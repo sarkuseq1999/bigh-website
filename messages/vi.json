@@ -1,0 +1,68 @@
+{
+  "Brand": {
+    "name": "BiGH"
+  },
+  "Nav": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About",
+    "contact": "Contact",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "toggleTheme": "Toggle theme"
+  },
+  "Hero": {
+    "headline": "Confidence in the Future of Your Mind",
+    "subhead": "Science-grounded longevity for the people who refuse to slow down. Built for a sharper decade ahead.",
+    "cta": "Learn More"
+  },
+  "Features": {
+    "science": {
+      "title": "Backed by Science",
+      "body": "Every formulation traces back to peer-reviewed research and clinical-grade dosing."
+    },
+    "ingredients": {
+      "title": "Clean Ingredients",
+      "body": "Third-party tested. No fillers, no shortcuts, no compromises on purity."
+    },
+    "trusted": {
+      "title": "Trusted by Members",
+      "body": "Built alongside a community of people who hold the bar high for their own health."
+    }
+  },
+  "Signup": {
+    "title": "Be the first to know.",
+    "body": "Join the BiGH list for new product launches and member-only research notes.",
+    "placeholder": "you@example.com",
+    "cta": "Notify Me"
+  },
+  "Footer": {
+    "tagline": "Confidence in the Future of Your Mind.",
+    "copyright": "© {year} BiGH. All rights reserved.",
+    "columns": {
+      "company": "Company",
+      "resources": "Resources",
+      "legal": "Legal"
+    },
+    "links": {
+      "about": "About",
+      "careers": "Careers",
+      "press": "Press",
+      "journal": "Journal",
+      "research": "Research",
+      "faq": "FAQ",
+      "privacy": "Privacy",
+      "terms": "Terms",
+      "shipping": "Shipping"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "youtube": "YouTube"
+    }
+  },
+  "Meta": {
+    "title": "BiGH — Confidence in the Future of Your Mind",
+    "description": "Premium longevity and cognitive wellness. Science-grounded supplements for a sharper decade ahead."
+  }
+}
