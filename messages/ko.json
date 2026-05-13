@@ -5,6 +5,7 @@
   "Nav": {
     "home": "Home",
     "products": "Products",
+    "science": "Science",
     "about": "About",
     "contact": "Contact",
     "openMenu": "Open menu",
@@ -12,9 +13,127 @@
     "toggleTheme": "Toggle theme"
   },
   "Hero": {
-    "headline": "Confidence in the Future of Your Mind",
-    "subhead": "Science-grounded longevity for the people who refuse to slow down. Built for a sharper decade ahead.",
-    "cta": "Learn More"
+    "headline": "Your mind has no <em>expiration date.</em>",
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain cells the fuel and protection they need, decade after decade.",
+    "cta": "Discover the line",
+    "ctaSecondary": "See the science",
+    "imageAlt": "A woman tending plants in a sunlit greenhouse"
+  },
+  "Science": {
+    "eyebrow": "the science",
+    "headline": "The fog isn't aging.<br></br>It's <em>energy.</em>",
+    "countSuffix": "+",
+    "countLabel": "power plants per brain cell",
+    "statementBefore": "Each brain cell is powered by more than a thousand tiny power plants called ",
+    "statementEmphasis": "mitochondria",
+    "statementAfter": ".",
+    "fuelLabel": "Fuel runs low",
+    "fuelBody": "Your mind slows.",
+    "wasteLabel": "Waste runs high",
+    "wasteBody": "Cells get damaged.",
+    "cta": "Learn how mitochondria work"
+  },
+  "YourMind": {
+    "eyebrow": "a note on timing",
+    "headlineBefore": "In the age of ",
+    "headlineAI": "AI",
+    "headlineAfter": ", your ",
+    "headlineEmphasis": "mind",
+    "headlineEnd": " is the most important asset.",
+    "body": "As more of the work moves to AI and advanced technology, what remains is uniquely yours — your judgment, your intuition, your way of seeing. These aren't gifts. They're cognitive performance. And they depend on a brain that's well fueled.",
+    "cta": "Discover the line"
+  },
+  "Credibility": {
+    "eyebrow": "The science behind NuriCell",
+    "headlineBefore": "In 2002, our chief science advisor ",
+    "headlineEmphasis": "solved",
+    "headlineAfter": " the equation.",
+    "intro": "Dr. Jian Kang Liu — then working with legendary biochemist Bruce Ames at UC Berkeley — published three papers in the Proceedings of the National Academy of Sciences in a single year. The discovery: a precise combination of acetyl-L-carnitine and R-α-lipoic acid that simultaneously fueled and protected aging mitochondria. The fuel side, the protection side — both in one daily ritual.",
+    "papersLabel": "The papers",
+    "papers": {
+      "one": {
+        "tag": "PNAS · 2002",
+        "title": "Feeding acetyl-L-carnitine and lipoic acid to old rats significantly improves metabolic function while decreasing oxidative stress."
+      },
+      "two": {
+        "tag": "PNAS · 2002",
+        "title": "Memory loss in old rats is associated with brain mitochondrial decay and RNA/DNA oxidation: Partial reversal by feeding acetyl-L-carnitine and/or R-α-lipoic acid."
+      },
+      "three": {
+        "tag": "PNAS · 2002",
+        "title": "Age-associated mitochondrial oxidative decay: improvement of carnitine acetyltransferase substrate-binding affinity and activity in brain by feeding old rats acetyl-L-carnitine and/or R-α-lipoic acid."
+      }
+    },
+    "closing": "That research became the foundation of NuriCell, our flagship formulation. Dr. Liu has guided its evolution ever since — 23 years of refinement, and counting.",
+    "stats": {
+      "yearsNumber": "23",
+      "yearsLabel": "years",
+      "yearsBody": "refining the formula",
+      "customersNumber": "100,000+",
+      "customersLabel": "customers",
+      "customersBody": "have trusted NuriCell",
+      "papersNumber": "3",
+      "papersStatLabel": "PNAS papers",
+      "papersBody": "published in a single year"
+    },
+    "ctaPrimary": "Learn more about NuriCell",
+    "ctaSecondary": "Meet Dr. Liu"
+  },
+  "System": {
+    "eyebrow": "The system",
+    "headlineBefore": "One mission. ",
+    "headlineEmphasis": "A system",
+    "headlineAfter": " to match.",
+    "intro": "Under Dr. Liu's continuing direction, BiGH has built a coordinated system of formulations — each designed to fuel the brain's mitochondria with energy, and protect them from the damage they create as they work. Engineered to stand alone. Built to work together.",
+    "products": {
+      "nuricell": {
+        "name": "NuriCell",
+        "role": "The foundation",
+        "tagline": "Fuel and protection, in one daily ritual.",
+        "body": "The flagship. Built on Dr. Liu's 2002 PNAS discovery — acetyl-L-carnitine and R-α-lipoic acid working in concert to refuel and shield aging mitochondria."
+      },
+      "nuriclear": {
+        "name": "NuriClear",
+        "role": "Daytime clarity",
+        "tagline": "For the hours that demand the most.",
+        "body": "A focused formulation for sustained mental performance — calibrated for the deep work of the day. (Placeholder — name and details to be confirmed.)"
+      },
+      "nuricalm": {
+        "name": "NuriCalm",
+        "role": "Evening recovery",
+        "tagline": "For the cycle of repair.",
+        "body": "The night-time companion that supports the cellular cleanup phase, helping the brain renew itself overnight. (Placeholder — name and details to be confirmed.)"
+      }
+    },
+    "cta": "Explore the system"
+  },
+  "Stories": {
+    "eyebrow": "From our members",
+    "headlineBefore": "From every continent, ",
+    "headlineEmphasis": "the same answer.",
+    "intro": "More than 100,000 members across the world, for 23 years. Their words say it best.",
+    "featured": {
+      "quote": "Fifteen years of NuriCell. I'm 71, still working in research, still sharp at the things I care about. The science was rigorous from the start — that's why I trusted it then. I'm still here because it kept working.",
+      "name": "Margaret O.",
+      "location": "Edinburgh"
+    },
+    "shortQuotes": {
+      "one": {
+        "quote": "My afternoons used to feel like wading through fog. A few weeks in, the fog lifted. I'm tracking conversations again — not just hanging on.",
+        "name": "David M.",
+        "location": "Portland, Oregon"
+      },
+      "two": {
+        "quote": "At 67, I'm still consulting full-time. My morning routine includes NuriCell — it's become as essential as coffee. Possibly more important.",
+        "name": "Sun-hee K.",
+        "location": "Seoul"
+      },
+      "three": {
+        "quote": "I wanted something rooted in real science, not marketing. I've kept it in my routine for three years because it works. My mother takes it too.",
+        "name": "Linh T.",
+        "location": "Ho Chi Minh City"
+      }
+    }
   },
   "Features": {
     "science": {
@@ -31,10 +150,13 @@
     }
   },
   "Signup": {
-    "title": "Be the first to know.",
-    "body": "Join the BiGH list for new product launches and member-only research notes.",
+    "eyebrow": "The dispatch",
+    "headlineBefore": "Stay close to ",
+    "headlineEmphasis": "the science.",
+    "intro": "A quiet dispatch on mitochondria, cognitive longevity, and the brain at every age — drawn from Dr. Liu's lab notes and ours. Sent occasionally. Written carefully.",
     "placeholder": "you@example.com",
-    "cta": "Notify Me"
+    "cta": "Subscribe",
+    "reassurance": "No promotions. No noise. Unsubscribe anytime."
   },
   "Footer": {
     "tagline": "Confidence in the Future of Your Mind.",

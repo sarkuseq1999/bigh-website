@@ -15,14 +15,14 @@ import {
   SheetDescription,
   SheetHeader,
 } from "@/components/ui/sheet";
-import { ThemeToggle } from "@/components/site/theme-toggle";
 
-const NAV_KEYS = ["home", "products", "about", "contact"] as const;
+const NAV_KEYS = ["home", "products", "science", "about", "support"] as const;
 const NAV_HREFS: Record<(typeof NAV_KEYS)[number], string> = {
   home: "/",
   products: "/products",
+  science: "/#science",
   about: "/about",
-  contact: "/contact",
+  support: "/support",
 };
 
 export function SiteHeader() {
@@ -31,7 +31,7 @@ export function SiteHeader() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="border-foreground/5 bg-paper/80 sticky top-0 z-50 w-full border-b backdrop-blur-md">
+    <header className="bg-cream-50/70 absolute top-0 right-0 left-0 z-50 w-full backdrop-blur-md">
       <div className="mx-auto flex h-24 max-w-6xl items-center justify-between px-6">
         <Link href="/" aria-label={tBrand("name")} className="inline-flex items-center">
           <Image
@@ -57,16 +57,14 @@ export function SiteHeader() {
             <Link
               key={key}
               href={NAV_HREFS[key]}
-              className="text-foreground/70 hover:text-foreground text-xl transition-colors"
+              className="text-espresso hover:text-sienna text-xl font-medium transition-colors"
             >
               {tNav(key)}
             </Link>
           ))}
-          <ThemeToggle />
         </nav>
 
         <div className="flex items-center gap-1 md:hidden">
-          <ThemeToggle />
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger
               render={<Button variant="ghost" size="icon" aria-label={tNav("openMenu")} />}
