@@ -34,13 +34,11 @@
     "cta": "Learn how mitochondria work"
   },
   "YourMind": {
-    "eyebrow": "a note on timing",
-    "headlineBefore": "In the age of ",
-    "headlineAI": "AI",
-    "headlineAfter": ", your ",
-    "headlineEmphasis": "mind",
-    "headlineEnd": " is the most important asset.",
-    "body": "As more of the work moves to AI and advanced technology, what remains is uniquely yours — your judgment, your intuition, your way of seeing. These aren't gifts. They're cognitive performance. And they depend on a brain that's well fueled.",
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
     "cta": "Discover the line"
   },
   "Credibility": {
@@ -135,19 +133,24 @@
       }
     }
   },
-  "Features": {
-    "science": {
-      "title": "Backed by Science",
-      "body": "Every formulation traces back to peer-reviewed research and clinical-grade dosing."
+  "AskDrLiu": {
+    "eyebrow": "Members only",
+    "headlineBefore": "Ask Dr. Liu. ",
+    "headlineEmphasis": "Real answers.",
+    "intro": "A chat companion trained on Dr. Liu's research, papers, and lab notes — exclusive to BiGH subscribers. Ask anything about mitochondria, brain health, or the science behind your routine. New Q&A added every Friday.",
+    "qaLabel": "Recent conversations",
+    "exchanges": {
+      "one": {
+        "question": "What's the best time of day to take NuriCell?",
+        "answer": "Morning, with a fat-containing breakfast. Acetyl-L-carnitine absorbs better with dietary fat, and taking it later than 4pm can affect sleep for some — it's mildly stimulating to cellular metabolism."
+      },
+      "two": {
+        "question": "Is mitochondrial damage really reversible?",
+        "answer": "Some of it, yes — but reversal is the wrong word. Healthy cells continuously produce new mitochondria. What we're doing is improving the function and survival of the ones you have, while supporting the birth of fresh ones."
+      }
     },
-    "ingredients": {
-      "title": "Clean Ingredients",
-      "body": "Third-party tested. No fillers, no shortcuts, no compromises on purity."
-    },
-    "trusted": {
-      "title": "Trusted by Members",
-      "body": "Built alongside a community of people who hold the bar high for their own health."
-    }
+    "typingHint": "Updated weekly with new conversations",
+    "cta": "Become a member"
   },
   "Signup": {
     "eyebrow": "The dispatch",

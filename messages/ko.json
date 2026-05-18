@@ -3,179 +3,182 @@
     "name": "BiGH"
   },
   "Nav": {
-    "home": "Home",
-    "products": "Products",
-    "science": "Science",
-    "about": "About",
-    "contact": "Contact",
-    "openMenu": "Open menu",
-    "closeMenu": "Close menu",
-    "toggleTheme": "Toggle theme"
+    "home": "홈",
+    "products": "제품",
+    "science": "사이언스",
+    "about": "소개",
+    "support": "지원",
+    "openMenu": "메뉴 열기",
+    "closeMenu": "메뉴 닫기",
+    "toggleTheme": "테마 전환"
   },
   "Hero": {
-    "headline": "Your mind has no <em>expiration date.</em>",
-    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain cells the fuel and protection they need, decade after decade.",
-    "cta": "Discover the line",
-    "ctaSecondary": "See the science",
-    "imageAlt": "A woman tending plants in a sunlit greenhouse"
+    "headline": "당신의 정신에는 <em>유효기간이 없습니다.</em>",
+    "subhead": "어떤 나이에도 명료함은 운이 아닙니다 — 자연과 과학이 함께 만들어내는 것입니다. BiGH는 당신의 뇌세포에 필요한 연료와 보호를, 십 년이 지나도 또 십 년이 지나도 변함없이 제공합니다.",
+    "cta": "제품 라인 살펴보기",
+    "ctaSecondary": "그 안의 과학",
+    "imageAlt": "햇살 가득한 온실에서 식물을 돌보는 여성"
   },
   "Science": {
-    "eyebrow": "the science",
-    "headline": "The fog isn't aging.<br></br>It's <em>energy.</em>",
+    "eyebrow": "사이언스",
+    "headline": "안개의 원인은 노화가 아닙니다.<br></br><em>에너지입니다.</em>",
     "countSuffix": "+",
-    "countLabel": "power plants per brain cell",
-    "statementBefore": "Each brain cell is powered by more than a thousand tiny power plants called ",
-    "statementEmphasis": "mitochondria",
-    "statementAfter": ".",
-    "fuelLabel": "Fuel runs low",
-    "fuelBody": "Your mind slows.",
-    "wasteLabel": "Waste runs high",
-    "wasteBody": "Cells get damaged.",
-    "cta": "Learn how mitochondria work"
+    "countLabel": "뇌세포 하나에 깃든 발전소",
+    "statementBefore": "당신의 뇌세포 하나하나에는 천 개가 넘는 작은 발전소가 작동하고 있습니다. 그것을 ",
+    "statementEmphasis": "미토콘드리아",
+    "statementAfter": "라 부릅니다.",
+    "fuelLabel": "연료가 부족할 때",
+    "fuelBody": "사고가 둔해집니다.",
+    "wasteLabel": "노폐물이 쌓일 때",
+    "wasteBody": "세포가 손상됩니다.",
+    "cta": "미토콘드리아의 작용 알아보기"
   },
   "YourMind": {
-    "eyebrow": "a note on timing",
-    "headlineBefore": "In the age of ",
-    "headlineAI": "AI",
-    "headlineAfter": ", your ",
-    "headlineEmphasis": "mind",
-    "headlineEnd": " is the most important asset.",
-    "body": "As more of the work moves to AI and advanced technology, what remains is uniquely yours — your judgment, your intuition, your way of seeing. These aren't gifts. They're cognitive performance. And they depend on a brain that's well fueled.",
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
     "cta": "Discover the line"
   },
   "Credibility": {
-    "eyebrow": "The science behind NuriCell",
-    "headlineBefore": "In 2002, our chief science advisor ",
-    "headlineEmphasis": "solved",
-    "headlineAfter": " the equation.",
-    "intro": "Dr. Jian Kang Liu — then working with legendary biochemist Bruce Ames at UC Berkeley — published three papers in the Proceedings of the National Academy of Sciences in a single year. The discovery: a precise combination of acetyl-L-carnitine and R-α-lipoic acid that simultaneously fueled and protected aging mitochondria. The fuel side, the protection side — both in one daily ritual.",
-    "papersLabel": "The papers",
+    "eyebrow": "NuriCell 의 과학",
+    "headlineBefore": "2002년, 우리의 수석 과학 자문은 그 방정식을 ",
+    "headlineEmphasis": "풀어냈습니다",
+    "headlineAfter": ".",
+    "intro": "류젠캉 박사는 — 당시 UC 버클리에서 전설적인 생화학자 Bruce Ames와 함께 연구하던 시절 — 단 한 해 동안 미국 국립과학원 회보(PNAS)에 세 편의 논문을 발표했습니다. 그 발견은 다음과 같습니다: 아세틸-L-카르니틴과 R-α-리포산의 정밀한 조합이 노화하는 미토콘드리아에 동시에 연료를 공급하고 보호한다는 것. 연료의 측면과 보호의 측면 — 모두 하루 한 번의 습관 속에서.",
+    "papersLabel": "세 편의 논문",
     "papers": {
       "one": {
         "tag": "PNAS · 2002",
-        "title": "Feeding acetyl-L-carnitine and lipoic acid to old rats significantly improves metabolic function while decreasing oxidative stress."
+        "title": "노화 쥐에 아세틸-L-카르니틴과 리포산을 급여하면 산화 스트레스를 감소시키면서 대사 기능이 크게 개선된다."
       },
       "two": {
         "tag": "PNAS · 2002",
-        "title": "Memory loss in old rats is associated with brain mitochondrial decay and RNA/DNA oxidation: Partial reversal by feeding acetyl-L-carnitine and/or R-α-lipoic acid."
+        "title": "노화 쥐의 기억력 저하는 뇌 미토콘드리아 쇠퇴 및 RNA/DNA 산화와 관련이 있다: 아세틸-L-카르니틴 및/또는 R-α-리포산 급여를 통한 부분적 회복."
       },
       "three": {
         "tag": "PNAS · 2002",
-        "title": "Age-associated mitochondrial oxidative decay: improvement of carnitine acetyltransferase substrate-binding affinity and activity in brain by feeding old rats acetyl-L-carnitine and/or R-α-lipoic acid."
+        "title": "노화 관련 미토콘드리아 산화적 쇠퇴: 노화 쥐에 아세틸-L-카르니틴 및/또는 R-α-리포산을 급여함으로써 뇌의 카르니틴 아세틸트랜스퍼라제 기질 결합 친화도 및 활성이 개선된다."
       }
     },
-    "closing": "That research became the foundation of NuriCell, our flagship formulation. Dr. Liu has guided its evolution ever since — 23 years of refinement, and counting.",
+    "closing": "이 연구가 우리의 대표 포뮬레이션 NuriCell의 토대가 되었습니다. 그 이후로 류 박사는 그 진화를 이끌어 왔습니다 — 23년의 정련, 그리고 지금도 계속되고 있습니다.",
     "stats": {
       "yearsNumber": "23",
-      "yearsLabel": "years",
-      "yearsBody": "refining the formula",
+      "yearsLabel": "년",
+      "yearsBody": "처방을 다듬어 온 시간",
       "customersNumber": "100,000+",
-      "customersLabel": "customers",
-      "customersBody": "have trusted NuriCell",
+      "customersLabel": "고객",
+      "customersBody": "NuriCell을 신뢰해 왔습니다",
       "papersNumber": "3",
-      "papersStatLabel": "PNAS papers",
-      "papersBody": "published in a single year"
+      "papersStatLabel": "PNAS 논문",
+      "papersBody": "단 한 해 동안 발표"
     },
-    "ctaPrimary": "Learn more about NuriCell",
-    "ctaSecondary": "Meet Dr. Liu"
+    "ctaPrimary": "NuriCell 자세히 알아보기",
+    "ctaSecondary": "류 박사 만나기"
   },
   "System": {
-    "eyebrow": "The system",
-    "headlineBefore": "One mission. ",
-    "headlineEmphasis": "A system",
-    "headlineAfter": " to match.",
-    "intro": "Under Dr. Liu's continuing direction, BiGH has built a coordinated system of formulations — each designed to fuel the brain's mitochondria with energy, and protect them from the damage they create as they work. Engineered to stand alone. Built to work together.",
+    "eyebrow": "우리의 시스템",
+    "headlineBefore": "하나의 사명. ",
+    "headlineEmphasis": "그에 걸맞은 시스템",
+    "headlineAfter": ".",
+    "intro": "류 박사의 지속적인 지도 아래, BiGH는 조화로운 포뮬레이션 시스템을 구축했습니다 — 각각이 뇌의 미토콘드리아에 에너지를 공급하고, 그 작용 과정에서 발생하는 손상으로부터 보호하도록 설계되었습니다. 독립적으로도, 함께 사용해도 더욱 빛납니다.",
     "products": {
       "nuricell": {
         "name": "NuriCell",
-        "role": "The foundation",
-        "tagline": "Fuel and protection, in one daily ritual.",
-        "body": "The flagship. Built on Dr. Liu's 2002 PNAS discovery — acetyl-L-carnitine and R-α-lipoic acid working in concert to refuel and shield aging mitochondria."
+        "role": "근간",
+        "tagline": "연료와 보호, 매일의 습관 속에.",
+        "body": "대표 제품. 류 박사의 2002년 PNAS 발견에 기반합니다 — 아세틸-L-카르니틴과 R-α-리포산이 함께 작용하여 노화하는 미토콘드리아를 다시 채우고 보호합니다."
       },
       "nuriclear": {
         "name": "NuriClear",
-        "role": "Daytime clarity",
-        "tagline": "For the hours that demand the most.",
-        "body": "A focused formulation for sustained mental performance — calibrated for the deep work of the day. (Placeholder — name and details to be confirmed.)"
+        "role": "낮의 명료함",
+        "tagline": "가장 집중이 필요한 시간을 위해.",
+        "body": "지속적인 정신 수행을 위한 집중 포뮬레이션 — 낮 시간의 깊은 작업에 맞추어 설계되었습니다. (자리표시자 — 이름과 상세 내용은 추후 확정 예정.)"
       },
       "nuricalm": {
         "name": "NuriCalm",
-        "role": "Evening recovery",
-        "tagline": "For the cycle of repair.",
-        "body": "The night-time companion that supports the cellular cleanup phase, helping the brain renew itself overnight. (Placeholder — name and details to be confirmed.)"
+        "role": "저녁의 회복",
+        "tagline": "회복의 순환을 위해.",
+        "body": "세포의 정리 단계를 돕는 밤 시간의 동반자 — 뇌가 밤사이 스스로를 새롭게 하도록 지원합니다. (자리표시자 — 이름과 상세 내용은 추후 확정 예정.)"
       }
     },
-    "cta": "Explore the system"
+    "cta": "시스템 둘러보기"
   },
   "Stories": {
-    "eyebrow": "From our members",
-    "headlineBefore": "From every continent, ",
-    "headlineEmphasis": "the same answer.",
-    "intro": "More than 100,000 members across the world, for 23 years. Their words say it best.",
+    "eyebrow": "회원들의 이야기",
+    "headlineBefore": "모든 대륙에서, ",
+    "headlineEmphasis": "같은 대답.",
+    "intro": "23년 동안, 전 세계 100,000명이 넘는 회원들. 그들의 말이 가장 잘 표현해 줍니다.",
     "featured": {
-      "quote": "Fifteen years of NuriCell. I'm 71, still working in research, still sharp at the things I care about. The science was rigorous from the start — that's why I trusted it then. I'm still here because it kept working.",
+      "quote": "NuriCell을 사용한 지 15년. 저는 71세이며, 여전히 연구를 하고 있고, 제가 중요하게 여기는 일들에 있어서는 여전히 또렷합니다. 처음부터 과학적으로 엄격했습니다 — 그것이 제가 당시 이것을 신뢰한 이유입니다. 지금도 사용하는 것은, 계속 효과가 있기 때문입니다.",
       "name": "Margaret O.",
-      "location": "Edinburgh"
+      "location": "에든버러"
     },
     "shortQuotes": {
       "one": {
-        "quote": "My afternoons used to feel like wading through fog. A few weeks in, the fog lifted. I'm tracking conversations again — not just hanging on.",
+        "quote": "예전에는 오후가 안개 속을 헤매는 듯했습니다. 몇 주 후, 안개가 걷혔습니다. 다시 대화의 흐름을 따라가게 되었습니다 — 그저 매달려 있는 것이 아니라.",
         "name": "David M.",
-        "location": "Portland, Oregon"
+        "location": "미국 오리건주 포틀랜드"
       },
       "two": {
-        "quote": "At 67, I'm still consulting full-time. My morning routine includes NuriCell — it's become as essential as coffee. Possibly more important.",
+        "quote": "67세, 여전히 풀타임으로 컨설팅을 하고 있습니다. 아침 루틴에 NuriCell이 포함됩니다 — 커피만큼이나 필수적인 존재가 되었습니다. 어쩌면 더 중요할지도 모릅니다.",
         "name": "Sun-hee K.",
-        "location": "Seoul"
+        "location": "서울"
       },
       "three": {
-        "quote": "I wanted something rooted in real science, not marketing. I've kept it in my routine for three years because it works. My mother takes it too.",
+        "quote": "저는 마케팅이 아닌, 진짜 과학에 뿌리를 둔 것을 원했습니다. 3년 동안 제 일상에 두어 왔습니다 — 효과가 있기 때문입니다. 어머니도 함께 드시고 계십니다.",
         "name": "Linh T.",
-        "location": "Ho Chi Minh City"
+        "location": "호치민시"
       }
     }
   },
-  "Features": {
-    "science": {
-      "title": "Backed by Science",
-      "body": "Every formulation traces back to peer-reviewed research and clinical-grade dosing."
+  "AskDrLiu": {
+    "eyebrow": "회원 전용",
+    "headlineBefore": "류 박사에게 묻다. ",
+    "headlineEmphasis": "진짜 답을 얻다.",
+    "intro": "류 박사의 연구, 논문, 그리고 실험실 노트로 학습된 대화 동반자 — BiGH 구독자 전용입니다. 미토콘드리아, 뇌 건강, 또는 당신의 루틴 뒤에 있는 과학에 대해 무엇이든 물어보세요. 매주 금요일 새로운 Q&A가 추가됩니다.",
+    "qaLabel": "최근 대화",
+    "exchanges": {
+      "one": {
+        "question": "NuriCell을 복용하기에 하루 중 가장 좋은 시간은 언제인가요?",
+        "answer": "지방이 포함된 아침 식사와 함께 아침에. 아세틸-L-카르니틴은 식이 지방과 함께 섭취할 때 흡수가 더 좋고, 오후 4시 이후에 복용할 경우 일부에게는 수면에 영향을 줄 수 있습니다 — 세포 대사를 약하게 자극하기 때문입니다."
+      },
+      "two": {
+        "question": "미토콘드리아의 손상은 정말 되돌릴 수 있나요?",
+        "answer": "일부는요 — 하지만 '되돌린다'는 표현은 정확하지 않습니다. 건강한 세포는 끊임없이 새로운 미토콘드리아를 만들어 냅니다. 우리가 하는 일은 기존 미토콘드리아의 기능과 생존을 개선하면서, 동시에 새 미토콘드리아의 탄생을 돕는 것입니다."
+      }
     },
-    "ingredients": {
-      "title": "Clean Ingredients",
-      "body": "Third-party tested. No fillers, no shortcuts, no compromises on purity."
-    },
-    "trusted": {
-      "title": "Trusted by Members",
-      "body": "Built alongside a community of people who hold the bar high for their own health."
-    }
+    "typingHint": "매주 새로운 대화로 업데이트됩니다",
+    "cta": "회원 되기"
   },
   "Signup": {
-    "eyebrow": "The dispatch",
-    "headlineBefore": "Stay close to ",
-    "headlineEmphasis": "the science.",
-    "intro": "A quiet dispatch on mitochondria, cognitive longevity, and the brain at every age — drawn from Dr. Liu's lab notes and ours. Sent occasionally. Written carefully.",
+    "eyebrow": "디스패치",
+    "headlineBefore": "",
+    "headlineEmphasis": "과학과 가까이",
+    "intro": "미토콘드리아, 인지적 장수, 그리고 모든 연령대의 뇌에 관한 조용한 디스패치 — 류 박사의 실험실 노트와 우리의 생각에서 길어 올린 것들. 가끔씩 보내드립니다. 정성스럽게 쓰여집니다.",
     "placeholder": "you@example.com",
-    "cta": "Subscribe",
-    "reassurance": "No promotions. No noise. Unsubscribe anytime."
+    "cta": "구독하기",
+    "reassurance": "프로모션 없음. 소음 없음. 언제든 구독 해지 가능."
   },
   "Footer": {
-    "tagline": "Confidence in the Future of Your Mind.",
+    "tagline": "당신의 미래 정신에 대한 확신.",
     "copyright": "© {year} BiGH. All rights reserved.",
     "columns": {
-      "company": "Company",
-      "resources": "Resources",
-      "legal": "Legal"
+      "company": "회사",
+      "resources": "자료",
+      "legal": "법적 고지"
     },
     "links": {
-      "about": "About",
-      "careers": "Careers",
-      "press": "Press",
-      "journal": "Journal",
-      "research": "Research",
-      "faq": "FAQ",
-      "privacy": "Privacy",
-      "terms": "Terms",
-      "shipping": "Shipping"
+      "about": "소개",
+      "careers": "채용",
+      "press": "보도",
+      "journal": "저널",
+      "research": "연구",
+      "faq": "자주 묻는 질문",
+      "privacy": "개인정보처리방침",
+      "terms": "이용약관",
+      "shipping": "배송"
     },
     "social": {
       "instagram": "Instagram",
@@ -184,7 +187,7 @@
     }
   },
   "Meta": {
-    "title": "BiGH — Confidence in the Future of Your Mind",
-    "description": "Premium longevity and cognitive wellness. Science-grounded supplements for a sharper decade ahead."
+    "title": "BiGH — 당신의 미래 정신에 대한 확신",
+    "description": "프리미엄 장수와 인지 건강. 과학에 기반한 보충제로, 더 또렷한 십 년을 위해."
   }
 }

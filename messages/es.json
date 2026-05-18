@@ -1,0 +1,193 @@
+{
+  "Brand": {
+    "name": "BiGH"
+  },
+  "Nav": {
+    "home": "Inicio",
+    "products": "Productos",
+    "science": "Ciencia",
+    "about": "Nosotros",
+    "support": "Soporte",
+    "openMenu": "Abrir menú",
+    "closeMenu": "Cerrar menú",
+    "toggleTheme": "Cambiar tema"
+  },
+  "Hero": {
+    "headline": "Tu mente no tiene <em>fecha de caducidad.</em>",
+    "subhead": "La claridad a cualquier edad no es cuestión de suerte: es naturaleza y ciencia. BiGH le entrega a tus células cerebrales el combustible y la protección que necesitan, década tras década.",
+    "cta": "Descubrir la línea",
+    "ctaSecondary": "Ver la ciencia",
+    "imageAlt": "Una mujer cuidando plantas en un invernadero iluminado por el sol"
+  },
+  "Science": {
+    "eyebrow": "la ciencia",
+    "headline": "La niebla no es la edad.<br></br>Es <em>energía.</em>",
+    "countSuffix": "+",
+    "countLabel": "centrales de energía por célula cerebral",
+    "statementBefore": "Cada célula cerebral está impulsada por más de mil minúsculas centrales de energía llamadas ",
+    "statementEmphasis": "mitocondrias",
+    "statementAfter": ".",
+    "fuelLabel": "Cuando falta combustible",
+    "fuelBody": "Tu mente se vuelve lenta.",
+    "wasteLabel": "Cuando sobran desechos",
+    "wasteBody": "Las células se dañan.",
+    "cta": "Aprender cómo funcionan las mitocondrias"
+  },
+  "YourMind": {
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
+    "cta": "Discover the line"
+  },
+  "Credibility": {
+    "eyebrow": "La ciencia detrás de NuriCell",
+    "headlineBefore": "En 2002, nuestro asesor científico jefe ",
+    "headlineEmphasis": "resolvió",
+    "headlineAfter": " la ecuación.",
+    "intro": "El Dr. Jian Kang Liu — entonces trabajando junto al legendario bioquímico Bruce Ames en UC Berkeley — publicó tres artículos en las Actas de la Academia Nacional de Ciencias en un solo año. El hallazgo: una combinación precisa de acetil-L-carnitina y ácido R-α-lipoico que simultáneamente alimentaba y protegía a las mitocondrias en proceso de envejecimiento. El lado del combustible, el lado de la protección — ambos en un ritual diario.",
+    "papersLabel": "Los artículos",
+    "papers": {
+      "one": {
+        "tag": "PNAS · 2002",
+        "title": "Alimentar a ratas viejas con acetil-L-carnitina y ácido lipoico mejora significativamente la función metabólica mientras reduce el estrés oxidativo."
+      },
+      "two": {
+        "tag": "PNAS · 2002",
+        "title": "La pérdida de memoria en ratas viejas está asociada con el deterioro mitocondrial cerebral y la oxidación de ARN/ADN: reversión parcial al alimentarlas con acetil-L-carnitina y/o ácido R-α-lipoico."
+      },
+      "three": {
+        "tag": "PNAS · 2002",
+        "title": "Deterioro oxidativo mitocondrial asociado al envejecimiento: mejora de la afinidad y actividad de la carnitina acetiltransferasa en el cerebro al alimentar a ratas viejas con acetil-L-carnitina y/o ácido R-α-lipoico."
+      }
+    },
+    "closing": "Esa investigación se convirtió en la base de NuriCell, nuestra formulación insignia. El Dr. Liu ha guiado su evolución desde entonces — 23 años de refinamiento, y contando.",
+    "stats": {
+      "yearsNumber": "23",
+      "yearsLabel": "años",
+      "yearsBody": "refinando la fórmula",
+      "customersNumber": "100,000+",
+      "customersLabel": "clientes",
+      "customersBody": "han confiado en NuriCell",
+      "papersNumber": "3",
+      "papersStatLabel": "artículos en PNAS",
+      "papersBody": "publicados en un mismo año"
+    },
+    "ctaPrimary": "Conoce más sobre NuriCell",
+    "ctaSecondary": "Conoce al Dr. Liu"
+  },
+  "System": {
+    "eyebrow": "El sistema",
+    "headlineBefore": "Una misión. ",
+    "headlineEmphasis": "Un sistema",
+    "headlineAfter": " a su altura.",
+    "intro": "Bajo la dirección continua del Dr. Liu, BiGH ha construido un sistema coordinado de formulaciones — cada una diseñada para alimentar las mitocondrias del cerebro con energía y protegerlas del daño que generan al trabajar. Pensadas para funcionar solas. Diseñadas para trabajar juntas.",
+    "products": {
+      "nuricell": {
+        "name": "NuriCell",
+        "role": "La base",
+        "tagline": "Combustible y protección, en un ritual diario.",
+        "body": "La insignia. Construida sobre el hallazgo de 2002 del Dr. Liu publicado en PNAS — acetil-L-carnitina y ácido R-α-lipoico actuando en conjunto para reabastecer y proteger las mitocondrias en proceso de envejecimiento."
+      },
+      "nuriclear": {
+        "name": "NuriClear",
+        "role": "Claridad diurna",
+        "tagline": "Para las horas que más exigen.",
+        "body": "Una formulación enfocada para el rendimiento mental sostenido — calibrada para el trabajo profundo del día. (Texto provisional — nombre y detalles por confirmar.)"
+      },
+      "nuricalm": {
+        "name": "NuriCalm",
+        "role": "Recuperación nocturna",
+        "tagline": "Para el ciclo de reparación.",
+        "body": "La compañera nocturna que apoya la fase de limpieza celular, ayudando al cerebro a renovarse durante la noche. (Texto provisional — nombre y detalles por confirmar.)"
+      }
+    },
+    "cta": "Explorar el sistema"
+  },
+  "Stories": {
+    "eyebrow": "De nuestros miembros",
+    "headlineBefore": "Desde cada continente, ",
+    "headlineEmphasis": "la misma respuesta.",
+    "intro": "Más de 100,000 miembros en todo el mundo, durante 23 años. Sus palabras lo dicen mejor.",
+    "featured": {
+      "quote": "Quince años con NuriCell. Tengo 71, sigo trabajando en investigación, sigo lúcida en las cosas que me importan. La ciencia fue rigurosa desde el principio — por eso confié entonces. Sigo aquí porque sigue funcionando.",
+      "name": "Margaret O.",
+      "location": "Edimburgo"
+    },
+    "shortQuotes": {
+      "one": {
+        "quote": "Mis tardes solían ser como caminar entre niebla. A las pocas semanas, la niebla se disipó. Vuelvo a seguir las conversaciones — ya no solo me aferro a ellas.",
+        "name": "David M.",
+        "location": "Portland, Oregón"
+      },
+      "two": {
+        "quote": "A los 67, sigo consultando a tiempo completo. Mi rutina matutina incluye NuriCell — se ha vuelto tan esencial como el café. Quizás más importante.",
+        "name": "Sun-hee K.",
+        "location": "Seúl"
+      },
+      "three": {
+        "quote": "Quería algo arraigado en ciencia real, no en marketing. Llevo tres años con él en mi rutina porque funciona. Mi madre también lo toma.",
+        "name": "Linh T.",
+        "location": "Ciudad Ho Chi Minh"
+      }
+    }
+  },
+  "AskDrLiu": {
+    "eyebrow": "Solo para miembros",
+    "headlineBefore": "Pregúntale al Dr. Liu. ",
+    "headlineEmphasis": "Respuestas reales.",
+    "intro": "Un compañero de conversación entrenado con la investigación, los artículos y las notas de laboratorio del Dr. Liu — exclusivo para suscriptores de BiGH. Pregunta lo que quieras sobre mitocondrias, salud cerebral o la ciencia detrás de tu rutina. Nuevas preguntas y respuestas cada viernes.",
+    "qaLabel": "Conversaciones recientes",
+    "exchanges": {
+      "one": {
+        "question": "¿Cuál es el mejor momento del día para tomar NuriCell?",
+        "answer": "En la mañana, con un desayuno que contenga grasa. La acetil-L-carnitina se absorbe mejor con grasas dietéticas, y tomarla después de las 4 de la tarde puede afectar el sueño en algunas personas — es ligeramente estimulante para el metabolismo celular."
+      },
+      "two": {
+        "question": "¿El daño mitocondrial es realmente reversible?",
+        "answer": "Parte de él, sí — aunque «reversible» no es la palabra precisa. Las células sanas producen continuamente nuevas mitocondrias. Lo que hacemos es mejorar la función y la supervivencia de las que ya tienes, mientras apoyamos el nacimiento de nuevas."
+      }
+    },
+    "typingHint": "Actualizado semanalmente con nuevas conversaciones",
+    "cta": "Hazte miembro"
+  },
+  "Signup": {
+    "eyebrow": "El boletín",
+    "headlineBefore": "Mantente cerca de ",
+    "headlineEmphasis": "la ciencia.",
+    "intro": "Un boletín tranquilo sobre mitocondrias, longevidad cognitiva y el cerebro en cada edad — extraído de las notas de laboratorio del Dr. Liu y de las nuestras. Enviado ocasionalmente. Escrito con cuidado.",
+    "placeholder": "tu@ejemplo.com",
+    "cta": "Suscribirse",
+    "reassurance": "Sin promociones. Sin ruido. Cancela cuando quieras."
+  },
+  "Footer": {
+    "tagline": "Confianza en el futuro de tu mente.",
+    "copyright": "© {year} BiGH. Todos los derechos reservados.",
+    "columns": {
+      "company": "Empresa",
+      "resources": "Recursos",
+      "legal": "Legal"
+    },
+    "links": {
+      "about": "Nosotros",
+      "careers": "Empleos",
+      "press": "Prensa",
+      "journal": "Diario",
+      "research": "Investigación",
+      "faq": "Preguntas frecuentes",
+      "privacy": "Privacidad",
+      "terms": "Términos",
+      "shipping": "Envíos"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "youtube": "YouTube"
+    }
+  },
+  "Meta": {
+    "title": "BiGH — Confianza en el futuro de tu mente",
+    "description": "Longevidad premium y bienestar cognitivo. Suplementos basados en ciencia para una década más nítida por delante."
+  }
+}

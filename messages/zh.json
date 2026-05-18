@@ -1,0 +1,193 @@
+{
+  "Brand": {
+    "name": "BiGH"
+  },
+  "Nav": {
+    "home": "首页",
+    "products": "产品",
+    "science": "科学",
+    "about": "关于",
+    "support": "支持",
+    "openMenu": "打开菜单",
+    "closeMenu": "关闭菜单",
+    "toggleTheme": "切换主题"
+  },
+  "Hero": {
+    "headline": "您的思维没有<em>保质期。</em>",
+    "subhead": "任何年龄的清晰思维都不靠运气——而是自然与科学的合力。BiGH 为您的脑细胞提供所需的燃料与保护,年复一年,代代相传。",
+    "cta": "探索产品系列",
+    "ctaSecondary": "了解背后的科学",
+    "imageAlt": "一位女性在阳光明媚的温室中照料植物"
+  },
+  "Science": {
+    "eyebrow": "科学",
+    "headline": "迷雾并非来自衰老。<br></br>而是<em>能量。</em>",
+    "countSuffix": "+",
+    "countLabel": "每个脑细胞中的发电厂",
+    "statementBefore": "每个脑细胞由超过一千个微型发电厂供能,它们被称为",
+    "statementEmphasis": "线粒体",
+    "statementAfter": "。",
+    "fuelLabel": "燃料不足时",
+    "fuelBody": "思维变得迟缓。",
+    "wasteLabel": "废物堆积时",
+    "wasteBody": "细胞受到损伤。",
+    "cta": "了解线粒体的工作原理"
+  },
+  "YourMind": {
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
+    "cta": "Discover the line"
+  },
+  "Credibility": {
+    "eyebrow": "NuriCell 背后的科学",
+    "headlineBefore": "2002 年,我们的首席科学顾问",
+    "headlineEmphasis": "破解了",
+    "headlineAfter": "这道难题。",
+    "intro": "刘剑康博士——当时与传奇生物化学家 Bruce Ames 在加州大学伯克利分校共事——在同一年内于《美国国家科学院院刊》(PNAS)上发表了三篇论文。他的发现是:乙酰左旋肉碱与 R-α-硫辛酸的精准组合,能够同时为衰老的线粒体提供燃料并加以保护。燃料的一面,保护的一面——皆寓于每日一次的仪式之中。",
+    "papersLabel": "三篇论文",
+    "papers": {
+      "one": {
+        "tag": "PNAS · 2002",
+        "title": "为衰老大鼠喂食乙酰左旋肉碱和硫辛酸显著改善代谢功能并降低氧化应激。"
+      },
+      "two": {
+        "tag": "PNAS · 2002",
+        "title": "衰老大鼠的记忆丧失与大脑线粒体衰退及 RNA/DNA 氧化相关:乙酰左旋肉碱和/或 R-α-硫辛酸的喂食可部分逆转此过程。"
+      },
+      "three": {
+        "tag": "PNAS · 2002",
+        "title": "与年龄相关的线粒体氧化衰退:为衰老大鼠喂食乙酰左旋肉碱和/或 R-α-硫辛酸可改善大脑肉碱乙酰转移酶的底物结合亲和力与活性。"
+      }
+    },
+    "closing": "这项研究成为了我们旗舰配方 NuriCell 的基石。自此之后,刘博士始终引领着它的演进——23 年的精雕细琢,仍在继续。",
+    "stats": {
+      "yearsNumber": "23",
+      "yearsLabel": "年",
+      "yearsBody": "持续完善配方",
+      "customersNumber": "100,000+",
+      "customersLabel": "客户",
+      "customersBody": "信赖 NuriCell",
+      "papersNumber": "3",
+      "papersStatLabel": "PNAS 论文",
+      "papersBody": "在同一年内发表"
+    },
+    "ctaPrimary": "了解更多关于 NuriCell",
+    "ctaSecondary": "认识刘博士"
+  },
+  "System": {
+    "eyebrow": "我们的体系",
+    "headlineBefore": "一项使命。",
+    "headlineEmphasis": "一套体系",
+    "headlineAfter": ",与之相称。",
+    "intro": "在刘博士持续的指导下,BiGH 打造了一套协同配方体系——每一款都为大脑的线粒体注入能量,并保护它们免受运作时产生的损伤。各自独立,亦相辅相成。",
+    "products": {
+      "nuricell": {
+        "name": "NuriCell",
+        "role": "根基",
+        "tagline": "燃料与保护,寓于每日仪式。",
+        "body": "旗舰之作。建立在刘博士 2002 年 PNAS 发现的基础之上——乙酰左旋肉碱与 R-α-硫辛酸协同作用,为衰老的线粒体补充能量并提供保护。"
+      },
+      "nuriclear": {
+        "name": "NuriClear",
+        "role": "日间清晰",
+        "tagline": "为最需要专注的时刻而生。",
+        "body": "一款专注的配方,助您持续保持心智表现——为白天的深度工作量身定制。(占位文本——名称和细节待确认。)"
+      },
+      "nuricalm": {
+        "name": "NuriCalm",
+        "role": "夜间修复",
+        "tagline": "为修复的循环而生。",
+        "body": "夜间的伴侣,支持细胞清理阶段,助力大脑在夜间自我修复。(占位文本——名称和细节待确认。)"
+      }
+    },
+    "cta": "探索我们的体系"
+  },
+  "Stories": {
+    "eyebrow": "来自我们的会员",
+    "headlineBefore": "来自每一个大洲,",
+    "headlineEmphasis": "同一个答案。",
+    "intro": "23 年来,来自世界各地超过 100,000 名会员。他们的话,最能说明一切。",
+    "featured": {
+      "quote": "我使用 NuriCell 已经十五年了。今年 71 岁,仍在从事研究工作,在我所关心的事情上依然敏锐如初。从一开始它的科学就严谨可靠——这是我当时信任它的原因。我至今仍在使用,因为它始终有效。",
+      "name": "Margaret O.",
+      "location": "爱丁堡"
+    },
+    "shortQuotes": {
+      "one": {
+        "quote": "我以前的下午时光总像在迷雾中艰难前行。几周后,迷雾消散。我又能跟上对话的节奏——而不只是勉强应付。",
+        "name": "David M.",
+        "location": "美国俄勒冈州波特兰"
+      },
+      "two": {
+        "quote": "67 岁了,我仍在全职从事咨询工作。我的晨间习惯包含 NuriCell——它已成为如咖啡般不可或缺,甚至可能更为重要。",
+        "name": "Sun-hee K.",
+        "location": "首尔"
+      },
+      "three": {
+        "quote": "我想要的是建立在真实科学之上的东西,而非营销噱头。这三年来我一直把它纳入我的日常,因为它确实有效。我母亲也在服用。",
+        "name": "Linh T.",
+        "location": "胡志明市"
+      }
+    }
+  },
+  "AskDrLiu": {
+    "eyebrow": "仅限会员",
+    "headlineBefore": "向刘博士提问。",
+    "headlineEmphasis": "获得真实答案。",
+    "intro": "一位由刘博士的研究、论文和实验室笔记训练的对话伴侣——BiGH 订阅会员专享。可询问关于线粒体、大脑健康,或您日常背后科学的任何问题。每周五新增问答。",
+    "qaLabel": "近期对话",
+    "exchanges": {
+      "one": {
+        "question": "一天中服用 NuriCell 的最佳时间是什么时候?",
+        "answer": "早晨,搭配含脂肪的早餐。乙酰左旋肉碱与饮食脂肪一同服用时吸收更佳,而晚于下午四点服用对部分人的睡眠会有影响——它对细胞代谢有轻微的刺激作用。"
+      },
+      "two": {
+        "question": "线粒体的损伤真的可以逆转吗?",
+        "answer": "部分可以——但用「逆转」这个词其实并不准确。健康的细胞会不断产生新的线粒体。我们所做的是改善现有线粒体的功能和存活,同时支持新线粒体的生成。"
+      }
+    },
+    "typingHint": "每周更新新的对话",
+    "cta": "成为会员"
+  },
+  "Signup": {
+    "eyebrow": "通讯",
+    "headlineBefore": "与",
+    "headlineEmphasis": "科学保持同行。",
+    "intro": "关于线粒体、认知长寿和不同年龄段大脑健康的安静通讯——汲取自刘博士实验室的笔记与我们的思考。偶尔寄出。用心书写。",
+    "placeholder": "you@example.com",
+    "cta": "订阅",
+    "reassurance": "无促销。无杂音。随时可取消订阅。"
+  },
+  "Footer": {
+    "tagline": "对您未来思维的信心。",
+    "copyright": "© {year} BiGH. 版权所有。",
+    "columns": {
+      "company": "公司",
+      "resources": "资源",
+      "legal": "法律"
+    },
+    "links": {
+      "about": "关于",
+      "careers": "招贤纳士",
+      "press": "媒体",
+      "journal": "期刊",
+      "research": "研究",
+      "faq": "常见问题",
+      "privacy": "隐私",
+      "terms": "条款",
+      "shipping": "运输"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "youtube": "YouTube"
+    }
+  },
+  "Meta": {
+    "title": "BiGH — 对您未来思维的信心",
+    "description": "高端长寿与认知健康。基于科学的补充剂,助您拥有更敏锐的未来。"
+  }
+}

@@ -1,0 +1,193 @@
+{
+  "Brand": {
+    "name": "BiGH"
+  },
+  "Nav": {
+    "home": "ホーム",
+    "products": "製品",
+    "science": "サイエンス",
+    "about": "BiGHについて",
+    "support": "サポート",
+    "openMenu": "メニューを開く",
+    "closeMenu": "メニューを閉じる",
+    "toggleTheme": "テーマを切り替える"
+  },
+  "Hero": {
+    "headline": "あなたの思考に、<em>有効期限はありません。</em>",
+    "subhead": "どんな年齢であっても、明晰さは運ではありません — 自然と科学が共に生み出すものです。BiGHは、あなたの脳細胞に必要な燃料と保護を、十年、また十年と届け続けます。",
+    "cta": "製品ラインを見る",
+    "ctaSecondary": "サイエンスを知る",
+    "imageAlt": "陽の差し込む温室で植物の手入れをする女性"
+  },
+  "Science": {
+    "eyebrow": "サイエンス",
+    "headline": "霧の原因は、加齢ではありません。<br></br><em>エネルギーです。</em>",
+    "countSuffix": "+",
+    "countLabel": "脳細胞ひとつに宿る発電所",
+    "statementBefore": "あなたの脳細胞は、それぞれ千以上もの微小な発電所によって動いています。それらは ",
+    "statementEmphasis": "ミトコンドリア",
+    "statementAfter": " と呼ばれています。",
+    "fuelLabel": "燃料が乏しいとき",
+    "fuelBody": "思考が鈍くなる。",
+    "wasteLabel": "老廃物が溜まるとき",
+    "wasteBody": "細胞が損傷を受ける。",
+    "cta": "ミトコンドリアの働きを学ぶ"
+  },
+  "YourMind": {
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
+    "cta": "Discover the line"
+  },
+  "Credibility": {
+    "eyebrow": "NuriCell の背景にあるサイエンス",
+    "headlineBefore": "2002年、私たちのチーフ・サイエンス・アドバイザーがその方程式を ",
+    "headlineEmphasis": "解き明かしました",
+    "headlineAfter": "。",
+    "intro": "劉剣康博士は — 当時、伝説的な生化学者ブルース・エイムズ氏とともにUCバークレーで研究していた頃 — たった一年の間に、米国科学アカデミー紀要(PNAS)に三本の論文を発表しました。その発見は次のようなものです:アセチル-L-カルニチンとR-α-リポ酸の精緻な組み合わせが、加齢するミトコンドリアに燃料を供給しながら、同時にそれらを保護する。燃料の側面、保護の側面 — その両方が、毎日のひとつの習慣の中に。",
+    "papersLabel": "三本の論文",
+    "papers": {
+      "one": {
+        "tag": "PNAS · 2002",
+        "title": "老齢ラットへのアセチル-L-カルニチンとリポ酸の投与は、酸化ストレスを低減させながら代謝機能を大きく改善する。"
+      },
+      "two": {
+        "tag": "PNAS · 2002",
+        "title": "老齢ラットの記憶喪失は、脳ミトコンドリアの衰退とRNA/DNAの酸化に関連する:アセチル-L-カルニチンおよび/またはR-α-リポ酸の投与による部分的な回復。"
+      },
+      "three": {
+        "tag": "PNAS · 2002",
+        "title": "加齢に伴うミトコンドリアの酸化的衰退:老齢ラットへのアセチル-L-カルニチンおよび/またはR-α-リポ酸の投与により、脳内カルニチン・アセチルトランスフェラーゼの基質結合親和性と活性が改善される。"
+      }
+    },
+    "closing": "この研究が、私たちの旗艦処方 NuriCell の礎となりました。劉博士はその進化を、それ以来ずっと導いてきました — 23年にわたる磨き上げ、そして今もなお続いています。",
+    "stats": {
+      "yearsNumber": "23",
+      "yearsLabel": "年",
+      "yearsBody": "処方を磨き続けてきた歳月",
+      "customersNumber": "100,000+",
+      "customersLabel": "の顧客",
+      "customersBody": "が NuriCell を信頼してきました",
+      "papersNumber": "3",
+      "papersStatLabel": "本の PNAS 論文",
+      "papersBody": "たった一年の間に発表"
+    },
+    "ctaPrimary": "NuriCell について詳しく見る",
+    "ctaSecondary": "劉博士について"
+  },
+  "System": {
+    "eyebrow": "私たちのシステム",
+    "headlineBefore": "ひとつのミッション。",
+    "headlineEmphasis": "それに見合うシステム",
+    "headlineAfter": "。",
+    "intro": "劉博士の継続的な指導のもと、BiGHは協調するフォーミュレーションのシステムを築き上げました — それぞれが脳のミトコンドリアにエネルギーを与え、その働きから生じる損傷から守るよう設計されています。単独でも機能するように。そして、共に働くようにも作られています。",
+    "products": {
+      "nuricell": {
+        "name": "NuriCell",
+        "role": "礎となるもの",
+        "tagline": "燃料と保護を、毎日のひとつの習慣に。",
+        "body": "旗艦製品。劉博士の2002年のPNAS発見を基盤として — アセチル-L-カルニチンとR-α-リポ酸が協働し、加齢するミトコンドリアを再び満たし、守ります。"
+      },
+      "nuriclear": {
+        "name": "NuriClear",
+        "role": "昼の明晰さ",
+        "tagline": "最も集中を要する時間のために。",
+        "body": "持続的な精神的パフォーマンスのための、集中型フォーミュレーション — 日中の深い仕事に合わせて調整されています。(プレースホルダー — 名称と詳細は今後確定予定。)"
+      },
+      "nuricalm": {
+        "name": "NuriCalm",
+        "role": "夜の回復",
+        "tagline": "修復の周期のために。",
+        "body": "細胞の清掃フェーズを支える、夜の伴侶 — 脳が夜の間に自らを新しくする手助けをします。(プレースホルダー — 名称と詳細は今後確定予定。)"
+      }
+    },
+    "cta": "システムを見てみる"
+  },
+  "Stories": {
+    "eyebrow": "メンバーからの声",
+    "headlineBefore": "あらゆる大陸から、",
+    "headlineEmphasis": "同じ答え。",
+    "intro": "23年にわたり、世界中の100,000人を超えるメンバーから。彼らの言葉が、最もよく語ってくれます。",
+    "featured": {
+      "quote": "NuriCellを15年間続けています。私は71歳、今も研究の仕事を続けていて、自分が大切にしていることについては相変わらず冴えています。最初から科学は厳密でした — それが当時信頼した理由です。今もここにいるのは、ずっと効き続けているからです。",
+      "name": "Margaret O.",
+      "location": "エディンバラ"
+    },
+    "shortQuotes": {
+      "one": {
+        "quote": "以前の午後は、霧の中を歩いているような感覚でした。数週間で、霧が晴れました。会話の流れを再び追えるようになりました — ただしがみついているのではなく。",
+        "name": "David M.",
+        "location": "ポートランド、オレゴン"
+      },
+      "two": {
+        "quote": "67歳、今もフルタイムでコンサルティングをしています。朝の習慣にNuriCellがあります — コーヒーと同じくらい欠かせないものになりました。もしかしたら、それ以上に大切かもしれません。",
+        "name": "Sun-hee K.",
+        "location": "ソウル"
+      },
+      "three": {
+        "quote": "マーケティングではなく、本物の科学に根ざしたものを欲していました。3年間日常に取り入れてきたのは、効くからです。母も飲んでいます。",
+        "name": "Linh T.",
+        "location": "ホーチミン市"
+      }
+    }
+  },
+  "AskDrLiu": {
+    "eyebrow": "メンバー限定",
+    "headlineBefore": "劉博士に尋ねる。",
+    "headlineEmphasis": "本物の答え。",
+    "intro": "劉博士の研究、論文、そして実験ノートで訓練された対話のパートナー — BiGHのサブスクライバー専用です。ミトコンドリア、脳の健康、あなたのルーティーンの背景にあるサイエンスについて、何でもお尋ねください。毎週金曜、新しい Q&A が追加されます。",
+    "qaLabel": "最近の対話",
+    "exchanges": {
+      "one": {
+        "question": "NuriCell を一日のうちのいつ飲むのが最適ですか?",
+        "answer": "朝、脂肪を含む朝食と一緒に。アセチル-L-カルニチンは食事の脂肪と一緒のほうが吸収が良く、午後4時より遅い時間に飲むと一部の方の睡眠に影響することがあります — 細胞代謝をわずかに刺激するためです。"
+      },
+      "two": {
+        "question": "ミトコンドリアの損傷は、本当に逆転できますか?",
+        "answer": "一部は、はい — ただし「逆転」という言葉は正確ではありません。健康な細胞は、絶え間なく新しいミトコンドリアを生み出します。私たちが行っているのは、今ある分の機能と生存を高めること、そして新しい分の誕生を支えることです。"
+      }
+    },
+    "typingHint": "毎週、新しい対話に更新されます",
+    "cta": "メンバーになる"
+  },
+  "Signup": {
+    "eyebrow": "ディスパッチ",
+    "headlineBefore": "",
+    "headlineEmphasis": "サイエンスのそばに。",
+    "intro": "ミトコンドリア、認知の長寿、そしてあらゆる年齢における脳についての、静かなディスパッチ — 劉博士の実験ノートと、私たちの思考から汲み上げられたもの。たまにだけお送りします。丁寧に書かれています。",
+    "placeholder": "you@example.com",
+    "cta": "購読する",
+    "reassurance": "プロモーションなし。ノイズなし。いつでも購読解除できます。"
+  },
+  "Footer": {
+    "tagline": "あなたの未来の思考に、確かな信頼を。",
+    "copyright": "© {year} BiGH. All rights reserved.",
+    "columns": {
+      "company": "会社情報",
+      "resources": "リソース",
+      "legal": "法的事項"
+    },
+    "links": {
+      "about": "BiGHについて",
+      "careers": "採用情報",
+      "press": "プレス",
+      "journal": "ジャーナル",
+      "research": "研究",
+      "faq": "よくある質問",
+      "privacy": "プライバシー",
+      "terms": "利用規約",
+      "shipping": "配送"
+    },
+    "social": {
+      "instagram": "Instagram",
+      "twitter": "Twitter",
+      "youtube": "YouTube"
+    }
+  },
+  "Meta": {
+    "title": "BiGH — あなたの未来の思考に、確かな信頼を",
+    "description": "プレミアムな長寿と認知のウェルネス。サイエンスに根ざしたサプリメントが、より明晰な十年を支えます。"
+  }
+}
