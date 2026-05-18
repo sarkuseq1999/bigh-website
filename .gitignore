@@ -49,3 +49,7 @@ Thumbs.db
 
 # Claude Code per-user state
 .claude/
+
+# Brainstorming visual companion
+.superpowers/
+.playwright-mcp/
