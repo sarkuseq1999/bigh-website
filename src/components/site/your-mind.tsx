@@ -1,110 +1,180 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef, type ReactNode } from "react";
+import { motion, useInView, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
 import { ArrowRight } from "lucide-react";
 
 const ease = [0.2, 0.7, 0.2, 1] as const;
 
-export function YourMind() {
-  const t = useTranslations("YourMind");
+/* ──────────────────────────────────────────────────────────────────────── */
+/* ThoughtLines — four faint brainwave lines that drift behind the section.  */
+/* preserveAspectRatio="none" lets the viewBox stretch full-bleed; each path  */
+/* spans x:0..1800 so a -600px drift (one wave period) loops seamlessly.      */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+function ThoughtLines({ reduce, inView }: { reduce: boolean; inView: boolean }) {
+  const lines = [
+    { d: "M0 120 q150 -34 300 0 t300 0 t300 0 t300 0 t300 0 t300 0", stroke: "#B85426", opacity: 0.3, dur: 21 },
+    { d: "M0 250 q150 32 300 0 t300 0 t300 0 t300 0 t300 0 t300 0", stroke: "#9C8F82", opacity: 0.34, dur: 27 },
+    { d: "M0 380 q150 -30 300 0 t300 0 t300 0 t300 0 t300 0 t300 0", stroke: "#B85426", opacity: 0.3, dur: 24 },
+    { d: "M0 500 q150 28 300 0 t300 0 t300 0 t300 0 t300 0 t300 0", stroke: "#9C8F82", opacity: 0.3, dur: 32 },
+  ];
 
   return (
-    <section className="relative overflow-hidden bg-white">
-      {/* Subtle thin sienna line entering from the top — visually marks the section start */}
-      <motion.div
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true, margin: "-40px" }}
-        transition={{ duration: 1.6, ease }}
-        className="bg-sienna/30 mx-auto h-px max-w-[120px] origin-center"
-      />
-
-      <div className="mx-auto max-w-[1200px] px-6 pt-24 pb-32 md:px-12 md:pt-32 md:pb-44">
-        {/* ─────────── EYEBROW ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease }}
-          className="flex justify-center"
-        >
-          <p className="text-espresso-40 font-display text-[0.7rem] font-medium tracking-[0.32em] uppercase italic">
-            {t("eyebrow")}
-          </p>
-        </motion.div>
-
-        {/* ─────────── HEADLINE ─────────── */}
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1.1, delay: 0.15, ease }}
-          className="font-display text-espresso mx-auto mt-14 max-w-[20ch] text-center text-[clamp(2.5rem,6.4vw,5.75rem)] font-light leading-[1.04] tracking-[-0.022em] md:mt-20"
-          style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-        >
-          {t("headlineBefore")}
-          <AIWord>{t("headlineAI")}</AIWord>
-          {t("headlineAfter")}
-          <em className="text-sienna font-light italic">
-            {t("headlineEmphasis")}
-          </em>
-          {t("headlineEnd")}
-        </motion.h2>
-
-        {/* ─────────── BODY ─────────── */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1, delay: 0.35, ease }}
-          className="text-espresso/75 mx-auto mt-16 max-w-[620px] text-center text-[clamp(1.0625rem,1.3vw,1.25rem)] leading-[1.7] md:mt-24"
-        >
-          {t("body")}
-        </motion.p>
-
-        {/* ─────────── CTA ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.9, delay: 0.55, ease }}
-          className="mt-14 flex justify-center md:mt-20"
-        >
-          <a
-            href="#"
-            className="group bg-espresso text-cream-50 hover:bg-sienna inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-medium tracking-[0.02em] transition-all duration-300 ease-out hover:gap-5"
-          >
-            {t("cta")}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
-        </motion.div>
-      </div>
-    </section>
+    <motion.div
+      aria-hidden="true"
+      className="absolute inset-0 z-0"
+      initial={reduce ? false : { opacity: 0 }}
+      animate={reduce ? undefined : { opacity: inView ? 1 : 0 }}
+      transition={{ duration: 1.8, delay: 1.2, ease: "linear" }}
+    >
+      <svg viewBox="0 0 1000 620" preserveAspectRatio="none" className="h-full w-full">
+        {lines.map((line) => (
+          <motion.path
+            key={line.d}
+            d={line.d}
+            fill="none"
+            stroke={line.stroke}
+            strokeWidth={1.1}
+            opacity={line.opacity}
+            animate={reduce ? undefined : { x: [0, -600] }}
+            transition={{ duration: line.dur, repeat: Infinity, ease: "linear" }}
+          />
+        ))}
+      </svg>
+    </motion.div>
   );
 }
 
 /* ──────────────────────────────────────────────────────────────────────── */
-/* The AI word — sans-serif Geist treatment with a sienna underline marker. */
-/* This is the design's central move: typographic contrast that visually   */
-/* performs the headline's meaning.                                        */
+/* Point — the sienna accent phrase ("the point") with a draw-in underline.  */
+/* Rendered as the <point> tag handler for the rich-text headline.           */
 /* ──────────────────────────────────────────────────────────────────────── */
 
-function AIWord({ children }: { children: React.ReactNode }) {
+function Point({
+  children,
+  reduce,
+  inView,
+}: {
+  children: ReactNode;
+  reduce: boolean;
+  inView: boolean;
+}) {
   return (
-    <span className="relative inline-block whitespace-nowrap">
-      <span className="text-espresso font-sans text-[0.78em] font-medium tracking-[0.04em] uppercase">
-        {children}
-      </span>
-      {/* Sienna underline marker — like a glossary term, but elegant */}
+    <span className="text-sienna relative inline-block font-medium whitespace-nowrap">
+      {children}
       <motion.span
-        initial={{ scaleX: 0 }}
-        whileInView={{ scaleX: 1 }}
-        viewport={{ once: true, margin: "-80px" }}
-        transition={{ duration: 0.9, delay: 0.6, ease }}
         aria-hidden="true"
-        className="bg-sienna absolute -bottom-1 left-0 right-0 h-[2px] origin-left"
+        className="bg-sienna absolute right-0 -bottom-[0.04em] left-0 h-[2px] origin-left"
+        initial={reduce ? false : { scaleX: 0 }}
+        animate={reduce ? undefined : { scaleX: inView ? 1 : 0 }}
+        transition={{ duration: 0.8, delay: 1.4, ease }}
       />
     </span>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* YourMind — homepage section 2. White, centered, with a staged reveal      */
+/* triggered once when the section scrolls into view.                        */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+export function YourMind() {
+  const t = useTranslations("YourMind");
+  const reduce = useReducedMotion() ?? false;
+  const ref = useRef<HTMLElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+
+  /* Motion props for a fade-and-rise element revealed `delay` seconds in.
+     Under reduced motion this is empty, so the element renders statically. */
+  const reveal = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 16 },
+          animate: inView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 },
+          transition: { duration: 0.95, delay, ease },
+        };
+
+  return (
+    <section ref={ref} className="relative overflow-hidden bg-white">
+      {/* thin sienna hairline marking the section start */}
+      <motion.div
+        initial={reduce ? false : { scaleX: 0 }}
+        animate={reduce ? undefined : { scaleX: inView ? 1 : 0 }}
+        transition={{ duration: 1.6, delay: 0.1, ease }}
+        className="bg-sienna/35 relative z-[2] mx-auto h-px w-[120px] origin-center"
+      />
+
+      {/* drifting background motif */}
+      <ThoughtLines reduce={reduce} inView={inView} />
+
+      {/* white focus-fade so the lines never sit behind the headline */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 z-[1]"
+        style={{
+          background:
+            "radial-gradient(ellipse 46% 60% at 50% 48%, #fff 0%, #fff 40%, rgba(255,255,255,0) 80%)",
+        }}
+      />
+
+      <div className="relative z-[2] mx-auto max-w-[920px] px-6 pt-28 pb-28 md:px-12 md:pt-36 md:pb-32">
+        {/* eyebrow */}
+        <motion.p
+          {...reveal(0.15)}
+          className="text-espresso-40 text-center text-[0.75rem] font-medium tracking-[0.32em] uppercase italic"
+        >
+          {t("eyebrow")}
+        </motion.p>
+
+        {/* headline — quiet setup line, then the full-weight punch */}
+        <h2 className="font-sans mx-auto mt-10 max-w-[21ch] text-center text-[clamp(2.3rem,4.5vw,4.1rem)] leading-[1.09] font-normal tracking-[-0.032em] text-balance md:mt-12">
+          <motion.span {...reveal(0.3)} className="text-espresso-60 block">
+            {t("headlineSetup")}
+          </motion.span>
+          <motion.span {...reveal(0.8)} className="text-espresso block">
+            {t.rich("headlinePunch", {
+              point: (chunks) => (
+                <Point reduce={reduce} inView={inView}>
+                  {chunks}
+                </Point>
+              ),
+            })}
+          </motion.span>
+        </h2>
+
+        {/* body */}
+        <motion.p
+          {...reveal(1.9)}
+          className="text-espresso/75 mx-auto mt-9 max-w-[600px] text-center text-[clamp(1.0625rem,1.2vw,1.1rem)] leading-[1.72]"
+        >
+          {t("body")}
+        </motion.p>
+
+        {/* coda — Jobs-style landing line */}
+        <motion.p
+          {...reveal(2.5)}
+          className="text-espresso-60 mt-6 text-center text-[1.3rem] italic"
+        >
+          {t("coda")}
+        </motion.p>
+
+        {/* CTA */}
+        <motion.div {...reveal(2.85)} className="mt-11 flex justify-center">
+          <a
+            href="#"
+            className="group bg-espresso text-cream-50 hover:bg-sienna inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-medium tracking-[0.01em] transition-all duration-300 ease-out hover:-translate-y-px hover:gap-5 active:translate-y-0 active:scale-[0.98]"
+          >
+            {t("cta")}
+            <ArrowRight
+              className="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
+              strokeWidth={1.5}
+            />
+          </a>
+        </motion.div>
+      </div>
+    </section>
   );
 }
