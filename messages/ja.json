@@ -13,11 +13,11 @@
     "toggleTheme": "テーマを切り替える"
   },
   "Hero": {
-    "headline": "あなたの思考に、<em>有効期限はありません。</em>",
-    "subhead": "どんな年齢であっても、明晰さは運ではありません — 自然と科学が共に生み出すものです。BiGHは、あなたの脳細胞に必要な燃料と保護を、十年、また十年と届け続けます。",
-    "cta": "製品ラインを見る",
-    "ctaSecondary": "サイエンスを知る",
-    "imageAlt": "陽の差し込む温室で植物の手入れをする女性"
+    "headline": "Your mind has no <em>expiration date.</em>",
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "cta": "Continue",
+    "scrollCue": "Scroll",
+    "imageAlt": "Slow amber aurora over a distant mountain horizon"
   },
   "Science": {
     "eyebrow": "サイエンス",

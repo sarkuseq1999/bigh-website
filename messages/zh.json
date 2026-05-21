@@ -13,11 +13,11 @@
     "toggleTheme": "切换主题"
   },
   "Hero": {
-    "headline": "您的思维没有<em>保质期。</em>",
-    "subhead": "任何年龄的清晰思维都不靠运气——而是自然与科学的合力。BiGH 为您的脑细胞提供所需的燃料与保护,年复一年,代代相传。",
-    "cta": "探索产品系列",
-    "ctaSecondary": "了解背后的科学",
-    "imageAlt": "一位女性在阳光明媚的温室中照料植物"
+    "headline": "Your mind has no <em>expiration date.</em>",
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "cta": "Continue",
+    "scrollCue": "Scroll",
+    "imageAlt": "Slow amber aurora over a distant mountain horizon"
   },
   "Science": {
     "eyebrow": "科学",

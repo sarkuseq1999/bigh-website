@@ -14,10 +14,10 @@
   },
   "Hero": {
     "headline": "Your mind has no <em>expiration date.</em>",
-    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain cells the fuel and protection they need, decade after decade.",
-    "cta": "Discover the line",
-    "ctaSecondary": "See the science",
-    "imageAlt": "A woman tending plants in a sunlit greenhouse"
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "cta": "Continue",
+    "scrollCue": "Scroll",
+    "imageAlt": "Slow amber aurora over a distant mountain horizon"
   },
   "Science": {
     "eyebrow": "the science",

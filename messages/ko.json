@@ -13,11 +13,11 @@
     "toggleTheme": "테마 전환"
   },
   "Hero": {
-    "headline": "당신의 정신에는 <em>유효기간이 없습니다.</em>",
-    "subhead": "어떤 나이에도 명료함은 운이 아닙니다 — 자연과 과학이 함께 만들어내는 것입니다. BiGH는 당신의 뇌세포에 필요한 연료와 보호를, 십 년이 지나도 또 십 년이 지나도 변함없이 제공합니다.",
-    "cta": "제품 라인 살펴보기",
-    "ctaSecondary": "그 안의 과학",
-    "imageAlt": "햇살 가득한 온실에서 식물을 돌보는 여성"
+    "headline": "Your mind has no <em>expiration date.</em>",
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "cta": "Continue",
+    "scrollCue": "Scroll",
+    "imageAlt": "Slow amber aurora over a distant mountain horizon"
   },
   "Science": {
     "eyebrow": "사이언스",

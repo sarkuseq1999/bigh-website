@@ -13,11 +13,11 @@
     "toggleTheme": "Cambiar tema"
   },
   "Hero": {
-    "headline": "Tu mente no tiene <em>fecha de caducidad.</em>",
-    "subhead": "La claridad a cualquier edad no es cuestión de suerte: es naturaleza y ciencia. BiGH le entrega a tus células cerebrales el combustible y la protección que necesitan, década tras década.",
-    "cta": "Descubrir la línea",
-    "ctaSecondary": "Ver la ciencia",
-    "imageAlt": "Una mujer cuidando plantas en un invernadero iluminado por el sol"
+    "headline": "Your mind has no <em>expiration date.</em>",
+    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "cta": "Continue",
+    "scrollCue": "Scroll",
+    "imageAlt": "Slow amber aurora over a distant mountain horizon"
   },
   "Science": {
     "eyebrow": "la ciencia",
