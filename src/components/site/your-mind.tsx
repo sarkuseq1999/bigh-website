@@ -98,7 +98,7 @@ export function YourMind() {
         };
 
   return (
-    <section ref={ref} className="relative overflow-hidden bg-white">
+    <section id="yourmind" ref={ref} className="relative overflow-hidden bg-white">
       {/* thin sienna hairline marking the section start */}
       <motion.div
         initial={reduce ? false : { scaleX: 0 }}
