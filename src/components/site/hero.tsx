@@ -1,69 +1,146 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
-
-import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 
 const ease = [0.2, 0.7, 0.2, 1] as const;
 
-export function Hero() {
-  const t = useTranslations("Hero");
+/* ──────────────────────────────────────────────────────────────────────── */
+/* AuroraBackground — looping aurora video with a still fallback under      */
+/* reduced motion. The still also serves as the video's poster (visible     */
+/* during initial fetch). A dark gradient overlay sits above the media for  */
+/* type legibility on the lower-left content stack.                          */
+/* ──────────────────────────────────────────────────────────────────────── */
 
+function AuroraBackground({
+  reduce,
+  imageAlt,
+}: {
+  reduce: boolean;
+  imageAlt: string;
+}) {
   return (
-    <section className="relative isolate min-h-screen overflow-hidden bg-cream-50">
-      <motion.div
-        initial={{ scale: 1, x: 0 }}
-        animate={{ scale: 1.045, x: "-1%" }}
-        transition={{
-          duration: 26,
-          repeat: Infinity,
-          repeatType: "mirror",
-          ease: "easeInOut",
-        }}
-        className="absolute inset-0 -z-10"
-      >
+    <>
+      {reduce ? (
         <Image
-          src="/hero/hero-76-star-trails-ridge.jpg"
-          alt={t("imageAlt")}
+          src="/hero/candidate-aurora.jpg"
+          alt={imageAlt}
           fill
           priority
           sizes="100vw"
-          className="object-cover object-right"
+          className="absolute inset-0 -z-10 object-cover"
         />
-      </motion.div>
+      ) : (
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster="/hero/candidate-aurora.jpg"
+          aria-hidden="true"
+          className="absolute inset-0 -z-10 h-full w-full object-cover"
+        >
+          <source src="/hero/aurora-loop-1.5x.mp4" type="video/mp4" />
+        </video>
+      )}
 
+      {/* Dark gradient overlay for legibility — z-0 so it sits above the
+          media (which is -z-10) but below the content (which is z-10).     */}
       <div
         aria-hidden="true"
-        className="absolute inset-0 -z-10 hidden md:block"
+        className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "linear-gradient(100deg, rgba(250,246,239,0.96) 0%, rgba(250,246,239,0.92) 28%, rgba(250,246,239,0.55) 48%, rgba(250,246,239,0.10) 62%, rgba(250,246,239,0.00) 78%)",
+            "linear-gradient(95deg, rgba(15,10,25,0.85) 0%, rgba(15,10,25,0.55) 28%, rgba(15,10,25,0.12) 52%, transparent 72%), linear-gradient(180deg, transparent 50%, rgba(15,10,25,0.55) 100%)",
         }}
       />
-      <div
-        aria-hidden="true"
-        className="absolute inset-0 -z-10 md:hidden"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(250,246,239,0.97) 0%, rgba(250,246,239,0.92) 32%, rgba(250,246,239,0.50) 56%, rgba(250,246,239,0.05) 78%)",
-        }}
-      />
+    </>
+  );
+}
 
-      <div className="relative mx-auto grid min-h-[calc(100vh-6rem)] max-w-[1320px] grid-cols-1 items-center gap-14 px-6 py-16 md:grid-cols-2 md:px-14 md:py-24">
-        <div className="max-w-[540px]">
+/* ──────────────────────────────────────────────────────────────────────── */
+/* ScrollCue — small uppercase label + hairline at the bottom-center.       */
+/* Hidden under reduced motion (the cue implies motion).                     */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+function ScrollCue({ label, reduce }: { label: string; reduce: boolean }) {
+  if (reduce) return null;
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.9, delay: 1.4, ease }}
+      className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center"
+      aria-hidden="true"
+    >
+      <span className="text-cream-50/50 text-[10px] tracking-[0.32em] uppercase">
+        {label}
+      </span>
+      <span className="bg-cream-50/35 mx-auto mt-2 block h-[18px] w-px" />
+    </motion.div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Hero — homepage section 1. Brand-statement manifesto with looping aurora */
+/* video background and a lower-left content stack revealed in sequence on  */
+/* mount. The CTA scrolls smoothly to the YourMind section (`#yourmind`).    */
+/*                                                                          */
+/* `data-dark-context` is read by SiteHeader (via IntersectionObserver) to  */
+/* switch the header into its dark-context visual mode while the hero is in */
+/* view.                                                                     */
+/* ──────────────────────────────────────────────────────────────────────── */
+
+export function Hero() {
+  const t = useTranslations("Hero");
+  const reduce = useReducedMotion() ?? false;
+  const sectionRef = useRef<HTMLElement>(null);
+
+  /* Motion props for a fade-and-rise element revealed `delay` seconds in.
+     Under reduced motion this is empty, so the element renders statically. */
+  const reveal = (delay: number) =>
+    reduce
+      ? {}
+      : {
+          initial: { opacity: 0, y: 16 },
+          animate: { opacity: 1, y: 0 },
+          transition: { duration: 0.9, delay, ease },
+        };
+
+  const scrollToNext = () => {
+    const target = document.getElementById("yourmind");
+    const behavior: ScrollBehavior = reduce ? "auto" : "smooth";
+    if (target) {
+      target.scrollIntoView({ behavior, block: "start" });
+    } else {
+      window.scrollTo({ top: window.innerHeight, behavior });
+    }
+  };
+
+  return (
+    <section
+      ref={sectionRef}
+      data-dark-context
+      className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0a0a1a]"
+    >
+      <AuroraBackground reduce={reduce} imageAlt={t("imageAlt")} />
+
+      {/* Lower-left content stack. flex justify-end pushes content to the
+          bottom of the section; max-width keeps it from spreading across
+          the brightest aurora area.                                       */}
+      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[1320px] flex-col justify-end px-6 pt-24 pb-20 md:px-14 md:pt-32 md:pb-24">
+        <div className="max-w-[640px] md:max-w-[58%]">
           <motion.h1
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.32, ease }}
-            className="font-display text-espresso m-0 text-[clamp(2.5rem,5.6vw,4.875rem)] font-light leading-[1.02] tracking-[-0.018em]"
-            style={{ fontVariationSettings: '"opsz" 144, "SOFT" 40' }}
+            {...reveal(0.3)}
+            className="font-display text-cream-50 m-0 text-[clamp(2.5rem,6.4vw,4.875rem)] leading-[1.02] font-light tracking-[-0.025em] text-balance"
           >
             {t.rich("headline", {
-              br: () => <br />,
               em: (chunks) => (
-                <em className="text-sienna font-light not-italic [font-style:italic]">
+                <em className="text-sienna font-normal not-italic [font-style:italic]">
                   {chunks}
                 </em>
               ),
@@ -71,44 +148,29 @@ export function Hero() {
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.58, ease }}
-            className="text-espresso-60 mt-7 max-w-[480px] text-[clamp(1.125rem,1.35vw,1.3125rem)] leading-[1.6]"
+            {...reveal(0.7)}
+            className="text-cream-50/80 mt-8 max-w-[560px] text-[clamp(0.95rem,1.2vw,1.125rem)] leading-[1.62]"
           >
             {t("subhead")}
           </motion.p>
 
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.82, ease }}
-            className="mt-9 flex flex-wrap items-center gap-5"
-          >
-            <Button
-              size="lg"
-              className="bg-espresso text-cream-50 hover:bg-sienna h-auto rounded-full px-7 py-3.5 text-sm font-medium tracking-[0.01em]"
+          <motion.div {...reveal(1.0)} className="mt-9">
+            <button
+              type="button"
+              onClick={scrollToNext}
+              className="group bg-cream-50 text-espresso hover:bg-sienna hover:text-cream-50 inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium tracking-[0.01em] transition-all duration-300 ease-out hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
             >
               {t("cta")}
-            </Button>
-            <Button
-              variant="ghost"
-              size="lg"
-              className="text-espresso hover:text-sienna group h-auto rounded-full px-1 py-3.5 text-sm font-medium tracking-[0.01em] hover:bg-transparent"
-            >
-              {t("ctaSecondary")}
-              <span
-                aria-hidden="true"
-                className="ml-1 inline-block transition-transform duration-200 group-hover:translate-x-1"
-              >
-                →
-              </span>
-            </Button>
+              <ArrowRight
+                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
+                strokeWidth={1.5}
+              />
+            </button>
           </motion.div>
         </div>
-
-        <div aria-hidden="true" />
       </div>
+
+      <ScrollCue label={t("scrollCue")} reduce={reduce} />
     </section>
   );
 }
