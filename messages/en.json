@@ -1,23 +1,36 @@
 {
-  "Brand": {
-    "name": "BiGH"
-  },
+  "Brand": { "name": "BiGH" },
   "Nav": {
-    "home": "Home",
-    "products": "Products",
     "science": "Science",
-    "about": "About",
-    "support": "Support",
+    "products": "Products",
+    "quiz": "Quiz",
+    "cta": "Take the Quiz",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "toggleTheme": "Toggle theme"
+    "language": "Language",
+    "home": "Home",
+    "about": "About",
+    "support": "Support"
   },
+  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Hero": {
-    "headline": "Your mind has no <em>expiration date.</em>",
-    "subhead": "Sharpness at every age isn't luck — it's nature and science. BiGH gives your brain the fuel and protection it needs — in one daily ritual.",
+    "eyebrow": "BACKED BY 30 YEARS OF PUBLISHED SCIENCE",
+    "headline": "The best is <em>still ahead</em>.",
+    "subhead": "Stay sharp for the years that matter most.",
+    "paragraph": "Most brain supplements sell you a list of ingredients. We start thirty years deeper — at your brain's own batteries, the mitochondria — with nutrition shaped by the published research of neuroscientist Dr. Jiankang Liu.",
+    "ctaPrimary": "Take the 3-Minute Brain Age Quiz",
+    "ctaSecondary": "Meet NuriCell →",
+    "imageAlt": "A vibrant, distinguished woman in her late 50s caught mid-thought in a sunlit room with books and warm wood",
     "cta": "Continue",
-    "scrollCue": "Scroll",
-    "imageAlt": "Slow amber aurora over a distant mountain horizon"
+    "scrollCue": "Scroll"
+  },
+  "YourMind": {
+    "eyebrow": "The human advantage",
+    "headlineSetup": "Everyone is talking about artificial intelligence.",
+    "headlinePunch": "They're missing <point>the point</point>.",
+    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
+    "coda": "That's the whole idea.",
+    "cta": "Discover the line"
   },
   "Science": {
     "eyebrow": "the science",
@@ -33,121 +46,52 @@
     "wasteBody": "Cells get damaged.",
     "cta": "Learn how mitochondria work"
   },
-  "YourMind": {
-    "eyebrow": "The human advantage",
-    "headlineSetup": "Everyone is talking about artificial intelligence.",
-    "headlinePunch": "They're missing <point>the point</point>.",
-    "body": "The most powerful intelligence you will ever use is your own mind — your taste, your judgment, your imagination. A machine can be trained. It cannot be you. Your mind runs on a healthy brain, and a brain needs just two things to stay extraordinary: protection, and fuel.",
-    "coda": "That's the whole idea.",
-    "cta": "Discover the line"
-  },
   "Credibility": {
     "eyebrow": "The science behind NuriCell",
     "headlineBefore": "In 2002, our chief science advisor ",
     "headlineEmphasis": "solved",
     "headlineAfter": " the equation.",
-    "intro": "Dr. Jian Kang Liu — then working with legendary biochemist Bruce Ames at UC Berkeley — published three papers in the Proceedings of the National Academy of Sciences in a single year. The discovery: a precise combination of acetyl-L-carnitine and R-α-lipoic acid that simultaneously fueled and protected aging mitochondria. The fuel side, the protection side — both in one daily ritual.",
+    "intro": "Dr. Jian Kang Liu — then working with legendary biochemist Bruce Ames at UC Berkeley — published three papers in the Proceedings of the National Academy of Sciences in a single year.",
     "papersLabel": "The papers",
     "papers": {
-      "one": {
-        "tag": "PNAS · 2002",
-        "title": "Feeding acetyl-L-carnitine and lipoic acid to old rats significantly improves metabolic function while decreasing oxidative stress."
-      },
-      "two": {
-        "tag": "PNAS · 2002",
-        "title": "Memory loss in old rats is associated with brain mitochondrial decay and RNA/DNA oxidation: Partial reversal by feeding acetyl-L-carnitine and/or R-α-lipoic acid."
-      },
-      "three": {
-        "tag": "PNAS · 2002",
-        "title": "Age-associated mitochondrial oxidative decay: improvement of carnitine acetyltransferase substrate-binding affinity and activity in brain by feeding old rats acetyl-L-carnitine and/or R-α-lipoic acid."
-      }
+      "one": { "tag": "PNAS · 2002", "title": "Feeding acetyl-L-carnitine and lipoic acid to old rats significantly improves metabolic function while decreasing oxidative stress." },
+      "two": { "tag": "PNAS · 2002", "title": "Memory loss in old rats is associated with brain mitochondrial decay and RNA/DNA oxidation: Partial reversal by feeding acetyl-L-carnitine and/or R-α-lipoic acid." },
+      "three": { "tag": "PNAS · 2002", "title": "Age-associated mitochondrial oxidative decay: improvement of carnitine acetyltransferase substrate-binding affinity and activity in brain by feeding old rats acetyl-L-carnitine and/or R-α-lipoic acid." }
     },
-    "closing": "That research became the foundation of NuriCell, our flagship formulation. Dr. Liu has guided its evolution ever since — 23 years of refinement, and counting.",
+    "closing": "That research became the foundation of NuriCell.",
     "stats": {
-      "yearsNumber": "23",
-      "yearsLabel": "years",
-      "yearsBody": "refining the formula",
-      "customersNumber": "100,000+",
-      "customersLabel": "customers",
-      "customersBody": "have trusted NuriCell",
-      "papersNumber": "3",
-      "papersStatLabel": "PNAS papers",
-      "papersBody": "published in a single year"
+      "yearsNumber": "23", "yearsLabel": "years", "yearsBody": "refining the formula",
+      "customersNumber": "100,000+", "customersLabel": "customers", "customersBody": "have trusted NuriCell",
+      "papersNumber": "3", "papersStatLabel": "PNAS papers", "papersBody": "published in a single year"
     },
     "ctaPrimary": "Learn more about NuriCell",
     "ctaSecondary": "Meet Dr. Liu"
-  },
-  "System": {
-    "eyebrow": "The system",
-    "headlineBefore": "One mission. ",
-    "headlineEmphasis": "A system",
-    "headlineAfter": " to match.",
-    "intro": "Under Dr. Liu's continuing direction, BiGH has built a coordinated system of formulations — each designed to fuel the brain's mitochondria with energy, and protect them from the damage they create as they work. Engineered to stand alone. Built to work together.",
-    "products": {
-      "nuricell": {
-        "name": "NuriCell",
-        "role": "The foundation",
-        "tagline": "Fuel and protection, in one daily ritual.",
-        "body": "The flagship. Built on Dr. Liu's 2002 PNAS discovery — acetyl-L-carnitine and R-α-lipoic acid working in concert to refuel and shield aging mitochondria."
-      },
-      "nuriclear": {
-        "name": "NuriClear",
-        "role": "Daytime clarity",
-        "tagline": "For the hours that demand the most.",
-        "body": "A focused formulation for sustained mental performance — calibrated for the deep work of the day. (Placeholder — name and details to be confirmed.)"
-      },
-      "nuricalm": {
-        "name": "NuriCalm",
-        "role": "Evening recovery",
-        "tagline": "For the cycle of repair.",
-        "body": "The night-time companion that supports the cellular cleanup phase, helping the brain renew itself overnight. (Placeholder — name and details to be confirmed.)"
-      }
-    },
-    "cta": "Explore the system"
   },
   "Stories": {
     "eyebrow": "From our members",
     "headlineBefore": "From every continent, ",
     "headlineEmphasis": "the same answer.",
-    "intro": "More than 100,000 members across the world, for 23 years. Their words say it best.",
+    "intro": "More than 100,000 members across the world, for 23 years.",
     "featured": {
-      "quote": "Fifteen years of NuriCell. I'm 71, still working in research, still sharp at the things I care about. The science was rigorous from the start — that's why I trusted it then. I'm still here because it kept working.",
+      "quote": "Fifteen years of NuriCell. I'm 71, still working in research, still sharp at the things I care about.",
       "name": "Margaret O.",
       "location": "Edinburgh"
     },
     "shortQuotes": {
-      "one": {
-        "quote": "My afternoons used to feel like wading through fog. A few weeks in, the fog lifted. I'm tracking conversations again — not just hanging on.",
-        "name": "David M.",
-        "location": "Portland, Oregon"
-      },
-      "two": {
-        "quote": "At 67, I'm still consulting full-time. My morning routine includes NuriCell — it's become as essential as coffee. Possibly more important.",
-        "name": "Sun-hee K.",
-        "location": "Seoul"
-      },
-      "three": {
-        "quote": "I wanted something rooted in real science, not marketing. I've kept it in my routine for three years because it works. My mother takes it too.",
-        "name": "Linh T.",
-        "location": "Ho Chi Minh City"
-      }
+      "one": { "quote": "My afternoons used to feel like wading through fog.", "name": "David M.", "location": "Portland, Oregon" },
+      "two": { "quote": "At 67, I'm still consulting full-time.", "name": "Sun-hee K.", "location": "Seoul" },
+      "three": { "quote": "I wanted something rooted in real science, not marketing.", "name": "Linh T.", "location": "Ho Chi Minh City" }
     }
   },
   "AskDrLiu": {
     "eyebrow": "Members only",
     "headlineBefore": "Ask Dr. Liu. ",
     "headlineEmphasis": "Real answers.",
-    "intro": "A chat companion trained on Dr. Liu's research, papers, and lab notes — exclusive to BiGH subscribers. Ask anything about mitochondria, brain health, or the science behind your routine. New Q&A added every Friday.",
+    "intro": "A chat companion trained on Dr. Liu's research, papers, and lab notes.",
     "qaLabel": "Recent conversations",
     "exchanges": {
-      "one": {
-        "question": "What's the best time of day to take NuriCell?",
-        "answer": "Morning, with a fat-containing breakfast. Acetyl-L-carnitine absorbs better with dietary fat, and taking it later than 4pm can affect sleep for some — it's mildly stimulating to cellular metabolism."
-      },
-      "two": {
-        "question": "Is mitochondrial damage really reversible?",
-        "answer": "Some of it, yes — but reversal is the wrong word. Healthy cells continuously produce new mitochondria. What we're doing is improving the function and survival of the ones you have, while supporting the birth of fresh ones."
-      }
+      "one": { "question": "What's the best time of day to take NuriCell?", "answer": "Morning, with a fat-containing breakfast." },
+      "two": { "question": "Is mitochondrial damage really reversible?", "answer": "Some of it, yes — but reversal is the wrong word." }
     },
     "typingHint": "Updated weekly with new conversations",
     "cta": "Become a member"
@@ -156,25 +100,139 @@
     "eyebrow": "The dispatch",
     "headlineBefore": "Stay close to ",
     "headlineEmphasis": "the science.",
-    "intro": "A quiet dispatch on mitochondria, cognitive longevity, and the brain at every age — drawn from Dr. Liu's lab notes and ours. Sent occasionally. Written carefully.",
+    "intro": "A quiet dispatch on mitochondria, cognitive longevity, and the brain at every age.",
     "placeholder": "you@example.com",
     "cta": "Subscribe",
     "reassurance": "No promotions. No noise. Unsubscribe anytime."
   },
+  "NewReality": {
+    "eyebrow": "THE NEW REALITY",
+    "headline": "The smarter the world gets, the more your mind is worth.",
+    "subhead": "Everyone's bracing for machines to make them obsolete. They've got it backwards.",
+    "bodyP1": "For the first time, machines can do the things we thought made us smart. They remember everything. They calculate in an instant. They answer before you've finished the question.",
+    "bodyP2": "So what's left? The things they can't do.",
+    "capabilities": {
+      "judgment": { "term": "Judgment", "definition": "knowing which answer is the right one." },
+      "wisdom": { "term": "Wisdom", "definition": "knowing what actually matters." },
+      "taste": { "term": "Taste", "definition": "knowing what's good and what isn't." }
+    },
+    "closing": "That last one is the rarest of all. It can't be downloaded. It can't be trained overnight. It's earned, over a lifetime, by a mind that stays sharp.",
+    "pivot": "Which means staying sharp is no longer about holding on. It's about staying ahead. And it starts somewhere smaller than you'd ever think."
+  },
+  "Reason": {
+    "eyebrow": "THE REASON",
+    "headline": "Your brain runs on <em>tiny batteries</em>.",
+    "subhead": "Billions of them. And they're the reason you feel sharp — or you don't.",
+    "bodyP1": "Your brain is the hungriest part of you. Just 2% of your body, burning 20% of your energy. It never stops, and it never coasts.",
+    "bodyP2": "All that energy is made inside your cells by microscopic power plants called mitochondria — your brain's batteries. When they're full and firing, you feel it. Quick. Clear. On.",
+    "bodyP3": "But like every battery, they fade with time. Scientists have a name for it: mitochondrial decay. As the batteries weaken, the brain gets less of the one thing it runs on.",
+    "turn": "Here's what most people never hear: batteries can be looked after.",
+    "differentiation": "Not at the surface. At the source.",
+    "pivot": "And we didn't guess at any of this. The roadmap came from thirty years of published research by one neuroscientist.",
+    "calloutStat": "2% / 20%",
+    "calloutLabel": "of the body / of its energy"
+  },
+  "Scientist": {
+    "eyebrow": "THE SCIENTIST",
+    "headline": "Meet Dr. Jiankang <em>Liu</em>.",
+    "subhead": "He has spent thirty years on a single question: how do you keep a brain sharp?",
+    "anchor": "3 papers. 1 issue. 22,000+ citations.",
+    "bodyP1": "In February 2002, three of his papers ran in a single issue of PNAS — the Proceedings of the National Academy of Sciences, one of the most respected journals in science. Most researchers never place a single paper there in a lifetime. He placed three at once.",
+    "bodyP2": "His work has since been cited by other scientists more than 22,000 times.",
+    "bodyP3": "This isn't a wellness trend with a celebrity face. It's a life's work — trained at UC Berkeley, carried through laboratories in the US and abroad, focused on one idea: how the brain makes its energy, and how to help it keep making it.",
+    "bodyP4": "When our founder, Mo Chen, set out to build BiGH, he didn't start with a logo or a launch plan. He started with a scientist he's known for years — and the belief that this research deserved to reach the people who need it.",
+    "pivot": "His research became a formula. We call it NuriCell.",
+    "photoLabel": "[REAL PHOTO: Dr. Liu]"
+  },
+  "Flagship": {
+    "eyebrow": "THE FLAGSHIP",
+    "badge": "FROM THE LAB",
+    "beat1": { "headline": "NuriCell.", "subhead": "Thirty years of research. Three capsules a day." },
+    "beat2": { "headline": "His formula. Not ours.", "body": "This is the one Dr. Liu built himself — straight from the research you just read about. Everything else we make is built on his science. This one is his science." },
+    "beat3": { "headline": "Two nutrients. Greater together.", "body": "Acetyl-L-carnitine and alpha-lipoic acid — the two his papers centered on. Alone, each supports the brain's batteries. Together, his research showed, they do far more. That pairing is the discovery." },
+    "beat4": { "headline": "More isn't better. Right is better.", "body": "We didn't chase the biggest numbers on the label. We matched the doses to the science — the amounts the research actually points to." },
+    "beat5": { "headline": "Built complete.", "body": "Rounded out with creatine and choline — energy and signaling support for a brain that never clocks out." },
+    "beat6": { "headline": "Three capsules. Every morning.", "body": "Working where it counts — not at the surface, at the source.", "cta": "Start with NuriCell →", "pivot": "It's the foundation. But it was never meant to work alone." },
+    "bottleLabel": "[PLACEHOLDER RENDER — swap real bottle]",
+    "capsuleLabel": "[IMAGE: a single capsule in an open palm]"
+  },
+  "System": {
+    "eyebrow": "THE SYSTEM",
+    "headline": "One formula from the lab. Five more built on the science. One complete team.",
+    "headlineBefore": "One mission. ",
+    "headlineEmphasis": "A system",
+    "headlineAfter": " to match.",
+    "intro": "NuriCell is the foundation. Around it, five formulas — each with a job, each built on the same research. Together, they're a system, not a shelf.",
+    "cta": "Explore the system",
+    "products": {
+      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                              "tag": "FROM THE LAB",          "tagline": "Fuel and protection, in one daily ritual.",            "body": "The flagship. Built on Dr. Liu's 2002 PNAS discovery." },
+      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                      "tag": "Built on the Science",  "tagline": "Calm against the day's stress.",                       "body": "Placeholder." },
+      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                            "tag": "Built on the Science",  "tagline": "Cools the everyday fire.",                            "body": "Placeholder." },
+      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                              "tag": "Built on the Science",  "tagline": "Protects the pathways.",                              "body": "Placeholder." },
+      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                           "tag": "Built on the Science",  "tagline": "Daily defense and repair.",                           "body": "Placeholder." },
+      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.",       "tag": "Built on the Science",  "tagline": "Day-and-night balance, overnight restoration.",       "body": "Placeholder." },
+      "nuriclear":   { "name": "NuriClear",          "role": "Daytime clarity", "line": "For the hours that demand the most.",                 "tag": "Built on the Science",  "tagline": "For the hours that demand the most.",                 "body": "Placeholder." },
+      "nuricalm":    { "name": "NuriCalm",           "role": "Evening recovery","line": "For the cycle of repair.",                           "tag": "Built on the Science",  "tagline": "For the cycle of repair.",                           "body": "Placeholder." }
+    },
+    "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol" }
+  },
+  "Proof": {
+    "eyebrow": "THE PROOF",
+    "headline": "Real science. Real people.",
+    "testimonials": {
+      "one":   { "quote": "At 62, I'm running my business better than I did at 45. I feel switched on.", "name": "Ji-woo K.", "location": "Seoul", "note": "(placeholder)" },
+      "two":   { "quote": "Part of my morning now. I just feel clear and steady through the day.",        "name": "Daniel R.", "location": "California", "note": "(placeholder)" },
+      "three": { "quote": "My whole family takes it. It's the one thing none of us skip.",                 "name": "Mai T.",    "location": "Hanoi", "note": "(placeholder)" }
+    },
+    "record": {
+      "pnas": "Published in PNAS",
+      "citations": "22,000+ citations",
+      "years": "30 years of research",
+      "berkeley": "UC Berkeley–trained",
+      "cta": "Read the research →"
+    }
+  },
+  "SoftEntry": {
+    "eyebrow": "FIND YOUR BRAIN AGE",
+    "headline": "How sharp is your brain, really?",
+    "subhead": "Three minutes. A few questions. Your Brain Age — and a protocol built for it.",
+    "quizCta": "Take the Brain Age Quiz →",
+    "newsletter": {
+      "title": "The Longevity Signal",
+      "line": "No spam. No schedule. Just science.",
+      "placeholder": "you@example.com",
+      "cta": "Subscribe"
+    }
+  },
+  "Founder": {
+    "eyebrow": "A NOTE FROM OUR FOUNDER",
+    "headline": "Why I built this.",
+    "bodyP1": "I didn't set out to build a supplement company. I set out to bring one scientist's life's work to the people who need it — starting with my own family.",
+    "bodyP2": "Everything here rests on real, published research, and it's made the way I'd make it for the people I love. No shortcuts. No hype. Just the science, done right — so you can stay sharp for everything still ahead.",
+    "signoff": "— Mo Chen, Founder",
+    "cta": "Start with NuriCell →",
+    "photoLabel": "[REAL PHOTO: Founder]"
+  },
   "Footer": {
-    "tagline": "Confidence in the Future of Your Mind.",
-    "copyright": "© {year} BiGH. All rights reserved.",
+    "mission": "Stay sharp for the years that matter most. Brain-health nutrition shaped by published science.",
     "columns": {
+      "product": "Product",
       "company": "Company",
       "resources": "Resources",
       "legal": "Legal"
     },
     "links": {
+      "nuricell": "NuriCell",
+      "system": "The System",
+      "science": "The Science",
+      "quiz": "Brain Age Quiz",
       "about": "About",
+      "founder": "Our Founder",
+      "research": "Research",
+      "contact": "Contact",
       "careers": "Careers",
       "press": "Press",
       "journal": "Journal",
-      "research": "Research",
       "faq": "FAQ",
       "privacy": "Privacy",
       "terms": "Terms",
@@ -184,10 +242,14 @@
       "instagram": "Instagram",
       "twitter": "Twitter",
       "youtube": "YouTube"
-    }
+    },
+    "tagline": "Confidence in the Future of Your Mind.",
+    "newsletter": { "title": "The Longevity Signal", "placeholder": "you@example.com", "cta": "Subscribe" },
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "copyright": "© {year} BiGH."
   },
   "Meta": {
     "title": "BiGH — Confidence in the Future of Your Mind",
-    "description": "Premium longevity and cognitive wellness. Science-grounded supplements for a sharper decade ahead."
+    "description": "Premium brain-health nutrition, shaped by thirty years of published science. Stay sharp for the years that matter most."
   }
 }
