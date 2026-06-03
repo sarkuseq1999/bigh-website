@@ -2,17 +2,26 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Geist, Geist_Mono, Fraunces } from "next/font/google";
+import { Fraunces, Hanken_Grotesk, Spline_Sans_Mono } from "next/font/google";
 
 import { routing } from "@/i18n/routing";
-import { ThemeProvider } from "@/components/theme-provider";
 import "../globals.css";
 
-const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
-const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 const fraunces = Fraunces({
-  variable: "--font-display",
   subsets: ["latin"],
+  variable: "--font-fraunces",
+  axes: ["opsz", "SOFT"],
+  style: ["normal", "italic"],
+  display: "swap",
+});
+const hanken = Hanken_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-hanken",
+  display: "swap",
+});
+const splineMono = Spline_Sans_Mono({
+  subsets: ["latin"],
+  variable: "--font-spline",
   display: "swap",
 });
 
@@ -62,17 +71,10 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${fraunces.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${hanken.variable} ${splineMono.variable} h-full antialiased`}
     >
-      <body className="bg-paper text-ink flex min-h-full flex-col">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NextIntlClientProvider>{children}</NextIntlClientProvider>
-        </ThemeProvider>
+      <body className="bg-background text-foreground flex min-h-full flex-col">
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );
