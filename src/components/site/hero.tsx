@@ -1,176 +1,139 @@
 "use client";
 
-import { useRef } from "react";
-import Image from "next/image";
 import { motion, useReducedMotion } from "motion/react";
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
+import { Placeholder } from "@/components/site/placeholder";
 
+/* ─────────────────────────────────────────────────────────────────────────
+   Premium ease curve shared across all staggered elements.
+   Spec §6.S1: "slow premium ease, ~0.8s duration"
+───────────────────────────────────────────────────────────────────────── */
 const ease = [0.2, 0.7, 0.2, 1] as const;
 
-/* ──────────────────────────────────────────────────────────────────────── */
-/* AuroraBackground — looping aurora video with a still fallback under      */
-/* reduced motion. The still also serves as the video's poster (visible     */
-/* during initial fetch). A dark gradient overlay sits above the media for  */
-/* type legibility on the lower-left content stack.                          */
-/* ──────────────────────────────────────────────────────────────────────── */
-
-function AuroraBackground({
-  reduce,
-  imageAlt,
-}: {
-  reduce: boolean;
-  imageAlt: string;
-}) {
-  return (
-    <>
-      {reduce ? (
-        <Image
-          src="/hero/candidate-aurora.jpg"
-          alt={imageAlt}
-          fill
-          priority
-          sizes="100vw"
-          className="absolute inset-0 -z-10 object-cover"
-        />
-      ) : (
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          poster="/hero/candidate-aurora.jpg"
-          aria-hidden="true"
-          className="absolute inset-0 -z-10 h-full w-full object-cover"
-        >
-          <source src="/hero/aurora-loop-1.5x.mp4" type="video/mp4" />
-        </video>
-      )}
-
-      {/* Dark gradient overlay for legibility — z-0 so it sits above the
-          media (which is -z-10) but below the content (which is z-10).     */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "linear-gradient(95deg, rgba(15,10,25,0.85) 0%, rgba(15,10,25,0.55) 28%, rgba(15,10,25,0.12) 52%, transparent 72%), linear-gradient(180deg, transparent 50%, rgba(15,10,25,0.55) 100%)",
-        }}
-      />
-    </>
-  );
+/* Mount-reveal factory.
+   Under reduced-motion we return an empty object so the element renders
+   statically (no transforms, no fade). */
+function makeReveal(reduce: boolean, delay: number) {
+  if (reduce) return {};
+  return {
+    initial: { opacity: 0, y: 18 },
+    animate: { opacity: 1, y: 0 },
+    transition: { duration: 0.8, delay, ease },
+  };
 }
 
-/* ──────────────────────────────────────────────────────────────────────── */
-/* ScrollCue — small uppercase label + hairline at the bottom-center.       */
-/* Hidden under reduced motion (the cue implies motion).                     */
-/* ──────────────────────────────────────────────────────────────────────── */
-
-function ScrollCue({ label, reduce }: { label: string; reduce: boolean }) {
-  if (reduce) return null;
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.9, delay: 1.4, ease }}
-      className="absolute bottom-6 left-1/2 z-10 -translate-x-1/2 text-center"
-      aria-hidden="true"
-    >
-      <span className="text-cream-50/50 text-[10px] tracking-[0.32em] uppercase">
-        {label}
-      </span>
-      <span className="bg-cream-50/35 mx-auto mt-2 block h-[18px] w-px" />
-    </motion.div>
-  );
-}
-
-/* ──────────────────────────────────────────────────────────────────────── */
-/* Hero — homepage section 1. Brand-statement manifesto with looping aurora */
-/* video background and a lower-left content stack revealed in sequence on  */
-/* mount. The CTA scrolls smoothly to the YourMind section (`#yourmind`).    */
-/*                                                                          */
-/* `data-dark-context` is read by SiteHeader (via IntersectionObserver) to  */
-/* switch the header into its dark-context visual mode while the hero is in */
-/* view.                                                                     */
-/* ──────────────────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────
+   Hero — Section 1 "The Promise"
+   Layout: two-zone editorial. Text stack left (lower-left on desktop),
+   warm portrait image bleeding off the right.
+   On mobile: text stacks above a shorter image block.
+───────────────────────────────────────────────────────────────────────── */
 
 export function Hero() {
   const t = useTranslations("Hero");
   const reduce = useReducedMotion() ?? false;
-  const sectionRef = useRef<HTMLElement>(null);
 
-  /* Motion props for a fade-and-rise element revealed `delay` seconds in.
-     Under reduced motion this is empty, so the element renders statically. */
-  const reveal = (delay: number) =>
-    reduce
-      ? {}
-      : {
-          initial: { opacity: 0, y: 16 },
-          animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.9, delay, ease },
-        };
-
-  const scrollToNext = () => {
-    const target = document.getElementById("yourmind");
-    const behavior: ScrollBehavior = reduce ? "auto" : "smooth";
-    if (target) {
-      target.scrollIntoView({ behavior, block: "start" });
-    } else {
-      window.scrollTo({ top: window.innerHeight, behavior });
-    }
-  };
+  /* Stagger delays: eyebrow → headline → subhead → paragraph → CTAs */
+  const r = (delay: number) => makeReveal(reduce, delay);
 
   return (
-    <section
-      ref={sectionRef}
-      data-dark-context
-      className="relative isolate min-h-[100dvh] overflow-hidden bg-[#0a0a1a]"
-    >
-      <AuroraBackground reduce={reduce} imageAlt={t("imageAlt")} />
+    <section className="relative isolate min-h-[100dvh] overflow-hidden bg-paper pt-28 md:pt-32">
 
-      {/* Lower-left content stack. flex justify-end pushes content to the
-          bottom of the section; max-width keeps it from spreading across
-          the brightest aurora area.                                       */}
-      <div className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[1320px] flex-col justify-end px-6 pt-24 pb-20 md:px-14 md:pt-32 md:pb-24">
-        <div className="max-w-[640px] md:max-w-[58%]">
-          <motion.h1
-            {...reveal(0.3)}
-            className="font-display text-cream-50 m-0 text-[clamp(2.5rem,6.4vw,4.875rem)] leading-[1.02] font-light tracking-[-0.025em] text-balance"
-          >
-            {t.rich("headline", {
-              em: (chunks) => (
-                <em className="text-sienna font-normal not-italic [font-style:italic]">
-                  {chunks}
-                </em>
-              ),
-            })}
-          </motion.h1>
+      {/* ── Grid wrapper ──────────────────────────────────────────────── */}
+      <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col md:grid md:grid-cols-[1fr_45%]">
 
-          <motion.p
-            {...reveal(0.7)}
-            className="text-cream-50/80 mt-8 max-w-[560px] text-[clamp(0.95rem,1.2vw,1.125rem)] leading-[1.62]"
-          >
-            {t("subhead")}
-          </motion.p>
+        {/* ── LEFT: text stack ─────────────────────────────────────────── */}
+        <div className="relative z-10 flex flex-col justify-end pb-16 pl-6 pr-6 pt-0 md:pb-20 md:pl-14 md:pr-10">
+          <div className="max-w-[640px]">
 
-          <motion.div {...reveal(1.0)} className="mt-9">
-            <button
-              type="button"
-              onClick={scrollToNext}
-              className="group bg-cream-50 text-espresso hover:bg-sienna hover:text-cream-50 inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-medium tracking-[0.01em] transition-all duration-300 ease-out hover:-translate-y-px active:translate-y-0 active:scale-[0.98]"
+            {/* Eyebrow */}
+            <motion.p
+              {...r(0)}
+              className="mb-6 font-mono text-[0.6875rem] font-normal tracking-[0.2em] uppercase text-ink-soft"
             >
-              {t("cta")}
-              <ArrowRight
-                className="size-4 transition-transform duration-300 group-hover:translate-x-0.5"
-                strokeWidth={1.5}
-              />
-            </button>
+              {t("eyebrow")}
+            </motion.p>
+
+            {/* Headline */}
+            <motion.h1
+              {...r(0.12)}
+              className="m-0 font-display text-[clamp(3.5rem,6vw,6rem)] font-light leading-[1.02] tracking-[-0.02em] text-balance text-ink"
+            >
+              {t.rich("headline", {
+                em: (chunks) => (
+                  <em className="font-display italic font-normal">{chunks}</em>
+                ),
+              })}
+            </motion.h1>
+
+            {/* Subhead */}
+            <motion.p
+              {...r(0.24)}
+              className="mt-6 text-[1.125rem] font-normal leading-[1.5] text-ink md:text-[1.25rem]"
+            >
+              {t("subhead")}
+            </motion.p>
+
+            {/* Paragraph */}
+            <motion.p
+              {...r(0.36)}
+              className="mt-5 max-w-[58ch] text-[1rem] leading-[1.65] text-ink-soft md:text-[1.0625rem]"
+            >
+              {t("paragraph")}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              {...r(0.48)}
+              className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center"
+            >
+              {/* Primary — amber pill */}
+              <a
+                href="#"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-7 py-3 text-[0.9375rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+              >
+                {t("ctaPrimary")}
+              </a>
+
+              {/* Secondary — text + arrow */}
+              <a
+                href="#nuricell"
+                className="inline-flex min-h-[48px] items-center gap-1 text-[0.9375rem] font-medium text-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+              >
+                {t("ctaSecondary")}
+              </a>
+            </motion.div>
+
+          </div>
+        </div>
+
+        {/* ── RIGHT: portrait image block ──────────────────────────────── */}
+        {/* On mobile this renders below the text at a fixed height.        */}
+        {/* On desktop it fills the right column and bleeds to the edge.    */}
+        <div className="relative h-[55vw] shrink-0 sm:h-[45vw] md:h-auto md:self-stretch">
+          <motion.div
+            className="h-full w-full"
+            {...(reduce
+              ? {}
+              : {
+                  initial: { scale: 1.0 },
+                  animate: { scale: 1.04 },
+                  transition: {
+                    duration: 20,
+                    ease: "linear",
+                    repeat: Infinity,
+                    repeatType: "mirror",
+                  },
+                })}
+          >
+            <Placeholder
+              label={t("imageAlt")}
+              className="h-full w-full rounded-none md:rounded-l-3xl"
+            />
           </motion.div>
         </div>
-      </div>
 
-      <ScrollCue label={t("scrollCue")} reduce={reduce} />
+      </div>
     </section>
   );
 }
