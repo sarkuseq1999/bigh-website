@@ -2,7 +2,12 @@
   "Brand": {
     "name": "BiGH"
   },
-  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
+  "Languages": {
+    "en": "EN",
+    "ko": "한국어",
+    "vi": "Tiếng Việt",
+    "zh": "中文"
+  },
   "Nav": {
     "products": "製品",
     "science": "サイエンス",
@@ -81,31 +86,51 @@
   },
   "System": {
     "eyebrow": "私たちのシステム",
-    "headlineBefore": "ひとつのミッション。",
-    "headlineEmphasis": "それに見合うシステム",
-    "headlineAfter": "。",
-    "intro": "劉博士の継続的な指導のもと、BiGHは協調するフォーミュレーションのシステムを築き上げました — それぞれが脳のミトコンドリアにエネルギーを与え、その働きから生じる損傷から守るよう設計されています。単独でも機能するように。そして、共に働くようにも作られています。",
+    "headline": "One formula from the lab. Five more built on the science. One complete team.",
+    "intro": "NuriCellは礎です。その周りに、それぞれ役割と研究基盤を持つ五つのフォーミュレーション。合わさることで、棚ではなくシステムになります。",
     "products": {
       "nuricell": {
         "name": "NuriCell",
-        "role": "礎となるもの",
-        "tagline": "燃料と保護を、毎日のひとつの習慣に。",
-        "body": "旗艦製品。劉博士の2002年のPNAS発見を基盤として — アセチル-L-カルニチンとR-α-リポ酸が協働し、加齢するミトコンドリアを再び満たし、守ります。"
+        "role": "The Foundation",
+        "line": "Energy, at the source.",
+        "tag": "FROM THE LAB"
       },
-      "nuriclear": {
-        "name": "NuriClear",
-        "role": "昼の明晰さ",
-        "tagline": "最も集中を要する時間のために。",
-        "body": "持続的な精神的パフォーマンスのための、集中型フォーミュレーション — 日中の深い仕事に合わせて調整されています。(プレースホルダー — 名称と詳細は今後確定予定。)"
+      "natureCalm": {
+        "name": "Nature Calm",
+        "role": "The Shield",
+        "line": "Calm against the day's stress.",
+        "tag": "Built on the Science"
       },
-      "nuricalm": {
-        "name": "NuriCalm",
-        "role": "夜の回復",
-        "tagline": "修復の周期のために。",
-        "body": "細胞の清掃フェーズを支える、夜の伴侶 — 脳が夜の間に自らを新しくする手助けをします。(プレースホルダー — 名称と詳細は今後確定予定。)"
+      "turmerific": {
+        "name": "Turmerific",
+        "role": "The Firefighter",
+        "line": "Cools the everyday fire.",
+        "tag": "Built on the Science"
+      },
+      "advancedOpc": {
+        "name": "Advanced OPC",
+        "role": "The Plumber",
+        "line": "Protects the pathways.",
+        "tag": "Built on the Science"
+      },
+      "greenBee": {
+        "name": "Green Bee Propolis",
+        "role": "The Builder",
+        "line": "Daily defense and repair.",
+        "tag": "Built on the Science"
+      },
+      "deerHorn": {
+        "name": "Deer Horn Reishi",
+        "role": "The Adapter",
+        "line": "Day-and-night balance, overnight restoration.",
+        "tag": "Built on the Science"
       }
     },
-    "cta": "システムを見てみる"
+    "bundles": {
+      "three": "Shop the 3 Treasures",
+      "four": "Shop the 4 Treasures",
+      "protocol": "Build Your Protocol"
+    }
   },
   "Stories": {
     "eyebrow": "メンバーからの声",
@@ -179,7 +204,11 @@
       "research": "研究",
       "contact": "お問い合わせ"
     },
-    "newsletter": { "title": "ロンジェビティ・シグナル", "placeholder": "メールアドレスを入力", "cta": "購読する" },
+    "newsletter": {
+      "title": "ロンジェビティ・シグナル",
+      "placeholder": "メールアドレスを入力",
+      "cta": "購読する"
+    },
     "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
     "copyright": "© {year} BiGH."
   },

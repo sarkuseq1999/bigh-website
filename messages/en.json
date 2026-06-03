@@ -154,20 +154,14 @@
   "System": {
     "eyebrow": "THE SYSTEM",
     "headline": "One formula from the lab. Five more built on the science. One complete team.",
-    "headlineBefore": "One mission. ",
-    "headlineEmphasis": "A system",
-    "headlineAfter": " to match.",
     "intro": "NuriCell is the foundation. Around it, five formulas — each with a job, each built on the same research. Together, they're a system, not a shelf.",
-    "cta": "Explore the system",
     "products": {
-      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                              "tag": "FROM THE LAB",          "tagline": "Fuel and protection, in one daily ritual.",            "body": "The flagship. Built on Dr. Liu's 2002 PNAS discovery." },
-      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                      "tag": "Built on the Science",  "tagline": "Calm against the day's stress.",                       "body": "Placeholder." },
-      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                            "tag": "Built on the Science",  "tagline": "Cools the everyday fire.",                            "body": "Placeholder." },
-      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                              "tag": "Built on the Science",  "tagline": "Protects the pathways.",                              "body": "Placeholder." },
-      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                           "tag": "Built on the Science",  "tagline": "Daily defense and repair.",                           "body": "Placeholder." },
-      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.",       "tag": "Built on the Science",  "tagline": "Day-and-night balance, overnight restoration.",       "body": "Placeholder." },
-      "nuriclear":   { "name": "NuriClear",          "role": "Daytime clarity", "line": "For the hours that demand the most.",                 "tag": "Built on the Science",  "tagline": "For the hours that demand the most.",                 "body": "Placeholder." },
-      "nuricalm":    { "name": "NuriCalm",           "role": "Evening recovery","line": "For the cycle of repair.",                           "tag": "Built on the Science",  "tagline": "For the cycle of repair.",                           "body": "Placeholder." }
+      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                        "tag": "FROM THE LAB" },
+      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                "tag": "Built on the Science" },
+      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                      "tag": "Built on the Science" },
+      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                        "tag": "Built on the Science" },
+      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                     "tag": "Built on the Science" },
+      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.", "tag": "Built on the Science" }
     },
     "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol" }
   },

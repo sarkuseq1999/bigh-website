@@ -81,31 +81,17 @@
   },
   "System": {
     "eyebrow": "El sistema",
-    "headlineBefore": "Una misión. ",
-    "headlineEmphasis": "Un sistema",
-    "headlineAfter": " a su altura.",
-    "intro": "Bajo la dirección continua del Dr. Liu, BiGH ha construido un sistema coordinado de formulaciones — cada una diseñada para alimentar las mitocondrias del cerebro con energía y protegerlas del daño que generan al trabajar. Pensadas para funcionar solas. Diseñadas para trabajar juntas.",
+    "headline": "One formula from the lab. Five more built on the science. One complete team.",
+    "intro": "NuriCell es la base. A su alrededor, cinco fórmulas — cada una con un trabajo, cada una construida sobre la misma investigación. Juntas, forman un sistema, no un estante.",
     "products": {
-      "nuricell": {
-        "name": "NuriCell",
-        "role": "La base",
-        "tagline": "Combustible y protección, en un ritual diario.",
-        "body": "La insignia. Construida sobre el hallazgo de 2002 del Dr. Liu publicado en PNAS — acetil-L-carnitina y ácido R-α-lipoico actuando en conjunto para reabastecer y proteger las mitocondrias en proceso de envejecimiento."
-      },
-      "nuriclear": {
-        "name": "NuriClear",
-        "role": "Claridad diurna",
-        "tagline": "Para las horas que más exigen.",
-        "body": "Una formulación enfocada para el rendimiento mental sostenido — calibrada para el trabajo profundo del día. (Texto provisional — nombre y detalles por confirmar.)"
-      },
-      "nuricalm": {
-        "name": "NuriCalm",
-        "role": "Recuperación nocturna",
-        "tagline": "Para el ciclo de reparación.",
-        "body": "La compañera nocturna que apoya la fase de limpieza celular, ayudando al cerebro a renovarse durante la noche. (Texto provisional — nombre y detalles por confirmar.)"
-      }
+      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                        "tag": "FROM THE LAB" },
+      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                "tag": "Built on the Science" },
+      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                      "tag": "Built on the Science" },
+      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                        "tag": "Built on the Science" },
+      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                     "tag": "Built on the Science" },
+      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.", "tag": "Built on the Science" }
     },
-    "cta": "Explorar el sistema"
+    "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol" }
   },
   "Stories": {
     "eyebrow": "De nuestros miembros",

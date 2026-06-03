@@ -81,31 +81,17 @@
   },
   "System": {
     "eyebrow": "우리의 시스템",
-    "headlineBefore": "하나의 사명. ",
-    "headlineEmphasis": "그에 걸맞은 시스템",
-    "headlineAfter": ".",
-    "intro": "류 박사의 지속적인 지도 아래, BiGH는 조화로운 포뮬레이션 시스템을 구축했습니다 — 각각이 뇌의 미토콘드리아에 에너지를 공급하고, 그 작용 과정에서 발생하는 손상으로부터 보호하도록 설계되었습니다. 독립적으로도, 함께 사용해도 더욱 빛납니다.",
+    "headline": "One formula from the lab. Five more built on the science. One complete team.",
+    "intro": "NuriCell은 근간입니다. 그 주위에, 각각 역할과 연구 기반을 가진 다섯 가지 포뮬레이션이 있습니다. 함께하면 선반이 아닌 시스템입니다.",
     "products": {
-      "nuricell": {
-        "name": "NuriCell",
-        "role": "근간",
-        "tagline": "연료와 보호, 매일의 습관 속에.",
-        "body": "대표 제품. 류 박사의 2002년 PNAS 발견에 기반합니다 — 아세틸-L-카르니틴과 R-α-리포산이 함께 작용하여 노화하는 미토콘드리아를 다시 채우고 보호합니다."
-      },
-      "nuriclear": {
-        "name": "NuriClear",
-        "role": "낮의 명료함",
-        "tagline": "가장 집중이 필요한 시간을 위해.",
-        "body": "지속적인 정신 수행을 위한 집중 포뮬레이션 — 낮 시간의 깊은 작업에 맞추어 설계되었습니다. (자리표시자 — 이름과 상세 내용은 추후 확정 예정.)"
-      },
-      "nuricalm": {
-        "name": "NuriCalm",
-        "role": "저녁의 회복",
-        "tagline": "회복의 순환을 위해.",
-        "body": "세포의 정리 단계를 돕는 밤 시간의 동반자 — 뇌가 밤사이 스스로를 새롭게 하도록 지원합니다. (자리표시자 — 이름과 상세 내용은 추후 확정 예정.)"
-      }
+      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                        "tag": "FROM THE LAB" },
+      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                "tag": "Built on the Science" },
+      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                      "tag": "Built on the Science" },
+      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                        "tag": "Built on the Science" },
+      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                     "tag": "Built on the Science" },
+      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.", "tag": "Built on the Science" }
     },
-    "cta": "시스템 둘러보기"
+    "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol" }
   },
   "Stories": {
     "eyebrow": "회원들의 이야기",

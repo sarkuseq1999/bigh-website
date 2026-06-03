@@ -2,7 +2,12 @@
   "Brand": {
     "name": "BiGH"
   },
-  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
+  "Languages": {
+    "en": "EN",
+    "ko": "한국어",
+    "vi": "Tiếng Việt",
+    "zh": "中文"
+  },
   "Nav": {
     "products": "产品",
     "science": "科学",
@@ -81,31 +86,51 @@
   },
   "System": {
     "eyebrow": "我们的体系",
-    "headlineBefore": "一项使命。",
-    "headlineEmphasis": "一套体系",
-    "headlineAfter": ",与之相称。",
-    "intro": "在刘博士持续的指导下,BiGH 打造了一套协同配方体系——每一款都为大脑的线粒体注入能量,并保护它们免受运作时产生的损伤。各自独立,亦相辅相成。",
+    "headline": "One formula from the lab. Five more built on the science. One complete team.",
+    "intro": "NuriCell 是根基。围绕它，五款配方各有职责，皆以同一研究为基础。合在一起，是一套体系，而非一排产品。",
     "products": {
       "nuricell": {
         "name": "NuriCell",
-        "role": "根基",
-        "tagline": "燃料与保护,寓于每日仪式。",
-        "body": "旗舰之作。建立在刘博士 2002 年 PNAS 发现的基础之上——乙酰左旋肉碱与 R-α-硫辛酸协同作用,为衰老的线粒体补充能量并提供保护。"
+        "role": "The Foundation",
+        "line": "Energy, at the source.",
+        "tag": "FROM THE LAB"
       },
-      "nuriclear": {
-        "name": "NuriClear",
-        "role": "日间清晰",
-        "tagline": "为最需要专注的时刻而生。",
-        "body": "一款专注的配方,助您持续保持心智表现——为白天的深度工作量身定制。(占位文本——名称和细节待确认。)"
+      "natureCalm": {
+        "name": "Nature Calm",
+        "role": "The Shield",
+        "line": "Calm against the day's stress.",
+        "tag": "Built on the Science"
       },
-      "nuricalm": {
-        "name": "NuriCalm",
-        "role": "夜间修复",
-        "tagline": "为修复的循环而生。",
-        "body": "夜间的伴侣,支持细胞清理阶段,助力大脑在夜间自我修复。(占位文本——名称和细节待确认。)"
+      "turmerific": {
+        "name": "Turmerific",
+        "role": "The Firefighter",
+        "line": "Cools the everyday fire.",
+        "tag": "Built on the Science"
+      },
+      "advancedOpc": {
+        "name": "Advanced OPC",
+        "role": "The Plumber",
+        "line": "Protects the pathways.",
+        "tag": "Built on the Science"
+      },
+      "greenBee": {
+        "name": "Green Bee Propolis",
+        "role": "The Builder",
+        "line": "Daily defense and repair.",
+        "tag": "Built on the Science"
+      },
+      "deerHorn": {
+        "name": "Deer Horn Reishi",
+        "role": "The Adapter",
+        "line": "Day-and-night balance, overnight restoration.",
+        "tag": "Built on the Science"
       }
     },
-    "cta": "探索我们的体系"
+    "bundles": {
+      "three": "Shop the 3 Treasures",
+      "four": "Shop the 4 Treasures",
+      "protocol": "Build Your Protocol"
+    }
   },
   "Stories": {
     "eyebrow": "来自我们的会员",
@@ -179,7 +204,11 @@
       "research": "研究",
       "contact": "联系我们"
     },
-    "newsletter": { "title": "长寿信号", "placeholder": "您的邮箱", "cta": "订阅" },
+    "newsletter": {
+      "title": "长寿信号",
+      "placeholder": "您的邮箱",
+      "cta": "订阅"
+    },
     "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
     "copyright": "© {year} BiGH."
   },
