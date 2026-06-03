@@ -1,153 +1,113 @@
 "use client";
 
-import { motion } from "motion/react";
 import { useTranslations } from "next-intl";
+import { Reveal } from "@/components/site/reveal";
+import { Placeholder } from "@/components/site/placeholder";
 
-const ease = [0.2, 0.7, 0.2, 1] as const;
-const SHORT_KEYS = ["one", "two", "three"] as const;
+const TESTIMONIAL_KEYS = ["one", "two", "three"] as const;
+const RECORD_STAT_KEYS = ["pnas", "citations", "years", "berkeley"] as const;
 
 export function CustomerStories() {
-  const t = useTranslations("Stories");
+  const t = useTranslations("Proof");
 
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div className="mx-auto max-w-[1240px] px-6 pt-28 pb-32 md:px-12 md:pt-40 md:pb-44">
-        {/* ─────────── EYEBROW ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease }}
-          className="flex justify-center"
-        >
-          <div className="inline-flex items-center gap-3">
-            <span className="bg-sienna block size-1 rounded-full" />
-            <p className="text-espresso-60 font-display text-[0.7rem] font-medium tracking-[0.32em] uppercase">
-              {t("eyebrow")}
-            </p>
-            <span className="bg-sienna block size-1 rounded-full" />
-          </div>
-        </motion.div>
+    <section id="proof" className="bg-paper py-24 md:py-36">
+      <div className="mx-auto max-w-[1200px] px-6 md:px-14">
 
-        {/* ─────────── HEADLINE ─────────── */}
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1.05, delay: 0.15, ease }}
-          className="font-display text-espresso mx-auto mt-10 max-w-[18ch] text-center text-[clamp(2.5rem,6vw,5.5rem)] font-light leading-[1.03] tracking-[-0.022em] md:mt-14"
-          style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-        >
-          {t("headlineBefore")}
-          <em className="text-sienna font-light italic">
-            {t("headlineEmphasis")}
-          </em>
-        </motion.h2>
+        {/* ── EYEBROW ──────────────────────────────────────────────── */}
+        <Reveal>
+          <p className="font-mono uppercase tracking-[0.2em] text-[0.6875rem] text-ink-soft text-center">
+            {t("eyebrow")}
+          </p>
+        </Reveal>
 
-        {/* ─────────── INTRO ─────────── */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1, delay: 0.3, ease }}
-          className="text-espresso/70 mx-auto mt-12 max-w-[580px] text-center text-[clamp(1rem,1.2vw,1.1875rem)] leading-[1.7] md:mt-16"
-        >
-          {t("intro")}
-        </motion.p>
+        {/* ── HEADLINE ─────────────────────────────────────────────── */}
+        <Reveal delay={0.08}>
+          <h2 className="font-display font-light text-ink text-center mt-5
+                         text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.1] tracking-[-0.02em]
+                         max-w-[22ch] mx-auto">
+            {t("headline")}
+          </h2>
+        </Reveal>
 
-        {/* ─────────── FEATURED QUOTE ─────────── */}
-        <motion.figure
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1.1, delay: 0.45, ease }}
-          className="relative mx-auto mt-28 max-w-[920px] md:mt-40"
-        >
-          {/* Massive decorative opening quote in sienna */}
-          <motion.span
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 1.2, delay: 0.3, ease }}
-            aria-hidden="true"
-            className="font-display text-sienna pointer-events-none absolute -top-12 left-0 text-[10rem] leading-none font-light select-none md:-top-20 md:-left-4 md:text-[14rem]"
-            style={{ fontVariationSettings: '"opsz" 144, "SOFT" 80' }}
-          >
-            &ldquo;
-          </motion.span>
+        {/* ── BAND 1: TESTIMONIALS ─────────────────────────────────── */}
+        <div className="mt-16 md:mt-20 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+          {TESTIMONIAL_KEYS.map((key, idx) => {
+            const quote    = t(`testimonials.${key}.quote`);
+            const name     = t(`testimonials.${key}.name`);
+            const location = t(`testimonials.${key}.location`);
+            const note     = t(`testimonials.${key}.note`);
+            return (
+              <Reveal key={key} delay={0.1 + idx * 0.12}>
+                <article className="flex flex-col gap-5 rounded-2xl bg-paper border border-line p-7 md:p-8 h-full">
 
-          <blockquote
-            className="font-display text-espresso relative text-[clamp(1.5rem,2.6vw,2.25rem)] leading-[1.4] font-light italic md:pl-16"
-            style={{ fontVariationSettings: '"opsz" 96, "SOFT" 50' }}
-          >
-            {t("featured.quote")}
-          </blockquote>
+                  {/* Avatar placeholder */}
+                  <Placeholder
+                    label={name}
+                    className="w-16 h-16 rounded-full shrink-0 border-line"
+                  />
 
-          <figcaption className="text-espresso-60 mt-10 flex items-center gap-3 md:pl-16">
-            <span className="bg-sienna block size-1 rounded-full" />
-            <span className="font-display text-sm">
-              <span className="text-espresso font-medium">
-                {t("featured.name")}
-              </span>
-              {" — "}
-              <span className="text-espresso-60">{t("featured.location")}</span>
-            </span>
-          </figcaption>
-        </motion.figure>
+                  {/* Quote — the focus */}
+                  <blockquote className="font-display font-light text-ink italic leading-normal
+                                          text-[1.25rem] md:text-[1.25rem] flex-1">
+                    &ldquo;{quote}&rdquo;
+                  </blockquote>
 
-        {/* ─────────── THREE SHORTER QUOTES ─────────── */}
-        <div className="mx-auto mt-28 grid max-w-[1140px] grid-cols-1 gap-12 md:mt-40 md:grid-cols-3 md:gap-8">
-          {SHORT_KEYS.map((key, idx) => (
-            <SmallQuote
-              key={key}
-              quote={t(`shortQuotes.${key}.quote`)}
-              name={t(`shortQuotes.${key}.name`)}
-              location={t(`shortQuotes.${key}.location`)}
-              delay={idx * 0.12}
-            />
-          ))}
+                  {/* Attribution */}
+                  <figcaption className="flex flex-col gap-1 mt-auto">
+                    <span className="font-mono text-[0.6875rem] tracking-[0.14em] uppercase text-ink">
+                      {name}
+                      <span className="text-ink-soft"> · {location}</span>
+                    </span>
+                    <span className="font-mono text-[0.6875rem] text-ink-soft">
+                      {note}
+                    </span>
+                  </figcaption>
+
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
+
+        {/* ── BAND 2: THE RECORD — mono stat strip ─────────────────── */}
+        <Reveal delay={0.1} className="mt-16 md:mt-20">
+          <div className="border border-line rounded-2xl bg-paper px-6 py-8 md:px-10">
+
+            {/* Stat pills row */}
+            <div className="flex flex-wrap items-center justify-center gap-0">
+              {RECORD_STAT_KEYS.map((key, idx) => (
+                <div key={key} className="flex items-center">
+                  <span className="font-mono text-[0.8125rem] uppercase tracking-[0.15em] text-ink-soft
+                                    px-4 py-1 text-center">
+                    {t(`record.${key}`)}
+                  </span>
+                  {idx < RECORD_STAT_KEYS.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="block w-px h-4 bg-line shrink-0"
+                    />
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* CTA link */}
+            <div className="mt-5 flex justify-center">
+              <a
+                href="#"
+                className="font-mono text-[0.8125rem] uppercase tracking-[0.15em] text-ink
+                           hover:bg-amber-hi transition-colors duration-200 underline-offset-4
+                           hover:underline"
+              >
+                {t("record.cta")}
+              </a>
+            </div>
+
+          </div>
+        </Reveal>
+
       </div>
     </section>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────── */
-
-function SmallQuote({
-  quote,
-  name,
-  location,
-  delay,
-}: {
-  quote: string;
-  name: string;
-  location: string;
-  delay: number;
-}) {
-  return (
-    <motion.figure
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.95, delay, ease }}
-      className="border-espresso/12 group flex flex-col border-t pt-8"
-    >
-      <blockquote
-        className="font-display text-espresso text-[clamp(1.0625rem,1.4vw,1.25rem)] leading-[1.55] font-light italic"
-        style={{ fontVariationSettings: '"opsz" 24' }}
-      >
-        {quote}
-      </blockquote>
-
-      <figcaption className="mt-7 flex items-center gap-2.5">
-        <span className="bg-sienna block size-1 rounded-full" />
-        <span className="font-display text-sm">
-          <span className="text-espresso font-medium">{name}</span>
-          {" — "}
-          <span className="text-espresso/55">{location}</span>
-        </span>
-      </figcaption>
-    </motion.figure>
   );
 }
