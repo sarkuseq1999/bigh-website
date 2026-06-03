@@ -157,7 +157,7 @@ export function SiteHeader() {
               id="mobile-nav-sheet"
               role="dialog"
               aria-modal="true"
-              aria-label={tNav("openMenu")}
+              aria-label={tBrand("name")}
               key="sheet"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}

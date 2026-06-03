@@ -28,6 +28,7 @@ const LANGS: LangCode[] = ["en", "ko", "vi", "zh"];
 
 export function SiteFooter() {
   const t = useTranslations("Footer");
+  const tNav = useTranslations("Nav");
   const tBrand = useTranslations("Brand");
   const tLangs = useTranslations("Languages");
 
@@ -96,8 +97,7 @@ export function SiteFooter() {
           <div>
             {/* language toggle */}
             <h3 className="font-mono text-ink-soft mb-3 text-xs font-semibold tracking-widest uppercase">
-              {/* reuse Nav.language label conceptually; the copy lives there */}
-              Language
+              {tNav("language")}
             </h3>
             <div className="mb-8 flex flex-wrap gap-2">
               {LANGS.map((code) => {
