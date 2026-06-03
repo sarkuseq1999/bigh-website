@@ -2,15 +2,15 @@
   "Brand": {
     "name": "BiGH"
   },
+  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Nav": {
-    "home": "ホーム",
     "products": "製品",
     "science": "サイエンス",
-    "about": "BiGHについて",
-    "support": "サポート",
+    "quiz": "クイズ",
+    "cta": "クイズを受ける",
     "openMenu": "メニューを開く",
     "closeMenu": "メニューを閉じる",
-    "toggleTheme": "テーマを切り替える"
+    "language": "言語"
   },
   "Hero": {
     "headline": "Your mind has no <em>expiration date.</em>",
@@ -162,29 +162,24 @@
     "reassurance": "プロモーションなし。ノイズなし。いつでも購読解除できます。"
   },
   "Footer": {
-    "tagline": "あなたの未来の思考に、確かな信頼を。",
-    "copyright": "© {year} BiGH. All rights reserved.",
+    "mission": "最も大切な年月のために、鋭さを保つ。発表された科学に基づく脳健康栄養。",
     "columns": {
-      "company": "会社情報",
-      "resources": "リソース",
-      "legal": "法的事項"
+      "product": "製品",
+      "company": "会社情報"
     },
     "links": {
+      "nuricell": "NuriCell",
+      "system": "システム",
+      "science": "サイエンス",
+      "quiz": "脳年齢クイズ",
       "about": "BiGHについて",
-      "careers": "採用情報",
-      "press": "プレス",
-      "journal": "ジャーナル",
+      "founder": "創業者",
       "research": "研究",
-      "faq": "よくある質問",
-      "privacy": "プライバシー",
-      "terms": "利用規約",
-      "shipping": "配送"
+      "contact": "お問い合わせ"
     },
-    "social": {
-      "instagram": "Instagram",
-      "twitter": "Twitter",
-      "youtube": "YouTube"
-    }
+    "newsletter": { "title": "ロンジェビティ・シグナル", "placeholder": "メールアドレスを入力", "cta": "購読する" },
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "copyright": "© {year} BiGH."
   },
   "Meta": {
     "title": "BiGH — あなたの未来の思考に、確かな信頼を",

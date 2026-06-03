@@ -7,10 +7,7 @@
     "cta": "Take the Quiz",
     "openMenu": "Open menu",
     "closeMenu": "Close menu",
-    "language": "Language",
-    "home": "Home",
-    "about": "About",
-    "support": "Support"
+    "language": "Language"
   },
   "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Hero": {
@@ -217,9 +214,7 @@
     "mission": "Stay sharp for the years that matter most. Brain-health nutrition shaped by published science.",
     "columns": {
       "product": "Product",
-      "company": "Company",
-      "resources": "Resources",
-      "legal": "Legal"
+      "company": "Company"
     },
     "links": {
       "nuricell": "NuriCell",
@@ -229,21 +224,8 @@
       "about": "About",
       "founder": "Our Founder",
       "research": "Research",
-      "contact": "Contact",
-      "careers": "Careers",
-      "press": "Press",
-      "journal": "Journal",
-      "faq": "FAQ",
-      "privacy": "Privacy",
-      "terms": "Terms",
-      "shipping": "Shipping"
+      "contact": "Contact"
     },
-    "social": {
-      "instagram": "Instagram",
-      "twitter": "Twitter",
-      "youtube": "YouTube"
-    },
-    "tagline": "Confidence in the Future of Your Mind.",
     "newsletter": { "title": "The Longevity Signal", "placeholder": "you@example.com", "cta": "Subscribe" },
     "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
     "copyright": "© {year} BiGH."

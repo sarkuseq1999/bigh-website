@@ -2,15 +2,15 @@
   "Brand": {
     "name": "BiGH"
   },
+  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Nav": {
-    "home": "홈",
     "products": "제품",
     "science": "사이언스",
-    "about": "소개",
-    "support": "지원",
+    "quiz": "퀴즈",
+    "cta": "퀴즈 시작하기",
     "openMenu": "메뉴 열기",
     "closeMenu": "메뉴 닫기",
-    "toggleTheme": "테마 전환"
+    "language": "언어"
   },
   "Hero": {
     "headline": "Your mind has no <em>expiration date.</em>",
@@ -162,29 +162,24 @@
     "reassurance": "프로모션 없음. 소음 없음. 언제든 구독 해지 가능."
   },
   "Footer": {
-    "tagline": "당신의 미래 정신에 대한 확신.",
-    "copyright": "© {year} BiGH. All rights reserved.",
+    "mission": "가장 중요한 시간을 위해 예리하게. 발표된 과학으로 만들어진 뇌 건강 영양.",
     "columns": {
-      "company": "회사",
-      "resources": "자료",
-      "legal": "법적 고지"
+      "product": "제품",
+      "company": "회사"
     },
     "links": {
+      "nuricell": "NuriCell",
+      "system": "더 시스템",
+      "science": "사이언스",
+      "quiz": "두뇌 나이 퀴즈",
       "about": "소개",
-      "careers": "채용",
-      "press": "보도",
-      "journal": "저널",
+      "founder": "창업자",
       "research": "연구",
-      "faq": "자주 묻는 질문",
-      "privacy": "개인정보처리방침",
-      "terms": "이용약관",
-      "shipping": "배송"
+      "contact": "연락처"
     },
-    "social": {
-      "instagram": "Instagram",
-      "twitter": "Twitter",
-      "youtube": "YouTube"
-    }
+    "newsletter": { "title": "장수 시그널", "placeholder": "이메일을 입력하세요", "cta": "구독하기" },
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "copyright": "© {year} BiGH."
   },
   "Meta": {
     "title": "BiGH — 당신의 미래 정신에 대한 확신",

@@ -2,15 +2,15 @@
   "Brand": {
     "name": "BiGH"
   },
+  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Nav": {
-    "home": "Inicio",
     "products": "Productos",
     "science": "Ciencia",
-    "about": "Nosotros",
-    "support": "Soporte",
+    "quiz": "Test",
+    "cta": "Hacer el Test",
     "openMenu": "Abrir menú",
     "closeMenu": "Cerrar menú",
-    "toggleTheme": "Cambiar tema"
+    "language": "Idioma"
   },
   "Hero": {
     "headline": "Your mind has no <em>expiration date.</em>",
@@ -162,29 +162,24 @@
     "reassurance": "Sin promociones. Sin ruido. Cancela cuando quieras."
   },
   "Footer": {
-    "tagline": "Confianza en el futuro de tu mente.",
-    "copyright": "© {year} BiGH. Todos los derechos reservados.",
+    "mission": "Mantente alerta para los años que más importan. Nutrición para la salud cerebral basada en ciencia publicada.",
     "columns": {
-      "company": "Empresa",
-      "resources": "Recursos",
-      "legal": "Legal"
+      "product": "Producto",
+      "company": "Empresa"
     },
     "links": {
+      "nuricell": "NuriCell",
+      "system": "El Sistema",
+      "science": "La Ciencia",
+      "quiz": "Test de Edad Cerebral",
       "about": "Nosotros",
-      "careers": "Empleos",
-      "press": "Prensa",
-      "journal": "Diario",
+      "founder": "Nuestro Fundador",
       "research": "Investigación",
-      "faq": "Preguntas frecuentes",
-      "privacy": "Privacidad",
-      "terms": "Términos",
-      "shipping": "Envíos"
+      "contact": "Contacto"
     },
-    "social": {
-      "instagram": "Instagram",
-      "twitter": "Twitter",
-      "youtube": "YouTube"
-    }
+    "newsletter": { "title": "La Señal de Longevidad", "placeholder": "tu@ejemplo.com", "cta": "Suscribirse" },
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "copyright": "© {year} BiGH."
   },
   "Meta": {
     "title": "BiGH — Confianza en el futuro de tu mente",

@@ -2,15 +2,15 @@
   "Brand": {
     "name": "BiGH"
   },
+  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Nav": {
-    "home": "首页",
     "products": "产品",
     "science": "科学",
-    "about": "关于",
-    "support": "支持",
+    "quiz": "测验",
+    "cta": "参加测验",
     "openMenu": "打开菜单",
     "closeMenu": "关闭菜单",
-    "toggleTheme": "切换主题"
+    "language": "语言"
   },
   "Hero": {
     "headline": "Your mind has no <em>expiration date.</em>",
@@ -162,29 +162,24 @@
     "reassurance": "无促销。无杂音。随时可取消订阅。"
   },
   "Footer": {
-    "tagline": "对您未来思维的信心。",
-    "copyright": "© {year} BiGH. 版权所有。",
+    "mission": "为最重要的岁月保持敏锐。基于已发表科学的脑健康营养。",
     "columns": {
-      "company": "公司",
-      "resources": "资源",
-      "legal": "法律"
+      "product": "产品",
+      "company": "公司"
     },
     "links": {
+      "nuricell": "NuriCell",
+      "system": "健康系统",
+      "science": "科学",
+      "quiz": "大脑年龄测验",
       "about": "关于",
-      "careers": "招贤纳士",
-      "press": "媒体",
-      "journal": "期刊",
+      "founder": "创始人",
       "research": "研究",
-      "faq": "常见问题",
-      "privacy": "隐私",
-      "terms": "条款",
-      "shipping": "运输"
+      "contact": "联系我们"
     },
-    "social": {
-      "instagram": "Instagram",
-      "twitter": "Twitter",
-      "youtube": "YouTube"
-    }
+    "newsletter": { "title": "长寿信号", "placeholder": "您的邮箱", "cta": "订阅" },
+    "disclaimer": "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+    "copyright": "© {year} BiGH."
   },
   "Meta": {
     "title": "BiGH — 对您未来思维的信心",
