@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, useReducedMotion } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
 import { Placeholder } from "@/components/site/placeholder";
@@ -126,7 +127,7 @@ function MergingOrbs({ reduced }: { reduced: boolean }) {
 ───────────────────────────────────────────────────────────────────────── */
 export function NuricellFlagship() {
   const t = useTranslations("Flagship");
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useReducedMotionSafe();
 
   return (
     <>

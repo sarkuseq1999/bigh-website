@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 
 import { Link } from "@/i18n/navigation";
 
@@ -31,7 +32,7 @@ export function SiteHeader() {
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
 
   /* scroll sentinel -------------------------------------------------- */
   const sentinelRef = useRef<HTMLDivElement>(null);

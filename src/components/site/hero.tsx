@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { Placeholder } from "@/components/site/placeholder";
 
@@ -31,7 +32,7 @@ function makeReveal(reduce: boolean, delay: number) {
 
 export function Hero() {
   const t = useTranslations("Hero");
-  const reduce = useReducedMotion() ?? false;
+  const reduce = useReducedMotionSafe();
 
   /* Stagger delays: eyebrow → headline → subhead → paragraph → CTAs */
   const r = (delay: number) => makeReveal(reduce, delay);

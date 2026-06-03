@@ -7,8 +7,8 @@ import {
   useMotionValue,
   useTransform,
   animate,
-  useReducedMotion,
 } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
@@ -141,7 +141,7 @@ function AnchorStat({ reduced }: { reduced: boolean }) {
 
 export function Credibility() {
   const t = useTranslations("Scientist");
-  const reduced = useReducedMotion() ?? false;
+  const reduced = useReducedMotionSafe();
 
   return (
     <section

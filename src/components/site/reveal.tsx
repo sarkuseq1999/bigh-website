@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import type { ReactNode } from "react";
 
 const EASE = [0.2, 0.7, 0.2, 1] as const;
@@ -14,7 +15,7 @@ export function Reveal({
   delay?: number;
   className?: string;
 }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   if (reduce) return <div className={className}>{children}</div>;
   return (
     <motion.div

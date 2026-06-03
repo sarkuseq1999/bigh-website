@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useReducedMotion, useInView } from "motion/react";
+import { motion, useInView } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
 
@@ -132,7 +133,7 @@ export function BrainScience() {
 
 function BatteryVisual() {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
   const inView = useInView(ref, { once: true, margin: "-20%" });
 
   // When reduced-motion OR in-view has fired, show full charge

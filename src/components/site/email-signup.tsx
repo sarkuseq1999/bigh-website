@@ -1,6 +1,7 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { AnimatePresence, motion } from "motion/react";
+import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Reveal } from "@/components/site/reveal";
@@ -11,7 +12,7 @@ type FormState = "idle" | "submitting" | "success" | "error";
 
 // Subtle attention pulse for the Quiz CTA button
 function QuizCta({ label }: { label: string }) {
-  const reduce = useReducedMotion();
+  const reduce = useReducedMotionSafe();
 
   if (reduce) {
     return (
