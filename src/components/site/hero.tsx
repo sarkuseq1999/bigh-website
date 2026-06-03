@@ -40,8 +40,9 @@ export function Hero() {
     <section className="relative isolate min-h-[100dvh] overflow-hidden bg-paper">
 
       {/* ── Grid wrapper ──────────────────────────────────────────────── */}
-      {/* The grid itself is exactly one viewport tall (no extra section
-          padding stacked on top), so the whole hero never exceeds 100dvh. */}
+      {/* On desktop the grid is exactly one viewport tall (no extra section
+          padding stacked on top), so the hero never exceeds 100dvh; on mobile
+          it stacks (text over image) and may grow taller to fit the content. */}
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col md:grid md:grid-cols-[1fr_45%]">
 
         {/* ── LEFT: text stack ─────────────────────────────────────────── */}
@@ -83,7 +84,7 @@ export function Hero() {
             {/* Paragraph */}
             <motion.p
               {...r(0.36)}
-              className="mt-4 max-w-[58ch] text-[1rem] leading-[1.6] text-ink-soft md:text-[1.0625rem]"
+              className="mt-4 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]"
             >
               {t("paragraph")}
             </motion.p>
