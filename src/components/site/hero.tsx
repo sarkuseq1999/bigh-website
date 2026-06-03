@@ -37,19 +37,25 @@ export function Hero() {
   const r = (delay: number) => makeReveal(reduce, delay);
 
   return (
-    <section className="relative isolate min-h-[100dvh] overflow-hidden bg-paper pt-28 md:pt-32">
+    <section className="relative isolate min-h-[100dvh] overflow-hidden bg-paper">
 
       {/* ── Grid wrapper ──────────────────────────────────────────────── */}
+      {/* The grid itself is exactly one viewport tall (no extra section
+          padding stacked on top), so the whole hero never exceeds 100dvh. */}
       <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col md:grid md:grid-cols-[1fr_45%]">
 
         {/* ── LEFT: text stack ─────────────────────────────────────────── */}
-        <div className="relative z-10 flex flex-col justify-end pb-16 pl-6 pr-6 pt-0 md:pb-20 md:pl-14 md:pr-10">
+        {/* justify-center vertically balances the stack. The top padding
+            clears the fixed header from *within* the viewport-tall column
+            (rather than adding to the section height), so the CTAs always
+            sit above the fold on laptop viewports. */}
+        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-32 md:pb-16 md:pl-14 md:pr-10">
           <div className="max-w-[640px]">
 
             {/* Eyebrow */}
             <motion.p
               {...r(0)}
-              className="mb-6 font-mono text-[0.6875rem] font-normal tracking-[0.2em] uppercase text-ink-soft"
+              className="mb-5 font-mono text-[0.6875rem] font-normal tracking-[0.2em] uppercase text-ink-soft"
             >
               {t("eyebrow")}
             </motion.p>
@@ -57,7 +63,7 @@ export function Hero() {
             {/* Headline */}
             <motion.h1
               {...r(0.12)}
-              className="m-0 font-display text-[clamp(3.5rem,6vw,6rem)] font-light leading-[1.02] tracking-[-0.02em] text-balance text-ink"
+              className="m-0 font-display text-[clamp(3rem,5.4vw,5.25rem)] font-light leading-[1.03] tracking-[-0.02em] text-balance text-ink"
             >
               {t.rich("headline", {
                 em: (chunks) => (
@@ -69,7 +75,7 @@ export function Hero() {
             {/* Subhead */}
             <motion.p
               {...r(0.24)}
-              className="mt-6 text-[1.125rem] font-normal leading-[1.5] text-ink md:text-[1.25rem]"
+              className="mt-5 text-[1.125rem] font-normal leading-[1.5] text-ink md:text-[1.1875rem]"
             >
               {t("subhead")}
             </motion.p>
@@ -77,7 +83,7 @@ export function Hero() {
             {/* Paragraph */}
             <motion.p
               {...r(0.36)}
-              className="mt-5 max-w-[58ch] text-[1rem] leading-[1.65] text-ink-soft md:text-[1.0625rem]"
+              className="mt-4 max-w-[58ch] text-[1rem] leading-[1.6] text-ink-soft md:text-[1.0625rem]"
             >
               {t("paragraph")}
             </motion.p>
@@ -85,7 +91,7 @@ export function Hero() {
             {/* CTAs */}
             <motion.div
               {...r(0.48)}
-              className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center"
+              className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center"
             >
               {/* Primary — amber pill */}
               <a
