@@ -98,7 +98,7 @@ export function Hero() {
               {/* Primary — amber pill */}
               <a
                 href="#"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-7 py-3 text-[0.9375rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-7 py-3 text-[1.0625rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
               >
                 {t("ctaPrimary")}
               </a>
@@ -106,7 +106,7 @@ export function Hero() {
               {/* Secondary — text + arrow */}
               <a
                 href="#nuricell"
-                className="inline-flex min-h-[48px] items-center gap-1 text-[0.9375rem] font-medium text-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                className="inline-flex min-h-[48px] items-center gap-1 text-[1.0625rem] font-medium text-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               >
                 {t("ctaSecondary")}
               </a>
