@@ -195,14 +195,8 @@ export function NuricellFlagship() {
       <section className="bg-paper">
         <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
 
-          <Reveal>
-            <p className="font-mono uppercase tracking-[0.2em] text-ink-soft text-[0.6875rem]">
-              {t("eyebrow")}
-            </p>
-          </Reveal>
-
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
               {t("beat2.headline")}
             </h2>
           </Reveal>
@@ -223,14 +217,8 @@ export function NuricellFlagship() {
       <section className="bg-paper-2">
         <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
 
-          <Reveal>
-            <p className="font-mono uppercase tracking-[0.2em] text-ink-soft text-[0.6875rem]">
-              {t("eyebrow")}
-            </p>
-          </Reveal>
-
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
               {t("beat3.headline")}
             </h2>
           </Reveal>
@@ -239,7 +227,7 @@ export function NuricellFlagship() {
           <MergingOrbs reduced={reduced} />
 
           <Reveal delay={0.15}>
-            <p className="text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat3.body")}
             </p>
           </Reveal>
@@ -253,14 +241,8 @@ export function NuricellFlagship() {
       <section className="bg-paper">
         <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
 
-          <Reveal>
-            <p className="font-mono uppercase tracking-[0.2em] text-ink-soft text-[0.6875rem]">
-              {t("eyebrow")}
-            </p>
-          </Reveal>
-
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
               {t("beat4.headline")}
             </h2>
           </Reveal>
@@ -283,14 +265,8 @@ export function NuricellFlagship() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
 
             <div>
-              <Reveal>
-                <p className="font-mono uppercase tracking-[0.2em] text-ink-soft text-[0.6875rem]">
-                  {t("eyebrow")}
-                </p>
-              </Reveal>
-
               <Reveal delay={0.1}>
-                <h2 className="mt-6 font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+                <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
                   {t("beat5.headline")}
                 </h2>
               </Reveal>
@@ -320,14 +296,8 @@ export function NuricellFlagship() {
       <section className="bg-paper">
         <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
 
-          <Reveal>
-            <p className="font-mono uppercase tracking-[0.2em] text-ink-soft text-[0.6875rem]">
-              {t("eyebrow")}
-            </p>
-          </Reveal>
-
           <Reveal delay={0.1}>
-            <h2 className="mt-6 font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
               {t("beat6.headline")}
             </h2>
           </Reveal>
@@ -343,7 +313,7 @@ export function NuricellFlagship() {
             <div className="mt-10">
               <a
                 href="#"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-8 py-3 text-[0.9375rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-8 py-3 text-[1.0625rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
               >
                 {t("beat6.cta")}
               </a>
