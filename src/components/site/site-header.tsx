@@ -21,7 +21,7 @@ const LANGS: { code: LangCode; key: keyof { en: string; ko: string; vi: string; 
 const NAV_ITEMS: { key: "science" | "products" | "quiz"; href: string }[] = [
   { key: "science", href: "#science" },
   { key: "products", href: "#system" },
-  { key: "quiz", href: "#" },
+  { key: "quiz", href: "#quiz" },
 ];
 
 export function SiteHeader() {

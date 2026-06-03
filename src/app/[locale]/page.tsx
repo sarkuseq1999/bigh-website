@@ -8,7 +8,6 @@ import { Credibility } from "@/components/site/credibility";
 import { NuricellFlagship } from "@/components/site/nuricell-flagship";
 import { TheSystem } from "@/components/site/the-system";
 import { CustomerStories } from "@/components/site/customer-stories";
-import { AskDrLiu } from "@/components/site/ask-dr-liu";
 import { EmailSignup } from "@/components/site/email-signup";
 import { Founder } from "@/components/site/founder";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -28,7 +27,6 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <NuricellFlagship />
         <TheSystem />
         <CustomerStories />
-        <AskDrLiu />
         <EmailSignup />
         <Founder />
       </main>
