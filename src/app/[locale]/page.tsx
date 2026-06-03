@@ -10,6 +10,7 @@ import { TheSystem } from "@/components/site/the-system";
 import { CustomerStories } from "@/components/site/customer-stories";
 import { AskDrLiu } from "@/components/site/ask-dr-liu";
 import { EmailSignup } from "@/components/site/email-signup";
+import { Founder } from "@/components/site/founder";
 import { SiteFooter } from "@/components/site/site-footer";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -29,6 +30,7 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <CustomerStories />
         <AskDrLiu />
         <EmailSignup />
+        <Founder />
       </main>
       <SiteFooter />
     </>
