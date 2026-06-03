@@ -127,7 +127,7 @@ export function TheSystem() {
                     </span>
                   </div>
 
-                  <p className="font-mono uppercase tracking-[0.16em] text-[0.65rem] text-ink-soft mt-5">
+                  <p className="font-mono uppercase tracking-[0.16em] text-[0.6875rem] text-ink-soft mt-5">
                     {role}
                   </p>
                   <h3 className="font-display font-light text-ink mt-1.5
@@ -150,7 +150,7 @@ export function TheSystem() {
             <a
               href="#"
               className="inline-flex items-center justify-center min-h-[48px] rounded-full
-                         bg-amber text-ink font-medium text-[1rem] tracking-[0.01em]
+                         bg-amber text-ink font-medium text-[1.0625rem] tracking-[0.01em]
                          px-7 py-3 transition-all duration-200
                          hover:bg-amber-hi focus-visible:outline-none
                          focus-visible:ring-2 focus-visible:ring-amber-hi focus-visible:ring-offset-2"
@@ -162,7 +162,7 @@ export function TheSystem() {
             <a
               href="#"
               className="inline-flex items-center justify-center min-h-[48px] rounded-full
-                         border-2 border-amber text-ink font-medium text-[1rem] tracking-[0.01em]
+                         border-2 border-amber text-ink font-medium text-[1.0625rem] tracking-[0.01em]
                          px-7 py-3 transition-all duration-200
                          hover:bg-amber/10 focus-visible:outline-none
                          focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2"
@@ -174,7 +174,7 @@ export function TheSystem() {
             <a
               href="#"
               className="inline-flex items-center justify-center min-h-[48px] rounded-full
-                         border border-line text-ink font-medium text-[1rem] tracking-[0.01em]
+                         border border-line text-ink font-medium text-[1.0625rem] tracking-[0.01em]
                          px-7 py-3 transition-all duration-200
                          hover:border-amber hover:bg-amber/5 focus-visible:outline-none
                          focus-visible:ring-2 focus-visible:ring-amber focus-visible:ring-offset-2"
