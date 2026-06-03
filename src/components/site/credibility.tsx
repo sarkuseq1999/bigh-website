@@ -1,204 +1,242 @@
 "use client";
 
-import { motion } from "motion/react";
+import { useRef } from "react";
+import {
+  motion,
+  useInView,
+  useMotionValue,
+  useTransform,
+  animate,
+  useReducedMotion,
+} from "motion/react";
+import { useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/site/reveal";
+import { Placeholder } from "@/components/site/placeholder";
 
-const ease = [0.2, 0.7, 0.2, 1] as const;
-const PAPER_KEYS = ["one", "two", "three"] as const;
+const EASE = [0.2, 0.7, 0.2, 1] as const;
 
-export function Credibility() {
-  const t = useTranslations("Credibility");
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Count-up hook                                                           */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+function useCountUp(
+  target: number,
+  duration: number,
+  triggered: boolean,
+  reduced: boolean,
+) {
+  const value = useMotionValue(reduced ? target : 0);
+  const rounded = useTransform(value, (v) => Math.round(v));
+
+  useEffect(() => {
+    if (!triggered) return;
+    if (reduced) {
+      value.set(target);
+      return;
+    }
+    const controls = animate(value, target, {
+      duration,
+      ease: "easeOut",
+    });
+    return () => controls.stop();
+  }, [triggered, target, duration, reduced, value]);
+
+  return rounded;
+}
+
+/* ─────────────────────────────────────────────────────────────────────── */
+/* Animated anchor stat                                                    */
+/* ─────────────────────────────────────────────────────────────────────── */
+
+function AnchorStat({ reduced }: { reduced: boolean }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+
+  const count3   = useCountUp(3,     1.4, inView, reduced);
+  const count1   = useCountUp(1,     1.1, inView, reduced);
+  const count22k = useCountUp(22000, 2.6, inView, reduced);
+
+  // Format count22k as "22,000" while animating (hoisted — no hook-in-render)
+  const count22kFormatted = useTransform(count22k, (v) => {
+    if (v < 1000) return String(Math.round(v));
+    const thousands = Math.floor(v / 1000);
+    const remainder = String(Math.round(v % 1000)).padStart(3, "0");
+    return `${thousands},${remainder}`;
+  });
 
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div className="mx-auto max-w-[1080px] px-6 pt-28 pb-32 md:px-12 md:pt-40 md:pb-44">
-        {/* ─────────── EYEBROW ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease }}
-          className="flex justify-center"
+    <div
+      ref={ref}
+      className="font-mono text-paper leading-tight"
+      aria-label="3 papers. 1 issue. 22,000+ citations."
+    >
+      {/* Row 1 */}
+      <div className="flex items-baseline gap-[0.3em] text-[clamp(1.75rem,3.2vw,2.75rem)]">
+        <motion.span
+          className="text-amber-hi font-bold"
+          initial={reduced ? false : { opacity: 0, y: 10 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.0, ease: EASE }}
         >
-          <div className="inline-flex items-center gap-3">
-            <span className="bg-sienna block size-1 rounded-full" />
-            <p className="text-espresso-60 font-display text-[0.7rem] font-medium tracking-[0.32em] uppercase">
-              {t("eyebrow")}
-            </p>
-            <span className="bg-sienna block size-1 rounded-full" />
-          </div>
-        </motion.div>
-
-        {/* ─────────── HEADLINE ─────────── */}
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1.05, delay: 0.15, ease }}
-          className="font-display text-espresso mx-auto mt-10 max-w-[20ch] text-center text-[clamp(2.5rem,6vw,5.5rem)] font-light leading-[1.03] tracking-[-0.022em] md:mt-14"
-          style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
+          <motion.span>{count3}</motion.span>
+        </motion.span>
+        <motion.span
+          className="text-paper/80 text-[0.62em] tracking-[0.12em] uppercase"
+          initial={reduced ? false : { opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.7, delay: 0.2, ease: EASE }}
         >
-          {t("headlineBefore")}
-          <em className="text-sienna font-light italic">
-            {t("headlineEmphasis")}
-          </em>
-          {t("headlineAfter")}
-        </motion.h2>
-
-        {/* ─────────── INTRO ─────────── */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1, delay: 0.3, ease }}
-          className="text-espresso/80 mx-auto mt-14 max-w-[700px] text-center text-[clamp(1.0625rem,1.3vw,1.25rem)] leading-[1.75] md:mt-20"
-        >
-          {t("intro")}
-        </motion.p>
-
-        {/* ─────────── CITATIONS BLOCK ─────────── */}
-        <div className="mx-auto mt-24 max-w-[860px] md:mt-32">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, margin: "-80px" }}
-            transition={{ duration: 0.7, ease }}
-            className="flex items-center gap-4"
-          >
-            <span className="border-espresso/15 block h-px w-12 border-t" />
-            <p className="text-espresso-60 font-display text-[0.7rem] font-medium tracking-[0.32em] uppercase">
-              {t("papersLabel")}
-            </p>
-            <span className="border-espresso/15 block h-px flex-1 border-t" />
-          </motion.div>
-
-          <ol className="mt-10 space-y-0">
-            {PAPER_KEYS.map((key, idx) => (
-              <motion.li
-                key={key}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.85, delay: 0.1 + idx * 0.12, ease }}
-                className={`group grid grid-cols-1 gap-2 py-7 md:grid-cols-[140px_1fr] md:gap-10 md:py-8 ${
-                  idx > 0 ? "border-espresso/10 border-t" : ""
-                }`}
-              >
-                <div className="flex items-baseline gap-3 md:flex-col md:gap-1">
-                  <span className="font-display text-sienna text-xl font-light leading-none tracking-[-0.01em]">
-                    0{idx + 1}
-                  </span>
-                  <span className="text-espresso-60 font-display text-[0.7rem] tracking-[0.24em] uppercase">
-                    {t(`papers.${key}.tag`)}
-                  </span>
-                </div>
-                <p
-                  className="font-display text-espresso text-[clamp(1.0625rem,1.4vw,1.25rem)] leading-[1.5] font-light italic transition-colors duration-300 group-hover:text-sienna"
-                  style={{ fontVariationSettings: '"opsz" 96, "SOFT" 40' }}
-                >
-                  {t(`papers.${key}.title`)}
-                </p>
-              </motion.li>
-            ))}
-          </ol>
-        </div>
-
-        {/* ─────────── CLOSING ─────────── */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1, ease }}
-          className="font-display text-espresso mx-auto mt-28 max-w-[720px] text-center text-[clamp(1.25rem,1.85vw,1.625rem)] leading-[1.5] font-light italic md:mt-36"
-          style={{ fontVariationSettings: '"opsz" 96, "SOFT" 50' }}
-        >
-          {t("closing")}
-        </motion.p>
-
-        {/* ─────────── STATS ROW ─────────── */}
-        <div className="border-espresso/10 mx-auto mt-28 grid max-w-[900px] grid-cols-1 gap-12 border-t pt-16 md:mt-36 md:grid-cols-3 md:gap-8 md:pt-20">
-          <Stat
-            number={t("stats.yearsNumber")}
-            label={t("stats.yearsLabel")}
-            body={t("stats.yearsBody")}
-            delay={0.05}
-          />
-          <Stat
-            number={t("stats.customersNumber")}
-            label={t("stats.customersLabel")}
-            body={t("stats.customersBody")}
-            delay={0.18}
-          />
-          <Stat
-            number={t("stats.papersNumber")}
-            label={t("stats.papersStatLabel")}
-            body={t("stats.papersBody")}
-            delay={0.31}
-          />
-        </div>
-
-        {/* ─────────── CTA ROW ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.95, delay: 0.2, ease }}
-          className="mt-24 flex flex-col items-center justify-center gap-4 sm:flex-row md:mt-32 md:gap-6"
-        >
-          <a
-            href="#"
-            className="group bg-espresso text-cream-50 hover:bg-sienna inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-medium tracking-[0.02em] transition-all duration-300 ease-out hover:gap-5"
-          >
-            {t("ctaPrimary")}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
-          <a
-            href="#"
-            className="group text-espresso border-espresso/25 hover:border-sienna hover:text-sienna inline-flex items-center gap-3 rounded-full border px-7 py-4 text-sm font-medium tracking-[0.02em] transition-all duration-300 ease-out hover:gap-5"
-          >
-            {t("ctaSecondary")}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
-        </motion.div>
+          papers.
+        </motion.span>
       </div>
-    </section>
+
+      {/* Row 2 */}
+      <div className="mt-2 flex items-baseline gap-[0.3em] text-[clamp(1.75rem,3.2vw,2.75rem)]">
+        <motion.span
+          className="text-amber-hi font-bold"
+          initial={reduced ? false : { opacity: 0, y: 10 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.3, ease: EASE }}
+        >
+          <motion.span>{count1}</motion.span>
+        </motion.span>
+        <motion.span
+          className="text-paper/80 text-[0.62em] tracking-[0.12em] uppercase"
+          initial={reduced ? false : { opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.7, delay: 0.5, ease: EASE }}
+        >
+          issue.
+        </motion.span>
+      </div>
+
+      {/* Row 3 */}
+      <div className="mt-2 flex items-baseline gap-[0.15em] text-[clamp(1.75rem,3.2vw,2.75rem)]">
+        <motion.span
+          className="text-amber-hi font-bold"
+          initial={reduced ? false : { opacity: 0, y: 10 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.7, delay: 0.6, ease: EASE }}
+        >
+          <motion.span>{count22kFormatted}</motion.span>
+          <span className="text-amber-hi">+</span>
+        </motion.span>
+        <motion.span
+          className="text-paper/80 text-[0.62em] tracking-[0.12em] uppercase"
+          initial={reduced ? false : { opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ duration: 0.7, delay: 0.85, ease: EASE }}
+        >
+          citations.
+        </motion.span>
+      </div>
+    </div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────── */
+/* Main export                                                             */
+/* ─────────────────────────────────────────────────────────────────────── */
 
-function Stat({
-  number,
-  label,
-  body,
-  delay,
-}: {
-  number: string;
-  label: string;
-  body: string;
-  delay: number;
-}) {
+export function Credibility() {
+  const t = useTranslations("Scientist");
+  const reduced = useReducedMotion() ?? false;
+
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 16 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.95, delay, ease }}
-      className="flex flex-col items-center text-center"
+    <section
+      id="scientist"
+      className="bg-forest relative overflow-hidden"
     >
+      {/* Subtle top edge separator */}
       <div
-        className="font-display text-espresso flex items-baseline gap-1 text-[clamp(3.5rem,6vw,5rem)] leading-none font-light tracking-[-0.035em]"
-        style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-      >
-        {number}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-amber-hi/10"
+      />
+
+      <div className="mx-auto max-w-[1200px] px-6 py-28 md:px-14 md:py-44">
+
+        {/* ─── EYEBROW ─── */}
+        <Reveal>
+          <p className="font-mono uppercase tracking-[0.2em] text-amber-hi text-[0.6875rem]">
+            {t("eyebrow")}
+          </p>
+        </Reveal>
+
+        {/* ─── HEADLINE + SUBHEAD ─── */}
+        <Reveal delay={0.1}>
+          <h2
+            className="font-display font-light text-paper mt-6 text-[clamp(2.5rem,4vw,4rem)] leading-[1.08] tracking-[-0.022em] max-w-[18ch]"
+          >
+            {t.rich("headline", {
+              em: (c) => (
+                <em className="font-display italic font-normal">{c}</em>
+              ),
+            })}
+          </h2>
+        </Reveal>
+
+        <Reveal delay={0.18}>
+          <p className="text-paper/70 mt-5 max-w-[52ch] text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">
+            {t("subhead")}
+          </p>
+        </Reveal>
+
+        {/* ─── MAIN TWO-COLUMN ZONE ─── */}
+        <div className="mt-16 md:mt-24 grid grid-cols-1 md:grid-cols-[1fr_1.25fr] gap-12 md:gap-20 items-start">
+
+          {/* LEFT — portrait placeholder */}
+          <Reveal delay={0.05} className="w-full">
+            <div className="border border-amber-hi/30 rounded-xl overflow-hidden">
+              <Placeholder
+                label={t("photoLabel")}
+                className="aspect-3/4 w-full bg-forest/60 border-0 rounded-none text-paper/50"
+              />
+            </div>
+          </Reveal>
+
+          {/* RIGHT — stat + body */}
+          <div className="flex flex-col gap-0">
+
+            {/* Giant anchor stat — reveals first */}
+            <AnchorStat reduced={reduced} />
+
+            {/* Body paragraphs */}
+            <Reveal delay={0.1} className="mt-10">
+              <p className="text-paper text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">
+                {t("bodyP1")}
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.15} className="mt-5">
+              <p className="text-paper/75 text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">
+                {t("bodyP2")}
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.2} className="mt-5">
+              <p className="text-paper/75 text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">
+                {t("bodyP3")}
+              </p>
+            </Reveal>
+
+            <Reveal delay={0.25} className="mt-5">
+              <p className="text-paper/75 text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">
+                {t("bodyP4")}
+              </p>
+            </Reveal>
+
+            {/* Pivot line — closing beat */}
+            <Reveal delay={0.32} className="mt-14 md:mt-16">
+              <p className="font-display font-light italic text-paper text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.3] tracking-[-0.01em]">
+                {t("pivot")}
+              </p>
+            </Reveal>
+
+          </div>
+        </div>
+
       </div>
-      <p className="text-espresso-60 font-display mt-4 text-[0.7rem] font-medium tracking-[0.28em] uppercase">
-        {label}
-      </p>
-      <p className="text-espresso/55 mt-2 max-w-[200px] text-sm leading-[1.5]">
-        {body}
-      </p>
-    </motion.div>
+    </section>
   );
 }
