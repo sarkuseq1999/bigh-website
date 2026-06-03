@@ -1,420 +1,395 @@
 "use client";
 
-import Image from "next/image";
-import { animate, motion, useInView, useMotionValue, useTransform } from "motion/react";
+import { useRef } from "react";
+import { motion, useReducedMotion, useInView } from "motion/react";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef } from "react";
-import { ArrowRight } from "lucide-react";
+import { Reveal } from "@/components/site/reveal";
 
-const ease = [0.2, 0.7, 0.2, 1] as const;
+// Number of cell segments inside the battery visual
+const CELL_COUNT = 5;
+
+/* ─────────────────────────────────────────────────────────────────────────
+   BrainScience — Section 3 "The Reason"
+   Two-column on desktop: copy left, animated battery visual right.
+   The battery charges up with a teal glow on scroll-in, then breathes.
+   Reduced-motion: fully-charged static state, no animation.
+───────────────────────────────────────────────────────────────────────── */
 
 export function BrainScience() {
-  const t = useTranslations("Science");
+  const t = useTranslations("Reason");
 
   return (
-    <section id="science" className="relative overflow-hidden bg-[#0a0a1a] scroll-mt-24">
-      {/* ── Cosmic space background image ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage: "url('/science/section-background-cosmos.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-        }}
-      />
+    <section id="science" className="bg-paper scroll-mt-24">
+      <div className="mx-auto max-w-[1200px] px-6 py-24 md:px-14 md:py-36">
 
-      {/* ── Top fade-in: pure white at the seam with section 2, easing into cosmos ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-[55%]"
-        style={{
-          background:
-            "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.92) 12%, rgba(255,255,255,0.55) 32%, rgba(255,255,255,0.18) 62%, rgba(255,255,255,0) 100%)",
-        }}
-      />
+        {/* Eyebrow */}
+        <Reveal>
+          <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
+            {t("eyebrow")}
+          </p>
+        </Reveal>
 
-      {/* ── Bottom fade-out: ease back to white before next section ── */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 bottom-0 h-[32%]"
-        style={{
-          background:
-            "linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0.82) 30%, rgba(255,255,255,0.35) 65%, rgba(255,255,255,0) 100%)",
-        }}
-      />
+        {/* Two-column grid: copy + visual */}
+        <div className="mt-10 grid grid-cols-1 gap-16 md:mt-14 md:grid-cols-2 md:gap-20 lg:gap-28">
 
-      <div className="relative mx-auto max-w-[1240px] px-6 pt-28 pb-32 md:px-12 md:pt-44 md:pb-44">
-        {/* ─────────── EYEBROW ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, ease }}
-          className="flex justify-center"
-        >
-          <div className="inline-flex items-center gap-3">
-            <span className="bg-sienna-soft block size-1 rounded-full" />
-            <p className="text-cream-50/70 font-display text-[0.7rem] font-medium tracking-[0.32em] uppercase">
-              {t("eyebrow")}
-            </p>
-            <span className="bg-sienna-soft block size-1 rounded-full" />
+          {/* ── LEFT: Copy column ── */}
+          <div className="flex flex-col justify-center">
+
+            {/* Headline */}
+            <Reveal delay={0.05}>
+              <h2 className="font-display text-[clamp(2.5rem,4vw,4rem)] font-light leading-[1.1] tracking-[-0.02em] text-balance text-ink">
+                {t.rich("headline", {
+                  em: (c) => (
+                    <em className="font-display italic font-normal">{c}</em>
+                  ),
+                })}
+              </h2>
+            </Reveal>
+
+            {/* Subhead */}
+            <Reveal delay={0.12}>
+              <p className="mt-5 text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+                {t("subhead")}
+              </p>
+            </Reveal>
+
+            {/* Body P1 + stat callout inline */}
+            <Reveal delay={0.2}>
+              <p className="mt-8 text-[1.125rem] leading-[1.6] text-ink md:mt-10 md:text-[1.1875rem]">
+                {t("bodyP1")}
+              </p>
+            </Reveal>
+
+            {/* Mono callout stat */}
+            <Reveal delay={0.28}>
+              <div className="mt-6 inline-flex flex-col border-l-2 border-ink-soft/25 pl-4">
+                <span className="font-mono text-[1.25rem] font-semibold tracking-[-0.01em] text-ink">
+                  {t("calloutStat")}
+                </span>
+                <span className="mt-0.5 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
+                  {t("calloutLabel")}
+                </span>
+              </div>
+            </Reveal>
+
+            {/* Body P2 */}
+            <Reveal delay={0.36}>
+              <p className="mt-8 text-[1.125rem] leading-[1.6] text-ink md:text-[1.1875rem]">
+                {t("bodyP2")}
+              </p>
+            </Reveal>
+
+            {/* Body P3 */}
+            <Reveal delay={0.44}>
+              <p className="mt-5 text-[1.125rem] leading-[1.6] text-ink md:text-[1.1875rem]">
+                {t("bodyP3")}
+              </p>
+            </Reveal>
+
+            {/* Turn — the pivot moment */}
+            <Reveal delay={0.52}>
+              <p className="mt-8 text-[1.125rem] font-medium leading-[1.6] text-ink md:text-[1.1875rem]">
+                {t("turn")}
+              </p>
+            </Reveal>
           </div>
-        </motion.div>
 
-        {/* ─────────── HEADLINE ─────────── */}
-        <motion.h2
-          initial={{ opacity: 0, y: 18 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 1.05, delay: 0.15, ease }}
-          className="font-display text-cream-50 mx-auto mt-10 max-w-[14ch] text-center text-[clamp(2.875rem,7vw,6.5rem)] font-light leading-[0.98] tracking-[-0.022em] md:mt-14"
-          style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-        >
-          {t.rich("headline", {
-            br: () => <br />,
-            em: (chunks) => (
-              <em className="text-sienna-soft font-light italic">{chunks}</em>
-            ),
-          })}
-        </motion.h2>
-
-        {/* ─────────── MITOCHONDRION CENTERPIECE (burning / energized) ─────────── */}
-        <MitochondrionStage />
-
-        {/* ─────────── COUNT-UP NUMBER ─────────── */}
-        <CountUpBlock
-          target={1000}
-          suffix={t("countSuffix")}
-          label={t("countLabel")}
-        />
-
-        {/* ─────────── STATEMENT ─────────── */}
-        <motion.p
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1, delay: 0.2, ease }}
-          className="font-display text-cream-50 mx-auto mt-20 max-w-[760px] text-center text-[clamp(1.375rem,2.2vw,1.875rem)] leading-[1.4] font-light tracking-[-0.012em] md:mt-28"
-          style={{ fontVariationSettings: '"opsz" 96, "SOFT" 40' }}
-        >
-          {t("statementBefore")}
-          <em className="text-sienna-soft font-light italic">
-            {t("statementEmphasis")}
-          </em>
-          {t("statementAfter")}
-        </motion.p>
-
-        {/* ─────────── TWO CONSEQUENCE LINES ─────────── */}
-        <div className="mx-auto mt-24 grid max-w-[920px] grid-cols-1 gap-12 md:mt-32 md:grid-cols-2 md:gap-16">
-          <ConsequenceBlock
-            kind="fuel"
-            label={t("fuelLabel")}
-            body={t("fuelBody")}
-          />
-          <ConsequenceBlock
-            kind="waste"
-            label={t("wasteLabel")}
-            body={t("wasteBody")}
-          />
+          {/* ── RIGHT: Animated battery visual ── */}
+          <div className="flex items-center justify-center md:justify-end">
+            <BatteryVisual />
+          </div>
         </div>
 
-        {/* ─────────── CTA ─────────── */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.9, delay: 0.25, ease }}
-          className="mt-24 flex justify-center md:mt-32"
-        >
-          <a
-            href="#"
-            className="group bg-cream-50 text-espresso hover:bg-sienna hover:text-cream-50 inline-flex items-center gap-3 rounded-full px-7 py-4 text-sm font-medium tracking-[0.02em] transition-all duration-300 ease-out hover:gap-5"
-          >
-            {t("cta")}
-            <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </a>
-        </motion.div>
+        {/* ── Brand-statement moment: "Not at the surface. At the source." ── */}
+        <Reveal delay={0.1}>
+          <div className="mt-24 border-t border-ink-soft/15 pt-16 md:mt-32 md:pt-20">
+            <p className="font-display text-[clamp(2rem,3.5vw,3.25rem)] font-light leading-[1.1] tracking-[-0.02em] text-balance text-ink">
+              {t("differentiation")}
+            </p>
+          </div>
+        </Reveal>
+
+        {/* Pivot — quieter, sets up next section */}
+        <Reveal delay={0.18}>
+          <p className="mt-8 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+            {t("pivot")}
+          </p>
+        </Reveal>
       </div>
     </section>
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────── */
-/* Mitochondrion with multi-layer burning / energized animation            */
-/* ─────────────────────────────────────────────────────────────────────── */
+/* ─────────────────────────────────────────────────────────────────────────
+   BatteryVisual
+   A custom inline SVG battery that "charges up" with teal glow on scroll-in.
+   After charging it breathes gently.
+   Reduced-motion: shows fully-charged end state, no animation.
 
-function MitochondrionStage() {
-  // 12 particles emitting outward from center at evenly-spaced angles
-  const emittingParticles = Array.from({ length: 12 }, (_, i) => ({
-    angle: (i / 12) * Math.PI * 2,
-    delay: i * 0.35,
-  }));
+   Safety: cells start at opacity 0.15 (never invisible), animate to full.
+   The SVG body always renders regardless of scroll/JS state.
+───────────────────────────────────────────────────────────────────────── */
+
+function BatteryVisual() {
+  const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const inView = useInView(ref, { once: true, margin: "-20%" });
+
+  // When reduced-motion OR in-view has fired, show full charge
+  const isCharged = reduce || inView;
 
   return (
-    <motion.figure
-      initial={{ opacity: 0, scale: 0.96 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ duration: 1.6, delay: 0.4, ease }}
-      className="relative mx-auto mt-20 w-full max-w-[920px] md:mt-28"
+    <div
+      ref={ref}
+      aria-hidden="true"
+      className="relative flex items-center justify-center"
+      style={{ width: 220, height: 380 }}
     >
-      {/* Layer 1: Slow outer breathing aura (life-force rhythm) */}
-      <motion.div
-        animate={{
-          scale: [1, 1.08, 1],
-          opacity: [0.55, 0.85, 0.55],
-        }}
-        transition={{
-          duration: 6.5,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-30"
-        style={{
-          background:
-            "radial-gradient(ellipse 75% 65% at 50% 50%, rgba(217,128,92,0.55) 0%, rgba(184,84,38,0.20) 35%, transparent 75%)",
-          filter: "blur(48px)",
-        }}
-      />
+      {/* Outer volumetric glow — behind the battery */}
+      <BreatheGlow isCharged={isCharged} reduce={!!reduce} />
 
-      {/* Layer 2: Mid-tier flame-flicker glow (combustion rhythm) */}
-      <motion.div
-        animate={{
-          scale: [0.98, 1.04, 0.995, 1.025, 0.98],
-          opacity: [0.4, 0.7, 0.5, 0.65, 0.4],
-        }}
-        transition={{
-          duration: 2.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-20"
-        style={{
-          background:
-            "radial-gradient(ellipse 55% 45% at 50% 50%, rgba(255,165,90,0.55) 0%, rgba(217,128,92,0.15) 45%, transparent 70%)",
-          filter: "blur(30px)",
-        }}
-      />
-
-      {/* Layer 3: Inner hot core (close to mitochondrion) */}
-      <motion.div
-        animate={{
-          scale: [0.95, 1.02, 0.97, 1, 0.95],
-          opacity: [0.45, 0.75, 0.55, 0.7, 0.45],
-        }}
-        transition={{
-          duration: 1.8,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 -z-10"
-        style={{
-          background:
-            "radial-gradient(ellipse 35% 30% at 50% 50%, rgba(255,210,150,0.45) 0%, rgba(255,165,90,0.18) 50%, transparent 75%)",
-          filter: "blur(18px)",
-        }}
-      />
-
-      {/* The mitochondrion image with brightness flicker (suggests active combustion) */}
-      <motion.div
-        animate={{
-          filter: [
-            "brightness(1) saturate(1)",
-            "brightness(1.2) saturate(1.18)",
-            "brightness(1.05) saturate(1.05)",
-            "brightness(1.22) saturate(1.15)",
-            "brightness(1) saturate(1)",
-          ],
-          scale: [1, 1.01, 1.005, 1.015, 1],
-        }}
-        transition={{
-          duration: 3.4,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-        className="relative aspect-video w-full"
+      {/* Battery SVG */}
+      <svg
+        viewBox="0 0 120 220"
+        width={180}
+        height={330}
+        className="relative z-10"
+        xmlns="http://www.w3.org/2000/svg"
+        style={{ overflow: "visible" }}
       >
-        <Image
-          src="/science/mitochondrion-hero.jpg"
-          alt=""
-          fill
-          sizes="(max-width: 768px) 100vw, 920px"
-          className="object-contain mix-blend-screen"
-          priority={false}
+        {/* Terminal nub at the top */}
+        <rect
+          x="42"
+          y="2"
+          width="36"
+          height="12"
+          rx="5"
+          ry="5"
+          fill="none"
+          stroke="var(--ink)"
+          strokeWidth="2.5"
+          strokeOpacity="0.35"
         />
-      </motion.div>
 
-      {/* Emitting energy particles — radiate outward from center */}
-      {emittingParticles.map(({ angle, delay }, i) => (
-        <EmittingParticle key={i} angle={angle} delay={delay} />
-      ))}
-    </motion.figure>
+        {/* Battery shell */}
+        <rect
+          x="6"
+          y="14"
+          width="108"
+          height="200"
+          rx="14"
+          ry="14"
+          fill="var(--paper-2)"
+          stroke="var(--ink)"
+          strokeWidth="2.5"
+          strokeOpacity="0.2"
+        />
+
+        {/* Cell segments (5 cells, bottom to top = lowest to highest) */}
+        {Array.from({ length: CELL_COUNT }, (_, i) => {
+          // i=0 is bottom cell, i=4 is top cell
+          // Cells fill from bottom (i=0) first
+          const cellIndex = i; // 0 = bottom
+          const cellW = 80;
+          const cellH = 30;
+          const cellX = (120 - cellW) / 2; // 20
+          // Position from bottom: i=0 is lowest, i=4 is highest
+          const cellY = 14 + 200 - 10 - (cellIndex + 1) * (cellH + 4);
+
+          return (
+            <BatteryCell
+              key={i}
+              x={cellX}
+              y={cellY}
+              width={cellW}
+              height={cellH}
+              rx={7}
+              // Cells charge in order: bottom (0) first, top (4) last
+              chargeDelay={cellIndex * 0.28}
+              isCharged={isCharged}
+              reduce={!!reduce}
+            />
+          );
+        })}
+
+        {/* Divider lines between cells (decorative) */}
+        {Array.from({ length: CELL_COUNT - 1 }, (_, i) => {
+          const cellH = 30;
+          // Line between cell i and cell i+1 (counting from bottom)
+          const lineY = 14 + 200 - 10 - (i + 1) * (cellH + 4) - 2;
+          return (
+            <line
+              key={i}
+              x1="20"
+              y1={lineY}
+              x2="100"
+              y2={lineY}
+              stroke="var(--ink)"
+              strokeWidth="1"
+              strokeOpacity="0.08"
+            />
+          );
+        })}
+
+        {/* Lightning bolt icon centered — suggests energy/power */}
+        <LightningBolt isCharged={isCharged} reduce={!!reduce} />
+      </svg>
+    </div>
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────── */
-
-function EmittingParticle({ angle, delay }: { angle: number; delay: number }) {
-  // Particle starts at center, drifts outward along its angle, then fades
-  const dx = Math.cos(angle);
-  const dy = Math.sin(angle);
-  const travelPx = 220; // how far the particle travels before fading
+/* Single battery cell that lights up with teal glow */
+function BatteryCell({
+  x,
+  y,
+  width,
+  height,
+  rx,
+  chargeDelay,
+  isCharged,
+  reduce,
+}: {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rx: number;
+  chargeDelay: number;
+  isCharged: boolean;
+  reduce: boolean;
+}) {
+  // Base fill — always visible at low opacity (never invisible safety)
+  const baseOpacity = 0.15;
+  const chargedOpacity = 0.88;
 
   return (
-    <motion.span
-      animate={{
-        x: [0, dx * travelPx],
-        y: [0, dy * travelPx],
-        opacity: [0, 0.9, 0],
-        scale: [0.6, 1.1, 0.4],
+    <motion.rect
+      x={x}
+      y={y}
+      width={width}
+      height={height}
+      rx={rx}
+      ry={rx}
+      // Start at low-but-visible state
+      initial={reduce ? false : { opacity: baseOpacity, scaleY: 0.88 }}
+      animate={
+        isCharged
+          ? {
+              opacity: chargedOpacity,
+              scaleY: 1,
+            }
+          : {
+              opacity: baseOpacity,
+              scaleY: 0.88,
+            }
+      }
+      transition={
+        reduce
+          ? { duration: 0 }
+          : {
+              opacity: { duration: 0.5, delay: chargeDelay, ease: [0.2, 0.7, 0.2, 1] },
+              scaleY: { duration: 0.45, delay: chargeDelay, ease: [0.2, 0.8, 0.2, 1] },
+            }
+      }
+      style={{
+        fill: "var(--glow)",
+        transformBox: "fill-box",
+        transformOrigin: "center",
+        // Soft inner glow on the cell itself
+        filter: isCharged ? "drop-shadow(0 0 6px var(--glow))" : "none",
       }}
-      transition={{
-        duration: 3.4,
-        repeat: Infinity,
-        delay,
-        ease: "easeOut",
-      }}
-      aria-hidden="true"
-      className="bg-sienna-soft pointer-events-none absolute top-1/2 left-1/2 size-1 rounded-full shadow-[0_0_8px_rgba(217,128,92,0.8)]"
     />
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────── */
-
-function CountUpBlock({
-  target,
-  suffix,
-  label,
+/* Lightning bolt — glows when charged */
+function LightningBolt({
+  isCharged,
+  reduce,
 }: {
-  target: number;
-  suffix: string;
-  label: string;
+  isCharged: boolean;
+  reduce: boolean;
 }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-100px" });
-  const count = useMotionValue(0);
-  const rounded = useTransform(count, (v) => Math.round(v).toLocaleString());
-
-  useEffect(() => {
-    if (inView) {
-      const controls = animate(count, target, {
-        duration: 2.4,
-        ease: [0.2, 0.7, 0.2, 1],
-      });
-      return controls.stop;
-    }
-  }, [inView, count, target]);
-
   return (
-    <div ref={ref} className="mt-12 flex flex-col items-center md:mt-16">
-      <div
-        className="font-display text-cream-50 flex items-baseline text-[clamp(4.5rem,11vw,9rem)] leading-none font-light tracking-[-0.035em]"
-        style={{ fontVariationSettings: '"opsz" 144, "SOFT" 30' }}
-      >
-        <motion.span>{rounded}</motion.span>
-        <span className="text-sienna-soft ml-1">{suffix}</span>
-      </div>
-      <motion.p
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.8, delay: 1.8, ease }}
-        className="text-cream-50/45 font-display mt-5 text-[0.7rem] tracking-[0.32em] uppercase"
-      >
-        {label}
-      </motion.p>
-    </div>
+    <motion.path
+      // Simple lightning bolt centered in the battery body
+      d="M 66 60 L 52 108 L 62 108 L 54 160 L 80 100 L 68 100 Z"
+      initial={reduce ? false : { opacity: 0.2 }}
+      animate={isCharged ? { opacity: 0.9 } : { opacity: 0.2 }}
+      transition={
+        reduce
+          ? { duration: 0 }
+          : {
+              opacity: {
+                duration: 0.6,
+                delay: CELL_COUNT * 0.28 + 0.1,
+                ease: [0.2, 0.7, 0.2, 1],
+              },
+            }
+      }
+      style={{
+        fill: "var(--glow)",
+        filter: isCharged ? "drop-shadow(0 0 8px var(--glow))" : "none",
+      }}
+    />
   );
 }
 
-/* ─────────────────────────────────────────────────────────────────────── */
-
-function ConsequenceBlock({
-  kind,
-  label,
-  body,
+/* Volumetric glow behind the battery — breathes after charging */
+function BreatheGlow({
+  isCharged,
+  reduce,
 }: {
-  kind: "fuel" | "waste";
-  label: string;
-  body: string;
+  isCharged: boolean;
+  reduce: boolean;
 }) {
+  if (reduce) {
+    // Static full glow
+    return (
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 rounded-full"
+        style={{
+          background:
+            "radial-gradient(ellipse 70% 60% at 50% 55%, rgba(68,205,169,0.32) 0%, transparent 75%)",
+          filter: "blur(32px)",
+          opacity: 0.9,
+        }}
+      />
+    );
+  }
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{
-        duration: 1,
-        delay: kind === "fuel" ? 0.1 : 0.25,
-        ease,
+      aria-hidden="true"
+      className="pointer-events-none absolute inset-0 rounded-full"
+      // Start barely visible (not 0 — never-invisible safety)
+      initial={{ opacity: 0.08, scale: 0.85 }}
+      animate={
+        isCharged
+          ? {
+              // Breathe loop — gentle, slow, living
+              opacity: [0.7, 0.9, 0.7],
+              scale: [0.97, 1.04, 0.97],
+            }
+          : { opacity: 0.08, scale: 0.85 }
+      }
+      transition={
+        isCharged
+          ? {
+              duration: 3.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              // Charge-in delay: let the cells finish charging first
+              delay: CELL_COUNT * 0.28 + 0.4,
+            }
+          : { duration: 0.8, ease: "easeOut" }
+      }
+      style={{
+        background:
+          "radial-gradient(ellipse 70% 60% at 50% 55%, rgba(68,205,169,0.32) 0%, transparent 75%)",
+        filter: "blur(32px)",
       }}
-      className="relative flex flex-col items-center text-center md:items-start md:text-left"
-    >
-      {/* Visual indicator */}
-      {kind === "fuel" ? <FuelIndicator /> : <WasteIndicator />}
-
-      <p className="text-cream-50/55 font-display mt-6 text-[0.7rem] font-medium tracking-[0.28em] uppercase">
-        {label}
-      </p>
-      <p
-        className="font-display text-cream-50 mt-3 text-[clamp(1.5rem,2.2vw,1.875rem)] leading-tight font-light tracking-[-0.012em]"
-        style={{ fontVariationSettings: '"opsz" 96, "SOFT" 40' }}
-      >
-        {body}
-      </p>
-    </motion.div>
-  );
-}
-
-/* ─────────────────────────────────────────────────────────────────────── */
-
-function FuelIndicator() {
-  return (
-    <div className="flex h-8 items-end gap-1.5">
-      {[0.3, 0.45, 0.6, 0.75, 1].map((h, i) => (
-        <motion.span
-          key={i}
-          initial={{ scaleY: 0 }}
-          whileInView={{ scaleY: 1 }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 0.5, delay: 0.4 + i * 0.08, ease }}
-          className={`block w-1.5 origin-bottom rounded-sm ${
-            i === 0 ? "bg-sienna-soft" : "bg-cream-50/15"
-          }`}
-          style={{ height: `${h * 2}rem` }}
-        />
-      ))}
-    </div>
-  );
-}
-
-function WasteIndicator() {
-  return (
-    <div className="relative h-8 w-12">
-      {[
-        { x: 6, y: 22, d: 0 },
-        { x: 18, y: 14, d: 0.2 },
-        { x: 30, y: 24, d: 0.4 },
-        { x: 24, y: 6, d: 0.6 },
-        { x: 38, y: 18, d: 0.8 },
-        { x: 12, y: 2, d: 1.0 },
-      ].map(({ x, y, d }, i) => (
-        <motion.span
-          key={i}
-          initial={{ opacity: 0, y: 8 }}
-          whileInView={{ opacity: [0, 0.65, 0.4], y: [8, y, y - 4] }}
-          viewport={{ once: true, margin: "-60px" }}
-          transition={{ duration: 1.6, delay: 0.4 + d, ease, repeat: 0 }}
-          className="bg-sienna-soft absolute size-1 rounded-full"
-          style={{ left: `${x}px`, top: `${y}px` }}
-        />
-      ))}
-    </div>
+    />
   );
 }
