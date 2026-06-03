@@ -5,9 +5,10 @@ import { Hero } from "@/components/site/hero";
 import { BrainScience } from "@/components/site/brain-science";
 import { YourMind } from "@/components/site/your-mind";
 import { Credibility } from "@/components/site/credibility";
+import { NuricellFlagship } from "@/components/site/nuricell-flagship";
 import { TheSystem } from "@/components/site/the-system";
 import { CustomerStories } from "@/components/site/customer-stories";
-import { FeatureGrid } from "@/components/site/feature-grid";
+import { AskDrLiu } from "@/components/site/ask-dr-liu";
 import { EmailSignup } from "@/components/site/email-signup";
 import { SiteFooter } from "@/components/site/site-footer";
 
@@ -23,9 +24,10 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
         <YourMind />
         <BrainScience />
         <Credibility />
+        <NuricellFlagship />
         <TheSystem />
         <CustomerStories />
-        <FeatureGrid />
+        <AskDrLiu />
         <EmailSignup />
       </main>
       <SiteFooter />
