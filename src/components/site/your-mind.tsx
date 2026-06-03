@@ -113,7 +113,7 @@ export function YourMind() {
 
         {/* Pivot */}
         <Reveal delay={0.2}>
-          <p className="mt-5 max-w-[58ch] text-[1.0625rem] leading-[1.6] text-ink-soft text-pretty">
+          <p className="mt-5 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft text-pretty">
             {t("pivot")}
           </p>
         </Reveal>
