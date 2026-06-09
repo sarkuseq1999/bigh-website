@@ -95,7 +95,9 @@
         "role": "The Foundation",
         "line": "Energy, at the source.",
         "tag": "FROM THE LAB",
-        "fact": "Acetyl-L-carnitine + alpha-lipoic acid"
+        "fact": "Acetyl-L-carnitine + alpha-lipoic acid",
+        "proof": "Built on research cited 22,000+ times.",
+        "proofCta": "Read the science →"
       },
       "natureCalm": {
         "name": "Nature Calm",
@@ -236,7 +238,13 @@
     "bodyP3": "It's a life's work — trained at UC Berkeley, carried through laboratories in the US and abroad, focused on one idea: how the brain makes its energy, and how to help it keep making it.",
     "bodyP4": "When our founder, Mo Chen, set out to build BiGH, he didn't start with a logo or a launch plan. He started with a scientist he's known for years — and the belief that this research deserved to reach the people who need it.",
     "pivot": "His research became a formula. We call it NuriCell.",
-    "photoLabel": "[REAL PHOTO: Dr. Liu]"
+    "photoLabel": "[REAL PHOTO: Dr. Liu]",
+    "journalFull": "Proceedings of the National Academy of Sciences",
+    "issueLine": "Vol. 99 · No. 4 · February 19, 2002",
+    "plateNote": "Three papers from that issue — the research behind NuriCell.",
+    "plateCta": "Read the issue →",
+    "pivotA": "His research became a formula.",
+    "pivotB": "We call it NuriCell."
   },
   "Proof": {
     "footnote": "Illustrative stories - verified member reviews arrive with launch.",
@@ -283,7 +291,26 @@
         "label": "where the training began"
       },
       "pnas": "Published in PNAS",
-      "cta": "Meet the scientist →"
+      "cta": "Meet the scientist →",
+      "nutrients": {
+        "value": "2",
+        "label": "nutrients, one discovery"
+      },
+      "issueLine": "PNAS · Vol. 99 · No. 4 · February 19, 2002"
+    },
+    "portraits": {
+      "one": {
+        "line": "For the 62-year-old founder who plans to run her company sharper at 70 than she did at 45.",
+        "place": "Seoul"
+      },
+      "two": {
+        "line": "For the contractor who reads every clause twice — and wants to stop having to.",
+        "place": "California"
+      },
+      "three": {
+        "line": "For the grandmother who keeps the whole family’s calendar in her head.",
+        "place": "Hanoi"
+      }
     }
   },
   "Founder": {
@@ -294,14 +321,19 @@
     "bodyP2": "Everything here is made the way I'd make it for them. No shortcuts. Just the science, done right — so you can stay sharp for everything still ahead.",
     "signoff": "— Mo Chen, Founder",
     "cta": "Start with NuriCell →",
-    "photoLabel": "[REAL PHOTO: Founder]"
+    "photoLabel": "[REAL PHOTO: Founder]",
+    "salutation": "To everyone determined to stay sharp —",
+    "signatureTitle": "Founder",
+    "ps": "P.S. — Not sure where to start? Three minutes with the Brain Age quiz will tell you.",
+    "psCta": "Take it here →"
   },
   "Flagship": {
     "beat3": {
       "nutrientA": "Acetyl-L-carnitine",
       "nutrientB": "Alpha-lipoic acid",
       "headline": "Two nutrients. Greater together.",
-      "body": "Acetyl-L-carnitine and alpha-lipoic acid — the two nutrients his PNAS papers centered on. Alone, each supports the brain's batteries. Together, his research showed, they do far more. That pairing is the discovery."
+      "body": "Acetyl-L-carnitine and alpha-lipoic acid — the two nutrients his PNAS papers centered on. Alone, each supports the brain's batteries. Together, his research showed, they do far more. That pairing is the discovery.",
+      "unionNote": "The overlap is the discovery — together they restored mitochondrial function, and memory, in aging animals."
     },
     "eyebrow": "THE FLAGSHIP",
     "badge": "Formulated by Dr. Jiankang Liu",
@@ -311,7 +343,8 @@
     },
     "beat2": {
       "headline": "His formula. Not ours.",
-      "body": "Three papers in a single issue of PNAS, February 2002 — cited more than 22,000 times since. This is the formula Dr. Liu built himself, straight from that research. Everything else we make is built on his science. This one is his science."
+      "body": "Three papers in a single issue of PNAS, February 2002 — cited more than 22,000 times since. This is the formula Dr. Liu built himself, straight from that research. Everything else we make is built on his science. This one is his science.",
+      "cta": "Be first when NuriCell ships →"
     },
     "beat4": {
       "headline": "More isn't better. Right is better.",
@@ -354,7 +387,8 @@
     "closing": "That last one is the rarest of all. It can't be downloaded. It can't be trained overnight. It's earned, over a lifetime, by a mind that stays sharp. Which means staying sharp is no longer about holding on — it's about staying ahead.",
     "pivotLead": "And it starts somewhere",
     "pivotMid": "smaller",
-    "pivotEnd": "than you'd ever think."
+    "pivotEnd": "than you'd ever think.",
+    "closingPunch": "Staying sharp is no longer about holding on. It’s about staying ahead."
   },
   "Reason": {
     "eyebrow": "THE REASON",
@@ -370,7 +404,10 @@
     "calloutStatB": "20%",
     "calloutLabel": "of your body / of its energy",
     "visualAlt": "A mitochondrion glowing like a charged battery cell among dimmer, aging ones",
-    "visualCaption": "Mitochondria — your brain's batteries. You have billions."
+    "visualCaption": "Mitochondria — your brain's batteries. You have billions.",
+    "surface": "Coffee rents you sharpness for an afternoon. This is about making more of the energy itself.",
+    "calloutLabelA": "of your body",
+    "calloutLabelB": "of its energy"
   },
   "SoftEntry": {
     "eyebrow": "THE FIRST STEP",
@@ -382,13 +419,20 @@
       "label": "Your result",
       "value": "47",
       "actual": "Actual age 54",
-      "note": "Sample report"
+      "note": "Sample report",
+      "rowMemory": "Memory",
+      "rowFocus": "Focus",
+      "rowRecall": "Recall"
     },
     "newsletter": {
       "title": "The Longevity Signal",
       "line": "One finding a month, explained in plain English. Four minutes to read. One click to leave.",
       "placeholder": "you@example.com",
-      "cta": "Subscribe"
-    }
+      "cta": "Subscribe",
+      "notReady": "Not ready? The Longevity Signal brings you one finding a month, in plain English.",
+      "notReadyCta": "Subscribe below →"
+    },
+    "headlineA": "How sharp is",
+    "headlineB": "your brain, really?"
   }
 }

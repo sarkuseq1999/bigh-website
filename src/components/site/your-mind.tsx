@@ -64,32 +64,33 @@ export function YourMind() {
         >
           {(
             [
-              { key: "judgment", num: "01", size: "text-[clamp(2.5rem,4.6vw,4.25rem)]" },
-              { key: "wisdom",   num: "02", size: "text-[clamp(2.75rem,5.2vw,4.75rem)]" },
-              { key: "taste",    num: "03", size: "text-[clamp(3rem,5.8vw,5.25rem)]" },
+              { key: "judgment", num: "01", size: "text-[clamp(2.75rem,5vw,4.5rem)]",   accent: "" },
+              { key: "wisdom",   num: "02", size: "text-[clamp(3.5rem,6.6vw,6rem)]",    accent: "" },
+              { key: "taste",    num: "03", size: "text-[clamp(4.5rem,8.8vw,8rem)]",    accent: "italic" },
             ] as const
-          ).map(({ key, num, size }, idx) => (
+          ).map(({ key, num, size, accent }, idx) => (
             <Reveal key={key} delay={0.1 + idx * 0.12}>
               <div
                 role="listitem"
-                className={`flex items-baseline gap-6 border-t border-line py-9 md:gap-10 md:py-11 ${idx === 2 ? "border-b" : ""}`}
+                className={`relative grid grid-cols-[1fr_auto] items-center gap-6 border-t border-line py-9 md:py-11 ${idx === 2 ? "border-b" : ""}`}
               >
-                <span
-                  aria-hidden="true"
-                  className="font-mono text-[0.75rem] tracking-[0.2em] text-ink-soft shrink-0 translate-y-[-0.25em]"
-                >
-                  {num}
-                </span>
                 <div>
                   <h3
-                    className={`m-0 font-display ${size} font-light leading-[1.02] tracking-[-0.02em] text-ink`}
+                    className={`m-0 font-display ${size} ${accent} font-light leading-[1.02] tracking-[-0.02em] text-ink`}
                   >
                     {t(`capabilities.${key}.term`)}
                   </h3>
-                  <p className="mt-3 max-w-[40ch] text-[1.0625rem] leading-[1.55] text-ink-soft md:text-[1.125rem]">
+                  <p className="mt-3 max-w-[44ch] text-[1.125rem] leading-[1.55] text-ink md:text-[1.1875rem]">
                     {t(`capabilities.${key}.definition`)}
                   </p>
                 </div>
+                {/* Ghosted display numeral — the row's typographic artifact */}
+                <span
+                  aria-hidden="true"
+                  className="font-display select-none self-center text-[clamp(4rem,9vw,8.5rem)] font-light leading-none text-ink/[0.08]"
+                >
+                  {num}
+                </span>
               </div>
             </Reveal>
           ))}
@@ -102,12 +103,19 @@ export function YourMind() {
           </p>
         </Reveal>
 
-        {/* Pivot — the hand-off line performs its own diminuendo */}
-        <Reveal delay={0.2}>
-          <p className="mt-10 text-ink font-display font-light italic leading-[1.3]">
-            <span className="text-[1.75rem] md:text-[2rem]">{t("pivotLead")} </span>
-            <span className="text-[1.375rem] md:text-[1.5rem]">{t("pivotMid")} </span>
-            <span className="text-[1.0625rem] md:text-[1.125rem]">{t("pivotEnd")}</span>
+        {/* The persuasion payoff — a statement, not a buried clause */}
+        <Reveal delay={0.16}>
+          <p className="mt-8 max-w-[36ch] font-display text-[clamp(1.5rem,2.6vw,2.125rem)] font-light leading-[1.25] text-ink">
+            {t("closingPunch")}
+          </p>
+        </Reveal>
+
+        {/* Pivot — the hand-off performs its own diminuendo, but stays legible */}
+        <Reveal delay={0.24}>
+          <p className="mt-12 text-ink font-display font-light italic leading-[1.3]">
+            <span className="text-[2rem] md:text-[2.25rem]">{t("pivotLead")} </span>
+            <span className="text-[1.5rem] md:text-[1.75rem]">{t("pivotMid")} </span>
+            <span className="text-[1.1875rem] md:text-[1.3125rem]">{t("pivotEnd")}</span>
           </p>
         </Reveal>
 

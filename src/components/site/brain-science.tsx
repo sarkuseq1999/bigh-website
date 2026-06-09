@@ -56,22 +56,26 @@ export function BrainScience() {
               </p>
             </Reveal>
 
-            {/* Anchor stat — display scale; the section's most quotable fact */}
+            {/* Anchor stat — each number paired with its own words */}
             <Reveal delay={0.28}>
-              <div className="mt-8 flex items-baseline gap-4">
-                <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-ink">
-                  {t("calloutStatA")}
-                </span>
-                <span className="font-display text-[clamp(1.5rem,2.5vw,2.25rem)] font-light leading-none text-ink-soft">
-                  /
-                </span>
-                <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-amber">
-                  {t("calloutStatB")}
-                </span>
+              <div className="mt-8 flex gap-12">
+                <div>
+                  <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-ink">
+                    {t("calloutStatA")}
+                  </span>
+                  <p className="mt-2 font-mono text-[0.75rem] uppercase tracking-[0.16em] text-ink-soft">
+                    {t("calloutLabelA")}
+                  </p>
+                </div>
+                <div>
+                  <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-amber">
+                    {t("calloutStatB")}
+                  </span>
+                  <p className="mt-2 font-mono text-[0.75rem] uppercase tracking-[0.16em] text-ink-soft">
+                    {t("calloutLabelB")}
+                  </p>
+                </div>
               </div>
-              <p className="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
-                {t("calloutLabel")}
-              </p>
             </Reveal>
 
             {/* Body P2 + P3 */}
@@ -98,36 +102,36 @@ export function BrainScience() {
           {/* ── RIGHT: mitochondria render — biology and battery in one image ── */}
           <Reveal delay={0.15} className="flex">
             <figure className="m-0 flex w-full flex-col md:self-stretch">
-              <div className="relative w-full flex-1 overflow-hidden rounded-2xl min-h-[420px] md:min-h-0">
+              <div className="relative w-full flex-1 overflow-hidden rounded-md min-h-[420px] md:min-h-0">
                 <Image
-                  src="/images/mitochondria.jpg"
+                  src="/images/mitochondria-v2.jpg"
                   alt={t("visualAlt")}
                   fill
                   sizes="(min-width: 768px) 45vw, 100vw"
                   className="object-cover"
                 />
               </div>
-              <figcaption className="mt-4 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
+              <figcaption className="mt-4 font-mono text-[0.75rem] uppercase tracking-[0.18em] text-ink-soft">
                 {t("visualCaption")}
               </figcaption>
             </figure>
           </Reveal>
         </div>
 
-        {/* ── Brand-statement moment, welded to the hand-off ── */}
+        {/* ── Brand-statement moment — earned by a named contrast, set as
+               its own centered event distinct from the headline ── */}
         <Reveal delay={0.1}>
-          <div className="mt-16 border-t border-ink-soft/15 pt-12 md:mt-20 md:pt-14">
-            <p className="font-display text-[clamp(2rem,3.5vw,3.25rem)] font-light leading-[1.1] tracking-[-0.02em] text-balance text-ink">
+          <div className="mt-16 border-t border-ink-soft/15 pt-12 md:mt-20 md:pt-14 text-center">
+            <p className="mx-auto max-w-[56ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+              {t("surface")}
+            </p>
+            <p className="mt-6 font-display italic text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.15] tracking-[-0.015em] text-ink">
               {t("differentiation")}
             </p>
+            <p className="mx-auto mt-6 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+              {t("pivot")}
+            </p>
           </div>
-        </Reveal>
-
-        {/* Pivot — quieter, sets up the scientist */}
-        <Reveal delay={0.18}>
-          <p className="mt-6 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
-            {t("pivot")}
-          </p>
         </Reveal>
       </div>
     </section>

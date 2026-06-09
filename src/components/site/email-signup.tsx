@@ -1,14 +1,9 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
+import { motion } from "motion/react";
 import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
 import { Reveal } from "@/components/site/reveal";
-
-const EASE = [0.2, 0.7, 0.2, 1] as const;
-const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-type FormState = "idle" | "submitting" | "success" | "error";
 
 // Subtle attention pulse for the Quiz CTA button
 function QuizCta({ label }: { label: string }) {
@@ -50,35 +45,53 @@ function QuizCta({ label }: { label: string }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Sample Brain Age report — the artifact the quiz promises, shown honestly
-   as a sample. Pure SVG: an arc gauge with a serif score.
+   Sample Brain Age report — an instrument, not a decoration.
+   270° gauge with tick marks, the score needle position, and a marker at
+   the sample's actual age so the seven-year gap is legible at a glance.
 ───────────────────────────────────────────────────────────────────────── */
 function BrainAgeSample({
   label,
   value,
   actual,
   note,
+  rows,
 }: {
   label: string;
   value: string;
   actual: string;
   note: string;
+  rows: { label: string; level: number }[];
 }) {
-  // Arc geometry: a 270° gauge, amber progress ~62%
   const r = 84;
   const c = 2 * Math.PI * r;
-  const arcFrac = 0.75; // 270° of the circle is the track
-  const progress = 0.62;
+  const arcFrac = 0.75; // 270° track
+  const progress = 0.62; // Brain Age 47 on the sample scale
+  const actualFrac = 0.78; // marker for actual age 54
+
+  // Tick marks along the 270° track
+  const ticks = Array.from({ length: 13 }, (_, i) => {
+    const angle = (-225 + i * (270 / 12)) * (Math.PI / 180);
+    const x1 = 100 + Math.cos(angle) * (r - 9);
+    const y1 = 100 + Math.sin(angle) * (r - 9);
+    const x2 = 100 + Math.cos(angle) * (r - 3);
+    const y2 = 100 + Math.sin(angle) * (r - 3);
+    return { x1, y1, x2, y2 };
+  });
+
+  // Marker dot at the sample's actual age
+  const mAngle = (-225 + actualFrac * 270) * (Math.PI / 180);
+  const mx = 100 + Math.cos(mAngle) * r;
+  const my = 100 + Math.sin(mAngle) * r;
 
   return (
     <div className="relative">
-      {/* Deliberate signal ripple — crisp concentric strokes, not a smudge */}
+      {/* Deliberate signal ripple — present, quiet, crisply drawn */}
       <svg
         aria-hidden="true"
         viewBox="0 0 480 480"
         className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[150%] -translate-x-1/2 -translate-y-1/2"
       >
-        {[120, 165, 210].map((rr, i) => (
+        {[130, 175, 220].map((rr, i) => (
           <circle
             key={rr}
             cx="240"
@@ -86,50 +99,83 @@ function BrainAgeSample({
             r={rr}
             fill="none"
             stroke="var(--amber)"
-            strokeOpacity={0.22 - i * 0.06}
+            strokeOpacity={0.4 - i * 0.11}
             strokeWidth="1"
           />
         ))}
       </svg>
 
-      <div className="rounded-2xl border border-line bg-paper px-10 py-9 shadow-[0_8px_40px_rgba(27,26,23,0.07)]">
+      <div className="rounded-2xl border border-line bg-paper px-9 py-8 shadow-[0_8px_40px_rgba(27,26,23,0.07)]">
         <p className="font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft text-center">
           {label}
         </p>
 
-        <div className="relative mx-auto mt-4 size-[200px]">
-          <svg viewBox="0 0 200 200" className="size-full -rotate-[225deg]">
-            {/* track */}
-            <circle
-              cx="100"
-              cy="100"
-              r={r}
-              fill="none"
-              stroke="var(--line)"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeDasharray={`${c * arcFrac} ${c}`}
-            />
-            {/* progress */}
-            <circle
-              cx="100"
-              cy="100"
-              r={r}
-              fill="none"
-              stroke="var(--amber)"
-              strokeWidth="6"
-              strokeLinecap="round"
-              strokeDasharray={`${c * arcFrac * progress} ${c}`}
-            />
+        <div className="relative mx-auto mt-3 size-[190px]">
+          <svg viewBox="0 0 200 200" className="size-full">
+            {/* tick marks */}
+            {ticks.map((tk, i) => (
+              <line
+                key={i}
+                x1={tk.x1}
+                y1={tk.y1}
+                x2={tk.x2}
+                y2={tk.y2}
+                stroke="var(--line)"
+                strokeWidth="1.5"
+              />
+            ))}
+            <g className="-rotate-[225deg] origin-center">
+              {/* track */}
+              <circle
+                cx="100"
+                cy="100"
+                r={r}
+                fill="none"
+                stroke="var(--line)"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeDasharray={`${c * arcFrac} ${c}`}
+              />
+              {/* progress — the sample's Brain Age */}
+              <circle
+                cx="100"
+                cy="100"
+                r={r}
+                fill="none"
+                stroke="var(--amber)"
+                strokeWidth="6"
+                strokeLinecap="round"
+                strokeDasharray={`${c * arcFrac * progress} ${c}`}
+              />
+            </g>
+            {/* marker at the sample's actual age — the 7-year gap, visible */}
+            <circle cx={mx} cy={my} r="5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <span className="font-display text-[4rem] font-light leading-none tracking-[-0.02em] text-ink">
+            <span className="font-display text-[3.75rem] font-light leading-none tracking-[-0.02em] text-ink">
               {value}
             </span>
             <span className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-ink-soft">
               {actual}
             </span>
           </div>
+        </div>
+
+        {/* sub-scores — the report has substance */}
+        <div className="mt-4 flex flex-col gap-2.5">
+          {rows.map(({ label: rowLabel, level }) => (
+            <div key={rowLabel} className="grid grid-cols-[7ch_1fr] items-center gap-3">
+              <span className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-ink-soft">
+                {rowLabel}
+              </span>
+              <span className="relative block h-px bg-line">
+                <span
+                  className="absolute inset-y-[-1px] left-0 bg-amber"
+                  style={{ width: `${level}%` }}
+                />
+              </span>
+            </div>
+          ))}
         </div>
 
         <p className="mt-5 text-center font-mono text-[0.625rem] uppercase tracking-[0.2em] text-ink-soft/80">
@@ -142,18 +188,12 @@ function BrainAgeSample({
 
 export function EmailSignup() {
   const t = useTranslations("SoftEntry");
-  const [email, setEmail] = useState("");
-  const [state, setState] = useState<FormState>("idle");
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!EMAIL_RE.test(email)) {
-      setState("error");
-      return;
-    }
-    setState("submitting");
-    window.setTimeout(() => setState("success"), 700);
-  }
+  const rows = [
+    { label: t("sample.rowMemory"), level: 58 },
+    { label: t("sample.rowFocus"), level: 72 },
+    { label: t("sample.rowRecall"), level: 64 },
+  ];
 
   return (
     <section id="quiz" className="relative overflow-hidden bg-paper-2 py-24 md:py-32">
@@ -172,23 +212,37 @@ export function EmailSignup() {
 
             <Reveal delay={0.1}>
               <h2 className="mt-6 font-display text-[clamp(2.25rem,4vw,3.75rem)] font-light leading-[1.08] tracking-[-0.02em] text-ink">
-                {t("headline")}
+                {t("headlineA")}
+                <br />
+                {t("headlineB")}
               </h2>
             </Reveal>
 
             <Reveal delay={0.2}>
-              <p className="mt-6 max-w-[46ch] text-[1.125rem] leading-[1.7] text-ink-soft">
+              <p className="mt-6 max-w-[44ch] text-[1.125rem] leading-[1.7] text-ink-soft">
                 {t("subhead")}
               </p>
             </Reveal>
 
             <Reveal delay={0.3} className="mt-10">
-              <QuizCta label={t("quizCta")} />
+              <div className="flex flex-col items-start gap-3">
+                <QuizCta label={t("quizCta")} />
+                <p className="font-mono text-[0.8125rem] uppercase tracking-[0.12em] text-ink">
+                  {t("trust")}
+                </p>
+              </div>
             </Reveal>
 
-            <Reveal delay={0.38}>
-              <p className="mt-4 font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-ink-soft">
-                {t("trust")}
+            {/* Not ready? One quiet line — the footer holds the form. */}
+            <Reveal delay={0.4}>
+              <p className="mt-10 text-[1.0625rem] leading-[1.6] text-ink-soft">
+                {t("newsletter.notReady")}{" "}
+                <a
+                  href="#newsletter"
+                  className="text-ink underline-offset-4 hover:underline"
+                >
+                  {t("newsletter.notReadyCta")}
+                </a>
               </p>
             </Reveal>
           </div>
@@ -200,104 +254,10 @@ export function EmailSignup() {
               value={t("sample.value")}
               actual={t("sample.actual")}
               note={t("sample.note")}
+              rows={rows}
             />
           </Reveal>
         </div>
-
-        {/* ── Newsletter — the "not ready yet? stay close" path ── */}
-        <Reveal delay={0.2} className="mt-20 md:mt-24">
-          <div className="mx-auto max-w-[560px] rounded-2xl border border-line bg-paper px-8 py-8 text-center">
-            <p className="font-display text-[1.25rem] font-medium text-ink">
-              {t("newsletter.title")}
-            </p>
-            <p className="mt-2 text-[1rem] leading-[1.6] text-ink-soft">
-              {t("newsletter.line")}
-            </p>
-
-            {/* Form */}
-            <form
-              onSubmit={handleSubmit}
-              aria-live="polite"
-              className="mt-6"
-              noValidate
-            >
-              <AnimatePresence mode="wait" initial={false}>
-                {state === "success" ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.45, ease: EASE }}
-                    className="flex items-center justify-center gap-2 py-3 text-[1.125rem] text-ink"
-                  >
-                    <span
-                      aria-hidden="true"
-                      className="flex size-6 shrink-0 items-center justify-center rounded-full bg-amber text-[0.75rem] text-ink"
-                    >
-                      ✓
-                    </span>
-                    <span className="font-display font-light">
-                      Thanks — you&apos;re in.
-                    </span>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="form"
-                    initial={{ opacity: 0, y: 6 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -6 }}
-                    transition={{ duration: 0.45, ease: EASE }}
-                    className="flex flex-col gap-3 sm:flex-row"
-                  >
-                    <input
-                      type="email"
-                      required
-                      value={email}
-                      onChange={(e) => {
-                        setEmail(e.target.value);
-                        if (state === "error") setState("idle");
-                      }}
-                      placeholder={t("newsletter.placeholder")}
-                      aria-label={t("newsletter.cta")}
-                      aria-invalid={state === "error"}
-                      className={`min-h-[48px] flex-1 rounded-full border bg-paper px-5 text-[1rem] text-ink placeholder:text-ink-soft/60 outline-none transition-colors duration-200 focus-visible:border-amber focus-visible:ring-2 focus-visible:ring-amber/30 ${
-                        state === "error"
-                          ? "border-amber"
-                          : "border-ink/15"
-                      }`}
-                    />
-                    {/* Quiet outline button — the quiz keeps the only gold */}
-                    <button
-                      type="submit"
-                      disabled={state === "submitting"}
-                      className="min-h-[48px] rounded-full border border-ink/25 px-6 text-[1rem] font-medium text-ink transition-colors duration-200 hover:border-ink hover:bg-ink/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink disabled:opacity-60"
-                    >
-                      {state === "submitting" ? (
-                        <span
-                          aria-hidden="true"
-                          className="inline-block size-4 animate-spin rounded-full border-2 border-ink/30 border-t-ink"
-                        />
-                      ) : (
-                        t("newsletter.cta")
-                      )}
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-
-              {/* Inline error */}
-              {state === "error" && (
-                <p
-                  role="alert"
-                  className="mt-2 font-mono text-[0.7rem] uppercase tracking-[0.12em] text-ink-soft"
-                >
-                  Please enter a valid email address.
-                </p>
-              )}
-            </form>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

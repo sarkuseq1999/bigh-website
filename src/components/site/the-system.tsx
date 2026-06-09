@@ -6,9 +6,9 @@ import { Reveal } from "@/components/site/reveal";
 
 /* ── ingredient still-life per product (no people; honest objects) ─────── */
 const CARD_IMAGES: Record<string, string> = {
-  natureCalm:  "/images/ing-calm.jpg",
+  natureCalm:  "/images/ing-calm-v2.jpg",
   turmerific:  "/images/ing-turmeric.jpg",
-  advancedOpc: "/images/ing-grapeseed.jpg",
+  advancedOpc: "/images/ing-grapeseed-v2.jpg",
   greenBee:    "/images/ing-propolis.jpg",
   deerHorn:    "/images/ing-reishi.jpg",
 };
@@ -67,7 +67,7 @@ export function TheSystem() {
                   {t("products.nuricell.role")}
                 </p>
                 <span className="font-mono uppercase tracking-[0.18em] text-[0.625rem]
-                                 bg-amber text-ink px-2.5 py-1 rounded-full">
+                                 border border-amber text-ink px-2.5 py-1 rounded-full">
                   {t("products.nuricell.tag")}
                 </span>
               </div>
@@ -80,6 +80,12 @@ export function TheSystem() {
               </p>
               <p className="font-mono uppercase tracking-[0.14em] text-[0.75rem] text-ink-soft mt-5">
                 {t("products.nuricell.fact")}
+              </p>
+              <p className="text-ink-soft text-[1rem] leading-[1.6] mt-4">
+                {t("products.nuricell.proof")}{" "}
+                <a href="#scientist" className="text-ink underline-offset-4 hover:underline">
+                  {t("products.nuricell.proofCta")}
+                </a>
               </p>
             </div>
 
@@ -96,44 +102,40 @@ export function TheSystem() {
           </div>
         </Reveal>
 
-        {/* ── SUPPORTING FIVE — ingredient photography, centered pair ── */}
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-6 gap-5 md:gap-6">
+        {/* ── SUPPORTING FIVE — one confident row under the foundation ── */}
+        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
           {SUPPORTING_KEYS.map((key, idx) => {
             const name = t(`products.${key}.name`);
             const role = t(`products.${key}.role`);
             const line = t(`products.${key}.line`);
             const fact = t(`products.${key}.fact`);
             return (
-              <Reveal
-                key={key}
-                delay={0.1 + idx * 0.07}
-                className={`lg:col-span-2 ${idx === 3 ? "lg:col-start-2" : ""}`}
-              >
+              <Reveal key={key} delay={0.1 + idx * 0.07}>
                 <article
                   className="group flex flex-col h-full overflow-hidden rounded-xl bg-paper border border-line
                              transition-all duration-300 ease-out
                              hover:-translate-y-1 hover:shadow-[0_6px_24px_rgba(27,26,23,0.08)]"
                 >
                   {/* ingredient still-life */}
-                  <div className="relative aspect-[16/9] w-full">
+                  <div className="relative aspect-[4/3] w-full">
                     <Image
                       src={CARD_IMAGES[key]}
                       alt={fact}
                       fill
-                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      sizes="(min-width: 1024px) 20vw, (min-width: 640px) 50vw, 100vw"
                       className="object-cover"
                     />
                   </div>
 
-                  <div className="p-6 flex flex-col flex-1">
-                    <p className="font-mono uppercase tracking-[0.16em] text-[0.6875rem] text-ink-soft">
+                  <div className="p-5 flex flex-col flex-1">
+                    <p className="font-mono uppercase tracking-[0.16em] text-[0.6875rem] text-amber">
                       {role}
                     </p>
                     <h3 className="font-display font-light text-ink mt-1.5
-                                   text-[1.5rem] leading-[1.1] tracking-[-0.01em]">
+                                   text-[1.3125rem] leading-[1.1] tracking-[-0.01em]">
                       {name}
                     </h3>
-                    <p className="text-ink text-[1.0625rem] leading-[1.55] mt-2.5">
+                    <p className="text-ink text-[1rem] leading-[1.55] mt-2.5">
                       {line}
                     </p>
                     <p className="font-mono uppercase tracking-[0.14em] text-[0.6875rem] text-ink-soft mt-auto pt-4">
@@ -150,10 +152,10 @@ export function TheSystem() {
         <Reveal delay={0.1} className="mt-14 md:mt-16">
           <div className="flex flex-col items-center gap-5">
             <a
-              href="#"
-              className="inline-flex items-center justify-center min-h-[52px] rounded-full
-                         bg-ink text-paper font-medium text-[1.0625rem] tracking-[0.01em]
-                         px-9 py-3 transition-colors duration-200
+              href="#quiz"
+              className="inline-flex items-center justify-center min-h-[56px] rounded-full
+                         bg-ink text-paper font-medium text-[1.125rem] tracking-[0.01em]
+                         px-10 py-4 transition-colors duration-200
                          hover:bg-forest focus-visible:outline-none
                          focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
             >

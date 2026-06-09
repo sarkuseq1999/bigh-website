@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
+import { Great_Vibes } from "next/font/google";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
 
+/* Script face for the signature mark — a drawn name, not a font-styled
+   byline. (A real scanned signature replaces this when Mo provides one.) */
+const script = Great_Vibes({ weight: "400", subsets: ["latin"] });
+
 /* ─────────────────────────────────────────────────────────────────────────
    Founder — Section 9 "The Founder"
-   Intimate two-column close: the letter-in-progress beside a personal note
-   set like correspondence (serif body, generous leading).
+   A letter, honored as a letter: salutation, serif correspondence body,
+   signature mark, quiet close, and a P.S. for the almost-ready reader.
 ───────────────────────────────────────────────────────────────────────── */
 
 export function Founder() {
@@ -15,20 +20,20 @@ export function Founder() {
 
   return (
     <section id="founder" className="bg-paper scroll-mt-24">
-      <div className="mx-auto max-w-[1000px] px-6 py-24 md:px-14 md:py-36">
+      <div className="mx-auto max-w-[1060px] px-6 py-24 md:px-14 md:py-36">
 
         {/* Two-column: letter photo + note */}
         <div className="flex flex-col gap-12 md:flex-row md:items-stretch md:gap-16">
 
           {/* The letter, mid-thought — stands in until a real portrait of
               Mo Chen is supplied; never a generated likeness */}
-          <Reveal delay={0.05} className="flex w-full md:w-[300px] md:flex-shrink-0">
-            <div className="relative w-full overflow-hidden rounded-xl border border-line aspect-[3/4] md:aspect-auto md:min-h-full">
+          <Reveal delay={0.05} className="flex w-full md:w-[360px] md:flex-shrink-0">
+            <div className="relative w-full overflow-hidden aspect-[3/4] md:aspect-auto md:min-h-full">
               <Image
-                src="/images/founder-letter.jpg"
+                src="/images/founder-letter-v2.jpg"
                 alt={t("photoAlt")}
                 fill
-                sizes="(min-width: 768px) 300px, 100vw"
+                sizes="(min-width: 768px) 360px, 100vw"
                 className="object-cover"
               />
             </div>
@@ -51,36 +56,56 @@ export function Founder() {
               </h2>
             </Reveal>
 
+            {/* Salutation — the form and the words agree */}
+            <Reveal delay={0.16}>
+              <p className="mt-8 font-display italic text-[1.25rem] font-light leading-[1.65] text-ink md:text-[1.3125rem]">
+                {t("salutation")}
+              </p>
+            </Reveal>
+
             {/* Body — set like correspondence, not interface text */}
-            <Reveal delay={0.18}>
-              <p className="mt-7 font-display text-[1.25rem] font-light leading-[1.65] text-ink md:text-[1.3125rem]">
+            <Reveal delay={0.22}>
+              <p className="mt-5 font-display text-[1.25rem] font-light leading-[1.65] text-ink md:text-[1.3125rem]">
                 {t("bodyP1")}
               </p>
             </Reveal>
 
-            <Reveal delay={0.26}>
+            <Reveal delay={0.3}>
               <p className="mt-5 font-display text-[1.25rem] font-light leading-[1.65] text-ink md:text-[1.3125rem]">
                 {t("bodyP2")}
               </p>
             </Reveal>
 
-            {/* Signoff */}
-            <Reveal delay={0.34}>
-              <p className="mt-8 font-display italic text-[1.375rem] leading-[1.5] text-ink">
-                {t("signoff")}
-              </p>
+            {/* Signature mark */}
+            <Reveal delay={0.38}>
+              <div className="mt-8">
+                <p className={`${script.className} text-[2.75rem] leading-none text-ink`}>
+                  Mo Chen
+                </p>
+                <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
+                  {t("signatureTitle")}
+                </p>
+              </div>
             </Reveal>
 
-            {/* CTA — the last ask of the page deserves a real button */}
-            <Reveal delay={0.42}>
-              <div className="mt-8">
-                <a
-                  href="#nuricell"
-                  className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-amber px-8 py-3 text-[1.0625rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
-                >
-                  {t("cta")}
+            {/* Quiet close — the intimacy is the sell */}
+            <Reveal delay={0.46}>
+              <a
+                href="#nuricell"
+                className="mt-9 inline-block font-display text-[1.25rem] font-light text-ink underline decoration-line decoration-1 underline-offset-4 transition-colors duration-200 hover:decoration-amber-hi"
+              >
+                {t("cta")}
+              </a>
+            </Reveal>
+
+            {/* P.S. — the second-most-read line of any letter */}
+            <Reveal delay={0.54}>
+              <p className="mt-7 text-[1.0625rem] leading-[1.6] text-ink-soft">
+                {t("ps")}{" "}
+                <a href="#quiz" className="text-ink underline-offset-4 hover:underline">
+                  {t("psCta")}
                 </a>
-              </div>
+              </p>
             </Reveal>
 
           </div>

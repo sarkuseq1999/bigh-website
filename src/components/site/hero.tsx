@@ -60,7 +60,7 @@ export function Hero() {
             clears the fixed header from *within* the viewport-tall column
             (rather than adding to the section height), so the CTAs always
             sit above the fold on laptop viewports. */}
-        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-16 md:pb-12 md:pl-14 md:pr-10">
+        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-12 md:pb-12 md:pl-14 md:pr-10">
           <div className="max-w-[640px]">
 
             {/* Eyebrow */}
@@ -121,10 +121,10 @@ export function Hero() {
               </a>
             </motion.div>
 
-            {/* CTA payoff — what the three minutes buy */}
+            {/* CTA payoff — what the quiz buys (readable at 55) */}
             <motion.p
               {...r(0.56)}
-              className="mt-4 font-mono text-[0.6875rem] tracking-[0.12em] uppercase text-ink-soft"
+              className="mt-4 font-mono text-[0.8125rem] tracking-[0.1em] uppercase text-ink"
             >
               {t("ctaNote")}
             </motion.p>
@@ -136,7 +136,7 @@ export function Hero() {
         {/* On mobile this renders below the text at a fixed height.        */}
         {/* On desktop the photo sits inset as a framed editorial card so   */}
         {/* it never collides with the fixed header.                        */}
-        <div className="relative h-[110vw] shrink-0 sm:h-[80vw] md:h-auto md:self-stretch md:pt-20 md:pb-8 md:pr-8">
+        <div className="relative h-[110vw] shrink-0 sm:h-[80vw] md:h-auto md:self-stretch md:py-24 md:pr-14">
           <div className="relative h-full w-full overflow-hidden rounded-none md:rounded-3xl">
             <motion.div
               className="relative h-full w-full"
@@ -154,7 +154,7 @@ export function Hero() {
                   })}
             >
               <Image
-                src="/images/hero-portrait-v2.jpg"
+                src="/images/hero-portrait-v3.jpg"
                 alt={t("imageAlt")}
                 fill
                 priority

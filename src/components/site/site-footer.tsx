@@ -121,7 +121,7 @@ export function SiteFooter() {
             </div>
 
             {/* newsletter mini-signup */}
-            <p className="text-ink mb-3 text-sm font-semibold">
+            <p id="newsletter" className="text-ink mb-3 scroll-mt-24 text-sm font-semibold">
               {t("newsletter.title")}
             </p>
             <form
