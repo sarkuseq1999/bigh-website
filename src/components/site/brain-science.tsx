@@ -44,7 +44,7 @@ export function BrainScience() {
 
             {/* Subhead */}
             <Reveal delay={0.12}>
-              <p className="mt-5 text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+              <p className="mt-5 text-[1.125rem] leading-[1.6] text-ink md:text-[1.1875rem]">
                 {t("subhead")}
               </p>
             </Reveal>
@@ -56,22 +56,22 @@ export function BrainScience() {
               </p>
             </Reveal>
 
-            {/* Anchor stat — each number paired with its own words */}
+            {/* Anchor stat — the section's exhibit, at display scale */}
             <Reveal delay={0.28}>
-              <div className="mt-8 flex gap-12">
+              <div className="mt-10 mb-2 flex gap-16 border-y border-line py-8">
                 <div>
-                  <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-ink">
+                  <span className="font-display text-[clamp(3.5rem,6vw,5.5rem)] font-light leading-none tracking-[-0.02em] text-ink">
                     {t("calloutStatA")}
                   </span>
-                  <p className="mt-2 font-mono text-[0.75rem] uppercase tracking-[0.16em] text-ink-soft">
+                  <p className="mt-3 font-mono text-[0.8125rem] uppercase tracking-[0.14em] text-ink">
                     {t("calloutLabelA")}
                   </p>
                 </div>
                 <div>
-                  <span className="font-display text-[clamp(3rem,5vw,4.5rem)] font-light leading-none tracking-[-0.02em] text-amber">
+                  <span className="font-display text-[clamp(3.5rem,6vw,5.5rem)] font-light leading-none tracking-[-0.02em] text-amber">
                     {t("calloutStatB")}
                   </span>
-                  <p className="mt-2 font-mono text-[0.75rem] uppercase tracking-[0.16em] text-ink-soft">
+                  <p className="mt-3 font-mono text-[0.8125rem] uppercase tracking-[0.14em] text-ink">
                     {t("calloutLabelB")}
                   </p>
                 </div>
@@ -104,7 +104,7 @@ export function BrainScience() {
             <figure className="m-0 flex w-full flex-col md:self-stretch">
               <div className="relative w-full flex-1 overflow-hidden rounded-md min-h-[420px] md:min-h-0">
                 <Image
-                  src="/images/mitochondria-v2.jpg"
+                  src="/images/mitochondria-v3.jpg"
                   alt={t("visualAlt")}
                   fill
                   sizes="(min-width: 768px) 45vw, 100vw"
@@ -122,13 +122,13 @@ export function BrainScience() {
                its own centered event distinct from the headline ── */}
         <Reveal delay={0.1}>
           <div className="mt-16 border-t border-ink-soft/15 pt-12 md:mt-20 md:pt-14 text-center">
-            <p className="mx-auto max-w-[56ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+            <p className="mx-auto max-w-[44ch] font-display text-[1.375rem] font-light leading-[1.45] text-ink md:text-[1.5rem]">
               {t("surface")}
             </p>
             <p className="mt-6 font-display italic text-[clamp(1.75rem,3vw,2.75rem)] font-light leading-[1.15] tracking-[-0.015em] text-ink">
               {t("differentiation")}
             </p>
-            <p className="mx-auto mt-6 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]">
+            <p className="mx-auto mt-6 max-w-[58ch] text-[1.0625rem] leading-[1.6] text-ink md:text-[1.125rem]">
               {t("pivot")}
             </p>
           </div>

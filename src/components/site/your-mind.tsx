@@ -64,9 +64,9 @@ export function YourMind() {
         >
           {(
             [
-              { key: "judgment", num: "01", size: "text-[clamp(2.75rem,5vw,4.5rem)]",   accent: "" },
-              { key: "wisdom",   num: "02", size: "text-[clamp(3.5rem,6.6vw,6rem)]",    accent: "" },
-              { key: "taste",    num: "03", size: "text-[clamp(4.5rem,8.8vw,8rem)]",    accent: "italic" },
+              { key: "judgment", num: "01", size: "text-[clamp(2.25rem,3.8vw,3rem)]",   accent: "" },
+              { key: "wisdom",   num: "02", size: "text-[clamp(3.25rem,5.8vw,4.75rem)]", accent: "" },
+              { key: "taste",    num: "03", size: "text-[clamp(4.5rem,9.4vw,7.5rem)]",  accent: "italic" },
             ] as const
           ).map(({ key, num, size, accent }, idx) => (
             <Reveal key={key} delay={0.1 + idx * 0.12}>
@@ -80,14 +80,14 @@ export function YourMind() {
                   >
                     {t(`capabilities.${key}.term`)}
                   </h3>
-                  <p className="mt-3 max-w-[44ch] text-[1.125rem] leading-[1.55] text-ink md:text-[1.1875rem]">
+                  <p className="mt-3 max-w-[44ch] text-[1.25rem] leading-[1.55] text-ink">
                     {t(`capabilities.${key}.definition`)}
                   </p>
                 </div>
-                {/* Ghosted display numeral — the row's typographic artifact */}
+                {/* Ghosted display numeral — anchors the right edge of each band */}
                 <span
                   aria-hidden="true"
-                  className="font-display select-none self-center text-[clamp(4rem,9vw,8.5rem)] font-light leading-none text-ink/[0.08]"
+                  className="font-display select-none self-center text-[clamp(5rem,12vw,11rem)] font-light leading-none text-ink/[0.12] translate-x-3 md:translate-x-6"
                 >
                   {num}
                 </span>
@@ -110,12 +110,13 @@ export function YourMind() {
           </p>
         </Reveal>
 
-        {/* Pivot — the hand-off performs its own diminuendo, but stays legible */}
+        {/* Pivot — one step down, felt but not fussy */}
         <Reveal delay={0.24}>
           <p className="mt-12 text-ink font-display font-light italic leading-[1.3]">
             <span className="text-[2rem] md:text-[2.25rem]">{t("pivotLead")} </span>
-            <span className="text-[1.5rem] md:text-[1.75rem]">{t("pivotMid")} </span>
-            <span className="text-[1.1875rem] md:text-[1.3125rem]">{t("pivotEnd")}</span>
+            <span className="text-[1.375rem] md:text-[1.5rem]">
+              {t("pivotMid")} {t("pivotEnd")}
+            </span>
           </p>
         </Reveal>
 

@@ -29,7 +29,7 @@ function IssuePlate({
   plateCta: string;
 }) {
   return (
-    <div className="flex h-full w-full flex-col rounded-md border border-amber-hi/30 bg-paper px-8 py-9 md:px-10 md:py-10">
+    <div className="flex h-full w-full flex-col rounded-sm border border-amber-hi/20 bg-[#F4EEE1] px-8 py-9 shadow-[0_18px_50px_rgba(0,0,0,0.45)] md:px-10 md:py-10">
       {/* Masthead */}
       <p className="font-display text-[2.5rem] font-light leading-none tracking-[-0.01em] text-ink">
         PNAS
@@ -65,7 +65,7 @@ function IssuePlate({
           href={PNAS_ISSUE_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="mt-3 inline-block font-mono text-[0.75rem] uppercase tracking-[0.14em] text-ink underline-offset-4 hover:underline"
+          className="mt-4 inline-flex min-h-[40px] items-center rounded-full border border-ink/30 px-5 font-mono text-[0.75rem] uppercase tracking-[0.14em] text-ink transition-colors duration-200 hover:border-ink hover:bg-ink/5"
         >
           {plateCta}
         </a>
@@ -135,8 +135,8 @@ export function Credibility() {
             />
           </Reveal>
 
-          {/* RIGHT — body */}
-          <div className="flex flex-col justify-center gap-0">
+          {/* RIGHT — body, top-aligned to the plate's masthead */}
+          <div className="flex flex-col justify-start gap-0 md:pt-2">
 
             <Reveal delay={0.1}>
               <p className="text-paper/90 text-[1.125rem] md:text-[1.1875rem] leading-[1.6]">

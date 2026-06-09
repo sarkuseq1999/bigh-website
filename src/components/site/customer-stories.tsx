@@ -12,7 +12,7 @@ const VIGNETTE_IMAGES: Record<(typeof VIGNETTE_KEYS)[number], string> = {
   three: "/images/story-hanoi.jpg",
 };
 
-const RECORD_KEYS = ["papers", "citations", "years", "nutrients"] as const;
+const RECORD_KEYS = ["papers", "citations", "years"] as const;
 
 const PNAS_ISSUE_URL = "https://www.pnas.org/toc/pnas/99/4";
 
@@ -49,22 +49,22 @@ export function CustomerStories() {
         {/* ── THE RECORD — dark exhibit band, four equal proofs ── */}
         <Reveal delay={0.2} className="mt-14 md:mt-16">
           <div className="rounded-2xl bg-forest px-8 py-12 md:px-14 md:py-14">
-            <div className="grid grid-cols-2 gap-x-6 gap-y-10 md:grid-cols-4">
+            <div className="grid grid-cols-3 gap-x-6">
               {RECORD_KEYS.map((key) => (
                 <div key={key} className="flex flex-col items-center text-center">
                   <span className="font-display font-light text-amber-hi leading-none
-                                   text-[clamp(2.25rem,3.6vw,3.5rem)] tracking-[-0.01em]">
+                                   text-[clamp(2.5rem,4vw,3.75rem)] tracking-[-0.01em]">
                     {t(`record.${key}.value`)}
                   </span>
-                  <span className="mt-3 font-mono uppercase tracking-[0.14em] text-[0.75rem] leading-[1.6] text-paper/80 max-w-[16ch]">
+                  <span className="mt-3 font-mono uppercase tracking-[0.14em] text-[0.8125rem] leading-[1.6] text-paper/85 max-w-[14ch]">
                     {t(`record.${key}.label`)}
                   </span>
                 </div>
               ))}
             </div>
 
-            {/* The issue itself — verifiable in one click */}
-            <div className="mt-10 flex flex-col items-center gap-3">
+            {/* The issue itself — the one verifiable action, set like one */}
+            <div className="mt-10 flex flex-col items-center gap-4">
               <p className="font-mono text-[0.75rem] uppercase tracking-[0.16em] text-paper/70">
                 {t("record.issueLine")}
               </p>
@@ -72,9 +72,10 @@ export function CustomerStories() {
                 href={PNAS_ISSUE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-mono text-[0.8125rem] uppercase tracking-[0.15em] text-paper
-                           underline-offset-4 hover:underline focus-visible:outline-2
-                           focus-visible:outline-offset-4 focus-visible:outline-amber-hi"
+                className="inline-flex min-h-[44px] items-center rounded-full border border-paper/40 px-6
+                           font-mono text-[0.8125rem] uppercase tracking-[0.15em] text-paper
+                           transition-colors duration-200 hover:border-paper hover:bg-paper/10
+                           focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber-hi"
               >
                 {t("record.cta")}
               </a>
@@ -90,7 +91,7 @@ export function CustomerStories() {
           </h3>
         </Reveal>
         <Reveal delay={0.14}>
-          <p className="mt-4 text-center font-mono text-[0.8125rem] tracking-[0.08em] text-ink-soft max-w-[60ch] mx-auto">
+          <p className="mt-4 text-center text-[0.9375rem] leading-[1.6] text-ink-soft max-w-[52ch] mx-auto">
             {t("vignettesNote")}
           </p>
         </Reveal>

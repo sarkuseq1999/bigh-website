@@ -67,6 +67,7 @@ function BrainAgeSample({
   const arcFrac = 0.75; // 270° track
   const progress = 0.62; // Brain Age 47 on the sample scale
   const actualFrac = 0.78; // marker for actual age 54
+  const rowValues = [82, 74, 78]; // sample sub-scores, shown beside the bars
 
   // Tick marks along the 270° track
   const ticks = Array.from({ length: 13 }, (_, i) => {
@@ -91,7 +92,7 @@ function BrainAgeSample({
         viewBox="0 0 480 480"
         className="pointer-events-none absolute left-1/2 top-1/2 -z-10 size-[150%] -translate-x-1/2 -translate-y-1/2"
       >
-        {[130, 175, 220].map((rr, i) => (
+        {[150, 195, 238].map((rr, i) => (
           <circle
             key={rr}
             cx="240"
@@ -99,8 +100,8 @@ function BrainAgeSample({
             r={rr}
             fill="none"
             stroke="var(--amber)"
-            strokeOpacity={0.4 - i * 0.11}
-            strokeWidth="1"
+            strokeOpacity={0.55 - i * 0.15}
+            strokeWidth="1.25"
           />
         ))}
       </svg>
@@ -148,8 +149,17 @@ function BrainAgeSample({
                 strokeDasharray={`${c * arcFrac * progress} ${c}`}
               />
             </g>
-            {/* marker at the sample's actual age — the 7-year gap, visible */}
+            {/* marker at the sample's actual age — labeled so the 7-year gap reads */}
             <circle cx={mx} cy={my} r="5" fill="var(--paper)" stroke="var(--ink)" strokeWidth="2" />
+            <text
+              x={mx - 11}
+              y={my - 10}
+              fontSize="11"
+              fill="var(--ink)"
+              fontFamily="var(--font-spline)"
+            >
+              54
+            </text>
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
             <span className="font-display text-[3.75rem] font-light leading-none tracking-[-0.02em] text-ink">
@@ -161,18 +171,21 @@ function BrainAgeSample({
           </div>
         </div>
 
-        {/* sub-scores — the report has substance */}
-        <div className="mt-4 flex flex-col gap-2.5">
-          {rows.map(({ label: rowLabel, level }) => (
-            <div key={rowLabel} className="grid grid-cols-[7ch_1fr] items-center gap-3">
-              <span className="font-mono text-[0.625rem] uppercase tracking-[0.16em] text-ink-soft">
+        {/* sub-scores — quiet values make the report a document, not decor */}
+        <div className="mt-5 flex flex-col gap-3">
+          {rows.map(({ label: rowLabel, level }, i) => (
+            <div key={rowLabel} className="grid grid-cols-[7ch_1fr_3ch] items-center gap-3">
+              <span className="font-mono text-[0.6875rem] uppercase tracking-[0.16em] text-ink-soft">
                 {rowLabel}
               </span>
-              <span className="relative block h-px bg-line">
+              <span className="relative block h-[3px] overflow-hidden rounded-full bg-line">
                 <span
-                  className="absolute inset-y-[-1px] left-0 bg-amber"
+                  className="absolute inset-y-0 left-0 rounded-full bg-amber"
                   style={{ width: `${level}%` }}
                 />
+              </span>
+              <span className="font-mono text-[0.6875rem] text-ink text-right tabular-nums">
+                {rowValues[i]}
               </span>
             </div>
           ))}

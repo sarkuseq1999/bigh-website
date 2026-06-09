@@ -52,7 +52,7 @@ function NutrientSynergy({
       {/* Union glow — confined to the lens where the circles overlap */}
       <motion.div
         aria-hidden="true"
-        className="pointer-events-none -mx-[3.25rem] md:-mx-[4rem] z-0 h-32 w-20 md:h-44 md:w-26 rounded-full blur-lg bg-amber-hi"
+        className="pointer-events-none -mx-[2.75rem] md:-mx-[3.5rem] z-0 h-28 w-14 md:h-40 md:w-18 rounded-[50%] blur-md bg-amber-hi"
         initial={reduced ? false : { opacity: 0, scale: 0.6 }}
         animate={
           inView || reduced
@@ -195,7 +195,7 @@ export function NuricellFlagship() {
 
           {/* What the union actually did — the diagram's caption does work */}
           <Reveal delay={0.1}>
-            <p className="text-center font-mono text-[0.75rem] uppercase tracking-[0.14em] leading-[1.7] text-ink-soft -mt-4 mb-10">
+            <p className="text-center font-mono text-[0.8125rem] uppercase tracking-[0.12em] leading-[1.7] text-ink -mt-4 mb-10 mx-auto max-w-[52ch]">
               {t("beat3.unionNote")}
             </p>
           </Reveal>
@@ -277,7 +277,7 @@ export function NuricellFlagship() {
         <div className="mx-auto max-w-[800px] px-6 py-20 md:px-14 md:py-28">
 
           <Reveal delay={0.1}>
-            <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
+            <h2 className="font-display font-light text-ink text-[clamp(2.75rem,4.6vw,4.5rem)] leading-[1.06] tracking-[-0.02em] text-balance">
               {t("beat6.headline")}
             </h2>
           </Reveal>

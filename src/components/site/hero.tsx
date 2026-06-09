@@ -47,26 +47,26 @@ export function Hero() {
   const r = (delay: number) => makeReveal(reduce, delay);
 
   return (
-    <section className="relative isolate min-h-[100dvh] overflow-hidden bg-paper">
+    <section className="relative isolate overflow-hidden bg-paper">
 
       {/* ── Grid wrapper ──────────────────────────────────────────────── */}
       {/* On desktop the grid is exactly one viewport tall (no extra section
           padding stacked on top), so the hero never exceeds 100dvh; on mobile
           it stacks (text over image) and may grow taller to fit the content. */}
-      <div className="relative mx-auto flex min-h-[100dvh] max-w-[1400px] flex-col md:grid md:grid-cols-[1fr_45%]">
+      <div className="relative mx-auto flex max-w-[1400px] flex-col md:grid md:grid-cols-[1fr_45%]">
 
         {/* ── LEFT: text stack ─────────────────────────────────────────── */}
         {/* justify-center vertically balances the stack. The top padding
             clears the fixed header from *within* the viewport-tall column
             (rather than adding to the section height), so the CTAs always
             sit above the fold on laptop viewports. */}
-        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-12 md:pb-12 md:pl-14 md:pr-10">
+        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:py-20 md:pl-14 md:pr-10">
           <div className="max-w-[640px]">
 
             {/* Eyebrow */}
             <motion.p
               {...r(0)}
-              className="mb-5 font-mono text-[0.6875rem] font-normal tracking-[0.2em] uppercase text-ink-soft"
+              className="mb-5 font-mono text-[0.8125rem] font-normal tracking-[0.16em] uppercase text-ink"
             >
               {t("eyebrow")}
             </motion.p>

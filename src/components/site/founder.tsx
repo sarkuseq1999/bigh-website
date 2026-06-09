@@ -1,13 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Great_Vibes } from "next/font/google";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
-
-/* Script face for the signature mark — a drawn name, not a font-styled
-   byline. (A real scanned signature replaces this when Mo provides one.) */
-const script = Great_Vibes({ weight: "400", subsets: ["latin"] });
 
 /* ─────────────────────────────────────────────────────────────────────────
    Founder — Section 9 "The Founder"
@@ -76,10 +71,10 @@ export function Founder() {
               </p>
             </Reveal>
 
-            {/* Signature mark */}
+            {/* Signature — restrained typeset name until a real scan exists */}
             <Reveal delay={0.38}>
-              <div className="mt-8">
-                <p className={`${script.className} text-[2.75rem] leading-none text-ink`}>
+              <div className="mt-6">
+                <p className="font-display italic text-[1.75rem] font-light leading-none text-ink">
                   Mo Chen
                 </p>
                 <p className="mt-2 font-mono text-[0.6875rem] uppercase tracking-[0.2em] text-ink-soft">
@@ -92,17 +87,17 @@ export function Founder() {
             <Reveal delay={0.46}>
               <a
                 href="#nuricell"
-                className="mt-9 inline-block font-display text-[1.25rem] font-light text-ink underline decoration-line decoration-1 underline-offset-4 transition-colors duration-200 hover:decoration-amber-hi"
+                className="mt-9 inline-block border-b border-line pb-0.5 font-display text-[1.25rem] font-light text-ink transition-colors duration-200 hover:border-amber-hi"
               >
                 {t("cta")}
               </a>
             </Reveal>
 
-            {/* P.S. — the second-most-read line of any letter */}
+            {/* P.S. — same hand as the letter */}
             <Reveal delay={0.54}>
-              <p className="mt-7 text-[1.0625rem] leading-[1.6] text-ink-soft">
+              <p className="mt-7 font-display text-[1.1875rem] font-light italic leading-[1.6] text-ink">
                 {t("ps")}{" "}
-                <a href="#quiz" className="text-ink underline-offset-4 hover:underline">
+                <a href="#quiz" className="border-b border-line pb-0.5 not-italic transition-colors duration-200 hover:border-amber-hi">
                   {t("psCta")}
                 </a>
               </p>

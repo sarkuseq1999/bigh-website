@@ -6,11 +6,11 @@ import { Reveal } from "@/components/site/reveal";
 
 /* ── ingredient still-life per product (no people; honest objects) ─────── */
 const CARD_IMAGES: Record<string, string> = {
-  natureCalm:  "/images/ing-calm-v2.jpg",
-  turmerific:  "/images/ing-turmeric.jpg",
-  advancedOpc: "/images/ing-grapeseed-v2.jpg",
-  greenBee:    "/images/ing-propolis.jpg",
-  deerHorn:    "/images/ing-reishi.jpg",
+  natureCalm:  "/images/ing-calm-v3.jpg",
+  turmerific:  "/images/ing-turmeric-v2.jpg",
+  advancedOpc: "/images/ing-grapeseed-v3.jpg",
+  greenBee:    "/images/ing-propolis-v2.jpg",
+  deerHorn:    "/images/ing-reishi-v2.jpg",
 };
 
 /* ── the five supporting product keys in display order ──────────────────── */
@@ -131,7 +131,7 @@ export function TheSystem() {
                     <p className="font-mono uppercase tracking-[0.16em] text-[0.6875rem] text-amber">
                       {role}
                     </p>
-                    <h3 className="font-display font-light text-ink mt-1.5
+                    <h3 className="font-display font-light text-ink mt-1.5 min-h-[2.3em]
                                    text-[1.3125rem] leading-[1.1] tracking-[-0.01em]">
                       {name}
                     </h3>
