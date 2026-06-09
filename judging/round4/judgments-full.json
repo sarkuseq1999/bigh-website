@@ -1,0 +1,749 @@
+{
+  "judgments": [
+    {
+      "section": "hero",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "The headline is true and almost everything else is nearly worthy of it — but a hero you have to read twice, a stranded word, and a photo any brand could rent is \"very good,\" and very good is the enemy of great.",
+      "fixes": {
+        "content": [
+          "The body sentence forces a re-read: \"...the two nutrients thirty years of published research centered on\" is a compressed relative clause. If they read it twice, you lost them. Rewrite: \"...with the two nutrients thirty years of published research kept coming back to\" or \"...two nutrients with thirty years of published research behind them.\"",
+          "Subhead pronoun floats: in \"Your edge runs on energy. After 45, it needs looking after,\" the \"it\" could be edge or energy. Say \"that energy needs looking after\" — zero ambiguity in a hero.",
+          "One viewport carries five message layers — citation eyebrow, promise headline, energy subhead, mitochondria paragraph, FREE payoff. Merge or cut one (the eyebrow and the payoff are both shouting in caps); let the headline do more of the work alone."
+        ],
+        "uiDesign": [
+          "Kill the widow: the subhead breaks as \"...it needs looking / after.\" — one orphaned word on its own line, splitting the very phrase \"looking after.\" Set a tighter max-width or hard-break after \"energy.\" This alone disqualifies sign-off.",
+          "The nav and the hero live on different grids — the BiGH logo sits roughly 90px right of the headline's left edge. Hang the logo, eyebrow, headline, and CTA on the same vertical line. One grid, no exceptions.",
+          "Dead cream at the bottom of the viewport: the composition floats with leftover space below both columns. Tighten the vertical rhythm so the payoff caps line and the photo's bottom edge share a baseline and the fold lands deliberately, not accidentally."
+        ],
+        "imagery": [
+          "The photo is warm, well-cast, and well-lit — and completely rentable. Any wellness brand could run it tomorrow. Art-direct a signature, repeatable look (the morning window light, the deep-green knit, the handwriting motif as a system) so the image becomes ownable instead of stock-flavored.",
+          "Nothing in frame belongs to THIS story. Put one quiet brand-true detail in shot — her notebook page showing the brain-age protocol or the quiz on a device — so it's a picture of the product's promise, not generic 'woman journaling.'",
+          "The busy bookshelf crowds her head while the type column breathes; recrop with more negative space toward the window so the photograph carries the same calm the layout does."
+        ]
+      }
+    },
+    {
+      "section": "hero",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "A literate hero that flags its reader and makes a real offer — but it whispers \"two nutrients\" where it should name them, and facts, not mystery, are what open wallets.",
+      "fixes": {
+        "content": [
+          "Name the nutrients in the body copy — 'acetyl-L-carnitine and alpha-lipoic acid', not 'the two nutrients'. The unnamed tease costs belief; the chemical names ARE the credibility, and they are true and printable pre-launch.",
+          "Anchor the citation claim: 'cited 22,000+ times' begs the question 'by whom, where?' Add the source — 'in PNAS, the Proceedings of the National Academy of Sciences' — in the eyebrow or first line of body copy. A claim with an address is twice as believable.",
+          "Test the headline against a fact-carrying alternative. 'Your best thinking is still ahead' is warm but contains no news. Run it against something like 'The two nutrients 30 years of brain research kept coming back to' — the winner should be decided by response, not by taste."
+        ],
+        "uiDesign": [
+          "The payoff line 'FREE · YOUR BRAIN AGE AND A PROTOCOL BUILT FOR IT' is the strongest selling sentence on the page, set in the smallest, hardest-to-read type (letterspaced caps). Set it larger, sentence case, directly under the button — the offer should never be the fine print.",
+          "The left column ends well above the photograph's bottom edge, leaving a dead zone under the CTA at exactly the spot the eye lands last. Tighten the vertical rhythm or let the offer block sit lower so both columns resolve together.",
+          "The nav's 'Take the Quiz' is plain text while the page's whole job is driving that same action — style it as a small pill matching the primary CTA so the route to response is visible from the first pixel."
+        ],
+        "imagery": [
+          "Put a caption under the photograph. Caption readership famously exceeds body copy — one line ('Kyung-Sook, 58, keeps a morning journal. Her brain runs on the same cellular batteries yours does.') turns a mood photo into a salesman.",
+          "The photo has identification but thin story appeal — she writes, but at nothing in particular. Connect the image to the offer: have her writing over something resembling the quiz/protocol result, so the picture demonstrates the payoff rather than merely decorating it.",
+          "One photograph and zero artifacts of the science: a small typeset element — the real PNAS paper titles as a clipped citation card, or a simple mitochondria diagram — would give the hero a proof object the stock-adjacent portrait cannot supply."
+        ]
+      }
+    },
+    {
+      "section": "hero",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "The words are dignified and the typography has a genuine point of view, but a widowed line, a drifting wordmark, and a photograph treated as a pasted card are small absences of care that keep this hero just shy of inevitable.",
+      "fixes": {
+        "content": [
+          "The flagship product sentence ends in a tangle — 'the two nutrients thirty years of published research centered on' strands the reader on a preposition at the exact moment the science claim should land; rewrite so the nutrients are the subject, e.g. '...with the two nutrients at the center of thirty years of published research.'"
+        ],
+        "uiDesign": [
+          "Kill the widow in the serif subhead — 'after.' sits orphaned on its own line, breaking the most lyrical sentence on the page; break the line deliberately ('Your edge runs on energy. / After 45, it needs looking after.') or tighten the measure so the phrase breaks as a thought, not an accident.",
+          "Align the BiGH wordmark to the hero's left content edge — the logo floats roughly 100px right of where the eyebrow, headline, and CTA all begin; shared edges are what make a layout feel inevitable, and this one visibly drifts.",
+          "Quiet the tracked-caps voice — the eyebrow and the long payoff line ('FREE · YOUR BRAIN AGE AND A PROTOCOL BUILT FOR IT') both shout in a technical letterspaced register that fights the warm editorial serif; shorten the payoff and set both lines smaller and softer, because the gentlest promise on the page should not be the loudest typography."
+        ],
+        "imagery": [
+          "The photograph itself is lovely — morning light, the green knit answering the cream page, writing as a literal image of thinking — but it is presented as a rounded-corner card placed on the page; let it claim the architecture instead: bleed it to the top and right edges, or square the corners and hang it on the same grid as the text column.",
+          "The crop is timid — the subject sits centered with equal dead space on all sides; recrop so there is one decision (tighter on the hands, notebook, and falling light, or wider to give the window real air).",
+          "Unify the grade — the cool white of the window light sits against the warm cream canvas like two different materials; a subtle warm grade on the image would make photograph and page read as one continuous surface."
+        ]
+      }
+    },
+    {
+      "section": "yourmind",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The words carry a real idea — \"the smarter the world gets, the more your mind is worth\" is the kind of line we'd have fought to keep — but the ghosted numerals are template decoration, and typography only becomes imagery when it does something nobody else's page could do.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "The ghost numerals float — 01 hugs Judgment's cap height, 02 and 03 drift relative to their words. Pick one optical rule (numeral cap-height locked to the word's cap-height, or numeral centered on the band) and apply it to all three so the bands feel machined, not placed.",
+          "The top block is left-locked with a dead right field for the first ~450px; the bands then suddenly activate the right edge with numerals. Either pull the headline/intro measure wider or introduce the right-edge rhythm from the top so the composition doesn't change rules mid-section.",
+          "The two-size italic closer is clever, but the small phrase's baseline drop reads as a possible bug at a glance. Sit both phrases on one shared baseline so the size shift is unmistakably intentional craft."
+        ],
+        "imagery": [
+          "Ghosted 01/02/03 numerals are the most common premium-template trope alive — they decorate, they don't mean. Make them work: tuck each numeral partially behind its serif word, crop it at the band's hairline, compose word and numeral as one lockup so each band becomes an image, not a list row.",
+          "Taste is the climax of the whole argument but gets the same treatment as the others, just bigger. Give it one bespoke typographic artifact — a swash, an exaggerated ligature, the 03 colliding with the T — so the eye knows the story peaked here without reading a word.",
+          "The closing line is your bridge to 'The Reason' — let the type literally diminish toward something cell-small (a true typographic diminuendo ending in a single tiny mark). That turns a cute gag into the one image of this section people remember and scroll toward."
+        ]
+      }
+    },
+    {
+      "section": "yourmind",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 5
+      },
+      "verdictLine": "Handsome, intelligent editorial that flatters the right reader and earns the next scroll — but there is not one fact, not one symptom, not one specific in it, and specifics are what make copy believed.",
+      "fixes": {
+        "content": [
+          "Put the reader's lived symptom on the page. The section is about machines; she is about the name that slipped at dinner, the word on the tip of her tongue. One concrete sentence of her experience and the 52-year-old knows this page was written for her — right now it could be a LinkedIn think-piece.",
+          "Give me one fact. The brand owns three verified PNAS papers cited 22,000+ times — even one true, specific line here ('the rarest of all' is assertion, not evidence) would convert elegant opinion into believable copy. You cannot bore or charm people into believing; you must inform them.",
+          "Sharpen the triad into parallel reader-benefit language and test the order. 'Knowing which answer is the right one' is crisp; but is Taste truly the seasoned professional's proudest possession, or is Judgment? The claim 'that last one is the rarest' is doing heavy lifting on no support."
+        ],
+        "uiDesign": [
+          "Regularize the word-to-definition spacing across the three bands — Judgment sits tight to its definition, Wisdom and Taste float loose. In a section where typography IS the design, the rhythm must be identical so only the size crescendo changes.",
+          "The closing diminuendo sets 'And it starts somewhere' large and 'smaller than you'd ever think' small on the same line — the mid-sentence size shift reads as a typesetting accident, not a flourish. One size, or break the line so the contrast is unmistakably deliberate.",
+          "At 1440px the entire right two-thirds of the intro block is dead cream. The narrow measure is right for reading, but the composition feels like a mobile column centered-left on a desktop canvas — widen the headline measure or give the right field a job."
+        ],
+        "imagery": [
+          "The constraint forbids likenesses of real people, not objects. One engraved or still-life artifact with story appeal — a watch movement, a chess endgame, a sommelier's glass — would give the eye a focal image and the triad a memory hook. Type alone is defensible; it is not memorable.",
+          "Make the ghost numerals earn their ink: right now 01/02/03 are decoration. Letterpress texture, or a hairline thread connecting them downward toward the 'somewhere smaller' tease, would turn ornament into narrative.",
+          "Set one of the three definitions as a typeset artifact — a dictionary-entry specimen with pronunciation and etymology — so the 'typography is the imagery' claim is actually demonstrated rather than merely asserted."
+        ]
+      }
+    },
+    {
+      "section": "yourmind",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "Quiet, considered, very nearly inevitable — the words earn their restraint, but a default-feeling sans and the most borrowed numeral trope in editorial design keep this from greatness.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "The sans-serif body sits uncomfortably against that characterful serif — it reads as a system default, and the bold sans interjection ('So what's left?') is the wrong voice for the pivot line; set pull-lines in the serif, or choose a companion sans with genuine warmth.",
+          "The label-to-definition spacing is inconsistent across the three bands — Judgment's definition hugs its headword while Wisdom's and Taste's float further away; as the type grows, the gap must be optically equal, not metrically equal. This is exactly where care, or its absence, is visible.",
+          "The inline diminuendo on the closing line ('...somewhere smaller than you'd ever think') is a lovely idea, but the mid-sentence size drop currently risks reading as an error to a 60-year-old rather than wit; refine the baseline and optical alignment of the two sizes, or let the smaller phrase take its own line so the gesture is unmistakably deliberate."
+        ],
+        "imagery": [
+          "The ghosted 01/02/03 numerals are the single most reached-for device in premium editorial templates — clean, but expected. Nothing here is proprietary. Consider an artifact only this brand could own: the headwords themselves echoed at ghost scale, or a bespoke figure cut that belongs to the brand typeface.",
+          "The numerals hold one fixed scale while the headwords crescendo 1x→1.6x→2.5x, so the relationship between word and figure drifts band to band; either let the numerals grow with the words or anchor them to a deliberate, repeated baseline so the system feels designed rather than placed.",
+          "Typography-as-imagery is a legitimate claim, but flat digital ink on a flat digital cream doesn't yet earn the word 'material' — a whisper of paper grain or letterpress impression in the ghosted figures would give the section the physical depth the rest of the page will need."
+        ]
+      }
+    },
+    {
+      "section": "science",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "\"Coffee rents you sharpness for an afternoon\" is the best sentence on this page — now have the discipline to give the section one opening and one ending instead of two and three.",
+      "fixes": {
+        "content": [
+          "Cut one of the two openings. \"Billions of them...\" and \"Your brain is the hungriest organ you own...\" are both first paragraphs. Pick the hungriest-organ line — it's the one doing work — and delete the other. Say it once, say it right.",
+          "The coda stacks three endings: coffee line, \"Not at the surface. At the source.\", then the PNAS teaser. The PNAS line is a footnote whispered after the mic drop — it kills the punch. Move it into Section 4's opening where it belongs, and let \"At the source.\" be the last word.",
+          "\"Scientists call it mitochondrial decay\" is the only sentence written for scientists instead of the 55-year-old. Either own the phrase boldly or cut the hedge — \"As the batteries weaken\" already carries it."
+        ],
+        "uiDesign": [
+          "The 2%/20% pair is the exhibit, but it's set at timid scale — it whispers. Make the amber 20% two to three times larger so it anchors the whole left column the way Apple would set a chip stat. Right now the headline and the stat fight to a draw and nobody wins.",
+          "The vertical rhythm at the top of the column is broken: the gap after \"you don't.\" is visibly larger than every other paragraph gap and reads like a missing element. One spacing scale, applied everywhere.",
+          "The centered coda uses three different type treatments in three lines (medium serif, large italic display, small regular). That's hierarchy by accident. Two voices maximum — the italic turn and one supporting line — and the block stops looking like a pile of leftover endings."
+        ],
+        "imagery": [
+          "The cristae inside the hero mitochondrion read as flesh — peach, visceral, intestinal. The metaphor is energy, not tissue. Push the inner material toward ember and light — glowing filament, not gut — so the image says \"battery\" before the caption has to.",
+          "The \"depleted\" mitochondria are too subtle to read — they look like soft-focus copies, not dead batteries. Make the contrast legible at a glance: one burning bright, the others visibly cold and dark. That contrast IS the story; right now you have to be told it.",
+          "The hard rounded-rectangle slab contains the glow like a stock-photo frame. Let the amber light bleed slightly into the cream field, or deepen the vignette so the charged one feels like the only light in the dark — make the image an event, not a placement."
+        ]
+      }
+    },
+    {
+      "section": "science",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 8,
+        "imagery": 7
+      },
+      "verdictLine": "The facts are here and the manners are impeccable — but you buried the one fact that sells: what those three papers actually found.",
+      "fixes": {
+        "content": [
+          "Replace the vague 'drew the roadmap' with the papers' actual finding in one plain sentence (what improved, in what subjects) — a concrete result sells; a citation count merely decorates. Keep '22,000+ times' as the supporting proof, not the headline proof.",
+          "Spell out PNAS as 'Proceedings of the National Academy of Sciences' on first mention — the 52-year-old reader shouldn't decode an acronym, and the full name carries far more authority.",
+          "'But batteries can be looked after.' promises care and delivers nothing — add one clause of mechanism (how they can be recharged/fed) so the reader is pulled into the next section on a fact, not a tease."
+        ],
+        "uiDesign": [],
+        "imagery": [
+          "Make the depleted mitochondria legibly depleted — right now they read as out-of-focus duplicates, not dimmed batteries; lower their inner glow distinctly so the charged-vs-fading contrast carries the metaphor at a glance.",
+          "Put a fact in the caption, not just a label — captions outpull body copy; e.g., 'MITOCHONDRIA — UP TO TWO MILLION IN A SINGLE NEURON. YOUR BRAIN'S BATTERIES.'",
+          "The render is handsome but generic stock-science; art-direct one notch toward the metaphor (cristae faintly reading as charge cells, a single brighter 'full' specimen) so the image is ownable to BiGH rather than interchangeable with any biology textbook."
+        ]
+      }
+    },
+    {
+      "section": "science",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "A genuinely considered editorial argument — the amber stat speaking to the glowing mitochondrion is real craft — let down by a render that approximates wonder rather than achieving it, and by a widowed final line at the exact moment the section asks to be believed.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Fix the widow in the closing line — '...cited 22,000+ times since.' wraps so 'times since.' nearly stands alone; rebreak or shorten so the citation sets as one clean line or two balanced ones.",
+          "Set the final PNAS citation in the letterspaced mono-caps voice used for the eyebrow and image caption, so the section closes in the same material it opened with instead of defaulting to body sans.",
+          "Commit to one vertical spacing scale in the left column — the gap between the deck ('Billions of them...') and the next paragraph is visibly looser than the rhythm inside the stat block, which makes the column feel improvised rather than composed."
+        ],
+        "imagery": [
+          "Re-render the mitochondrion with crisper cristae and finer membrane translucency — the current material reads soft and faintly doughy, almost edible, rather than lit precision; the inner glow should feel like light through amber glass, not warmth through pastry.",
+          "Push the charged-versus-depleted narrative further: cool and grey the background mitochondria so the single warm one carries the entire amber story — right now the dim ones are barely legible as 'depleted' and the concept goes unread.",
+          "Give the dark panel material depth — subtle grain or atmospheric falloff — and extend it slightly so the caption baseline resolves against the italic turn opposite; at present it is a sharp rectangle of flat dark green, a default rather than a decision."
+        ]
+      }
+    },
+    {
+      "section": "scientist",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 6,
+        "imagery": 6
+      },
+      "verdictLine": "The story is real and the headline sings, but half the stage sits empty and the journal reads like a styled card, not paper you could pick up — and the plate spoils the punchline before the close gets to land.",
+      "fixes": {
+        "content": [
+          "The key proof sentence dangles: 'fed two natural compounds — ... — old rats worked memory tests' makes the rats do the feeding. Recast: 'Fed two natural compounds, old rats worked memory tests the way young ones did' is salvageable only if you restructure — say 'When old rats were fed acetyl-L-carnitine and alpha-lipoic acid, they worked memory tests the way young ones did — and their failing mitochondria recovered.'",
+          "The plate's footer note 'THREE PAPERS FROM THAT ISSUE — THE RESEARCH BEHIND NURICELL' gives away the reveal that the italic close is built to deliver. Cut 'the research behind NuriCell' from the plate so 'His research became a formula. We call it NuriCell.' actually lands as a surprise.",
+          "Subhead wobbles: 'has spent a career on how a brain keeps its energy' — 'spent a career on how' is mushy. Tighten to 'has spent his career on a single question: how the brain keeps its energy.'"
+        ],
+        "uiDesign": [
+          "Kill the dead zone: the right text column ends roughly 40% up the plate, leaving a large empty dark-green hole at bottom-right. Either pull the italic close up into that slot (baseline-aligned with the plate) or balance the column lengths — right now the composition trails off instead of resolving.",
+          "The subhead wraps 'keeps / its energy' — orphaning the payoff words on a stub line while acres of width sit unused. Widen the measure or set the break after 'career.'",
+          "The whole section is locked into the left two-thirds; the space right of the headline and above the body column reads as leftover, not designed. Re-balance the grid so the whitespace feels intentional, the way Aesop earns its emptiness."
+        ],
+        "imagery": [
+          "The PNAS plate is the right idea — evidence standing in for a portrait is honest and clever — but it's executed as a CSS card: flat uniform drop-shadow, untextured cream, no physicality. Add paper grain, directional light, a hint of stacked pages or edge, so it feels like a journal on a desk in 2002.",
+          "The plate's masthead is set in the website's own display serif, which makes it read as a brand card cosplaying a journal. Give the plate its own restrained, period-correct academic typography so it's an artifact, not a marketing module.",
+          "The single most visual claim on the page — old rats performing like young ones, mitochondria recovering — is invisible. One small, austere diagram (a before/after performance line, nothing decorative) in the empty bottom-right would let people SEE the result instead of only reading it."
+        ]
+      }
+    },
+    {
+      "section": "scientist",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The rats and the journal issue sell — that is fact, not poetry — but you left the Berkeley credential in the drawer, the citation count unexplained, and a half-empty page where a chart of the result should be.",
+      "fixes": {
+        "content": [
+          "Put the credential in print: 'UC Berkeley-trained neuroscientist Dr. Jiankang Liu' in the subhead or first paragraph. Credentials are facts, and facts sell — a 52-year-old skeptic wants to know who this man is before believing the rats.",
+          "Anchor '22,000+ citations' for the layman the way you anchored PNAS ('Most researchers never place a single paper there'). Raw numbers without comparison are wallpaper; one truthful comparative sentence — what most career scientists ever reach — turns it into a claim.",
+          "Repair the subhead: 'has spent a career on how a brain keeps its energy' is not English a reader trusts. 'Has spent his career on one question: how a brain keeps its energy' — and it echoes your headline instead of fumbling past it."
+        ],
+        "uiDesign": [
+          "Fill the dead zone under the right column — the plate runs a full card-height past the copy, leaving a void that makes the section feel unfinished. Set the citation figure large, add a pull-quote, or lengthen the copy (long copy sells; empty space here sells nothing).",
+          "Promote 'READ THE ISSUE →' — it is the single most valuable click on this page, the moment the skeptic verifies you. It is currently styled like a footnote. Make the proof CTA impossible to miss.",
+          "Rebreak the subhead so 'its energy.' isn't an orphaned two-word second line under a magnificent headline — it cheapens the typesetting directly beneath your best display work."
+        ],
+        "imagery": [
+          "Show the result, don't only cite it: a small captioned chart — old rats' memory scores before and after, against young rats — is worth a third paragraph. Readers read captions; a demonstration outsells a description every time.",
+          "Make the PNAS plate feel like paper, not a styled rectangle: grain, ink impression, a scanned-document edge. The device is honest evidence-as-hero — it deserves the physical conviction of a real object on the desk.",
+          "Use the empty right-lower quadrant for a simple mitochondrion schematic tied to the 'how the brain makes its energy' line — it teaches the mechanism and balances the layout in one move."
+        ]
+      }
+    },
+    {
+      "section": "scientist",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The typeset plate is an honest, considered answer to a hard constraint and the words have real discipline — but the dead lower-right quadrant and the flat, default-shadowed paper betray the final pass of care that separates good from inevitable.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Resolve the dead lower-right quadrant: the right column ends roughly a third of the way up the plate, leaving a large unconsidered void — bottom-anchor the closing paragraph to the plate's base, or move the italic close into that space so the composition resolves.",
+          "Rebreak the subhead: 'its energy.' dangles as a two-word orphan on line two — tighten the measure or break after 'career' so both lines feel deliberately set rather than accidentally wrapped.",
+          "Tune the vertical rhythm around the amber anchor line — the gap above it (to the subhead) and below it (to the plate) are near-equal, so it floats ambiguously between the two; it should clearly belong to the evidence below it."
+        ],
+        "imagery": [
+          "Give the plate true material: a whisper of paper grain and a gentle light gradient across the cream surface so it reads as a physical offprint under light, not a flat rectangle of hex #f2ead9.",
+          "Replace the uniform drop shadow — it reads as a CSS default; a tight contact shadow at the base with a softer, asymmetric ambient falloff would let the plate sit on the page instead of hovering generically.",
+          "Audit the α glyph in title 01 ('R-α-lipoic') — it appears heavier than the surrounding italic, a font-fallback artifact; one wrong glyph in the evidence artifact quietly undermines the whole claim of rigor."
+        ]
+      }
+    },
+    {
+      "section": "nuricell",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 5
+      },
+      "verdictLine": "The words are almost worthy of shipping — \"His formula. Not ours.\" and \"More isn't better. Right is better.\" are real lines — but the flagship shot is a ghost: you cannot fall in love with a bottle you cannot see, and the one diagram carrying the science is the least crafted thing on the page.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Unify the CTA: beat 2's 'Be first when NuriCell ships →' is a timid bare text link while beat 6 gets a proper deep-green pill. One product, one ask, one treatment — make the first a real button or cut it; right now the section can't decide how much it believes its own call to action.",
+          "Fix the axis break at 'Built complete.' — beats 2, 3, 4, and 6 all hang their headlines on the same left column line, then beat 5 jumps to the page margin. That grid is the section's spine; either keep every beat on it or make the two-column move a deliberate, repeated rhythm.",
+          "Tighten the vertical pacing: beats 4 and 5 are two-line thoughts floating in screen-heights of cream, so six beats start reading as the same slide six times. Compress the dead space or merge 4 and 5 — the scroll has to earn its length, and right now whitespace is doing the work craft should."
+        ],
+        "imagery": [
+          "The hero is the flagship moment and the product is illegible — the bottle dissolves into the dark and the 'NuriCell' label reads as a translucent watermark floating on glass, like an unfinished comp. Dark and cinematic is fine (Aesop proves it); murky is not. Re-render with a crisp printed label and one disciplined rim light so the bottle is something you want to hold.",
+          "Recraft the Venn: the amber glow is a soft blob that bleeds past the overlap instead of living inside the lens, sitting on hairline circles with tiny mono labels. 'The overlap is the discovery' is the best idea in the section — clip the glow hard to the lens, give the circles real weight, and make that overlap the single most beautiful object on the page.",
+          "Beat 6 — the sensory payoff, 'Three capsules. Every morning.' — has no image at all. The ritual is described but never seen. Bring the capsule still-life back in morning light at the close so the last thing before the CTA is the thing they'll actually do tomorrow."
+        ]
+      }
+    },
+    {
+      "section": "nuricell",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "\"His formula. Not ours.\" would stop my 52-year-old cold, and \"the name across the room\" sells the real promise — but the advertisement whispers its only ask, gives no reason to respond, and hides its product in the dark.",
+      "fixes": {
+        "content": [
+          "Give the CTA a reason to respond. 'Be first when NuriCell ships' promises nothing concrete — attach the offer: founder pricing, the published dose sheet, the research brief. Tell the reader exactly what surrendering her email buys her, or she won't surrender it.",
+          "You have three PNAS papers and 22,000 citations and you spend sixty words on them. Print the paper titles, or one quantified result from the rat studies, under 'His formula. Not ours.' Long factual copy sells to a considered 52-year-old buyer; this reader WILL read it.",
+          "Kill 'Built complete.' — it is vague poetry that sells nothing. Put the fact in the headline: name creatine and choline or state what they do ('Two more nutrients your brain burns every day'). Specifics persuade; abstractions decorate."
+        ],
+        "uiDesign": [
+          "Promote the first 'Be first when NuriCell ships' from a bare text link to a visible button — the section's only ask is invisible until the final beat, and a reader who is sold at beat 2 has nothing to press.",
+          "Break the monotone rhythm: five of six beats are the identical headline-left, copy-below stack with a vast empty left column. Vary the grid (full-width Venn, two-column proof beat) so the scroll has pacing instead of padding.",
+          "Tighten the dead space in the 'Two nutrients' and 'More isn't better' beats — acres of empty cream read as a template stretched thin, not premium restraint."
+        ],
+        "imagery": [
+          "Relight the hero bottle. It is a black silhouette with a half-legible ghost of a label — a flagship product shot must be legible and appetizing. Rim-light the glass, raise the label luminance; no Aesop or Apple page buries its product in murk.",
+          "Two of six beats ('His formula', 'More isn't better') carry no image at all. Give the dose beat a typeset artifact — a simple dose-vs-research comparison graphic — so the honesty claim has something the eye can verify.",
+          "Put a working caption under the capsules-and-water photograph. Captions are read more than body copy; 'Three capsules: acetyl-L-carnitine, alpha-lipoic acid, creatine + choline' sells while it labels. Right now the photo is mute."
+        ]
+      }
+    },
+    {
+      "section": "nuricell",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The words have real conviction — honest, spare, beautifully cadenced — but the bottle that must carry them is a pasted rectangle pretending to be glass, and care, or its absence, is always visible.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Resolve the hero collision: the subhead 'Three capsules a day.' and the amber attribution run directly across the bottle label's left edge, so the type sits on two different tonal fields mid-sentence — shift the text column or the bottle until each occupies its own uncontested space.",
+          "Commit to one content rail: beats 2, 3, 4 and 6 share a left edge, but 'Built complete.' starts on a noticeably different margin — the eye should travel down a single inevitable line, not stumble sideways once.",
+          "Give the beat-2 text link 'Be first when NuriCell ships →' considered weight (it is nearly invisible against the cream), and rescue the kicker 'It's the foundation. But it was never meant to work alone.' from beneath the final button, where it reads as an orphaned afterthought rather than a deliberate turn toward the System."
+        ],
+        "imagery": [
+          "Rebuild the hero bottle: the label is a flat rectangle with razor-straight vertical edges, no cylindrical wrap, no edge falloff — light does not turn around the form, so the flagship object reads as composited, not made. This is the single most damaging artifact in the section.",
+          "Clip the amber glow honestly to the Venn lens — it currently bleeds past both circle boundaries as a soft smudge; the caption declares 'the overlap is the discovery,' so the overlap must be drawn with the precision of a discovery.",
+          "Art-direct the capsule still life into the brand's world: the glass casts a hard raking shadow while the capsules cast almost none (two light logics in one frame), and the default rounded-corner card treatment cheapens an otherwise warm photograph — let it meet the page squarely."
+        ]
+      }
+    },
+    {
+      "section": "system",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 6,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "The idea is right — \"A system, not a shelf\" is a real story, instantly clear — but \"Turmerific\" belongs on a cereal box, \"Advanced OPC\" makes the customer decode jargon, and the five-card row looks assembled from a template, not designed. The hero bottle shot is the only thing here that feels inevitable.",
+      "fixes": {
+        "content": [
+          "Kill 'Turmerific' — it's a discount-aisle pun that breaks the premium spell every other word built. Rename all five formulas in ONE consistent naming system so they sound like a family, not five different companies.",
+          "'Advanced OPC' forces a 55-year-old to decode an acronym. Lead with the felt benefit in the name; 'Grape-seed OPCs' already lives in the small print where it belongs.",
+          "The closing line 'the one Dr. Liu built' repeats the featured card's subhead verbatim. Say something new — e.g. 'the foundation everything else builds on' — every sentence must earn its place."
+        ],
+        "uiDesign": [
+          "The featured card stacks two labels (THE FOUNDATION eyebrow + FROM THE LAB outlined tag) plus mono, serif, and sans registers in one small block. Pick one label, delete the other — clutter is a failure of decision-making.",
+          "The five-card row reads equal-weight and templated — competent, forgettable. Give it presence: taller image zones or a deliberate rhythm so it feels designed, not generated by a loop.",
+          "Two-line titles (Green Bee Propolis, Deer Horn Reishi) against one-line neighbors break the row's rhythm. Tighten the names or lock the title-zone height so all five baselines truly align."
+        ],
+        "imagery": [
+          "The letterboxed thin crops behead good still-lifes — the turmeric and reishi want to breathe. Give the ingredient photos a taller, squarer frame like the bottle gets.",
+          "The FOR STRESS leaf is an anonymous green leaf — it says clip-art nature, not 'calming botanicals.' Shoot the actual botanical so the photograph tells the truth of the label.",
+          "The section claims a system but shows one bottle and five raw ingredients. Even muted secondary bottle renders for the five formulas would PROVE the system visually instead of asserting it."
+        ]
+      }
+    },
+    {
+      "section": "system",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "The architecture sells — named ingredients, a 22,000-citation fact, problem-flagging labels — but \"Turmerific\" is a pun wearing a lab coat, and I do not sign off on puns that cost gravitas.",
+      "fixes": {
+        "content": [
+          "Rename 'Turmerific' — a cute pun sitting beside NuriCell's scientific gravitas cheapens the whole shelf; the consumer is not a moron, and she does not trust jokes about her brain. Give every formula the same editorial weight.",
+          "Tell the reader how to USE the system — does she buy six bottles or one? Add a single sentence of instruction ('Start with NuriCell; add one formula for your weakest hour'), because confusion is the enemy of the order.",
+          "'Deer Horn Reishi' reads as if deer antler is an ingredient — a 52-year-old will wonder, then leave. Clarify in the fact line (the mushroom's antler shape) or rename it."
+        ],
+        "uiDesign": [
+          "Card body copy is set too small for eyes that are 52 years old — the very reader the page flags with 'FOR STRESS' cannot comfortably read why it's for stress. Raise the size; five-across is cramped at 1440px.",
+          "Even out the title zones — 'Green Bee Propolis' and 'Deer Horn Reishi' wrap to two lines while neighbors sit on one, breaking the baseline rhythm the row otherwise earns.",
+          "'Read the science →' is the most persuasive line on the panel and it is set like a footnote — give the 22,000-citations proof more visual weight; facts sell, whisper them and they don't."
+        ],
+        "imagery": [
+          "The reishi crop reads as a baked pastry at first glance — recrop or reshoot so it is unmistakably a mushroom; an image that needs the caption to be understood has failed.",
+          "The single generic leaf for 'Nature Calm' says nothing — show the actual named botanicals; specificity in the picture sells as hard as specificity in the copy.",
+          "In the hero bottle shot the label type is barely legible — the package is the salesman; tighten the crop or angle until 'NuriCell' can be read without leaning in."
+        ]
+      }
+    },
+    {
+      "section": "system",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "A genuinely considered system — calm, coherent, close to inevitable — held back from shippable by a one-word widow, two photographic light-worlds that never agree, and one product name that giggles in a room where everything else speaks quietly.",
+      "fixes": {
+        "content": [
+          "Resolve the register clash of 'Turmerific' — a pun name sitting beside 'A system, not a shelf.' and 'the formula Dr. Liu built himself' is the single loudest act of carelessness on the page; if the name is fixed brand inventory, lead with the role and let the name recede typographically.",
+          "Break the em-dash tic: four of the six descriptive lines use the identical 'phrase — consequence' construction ('Energy, at the source —', 'Calm against… —', 'Cools inflammation —', 'Deep nights —'); vary the cadence so each formula sounds observed, not templated.",
+          "Shorten the button to a single thought — 'Find your formula' is the promise; 'take the 3-minute quiz' is mechanics that belongs beneath it, not inside the same breath."
+        ],
+        "uiDesign": [
+          "Fix the widow in the featured card — 'himself.' sitting alone on its own line under 'Energy, at the source — the formula Dr. Liu built' is exactly the kind of detail that tells you whether anyone looked; rebreak the line or tighten the measure.",
+          "The gap between the featured NuriCell card and the five-card row is tighter than every other vertical interval in the section — the macro rhythm breathes, then suddenly holds its breath; open it to match the section's spacing scale.",
+          "The featured card's left column is top-loaded — the text ends and leaves dead space pooling at the bottom while the image runs full height; either center the text block optically or let the type scale grow into the room it has."
+        ],
+        "imagery": [
+          "The two photographic worlds don't belong to each other: the bottle lives in dark, cinematic chiaroscuro while the five ingredients sit in bright cream daylight — commit to one session, ideally carrying a hint of the hero's shadow depth and warmth into the still lifes so the family reads as one material world.",
+          "Replace the anonymous green leaf on 'Nature Calm' — it is the only image in the row that says nothing specific (turmeric, grapes, honeycomb, reishi are all legible at a glance); a chamomile bloom or recognizable botanical would carry the same calm with actual meaning.",
+          "Loosen the thumbnail crops — the squat letterbox windows pinch the objects against their edges while the text below enjoys generous room; a taller image zone with more headroom would let each specimen sit with the same composure as the bottle."
+        ]
+      }
+    },
+    {
+      "section": "stories",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The honesty is real and the numbers sing — but you titled it \"The proof is in print\" and never showed me the print, then bolted a second section onto the bottom of it.",
+      "fixes": {
+        "content": [
+          "This is two sections wearing one coat. 'The people we built it for' is not proof — it's audience portraiture, and it dilutes the one thing this section must do. Move it to The New Reality, or cut it. One section, one story.",
+          "Pay off the headline. 'The proof is in print' — so show me the print. The three real, verifiable paper titles belong right here in the dark band, not behind a click. A volume number is a footnote; a title is proof.",
+          "'22,000+ citations' is unanchored — citations of what? This audience reads every clause twice (your own card says so). Make it '22,000+ citations of these three papers' so the skeptic has nothing to grab."
+        ],
+        "uiDesign": [
+          "Commit to the structure. The huge gap between the dark band and 'The people we built it for' makes it read as a brand-new section with no eyebrow — either give the second half its own eyebrow and treatment, or pull it tight under the proof band so it reads as one breath.",
+          "The gray sans subhead whispers under a headline that commands. It's the weakest typographic voice on the page — give it the serif, or more size and ink. Three type voices is the limit; one of them shouldn't be 'default gray'.",
+          "The cards read template: thin rounded borders, photo-on-top, anywhere-on-the-web. Aesop wouldn't draw that box. Go borderless with hairline rules or full-bleed photos so the cards belong to the print-editorial concept the rest of the section earns."
+        ],
+        "imagery": [
+          "The single most persuasive image this section could carry is missing: a typeset artifact of the actual PNAS issue — the contents page, the three titles set in print. You have real, verifiable papers and you're showing me three numbers instead. Put the print in 'proof is in print'.",
+          "All three photos wear the same golden-hour glaze — Seoul, California, Hanoi lit by one render batch. Three lives should look like three lives: vary the hour, the palette, the weather, so the row reads as world, not template.",
+          "Each photo needs one focal object that tells its line's story — the founder's photo almost has it (the desk, the city), but the Hanoi table is clutter without a subject. The grandmother keeps the family's calendar in her head; show me the table waiting for the family, not a buffet."
+        ]
+      }
+    },
+    {
+      "section": "stories",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "Admirably honest copy with real facts behind it — but you tell me the proof is in print and never show me the print, nor what the papers actually proved for my dulling memory.",
+      "fixes": {
+        "content": [
+          "The band sells prestige numbers but never the finding. '3 papers, 22,000 citations' is the resume; the sale is what those papers showed. Add one plain line a 52-year-old cares about — what the research demonstrated about aging memory and energy (worded truthfully). Facts must mean something to the reader, not just impress.",
+          "Anchor '22,000+ citations.' The consumer is not a moron, but she is also not a bibliometrician — 22,000 could be average for all she knows. One verifiable comparison ('more than 99% of published papers' or similar, only if true) turns a vanity metric into proof.",
+          "Print the three real PNAS paper titles in this section. They are verified, they cost nothing, and specifics outsell summaries every time. Right now the only way to see the evidence is to leave the page via the external button — make the reader believe before she clicks away."
+        ],
+        "uiDesign": [
+          "'The people we built it for' is a second section wearing the first one's hat. The dark proof band and the cream persona cards have no visual relationship — give the people block its own eyebrow/treatment or move it, so 'The Proof' stays a proof section.",
+          "The sole call-to-action is a small, low-contrast mono ghost button on dark green. If you want the reader to verify the research, make the door bigger — larger target, stronger contrast, and consider a secondary on-page path so the only CTA isn't an exit.",
+          "Optically center the stat numerals over their labels — the '3' floats off-axis from its two-line 'PAPERS IN ONE ISSUE' caption, and the eye notices even when the mind doesn't."
+        ],
+        "imagery": [
+          "The headline promises print and shows none. A typeset recreation or scan of the Feb 19, 2002 PNAS contents page with the three titles visible would be the single most persuasive image this brand could run — evidence you can see, not just be told about. This is the section's biggest missed shot.",
+          "The note says 'Illustrative portraits' but the photos contain no people — empty rooms are not portraits, and the mismatch reads as a hedge. Either rename them ('scenes from the lives we built it for') or art-direct in human presence — hands on the contract, a hand pouring the tea — within your no-real-likeness constraint.",
+          "The three photos read as warm AI stock; the third card's window light is blown out versus the other two. Tighten the color grade and exposure so the set looks commissioned, not generated."
+        ]
+      }
+    },
+    {
+      "section": "stories",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "An honest, quietly confident section — the words are genuinely premium and the palette sings, but small lapses of typographic care (ragged line breaks, a one-word widow, slightly accidental stat hierarchy) and timid letterbox crops keep it just short of inevitable.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Fix the careless rags: break the subhead after \"testimonials here —\" instead of stranding \"here\" at the start of line two, and rebreak the disclaimer so \"launch.\" is not a one-word widow — these two rags are exactly where the absence of care becomes visible.",
+          "Make the stat hierarchy decisive: either set all three numerals at one size, or step \"22,000+\" up unmistakably and optically align the flanking \"3\" and \"30\" to its baseline — right now the center being larger reads as accident, not intent.",
+          "Reduce the typographic voices from four to three: the gray sans subheads sit oddly against the serif display, mono labels, and serif card body — set the subheads in the text cut of the serif so the whole section reads as one hand."
+        ],
+        "imagery": [
+          "Give the photographs room to be portraits: the shallow letterbox crops make three lovely places read as decorative strips — a 4:5 or square crop with the card text beside or below would let each scene carry the \"portrait\" idea the copy promises.",
+          "Art-direct one unmistakable story object per frame: the Seoul desk with the tower view is perfect; the contractor's porch reads as vacation rather than the read-every-clause-twice ritual — a contract, a worksite jacket, anything that earns the line.",
+          "Grade the three frames as a commissioned series: all are golden-hour warm but the light direction and color temperature drift between them, so the row doesn't quite sit as one considered piece."
+        ]
+      }
+    },
+    {
+      "section": "signup",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 6,
+        "imagery": 5
+      },
+      "verdictLine": "The question stops you — \"How sharp is your brain, really?\" is the right ask — but the proof card mumbles: the one number that matters on it doesn't even have a name.",
+      "fixes": {
+        "content": [
+          "Label the hero number. The card's giant '47' is anonymous — a first-time visitor must guess it's the Brain Age. Put 'BRAIN AGE' on it. The entire section exists to sell that number; an unlabeled number sells nothing.",
+          "MEMORY and RECALL are the same word to a normal 55-year-old — it reads like padding and quietly erodes the science credibility. Replace RECALL with a genuinely distinct dimension (SPEED, CLARITY).",
+          "Two captions say the same thing — 'SAMPLE REPORT' on top, 'WHAT YOU'LL SEE' on the bottom. Pick one and delete the other. Every redundant word is a tax on trust."
+        ],
+        "uiDesign": [
+          "The report card is the proof of the whole promise, and it's a timid postage stamp floating in a sea of cream. Scale it up ~30%, tighten the column balance — right now the section reads as unfinished whitespace, not confident whitespace.",
+          "Fix the '54' marker: a tiny dot with a tiny number colliding into the arc's end is visual noise, not information. Either pull it outside the ticks with a clean leader line or drop the dot entirely and let 'ACTUAL AGE 54' carry it.",
+          "The three sub-score bars are hairlines whose fill differences (82 vs 74 vs 78) are nearly indistinguishable at arm's length. Thicken them until the deltas read instantly or remove the bars and let the numbers stand."
+        ],
+        "imagery": [
+          "The gauge has tick marks but no scale — ticks with no numbers imply a precision the instrument doesn't deliver, which is exactly the kind of fake detail this honest brand can't afford. Anchor the scale or strip the ticks.",
+          "The concentric signal rings behind the card are effectively invisible in this render — half-rendered atmosphere is worse than none. Make them present or delete the idea.",
+          "Make the 47-vs-54 gap the visual hero: highlight the 7-year delta on the arc itself. 'Seven years younger' is the emotional payload of the sample, and right now the eye has to do arithmetic to find it."
+        ]
+      }
+    },
+    {
+      "section": "signup",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "A first-class involvement device — the quiz headline stops the right reader and the sample report shows the reward — but vague \"a few questions,\" a missing proof anchor, and a fiddly gauge keep it one red-pen pass from shippable.",
+      "fixes": {
+        "content": [
+          "Replace \"A few questions\" with the exact number — specificity sells: \"12 questions. 3 minutes. You'll see your Brain Age.\" You cannot print \"3 MINUTES\" in the trust line and stay vague one sentence above it.",
+          "Add one credibility anchor inside this section — the stranger arriving here cold has no reason to believe a 3-minute quiz can score a brain. One truthful line under the trust line: \"Scored against 30 years of published cognition research\" ties the gimmick to the science you actually own.",
+          "Test a promise-carrying headline against the question: \"Is your brain younger than you are?\" mirrors the 47-vs-54 story on the card and converts curiosity into desire. Run both; keep the winner."
+        ],
+        "uiDesign": [
+          "Fix the \"54\" marker — the tiny dot and label collide with the end of the amber arc at the 1 o'clock position. Give it a leader line or clear offset so the two ages read at a glance instead of demanding squinting.",
+          "Move or rename \"WHAT YOU'LL SEE\" — buried at the bottom of the card it reads as a forgotten footer. It is the card's whole argument; it belongs above the card as a caption, or above the sub-scores as a section label.",
+          "Close the dead cream channel between the copy column and the report card — roughly 300px of nothing weakens the call-and-response between the offer and the proof of reward. Enlarge the card or tighten the grid."
+        ],
+        "imagery": [
+          "Sell the seven years. The card shows 47 and \"ACTUAL AGE 54\" but never states the delta — add a \"7 YEARS YOUNGER\" callout. The gap between the two numbers IS the dream; make the reader do no arithmetic.",
+          "Give MEMORY / FOCUS / RECALL bars real visual weight — they are hairline-thin and visually mumble. Proportional amber fills at double the height would make the report look like a result worth earning.",
+          "The concentric signal rings behind the card are invisible at this size — either bring them up to where they create depth and draw the eye to the card, or delete them; a device nobody can see is dead weight."
+        ]
+      }
+    },
+    {
+      "section": "signup",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 8,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The words are quietly confident and honest, but the composition is unresolved — the report card, which should be the object of desire, sits small and timid across an empty gulf, and the cramped \"54\" marker betrays the care the rest of the section aspires to.",
+      "fixes": {
+        "content": [],
+        "uiDesign": [
+          "Rebalance the spread: the sample-report card is too small against the heavy left text block, separated by roughly 400px of dead gutter — enlarge the card to ~360-400px wide and close the gap so the two halves read as one considered composition rather than two objects placed apart.",
+          "Remove the double-labeling on the card: 'SAMPLE REPORT' at top and 'WHAT YOU'LL SEE' at bottom say the same thing twice — keep one (ideally move 'What you'll see' outside the card as a quiet caption, or delete it) so the artifact has a single, calm voice.",
+          "Make the arrow agree with the words: 'Subscribe below →' points right while the copy says below — use ↓; and unify the trust-line separators ('NO CARD, NO COMMITMENT' breaks the middot rhythm with a comma)."
+        ],
+        "imagery": [
+          "Resolve the actual-age marker: the tiny '54' label is jammed against the arc, nearly touching it and barely legible — yet the 47-versus-54 gap is the entire promise of the product; offset the label outside the gauge with a hairline leader and give it room to breathe.",
+          "Give the card material presence: it reads as a thin tint with a faint border, and the promised concentric signal rings behind it are effectively invisible — either render the rings as a perceptible whisper of depth or remove the intent entirely; ambiguity is not restraint.",
+          "Make the three sub-score bars honest: at 82/74/78 the fills read identical and decorative — lengthen the bars and make the fill proportions visibly differ so the data feels measured, not painted on."
+        ]
+      }
+    },
+    {
+      "section": "founder",
+      "judgeKey": "jobs",
+      "judge": "Steve Jobs",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "Honest words, restrained craft — but the letter says \"no shortcuts\" while the photo's fake handwriting takes one.",
+      "fixes": {
+        "content": [
+          "\"Starting with my own family\" is the whole letter — and you skip past it. Name the person and the moment in one sentence. A letter to \"everyone\" with no specific human in it is a letter to no one; specificity is what makes it true.",
+          "\"No shortcuts. Just the science, done right\" is what every supplement founder says — it's boilerplate wearing a serif. Replace it with one thing only Mo could say: a real decision she made the hard way for her family's bottle.",
+          "Two stacked links is one decision too many at the end of the page. \"Begin with NuriCell\" is the terminal action — let the P.S. quiz link exist, but it must visually and verbally defer to it, not rhyme with it."
+        ],
+        "uiDesign": [
+          "The sign-off is the emotional payoff of a letter and yours is just another italic line — same face as the salutation, no presence. Even a typeset placeholder should get a dedicated signature treatment: larger, looser, more air above it, so it reads as a hand and not a paragraph.",
+          "\"Begin with NuriCell →\" is the last call-to-action on the entire homepage and it whispers at the same volume as the P.S. link below it. Quiet is right; equal is wrong. Give it weight or isolation so there is exactly one obvious next step.",
+          "The arrows collide with the hairline underlines — the → sits on top of the rule's end on both links. Underline the words only and let the arrow live beyond it. It's a half-pixel thing, and half-pixel things are the whole game."
+        ],
+        "imagery": [
+          "The handwriting on the sheet is illegible pseudo-scrawl — the one prop that's supposed to prove this letter is real is the thing that proves it isn't. Hand-write the actual opening line of this note and photograph that sheet. The conceit only works if the photo and the typeset letter are the same letter.",
+          "The blank-label amber bottle whispers \"placeholder.\" Pre-launch you can't show the real label — fine — then take the bottle out. Pen, paper, window light is a complete, honest still life; an empty label is a small lie sitting in the frame.",
+          "The photo is the right idea — warm, quiet, human — but it floats as a polite rectangle. Commit: let it bleed to the section edge or scale the written page up so the hand is the hero, not the furniture."
+        ]
+      }
+    },
+    {
+      "section": "founder",
+      "judgeKey": "ogilvy",
+      "judge": "David Ogilvy",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 6
+      },
+      "verdictLine": "The letter form and the P.S. are textbook direct response, but a founder letter with no facts and no story is a warm handshake the reader forgets by the next scroll.",
+      "fixes": {
+        "content": [
+          "Put one verifiable fact in the letter — 'three papers in a single 2002 issue of PNAS, cited more than 22,000 times' turns 'thirty years of work' from assertion into evidence; the more facts you tell, the more you sell.",
+          "Tell the family story you only gesture at: who in 'my own family,' what you saw, what changed. One specific anecdote is worth a page of sentiment — long copy works when it has something to say.",
+          "Make the P.S. promise concrete: 'will tell you' is vague. 'Three minutes will tell you where your memory, focus, and recall stand today' gives the reader a reason to spend the three minutes."
+        ],
+        "uiDesign": [
+          "Give 'Begin with NuriCell →' visibly more weight than the P.S. link — two identical hairline links at the close means the prospect can't tell the order form from the footnote; the primary action must dominate.",
+          "Fix the arrow overhanging the hairline underline on both links — pull the glyph inside the rule or extend the rule; at this level of restraint, a one-pixel slip reads as carelessness.",
+          "Set 'Mo Chen' a full step larger (or in the display italic) so the sign-off lands as a signature moment instead of another line of body italic — right now the most personal element on the page whispers."
+        ],
+        "imagery": [
+          "Reshoot or replace so the handwritten page carries three legible words ('To my mother —'); legible words give the photo story appeal, while the current scribble reads as a stock prop on any close look.",
+          "Make the bottle ownable: embossed glass, the brand's amber-and-cream palette, or a deliberately blank final-form label silhouette — a white sticker on an anonymous bottle could sell anyone's pills, which means it sells no one's.",
+          "Light the letter sheet as the hero, not the desk — the eye lands on wood grain before it finds the letter; the photo should make the reader want to read what's being written."
+        ]
+      }
+    },
+    {
+      "section": "founder",
+      "judgeKey": "ive",
+      "judge": "Jony Ive",
+      "couldSeeImage": true,
+      "scores": {
+        "content": 7,
+        "uiDesign": 7,
+        "imagery": 7
+      },
+      "verdictLine": "A genuinely calm, considered close — honest letter, disciplined column, warm still life — but the signature moment deflates into plain italic, the copy goes generic exactly where it should be most personal, and the photo is the stock idea of sincerity rather than one this brand owns.",
+      "fixes": {
+        "content": [
+          "\"Starting with my own family\" is the emotional center and it is left abstract — add one true, concrete sentence (who, what moment) so the headline's \"why\" is shown, not asserted; without it the letter is a well-mannered shrug.",
+          "\"No shortcuts. Just the science, done right\" is a slogan wearing a letter's clothing — rewrite in plain first person, naming one factual thing \"made the way I'd make it for them\" actually means.",
+          "The P.S. quiz link repeats the quiz section that sits directly above this one; either give the P.S. a different gift (e.g., a promise about the launch, the real signature to come) or accept the redundancy knowingly and trim it."
+        ],
+        "uiDesign": [
+          "The typeset \"Mo Chen\" is the climax of the page and currently its weakest typographic beat — it reads as enlarged body italic, not a signature. Until the real scan exists, give it a deliberate treatment: more size, more contrast in the italic, more air above, so the close lands instead of deflating.",
+          "Two underlined arrow-links stacked within a hundred pixels compete for the final action; make \"Begin with NuriCell\" unmistakably primary (weight, size, or color) and let the P.S. link recede to a whisper.",
+          "Resolve the small rhythm faults: the gap between the last paragraph and the signature is tighter than the gap after FOUNDER, and the arrow on \"Begin with NuriCell\" overshoots its hairline underline — the underline and arrow should end as one considered gesture."
+        ],
+        "imagery": [
+          "The composition — fountain pen across a half-written letter in golden light — is the stock-photography idea of sincerity; recompose around something only this brand could photograph (the letter beneath the actual amber NuriCell bottle in flat honest daylight) so the image feels inevitable rather than borrowed.",
+          "The amber grade is laid on thick — almost nostalgic filter territory — and it separates from the cool cream of the page; pull the warmth back so photograph and background read as one continuous material.",
+          "The handwriting is illegible pseudo-script on inspection — a small care leak in a section about a real person's words; either write the letter's actual opening line legibly at the top of the sheet, or push the page fully out of focus so it reads purely as texture."
+        ]
+      }
+    }
+  ]
+}
