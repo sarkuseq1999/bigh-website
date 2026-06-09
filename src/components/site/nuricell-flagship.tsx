@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { motion, useInView } from "motion/react";
 import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
 import { Reveal } from "@/components/site/reveal";
-import { Placeholder } from "@/components/site/placeholder";
 
 /* ─────────────────────────────────────────────────────────────────────────
    Shared ease curve — premium slow feel
@@ -27,7 +27,14 @@ function BottleReveal({
     <motion.div
       className="w-full"
       {...(reduced
-        ? {}
+        ? {
+            /* Always land at the settled state — the reduced-motion flag flips
+               one frame after mount, so an empty props object would leave the
+               element stuck at the opacity-0 `initial` it mounted with. */
+            initial: false as const,
+            animate: { opacity: 1, scale: 1 },
+            transition: { duration: 0 },
+          }
         : {
             initial: { opacity: 0, scale: 0.94 },
             whileInView: { opacity: 1, scale: 1 },
@@ -35,88 +42,82 @@ function BottleReveal({
             transition: { duration: 1.6, ease: EASE },
           })}
     >
-      {/* Soft ambient glow behind the bottle — pure CSS, no raw hex */}
-      <div className="relative mx-auto max-w-[280px] md:max-w-[340px]">
+      {/* Soft ambient glow behind the bottle — pure CSS, no raw hex.
+          Width must be explicit: the grid column is auto-sized and the
+          fill-image provides no intrinsic width of its own. */}
+      <div className="relative mx-auto w-[320px] md:w-[420px]">
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-[-20%] rounded-full opacity-20 blur-3xl bg-amber-hi"
         />
-        <Placeholder
-          label={label}
-          className="relative aspect-[2/3] w-full border-amber-hi/20 bg-forest/60 text-paper/40 rounded-2xl"
-        />
+        <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl">
+          <Image
+            src="/images/nuricell-bottle.jpg"
+            alt={label}
+            fill
+            sizes="340px"
+            className="object-cover"
+          />
+        </div>
       </div>
     </motion.div>
   );
 }
 
 /* ─────────────────────────────────────────────────────────────────────────
-   Beat 3 Orbs — drift together when in view.
-   Reduced motion: render statically already merged.
+   Beat 3 Synergy diagram — the two nutrients as labeled circles that
+   overlap; the union holds the glow. Drift together when in view.
+   The `animate` target is always present so the diagram can never be
+   left stuck invisible (reduced-motion lands it instantly).
 ───────────────────────────────────────────────────────────────────────── */
-function MergingOrbs({ reduced }: { reduced: boolean }) {
+function NutrientSynergy({
+  reduced,
+  labelA,
+  labelB,
+}: {
+  reduced: boolean;
+  labelA: string;
+  labelB: string;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-10% 0px" });
+  const settle = (x: number) => ({
+    initial: reduced ? (false as const) : { x, opacity: 0 },
+    animate: inView || reduced ? { x: 0, opacity: 1 } : { x, opacity: 0 },
+    transition: { duration: reduced ? 0 : 1.4, ease: EASE, delay: 0.1 },
+  });
 
-  /* Settled (merged) positions */
-  const settled = { x: 0, opacity: 1 };
+  const circle =
+    "flex size-48 md:size-64 shrink-0 items-center justify-center rounded-full " +
+    "border border-ink/25 bg-glow/[0.07]";
+  const label =
+    "max-w-[12ch] text-center font-mono text-[0.6875rem] md:text-[0.8125rem] " +
+    "uppercase tracking-[0.16em] leading-[1.6] text-ink";
 
   return (
-    <div
-      ref={ref}
-      aria-hidden="true"
-      className="flex items-center justify-center gap-0 my-12 md:my-16"
-    >
-      {/* Orb A — drifts in from the left */}
+    <div ref={ref} className="my-12 md:my-16 flex items-center justify-center">
+      {/* Circle A — drifts in from the left */}
+      <motion.div className={`${circle} z-10`} {...settle(-40)}>
+        <span className={label}>{labelA}</span>
+      </motion.div>
+
+      {/* Union glow — the discovery lives in the overlap */}
       <motion.div
-        className="size-20 md:size-28 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 40% 40%, var(--glow), transparent 70%)",
-          boxShadow: "0 0 40px 6px color-mix(in srgb, var(--glow) 18%, transparent)",
-        }}
-        {...(reduced
-          ? {}
-          : {
-              initial: { x: -48, opacity: 0 },
-              animate: inView ? settled : { x: -48, opacity: 0 },
-              transition: { duration: 1.4, ease: EASE, delay: 0.1 },
-            })}
+        aria-hidden="true"
+        className="pointer-events-none -mx-24 md:-mx-28 z-0 size-36 md:size-44 rounded-full blur-2xl bg-glow"
+        initial={reduced ? false : { opacity: 0, scale: 0.6 }}
+        animate={
+          inView || reduced
+            ? { opacity: 0.55, scale: 1 }
+            : { opacity: 0, scale: 0.6 }
+        }
+        transition={{ duration: reduced ? 0 : 1.2, ease: EASE, delay: 0.7 }}
       />
 
-      {/* Overlap bridge — only visible when merged */}
-      <motion.div
-        className="-mx-6 size-10 md:size-14 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 50% 50%, var(--glow), transparent 70%)",
-          opacity: 0.45,
-        }}
-        {...(reduced
-          ? {}
-          : {
-              initial: { opacity: 0, scale: 0.6 },
-              animate: inView ? { opacity: 0.45, scale: 1 } : { opacity: 0, scale: 0.6 },
-              transition: { duration: 1.0, ease: EASE, delay: 0.7 },
-            })}
-      />
-
-      {/* Orb B — drifts in from the right */}
-      <motion.div
-        className="size-20 md:size-28 rounded-full"
-        style={{
-          background:
-            "radial-gradient(circle at 60% 40%, var(--glow), transparent 70%)",
-          boxShadow: "0 0 40px 6px color-mix(in srgb, var(--glow) 18%, transparent)",
-        }}
-        {...(reduced
-          ? {}
-          : {
-              initial: { x: 48, opacity: 0 },
-              animate: inView ? settled : { x: 48, opacity: 0 },
-              transition: { duration: 1.4, ease: EASE, delay: 0.1 },
-            })}
-      />
+      {/* Circle B — drifts in from the right */}
+      <motion.div className={`${circle} z-10`} {...settle(40)}>
+        <span className={label}>{labelB}</span>
+      </motion.div>
     </div>
   );
 }
@@ -144,7 +145,7 @@ export function NuricellFlagship() {
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-amber-hi/10"
         />
 
-        <div className="mx-auto max-w-[1200px] px-6 py-28 md:px-14 md:py-40 min-h-[90dvh] flex flex-col justify-center">
+        <div className="mx-auto max-w-[1200px] px-6 py-20 md:px-14 md:py-24 flex flex-col justify-center">
 
           {/* Eyebrow */}
           <Reveal>
@@ -171,13 +172,11 @@ export function NuricellFlagship() {
                 </p>
               </Reveal>
 
-              {/* Badge pill */}
+              {/* Provenance — a true sentence, not a sticker */}
               <Reveal delay={0.3}>
-                <div className="mt-8">
-                  <span className="inline-flex items-center rounded-full bg-amber text-ink px-5 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.2em]">
-                    {t("badge")}
-                  </span>
-                </div>
+                <p className="mt-8 font-display italic font-light text-amber-hi text-[1.25rem] md:text-[1.375rem]">
+                  {t("badge")}
+                </p>
               </Reveal>
             </div>
 
@@ -194,7 +193,7 @@ export function NuricellFlagship() {
           BEAT 2 — bg-paper. His formula, not ours.
       ────────────────────────────────────────────────────────────────────── */}
       <section className="bg-paper">
-        <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
+        <div className="mx-auto max-w-[800px] px-6 py-20 md:px-14 md:py-28">
 
           <Reveal delay={0.1}>
             <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
@@ -203,7 +202,7 @@ export function NuricellFlagship() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-7 text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat2.body")}
             </p>
           </Reveal>
@@ -216,7 +215,7 @@ export function NuricellFlagship() {
           Spec §2.1 glow echo permitted here on the merging orbs only.
       ────────────────────────────────────────────────────────────────────── */}
       <section className="bg-paper-2">
-        <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
+        <div className="mx-auto max-w-[800px] px-6 py-20 md:px-14 md:py-28">
 
           <Reveal delay={0.1}>
             <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
@@ -224,11 +223,15 @@ export function NuricellFlagship() {
             </h2>
           </Reveal>
 
-          {/* Merging orbs — glow only here, as permitted */}
-          <MergingOrbs reduced={reduced} />
+          {/* Nutrient synergy diagram — glow only here, as permitted */}
+          <NutrientSynergy
+            reduced={reduced}
+            labelA={t("beat3.nutrientA")}
+            labelB={t("beat3.nutrientB")}
+          />
 
           <Reveal delay={0.15}>
-            <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-7 text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat3.body")}
             </p>
           </Reveal>
@@ -238,9 +241,10 @@ export function NuricellFlagship() {
 
       {/* ──────────────────────────────────────────────────────────────────
           BEAT 4 — bg-paper. More isn't better. Right is better.
+          Centered to break the repeated left-rail template rhythm.
       ────────────────────────────────────────────────────────────────────── */}
       <section className="bg-paper">
-        <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
+        <div className="mx-auto max-w-[800px] px-6 py-20 md:px-14 md:py-28 text-center">
 
           <Reveal delay={0.1}>
             <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
@@ -249,7 +253,7 @@ export function NuricellFlagship() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-7 mx-auto text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat4.body")}
             </p>
           </Reveal>
@@ -261,7 +265,7 @@ export function NuricellFlagship() {
           BEAT 5 — bg-paper-2. Built complete.
       ────────────────────────────────────────────────────────────────────── */}
       <section className="bg-paper-2">
-        <div className="mx-auto max-w-[1200px] px-6 py-28 md:px-14 md:py-40">
+        <div className="mx-auto max-w-[1200px] px-6 py-20 md:px-14 md:py-28">
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-20 items-center">
 
@@ -273,7 +277,7 @@ export function NuricellFlagship() {
               </Reveal>
 
               <Reveal delay={0.2}>
-                <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[48ch]">
+                <p className="mt-7 text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[48ch]">
                   {t("beat5.body")}
                 </p>
               </Reveal>
@@ -281,10 +285,15 @@ export function NuricellFlagship() {
 
             {/* Capsule visual */}
             <Reveal delay={0.1} className="w-full">
-              <Placeholder
-                label={t("capsuleLabel")}
-                className="aspect-[4/3] w-full border-line bg-paper text-ink-soft rounded-2xl"
-              />
+              <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl">
+                <Image
+                  src="/images/capsule-trio.jpg"
+                  alt={t("capsuleLabel")}
+                  fill
+                  sizes="(min-width: 768px) 50vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
             </Reveal>
 
           </div>
@@ -295,7 +304,7 @@ export function NuricellFlagship() {
           BEAT 6 — bg-paper. Three capsules. Every morning. Chapter close.
       ────────────────────────────────────────────────────────────────────── */}
       <section className="bg-paper">
-        <div className="mx-auto max-w-[800px] px-6 py-28 md:px-14 md:py-40">
+        <div className="mx-auto max-w-[800px] px-6 py-20 md:px-14 md:py-28">
 
           <Reveal delay={0.1}>
             <h2 className="font-display font-light text-ink text-[clamp(2.25rem,3.5vw,3.5rem)] leading-[1.08] tracking-[-0.02em] text-balance">
@@ -304,7 +313,7 @@ export function NuricellFlagship() {
           </Reveal>
 
           <Reveal delay={0.2}>
-            <p className="mt-7 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-7 text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat6.body")}
             </p>
           </Reveal>
@@ -323,7 +332,7 @@ export function NuricellFlagship() {
 
           {/* Pivot — quieter closing line */}
           <Reveal delay={0.4}>
-            <p className="mt-10 text-ink-soft text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
+            <p className="mt-10 text-ink text-[1.125rem] md:text-[1.1875rem] leading-[1.6] max-w-[52ch]">
               {t("beat6.pivot")}
             </p>
           </Reveal>

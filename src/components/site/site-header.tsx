@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AnimatePresence, motion } from "motion/react";
 import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
@@ -18,11 +18,12 @@ const LANGS: { code: LangCode; key: keyof { en: string; ko: string; vi: string; 
     { code: "zh", key: "zh" },
   ];
 
-/* ─── nav links ─────────────────────────────────────────────────────── */
-const NAV_ITEMS: { key: "science" | "products" | "quiz"; href: string }[] = [
+/* ─── nav links ───────────────────────────────────────────────────────
+   "quiz" lives only in the CTA link — a nav item AND a pill for the same
+   destination reads as three doors to one room. */
+const NAV_ITEMS: { key: "science" | "products"; href: string }[] = [
   { key: "science", href: "#science" },
   { key: "products", href: "#system" },
-  { key: "quiz", href: "#quiz" },
 ];
 
 export function SiteHeader() {
@@ -32,7 +33,21 @@ export function SiteHeader() {
 
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
+  const langRef = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotionSafe();
+
+  /* close the language menu on outside click */
+  useEffect(() => {
+    if (!langOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (langRef.current && !langRef.current.contains(e.target as Node)) {
+        setLangOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [langOpen]);
 
   /* scroll sentinel -------------------------------------------------- */
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -58,12 +73,13 @@ export function SiteHeader() {
       {/* sentinel placed just below the fold so the header knows it has been scrolled past */}
       <div ref={sentinelRef} aria-hidden className="pointer-events-none absolute top-[100dvh] h-px w-full" />
 
+      {/* The header always keeps its own solid band — a transparent nav over
+          the hero photograph collided with the image edge. */}
       <header
         className={[
-          "fixed top-0 right-0 left-0 z-50 w-full transition-all duration-300",
-          scrolled
-            ? "bg-paper/95 border-b border-line shadow-[0_1px_0_0_var(--color-line)] backdrop-blur-md"
-            : "bg-transparent",
+          "fixed top-0 right-0 left-0 z-50 w-full transition-shadow duration-300",
+          "bg-paper/95 border-b border-line backdrop-blur-md",
+          scrolled ? "shadow-[0_1px_0_0_var(--color-line)]" : "",
         ].join(" ")}
       >
         <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
@@ -89,36 +105,53 @@ export function SiteHeader() {
               </a>
             ))}
 
-            {/* language toggle — visual only, EN active */}
-            <div
-              role="group"
-              aria-label={tNav("language")}
-              className="flex items-center gap-0.5"
-            >
-              {LANGS.map(({ code, key }) => {
-                const isActive = code === "en";
-                return (
-                  <a
-                    key={code}
-                    href="#"
-                    aria-current={isActive ? "true" : undefined}
-                    className={[
-                      "font-mono min-h-[48px] flex items-center px-2 text-xs tracking-wide transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber",
-                      isActive
-                        ? "text-ink font-semibold"
-                        : "text-ink-soft hover:text-ink",
-                    ].join(" ")}
-                  >
-                    {tLangs(key)}
-                  </a>
-                );
-              })}
+            {/* language switcher — one compact dropdown, not four loose links */}
+            <div ref={langRef} className="relative">
+              <button
+                type="button"
+                aria-haspopup="listbox"
+                aria-expanded={langOpen}
+                aria-label={tNav("language")}
+                onClick={() => setLangOpen((o) => !o)}
+                className="font-mono text-ink-soft hover:text-ink flex min-h-[48px] items-center gap-1 px-2 text-xs tracking-wide transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+              >
+                EN
+                <ChevronDown className="size-3" aria-hidden />
+              </button>
+              {langOpen && (
+                <div
+                  role="listbox"
+                  aria-label={tNav("language")}
+                  className="bg-paper border-line absolute right-0 top-full z-50 min-w-[10rem] rounded-xl border p-1 shadow-lg"
+                >
+                  {LANGS.map(({ code, key }) => {
+                    const isActive = code === "en";
+                    return (
+                      <a
+                        key={code}
+                        href="#"
+                        role="option"
+                        aria-selected={isActive}
+                        onClick={() => setLangOpen(false)}
+                        className={[
+                          "flex min-h-[40px] items-center rounded-lg px-3 text-sm transition-colors duration-150",
+                          isActive
+                            ? "text-ink font-semibold"
+                            : "text-ink-soft hover:text-ink hover:bg-paper-2",
+                        ].join(" ")}
+                      >
+                        {tLangs(key)}
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            {/* CTA pill */}
+            {/* CTA — quiet text link; the hero owns the loud version */}
             <a
-              href="#"
-              className="bg-amber hover:bg-amber-hi text-ink inline-flex min-h-[48px] items-center rounded-full px-5 text-sm font-semibold transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
+              href="#quiz"
+              className="text-ink inline-flex min-h-[48px] items-center text-sm font-semibold underline-offset-4 transition-colors duration-150 hover:underline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-amber"
             >
               {tNav("cta")}
             </a>

@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NuriCell — Energy for the cells that remember | BiGH</title>
+<meta name="description" content="NuriCell is a daily cognitive supplement built on UC Berkeley research into the mitochondrial theory of brain aging. Four mitochondrial nutrients. One capsule. $49." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+/* ============================================================
+   NuriCell — The Mitochondrial Renewal
+   Single-file flagship product page. file:// safe.
+   ============================================================ */
+
+:root{
+  --bg:#0B0A09;
+  --bg-2:#14110E;
+  --bg-3:#1C1813;
+  --text:#EDE6DA;
+  --text-soft:#A89E8E;
+  --amber:#E9A23C;
+  --amber-hi:#F6C667;
+  --ember:#B5651E;
+  --hairline:rgba(237,230,218,0.12);
+  --hairline-soft:rgba(237,230,218,0.07);
+
+  --maxw:1280px;
+  --gutter:clamp(20px,5vw,72px);
+
+  /* type scale — fluid, metric */
+  --step--1:clamp(0.78rem,0.74rem + 0.2vw,0.88rem);
+  --step-0:clamp(1rem,0.96rem + 0.2vw,1.12rem);
+  --step-1:clamp(1.18rem,1.08rem + 0.5vw,1.45rem);
+  --step-2:clamp(1.6rem,1.35rem + 1.2vw,2.4rem);
+  --step-3:clamp(2.1rem,1.6rem + 2.4vw,3.6rem);
+  --step-4:clamp(2.7rem,1.9rem + 4vw,5.4rem);
+  --step-5:clamp(3.4rem,2.2rem + 6vw,7.6rem);
+
+  --ease:cubic-bezier(0.16,1,0.3,1);
+  --ease-soft:cubic-bezier(0.33,1,0.68,1);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto;}}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  font-size:var(--step-0);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+
+img{max-width:100%;display:block;}
+a{color:inherit;text-decoration:none;}
+button{font-family:inherit;cursor:pointer;border:0;background:none;color:inherit;}
+
+::selection{background:rgba(233,162,60,0.3);color:#fff;}
+
+/* ---- film grain overlay (fixed, GPU-safe) ---- */
+.grain{
+  position:fixed;inset:0;z-index:9000;pointer-events:none;
+  opacity:0.04;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+/* ---- helpers ---- */
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gutter);}
+.mono{
+  font-family:'IBM Plex Mono',ui-monospace,monospace;
+  text-transform:uppercase;
+  letter-spacing:0.16em;
+  font-size:var(--step--1);
+  font-weight:500;
+}
+.serif{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;}
+
+/* eyebrow */
+.eyebrow{
+  display:inline-flex;align-items:center;gap:0.7em;
+  color:var(--amber);
+  font-family:'IBM Plex Mono',monospace;
+  text-transform:uppercase;letter-spacing:0.2em;
+  font-size:var(--step--1);font-weight:500;
+}
+.eyebrow::before{
+  content:"";width:34px;height:1px;background:var(--amber);
+  display:inline-block;opacity:0.7;
+}
+.eyebrow.center::before{display:none;}
+
+/* section numbering */
+.sec-num{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:var(--step--1);
+  letter-spacing:0.2em;
+  color:var(--text-soft);
+}
+
+/* ---- reveal pattern (robust) ---- */
+.reveal{
+  opacity:0;
+  transform:translateY(26px);
+  transition:opacity 0.9s var(--ease),transform 0.9s var(--ease);
+  will-change:opacity,transform;
+}
+.reveal.in{opacity:1;transform:none;}
+.reveal[data-d="1"]{transition-delay:0.08s;}
+.reveal[data-d="2"]{transition-delay:0.16s;}
+.reveal[data-d="3"]{transition-delay:0.24s;}
+.reveal[data-d="4"]{transition-delay:0.32s;}
+.reveal[data-d="5"]{transition-delay:0.40s;}
+.reveal[data-d="6"]{transition-delay:0.48s;}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none;}
+}
+
+/* ============================================================
+   HEADER
+   ============================================================ */
+.progress{
+  position:fixed;top:0;left:0;height:2px;width:100%;
+  transform-origin:0 50%;transform:scaleX(0);
+  background:linear-gradient(90deg,var(--ember),var(--amber),var(--amber-hi));
+  z-index:1001;
+}
+
+.site-header{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  transition:background 0.5s var(--ease),border-color 0.5s var(--ease),backdrop-filter 0.5s var(--ease);
+  border-bottom:1px solid transparent;
+}
+.site-header.scrolled{
+  background:rgba(11,10,9,0.78);
+  backdrop-filter:blur(18px) saturate(1.4);
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);
+  border-bottom:1px solid var(--hairline);
+}
+.header-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:24px;
+  padding:18px var(--gutter);
+}
+.brand-logo{height:30px;width:auto;display:block;flex:none;}
+.brand-mark{display:flex;align-items:center;gap:12px;}
+.brand-tag{
+  display:none;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;
+  color:var(--text-soft);
+  padding-left:12px;border-left:1px solid var(--hairline);
+}
+.nav{display:none;gap:34px;align-items:center;}
+.nav a{
+  font-size:0.86rem;color:var(--text-soft);
+  position:relative;padding:6px 0;
+  transition:color 0.3s var(--ease);
+}
+.nav a::after{
+  content:"";position:absolute;left:0;bottom:0;height:1px;width:100%;
+  background:var(--amber);transform:scaleX(0);transform-origin:0 50%;
+  transition:transform 0.4s var(--ease);
+}
+.nav a:hover,.nav a:focus-visible{color:var(--text);}
+.nav a:hover::after,.nav a:focus-visible::after{transform:scaleX(1);}
+
+/* CTA buttons */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.6em;
+  font-family:'Inter',sans-serif;font-weight:600;
+  font-size:0.92rem;letter-spacing:0.01em;
+  padding:0.92em 1.6em;border-radius:100px;
+  transition:transform 0.32s var(--ease),box-shadow 0.32s var(--ease),
+             background 0.32s var(--ease),color 0.32s var(--ease);
+  white-space:nowrap;position:relative;
+}
+.btn:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px;}
+
+.btn-primary{
+  background:linear-gradient(140deg,var(--amber-hi),var(--amber) 55%,var(--ember));
+  color:#1A1206;
+  box-shadow:0 8px 26px -10px rgba(233,162,60,0.55),
+             inset 0 1px 0 rgba(255,255,255,0.35);
+}
+.btn-primary:hover{
+  transform:translateY(-3px);
+  box-shadow:0 16px 40px -10px rgba(233,162,60,0.7),
+             inset 0 1px 0 rgba(255,255,255,0.45);
+}
+.btn-primary:active{transform:translateY(-1px) scale(0.985);}
+
+.btn-ghost{
+  background:transparent;color:var(--text);
+  border:1px solid var(--hairline);
+}
+.btn-ghost:hover{
+  border-color:rgba(233,162,60,0.55);
+  background:rgba(233,162,60,0.06);
+  transform:translateY(-2px);
+}
+.btn-ghost:active{transform:translateY(0) scale(0.985);}
+
+.btn-pill{
+  padding:0.68em 1.2em;font-size:0.82rem;
+}
+.header-cta{display:none;}
+
+@media (min-width:560px){.header-cta{display:inline-flex;}}
+@media (min-width:920px){
+  .nav{display:flex;}
+  .brand-tag{display:block;}
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero{
+  position:relative;
+  min-height:100dvh;
+  display:flex;align-items:center;
+  padding:120px 0 52px;
+  overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:-8% -8% -8% -8%;z-index:0;
+  background:url("assets/hero-mitochondria.jpg") center/cover no-repeat;
+  will-change:transform;
+}
+.hero-scrim{
+  position:absolute;inset:0;z-index:1;
+  background:
+    linear-gradient(100deg,var(--bg) 8%,rgba(11,10,9,0.86) 36%,rgba(11,10,9,0.28) 62%,rgba(11,10,9,0.55) 100%),
+    linear-gradient(to top,var(--bg) 2%,transparent 30%),
+    radial-gradient(120% 80% at 15% 60%,rgba(11,10,9,0.65),transparent 70%);
+}
+.hero-inner{
+  position:relative;z-index:3;width:100%;
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:40px;align-items:center;
+}
+.hero-copy{max-width:none;}
+.hero h1{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;
+  font-size:var(--step-5);
+  line-height:0.98;
+  letter-spacing:-0.022em;
+  margin:16px 0 0;
+  color:#fff;
+}
+.hero h1 em{
+  font-style:italic;font-weight:400;
+  color:var(--amber-hi);
+}
+.hero-lede{
+  margin-top:18px;
+  max-width:33ch;
+  font-size:var(--step-1);
+  color:var(--text-soft);
+  line-height:1.5;
+}
+.hero-lede strong{color:var(--text);font-weight:500;}
+.hero-cta{
+  margin-top:26px;
+  display:flex;flex-wrap:wrap;gap:14px;
+}
+.hero-price-note{
+  margin-top:14px;
+  display:flex;align-items:center;gap:8px;
+  color:var(--text-soft);font-size:0.84rem;
+}
+.hero-price-note .dot{width:5px;height:5px;border-radius:50%;background:var(--amber);}
+
+/* proof chips */
+.proof-chips{
+  margin-top:22px;
+  display:flex;flex-wrap:wrap;gap:10px;
+}
+.chip{
+  display:inline-flex;align-items:center;gap:9px;
+  padding:9px 15px;border-radius:100px;
+  border:1px solid var(--hairline);
+  background:rgba(20,17,14,0.55);
+  backdrop-filter:blur(8px);
+  font-size:0.78rem;color:var(--text);
+}
+.chip svg{flex:none;}
+.chip .chip-amber{color:var(--amber-hi);}
+
+/* hero product */
+.hero-product{
+  position:relative;
+  display:flex;justify-content:center;align-items:center;
+  min-height:300px;
+}
+.hero-glow{
+  position:absolute;width:78%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(246,198,103,0.42),rgba(233,162,60,0.14) 45%,transparent 70%);
+  filter:blur(14px);
+  z-index:0;
+  animation:breathe 7s var(--ease-soft) infinite;
+}
+@keyframes breathe{
+  0%,100%{transform:scale(0.92);opacity:0.72;}
+  50%{transform:scale(1.06);opacity:1;}
+}
+.hero-bottle{
+  position:relative;z-index:1;
+  width:min(74%,340px);
+  filter:drop-shadow(0 40px 60px rgba(0,0,0,0.7));
+  will-change:transform;
+}
+@media (prefers-reduced-motion:reduce){
+  .hero-glow{animation:none;}
+}
+
+/* scroll cue */
+.scroll-cue{
+  position:absolute;left:50%;bottom:26px;z-index:4;
+  transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  color:var(--text-soft);
+}
+.scroll-cue .mono{font-size:0.6rem;letter-spacing:0.24em;}
+.scroll-track{
+  width:1px;height:46px;
+  background:linear-gradient(to bottom,var(--amber),transparent);
+  position:relative;overflow:hidden;
+}
+.scroll-track::after{
+  content:"";position:absolute;left:-1px;top:0;width:3px;height:14px;
+  background:var(--amber-hi);border-radius:2px;
+  animation:cue 2.4s var(--ease) infinite;
+}
+@keyframes cue{
+  0%{transform:translateY(-16px);opacity:0;}
+  35%{opacity:1;}
+  70%{opacity:1;}
+  100%{transform:translateY(48px);opacity:0;}
+}
+@media (prefers-reduced-motion:reduce){
+  .scroll-track::after{animation:none;opacity:0.7;}
+}
+
+@media (min-width:880px){
+  .hero-inner{
+    grid-template-columns:minmax(0,1.18fr) minmax(0,0.82fr);
+    gap:48px;
+  }
+  .hero-product{min-height:520px;}
+  .scroll-cue{left:var(--gutter);transform:none;}
+}
+
+/* ============================================================
+   PROOF STRIP
+   ============================================================ */
+.proof-strip{
+  border-top:1px solid var(--hairline);
+  border-bottom:1px solid var(--hairline);
+  background:var(--bg-2);
+}
+.proof-strip-inner{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+.proof-item{
+  padding:24px 18px;
+  text-align:center;
+  border-right:1px solid var(--hairline-soft);
+  border-bottom:1px solid var(--hairline-soft);
+  display:flex;flex-direction:column;gap:5px;align-items:center;
+  transition:background 0.4s var(--ease);
+}
+.proof-item:hover{background:rgba(233,162,60,0.04);}
+.proof-item .label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.13em;text-transform:uppercase;
+  color:var(--text);
+}
+.proof-item .sub{
+  font-size:0.66rem;color:var(--text-soft);letter-spacing:0.06em;
+  font-family:'IBM Plex Mono',monospace;text-transform:uppercase;
+}
+@media (min-width:680px){
+  .proof-strip-inner{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+@media (min-width:1040px){
+  .proof-strip-inner{grid-template-columns:repeat(6,minmax(0,1fr));}
+  .proof-item{border-bottom:0;}
+}
+
+/* ============================================================
+   SECTION SHELL
+   ============================================================ */
+.section{padding:clamp(80px,11vw,150px) 0;position:relative;}
+.section-head{
+  display:flex;align-items:baseline;gap:18px;
+  margin-bottom:14px;
+}
+.lede{
+  font-size:var(--step-1);
+  color:var(--text-soft);
+  max-width:46ch;
+  line-height:1.55;
+}
+.h-display{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;
+  font-size:var(--step-3);
+  line-height:1.04;
+  letter-spacing:-0.018em;
+  color:#fff;
+}
+.h-display em{font-style:italic;font-weight:400;color:var(--amber-hi);}
+.h-section{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;
+  font-size:var(--step-4);
+  line-height:1.0;
+  letter-spacing:-0.02em;
+  color:#fff;
+}
+.h-section em{font-style:italic;font-weight:400;color:var(--amber-hi);}
+
+/* ============================================================
+   THE PROBLEM
+   ============================================================ */
+.problem{background:var(--bg);}
+.problem-grid{
+  display:grid;
+  grid-template-columns:minmax(0,1fr);
+  gap:clamp(36px,6vw,72px);
+  align-items:center;
+}
+.problem-figure{
+  position:relative;
+  border-radius:8px;overflow:hidden;
+  aspect-ratio:3/2;
+}
+.problem-figure img{width:100%;height:100%;object-fit:cover;}
+.problem-figure::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(11,10,9,0.7),transparent 55%),
+            radial-gradient(80% 60% at 70% 40%,transparent,rgba(11,10,9,0.4));
+  pointer-events:none;
+}
+.figure-cap{
+  position:absolute;left:18px;bottom:16px;z-index:2;
+  color:var(--text-soft);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.64rem;letter-spacing:0.14em;text-transform:uppercase;
+  display:flex;align-items:center;gap:8px;
+}
+.figure-cap::before{content:"";width:18px;height:1px;background:var(--amber);}
+.problem-copy p{
+  color:var(--text-soft);
+  margin-top:22px;
+  max-width:42ch;
+}
+.problem-copy p strong{color:var(--text);font-weight:500;}
+.problem-copy .h-section{margin-top:22px;}
+
+/* signal list */
+.signal-list{
+  margin-top:34px;
+  display:grid;gap:1px;
+  background:var(--hairline-soft);
+  border-block:1px solid var(--hairline-soft);
+}
+.signal-list li{
+  list-style:none;
+  background:var(--bg);
+  padding:18px 4px 18px 0;
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:18px;align-items:start;
+}
+.signal-list li .sig-no{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.74rem;color:var(--amber);letter-spacing:0.1em;
+  padding-top:3px;
+}
+.signal-list li .sig-text{color:var(--text);font-size:0.96rem;}
+.signal-list li .sig-text span{color:var(--text-soft);}
+
+@media (min-width:880px){
+  .problem-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);}
+  .problem-figure{aspect-ratio:4/5;}
+}
+
+/* ============================================================
+   THE SCIENCE / DR LIU
+   ============================================================ */
+.science{
+  background:var(--bg-2);
+  border-top:1px solid var(--hairline);
+  position:relative;overflow:hidden;
+}
+.science-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url("assets/particle-field.jpg") center/cover no-repeat;
+  opacity:0.32;
+}
+.science-bg::after{
+  content:"";position:absolute;inset:0;
+  background:linear-gradient(to bottom,var(--bg-2),rgba(20,17,14,0.6) 40%,var(--bg-2));
+}
+.science .wrap{position:relative;z-index:2;}
+
+.science-grid{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:clamp(40px,6vw,80px);
+  margin-top:54px;align-items:start;
+}
+
+/* big stat block */
+.stat-hero{
+  border:1px solid var(--hairline);
+  background:linear-gradient(160deg,rgba(28,24,19,0.9),rgba(20,17,14,0.7));
+  border-radius:10px;
+  padding:clamp(28px,4vw,48px);
+  position:relative;overflow:hidden;
+}
+.stat-hero::before{
+  content:"";position:absolute;top:-40%;right:-30%;
+  width:70%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(233,162,60,0.16),transparent 65%);
+  pointer-events:none;
+}
+.stat-figure{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;
+  font-size:clamp(4.6rem,3rem + 9vw,9rem);
+  line-height:0.86;
+  color:var(--amber-hi);
+  letter-spacing:-0.03em;
+  display:flex;align-items:flex-start;gap:4px;
+}
+.stat-figure .unit{
+  font-size:0.32em;color:var(--amber);
+  font-family:'IBM Plex Mono',monospace;
+  letter-spacing:0.05em;padding-top:0.6em;
+}
+.stat-label{
+  margin-top:18px;
+  font-size:var(--step-1);color:#fff;
+  font-weight:500;line-height:1.35;
+  max-width:24ch;
+}
+.stat-detail{
+  margin-top:14px;color:var(--text-soft);
+  font-size:0.92rem;max-width:38ch;
+}
+.stat-cite{
+  margin-top:22px;padding-top:18px;
+  border-top:1px solid var(--hairline);
+  display:flex;flex-wrap:wrap;gap:10px 22px;
+}
+.stat-cite span{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-soft);
+}
+.stat-cite span b{color:var(--amber);font-weight:500;}
+
+/* dr liu provenance */
+.provenance{position:relative;}
+.pull-quote{
+  font-family:'Fraunces',serif;font-optical-sizing:auto;
+  font-weight:300;font-style:italic;
+  font-size:var(--step-2);
+  line-height:1.28;
+  color:#fff;
+  letter-spacing:-0.01em;
+}
+.pull-quote .mark{
+  color:var(--amber);font-size:1.4em;
+  line-height:0;vertical-align:-0.28em;
+  margin-right:0.06em;
+}
+.provenance-body{
+  margin-top:26px;color:var(--text-soft);
+}
+.provenance-body p+p{margin-top:14px;}
+.provenance-body strong{color:var(--text);font-weight:500;}
+
+.attribution{
+  margin-top:30px;
+  display:flex;align-items:center;gap:16px;
+  padding-top:24px;border-top:1px solid var(--hairline);
+}
+.attr-avatar{
+  width:54px;height:54px;border-radius:50%;flex:none;
+  background:radial-gradient(circle at 35% 30%,var(--bg-3),var(--bg));
+  border:1px solid var(--hairline);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:1.3rem;color:var(--amber-hi);
+}
+.attr-meta .name{color:var(--text);font-weight:500;font-size:0.95rem;}
+.attr-meta .role{
+  color:var(--text-soft);font-size:0.78rem;
+  font-family:'IBM Plex Mono',monospace;
+  text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;
+}
+
+/* journal row */
+.journal-row{
+  margin-top:46px;
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px;background:var(--hairline-soft);
+  border:1px solid var(--hairline-soft);border-radius:8px;overflow:hidden;
+}
+.journal-row .j{
+  background:var(--bg-2);padding:20px 18px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.journal-row .j .jname{
+  font-family:'Fraunces',serif;font-size:1.05rem;color:var(--text);
+  font-weight:400;line-height:1.2;
+}
+.journal-row .j .jtag{
+  font-family:'IBM Plex Mono',monospace;font-size:0.62rem;
+  letter-spacing:0.12em;text-transform:uppercase;color:var(--amber);
+}
+@media (min-width:760px){
+  .journal-row{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+@media (min-width:980px){
+  .science-grid{grid-template-columns:minmax(0,0.92fr) minmax(0,1.08fr);}
+}
+
+/* ============================================================
+   HOW IT WORKS — THE RENEWAL (signature interaction)
+   ============================================================ */
+.renewal{background:var(--bg);position:relative;}
+.renewal-head{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:24px;align-items:end;margin-bottom:48px;
+}
+.renewal-head .lede{margin-top:16px;}
+
+.scrubber{
+  position:relative;
+  aspect-ratio:3/2;
+  border-radius:10px;overflow:hidden;
+  border:1px solid var(--hairline);
+  cursor:ew-resize;
+  user-select:none;-webkit-user-select:none;
+  box-shadow:0 30px 70px -30px rgba(0,0,0,0.9);
+  touch-action:pan-y;
+}
+.scrubber img{
+  display:block;width:100%;height:100%;object-fit:cover;
+  pointer-events:none;
+}
+.scrub-aged,
+.scrub-renewed{position:absolute;inset:0;}
+/* renewed layer revealed from the right */
+.scrub-renewed{
+  clip-path:inset(0 0 0 50%);
+  will-change:clip-path;
+}
+
+.scrub-handle{
+  position:absolute;top:0;bottom:0;left:50%;
+  width:2px;
+  background:linear-gradient(to bottom,transparent,var(--amber-hi),var(--amber),transparent);
+  transform:translateX(-50%);
+  z-index:5;will-change:left;
+}
+.scrub-knob{
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  width:54px;height:54px;border-radius:50%;
+  background:rgba(11,10,9,0.78);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(246,198,103,0.6);
+  box-shadow:0 0 0 6px rgba(233,162,60,0.1),
+             0 10px 30px -8px rgba(0,0,0,0.8),
+             inset 0 1px 0 rgba(255,255,255,0.18);
+  display:flex;align-items:center;justify-content:center;gap:3px;
+  transition:transform 0.3s var(--ease),box-shadow 0.3s var(--ease);
+}
+.scrubber:hover .scrub-knob{
+  box-shadow:0 0 0 9px rgba(233,162,60,0.14),
+             0 10px 30px -8px rgba(0,0,0,0.8),
+             inset 0 1px 0 rgba(255,255,255,0.18);
+}
+.scrub-knob .arw{width:0;height:0;}
+.scrub-knob .arw.l{border-top:5px solid transparent;border-bottom:5px solid transparent;border-right:7px solid var(--amber-hi);}
+.scrub-knob .arw.r{border-top:5px solid transparent;border-bottom:5px solid transparent;border-left:7px solid var(--amber-hi);}
+
+.scrub-tag{
+  position:absolute;top:16px;z-index:6;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.62rem;letter-spacing:0.16em;text-transform:uppercase;
+  padding:7px 12px;border-radius:100px;
+  background:rgba(11,10,9,0.7);backdrop-filter:blur(6px);
+  border:1px solid var(--hairline);
+}
+.scrub-tag.before{left:16px;color:var(--text-soft);}
+.scrub-tag.after{right:16px;top:auto;bottom:14px;color:var(--amber-hi);border-color:rgba(246,198,103,0.4);}
+/* on wider screens both tags sit on the top row */
+@media (min-width:680px){
+  .scrub-tag.after{top:16px;bottom:auto;}
+}
+
+.scrub-hint{
+  text-align:center;margin-top:18px;
+  color:var(--text-soft);
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.scrub-hint .ln{width:24px;height:1px;background:var(--hairline);}
+
+/* the three-step mechanism */
+.mechanism{
+  margin-top:clamp(56px,8vw,96px);
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:1px;background:var(--hairline-soft);
+  border:1px solid var(--hairline-soft);border-radius:10px;overflow:hidden;
+}
+.mech-step{
+  background:var(--bg-2);
+  padding:clamp(26px,3.4vw,40px);
+  position:relative;
+  transition:background 0.45s var(--ease);
+}
+.mech-step:hover{background:var(--bg-3);}
+.mech-step .step-no{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.18em;color:var(--amber);
+  display:flex;align-items:center;gap:10px;
+}
+.mech-step .step-no::after{
+  content:"";flex:1;height:1px;background:var(--hairline);
+}
+.mech-icon{
+  margin-top:22px;width:46px;height:46px;
+}
+.mech-step h3{
+  margin-top:20px;
+  font-family:'Fraunces',serif;font-weight:400;
+  font-size:var(--step-1);color:#fff;line-height:1.15;
+}
+.mech-step p{
+  margin-top:12px;color:var(--text-soft);font-size:0.92rem;
+}
+@media (min-width:820px){
+  .renewal-head{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);}
+  .mechanism{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+
+/* big number band */
+.num-band{
+  margin-top:clamp(56px,8vw,90px);
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:1px;background:var(--hairline-soft);
+  border-block:1px solid var(--hairline);
+}
+.num-cell{
+  background:var(--bg);
+  padding:clamp(26px,4vw,44px) 18px;
+  text-align:center;
+}
+.num-cell .big{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:clamp(2.8rem,1.8rem + 4vw,4.6rem);
+  line-height:1;color:var(--amber-hi);letter-spacing:-0.02em;
+}
+.num-cell .big .u{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.34em;color:var(--amber);vertical-align:0.5em;margin-left:1px;
+}
+.num-cell .cap{
+  margin-top:12px;color:var(--text-soft);
+  font-size:0.82rem;line-height:1.45;
+  max-width:24ch;margin-inline:auto;
+}
+@media (min-width:760px){
+  .num-band{grid-template-columns:repeat(4,minmax(0,1fr));}
+}
+
+/* ============================================================
+   THE FORMULA
+   ============================================================ */
+.formula{
+  background:var(--bg-2);
+  border-top:1px solid var(--hairline);
+}
+.formula-grid{
+  margin-top:54px;
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:18px;
+}
+.actv{
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  background:linear-gradient(165deg,var(--bg-3),var(--bg-2));
+  padding:clamp(24px,3vw,36px);
+  position:relative;overflow:hidden;
+  transition:transform 0.5s var(--ease),border-color 0.5s var(--ease),box-shadow 0.5s var(--ease);
+}
+.actv::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(to bottom,var(--amber-hi),var(--ember));
+  transform:scaleY(0);transform-origin:0 0;
+  transition:transform 0.55s var(--ease);
+}
+.actv::after{
+  content:"";position:absolute;top:-50%;right:-30%;
+  width:60%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(233,162,60,0.12),transparent 65%);
+  opacity:0;transition:opacity 0.55s var(--ease);
+}
+.actv:hover{
+  transform:translateY(-5px);
+  border-color:rgba(233,162,60,0.4);
+  box-shadow:0 24px 50px -24px rgba(0,0,0,0.85);
+}
+.actv:hover::before{transform:scaleY(1);}
+.actv:hover::after{opacity:1;}
+
+.actv-top{
+  display:flex;align-items:baseline;justify-content:space-between;
+  gap:18px;flex-wrap:wrap;
+}
+.actv-idx{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.16em;color:var(--text-soft);
+}
+.actv-dose{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:1rem;color:var(--amber-hi);letter-spacing:0.04em;
+  padding:5px 11px;border:1px solid rgba(246,198,103,0.3);
+  border-radius:6px;background:rgba(233,162,60,0.06);
+}
+.actv-role{
+  margin-top:18px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--amber);
+}
+.actv h3{
+  margin-top:8px;
+  font-family:'Fraunces',serif;font-weight:400;
+  font-size:var(--step-2);color:#fff;line-height:1.05;
+  letter-spacing:-0.01em;
+}
+.actv p{
+  margin-top:14px;color:var(--text-soft);
+  font-size:0.92rem;max-width:46ch;
+}
+
+/* synergy callout */
+.synergy{
+  margin-top:24px;
+  border:1px solid rgba(246,198,103,0.28);
+  border-radius:10px;
+  background:
+    radial-gradient(120% 130% at 100% 0%,rgba(233,162,60,0.12),transparent 60%),
+    var(--bg-3);
+  padding:clamp(28px,4vw,46px);
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:24px;align-items:center;
+}
+.synergy .sy-eyebrow{margin-bottom:14px;}
+.synergy h3{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:var(--step-2);color:#fff;line-height:1.1;
+}
+.synergy h3 em{font-style:italic;color:var(--amber-hi);}
+.synergy p{margin-top:14px;color:var(--text-soft);max-width:52ch;}
+.synergy-pair{
+  display:flex;align-items:center;gap:14px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.78rem;letter-spacing:0.06em;
+  flex-wrap:wrap;
+}
+.synergy-pair .node{
+  padding:11px 16px;border-radius:8px;
+  border:1px solid var(--hairline);
+  background:var(--bg-2);color:var(--text);
+}
+.synergy-pair .plus{color:var(--amber);font-size:1.3rem;}
+.synergy-pair .eq{color:var(--amber-hi);font-weight:500;}
+@media (min-width:680px){
+  .formula-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:900px){
+  .synergy{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);}
+}
+
+/* serving line */
+.serving-line{
+  margin-top:34px;
+  display:flex;flex-wrap:wrap;gap:10px 30px;
+  align-items:center;justify-content:center;
+  padding:22px;
+  border:1px dashed var(--hairline);border-radius:10px;
+}
+.serving-line .sv{
+  display:flex;align-items:center;gap:9px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-soft);
+}
+.serving-line .sv b{color:var(--text);font-weight:500;}
+.serving-line .sv .pip{width:6px;height:6px;border-radius:50%;background:var(--amber);}
+
+/* ============================================================
+   REVIEWS
+   ============================================================ */
+.reviews{background:var(--bg);}
+.reviews-grid{
+  margin-top:54px;
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:18px;
+}
+.review{
+  border:1px solid var(--hairline);
+  border-radius:10px;
+  background:var(--bg-2);
+  padding:clamp(26px,3.2vw,38px);
+  display:flex;flex-direction:column;
+  transition:transform 0.5s var(--ease),border-color 0.5s var(--ease);
+}
+.review:hover{transform:translateY(-4px);border-color:rgba(233,162,60,0.3);}
+.review .stars{
+  display:flex;gap:3px;color:var(--amber);margin-bottom:18px;
+}
+.review blockquote{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:var(--step-1);line-height:1.4;color:var(--text);
+  flex:1;letter-spacing:-0.005em;
+}
+.review blockquote em{font-style:italic;color:var(--amber-hi);}
+.review .rv-by{
+  margin-top:24px;padding-top:18px;
+  border-top:1px solid var(--hairline);
+  display:flex;align-items:center;gap:13px;
+}
+.rv-mono{
+  width:42px;height:42px;border-radius:50%;flex:none;
+  border:1px solid var(--hairline);
+  background:var(--bg-3);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-size:1rem;color:var(--amber-hi);
+}
+.rv-by .who{font-size:0.9rem;color:var(--text);font-weight:500;}
+.rv-by .ctx{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.08em;text-transform:uppercase;
+  color:var(--text-soft);margin-top:2px;
+}
+.review.feature{
+  background:
+    radial-gradient(130% 120% at 0% 0%,rgba(233,162,60,0.1),transparent 55%),
+    var(--bg-3);
+  border-color:rgba(246,198,103,0.24);
+}
+@media (min-width:680px){
+  .reviews-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media (min-width:1000px){
+  .reviews-grid{grid-template-columns:repeat(12,minmax(0,1fr));}
+  .review:nth-child(1){grid-column:span 7;}
+  .review:nth-child(2){grid-column:span 5;}
+  .review:nth-child(3){grid-column:span 5;}
+  .review:nth-child(4){grid-column:span 7;}
+}
+
+/* ============================================================
+   TRUST & GUARANTEE
+   ============================================================ */
+.trust{
+  background:var(--bg-2);
+  border-top:1px solid var(--hairline);
+}
+.trust-grid{
+  margin-top:54px;
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:clamp(36px,5vw,64px);
+  align-items:start;
+}
+.trust-list{
+  display:grid;gap:1px;background:var(--hairline-soft);
+  border-block:1px solid var(--hairline-soft);
+}
+.trust-item{
+  background:var(--bg-2);
+  padding:22px 4px;
+  display:grid;grid-template-columns:auto minmax(0,1fr);
+  gap:18px;align-items:start;
+}
+.trust-item .tk{
+  width:38px;height:38px;flex:none;
+  border:1px solid var(--hairline);border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--amber);
+  background:rgba(233,162,60,0.05);
+}
+.trust-item .tt{color:var(--text);font-size:0.95rem;font-weight:500;}
+.trust-item .td{color:var(--text-soft);font-size:0.85rem;margin-top:4px;}
+
+/* guarantee medal */
+.guarantee{
+  border:1px solid rgba(246,198,103,0.3);
+  border-radius:14px;
+  background:
+    radial-gradient(120% 100% at 50% 0%,rgba(233,162,60,0.16),transparent 60%),
+    var(--bg-3);
+  padding:clamp(32px,4.5vw,52px);
+  text-align:center;
+  position:relative;
+}
+.medal{
+  width:108px;height:108px;margin:0 auto 22px;
+  border-radius:50%;
+  border:1px solid rgba(246,198,103,0.4);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:radial-gradient(circle at 50% 35%,rgba(233,162,60,0.18),transparent 70%);
+  position:relative;
+}
+.medal::before{
+  content:"";position:absolute;inset:8px;border-radius:50%;
+  border:1px dashed rgba(246,198,103,0.3);
+}
+.medal .m-num{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:2.6rem;line-height:0.9;color:var(--amber-hi);
+}
+.medal .m-unit{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.56rem;letter-spacing:0.18em;color:var(--amber);
+  text-transform:uppercase;margin-top:4px;
+}
+.guarantee h3{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:var(--step-2);color:#fff;line-height:1.1;
+}
+.guarantee h3 em{font-style:italic;color:var(--amber-hi);}
+.guarantee p{
+  margin-top:14px;color:var(--text-soft);
+  max-width:40ch;margin-inline:auto;font-size:0.94rem;
+}
+.guarantee .g-sign{
+  margin-top:22px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.14em;text-transform:uppercase;
+  color:var(--text-soft);
+}
+@media (min-width:880px){
+  .trust-grid{grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr);}
+}
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+.faq{background:var(--bg);}
+.faq-grid{
+  margin-top:48px;
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:clamp(32px,5vw,72px);
+  align-items:start;
+}
+.faq-aside p{color:var(--text-soft);margin-top:18px;max-width:34ch;}
+.faq-aside .faq-help{
+  margin-top:26px;
+  display:inline-flex;align-items:center;gap:10px;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--amber);
+}
+.faq-list{display:flex;flex-direction:column;}
+.faq-item{border-top:1px solid var(--hairline);}
+.faq-item:last-child{border-bottom:1px solid var(--hairline);}
+.faq-q{
+  width:100%;
+  display:flex;align-items:center;gap:20px;
+  padding:26px 4px;
+  text-align:left;
+}
+.faq-q .q-no{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.7rem;color:var(--text-soft);letter-spacing:0.1em;
+  flex:none;
+}
+.faq-q .q-text{
+  flex:1;
+  font-family:'Fraunces',serif;font-weight:400;
+  font-size:var(--step-1);color:var(--text);line-height:1.25;
+  transition:color 0.35s var(--ease);
+}
+.faq-q:hover .q-text,.faq-q:focus-visible .q-text{color:var(--amber-hi);}
+.faq-q:focus-visible{outline:2px solid var(--amber-hi);outline-offset:3px;border-radius:4px;}
+.q-icon{
+  flex:none;width:26px;height:26px;position:relative;
+}
+.q-icon::before,.q-icon::after{
+  content:"";position:absolute;left:50%;top:50%;
+  background:var(--amber);
+  transition:transform 0.4s var(--ease),opacity 0.4s var(--ease);
+}
+.q-icon::before{width:13px;height:1.5px;transform:translate(-50%,-50%);}
+.q-icon::after{width:1.5px;height:13px;transform:translate(-50%,-50%);}
+.faq-item.open .q-icon::after{transform:translate(-50%,-50%) scaleY(0);opacity:0;}
+.faq-item.open .q-icon::before{background:var(--amber-hi);}
+
+.faq-a{
+  display:grid;grid-template-rows:0fr;
+  transition:grid-template-rows 0.5s var(--ease);
+}
+.faq-item.open .faq-a{grid-template-rows:1fr;}
+.faq-a-inner{overflow:hidden;}
+.faq-a p{
+  color:var(--text-soft);
+  padding:0 56px 28px 4px;
+  max-width:60ch;font-size:0.96rem;
+}
+@media (prefers-reduced-motion:reduce){
+  .faq-a{transition:none;}
+}
+@media (min-width:900px){
+  .faq-grid{grid-template-columns:minmax(0,0.66fr) minmax(0,1.34fr);}
+}
+
+/* ============================================================
+   CLOSING CTA
+   ============================================================ */
+.closing{
+  position:relative;overflow:hidden;
+  border-top:1px solid var(--hairline);
+  padding:clamp(90px,13vw,170px) 0;
+}
+.closing-bg{
+  position:absolute;inset:0;z-index:0;
+  background:url("assets/particle-field.jpg") center/cover no-repeat;
+  opacity:0.5;
+}
+.closing-bg::after{
+  content:"";position:absolute;inset:0;
+  background:
+    radial-gradient(70% 60% at 50% 50%,transparent,rgba(11,10,9,0.7)),
+    linear-gradient(to bottom,var(--bg),rgba(11,10,9,0.55) 30%,rgba(11,10,9,0.85));
+}
+.closing .wrap{position:relative;z-index:2;}
+.closing-inner{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:clamp(40px,6vw,80px);align-items:center;
+}
+.closing-product{
+  position:relative;
+  display:flex;justify-content:center;align-items:center;
+  min-height:320px;
+}
+.closing-glow{
+  position:absolute;width:74%;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(246,198,103,0.4),transparent 68%);
+  filter:blur(10px);
+  animation:breathe 7s var(--ease-soft) infinite;
+}
+@media (prefers-reduced-motion:reduce){.closing-glow{animation:none;}}
+.closing-bottle{
+  position:relative;z-index:1;width:min(72%,320px);
+  filter:drop-shadow(0 40px 60px rgba(0,0,0,0.8));
+}
+.closing-copy .h-section{margin-top:20px;}
+.closing-copy .lede{margin-top:22px;}
+
+.price-row{
+  margin-top:32px;
+  display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;
+}
+.price-big{
+  font-family:'Fraunces',serif;font-weight:300;
+  font-size:clamp(3.4rem,2.4rem + 4vw,5rem);
+  line-height:1;color:#fff;letter-spacing:-0.02em;
+}
+.price-big .cur{color:var(--amber);font-size:0.5em;vertical-align:0.55em;}
+.price-meta{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.72rem;letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--text-soft);line-height:1.5;
+}
+.closing-cta{margin-top:30px;display:flex;flex-wrap:wrap;gap:14px;}
+.btn-xl{padding:1.1em 2.1em;font-size:1rem;}
+.closing-assure{
+  margin-top:20px;
+  display:flex;align-items:center;gap:9px;
+  color:var(--text-soft);font-size:0.84rem;
+}
+.closing-assure svg{flex:none;color:var(--amber);}
+@media (min-width:860px){
+  .closing-inner{grid-template-columns:minmax(0,0.85fr) minmax(0,1.15fr);}
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+.site-footer{
+  background:var(--bg-2);
+  border-top:1px solid var(--hairline);
+  padding:clamp(54px,7vw,84px) 0 40px;
+}
+.footer-top{
+  display:grid;grid-template-columns:minmax(0,1fr);
+  gap:38px;
+  padding-bottom:40px;border-bottom:1px solid var(--hairline);
+}
+.footer-brand .f-logo{height:30px;width:auto;margin-bottom:18px;}
+.footer-brand .f-line{
+  font-family:'Fraunces',serif;font-weight:300;font-style:italic;
+  font-size:var(--step-1);color:var(--text);max-width:24ch;line-height:1.3;
+}
+.footer-nav{
+  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:32px;
+}
+.footer-nav .col h4{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--amber);margin-bottom:14px;
+}
+.footer-nav .col a,.footer-nav .col span{
+  display:block;color:var(--text-soft);font-size:0.86rem;
+  padding:5px 0;transition:color 0.3s var(--ease);
+}
+.footer-nav .col a:hover,.footer-nav .col a:focus-visible{color:var(--text);}
+
+.disclaimer{
+  margin-top:32px;
+  padding:20px;
+  border:1px solid var(--hairline-soft);border-radius:8px;
+  background:var(--bg);
+}
+.disclaimer p{
+  color:var(--text-soft);
+  font-size:0.74rem;line-height:1.65;
+  max-width:80ch;
+}
+.disclaimer .dlabel{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.6rem;letter-spacing:0.16em;text-transform:uppercase;
+  color:var(--amber);display:block;margin-bottom:8px;
+}
+.footer-base{
+  margin-top:28px;
+  display:flex;flex-wrap:wrap;gap:14px;
+  align-items:center;justify-content:space-between;
+}
+.footer-base .copy{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.08em;color:var(--text-soft);
+}
+.footer-base .made{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:0.66rem;letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--text-soft);
+  display:flex;align-items:center;gap:8px;
+}
+.footer-base .made .pip{width:5px;height:5px;border-radius:50%;background:var(--amber);}
+@media (min-width:720px){
+  .footer-top{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);}
+  .footer-nav{grid-template-columns:repeat(3,minmax(0,1fr));}
+}
+
+/* ============================================================
+   SHARED SECTION INTRO
+   ============================================================ */
+.intro-block{max-width:62ch;}
+.intro-block .h-section{margin-top:16px;}
+.intro-block .lede{margin-top:22px;}
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+
+<!-- ========================= HEADER ========================= -->
+<header class="site-header" id="header">
+  <div class="header-inner">
+    <div class="brand-mark">
+      <a href="#top" aria-label="BiGH — Be in Good Health, home">
+        <img src="assets/logo-white.png" alt="BiGH" class="brand-logo" />
+      </a>
+      <span class="brand-tag">Be in Good Health</span>
+    </div>
+    <nav class="nav" aria-label="Primary">
+      <a href="#science">The Science</a>
+      <a href="#renewal">How It Works</a>
+      <a href="#formula">Formula</a>
+      <a href="#reviews">Reviews</a>
+    </nav>
+    <a href="#buy" class="btn btn-primary btn-pill header-cta">Add to Cart · $49</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ========================= HERO ========================= -->
+  <section class="hero" id="hero" aria-label="NuriCell — Energy for the cells that remember">
+    <div class="hero-bg" id="heroBg" aria-hidden="true"></div>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="hero-inner">
+        <div class="hero-copy">
+          <p class="eyebrow reveal">Daily Cognitive Support — Backed by UC Berkeley Science</p>
+          <h1 class="reveal" data-d="1">Energy for the cells that <em>remember</em>.</h1>
+          <p class="hero-lede reveal" data-d="2">
+            NuriCell helps aging mitochondria — the tiny power plants inside every brain
+            cell — <strong>work the way young ones do</strong>. A four-nutrient system,
+            built on published university research.
+          </p>
+          <div class="hero-cta reveal" data-d="3">
+            <a href="#buy" class="btn btn-primary">Add to Cart — $49</a>
+            <a href="#science" class="btn btn-ghost">See the science</a>
+          </div>
+          <p class="hero-price-note reveal" data-d="3">
+            <span class="dot" aria-hidden="true"></span>
+            60 capsules · one-month supply · 60-day money-back guarantee
+          </p>
+          <div class="proof-chips reveal" data-d="4">
+            <span class="chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 2 4 6v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V6l-8-4Z" stroke="currentColor" stroke-width="1.6" class="chip-amber"/>
+                <path d="m8.5 12 2.5 2.5L16 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="chip-amber"/>
+              </svg>
+              PNAS-published research
+            </span>
+            <span class="chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" class="chip-amber"/>
+                <path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" class="chip-amber"/>
+              </svg>
+              23 years of science
+            </span>
+            <span class="chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M9 3h6m-3 0v5m-5 0h10l-2 4v6a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2v-6L5 8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" class="chip-amber"/>
+              </svg>
+              Third-party tested
+            </span>
+            <span class="chip">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" class="chip-amber"/>
+                <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6" class="chip-amber"/>
+              </svg>
+              Made in the USA · cGMP
+            </span>
+          </div>
+        </div>
+        <div class="hero-product reveal" data-d="2">
+          <div class="hero-glow" aria-hidden="true"></div>
+          <img src="assets/nuricell.png" alt="A bottle of NuriCell — 60 vegetable capsules of daily cognitive support" class="hero-bottle" id="heroBottle" />
+        </div>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="mono">Scroll</span>
+      <div class="scroll-track"></div>
+    </div>
+  </section>
+
+  <!-- ========================= PROOF STRIP ========================= -->
+  <section class="proof-strip" aria-label="Research and certification">
+    <div class="proof-strip-inner">
+      <div class="proof-item"><span class="label">PNAS</span><span class="sub">Proceedings · Nat. Acad.</span></div>
+      <div class="proof-item"><span class="label">FASEB Journal</span><span class="sub">Peer-reviewed</span></div>
+      <div class="proof-item"><span class="label">NY Acad. Sciences</span><span class="sub">Annals</span></div>
+      <div class="proof-item"><span class="label">UC Berkeley</span><span class="sub">Biochem. &amp; Mol. Biology</span></div>
+      <div class="proof-item"><span class="label">cGMP</span><span class="sub">USA facility</span></div>
+      <div class="proof-item"><span class="label">Third-Party Tested</span><span class="sub">Purity &amp; potency</span></div>
+    </div>
+  </section>
+
+  <!-- ========================= THE PROBLEM ========================= -->
+  <section class="section problem" id="problem" aria-labelledby="problem-h">
+    <div class="wrap">
+      <div class="problem-grid">
+        <div class="problem-figure reveal">
+          <img src="assets/mito-macro.jpg" alt="Macro view of a single mitochondrion — the cell's power plant — its inner cristae glowing" loading="lazy" decoding="async" />
+          <span class="figure-cap">Fig. 01 — A mitochondrion, magnified</span>
+        </div>
+        <div class="problem-copy">
+          <div class="section-head reveal">
+            <span class="sec-num">01 / The Problem</span>
+          </div>
+          <h2 class="h-section reveal" data-d="1" id="problem-h">
+            Your mind runs on power plants. <em>They're aging.</em>
+          </h2>
+          <p class="reveal" data-d="2">
+            Inside every brain cell sit mitochondria — microscopic engines that produce
+            the energy thinking, remembering, and focusing all depend on. When they run
+            clean, the mind feels quick.
+          </p>
+          <p class="reveal" data-d="2">
+            <strong>With age, that machinery decays.</strong> Oxidative damage accumulates
+            in their lipids, proteins, RNA and DNA. They make less energy and leak more
+            damage — a decline that tracks closely with the memory loss and mental
+            fatigue of getting older.
+          </p>
+          <ul class="signal-list reveal" data-d="3">
+            <li>
+              <span class="sig-no">A</span>
+              <span class="sig-text">A name that won't surface fast enough <span>— the half-second pause that wasn't there before.</span></span>
+            </li>
+            <li>
+              <span class="sig-no">B</span>
+              <span class="sig-text">The afternoon mental fog <span>— focus that arrives later and leaves sooner.</span></span>
+            </li>
+            <li>
+              <span class="sig-no">C</span>
+              <span class="sig-text">Thinking that takes more effort <span>— the same task, quietly costing more.</span></span>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= THE SCIENCE ========================= -->
+  <section class="section science" id="science" aria-labelledby="science-h">
+    <div class="science-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="intro-block">
+        <div class="section-head reveal">
+          <span class="sec-num">02 / The Discovery</span>
+        </div>
+        <h2 class="h-section reveal" data-d="1" id="science-h">
+          It started in a lab <em>at Berkeley.</em>
+        </h2>
+        <p class="lede reveal" data-d="2">
+          NuriCell is built on a formula known in the research literature as CellGen,
+          developed by biochemist Dr. Jian Kang Liu in the Division of Biochemistry &amp;
+          Molecular Biology at the University of California, Berkeley.
+        </p>
+      </div>
+
+      <div class="science-grid">
+        <!-- the hero stat -->
+        <div class="stat-hero reveal" data-d="1">
+          <div class="stat-figure">
+            <span class="count" data-target="2002" data-plain="true">0</span>
+          </div>
+          <p class="stat-label">
+            The landmark finding, published in <em style="font-style:italic;color:var(--amber-hi)">PNAS</em>.
+          </p>
+          <p class="stat-detail">
+            Dr. Liu fed two mitochondrial nutrients — acetyl-L-carnitine and
+            R-alpha-lipoic acid — to old rats. The result: age-associated brain
+            mitochondrial decay was <strong style="color:var(--text)">partially reversed</strong>,
+            and the animals improved on memory tasks.
+          </p>
+          <div class="stat-cite">
+            <span><b>2 nutrients</b> studied together</span>
+            <span><b>better</b> than either alone</span>
+            <span>EM imaging — <b>structure restored</b></span>
+          </div>
+        </div>
+
+        <!-- provenance + pull quote -->
+        <div class="provenance">
+          <p class="pull-quote reveal" data-d="1">
+            <span class="mark" aria-hidden="true">&ldquo;</span>The science started in a lab at
+            Berkeley. NuriCell finishes the sentence in a capsule.
+          </p>
+          <div class="provenance-body reveal" data-d="2">
+            <p>
+              Dr. Liu did his landmark work alongside the renowned scientist
+              <strong>Dr. Bruce Ames</strong>. Under an electron microscope, the aged
+              mitochondria of treated animals appeared structurally restored toward a
+              younger state — and the combination of nutrients consistently outperformed
+              either one given alone.
+            </p>
+            <p>
+              The research was published across the most respected journals in the field,
+              and the broader work on mitochondrial aging drew coverage from the BBC and
+              Discover magazine. NuriCell takes that research and builds it into a daily
+              capsule.
+            </p>
+          </div>
+          <div class="attribution reveal" data-d="3">
+            <div class="attr-avatar" aria-hidden="true">JL</div>
+            <div class="attr-meta">
+              <div class="name">Dr. Jian Kang Liu</div>
+              <div class="role">Biochemist · UC Berkeley</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="journal-row reveal" data-d="2">
+        <div class="j">
+          <span class="jname">Proceedings of the National Academy of Sciences</span>
+          <span class="jtag">PNAS · 2002</span>
+        </div>
+        <div class="j">
+          <span class="jname">The FASEB Journal</span>
+          <span class="jtag">Peer-reviewed</span>
+        </div>
+        <div class="j">
+          <span class="jname">Annals of the New York Academy of Sciences</span>
+          <span class="jtag">Mitochondrial aging</span>
+        </div>
+        <div class="j">
+          <span class="jname">BBC &amp; Discover Magazine</span>
+          <span class="jtag">Press coverage</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= HOW IT WORKS — THE RENEWAL ========================= -->
+  <section class="section renewal" id="renewal" aria-labelledby="renewal-h">
+    <div class="wrap">
+      <div class="renewal-head">
+        <div>
+          <div class="section-head reveal">
+            <span class="sec-num">03 / The Mechanism</span>
+          </div>
+          <h2 class="h-section reveal" data-d="1" id="renewal-h">
+            From decay <em>to renewal.</em>
+          </h2>
+        </div>
+        <p class="lede reveal" data-d="2">
+          The same mitochondrion, before and after. Drag across the figure to see what
+          the research describes — aged machinery, fed the right nutrients, restored
+          toward a younger state.
+        </p>
+      </div>
+
+      <!-- SIGNATURE INTERACTION: decay -> renewal scrubber -->
+      <div class="scrubber reveal" data-d="1" id="scrubber"
+           role="slider" tabindex="0"
+           aria-label="Decay to renewal comparison slider"
+           aria-valuemin="0" aria-valuemax="100" aria-valuenow="50">
+        <span class="scrub-tag before" aria-hidden="true">Aged mitochondrion</span>
+        <span class="scrub-tag after" aria-hidden="true">Restored mitochondrion</span>
+        <div class="scrub-aged">
+          <img src="assets/mito-aged.jpg" alt="An aged, decayed mitochondrion — shrivelled and grey, its inner folds collapsing" loading="lazy" decoding="async" />
+        </div>
+        <div class="scrub-renewed" id="scrubRenewed" aria-hidden="true">
+          <img src="assets/mito-renewed.jpg" alt="" loading="lazy" decoding="async" />
+        </div>
+        <div class="scrub-handle" id="scrubHandle">
+          <div class="scrub-knob">
+            <span class="arw l" aria-hidden="true"></span>
+            <span class="arw r" aria-hidden="true"></span>
+          </div>
+        </div>
+      </div>
+      <p class="scrub-hint reveal" data-d="2">
+        <span class="ln" aria-hidden="true"></span>
+        Drag, or use arrow keys
+        <span class="ln" aria-hidden="true"></span>
+      </p>
+
+      <!-- 3-step mechanism -->
+      <div class="mechanism">
+        <div class="mech-step reveal" data-d="1">
+          <div class="step-no">Step 01</div>
+          <svg class="mech-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <ellipse cx="24" cy="24" rx="18" ry="11" stroke="#A89E8E" stroke-width="1.6"/>
+            <path d="M12 24c3-4 6 4 9 0s6 4 9 0 6 4 6 0" stroke="#A89E8E" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M14 14l-3-3M34 14l3-3M14 34l-3 3M34 34l3 3" stroke="#7A7163" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <h3>Mitochondria decay</h3>
+          <p>
+            With age, oxidative damage builds in the cell's power plants. They produce
+            less energy and leak more damage — and the mind feels it.
+          </p>
+        </div>
+        <div class="mech-step reveal" data-d="2">
+          <div class="step-no">Step 02</div>
+          <svg class="mech-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <ellipse cx="24" cy="24" rx="18" ry="11" stroke="#E9A23C" stroke-width="1.6"/>
+            <path d="M12 24c3-4 6 4 9 0s6 4 9 0 6 4 6 0" stroke="#E9A23C" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M24 6v6M24 36v6M6 24h4M38 24h4" stroke="#F6C667" stroke-width="2" stroke-linecap="round"/>
+            <circle cx="24" cy="24" r="2.4" fill="#F6C667"/>
+          </svg>
+          <h3>NuriCell feeds them</h3>
+          <p>
+            Two capsules deliver the mitochondrial nutrients studied in Dr. Liu's
+            research — the fuel the power plants need to run clean again.
+          </p>
+        </div>
+        <div class="mech-step reveal" data-d="3">
+          <div class="step-no">Step 03</div>
+          <svg class="mech-icon" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+            <ellipse cx="24" cy="24" rx="18" ry="11" stroke="#F6C667" stroke-width="1.8"/>
+            <path d="M12 24c3-4 6 4 9 0s6 4 9 0 6 4 6 0" stroke="#F6C667" stroke-width="1.8" stroke-linecap="round"/>
+            <path d="M24 3l2.2 4.4 4.8.7-3.5 3.4.8 4.8L24 14l-4.3 2.3.8-4.8-3.5-3.4 4.8-.7L24 3Z" fill="#F6C667"/>
+          </svg>
+          <h3>Energy is restored</h3>
+          <p>
+            Supported mitochondrial function means steadier mental energy and a brain
+            better equipped for memory, recall and focus.
+          </p>
+        </div>
+      </div>
+
+      <!-- big number band -->
+      <div class="num-band">
+        <div class="num-cell reveal" data-d="1">
+          <div class="big"><span class="count" data-target="4">0</span></div>
+          <p class="cap">Mitochondrial nutrients working as one system</p>
+        </div>
+        <div class="num-cell reveal" data-d="2">
+          <div class="big"><span class="count" data-target="2">0</span></div>
+          <p class="cap">From Dr. Liu's PNAS study — carnitine and lipoic acid</p>
+        </div>
+        <div class="num-cell reveal" data-d="3">
+          <div class="big"><span class="count" data-target="2">0</span>&ndash;<span class="count" data-target="4">0</span><span class="u">wks</span></div>
+          <p class="cap">When most people describe a subtle lift</p>
+        </div>
+        <div class="num-cell reveal" data-d="4">
+          <div class="big"><span class="count" data-target="60">0</span></div>
+          <p class="cap">Capsules per bottle — a full month of daily support</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= THE FORMULA ========================= -->
+  <section class="section formula" id="formula" aria-labelledby="formula-h">
+    <div class="wrap">
+      <div class="intro-block">
+        <div class="section-head reveal">
+          <span class="sec-num">04 / The Formula</span>
+        </div>
+        <h2 class="h-section reveal" data-d="1" id="formula-h">
+          Four actives. <em>One system.</em>
+        </h2>
+        <p class="lede reveal" data-d="2">
+          NuriCell is not a single hopeful ingredient. It is a four-nutrient system —
+          two from Dr. Liu's research, two that extend the same energy-and-memory
+          pathway. Amounts shown are per daily serving of two capsules.
+        </p>
+      </div>
+
+      <div class="formula-grid">
+        <article class="actv reveal" data-d="1">
+          <div class="actv-top">
+            <span class="actv-idx">01 — Active</span>
+            <span class="actv-dose">267 mg</span>
+          </div>
+          <p class="actv-role">The Carrier</p>
+          <h3>N-Acetyl L-Carnitine HCl</h3>
+          <p>
+            A mitochondrial nutrient that helps shuttle fuel into the cell's power
+            plants — and crosses the blood&ndash;brain barrier. Studied for memory and
+            mental energy. One of the two nutrients from the Berkeley research.
+          </p>
+        </article>
+
+        <article class="actv reveal" data-d="2">
+          <div class="actv-top">
+            <span class="actv-idx">02 — Active</span>
+            <span class="actv-dose">267 mg</span>
+          </div>
+          <p class="actv-role">The Reservoir</p>
+          <h3>Creatine Monohydrate</h3>
+          <p>
+            A rechargeable energy buffer — phosphocreatine — that keeps ATP available
+            for fast thinking. Human trials link it to better working memory and
+            processing speed.
+          </p>
+        </article>
+
+        <article class="actv reveal" data-d="3">
+          <div class="actv-top">
+            <span class="actv-idx">03 — Active</span>
+            <span class="actv-dose">133 mg</span>
+          </div>
+          <p class="actv-role">The Protector</p>
+          <h3>Alpha-Lipoic Acid</h3>
+          <p>
+            A mitochondrial antioxidant that neutralizes oxidative damage and
+            regenerates other antioxidants — vitamins C and E, and glutathione. The
+            partner that makes the Carrier work better.
+          </p>
+        </article>
+
+        <article class="actv reveal" data-d="4">
+          <div class="actv-top">
+            <span class="actv-idx">04 — Active</span>
+            <span class="actv-dose">67 mg</span>
+          </div>
+          <p class="actv-role">The Messenger</p>
+          <h3>Choline Bitartrate</h3>
+          <p>
+            A building block of acetylcholine — the neurotransmitter the brain uses for
+            memory and learning — and of healthy brain-cell membranes.
+          </p>
+        </article>
+      </div>
+
+      <!-- synergy callout -->
+      <div class="synergy reveal" data-d="1">
+        <div>
+          <p class="eyebrow sy-eyebrow">The Synergy</p>
+          <h3>Better together <em>than alone.</em></h3>
+          <p>
+            Acetyl-L-carnitine and alpha-lipoic acid are the two nutrients from Dr. Liu's
+            research — and they were shown to work better paired than separately.
+            Creatine and choline extend the same energy-and-memory system. The formula
+            is a system, not a pile of ingredients.
+          </p>
+        </div>
+        <div class="synergy-pair" aria-hidden="false">
+          <span class="node">Carnitine</span>
+          <span class="plus">+</span>
+          <span class="node">Lipoic Acid</span>
+          <span class="plus">=</span>
+          <span class="eq">Restored function</span>
+        </div>
+      </div>
+
+      <div class="serving-line reveal" data-d="2">
+        <span class="sv"><span class="pip" aria-hidden="true"></span><b>2 capsules</b> daily</span>
+        <span class="sv"><span class="pip" aria-hidden="true"></span><b>60 capsules</b> per bottle</span>
+        <span class="sv"><span class="pip" aria-hidden="true"></span><b>White vegetable</b> capsule</span>
+        <span class="sv"><span class="pip" aria-hidden="true"></span><b>No</b> artificial colors</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= REVIEWS ========================= -->
+  <section class="section reviews" id="reviews" aria-labelledby="reviews-h">
+    <div class="wrap">
+      <div class="intro-block">
+        <div class="section-head reveal">
+          <span class="sec-num">05 / The Results</span>
+        </div>
+        <h2 class="h-section reveal" data-d="1" id="reviews-h">
+          What people <em>notice first.</em>
+        </h2>
+        <p class="lede reveal" data-d="2">
+          The mitochondrial benefits build with consistency. Most describe the change
+          not as a jolt, but as something quietly returning.
+        </p>
+      </div>
+
+      <div class="reviews-grid">
+        <article class="review feature reveal" data-d="1">
+          <div class="stars" aria-label="Five out of five">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+          </div>
+          <blockquote>
+            Three weeks in, the afternoon fog is the thing I noticed first. <em>It just&hellip;
+            didn't arrive.</em>
+          </blockquote>
+          <div class="rv-by">
+            <div class="rv-mono" aria-hidden="true">L</div>
+            <div>
+              <div class="who">Linda M.</div>
+              <div class="ctx">Age 58 · Verified</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="review reveal" data-d="2">
+          <div class="stars" aria-label="Five out of five">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+          </div>
+          <blockquote>
+            My mother started it on her doctor's nudge. She's sharper on our calls.
+            That's all the proof I need.
+          </blockquote>
+          <div class="rv-by">
+            <div class="rv-mono" aria-hidden="true">P</div>
+            <div>
+              <div class="who">Priya S.</div>
+              <div class="ctx">Age 34 · Verified</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="review reveal" data-d="1">
+          <div class="stars" aria-label="Five out of five">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+          </div>
+          <blockquote>
+            I research everything I put in my body. <em>The Berkeley paper trail is why
+            I finally bought.</em>
+          </blockquote>
+          <div class="rv-by">
+            <div class="rv-mono" aria-hidden="true">M</div>
+            <div>
+              <div class="who">Marcus T.</div>
+              <div class="ctx">Age 47 · Verified</div>
+            </div>
+          </div>
+        </article>
+
+        <article class="review reveal" data-d="2">
+          <div class="stars" aria-label="Five out of five">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.3L22 9.3l-5 4.9 1.2 7L12 17.8 5.8 21l1.2-7-5-4.9 7.1-1L12 2Z"/></svg>
+          </div>
+          <blockquote>
+            I'm a writer. Word-finding is my whole job. <em>NuriCell gave me back a
+            half-step I didn't know I'd lost.</em>
+          </blockquote>
+          <div class="rv-by">
+            <div class="rv-mono" aria-hidden="true">D</div>
+            <div>
+              <div class="who">David R.</div>
+              <div class="ctx">Age 61 · Verified</div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= TRUST & GUARANTEE ========================= -->
+  <section class="section trust" id="trust" aria-labelledby="trust-h">
+    <div class="wrap">
+      <div class="intro-block">
+        <div class="section-head reveal">
+          <span class="sec-num">06 / Trust</span>
+        </div>
+        <h2 class="h-section reveal" data-d="1" id="trust-h">
+          Made to be <em>verified.</em>
+        </h2>
+        <p class="lede reveal" data-d="2">
+          Science you can check, made in a facility you can trust, backed by a promise
+          you can hold us to.
+        </p>
+      </div>
+
+      <div class="trust-grid">
+        <ul class="trust-list reveal" data-d="1">
+          <li class="trust-item">
+            <span class="tk" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <div class="tt">Built on UC Berkeley research</div>
+              <div class="td">A formula developed by Dr. Jian Kang Liu, with nutrients studied in PNAS-published research.</div>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="tk" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6 21V8l6-4 6 4v13M3 21h18M10 21v-5h4v5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <div>
+              <div class="tt">Made in the USA · cGMP facility</div>
+              <div class="td">Produced in a current Good Manufacturing Practice-compliant facility in the United States.</div>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="tk" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 3h6M10 3v5L6 16a2 2 0 0 0 1.8 3h8.4A2 2 0 0 0 18 16l-4-8V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 14h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <div>
+              <div class="tt">Third-party lab tested</div>
+              <div class="td">Independently tested for purity and potency, and passed microbial screening.</div>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="tk" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 3a6 6 0 0 1 6 6c0 4-6 12-6 12S6 13 6 9a6 6 0 0 1 6-6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="12" cy="9" r="2.2" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <div>
+              <div class="tt">Vegetarian capsule · no artificial colors</div>
+              <div class="td">White vegetable capsules, formulated clean — nothing on the label you can't account for.</div>
+            </div>
+          </li>
+          <li class="trust-item">
+            <span class="tk" aria-hidden="true">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/><path d="M12 7v5l3.5 2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+            </span>
+            <div>
+              <div class="tt">23 years behind the brand</div>
+              <div class="td">BiGH — Be in Good Health — has 23 years of science-backed cognitive wellness work.</div>
+            </div>
+          </li>
+        </ul>
+
+        <div class="guarantee reveal" data-d="2">
+          <div class="medal" aria-hidden="true">
+            <span class="m-num">60</span>
+            <span class="m-unit">Day promise</span>
+          </div>
+          <h3>Try it for 60 days. <em>On us.</em></h3>
+          <p>
+            Take NuriCell every day for 60 days. If you don't feel the difference,
+            we'll refund you in full — no return shipping, no friction.
+          </p>
+          <p class="g-sign">A promise from BiGH — Be in Good Health</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= FAQ ========================= -->
+  <section class="section faq" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="faq-grid">
+        <div class="faq-aside">
+          <div class="section-head reveal">
+            <span class="sec-num">07 / Questions</span>
+          </div>
+          <h2 class="h-display reveal" data-d="1" id="faq-h">
+            The honest <em>answers.</em>
+          </h2>
+          <p class="reveal" data-d="2">
+            No hype, no hedging. If something isn't here, it's a fair question to ask
+            your physician.
+          </p>
+          <span class="faq-help reveal" data-d="3">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
+              <path d="M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.8-.9 1.5v.4M12 17h.01" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+            </svg>
+            Five things people ask most
+          </span>
+        </div>
+
+        <div class="faq-list reveal" data-d="1">
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              <span class="q-no">Q1</span>
+              <span class="q-text">How soon will I notice something?</span>
+              <span class="q-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>
+                  Most people describe a subtle lift in focus and energy within two to
+                  four weeks of daily use. The mitochondrial benefits build with
+                  consistency — NuriCell rewards a steady habit, not a single dose.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              <span class="q-no">Q2</span>
+              <span class="q-text">When should I take it?</span>
+              <span class="q-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>
+                  Two capsules daily, with a meal. Morning is ideal — the formula
+                  supports energy, so most people prefer it at the start of the day.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              <span class="q-no">Q3</span>
+              <span class="q-text">Is it safe with my other supplements?</span>
+              <span class="q-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>
+                  NuriCell is a food-based nutrient formula. As with any supplement,
+                  check with your physician if you take medication or have a health
+                  condition.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              <span class="q-no">Q4</span>
+              <span class="q-text">What makes NuriCell different?</span>
+              <span class="q-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>
+                  It isn't a stimulant, and it isn't a single hopeful ingredient. It's a
+                  four-nutrient system built on published university research into how
+                  the brain ages — and how that aging can be slowed.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              <span class="q-no">Q5</span>
+              <span class="q-text">What's your guarantee?</span>
+              <span class="q-icon" aria-hidden="true"></span>
+            </button>
+            <div class="faq-a">
+              <div class="faq-a-inner">
+                <p>
+                  Try NuriCell for 60 days. If you don't feel the difference, we'll
+                  refund you in full. The promise is simple because the science is.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CLOSING CTA ========================= -->
+  <section class="closing" id="buy" aria-labelledby="buy-h">
+    <div class="closing-bg" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="closing-inner">
+        <div class="closing-product reveal">
+          <div class="closing-glow" aria-hidden="true"></div>
+          <img src="assets/nuricell.png" alt="A bottle of NuriCell" class="closing-bottle" loading="lazy" decoding="async" />
+        </div>
+        <div class="closing-copy">
+          <p class="eyebrow reveal">Begin the renewal</p>
+          <h2 class="h-section reveal" data-d="1" id="buy-h">
+            Feed the cells that <em>remember.</em>
+          </h2>
+          <p class="lede reveal" data-d="2">
+            One bottle. One month. The four-nutrient system, built on the Berkeley
+            research — in a capsule you take with breakfast.
+          </p>
+          <div class="price-row reveal" data-d="3">
+            <span class="price-big"><span class="cur">$</span>49</span>
+            <span class="price-meta">
+              Per bottle<br />60 capsules · one-month supply
+            </span>
+          </div>
+          <div class="closing-cta reveal" data-d="3">
+            <a href="#buy" class="btn btn-primary btn-xl">Add to Cart — $49</a>
+            <a href="#science" class="btn btn-ghost btn-xl">Revisit the science</a>
+          </div>
+          <p class="closing-assure reveal" data-d="4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3l7 3v6c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6l7-3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+              <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            Protected by the 60-day money-back guarantee
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ========================= FOOTER ========================= -->
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <img src="assets/logo-white.png" alt="BiGH" class="f-logo" loading="lazy" decoding="async" />
+        <p class="f-line">Be in Good Health. <em>Science-backed cognitive wellness — for 23 years.</em></p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer">
+        <div class="col">
+          <h4>Product</h4>
+          <a href="#science">The Science</a>
+          <a href="#renewal">How It Works</a>
+          <a href="#formula">The Formula</a>
+          <a href="#buy">Add to Cart</a>
+        </div>
+        <div class="col">
+          <h4>Trust</h4>
+          <a href="#trust">Certifications</a>
+          <a href="#trust">Guarantee</a>
+          <a href="#reviews">Reviews</a>
+          <a href="#faq">FAQ</a>
+        </div>
+        <div class="col">
+          <h4>Company</h4>
+          <span>BiGH Wellness</span>
+          <span>Contact</span>
+          <span>Privacy</span>
+          <span>Terms</span>
+        </div>
+      </nav>
+    </div>
+
+    <div class="disclaimer">
+      <span class="dlabel">Important disclaimer</span>
+      <p>
+        These statements have not been evaluated by the Food and Drug Administration.
+        This product is not intended to diagnose, treat, cure, or prevent any disease.
+        NuriCell is a dietary supplement. Individual results vary. Consult your physician
+        before use if you are pregnant, nursing, take medication, or have a medical
+        condition.
+      </p>
+    </div>
+
+    <div class="footer-base">
+      <span class="copy">&copy; 2026 BiGH — Be in Good Health. All rights reserved.</span>
+      <span class="made"><span class="pip" aria-hidden="true"></span>Made in the USA · cGMP facility</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- ROBUST REVEAL ---------- */
+  var revealEls = Array.prototype.slice.call(document.querySelectorAll('.reveal'));
+  function revealAll(){ revealEls.forEach(function(el){ el.classList.add('in'); }); }
+
+  if (reduce || !('IntersectionObserver' in window)) {
+    revealAll();
+  } else {
+    // immediately reveal anything already in or above the viewport
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    revealEls.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      if (r.top < vh * 0.92) el.classList.add('in');
+    });
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting){
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
+    revealEls.forEach(function(el){
+      if (!el.classList.contains('in')) io.observe(el);
+    });
+  }
+  // safety nets — content can never stay stuck hidden
+  window.addEventListener('load', function(){
+    revealEls.forEach(function(el){
+      var r = el.getBoundingClientRect();
+      var vh2 = window.innerHeight || document.documentElement.clientHeight;
+      if (r.top < vh2) el.classList.add('in');
+    });
+  });
+  setTimeout(revealAll, 6000);
+
+  /* ---------- HEADER STATE + SCROLL PROGRESS ---------- */
+  var header = document.getElementById('header');
+  var progress = document.getElementById('progress');
+  var heroBg = document.getElementById('heroBg');
+  var heroBottle = document.getElementById('heroBottle');
+  var ticking = false;
+
+  function onScroll(){
+    var y = window.pageYOffset || document.documentElement.scrollTop;
+    if (header) header.classList.toggle('scrolled', y > 40);
+    if (progress){
+      var docH = document.documentElement.scrollHeight - window.innerHeight;
+      var p = docH > 0 ? Math.min(1, y / docH) : 0;
+      progress.style.transform = 'scaleX(' + p + ')';
+    }
+    if (!reduce){
+      if (heroBg && y < window.innerHeight * 1.2){
+        heroBg.style.transform = 'translate3d(0,' + (y * 0.18) + 'px,0) scale(1.04)';
+      }
+      if (heroBottle && y < window.innerHeight * 1.2){
+        heroBottle.style.transform = 'translate3d(0,' + (y * -0.06) + 'px,0)';
+      }
+    }
+    ticking = false;
+  }
+  function requestTick(){
+    if (!ticking){ window.requestAnimationFrame(onScroll); ticking = true; }
+  }
+  window.addEventListener('scroll', requestTick, { passive: true });
+  onScroll();
+
+  /* ---------- COUNT-UP NUMBERS — robust: never stuck at 0 ---------- */
+  var counters = Array.prototype.slice.call(document.querySelectorAll('.count'));
+  function runCount(el){
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+    var target = parseFloat(el.getAttribute('data-target')) || 0;
+    if (reduce){ el.textContent = String(target); return; }
+    var dur = el.getAttribute('data-plain') === 'true' ? 1100 : 1300;
+    var start = null;
+    function frame(ts){
+      if (start === null) start = ts;
+      var prog = Math.min(1, (ts - start) / dur);
+      var eased = 1 - Math.pow(1 - prog, 3);
+      el.textContent = String(Math.round(eased * target));
+      if (prog < 1) window.requestAnimationFrame(frame);
+      else el.textContent = String(target);
+    }
+    window.requestAnimationFrame(frame);
+  }
+  function finalizeCount(el){
+    if (el.dataset.counted) return;
+    el.dataset.counted = '1';
+    el.textContent = el.getAttribute('data-target');
+  }
+  if (counters.length){
+    if (reduce || !('IntersectionObserver' in window)){
+      counters.forEach(finalizeCount);
+    } else {
+      var cio = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){
+          if (e.isIntersecting){ runCount(e.target); cio.unobserve(e.target); }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+      counters.forEach(function(c){
+        var r = c.getBoundingClientRect();
+        if (r.top < window.innerHeight && r.bottom > 0) runCount(c);
+        else cio.observe(c);
+      });
+      /* safety net — a number must never stay stuck at 0 */
+      window.addEventListener('load', function(){
+        setTimeout(function(){ counters.forEach(finalizeCount); }, 6000);
+      });
+    }
+  }
+
+  /* ---------- FAQ ACCORDION ---------- */
+  var faqItems = Array.prototype.slice.call(document.querySelectorAll('.faq-item'));
+  faqItems.forEach(function(item){
+    var btn = item.querySelector('.faq-q');
+    if (!btn) return;
+    btn.addEventListener('click', function(){
+      var isOpen = item.classList.contains('open');
+      faqItems.forEach(function(other){
+        other.classList.remove('open');
+        var ob = other.querySelector('.faq-q');
+        if (ob) ob.setAttribute('aria-expanded', 'false');
+      });
+      if (!isOpen){
+        item.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+
+  /* ---------- SIGNATURE INTERACTION: decay -> renewal scrubber ---------- */
+  var scrubber = document.getElementById('scrubber');
+  var renewed = document.getElementById('scrubRenewed');
+  var handle = document.getElementById('scrubHandle');
+  if (scrubber && renewed && handle){
+    var pos = 50;          // 0 = full decay, 100 = full renewal
+    var raf = null;
+    function paint(){
+      // renewed layer revealed from the right; clip its left edge
+      renewed.style.clipPath = 'inset(0 0 0 ' + pos + '%)';
+      handle.style.left = pos + '%';
+      scrubber.setAttribute('aria-valuenow', String(Math.round(pos)));
+      raf = null;
+    }
+    function setPos(p){
+      pos = Math.max(0, Math.min(100, p));
+      if (raf === null) raf = window.requestAnimationFrame(paint);
+    }
+    function posFromEvent(clientX){
+      var rect = scrubber.getBoundingClientRect();
+      return ((clientX - rect.left) / rect.width) * 100;
+    }
+    var dragging = false;
+    function startDrag(clientX){ dragging = true; setPos(posFromEvent(clientX)); }
+    function moveDrag(clientX){ if (dragging) setPos(posFromEvent(clientX)); }
+    function endDrag(){ dragging = false; }
+
+    scrubber.addEventListener('mousedown', function(e){ e.preventDefault(); startDrag(e.clientX); });
+    window.addEventListener('mousemove', function(e){ moveDrag(e.clientX); });
+    window.addEventListener('mouseup', endDrag);
+
+    scrubber.addEventListener('touchstart', function(e){
+      if (e.touches[0]) startDrag(e.touches[0].clientX);
+    }, { passive: true });
+    scrubber.addEventListener('touchmove', function(e){
+      if (e.touches[0]) moveDrag(e.touches[0].clientX);
+    }, { passive: true });
+    scrubber.addEventListener('touchend', endDrag);
+
+    // keyboard accessible
+    scrubber.addEventListener('keydown', function(e){
+      if (e.key === 'ArrowLeft' || e.key === 'ArrowDown'){ setPos(pos - 5); e.preventDefault(); }
+      else if (e.key === 'ArrowRight' || e.key === 'ArrowUp'){ setPos(pos + 5); e.preventDefault(); }
+      else if (e.key === 'Home'){ setPos(0); e.preventDefault(); }
+      else if (e.key === 'End'){ setPos(100); e.preventDefault(); }
+    });
+
+    // gentle one-time auto-demo when it first enters view (motion-safe)
+    if (!reduce && 'IntersectionObserver' in window){
+      var demoed = false;
+      var sio = new IntersectionObserver(function(entries){
+        entries.forEach(function(en){
+          if (en.isIntersecting && !demoed){
+            demoed = true;
+            var t0 = null;
+            function demo(ts){
+              if (t0 === null) t0 = ts;
+              var pr = Math.min(1, (ts - t0) / 1500);
+              var eased = 1 - Math.pow(1 - pr, 3);
+              // sweep 50 -> 22 -> 50 to hint the interaction
+              var swing = Math.sin(eased * Math.PI) * 28;
+              setPos(50 - swing);
+              if (pr < 1 && !dragging) window.requestAnimationFrame(demo);
+              else if (!dragging) setPos(50);
+            }
+            window.requestAnimationFrame(demo);
+            sio.disconnect();
+          }
+        });
+      }, { threshold: 0.5 });
+      sio.observe(scrubber);
+    }
+    paint();
+  }
+
+  /* ---------- SMOOTH ANCHOR FOCUS (a11y) ---------- */
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(){
+      var id = a.getAttribute('href');
+      if (id && id.length > 1){
+        var t = document.querySelector(id);
+        if (t){ setTimeout(function(){ t.setAttribute('tabindex','-1'); t.focus({preventScroll:true}); }, 600); }
+      }
+    });
+  });
+})();
+</script>
+</body>
+</html>

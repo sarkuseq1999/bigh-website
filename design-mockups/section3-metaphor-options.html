@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Section 3 · The Science — metaphor options</title>
+<style>
+  :root{
+    --cosmos:#0a0a1a; --cream:#F3ECE0; --cream-dim:#cbbca9;
+    --sienna:#B85426; --sienna-soft:#D9805C; --amber:#FFB46E;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--cosmos); color:var(--cream);
+    font-family:"Iowan Old Style","Palatino Linotype",Georgia,serif;
+    -webkit-font-smoothing:antialiased; line-height:1.5;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 50% 0%, rgba(184,84,38,.16), transparent 70%),
+      radial-gradient(circle at 20% 80%, rgba(217,128,92,.06), transparent 60%);
+    min-height:100vh;
+  }
+  .wrap{max-width:1120px;margin:0 auto;padding:4rem 1.5rem 5rem}
+  .eyebrow{font-size:.7rem;letter-spacing:.34em;text-transform:uppercase;color:var(--sienna-soft);
+    font-family:system-ui,sans-serif;text-align:center}
+  h1{font-weight:300;font-size:clamp(2rem,5vw,3.4rem);line-height:1.05;letter-spacing:-.02em;
+    text-align:center;margin:.8rem 0 0}
+  h1 em{color:var(--sienna-soft);font-style:italic}
+  .sub{text-align:center;color:var(--cream-dim);max-width:48ch;margin:1rem auto 0;font-size:1.05rem}
+
+  .arc{display:flex;flex-wrap:wrap;gap:.45rem;justify-content:center;margin:2.4rem auto 0;max-width:760px}
+  .arc .pill{font-family:system-ui,sans-serif;font-size:.72rem;letter-spacing:.01em;padding:.4rem .8rem;
+    border:1px solid rgba(217,128,92,.32);border-radius:999px;color:var(--cream-dim);background:rgba(184,84,38,.07)}
+  .arc .arr{align-self:center;color:var(--sienna);font-size:.8rem}
+
+  .grid{display:grid;grid-template-columns:1fr;gap:1.4rem;margin-top:3rem}
+  @media(min-width:860px){.grid{grid-template-columns:repeat(3,1fr)}}
+  .card{border:1px solid rgba(217,128,92,.18);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.015);
+    transition:border-color .3s, transform .3s}
+  .card:hover{border-color:rgba(217,128,92,.5);transform:translateY(-3px)}
+  .card.lean{border-color:rgba(217,128,92,.55);box-shadow:0 0 0 1px rgba(217,128,92,.25),0 24px 60px -30px rgba(184,84,38,.5)}
+  .stage{height:170px;background:#06060f;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .body{padding:1.3rem 1.4rem 1.5rem}
+  .tag{font-family:system-ui,sans-serif;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--sienna-soft)}
+  .card h3{font-weight:400;font-size:1.5rem;margin:.2rem 0 .5rem;letter-spacing:-.01em}
+  .card p{color:var(--cream-dim);font-size:.95rem;margin:0}
+  .card p em{color:var(--cream);font-style:italic}
+  .mech{font-family:system-ui,sans-serif;font-size:.78rem;color:#8a7a6b;margin-top:.9rem;display:flex;flex-direction:column;gap:.3rem}
+  .trade{margin-top:1rem;padding-top:.85rem;border-top:1px solid rgba(217,128,92,.14);font-size:.82rem;color:#9d8c7b;font-family:system-ui,sans-serif}
+  .trade b{color:var(--cream)}
+  .leanbadge{display:inline-block;margin-left:.5rem;font-family:system-ui,sans-serif;font-size:.6rem;letter-spacing:.14em;
+    text-transform:uppercase;color:var(--cosmos);background:var(--sienna-soft);padding:.2rem .5rem;border-radius:999px;vertical-align:middle}
+
+  /* glow primitives */
+  .glow{border-radius:999px;background:radial-gradient(circle,var(--amber) 0%,var(--sienna-soft) 38%,rgba(184,84,38,.2) 70%,transparent 75%)}
+  .ring{position:absolute;border:1px solid rgba(217,128,92,.3);border-radius:999px}
+  @keyframes breathe{0%,100%{transform:scale(1);opacity:.85}50%{transform:scale(1.12);opacity:1}}
+  @keyframes breathe2{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.07);opacity:.85}}
+  @keyframes drift{0%{transform:translateY(0);opacity:.25}50%{opacity:.6}100%{transform:translateY(-22px);opacity:0}}
+  .pulse{animation:breathe 3.6s ease-in-out infinite}
+  .pulse2{animation:breathe2 4.8s ease-in-out infinite}
+
+  .foot{text-align:center;color:var(--cream-dim);margin-top:3rem;font-size:1.02rem}
+  .foot b{color:var(--cream)}
+  .key{font-family:system-ui,sans-serif;font-size:.85rem;color:#8a7a6b;margin-top:.6rem}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">Brainstorm · Section 3 — The Science</div>
+  <h1>How should the science <em>look</em>?</h1>
+  <p class="sub">All three tell the same story. What changes is the <strong>central visual</strong> and how it moves as you scroll.</p>
+
+  <div class="arc">
+    <span class="pill">1 · Fog isn't aging</span><span class="arr">→</span>
+    <span class="pill">2 · Inside one brain cell</span><span class="arr">→</span>
+    <span class="pill">3 · 1,000+ power plants</span><span class="arr">→</span>
+    <span class="pill">4 · Fuel drops · waste builds</span><span class="arr">→</span>
+    <span class="pill">5 · A brain needs fuel + protection</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- A -->
+    <div class="card">
+      <div class="stage">
+        <div class="ring pulse2" style="width:140px;height:140px"></div>
+        <div class="ring pulse2" style="width:94px;height:94px;animation-delay:.4s"></div>
+        <div class="ring pulse2" style="width:52px;height:52px;animation-delay:.8s"></div>
+        <div class="glow pulse" style="width:24px;height:24px;box-shadow:0 0 26px 9px rgba(217,128,92,.7)"></div>
+      </div>
+      <div class="body">
+        <div class="tag">Option A</div>
+        <h3>The Descent</h3>
+        <p>The camera flies <em>inward</em> — your head → one brain cell → the glowing power plant inside. Each scroll beat drops a level deeper.</p>
+        <div class="mech">
+          <span>↓ &nbsp;Zoom is the scroll mechanic; depth = beat</span>
+          <span>↓ &nbsp;The mitochondrion is the destination</span>
+        </div>
+        <div class="trade"><b>Most cinematic.</b> Biggest "wow." Needs the most art / asset work to feel smooth.</div>
+      </div>
+    </div>
+
+    <!-- B (lean) -->
+    <div class="card lean">
+      <div class="stage">
+        <div class="glow pulse" style="width:50px;height:32px;border-radius:50%;box-shadow:0 0 24px 7px rgba(217,128,92,.75)"></div>
+        <div class="glow" style="width:50px;height:32px;border-radius:50%;opacity:.3;margin:0 16px"></div>
+        <div class="glow pulse" style="width:50px;height:32px;border-radius:50%;box-shadow:0 0 30px 9px rgba(217,128,92,.9);animation-delay:1.2s"></div>
+        <span style="position:absolute;bottom:12px;font-family:system-ui,sans-serif;font-size:.6rem;letter-spacing:.2em;color:#7a6a5b">BRIGHT → DIM → REVIVED</span>
+      </div>
+      <div class="body">
+        <div class="tag">Option B <span class="leanbadge">My lean</span></div>
+        <h3>The Living Power Plant</h3>
+        <p>The mitochondrion (your existing glowing asset) <em>stays centered</em> and changes <strong>state</strong> as you scroll: bright → fuel drains → waste chokes it → fuel + protection revive it.</p>
+        <div class="mech">
+          <span>◑ &nbsp;One object, changing state = beat</span>
+          <span>◑ &nbsp;Reuses the asset you already have</span>
+        </div>
+        <div class="trade"><b>Most emotional + buildable.</b> You watch it struggle, then revive. Less fly-through spectacle than A.</div>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="card">
+      <div class="stage">
+        <div style="width:56px;height:92px;border:2px solid rgba(217,128,92,.5);border-radius:9px;position:relative;display:flex;align-items:flex-end;padding:4px">
+          <div class="pulse" style="width:100%;height:55%;background:linear-gradient(0deg,var(--sienna),var(--sienna-soft));border-radius:5px"></div>
+        </div>
+        <span style="position:absolute;left:calc(50% + 56px);color:#7ED9A5;font-family:system-ui,sans-serif;font-size:1rem">↑ fuel</span>
+        <span style="position:absolute;left:calc(50% - 120px);color:#D96b6b;font-family:system-ui,sans-serif;font-size:1rem">↓ waste</span>
+      </div>
+      <div class="body">
+        <div class="tag">Option C</div>
+        <h3>The Energy Gauge</h3>
+        <p>An explainer diagram. A central <strong>energy meter</strong> with two visible forces — fuel charging it up, waste draining it. Each beat reveals another part of the diagram.</p>
+        <div class="mech">
+          <span>▤ &nbsp;Infographic reveal = beat</span>
+          <span>▤ &nbsp;Clearest "teaching" of the mechanism</span>
+        </div>
+        <div class="trade"><b>Clearest, most literal.</b> Easy to make accurate — but risks feeling clinical on this poetic brand.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <p class="foot">My lean: <b>B</b>, opening with a short taste of A's zoom as the intro — reuses your asset, lands emotionally, still teaches.</p>
+  <p class="key">Tell me <b>A</b>, <b>B</b>, or <b>C</b> in the terminal (or mix them).</p>
+</div>
+</body>
+</html>

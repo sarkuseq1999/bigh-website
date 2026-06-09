@@ -1,9 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
 import { useReducedMotionSafe } from "@/components/site/use-reduced-motion-safe";
 import { useTranslations } from "next-intl";
-import { Placeholder } from "@/components/site/placeholder";
 
 /* ─────────────────────────────────────────────────────────────────────────
    Premium ease curve shared across all staggered elements.
@@ -12,10 +12,19 @@ import { Placeholder } from "@/components/site/placeholder";
 const ease = [0.2, 0.7, 0.2, 1] as const;
 
 /* Mount-reveal factory.
-   Under reduced-motion we return an empty object so the element renders
-   statically (no transforms, no fade). */
+   The `animate` target must ALWAYS be present: the reduced-motion hook is
+   hydration-safe (false on first render, real value after mount), so if we
+   returned {} under reduce the element would be stuck at the `initial`
+   opacity-0 state it mounted with. Keeping `animate` (with zero duration
+   under reduce) guarantees the text always lands visible. */
 function makeReveal(reduce: boolean, delay: number) {
-  if (reduce) return {};
+  if (reduce) {
+    return {
+      initial: false as const,
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0 },
+    };
+  }
   return {
     initial: { opacity: 0, y: 18 },
     animate: { opacity: 1, y: 0 },
@@ -51,7 +60,7 @@ export function Hero() {
             clears the fixed header from *within* the viewport-tall column
             (rather than adding to the section height), so the CTAs always
             sit above the fold on laptop viewports. */}
-        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-32 md:pb-16 md:pl-14 md:pr-10">
+        <div className="relative z-10 flex flex-col justify-center pt-28 pb-12 pl-6 pr-6 md:pt-16 md:pb-12 md:pl-14 md:pr-10">
           <div className="max-w-[640px]">
 
             {/* Eyebrow */}
@@ -74,10 +83,10 @@ export function Hero() {
               })}
             </motion.h1>
 
-            {/* Subhead */}
+            {/* Subhead — serif middle register between display and body */}
             <motion.p
               {...r(0.24)}
-              className="mt-5 text-[1.125rem] font-normal leading-[1.5] text-ink md:text-[1.1875rem]"
+              className="mt-6 font-display text-[1.375rem] font-light leading-[1.35] text-ink md:text-[1.625rem]"
             >
               {t("subhead")}
             </motion.p>
@@ -85,7 +94,7 @@ export function Hero() {
             {/* Paragraph */}
             <motion.p
               {...r(0.36)}
-              className="mt-4 max-w-[58ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]"
+              className="mt-5 max-w-[54ch] text-[1.125rem] leading-[1.6] text-ink-soft md:text-[1.1875rem]"
             >
               {t("paragraph")}
             </motion.p>
@@ -93,12 +102,12 @@ export function Hero() {
             {/* CTAs */}
             <motion.div
               {...r(0.48)}
-              className="mt-7 flex flex-col gap-4 sm:flex-row sm:items-center"
+              className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center"
             >
-              {/* Primary — amber pill */}
+              {/* Primary — high-contrast ink pill */}
               <a
-                href="#"
-                className="inline-flex min-h-[48px] items-center justify-center rounded-full bg-amber px-7 py-3 text-[1.0625rem] font-medium text-ink transition-colors duration-200 hover:bg-amber-hi focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber"
+                href="#quiz"
+                className="inline-flex min-h-[52px] items-center justify-center rounded-full bg-ink px-8 py-3 text-[1.0625rem] font-medium text-paper transition-colors duration-200 hover:bg-forest focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               >
                 {t("ctaPrimary")}
               </a>
@@ -106,39 +115,54 @@ export function Hero() {
               {/* Secondary — text + arrow */}
               <a
                 href="#nuricell"
-                className="inline-flex min-h-[48px] items-center gap-1 text-[1.0625rem] font-medium text-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
+                className="inline-flex min-h-[52px] items-center gap-1 text-[1.0625rem] font-medium text-ink underline-offset-4 hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink"
               >
                 {t("ctaSecondary")}
               </a>
             </motion.div>
+
+            {/* CTA payoff — what the three minutes buy */}
+            <motion.p
+              {...r(0.56)}
+              className="mt-4 font-mono text-[0.6875rem] tracking-[0.12em] uppercase text-ink-soft"
+            >
+              {t("ctaNote")}
+            </motion.p>
 
           </div>
         </div>
 
         {/* ── RIGHT: portrait image block ──────────────────────────────── */}
         {/* On mobile this renders below the text at a fixed height.        */}
-        {/* On desktop it fills the right column and bleeds to the edge.    */}
-        <div className="relative h-[55vw] shrink-0 sm:h-[45vw] md:h-auto md:self-stretch">
-          <motion.div
-            className="h-full w-full"
-            {...(reduce
-              ? {}
-              : {
-                  initial: { scale: 1.0 },
-                  animate: { scale: 1.04 },
-                  transition: {
-                    duration: 20,
-                    ease: "linear",
-                    repeat: Infinity,
-                    repeatType: "mirror",
-                  },
-                })}
-          >
-            <Placeholder
-              label={t("imageAlt")}
-              className="h-full w-full rounded-none md:rounded-l-3xl"
-            />
-          </motion.div>
+        {/* On desktop the photo sits inset as a framed editorial card so   */}
+        {/* it never collides with the fixed header.                        */}
+        <div className="relative h-[110vw] shrink-0 sm:h-[80vw] md:h-auto md:self-stretch md:pt-20 md:pb-8 md:pr-8">
+          <div className="relative h-full w-full overflow-hidden rounded-none md:rounded-3xl">
+            <motion.div
+              className="relative h-full w-full"
+              {...(reduce
+                ? {}
+                : {
+                    initial: { scale: 1.0 },
+                    animate: { scale: 1.04 },
+                    transition: {
+                      duration: 20,
+                      ease: "linear",
+                      repeat: Infinity,
+                      repeatType: "mirror",
+                    },
+                  })}
+            >
+              <Image
+                src="/images/hero-portrait-v2.jpg"
+                alt={t("imageAlt")}
+                fill
+                priority
+                sizes="(min-width: 768px) 45vw, 100vw"
+                className="object-cover object-[center_30%]"
+              />
+            </motion.div>
+          </div>
         </div>
 
       </div>

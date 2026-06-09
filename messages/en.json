@@ -9,20 +9,22 @@
     "closeMenu": "Close menu",
     "language": "Language"
   },
-  "Languages": { "en": "EN", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
+  "Languages": { "en": "English", "ko": "한국어", "vi": "Tiếng Việt", "zh": "中文" },
   "Hero": {
-    "eyebrow": "BACKED BY 30 YEARS OF PUBLISHED SCIENCE",
-    "headline": "The best is <em>still ahead</em>.",
-    "subhead": "Stay sharp for the years that matter most.",
-    "paragraph": "Most brain supplements sell you a list of ingredients. We start thirty years deeper — at your brain's own batteries, the mitochondria — with nutrition shaped by the published research of neuroscientist Dr. Jiankang Liu.",
+    "eyebrow": "30 YEARS OF PUBLISHED NEUROSCIENCE · 22,000+ CITATIONS",
+    "headline": "Your best thinking is <em>still ahead</em>.",
+    "subhead": "Your edge runs on energy. After 45, energy needs looking after.",
+    "paragraph": "Your brain runs on tiny batteries — the mitochondria. NuriCell starts there, built on the published research of neuroscientist Dr. Jiankang Liu.",
     "ctaPrimary": "Take the 3-Minute Brain Age Quiz",
     "ctaSecondary": "Meet NuriCell →",
-    "imageAlt": "A vibrant, distinguished woman in her late 50s caught mid-thought in a sunlit room with books and warm wood"
+    "ctaNote": "Free · 3 minutes · your Brain Age and a protocol built for it",
+    "imageAlt": "A vibrant woman in her late fifties writing at her desk in a sunlit study"
   },
   "NewReality": {
     "eyebrow": "THE NEW REALITY",
     "headline": "The smarter the world gets, the more your mind is worth.",
-    "subhead": "Everyone's bracing for machines to make them obsolete. They've got it backwards.",
+    "subheadSetup": "Everyone's bracing for machines to make them obsolete.",
+    "subheadTurn": "They've got it backwards.",
     "bodyP1": "For the first time, machines can do the things we thought made us smart. They remember everything. They calculate in an instant. They answer before you've finished the question.",
     "bodyP2": "So what's left? The things they can't do.",
     "capabilities": {
@@ -30,84 +32,103 @@
       "wisdom": { "term": "Wisdom", "definition": "knowing what actually matters." },
       "taste": { "term": "Taste", "definition": "knowing what's good and what isn't." }
     },
-    "closing": "That last one is the rarest of all. It can't be downloaded. It can't be trained overnight. It's earned, over a lifetime, by a mind that stays sharp.",
-    "pivot": "Which means staying sharp is no longer about holding on. It's about staying ahead. And it starts somewhere smaller than you'd ever think."
+    "closing": "That last one is the rarest of all. It can't be downloaded. It can't be trained overnight. It's earned, over a lifetime, by a mind that stays sharp. Which means staying sharp is no longer about holding on — it's about staying ahead.",
+    "pivotLead": "And it starts somewhere",
+    "pivotMid": "smaller",
+    "pivotEnd": "than you'd ever think."
   },
   "Reason": {
     "eyebrow": "THE REASON",
     "headline": "Your brain runs on <em>tiny batteries</em>.",
     "subhead": "Billions of them. And they're the reason you feel sharp — or you don't.",
-    "bodyP1": "Your brain is the hungriest part of you. Just 2% of your body, burning 20% of your energy. It never stops, and it never coasts.",
-    "bodyP2": "All that energy is made inside your cells by microscopic power plants called mitochondria — your brain's batteries. When they're full and firing, you feel it. Quick. Clear. On.",
-    "bodyP3": "But like every battery, they fade with time. Scientists have a name for it: mitochondrial decay. As the batteries weaken, the brain gets less of the one thing it runs on.",
-    "turn": "Here's what most people never hear: batteries can be looked after.",
+    "bodyP1": "Your brain is the hungriest organ you own. It never stops, and it never coasts.",
+    "bodyP2": "All that energy is made by billions of microscopic batteries inside your cells — the mitochondria. When they're full and firing, you feel it. Quick. Clear. On.",
+    "bodyP3": "But like every battery, they fade with time. Scientists call it mitochondrial decay. As the batteries weaken, the brain gets less of the one thing it runs on.",
+    "turn": "But batteries can be looked after.",
     "differentiation": "Not at the surface. At the source.",
-    "pivot": "And we didn't guess at any of this. The roadmap came from thirty years of published research by one neuroscientist.",
-    "calloutStat": "2% / 20%",
-    "calloutLabel": "of the body / of its energy"
+    "pivot": "None of this is guesswork. The roadmap came from thirty years of published research by one neuroscientist.",
+    "calloutStatA": "2%",
+    "calloutStatB": "20%",
+    "calloutLabel": "of your body / of its energy",
+    "visualAlt": "A mitochondrion glowing like a charged battery cell among dimmer, aging ones",
+    "visualCaption": "Mitochondria — your brain's batteries. You have billions."
   },
   "Scientist": {
     "eyebrow": "THE SCIENTIST",
-    "headline": "Meet Dr. Jiankang <em>Liu</em>.",
-    "subhead": "He has spent thirty years on a single question: how do you keep a brain sharp?",
+    "headline": "Thirty years. One question.",
+    "subhead": "Neuroscientist Dr. Jiankang Liu has spent his career on it: how does a brain keep its energy?",
     "anchor": "3 papers. 1 issue. 22,000+ citations.",
-    "bodyP1": "In February 2002, three of his papers ran in a single issue of PNAS — the Proceedings of the National Academy of Sciences, one of the most respected journals in science. Most researchers never place a single paper there in a lifetime. He placed three at once.",
-    "bodyP2": "His work has since been cited by other scientists more than 22,000 times.",
-    "bodyP3": "This isn't a wellness trend with a celebrity face. It's a life's work — trained at UC Berkeley, carried through laboratories in the US and abroad, focused on one idea: how the brain makes its energy, and how to help it keep making it.",
+    "bodyP1": "In February 2002, three of his papers ran in a single issue of PNAS — the Proceedings of the National Academy of Sciences, among the most respected journals in science. Most researchers never place one paper there. He placed three at once — and they have been cited more than 22,000 times since.",
+    "bodyP2": "What the papers showed, in plain words: two natural compounds — acetyl-L-carnitine and alpha-lipoic acid — restored failing mitochondria, and with them memory, in aging animals.",
+    "bodyP3": "It's a life's work — trained at UC Berkeley, carried through laboratories in the US and abroad, focused on one idea: how the brain makes its energy, and how to help it keep making it.",
     "bodyP4": "When our founder, Mo Chen, set out to build BiGH, he didn't start with a logo or a launch plan. He started with a scientist he's known for years — and the belief that this research deserved to reach the people who need it.",
     "pivot": "His research became a formula. We call it NuriCell.",
-    "photoLabel": "[REAL PHOTO: Dr. Liu]"
+    "photoLabel": "[REAL PHOTO: Dr. Liu]",
+    "photoAlt": "A shelf of uniformly bound research journal volumes in deep green buckram",
+    "photoCaption": "The work, in print."
   },
   "Flagship": {
     "eyebrow": "THE FLAGSHIP",
-    "badge": "FROM THE LAB",
+    "badge": "Formulated by Dr. Jiankang Liu",
     "beat1": { "headline": "NuriCell.", "subhead": "Thirty years of research. Three capsules a day." },
-    "beat2": { "headline": "His formula. Not ours.", "body": "This is the one Dr. Liu built himself — straight from the research you just read about. Everything else we make is built on his science. This one is his science." },
-    "beat3": { "headline": "Two nutrients. Greater together.", "body": "Acetyl-L-carnitine and alpha-lipoic acid — the two his papers centered on. Alone, each supports the brain's batteries. Together, his research showed, they do far more. That pairing is the discovery." },
+    "beat2": { "headline": "His formula. Not ours.", "body": "Three papers in a single issue of PNAS, February 2002 — cited more than 22,000 times since. This is the formula Dr. Liu built himself, straight from that research. Everything else we make is built on his science. This one is his science." },
+    "beat3": { "headline": "Two nutrients. Greater together.", "body": "Acetyl-L-carnitine and alpha-lipoic acid — the two nutrients his PNAS papers centered on. Alone, each supports the brain's batteries. Together, his research showed, they do far more. That pairing is the discovery.", "nutrientA": "Acetyl-L-carnitine", "nutrientB": "Alpha-lipoic acid" },
     "beat4": { "headline": "More isn't better. Right is better.", "body": "We didn't chase the biggest numbers on the label. We matched the doses to the science — the amounts the research actually points to." },
     "beat5": { "headline": "Built complete.", "body": "Rounded out with creatine and choline — energy and signaling support for a brain that never clocks out." },
-    "beat6": { "headline": "Three capsules. Every morning.", "body": "Working where it counts — not at the surface, at the source.", "cta": "Start with NuriCell →", "pivot": "It's the foundation. But it was never meant to work alone." },
-    "bottleLabel": "[PLACEHOLDER RENDER — swap real bottle]",
-    "capsuleLabel": "[IMAGE: a single capsule in an open palm]"
+    "beat6": { "headline": "Three capsules. Every morning.", "body": "Working where it counts — not at the surface, at the source. So the morning meeting, the crossword, the name across the room are right there when you reach for them.", "cta": "Start with NuriCell →", "pivot": "It's the foundation. But it was never meant to work alone." },
+    "bottleLabel": "A bottle of NuriCell in a beam of warm light",
+    "capsuleLabel": "Three capsules beside a glass of water in morning light"
   },
   "System": {
     "eyebrow": "THE SYSTEM",
-    "headline": "One formula from the lab. Five more built on the science. One complete team.",
-    "intro": "NuriCell is the foundation. Around it, five formulas — each with a job, each built on the same research. Together, they're a system, not a shelf.",
+    "headline": "A system, not a shelf.",
+    "intro": "One formula from the lab. Five more built on the same published science. NuriCell is the foundation; around it, five formulas — each with a job, all working toward one thing: a mind that stays sharp.",
     "products": {
-      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source.",                        "tag": "FROM THE LAB" },
-      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                "tag": "Built on the Science" },
-      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                      "tag": "Built on the Science" },
-      "advancedOpc": { "name": "Advanced OPC",       "role": "The Plumber",     "line": "Protects the pathways.",                        "tag": "Built on the Science" },
-      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                     "tag": "Built on the Science" },
-      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.", "tag": "Built on the Science" }
+      "nuricell":    { "name": "NuriCell",          "role": "The Foundation",  "line": "Energy, at the source — the formula Dr. Liu built himself.", "tag": "FROM THE LAB",          "fact": "Acetyl-L-carnitine + alpha-lipoic acid" },
+      "natureCalm":  { "name": "Nature Calm",        "role": "The Shield",      "line": "Calm against the day's stress.",                "tag": "Built on the Science", "fact": "Daily stress support" },
+      "turmerific":  { "name": "Turmerific",         "role": "The Firefighter", "line": "Cools the everyday fire.",                      "tag": "Built on the Science", "fact": "Turmeric curcumin" },
+      "advancedOpc": { "name": "Advanced OPC",       "role": "The Guardian",    "line": "Protects the pathways your brain depends on.",  "tag": "Built on the Science", "fact": "Grape-seed OPCs" },
+      "greenBee":    { "name": "Green Bee Propolis", "role": "The Builder",     "line": "Daily defense and repair.",                     "tag": "Built on the Science", "fact": "Bee propolis" },
+      "deerHorn":    { "name": "Deer Horn Reishi",   "role": "The Adapter",     "line": "Day-and-night balance, overnight restoration.", "tag": "Built on the Science", "fact": "Reishi mushroom" }
     },
-    "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol" }
+    "bundles": { "three": "Shop the 3 Treasures", "four": "Shop the 4 Treasures", "protocol": "Build Your Protocol", "single": "Or start with NuriCell →" }
   },
   "Proof": {
     "eyebrow": "THE PROOF",
-    "headline": "Real science. Real people.",
+    "headline": "The proof is in print.",
+    "subhead": "We're pre-launch, so you won't find paid testimonials here. You'll find a research record almost no supplement company can claim.",
     "testimonials": {
       "one":   { "quote": "At 62, I'm running my business better than I did at 45. I feel switched on.", "name": "Ji-woo K.", "location": "Seoul", "note": "(placeholder)" },
       "two":   { "quote": "Part of my morning now. I just feel clear and steady through the day.",        "name": "Daniel R.", "location": "California", "note": "(placeholder)" },
       "three": { "quote": "My whole family takes it. It's the one thing none of us skip.",                 "name": "Mai T.",    "location": "Hanoi", "note": "(placeholder)" }
     },
+    "footnote": "Illustrative stories — verified member reviews arrive with launch.",
+    "vignettesTitle": "The people we built it for",
+    "vignettesNote": "Illustrative vignettes, not testimonials — verified member stories will appear here after launch.",
     "record": {
+      "papers":    { "value": "3",        "label": "papers in one issue of PNAS" },
+      "citations": { "value": "22,000+",  "label": "citations by other scientists" },
+      "years":     { "value": "30",       "label": "years of published research" },
+      "berkeley":  { "value": "Berkeley", "label": "where the training began" },
       "pnas": "Published in PNAS",
-      "citations": "22,000+ citations",
-      "years": "30 years of research",
-      "berkeley": "UC Berkeley–trained",
-      "cta": "Read the research →"
+      "cta": "Meet the scientist →"
     }
   },
   "SoftEntry": {
-    "eyebrow": "FIND YOUR BRAIN AGE",
+    "eyebrow": "THE FIRST STEP",
     "headline": "How sharp is your brain, really?",
-    "subhead": "Three minutes. A few questions. Your Brain Age — and a protocol built for it.",
+    "subhead": "A few questions, three minutes. You'll see your Brain Age — and the protocol the science points to for it.",
     "quizCta": "Take the Brain Age Quiz →",
+    "trust": "Free · 3 minutes · no card, no commitment",
+    "sample": {
+      "label": "Your result",
+      "value": "47",
+      "actual": "Actual age 54",
+      "note": "Sample report"
+    },
     "newsletter": {
       "title": "The Longevity Signal",
-      "line": "No spam. No schedule. Just science.",
+      "line": "One finding a month, explained in plain English. Four minutes to read. One click to leave.",
       "placeholder": "you@example.com",
       "cta": "Subscribe"
     }
@@ -115,11 +136,12 @@
   "Founder": {
     "eyebrow": "A NOTE FROM OUR FOUNDER",
     "headline": "Why I built this.",
-    "bodyP1": "I didn't set out to build a supplement company. I set out to bring one scientist's life's work to the people who need it — starting with my own family.",
-    "bodyP2": "Everything here rests on real, published research, and it's made the way I'd make it for the people I love. No shortcuts. No hype. Just the science, done right — so you can stay sharp for everything still ahead.",
+    "bodyP1": "I didn't set out to build a supplement company. I set out to bring Dr. Liu's thirty years of work to the people who need it — starting with my own family.",
+    "bodyP2": "Everything here is made the way I'd make it for them. No shortcuts. Just the science, done right — so you can stay sharp for everything still ahead.",
     "signoff": "— Mo Chen, Founder",
     "cta": "Start with NuriCell →",
-    "photoLabel": "[REAL PHOTO: Founder]"
+    "photoLabel": "[REAL PHOTO: Founder]",
+    "photoAlt": "A letter in progress beside a fountain pen and a bottle of NuriCell"
   },
   "Footer": {
     "mission": "Stay sharp for the years that matter most. Brain-health nutrition shaped by published science.",
