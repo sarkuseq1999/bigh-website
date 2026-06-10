@@ -66,3 +66,46 @@
   }
   ::selection { background: var(--amber); color: var(--ink); }
 }
+
+@layer components {
+  /* ── hero "Ignite + Protect" atmosphere ─────────────────────────────
+     The dark base doubles as the WebGL canvas backdrop (the canvas is
+     transparent) and as the floor of the no-JS / no-WebGL fallback. */
+  .hero-dark {
+    background-color: #0B100D;
+  }
+  .hero-base {
+    background:
+      radial-gradient(1100px 700px at 68% 38%, rgba(194, 138, 58, 0.10), transparent 60%),
+      radial-gradient(900px 600px at 30% 82%, rgba(68, 205, 169, 0.05), transparent 60%),
+      linear-gradient(180deg, #0D130F 0%, #0B100D 55%, #0C110E 100%);
+  }
+  .hero-base::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(140% 100% at 50% 40%, transparent 58%, rgba(5, 8, 6, 0.55) 100%);
+  }
+
+  /* Static "already lit" glows: appear only if WebGL hasn't taken over
+     within 1.2s (the scene unmounts this layer when it goes live). */
+  .hero-static-glow {
+    opacity: 0;
+    filter: blur(2px);
+    background:
+      radial-gradient(220px 220px at 62% 40%, rgba(221, 169, 78, 0.50), transparent 70%),
+      radial-gradient(160px 160px at 78% 55%, rgba(221, 169, 78, 0.38), transparent 70%),
+      radial-gradient(130px 130px at 55% 64%, rgba(194, 138, 58, 0.35), transparent 70%),
+      radial-gradient(110px 110px at 70% 28%, rgba(221, 169, 78, 0.28), transparent 70%);
+    animation: hero-glow-in 0.9s ease-out 1.2s forwards;
+  }
+  @keyframes hero-glow-in {
+    to { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .hero-static-glow {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}
