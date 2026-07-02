@@ -1,23 +1,28 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import { notFound } from "next/navigation";
-import { setRequestLocale, getTranslations } from "next-intl/server";
+import { setRequestLocale } from "next-intl/server";
 
 import { ProductGallery } from "@/components/clone/product-gallery";
 import { Reveal } from "@/components/clone/reveal";
 import { routing, type Locale } from "@/i18n/routing";
-import { isProductSlug, productName, PRODUCT_HUES, type ProductSlug } from "@/data/products";
+import { isProductSlug, productName, type ProductSlug } from "@/data/products";
+import productLayout from "@/data/product-layout.json";
 import {
-  buyLink,
   listSlugs,
   loadPage,
   localesWithSlug,
   mdToHtml,
   pageHeading,
   parseProduct,
-  productImages,
   type HarvestPage,
 } from "@/lib/content";
 import { imageDims } from "@/lib/images";
+
+const LAYOUT = productLayout as Record<
+  string,
+  { heroBg: string | null; bandBg: string | null; gallery: string[] }
+>;
 
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
@@ -70,39 +75,38 @@ function ProductPage({
   page,
   slug,
   locale,
-  buyLabel,
 }: {
   page: HarvestPage;
   slug: ProductSlug;
   locale: Locale;
-  buyLabel: string;
 }) {
   const title = productName(slug, locale);
-  const hue = PRODUCT_HUES[slug];
+  const layout = LAYOUT[slug];
   const content = parseProduct(page);
-  const gallery = productImages(page).map((src) => ({ src, ...imageDims(src) }));
-  const buy = buyLink(page);
+  const gallery = layout.gallery.map((src) => ({ src, ...imageDims(src) }));
+
+  // the original renders "Key Ingredients"-style card sections on white and
+  // the remaining prose sections on the second themed band
+  const cardSections = content.sections.filter((s) => s.cards.length > 0);
+  const proseSections = content.sections.filter((s) => s.cards.length === 0);
 
   return (
     <article>
-      {/* wave hero in the product's label color, like the original */}
-      <section
-        className="relative overflow-hidden text-white"
-        style={{
-          background: `
-            radial-gradient(90rem 42rem at 115% -18%, color-mix(in srgb, ${hue} 55%, white) 0%, transparent 55%),
-            radial-gradient(70rem 36rem at -20% 118%, color-mix(in srgb, ${hue} 60%, #1c2340) 0%, transparent 60%),
-            linear-gradient(155deg, color-mix(in srgb, ${hue} 82%, #10315c) 0%, ${hue} 48%, color-mix(in srgb, ${hue} 60%, white) 100%)`,
-        }}
-      >
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 pb-24 pt-12 sm:px-6 md:grid-cols-[1fr_1.1fr]">
+      {/* hero — the product's own background artwork, measured layout */}
+      <section className="relative text-white">
+        <div className="absolute inset-0 overflow-hidden">
+          {layout.heroBg && (
+            <Image src={layout.heroBg} alt="" fill priority className="object-cover object-top" sizes="100vw" />
+          )}
+        </div>
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-4 pb-28 pt-8 sm:px-6 md:grid-cols-[46%_54%] md:pb-36">
           <Reveal>
             <ProductGallery images={gallery} alt={title} />
           </Reveal>
-          <Reveal delay={100}>
-            <h1 className="text-4xl font-bold text-white md:text-5xl">{title}</h1>
+          <Reveal delay={100} className="md:pt-10">
+            <h1 className="text-4xl font-semibold text-white md:text-5xl">{title}</h1>
             {content.intro.map((p) => (
-              <p key={p.slice(0, 24)} className="mt-5 max-w-xl leading-relaxed text-white/95">
+              <p key={p.slice(0, 24)} className="mt-5 max-w-xl text-justify font-medium leading-relaxed text-white">
                 {p}
               </p>
             ))}
@@ -114,78 +118,109 @@ function ProductPage({
                     href={f.href}
                     target="_blank"
                     rel="noopener"
-                    className="rounded border border-white/80 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-white hover:text-heading"
+                    className="rounded border border-white px-4 py-2.5 text-sm font-medium leading-none text-white transition-colors hover:bg-white hover:text-heading"
                   >
                     {f.label}
                   </a>
                 ))}
               </div>
             )}
-            <div className="mt-8 flex flex-wrap items-center gap-5">
-              {content.price && <p className="text-3xl font-bold text-white">{content.price}</p>}
-              {buy && (
-                <a
-                  href={buy}
-                  className="rounded bg-[#f2762e] px-8 py-3 text-lg font-bold text-white shadow-[0_8px_24px_rgba(0,0,0,0.3)] transition-transform hover:scale-[1.03]"
-                >
-                  {buyLabel}
-                </a>
-              )}
-            </div>
           </Reveal>
         </div>
-        {/* bottom white wave */}
-        <svg
-          aria-hidden
-          className="absolute bottom-0 left-0 h-14 w-full text-white md:h-20"
-          viewBox="0 0 1440 96"
-          preserveAspectRatio="none"
-        >
-          <path
-            fill="currentColor"
-            d="M0,64 C240,96 480,16 720,32 C960,48 1200,96 1440,48 L1440,96 L0,96 Z"
-          />
-        </svg>
+        {/* the original's white wave divider image */}
+        <Image
+          src="/original/uploads/2019/04/nano_shapedivider7-1024x128.png"
+          alt=""
+          width={1024}
+          height={128}
+          unoptimized
+          className="absolute bottom-0 left-0 h-auto w-full"
+          sizes="100vw"
+        />
       </section>
 
-      {/* parsed content sections (Key Ingredients cards, Synergistic Effects, …) */}
-      <div className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-        {content.sections.map((sec) => (
-          <section key={sec.title || sec.paragraphs[0]} className="mt-14">
-            {sec.title && <h2 className="text-center text-3xl font-bold">{sec.title}</h2>}
+      {/* white content: ingredient card sections */}
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
+        {cardSections.map((sec) => (
+          <section key={sec.title} className="mt-12">
+            {sec.title && (
+              <h2 className="text-center text-[clamp(1.9rem,3.3vw,3rem)] font-semibold">{sec.title}</h2>
+            )}
             {sec.paragraphs.map((p) => (
-              <p key={p.slice(0, 24)} className="mx-auto mt-5 max-w-3xl text-center">
+              <p key={p.slice(0, 24)} className="mx-auto mt-4 max-w-3xl text-center">
                 {p}
               </p>
             ))}
-            {sec.cards.length > 0 && (
-              <ul
-                className={`mx-auto mt-10 grid max-w-5xl gap-5 sm:grid-cols-2 ${
-                  sec.cards.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
-                }`}
-              >
-                {sec.cards.map((c) => (
-                  <li key={c.title} className="rounded-xl bg-muted px-5 py-6 text-center">
-                    <h3 className="text-lg font-bold">{c.title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed">{c.text}</p>
-                  </li>
-                ))}
-              </ul>
-            )}
+            <ul
+              className={`mx-auto mt-9 grid max-w-5xl gap-5 sm:grid-cols-2 ${
+                sec.cards.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+              }`}
+            >
+              {sec.cards.map((c) => (
+                <li key={c.title} className="rounded-xl bg-[#f2f2f4] px-5 py-6 text-center">
+                  <h3 className="text-lg font-semibold">{c.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed">{c.text}</p>
+                </li>
+              ))}
+            </ul>
+            {sec.images.map((src) => (
+              <Image
+                key={src}
+                src={src}
+                alt=""
+                {...imageDims(src)}
+                className="mx-auto mt-10 h-auto w-full max-w-3xl"
+                sizes="(max-width: 768px) 95vw, 768px"
+              />
+            ))}
           </section>
         ))}
-
-        {buy && (
-          <div className="mt-16 text-center">
-            <a
-              href={buy}
-              className="inline-block rounded bg-[#f2762e] px-10 py-3 text-lg font-bold text-white shadow-[0_8px_24px_rgba(0,0,0,0.2)] transition-transform hover:scale-[1.03]"
-            >
-              {buyLabel}
-            </a>
-          </div>
-        )}
       </div>
+
+      {/* themed band: remaining prose sections over the product's band art */}
+      {proseSections.length > 0 && (
+        <section className="relative mt-14 overflow-hidden">
+          {layout.bandBg && (
+            <Image src={layout.bandBg} alt="" fill className="object-cover" sizes="100vw" />
+          )}
+          <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-16 sm:px-6 md:grid-cols-2">
+            {proseSections.map((sec, i) => (
+              <Reveal key={sec.title || i} delay={i * 80}>
+                {sec.paragraphs.length > 0 || sec.images.length > 0 ? (
+                  <div className={layout.bandBg ? "rounded-xl bg-white/75 px-6 py-7 backdrop-blur-sm" : ""}>
+                    {sec.title && (
+                      <h2 className="text-center text-2xl font-semibold text-heading">{sec.title}</h2>
+                    )}
+                    {sec.paragraphs.map((p) => (
+                      <p key={p.slice(0, 24)} className="mt-4 text-center text-[15px] leading-relaxed">
+                        {p}
+                      </p>
+                    ))}
+                    {sec.images.map((src) => (
+                      <Image
+                        key={src}
+                        src={src}
+                        alt=""
+                        {...imageDims(src)}
+                        className="mx-auto mt-6 h-auto w-full max-w-xl"
+                        sizes="(max-width: 768px) 90vw, 560px"
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <h2
+                    className={`text-center text-[clamp(2rem,3.6vw,3.2rem)] font-semibold ${
+                      layout.bandBg ? "text-heading" : ""
+                    }`}
+                  >
+                    {sec.title}
+                  </h2>
+                )}
+              </Reveal>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 }
@@ -203,8 +238,7 @@ export default async function ClonePage({
   if (!page) notFound();
 
   if (isProductSlug(slug)) {
-    const t = await getTranslations({ locale, namespace: "Product" });
-    return <ProductPage page={page} slug={slug} locale={locale} buyLabel={t("buyNow")} />;
+    return <ProductPage page={page} slug={slug} locale={locale} />;
   }
 
   // generic harvested page (about, science, legal, badges, …)
@@ -218,7 +252,7 @@ export default async function ClonePage({
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="max-w-2xl text-4xl font-bold leading-tight md:text-5xl">{title}</h1>
+      <h1 className="max-w-2xl text-4xl font-semibold leading-tight md:text-5xl">{title}</h1>
       <div
         className="prose-clone mt-8"
         // our own harvested, spam-stripped content — no third-party input

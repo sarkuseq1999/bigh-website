@@ -1,0 +1,92 @@
+{
+ "advanced-opc-formula": {
+  "heroBg": "/original/uploads/2019/04/opc_bg_1.jpg",
+  "bandBg": null,
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_opc_1-1.png",
+   "/original/uploads/2019/03/1140_1183_opc_2.png",
+   "/original/uploads/2019/03/1140_1183_opc_3.png"
+  ]
+ },
+ "deer-horn-reishi": {
+  "heroBg": "/original/uploads/2021/12/DeerHorn2v4.jpg",
+  "bandBg": "/original/uploads/2021/12/DeerHorn2v4.jpg",
+  "gallery": [
+   "/original/uploads/2021/12/final61.1410-2-1.png",
+   "/original/uploads/2021/12/final62.1411.png",
+   "/original/uploads/2021/12/final63.1412-2.png"
+  ]
+ },
+ "green-bee-propolis": {
+  "heroBg": "/original/uploads/2019/04/propolis_bg_new4.jpg",
+  "bandBg": "/original/uploads/2019/04/propolis_bg_s3_5.png",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_propolis_1-2.png",
+   "/original/uploads/2019/03/1140_1183_propolis_2-1.png",
+   "/original/uploads/2019/03/1140_1183_propolis_3-1.png"
+  ]
+ },
+ "heart-q10": {
+  "heroBg": "/original/uploads/2019/04/Q10_bg_1.png",
+  "bandBg": "/original/uploads/2019/04/q10_bg_s3.png",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_heart_1.png",
+   "/original/uploads/2019/03/1140_1183_heart_2.png",
+   "/original/uploads/2019/03/1140_1183_heart_3.png"
+  ]
+ },
+ "nature-calm": {
+  "heroBg": "/original/uploads/2019/04/nature_bg_new1.jpg",
+  "bandBg": "/original/uploads/2019/04/nature_bg_s3_2.jpg",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_nature_1.png",
+   "/original/uploads/2019/03/1140_1183_nature_2.png",
+   "/original/uploads/2019/03/1140_1183_nature_3.png"
+  ]
+ },
+ "nano-detoxifier": {
+  "heroBg": "/original/uploads/2019/04/nano_bg_1.png",
+  "bandBg": "/original/uploads/2019/04/nano_s3_bg_4.jpg",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_nano_1.png",
+   "/original/uploads/2019/03/1140_1183_nano_2.png",
+   "/original/uploads/2019/03/1140_1183_nano_3.png"
+  ]
+ },
+ "nuricell": {
+  "heroBg": "/original/uploads/2019/04/nuricell_bg_2.jpg",
+  "bandBg": "/original/uploads/2019/04/nuricell_s3_bg_4.png",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_nuri1-1.png",
+   "/original/uploads/2019/03/1140_1183_nuri2-2.png",
+   "/original/uploads/2019/03/1140_1183_nuri3-1.png"
+  ]
+ },
+ "super-green": {
+  "heroBg": "/original/uploads/2019/04/super_bg_4.jpg",
+  "bandBg": "/original/uploads/2019/04/super_s3_bg1.jpg",
+  "gallery": [
+   "/original/uploads/2019/03/1140_1183_super_1.png",
+   "/original/uploads/2019/03/1140_1183_super_2.png",
+   "/original/uploads/2019/03/1140_1183_super_3.png"
+  ]
+ },
+ "turmerific": {
+  "heroBg": "/original/uploads/2020/03/Turmeric-Page-Top-Banner_JPGV1-scaled-1.jpg",
+  "bandBg": null,
+  "gallery": [
+   "/original/uploads/2020/03/Turmeric-Page-Top-Banner-ART-5-1-494x1024.png",
+   "/original/uploads/2020/03/1140_1183_Turmerific1.png",
+   "/original/uploads/2020/03/1140_1183_Turmerific2.png"
+  ]
+ },
+ "uber-calcium": {
+  "heroBg": "/original/uploads/2019/04/uber_bg_2.jpg",
+  "bandBg": "/original/uploads/2019/04/uber_bg_s3_1.jpg",
+  "gallery": [
+   "/original/uploads/2019/04/1140_1183_Uber1.png",
+   "/original/uploads/2019/04/1140_1183_uber2.png",
+   "/original/uploads/2019/04/1140_1183_uber3.png"
+  ]
+ }
+}

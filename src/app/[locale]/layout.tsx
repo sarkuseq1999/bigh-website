@@ -2,28 +2,19 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Fraunces, Hanken_Grotesk, Spline_Sans_Mono } from "next/font/google";
+import { Roboto } from "next/font/google";
 
 import { SiteFooter } from "@/components/clone/footer";
 import { SiteHeader } from "@/components/clone/header";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  variable: "--font-fraunces",
-  axes: ["opsz", "SOFT"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-const hanken = Hanken_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-hanken",
-  display: "swap",
-});
-const splineMono = Spline_Sans_Mono({
-  subsets: ["latin"],
-  variable: "--font-spline",
+// The original site sets every heading and button in Roboto (600) — measured
+// from the live pages, not guessed.
+const roboto = Roboto({
+  subsets: ["latin", "latin-ext", "vietnamese"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-roboto",
   display: "swap",
 });
 
@@ -84,7 +75,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${fraunces.variable} ${hanken.variable} ${splineMono.variable} h-full antialiased`}
+      className={`${roboto.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
         {cjkHref && (

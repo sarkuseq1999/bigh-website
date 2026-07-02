@@ -12,10 +12,11 @@ interface HeroProps {
   learnMore: string;
 }
 
-// Faithful recreation of the original hero: navy/yellow diagonal backdrop
-// (the site's own testing6.jpg), fresh-produce collage on the yellow side,
-// centered white type on the navy side, green CTA. Enhancement = a single
-// orchestrated entrance and a slow drift on the produce.
+// Measured clone of the original hero (1440px reference):
+// section = 74vw tall; bg = testing6.jpg (navy/yellow diagonal);
+// produce banner absolutely at 43% / 31%, 69% wide, overhanging the section
+// bottom exactly like the original; centered white Roboto-600 text column
+// on the navy side (49px / 154px / 28px at full width).
 export function Hero({ eyebrow, brand, tagline, learnMore }: HeroProps) {
   const scope = useRef<HTMLElement>(null);
 
@@ -31,85 +32,69 @@ export function Hero({ eyebrow, brand, tagline, learnMore }: HeroProps) {
       ctx = gsap.context(() => {
         gsap
           .timeline({ defaults: { ease: "power3.out" } })
-          .fromTo("[data-hero='eyebrow']", { opacity: 0, y: 16 }, { opacity: 1, y: 0, duration: 0.7 }, 0.1)
-          .fromTo("[data-hero='brand']", { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.9 }, 0.25)
-          .fromTo("[data-hero='tagline']", { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 0.8 }, 0.45)
-          .fromTo("[data-hero='cta']", { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.7 }, 0.65)
-          .fromTo(
-            "[data-hero='fruit']",
-            { opacity: 0, x: 60, rotate: 4 },
-            { opacity: 1, x: 0, rotate: 0, duration: 1.1 },
-            0.2,
-          )
-          .fromTo(
-            "[data-hero='veg']",
-            { opacity: 0, x: 80, rotate: -4 },
-            { opacity: 1, x: 0, rotate: 0, duration: 1.1 },
-            0.35,
-          );
-        // slow ambient drift on the collage
-        gsap.to("[data-hero='fruit']", { y: -10, duration: 5, yoyo: true, repeat: -1, ease: "sine.inOut" });
-        gsap.to("[data-hero='veg']", { y: 8, duration: 6, yoyo: true, repeat: -1, ease: "sine.inOut" });
+          .fromTo("[data-hero='text']", { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.9 }, 0.1)
+          .fromTo("[data-hero='banner']", { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 1.1 }, 0.3);
       }, el);
     });
     return () => ctx?.revert();
   }, []);
 
   return (
-    <section ref={scope} className="relative overflow-hidden bg-navy" aria-label={`${brand} — ${tagline}`}>
-      <Image
-        src="/original/uploads/2019/04/testing6.jpg"
-        alt=""
-        fill
-        priority
-        className="object-cover"
-        sizes="100vw"
-      />
-      <div className="relative mx-auto grid min-h-[34rem] max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 md:grid-cols-[1.05fr_1fr]">
-        <div className="relative z-10 text-center">
-          <p data-hero="eyebrow" className="font-display text-2xl italic text-white/95 opacity-0 md:text-3xl">
-            {eyebrow}
-          </p>
-          <h1 data-hero="brand" className="font-display mt-2 text-7xl text-white opacity-0 md:text-8xl">
-            {brand}
-          </h1>
-          <div aria-hidden className="mx-auto mt-5 h-px w-16 bg-white/50" />
-          <p data-hero="tagline" className="mx-auto mt-6 max-w-sm text-lg leading-relaxed text-white opacity-0">
-            {tagline}
-          </p>
-          <div data-hero="cta" className="mt-8 opacity-0">
-            <Link
-              href="/about"
-              className="inline-block rounded bg-green px-7 py-2.5 font-semibold text-white shadow-[0_6px_20px_rgba(0,0,0,0.25)] transition-colors hover:bg-green-dark"
-            >
-              {learnMore}
-            </Link>
-          </div>
-        </div>
+    <section
+      ref={scope}
+      className="relative z-10 bg-navy md:h-[74vw] md:max-h-[67rem]"
+      aria-label={`${brand} — ${tagline}`}
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src="/original/uploads/2019/04/testing6.jpg"
+          alt=""
+          fill
+          priority
+          className="object-cover"
+          sizes="100vw"
+        />
+      </div>
 
-        <div className="relative hidden min-h-[30rem] md:block">
-          <div data-hero="fruit" className="absolute -right-8 -top-4 w-[125%] max-w-none opacity-0">
-            <Image
-              src="/original/uploads/2019/04/fruits-and-berry.png"
-              alt=""
-              width={300}
-              height={182}
-              priority
-              unoptimized
-              className="h-auto w-full"
-            />
-          </div>
-          <div data-hero="veg" className="absolute -right-6 bottom-0 w-[115%] max-w-none opacity-0">
-            <Image
-              src="/original/uploads/2019/04/herbs-and-veg.png"
-              alt=""
-              width={300}
-              height={244}
-              unoptimized
-              className="h-auto w-full"
-            />
-          </div>
+      {/* text column — vertically centered on the navy side */}
+      <div
+        data-hero="text"
+        className="relative px-6 pb-8 pt-16 text-center opacity-0 md:absolute md:left-[3%] md:top-[42%] md:w-[37%] md:-translate-y-1/2 md:px-0 md:pb-0 md:pt-0"
+      >
+        <p className="text-[clamp(1.6rem,3.4vw,3.06rem)] font-semibold leading-tight text-white/85">
+          {eyebrow}
+        </p>
+        <h1 className="text-[clamp(4rem,10.7vw,9.6rem)] font-semibold leading-none text-white/85">
+          {brand}
+        </h1>
+        <div aria-hidden className="mx-auto mt-6 h-px w-24 bg-white/40" />
+        <p className="mx-auto mt-7 max-w-md text-[clamp(1.1rem,1.95vw,1.75rem)] font-semibold leading-snug text-white/85">
+          {tagline}
+        </p>
+        <div className="mt-9">
+          <Link
+            href="/about"
+            className="inline-block rounded bg-green px-[30px] py-[15px] text-base font-medium leading-none text-white transition-colors hover:bg-green-dark"
+          >
+            {learnMore}
+          </Link>
         </div>
+      </div>
+
+      {/* produce banner — 43% left, 31% down, 69% wide, spills below the section */}
+      <div
+        data-hero="banner"
+        className="relative mx-auto w-[94%] max-w-xl pb-4 opacity-0 md:absolute md:left-[43%] md:top-[31%] md:mx-0 md:w-[69%] md:max-w-none md:pb-0"
+      >
+        <Image
+          src="/original/uploads/2019/04/bottle_banner_1@0.5x.png"
+          alt=""
+          width={986}
+          height={1035}
+          priority
+          className="h-auto w-full"
+          sizes="(max-width: 768px) 94vw, 69vw"
+        />
       </div>
     </section>
   );

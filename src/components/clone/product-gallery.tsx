@@ -17,7 +17,7 @@ export function ProductGallery({ images, alt }: GalleryProps) {
 
   return (
     <div>
-      <div className="relative mx-auto max-w-md">
+      <div className="relative mx-auto max-w-[34rem] md:mx-0">
         <Image
           key={main.src}
           src={main.src}
@@ -25,12 +25,12 @@ export function ProductGallery({ images, alt }: GalleryProps) {
           width={main.width}
           height={main.height}
           priority
-          className="h-auto w-full drop-shadow-[0_30px_50px_rgba(0,0,0,0.3)]"
-          sizes="(max-width: 768px) 90vw, 420px"
+          className="h-auto w-full"
+          sizes="(max-width: 768px) 90vw, 550px"
         />
       </div>
       {images.length > 1 && (
-        <ul className="mt-6 flex justify-center gap-3">
+        <ul className="mt-3 flex justify-center gap-6 md:justify-start md:pl-8">
           {images.map((img, i) => (
             <li key={img.src}>
               <button
@@ -38,11 +38,11 @@ export function ProductGallery({ images, alt }: GalleryProps) {
                 onClick={() => setActive(i)}
                 aria-label={`${alt} ${i + 1}`}
                 aria-current={i === active}
-                className={`block w-20 rounded-lg border-2 bg-white/85 p-1.5 transition-colors ${
-                  i === active ? "border-white" : "border-white/40 hover:border-white/80"
+                className={`block w-[8.5rem] max-w-[22vw] rounded-md border p-2 transition-colors ${
+                  i === active ? "border-white bg-white/15" : "border-white/50 hover:border-white"
                 }`}
               >
-                <Image src={img.src} alt="" width={img.width} height={img.height} className="h-auto w-full" sizes="80px" />
+                <Image src={img.src} alt="" width={img.width} height={img.height} className="h-auto w-full" sizes="136px" />
               </button>
             </li>
           ))}

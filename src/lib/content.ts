@@ -115,6 +115,7 @@ export interface ProductSection {
   title: string;
   paragraphs: string[];
   cards: { title: string; text: string }[];
+  images: string[];
 }
 
 export interface ProductContent {
@@ -201,6 +202,15 @@ export function parseProduct(page: HarvestPage): ProductContent {
 
     const cards: { title: string; text: string }[] = [];
     const paragraphs: string[] = [];
+    // content images that live inside this section (e.g. the Reishi mushroom
+    // photo) — pack shots and decorations are excluded
+    const images: string[] = [];
+    for (const im of body.matchAll(/!\[[^\]]*\]\((https?:\/\/(?:www\.)?bighnow\.com\/wp-content\/[^)]+)\)/g)) {
+      if (!/1140_|final6|buynow|shapedivider|sup_|ser_|Supplement|Suggested|Serving/i.test(im[1])) {
+        const p = localAsset(im[1]);
+        if (!images.includes(p)) images.push(p);
+      }
+    }
     const subParts = body.split(/^###\s+/m);
     for (const p of subParts[0].split(/\n{2,}/)) {
       if (isLinkOnlyBlock(p)) continue;
@@ -213,8 +223,8 @@ export function parseProduct(page: HarvestPage): ProductContent {
       const subText = cleanText(subLines.slice(1).join(" "));
       if (subTitle) cards.push({ title: subTitle, text: subText });
     }
-    if (title || paragraphs.length || cards.length) {
-      sections.push({ title, paragraphs, cards });
+    if (title || paragraphs.length || cards.length || images.length) {
+      sections.push({ title, paragraphs, cards, images });
     }
   });
 

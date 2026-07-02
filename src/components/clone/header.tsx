@@ -106,15 +106,15 @@ export function SiteHeader() {
         </div>
       </div>
 
-      <div className="mx-auto flex h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
+      <div className="mx-auto flex h-[6.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex shrink-0 items-center" aria-label="BiGH — Home">
           <Image
             src="/original/uploads/2019/04/logo_white_97.png"
             alt="BiGH — Be in Good Health"
-            width={110}
-            height={62}
+            width={157}
+            height={88}
             priority
-            className="h-12 w-auto"
+            className="h-[5.25rem] w-auto"
           />
         </Link>
 
