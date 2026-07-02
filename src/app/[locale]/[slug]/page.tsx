@@ -176,7 +176,7 @@ function ProductPage({
           </div>
         ))}
         <div
-          className="relative mx-auto grid max-w-[70rem] gap-8 px-4 pb-24 pt-[10.3rem] sm:px-6 md:grid-cols-[550px_1fr] md:pb-[var(--hero-pb)]"
+          className="relative mx-auto grid max-w-[70rem] gap-8 px-4 pb-24 pt-[15.5rem] sm:px-6 md:grid-cols-[550px_1fr] md:pb-[var(--hero-pb)] md:pt-[10.3rem]"
           // measured: hero content ends 887px down; each product's hero section
           // height (incl. its wave divider) comes from the original page
           style={{ "--hero-pb": `${layout.heroH - 887}px` } as React.CSSProperties}
@@ -264,7 +264,7 @@ function ProductPage({
               </p>
             ))}
             <ul
-              className={`mx-auto mt-24 grid gap-x-7 gap-y-16 sm:grid-cols-2 ${
+              className={`mx-auto mt-[83px] grid gap-x-7 gap-y-16 sm:grid-cols-2 ${
                 sec.cards.length >= 6
                   ? "lg:grid-cols-6"
                   : sec.cards.length === 5
@@ -429,7 +429,7 @@ export default async function ClonePage({
       <article>
         <section
           className="relative overflow-hidden"
-          style={{ minHeight: "min(76vw, 1100px)" }}
+          style={{ minHeight: "min(70vw, 1000px)" }}
         >
           <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
           <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-44 sm:px-6">
@@ -478,14 +478,14 @@ export default async function ClonePage({
           className={`relative overflow-hidden ${onBanner ? "" : "flex items-center justify-center"}`}
           style={
             onBanner
-              ? { minHeight: `min(${Math.round((banner.h / 1440) * 100)}vw, ${banner.h}px)` }
-              : { height: `min(${Math.round((banner.h / 1440) * 100) + 2}vw, ${banner.h}px)` }
+              ? { minHeight: `max(min(${Math.round((banner.h / 1440) * 100)}vw, ${banner.h}px), 24rem)` }
+              : { height: `max(min(${Math.round((banner.h / 1440) * 100) + 2}vw, ${banner.h}px), 24rem)` }
           }
         >
           <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
           <div aria-hidden className="absolute inset-0 bg-black/25" />
           {onBanner ? (
-            <div className="relative mx-auto max-w-5xl px-4 pb-10 pt-32 sm:px-6">
+            <div className="relative mx-auto max-w-5xl px-4 pb-10 pt-60 sm:px-6 md:pt-32">
               <h1 className="text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
                 {title}
               </h1>
@@ -495,15 +495,19 @@ export default async function ClonePage({
               />
             </div>
           ) : (
-            <h1 className="relative px-4 text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
+            <h1 className="relative px-4 pt-40 text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95 md:pt-0">
               {title}
             </h1>
           )}
         </section>
         {belowHtml.trim() && (
-          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+          <div
+            className={`mx-auto max-w-4xl px-4 sm:px-6 ${
+              slug === "about" ? "pb-6 pt-8" : slug === "gluten-free" ? "pb-32 pt-12" : "py-12"
+            }`}
+          >
             <div
-              className={`prose-clone mx-auto ${slug === "terms-and-conditions" ? "prose-legal" : ""}`}
+              className="prose-clone mx-auto"
               // our own harvested, spam-stripped content — no third-party input
               dangerouslySetInnerHTML={{ __html: belowHtml }}
             />
@@ -534,12 +538,14 @@ export default async function ClonePage({
   }
 
   return (
-    <article className="mx-auto max-w-4xl px-4 pb-12 pt-44 sm:px-6">
+    <article className="mx-auto max-w-4xl px-4 pb-12 pt-64 sm:px-6 md:pt-44">
       <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-black/75 md:text-[3.44rem]">
         {title}
       </h1>
       <div
-        className={`prose-clone mt-8 ${slug === "terms-and-conditions" ? "prose-legal" : ""}`}
+        className={`prose-clone mt-8 ${
+          slug === "terms-and-conditions" || slug === "return-policy" ? "prose-legal" : ""
+        }`}
         // our own harvested, spam-stripped content — no third-party input
         dangerouslySetInnerHTML={{ __html: html }}
       />

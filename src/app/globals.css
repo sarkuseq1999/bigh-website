@@ -115,8 +115,8 @@ html[lang="vn"] {
 
   /* terms page uses the original's larger legal type */
   .prose-legal {
-    font-size: 17px;
-    line-height: 1.8;
+    font-size: 16px;
+    line-height: 1.77;
   }
   .prose-legal p,
   .prose-legal li {

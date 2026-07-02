@@ -9,5 +9,5 @@ export const PAGE_BANNERS: Record<string, { img: string; h: number }> = {
   "gluten-free": { img: "/original/uploads/2019/03/organic-1.jpg", h: 1272 },
   vegan: { img: "/original/uploads/2019/03/vegan-3.jpg", h: 730 },
   signup: { img: "/original/uploads/2019/04/signup_bg4.jpg", h: 900 },
-  login: { img: "/original/uploads/2019/04/login_bg5.jpg", h: 1000 },
+  login: { img: "/original/uploads/2019/04/login_bg5.jpg", h: 900 },
 };

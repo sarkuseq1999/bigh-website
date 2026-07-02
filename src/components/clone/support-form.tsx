@@ -26,7 +26,7 @@ interface Labels {
 
 const inputCls =
   "w-full rounded border border-line bg-white px-3 py-2 text-[15px] text-heading outline-none focus:border-green";
-const labelCls = "mb-1 mt-4 block text-[15px] font-medium text-heading";
+const labelCls = "mb-1 mt-3.5 block text-[15px] font-medium text-heading";
 
 export function SupportForm({ labels }: { labels: Labels }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");
@@ -55,8 +55,8 @@ export function SupportForm({ labels }: { labels: Labels }) {
   }
 
   return (
-    <section className="mx-auto max-w-6xl px-4 pb-16 sm:px-6">
-      <h2 className="mt-12 text-center text-[clamp(2rem,3.8vw,3.4rem)] font-semibold text-black/60">
+    <section className="mx-auto max-w-6xl px-4 pb-12 sm:px-6">
+      <h2 className="mt-6 text-center text-[clamp(2rem,3.8vw,3.4rem)] font-semibold text-black/60">
         {labels.title}
       </h2>
       <form onSubmit={onSubmit} className="mx-auto mt-6 max-w-6xl">
@@ -107,7 +107,7 @@ export function SupportForm({ labels }: { labels: Labels }) {
         <button
           type="submit"
           disabled={status === "sending"}
-          className="mt-7 w-full rounded bg-green py-4 text-lg font-medium text-white transition-colors hover:bg-green-dark disabled:opacity-60"
+          className="mt-6 w-full rounded bg-green py-3 text-lg font-medium text-white transition-colors hover:bg-green-dark disabled:opacity-60"
         >
           {labels.send}
         </button>

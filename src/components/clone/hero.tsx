@@ -59,7 +59,7 @@ export function Hero({ eyebrow, brand, tagline, learnMore }: HeroProps) {
       {/* text column — vertically centered on the navy side */}
       <div
         data-hero="text"
-        className="relative px-6 pb-8 pt-16 text-center opacity-0 md:absolute md:left-[3%] md:top-[42%] md:w-[37%] md:-translate-y-1/2 md:px-0 md:pb-0 md:pt-0"
+        className="relative px-6 pb-8 pt-60 text-center opacity-0 md:absolute md:left-[3%] md:top-[42%] md:w-[37%] md:-translate-y-1/2 md:px-0 md:pb-0 md:pt-0"
       >
         <p className="text-[clamp(1.6rem,3.4vw,3.06rem)] font-semibold leading-tight text-white/85">
           {eyebrow}

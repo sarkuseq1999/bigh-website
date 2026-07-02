@@ -12,6 +12,10 @@ import { LangSwitcher } from "./lang-switcher";
 
 const LOGIN_URL = "https://aeg.imatrixoffice.com";
 
+// Measured from the original (1440px): header floats transparently over the
+// page — 26px microbar + 109px main row; logo 157x88 at the content edge;
+// nav items Roboto 600 24px with 13x20 padding; FOUR top-level items
+// (Science lives in the About dropdown). Mobile: 185px row w/ 292px logo.
 function Dropdown({
   label,
   items,
@@ -40,23 +44,20 @@ function Dropdown({
     >
       <button
         type="button"
-        className="flex items-center gap-1 rounded-full px-4 py-1.5 text-[15px] font-medium text-white/90 transition-colors hover:bg-green hover:text-white"
+        className="flex items-center gap-1 rounded-[5px] px-5 py-[13px] text-2xl font-semibold leading-none text-[#efefef] transition-colors hover:bg-green hover:text-white"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
-        <svg aria-hidden viewBox="0 0 12 12" className="h-3 w-3 opacity-70">
-          <path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" strokeWidth="1.5" />
-        </svg>
       </button>
       {open && (
-        <div className="absolute left-1/2 top-full z-50 w-64 -translate-x-1/2 pt-2">
-          <ul className="rounded-lg border border-white/10 bg-ink-dark/95 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur">
+        <div className="absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-1">
+          <ul className="rounded-md border border-white/10 bg-[#1d1d25]/95 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur">
             {items.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  className="block rounded-md px-3 py-2 text-[15px] text-white/85 hover:bg-green hover:text-white"
+                  className="block rounded px-3 py-2 text-lg text-white/85 hover:bg-green hover:text-white"
                   onClick={() => setOpen(false)}
                 >
                   {item.label}
@@ -87,84 +88,86 @@ export function SiteHeader() {
     "gluten-free": t("glutenFree"),
     vegan: t("vegan"),
   };
-  const aboutItems = ABOUT_SLUGS.map((slug) => ({ href: `/${slug}`, label: aboutLabels[slug] }));
+  const aboutItems = [
+    ...ABOUT_SLUGS.map((slug) => ({ href: `/${slug}`, label: aboutLabels[slug] })),
+    { href: "/science", label: t("science") },
+  ];
 
   return (
-    // the original header floats transparently over the page (135px total):
-    // clear microbar + a 54%-black main row
     <header className="absolute left-0 top-0 z-40 w-full">
-      <div>
-        <div className="mx-auto flex h-8 max-w-6xl items-center justify-end gap-1 px-4 text-xs text-white/80 sm:px-6">
-          <span aria-hidden>|</span>
-          <a href={LOGIN_URL} className="px-1.5 font-semibold hover:text-green">
-            {t("login")}
-          </a>
-          <span aria-hidden>|</span>
-          <Link href="/signup" className="px-1.5 font-semibold hover:text-green">
-            {t("signup")}
+      {/* 26px microbar: Login | Sign Up (+ language) */}
+      <div className="mx-auto flex h-[26px] max-w-[70rem] items-center justify-end gap-1 px-4 text-xs text-white/80 sm:px-6">
+        <div className="mr-3">
+          <LangSwitcher dark />
+        </div>
+        <span aria-hidden>|</span>
+        <a href={LOGIN_URL} className="px-1.5 font-semibold hover:text-green">
+          {t("login")}
+        </a>
+        <span aria-hidden>|</span>
+        <Link href="/signup" className="px-1.5 font-semibold hover:text-green">
+          {t("signup")}
+        </Link>
+        <span aria-hidden>|</span>
+      </div>
+
+      {/* main row: 109px desktop / 185px mobile, translucent black */}
+      <div className="bg-black/55">
+        <div className="mx-auto flex max-w-[70rem] items-center justify-between gap-4 px-2.5 py-[10px] sm:px-6 lg:h-[109px] lg:py-0">
+          <Link href="/" className="flex shrink-0 items-center" aria-label="BiGH — Home">
+            <Image
+              src="/original/uploads/2019/04/logo_white_97.png"
+              alt="BiGH — Be in Good Health"
+              width={292}
+              height={164}
+              priority
+              className="h-auto w-[292px] max-w-[75vw] lg:h-[88px] lg:w-[157px]"
+            />
           </Link>
-          <span aria-hidden>|</span>
+
+          <nav className="hidden items-center lg:flex" aria-label="Main">
+            <Link
+              href="/"
+              className={`rounded-[5px] px-5 py-[13px] text-2xl font-semibold leading-none transition-colors ${
+                pathname === "/" ? "bg-green text-white" : "text-[#efefef] hover:bg-green hover:text-white"
+              }`}
+            >
+              {t("home")}
+            </Link>
+            <Dropdown label={t("products")} items={productItems} />
+            <Dropdown label={t("about")} items={aboutItems} />
+            <Link
+              href="/support"
+              className="rounded-[5px] px-5 py-[13px] text-2xl font-semibold leading-none text-[#efefef] transition-colors hover:bg-green hover:text-white"
+            >
+              {t("support")}
+            </Link>
+          </nav>
+
+          <button
+            type="button"
+            className="p-2 text-white lg:hidden"
+            aria-expanded={mobileOpen}
+            aria-label={t("menu")}
+            onClick={() => setMobileOpen((v) => !v)}
+          >
+            <svg aria-hidden viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="2">
+              {mobileOpen ? <path d="M5 5l14 14M19 5L5 19" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
+            </svg>
+          </button>
         </div>
       </div>
 
-      <div className="bg-black/55">
-      <div className="mx-auto flex h-[6.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
-        <Link href="/" className="flex shrink-0 items-center" aria-label="BiGH — Home">
-          <Image
-            src="/original/uploads/2019/04/logo_white_97.png"
-            alt="BiGH — Be in Good Health"
-            width={157}
-            height={88}
-            priority
-            className="h-[5.25rem] w-auto"
-          />
-        </Link>
-
-        <nav className="hidden items-center gap-1 lg:flex" aria-label="Main">
-          <Link
-            href="/"
-            className={`rounded-full px-4 py-1.5 text-[15px] font-medium transition-colors ${
-              pathname === "/" ? "bg-green text-white" : "text-white/90 hover:bg-green hover:text-white"
-            }`}
-          >
-            {t("home")}
-          </Link>
-          <Dropdown label={t("products")} items={productItems} />
-          <Dropdown label={t("about")} items={aboutItems} />
-          <Link
-            href="/science"
-            className="rounded-full px-4 py-1.5 text-[15px] font-medium text-white/90 transition-colors hover:bg-green hover:text-white"
-          >
-            {t("science")}
-          </Link>
-          <Link
-            href="/support"
-            className="rounded-full px-4 py-1.5 text-[15px] font-medium text-white/90 transition-colors hover:bg-green hover:text-white"
-          >
-            {t("support")}
-          </Link>
-          <div className="ml-3 border-l border-white/15 pl-4">
-            <LangSwitcher dark />
-          </div>
-        </nav>
-
-        <button
-          type="button"
-          className="rounded-lg border border-white/20 p-2 text-white lg:hidden"
-          aria-expanded={mobileOpen}
-          aria-label={t("menu")}
-          onClick={() => setMobileOpen((v) => !v)}
-        >
-          <svg aria-hidden viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8">
-            {mobileOpen ? <path d="M5 5l14 14M19 5L5 19" /> : <path d="M4 7h16M4 12h16M4 17h16" />}
-          </svg>
-        </button>
-      </div>
-      </div>
-
       {mobileOpen && (
-        <div className="border-t border-white/10 bg-ink-dark/95 px-4 pb-6 pt-3 backdrop-blur lg:hidden">
-          <p className="pb-1 pt-2 text-xs font-semibold uppercase tracking-widest text-white/50">
+        <div className="bg-[#1d1d25]/95 px-4 pb-6 pt-3 backdrop-blur lg:hidden">
+          <ul>
+            <li>
+              <Link href="/" className="block py-2 text-lg font-semibold text-white" onClick={() => setMobileOpen(false)}>
+                {t("home")}
+              </Link>
+            </li>
+          </ul>
+          <p className="pb-1 pt-3 text-xs font-semibold uppercase tracking-widest text-white/50">
             {t("products")}
           </p>
           <ul className="grid grid-cols-2 gap-x-4">
@@ -184,19 +187,17 @@ export function SiteHeader() {
             {t("about")}
           </p>
           <ul className="grid grid-cols-2 gap-x-4">
-            {[...aboutItems, { href: "/science", label: t("science") }, { href: "/support", label: t("support") }].map(
-              (item) => (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    className="block py-1.5 text-[15px] text-white/85"
-                    onClick={() => setMobileOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                </li>
-              ),
-            )}
+            {[...aboutItems, { href: "/support", label: t("support") }].map((item) => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className="block py-1.5 text-[15px] text-white/85"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
           </ul>
           <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
             <LangSwitcher dark />
@@ -206,7 +207,7 @@ export function SiteHeader() {
               </a>
               <Link
                 href="/signup"
-                className="rounded-full bg-green px-4 py-1.5 text-[15px] font-medium text-white"
+                className="rounded bg-green px-4 py-1.5 text-[15px] font-medium text-white"
                 onClick={() => setMobileOpen(false)}
               >
                 {t("signup")}

@@ -31,7 +31,7 @@ export function ProductGallery({ images, alt, dark = false }: GalleryProps) {
         />
       </div>
       {images.length > 1 && (
-        <ul className="mt-3 flex justify-center gap-6 md:justify-start md:pl-8">
+        <ul className="mt-2 flex justify-center gap-6 md:justify-start md:pl-8">
           {images.map((img, i) => (
             <li key={img.src}>
               <button
@@ -39,7 +39,7 @@ export function ProductGallery({ images, alt, dark = false }: GalleryProps) {
                 onClick={() => setActive(i)}
                 aria-label={`${alt} ${i + 1}`}
                 aria-current={i === active}
-                className={`block w-[8.25rem] max-w-[22vw] rounded-md border p-1.5 transition-colors ${
+                className={`block w-[8.25rem] max-w-[22vw] rounded-md border p-1 transition-colors ${
                   dark
                     ? i === active
                       ? "border-black/60 bg-black/5"
