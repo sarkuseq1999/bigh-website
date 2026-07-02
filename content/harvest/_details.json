@@ -1,0 +1,1519 @@
+{
+ "about": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 880,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/03/organic.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [],
+  "headings": [
+   {
+    "text": "About BiGH",
+    "x": 0,
+    "y": 195,
+    "size": "63px",
+    "color": "rgba(255, 255, 255, 0.98)",
+    "align": "center"
+   },
+   {
+    "text": "Three Guiding Principles",
+    "x": 0,
+    "y": 865,
+    "size": "54px",
+    "color": "rgb(114, 114, 114)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 1838,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 1951,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "science": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 832,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/shutterstock_697695826.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [],
+  "headings": [
+   {
+    "text": "Science",
+    "x": 0,
+    "y": 195,
+    "size": "63px",
+    "color": "rgba(255, 255, 255, 0.98)",
+    "align": "center"
+   },
+   {
+    "text": "Our Commitment",
+    "x": 0,
+    "y": 817,
+    "size": "54px",
+    "color": "rgb(114, 114, 114)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 1413,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 1525,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "support": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 897,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/support_bg1.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   }
+  ],
+  "form": [
+   {
+    "tag": "INPUT",
+    "type": "hidden",
+    "name": "post_id",
+    "label": "",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "hidden",
+    "name": "form_id",
+    "label": "",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "hidden",
+    "name": "referer_title",
+    "label": "",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "hidden",
+    "name": "queried_id",
+    "label": "",
+    "x": 0,
+    "y": 0,
+    "w": 0,
+    "h": 0,
+    "required": false
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Your Name",
+    "x": 160,
+    "y": 1039,
+    "w": 106,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "text",
+    "name": "form_fields[name]",
+    "label": "First Name, Last Name",
+    "x": 160,
+    "y": 1079,
+    "w": 1120,
+    "h": 47,
+    "required": true
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Customer ID (If you have already registered)",
+    "x": 160,
+    "y": 1138,
+    "w": 379,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "number",
+    "name": "form_fields[customerid]",
+    "label": "Numbers only",
+    "x": 160,
+    "y": 1178,
+    "w": 1120,
+    "h": 47,
+    "required": false
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Email",
+    "x": 160,
+    "y": 1237,
+    "w": 60,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "email",
+    "name": "form_fields[email]",
+    "label": "Email",
+    "x": 160,
+    "y": 1278,
+    "w": 1120,
+    "h": 47,
+    "required": true
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Phone Number",
+    "x": 160,
+    "y": 1337,
+    "w": 127,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "text",
+    "name": "form_fields[phonenumber]",
+    "label": "Numbers Only",
+    "x": 160,
+    "y": 1377,
+    "w": 1120,
+    "h": 47,
+    "required": false
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Subject",
+    "x": 160,
+    "y": 1436,
+    "w": 77,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "INPUT",
+    "type": "text",
+    "name": "form_fields[subject]",
+    "label": "Please be as precise as possible",
+    "x": 160,
+    "y": 1476,
+    "w": 1120,
+    "h": 47,
+    "required": true
+   },
+   {
+    "tag": "LABEL",
+    "type": "",
+    "name": "",
+    "label": "Message",
+    "x": 160,
+    "y": 1535,
+    "w": 89,
+    "h": 40,
+    "required": false
+   },
+   {
+    "tag": "TEXTAREA",
+    "type": "textarea",
+    "name": "form_fields[message]",
+    "label": "Message",
+    "x": 160,
+    "y": 1575,
+    "w": 1120,
+    "h": 104,
+    "required": true
+   },
+   {
+    "tag": "BUTTON",
+    "type": "submit",
+    "name": "",
+    "label": "Send",
+    "x": 160,
+    "y": 1691,
+    "w": 1120,
+    "h": 59,
+    "required": false
+   }
+  ],
+  "particles": [],
+  "cards": [
+   {
+    "title": "Contact Information",
+    "x": 280,
+    "y": 468,
+    "w": 430,
+    "h": 252,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Corporate Address",
+    "x": 730,
+    "y": 468,
+    "w": 430,
+    "h": 282,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   }
+  ],
+  "headings": [
+   {
+    "text": "What can we do for you?",
+    "x": 150,
+    "y": 192,
+    "size": "77px",
+    "color": "rgba(255, 255, 255, 0.89)",
+    "align": "center"
+   },
+   {
+    "text": "Contact Form",
+    "x": 160,
+    "y": 942,
+    "size": "55px",
+    "color": "rgba(0, 0, 0, 0.58)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 1836,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 1948,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "nuricell": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 1191,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/nuricell_bg_2.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1661,
+    "h": 600,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/nuricell_s3_bg_4.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   },
+   {
+    "src": "1140_1183_nuri1-1-987x1024.png",
+    "x": 160,
+    "y": 165,
+    "w": 550,
+    "h": 571
+   },
+   {
+    "src": "1140_1183_nuri1-1-987x1024.png",
+    "x": 194,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_nuri2-2-987x1024.png",
+    "x": 367,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_nuri3-1-987x1024.png",
+    "x": 540,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "nano_shapedivider7-1024x128.png",
+    "x": 0,
+    "y": 996,
+    "w": 1440,
+    "h": 180
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [
+   {
+    "title": "Alpha Lipoic Acid",
+    "x": 168,
+    "y": 1384,
+    "w": 249,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Acetyl-L-Carnitine",
+    "x": 453,
+    "y": 1384,
+    "w": 249,
+    "h": 189,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Creatine Monohydrate",
+    "x": 738,
+    "y": 1384,
+    "w": 249,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Choline Bitartrate",
+    "x": 1023,
+    "y": 1384,
+    "w": 249,
+    "h": 189,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   }
+  ],
+  "headings": [
+   {
+    "text": "NuriCell",
+    "x": 750,
+    "y": 165,
+    "size": "49px",
+    "color": "rgba(255, 255, 255, 0.95)",
+    "align": "start"
+   },
+   {
+    "text": "$80.00 ($100 MSRP)",
+    "x": 0,
+    "y": 0,
+    "size": "42px",
+    "color": "rgba(255, 255, 255, 0.95)",
+    "align": "start"
+   },
+   {
+    "text": "Key Ingredients",
+    "x": 10,
+    "y": 1226,
+    "size": "48px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Synergistic Effects",
+    "x": 180,
+    "y": 1935,
+    "size": "30px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Product Highlight",
+    "x": 730,
+    "y": 1923,
+    "size": "60px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 2297,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 2409,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "nano-detoxifier": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 1276,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/nano_bg_1.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1810,
+    "h": 560,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/nano_s3_bg_4.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   },
+   {
+    "src": "1140_1183_nano_1-987x1024.png",
+    "x": 160,
+    "y": 165,
+    "w": 550,
+    "h": 571
+   },
+   {
+    "src": "olive1.png",
+    "x": -69,
+    "y": -70,
+    "w": 260,
+    "h": 302
+   },
+   {
+    "src": "olive6.png",
+    "x": 1389,
+    "y": 612,
+    "w": 173,
+    "h": 179
+   },
+   {
+    "src": "olive2.png",
+    "x": -106,
+    "y": 632,
+    "w": 260,
+    "h": 237
+   },
+   {
+    "src": "olive3.png",
+    "x": 1118,
+    "y": -94,
+    "w": 260,
+    "h": 233
+   },
+   {
+    "src": "olive7.png",
+    "x": 1203,
+    "y": 302,
+    "w": 312,
+    "h": 279
+   },
+   {
+    "src": "1140_1183_nano_1-987x1024.png",
+    "x": 194,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_nano_2-987x1024.png",
+    "x": 367,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_nano_3-987x1024.png",
+    "x": 540,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "nano_shapedivider2-1024x224.png",
+    "x": 0,
+    "y": 946,
+    "w": 1440,
+    "h": 315
+   },
+   {
+    "src": "nano_olive.png",
+    "x": 276,
+    "y": 1436,
+    "w": 127,
+    "h": 108
+   },
+   {
+    "src": "Nano_B12.png",
+    "x": 670,
+    "y": 1453,
+    "w": 100,
+    "h": 91
+   },
+   {
+    "src": "nano_greentea.png",
+    "x": 1040,
+    "y": 1448,
+    "w": 120,
+    "h": 98
+   },
+   {
+    "src": "nano_s2_1.png",
+    "x": 55,
+    "y": 1171,
+    "w": 160,
+    "h": 166
+   },
+   {
+    "src": "nano_s2_2.png",
+    "x": 1308,
+    "y": 1664,
+    "w": 160,
+    "h": 146
+   },
+   {
+    "src": "nano_s3_leaf_1.png",
+    "x": -19,
+    "y": 1909,
+    "w": 149,
+    "h": 153
+   },
+   {
+    "src": "nano_s3_leaf_2.png",
+    "x": 9,
+    "y": 2229,
+    "w": 90,
+    "h": 88
+   },
+   {
+    "src": "nano_s3_leaf3.png",
+    "x": 1208,
+    "y": 2147,
+    "w": 128,
+    "h": 125
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [
+   {
+    "title": "Olive Leaf Extract",
+    "x": 168,
+    "y": 1537,
+    "w": 344,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Polyphlor-70",
+    "x": 548,
+    "y": 1537,
+    "w": 344,
+    "h": 117,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Green Tea Extract",
+    "x": 928,
+    "y": 1537,
+    "w": 344,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   }
+  ],
+  "headings": [
+   {
+    "text": "Nano Detoxifier",
+    "x": 750,
+    "y": 165,
+    "size": "49px",
+    "color": "rgba(0, 0, 0, 0.63)",
+    "align": "start"
+   },
+   {
+    "text": "$50.00 ($60 MSRP)",
+    "x": 0,
+    "y": 0,
+    "size": "42px",
+    "color": "rgba(0, 0, 0, 0.76)",
+    "align": "start"
+   },
+   {
+    "text": "Key Ingredients",
+    "x": 10,
+    "y": 1311,
+    "size": "48px",
+    "color": "rgba(0, 0, 0, 0.61)",
+    "align": "center"
+   },
+   {
+    "text": "Science Based Optical Body Defense Formu",
+    "x": 60,
+    "y": 2023,
+    "size": "40px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Product Highlight",
+    "x": 730,
+    "y": 2039,
+    "size": "60px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 2406,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 2518,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "heart-q10": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 1121,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/Q10_bg_1.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1654,
+    "h": 560,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/q10_bg_s3.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   },
+   {
+    "src": "1140_1183_heart_1-987x1024.png",
+    "x": 160,
+    "y": 165,
+    "w": 550,
+    "h": 571
+   },
+   {
+    "src": "q10_pom_2-423x1024.png",
+    "x": 1057,
+    "y": 437,
+    "w": 378,
+    "h": 915
+   },
+   {
+    "src": "q10_pom.png",
+    "x": -214,
+    "y": 55,
+    "w": 496,
+    "h": 789
+   },
+   {
+    "src": "1140_1183_heart_1-987x1024.png",
+    "x": 194,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_heart_2-987x1024.png",
+    "x": 367,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_heart_3-987x1024.png",
+    "x": 540,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "pomegranate.png",
+    "x": 213,
+    "y": 1290,
+    "w": 160,
+    "h": 122
+   },
+   {
+    "src": "kanekalogo.png",
+    "x": 477,
+    "y": 1313,
+    "w": 202,
+    "h": 91
+   },
+   {
+    "src": "redyeast.png",
+    "x": 800,
+    "y": 1288,
+    "w": 126,
+    "h": 133
+   },
+   {
+    "src": "folate.png",
+    "x": 1085,
+    "y": 1301,
+    "w": 125,
+    "h": 106
+   },
+   {
+    "src": "q10_pom_s3_1.png",
+    "x": 1277,
+    "y": 1886,
+    "w": 284,
+    "h": 281
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [
+   {
+    "title": "Pomegranate Fruit",
+    "x": 168,
+    "y": 1401,
+    "w": 249,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Kaneka Q10",
+    "x": 453,
+    "y": 1401,
+    "w": 249,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Red Yeast Rice",
+    "x": 738,
+    "y": 1401,
+    "w": 249,
+    "h": 165,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   },
+   {
+    "title": "Folate",
+    "x": 1023,
+    "y": 1401,
+    "w": 249,
+    "h": 117,
+    "icon": null,
+    "bg": "rgba(0, 0, 0, 0)",
+    "radius": "0px"
+   }
+  ],
+  "headings": [
+   {
+    "text": "Heart Q10",
+    "x": 750,
+    "y": 165,
+    "size": "49px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "start"
+   },
+   {
+    "text": "$45.00 ($55 MSRP)",
+    "x": 0,
+    "y": 0,
+    "size": "42px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "start"
+   },
+   {
+    "text": "Key Ingredients",
+    "x": 10,
+    "y": 1156,
+    "size": "48px",
+    "color": "rgba(0, 0, 0, 0.61)",
+    "align": "center"
+   },
+   {
+    "text": "KANEKA Q10",
+    "x": 60,
+    "y": 1932,
+    "size": "30px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Product Highlight",
+    "x": 730,
+    "y": 1849,
+    "size": "60px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 2250,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 2362,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "turmerific": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 1210,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2020/03/Turmeric-Page-Top-Banner_JPGV1-scaled-1.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1324,
+    "h": 789,
+    "w": 1140,
+    "x": 150,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2020/03/Turmeric-Page-Middle-Banner-ART-5.png\")",
+    "size": "contain",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1993,
+    "h": 795,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2020/03/ShapeDividerBottom.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   },
+   {
+    "src": "Turmeric-Page-Top-Banner-ART-9-487x1024.png",
+    "x": -200,
+    "y": 163,
+    "w": 418,
+    "h": 879
+   },
+   {
+    "src": "1140_1183_Turmerific1-987x1024.png",
+    "x": 160,
+    "y": 165,
+    "w": 550,
+    "h": 571
+   },
+   {
+    "src": "Turmeric-Page-Top-Banner-ART-5-1-494x1024.png",
+    "x": 1295,
+    "y": 145,
+    "w": 495,
+    "h": 1026
+   },
+   {
+    "src": "1140_1183_Turmerific1-987x1024.png",
+    "x": 194,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "1140_1183_Turmerific2-987x1024.png",
+    "x": 367,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "Turmerific_Leftv2-987x1024.png",
+    "x": 540,
+    "y": 756,
+    "w": 136,
+    "h": 141
+   },
+   {
+    "src": "NonGMOProject_JPG1.jpg",
+    "x": 750,
+    "y": 771,
+    "w": 150,
+    "h": 106
+   },
+   {
+    "src": "ShapeDivider_TurmerificTop-1024x177.png",
+    "x": 0,
+    "y": 946,
+    "w": 1440,
+    "h": 249
+   },
+   {
+    "src": "Untitled-4.png",
+    "x": -72,
+    "y": 2230,
+    "w": 347,
+    "h": 540
+   }
+  ],
+  "form": [],
+  "particles": [],
+  "cards": [],
+  "headings": [
+   {
+    "text": "Turmerific",
+    "x": 750,
+    "y": 165,
+    "size": "49px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "start"
+   },
+   {
+    "text": "$50.00 ($65 MSRP)",
+    "x": 0,
+    "y": 0,
+    "size": "42px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "start"
+   },
+   {
+    "text": "Key Ingredients",
+    "x": 10,
+    "y": 1229,
+    "size": "60px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Longvida\u00ae Optimized Curcumin Extract",
+    "x": 160,
+    "y": 1414,
+    "size": "30px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "Product Highlight",
+    "x": 955,
+    "y": 2312,
+    "size": "63px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 2824,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 2937,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ },
+ "home": {
+  "bgs": [
+   {
+    "y": -15,
+    "h": 1069,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/testing6.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 1702,
+    "h": 752,
+    "w": 1440,
+    "x": 0,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/madeincalifornia_bg.png\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   },
+   {
+    "y": 3053,
+    "h": 647,
+    "w": 1441,
+    "x": -1,
+    "img": "url(\"https://bighnow.com/wp-content/uploads/2019/03/Driven-by-nature-2.jpg\")",
+    "size": "cover",
+    "pos": "0% 0%"
+   }
+  ],
+  "imgs": [
+   {
+    "src": "logo_white_97-300x168.png",
+    "x": 160,
+    "y": 36,
+    "w": 157,
+    "h": 88
+   },
+   {
+    "src": "bottle_banner_1@0.5x.png",
+    "x": 619,
+    "y": 330,
+    "w": 1000,
+    "h": 1049
+   },
+   {
+    "src": "DeerHornv1_1-683x1024.png",
+    "x": 846,
+    "y": 1144,
+    "w": 319,
+    "h": 478
+   },
+   {
+    "src": "Slice-1_latestrelease.png",
+    "x": 136,
+    "y": 1054,
+    "w": 415,
+    "h": 588
+   },
+   {
+    "src": "madeincalifornia4-981x1024.jpg",
+    "x": 0,
+    "y": 1702,
+    "w": 720,
+    "h": 752
+   },
+   {
+    "src": "1140_1183_nuri1-987x1024.png",
+    "x": 160,
+    "y": 2626,
+    "w": 360,
+    "h": 373
+   },
+   {
+    "src": "1140_1183_opc_1-987x1024.png",
+    "x": 540,
+    "y": 2626,
+    "w": 360,
+    "h": 373
+   },
+   {
+    "src": "1140_1183_propolis_1-1-987x1024.png",
+    "x": 920,
+    "y": 2626,
+    "w": 360,
+    "h": 373
+   },
+   {
+    "src": "guidedbysciene_1-878x1024.png",
+    "x": 730,
+    "y": 3710,
+    "w": 700,
+    "h": 816
+   },
+   {
+    "src": "Learn-More_3-1024x576.jpg",
+    "x": 5,
+    "y": 4541,
+    "w": 710,
+    "h": 399
+   },
+   {
+    "src": "Connect-with-Us_3-1024x576.jpg",
+    "x": 725,
+    "y": 4541,
+    "w": 710,
+    "h": 399
+   }
+  ],
+  "form": [],
+  "particles": [
+   {
+    "tag": "CANVAS",
+    "cls": "particles-js-canvas-el",
+    "attrs": [],
+    "y": 3700,
+    "w": 1440,
+    "h": 836
+   },
+   {
+    "tag": "SCRIPT",
+    "cls": "",
+    "attrs": [],
+    "y": 0,
+    "w": 0,
+    "h": 0
+   }
+  ],
+  "cards": [],
+  "headings": [
+   {
+    "text": "Nature  Science",
+    "x": 0,
+    "y": 250,
+    "size": "49px",
+    "color": "rgba(255, 255, 255, 0.85)",
+    "align": "center"
+   },
+   {
+    "text": "BiGH",
+    "x": 0,
+    "y": 307,
+    "size": "154px",
+    "color": "rgba(255, 255, 255, 0.85)",
+    "align": "center"
+   },
+   {
+    "text": "The art of incorporating nature and scie",
+    "x": 100,
+    "y": 571,
+    "size": "28px",
+    "color": "rgba(255, 255, 255, 0.85)",
+    "align": "center"
+   },
+   {
+    "text": "Latest Release",
+    "x": 230,
+    "y": 1174,
+    "size": "30px",
+    "color": "rgb(114, 114, 114)",
+    "align": "start"
+   },
+   {
+    "text": "Deer Horn Reishi",
+    "x": 230,
+    "y": 1231,
+    "size": "58px",
+    "color": "rgb(114, 114, 114)",
+    "align": "start"
+   },
+   {
+    "text": "The rarest and most potent organic Reish",
+    "x": 230,
+    "y": 1324,
+    "size": "35px",
+    "color": "rgb(114, 114, 114)",
+    "align": "start"
+   },
+   {
+    "text": "Made in California",
+    "x": 720,
+    "y": 1840,
+    "size": "55px",
+    "color": "rgba(255, 255, 255, 0.98)",
+    "align": "center"
+   },
+   {
+    "text": "All of our products are proudly made in ",
+    "x": 750,
+    "y": 2003,
+    "size": "29px",
+    "color": "rgba(255, 255, 255, 0.98)",
+    "align": "center"
+   },
+   {
+    "text": "Most Popular",
+    "x": 0,
+    "y": 2498,
+    "size": "65px",
+    "color": "rgb(114, 114, 114)",
+    "align": "center"
+   },
+   {
+    "text": "Driven by Nature",
+    "x": 288,
+    "y": 3347,
+    "size": "71px",
+    "color": "rgb(237, 237, 237)",
+    "align": "center"
+   },
+   {
+    "text": "Guided by Science",
+    "x": 10,
+    "y": 3981,
+    "size": "60px",
+    "color": "rgba(0, 0, 0, 0.65)",
+    "align": "center"
+   },
+   {
+    "text": "*These statements have not been evaluate",
+    "x": 151,
+    "y": 4981,
+    "size": "20px",
+    "color": "rgba(255, 255, 255, 0.81)",
+    "align": "center"
+   },
+   {
+    "text": "\u00a9 BiGH Corporation. All Rights Reserved.",
+    "x": 150,
+    "y": 5094,
+    "size": "18px",
+    "color": "rgba(255, 255, 255, 0.76)",
+    "align": "center"
+   }
+  ],
+  "header": {
+   "h": 135,
+   "bg": "rgba(0, 0, 0, 0)",
+   "position": "static",
+   "inner": [
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0.54)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)",
+    "rgba(0, 0, 0, 0)"
+   ]
+  }
+ }
+}

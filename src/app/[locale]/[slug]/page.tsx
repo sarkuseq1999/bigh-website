@@ -3,10 +3,14 @@ import Image from "next/image";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 
+import { getTranslations } from "next-intl/server";
+
 import { ProductGallery } from "@/components/clone/product-gallery";
 import { Reveal } from "@/components/clone/reveal";
+import { SupportForm } from "@/components/clone/support-form";
 import { routing, type Locale } from "@/i18n/routing";
 import { isProductSlug, productName, type ProductSlug } from "@/data/products";
+import { PAGE_BANNERS } from "@/data/page-banners";
 import productLayout from "@/data/product-layout.json";
 import {
   listSlugs,
@@ -99,12 +103,12 @@ function ProductPage({
             <Image src={layout.heroBg} alt="" fill priority className="object-cover object-top" sizes="100vw" />
           )}
         </div>
-        <div className="relative mx-auto grid max-w-6xl gap-8 px-4 pb-28 pt-8 sm:px-6 md:grid-cols-[46%_54%] md:pb-36">
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-4 pb-28 pt-40 sm:px-6 md:grid-cols-[46%_54%] md:pb-36">
           <Reveal>
             <ProductGallery images={gallery} alt={title} />
           </Reveal>
-          <Reveal delay={100} className="md:pt-10">
-            <h1 className="text-4xl font-semibold text-white md:text-5xl">{title}</h1>
+          <Reveal delay={100} className="md:pt-2">
+            <h1 className="text-4xl font-semibold text-white md:text-[3.05rem] md:leading-tight">{title}</h1>
             {content.intro.map((p) => (
               <p key={p.slice(0, 24)} className="mt-5 max-w-xl text-justify font-medium leading-relaxed text-white">
                 {p}
@@ -152,13 +156,22 @@ function ProductPage({
               </p>
             ))}
             <ul
-              className={`mx-auto mt-9 grid max-w-5xl gap-5 sm:grid-cols-2 ${
+              className={`mx-auto mt-10 grid max-w-5xl gap-x-9 gap-y-8 sm:grid-cols-2 ${
                 sec.cards.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
               }`}
             >
               {sec.cards.map((c) => (
-                <li key={c.title} className="rounded-xl bg-[#f2f2f4] px-5 py-6 text-center">
-                  <h3 className="text-lg font-semibold">{c.title}</h3>
+                <li key={c.title} className="rounded-lg bg-[#f6f6f7] px-5 py-6 text-center">
+                  {c.icon && (
+                    <Image
+                      src={c.icon}
+                      alt=""
+                      {...imageDims(c.icon)}
+                      className="mx-auto mb-4 h-24 w-auto object-contain"
+                      sizes="130px"
+                    />
+                  )}
+                  <h3 className="text-xl font-semibold">{c.title}</h3>
                   <p className="mt-3 text-sm leading-relaxed">{c.text}</p>
                 </li>
               ))}
@@ -244,15 +257,80 @@ export default async function ClonePage({
   // generic harvested page (about, science, legal, badges, …)
   const title = displayTitle(locale, slug);
   const heading = pageHeading(page);
-  const markdown =
+  let markdown =
     heading === title
       ? page.markdown.replace(/^#{1,3}\s+.+$/m, "").trim()
       : page.markdown;
+  if (slug === "support") {
+    // the legacy form serialized as a heading + bare label lines; the live
+    // form component replaces it, so cut from that heading onward
+    const lines = markdown.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      if (/^#{2,3}\s/.test(lines[i])) {
+        const rest = lines.slice(i + 1).filter((l) => l.trim());
+        if (rest.length >= 3 && rest.every((l) => l.trim().length < 60 && !/^#|!\[|\]\(/.test(l.trim()))) {
+          markdown = lines.slice(0, i).join("\n");
+          break;
+        }
+      }
+    }
+  }
   const html = mdToHtml(markdown);
+  const banner = PAGE_BANNERS[slug];
+
+  if (banner) {
+    const t = slug === "support" ? await getTranslations({ locale, namespace: "Support" }) : null;
+    return (
+      <article>
+        {/* full-bleed banner with centered white title, per the original */}
+        <section
+          className="relative flex items-center justify-center overflow-hidden"
+          style={{ height: `min(62vw, ${banner.h}px)` }}
+        >
+          <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
+          <div aria-hidden className="absolute inset-0 bg-black/20" />
+          <h1 className="relative px-4 text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
+            {title}
+          </h1>
+        </section>
+        {html.trim() && (
+          <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
+            <div
+              className="prose-clone mx-auto"
+              // our own harvested, spam-stripped content — no third-party input
+              dangerouslySetInnerHTML={{ __html: html }}
+            />
+          </div>
+        )}
+        {t && (
+          <SupportForm
+            labels={{
+              title: t("title"),
+              name: t("name"),
+              namePh: t("namePh"),
+              customerId: t("customerId"),
+              customerIdPh: t("customerIdPh"),
+              email: t("email"),
+              phone: t("phone"),
+              phonePh: t("phonePh"),
+              subject: t("subject"),
+              subjectPh: t("subjectPh"),
+              message: t("message"),
+              send: t("send"),
+              sent: t("sent"),
+              failed: t("failed"),
+            }}
+          />
+        )}
+      </article>
+    );
+  }
 
   return (
-    <article className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
-      <h1 className="max-w-2xl text-4xl font-semibold leading-tight md:text-5xl">{title}</h1>
+    <article className="mx-auto max-w-4xl px-4 pb-12 pt-44 sm:px-6">
+      <h1 className="max-w-2xl text-4xl font-semibold leading-tight text-black/75 md:text-[3.44rem]">
+        {title}
+      </h1>
       <div
         className="prose-clone mt-8"
         // our own harvested, spam-stripped content — no third-party input

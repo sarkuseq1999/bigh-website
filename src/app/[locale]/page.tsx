@@ -2,6 +2,7 @@ import Image from "next/image";
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Hero } from "@/components/clone/hero";
+import { ParticlesBg } from "@/components/clone/particles";
 import { Reveal } from "@/components/clone/reveal";
 import { Link } from "@/i18n/navigation";
 import { routing, type Locale } from "@/i18n/routing";
@@ -193,8 +194,11 @@ export default async function HomePage({
         </div>
       </section>
 
-      {/* Guided by Science — text left, large microscope right */}
-      <section className="mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 md:grid-cols-[1fr_1.15fr]">
+      {/* Guided by Science — text left, large microscope right,
+          particles.js-style network background like the original */}
+      <section className="relative">
+        <ParticlesBg className="absolute inset-0 h-full w-full" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-8 px-4 py-14 sm:px-6 md:grid-cols-[1fr_1.15fr]">
         <Reveal className="text-center md:text-left">
           <h2 className="text-[clamp(2rem,3.8vw,3.4rem)] font-semibold">{t("scienceTitle")}</h2>
           <p className="mx-auto mt-4 max-w-md md:mx-0">{t("scienceBody")}</p>
@@ -214,6 +218,7 @@ export default async function HomePage({
             sizes="(max-width: 768px) 90vw, 700px"
           />
         </Reveal>
+        </div>
       </section>
 
       {/* Learn more / Connect — faithful two-panel band */}

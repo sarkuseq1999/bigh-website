@@ -90,10 +90,11 @@ export function SiteHeader() {
   const aboutItems = ABOUT_SLUGS.map((slug) => ({ href: `/${slug}`, label: aboutLabels[slug] }));
 
   return (
-    <header className="sticky top-0 z-40 bg-ink-dark/95 backdrop-blur">
-      {/* top microbar, as on the original */}
-      <div className="border-b border-white/10">
-        <div className="mx-auto flex h-8 max-w-6xl items-center justify-end gap-1 px-4 text-xs text-white/70 sm:px-6">
+    // the original header floats transparently over the page (135px total):
+    // clear microbar + a 54%-black main row
+    <header className="absolute left-0 top-0 z-40 w-full">
+      <div>
+        <div className="mx-auto flex h-8 max-w-6xl items-center justify-end gap-1 px-4 text-xs text-white/80 sm:px-6">
           <span aria-hidden>|</span>
           <a href={LOGIN_URL} className="px-1.5 font-semibold hover:text-green">
             {t("login")}
@@ -106,6 +107,7 @@ export function SiteHeader() {
         </div>
       </div>
 
+      <div className="bg-black/55">
       <div className="mx-auto flex h-[6.5rem] max-w-6xl items-center justify-between gap-4 px-4 sm:px-6">
         <Link href="/" className="flex shrink-0 items-center" aria-label="BiGH — Home">
           <Image
@@ -158,9 +160,10 @@ export function SiteHeader() {
           </svg>
         </button>
       </div>
+      </div>
 
       {mobileOpen && (
-        <div className="border-t border-white/10 bg-ink-dark px-4 pb-6 pt-3 lg:hidden">
+        <div className="border-t border-white/10 bg-ink-dark/95 px-4 pb-6 pt-3 backdrop-blur lg:hidden">
           <p className="pb-1 pt-2 text-xs font-semibold uppercase tracking-widest text-white/50">
             {t("products")}
           </p>

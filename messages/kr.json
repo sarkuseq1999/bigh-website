@@ -54,5 +54,21 @@
     "madeLine": "Made in California · cGMP · HPTLC",
     "rights": "© {year} BiGH Corporation. All rights reserved.",
     "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+  },
+  "Support": {
+    "title": "문의하기",
+    "name": "성함",
+    "namePh": "이름, 성",
+    "customerId": "회원번호 (기존 회원인 경우)",
+    "customerIdPh": "숫자만 입력",
+    "email": "이메일",
+    "phone": "전화번호",
+    "phonePh": "숫자만 입력",
+    "subject": "제목",
+    "subjectPh": "최대한 구체적으로 적어주세요",
+    "message": "내용",
+    "send": "보내기",
+    "sent": "감사합니다 — 메시지가 전송되었습니다.",
+    "failed": "전송에 실패했습니다. 다시 시도해 주세요."
   }
 }

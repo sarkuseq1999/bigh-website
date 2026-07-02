@@ -1,0 +1,86 @@
+{
+ "organic": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/sprouts.jpg\")",
+   "h": 832
+  },
+  "title": "Certified Organic",
+  "titleColor": "rgba(255, 255, 255, 0.98)",
+  "titleSize": "63px"
+ },
+ "non-gmo": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/03/gmo1.jpg\")",
+   "h": 676
+  },
+  "title": "What is GMO?",
+  "titleColor": "rgba(255, 255, 255, 0.98)",
+  "titleSize": "63px"
+ },
+ "gluten-free": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/03/organic-1.jpg\")",
+   "h": 1272
+  },
+  "title": "Gluten Free",
+  "titleColor": "rgba(255, 255, 255, 0.98)",
+  "titleSize": "63px"
+ },
+ "vegan": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/03/vegan-3.jpg\")",
+   "h": 730
+  },
+  "title": "Vegan",
+  "titleColor": "rgba(255, 255, 255, 0.98)",
+  "titleSize": "63px"
+ },
+ "opportunity": {
+  "banner": null,
+  "title": "Opportunity",
+  "titleColor": "rgba(0, 0, 0, 0.76)",
+  "titleSize": "55px"
+ },
+ "career": {
+  "banner": null,
+  "title": "Career",
+  "titleColor": "rgba(0, 0, 0, 0.76)",
+  "titleSize": "55px"
+ },
+ "signup": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/signup_bg4.jpg\")",
+   "h": 1100
+  },
+  "title": "Sign Up",
+  "titleColor": "rgba(255, 255, 255, 0.76)",
+  "titleSize": "50px"
+ },
+ "login": {
+  "banner": {
+   "img": "url(\"https://bighnow.com/wp-content/uploads/2019/04/login_bg5.jpg\")",
+   "h": 1000
+  },
+  "title": "Login",
+  "titleColor": "rgba(255, 255, 255, 0.94)",
+  "titleSize": "67px"
+ },
+ "privacy-notice": {
+  "banner": null,
+  "title": "Privacy Notice",
+  "titleColor": "rgba(0, 0, 0, 0.76)",
+  "titleSize": "55px"
+ },
+ "terms-and-conditions": {
+  "banner": null,
+  "title": "Terms and Conditions",
+  "titleColor": "rgba(0, 0, 0, 0.76)",
+  "titleSize": "55px"
+ },
+ "return-policy": {
+  "banner": null,
+  "title": "Return Policy",
+  "titleColor": "rgba(0, 0, 0, 0.76)",
+  "titleSize": "55px"
+ }
+}

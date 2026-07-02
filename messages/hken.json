@@ -54,5 +54,21 @@
     "madeLine": "Made in California · cGMP · HPTLC",
     "rights": "© {year} BiGH Corporation. All rights reserved.",
     "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+  },
+  "Support": {
+    "title": "联系表格",
+    "name": "姓名",
+    "namePh": "名, 姓",
+    "customerId": "会员编号（如已注册）",
+    "customerIdPh": "仅限数字",
+    "email": "电子邮件",
+    "phone": "电话号码",
+    "phonePh": "仅限数字",
+    "subject": "主题",
+    "subjectPh": "请尽量描述准确",
+    "message": "留言内容",
+    "send": "发送",
+    "sent": "谢谢——您的留言已发送。",
+    "failed": "发送失败，请重试。"
   }
 }
