@@ -203,14 +203,21 @@ export function parseProduct(page: HarvestPage): ProductContent {
     const cards: { title: string; text: string; icon: string | null }[] = [];
     const paragraphs: string[] = [];
     const subParts = body.split(/^###\s+/m);
-    // content images that live directly in this section (e.g. the Reishi
-    // mushroom photo) — card icons, pack shots and decorations are excluded
+    const blockImages = (block: string): string[] =>
+      [...block.matchAll(/!\[[^\]]*\]\((https?:\/\/(?:www\.)?bighnow\.com\/wp-content\/[^)]+)\)/g)]
+        .filter((m) => !/1140_|final6|buynow|shapedivider|sup_|ser_|Supplement|Suggested|Serving/i.test(m[1]))
+        .map((m) => localAsset(m[1]));
+
+    // In the legacy markup each ingredient icon appears BEFORE its ### heading,
+    // i.e. the icon for card N sits at the end of block N-1 (or the section
+    // preamble for the first card).
+    const preambleImages = blockImages(subParts[0]);
+    let pendingIcon: string | null =
+      subParts.length > 1 ? (preambleImages.pop() ?? null) : null;
+    // remaining preamble images are real section content (e.g. Reishi photo)
     const images: string[] = [];
-    for (const im of subParts[0].matchAll(/!\[[^\]]*\]\((https?:\/\/(?:www\.)?bighnow\.com\/wp-content\/[^)]+)\)/g)) {
-      if (!/1140_|final6|buynow|shapedivider|sup_|ser_|Supplement|Suggested|Serving/i.test(im[1])) {
-        const p = localAsset(im[1]);
-        if (!images.includes(p)) images.push(p);
-      }
+    for (const p of preambleImages) {
+      if (!images.includes(p)) images.push(p);
     }
     for (const p of subParts[0].split(/\n{2,}/)) {
       if (isLinkOnlyBlock(p)) continue;
@@ -220,17 +227,13 @@ export function parseProduct(page: HarvestPage): ProductContent {
     for (const sub of subParts.slice(1)) {
       const subLines = sub.split("\n");
       const subTitle = cleanText(subLines[0]);
-      const subBody = subLines.slice(1).join(" ");
-      // per-ingredient icon (nano's olive, q10's pomegranate, …)
-      const iconMatch = subBody.match(/!\[[^\]]*\]\((https?:\/\/(?:www\.)?bighnow\.com\/wp-content\/[^)]+)\)/);
+      const subBody = subLines.slice(1).join("\n");
       const subText = cleanProse(subBody);
       if (subTitle) {
-        cards.push({
-          title: subTitle,
-          text: subText,
-          icon: iconMatch ? localAsset(iconMatch[1]) : null,
-        });
+        cards.push({ title: subTitle, text: subText, icon: pendingIcon });
       }
+      // an image at the end of this block is the NEXT card's icon
+      pendingIcon = blockImages(subBody).pop() ?? null;
     }
     if (title || paragraphs.length || cards.length || images.length) {
       sections.push({ title, paragraphs, cards, images });

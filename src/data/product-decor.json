@@ -1,0 +1,450 @@
+{
+ "advanced-opc-formula": {
+  "heroH": 1231,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/Asset-2-1.png",
+    "x": -72,
+    "y": 33,
+    "w": 482,
+    "h": 434
+   },
+   {
+    "img": "/original/uploads/2019/04/Asset-1.png",
+    "x": 1260,
+    "y": 821,
+    "w": 229,
+    "h": 525
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/noni-1.png",
+    "x": 74,
+    "y": 1423,
+    "w": 140,
+    "h": 97,
+    "yRel": 192
+   },
+   {
+    "img": "/original/uploads/2019/04/pinebark-1.png",
+    "x": 356,
+    "y": 1438,
+    "w": 153,
+    "h": 77,
+    "yRel": 207
+   },
+   {
+    "img": "/original/uploads/2019/04/bilberry-1.png",
+    "x": 669,
+    "y": 1429,
+    "w": 103,
+    "h": 89,
+    "yRel": 198
+   },
+   {
+    "img": "/original/uploads/2019/04/grapeseed.png",
+    "x": 938,
+    "y": 1413,
+    "w": 140,
+    "h": 110,
+    "yRel": 182
+   },
+   {
+    "img": "/original/uploads/2019/04/teablend.png",
+    "x": 1241,
+    "y": 1425,
+    "w": 110,
+    "h": 94,
+    "yRel": 194
+   }
+  ]
+ },
+ "deer-horn-reishi": {
+  "heroH": 1135,
+  "hero": [],
+  "body": []
+ },
+ "green-bee-propolis": {
+  "heroH": 1159,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/propolis_bg_dividershape-1024x152.png",
+    "x": 0,
+    "y": 946,
+    "w": 1440,
+    "h": 214
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/propolis_bd_flower.png",
+    "x": 66,
+    "y": 1146,
+    "w": 480,
+    "h": 396,
+    "yRel": -13
+   }
+  ]
+ },
+ "heart-q10": {
+  "heroH": 1106,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/q10_pom_2-423x1024.png",
+    "x": 1057,
+    "y": 437,
+    "w": 378,
+    "h": 915
+   },
+   {
+    "img": "/original/uploads/2019/04/q10_pom.png",
+    "x": -214,
+    "y": 55,
+    "w": 496,
+    "h": 789
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/pomegranate.png",
+    "x": 213,
+    "y": 1290,
+    "w": 160,
+    "h": 122,
+    "yRel": 184
+   },
+   {
+    "img": "/original/uploads/2019/04/redyeast.png",
+    "x": 800,
+    "y": 1288,
+    "w": 126,
+    "h": 133,
+    "yRel": 182
+   },
+   {
+    "img": "/original/uploads/2019/04/folate.png",
+    "x": 1085,
+    "y": 1301,
+    "w": 125,
+    "h": 106,
+    "yRel": 195
+   },
+   {
+    "img": "/original/uploads/2019/04/q10_pom_s3_1.png",
+    "x": 1277,
+    "y": 1886,
+    "w": 284,
+    "h": 281,
+    "yRel": 780
+   }
+  ]
+ },
+ "nature-calm": {
+  "heroH": 1182,
+  "hero": [],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/antioxidants.png",
+    "x": 276,
+    "y": 1346,
+    "w": 127,
+    "h": 103,
+    "yRel": 164
+   },
+   {
+    "img": "/original/uploads/2019/04/bvitamin.png",
+    "x": 635,
+    "y": 1357,
+    "w": 170,
+    "h": 88,
+    "yRel": 175
+   },
+   {
+    "img": "/original/uploads/2019/04/amino.png",
+    "x": 1000,
+    "y": 1353,
+    "w": 200,
+    "h": 94,
+    "yRel": 171
+   }
+  ]
+ },
+ "nano-detoxifier": {
+  "heroH": 1261,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/olive1.png",
+    "x": -69,
+    "y": -70,
+    "w": 260,
+    "h": 302
+   },
+   {
+    "img": "/original/uploads/2019/04/olive6.png",
+    "x": 1389,
+    "y": 612,
+    "w": 173,
+    "h": 179
+   },
+   {
+    "img": "/original/uploads/2019/04/olive2.png",
+    "x": -106,
+    "y": 632,
+    "w": 260,
+    "h": 237
+   },
+   {
+    "img": "/original/uploads/2019/04/olive3.png",
+    "x": 1118,
+    "y": -94,
+    "w": 260,
+    "h": 233
+   },
+   {
+    "img": "/original/uploads/2019/04/olive7.png",
+    "x": 1203,
+    "y": 302,
+    "w": 312,
+    "h": 279
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/nano_olive.png",
+    "x": 276,
+    "y": 1436,
+    "w": 127,
+    "h": 108,
+    "yRel": 175
+   },
+   {
+    "img": "/original/uploads/2019/04/Nano_B12.png",
+    "x": 670,
+    "y": 1453,
+    "w": 100,
+    "h": 91,
+    "yRel": 192
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_greentea.png",
+    "x": 1040,
+    "y": 1448,
+    "w": 120,
+    "h": 98,
+    "yRel": 187
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_s2_1.png",
+    "x": 55,
+    "y": 1171,
+    "w": 160,
+    "h": 166,
+    "yRel": -90
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_s2_2.png",
+    "x": 1308,
+    "y": 1664,
+    "w": 160,
+    "h": 146,
+    "yRel": 403
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_s3_leaf_1.png",
+    "x": -19,
+    "y": 1909,
+    "w": 149,
+    "h": 153,
+    "yRel": 648
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_s3_leaf_2.png",
+    "x": 9,
+    "y": 2229,
+    "w": 90,
+    "h": 88,
+    "yRel": 968
+   },
+   {
+    "img": "/original/uploads/2019/04/nano_s3_leaf3.png",
+    "x": 1208,
+    "y": 2147,
+    "w": 128,
+    "h": 125,
+    "yRel": 886
+   }
+  ]
+ },
+ "nuricell": {
+  "heroH": 1176,
+  "hero": [],
+  "body": []
+ },
+ "super-green": {
+  "heroH": 1135,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/USDA_highres.png",
+    "x": 760,
+    "y": 795,
+    "w": 110,
+    "h": 110
+   },
+   {
+    "img": "/original/uploads/2019/04/QAI.png",
+    "x": 920,
+    "y": 796,
+    "w": 150,
+    "h": 108
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/cereal-grass.png",
+    "x": 65,
+    "y": 1289,
+    "w": 127,
+    "h": 116,
+    "yRel": 154
+   },
+   {
+    "img": "/original/uploads/2019/04/fruits-and-berry.png",
+    "x": 301,
+    "y": 1319,
+    "w": 127,
+    "h": 77,
+    "yRel": 184
+   },
+   {
+    "img": "/original/uploads/2019/04/omega-and-fiber.png",
+    "x": 538,
+    "y": 1329,
+    "w": 127,
+    "h": 63,
+    "yRel": 194
+   },
+   {
+    "img": "/original/uploads/2019/04/herbs-and-veg.png",
+    "x": 775,
+    "y": 1299,
+    "w": 127,
+    "h": 103,
+    "yRel": 164
+   },
+   {
+    "img": "/original/uploads/2019/04/algaeblend.png",
+    "x": 1024,
+    "y": 1293,
+    "w": 101,
+    "h": 111,
+    "yRel": 158
+   },
+   {
+    "img": "/original/uploads/2019/04/enzyme.png",
+    "x": 1212,
+    "y": 1293,
+    "w": 200,
+    "h": 112,
+    "yRel": 158
+   }
+  ]
+ },
+ "turmerific": {
+  "heroH": 1195,
+  "hero": [
+   {
+    "img": "/original/uploads/2020/03/Turmeric-Page-Top-Banner-ART-9-487x1024.png",
+    "x": -200,
+    "y": 163,
+    "w": 418,
+    "h": 879
+   },
+   {
+    "img": "/original/uploads/2020/03/Turmeric-Page-Top-Banner-ART-5-1-494x1024.png",
+    "x": 1295,
+    "y": 145,
+    "w": 495,
+    "h": 1026
+   },
+   {
+    "img": "/original/uploads/2020/03/NonGMOProject_JPG1.jpg",
+    "x": 750,
+    "y": 771,
+    "w": 150,
+    "h": 106
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2020/03/Untitled-4.png",
+    "x": -72,
+    "y": 2230,
+    "w": 347,
+    "h": 540,
+    "yRel": 1035
+   }
+  ]
+ },
+ "uber-calcium": {
+  "heroH": 1135,
+  "hero": [
+   {
+    "img": "/original/uploads/2019/04/USDA_highres.png",
+    "x": 759,
+    "y": 884,
+    "w": 112,
+    "h": 112
+   },
+   {
+    "img": "/original/uploads/2019/04/QAI.png",
+    "x": 920,
+    "y": 889,
+    "w": 143,
+    "h": 103
+   }
+  ],
+  "body": [
+   {
+    "img": "/original/uploads/2019/04/algas.png",
+    "x": 89,
+    "y": 1367,
+    "w": 127,
+    "h": 115,
+    "yRel": 232
+   },
+   {
+    "img": "/original/uploads/2019/04/fermentedcalblend.png",
+    "x": 353,
+    "y": 1354,
+    "w": 166,
+    "h": 132,
+    "yRel": 219
+   },
+   {
+    "img": "/original/uploads/2019/04/lichen.png",
+    "x": 657,
+    "y": 1374,
+    "w": 127,
+    "h": 105,
+    "yRel": 239
+   },
+   {
+    "img": "/original/uploads/2019/04/natto.png",
+    "x": 934,
+    "y": 1361,
+    "w": 141,
+    "h": 123,
+    "yRel": 226
+   },
+   {
+    "img": "/original/uploads/2019/04/ayurvedic.png",
+    "x": 1203,
+    "y": 1348,
+    "w": 170,
+    "h": 140,
+    "yRel": 213
+   }
+  ]
+ }
+}

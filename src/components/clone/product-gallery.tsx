@@ -6,11 +6,12 @@ import { useState } from "react";
 interface GalleryProps {
   images: { src: string; width: number; height: number }[];
   alt: string;
+  dark?: boolean;
 }
 
 // Main bottle shot + thumbnail strip; thumbnails swap the main image,
 // matching (and smoothing) the original page's gallery behavior.
-export function ProductGallery({ images, alt }: GalleryProps) {
+export function ProductGallery({ images, alt, dark = false }: GalleryProps) {
   const [active, setActive] = useState(0);
   if (images.length === 0) return null;
   const main = images[active];
@@ -39,7 +40,13 @@ export function ProductGallery({ images, alt }: GalleryProps) {
                 aria-label={`${alt} ${i + 1}`}
                 aria-current={i === active}
                 className={`block w-[8.5rem] max-w-[22vw] rounded-md border p-2 transition-colors ${
-                  i === active ? "border-white bg-white/15" : "border-white/50 hover:border-white"
+                  dark
+                    ? i === active
+                      ? "border-black/60 bg-black/5"
+                      : "border-black/25 hover:border-black/60"
+                    : i === active
+                      ? "border-white bg-white/15"
+                      : "border-white/50 hover:border-white"
                 }`}
               >
                 <Image src={img.src} alt="" width={img.width} height={img.height} className="h-auto w-full" sizes="136px" />
