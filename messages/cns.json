@@ -1,0 +1,53 @@
+{
+  "Meta": {
+    "title": "BiGH — Be in Good Health",
+    "description": "将大自然和科学相结合而配制出新时代健康食品的艺术。美国加州出品，cGMP·HPTLC认证。"
+  },
+  "Nav": {
+    "home": "首页",
+    "products": "产品",
+    "about": "经营理念",
+    "aboutBigh": "关于BiGH",
+    "organic": "有机认证",
+    "nonGmo": "非转基因",
+    "glutenFree": "无麸质",
+    "vegan": "素食",
+    "science": "科学",
+    "support": "顾客服务",
+    "login": "登录",
+    "signup": "注册",
+    "menu": "菜单",
+    "language": "语言"
+  },
+  "Home": {
+    "eyebrow": "Nature Science",
+    "brand": "BiGH",
+    "tagline": "将大自然和科学相结合而配制出新时代健康食品的艺术。",
+    "learnMore": "了解更多",
+    "viewProducts": "查看产品",
+    "latestEyebrow": "新产品",
+    "featuredSlug": "deer-horn-reishi",
+    "featuredBlurb": "市场上最稀有和高纯度的天然有机赤灵芝。",
+    "madeTitle": "加利福尼亚州出品",
+    "madeBody": "我们所有的产品都是在美国加利福尼亚州生产。我们对于合作伙伴的要求非常严格，只有cGMP和HPTLC认证的制造商并同时享有数十年的卓越成果，和我们拥有共同一致的愿景为客户提供无妥协的健康食品，才能赢得我们的信任。",
+    "popular": "人气产品",
+    "standards": "品质标准"
+  },
+  "Product": {
+    "buyNow": "立即购买",
+    "allProducts": "全部产品",
+    "eyebrow": "BiGH 配方"
+  },
+  "Footer": {
+    "products": "产品",
+    "company": "公司",
+    "legal": "条款",
+    "opportunity": "Opportunity",
+    "career": "Career",
+    "privacy": "Privacy Notice",
+    "terms": "Terms and Conditions",
+    "returns": "Return Policy",
+    "madeLine": "Made in California · cGMP · HPTLC",
+    "rights": "© {year} BiGH Corporation. All rights reserved."
+  }
+}

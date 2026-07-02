@@ -53,3 +53,6 @@ Thumbs.db
 # Brainstorming visual companion
 .superpowers/
 .playwright-mcp/
+
+# synced from content/harvest/assets at build time
+/public/original/

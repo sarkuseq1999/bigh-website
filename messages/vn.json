@@ -1,0 +1,53 @@
+{
+  "Meta": {
+    "title": "BiGH — Be in Good Health",
+    "description": "Nghệ thuật kết hợp thiên nhiên và khoa học trong thực phẩm bổ sung hiện đại. Sản xuất tại California, chứng nhận cGMP và HPTLC."
+  },
+  "Nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "about": "Về chúng tôi",
+    "aboutBigh": "Về chúng tôi",
+    "organic": "Hữu cơ",
+    "nonGmo": "Không biến đổi gen",
+    "glutenFree": "Không chứa gluten",
+    "vegan": "Ăn chay",
+    "science": "Khoa Học",
+    "support": "Hỗ trợ khách hàng",
+    "login": "Đăng nhập",
+    "signup": "Đăng ký",
+    "menu": "Menu",
+    "language": "Ngôn ngữ"
+  },
+  "Home": {
+    "eyebrow": "Nature Science",
+    "brand": "BiGH",
+    "tagline": "The art of incorporating nature and science into modern dietary supplements.",
+    "learnMore": "Tìm hiểu thêm",
+    "viewProducts": "Xem sản phẩm",
+    "latestEyebrow": "Latest Release",
+    "featuredSlug": "deer-horn-reishi",
+    "featuredBlurb": "The rarest and most potent organic Reishi mushroom on the market.",
+    "madeTitle": "Made in California",
+    "madeBody": "All of our products are proudly made in California. We are picky about who we work with — only cGMP and HPTLC certified manufacturers with decades of great results, who share our vision of delivering no-compromise nutritional supplements, earn our trust.",
+    "popular": "Sản phẩm phổ biến",
+    "standards": "Tiêu chuẩn chất lượng"
+  },
+  "Product": {
+    "buyNow": "Mua ngay",
+    "allProducts": "Tất cả sản phẩm",
+    "eyebrow": "BiGH Formulary"
+  },
+  "Footer": {
+    "products": "Sản phẩm",
+    "company": "Công ty",
+    "legal": "Điều khoản",
+    "opportunity": "Opportunity",
+    "career": "Career",
+    "privacy": "Privacy Notice",
+    "terms": "Terms and Conditions",
+    "returns": "Return Policy",
+    "madeLine": "Made in California · cGMP · HPTLC",
+    "rights": "© {year} BiGH Corporation. All rights reserved."
+  }
+}

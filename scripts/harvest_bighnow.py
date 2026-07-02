@@ -129,6 +129,8 @@ def real_src(img):
 
 def extract(url, html, spam_log):
     soup = BeautifulSoup(html, "html.parser")
+    for junk in soup.find_all(["script", "style", "noscript", "template"]):
+        junk.decompose()
     removed = strip_spam(soup)
     if removed:
         spam_log[url] = removed

@@ -5,38 +5,62 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* warm-laboratory palette (confirmed) */
-  --paper:    #F6F1E8;
-  --paper-2:  #EFE8DA;
-  --ink:      #1B1A17;
-  --ink-soft: #6E665A;
-  --forest:   #16201B;
-  --amber:    #C28A3A;
-  --amber-hi: #DDA94E;
-  --glow:     #44CDA9;
-  --line:     #D8CEBD;
+  /* ── celadon apothecary palette ──────────────────────────────────
+     Korean celadon glaze + hanji paper + pine ink + propolis amber.
+     Calm, premium, trustworthy — the register of heritage health. */
+  --porcelain: #f7f6f1;
+  --hanji: #efece3;
+  --celadon: #9dbfae;
+  --celadon-deep: #5f8a75;
+  --pine: #17342b;
+  --pine-soft: #5b6d63;
+  --amber: #b97f2e;
+  --amber-hi: #d49a44;
+  --line: #ddd8cb;
 
-  /* shadcn semantic tokens mapped onto the palette so existing utilities resolve */
-  --background: var(--paper);
-  --foreground: var(--ink);
-  --muted: var(--paper-2);
-  --muted-foreground: var(--ink-soft);
+  /* per-locale CJK companions, set on html[lang=…] below */
+  --cjk-serif: "Iowan Old Style";
+  --cjk-sans: "Segoe UI";
+
+  /* shadcn semantic tokens mapped onto the palette */
+  --background: var(--porcelain);
+  --foreground: var(--pine);
+  --muted: var(--hanji);
+  --muted-foreground: var(--pine-soft);
   --border: var(--line);
-  --card: var(--paper);
-  --card-foreground: var(--ink);
+  --card: var(--porcelain);
+  --card-foreground: var(--pine);
   --primary: var(--amber);
-  --primary-foreground: var(--ink);
+  --primary-foreground: #fffdf7;
+}
+
+html[lang="kr"] {
+  --cjk-serif: "Noto Serif KR";
+  --cjk-sans: "Noto Sans KR";
+}
+html[lang="jp"] {
+  --cjk-serif: "Noto Serif JP";
+  --cjk-sans: "Noto Sans JP";
+}
+html[lang="cns"],
+html[lang="hken"] {
+  --cjk-serif: "Noto Serif SC";
+  --cjk-sans: "Noto Sans SC";
+}
+html[lang="vn"] {
+  --cjk-serif: "Noto Serif";
+  --cjk-sans: "Noto Sans";
 }
 
 @theme inline {
-  --color-paper: var(--paper);
-  --color-paper-2: var(--paper-2);
-  --color-ink: var(--ink);
-  --color-ink-soft: var(--ink-soft);
-  --color-forest: var(--forest);
+  --color-porcelain: var(--porcelain);
+  --color-hanji: var(--hanji);
+  --color-celadon: var(--celadon);
+  --color-celadon-deep: var(--celadon-deep);
+  --color-pine: var(--pine);
+  --color-pine-soft: var(--pine-soft);
   --color-amber: var(--amber);
   --color-amber-hi: var(--amber-hi);
-  --color-glow: var(--glow);
   --color-line: var(--line);
 
   --color-background: var(--background);
@@ -49,63 +73,86 @@
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
 
-  --font-display: var(--font-fraunces);
-  --font-sans: var(--font-hanken);
-  --font-mono: var(--font-spline);
+  --font-display: var(--font-fraunces), var(--cjk-serif), serif;
+  --font-sans: var(--font-hanken), var(--cjk-sans), system-ui, sans-serif;
+  --font-mono: var(--font-spline), monospace;
 }
 
 @layer base {
   body {
-    background-color: var(--paper);
-    color: var(--ink);
-    font-family: var(--font-hanken), system-ui, sans-serif;
-    font-size: 1.1875rem;   /* 19px */
-    line-height: 1.6;
+    background-color: var(--porcelain);
+    color: var(--pine);
+    font-family: var(--font-hanken), var(--cjk-sans), system-ui, sans-serif;
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
-  ::selection { background: var(--amber); color: var(--ink); }
+  ::selection {
+    background: var(--celadon);
+    color: var(--pine);
+  }
+  :focus-visible {
+    outline: 2px solid var(--celadon-deep);
+    outline-offset: 2px;
+  }
 }
 
 @layer components {
-  /* ── hero "Ignite + Protect" atmosphere ─────────────────────────────
-     The dark base doubles as the WebGL canvas backdrop (the canvas is
-     transparent) and as the floor of the no-JS / no-WebGL fallback. */
-  .hero-dark {
-    background-color: #0B100D;
+  /* long-form pages (legal, about, science) rendered from harvested markdown */
+  .prose-clone {
+    max-width: 44rem;
   }
-  .hero-base {
-    background:
-      radial-gradient(1100px 700px at 68% 38%, rgba(194, 138, 58, 0.10), transparent 60%),
-      radial-gradient(900px 600px at 30% 82%, rgba(68, 205, 169, 0.05), transparent 60%),
-      linear-gradient(180deg, #0D130F 0%, #0B100D 55%, #0C110E 100%);
+  .prose-clone h1,
+  .prose-clone h2,
+  .prose-clone h3 {
+    font-family: var(--font-display);
+    color: var(--pine);
+    line-height: 1.25;
+    margin: 2.2em 0 0.6em;
+    text-wrap: balance;
   }
-  .hero-base::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(140% 100% at 50% 40%, transparent 58%, rgba(5, 8, 6, 0.55) 100%);
+  .prose-clone h1 { font-size: 2rem; }
+  .prose-clone h2 { font-size: 1.5rem; }
+  .prose-clone h3 { font-size: 1.2rem; }
+  .prose-clone p,
+  .prose-clone li {
+    color: var(--pine);
+    margin: 0.9em 0;
+  }
+  .prose-clone ul,
+  .prose-clone ol {
+    padding-left: 1.4em;
+  }
+  .prose-clone ul { list-style: disc; }
+  .prose-clone ol { list-style: decimal; }
+  .prose-clone a {
+    color: var(--celadon-deep);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-clone a:hover { color: var(--amber); }
+  .prose-clone img {
+    border-radius: 1rem;
+    margin: 1.6em auto;
+    box-shadow: 0 8px 30px rgba(23, 52, 43, 0.08);
+  }
+  .prose-clone hr {
+    border-color: var(--line);
+    margin: 2.5em 0;
   }
 
-  /* Static "already lit" glows: appear only if WebGL hasn't taken over
-     within 1.2s (the scene unmounts this layer when it goes live). */
-  .hero-static-glow {
+  /* scroll-reveal: .reveal-pending is only ever added by JS after hydration,
+     so content stays visible for crawlers and no-JS visitors */
+  .reveal-pending {
     opacity: 0;
-    filter: blur(2px);
-    background:
-      radial-gradient(220px 220px at 62% 40%, rgba(221, 169, 78, 0.50), transparent 70%),
-      radial-gradient(160px 160px at 78% 55%, rgba(221, 169, 78, 0.38), transparent 70%),
-      radial-gradient(130px 130px at 55% 64%, rgba(194, 138, 58, 0.35), transparent 70%),
-      radial-gradient(110px 110px at 70% 28%, rgba(221, 169, 78, 0.28), transparent 70%);
-    animation: hero-glow-in 0.9s ease-out 1.2s forwards;
+    transform: translateY(14px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  @keyframes hero-glow-in {
-    to { opacity: 1; }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .hero-static-glow {
-      animation: none;
-      opacity: 1;
-    }
+  .reveal-pending.is-revealed {
+    opacity: 1;
+    transform: none;
   }
 }
