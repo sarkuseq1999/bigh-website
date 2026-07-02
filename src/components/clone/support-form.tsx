@@ -25,8 +25,8 @@ interface Labels {
 }
 
 const inputCls =
-  "w-full rounded border border-line bg-white px-3 py-2.5 text-[15px] text-heading outline-none focus:border-green";
-const labelCls = "mb-1 mt-5 block text-[15px] font-medium text-heading";
+  "w-full rounded border border-line bg-white px-3 py-2 text-[15px] text-heading outline-none focus:border-green";
+const labelCls = "mb-1 mt-4 block text-[15px] font-medium text-heading";
 
 export function SupportForm({ labels }: { labels: Labels }) {
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "failed">("idle");

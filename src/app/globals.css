@@ -109,7 +109,34 @@ html[lang="vn"] {
 @layer components {
   /* long-form pages (legal, about, science) rendered from harvested markdown */
   .prose-clone {
-    max-width: 44rem;
+    max-width: 50rem;
+    font-size: 15px;
+  }
+
+  /* white copy rendered directly on page banners (vegan, non-gmo, support) */
+  .prose-banner {
+    max-width: 52rem;
+    font-size: 15px;
+    color: #fff;
+  }
+  .prose-banner p,
+  .prose-banner li {
+    color: #fff;
+    margin: 0.8em 0;
+  }
+  .prose-banner ul {
+    list-style: disc;
+    padding-left: 1.4em;
+  }
+  .prose-banner h2,
+  .prose-banner h3 {
+    color: #fff;
+    font-weight: 600;
+    margin: 1.4em 0 0.5em;
+  }
+  .prose-banner a {
+    color: #fff;
+    text-decoration: underline;
   }
   .prose-clone h1,
   .prose-clone h2,

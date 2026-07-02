@@ -118,7 +118,19 @@ function ProductPage({
   // the original renders "Key Ingredients"-style card sections on white and
   // the remaining prose sections on the second themed band
   const cardSections = content.sections.filter((s) => s.cards.length > 0);
-  const proseSections = content.sections.filter((s) => s.cards.length === 0);
+  // Elementor body copy often lives in heading widgets, which harvest as
+  // sections whose "title" is a full sentence — fold those into the previous
+  // section as paragraphs
+  const proseSections: typeof content.sections = [];
+  for (const s of content.sections.filter((x) => x.cards.length === 0)) {
+    if (s.title.length > 80 && proseSections.length > 0) {
+      const prev = proseSections[proseSections.length - 1];
+      prev.paragraphs = [...prev.paragraphs, s.title, ...s.paragraphs];
+      prev.images = [...prev.images, ...s.images];
+    } else {
+      proseSections.push({ ...s });
+    }
+  }
 
   // only substantial images render as section content (e.g. the Reishi photo);
   // small ones are decorative floaters handled by the decor map
@@ -245,23 +257,32 @@ function ProductPage({
               </p>
             ))}
             <ul
-              className={`mx-auto mt-20 grid gap-x-9 gap-y-8 sm:grid-cols-2 ${
-                sec.cards.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"
+              className={`mx-auto mt-24 grid gap-x-7 gap-y-16 sm:grid-cols-2 ${
+                sec.cards.length >= 6
+                  ? "lg:grid-cols-6"
+                  : sec.cards.length === 5
+                    ? "lg:grid-cols-5"
+                    : sec.cards.length === 4
+                      ? "lg:grid-cols-4"
+                      : "lg:grid-cols-3"
               }`}
             >
               {sec.cards.map((c) => (
-                <li key={c.title} className="rounded-lg bg-[#f6f6f7] px-5 py-6 text-center">
-                  {c.icon && (
+                <li key={c.title} className="rounded-lg bg-[#f6f6f7] px-4 pb-6 text-center">
+                  {/* the original pulls each icon half out of the card top */}
+                  {c.icon ? (
                     <Image
                       src={c.icon}
                       alt=""
                       {...imageDims(c.icon)}
-                      className="mx-auto mb-4 h-24 w-auto object-contain"
+                      className="mx-auto -mt-12 mb-2 h-24 w-auto object-contain"
                       sizes="130px"
                     />
+                  ) : (
+                    <div className="pt-5" />
                   )}
-                  <h3 className="text-xl font-semibold">{c.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed">{c.text}</p>
+                  <h3 className="text-lg font-semibold">{c.title}</h3>
+                  <p className="mt-3 text-[13px] leading-relaxed">{c.text}</p>
                 </li>
               ))}
             </ul>
@@ -310,6 +331,8 @@ function ProductPage({
                       />
                     ))}
                   </div>
+                ) : sec.title.length > 80 ? (
+                  <p className="text-center text-[15px] leading-relaxed">{sec.title}</p>
                 ) : (
                   <h2
                     className={`text-center text-[clamp(2rem,3.6vw,3.2rem)] font-semibold ${
@@ -368,27 +391,88 @@ export default async function ClonePage({
   const html = mdToHtml(markdown);
   const banner = PAGE_BANNERS[slug];
 
+  // signup: translucent panel over the banner with two clickable options,
+  // exactly like the original (Customer | Member -> iMatrix signup flows)
+  if (banner && slug === "signup") {
+    const intro = markdown.match(/^##\s+(.{80,})$/m)?.[1]?.trim() ?? "";
+    const options = [...markdown.matchAll(/\[!\[\]\(([^)]+)\)\]\(([^)]+)\)\s*\n+##\s+(.+)/g)].map((m) => ({
+      img: m[1].replace(/^https?:\/\/(www\.)?bighnow\.com\/wp-content\//, "/original/"),
+      href: m[2],
+      label: m[3].trim(),
+    }));
+    return (
+      <article>
+        <section className="relative overflow-hidden">
+          <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
+          <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-44 sm:px-6">
+            <div className="mx-auto max-w-3xl rounded-lg bg-black/25 px-6 py-9 text-center backdrop-blur-[2px]">
+              <h1 className="text-4xl font-semibold text-white/95 md:text-[3.1rem]">{title}</h1>
+              <p className="mx-auto mt-4 max-w-2xl font-medium leading-relaxed text-white">{intro}</p>
+              <div className="mt-8 grid gap-8 sm:grid-cols-2">
+                {options.map((o) => (
+                  <a key={o.href} href={o.href} className="group block">
+                    <span className="block overflow-hidden rounded">
+                      <Image
+                        src={o.img}
+                        alt={o.label}
+                        {...imageDims(o.img)}
+                        className="h-auto w-full transition-transform duration-500 group-hover:scale-[1.04]"
+                        sizes="(max-width: 640px) 90vw, 330px"
+                      />
+                    </span>
+                    <span className="mt-3 block text-xl font-semibold text-white">{o.label}</span>
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </article>
+    );
+  }
+
   if (banner) {
     const t = slug === "support" ? await getTranslations({ locale, namespace: "Support" }) : null;
+    // these pages show their opening copy ON the banner in white, per the original
+    const onBanner = ["vegan", "non-gmo", "support"].includes(slug);
+    let bannerHtml = "";
+    let belowHtml = html;
+    if (onBanner) {
+      const idx = markdown.search(/^##\s/m);
+      bannerHtml = mdToHtml(idx === -1 ? markdown : markdown.slice(0, idx));
+      belowHtml = idx === -1 ? "" : mdToHtml(markdown.slice(idx));
+    }
     return (
       <article>
         {/* full-bleed banner with centered white title, per the original */}
         <section
-          className="relative flex items-center justify-center overflow-hidden"
-          style={{ height: `min(62vw, ${banner.h}px)` }}
+          className={`relative overflow-hidden ${onBanner ? "" : "flex items-center justify-center"}`}
+          style={onBanner ? { minHeight: `min(52vw, ${banner.h}px)` } : { height: `min(62vw, ${banner.h}px)` }}
         >
           <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
-          <div aria-hidden className="absolute inset-0 bg-black/20" />
-          <h1 className="relative px-4 text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
-            {title}
-          </h1>
+          <div aria-hidden className="absolute inset-0 bg-black/25" />
+          {onBanner ? (
+            <div className="relative mx-auto max-w-5xl px-4 pb-14 pt-40 sm:px-6">
+              <h1 className="text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
+                {title}
+              </h1>
+              <div
+                className="prose-banner mx-auto mt-6"
+                dangerouslySetInnerHTML={{ __html: bannerHtml }}
+              />
+            </div>
+          ) : (
+            <h1 className="relative px-4 text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
+              {title}
+            </h1>
+          )}
         </section>
-        {html.trim() && (
+        {belowHtml.trim() && (
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
             <div
               className="prose-clone mx-auto"
               // our own harvested, spam-stripped content — no third-party input
-              dangerouslySetInnerHTML={{ __html: html }}
+              dangerouslySetInnerHTML={{ __html: belowHtml }}
             />
           </div>
         )}
