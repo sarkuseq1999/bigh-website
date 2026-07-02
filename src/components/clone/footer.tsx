@@ -18,8 +18,8 @@ export async function SiteFooter({ locale }: { locale: Locale }) {
   ];
 
   return (
-    <footer className="mt-20 bg-[#111114] text-white">
-      <div className="mx-auto max-w-5xl px-4 py-10 sm:px-6">
+    <footer className="mt-14 bg-[#111114] text-white">
+      <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
         <p className="mx-auto max-w-4xl rounded-md border border-white/60 px-4 py-3 text-center text-sm font-semibold leading-snug">
           {t("disclaimer")}
         </p>

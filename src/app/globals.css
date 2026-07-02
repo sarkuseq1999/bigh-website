@@ -113,6 +113,16 @@ html[lang="vn"] {
     font-size: 15px;
   }
 
+  /* terms page uses the original's larger legal type */
+  .prose-legal {
+    font-size: 17px;
+    line-height: 1.8;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    margin: 1.05em 0;
+  }
+
   /* white copy rendered directly on page banners (vegan, non-gmo, support) */
   .prose-banner {
     max-width: 52rem;

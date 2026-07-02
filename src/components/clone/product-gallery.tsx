@@ -39,7 +39,7 @@ export function ProductGallery({ images, alt, dark = false }: GalleryProps) {
                 onClick={() => setActive(i)}
                 aria-label={`${alt} ${i + 1}`}
                 aria-current={i === active}
-                className={`block w-[8.5rem] max-w-[22vw] rounded-md border p-2 transition-colors ${
+                className={`block w-[8.25rem] max-w-[22vw] rounded-md border p-1.5 transition-colors ${
                   dark
                     ? i === active
                       ? "border-black/60 bg-black/5"

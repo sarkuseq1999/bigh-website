@@ -33,6 +33,8 @@ const LAYOUT = productLayout as Record<
     gallery: string[];
     divider: string;
     darkText: boolean;
+    heroH: number;
+    bandH: number;
   }
 >;
 
@@ -173,7 +175,12 @@ function ProductPage({
             </ScrollDrift>
           </div>
         ))}
-        <div className="relative mx-auto grid max-w-[70rem] gap-8 px-4 pb-24 pt-[10.3rem] sm:px-6 md:grid-cols-[550px_1fr] md:pb-[18rem]">
+        <div
+          className="relative mx-auto grid max-w-[70rem] gap-8 px-4 pb-24 pt-[10.3rem] sm:px-6 md:grid-cols-[550px_1fr] md:pb-[var(--hero-pb)]"
+          // measured: hero content ends 887px down; each product's hero section
+          // height (incl. its wave divider) comes from the original page
+          style={{ "--hero-pb": `${layout.heroH - 887}px` } as React.CSSProperties}
+        >
           <Reveal>
             <ProductGallery images={gallery} alt={title} dark={layout.darkText} />
           </Reveal>
@@ -268,21 +275,36 @@ function ProductPage({
               }`}
             >
               {sec.cards.map((c) => (
-                <li key={c.title} className="rounded-lg bg-[#f6f6f7] px-4 pb-6 text-center">
+                <li
+                  key={c.title}
+                  className={`rounded-lg bg-[#f6f6f7] pb-6 text-center ${
+                    sec.cards.length >= 6 ? "px-3" : "px-4"
+                  }`}
+                >
                   {/* the original pulls each icon half out of the card top */}
                   {c.icon ? (
                     <Image
                       src={c.icon}
                       alt=""
                       {...imageDims(c.icon)}
-                      className="mx-auto -mt-12 mb-2 h-24 w-auto object-contain"
+                      className={`mx-auto -mt-12 mb-2 w-auto object-contain ${
+                        sec.cards.length >= 6 ? "h-20" : "h-24"
+                      }`}
                       sizes="130px"
                     />
                   ) : (
                     <div className="pt-5" />
                   )}
-                  <h3 className="text-lg font-semibold">{c.title}</h3>
-                  <p className="mt-3 text-[13px] leading-relaxed">{c.text}</p>
+                  <h3 className={`font-semibold ${sec.cards.length >= 6 ? "text-base" : "text-lg"}`}>
+                    {c.title}
+                  </h3>
+                  <p
+                    className={`mt-3 leading-relaxed ${
+                      sec.cards.length >= 6 ? "text-[12px]" : "text-[13px]"
+                    }`}
+                  >
+                    {c.text}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -307,7 +329,10 @@ function ProductPage({
           {layout.bandBg && (
             <Image src={layout.bandBg} alt="" fill className="object-cover" sizes="100vw" />
           )}
-          <div className="relative mx-auto grid min-h-[37.5rem] max-w-[70rem] items-center gap-8 px-4 py-16 sm:px-6 md:grid-cols-2">
+          <div
+            className="relative mx-auto grid max-w-[70rem] items-center gap-8 px-4 py-12 sm:px-6 md:grid-cols-2"
+            style={{ minHeight: `${layout.bandH}px` }}
+          >
             {proseSections.map((sec, i) => (
               <Reveal key={sec.title || i} delay={i * 80}>
                 {sec.paragraphs.length > 0 || sec.images.length > 0 ? (
@@ -402,7 +427,10 @@ export default async function ClonePage({
     }));
     return (
       <article>
-        <section className="relative overflow-hidden">
+        <section
+          className="relative overflow-hidden"
+          style={{ minHeight: "min(76vw, 1100px)" }}
+        >
           <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
           <div className="relative mx-auto max-w-6xl px-4 pb-20 pt-44 sm:px-6">
             <div className="mx-auto max-w-3xl rounded-lg bg-black/25 px-6 py-9 text-center backdrop-blur-[2px]">
@@ -433,12 +461,13 @@ export default async function ClonePage({
 
   if (banner) {
     const t = slug === "support" ? await getTranslations({ locale, namespace: "Support" }) : null;
-    // these pages show their opening copy ON the banner in white, per the original
-    const onBanner = ["vegan", "non-gmo", "support"].includes(slug);
+    // these pages show their opening copy ON the banner in white, per the original;
+    // login renders its whole content there
+    const onBanner = ["vegan", "non-gmo", "support", "login", "gluten-free"].includes(slug);
     let bannerHtml = "";
     let belowHtml = html;
     if (onBanner) {
-      const idx = markdown.search(/^##\s/m);
+      const idx = slug === "login" ? -1 : markdown.search(/^##\s/m);
       bannerHtml = mdToHtml(idx === -1 ? markdown : markdown.slice(0, idx));
       belowHtml = idx === -1 ? "" : mdToHtml(markdown.slice(idx));
     }
@@ -447,12 +476,16 @@ export default async function ClonePage({
         {/* full-bleed banner with centered white title, per the original */}
         <section
           className={`relative overflow-hidden ${onBanner ? "" : "flex items-center justify-center"}`}
-          style={onBanner ? { minHeight: `min(52vw, ${banner.h}px)` } : { height: `min(62vw, ${banner.h}px)` }}
+          style={
+            onBanner
+              ? { minHeight: `min(${Math.round((banner.h / 1440) * 100)}vw, ${banner.h}px)` }
+              : { height: `min(${Math.round((banner.h / 1440) * 100) + 2}vw, ${banner.h}px)` }
+          }
         >
           <Image src={banner.img} alt="" fill priority className="object-cover" sizes="100vw" />
           <div aria-hidden className="absolute inset-0 bg-black/25" />
           {onBanner ? (
-            <div className="relative mx-auto max-w-5xl px-4 pb-14 pt-40 sm:px-6">
+            <div className="relative mx-auto max-w-5xl px-4 pb-10 pt-32 sm:px-6">
               <h1 className="text-center text-[clamp(2.4rem,4.4vw,3.95rem)] font-semibold text-white/95">
                 {title}
               </h1>
@@ -470,7 +503,7 @@ export default async function ClonePage({
         {belowHtml.trim() && (
           <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
             <div
-              className="prose-clone mx-auto"
+              className={`prose-clone mx-auto ${slug === "terms-and-conditions" ? "prose-legal" : ""}`}
               // our own harvested, spam-stripped content — no third-party input
               dangerouslySetInnerHTML={{ __html: belowHtml }}
             />
@@ -506,7 +539,7 @@ export default async function ClonePage({
         {title}
       </h1>
       <div
-        className="prose-clone mt-8"
+        className={`prose-clone mt-8 ${slug === "terms-and-conditions" ? "prose-legal" : ""}`}
         // our own harvested, spam-stripped content — no third-party input
         dangerouslySetInnerHTML={{ __html: html }}
       />

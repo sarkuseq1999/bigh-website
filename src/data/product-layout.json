@@ -8,7 +8,9 @@
    "/original/uploads/2019/03/1140_1183_opc_3.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": false
+  "darkText": false,
+  "heroH": 1231,
+  "bandH": 700
  },
  "deer-horn-reishi": {
   "heroBg": "/original/uploads/2021/12/DeerHorn2v4.jpg",
@@ -19,7 +21,9 @@
    "/original/uploads/2021/12/final63.1412-2.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": false
+  "darkText": false,
+  "heroH": 1135,
+  "bandH": 560
  },
  "green-bee-propolis": {
   "heroBg": "/original/uploads/2019/04/propolis_bg_new4.jpg",
@@ -30,7 +34,9 @@
    "/original/uploads/2019/03/1140_1183_propolis_3-1.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": true
+  "darkText": true,
+  "heroH": 1159,
+  "bandH": 950
  },
  "heart-q10": {
   "heroBg": "/original/uploads/2019/04/Q10_bg_1.png",
@@ -41,7 +47,9 @@
    "/original/uploads/2019/03/1140_1183_heart_3.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": true
+  "darkText": true,
+  "heroH": 1106,
+  "bandH": 560
  },
  "nature-calm": {
   "heroBg": "/original/uploads/2019/04/nature_bg_new1.jpg",
@@ -52,7 +60,9 @@
    "/original/uploads/2019/03/1140_1183_nature_3.png"
   ],
   "divider": "/original/uploads/2019/04/nature_bg_shapedivider3-1024x168.png",
-  "darkText": false
+  "darkText": false,
+  "heroH": 1182,
+  "bandH": 700
  },
  "nano-detoxifier": {
   "heroBg": "/original/uploads/2019/04/nano_bg_1.png",
@@ -63,7 +73,9 @@
    "/original/uploads/2019/03/1140_1183_nano_3.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider2-1024x224.png",
-  "darkText": true
+  "darkText": true,
+  "heroH": 1261,
+  "bandH": 560
  },
  "nuricell": {
   "heroBg": "/original/uploads/2019/04/nuricell_bg_2.jpg",
@@ -74,7 +86,9 @@
    "/original/uploads/2019/03/1140_1183_nuri3-1.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": false
+  "darkText": false,
+  "heroH": 1176,
+  "bandH": 600
  },
  "super-green": {
   "heroBg": "/original/uploads/2019/04/super_bg_4.jpg",
@@ -85,7 +99,9 @@
    "/original/uploads/2019/03/1140_1183_super_3.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": false
+  "darkText": false,
+  "heroH": 1135,
+  "bandH": 560
  },
  "turmerific": {
   "heroBg": "/original/uploads/2020/03/Turmeric-Page-Top-Banner_JPGV1-scaled-1.jpg",
@@ -96,7 +112,9 @@
    "/original/uploads/2020/04/Turmerific_Leftv2-987x1024.png"
   ],
   "divider": "/original/uploads/2020/03/ShapeDivider_TurmerificTop-1024x177.png",
-  "darkText": true
+  "darkText": true,
+  "heroH": 1195,
+  "bandH": 795
  },
  "uber-calcium": {
   "heroBg": "/original/uploads/2019/04/uber_bg_2.jpg",
@@ -107,6 +125,8 @@
    "/original/uploads/2019/04/1140_1183_uber3.png"
   ],
   "divider": "/original/uploads/2019/04/nano_shapedivider7-1024x128.png",
-  "darkText": true
+  "darkText": true,
+  "heroH": 1135,
+  "bandH": 560
  }
 }
