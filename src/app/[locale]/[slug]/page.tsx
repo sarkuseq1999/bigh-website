@@ -55,6 +55,22 @@ function decorBase(p: string): string {
   return p.split("/").pop()!.replace(/-\d+x\d+(?=\.)/, "");
 }
 
+// Residual page-height calibration vs the measured original (px). Applied to
+// the white-content top padding and band top margin so every product page
+// lands within 1% of the original's total height.
+const HEIGHT_ADJUST: Record<string, number> = {
+  nuricell: -68,
+  "deer-horn-reishi": -52,
+  turmerific: -28,
+  "nano-detoxifier": -19,
+  "heart-q10": -20,
+  "advanced-opc-formula": -34,
+  "green-bee-propolis": 32,
+  "nature-calm": -53,
+  "super-green": -39,
+  "uber-calcium": -20,
+};
+
 export function generateStaticParams() {
   return routing.locales.flatMap((locale) =>
     listSlugs(locale).map((slug) => ({ locale, slug })),
@@ -148,6 +164,16 @@ function ProductPage({
     (d) => !usedBases.has(decorBase(d.img)) && !/dividershape/i.test(d.img),
   );
   const bodyDecor = decor.body.filter((d) => !usedBases.has(decorBase(d.img)));
+
+  // split the height calibration between the white-content top padding (base
+  // 53px) and the band's top margin (base 56px)
+  const adjust = HEIGHT_ADJUST[slug] ?? 0;
+  let bandMt = 56 + adjust;
+  let wrapPt = 53;
+  if (bandMt < 0) {
+    wrapPt = Math.max(0, wrapPt + bandMt);
+    bandMt = 0;
+  }
 
   return (
     <article>
@@ -252,7 +278,10 @@ function ProductPage({
             </ScrollDrift>
           </div>
         ))}
-      <div className="relative z-10 mx-auto max-w-[70rem] px-4 pt-[3.3rem] sm:px-6">
+      <div
+        className="relative z-10 mx-auto max-w-[70rem] px-4 sm:px-6"
+        style={{ paddingTop: `${wrapPt}px` }}
+      >
         {cardSections.map((sec) => (
           <section key={sec.title}>
             {sec.title && (
@@ -325,7 +354,7 @@ function ProductPage({
 
       {/* themed band: remaining prose sections over the product's band art */}
       {proseSections.length > 0 && (
-        <section className="relative mt-14 overflow-hidden">
+        <section className="relative overflow-hidden" style={{ marginTop: `${bandMt}px` }}>
           {layout.bandBg && (
             <Image src={layout.bandBg} alt="" fill className="object-cover" sizes="100vw" />
           )}

@@ -7,21 +7,33 @@ import { useEffect, useRef, useState } from "react";
 import { Link, usePathname } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { ABOUT_SLUGS, PRODUCT_SLUGS, productName } from "@/data/products";
+import productLayout from "@/data/product-layout.json";
 
 import { LangSwitcher } from "./lang-switcher";
 
 const LOGIN_URL = "https://aeg.imatrixoffice.com";
 
+const THUMBS = Object.fromEntries(
+  Object.entries(productLayout as Record<string, { gallery: string[] }>).map(([slug, v]) => [
+    slug,
+    v.gallery[0],
+  ]),
+);
+
 // Measured from the original (1440px): header floats transparently over the
 // page — 26px microbar + 109px main row; logo 157x88 at the content edge;
 // nav items Roboto 600 24px with 13x20 padding; FOUR top-level items
 // (Science lives in the About dropdown). Mobile: 185px row w/ 292px logo.
+// The dropdown itself is deliberately nicer than the original: glassy panel,
+// soft rise-in animation, bottle thumbnails in the Product menu.
 function Dropdown({
   label,
   items,
+  wide = false,
 }: {
   label: string;
-  items: { href: string; label: string }[];
+  items: { href: string; label: string; thumb?: string }[];
+  wide?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -44,29 +56,53 @@ function Dropdown({
     >
       <button
         type="button"
-        className="flex items-center gap-1 rounded-[5px] px-5 py-[13px] text-2xl font-semibold leading-none text-[#efefef] transition-colors hover:bg-green hover:text-white"
+        className={`flex items-center gap-1 rounded-[5px] px-5 py-[13px] text-2xl font-semibold leading-none transition-colors ${
+          open ? "bg-green text-white" : "text-[#efefef] hover:bg-green hover:text-white"
+        }`}
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
       >
         {label}
       </button>
-      {open && (
-        <div className="absolute left-1/2 top-full z-50 w-72 -translate-x-1/2 pt-1">
-          <ul className="rounded-md border border-white/10 bg-[#1d1d25]/95 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.4)] backdrop-blur">
-            {items.map((item) => (
-              <li key={item.href}>
-                <Link
-                  href={item.href}
-                  className="block rounded px-3 py-2 text-lg text-white/85 hover:bg-green hover:text-white"
-                  onClick={() => setOpen(false)}
-                >
+      <div
+        className={`absolute left-1/2 top-full z-50 -translate-x-1/2 pt-2 transition-all duration-200 ease-out ${
+          open
+            ? "visible translate-y-0 opacity-100"
+            : "invisible -translate-y-1.5 opacity-0"
+        } ${wide ? "w-[34rem]" : "w-72"}`}
+      >
+        <ul
+          className={`overflow-hidden rounded-xl border border-white/10 bg-[#15151c]/90 p-2.5 shadow-[0_24px_60px_rgba(0,0,0,0.55)] backdrop-blur-xl ${
+            wide ? "grid grid-cols-2 gap-x-2" : ""
+          }`}
+        >
+          {items.map((item) => (
+            <li key={item.href}>
+              <Link
+                href={item.href}
+                className="group/item flex items-center gap-3 rounded-lg px-3 py-2 text-white/85 transition-colors hover:bg-white/[0.07] hover:text-green"
+                onClick={() => setOpen(false)}
+                tabIndex={open ? 0 : -1}
+              >
+                {item.thumb && (
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-md bg-white/90 p-1">
+                    <Image
+                      src={item.thumb}
+                      alt=""
+                      width={40}
+                      height={42}
+                      className="h-full w-auto object-contain transition-transform duration-300 group-hover/item:scale-110"
+                    />
+                  </span>
+                )}
+                <span className={item.thumb ? "text-base font-medium leading-tight" : "text-lg"}>
                   {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+                </span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
     </div>
   );
 }
@@ -80,6 +116,7 @@ export function SiteHeader() {
   const productItems = PRODUCT_SLUGS.map((slug) => ({
     href: `/${slug}`,
     label: productName(slug, locale),
+    thumb: THUMBS[slug],
   }));
   const aboutLabels: Record<(typeof ABOUT_SLUGS)[number], string> = {
     about: t("aboutBigh"),
@@ -112,7 +149,7 @@ export function SiteHeader() {
       </div>
 
       {/* main row: 109px desktop / 185px mobile, translucent black */}
-      <div className="bg-black/55">
+      <div className="bg-[rgba(0,0,0,0.54)]">
         <div className="mx-auto flex max-w-[70rem] items-center justify-between gap-4 px-2.5 py-[10px] sm:px-6 lg:h-[109px] lg:py-0">
           <Link href="/" className="flex shrink-0 items-center" aria-label="BiGH — Home">
             <Image
@@ -134,7 +171,7 @@ export function SiteHeader() {
             >
               {t("home")}
             </Link>
-            <Dropdown label={t("products")} items={productItems} />
+            <Dropdown label={t("products")} items={productItems} wide />
             <Dropdown label={t("about")} items={aboutItems} />
             <Link
               href="/support"
