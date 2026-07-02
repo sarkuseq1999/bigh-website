@@ -30,8 +30,12 @@
     "featuredBlurb": "The rarest and most potent organic Reishi mushroom on the market.",
     "madeTitle": "Made in California",
     "madeBody": "All of our products are proudly made in California. We are picky about who we work with — only cGMP and HPTLC certified manufacturers with decades of great results, who share our vision of delivering no-compromise nutritional supplements, earn our trust.",
-    "popular": "人气产品",
-    "standards": "品质标准"
+    "popular": "最受欢迎",
+    "standards": "品质标准",
+    "natureTitle": "Driven by Nature",
+    "natureBody": "We will always start by selecting the purest ingredients that are sourced from areas or regions that are best suited for its natural growth.",
+    "scienceTitle": "Guided by Science",
+    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products."
   },
   "Product": {
     "buyNow": "立即购买",
@@ -48,6 +52,7 @@
     "terms": "Terms and Conditions",
     "returns": "Return Policy",
     "madeLine": "Made in California · cGMP · HPTLC",
-    "rights": "© {year} BiGH Corporation. All rights reserved."
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
   }
 }

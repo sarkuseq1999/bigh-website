@@ -31,7 +31,11 @@
     "madeTitle": "Made in California",
     "madeBody": "All of our products are proudly made in California. We are picky about who we work with — only cGMP and HPTLC certified manufacturers with decades of great results, who share our vision of delivering no-compromise nutritional supplements, earn our trust.",
     "popular": "Most Popular",
-    "standards": "Our Standards"
+    "standards": "Our Standards",
+    "natureTitle": "Driven by Nature",
+    "natureBody": "We will always start by selecting the purest ingredients that are sourced from areas or regions that are best suited for its natural growth.",
+    "scienceTitle": "Guided by Science",
+    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products."
   },
   "Product": {
     "buyNow": "Buy Now",
@@ -48,6 +52,7 @@
     "terms": "Terms and Conditions",
     "returns": "Return Policy",
     "madeLine": "Made in California · cGMP · HPTLC",
-    "rights": "© {year} BiGH Corporation. All rights reserved."
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
   }
 }

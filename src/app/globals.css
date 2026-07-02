@@ -5,33 +5,34 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ── celadon apothecary palette ──────────────────────────────────
-     Korean celadon glaze + hanji paper + pine ink + propolis amber.
-     Calm, premium, trustworthy — the register of heritage health. */
-  --porcelain: #f7f6f1;
-  --hanji: #efece3;
-  --celadon: #9dbfae;
-  --celadon-deep: #5f8a75;
-  --pine: #17342b;
-  --pine-soft: #5b6d63;
-  --amber: #b97f2e;
-  --amber-hi: #d49a44;
-  --line: #ddd8cb;
+  /* ── BiGH brand palette, sampled from the original bighnow.com ──────
+     dark navy chrome, vivid logo green, teal California band,
+     sunny yellow hero panel. White page ground. */
+  --ink-dark: #17171f;
+  --navy: #3e3d63;
+  --green: #4caf50;
+  --green-dark: #3d9c41;
+  --teal: #45b5ac;
+  --yellow: #f7e733;
+  --page: #ffffff;
+  --heading: #2b2b33;
+  --body-col: #4d4d56;
+  --line: #e4e4ea;
 
   /* per-locale CJK companions, set on html[lang=…] below */
   --cjk-serif: "Iowan Old Style";
   --cjk-sans: "Segoe UI";
 
   /* shadcn semantic tokens mapped onto the palette */
-  --background: var(--porcelain);
-  --foreground: var(--pine);
-  --muted: var(--hanji);
-  --muted-foreground: var(--pine-soft);
+  --background: var(--page);
+  --foreground: var(--heading);
+  --muted: #f4f4f6;
+  --muted-foreground: var(--body-col);
   --border: var(--line);
-  --card: var(--porcelain);
-  --card-foreground: var(--pine);
-  --primary: var(--amber);
-  --primary-foreground: #fffdf7;
+  --card: var(--page);
+  --card-foreground: var(--heading);
+  --primary: var(--green);
+  --primary-foreground: #ffffff;
 }
 
 html[lang="kr"] {
@@ -53,14 +54,14 @@ html[lang="vn"] {
 }
 
 @theme inline {
-  --color-porcelain: var(--porcelain);
-  --color-hanji: var(--hanji);
-  --color-celadon: var(--celadon);
-  --color-celadon-deep: var(--celadon-deep);
-  --color-pine: var(--pine);
-  --color-pine-soft: var(--pine-soft);
-  --color-amber: var(--amber);
-  --color-amber-hi: var(--amber-hi);
+  --color-ink-dark: var(--ink-dark);
+  --color-navy: var(--navy);
+  --color-green: var(--green);
+  --color-green-dark: var(--green-dark);
+  --color-teal: var(--teal);
+  --color-yellow: var(--yellow);
+  --color-heading: var(--heading);
+  --color-body-col: var(--body-col);
   --color-line: var(--line);
 
   --color-background: var(--background);
@@ -80,20 +81,26 @@ html[lang="vn"] {
 
 @layer base {
   body {
-    background-color: var(--porcelain);
-    color: var(--pine);
+    background-color: var(--page);
+    color: var(--body-col);
     font-family: var(--font-hanken), var(--cjk-sans), system-ui, sans-serif;
     font-size: 1.0625rem; /* 17px */
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--heading);
+  }
   ::selection {
-    background: var(--celadon);
-    color: var(--pine);
+    background: var(--green);
+    color: #fff;
   }
   :focus-visible {
-    outline: 2px solid var(--celadon-deep);
+    outline: 2px solid var(--green-dark);
     outline-offset: 2px;
   }
 }
@@ -106,10 +113,10 @@ html[lang="vn"] {
   .prose-clone h1,
   .prose-clone h2,
   .prose-clone h3 {
-    font-family: var(--font-display);
-    color: var(--pine);
+    color: var(--heading);
     line-height: 1.25;
     margin: 2.2em 0 0.6em;
+    font-weight: 650;
     text-wrap: balance;
   }
   .prose-clone h1 { font-size: 2rem; }
@@ -117,7 +124,7 @@ html[lang="vn"] {
   .prose-clone h3 { font-size: 1.2rem; }
   .prose-clone p,
   .prose-clone li {
-    color: var(--pine);
+    color: var(--body-col);
     margin: 0.9em 0;
   }
   .prose-clone ul,
@@ -127,15 +134,15 @@ html[lang="vn"] {
   .prose-clone ul { list-style: disc; }
   .prose-clone ol { list-style: decimal; }
   .prose-clone a {
-    color: var(--celadon-deep);
+    color: var(--green-dark);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-  .prose-clone a:hover { color: var(--amber); }
+  .prose-clone a:hover { color: var(--green); }
   .prose-clone img {
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     margin: 1.6em auto;
-    box-shadow: 0 8px 30px rgba(23, 52, 43, 0.08);
+    box-shadow: 0 8px 30px rgba(23, 23, 31, 0.1);
   }
   .prose-clone hr {
     border-color: var(--line);

@@ -105,3 +105,118 @@ export function pageHeading(page: HarvestPage): string | null {
   const m = page.markdown.match(/^#{1,3}\s+(.+)$/m);
   return m ? m[1].replace(/[​]/g, "").trim() : null;
 }
+
+// ── structured product-page content ─────────────────────────────────────────
+// The legacy product pages share one Elementor shape: intro → facts links →
+// price → buy → gallery → "Key Ingredients" (h3 cards) → prose sections.
+// Parsing is structural (not string-matched) so every locale works.
+
+export interface ProductSection {
+  title: string;
+  paragraphs: string[];
+  cards: { title: string; text: string }[];
+}
+
+export interface ProductContent {
+  intro: string[];
+  factsLinks: { label: string; href: string }[];
+  price: string | null;
+  sections: ProductSection[];
+}
+
+const MD_IMAGE = /!\[[^\]]*\]\([^)]*\)/g;
+const MD_LINK = /\[([^\]]*)\]\(([^)]*)\)/g;
+
+function cleanText(s: string): string {
+  return s
+    .replace(/\\([*_'".])/g, "$1") // unescape BEFORE stripping emphasis
+    .replace(MD_IMAGE, "")
+    .replace(MD_LINK, "$1")
+    .replace(/\*\*?/g, "")
+    .replace(/\\(?=\s|$)/g, "")
+    .replace(/[​]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Prose cleaner for product copy: links are buttons on these pages, so they
+ * are deleted outright instead of collapsing to their text. */
+function cleanProse(s: string): string {
+  return cleanText(s.replace(MD_IMAGE, "").replace(/\[[^\]]*\]\([^)]*\)/g, ""));
+}
+
+/** True when a markdown block is only links/images (a button row, not prose). */
+function isLinkOnlyBlock(s: string): boolean {
+  const stripped = s
+    .replace(MD_IMAGE, "")
+    .replace(/\[[^\]]*\]\([^)]*\)/g, "")
+    .replace(/[[\]!\\]/g, "")
+    .trim();
+  return stripped === "";
+}
+
+export function parseProduct(page: HarvestPage): ProductContent {
+  const md = page.markdown;
+
+  // facts/serving sheet links: markdown links with text pointing at an uploads image
+  const factsLinks: { label: string; href: string }[] = [];
+  for (const m of md.matchAll(/(?<!!)\[([^\]]+)\]\((https?:\/\/(?:www\.)?bighnow\.com\/wp-content\/[^)]+\.(?:png|jpe?g))\)/g)) {
+    const label = cleanText(m[1]);
+    if (
+      label &&
+      !label.includes("![") &&
+      !/^\$/.test(label) &&
+      !/buynow|purchase|1140_|shapedivider/i.test(m[1] + m[2])
+    ) {
+      factsLinks.push({ label, href: localAsset(m[2]) });
+    }
+  }
+
+  // split into h2 sections
+  const rawParts = md.split(/^##\s+/m);
+  let price: string | null = null;
+  const intro: string[] = [];
+  const sections: ProductSection[] = [];
+
+  rawParts.forEach((part, idx) => {
+    if (idx === 0) return; // preamble before the product-name heading
+    const lines = part.split("\n");
+    const title = cleanText(lines[0]);
+    const body = lines.slice(1).join("\n");
+
+    if (/^\$/.test(title)) {
+      price = title;
+      return;
+    }
+    if (idx === 1) {
+      // first section = product name; its prose paragraphs are the intro
+      // (button/link rows and images are rendered separately, not as prose)
+      for (const p of body.split(/\n{2,}/)) {
+        if (isLinkOnlyBlock(p)) continue;
+        const t = cleanProse(p);
+        if (t) intro.push(t);
+      }
+      return;
+    }
+
+    const cards: { title: string; text: string }[] = [];
+    const paragraphs: string[] = [];
+    const subParts = body.split(/^###\s+/m);
+    for (const p of subParts[0].split(/\n{2,}/)) {
+      if (isLinkOnlyBlock(p)) continue;
+      const t = cleanProse(p);
+      if (t) paragraphs.push(t);
+    }
+    for (const sub of subParts.slice(1)) {
+      const subLines = sub.split("\n");
+      const subTitle = cleanText(subLines[0]);
+      const subText = cleanText(subLines.slice(1).join(" "));
+      if (subTitle) cards.push({ title: subTitle, text: subText });
+    }
+    if (title || paragraphs.length || cards.length) {
+      sections.push({ title, paragraphs, cards });
+    }
+  });
+
+  return { intro, factsLinks, price, sections };
+}

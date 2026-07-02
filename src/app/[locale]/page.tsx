@@ -33,9 +33,12 @@ export default async function HomePage({
 
   const featuredSlug = t("featuredSlug");
   const featured: ProductSlug = isProductSlug(featuredSlug) ? featuredSlug : "deer-horn-reishi";
-  const featuredImg = cardImage(locale, featured);
+  const featuredImg =
+    featured === "deer-horn-reishi"
+      ? "/original/uploads/2021/12/DeerHornv1_1.png"
+      : cardImage(locale, featured);
 
-  const badges = [
+  const pills = [
     { slug: "organic", label: nav("organic") },
     { slug: "non-gmo", label: nav("nonGmo") },
     { slug: "gluten-free", label: nav("glutenFree") },
@@ -44,72 +47,84 @@ export default async function HomePage({
 
   return (
     <>
-      <Hero
-        eyebrow={t("eyebrow")}
-        brand={t("brand")}
-        tagline={t("tagline")}
-        learnMore={t("learnMore")}
-        viewProducts={t("viewProducts")}
-      />
+      <Hero eyebrow={t("eyebrow")} brand={t("brand")} tagline={t("tagline")} learnMore={t("learnMore")} />
 
       {/* Latest release */}
-      <section className="bg-hanji">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2">
-          <Reveal>
-            <p className="font-mono text-sm uppercase tracking-[0.25em] text-amber">
-              {t("latestEyebrow")}
-            </p>
-            <h2 className="font-display mt-3 text-4xl text-pine">
-              {productName(featured, locale)}
-            </h2>
-            <p className="mt-4 max-w-md text-lg text-pine-soft">{t("featuredBlurb")}</p>
-            <Link
-              href={`/${featured}`}
-              className="mt-7 inline-block rounded-full bg-pine px-6 py-2.5 font-medium text-porcelain transition-colors hover:bg-celadon-deep"
-            >
-              {t("learnMore")}
-            </Link>
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2">
+        <Reveal>
+          <p className="text-lg font-semibold text-green">{t("latestEyebrow")}</p>
+          <h2 className="mt-2 text-4xl font-bold">{productName(featured, locale)}</h2>
+          <p className="mt-4 max-w-md text-lg">{t("featuredBlurb")}</p>
+          <Link
+            href={`/${featured}`}
+            className="mt-7 inline-block rounded bg-green px-6 py-2.5 font-semibold text-white transition-colors hover:bg-green-dark"
+          >
+            {t("learnMore")}
+          </Link>
+        </Reveal>
+        {featuredImg && (
+          <Reveal delay={120} className="mx-auto w-full max-w-xs">
+            <Image
+              src={featuredImg}
+              alt={productName(featured, locale)}
+              {...imageDims(featuredImg)}
+              className="h-auto w-full drop-shadow-[0_24px_40px_rgba(23,23,31,0.22)]"
+              sizes="(max-width: 768px) 80vw, 320px"
+            />
           </Reveal>
-          {featuredImg && (
-            <Reveal delay={120} className="mx-auto w-full max-w-sm">
-              <Image
-                src={featuredImg}
-                alt={productName(featured, locale)}
-                {...imageDims(featuredImg)}
-                className="h-auto w-full drop-shadow-[0_24px_40px_rgba(23,52,43,0.18)]"
-                sizes="(max-width: 768px) 90vw, 400px"
-              />
-            </Reveal>
-          )}
+        )}
+      </section>
+
+      {/* Made in California — teal band, faithful */}
+      <section className="relative overflow-hidden bg-teal">
+        <Image
+          src="/original/uploads/2019/04/madeincalifornia_bg.png"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-14 sm:px-6 md:grid-cols-2">
+          <Reveal>
+            <Image
+              src="/original/uploads/2019/04/madeincalifornia4.jpg"
+              alt={t("madeTitle")}
+              {...imageDims("/original/uploads/2019/04/madeincalifornia4.jpg")}
+              className="mx-auto h-auto w-full max-w-md"
+              sizes="(max-width: 768px) 90vw, 440px"
+            />
+          </Reveal>
+          <Reveal delay={120} className="text-center md:pr-6">
+            <h2 className="text-4xl font-bold text-white">{t("madeTitle")}</h2>
+            <p className="mx-auto mt-5 max-w-md text-lg leading-relaxed text-white">{t("madeBody")}</p>
+          </Reveal>
         </div>
       </section>
 
-      {/* Product shelf */}
-      <section id="products" className="mx-auto max-w-6xl scroll-mt-20 px-4 py-16 sm:px-6">
+      {/* Most Popular — full shelf */}
+      <section id="products" className="mx-auto max-w-6xl scroll-mt-24 px-4 py-16 sm:px-6">
         <Reveal>
-          <p className="font-mono text-sm uppercase tracking-[0.25em] text-celadon-deep">
-            {t("popular")}
-          </p>
+          <h2 className="text-center text-4xl font-bold">{t("popular")}</h2>
         </Reveal>
-        <ul className="mt-8 grid grid-cols-2 gap-x-6 gap-y-10 sm:grid-cols-3 lg:grid-cols-5">
+        <ul className="mt-12 grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 lg:grid-cols-5">
           {PRODUCT_SLUGS.map((slug, i) => {
             const img = cardImage(locale, slug);
             return (
               <li key={slug}>
                 <Reveal delay={(i % 5) * 60}>
-                  <Link href={`/${slug}`} className="group block">
-                    <div className="flex aspect-[4/5] items-center justify-center overflow-hidden rounded-2xl border border-line bg-white p-4 transition-shadow group-hover:shadow-[0_16px_40px_rgba(23,52,43,0.12)]">
+                  <Link href={`/${slug}`} className="group block text-center">
+                    <div className="flex aspect-[5/6] items-center justify-center">
                       {img && (
                         <Image
                           src={img}
                           alt=""
                           {...imageDims(img)}
-                          className="h-full w-auto object-contain transition-transform duration-500 group-hover:scale-[1.04]"
+                          className="h-full w-auto object-contain drop-shadow-[0_14px_24px_rgba(23,23,31,0.16)] transition-transform duration-500 group-hover:scale-[1.06]"
                           sizes="(max-width: 640px) 45vw, 220px"
                         />
                       )}
                     </div>
-                    <p className="mt-3 text-center text-[15px] font-medium text-pine group-hover:text-celadon-deep">
+                    <p className="mt-3 text-[15px] font-semibold text-heading group-hover:text-green-dark">
                       {productName(slug, locale)}
                     </p>
                   </Link>
@@ -120,49 +135,78 @@ export default async function HomePage({
         </ul>
       </section>
 
-      {/* Made in California */}
-      <section className="bg-hanji">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2">
-          <Reveal className="order-2 md:order-1">
-            <Image
-              src="/original/uploads/2019/04/madeincalifornia4-981x1024.jpg"
-              alt={t("madeTitle")}
-              {...imageDims("/original/uploads/2019/04/madeincalifornia4-981x1024.jpg")}
-              className="mx-auto h-auto w-full max-w-sm rounded-2xl shadow-[0_16px_40px_rgba(23,52,43,0.14)]"
-              sizes="(max-width: 768px) 90vw, 400px"
-            />
-          </Reveal>
-          <Reveal delay={120} className="order-1 md:order-2">
-            <p className="font-mono text-sm uppercase tracking-[0.25em] text-celadon-deep">
-              GLENDORA · CALIFORNIA
-            </p>
-            <h2 className="font-display mt-3 text-4xl text-pine">{t("madeTitle")}</h2>
-            <p className="mt-4 text-pine-soft">{t("madeBody")}</p>
+      {/* Driven by Nature — forest band, faithful */}
+      <section className="relative overflow-hidden">
+        <Image
+          src="/original/uploads/2019/03/Driven-by-nature-2.jpg"
+          alt=""
+          fill
+          className="object-cover"
+          sizes="100vw"
+        />
+        <div aria-hidden className="absolute inset-0 bg-black/25" />
+        <div className="relative mx-auto max-w-3xl px-4 py-24 text-center sm:px-6">
+          <Reveal>
+            <h2 className="text-4xl font-bold text-white drop-shadow">{t("natureTitle")}</h2>
+            <p className="mx-auto mt-4 max-w-xl text-white drop-shadow">{t("natureBody")}</p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              {pills.map((p) => (
+                <Link
+                  key={p.slug}
+                  href={`/${p.slug}`}
+                  className="rounded bg-green px-4 py-1.5 text-sm font-semibold text-white transition-colors hover:bg-green-dark"
+                >
+                  {p.label}
+                </Link>
+              ))}
+            </div>
           </Reveal>
         </div>
       </section>
 
-      {/* Standards */}
-      <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
-        <Reveal>
-          <p className="font-mono text-sm uppercase tracking-[0.25em] text-celadon-deep">
-            {t("standards")}
-          </p>
+      {/* Guided by Science — faithful */}
+      <section className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-16 sm:px-6 md:grid-cols-2">
+        <Reveal className="text-center md:text-left">
+          <h2 className="text-4xl font-bold">{t("scienceTitle")}</h2>
+          <p className="mx-auto mt-4 max-w-md md:mx-0">{t("scienceBody")}</p>
+          <Link
+            href="/science"
+            className="mt-7 inline-block rounded bg-green px-6 py-2.5 font-semibold text-white transition-colors hover:bg-green-dark"
+          >
+            {t("learnMore")}
+          </Link>
         </Reveal>
-        <ul className="mt-8 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {badges.map((b, i) => (
-            <li key={b.slug}>
-              <Reveal delay={i * 60}>
-                <Link
-                  href={`/${b.slug}`}
-                  className="flex h-full items-center justify-center rounded-2xl border border-line bg-porcelain px-4 py-6 text-center font-medium text-pine transition-colors hover:border-celadon hover:text-celadon-deep"
-                >
-                  {b.label}
-                </Link>
-              </Reveal>
-            </li>
-          ))}
-        </ul>
+        <Reveal delay={120} className="mx-auto w-full max-w-sm">
+          <Image
+            src="/original/uploads/2019/04/guidedbysciene_1-878x1024.png"
+            alt={t("scienceTitle")}
+            {...imageDims("/original/uploads/2019/04/guidedbysciene_1-878x1024.png")}
+            className="h-auto w-full"
+            sizes="(max-width: 768px) 80vw, 380px"
+          />
+        </Reveal>
+      </section>
+
+      {/* Learn more / Connect — faithful two-panel band */}
+      <section className="grid md:grid-cols-2">
+        <Link href="/about" className="group relative block aspect-[16/9] overflow-hidden">
+          <Image
+            src="/original/uploads/2019/04/Learn-More_3.jpg"
+            alt={nav("aboutBigh")}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </Link>
+        <Link href="/support" className="group relative block aspect-[16/9] overflow-hidden">
+          <Image
+            src="/original/uploads/2019/04/Connect-with-Us_3.jpg"
+            alt={nav("support")}
+            fill
+            className="object-cover transition-transform duration-700 group-hover:scale-[1.04]"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        </Link>
       </section>
     </>
   );

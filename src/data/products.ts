@@ -112,3 +112,18 @@ export function isProductSlug(slug: string): slug is ProductSlug {
 
 // Pages grouped under the legacy "About" menu
 export const ABOUT_SLUGS = ["about", "organic", "non-gmo", "gluten-free", "vegan"] as const;
+
+// Label hue per product — drives each product page's wave-gradient hero,
+// mirroring the original site's per-product color theming (NuriCell blue, …).
+export const PRODUCT_HUES: Record<ProductSlug, string> = {
+  nuricell: "#2d9fd8",
+  "advanced-opc-formula": "#c05b52",
+  "green-bee-propolis": "#caa63d",
+  "heart-q10": "#ef8f3a",
+  "nature-calm": "#5cb85f",
+  "nano-detoxifier": "#41b0b8",
+  "super-green": "#b6444f",
+  turmerific: "#e78b2e",
+  "uber-calcium": "#3fc3cf",
+  "deer-horn-reishi": "#8a5a33",
+};

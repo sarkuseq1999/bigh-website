@@ -30,8 +30,12 @@
     "featuredBlurb": "唯一Non-GMO(非遺伝子組み換え)プロジェクトの認証を取得している血液脳関門および血液網膜関門を通過できるターメリック(ウコン)製剤。",
     "madeTitle": "カリフォルニア製",
     "madeBody": "私達のプロダクトすべては誇らしげにカリフォルニア州でなされます。妥協のない栄養補助食品をお客様にお届けするという私たちのビジョンを共有している、何十年にもわたる優れた結果を持つcGMPおよびHPTLC認定メーカーだけが、私たちの信頼を得ています。",
-    "popular": "人気商品",
-    "standards": "品質基準"
+    "popular": "一番人気",
+    "standards": "品質基準",
+    "natureTitle": "自然によって動かされる",
+    "natureBody": "私達は常に自然に成長を促進する地域や地方から供給された最も純粋な成分を選ぶことから始めます。",
+    "scienceTitle": "科学に導かれる",
+    "scienceBody": "私達の科学チームは、何十年もの経験を持ち、現代の健康科学によって私達の製品を研究し、デザインしそして処方するために導かれます。"
   },
   "Product": {
     "buyNow": "購入する",
@@ -48,6 +52,7 @@
     "terms": "Terms and Conditions",
     "returns": "Return Policy",
     "madeLine": "Made in California · cGMP · HPTLC",
-    "rights": "© {year} BiGH Corporation. All rights reserved."
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
   }
 }
