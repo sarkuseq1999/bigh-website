@@ -39,7 +39,8 @@
     "hero": {
       "line1": "Your mind has no",
       "line2": "expiration date.",
-      "reveal": "Because aging well starts in your cells.",
+      "reveal": "Because aging well starts",
+      "revealAccent": "in your cells.",
       "cta": "See the science"
     },
     "footer": {

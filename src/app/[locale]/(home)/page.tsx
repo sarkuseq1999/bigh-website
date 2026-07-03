@@ -32,6 +32,7 @@ export default async function HomePage({
         l1={t("hero.line1")}
         l2={t("hero.line2")}
         reveal={t("hero.reveal")}
+        revealAccent={t("hero.revealAccent")}
         cta={t("hero.cta")}
       />
       <Truth

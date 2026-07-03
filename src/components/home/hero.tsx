@@ -13,12 +13,14 @@ export function Hero({
   l1,
   l2,
   reveal,
+  revealAccent,
   cta,
 }: {
   eyebrow?: string;
   l1: string;
   l2: string;
   reveal: string;
+  revealAccent?: string;
   cta: string;
 }) {
   const root = useRef<HTMLDivElement>(null);
@@ -59,8 +61,8 @@ export function Hero({
     <section ref={root} className="relative min-h-svh overflow-hidden">
       <Silk palette={palette} />
 
-      <div className="relative z-10 flex min-h-svh flex-col px-6 pt-36 sm:px-12">
-        <div className="mt-[6vh] sm:mt-[8vh]">
+      <div className="relative z-10 flex min-h-svh flex-col justify-center px-6 pb-[6vh] pt-28 sm:px-12">
+        <div>
           {eyebrow ? (
             <p className="mb-6 font-mono text-[12px] uppercase tracking-[0.24em] text-[color:var(--gh-faint)]">
               {eyebrow}
@@ -83,19 +85,25 @@ export function Hero({
 
           <p
             data-sub
-            className="mt-9 max-w-xl text-[22px] leading-[1.7] text-[color:var(--gh-muted)]"
+            className="gh-serif mt-10 max-w-2xl text-[clamp(1.5rem,2.3vw,2rem)] leading-[1.45] text-[color:var(--gh-fg)]"
           >
             {reveal}
+            {revealAccent ? (
+              <>
+                {" "}
+                <em className="text-[color:var(--gh-ember)]">{revealAccent}</em>
+              </>
+            ) : null}
           </p>
           <a
             data-cta
             href="#truth"
-            className="group mt-10 inline-flex w-fit items-center gap-3 font-mono text-[13px] uppercase tracking-[0.22em]"
+            className="group mt-12 inline-flex w-fit items-center gap-3 font-mono text-[13px] uppercase tracking-[0.22em]"
           >
-            <span className="border-b border-[color:var(--gh-fg)] pb-1 transition-colors group-hover:border-[color:var(--gh-ember)] group-hover:text-[color:var(--gh-ember)]">
+            <span className="border-b border-[color:var(--gh-ember)] pb-1 transition-colors group-hover:text-[color:var(--gh-ember)]">
               {cta}
             </span>
-            <span className="transition-transform duration-300 group-hover:translate-x-1.5">
+            <span className="text-[color:var(--gh-ember)] transition-transform duration-300 group-hover:translate-x-1.5">
               →
             </span>
           </a>
