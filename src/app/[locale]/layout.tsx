@@ -4,8 +4,6 @@ import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Fraunces, Roboto } from "next/font/google";
 
-import { SiteFooter } from "@/components/clone/footer";
-import { SiteHeader } from "@/components/clone/header";
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
 
@@ -94,11 +92,7 @@ export default async function LocaleLayout({
             <link rel="stylesheet" href={cjkHref} precedence="default" />
           </>
         )}
-        <NextIntlClientProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter locale={locale as Locale} />
-        </NextIntlClientProvider>
+        <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
   );

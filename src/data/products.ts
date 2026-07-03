@@ -113,6 +113,18 @@ export function isProductSlug(slug: string): slug is ProductSlug {
 // Pages grouped under the legacy "About" menu
 export const ABOUT_SLUGS = ["about", "organic", "non-gmo", "gluten-free", "vegan"] as const;
 
+// The new-brand family shown on the Golden Hour site — NuriCell the hero,
+// then the supporting cast in design-doc order. The other legacy products
+// stay reachable by URL but are not part of the new story.
+export const GH_PRODUCT_SLUGS: readonly ProductSlug[] = [
+  "nuricell",
+  "turmerific",
+  "advanced-opc-formula",
+  "green-bee-propolis",
+  "nature-calm",
+  "deer-horn-reishi",
+] as const;
+
 // Label hue per product — drives each product page's wave-gradient hero,
 // mirroring the original site's per-product color theming (NuriCell blue, …).
 export const PRODUCT_HUES: Record<ProductSlug, string> = {

@@ -35,7 +35,16 @@
     "natureTitle": "Driven by Nature",
     "natureBody": "We will always start by selecting the purest ingredients that are sourced from areas or regions that are best suited for its natural growth.",
     "scienceTitle": "Guided by Science",
-    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products."
+    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products.",
+    "hero": {
+      "line1": "Your mind has no",
+      "line2": "expiration date.",
+      "reveal": "Because aging well starts in your cells.",
+      "cta": "See the science"
+    },
+    "footer": {
+      "brandLine": "Be in Good Health. Age well, together."
+    }
   },
   "Product": {
     "buyNow": "Buy Now",

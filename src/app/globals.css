@@ -216,3 +216,16 @@ html[lang="vn"] {
 .gh-serif {
   font-family: var(--font-gh-serif), Georgia, serif;
 }
+/* the clone's base layer paints headings + body text in its measured light
+   palette; inside the Golden Hour scope everything inherits the dark tokens */
+.gh h1,
+.gh h2,
+.gh h3,
+.gh h4 {
+  color: inherit;
+  font-weight: 400;
+}
+.gh ::selection {
+  background: var(--gh-ember);
+  color: #04080f;
+}

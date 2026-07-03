@@ -16,6 +16,10 @@ const FRAG = /* glsl */ `
   uniform vec2 uRes;
   uniform vec2 uPointer;
   uniform vec3 uDrops[MAX_DROPS]; // xy = uv position, z = birth time
+  uniform vec3 uBase;
+  uniform vec3 uMid;
+  uniform vec3 uHigh;
+  uniform vec3 uEdge;
 
   float hash(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453123);
@@ -76,10 +80,10 @@ const FRAG = /* glsl */ `
     );
     float f = fbm(p * 1.3 + 2.4 * r + uPointer * 0.22);
 
-    vec3 base   = vec3(0.016, 0.031, 0.059); // abyssal navy
-    vec3 indigo = vec3(0.071, 0.149, 0.322); // deep indigo
-    vec3 azure  = vec3(0.165, 0.420, 0.851); // electric azure
-    vec3 ice    = vec3(0.475, 0.812, 0.957); // glacial cyan edges
+    vec3 base   = uBase;
+    vec3 indigo = uMid;
+    vec3 azure  = uHigh;
+    vec3 ice    = uEdge;
 
     // silk gathers toward the lower right; darkness dominates elsewhere
     float zone = smoothstep(0.3, 1.08, uv.x * 0.72 + (1.0 - uv.y) * 0.5);
@@ -115,12 +119,32 @@ const VERT = /* glsl */ `
   }
 `;
 
-export default function Silk() {
+// Two silk moods, one shader. "navy" = the /a design-lab abyssal blue;
+// "gold" = molten gold on espresso black, the literal Golden Hour read.
+const PALETTES = {
+  navy: {
+    base: [0.016, 0.031, 0.059], // abyssal navy
+    mid: [0.071, 0.149, 0.322], // deep indigo
+    high: [0.165, 0.42, 0.851], // electric azure
+    edge: [0.475, 0.812, 0.957], // glacial cyan edges
+  },
+  gold: {
+    base: [0.051, 0.031, 0.014], // espresso black
+    mid: [0.322, 0.165, 0.055], // deep bronze
+    high: [0.851, 0.53, 0.155], // molten gold
+    edge: [0.957, 0.812, 0.475], // champagne edges
+  },
+} as const;
+
+export type SilkPalette = keyof typeof PALETTES;
+
+export default function Silk({ palette = "navy" }: { palette?: SilkPalette }) {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mount = mountRef.current;
     if (!mount) return;
+    const colors = PALETTES[palette];
 
     const reduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
@@ -149,6 +173,10 @@ export default function Silk() {
           () => new THREE.Vector3(0, 0, -100),
         ),
       },
+      uBase: { value: new THREE.Vector3(...colors.base) },
+      uMid: { value: new THREE.Vector3(...colors.mid) },
+      uHigh: { value: new THREE.Vector3(...colors.high) },
+      uEdge: { value: new THREE.Vector3(...colors.edge) },
     };
 
     const quad = new THREE.Mesh(
@@ -228,7 +256,7 @@ export default function Silk() {
       renderer.dispose();
       mount.removeChild(renderer.domElement);
     };
-  }, []);
+  }, [palette]);
 
   return (
     <div
