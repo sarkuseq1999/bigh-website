@@ -229,3 +229,19 @@ html[lang="vn"] {
   background: var(--gh-ember);
   color: #04080f;
 }
+/* Light-break scope — a daylight section inside the Golden Hour scroll.
+   Same hues as .gh, inverted: the white is tinted toward the navy (not
+   warm-cream), and ember is darkened to hold ≥4.5:1 on white. */
+.ghl {
+  --ghl-bg: #f7f9fb;
+  --ghl-ink: #0c1622;
+  --ghl-muted: #3f5468;
+  --ghl-ember: #b05a2c;
+  --ghl-line: rgba(12, 22, 34, 0.14);
+  background: var(--ghl-bg);
+  color: var(--ghl-ink);
+}
+.ghl ::selection {
+  background: var(--ghl-ember);
+  color: #f7f9fb;
+}
