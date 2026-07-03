@@ -1,8 +1,11 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Family } from "@/components/home/family";
+import { Heart } from "@/components/home/heart";
 import { Hero } from "@/components/home/hero";
+import { Honest } from "@/components/home/honest";
 import { Nuricell } from "@/components/home/nuricell";
+import { Ritual } from "@/components/home/ritual";
 import { Scientist } from "@/components/home/scientist";
 import { Truth } from "@/components/home/truth";
 import { productName } from "@/data/products";
@@ -65,6 +68,22 @@ export default async function HomePage({
           "nature-calm": t("family.jobs.nature-calm"),
           "deer-horn-reishi": t("family.jobs.deer-horn-reishi"),
         }}
+      />
+      <Heart title={t("heart.title")} body={t("heart.body")} />
+      <Honest
+        kicker={t("honest.kicker")}
+        title={t("honest.title")}
+        pledges={[
+          { title: t("honest.pledges.doses.title"), body: t("honest.pledges.doses.body") },
+          { title: t("honest.pledges.science.title"), body: t("honest.pledges.science.body") },
+          { title: t("honest.pledges.hype.title"), body: t("honest.pledges.hype.body") },
+        ]}
+      />
+      <Ritual
+        title={t("ritual.title")}
+        body={t("ritual.body")}
+        primary={t("ritual.primary")}
+        secondary={t("ritual.secondary")}
       />
     </>
   );

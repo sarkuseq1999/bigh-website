@@ -77,6 +77,34 @@
         "nature-calm": "Everyday calm, gentle enough for every evening.",
         "deer-horn-reishi": "Calm strength from a centuries-old longevity heritage."
       }
+    },
+    "heart": {
+      "title": "Age well, together.",
+      "body": "For the people you love. Health has always been the best gift."
+    },
+    "honest": {
+      "kicker": "Honest by design",
+      "title": "In a world of miracle promises, we made three small ones instead.",
+      "pledges": {
+        "doses": {
+          "title": "Real doses",
+          "body": "We tell you exactly what’s inside, and why each amount was chosen — nothing hidden behind a “proprietary blend.”"
+        },
+        "science": {
+          "title": "Real science",
+          "body": "We cite the research behind our formulas — and we say plainly what’s still being studied."
+        },
+        "hype": {
+          "title": "No hype",
+          "body": "We never promise miracles. Supplements support a healthy life; they don’t replace one."
+        }
+      }
+    },
+    "ritual": {
+      "title": "Begin your daily ritual.",
+      "body": "For yourself — or for someone you love. One gentle capsule a day, built to be taken for life.",
+      "primary": "Start with NuriCell",
+      "secondary": "Talk to a BiGH advisor"
     }
   },
   "Product": {
