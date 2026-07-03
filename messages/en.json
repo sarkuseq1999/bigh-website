@@ -44,6 +44,12 @@
     },
     "footer": {
       "brandLine": "Be in Good Health. Age well, together."
+    },
+    "truth": {
+      "kicker": "The honest truth",
+      "body": "Your cells run on tiny power plants. With age, they slow — and your brain, which burns about a fifth of your energy, feels it first.",
+      "stat1": "of your body — that’s all your brain weighs.",
+      "stat2": "of your energy — that’s what it burns."
     }
   },
   "Product": {
