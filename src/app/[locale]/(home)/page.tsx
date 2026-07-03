@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Hero } from "@/components/home/hero";
+import { Scientist } from "@/components/home/scientist";
 import { Truth } from "@/components/home/truth";
 import { routing, type Locale } from "@/i18n/routing";
 
@@ -32,6 +33,14 @@ export default async function HomePage({
         body={t("truth.body")}
         stat1={t("truth.stat1")}
         stat2={t("truth.stat2")}
+      />
+      <Scientist
+        kicker={t("liu.kicker")}
+        name={t("liu.name")}
+        honor={t("liu.honor")}
+        body={t("liu.body")}
+        quote={t("liu.quote")}
+        cta={t("liu.cta")}
       />
     </>
   );
