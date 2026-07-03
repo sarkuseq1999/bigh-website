@@ -1,5 +1,6 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
+import { Family } from "@/components/home/family";
 import { Hero } from "@/components/home/hero";
 import { Nuricell } from "@/components/home/nuricell";
 import { Scientist } from "@/components/home/scientist";
@@ -52,6 +53,18 @@ export default async function HomePage({
         ingredients={t("nuricell.ingredients")}
         heritage={t("nuricell.heritage")}
         cta={t("nuricell.cta")}
+      />
+      <Family
+        locale={locale}
+        kicker={t("family.kicker")}
+        title={t("family.title")}
+        jobs={{
+          turmerific: t("family.jobs.turmerific"),
+          "advanced-opc-formula": t("family.jobs.advanced-opc-formula"),
+          "green-bee-propolis": t("family.jobs.green-bee-propolis"),
+          "nature-calm": t("family.jobs.nature-calm"),
+          "deer-horn-reishi": t("family.jobs.deer-horn-reishi"),
+        }}
       />
     </>
   );
