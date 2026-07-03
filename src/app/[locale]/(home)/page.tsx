@@ -1,8 +1,10 @@
 import { setRequestLocale, getTranslations } from "next-intl/server";
 
 import { Hero } from "@/components/home/hero";
+import { Nuricell } from "@/components/home/nuricell";
 import { Scientist } from "@/components/home/scientist";
 import { Truth } from "@/components/home/truth";
+import { productName } from "@/data/products";
 import { routing, type Locale } from "@/i18n/routing";
 
 export function generateStaticParams() {
@@ -41,6 +43,15 @@ export default async function HomePage({
         body={t("liu.body")}
         quote={t("liu.quote")}
         cta={t("liu.cta")}
+      />
+      <Nuricell
+        name={productName("nuricell", locale)}
+        lead={t("nuricell.lead")}
+        dose={t("nuricell.dose")}
+        doseBody={t("nuricell.doseBody")}
+        ingredients={t("nuricell.ingredients")}
+        heritage={t("nuricell.heritage")}
+        cta={t("nuricell.cta")}
       />
     </>
   );
