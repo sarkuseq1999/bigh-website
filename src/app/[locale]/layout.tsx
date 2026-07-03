@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider, hasLocale } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Roboto } from "next/font/google";
+import { Fraunces, Roboto } from "next/font/google";
 
 import { SiteFooter } from "@/components/clone/footer";
 import { SiteHeader } from "@/components/clone/header";
@@ -15,6 +15,15 @@ const roboto = Roboto({
   subsets: ["latin", "latin-ext", "vietnamese"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-roboto",
+  display: "swap",
+});
+
+// Golden Hour serif display face for the new homepage (`.gh-serif`).
+const ghSerif = Fraunces({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-gh-serif",
   display: "swap",
 });
 
@@ -75,7 +84,7 @@ export default async function LocaleLayout({
     <html
       lang={locale}
       suppressHydrationWarning
-      className={`${roboto.variable} h-full antialiased`}
+      className={`${roboto.variable} ${ghSerif.variable} h-full antialiased`}
     >
       <body className="bg-background text-foreground flex min-h-full flex-col">
         {cjkHref && (

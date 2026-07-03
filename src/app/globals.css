@@ -201,3 +201,18 @@ html[lang="vn"] {
     transform: none;
   }
 }
+
+/* ── Golden Hour homepage scope (new site) ─────────────── */
+.gh {
+  --gh-bg: #04080f;
+  --gh-fg: #e6f0f7;
+  --gh-muted: #b9cbd9;
+  --gh-faint: #6f8aa0;
+  --gh-ember: #e9946a; /* warm accent (reconcile gold vs ember with Mo) */
+  --gh-line: rgba(230, 240, 247, 0.12);
+  background: var(--gh-bg);
+  color: var(--gh-fg);
+}
+.gh-serif {
+  font-family: var(--font-gh-serif), Georgia, serif;
+}
