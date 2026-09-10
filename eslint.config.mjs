@@ -16,6 +16,7 @@ const eslintConfig = defineConfig([
     ".superpowers/**",
     ".playwright-mcp/**",
     "reference/**",
+    "old-storage/**",
   ]),
 ]);
 

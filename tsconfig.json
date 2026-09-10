@@ -30,5 +30,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules", "reference", ".claude", ".superpowers", ".playwright-mcp"]
+  "exclude": [
+    "node_modules",
+    "reference",
+    "old-storage",
+    ".claude",
+    ".superpowers",
+    ".playwright-mcp"
+  ]
 }

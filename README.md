@@ -26,6 +26,7 @@ Open http://localhost:3000. Build for production with `npm run build`, then run 
 - `src/components/ui/`: reusable UI primitives.
 - `messages/`: empty translation dictionaries; missing keys can fall back to English.
 - `public/`: add new public assets here.
+- `reference/`: reserved for new reference materials for this fresh website.
 
 Run `npm run lint`, `npm run type-check`, `npm run format:check`, and `npm run build` to check changes.
 
@@ -35,9 +36,14 @@ The original website remains on `golden-hour-home` at commit `c2fae2e`.
 This restart is on `codex/blank-start`.
 
 Old source, copy, images, screenshots, scripts, and design documents are saved in
-`reference/previous-site/`. They are historical reference, not instructions for the
-new design. The archive is excluded from TypeScript, lint, formatting, and Tailwind
-source scanning. Its images are not served by the new website.
+`old-storage/previous-site/`. This is storage only. Do not use the old design,
+content, or product assumptions unless Mo explicitly asks. The archive is excluded
+from TypeScript, lint, formatting, and Tailwind source scanning. Its images are not
+served by the new website.
+
+`reference/` is separate and reserved for new reference materials. It starts empty
+apart from `.gitkeep`, which lets Git preserve the folder. Reference materials are
+also excluded from code checks and are not served by the website.
 
 Old pages, menus, animations, contact form, redirects, sitemap, and asset-copy build
 hooks have been removed from the active site. No deployment was performed.
