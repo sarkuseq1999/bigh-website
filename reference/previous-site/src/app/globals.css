@@ -1,0 +1,247 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  /* ── BiGH brand palette, sampled from the original bighnow.com ──────
+     dark navy chrome, vivid logo green, teal California band,
+     sunny yellow hero panel. White page ground. */
+  --ink-dark: #17171f;
+  --navy: #3e3d63;
+  --green: #61ce70;
+  --green-dark: #4fbf5e;
+  --teal: #45b5ac;
+  --yellow: #f7e733;
+  --page: #ffffff;
+  --heading: #727272;
+  --body-col: #54545c;
+  --line: #e4e4ea;
+
+  /* per-locale CJK companions, set on html[lang=…] below */
+  --cjk-serif: "Iowan Old Style";
+  --cjk-sans: "Segoe UI";
+
+  /* shadcn semantic tokens mapped onto the palette */
+  --background: var(--page);
+  --foreground: var(--heading);
+  --muted: #f4f4f6;
+  --muted-foreground: var(--body-col);
+  --border: var(--line);
+  --card: var(--page);
+  --card-foreground: var(--heading);
+  --primary: var(--green);
+  --primary-foreground: #ffffff;
+}
+
+html[lang="kr"] {
+  --cjk-serif: "Noto Serif KR";
+  --cjk-sans: "Noto Sans KR";
+}
+html[lang="jp"] {
+  --cjk-serif: "Noto Serif JP";
+  --cjk-sans: "Noto Sans JP";
+}
+html[lang="cns"],
+html[lang="hken"] {
+  --cjk-serif: "Noto Serif SC";
+  --cjk-sans: "Noto Sans SC";
+}
+html[lang="vn"] {
+  --cjk-serif: "Noto Serif";
+  --cjk-sans: "Noto Sans";
+}
+
+@theme inline {
+  --color-ink-dark: var(--ink-dark);
+  --color-navy: var(--navy);
+  --color-green: var(--green);
+  --color-green-dark: var(--green-dark);
+  --color-teal: var(--teal);
+  --color-yellow: var(--yellow);
+  --color-heading: var(--heading);
+  --color-body-col: var(--body-col);
+  --color-line: var(--line);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+
+  --font-display: var(--font-roboto), var(--cjk-sans), sans-serif;
+  --font-sans: var(--font-roboto), var(--cjk-sans), system-ui, sans-serif;
+  --font-mono: monospace;
+}
+
+@layer base {
+  body {
+    background-color: var(--page);
+    color: var(--body-col);
+    font-family: var(--font-roboto), var(--cjk-sans), system-ui, sans-serif;
+    font-size: 1.0625rem; /* 17px */
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--heading);
+    font-weight: 600;
+  }
+  ::selection {
+    background: var(--green);
+    color: #fff;
+  }
+  :focus-visible {
+    outline: 2px solid var(--green-dark);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* long-form pages (legal, about, science) rendered from harvested markdown */
+  .prose-clone {
+    max-width: 50rem;
+    font-size: 15px;
+  }
+
+  /* terms page uses the original's larger legal type */
+  .prose-legal {
+    font-size: 16px;
+    line-height: 1.77;
+  }
+  .prose-legal p,
+  .prose-legal li {
+    margin: 1.05em 0;
+  }
+
+  /* white copy rendered directly on page banners (vegan, non-gmo, support) */
+  .prose-banner {
+    max-width: 52rem;
+    font-size: 15px;
+    color: #fff;
+  }
+  .prose-banner p,
+  .prose-banner li {
+    color: #fff;
+    margin: 0.8em 0;
+  }
+  .prose-banner ul {
+    list-style: disc;
+    padding-left: 1.4em;
+  }
+  .prose-banner h2,
+  .prose-banner h3 {
+    color: #fff;
+    font-weight: 600;
+    margin: 1.4em 0 0.5em;
+  }
+  .prose-banner a {
+    color: #fff;
+    text-decoration: underline;
+  }
+  .prose-clone h1,
+  .prose-clone h2,
+  .prose-clone h3 {
+    color: var(--heading);
+    line-height: 1.25;
+    margin: 2.2em 0 0.6em;
+    font-weight: 650;
+    text-wrap: balance;
+  }
+  .prose-clone h1 { font-size: 2rem; }
+  .prose-clone h2 { font-size: 1.5rem; }
+  .prose-clone h3 { font-size: 1.2rem; }
+  .prose-clone p,
+  .prose-clone li {
+    color: var(--body-col);
+    margin: 0.9em 0;
+  }
+  .prose-clone ul,
+  .prose-clone ol {
+    padding-left: 1.4em;
+  }
+  .prose-clone ul { list-style: disc; }
+  .prose-clone ol { list-style: decimal; }
+  .prose-clone a {
+    color: var(--green-dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose-clone a:hover { color: var(--green); }
+  .prose-clone img {
+    border-radius: 0.75rem;
+    margin: 1.6em auto;
+    box-shadow: 0 8px 30px rgba(23, 23, 31, 0.1);
+  }
+  .prose-clone hr {
+    border-color: var(--line);
+    margin: 2.5em 0;
+  }
+
+  /* scroll-reveal: .reveal-pending is only ever added by JS after hydration,
+     so content stays visible for crawlers and no-JS visitors */
+  .reveal-pending {
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .reveal-pending.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ── Golden Hour homepage scope (new site) ─────────────── */
+.gh {
+  --gh-bg: #04080f;
+  --gh-fg: #e6f0f7;
+  --gh-muted: #b9cbd9;
+  --gh-faint: #6f8aa0;
+  --gh-ember: #e9946a; /* warm accent (reconcile gold vs ember with Mo) */
+  --gh-line: rgba(230, 240, 247, 0.12);
+  background: var(--gh-bg);
+  color: var(--gh-fg);
+}
+.gh-serif {
+  font-family: var(--font-gh-serif), Georgia, serif;
+}
+/* the clone's base layer paints headings + body text in its measured light
+   palette; inside the Golden Hour scope everything inherits the dark tokens */
+.gh h1,
+.gh h2,
+.gh h3,
+.gh h4 {
+  color: inherit;
+  font-weight: 400;
+}
+.gh ::selection {
+  background: var(--gh-ember);
+  color: #04080f;
+}
+/* Light-break scope — a daylight section inside the Golden Hour scroll.
+   Same hues as .gh, inverted: the white is tinted toward the navy (not
+   warm-cream), and ember is darkened to hold ≥4.5:1 on white. */
+.ghl {
+  --ghl-bg: #f7f9fb;
+  --ghl-ink: #0c1622;
+  --ghl-muted: #3f5468;
+  --ghl-ember: #b05a2c;
+  --ghl-line: rgba(12, 22, 34, 0.14);
+  background: var(--ghl-bg);
+  color: var(--ghl-ink);
+}
+.ghl ::selection {
+  background: var(--ghl-ember);
+  color: #f7f9fb;
+}

@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BiGH — blank start
 
-## Getting Started
+A fresh website canvas using the existing stack. The homepage is intentionally blank.
 
-First, run the development server:
+## Run locally
 
-```bash
+```sh
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000. Build for production with `npm run build`, then run it with `npm start`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Stack kept
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Next.js 16.2.6, React 19.2.4, TypeScript 5, and Tailwind CSS 4.
+- shadcn/Base UI components, Lucide icons, GSAP, Motion, Three.js, and next-themes remain installed.
+- next-intl keeps the existing language routes: `/`, `/kr`, `/jp`, `/cns`, `/hken`, `/vn`.
+- Every dependency and its locked version is unchanged.
 
-## Learn More
+## Start building here
 
-To learn more about Next.js, take a look at the following resources:
+- `src/app/[locale]/page.tsx`: blank homepage.
+- `src/app/[locale]/layout.tsx`: document and language provider.
+- `src/app/globals.css`: neutral base styles.
+- `src/components/ui/`: reusable UI primitives.
+- `messages/`: empty translation dictionaries; missing keys can fall back to English.
+- `public/`: add new public assets here.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Run `npm run lint`, `npm run type-check`, `npm run format:check`, and `npm run build` to check changes.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Previous website
 
-## Deploy on Vercel
+The original website remains on `golden-hour-home` at commit `c2fae2e`.
+This restart is on `codex/blank-start`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Old source, copy, images, screenshots, scripts, and design documents are saved in
+`reference/previous-site/`. They are historical reference, not instructions for the
+new design. The archive is excluded from TypeScript, lint, formatting, and Tailwind
+source scanning. Its images are not served by the new website.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Old pages, menus, animations, contact form, redirects, sitemap, and asset-copy build
+hooks have been removed from the active site. No deployment was performed.
+
+The blank draft asks search engines not to index it. Revisit the metadata and
+`robots.ts`, and restore appropriate redirects and a sitemap before launching the
+rebuilt website.

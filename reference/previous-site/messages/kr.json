@@ -1,0 +1,74 @@
+{
+  "Meta": {
+    "title": "BiGH — Be in Good Health",
+    "description": "자연과 과학을 통합하여 창조된 현대 건강보조식품. 켈리포니아에서 제조, cGMP·HPTLC 인증."
+  },
+  "Nav": {
+    "home": "홈",
+    "products": "제품",
+    "about": "알아보기",
+    "aboutBigh": "BiGH 알아보기",
+    "organic": "유기농 인증",
+    "nonGmo": "GMO는 무엇인가요",
+    "glutenFree": "글루텐 프리",
+    "vegan": "비건채식 인증",
+    "science": "과학",
+    "support": "고객지원",
+    "login": "로그인",
+    "signup": "회원가입",
+    "menu": "메뉴",
+    "language": "언어"
+  },
+  "Home": {
+    "eyebrow": "Nature Science",
+    "brand": "BiGH",
+    "tagline": "자연과 과학을 통합하여 창조된 현대 건강보조식품",
+    "learnMore": "자세히 알아보기",
+    "viewProducts": "제품 보기",
+    "latestEyebrow": "최신 제품",
+    "featuredSlug": "deer-horn-reishi",
+    "featuredBlurb": "시중에 보급되는 영지버섯중에서 가장 희귀하고 가장 효능이 높은 유기농 영지버섯.",
+    "madeTitle": "켈리포니아에서 제조되었습니다",
+    "madeBody": "저희 모든 제품은 켈리포니아주에서 최상으로 제조됩니다. 저희와 함께 일하는 제조업체를 매우 까다롭게 선택하고 있으며, 오직 cGMP 와 HPTLC 가 인증하고 수십년간 훌륭한 결과를 창출한 제조업체들과 함께 일하고 있습니다. 또한 타협하지 않은 선별된 건강보조제품 성분을 저희 고객들에게 전달함으로써 우리의 비젼을 함께 공유하고 있으며, 이러한 과정을 통해서 우리의 신뢰를 얻고 있습니다.",
+    "popular": "인기 상품",
+    "standards": "품질 기준",
+    "natureTitle": "자연을 근거로",
+    "natureBody": "우리는 자연의 성장에 가장 적합한 지역에서 공급되는 순수 성분만을 선택하여 나아갈 것 입니다.",
+    "scienceTitle": "과학에 의하여 만들어진",
+    "scienceBody": "수년간의 경험으로 형성된 과학팀은 현대 건강과학과 연구에 의하여 제품을 설계하고 제조하였습니다."
+  },
+  "Product": {
+    "buyNow": "구매하기",
+    "allProducts": "전체 제품",
+    "eyebrow": "BiGH 포뮬러리"
+  },
+  "Footer": {
+    "products": "제품",
+    "company": "회사",
+    "legal": "약관",
+    "opportunity": "Opportunity",
+    "career": "Career",
+    "privacy": "Privacy Notice",
+    "terms": "Terms and Conditions",
+    "returns": "Return Policy",
+    "madeLine": "Made in California · cGMP · HPTLC",
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+  },
+  "Support": {
+    "title": "문의하기",
+    "name": "성함",
+    "namePh": "이름, 성",
+    "customerId": "회원번호 (기존 회원인 경우)",
+    "customerIdPh": "숫자만 입력",
+    "email": "이메일",
+    "phone": "전화번호",
+    "phonePh": "숫자만 입력",
+    "subject": "제목",
+    "subjectPh": "최대한 구체적으로 적어주세요",
+    "message": "내용",
+    "send": "보내기",
+    "sent": "감사합니다 — 메시지가 전송되었습니다.",
+    "failed": "전송에 실패했습니다. 다시 시도해 주세요."
+  }
+}

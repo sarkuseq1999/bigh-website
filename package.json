@@ -9,9 +9,7 @@
     "lint": "eslint",
     "type-check": "tsc --noEmit",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
-    "prebuild": "node scripts/sync-assets.mjs",
-    "predev": "node scripts/sync-assets.mjs"
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@base-ui/react": "^1.4.1",

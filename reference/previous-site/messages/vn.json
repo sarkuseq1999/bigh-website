@@ -1,0 +1,74 @@
+{
+  "Meta": {
+    "title": "BiGH — Be in Good Health",
+    "description": "Nghệ thuật kết hợp thiên nhiên và khoa học trong thực phẩm bổ sung hiện đại. Sản xuất tại California, chứng nhận cGMP và HPTLC."
+  },
+  "Nav": {
+    "home": "Trang chủ",
+    "products": "Sản phẩm",
+    "about": "Về chúng tôi",
+    "aboutBigh": "Về chúng tôi",
+    "organic": "Hữu cơ",
+    "nonGmo": "Không biến đổi gen",
+    "glutenFree": "Không chứa gluten",
+    "vegan": "Ăn chay",
+    "science": "Khoa Học",
+    "support": "Hỗ trợ khách hàng",
+    "login": "Đăng nhập",
+    "signup": "Đăng ký",
+    "menu": "Menu",
+    "language": "Ngôn ngữ"
+  },
+  "Home": {
+    "eyebrow": "Nature Science",
+    "brand": "BiGH",
+    "tagline": "The art of incorporating nature and science into modern dietary supplements.",
+    "learnMore": "Tìm hiểu thêm",
+    "viewProducts": "Xem sản phẩm",
+    "latestEyebrow": "Latest Release",
+    "featuredSlug": "deer-horn-reishi",
+    "featuredBlurb": "The rarest and most potent organic Reishi mushroom on the market.",
+    "madeTitle": "Made in California",
+    "madeBody": "All of our products are proudly made in California. We are picky about who we work with — only cGMP and HPTLC certified manufacturers with decades of great results, who share our vision of delivering no-compromise nutritional supplements, earn our trust.",
+    "popular": "Sản phẩm phổ biến",
+    "standards": "Tiêu chuẩn chất lượng",
+    "natureTitle": "Driven by Nature",
+    "natureBody": "We will always start by selecting the purest ingredients that are sourced from areas or regions that are best suited for its natural growth.",
+    "scienceTitle": "Guided by Science",
+    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products."
+  },
+  "Product": {
+    "buyNow": "Mua ngay",
+    "allProducts": "Tất cả sản phẩm",
+    "eyebrow": "BiGH Formulary"
+  },
+  "Footer": {
+    "products": "Sản phẩm",
+    "company": "Công ty",
+    "legal": "Điều khoản",
+    "opportunity": "Opportunity",
+    "career": "Career",
+    "privacy": "Privacy Notice",
+    "terms": "Terms and Conditions",
+    "returns": "Return Policy",
+    "madeLine": "Made in California · cGMP · HPTLC",
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+  },
+  "Support": {
+    "title": "Biểu mẫu liên hệ",
+    "name": "Họ và tên",
+    "namePh": "Tên, Họ",
+    "customerId": "Mã khách hàng (nếu đã đăng ký)",
+    "customerIdPh": "Chỉ nhập số",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "phonePh": "Chỉ nhập số",
+    "subject": "Tiêu đề",
+    "subjectPh": "Vui lòng mô tả càng rõ càng tốt",
+    "message": "Nội dung",
+    "send": "Gửi",
+    "sent": "Cảm ơn bạn — tin nhắn đã được gửi.",
+    "failed": "Gửi không thành công. Vui lòng thử lại."
+  }
+}

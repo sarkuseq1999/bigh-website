@@ -7,3 +7,7 @@ package-lock.json
 *.log
 .DS_Store
 .vercel
+.claude
+.superpowers
+.playwright-mcp
+reference

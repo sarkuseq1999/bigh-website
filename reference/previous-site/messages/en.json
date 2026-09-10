@@ -1,0 +1,145 @@
+{
+  "Meta": {
+    "title": "BiGH — Be in Good Health",
+    "description": "The art of incorporating nature and science into modern dietary supplements. Made in California, cGMP and HPTLC certified."
+  },
+  "Nav": {
+    "home": "Home",
+    "products": "Product",
+    "about": "About",
+    "aboutBigh": "About BiGH",
+    "organic": "Organic",
+    "nonGmo": "Non-GMO",
+    "glutenFree": "Gluten Free",
+    "vegan": "Vegan",
+    "science": "Science",
+    "support": "Support",
+    "login": "Login",
+    "signup": "Sign Up",
+    "menu": "Menu",
+    "language": "Language"
+  },
+  "Home": {
+    "eyebrow": "Nature Science",
+    "brand": "BiGH",
+    "tagline": "The art of incorporating nature and science into modern dietary supplements.",
+    "learnMore": "Learn More",
+    "viewProducts": "View Products",
+    "latestEyebrow": "Latest Release",
+    "featuredSlug": "deer-horn-reishi",
+    "featuredBlurb": "The rarest and most potent organic Reishi mushroom on the market.",
+    "madeTitle": "Made in California",
+    "madeBody": "All of our products are proudly made in California. We are picky about who we work with — only cGMP and HPTLC certified manufacturers with decades of great results, who share our vision of delivering no-compromise nutritional supplements, earn our trust.",
+    "popular": "Most Popular",
+    "standards": "Our Standards",
+    "natureTitle": "Driven by Nature",
+    "natureBody": "We will always start by selecting the purest ingredients that are sourced from areas or regions that are best suited for its natural growth.",
+    "scienceTitle": "Guided by Science",
+    "scienceBody": "Our scientific team with decades of experiences are guided by modern health science and researches to design and formulate our products.",
+    "hero": {
+      "line1": "Your mind has no",
+      "line2": "expiration date.",
+      "reveal": "Because aging well starts",
+      "revealAccent": "in your cells.",
+      "cta": "See the science"
+    },
+    "footer": {
+      "brandLine": "Be in Good Health. Age well, together."
+    },
+    "truth": {
+      "kicker": "The honest truth",
+      "body": "Your cells run on tiny power plants. With age, they slow — and your brain, which burns about a fifth of your energy, feels it first.",
+      "stat1": "of your body — that’s all your brain weighs.",
+      "stat2": "of your energy — that’s what it burns."
+    },
+    "liu": {
+      "kicker": "Meet the scientist",
+      "name": "Dr. Jiankang Liu",
+      "honor": "Elected Member of the European Academy of Sciences and Arts",
+      "body": "A scientist who has spent his life on one question: how our cells make energy. During his years in Dr. Bruce Ames’ lab at UC Berkeley, he co-authored the landmark 2002 research this work is built on — and he has never stopped studying it since.",
+      "quote": "This isn’t a marketing brand. It’s a scientist’s life’s work.",
+      "cta": "Meet Dr. Liu & the science"
+    },
+    "nuricell": {
+      "lead": "Built on the research Dr. Liu co-authored",
+      "dose": "Not the biggest dose. The right one.",
+      "doseBody": "Dr. Liu tuned NuriCell’s golden ratio — the balance of ingredients and the daily portion — for safe, effective use every day, for life.",
+      "ingredients": "And every key ingredient is one your body already makes and knows.",
+      "heritage": "The same formula, trusted for over 20 years",
+      "cta": "Explore NuriCell"
+    },
+    "family": {
+      "kicker": "The family",
+      "title": "One idea — cellular energy. A family of ways to age well.",
+      "jobs": {
+        "turmerific": "Supports a healthy inflammatory response and everyday recovery.",
+        "advanced-opc-formula": "Antioxidant support for your body’s defenses and healthy circulation.",
+        "green-bee-propolis": "Supports calm, comfort, and a healthy immune system.",
+        "nature-calm": "Everyday calm, gentle enough for every evening.",
+        "deer-horn-reishi": "Calm strength from a centuries-old longevity heritage."
+      }
+    },
+    "heart": {
+      "title": "Age well, together.",
+      "body": "For the people you love. Health has always been the best gift."
+    },
+    "honest": {
+      "kicker": "Honest by design",
+      "title": "In a world of miracle promises, we made three small ones instead.",
+      "pledges": {
+        "doses": {
+          "title": "Real doses",
+          "body": "We tell you exactly what’s inside, and why each amount was chosen — nothing hidden behind a “proprietary blend.”"
+        },
+        "science": {
+          "title": "Real science",
+          "body": "We cite the research behind our formulas — and we say plainly what’s still being studied."
+        },
+        "hype": {
+          "title": "No hype",
+          "body": "We never promise miracles. Supplements support a healthy life; they don’t replace one."
+        }
+      }
+    },
+    "ritual": {
+      "title": "Begin your daily ritual.",
+      "body": "For yourself — or for someone you love. One gentle capsule a day, built to be taken for life.",
+      "primary": "Start with NuriCell",
+      "secondary": "Talk to a BiGH advisor"
+    }
+  },
+  "Product": {
+    "buyNow": "Buy Now",
+    "allProducts": "All Products",
+    "eyebrow": "BiGH Formulary"
+  },
+  "Footer": {
+    "products": "Products",
+    "company": "Company",
+    "legal": "Legal",
+    "opportunity": "Opportunity",
+    "career": "Career",
+    "privacy": "Privacy Notice",
+    "terms": "Terms and Conditions",
+    "returns": "Return Policy",
+    "madeLine": "Made in California · cGMP · HPTLC",
+    "rights": "© {year} BiGH Corporation. All rights reserved.",
+    "disclaimer": "*These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure or prevent any disease."
+  },
+  "Support": {
+    "title": "Contact Form",
+    "name": "Your Name",
+    "namePh": "First Name, Last Name",
+    "customerId": "Customer ID (If you have already registered)",
+    "customerIdPh": "Numbers only",
+    "email": "Email",
+    "phone": "Phone Number",
+    "phonePh": "Numbers Only",
+    "subject": "Subject",
+    "subjectPh": "Please be as precise as possible",
+    "message": "Message",
+    "send": "Send",
+    "sent": "Thank you — your message has been sent.",
+    "failed": "Something went wrong. Please try again or email us directly."
+  }
+}
