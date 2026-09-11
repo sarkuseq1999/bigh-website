@@ -2,6 +2,9 @@
 
 A fresh website canvas using the existing stack. The homepage is intentionally blank.
 
+For the current brand direction, audience, markets, and open decisions, see the
+[BiGH brand & website cheat sheet](BRAND-CHEATSHEET.md).
+
 ## Run locally
 
 ```sh
