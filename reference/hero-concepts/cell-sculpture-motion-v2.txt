@@ -1,0 +1,32 @@
+Title: BiGH translucent cell — weightless motion revision
+Requested: September 21, 2026
+Source image: cell-sculpture-v1.png
+Direction from Mo: make the whole background float like space and give the cell a fluid, jellyfish-like movement.
+Method: Higgsfield, Seedance 2.5
+Job ID: eaf46006-e98a-4cf9-874c-a0de38fa192d
+Source media ID: 3bbb7805-5eee-4821-b0cc-39f95b0341e1
+Requested settings: 10 seconds, 16:9, 1080p, no audio, one output.
+Reference roles: same original cell image supplied as both start_image and end_image.
+Credit estimate before submission: 120 credits.
+Status: completed, inspected, and integrated into the local hero preview; awaiting Mo's feedback.
+Original generated video: cell-sculpture-motion-v2.mp4 (HEVC, 2,521,716 bytes).
+Browser-friendly copy: cell-sculpture-motion-v2-web.mp4 (H.264, 3,465,865 bytes).
+Served copy: public/media/hero/cell-sculpture-motion-v2.mp4, identical SHA-256 to the H.264 reference copy.
+SHA-256: 66DB31DC156CA431EC2FA5CB93304CCCE699C7D763C782D6592E4F7BF7AF5390
+Actual output: 1920 x 1080, 24 frames/second, 241 frames, 10.041667 seconds, no audio stream.
+Result URL: https://d8j0ntlcm91z4.cloudfront.net/user_3CxRNPyGspBilpDcpmVjn7icK40/hf_20260922_012405_eaf46006-e98a-4cf9-874c-a0de38fa192d.mp4
+Verification: both video files fully decoded with ffmpeg without errors; metadata checked with ffprobe. Six chronological frames show changes in the cell's outline and internal folds with the original cell intact. A diffuse surface reflection remains despite the requested atmospheric background; the hero's feathered mask blends the footage into moving light layers.
+Browser verification: the local page loads this exact v2 URL and plays the silent video; loop restart, shared pause/play, and a stationary headline were checked. Desktop and phone screenshots were inspected. Perfect visual continuity at the video loop seam has not been established.
+Review sheet: qa/cell-sculpture-motion-v2-frames.jpg.
+Preview screenshots: qa/hero-preview-v2-desktop.png and qa/hero-preview-v2-phone.png.
+Version 1 and the source image are preserved. No public deployment was made.
+
+Motion brief:
+A gentle contraction-and-release rhythm inspired by a swimming jellyfish, while retaining a recognizable cell.
+The membrane and internal structures should move in fluid motion.
+Keep open space at left and a calm pastel environment.
+The local hero also adds drifting light layers and a slight whole-object float; all motion shares the pause control.
+Loop quality and final composition must be inspected.
+
+Exact generation prompt:
+Create a noticeably fluid, weightless animation of this exact translucent cell sculpture for a premium cellular-health website hero. Preserve the single cell, its nucleus and recognizable folded internal structures, pearlescent glass-gel material, and pastel blue, lavender and warm ivory palette. It remains the same beautiful CELL, never turning into an actual jellyfish. Use a jellyfish's swimming rhythm as the motion reference: the whole outer membrane slowly gathers inward and then billows outward, with a soft traveling ripple that moves around the cell. Over ten seconds perform two clearly visible but unhurried contraction-and-release pulses, about 6 to 9 percent deformation. Internal folds trail behind each pulse with gentle fluid inertia and settle naturally; the nucleus stays intact and suspended. The cell rises gracefully during release, drifts gently sideways, and settles back, moving about 3 percent of the frame height and tilting a few degrees. The cell must feel alive and freely suspended, not a rigid sculpture slowly spinning, not a still picture with a light flicker. Keep the complete cell on the right, fully within the frame; its left edge must stay outside the left 40 percent reserved for web text. The surrounding pastel atmosphere also moves: broad, very soft veils of blue and warm ivory light drift slowly in depth like luminous space. The background has no hard horizon, no distinct floor, no stars or planets. Any reflection is diffuse and atmospheric, not a shiny tabletop. Camera remains stationary; all movement comes from the cell and the soft environment. Light shifts continuously and smoothly with stable overall exposure. Beautiful, serene, immersive macro cinematography; substantial enough motion to be clearly apparent within two seconds but graceful and slow. Ease through a complete cycle and return naturally to the supplied end image, with matching position and lighting for a repeating background loop. Do not pause or freeze at either endpoint. No tendrils, tentacles, extra cells, division, melting, structural collapse, particle explosion, flashing, text, logos, audio or hard cuts.

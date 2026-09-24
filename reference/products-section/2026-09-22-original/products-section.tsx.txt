@@ -1,0 +1,93 @@
+        <section id="products" className={styles.productsSection}>
+          <div className={styles.productIntro}>
+            <p className={styles.eyebrow}>03 / THOUGHTFULLY FORMULATED</p>
+            <h2>
+              Meet your
+              <br />
+              everyday possibilities<span>.</span>
+            </h2>
+            <p>
+              Get to know the BiGH collection.
+              <br />
+              Start with what’s inside.
+            </p>
+          </div>
+          <div className={styles.flagship}>
+            <div className={styles.flagshipVisual}>
+              <span className={styles.flagshipTag}>THE BIGH FLAGSHIP</span>
+              <span className={styles.bottleHalo} />
+              <span className={styles.bottleWord} aria-hidden="true">
+                NuriCell
+              </span>
+              <Image
+                src="/images/nuricell.png"
+                alt="NuriCell dietary supplement bottle"
+                width={550}
+                height={580}
+                sizes="(max-width: 760px) 80vw, 42vw"
+              />
+              <span className={styles.packagingNote}>Existing packaging shown</span>
+            </div>
+            <div className={styles.flagshipCopy}>
+              <span className={styles.eyebrow}>OUR STARTING POINT</span>
+              <h3>NuriCell.</h3>
+              <p className={styles.serifLead}>
+                Cellular health.
+                <br />
+                Mental energy.
+                <br />A life to get on with.
+              </p>
+              <p>
+                Our flagship formula brings BiGH’s focus into one place. Four ingredients, with a
+                scientific story worth understanding.
+              </p>
+              <div className={styles.ingredientPills}>
+                <span>Acetyl-L-carnitine</span>
+                <span>Creatine</span>
+                <span>Alpha-lipoic acid</span>
+                <span>Choline</span>
+              </div>
+              <button onClick={() => openProduct(0)} className={styles.darkButton}>
+                Discover NuriCell <ArrowUpRight size={20} />
+              </button>
+              <a href="#research" className={styles.textLink}>
+                Explore the research <ArrowRight size={18} />
+              </a>
+            </div>
+          </div>
+          <div className={styles.collectionHeader}>
+            <h3>A considered collection.</h3>
+            <span>
+              Find your starting point <ArrowDown size={18} />
+            </span>
+          </div>
+          <div className={styles.productGrid}>
+            {products.slice(1).map((product, index) => (
+              <button
+                className={styles.productCard}
+                key={product.name}
+                onClick={() => openProduct(index + 1)}
+              >
+                <div className={`${styles.productImage} ${styles[product.tone]}`}>
+                  <span className={styles.productIndex}>0{index + 2}</span>
+                  <Image
+                    src={`/images/${product.image}.png`}
+                    alt={`${product.name} bottle`}
+                    width={310}
+                    height={330}
+                    sizes="(max-width: 600px) 44vw, 23vw"
+                  />
+                  <span className={styles.productArrow}>
+                    <Plus size={23} />
+                  </span>
+                </div>
+                <h4>{product.name}</h4>
+                <p>{product.category}</p>
+                <span className={styles.productLink}>
+                  Explore formula <ArrowUpRight size={16} />
+                </span>
+              </button>
+            ))}
+          </div>
+        </section>
+

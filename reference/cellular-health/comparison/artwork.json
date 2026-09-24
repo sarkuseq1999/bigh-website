@@ -1,0 +1,65 @@
+{
+  "mode": "Built-in image_gen edit, followed by WebP encoding only with Sharp.",
+  "records": [
+    {
+      "n": 1,
+      "key": "inside-cell",
+      "file": "01-inside-cell-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\01-inside-cell-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects.  Preserve the dark atmospheric scene exactly. Smooth, quiet areas behind the removed copy should remain suitable for legible text overlays. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-05cc1ced-24c6-4efd-9e53-2f3896639549.png",
+      "savedPng": "reference/cellular-health/comparison/01-inside-cell.png",
+      "servedImage": "public/images/science/comparison/01-inside-cell.webp"
+    },
+    {
+      "n": 2,
+      "key": "living-microscope",
+      "file": "02-living-microscope-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\02-living-microscope-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects. Preserve the whole-cell image, its selected mitochondrion outline, and the thin scientific zoom connector to the enlarged mitochondrion. These connectors are part of the art, not UI. Remove the small textual scientific labels only. Preserve the dark atmospheric scene exactly. Smooth, quiet areas behind the removed copy should remain suitable for legible text overlays. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-529181c5-b9d3-44a7-a484-94dd1d205cff.png",
+      "savedPng": "reference/cellular-health/comparison/02-living-microscope.png",
+      "servedImage": "public/images/science/comparison/02-living-microscope.webp"
+    },
+    {
+      "n": 3,
+      "key": "sculpted-energy",
+      "file": "03-sculpted-energy-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\03-sculpted-energy-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects.  Preserve the dark atmospheric scene exactly. Smooth, quiet areas behind the removed copy should remain suitable for legible text overlays. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-3483a582-6cdf-409f-b4dc-3290b35b051f.png",
+      "savedPng": "reference/cellular-health/comparison/03-sculpted-energy.png",
+      "servedImage": "public/images/science/comparison/03-sculpted-energy.webp"
+    },
+    {
+      "n": 4,
+      "key": "pearl-sculpture",
+      "file": "04-pearl-sculpture-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\04-pearl-sculpture-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects.  The white or near-white background must remain white/near-white everywhere it was before. Do not tint it or introduce a dark field. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-24f88d2a-11ad-4915-815e-3431ccfbabb7.png",
+      "savedPng": "reference/cellular-health/comparison/04-pearl-sculpture.png",
+      "servedImage": "public/images/science/comparison/04-pearl-sculpture.webp"
+    },
+    {
+      "n": 5,
+      "key": "white-zoom",
+      "file": "05-white-zoom-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\05-white-zoom-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects. Preserve the whole-cell image, its selected mitochondrion outline, and the thin scientific zoom connector to the enlarged mitochondrion. These connectors are part of the art, not UI. Remove the small textual scientific labels only. The white or near-white background must remain white/near-white everywhere it was before. Do not tint it or introduce a dark field. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-db4ea817-e871-4758-8f66-2dcb179a9fe1.png",
+      "savedPng": "reference/cellular-health/comparison/05-white-zoom.png",
+      "servedImage": "public/images/science/comparison/05-white-zoom.webp"
+    },
+    {
+      "n": 6,
+      "key": "ivory-editorial",
+      "file": "06-ivory-editorial-v1.png",
+      "path": "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\cellular-health\\concepts\\06-ivory-editorial-v1.png",
+      "prompt": "Use case: precise-object-edit. Edit target: the supplied BiGH website mockup. Produce its clean BACKGROUND ART ONLY so we can rebuild the text as real HTML. Remove EVERY letter, word, number, caption, label, button, button outline/fill, arrow inside the button, and any decorative line belonging to typography. Fill each removed region seamlessly with the underlying background texture/color. Do NOT add any text or UI. Preserve the exact canvas aspect ratio 1536 x 1024, image composition, scientific objects, organelle placement, scale, crop, colors, membrane detail, lighting and depth. Keep the empty space where all the text was, with matching background, rather than enlarging or shifting the artwork to fill that space. Do not create extra objects.  The white or near-white background must remain white/near-white everywhere it was before. Do not tint it or introduce a dark field. This is an extraction of the existing composition, not a redesign. The output must contain ZERO text.",
+      "generatedSource": "C:\\Users\\mcbig\\.codex\\generated_images\\01a0b5ed-3791-7451-9a41-2f3e12115109\\exec-c0432a80-29af-4673-a8fa-d93f77801695.png",
+      "savedPng": "reference/cellular-health/comparison/06-ivory-editorial.png",
+      "servedImage": "public/images/science/comparison/06-ivory-editorial.webp"
+    }
+  ]
+}

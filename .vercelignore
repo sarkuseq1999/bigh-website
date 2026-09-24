@@ -1,0 +1,21 @@
+# Upload only the new website and its build configuration.
+old-storage/
+reference/
+content/
+design-mockups/
+judging/
+scripts/
+docs/
+.claude/
+.codex/
+.agents/
+.superpowers/
+.playwright-mcp/
+.git/
+.next/
+node_modules/
+*.md
+*.log
+*.tsbuildinfo
+.env*
+*.pem

@@ -1,0 +1,283 @@
+.products {
+  background: #fff;
+}
+.spotlight {
+  --nuricell-ink: #102b50;
+  display: grid;
+  grid-template-columns: 52% 48%;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "visual heading" "visual details";
+  column-gap: 0;
+  row-gap: 28px;
+  max-width: 1520px;
+  min-height: 860px;
+  margin: 0 auto;
+  padding: 80px 5.3vw 90px;
+  color: var(--nuricell-ink);
+  background: #fff;
+}
+.heading {
+  grid-area: heading;
+  align-self: end;
+  padding-left: 35px;
+}
+.spotlight .eyebrow {
+  margin-bottom: 25px;
+  color: #456b95;
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.2em;
+  line-height: 1.4;
+}
+.spotlight .title {
+  font-size: clamp(58px, 6.3vw, 96px);
+  font-weight: 450;
+  line-height: 1.01;
+  letter-spacing: -0.055em;
+  text-wrap: initial;
+}
+.title span {
+  display: block;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.12em;
+  font-style: italic;
+  letter-spacing: -0.04em;
+}
+.visual {
+  grid-area: visual;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: 650px;
+  overflow: clip;
+}
+.visual::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 88%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 38%, #f4f8ff, #e8f0fc 65%, #f5f8fd);
+}
+.spotlight .flagshipLabel {
+  position: absolute;
+  top: 18px;
+  left: 24px;
+  font-size: 10px;
+  letter-spacing: 0.17em;
+  line-height: 1.5;
+  color: #58718e;
+}
+.spotlight .productWord {
+  position: absolute;
+  left: -2%;
+  top: 18%;
+  width: 104%;
+  text-align: center;
+  color: #ccdaed;
+  font-size: clamp(90px, 10.6vw, 155px);
+  font-weight: 450;
+  line-height: 1;
+  letter-spacing: -0.075em;
+  user-select: none;
+}
+.groundShadow {
+  position: absolute;
+  bottom: 76px;
+  left: 29%;
+  width: 47%;
+  height: 24px;
+  border-radius: 50%;
+  background: #1a3f6630;
+  filter: blur(14px);
+  transform: rotate(-7deg);
+}
+.spotlight .bottle {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 570px;
+  object-fit: contain;
+  transform: rotate(-8deg);
+  filter: drop-shadow(16px 24px 15px #1734581a);
+}
+.spotlight .visualCaption {
+  position: absolute;
+  bottom: 13px;
+  left: 0;
+  width: 100%;
+  text-align: center;
+  color: #708095;
+  font-size: 10px;
+  letter-spacing: 0.06em;
+}
+.details {
+  grid-area: details;
+  align-self: start;
+  padding-left: 35px;
+  max-width: 560px;
+}
+.spotlight .description {
+  max-width: 470px;
+  font-size: clamp(18px, 1.5vw, 22px);
+  line-height: 1.65;
+  color: #43556c;
+}
+.description strong {
+  font-weight: 550;
+  color: var(--nuricell-ink);
+}
+.credit {
+  display: flex;
+  align-items: flex-start;
+  gap: 15px;
+  max-width: 465px;
+  margin-top: 27px;
+  padding-top: 23px;
+  border-top: 1px solid #dce4ee;
+  color: #506580;
+}
+.spotlight .credit p {
+  font-size: 14px;
+  line-height: 1.7;
+}
+.credit strong {
+  color: var(--nuricell-ink);
+  font-weight: 550;
+  white-space: nowrap;
+}
+.spotlight .discover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 38px;
+  min-height: 58px;
+  margin-top: 29px;
+  padding: 15px 27px;
+  border: 1px solid var(--nuricell-ink);
+  border-radius: 99px;
+  background: var(--nuricell-ink);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.spotlight .discover:hover {
+  background: #254973;
+}
+.spotlight .discover:focus-visible {
+  outline: 3px solid #456b95;
+  outline-offset: 5px;
+}
+.collection {
+  padding: 15px max(64px, calc((100% - 1312px) / 2)) 100px;
+  background: #f0f0e9;
+}
+
+@media (min-width: 1600px) {
+  .spotlight {
+    padding-inline: 80px;
+  }
+}
+@media (max-width: 1100px) {
+  .spotlight {
+    min-height: 730px;
+    padding: 65px 35px 75px;
+    grid-template-columns: 50% 50%;
+  }
+  .heading,
+  .details {
+    padding-left: 22px;
+  }
+  .visual {
+    min-height: 580px;
+  }
+  .spotlight .bottle {
+    height: 470px;
+  }
+  .spotlight .flagshipLabel {
+    left: 10px;
+  }
+  .collection {
+    padding-inline: 40px;
+  }
+}
+@media (max-width: 800px) {
+  .spotlight {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto;
+    grid-template-areas: "heading" "visual" "details";
+    min-height: 0;
+    padding: 64px 24px 72px;
+    row-gap: 20px;
+  }
+  .heading,
+  .details {
+    width: 100%;
+    max-width: 540px;
+    padding: 0;
+    margin: 0 auto;
+  }
+  .spotlight .title {
+    font-size: clamp(52px, 12.7vw, 82px);
+  }
+  .spotlight .eyebrow {
+    font-size: 10px;
+    margin-bottom: 19px;
+  }
+  .visual {
+    width: calc(100% + 48px);
+    max-width: 560px;
+    min-height: 430px;
+    justify-self: center;
+  }
+  .visual::before {
+    width: min(88%, 390px);
+  }
+  .spotlight .flagshipLabel {
+    top: 12px;
+    left: 24px;
+    font-size: 8px;
+  }
+  .spotlight .productWord {
+    font-size: clamp(86px, 25vw, 140px);
+    left: 0;
+    width: 100%;
+    top: 20%;
+  }
+  .spotlight .bottle {
+    height: 380px;
+    width: 95%;
+  }
+  .groundShadow {
+    bottom: 49px;
+    height: 18px;
+  }
+  .spotlight .visualCaption {
+    bottom: 0;
+    font-size: 9px;
+  }
+  .spotlight .description {
+    max-width: none;
+    font-size: 18px;
+  }
+  .credit {
+    max-width: none;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 21px;
+  }
+  .spotlight .credit p {
+    font-size: 13px;
+  }
+  .spotlight .discover {
+    margin-top: 26px;
+    min-height: 54px;
+    font-size: 14px;
+  }
+  .collection {
+    padding: 8px 20px 65px;
+  }
+}

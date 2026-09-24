@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>NuriCell — original and enhanced</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      :root {
+        color-scheme: light;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #232722;
+        background: #f8f8f5;
+      }
+      body {
+        margin: 0;
+        --zoom: 1;
+      }
+      main {
+        max-width: 1160px;
+        margin: auto;
+        padding: 38px 28px 30px;
+      }
+      .eyebrow {
+        font-size: 12px;
+        letter-spacing: 0.13em;
+        text-transform: uppercase;
+        color: #687164;
+        margin: 0 0 17px;
+      }
+      h1 {
+        font-size: clamp(28px, 4vw, 44px);
+        font-weight: 500;
+        letter-spacing: -0.045em;
+        margin: 0 0 12px;
+      }
+      .intro {
+        color: #5c6259;
+        font-size: 16px;
+        line-height: 1.5;
+        margin: 0;
+      }
+      .controls {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 22px;
+        margin: 28px 0;
+      }
+      fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        min-width: 0;
+      }
+      legend,
+      .zoom-label {
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 9px;
+      }
+      .backgrounds {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 7px;
+      }
+      .backgrounds label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        padding: 11px 14px;
+        border: 1px solid #d5d8d0;
+        border-radius: 7px;
+        min-height: 44px;
+        background: #fff;
+        font-size: 14px;
+        cursor: pointer;
+      }
+      .backgrounds label:has(input:checked) {
+        border-color: #244d9c;
+        background: #eaf0ff;
+      }
+      input {
+        accent-color: #244d9c;
+      }
+      input[type="radio"] {
+        margin: 0;
+      }
+      .zoom-control {
+        min-width: 215px;
+      }
+      .zoom-label {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+      output {
+        font-variant-numeric: tabular-nums;
+        color: #5c6259;
+      }
+      input[type="range"] {
+        display: block;
+        width: 100%;
+        height: 30px;
+        margin: 0;
+        cursor: pointer;
+      }
+      :focus-visible {
+        outline: 3px solid #4574c8;
+        outline-offset: 4px;
+      }
+      .comparison {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 20px;
+      }
+      figure {
+        min-width: 0;
+        margin: 0;
+      }
+      figcaption {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
+      h2 {
+        font-size: 18px;
+        font-weight: 600;
+        margin: 0;
+      }
+      .version {
+        color: #747a70;
+        font-size: 12px;
+      }
+      .stage {
+        height: clamp(300px, calc(100svh - 420px), 620px);
+        border: 1px solid #e0e2da;
+        border-radius: 12px;
+        overflow: hidden;
+        position: relative;
+        background: #f0f0ec;
+      }
+      .bottle {
+        position: absolute;
+        height: 89%;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(var(--zoom));
+        transform-origin: 50% 60%;
+        overflow: hidden;
+      }
+      .bottle img {
+        position: absolute;
+        height: auto;
+        max-width: none;
+        display: block;
+      }
+      body[data-background="white"] .stage {
+        background: #fff;
+      }
+      body[data-background="dark"] .stage {
+        background: #26313f;
+        border-color: #26313f;
+      }
+      body[data-background="checkered"] .stage {
+        background-color: #eeeeea;
+        background-image:
+          linear-gradient(45deg, #d8dbd3 25%, transparent 25%),
+          linear-gradient(-45deg, #d8dbd3 25%, transparent 25%),
+          linear-gradient(45deg, transparent 75%, #d8dbd3 75%),
+          linear-gradient(-45deg, transparent 75%, #d8dbd3 75%);
+        background-size: 24px 24px;
+        background-position:
+          0 0,
+          0 12px,
+          12px -12px,
+          -12px 0;
+      }
+      .download {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        margin-top: 6px;
+        font-size: 13px;
+        color: #244d9c;
+        text-underline-offset: 4px;
+      }
+      .note {
+        border-top: 1px solid #dedfd8;
+        padding-top: 17px;
+        margin: 18px 0 0;
+        font-size: 13px;
+        color: #61675d;
+        line-height: 1.5;
+      }
+      @media (max-width: 600px) {
+        main {
+          padding: 26px 16px 22px;
+        }
+        .intro {
+          font-size: 14px;
+        }
+        .controls {
+          margin: 23px 0;
+          gap: 17px;
+        }
+        .zoom-control {
+          width: 100%;
+          min-width: 0;
+        }
+        .backgrounds label {
+          padding: 10px;
+          font-size: 13px;
+        }
+        .comparison {
+          gap: 10px;
+        }
+        figcaption {
+          display: block;
+        }
+        h2 {
+          font-size: 16px;
+          margin-bottom: 4px;
+        }
+        .version {
+          font-size: 11px;
+        }
+        .stage {
+          height: clamp(210px, 61vw, 340px);
+          border-radius: 8px;
+        }
+        .bottle {
+          height: 84%;
+        }
+        .download {
+          font-size: 12px;
+        }
+      }
+    </style>
+  </head>
+  <body data-background="white">
+    <main>
+      <p class="eyebrow">BiGH / Photo experiment</p>
+      <h1>NuriCell, side by side.</h1>
+      <p class="intro">Both bottles at the same height, on the same background.</p>
+
+      <div class="controls">
+        <fieldset>
+          <legend>Background</legend>
+          <div class="backgrounds">
+            <label><input type="radio" name="background" value="white" checked /> White</label>
+            <label><input type="radio" name="background" value="dark" /> Dark</label>
+            <label><input type="radio" name="background" value="checkered" /> Checkered</label>
+          </div>
+        </fieldset>
+        <div class="zoom-control">
+          <label for="zoom" class="zoom-label"
+            >Zoom both <output id="zoom-value" for="zoom">100%</output></label
+          >
+          <input
+            id="zoom"
+            type="range"
+            min="100"
+            max="200"
+            step="10"
+            value="100"
+            aria-valuetext="100 percent"
+          />
+        </div>
+      </div>
+
+      <div class="comparison">
+        <figure>
+          <figcaption>
+            <h2>Original</h2>
+            <span class="version">Transparent PNG</span>
+          </figcaption>
+          <div class="stage">
+            <div class="bottle" style="aspect-ratio: 596 / 1100">
+              <img
+                src="/images/nuricell.png"
+                alt="Original NuriCell bottle"
+                width="1140"
+                height="1183"
+                style="width: 191.275168%; left: -45.637584%; top: -4.272727%"
+              />
+            </div>
+          </div>
+          <a class="download" href="/images/nuricell.png" download="nuricell-original.png"
+            >Download original PNG</a
+          >
+        </figure>
+        <figure>
+          <figcaption>
+            <h2>Enhanced</h2>
+            <span class="version">Transparent PNG</span>
+          </figcaption>
+          <div class="stage">
+            <div class="bottle" style="aspect-ratio: 649 / 1193">
+              <img
+                src="/experiments/nuricell-enhanced-transparent.png"
+                alt="Enhanced NuriCell bottle"
+                width="1230"
+                height="1278"
+                style="width: 189.522342%; left: -44.838213%; top: -4.107293%"
+              />
+            </div>
+          </div>
+          <a
+            class="download"
+            href="/experiments/nuricell-enhanced-transparent.png"
+            download="nuricell-enhanced-transparent.png"
+            >Download enhanced PNG</a
+          >
+        </figure>
+      </div>
+      <p class="note">
+        This is an experiment. Some fine label artwork differs in the enhanced version.
+      </p>
+    </main>
+    <script>
+      const zoom = document.getElementById("zoom");
+      const zoomValue = document.getElementById("zoom-value");
+      document.querySelectorAll('input[name="background"]').forEach((input) => {
+        input.addEventListener("change", () => {
+          document.body.dataset.background = input.value;
+        });
+      });
+      zoom.addEventListener("input", () => {
+        document.body.style.setProperty("--zoom", Number(zoom.value) / 100);
+        zoomValue.value = `${zoom.value}%`;
+        zoom.setAttribute("aria-valuetext", `${zoom.value} percent`);
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,119 @@
+.utilities {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 15px;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.utilities .login,
+.utilities .signup {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 8px 0;
+  font-weight: 500;
+  cursor: default;
+}
+.utilities .signup {
+  border: 1px solid #ffffff70;
+  border-radius: 99px;
+  padding-inline: 17px;
+  background: #ffffff0a;
+}
+.utilities .signup:enabled:hover {
+  background: #ffffff20;
+}
+.utilities .login {
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+.utilities .login:hover {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.language {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+}
+.language select {
+  appearance: none;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  padding: 12px 17px 12px 0;
+  max-width: 112px;
+  cursor: pointer;
+}
+.language select:disabled {
+  opacity: 0.65;
+}
+.language select option {
+  background: #fff;
+  color: #102b50;
+}
+.language > svg:last-child {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+}
+.utilities button:focus-visible,
+.utilities a:focus-visible,
+.utilities select:focus-visible {
+  outline: 2px solid #b9defb;
+  outline-offset: 4px;
+}
+.status {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (max-width: 1100px) {
+  .utilities {
+    gap: 12px;
+  }
+}
+@media (min-width: 901px) and (max-width: 1180px) {
+  .utilities {
+    grid-column: 2;
+  }
+}
+@media (max-width: 900px) {
+  .utilities {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    padding-bottom: 7px;
+    border-bottom: 1px solid #ffffff20;
+    font-size: 12px;
+  }
+  .utilities .signup {
+    min-height: 36px;
+    padding: 5px 14px;
+  }
+  .language select {
+    max-width: 108px;
+  }
+}
+@media (max-width: 360px) {
+  .utilities {
+    gap: 8px;
+    font-size: 11px;
+  }
+  .utilities .signup {
+    padding-inline: 10px;
+  }
+  .language select {
+    max-width: 91px;
+  }
+}

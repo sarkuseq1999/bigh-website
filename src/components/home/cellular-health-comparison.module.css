@@ -1,0 +1,524 @@
+.section {
+  --science-paper: #fff;
+  --science-ink: #071c42;
+  position: relative;
+  color: var(--science-ink);
+  background: var(--science-paper);
+}
+
+.scene {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: max(840px, 66.6667vw);
+}
+
+.art,
+.shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.artImage {
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+}
+.artImage[data-active="true"] {
+  opacity: 1;
+}
+.shade {
+  z-index: 1;
+}
+.layout {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: inherit;
+  padding: clamp(65px, 6.5vw, 110px) 5.3vw 82px;
+}
+.heading {
+  width: 55%;
+  max-width: 850px;
+}
+.section .eyebrow {
+  margin-bottom: 24px;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  line-height: 1.5;
+}
+.section .title {
+  font-size: clamp(48px, 5.1vw, 84px);
+  font-weight: 450;
+  letter-spacing: -0.05em;
+  line-height: 1.07;
+  text-wrap: initial;
+}
+.title span {
+  display: block;
+}
+.visualSpace {
+  display: none;
+}
+.content {
+  width: 36%;
+  max-width: 570px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  margin-top: 36px;
+  font-size: clamp(18px, 1.55vw, 24px);
+  line-height: 1.55;
+}
+.opening {
+  grid-area: opening;
+}
+.benefits {
+  grid-area: benefits;
+}
+.section .benefits p + p {
+  margin-top: 28px;
+}
+.section .action {
+  grid-area: action;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  width: fit-content;
+  min-height: 54px;
+  padding: 13px 24px;
+  border: 1px solid currentColor;
+  border-radius: 99px;
+  color: inherit;
+  background: transparent;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.section .action:hover {
+  background: color-mix(in srgb, var(--science-ink) 8%, transparent);
+}
+.section .caption {
+  position: absolute;
+  z-index: 2;
+  bottom: 24px;
+  right: 5.3vw;
+  font-size: 11px;
+  line-height: 1.5;
+  opacity: 0.7;
+}
+
+.section[data-design="original"] {
+  --science-paper: #021424;
+  --science-ink: #fffaf3;
+}
+.section[data-design="original"] .shade {
+  background: linear-gradient(90deg, #02142460, transparent 54%);
+}
+.section[data-design="original"] .heading {
+  width: 49%;
+}
+
+.section[data-art-side="left"] .art {
+  right: 16%;
+}
+.section[data-art-side="left"] .artImage {
+  object-fit: contain;
+}
+.section[data-art-side="left"] .layout {
+  justify-content: center;
+  padding-top: 88px;
+  padding-bottom: 100px;
+}
+.section[data-art-side="left"] .heading,
+.section[data-art-side="left"] .content {
+  width: 46%;
+  max-width: 650px;
+  margin-left: auto;
+}
+.section[data-art-side="left"] .title {
+  font-size: clamp(48px, 4.5vw, 74px);
+  line-height: 1.08;
+  letter-spacing: -0.045em;
+}
+.section[data-art-side="left"] .title span {
+  text-wrap: balance;
+}
+.section[data-art-side="left"] .content {
+  margin-top: 32px;
+  gap: 22px;
+  font-size: clamp(18px, 1.45vw, 22px);
+  line-height: 1.65;
+}
+.section[data-art-side="left"] .benefits p + p {
+  margin-top: 22px;
+}
+.section[data-art-side="left"] .action {
+  margin-top: 8px;
+  background: var(--science-ink);
+  border-color: var(--science-ink);
+  color: #fff;
+}
+.section[data-art-side="left"] .action:hover {
+  background: color-mix(in srgb, var(--science-ink) 82%, #fff);
+}
+.section[data-art-side="left"] .caption {
+  right: auto;
+  left: 5.3vw;
+}
+.section[data-design="1"] .eyebrow {
+  color: #456789;
+}
+
+.section[data-design="2"] {
+  --science-ink: #163f34;
+}
+.section[data-design="2"] .title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(60px, 5.5vw, 90px);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+}
+.section[data-design="2"] .eyebrow {
+  color: #486c5e;
+}
+
+.section[data-design="3"] {
+  --science-ink: #3d2925;
+}
+.section[data-design="3"] .title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(62px, 5.8vw, 94px);
+  line-height: 1.01;
+  letter-spacing: -0.035em;
+}
+.section[data-design="3"] .title span {
+  font-style: italic;
+}
+.section[data-design="3"] .eyebrow {
+  color: #965239;
+}
+.section[data-design="3"] .action {
+  background: #8f482f;
+  border-color: #8f482f;
+}
+
+.section[data-design="4"] .heading {
+  width: 61%;
+  max-width: 950px;
+}
+.section[data-design="4"] .title span {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.15em;
+  font-style: italic;
+  letter-spacing: -0.035em;
+}
+.section[data-design="4"] .content {
+  width: 35%;
+}
+.section[data-design="4"] .action,
+.section[data-design="5"] .action {
+  background: #071e45;
+  border-color: #071e45;
+  color: white;
+}
+
+.section[data-design="5"] .layout {
+  padding: 48px 4.6vw 82px;
+}
+.section[data-design="5"] .heading {
+  width: 76%;
+  max-width: 1150px;
+}
+.section[data-design="5"] .title {
+  font-size: clamp(54px, 6vw, 96px);
+  line-height: 1.05;
+}
+.section[data-design="5"] .visualSpace {
+  display: block;
+  flex: 1;
+  min-height: 31vw;
+}
+.section[data-design="5"] .content {
+  width: 100%;
+  max-width: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-areas: "opening benefits" "action benefits";
+  align-items: start;
+  gap: 25px 7vw;
+  margin-top: 20px;
+  font-size: clamp(18px, 1.65vw, 25px);
+}
+
+.section[data-design="6"] {
+  --science-paper: #fcfaf7;
+}
+.section[data-design="6"] .layout {
+  padding-top: 50px;
+}
+.section[data-design="6"] .heading {
+  width: 100%;
+  max-width: none;
+  text-align: center;
+}
+.section[data-design="6"] .title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(64px, 7.6vw, 122px);
+  line-height: 1.01;
+  letter-spacing: -0.033em;
+}
+.section[data-design="6"] .content {
+  width: 32%;
+  margin-left: auto;
+  margin-top: 65px;
+}
+.section[data-design="6"] .caption {
+  right: auto;
+  left: 3vw;
+}
+
+.switcher {
+  position: fixed;
+  z-index: 25;
+  bottom: 18px;
+  right: 20px;
+  width: 326px;
+  max-width: calc(100% - 24px);
+  padding: 12px;
+  border: 1px solid #d6dde6;
+  border-radius: 19px;
+  color: #13253d;
+  background: #fffffff2;
+  box-shadow: 0 8px 40px #071a3926;
+  backdrop-filter: blur(16px);
+}
+.switcherLabel {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+  margin: 0 3px 9px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.switcherLabel > span:last-child {
+  color: #62738a;
+  font-size: 10px;
+  font-weight: 400;
+}
+.options {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 5px;
+}
+.section .options button {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 43px;
+  padding: 0;
+  border: 1px solid #e0e5ec;
+  border-radius: 11px;
+  color: #18324f;
+  background: #f3f5f8;
+  font-size: 15px;
+  font-weight: 550;
+}
+.section .options button:hover {
+  background: #e1e9f3;
+}
+.section .options button[aria-pressed="true"] {
+  background: #102b50;
+  border-color: #102b50;
+  color: white;
+}
+
+@media (min-width: 1800px) {
+  .scene {
+    min-height: 1200px;
+  }
+  .section[data-design="5"] .visualSpace {
+    min-height: 510px;
+  }
+}
+
+@media (max-width: 1000px) and (min-width: 761px) {
+  .section .title {
+    font-size: 46px;
+  }
+  .content {
+    font-size: 18px;
+    width: 43%;
+  }
+  .section[data-design="4"] .content {
+    width: 43%;
+  }
+  .section[data-design="5"] .title {
+    font-size: 52px;
+  }
+  .section[data-design="5"] .visualSpace {
+    min-height: 310px;
+  }
+  .section[data-design="6"] .title {
+    font-size: 65px;
+  }
+  .section[data-design="6"] .content {
+    width: 40%;
+  }
+}
+
+@media (max-width: 1100px) {
+  .section .scene {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "heading" "art" "content" "caption";
+    min-height: 0;
+  }
+  .section[data-design] .layout {
+    display: contents;
+    padding: 0;
+    min-height: 0;
+  }
+  .section[data-design] .heading {
+    position: relative;
+    z-index: 2;
+    grid-area: heading;
+    padding: 58px 24px 0;
+    width: 100%;
+    max-width: none;
+    text-align: left;
+  }
+  .section[data-design] .eyebrow {
+    margin-bottom: 23px;
+    font-size: 10px;
+    letter-spacing: 0.17em;
+  }
+  .section[data-design] .title {
+    font-size: clamp(39px, 8vw, 59px);
+    line-height: 1.06;
+  }
+  .section[data-design="2"] .title,
+  .section[data-design="6"] .title {
+    font-size: clamp(47px, 9vw, 67px);
+  }
+  .section[data-design="3"] .title {
+    font-size: clamp(53px, 11vw, 80px);
+  }
+  .section .title span {
+    max-width: none;
+  }
+  .section[data-design] .visualSpace {
+    display: none;
+  }
+  .section .art {
+    position: relative;
+    grid-area: art;
+    inset: auto;
+    height: clamp(340px, 43vw, 450px);
+    margin: 25px 0 15px;
+  }
+  .section .artImage {
+    object-fit: cover;
+  }
+  .section[data-art-side="left"] .art {
+    inset: auto;
+    width: min(100%, 500px);
+    height: auto;
+    aspect-ratio: 0.9;
+    margin: 25px auto 15px;
+    overflow: hidden;
+  }
+  .section[data-art-side="left"] .artImage {
+    /* Crop away the empty desktop copy area while keeping the full sculpture. */
+    width: 166.6667% !important;
+    max-width: none;
+    object-fit: cover;
+    object-position: left center;
+  }
+  .section[data-design] .shade {
+    position: relative;
+    grid-area: art;
+    background: linear-gradient(
+      var(--science-paper),
+      transparent 15%,
+      transparent 80%,
+      var(--science-paper)
+    );
+    inset: auto;
+    margin: 25px 0 15px;
+  }
+  .section[data-design] .content {
+    position: relative;
+    z-index: 2;
+    grid-area: content;
+    display: flex;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 24px;
+    gap: 25px;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .section[data-design] .benefits p + p {
+    margin-top: 25px;
+  }
+  .section .action {
+    min-height: 52px;
+    font-size: 14px;
+    gap: 20px;
+  }
+  .section[data-design] .caption {
+    position: relative;
+    grid-area: caption;
+    inset: auto;
+    padding: 25px 24px 145px;
+    font-size: 10px;
+  }
+  .section[data-design="original"] .artImage {
+    object-position: 85% center;
+  }
+  .section[data-design="original"] .caption {
+    padding-bottom: 58px;
+  }
+  .section[data-design="1"] .artImage {
+    object-position: 10% center;
+  }
+  .section[data-design="4"] .artImage {
+    object-position: 85% center;
+  }
+  .section[data-design="2"] .artImage {
+    object-position: 10% center;
+  }
+  .section[data-design="3"] .artImage {
+    object-position: 10% center;
+  }
+  .section[data-design="5"] .artImage {
+    object-fit: cover;
+    object-position: center 49%;
+  }
+  .section[data-design="6"] .artImage {
+    object-position: 10% 70%;
+  }
+  .switcher {
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 650px) and (max-width: 1100px) {
+  .section[data-art-side="left"] .art {
+    mask-image: linear-gradient(90deg, transparent, #000 7%, #000);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section .action {
+    transition: none;
+  }
+}

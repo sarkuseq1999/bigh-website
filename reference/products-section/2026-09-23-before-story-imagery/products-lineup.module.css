@@ -1,0 +1,553 @@
+.section {
+  color: #16324f;
+  background: #fff;
+}
+
+.shell {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 92px 56px 100px;
+}
+
+.storyLabel {
+  font-size: 11px;
+  font-weight: 550;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.section .hint {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 36px 0 0;
+  color: #667584;
+  font-size: 12px;
+}
+
+.shelf {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.65fr 1fr 1fr;
+  align-items: stretch;
+  gap: 14px;
+}
+
+.section .product {
+  position: relative;
+  display: grid;
+  grid-template-rows: 430px auto 1fr 34px;
+  gap: 10px;
+  min-width: 0;
+  padding: 0 4px 18px;
+  text-align: center;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.product[data-product="1"] {
+  order: 0;
+}
+.product[data-product="2"] {
+  order: 1;
+}
+.product[data-product="0"] {
+  order: 2;
+}
+.product[data-product="3"] {
+  order: 3;
+}
+.product[data-product="4"] {
+  order: 4;
+}
+
+.section .product[aria-selected="true"] {
+  border-bottom-color: var(--product-ink);
+}
+
+.visual {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  isolation: isolate;
+  min-width: 0;
+  padding-bottom: 12px;
+}
+
+.halo {
+  position: absolute;
+  inset: 20% -5% 0;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 70%, var(--product-tint), transparent 68%);
+  opacity: 0.55;
+  transition: opacity 500ms ease;
+}
+
+.visual::after {
+  content: "";
+  position: absolute;
+  bottom: 7px;
+  left: 15%;
+  width: 70%;
+  height: 13px;
+  z-index: -1;
+  border-radius: 50%;
+  background: var(--product-ink);
+  opacity: 0.12;
+  filter: blur(8px);
+}
+
+.bottle {
+  width: 137%;
+  max-width: none;
+  height: 247px;
+  object-fit: contain;
+  transform: rotate(var(--tilt, -5deg));
+  transition:
+    transform 650ms cubic-bezier(0.2, 0.7, 0.25, 1),
+    filter 650ms ease;
+  filter: drop-shadow(5px 12px 9px #1c355614);
+  pointer-events: none;
+}
+
+.product[data-product="2"],
+.product[data-product="4"] {
+  --tilt: 5deg;
+}
+
+.product[data-flagship="true"] .bottle {
+  height: 402px;
+  --tilt: -2deg;
+  filter: drop-shadow(7px 16px 11px #1c355621);
+}
+
+.product[data-flagship="true"] .halo {
+  opacity: 1;
+}
+
+.section[data-lineup-design="1"] .product[data-flagship="true"] .halo {
+  inset: 0 1% 3px;
+  border: 1px solid #e0ecf4;
+  border-radius: 49% 49% 12px 12px;
+  background: linear-gradient(180deg, #f4f9fc 0%, #e8f3fa 75%, #f3f8fc 100%);
+}
+
+.section[data-lineup-design="1"] .product[data-flagship="true"] .visual {
+  padding-bottom: 15px;
+}
+
+.section[data-lineup-design="2"] .product[data-flagship="true"] .halo {
+  inset: -4% -22% 10%;
+  background: radial-gradient(ellipse at 50% 54%, #d7eaf6 0%, #f0f7fb 38%, #fff0 69%);
+}
+
+.section[data-lineup-design="2"] .product[data-flagship="true"] .visual {
+  padding-bottom: 40px;
+}
+
+.section[data-lineup-design="2"] .product[data-flagship="true"] .bottle {
+  height: 385px;
+}
+
+.section[data-lineup-design="2"] .product[data-flagship="true"] .visual::before {
+  content: "";
+  position: absolute;
+  bottom: 16px;
+  left: 10%;
+  width: 80%;
+  height: 38px;
+  border: 1px solid #dce7ed;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #fff 0%, #f3f7fa 44%, #d9e6ee 100%);
+  box-shadow: 0 15px 15px -12px #294e7940;
+  z-index: -1;
+}
+
+.section[data-lineup-design="3"] .product[data-flagship="true"] .halo {
+  inset: 0 1% 7px;
+  border: 1px solid #d6c9b3;
+  border-radius: 50% 50% 46% 46%;
+  background: radial-gradient(ellipse at 50% 55%, #f2f4f1, #fcfaf6 65%, #fff);
+}
+
+.section[data-lineup-design="3"] .product[data-flagship="true"] .halo::after {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid #e7e0d4;
+  border-radius: inherit;
+}
+
+.section[data-lineup-design="3"] .product[data-flagship="true"] .bottle {
+  --tilt: 0deg;
+  height: 390px;
+}
+
+.product[aria-selected="true"] .bottle {
+  transform: translateY(-5px) rotate(-1deg);
+}
+
+.product[aria-selected="true"] .halo {
+  opacity: 1;
+}
+
+.name {
+  display: block;
+  font-size: clamp(16px, 1.35vw, 20px);
+  font-weight: 550;
+  line-height: 1.25;
+  letter-spacing: -0.035em;
+}
+
+.product[data-flagship="true"] .name {
+  color: #24578e;
+  font-size: 37px;
+  line-height: 1.05;
+}
+
+.nameGroup {
+  padding-top: 5px;
+}
+
+.signature {
+  display: block;
+  margin-top: 8px;
+  color: #526e86;
+  font-size: 10px;
+  font-weight: 550;
+  line-height: 1.6;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.product[data-flagship="true"] .focus {
+  max-width: 100%;
+}
+
+.focus {
+  max-width: 200px;
+  margin: 0 auto;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #617181;
+}
+
+.indicator {
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: 30px;
+  height: 30px;
+  border: 1px solid #dce4e9;
+  border-radius: 50%;
+  color: var(--product-ink);
+  transition:
+    background 250ms ease,
+    color 250ms ease;
+}
+
+.product[aria-selected="true"] .indicator {
+  background: var(--product-ink);
+  border-color: var(--product-ink);
+  color: #fff;
+}
+
+.storyFrame {
+  position: relative;
+  margin-top: 24px;
+  border-radius: 20px;
+  background: var(--product-tint);
+  transition: background 350ms ease;
+}
+
+.story {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  align-items: start;
+  gap: 55px;
+  min-height: 330px;
+  padding: 42px 48px 72px;
+}
+
+.story[hidden] {
+  display: none;
+}
+
+.storyLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--product-ink);
+  line-height: 1.6;
+}
+
+.section .storyHeading h3 {
+  max-width: 420px;
+  margin-top: 19px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(34px, 3.2vw, 46px);
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.story:first-child .storyHeading h3 {
+  max-width: 310px;
+  font-size: clamp(44px, 4vw, 58px);
+}
+
+.description {
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.section .detail {
+  margin-top: 17px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #526479;
+}
+
+.section .discover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  max-width: 100%;
+  margin-top: 24px;
+  padding: 12px 20px;
+  color: #fff;
+  border-radius: 30px;
+  background: #16324f;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: background 200ms ease;
+}
+
+.storyNavigation {
+  position: absolute;
+  bottom: 18px;
+  left: 48px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.section .storyNavigation button {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--product-ink) 24%, transparent);
+  border-radius: 50%;
+  color: var(--product-ink);
+  cursor: pointer;
+}
+
+.storyNumber {
+  color: var(--product-ink);
+  font-size: 12px;
+  letter-spacing: 0.07em;
+}
+
+.storyNumber span {
+  opacity: 0.5;
+}
+
+.selectedStatus {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.section .product:focus-visible,
+.section .discover:focus-visible,
+.section .storyNavigation button:focus-visible,
+.story:focus-visible {
+  outline: 2px solid #24578e;
+  outline-offset: 5px;
+  border-radius: 10px;
+}
+
+@media (hover: hover) {
+  .product:hover .bottle {
+    transform: translateY(-9px) rotate(0);
+  }
+  .product:hover .halo {
+    opacity: 1;
+  }
+  .section .discover:hover {
+    background: var(--product-ink);
+  }
+}
+
+@media (max-width: 1100px) {
+  .shell {
+    padding: 76px 30px 80px;
+  }
+  .shelf {
+    gap: 6px;
+  }
+  .section .product {
+    grid-template-rows: 340px auto 1fr 34px;
+  }
+  .bottle {
+    height: 196px;
+  }
+  .product[data-flagship="true"] .bottle {
+    height: 320px;
+  }
+  .section[data-lineup-design="2"] .product[data-flagship="true"] .bottle {
+    height: 305px;
+  }
+  .section[data-lineup-design="3"] .product[data-flagship="true"] .bottle {
+    height: 308px;
+  }
+  .signature {
+    font-size: 9px;
+    letter-spacing: 0.08em;
+  }
+  .name {
+    font-size: 16px;
+  }
+  .focus {
+    font-size: 12px;
+  }
+  .story {
+    padding: 34px 32px 52px;
+    gap: 30px;
+  }
+  .storyNavigation {
+    left: 32px;
+    bottom: 13px;
+  }
+}
+
+@media (max-width: 760px) {
+  .shell {
+    padding: 62px 22px 65px;
+  }
+  .section .hint {
+    justify-content: center;
+    margin-top: 24px;
+  }
+  .shelf {
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 16px;
+    margin-top: 22px;
+  }
+  .section .product {
+    grid-template-rows: 200px auto 1fr 30px;
+    gap: 9px;
+    padding-bottom: 12px;
+  }
+  .section .product[data-flagship="true"] {
+    order: -1;
+    grid-column: 1 / -1;
+    grid-template-rows: 365px auto auto 30px;
+    justify-self: center;
+    width: min(100%, 350px);
+  }
+  .bottle {
+    width: 135%;
+    height: 190px;
+  }
+  .product[data-flagship="true"] .bottle {
+    height: 345px;
+    width: 100%;
+  }
+  .section[data-lineup-design="2"] .product[data-flagship="true"] .bottle {
+    height: 330px;
+  }
+  .section[data-lineup-design="3"] .product[data-flagship="true"] .bottle {
+    height: 337px;
+  }
+  .section[data-lineup-design="2"] .product[data-flagship="true"] .halo {
+    inset-inline: -4%;
+  }
+  .focus {
+    max-width: 190px;
+    font-size: 12px;
+  }
+  .product[data-flagship="true"] .name {
+    font-size: 34px;
+    line-height: 1.2;
+  }
+  .product[data-flagship="true"] .focus {
+    max-width: 100%;
+    font-size: 14px;
+  }
+  .signature {
+    font-size: 10px;
+    letter-spacing: 0.11em;
+  }
+  .name {
+    font-size: 16px;
+  }
+  .storyFrame {
+    margin-top: 28px;
+    border-radius: 16px;
+  }
+  .story {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    gap: 22px;
+    padding: 28px 25px 76px;
+  }
+  .section .storyHeading h3 {
+    margin-top: 13px;
+    font-size: 36px;
+  }
+  .story:first-child .storyHeading h3 {
+    font-size: 45px;
+  }
+  .description {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+  .section .detail {
+    font-size: 13px;
+  }
+  .storyNavigation {
+    left: 25px;
+    bottom: 22px;
+  }
+}
+
+@media (max-width: 370px) {
+  .shell {
+    padding-inline: 16px;
+  }
+  .shelf {
+    column-gap: 10px;
+  }
+  .section .product {
+    grid-template-rows: 175px auto 1fr 30px;
+  }
+  .bottle {
+    height: 165px;
+  }
+  .name {
+    font-size: 15px;
+  }
+  .story {
+    padding-inline: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section *,
+  .section *::after {
+    transition: none;
+  }
+}

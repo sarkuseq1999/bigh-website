@@ -1,0 +1,17 @@
+BiGH cellular-health section — September 22, 2026
+
+Mode: built-in image_gen, generate; no reference image.
+Use case: scientific-educational.
+Served asset: public/images/science/mitochondrion-cutaway-v1.png
+Dimensions: 1254 x 1254 pixels.
+SHA-256: CDDDC1E9EFC0876F6F9A560D6603697610F699575CBF074610C321E89E833583
+Original output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-79067a5a-f2ee-4771-855d-8f0b3d62998b.png
+
+Inspected the generated image and copied it into the workspace. Original and served-copy hashes match. This is a simplified, not-to-scale educational illustration, not microscopy or an exact anatomical reconstruction. Blue outer membrane and amber folds connect the illustration to the approved hero palette. The page adds context and labels in real HTML.
+
+Exact prompt:
+Use case: scientific-educational. Asset type: a single premium 3D mitochondrion illustration for the calm educational section of the BiGH cellular-health website, following a midnight-blue and warm-gold hero.
+Primary request: One beautifully clear, elongated bean-shaped mitochondrion in a three-quarter longitudinal cutaway. It must be recognizable as a MITOCHONDRION, not a whole cell: smooth outer membrane, a distinct inner membrane folding into six to eight broad cristae connected continuously to the inner membrane, and a quiet matrix interior. NO nucleus or extra organelles. Use a slightly translucent desaturated powder-blue outer membrane and soft amber/copper inner folds. The cutaway should make the folded interior immediately easy to understand for a non-scientist. Simplified educational anatomy with elegant organic curves, not dense microscopic detail.
+Composition: square canvas. One object only, centered, fully visible, occupying about 77 percent of the canvas width. Its long axis runs gently diagonally from lower left to upper right, about 20 degrees, length-to-width roughly 2.3:1. Ample clean breathing room on all sides. No separate floating pieces.
+Style: exceptionally refined tactile 3D scientific editorial illustration, soft satin surfaces, believable depth, delicate translucent edges, restrained reflections. Broad soft studio lighting, calm and inviting. Matte very pale cool ivory background close to #f2f5f6, uniform clean corners, subtle ambient shadow and a faint airy blue halo only near the subject. Restrained warm highlights on the folds. Crisp structure but no harsh outlines.
+No labels, arrows, typography, logos, charts, decorative orbits, particles, sparkles, electricity, aura, neon, busy background, extra mitochondria, capsules or product packaging. The website will add its own real text and contextual diagrams.

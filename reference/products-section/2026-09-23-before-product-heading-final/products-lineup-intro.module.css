@@ -1,0 +1,151 @@
+.intro {
+  position: relative;
+  color: #16324f;
+  text-align: center;
+  padding-bottom: 8px;
+}
+
+.intro[data-heading-design] h2 {
+  max-width: 1080px;
+  margin: 0 auto;
+  font-size: clamp(60px, 6.6vw, 95px);
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.intro .first,
+.intro .second {
+  display: block;
+}
+
+.intro .first {
+  margin-bottom: 5px;
+  font-size: 0.49em;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+}
+
+.intro .second {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-weight: 400;
+  font-style: italic;
+  letter-spacing: -0.025em;
+  word-spacing: 0.06em;
+  color: #32749a;
+}
+
+.intro .description {
+  max-width: 570px;
+  margin: 23px auto 0;
+  color: #586b7c;
+  font-size: 17px;
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.switcher {
+  position: fixed;
+  z-index: 45;
+  right: 20px;
+  bottom: max(18px, env(safe-area-inset-bottom));
+  width: 258px;
+  padding: 12px;
+  border: 1px solid #d9e2ec;
+  border-radius: 18px;
+  background: #ffffffed;
+  box-shadow: 0 8px 32px #1c355619;
+  backdrop-filter: blur(14px);
+}
+
+.switcherLabel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: #18364f;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.switcherLabel span:last-child {
+  font-size: 10px;
+  color: #637588;
+  text-align: right;
+}
+
+.options {
+  display: flex;
+  gap: 7px;
+}
+
+.switcher .options button {
+  flex: 1;
+  height: 38px;
+  border: 1px solid #dce5ec;
+  border-radius: 10px;
+  background: #f4f7fa;
+  color: #18364f;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.switcher .options button[aria-pressed="true"] {
+  border-color: #16324f;
+  background: #16324f;
+  color: #fff;
+}
+
+.switcher .options button:focus-visible {
+  outline: 2px solid #32749a;
+  outline-offset: 3px;
+}
+
+@media (max-width: 760px) {
+  .intro[data-heading-design] h2 {
+    font-size: clamp(43px, 11.5vw, 76px);
+  }
+  .intro .first {
+    font-size: 0.59em;
+    margin-bottom: 8px;
+  }
+  .intro .description {
+    max-width: 400px;
+    margin-top: 20px;
+    font-size: 15px;
+  }
+  .switcher {
+    right: 12px;
+    bottom: max(12px, env(safe-area-inset-bottom));
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    padding: 8px;
+    border-radius: 14px;
+  }
+  .switcherLabel {
+    margin-bottom: 0;
+    margin-left: 4px;
+    font-size: 11px;
+  }
+  .switcherLabel span:last-child {
+    display: none;
+  }
+  .options {
+    gap: 5px;
+  }
+  .switcher .options button {
+    flex: none;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .switcher {
+    backdrop-filter: none;
+  }
+}

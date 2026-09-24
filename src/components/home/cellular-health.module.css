@@ -1,0 +1,298 @@
+.section {
+  --science-ink: #172d43;
+  --science-muted: #526273;
+  padding: clamp(72px, 7.4vw, 112px) 5.5vw;
+  background: #f9faf8;
+  color: var(--science-ink);
+  border-bottom: 1px solid #dce3e5;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: 1.08fr 1fr;
+  grid-template-areas:
+    "visual heading"
+    "visual explanation"
+    "visual ending";
+  grid-template-rows: min-content min-content 1fr;
+  column-gap: clamp(40px, 6vw, 92px);
+  max-width: 1312px;
+  margin: 0 auto;
+  align-items: start;
+}
+
+.heading {
+  grid-area: heading;
+  padding-top: 20px;
+}
+
+.section .eyebrow {
+  margin-bottom: 26px;
+  color: #516b82;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.6;
+}
+
+.section .title {
+  font-size: clamp(39px, 3.75vw, 58px);
+  font-weight: 450;
+  letter-spacing: -0.045em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.title > span {
+  display: block;
+  margin-top: 10px;
+  color: #456883;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.14em;
+  font-style: italic;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+.visual {
+  grid-area: visual;
+  position: relative;
+  min-width: 0;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  background: #f2f5f6;
+  border-radius: 160px 160px 12px 12px;
+  overflow: hidden;
+}
+
+.scalePath {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 33px 24px 0;
+  margin: 0;
+  list-style: none;
+}
+
+.scalePath li {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  color: #5b7184;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.scalePath li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 25px;
+  left: calc(50% + 34px);
+  width: calc(100% - 68px);
+  height: 1px;
+  background: #becdd6;
+}
+
+.scalePath svg {
+  width: 51px;
+  height: 51px;
+}
+
+.scalePath .currentScale {
+  color: #986737;
+}
+
+.imageWrap {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.35;
+  margin-top: 10px;
+  flex: none;
+}
+
+.image {
+  object-fit: contain;
+  mask-image:
+    linear-gradient(to right, transparent, #000 8%, #000 92%, transparent),
+    linear-gradient(to bottom, transparent, #000 10%, #000 90%, transparent);
+  mask-composite: intersect;
+}
+
+.section .caption {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0 22px 30px;
+  text-align: center;
+  color: #51687b;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.caption > span:last-child {
+  color: #657785;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+}
+
+.explanation {
+  grid-area: explanation;
+  margin-top: 30px;
+  color: var(--science-muted);
+  font-size: clamp(17px, 1.38vw, 20px);
+  line-height: 1.65;
+}
+
+.section .explanation p + p {
+  margin-top: 20px;
+}
+
+.explanation strong {
+  color: var(--science-ink);
+  font-weight: 550;
+}
+
+.ending {
+  grid-area: ending;
+  align-self: start;
+  margin-top: 29px;
+  padding-top: 25px;
+  border-top: 1px solid #d3dde2;
+}
+
+.section .ending > p {
+  max-width: 400px;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.section .explore {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  min-height: 52px;
+  margin-top: 25px;
+  padding: 13px 23px;
+  border: 1px solid #738b9e;
+  border-radius: 99px;
+  color: var(--science-ink);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  transition:
+    background 180ms,
+    border-color 180ms;
+}
+
+.section .explore:hover {
+  border-color: #2d526e;
+  background: #e8eff2;
+}
+
+@media (max-width: 1100px) and (min-width: 761px) {
+  .layout {
+    column-gap: 32px;
+    grid-template-columns: 1fr 1fr;
+  }
+  .visual {
+    align-self: center;
+    border-radius: 100px 100px 12px 12px;
+  }
+  .scalePath {
+    padding-inline: 12px;
+  }
+  .scalePath li {
+    font-size: 10px;
+  }
+  .imageWrap {
+    min-height: 290px;
+  }
+  .section .title {
+    font-size: 38px;
+  }
+}
+
+@media (max-width: 760px) {
+  .section {
+    padding: 65px 24px;
+  }
+  .layout {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: "heading" "visual" "explanation" "ending";
+    max-width: 540px;
+  }
+  .heading {
+    padding-top: 0;
+  }
+  .section .eyebrow {
+    margin-bottom: 22px;
+    font-size: 10px;
+  }
+  .section .title {
+    font-size: clamp(38px, 7.7vw, 52px);
+    max-width: 500px;
+  }
+  .section .visual {
+    margin-top: 34px;
+    border-radius: 100px 100px 10px 10px;
+  }
+  .scalePath {
+    padding: 25px 10px 0;
+  }
+  .scalePath li {
+    font-size: 11px;
+  }
+  .scalePath svg {
+    width: 44px;
+    height: 44px;
+  }
+  .scalePath li:not(:last-child)::after {
+    top: 22px;
+    left: calc(50% + 26px);
+    width: calc(100% - 52px);
+  }
+  .imageWrap {
+    flex: none;
+    min-height: 0;
+    margin-top: 0;
+    aspect-ratio: 1.2;
+  }
+  .section .caption {
+    padding: 0 14px 24px;
+    font-size: 12px;
+  }
+  .explanation {
+    margin-top: 31px;
+    font-size: 17px;
+  }
+  .ending {
+    margin-top: 26px;
+    padding-top: 22px;
+  }
+  .section .explore {
+    gap: 25px;
+  }
+}
+
+@media (max-width: 360px) {
+  .section .title {
+    font-size: 35px;
+  }
+  .scalePath li {
+    font-size: 10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .section .explore {
+    transition: none;
+  }
+}

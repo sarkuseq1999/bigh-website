@@ -56,3 +56,8 @@ Thumbs.db
 
 # synced from content/harvest/assets at build time
 /public/original/
+
+# Third-party design inspiration (recordings/screenshots of other companies' sites).
+# Keep on this PC only; this repo is public.
+/reference/motionsites-*
+/reference/pear-*

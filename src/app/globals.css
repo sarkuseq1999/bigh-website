@@ -4,9 +4,31 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html:lang(zh) body {
+  --font-dm-sans: "PingFang SC", "Microsoft YaHei", sans-serif;
+  --font-instrument: "Songti SC", "SimSun", serif;
+  font-family: var(--font-dm-sans);
+}
+html:lang(ko) body {
+  --font-dm-sans: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-instrument: "Batang", serif;
+  font-family: var(--font-dm-sans);
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+html:lang(ja) body {
+  --font-dm-sans: "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --font-instrument: "Hiragino Mincho ProN", "Yu Mincho", serif;
+  font-family: var(--font-dm-sans);
+}
+html:lang(vi) body {
+  --font-instrument: "Times New Roman", serif;
+  font-family: var(--font-dm-sans), Arial, sans-serif;
+}
+
 @theme inline {
-  --color-background: #ffffff;
-  --color-foreground: #171717;
+  --color-background: #fbfaf7;
+  --color-foreground: #242722;
   --color-card: #ffffff;
   --color-card-foreground: #171717;
   --color-popover: #ffffff;
@@ -23,7 +45,7 @@
   --color-border: #e5e5e5;
   --color-input: #e5e5e5;
   --color-ring: #737373;
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-dm-sans), Arial, Helvetica, sans-serif;
 }
 
 @layer base {
@@ -34,8 +56,37 @@
     font-family: var(--font-sans);
   }
 
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 150px;
+  }
+  button,
+  a,
+  summary {
+    -webkit-tap-highlight-color: transparent;
+  }
+  button {
+    cursor: pointer;
+  }
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+  ::selection {
+    background: #edf0ae;
+    color: #242722;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--color-ring);
-    outline-offset: 2px;
+    outline: 3px solid #6d8ded;
+    outline-offset: 5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

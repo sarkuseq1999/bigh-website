@@ -1,0 +1,26 @@
+Title: BiGH cell sculpture — hero concept 1
+Type: Original generated artwork; selected by Mo for an animation test, not approved as the final hero
+Created: September 21, 2026
+Image: cell-sculpture-v1.png
+Dimensions: 1672 x 941 pixels
+Method: Built-in image generation tool; no CLI or external API script
+Original: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-f66e7654-0c0b-4761-9cde-664cdf62095a.png
+
+Purpose
+A still-image starting point for Mo's image-first animated hero approach. This is an artistic cell-inspired sculpture, not a microscope image or anatomically exact diagram.
+
+Visual review
+The generated image shows one complete translucent organic form on the right, a luminous central structure, folded interior details, and open space on the left. The image contains no text, logo, or website interface. The original generated file was preserved; the project copy was verified by matching SHA-256 hashes.
+
+Animation follow-up — September 21, 2026
+Mo selected this first translucent cell image for an animation test. Higgsfield generated an approximately eight-second video with a fixed composition, slight membrane movement, and shifting internal light. See cell-sculpture-motion-v1-web.mp4 for the browser-friendly copy and cell-sculpture-motion-v1.txt for the prompt, original result, and verification details. The still and animation have not been added to the live homepage or selected as the final design. They are separate from the earlier cellular-energy.png experiment.
+
+Final generation prompt
+Use case: stylized-concept.
+Asset type: original still artwork for an immersive, animated BiGH cellular-health website hero; create ONE finished image, not a website mockup or a collage.
+Primary request: a visually exquisite, sculptural interpretation of a living cell. One large, softly asymmetrical translucent form floats weightlessly in a spacious, serene environment. It should feel alive, tactile, elegant and memorable, with the craft of a gallery glass sculpture and the intimacy of cinematic macro photography.
+Subject: a delicate translucent outer membrane with an organic, gently folded silhouette, not a perfect ball. Within it, a softly luminous pearlescent central structure and a few graceful, folded inner forms create beautiful depth. Fine striations, subtle refraction, thin iridescent edges and soft internal light reward looking closely. The anatomy is artistic and cell-inspired, not an educational diagram or an actual microscope photograph.
+Composition: wide landscape 16:9 hero artwork at high resolution. The single complete cell sculpture occupies the right-hand portion prominently, with its center around 68% of the image width. Leave the left 40% quiet and spacious for the website headline “Good health starts with your cells.” to be added later; DO NOT render any words. The entire sculpture must fit inside the frame with generous space around it. Keep the backdrop smooth, restrained and luminous, with only a faint soft reflection or shadow beneath the floating form. It should feel like one coherent scene with ample breathing room.
+Materials and lighting: exceptionally convincing translucent material, natural pearlescence, soft internal glow, controlled cinematic light, delicate warm and cool interplay in the refractions. Elegant, restrained color; luminous highlights without blown-out whites. Rich three-dimensional depth without visual clutter.
+Animation readiness: crisp still frame, a distinct continuous outer silhouette, clear separation from the calm background, internal details that could support a very gentle rotation and a slow movement of light later.
+Constraints: no text, no lettering, no logos, no product bottles, no people, no labels, no interface, no extra floating cells, no decorative particles. Avoid spiky virus shapes, medical horror, a toy-like jelly ball, busy textbook organelles, generic neon science-fiction graphics, star fields, oversaturated rainbow colors, or dramatic motion blur. Make the object itself the beautiful and arresting focal point.

@@ -1,0 +1,64 @@
+.account {
+  color: #19334f;
+}
+.notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 15px 17px;
+  margin: 22px 0;
+  border-radius: 12px;
+  background: #eff4fa;
+}
+.notice > svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+.account .notice p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.65;
+}
+.fields {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 19px;
+}
+.fields label {
+  display: grid;
+  gap: 8px;
+  font-size: 14px;
+}
+.fields input {
+  width: 100%;
+  min-height: 50px;
+  border: 1px solid #d4deea;
+  border-radius: 9px;
+  background: #fafbfd;
+  padding: 12px 15px;
+  color: #53667e;
+  font: inherit;
+  cursor: not-allowed;
+}
+.account .fields button {
+  min-height: 52px;
+  border-radius: 99px;
+  background: #19334f;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 22px;
+  font-size: 14px;
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}

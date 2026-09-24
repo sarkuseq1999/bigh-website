@@ -1,0 +1,420 @@
+.hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  min-height: clamp(680px, calc(100svh - 130px), 980px);
+  overflow: clip;
+  padding: 72px clamp(32px, 5vw, 112px) 88px;
+  background: #edf0f6;
+  color: #253249;
+}
+
+.artwork,
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+.atmosphere {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(115deg, #fff5e9 5%, #e8e9f6 51%, #c2d7e8 100%);
+}
+
+.lightVeil,
+.lightVeilSecondary {
+  position: absolute;
+  inset: -25%;
+  animation: atmosphereDrift 22s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.lightVeil {
+  background:
+    radial-gradient(ellipse at 73% 28%, #9ebdd6b3, transparent 43%),
+    radial-gradient(ellipse at 22% 64%, #ffefcfcc, transparent 39%),
+    radial-gradient(ellipse at 60% 77%, #c7b3e180, transparent 42%);
+}
+
+.lightVeilSecondary {
+  background:
+    radial-gradient(ellipse at 39% 20%, #ffffffd9, transparent 36%),
+    radial-gradient(ellipse at 84% 67%, #e7d5f2b3, transparent 36%),
+    radial-gradient(ellipse at 18% 85%, #a4c8df70, transparent 38%);
+  animation-name: atmosphereCounterDrift;
+  animation-duration: 29s;
+  animation-delay: -12s;
+}
+
+.floatingLight {
+  position: absolute;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 13px 3px #fff9efb3;
+  opacity: 0.6;
+  animation: lightFloat 20s ease-in-out infinite alternate;
+}
+
+.media {
+  mask-image:
+    radial-gradient(
+      ellipse 44% 64% at 68% 46%,
+      #000 62%,
+      rgb(0 0 0 / 78%) 73%,
+      rgb(0 0 0 / 20%) 87%,
+      transparent 99%
+    ),
+    linear-gradient(transparent, #000 5%, #000 88%, transparent),
+    linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+  mask-composite: intersect;
+  transform-origin: 68% 46%;
+  animation: cellFloat 18s ease-in-out infinite;
+  will-change: transform;
+}
+
+.hero[data-motion="paused"] .lightVeil,
+.hero[data-motion="paused"] .lightVeilSecondary,
+.hero[data-motion="paused"] .floatingLight,
+.hero[data-motion="paused"] .media {
+  animation-play-state: paused;
+}
+
+.artwork::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(90deg, #fff8f085 0%, #fff8f060 25%, #fff8f018 43%, transparent 55%);
+}
+
+.image,
+.video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.video {
+  position: absolute;
+  inset: 0;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  width: 45%;
+  max-width: 590px;
+}
+
+.hero .title {
+  font-size: clamp(62px, 6.1vw, 104px);
+  font-weight: 450;
+  letter-spacing: -0.065em;
+  line-height: 1.04;
+  text-wrap: initial;
+}
+
+.title > span {
+  display: block;
+}
+
+.title .cellLine {
+  margin-top: 3px;
+  color: #45637e;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.18em;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+  line-height: 1;
+}
+
+.hero .description {
+  max-width: 465px;
+  margin-top: 32px;
+  font-size: clamp(17px, 1.28vw, 20px);
+  line-height: 1.7;
+  color: #435064;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 25px;
+  margin-top: 33px;
+}
+
+.hero .primary,
+.hero .secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  gap: 16px;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.4;
+  transition:
+    background-color 180ms,
+    color 180ms;
+}
+
+.hero .primary {
+  padding: 16px 23px;
+  border: 1px solid #273b50;
+  border-radius: 4px;
+  background: #273b50;
+  color: #fff;
+}
+
+.hero .primary:hover {
+  background: #3a526c;
+}
+
+.hero .secondary {
+  padding-block: 12px;
+  border-bottom: 1px solid #64778b70;
+  color: #2e4158;
+}
+
+.hero .secondary:hover {
+  color: #132943;
+  border-bottom-color: currentColor;
+}
+
+.hero .motionControl {
+  position: absolute;
+  z-index: 2;
+  right: clamp(24px, 3vw, 56px);
+  bottom: 25px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #52677d40;
+  border-radius: 24px;
+  background: #fffaf3dd;
+  color: #2e4158;
+  font-size: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.hero .motionControl:hover {
+  background: #fffaf3;
+}
+
+@media (min-width: 901px) and (max-width: 1180px) {
+  .hero {
+    padding-inline: 40px;
+  }
+
+  .content {
+    width: 47%;
+  }
+
+  .hero .title {
+    font-size: 65px;
+  }
+
+  .hero .description {
+    max-width: 390px;
+  }
+
+  .actions {
+    gap: 10px 18px;
+  }
+
+  .hero .primary,
+  .hero .secondary {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    display: flex;
+    flex-direction: column;
+    min-height: calc(100svh - 76px);
+    padding: 30px 0 36px;
+  }
+
+  .content {
+    display: contents;
+  }
+
+  .hero .title {
+    position: relative;
+    z-index: 1;
+    order: 0;
+    padding-inline: 24px;
+    font-size: clamp(46px, 9.7vw, 68px);
+    text-align: center;
+    letter-spacing: -0.05em;
+  }
+
+  .title .cellLine {
+    font-size: 1.2em;
+  }
+
+  .artwork {
+    position: relative;
+    order: 1;
+    flex: none;
+    width: 100%;
+    height: clamp(250px, 70vw, 420px);
+    margin-top: 5px;
+  }
+
+  .media {
+    mask-image:
+      radial-gradient(
+        ellipse 75% 65% at 54% 47%,
+        #000 58%,
+        rgb(0 0 0 / 70%) 71%,
+        rgb(0 0 0 / 15%) 88%,
+        transparent 100%
+      ),
+      linear-gradient(transparent, #000 12%, #000 78%, transparent),
+      linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    transform-origin: 54% 47%;
+  }
+
+  .image,
+  .video {
+    object-position: right center;
+  }
+
+  .artwork::after {
+    display: none;
+  }
+
+  .hero .motionControl {
+    right: 20px;
+    bottom: 12px;
+    font-size: 11px;
+  }
+
+  .hero .description {
+    position: relative;
+    z-index: 1;
+    order: 2;
+    width: calc(100% - 48px);
+    max-width: 500px;
+    margin-top: 4px;
+    font-size: 17px;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .actions {
+    position: relative;
+    z-index: 1;
+    order: 3;
+    justify-content: center;
+    width: calc(100% - 48px);
+    margin-top: 25px;
+  }
+}
+
+@media (max-width: 430px) {
+  .hero .title {
+    font-size: 47px;
+  }
+
+  .hero .description {
+    font-size: 16px;
+  }
+
+  .actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero .primary {
+    width: 100%;
+    max-width: 342px;
+  }
+
+  .hero .secondary {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero .title {
+    font-size: 42px;
+  }
+
+  .hero .description,
+  .actions {
+    width: calc(100% - 40px);
+  }
+}
+
+@keyframes atmosphereDrift {
+  from {
+    transform: translate3d(-4%, 3%, 0) rotate(-4deg) scale(1);
+  }
+  to {
+    transform: translate3d(7%, -5%, 0) rotate(5deg) scale(1.08);
+  }
+}
+
+@keyframes atmosphereCounterDrift {
+  from {
+    transform: translate3d(5%, -4%, 0) rotate(3deg) scale(1.06);
+  }
+  to {
+    transform: translate3d(-6%, 5%, 0) rotate(-5deg) scale(1);
+  }
+}
+
+@keyframes cellFloat {
+  0%,
+  100% {
+    transform: translate3d(0, 8px, 0) rotate(-0.6deg);
+  }
+  25% {
+    transform: translate3d(9px, -10px, 0) rotate(0.4deg);
+  }
+  50% {
+    transform: translate3d(0, -18px, 0) rotate(0.8deg);
+  }
+  75% {
+    transform: translate3d(-8px, -3px, 0) rotate(-0.2deg);
+  }
+}
+
+@keyframes lightFloat {
+  from {
+    transform: translate3d(-8px, 26px, 0) scale(0.75);
+    opacity: 0.3;
+  }
+  to {
+    transform: translate3d(16px, -32px, 0) scale(1.15);
+    opacity: 0.7;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media,
+  .lightVeil,
+  .lightVeilSecondary,
+  .floatingLight {
+    animation: none;
+    will-change: auto;
+  }
+
+  .hero .primary,
+  .hero .secondary {
+    transition: none;
+  }
+}

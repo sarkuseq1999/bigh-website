@@ -1,0 +1,24 @@
+Title: 2. Deep Space — complete BiGH hero mockup
+Created: September 22, 2026
+Method: built-in image_gen tool, raster generation with brand and cell references.
+Status: unselected still-image design option for Mo's review; not implemented or animated.
+Output: 02-deep-space-v1.png, 1672 x 941 pixels.
+Source: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-1f33b2a4-0ef2-465e-a564-f08c32c79da2.png
+References: C:\Users\mcbig\Documents\codes\bigh-website\public\images\brand\bigh-logo-white.png; C:\Users\mcbig\Documents\codes\bigh-website\reference\hero-concepts\cell-sculpture-v1.png
+Inspection: complete first-screen composition, readable headline, introduction and two actions, recognizable cell and navigation. Logo and typography in these raster concepts are illustrative; implementation should use the official logo asset and editable text. Source and saved-copy hashes match. All four corner alpha values are 255.
+No website code, hosted preview or animation was changed for this concept set.
+
+Exact generation prompt:
+Use case: ui-mockup. Create one polished, fully designed desktop WEBSITE HERO MOCKUP, wide 16:9 landscape, as a flat edge-to-edge screenshot without a browser frame or device. This is the complete FIRST SCREEN for BiGH, a cellular-health supplement brand: header, striking original cell artwork, headline, full supporting paragraph, and two actions. High fidelity, buildable web design, exceptionally readable and beautifully composed. Audience includes adults 45 and older; important text must be comfortably large.
+Input Image 1 is the official BiGH logo, a supporting brand reference; preserve the distinctive BiGH lettering and two green leaves, omit the small tagline under it. Input Image 2 is a subject reference ONLY for a translucent cell with a nucleus and internal folded organelles. Create a substantially new visual composition and lighting rather than reusing that reference background.
+Header: compact logo at upper left, generous horizontal margins, one quiet navigation row with EXACT words "Home", "Products", "Science", "About", "Support"; small "English" control at upper right. Integrate the header into the art direction.
+Required hero text, verbatim and exactly once each:
+Headline: "Good health starts with your cells."
+Paragraph: "Developed by scientists with deep expertise in cellular health and aging, BiGH’s key formulas share one purpose: helping you stay sharp, stay active, and live fully."
+Primary button: "Discover NuriCell"
+Secondary text link: "Meet our scientists"
+Keep every word legible, no text across detailed cell structures. NuriCell is spelled N-u-r-i-C-e-l-l. Use refined contemporary typography: confident large clean sans serif with an expressive elegant serif treatment for "your cells." if composition benefits. Body text should be approximately 20–22 pixels in a 1600px-wide design, a short comfortable line length, well spaced.
+The artwork is a stylized cellular-health metaphor, not a labeled anatomical diagram. It should look sculptural and alive, made of translucent supple membrane with clearly recognizable nucleus and softly folded internal forms. It must feel suspended without a ground plane or reflection. Design a pose that could later flex and float gently like a jellyfish. No literal jellyfish, tentacles, planets, starfields, anatomical labels, molecules, DNA symbols, pills, bottles, badges, fake research statistics, testimonials, extra copy, watermarks, option numbers, explanatory captions, collage, multiple screens, device mockups, or browser chrome. The entire output is one coherent first-screen website design.
+
+ART DIRECTION — DEEP SPACE: An immersive, cinematic, midnight-navy hero, with rich nearly-black indigo on the left transitioning to deep midnight blue around the cell. White/green logo. Strong warm-white headline on the left at 6% margin, maximum 43% width. Set "your cells." in a delicate luminous ice-blue serif. Full paragraph and actions below, high contrast; an ivory filled primary button with navy lettering and a quiet white secondary link. A magnificent cell dominates the right half, whole silhouette visible, viewed three-quarter with asymmetrical fluid membrane, a complex amber-lit nucleus and visibly layered translucent internal forms. Its thin outer membrane catches icy-blue rim light; amber interior light contrasts beautifully with dark space. Rich translucency and material detail, not a plastic ball or a sun. Suggest immense depth through broad soft shafts of light and extremely subtle hazy atmosphere, with no stars, nebula art, galaxies or literal outer-space objects. The composition should feel stunning and alive within one second, not futuristic software or a science-fiction movie poster. Tasteful restraint, large readable type, no glass UI cards. Header is directly on the dark background. This is a bold alternative with much more light/dark contrast than a pastel hero.
+

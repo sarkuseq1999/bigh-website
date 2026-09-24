@@ -1,0 +1,37 @@
+[
+  {
+    "original": "src/components/home/homepage.tsx",
+    "backup": "reference/products-section/2026-09-22-original/homepage.tsx.txt",
+    "sha256": "7D4C9C0B4A11E5722DCA64A2E7069E727A4AE9D95E19B63F609F8C1A03F51381"
+  },
+  {
+    "original": "src/components/home/homepage.module.css",
+    "backup": "reference/products-section/2026-09-22-original/homepage.module.css.txt",
+    "sha256": "2618A6FAF201FC571C6B216F906CD26DA62EFA8C608B184AEF03AD8DBB35F72F"
+  },
+  {
+    "original": "public/images/nuricell.png",
+    "backup": "reference/products-section/2026-09-22-original/images/nuricell.png",
+    "sha256": "7F8B403933797567055D66C7DFED68FC166020790EA5CB1F6703DC4DD8BA923A"
+  },
+  {
+    "original": "public/images/green-bee-propolis.png",
+    "backup": "reference/products-section/2026-09-22-original/images/green-bee-propolis.png",
+    "sha256": "C86527DCFD4C44283AD02FD8CE9C19308F65D192A5DCBA61041EBB5373E38F0D"
+  },
+  {
+    "original": "public/images/advanced-opc.png",
+    "backup": "reference/products-section/2026-09-22-original/images/advanced-opc.png",
+    "sha256": "F4DBF7A040D35D3926441BB9F66B594E29D65BDFA36C6DE10E2F8478AB730785"
+  },
+  {
+    "original": "public/images/turmerific.png",
+    "backup": "reference/products-section/2026-09-22-original/images/turmerific.png",
+    "sha256": "3A7833B31A3032D87118FFCC5EDB6668A473D7C61180DE7B8EA888D33F96D5C5"
+  },
+  {
+    "original": "public/images/nature-calm.png",
+    "backup": "reference/products-section/2026-09-22-original/images/nature-calm.png",
+    "sha256": "3C0A7F40EE92E3E72E31E766A4084E4688480F0BCABEA54C49BF8BD3F2822437"
+  }
+]

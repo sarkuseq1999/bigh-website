@@ -1,0 +1,22 @@
+The beginning of life — additional hero option 2
+Generated: September 21, 2026
+Classification: original design concept, awaiting Mo's selection
+Image: opening-seed-v1.png
+Dimensions: 1672 x 941 pixels
+Method: built-in image_gen tool; original generation with no reference images
+Original output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-af001cd9-3b7f-4c8f-b37e-ad63d47beba5.png
+Verification: generated image inspected; workspace copy SHA256 matches original.
+Status: still image only; no animation or website implementation.
+Proposed motion: Soft movement in the opening shell and emerging leaf, with a gentle change in the light.
+Usage: homepage hero candidate with open space for the approved headline.
+Interpretation: artistic visual metaphor, not an anatomical diagram, ingredient claim, or product-effect evidence.
+
+Exact generation prompt:
+Use case: stylized-concept.
+Asset type: ONE original wide 16:9 hero artwork for a premium cellular-health website, an image to animate later. No website interface.
+Scene: a spacious sunlit environment with an almost seamless warm off-white backdrop. Soft morning light, generous empty space and a faint grounded shadow. Intimate and natural, like extraordinary macro still-life photography.
+Subject: a single sculptural seed pod, hovering just above the surface. Its two exquisitely thin, delicately ribbed papery shell halves are gently opening around a small unfolding fresh green shoot. The shell has realistic fibrous texture, subtle imperfections, fine translucent veins and graceful curved edges. The emerging shoot is small but clearly visible. Backlighting creates a soft glow through the shell and leaf: the visual suggestion of life beginning, not a magical light effect.
+Style: subtly surreal editorial nature photography with photorealistic botanical materials, lovely sculptural form, precise detail, refined restraint and believable light. The seed is the sole focal object; it should feel special enough to anchor a full-screen homepage, not like a generic seedling stock photograph.
+Composition: the entire suspended seed and opening shell occupy the right-hand part of the frame, centered near 68% width, with plenty of room around every edge. The left 40% is calm, uncluttered, softly warm negative space for the headline. A slight three-quarter angle makes the opening and inner shoot readable. Crisp subject with softly receding atmosphere.
+Constraints: no text, logos, labels, products, hands, people, pots, garden beds, extra leaves in the background, additional seeds, sparkles, fantasy forests, or decorative props. This is a visual metaphor for life and growth, not a claimed ingredient or scientific diagram.
+

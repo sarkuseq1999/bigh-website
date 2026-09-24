@@ -1,0 +1,29 @@
+Title: Deep Space — natural cell movement redesign
+Requested: September 22, 2026
+Direction: Mo rejected the old movement as fake, including the half-speed revision, and asked for a fresh animation designed with independent judgment.
+Art direction: stable cell volume; tiny inertial drift; localized, asynchronous membrane movement; subtle internal movement; quiet lighting. Remove the overlaid CSS particles. Play at the generation's native speed.
+Source: public/media/hero/deep-space-background-v1.png
+Higgsfield media ID: afe00d05-fd85-4a0b-8a80-11afae5d662b
+Same still supplied as start_image and end_image.
+Model: Seedance 2.5, mode omni_reference
+Requested output: 16 seconds, 1080p, 16:9, silent, one output.
+Credit estimate: 192 credits.
+Job ID: 9b48226b-e602-44c5-bf38-aed8679b00f7
+Status: completed; sampled frames and local browser checked; protected preview deployed and READY.
+Preview: https://bigh-website-ngmivb1pe-sarkuseq1999s-projects.vercel.app
+Deployment: dpl_CuQjktokpsb9wQ1GuXMMZGaR1cHa
+Result URL: https://d8j0ntlcm91z4.cloudfront.net/user_3CxRNPyGspBilpDcpmVjn7icK40/hf_20260922_201255_9b48226b-e602-44c5-bf38-aed8679b00f7.mp4
+Original: reference/hero-concepts/deep-space-motion-v2-source.mp4 (HEVC, 2,896,768 bytes).
+Served: public/media/hero/deep-space-motion-v2.mp4 (H.264, 2,674,967 bytes, silent, fast-start).
+Output: 1920 x 1080, 24 fps, 385 frames, 16.041667 seconds. Website plays at native 1x speed.
+SHA-256: 638AD9C3D2D78829C03078B463A6B9A58A2AA2E4B8BA64F29317C1E5ACE20DB9
+Verification: docs/deep-space-natural-motion.md.
+
+Exact prompt:
+Create a cinematic macro portrait of this exact luminous translucent cell suspended in a very calm fluid. Preserve the approved midnight-blue and warm amber artwork, its internal anatomy, the cell's size and position on the right, and the dark open left 42 percent of the frame for website text. Locked camera and steady lighting throughout this single continuous shot.
+
+Motion direction: quiet, physically coherent life. The main mass feels buoyant and has gentle inertia. An almost imperceptible current carries the cell a short distance on a shallow curved path, with a tiny gradual three-dimensional change in orientation, roughly two degrees over the entire shot. Maximum travel is one percent of the frame. Its overall volume and silhouette stay stable. Only small LOCAL areas of the thin outer membrane softly flex and settle, with neighboring areas responding later; these motions differ in timing and amplitude instead of moving together. The folds inside lag slightly behind the drift, then settle independently. Fine suspended detail moves slowly through the cytoplasm, adding a sense of living depth. The nucleus remains stable and intact, with constant warm illumination. Highlights move because the membrane changes angle, not because lights are flashing. The eye should discover subtle motion in different places, with no repeating beat.
+
+The overall impression is an elegant living specimen observed through a macro lens: calm, grounded and alive, flowing continuously at a natural pace. The subject has enough movement to be perceptible within a few seconds without performing for the camera. A few tiny, softly defocused suspended specks drift at different depths; leave most of the environment empty. Background rays remain soft and largely steady. Keep the full cell inside the frame and away from the text area. Gently settle toward the supplied ending pose to support a quiet repeating hero background, without an abrupt return, reverse-playback effect or freeze.
+
+No rhythmic inflation or deflation, no whole-cell squeezing, no synchronized breathing, no swimming strokes, no bouncing, no rubber wobble, no spinning, no rigid turntable rotation, no zoom, no camera motion, no anatomical morphing, no melting, no electrical energy bursts, no flicker, no sparkles, no text, no logos, no music or audio.

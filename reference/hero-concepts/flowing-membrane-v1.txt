@@ -1,0 +1,22 @@
+Life in motion — additional hero option 3
+Generated: September 21, 2026
+Classification: original design concept, awaiting Mo's selection
+Image: flowing-membrane-v1.png
+Dimensions: 1672 x 941 pixels
+Method: built-in image_gen tool; original generation with no reference images
+Original output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-3523acf6-3212-4293-b5f2-2b021989a501.png
+Verification: generated image inspected; workspace copy SHA256 matches original.
+Status: still image only; no animation or website implementation.
+Proposed motion: A slow, continuous ripple and twist through the membrane, with the camera held steady.
+Usage: homepage hero candidate with open space for the approved headline.
+Interpretation: artistic visual metaphor, not an anatomical diagram, ingredient claim, or product-effect evidence.
+
+Exact generation prompt:
+Use case: stylized-concept.
+Asset type: ONE original wide 16:9 hero still for BiGH's future animated cellular-health homepage. Create artwork only, with no typography or interface.
+Scene: an immersive, beautifully smooth deep-azure environment with a subtle luminous gradient. Minimal surroundings, generous breathing room, a very soft shadow beneath the floating form. The left side remains quiet for a future light-colored headline.
+Subject: a single extraordinary flowing organic membrane, suspended mid-unfurl. It forms a broad graceful asymmetric S-shaped fold, with an open silhouette and delicately rippled edges. The material resembles a very thin pearlescent biological film crossed with liquid silk, with natural micro-pleats and soft translucent areas. The sculpture is warm ivory with delicate silver reflections from the environment. Its varying thickness catches the light beautifully. It is one continuous form, not multiple ribbons or a tangle.
+Style and mood: bold contemporary editorial art, sophisticated museum-quality material rendering, fluid and alive, calm confidence. A clearly defined sculptural object whose motion is easy to imagine: a slow wave traveling through its surface. Use dimensional folds and artful light rather than visual clutter.
+Composition: the complete floating membrane is large on the right, centered around 68% of the frame width, rising gracefully with room at the top and bottom. Keep the left 40% largely empty and evenly toned for readable web copy. Cinematic high-resolution 3D artwork with exceptional surface detail and realistic light.
+Constraints: no letters, logos, text, product bottles, pills, figures, hands, decorative particles, star fields, anatomical labels or collage. No closed ring, infinity symbol, DNA helix, or perfect sphere. Avoid oversaturated rainbow iridescence, harsh metallic chrome and flashy neon. Convey life and energy through the organic form alone.
+

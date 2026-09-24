@@ -1,0 +1,22 @@
+Folded cellular energy — additional hero option 1
+Generated: September 21, 2026
+Classification: original design concept, awaiting Mo's selection
+Image: mitochondrial-folds-v1.png
+Dimensions: 1672 x 941 pixels
+Method: built-in image_gen tool; original generation with no reference images
+Original output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-cb80943b-e07f-452f-aeb5-83e505fe1cfb.png
+Verification: generated image inspected; workspace copy SHA256 matches original.
+Status: still image only; no animation or website implementation.
+Proposed motion: A slow, restrained turn, with light gradually moving through the interior folds.
+Usage: homepage hero candidate with open space for the approved headline.
+Interpretation: artistic visual metaphor, not an anatomical diagram, ingredient claim, or product-effect evidence.
+
+Exact generation prompt:
+Use case: stylized-concept.
+Asset type: ONE original wide 16:9 website hero artwork for BiGH, a cellular-health brand. This is a still-image concept for later animation, not a webpage mockup.
+Scene: an expansive, softly lit charcoal-blue space, calm and almost architectural. Rich, quiet darkness on the left gives excellent room for a future white headline. A faint reflection beneath the subject anchors it without adding scenery.
+Subject: one breathtaking elongated organic sculpture inspired by the folded inner architecture of a mitochondrion. A thin translucent outer shell curls around a flowing sequence of closely spaced, luminous ivory folds. The folds are irregular and beautifully curved, like a living piece of carved alabaster softened into silk. Show a three-quarter view into the folds so their depth is immediately striking. This is artistic biological inspiration, not a literal anatomical cutaway.
+Materials and light: alabaster translucency, delicate glass edges, fine satin surfaces, warm light passing through the inner ridges against cool shadow. Sophisticated and tangible, with exquisite small details and a bold clear silhouette.
+Composition: the complete elongated sculpture floats on the right, centered around 68% of the width, its long axis gently diagonal. Large and arresting, but not cropped. Preserve a broad clean left 40% for headline and buttons added later. High-resolution cinematic editorial 3D rendering, controlled highlights, realistic light transport.
+Constraints: one coherent scene and one focal object. No words, labels, logos, pills, bottles, people, extra floating objects, diagrams, particles or star fields. No perfect bubble or spherical cell, no spiky virus, no exaggerated neon, no medical gore, no generic DNA helix. Make this a strong, distinctive alternative to a transparent round cell.
+

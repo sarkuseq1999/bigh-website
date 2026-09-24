@@ -1,0 +1,28 @@
+Title: BiGH translucent cell — first animation test
+Requested: September 21, 2026
+Source image: cell-sculpture-v1.png
+Source image selected by Mo for animation; final hero design remains open.
+Method: Higgsfield, Seedance 2.5
+Job ID: 6acab263-6856-4305-a39b-b535c45c3cd1
+Source media ID: 3bbb7805-5eee-4821-b0cc-39f95b0341e1
+Requested settings: 8 seconds, 16:9, 1080p, no audio, one output.
+Reference roles: same original cell image supplied as both start_image and end_image.
+Credit estimate before submission: 96 credits.
+Status: generation completed and saved; awaiting Mo's feedback.
+Original generated video: cell-sculpture-motion-v1.mp4 (HEVC, 1,466,706 bytes).
+Browser-friendly copy: cell-sculpture-motion-v1-web.mp4 (H.264, 2,325,467 bytes).
+Actual output: 1920 x 1080, 24 frames/second, 193 frames, 8.041667 seconds, no audio stream.
+Result URL: https://d8j0ntlcm91z4.cloudfront.net/user_3CxRNPyGspBilpDcpmVjn7icK40/hf_20260921_195116_6acab263-6856-4305-a39b-b535c45c3cd1.mp4
+Verification: both videos fully decoded with ffmpeg without errors; metadata checked with ffprobe.
+Visual inspection: nine sampled frames from 0 through 8 seconds show the original recognizable cell on the right, a stable background and text area on the left, small changes in the membrane, and shifting internal light. No text or additional objects appeared in those samples.
+Review sheet: qa/cell-sculpture-motion-v1-frames.jpg (chronological, left-to-right and top-to-bottom).
+Loop boundary was requested and endpoint composition appears consistent in sampled frames; continuous playback and exact seam quality have not been verified by the agent. Do not label it a production-ready seamless loop.
+No website implementation or deployment was performed.
+
+Motion brief:
+Gentle membrane undulation and internal movement; soft shifting light.
+Fixed camera and composition, preserving empty space at left for the headline.
+Return to the original pose and light is requested; loop quality must be inspected.
+
+Exact generation prompt:
+Animate the exact translucent cell sculpture in the supplied first frame as a calm, elegant website hero. Preserve its recognizable outer silhouette, all major internal structures, luminous pearlescent materials, pastel blue and warm ivory palette, and the original composition. The single cell stays suspended on the right at the same size and position. The left 40 percent remains clean, quiet negative space throughout. Camera locked absolutely still: no zoom, pan, orbit, cuts or reframing. Over eight seconds, give the outer membrane a barely perceptible soft undulation, while the internal folded forms move very slowly and delicately as if suspended in fluid. A gentle warm light drifts smoothly through the existing internal folds, and subtle reflections glide over the translucent surface. The cell makes a tiny, slow turning motion of just a few degrees and settles back to its original orientation. Understated, graceful, believable material motion, not bouncing or jelly wobble. Keep brightness stable with no flicker or flashing. Aim for a seamless repeating motion: the final pose, light, background and composition return naturally to the provided matching end frame. Maintain crisp detail and the original calm background and soft shadow. This is artistic cell-inspired imagery, not a labeled biological demonstration. No new objects, no multiplying or dividing cells, no disintegration, no particles or sparks, no text, no logos, no sound.

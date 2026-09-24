@@ -1,0 +1,170 @@
+.artwork {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.filters {
+  position: absolute;
+}
+
+.viewport {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.drift {
+  position: absolute;
+  inset: -3%;
+  transform-origin: 70% 48%;
+  animation: sceneDrift 28s ease-in-out -6s infinite;
+  animation-play-state: paused;
+}
+
+.atmosphere {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent 12%, #000 58%);
+}
+
+.currents {
+  position: absolute;
+  inset: -12%;
+  background:
+    radial-gradient(ellipse at 66% 14%, #6bd5f847, transparent 42%),
+    radial-gradient(ellipse at 38% 87%, #2f93d447, transparent 34%);
+  mix-blend-mode: screen;
+  animation: lightCurrent 19s ease-in-out -4s infinite;
+  animation-play-state: paused;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(circle, #dcf8ffb3, #82d9f533 45%, transparent 72%);
+  animation: suspendedParticle 24s linear infinite;
+  animation-play-state: paused;
+}
+
+.glow {
+  object-fit: cover;
+  object-position: center;
+  mix-blend-mode: screen;
+  opacity: 0.14;
+  animation: warmPulse 8s ease-in-out -1.6s infinite;
+  animation-play-state: paused;
+}
+
+.artwork[data-running="true"] .glow,
+.artwork[data-running="true"] .drift,
+.artwork[data-running="true"] .currents,
+.artwork[data-running="true"] .particle {
+  animation-play-state: running;
+}
+
+@keyframes sceneDrift {
+  0%,
+  100% {
+    transform: translate3d(-1%, 0.7%, 0) scale(1.015) rotate(-0.25deg);
+  }
+  50% {
+    transform: translate3d(1%, -0.7%, 0) scale(1.045) rotate(0.25deg);
+  }
+}
+
+@keyframes lightCurrent {
+  0%,
+  100% {
+    transform: translate3d(-4%, 2%, 0) rotate(-3deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: translate3d(4%, -3%, 0) rotate(3deg);
+    opacity: 0.65;
+  }
+}
+
+@keyframes suspendedParticle {
+  0% {
+    transform: translate3d(12px, 24px, 0);
+    opacity: 0;
+  }
+  20%,
+  70% {
+    opacity: 0.55;
+  }
+  100% {
+    transform: translate3d(-20px, -48px, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes warmPulse {
+  0%,
+  100% {
+    opacity: 0.02;
+  }
+  48% {
+    opacity: 1;
+  }
+}
+
+.control {
+  position: absolute;
+  z-index: 3;
+  right: 5.3vw;
+  bottom: 57px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 8px 12px;
+  border: 1px solid #d9eeff33;
+  border-radius: 99px;
+  color: #fffaf3;
+  background: #021424c9;
+  font-size: 11px;
+  line-height: 1.4;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.control:hover {
+  background: #17354ee6;
+  border-color: #d9eeff70;
+}
+
+.control:focus-visible {
+  outline: 2px solid #ffd294;
+  outline-offset: 4px;
+}
+
+@media (max-width: 1100px) {
+  .glow {
+    object-position: 85% center;
+  }
+  .control {
+    right: 24px;
+    bottom: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .drift,
+  .currents,
+  .particle {
+    animation: none;
+  }
+  .atmosphere {
+    display: none;
+  }
+  .glow {
+    animation: none;
+    opacity: 0.14;
+  }
+  .control {
+    display: none;
+  }
+}

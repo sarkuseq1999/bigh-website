@@ -1,7 +1,7 @@
 import { defineRouting } from "next-intl/routing";
 
-// Locale codes mirror the legacy site's own suffixes (_kr, _jp, _cns, _hken, _vn)
-// so harvested content, redirects, and URLs stay 1:1 traceable to the old site.
+// Keep existing URL codes. The selector offers five languages; /hken redirects to /cns.
+// The layout maps URL codes to valid document language tags (ko, ja, zh-Hans, vi).
 export const routing = defineRouting({
   locales: ["en", "kr", "jp", "cns", "hken", "vn"],
   defaultLocale: "en",

@@ -1,0 +1,69 @@
+BiGH cellular-health section — visual directions, September 22, 2026
+
+Mode: built-in image_gen, three independent generations with no reference images.
+Status: still design mockups for review; no option selected; website not changed. These are stylized illustrations, not microscopy. Any later implementation should use real HTML text and separately prepared artwork. Motion descriptions in chat are proposals, not generated animations.
+
+1. 1 — Inside the cell
+Saved image: 01-inside-cell-v1.png
+Source output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-fc9b62d6-27d3-48b9-8cc3-16b70c58da15.png
+
+Exact prompt:
+Use case: ui-mockup.
+Create a finished, original art-directed desktop WEBSITE SECTION mockup for BiGH, a cellular-health supplement brand. This is the educational second section immediately below an approved midnight-blue cinematic cell hero. It is NOT a new hero: no navigation, logo, product bottles, or page footer. Show just this complete education section as a flat website screenshot, no browser/device frame. Landscape canvas about 1536 x 1024. Make it striking, calm and genuinely easy to read for middle-aged customers. Scientific wonder without generic tech decoration. No white-background card layout, dashboard, stock infographic, icon grid, excessive tiny labels, or repeated rounded panels.
+Keep the following actual approved content legible, with no rewriting:
+Eyebrow: "WHY CELLULAR HEALTH MATTERS"
+Headline: "Tiny power plants. A big part of your health."
+Paragraph 1: "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use."
+Paragraph 2: "That energy helps your brain think, your heart beat, and your muscles move."
+Closing: "It’s one reason good health starts with your cells."
+Button: "Explore cellular health"
+Small image caption: "Illustrative view"
+Use large contemporary typography and generous space. Headline must be the first and dominant reading element. Paragraphs must remain comfortably readable, never over high-detail imagery. Design must include all copy without becoming crowded.
+Biology for the visual: a mitochondrion is elongated with an outer membrane and folded inner membrane, no nucleus, no tentacles, no electricity bolts. Folded membrane is the defining feature. The imagery is an original stylized scientific illustration, not real microscopy.
+Direction 1: INSIDE THE CELL. A continuous cinematic midnight-navy environment. An enormous translucent blue mitochondrion with warmly illuminated copper inner folds fills the right two-thirds and extends beyond the right crop. We feel physically close to it, with immersive macro depth, not like a small isolated bean displayed in a card. Delicate blue membrane texture, amber ribbon-like cristae, and a faint out-of-focus suggestion of the cell interior in the far background. Mostly dark, NOT a busy starfield; NO stars or speckled glitter. Selective organic highlights, restrained glow and exquisite soft depth.
+Composition: typography along the left 43%, mostly left aligned, with the headline in large off-white elegant sans-serif, one thoughtful serif accent allowed. Image overlaps center-right but a deep dark open reading area behind all words. Paragraphs sit below the headline in muted ivory; closing and an understated ivory outline button at lower left. Image caption at lower right. Flat uninterrupted full-bleed scene, no dividing box or vertical line. Leave generous margins at least 6% of canvas. This should feel like the viewer has moved closer inside the cell from the preceding hero, revealing a new place, not repeating a floating whole cell.
+
+------------------------------------------------------------
+
+2. 2 — Living microscope
+Saved image: 02-living-microscope-v1.png
+Source output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-c7a40533-6bc9-4fe4-9c91-82c9e5421735.png
+
+Exact prompt:
+Use case: ui-mockup.
+Create a finished, original art-directed desktop WEBSITE SECTION mockup for BiGH, a cellular-health supplement brand. This is the educational second section immediately below an approved midnight-blue cinematic cell hero. It is NOT a new hero: no navigation, logo, product bottles, or page footer. Show just this complete education section as a flat website screenshot, no browser/device frame. Landscape canvas about 1536 x 1024. Make it striking, calm and genuinely easy to read for middle-aged customers. Scientific wonder without generic tech decoration. No white-background card layout, dashboard, stock infographic, icon grid, excessive tiny labels, or repeated rounded panels.
+Keep the following actual approved content legible, with no rewriting:
+Eyebrow: "WHY CELLULAR HEALTH MATTERS"
+Headline: "Tiny power plants. A big part of your health."
+Paragraph 1: "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use."
+Paragraph 2: "That energy helps your brain think, your heart beat, and your muscles move."
+Closing: "It’s one reason good health starts with your cells."
+Button: "Explore cellular health"
+Small image caption: "Illustrative view"
+Use large contemporary typography and generous space. Headline must be the first and dominant reading element. Paragraphs must remain comfortably readable, never over high-detail imagery. Design must include all copy without becoming crowded.
+Biology for the visual: a mitochondrion is elongated with an outer membrane and folded inner membrane, no nucleus, no tentacles, no electricity bolts. Folded membrane is the defining feature. The imagery is an original stylized scientific illustration, not real microscopy.
+Direction 2: LIVING MICROSCOPE. An immersive modern emerald-and-petrol editorial science experience. The layout makes one easy relationship visible: small mitochondria live within a cell; we are zooming into one of them. Different from a dark-blue hero: use a saturated deep forest/teal field with luminous sage and soft amber accents. One large subtle translucent CELL cross-section sits across the left and center, partly cropped, with several small warm mitochondria inside its cytoplasm and a quiet darker blue-green nucleus. Exactly ONE amber mitochondrion inside the cell is delicately outlined and connected by a single thin line to a very large circular magnified view on the right. The magnified view is integrated seamlessly, not a floating UI card; it contains a breathtaking sharp diagonal cutaway mitochondrion with membranous amber cristae and pale translucent sage-blue exterior. The rest of the cell stays dimmed and defocused for hierarchy. No technical coordinate grids, fake microscope controls, scientific data, or dashboards.
+Composition: headline large and legible along the upper left/top band (about 24% height), white type with a quiet serif contrast. Main zoom visual dominates the middle band and right. Actual body copy occupies a protected dark open area in lower left, sufficiently large to read; closing and button just below. A simple small label "Mitochondria" near the selected feature is allowed. Clear visual connection, not an abstract mural. Rich depth, clean composition, precise typography. It should look like a premium interactive zoom experience frozen in one frame. No arrows or blocks of icons.
+
+------------------------------------------------------------
+
+3. 3 — Sculpted energy
+Saved image: 03-sculpted-energy-v1.png
+Source output: C:\Users\mcbig\.codex\generated_images\01a0b5ed-3791-7451-9a41-2f3e12115109\exec-a3bfd022-a585-479d-b39d-3395a6cd9dc7.png
+
+Exact prompt:
+Use case: ui-mockup.
+Create a finished, original art-directed desktop WEBSITE SECTION mockup for BiGH, a cellular-health supplement brand. This is the educational second section immediately below an approved midnight-blue cinematic cell hero. It is NOT a new hero: no navigation, logo, product bottles, or page footer. Show just this complete education section as a flat website screenshot, no browser/device frame. Landscape canvas about 1536 x 1024. Make it striking, calm and genuinely easy to read for middle-aged customers. Scientific wonder without generic tech decoration. No white-background card layout, dashboard, stock infographic, icon grid, excessive tiny labels, or repeated rounded panels.
+Keep the following actual approved content legible, with no rewriting:
+Eyebrow: "WHY CELLULAR HEALTH MATTERS"
+Headline: "Tiny power plants. A big part of your health."
+Paragraph 1: "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use."
+Paragraph 2: "That energy helps your brain think, your heart beat, and your muscles move."
+Closing: "It’s one reason good health starts with your cells."
+Button: "Explore cellular health"
+Small image caption: "Illustrative view"
+Use large contemporary typography and generous space. Headline must be the first and dominant reading element. Paragraphs must remain comfortably readable, never over high-detail imagery. Design must include all copy without becoming crowded.
+Biology for the visual: a mitochondrion is elongated with an outer membrane and folded inner membrane, no nucleus, no tentacles, no electricity bolts. Folded membrane is the defining feature. The imagery is an original stylized scientific illustration, not real microscopy.
+Direction 3: SCULPTED ENERGY. A bold warm editorial composition with copper, burnt sienna, terracotta, and deep aubergine shadows. No white or cream canvas. Rich tactile macro rendering of the folds INSIDE a mitochondrion, like an extraordinary organically folded membrane landscape seen from very close, not a closed bean or a museum object on a pedestal. Smooth thin translucent amber membrane crests form large flowing curves. Their connected folded structure should feel biological, not intestines, bread, pasta, or a flower. A subtle sliver of the outer mitochondrial membrane on the upper right provides context. Beautiful grazing warm light and dark plum interior valleys, physically convincing material, restrained satin sheen, no neon.
+Composition: highly graphic typography-driven magazine spread, markedly different from a standard left-text/right-image split. Huge headline spans the upper left and center with deliberate dramatic line breaks in pale warm ivory, occupying roughly the top 38% of the canvas. Image emerges across the far right and sweeps behind the bottom-center, cropped dramatically at the right edge. Use dark wine negative space so type stays crisp. The two explanatory paragraphs are set in a generously spaced horizontal bottom reading band, two simple text columns without cards or separators, with the closing and understated text/button action below. Do not put the body on bright detailed folds. Eyebrow upper left. Caption small lower right. Feel warm, tactile, sophisticated and vibrant while clearly about mitochondria and cellular energy. Avoid standard health-site blue and white. Image and typography should form one intentional composition, not a template.
+

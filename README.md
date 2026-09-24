@@ -1,6 +1,16 @@
-# BiGH — blank start
+# BiGH — homepage preview
 
-A fresh website canvas using the existing stack. The homepage is intentionally blank.
+**Public demo: https://bigh-website-demo.vercel.app/** — opens without a login or access code. Use this same address for future demo updates; see [publishing instructions](docs/public-demo.md).
+
+A fresh homepage using the existing stack. Mo selected Deep Space for the opening hero on September 22, 2026. It uses the approved cellular-health copy, a redesigned cell animation with subtle local movement. See [the current animation and preview](docs/deep-space-natural-motion.md), plus [the earlier comparison history](docs/hero-comparison.md). The [earlier animated-cell trial](docs/cellular-hero-preview.md) is preserved.
+The [current section-order trial](docs/cellular-health-comparison.md) places Dr. Jiankang Liu's existing white section second and the original dark “Inside the cell” design third. Comparison controls are hidden so Mo can review the full-page flow. All six comparison designs and the [first implementation](docs/cellular-health-section.md) are preserved for reference.
+That dark illustration now has [slow background drift and glowing orange folds](docs/mitochondria-glow.md), with soft blue light, floating particles, one pause control, and a still version for reduced-motion preferences.
+Mo accepted that order and selected **choice 2, The Lineup**, on September 23. Section four now uses the [refined white product lineup](docs/products-lineup-refinement.md): NuriCell leads the five-bottle collection, and selecting any bottle reveals its approved product story. The design switcher is hidden. The [three comparison designs](docs/products-collection-comparison.md) remain available through `design="comparison"`; the [previous NuriCell spotlight](docs/nuricell-spotlight.md) and original layout remain available through `design="spotlight"` and `design="original"` on `ProductsSection`.
+The [earlier redesign notes](docs/timeline-redesign.md) cover the rest of the existing preview, its asset sources, interactions, and verification.
+Mo approved the count-neutral introduction **“Explore our products. Find your starting point.”** The [current product section](docs/products-heading-final.md) keeps the earlier bottle proportions, Elegant typography, and subtle flagship caption. The comparison controls are removed. NuriCell now has its own coastal-walk artwork, and every product story has two illustrated highlights with a separate supporting detail or scientist credit. The white Lineup remains selected; the [earlier story review](docs/products-story-imagery.md), [elegant variations](docs/products-elegant-variants.md), and [heading choices](docs/products-heading-options.md) are preserved.
+The [customer stories comparison](docs/customer-stories-comparison.md) follows Products with three selectable designs: warm Daybook, colorful Story Wall, and green Spotlight. Each uses fresh illustrative imagery and the approved two NuriCell samples and one Green Bee Propolis sample, visibly labeled as fictional in all five languages. No new design has been selected. The [original paper design](docs/customer-stories.md) is preserved; genuine reviews still need sourcing.
+The [first-preview notes](docs/homepage-preview.md) retain earlier provenance and pending launch content.
+The [header and language update](docs/header-and-languages.md) adds Log in, Sign up, and a five-language selector at the upper right. English, Simplified Chinese, Korean, Vietnamese and Japanese now have homepage translations, including the product and help dialogs. Log in links to `https://bigh-vn-demo.vercel.app`, as supplied by Mo. Sign up remains a placeholder until he provides its link. Shopping and live question submission are not connected.
 
 For the current brand direction, audience, markets, and open decisions, see the
 [BiGH brand & website cheat sheet](BRAND-CHEATSHEET.md).
@@ -9,7 +19,7 @@ For the current brand direction, audience, markets, and open decisions, see the
 
 ```sh
 npm ci
-npm run dev
+npm run dev -- --hostname localhost --port 3000
 ```
 
 Open http://localhost:3000. Build for production with `npm run build`, then run it with `npm start`.
@@ -23,12 +33,13 @@ Open http://localhost:3000. Build for production with `npm run build`, then run 
 
 ## Start building here
 
-- `src/app/[locale]/page.tsx`: blank homepage.
+- `src/app/[locale]/page.tsx`: homepage entry.
+- `src/components/home/`: homepage content, interactions, and responsive styles.
 - `src/app/[locale]/layout.tsx`: document and language provider.
-- `src/app/globals.css`: neutral base styles.
+- `src/app/globals.css`: shared base styles.
 - `src/components/ui/`: reusable UI primitives.
 - `messages/`: empty translation dictionaries; missing keys can fall back to English.
-- `public/`: add new public assets here.
+- `public/images/`: original hero artwork and referenced product/scientist images.
 - `reference/`: reserved for new reference materials for this fresh website.
 
 Run `npm run lint`, `npm run type-check`, `npm run format:check`, and `npm run build` to check changes.
@@ -44,13 +55,14 @@ content, or product assumptions unless Mo explicitly asks. The archive is exclud
 from TypeScript, lint, formatting, and Tailwind source scanning. Its images are not
 served by the new website.
 
-`reference/` is separate and reserved for new reference materials. It starts empty
-apart from `.gitkeep`, which lets Git preserve the folder. Reference materials are
+`reference/` is separate and reserved for new reference materials. It contains the
+new MotionSites reference recordings and notes. Reference materials are
 also excluded from code checks and are not served by the website.
 
 Old pages, menus, animations, contact form, redirects, sitemap, and asset-copy build
-hooks have been removed from the active site. No deployment was performed.
+hooks have been removed from the active site. A separate Vercel preview was deployed
+with Mo's approval; its URL and access requirements are in the preview notes above.
 
-The blank draft asks search engines not to index it. Revisit the metadata and
+The preview asks search engines not to index it. Revisit the metadata and
 `robots.ts`, and restore appropriate redirects and a sitemap before launching the
 rebuilt website.

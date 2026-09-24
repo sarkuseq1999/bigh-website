@@ -1,0 +1,20 @@
+Title: BiGH Deep Space — cell animation
+Requested: September 22, 2026
+Source image: public/media/hero/deep-space-background-v1.png
+Source media ID: afe00d05-fd85-4a0b-8a80-11afae5d662b
+Generation: Higgsfield Seedance 2.5, omni_reference mode, 10 seconds, 16:9, 1080p, no audio.
+Same approved artwork supplied as start_image and end_image.
+Job ID: c5b49d19-7f33-4163-ba06-0f6a286555ee
+Credit estimate: 120 credits.
+Status: generation completed, inspected and integrated. Protected preview deployed and READY.
+Preview: https://bigh-website-c65me4fy8-sarkuseq1999s-projects.vercel.app
+Deployment: dpl_4ajMyntDVjoDFXd41WntuF7AfnnF
+Result URL: https://d8j0ntlcm91z4.cloudfront.net/user_3CxRNPyGspBilpDcpmVjn7icK40/hf_20260922_195318_c5b49d19-7f33-4163-ba06-0f6a286555ee.mp4
+Original: reference/hero-concepts/deep-space-motion-v1-source.mp4 (HEVC, 3,077,796 bytes).
+Served: public/media/hero/deep-space-motion-v1.mp4 (H.264, 1,923,780 bytes, no audio, fast-start metadata).
+Output: 1920 x 1080, 24 fps, 241 frames, 10.041667 seconds.
+Served SHA-256: 6A6A51A18E59CCF42EA36E4788B7562993DEF68A2C6F9D8B5A0F0E8B81A9EEE0
+Verification details: docs/deep-space-animation.md.
+
+Exact prompt:
+Animate this exact Deep Space artwork for a premium cellular-health website hero. Preserve this single large translucent blue-glass CELL on the right with its warm golden nucleus, intricate folded internal structures, luminous membrane, midnight navy background and soft diagonal shafts of light. Keep the exact fixed composition, scale and dark empty left 42 percent reserved for website text. Camera completely locked: no zoom, pan, orbit, framing change or cuts. Make the CELL feel alive and weightless with a graceful jellyfish-inspired contraction-and-release rhythm, but it must remain a biological cell, never turn into a jellyfish. Over ten seconds perform two slow visible pulses: the soft membrane gently draws inward by about 5 percent then billows and relaxes outward; small ripples travel along its edge, and the delicate internal folds sway with soft fluid inertia. The intact nucleus floats with a very subtle organic oscillation and steady golden illumination. The whole cell drifts vertically about 1 percent of the frame and returns, keeping its leftmost edge outside the text space. Sparse tiny pale blue and gold dust motes slowly drift in depth around the cell. Broad faint light rays breathe and drift gently in the background while the left side stays consistently dark and calm. Motion should be noticeable within two seconds but serene and luxurious, with stable exposure, no flashing or bright bursts. The scene is suspended in deep luminous space with no horizon, floor or reflections. Smooth repeating cycle: return naturally to the supplied identical end image, matching position, membrane outline and lighting, with continuous slow movement and no frozen endpoints. Preserve all existing visual details and colors. No added subjects, tentacles, tendrils, division, stretching out of shape, melting, collapse, extra cells, planets, text, logos, sound or music.

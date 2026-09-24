@@ -1,0 +1,137 @@
+[
+  {
+    "id": "nuricell",
+    "name": "NuriCell",
+    "note": "Earlier enhancement. Fine circuit artwork and small label geometry differ from the original.",
+    "original": {
+      "url": "/images/nuricell.png",
+      "width": 1140,
+      "height": 1183,
+      "bbox": [
+        272,
+        47,
+        868,
+        1147
+      ]
+    },
+    "enhanced": {
+      "url": "/experiments/nuricell-enhanced-transparent.png",
+      "width": 1230,
+      "height": 1278,
+      "bbox": [
+        292,
+        49,
+        939,
+        1242
+      ]
+    }
+  },
+  {
+    "id": "green-bee-propolis",
+    "name": "Green Bee Propolis",
+    "note": "Review the honeycomb artwork and curved side text. The source wording “Strengths Body Defenses” is retained.",
+    "original": {
+      "url": "/images/green-bee-propolis.png",
+      "width": 1140,
+      "height": 1183,
+      "bbox": [
+        294,
+        37,
+        888,
+        1134
+      ]
+    },
+    "enhanced": {
+      "url": "/experiments/green-bee-propolis-enhanced-transparent.png",
+      "width": 1231,
+      "height": 1278,
+      "bbox": [
+        294,
+        36,
+        931,
+        1213
+      ]
+    }
+  },
+  {
+    "id": "advanced-opc",
+    "name": "Advanced OPC Formula",
+    "note": "The fruit artwork and small curved text differ from the original. Review these details and the side-panel printing closely.",
+    "original": {
+      "url": "/images/advanced-opc.png",
+      "width": 1140,
+      "height": 1183,
+      "bbox": [
+        272,
+        47,
+        868,
+        1149
+      ]
+    },
+    "enhanced": {
+      "url": "/experiments/advanced-opc-enhanced-transparent.png",
+      "width": 1231,
+      "height": 1278,
+      "bbox": [
+        293,
+        42,
+        923,
+        1227
+      ]
+    }
+  },
+  {
+    "id": "turmerific",
+    "name": "Turmerific",
+    "note": "The turmeric illustration and small benefit badges have changed slightly. Review these details and the side-panel printing closely.",
+    "original": {
+      "url": "/images/turmerific.png",
+      "width": 1140,
+      "height": 1183,
+      "bbox": [
+        275,
+        42,
+        864,
+        1141
+      ]
+    },
+    "enhanced": {
+      "url": "/experiments/turmerific-enhanced-transparent.png",
+      "width": 1230,
+      "height": 1278,
+      "bbox": [
+        294,
+        30,
+        932,
+        1229
+      ]
+    }
+  },
+  {
+    "id": "nature-calm",
+    "name": "Nature Calm",
+    "note": "Review the connected-circle artwork, meditation symbol, and small side-panel printing.",
+    "original": {
+      "url": "/images/nature-calm.png",
+      "width": 1140,
+      "height": 1183,
+      "bbox": [
+        272,
+        47,
+        869,
+        1149
+      ]
+    },
+    "enhanced": {
+      "url": "/experiments/nature-calm-enhanced-transparent.png",
+      "width": 1230,
+      "height": 1278,
+      "bbox": [
+        293,
+        46,
+        937,
+        1227
+      ]
+    }
+  }
+]
