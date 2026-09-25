@@ -61,3 +61,6 @@ Thumbs.db
 # Keep on this PC only; this repo is public.
 /reference/motionsites-*
 /reference/pear-*
+
+# QA captures
+scripts/qa/out/

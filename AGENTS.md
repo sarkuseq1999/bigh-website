@@ -6,6 +6,15 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 <!-- END:nextjs-agent-rules -->
 
+## Driving this build (from September 25, 2026)
+
+Claude Code drives the BiGH website from this repo. Start every session with
+`docs/handoff-2026-09-24.md` (one page: state, Mo's rules, what's next, how to run, check and ship),
+then `README.md` and `BRAND-CHEATSHEET.md`. Claude Code's memory for this folder lives in
+`C:\Users\mcbig\.claude\projects\C--Users-mcbig-Documents-codes-bigh-website\memory\\`.
+Browser checks are in `scripts/qa/` (Playwright for Python); the dev server is the app's
+"bigh-website" preview on port 3007. The GitHub repo is public: ask Mo before every push.
+
 ## Fresh start
 
 This is a brand-new website using the existing tech stack. Do not carry over old

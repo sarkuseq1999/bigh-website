@@ -2,6 +2,8 @@
 
 **Public demo: https://bigh-website-demo.vercel.app/** — opens without a login or access code. Use this same address for future demo updates; see [publishing instructions](docs/public-demo.md).
 
+**Driving the build from this repo? Start with the [handoff of September 24, 2026](docs/handoff-2026-09-24.md).**
+
 A fresh homepage using the existing stack. Mo selected Deep Space for the opening hero on September 22, 2026. It uses the approved cellular-health copy, a redesigned cell animation with subtle local movement. See [the current animation and preview](docs/deep-space-natural-motion.md), plus [the earlier comparison history](docs/hero-comparison.md). The [earlier animated-cell trial](docs/cellular-hero-preview.md) is preserved.
 The [current section-order trial](docs/cellular-health-comparison.md) places Dr. Jiankang Liu's existing white section second and the original dark “Inside the cell” design third. Comparison controls are hidden so Mo can review the full-page flow. All six comparison designs and the [first implementation](docs/cellular-health-section.md) are preserved for reference.
 That dark illustration now has [slow background drift and glowing orange folds](docs/mitochondria-glow.md), with soft blue light, floating particles, one pause control, and a still version for reduced-motion preferences.
