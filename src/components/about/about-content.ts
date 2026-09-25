@@ -3,21 +3,8 @@
 // stays true without an exact start year; never name its earlier Asian brand), products are made
 // in California by a GMP-certified maker, the 45-day refund is current policy, and Ask BiGH Science
 // stays on the page before the service exists. BiGH was incorporated in California on 05/11/2016.
-// All three looks render these same words; only the design differs.
-
-// Mo liked A and B (Sept 25) and asked to try "an A look and then a B look": the "ab" mix starts
-// light like A and dives into B's dark cell. C is parked: no longer in the switcher, still at ?look=c.
-export const looks = [
-  { id: "a", name: "Calm" },
-  { id: "b", name: "Deep space" },
-  { id: "ab", name: "A then B" },
-] as const;
-
-export type Look = "a" | "b" | "c" | "ab";
-
-export function toLook(value: unknown): Look {
-  return value === "b" || value === "c" || value === "ab" ? value : "a";
-}
+// Mo picked look A, "Calm", the same day; the other review looks (B "Deep space", C "Bold" and an
+// A-then-B mix) are in the history at commit 2db8f07.
 
 export const about = {
   hero: {
@@ -76,12 +63,7 @@ export const routes = {
   products: "/#products",
 } as const;
 
-// Shared pictures, all already approved for the homepage.
+// The opening photo: the coastal-walk artwork already approved for the homepage.
 export const media = {
   coast: "/images/life-in-full.png",
-  cellStill: "/media/hero/deep-space-background-v1.png",
-  cellVideo: "/media/hero/deep-space-motion-v2.mp4",
-  cells: "/images/closing/space-cells.webp",
-  mitochondrion: "/images/science/glass-cell.webp",
-  nuricell: "/images/products/nuricell.png",
 } as const;

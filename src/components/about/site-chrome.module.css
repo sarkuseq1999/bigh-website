@@ -1,7 +1,7 @@
-/* Same as the Science page's chrome (bigh-science-page, site-chrome.module.css), so both pages
-   share one header and footer until the branches merge into a single component. */
+/* Copied from the Science page's chrome (bigh-science-page, site-chrome.module.css), minus its
+   dark header, so both pages match until the branches merge into a single component. */
 
-/* Sticky, but it takes no room: each look starts under it and pads its own top. */
+/* Sticky, but it takes no room: the page's opening starts under it and pads its own top. */
 .header {
   --header-h: 84px;
   position: sticky;
@@ -20,14 +20,6 @@
   background: rgba(251, 250, 247, 0.94);
   border-bottom: 1px solid rgba(36, 39, 34, 0.1);
   backdrop-filter: blur(12px);
-}
-
-/* Over a dark look: the same navy, see-through, so words sliding under it stay apart. */
-.dark {
-  color: #fffaf2;
-  background: rgba(4, 19, 40, 0.62);
-  border-bottom: 1px solid rgba(255, 250, 242, 0.06);
-  backdrop-filter: blur(14px);
 }
 
 .bar {

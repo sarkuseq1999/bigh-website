@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUp, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
@@ -13,7 +13,7 @@ import styles from "./site-chrome.module.css";
 // site-chrome.tsx) so the two pages match; the product pages (branch nuricell-page) grow their own.
 // All of them become one shared component when the branches land.
 
-function Logo({ light, footer = false }: { light: boolean; footer?: boolean }) {
+function Logo({ footer = false }: { footer?: boolean }) {
   const copy = useCopy();
   return (
     <Link
@@ -23,9 +23,7 @@ function Logo({ light, footer = false }: { light: boolean; footer?: boolean }) {
     >
       <span className={styles.logoCrop}>
         <Image
-          src={
-            light ? "/images/brand/bigh-logo-white.png" : "/images/brand/bigh-logo-black-green.png"
-          }
+          src="/images/brand/bigh-logo-black-green.png"
           alt={copy("BiGH")}
           width={1448}
           height={811}
@@ -38,59 +36,17 @@ function Logo({ light, footer = false }: { light: boolean; footer?: boolean }) {
   );
 }
 
-export function AboutHeader({
-  startsDark,
-  adaptive,
-  onSupport,
-}: {
-  startsDark: boolean;
-  adaptive: boolean;
-  onSupport: () => void;
-}) {
+// Always light: look A runs on paper throughout. (Science's copy also turns dark over dark
+// sections; the shared header will need that when the branches merge.)
+export function AboutHeader({ onSupport }: { onSupport: () => void }) {
   const copy = useCopy();
-  const header = useRef<HTMLElement>(null);
-  const [overDark, setOverDark] = useState(startsDark);
   const [open, setOpen] = useState(false);
-  const dark = adaptive && overDark && !open;
-
-  // Where light and dark sections alternate, the header matches the section under it
-  // (sections mark themselves with data-tone="dark"; anything else counts as light).
-  useEffect(() => {
-    if (!adaptive) return;
-    let frame = 0;
-    const check = () => {
-      frame = 0;
-      const element = header.current;
-      if (!element) return;
-      const y = element.getBoundingClientRect().bottom + 1;
-      const zone = document
-        .elementsFromPoint(4, y)
-        .map((node) => node.closest<HTMLElement>("[data-tone]"))
-        .find(Boolean);
-      setOverDark(zone?.dataset.tone === "dark");
-    };
-    const schedule = () => {
-      if (!frame) frame = requestAnimationFrame(check);
-    };
-    schedule();
-    window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", schedule);
-    return () => {
-      cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", schedule);
-    };
-  }, [adaptive]);
-
   const close = () => setOpen(false);
 
   return (
-    <header
-      ref={header}
-      className={`${styles.header} ${dark ? styles.dark : styles.light} ${open ? styles.open : ""}`}
-    >
+    <header className={`${styles.header} ${styles.light} ${open ? styles.open : ""}`}>
       <div className={styles.bar}>
-        <Logo light={dark} />
+        <Logo />
         <nav id="about-navigation" aria-label={copy("Main navigation")} className={styles.nav}>
           <Link href="/" onClick={close}>
             {copy("Home")}
@@ -138,7 +94,7 @@ export function AboutFooter({ onAsk, onSupport }: { onAsk: () => void; onSupport
     <footer className={styles.footer} data-tone="light">
       <div className={styles.footerTop}>
         <div>
-          <Logo light={false} footer />
+          <Logo footer />
           <p className={styles.footerMessage}>{copy("Stay sharp. Live fully.")}</p>
         </div>
         <div className={styles.footerColumns}>

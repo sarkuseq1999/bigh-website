@@ -10,9 +10,9 @@ import { Sentences } from "./sentences";
 import { useScrollProgress } from "./use-scroll-progress";
 import styles from "./look-calm.module.css";
 
-// Look A, "Calm": Timeline's About page (Design Vault #014, #015). One centered idea per screen on
-// paper; the one bold move is the rounded coastal photo that comes into focus as you scroll.
-// Its sections are exported one by one so the "A then B" mix can borrow them.
+// Look A, "Calm" (Mo's pick, Sept 25): Timeline's About page (Design Vault #014, #015). One
+// centered idea per screen on paper; the one bold move is the rounded coastal photo that comes
+// into focus as you scroll.
 export function LookCalm({ onAsk }: LookProps) {
   return (
     <>
@@ -26,7 +26,7 @@ export function LookCalm({ onAsk }: LookProps) {
   );
 }
 
-export function CalmHero() {
+function CalmHero() {
   const copy = useCopy();
   const photo = useScrollProgress<HTMLDivElement>();
   return (
@@ -67,7 +67,7 @@ function CalmPurpose() {
   );
 }
 
-export function CalmRoots() {
+function CalmRoots() {
   const copy = useCopy();
   return (
     <section id="roots" className={styles.roots} aria-labelledby="roots-title">
@@ -121,7 +121,7 @@ function CalmExperience() {
   );
 }
 
-export function CalmPromise() {
+function CalmPromise() {
   const copy = useCopy();
   return (
     <section id="promise" className={styles.promise} aria-labelledby="promise-title">
@@ -141,7 +141,7 @@ export function CalmPromise() {
   );
 }
 
-export function CalmClosing({ onAsk }: LookProps) {
+function CalmClosing({ onAsk }: LookProps) {
   const copy = useCopy();
   return (
     <section className={styles.closing} aria-labelledby="closing-title">

@@ -3,20 +3,16 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useCopy } from "@/i18n/use-copy";
-import type { Look } from "./about-content";
-import { LookBold } from "./look-bold";
 import { LookCalm } from "./look-calm";
-import { LookMix } from "./look-mix";
-import { LookSpace } from "./look-space";
 import { AboutFooter, AboutHeader } from "./site-chrome";
 import styles from "./about-page.module.css";
 
 export type LookProps = { onAsk: () => void };
 type Panel = "ask" | "support" | null;
 
-// The About page. Mo picked look A, "Calm", on September 25, 2026; it is what /about shows.
-// The other looks stay reachable at ?look=b|ab|c only until the review copies are cleaned up.
-export function AboutPage({ look }: { look: Look }) {
+// The About page in look A, "Calm", which Mo picked on September 25, 2026, then the footer and the
+// Ask BiGH Science / support panel.
+export function AboutPage() {
   const copy = useCopy();
   const dialog = useRef<HTMLDialogElement>(null);
   const [panel, setPanel] = useState<Panel>(null);
@@ -28,24 +24,16 @@ export function AboutPage({ look }: { look: Look }) {
     if (!panel && element.open) element.close();
   }, [panel]);
 
-  const Body = { a: LookCalm, b: LookSpace, c: LookBold, ab: LookMix }[look];
   const close = () => setPanel(null);
 
   return (
-    <div className={styles.page} data-look={look}>
+    <div className={styles.page}>
       <a href="#about-main" className={styles.skipLink}>
         {copy("Skip to content")}
       </a>
-      {/* Keyed by look so switching looks starts the header fresh. B starts dark; B and the mix
-          follow the tone of whatever section is under the header. */}
-      <AboutHeader
-        key={look}
-        startsDark={look === "b"}
-        adaptive={look === "b" || look === "ab"}
-        onSupport={() => setPanel("support")}
-      />
+      <AboutHeader onSupport={() => setPanel("support")} />
       <main id="about-main">
-        <Body onAsk={() => setPanel("ask")} />
+        <LookCalm onAsk={() => setPanel("ask")} />
       </main>
       <AboutFooter onAsk={() => setPanel("ask")} onSupport={() => setPanel("support")} />
 
