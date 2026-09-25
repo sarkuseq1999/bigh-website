@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "Half of a crisp red apple, cut cleanly across the middle and lying cut side up, seen at a three-quarter angle from above so the whole cut face is visible: bright creamy-white flesh, a small star-shaped core with two dark seeds, and a thin ring of glossy red skin around the edge. Perfectly fresh, just cut. The apple half alone.\n\nHigh-end editorial product photography, photorealistic, soft natural studio light from the upper left, rich true-to-life color, crisp detail, subtle shading only inside the object. Isolated as one clean cut-out on a fully transparent background: no background, no table, no floor, no ground shadow, no frame, no text, no logos, no labels, no readable writing.",
+  "generated": "2026-09-24 12:20:14",
+  "seconds": 62
+}

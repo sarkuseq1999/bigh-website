@@ -1,0 +1,314 @@
+.section {
+  --ink: #102b50;
+  --text: #25303b;
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --olive: #8ea321;
+  --gold: #eaa43a;
+  --paper: #fbfaf7;
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  color: var(--text);
+}
+
+/* The words, shared by the three looks. */
+.section .words {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  max-width: 44rem;
+  text-align: center;
+}
+.section .title {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(2.9rem, 6vw, 5.6rem);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.05em;
+  text-wrap: balance;
+}
+.section .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.2rem, 4.6vw, 4.2rem);
+  line-height: 1.2;
+  letter-spacing: 0;
+}
+.section .cells {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.16em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.035em;
+}
+.section .text {
+  max-width: 32em;
+  margin: 22px 0 0;
+  font-size: clamp(1.0625rem, 1.3vw, 1.3125rem);
+  line-height: 1.55;
+}
+.section .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 22px;
+  justify-content: center;
+  align-items: center;
+  margin-top: 34px;
+}
+.section .primary,
+.section .secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 200ms,
+    color 200ms,
+    border-color 200ms,
+    transform 200ms;
+}
+.section .primary {
+  border: 0;
+  background: var(--ink);
+  color: #fff;
+}
+.section .primary:hover {
+  background: var(--cobalt);
+}
+.section .secondary {
+  border: 1.5px solid rgb(16 43 80 / 0.35);
+  color: var(--ink);
+  text-decoration: none;
+}
+.section .secondary:hover {
+  border-color: var(--ink);
+}
+.section .primary:focus-visible,
+.section .secondary:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 4px;
+}
+
+/* 1 · Space: the page ends where it began, in the dark, with the cell small and calm. */
+.section .space {
+  display: grid;
+  justify-items: center;
+  padding: clamp(56px, 7vw, 96px) clamp(20px, 5vw, 72px) clamp(88px, 10vw, 136px);
+  background: #030b1b;
+  color: #d9e1ee;
+}
+.section .space .title {
+  color: #fff;
+}
+.section .space .cells {
+  color: #cfe0ff;
+}
+.section .space .text {
+  color: #c2cddf;
+}
+.section .space .primary {
+  background: #f0f3a0;
+  color: #22291f;
+}
+.section .space .primary:hover {
+  background: #fff;
+}
+.section .space .secondary {
+  border-color: rgb(255 255 255 / 0.4);
+  color: #fff;
+}
+.section .space .secondary:hover {
+  border-color: #fff;
+}
+.section .spaceScene {
+  position: relative;
+  width: min(100%, 640px);
+  aspect-ratio: 1.25;
+  margin-bottom: clamp(16px, 2vw, 32px);
+  mask-image: radial-gradient(closest-side, #000 52%, transparent 100%);
+  -webkit-mask-image: radial-gradient(closest-side, #000 52%, transparent 100%);
+}
+.section .spaceDrift {
+  position: absolute;
+  inset: 0;
+  animation: drift 16s ease-in-out infinite alternate;
+}
+.section .spaceImage {
+  object-fit: cover;
+  object-position: 50% 50%;
+  transform: scale(1.08);
+}
+.section .space[data-reduced="true"] .spaceDrift {
+  animation: none;
+}
+
+/* 2 · Light: the bottle in the science section's warm gold, beside the words. */
+.section .light {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  gap: 32px clamp(24px, 5vw, 80px);
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: clamp(72px, 9vw, 120px) clamp(20px, 5vw, 72px) clamp(80px, 10vw, 130px);
+}
+.section .light .words {
+  justify-items: start;
+  text-align: left;
+}
+.section .light .actions {
+  justify-content: flex-start;
+}
+.section .stage {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  align-items: end;
+  height: clamp(380px, 36vw, 500px);
+  margin-bottom: 104px;
+}
+.section .glow {
+  position: absolute;
+  top: 52%;
+  left: 50%;
+  width: min(120%, 620px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 200 110 / 0.62),
+    rgb(255 220 160 / 0.28) 46%,
+    transparent 100%
+  );
+  translate: -50% -50%;
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+.section .bottle {
+  position: relative;
+  z-index: 1;
+  width: clamp(190px, 21vw, 290px);
+  transform-style: preserve-3d;
+  perspective: 1200px;
+}
+.section .bottleImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 30px 40px rgb(80 50 10 / 0.18));
+}
+.section .reflection {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: auto;
+  opacity: 0.2;
+  transform: scaleY(-1);
+  mask-image: linear-gradient(to top, #000 0%, transparent 34%);
+  -webkit-mask-image: linear-gradient(to top, #000 0%, transparent 34%);
+}
+.section .shadow {
+  position: absolute;
+  bottom: -14px;
+  left: 50%;
+  width: min(70%, 380px);
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(110 70 20 / 0.28), transparent 100%);
+  translate: -50% 0;
+}
+.section .light[data-reduced="true"] .glow {
+  animation: none;
+}
+
+/* 3 · Field: the statement alone, over a living field of tiny cells. */
+.section .field {
+  display: grid;
+  justify-items: center;
+  padding: clamp(80px, 10vw, 140px) clamp(20px, 5vw, 72px) 0;
+}
+.section .fieldCanvas {
+  display: block;
+  width: min(100%, 1440px);
+  height: clamp(200px, 24vw, 320px);
+  margin-top: clamp(24px, 4vw, 56px);
+  pointer-events: none;
+  mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent 100%);
+}
+
+@keyframes drift {
+  from {
+    transform: translate3d(0, 8px, 0) scale(1);
+  }
+  to {
+    transform: translate3d(0, -8px, 0) scale(1.04);
+  }
+}
+@keyframes breathe {
+  from {
+    scale: 0.94;
+    opacity: 0.85;
+  }
+  to {
+    scale: 1.06;
+    opacity: 1;
+  }
+}
+
+@media (max-width: 899px) {
+  .section .title {
+    font-size: clamp(2.5rem, 11vw, 3.4rem);
+  }
+  .section .text {
+    font-size: 1rem;
+  }
+  .section .actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .section .primary,
+  .section .secondary {
+    justify-content: center;
+    width: min(100%, 340px);
+  }
+  .section .space {
+    padding-bottom: 88px;
+  }
+  .section .spaceScene {
+    width: min(100%, 420px);
+    margin-bottom: 8px;
+  }
+  .section .light {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .section .light .words {
+    order: 1;
+    justify-items: center;
+    text-align: center;
+  }
+  .section .light .actions {
+    justify-content: center;
+  }
+  .section .stage {
+    height: 280px;
+    margin-bottom: 104px;
+  }
+  .section .glow {
+    width: 360px;
+  }
+  .section .bottle {
+    width: 150px;
+  }
+  .section .fieldCanvas {
+    height: 190px;
+  }
+}

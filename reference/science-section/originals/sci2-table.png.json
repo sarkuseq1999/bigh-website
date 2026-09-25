@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "21:9",
+    "--resolution",
+    "4k",
+    "--quality",
+    "max"
+  ],
+  "prompt": "Overhead flat-lay editorial photograph of a sunlit kitchen table in the morning, shot straight down. Pale natural oak tabletop, soft window light from the left with gentle leaf-shaped shadows. Three small arrangements sit in a single row from left to right with generous open space between them:\n1) a clear vintage Edison light bulb with a brass base lying on a folded off-white linen napkin;\n2) two halves of a red apple, cut side up, side by side: the left half has turned golden brown, the right half is fresh and creamy white with a halved lemon beside it and a few drops of juice on its surface;\n3) a round slice of a tree trunk with clear concentric growth rings and a thin bark rim, used as a board, with a small ceramic cup of tea beside it.\n\nBright, airy, natural color, high-end lifestyle magazine photography, realistic textures, soft natural shadows, calm and uncluttered, lots of clean table surface. No people, no hands, no text, no labels, no logos, no packaging.",
+  "generated": "2026-09-24 13:10:28",
+  "seconds": 43
+}

@@ -1,0 +1,21 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "seedance_2_0",
+  "params": [
+    "--start-image",
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\customer-stories\\v2\\originals\\moment-garden.jpg",
+    "--end-image",
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\customer-stories\\v2\\originals\\moment-garden.jpg",
+    "--duration",
+    "5",
+    "--resolution",
+    "720p",
+    "--aspect_ratio",
+    "9:16",
+    "--generate_audio",
+    "false"
+  ],
+  "prompt": "A calm, realistic, seamless background loop for a website. The camera stays completely still. The green branch sways gently in a light breeze, the slender leaves flutter, the honeybee's wings flicker, and soft sunlight shimmers in the blurred greenery behind. The hands barely move. Gentle, unhurried, natural motion only. No cuts, no zoom, no new objects, no text.",
+  "generated": "2026-09-24 10:17:31",
+  "seconds": 191
+}

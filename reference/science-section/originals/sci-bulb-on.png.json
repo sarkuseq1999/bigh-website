@@ -1,0 +1,19 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--image",
+    "C:/Users/mcbig/Documents/codes/bigh-website/reference/science-section/originals/sci-bulb-off.png",
+    "--aspect_ratio",
+    "2:3",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "The exact same light bulb, with an identical shape, angle, framing, glass stem, and brass base, now switched on: the looping filament glows a warm golden-orange and fills the glass with soft warm light, with a gentle golden bloom around the filament. Keep the glass outline and the brass base crisp and unchanged. Same fully transparent background: no background, no table, no floor, no shadow, no text.",
+  "generated": "2026-09-24 12:21:39",
+  "seconds": 60
+}

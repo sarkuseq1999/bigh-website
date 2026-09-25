@@ -1,0 +1,86 @@
+/* Still life: an arrangement of everyday things floating in layered depth on the cobalt field. */
+.stage {
+  position: relative;
+  grid-area: figure;
+  align-self: center;
+  justify-self: center;
+  width: min(100%, 640px);
+  aspect-ratio: 1 / 1.02;
+  margin: 0 0 clamp(32px, 4vw, 64px);
+}
+
+/* Two slow orbits give the arrangement a center of gravity without a flat backdrop disc. */
+.stage .orbit {
+  position: absolute;
+  inset: 4%;
+  border: 1px solid rgb(255 255 255 / 0.2);
+  border-radius: 50%;
+  animation: orbit 90s linear infinite;
+}
+.stage .orbit::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  left: 88%;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #e2ed94;
+  box-shadow: 0 0 0 6px rgb(226 237 148 / 0.18);
+}
+.stage .orbitInner {
+  inset: 20%;
+  border-color: rgb(255 255 255 / 0.14);
+  animation-duration: 60s;
+  animation-direction: reverse;
+}
+.stage .orbitInner::after {
+  top: auto;
+  bottom: 6%;
+  left: 18%;
+  width: 9px;
+  height: 9px;
+  background: #fff;
+  box-shadow: 0 0 0 5px rgb(255 255 255 / 0.12);
+}
+
+.stage .piece {
+  position: absolute;
+  translate: calc(var(--px, 0) * var(--depth) * -30px) calc(var(--py, 0) * var(--depth) * -20px);
+  transform: translate(-50%, -50%);
+  transition: translate 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.stage .bob {
+  rotate: var(--rot);
+}
+.stage .bob img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 22px 24px rgb(6 18 48 / 0.34));
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+@keyframes orbit {
+  to {
+    rotate: 360deg;
+  }
+}
+
+@media (max-width: 899px) {
+  .stage {
+    width: min(100%, 460px);
+    margin: 18px 0 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage .orbit {
+    animation: none;
+  }
+  .stage .piece {
+    translate: none;
+    transition: none;
+  }
+}

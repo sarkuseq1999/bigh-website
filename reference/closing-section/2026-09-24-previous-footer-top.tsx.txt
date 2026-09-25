@@ -1,0 +1,10 @@
+// Removed from src/components/home/homepage.tsx on September 24, 2026, when the closing block
+// "Start with your cells." took over the page's ending. Restore by pasting it back as the first
+// child of <footer className={styles.footer}>. The strings stay in the catalogs.
+        <div className={styles.footerTop}>
+          <p>{copy("BE IN GOOD HEALTH.")}</p>
+          <h2>{copy("Stay sharp. Live fully.")}</h2>
+          <a href="#products" className={styles.primaryButton}>
+            {copy("Explore BiGH")} <ArrowUpRight size={20} />
+          </a>
+        </div>

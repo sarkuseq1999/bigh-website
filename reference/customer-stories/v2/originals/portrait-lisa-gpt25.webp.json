@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "2:3",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "Contemporary figurative oil painting of one ordinary person, full-length figure, isolated as a clean cut-out on a fully transparent background: no background, no floor, no cast shadow, no frame, no text, no logos.\n\nSubject: a Korean-American woman in her mid-40s, mid-stride on a busy weekday morning. Shoulder-length black hair tucked behind one ear. A soft camel trench coat open over a cream knit top and navy trousers, simple loafers, a canvas tote on one shoulder. She holds a ceramic coffee mug in one hand and a set of car keys in the other, and glances back over her shoulder with a small, amused smile, as if calling goodbye to her family on her way out the door.\n\nStyle: confident, loose, painterly brushwork with visible strokes in the clothing folds; rich, luminous color; soft natural daylight from the left; warm, true skin tones; a dignified, warm, quietly joyful mood, like a portrait in a modern gallery. Realistic proportions and a natural, unposed gesture. The painted edges of the figure are crisp enough to sit on a solid color page.",
+  "generated": "2026-09-24 10:09:22",
+  "seconds": 55
+}

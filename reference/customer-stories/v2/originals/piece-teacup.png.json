@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "A simple cream stoneware teacup filled with clear amber tea, sitting on a matching saucer, seen at a three-quarter angle from slightly above.\n\nHigh-end editorial product photography, photorealistic, soft natural studio light from the upper left, rich true-to-life color, crisp detail, subtle shading only inside the object. Isolated as one clean cut-out on a fully transparent background: no background, no table, no floor, no ground shadow, no frame, no text, no logos, no labels, no readable writing.",
+  "generated": "2026-09-24 11:34:26",
+  "seconds": 61
+}

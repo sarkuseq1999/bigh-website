@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "16:9",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--image-references",
+    "C:/Users/mcbig/Documents/codes/bigh-website/public/media/hero/deep-space-background-v1.png"
+  ],
+  "prompt": "In exactly the same style, palette and lighting as the reference image (deep dark navy space, cool blue light with a warm golden glow, translucent glassy biological forms, crisp premium 3D render, faint soft rays of light): a small cluster of many translucent living cells drifting together like a constellation, seen from a little distance. Each cell glows softly from within, warm gold at its core and cool blue at its edges. The nearest cells are larger and sharper; the farthest are tiny and faint. Centered composition with generous dark space all around, the cluster filling about half the frame. Nothing else in the frame: no text, no planets, no red.",
+  "generated": "2026-09-24 20:37:37",
+  "seconds": 52
+}

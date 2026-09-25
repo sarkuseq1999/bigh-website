@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "A set of three car and house keys on a simple brass key ring with a small tan leather tag (the tag is blank), lying loosely at a slight angle.\n\nHigh-end editorial product photography, photorealistic, soft natural studio light from the upper left, rich true-to-life color, crisp detail, subtle shading only inside the object. Isolated as one clean cut-out on a fully transparent background: no background, no table, no floor, no ground shadow, no frame, no text, no logos, no labels, no readable writing.",
+  "generated": "2026-09-24 11:34:31",
+  "seconds": 65
+}

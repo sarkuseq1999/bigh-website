@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high"
+  ],
+  "prompt": "Extreme macro photograph of the cut surface of a crisp apple half turning golden brown near its edge while the center is still creamy white, the fine cell texture of the flesh visible, natural soft daylight, shallow depth of field. Photorealistic, appetizing, beautiful. No text.",
+  "generated": "2026-09-24 13:10:14",
+  "seconds": 31
+}

@@ -1,0 +1,21 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--image",
+    "C:\\Users\\mcbig\\AppData\\Local\\Temp\\claude\\C--Users-mcbig-Documents-codes-bigh-skills\\f1b04ea0-510c-4e85-8918-9111afdb4c03\\scratchpad\\susan-reference.png",
+    "--image",
+    "C:\\Users\\mcbig\\AppData\\Local\\Temp\\claude\\C--Users-mcbig-Documents-codes-bigh-skills\\f1b04ea0-510c-4e85-8918-9111afdb4c03\\scratchpad\\style-c-reference.png",
+    "--aspect_ratio",
+    "2:3",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "Draw the person from the FIRST reference image in exactly the same illustration style as the SECOND reference image (an elegant fashion-style illustration): confident, expressive ink outlines with lively line weight, filled with flat, slightly loose color that does not perfectly meet the lines, minimal shading, and a simplified face drawn with a few graceful strokes. Match the second image line quality, color handling, level of detail, and proportions so the two look like they were drawn by the same illustrator for the same series. Energetic, graceful, and editorial.\n\nKeep her exactly as in the first reference: a Vietnamese-American woman in her early 60s standing in a relaxed pose, silver-streaked black hair in a low bun, a sage-green linen shirt with rolled sleeves, light khaki trousers, a canvas garden apron, simple canvas shoes, a wide-brimmed straw sun hat held against her hip, and a small sprig of fresh green leaves with tiny white flowers lifted in her other hand, which she studies with gentle, bright-eyed curiosity and a soft smile.\n\nFull-length figure, same framing and proportions as the first reference. Isolated as a clean cut-out on a fully transparent background: no background, no floor, no cast shadow, no frame, no text, no logos. It must read instantly as a drawing, never as a photograph.",
+  "generated": "2026-09-24 11:03:02",
+  "seconds": 74
+}

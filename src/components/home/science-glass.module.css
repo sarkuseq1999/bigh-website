@@ -1,0 +1,735 @@
+.glass {
+  --ink: #102b50;
+  --text: #25303b;
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --olive: #8ea321;
+  --gold: #eaa43a;
+  --paper: #fbfaf7;
+  background: var(--paper);
+  color: var(--text);
+}
+.glass ::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* Centered opening, in Timeline's calm manner. */
+.glass .head {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(84px, 9vw, 132px) clamp(20px, 5vw, 72px) clamp(8px, 2vw, 24px);
+  text-align: center;
+}
+.glass .heading {
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(3.1rem, 6.4vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.glass .heading:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+.glass .head p {
+  max-width: 34em;
+  margin: 22px auto 0;
+  font-size: clamp(1.125rem, 1.35vw, 1.3125rem);
+  line-height: 1.55;
+}
+
+/* A tall track; the stage stays put while the three topics scroll past. */
+.glass .track {
+  position: relative;
+  height: 340svh;
+}
+.glass .stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-rows: auto auto minmax(0, 1fr);
+  justify-items: center;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px clamp(20px, 5vw, 72px) 24px;
+  /* A stacking context of its own: the multiplied render blends with this paper. */
+  background: var(--paper);
+}
+
+/* The topic tabs: which topic you are on, always, and a way to jump. */
+.glass .topics {
+  position: relative;
+  display: inline-flex;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgb(16 43 80 / 0.06);
+}
+.glass .topics button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px 0 8px;
+  border-radius: 999px;
+  color: #3f4b58;
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background 300ms ease,
+    color 300ms ease;
+}
+.glass .topics button:hover {
+  background: rgb(16 43 80 / 0.06);
+}
+.glass .topics button[aria-current="step"] {
+  background: var(--ink);
+  color: #fff;
+}
+.glass .number {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  transition: background 300ms ease;
+}
+.glass .topics button[aria-current="step"] .number {
+  background: var(--lime);
+}
+.glass .meter {
+  position: absolute;
+  right: 26px;
+  bottom: 2px;
+  left: 26px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+}
+.glass .meter span {
+  position: absolute;
+  inset: 0;
+  background: var(--olive);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+}
+
+/* The cell and its facts travel together. */
+.glass .figure {
+  position: relative;
+  width: min(100%, 860px, calc((100svh - 330px) * 1.767));
+  margin-top: clamp(4px, 1.5vh, 16px);
+}
+
+.glass .plate {
+  position: relative;
+}
+
+/* The glass cell: the render's white ground multiplies away into the paper. */
+.glass .visual {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 566;
+}
+.glass .halo {
+  position: absolute;
+  top: 48%;
+  left: 50%;
+  width: 78%;
+  aspect-ratio: 1.9;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 196 104 / 0.34),
+    rgb(255 220 160 / 0.14) 50%,
+    transparent 100%
+  );
+  opacity: calc(0.9 - var(--age, 0) * 0.85);
+  translate: -50% -50%;
+  animation: halo 5.2s ease-in-out infinite alternate;
+}
+.glass .cell {
+  position: absolute;
+  inset: 0;
+}
+.glass .cell img,
+.glass .canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.glass .canvas {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+.glass[data-ready="true"] .canvas {
+  opacity: 1;
+}
+.glass[data-ready="true"] .still {
+  visibility: hidden;
+}
+
+/* Each topic's picture, drawn over the cell; it follows the glass as it turns. */
+.glass .overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  translate: var(--shift-x, 0px) var(--shift-y, 0px);
+  pointer-events: none;
+}
+.glass [data-part] {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.glass[data-chapter="0"] [data-part="0"],
+.glass[data-chapter="1"] [data-part="1"],
+.glass[data-chapter="2"] [data-part="2"] {
+  opacity: 1;
+}
+/* Energy flow: topic 1, and again in topic 3, where it dims and slows with age. */
+.glass .flow {
+  opacity: 0;
+  transition: opacity 600ms ease;
+}
+.glass[data-chapter="0"] .flow,
+.glass[data-chapter="2"] .flow {
+  opacity: calc(1 - var(--age, 0) * 0.9);
+}
+/* 1 · Energy streams out of the glass. */
+.glass .stream {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 1.6;
+  stroke-dasharray: 2 7;
+  stroke-linecap: round;
+  opacity: 0.55;
+}
+.glass .packet {
+  fill: #f6b847;
+  opacity: 0;
+}
+.glass .pin {
+  fill: var(--paper);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+.glass .leader {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+}
+/* 2 and 3 are drawn inside the glass by the shader (science-glass.tsx). */
+
+.glass .label {
+  position: absolute;
+  max-width: 13em;
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  translate: var(--shift-x, 0px) var(--shift-y, 0px);
+}
+.glass .labelEnergy {
+  top: 83%;
+  left: 20%;
+  max-width: 17em;
+  text-align: right;
+  transform: translate(-100%, -50%);
+}
+.glass .labelRadicals {
+  top: 14%;
+  left: 33%;
+  text-align: right;
+  transform: translate(-100%, -50%);
+}
+.glass .labelDefenses {
+  top: 42%;
+  left: 22.5%;
+  text-align: right;
+  transform: translate(-100%, -50%);
+}
+
+/* 3 · The age dial: a number, and a line from 20 to 80 under the cell. */
+.glass .age {
+  position: absolute;
+  top: 12%;
+  left: 0;
+  display: grid;
+  margin: 0;
+  color: var(--ink);
+  line-height: 1;
+}
+.glass .age span {
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.glass .age strong {
+  margin-top: 6px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2.6rem, 4vw, 3.6rem);
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+/* The age slider sits under the cell: drag it, or sweep a mouse over it. */
+.glass .ageControl {
+  position: absolute;
+  top: 88%;
+  right: 24%;
+  left: 24%;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
+.glass .ageControl input {
+  width: 100%;
+  height: 36px;
+  margin: 0;
+  background: none;
+  cursor: grab;
+  appearance: none;
+  -webkit-appearance: none;
+}
+.glass .ageControl input:active {
+  cursor: grabbing;
+}
+.glass .ageControl input::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold), #b9b4a8);
+}
+.glass .ageControl input::-moz-range-track {
+  height: 4px;
+  border-radius: 4px;
+  background: linear-gradient(90deg, var(--gold), #b9b4a8);
+}
+.glass .ageControl input::-webkit-slider-thumb {
+  width: 26px;
+  height: 26px;
+  margin-top: -11px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 6px 14px -6px rgb(16 43 80 / 0.6);
+  appearance: none;
+  -webkit-appearance: none;
+}
+.glass .ageControl input::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  background: var(--lime);
+  box-shadow: 0 6px 14px -6px rgb(16 43 80 / 0.6);
+}
+.glass .ageControl input:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.glass .ticks {
+  position: relative;
+  width: calc(100% - 26px);
+  height: 18px;
+}
+.glass .ticks span {
+  position: absolute;
+  top: 0;
+  color: #4b5866;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  translate: -50% 0;
+}
+.glass .hint {
+  margin-top: 6px;
+  color: #5b6672;
+  font-size: 0.75rem;
+  white-space: nowrap;
+}
+
+/* Three short facts beside the cell, like Timeline's list next to its "battery". */
+.glass .facts {
+  position: absolute;
+  top: 34%;
+  left: 88%;
+  display: grid;
+  gap: 12px;
+  width: clamp(190px, 17vw, 250px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.glass .facts li,
+.glass .inlineFacts li {
+  position: relative;
+  padding-left: 22px;
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.35;
+}
+.glass .facts li {
+  animation: fact 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.glass .facts li::before,
+.glass .inlineFacts li::before {
+  position: absolute;
+  top: 0.32em;
+  left: 0;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--olive);
+  border-radius: 50%;
+  background: var(--lime);
+  content: "";
+}
+.glass .inlineFacts {
+  display: none;
+}
+/* Topic 2's caption: three numbered steps under the cell, the current one lit with the scene. */
+.glass .caption {
+  position: absolute;
+  top: 88%;
+  right: 6%;
+  left: 6%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.glass .caption li {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.3;
+  opacity: 0.4;
+  transition: opacity 300ms ease;
+}
+.glass .caption li[data-lit="true"] {
+  opacity: 1;
+}
+.glass .stepNumber {
+  display: grid;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  border: 1.5px solid var(--olive);
+  border-radius: 50%;
+  background: #fff;
+  color: var(--ink);
+  font-size: 0.75rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background 300ms ease,
+    transform 300ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass .caption li[data-lit="true"] .stepNumber {
+  background: var(--lime);
+  transform: scale(1.15);
+}
+
+/* The words: one topic at a time, centered below the cell. */
+.glass .copy {
+  display: grid;
+  align-self: start;
+  width: 100%;
+  max-width: 44rem;
+  margin-top: clamp(28px, 4.5vh, 48px);
+  text-align: center;
+}
+.glass .chapter {
+  grid-area: 1 / 1;
+  opacity: 0;
+  transform: translateY(18px);
+  visibility: hidden;
+  transition:
+    opacity 400ms ease,
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0s linear 600ms;
+}
+.glass .chapter[data-active="true"] {
+  opacity: 1;
+  transform: none;
+  visibility: visible;
+  transition:
+    opacity 600ms ease 120ms,
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1) 120ms,
+    visibility 0s;
+}
+.glass .title {
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2rem, 3vw, 3rem);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.glass .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(1.6rem, 2.3vw, 2.2rem);
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+.glass .preview {
+  max-width: 34em;
+  margin: 14px auto 0;
+  font-size: clamp(1.0625rem, 1.2vw, 1.1875rem);
+  line-height: 1.6;
+}
+.glass .read {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin-top: 8px;
+  padding: 0;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgb(40 77 168 / 0.35);
+  text-underline-offset: 6px;
+  cursor: pointer;
+  transition: text-decoration-color 200ms;
+}
+.glass .read:hover {
+  text-decoration-color: currentColor;
+}
+.glass .read:focus-visible,
+.glass .topics button:focus-visible,
+.glass .explore:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 4px;
+}
+
+.glass .foot {
+  display: flex;
+  justify-content: center;
+  padding: 8px 20px clamp(72px, 8vw, 112px);
+}
+.glass .explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  transition: background 200ms;
+}
+.glass .explore:hover {
+  background: var(--cobalt);
+}
+
+@keyframes halo {
+  from {
+    scale: 0.94;
+  }
+  to {
+    scale: 1.06;
+  }
+}
+@keyframes fact {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+}
+
+/* Narrower desktops: the facts sit under the cell instead of beside it. */
+@media (max-width: 1239px) {
+  .glass .facts {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 6px 22px;
+    width: auto;
+    margin-top: 44px;
+  }
+  .glass .figure {
+    width: min(100%, 780px, calc((100svh - 400px) * 1.767));
+  }
+  .glass .copy {
+    margin-top: 18px;
+  }
+}
+
+@media (max-width: 899px) {
+  .glass .track {
+    height: 330svh;
+  }
+  .glass .stage {
+    padding: 12px 18px 16px;
+  }
+  .glass .topics button {
+    gap: 8px;
+    min-height: 44px;
+    padding: 0 14px 0 6px;
+    font-size: 0.9375rem;
+  }
+  /* Short phones: the cell gives up width so the slider, facts and words still fit one screen. */
+  .glass .figure {
+    width: min(100%, calc((100svh - 484px) * 1.425));
+    margin-top: 20px;
+  }
+  /* The render's white margins multiply away, so the cell can grow past the column edges. */
+  .glass .visual {
+    width: 124%;
+    margin-inline: -12%;
+  }
+  .glass .label {
+    max-width: 9em;
+    font-size: 0.75rem;
+  }
+  .glass .labelEnergy,
+  .glass .labelDefenses {
+    top: 96%;
+    left: 11%;
+    text-align: left;
+    transform: none;
+  }
+  .glass .labelRadicals {
+    top: -4%;
+    left: 11%;
+    text-align: left;
+    transform: none;
+  }
+  .glass .labelDefenses {
+    top: -4%;
+    right: 11%;
+    left: auto;
+    text-align: right;
+  }
+  .glass .plate {
+    padding-bottom: 96px;
+  }
+  .glass .caption {
+    top: auto;
+    bottom: 0;
+    gap: 4px 14px;
+  }
+  /* On phones the caption tells topic 2 and the slider tells topic 3; their side lists and the
+     leader line step aside (the explainers carry the same points). */
+  .glass .facts[data-topic="1"],
+  .glass .facts[data-topic="2"],
+  .glass .radicalLeader {
+    display: none;
+  }
+  .glass .caption li {
+    font-size: 0.8125rem;
+  }
+  .glass .age {
+    top: -6%;
+    left: 11%;
+  }
+  .glass .age strong {
+    margin-top: 2px;
+    font-size: 2rem;
+  }
+  .glass .ageControl {
+    top: auto;
+    bottom: 0;
+    right: 16%;
+    left: 16%;
+  }
+  .glass .ticks span,
+  .glass .hint {
+    font-size: 0.6875rem;
+  }
+  .glass .hint {
+    white-space: normal;
+    text-align: center;
+  }
+  .glass .facts {
+    margin-top: 14px;
+  }
+  .glass .facts li {
+    font-size: 0.8125rem;
+  }
+  .glass .title {
+    font-size: clamp(1.5rem, 6.2vw, 1.9rem);
+  }
+  .glass .preview {
+    margin-top: 8px;
+    font-size: 0.9375rem;
+  }
+}
+
+/* Phones: only the current tab shows its name; the others show their number. */
+@media (max-width: 559px) {
+  .glass .topics button:not([aria-current="step"]) {
+    padding-right: 6px;
+  }
+  .glass .topics button:not([aria-current="step"]) .topicName {
+    display: none;
+  }
+}
+
+/* Reduced motion: no scroll stage; the still cell and all three topics, one after another. */
+.glass[data-reduced="true"] .track {
+  height: auto;
+}
+.glass[data-reduced="true"] .stage {
+  position: static;
+  grid-template-rows: none;
+  row-gap: 32px;
+}
+.glass[data-reduced="true"] .copy {
+  gap: 56px;
+}
+.glass[data-reduced="true"] .chapter {
+  grid-area: auto;
+}
+.glass[data-reduced="true"] .facts,
+.glass[data-reduced="true"] .topics,
+.glass[data-reduced="true"] .halo,
+.glass[data-reduced="true"] [data-part] {
+  display: none;
+}
+.glass[data-reduced="true"] .inlineFacts {
+  display: grid;
+  justify-content: center;
+  gap: 8px;
+  margin: 18px 0 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}

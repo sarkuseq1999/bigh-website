@@ -1,0 +1,19 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--image",
+    "C:/Users/mcbig/Documents/codes/bigh-website/reference/science-section/originals/sci-apple-fresh.png",
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "The exact same apple half, with an identical shape, angle, framing, red skin, core, and seeds, but after an hour left out in the air: the cut surface has turned an even golden brown from oxidation, deepest near the edges and around the core, and the flesh looks slightly duller and drier. Nothing else changes. Same fully transparent background: no background, no table, no shadow, no text.",
+  "generated": "2026-09-24 12:22:12",
+  "seconds": 93
+}

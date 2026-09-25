@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "A round cross-section slice of a tree trunk, seen from directly above and perfectly front-facing: many clear, fine concentric growth rings spreading outward from a small center near the middle, warm honey and caramel wood tones, two or three fine radial cracks, and a thin rim of natural grey-brown bark all the way around. The wood slice alone.\n\nHigh-end editorial product photography, photorealistic, soft natural studio light from the upper left, rich true-to-life color, crisp detail, subtle shading only inside the object. Isolated as one clean cut-out on a fully transparent background: no background, no table, no floor, no ground shadow, no frame, no text, no logos, no labels, no readable writing.",
+  "generated": "2026-09-24 12:20:20",
+  "seconds": 67
+}

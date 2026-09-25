@@ -1,0 +1,19 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--image",
+    "C:\\Users\\mcbig\\AppData\\Local\\Temp\\claude\\C--Users-mcbig-Documents-codes-bigh-skills\\f1b04ea0-510c-4e85-8918-9111afdb4c03\\scratchpad\\lisa-reference.png",
+    "--aspect_ratio",
+    "2:3",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "Re-draw the person in the reference image as a bold, modern editorial illustration in a flat style: simplified shapes, flat areas of confident color with only one or two soft shade tones, crisp clean edges, no photographic detail, no realistic skin texture, gently simplified facial features drawn with a few precise lines. Friendly, stylish, and contemporary, like a premium brand or magazine illustration.\n\nKeep her exactly as in the reference: a Korean-American woman in her mid-40s mid-stride, shoulder-length black hair tucked behind one ear, camel trench coat open over a cream knit top, navy trousers, brown loafers, canvas tote on one shoulder, a blue-and-white patterned coffee mug in one hand, car keys in the other, glancing back over her shoulder with a small, warm smile. Full-length figure, same framing and proportions. Isolated as a clean cut-out on a fully transparent background: no background, no floor, no cast shadow, no frame, no text, no logos. It must read instantly as a drawing, never as a photograph.",
+  "generated": "2026-09-24 10:55:40",
+  "seconds": 62
+}

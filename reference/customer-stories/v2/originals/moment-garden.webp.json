@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "9:16",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "opaque"
+  ],
+  "prompt": "Vertical 9:16 candid lifestyle photograph, shot on a 35mm lens with shallow depth of field, natural daylight, warm but true-to-life color, fine film grain. No text, no logos, no brand labels, no readable writing anywhere. No face visible: the frame shows only hands and forearms.\n\nScene: a sunlit garden edge in the late morning. A woman's hands in sage-green linen sleeves, with a simple silver ring, gently cup a branch of a bushy green shrub with slender needle-like leaves and tiny white flower clusters. A single honeybee rests on a leaf near her fingers. Behind: soft, glowing bokeh of greenery and warm sunlight. Calm, curious, close to nature. Composition: hands and branch in the middle third, the bee clearly visible but small.",
+  "generated": "2026-09-24 10:12:05",
+  "seconds": 49
+}

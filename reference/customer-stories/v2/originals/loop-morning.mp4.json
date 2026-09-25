@@ -1,0 +1,21 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "seedance_2_0",
+  "params": [
+    "--start-image",
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\customer-stories\\v2\\originals\\moment-morning-gpt25.jpg",
+    "--end-image",
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-website\\reference\\customer-stories\\v2\\originals\\moment-morning-gpt25.jpg",
+    "--duration",
+    "5",
+    "--resolution",
+    "720p",
+    "--aspect_ratio",
+    "9:16",
+    "--generate_audio",
+    "false"
+  ],
+  "prompt": "A calm, realistic, seamless background loop for a website. The camera stays completely still. Coffee keeps pouring in a thin, steady stream into the mug, steam curls slowly upward through the warm sunbeam, and the morning light flickers very softly. The hands barely move. Gentle, unhurried, natural motion only. No cuts, no zoom, no new objects, no text.",
+  "generated": "2026-09-24 10:17:43",
+  "seconds": 202
+}

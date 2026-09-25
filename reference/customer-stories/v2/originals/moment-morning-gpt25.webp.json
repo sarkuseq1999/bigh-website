@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "9:16",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "opaque"
+  ],
+  "prompt": "Vertical 9:16 candid lifestyle photograph, shot on a 35mm lens with shallow depth of field, natural window light, warm but true-to-life color, fine film grain. No text, no logos, no brand labels, no readable writing anywhere. No face visible: the frame shows only hands and forearms.\n\nScene: an early weekday morning at a kitchen counter in low golden sunlight. A woman's hands in cream knit sleeves pour coffee from a small glass French press into a speckled ceramic mug; steam curls up from the mug through the sunbeam. Around it, a lived-in, happy morning: a half-packed child's lunch box with sliced apples, a bowl of clementines, a plate with a slice of toast, a folded school note. Composition: the mug and pouring hands in the lower-middle third, warm light streaming from the upper left, soft out-of-focus kitchen behind.",
+  "generated": "2026-09-24 10:12:02",
+  "seconds": 47
+}

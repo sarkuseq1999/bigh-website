@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high"
+  ],
+  "prompt": "Extreme macro photograph of the glowing coiled tungsten filament inside a clear vintage light bulb, warm golden-orange light, shallow depth of field with soft golden bokeh, dark warm brown background. Photorealistic, rich, beautiful. No text.",
+  "generated": "2026-09-24 13:10:18",
+  "seconds": 34
+}

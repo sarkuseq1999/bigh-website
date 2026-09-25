@@ -1,0 +1,247 @@
+.words {
+  --ink: #102b50;
+  --text: #25303b;
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --paper: #fbfaf7;
+  position: relative;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(84px, 9vw, 132px) clamp(20px, 5vw, 72px) clamp(72px, 8vw, 112px);
+  background: var(--paper);
+  color: var(--text);
+  text-align: center;
+}
+.words ::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* Centered opening, in Timeline's calm manner. */
+.words .head {
+  margin-bottom: clamp(88px, 11vw, 168px);
+}
+.words .heading {
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(3.1rem, 6.4vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.words .heading:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+.words .head p {
+  max-width: 34em;
+  margin: 22px auto 0;
+  font-size: clamp(1.125rem, 1.35vw, 1.3125rem);
+  line-height: 1.55;
+}
+
+/* Three large centered sentences, each with the everyday thing set into the words. */
+.words .list {
+  display: grid;
+  gap: clamp(120px, 15vw, 220px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.words .sentence {
+  max-width: 14em;
+  margin: 0 auto;
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2.6rem, 6.2vw, 6.2rem);
+  font-weight: 400;
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+.words .sentence:is(:lang(ko), :lang(ja), :lang(zh)) {
+  max-width: 12em;
+  font-size: clamp(2rem, 4.6vw, 4.6rem);
+  line-height: 1.3;
+  letter-spacing: 0;
+}
+.words .line {
+  display: block;
+}
+.words .line > span {
+  margin: 0 0.12em;
+}
+.words .object {
+  position: relative;
+  display: inline-block;
+  height: 1.05em;
+  vertical-align: -0.22em;
+  cursor: zoom-in;
+  transition: transform 500ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.words .object[data-object="bulb"] {
+  height: 1.3em;
+  vertical-align: -0.34em;
+}
+.words .lift {
+  position: relative;
+  display: block;
+  height: 100%;
+  filter: drop-shadow(0 0.08em 0.07em rgb(40 26 8 / 0.22));
+}
+.words .lift img {
+  display: block;
+  width: auto;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.words .lift img + img {
+  position: absolute;
+  inset: 0;
+}
+.words .object[data-object="lemon"] img {
+  animation: bob 4.8s ease-in-out infinite alternate;
+}
+.words .object:hover {
+  transform: translateY(-0.06em) rotate(-6deg) scale(1.06);
+}
+
+/* Under each sentence: the article it opens, centered. */
+.words .details {
+  display: grid;
+  justify-items: center;
+  gap: 8px;
+  max-width: 38rem;
+  margin: clamp(28px, 3vw, 44px) auto 0;
+}
+.words .title {
+  font-size: inherit;
+}
+.words .title button {
+  display: inline;
+  min-height: 48px;
+  padding: 0;
+  color: var(--cobalt);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(1.4rem, 1.9vw, 1.75rem);
+  line-height: 1.2;
+  cursor: pointer;
+}
+.words .title button:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(1.2rem, 1.5vw, 1.4rem);
+}
+.words .title span {
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-decoration-color: rgb(40 77 168 / 0.35);
+  text-underline-offset: 7px;
+  transition: text-decoration-color 200ms;
+}
+.words .title button:hover span {
+  text-decoration-color: currentColor;
+}
+.words .preview {
+  max-width: 34em;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+.words .title button:focus-visible,
+.words .explore:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.words .foot {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(96px, 11vw, 160px);
+}
+.words .explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  transition: background 200ms;
+}
+.words .explore:hover {
+  background: var(--cobalt);
+}
+
+/* The close-up that follows the pointer over an object. */
+.words .float {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 20;
+  width: 260px;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  box-shadow: 0 30px 60px -30px rgb(16 43 80 / 0.6);
+  opacity: 0;
+  scale: 0.8;
+  pointer-events: none;
+  transition:
+    opacity 260ms ease,
+    scale 420ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.words .float[data-visible="true"] {
+  opacity: 1;
+  scale: 1;
+}
+.words .float img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+@keyframes bob {
+  from {
+    transform: rotate(-5deg) translateY(0);
+  }
+  to {
+    transform: rotate(4deg) translateY(-0.04em);
+  }
+}
+
+@media (max-width: 899px) {
+  .words .sentence {
+    font-size: clamp(2.1rem, 9.4vw, 3.4rem);
+  }
+  .words .sentence:is(:lang(ko), :lang(ja), :lang(zh)) {
+    font-size: clamp(1.7rem, 7.2vw, 2.6rem);
+  }
+  .words .list {
+    gap: 96px;
+  }
+}
+
+@media (hover: none), (max-width: 899px) {
+  .words .float {
+    display: none;
+  }
+  .words .object {
+    cursor: default;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .words .object,
+  .words .float,
+  .words .explore {
+    transition: none;
+  }
+  .words .object[data-object="lemon"] img {
+    animation: none;
+  }
+}

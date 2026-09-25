@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "2:3",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "A vintage clear-glass Edison light bulb with a tall teardrop shape, a delicate looping carbon filament held on a thin glass stem, and a brushed brass screw base, standing upright with the base at the bottom, seen straight on from slightly above. The bulb is switched off: the filament is a dark amber-bronze wire and the glass is clear with soft, faint reflections. The bulb alone.\n\nHigh-end editorial product photography, photorealistic, soft natural studio light from the upper left, rich true-to-life color, crisp detail, subtle shading only inside the object. Isolated as one clean cut-out on a fully transparent background: no background, no table, no floor, no ground shadow, no frame, no text, no logos, no labels, no readable writing.",
+  "generated": "2026-09-24 12:20:02",
+  "seconds": 50
+}

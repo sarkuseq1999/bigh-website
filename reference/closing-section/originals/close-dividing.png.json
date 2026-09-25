@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "16:9",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--image-references",
+    "C:/Users/mcbig/Documents/codes/bigh-website/public/media/hero/deep-space-background-v1.png"
+  ],
+  "prompt": "In exactly the same style, palette and lighting as the reference image (deep dark navy space, cool blue light with a warm golden glow, translucent glassy biological forms, crisp premium 3D render, faint soft rays of light): a single translucent living cell caught in the moment of dividing into two, the two halves still joined by a narrow glowing bridge, each half glowing softly from within, warm gold at the core and cool blue at the edges, seen a little from above. Centered composition with generous dark space all around, the cell filling about half the frame. Nothing else in the frame: no text, no planets, no red.",
+  "generated": "2026-09-24 20:37:34",
+  "seconds": 47
+}

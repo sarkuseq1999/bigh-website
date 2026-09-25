@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "16:9",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max"
+  ],
+  "prompt": "A single mitochondrion rendered as a precious object made of clear, flawless glass: a smooth, elongated bean-shaped capsule lying horizontally, its transparent outer shell catching soft white studio highlights and a faint pearly iridescence. Inside it, delicate folded inner membranes (cristae) run across its length like layered ribbons and glow a warm honey-gold light, as if lit softly from within. It floats a little above a seamless pure white background, centered with generous empty space around it, with a very soft, faint shadow far below.\n\nPremium scientific 3D render, calm and elegant, museum quality, crisp detail, clean high-key lighting, the only color is the warm golden glow inside the clear glass. Nothing else in the frame: no text, no labels, no particles, no dots, no spikes, no hairs, no red, no other objects.",
+  "generated": "2026-09-24 13:10:25",
+  "seconds": 41
+}

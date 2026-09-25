@@ -1,0 +1,407 @@
+.table {
+  --ink: #102b50;
+  --text: #25303b;
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --paper: #fbfaf7;
+  background: var(--paper);
+  color: var(--text);
+}
+.table ::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+/* Centered opening, in Timeline's calm manner. */
+.table .head {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(84px, 9vw, 132px) clamp(20px, 5vw, 72px) clamp(32px, 4vw, 56px);
+  text-align: center;
+}
+.table .heading {
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(3.1rem, 6.4vw, 6rem);
+  font-weight: 400;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+.table .heading:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.5rem, 4.8vw, 4.5rem);
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+.table .head p {
+  max-width: 34em;
+  margin: 22px auto 0;
+  font-size: clamp(1.125rem, 1.35vw, 1.3125rem);
+  line-height: 1.55;
+}
+
+/* The track holds the stage in place while the camera travels along the table. */
+.table .track {
+  position: relative;
+  height: 340svh;
+}
+.table .stage {
+  position: sticky;
+  top: var(--bar, 0px);
+  height: calc(100svh - var(--bar, 0px));
+  padding: 12px clamp(12px, 1.4vw, 20px) clamp(12px, 1.4vw, 20px);
+  background: var(--paper);
+}
+
+/* The photograph fills the screen, framed by a thin margin and soft corners, as on Timeline. */
+.table .view {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  border-radius: clamp(18px, 2vw, 28px);
+  background: linear-gradient(180deg, var(--paper) 0%, #e9dcc4 40%, #cdb48c 100%);
+  isolation: isolate;
+}
+.table .scene {
+  position: absolute;
+  inset: 0;
+}
+.table .photo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  aspect-ratio: 3840 / 1648;
+  will-change: transform;
+}
+.table .photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.table .soft {
+  --focus: 34;
+  position: absolute;
+  inset: 0;
+  mask-image: radial-gradient(
+    ellipse calc(var(--focus) * 1% + 0.1%) calc(var(--focus) * 1.3% + 0.1%) at
+      calc(var(--fx, 0.5) * 100%) calc(var(--fy, 0.64) * 100%),
+    transparent 55%,
+    #000 100%
+  );
+  pointer-events: none;
+}
+/* Morning light moving softly across the table. */
+.table .sun {
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(38% 46% at 30% 32%, rgb(255 246 222 / 0.7), transparent 70%),
+    radial-gradient(30% 40% at 72% 64%, rgb(255 234 196 / 0.45), transparent 70%);
+  mix-blend-mode: soft-light;
+  animation: sun 9s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+.table .note {
+  position: absolute;
+  z-index: 1;
+  padding: 6px 13px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.9);
+  box-shadow: 0 8px 18px -12px rgb(40 26 8 / 0.6);
+  color: var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.3;
+  white-space: nowrap;
+  opacity: 0;
+  transform: translate(-50%, 6px);
+  transition:
+    opacity 500ms ease,
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.table .note[data-visible="true"] {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+/* A wash of paper at the top of the photo keeps the words easy to read. */
+.table .scrim {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 56%;
+  background: linear-gradient(
+    180deg,
+    rgb(251 250 247 / 0.94) 0%,
+    rgb(251 250 247 / 0.8) 42%,
+    rgb(251 250 247 / 0) 100%
+  );
+  pointer-events: none;
+}
+
+/* One sentence at a time, centered above the subject. */
+.table .copy {
+  position: absolute;
+  inset: clamp(28px, 5vh, 56px) clamp(20px, 4vw, 64px) auto;
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+.table .chapter {
+  display: grid;
+  grid-area: 1 / 1;
+  justify-items: center;
+  max-width: 44rem;
+  opacity: 0;
+  transform: translateY(16px);
+  filter: blur(6px);
+  visibility: hidden;
+  transition:
+    opacity 400ms ease,
+    transform 600ms cubic-bezier(0.16, 1, 0.3, 1),
+    filter 400ms ease,
+    visibility 0s linear 600ms;
+}
+.table .chapter[data-active="true"] {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  visibility: visible;
+  transition:
+    opacity 700ms ease 150ms,
+    transform 900ms cubic-bezier(0.16, 1, 0.3, 1) 150ms,
+    filter 700ms ease 150ms,
+    visibility 0s;
+}
+.table .line {
+  max-width: 19em;
+  color: var(--ink);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2rem, 3.4vw, 3.4rem);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.table .line:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(1.6rem, 2.5vw, 2.4rem);
+  line-height: 1.32;
+  letter-spacing: 0;
+}
+.table .title {
+  margin-top: 16px;
+  font-size: inherit;
+}
+.table .title button {
+  display: inline;
+  min-height: 44px;
+  padding: 0;
+  color: var(--cobalt);
+  font: inherit;
+  font-size: 1.125rem;
+  font-weight: 600;
+  line-height: 1.35;
+  text-align: center;
+  cursor: pointer;
+}
+.table .title span {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-decoration-color: rgb(40 77 168 / 0.35);
+  text-underline-offset: 6px;
+  transition: text-decoration-color 200ms;
+}
+.table .title button:hover span {
+  text-decoration-color: currentColor;
+}
+.table .preview {
+  max-width: 36em;
+  margin-top: 6px;
+  color: #3a4550;
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* Chapters, as a small bar along the bottom of the photo. */
+.table .rail {
+  position: absolute;
+  bottom: clamp(14px, 2.4vh, 24px);
+  left: 50%;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgb(251 250 247 / 0.86);
+  box-shadow: 0 10px 24px -16px rgb(40 26 8 / 0.7);
+  translate: -50% 0;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+}
+.table .meter {
+  position: absolute;
+  right: 22px;
+  bottom: 3px;
+  left: 22px;
+  height: 2px;
+  overflow: hidden;
+  border-radius: 2px;
+  background: rgb(16 43 80 / 0.1);
+}
+.table .meter span {
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  transform: scaleX(var(--progress, 0));
+  transform-origin: left center;
+}
+.table .rail button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px 0 8px;
+  border-radius: 999px;
+  color: #4b5866;
+  font: inherit;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 200ms,
+    color 200ms;
+}
+.table .rail button[aria-current="step"] {
+  background: var(--ink);
+  color: #fff;
+}
+.table .step {
+  display: grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  background: rgb(16 43 80 / 0.08);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+.table .rail button[aria-current="step"] .step {
+  background: rgb(255 255 255 / 0.18);
+}
+.table .title button:focus-visible,
+.table .rail button:focus-visible,
+.table .explore:focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 3px;
+  border-radius: 8px;
+}
+
+.table .foot {
+  display: flex;
+  justify-content: center;
+  padding: clamp(40px, 5vw, 72px) 20px clamp(72px, 8vw, 112px);
+}
+.table .explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 56px;
+  padding: 14px 28px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 1.0625rem;
+  font-weight: 600;
+  transition: background 200ms;
+}
+.table .explore:hover {
+  background: var(--cobalt);
+}
+
+@keyframes sun {
+  from {
+    translate: -5% -3%;
+  }
+  to {
+    translate: 5% 4%;
+  }
+}
+
+@media (max-width: 899px) {
+  .table .track {
+    height: 330svh;
+  }
+  .table .stage {
+    padding: 8px 10px 10px;
+  }
+  .table .scrim {
+    height: 62%;
+  }
+  .table .copy {
+    inset: 22px 16px auto;
+  }
+  .table .line {
+    font-size: clamp(1.45rem, 6vw, 1.9rem);
+  }
+  .table .line:is(:lang(ko), :lang(ja), :lang(zh)) {
+    font-size: clamp(1.25rem, 5vw, 1.6rem);
+  }
+  .table .title {
+    margin-top: 8px;
+  }
+  .table .title button {
+    font-size: 0.9375rem;
+  }
+  .table .preview {
+    font-size: 0.875rem;
+  }
+  .table .note {
+    font-size: 0.8125rem;
+  }
+  .table .rail button {
+    padding: 0 10px 0 6px;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Reduced motion: the whole table at once, then the three chapters. */
+.table[data-reduced="true"] .track {
+  height: auto;
+}
+.table[data-reduced="true"] .stage {
+  position: static;
+  height: auto;
+  padding: 0 clamp(20px, 5vw, 72px);
+}
+.table[data-reduced="true"] .view {
+  height: auto;
+  overflow: visible;
+  border-radius: 0;
+  background: none;
+}
+.table[data-reduced="true"] .scene {
+  position: relative;
+  aspect-ratio: 3840 / 1648;
+  overflow: hidden;
+  border-radius: 24px;
+}
+.table[data-reduced="true"] .photo {
+  width: 100%;
+  height: auto;
+}
+.table[data-reduced="true"] .soft,
+.table[data-reduced="true"] .note,
+.table[data-reduced="true"] .rail,
+.table[data-reduced="true"] .scrim {
+  display: none;
+}
+.table[data-reduced="true"] .copy {
+  position: static;
+  gap: 48px;
+  margin-top: 40px;
+}
+.table[data-reduced="true"] .chapter {
+  grid-area: auto;
+}
+.table[data-reduced="true"] .sun {
+  animation: none;
+}

@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high"
+  ],
+  "prompt": "Macro photograph of the growth rings of a tree seen in a smooth cross-section of wood: many fine concentric rings in warm honey, amber and caramel tones, one small radial crack, soft natural light raking across the grain. Photorealistic, calm, beautiful. No text.",
+  "generated": "2026-09-24 13:10:17",
+  "seconds": 34
+}

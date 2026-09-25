@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "16:9",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--image-references",
+    "C:/Users/mcbig/Documents/codes/bigh-website/reference/science-section/originals/sci2-glass.png"
+  ],
+  "prompt": "Use the reference image exactly: the same glass mitochondrion, the same shape, the same size and position in the frame, the same camera angle, the same seamless pure white background, the same soft high-key studio lighting and the same faint soft shadow far below. Change only its condition: this one is old and worn. The clear glass shell has turned slightly cloudy and frosted, with fine crazing lines and dulled highlights. Inside, the folded inner membranes are fewer, thinner and partly collapsed, and their warm honey-gold glow has faded to a dim, dusty amber-grey, lit only faintly from within. A few tiny dark specks of oxidation sit inside the glass. Still a premium scientific 3D render, calm, elegant, museum quality, crisp detail. No text, no labels, no particles outside the glass, no red, no other objects.",
+  "generated": "2026-09-24 18:35:00",
+  "seconds": 48
+}

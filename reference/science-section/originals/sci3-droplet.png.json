@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high",
+    "--background",
+    "transparent"
+  ],
+  "prompt": "A single small sphere of clear glass tinted a soft pale lime green, like a drop of water made of glass, in a premium scientific 3D render style: smooth, flawless, a soft white studio highlight on its upper left, a faint pearly rim, a gentle pale lime light inside it and a soft translucent lime glow just beneath it. Centered, filling about 70 percent of the frame, on a fully transparent background. Nothing else in the frame: no text, no other objects, no hard shadow, no red.",
+  "generated": "2026-09-24 18:34:43",
+  "seconds": 31
+}

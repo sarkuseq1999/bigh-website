@@ -1,0 +1,253 @@
+.light {
+  --night: #041328;
+  --cream: #fff4dc;
+  --gold: #ffc56e;
+  --lime: #e2ed94;
+  --gutter: clamp(20px, 5vw, 72px);
+  background: var(--night);
+  color: #fff;
+}
+.light ::selection {
+  background: var(--gold);
+  color: var(--night);
+}
+
+.light .head {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: clamp(88px, 9vw, 128px) var(--gutter) clamp(24px, 3vw, 40px);
+}
+.light .head h2 {
+  font-size: clamp(2.75rem, 5vw, 4.75rem);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+.light .head p {
+  max-width: 32em;
+  margin-top: 14px;
+  color: rgb(255 255 255 / 0.8);
+  font-size: 18px;
+  line-height: 1.5;
+}
+.light .head .note {
+  margin-top: 10px;
+  color: rgb(255 255 255 / 0.74);
+  font-size: 14px;
+}
+.light .head .hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 10px 18px 10px 14px;
+  border: 1px solid rgb(255 244 220 / 0.3);
+  border-radius: 999px;
+  color: var(--cream);
+  font-size: 15px;
+}
+.light[data-live] .hint svg {
+  animation: nudge 2.4s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+/* Each chapter is taller than the screen; its stage stays pinned while the words light up. */
+.light .chapter {
+  position: relative;
+  height: 150svh;
+}
+.light .pin {
+  position: sticky;
+  top: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(32px, 6vw, 112px);
+  max-width: 1440px;
+  height: 100svh;
+  margin: 0 auto;
+  padding: 72px var(--gutter) 40px;
+}
+
+.light .visual {
+  position: relative;
+  justify-self: center;
+  width: min(36vw, 62svh, 560px);
+  margin: 0;
+}
+.light .glow {
+  position: absolute;
+  inset: -22%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 197 110 / 0.5),
+    rgb(255 160 80 / 0.16) 58%,
+    transparent 74%
+  );
+  opacity: calc(0.2 + var(--reveal, 1) * 0.8);
+  transform: scale(calc(0.78 + var(--reveal, 1) * 0.26));
+  pointer-events: none;
+}
+.light .window {
+  position: relative;
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  border-radius: 50%;
+  clip-path: circle(calc(28% + var(--reveal, 1) * 22.5%) at 50% 50%);
+  filter: brightness(calc(0.42 + var(--reveal, 1) * 0.58))
+    saturate(calc(0.55 + var(--reveal, 1) * 0.45));
+  box-shadow: 0 0 0 1px rgb(255 244 220 / 0.14);
+}
+.light .window img {
+  object-fit: cover;
+  object-position: 50% 58%;
+  transform: scale(calc(1.14 - var(--reveal, 1) * 0.14));
+}
+.light .visual figcaption {
+  position: relative;
+  margin-top: 22px;
+  color: rgb(255 255 255 / 0.66);
+  font-size: 13px;
+  text-align: center;
+}
+
+.light .copy {
+  max-width: 40rem;
+}
+.light .title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(2.75rem, 4.6vw, 4.75rem);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.light .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.2rem, 3.7vw, 3.8rem);
+  line-height: 1.16;
+  letter-spacing: 0;
+}
+.light .quote {
+  margin-top: 26px;
+  font-size: clamp(1.1875rem, 1.55vw, 1.5rem);
+  line-height: 1.58;
+}
+
+/* The light: lit words turn warm cream; the two words at the front of the wave glow gold. */
+.light[data-live] .w {
+  --on: clamp(0, calc(var(--lit, 999) - var(--i)), 1);
+  --wave: calc(var(--on) - clamp(0, calc(var(--lit, 999) - var(--i) - 2.5), 1));
+  color: color-mix(in oklab, var(--gold) calc(var(--wave) * 100%), var(--cream));
+  opacity: calc(0.2 + var(--on) * 0.8);
+  text-shadow: 0 0 calc(var(--wave) * 22px) rgb(255 182 84 / calc(var(--wave) * 0.85));
+}
+
+.light .byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.light .tag {
+  padding: 4px 11px;
+  border: 1px solid rgb(255 244 220 / 0.5);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.9);
+  font-size: 13px;
+  font-weight: 500;
+}
+.light .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  margin-top: 28px;
+  padding: 8px 24px 8px 8px;
+  border-radius: 999px;
+  background: var(--cream);
+  color: var(--night);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 200ms,
+    box-shadow 200ms;
+}
+.light .cta svg {
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.light .cta:hover {
+  background: #fff;
+  box-shadow: 0 0 36px -8px rgb(255 190 100 / 0.7);
+}
+.light .cta:hover svg {
+  transform: translate(3px, -3px);
+}
+.light .bottle {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
+}
+.light .bottle img {
+  width: 30px;
+  height: auto;
+}
+
+.light button:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 3px;
+}
+
+@keyframes nudge {
+  0%,
+  100% {
+    transform: translateY(-2px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+/* Phones and short screens: no pinning; the words still light as each story scrolls past. */
+@media (max-width: 899px), (max-height: 699px) {
+  .light .chapter {
+    height: auto;
+  }
+  .light .pin {
+    position: relative;
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    gap: 32px;
+    padding: 56px var(--gutter);
+  }
+  .light .visual {
+    width: min(78vw, 360px);
+  }
+  .light .title {
+    font-size: clamp(2.4rem, 9.6vw, 3.2rem);
+  }
+  .light .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+    font-size: clamp(2rem, 7.8vw, 2.6rem);
+  }
+  .light .cta {
+    display: flex;
+    width: 100%;
+  }
+  .light .cta > span:nth-child(2) {
+    flex: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .light .hint svg {
+    animation: none;
+  }
+}

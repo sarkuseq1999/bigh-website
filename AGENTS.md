@@ -15,6 +15,21 @@ design, content, or product assumptions unless Mo explicitly asks.
   or reuse its layouts, colors, fonts, images, wording, or animations unless asked.
 - `reference/` is reserved for new reference materials for the new website.
 
+## Homepage CSS specificity
+
+`src/components/home/homepage.module.css` resets `.site p`, `.site button`, and `.site h2`
+(specificity 0,1,1). A single-class CSS-module rule such as `.cta { background: … }` or
+`.quote { margin-top: … }` loses to them silently. Scope component rules under the
+component's root class (for example `.portraits .cta`).
+
+## Line endings
+
+Files are LF, but this checkout has `core.autocrlf=true`. `git stash` / `git checkout`
+rewrite every touched file with CRLF, and `npm run format:check` then fails on all of them.
+Don't stash to compare states. On Windows, Python's `write_text` also writes CRLF unless you
+pass `newline="\n"`. To repair, rewrite the files with LF endings. `prettier --write` also
+restores LF.
+
 ## Approved product images
 
 Mo approved all five enhanced transparent product PNGs on September 18, 2026.

@@ -1,0 +1,39 @@
+// The homepage's earlier education section ("Stay curious."), replaced on September 24, 2026
+// by ScienceSection ("Make sense of the science."). Its styles remain in homepage.module.css
+// (.learnSection, .learnHeading, .learnGrid, .learnCard, .learnArt*, .readTag).
+
+        <section id="learn" className={`${styles.section} ${styles.learnSection}`}>
+          <div className={styles.learnHeading}>
+            <div>
+              <p className={styles.eyebrow}>{copy("06 / A LITTLE MORE UNDERSTANDING")}</p>
+              <h2>{copy("Stay curious.")}</h2>
+            </div>
+            <p>{copy("Simple science. Useful perspectives.")}</p>
+          </div>
+          <div className={styles.learnGrid}>
+            {scienceSteps.map((item, index) => (
+              <button
+                key={item.label}
+                className={styles.learnCard}
+                onClick={() => openArticle(index)}
+              >
+                <div className={`${styles.learnArt} ${styles[`learnArt${index}`]}`}>
+                  <CellDiagram variant={item.illustration} />
+                  <span className={styles.readTag}>
+                    {copy("A QUICK READ")} <ArrowUpRight size={16} />
+                  </span>
+                </div>
+                <p className={styles.eyebrow}>{copy(item.label)}</p>
+                <h3>
+                  {copy(
+                    [
+                      "The tiny structures doing big things.",
+                      "Cellular balance, without the jargon.",
+                      "Aging is more than one thing.",
+                    ][index],
+                  )}
+                </h3>
+              </button>
+            ))}
+          </div>
+        </section>

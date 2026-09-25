@@ -6,11 +6,13 @@ import Image from "next/image";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import {
   ArrowDown,
+  ArrowRight,
   ArrowUpRight,
   ChevronDown,
   Globe2,
   Menu,
   MessageCircle,
+  Minus,
   Plus,
   X,
 } from "lucide-react";
@@ -19,6 +21,8 @@ import { DeepSpaceHero } from "./hero-comparison";
 import { CellularHealthComparison } from "./cellular-health-comparison";
 import { ProductsSection } from "./products-section";
 import { CustomerStories } from "./customer-stories";
+import { researchItems, researchTypes } from "./research-data";
+import { ScienceSection } from "./science-section";
 import { HeaderUtilities } from "./header-utilities";
 import { useLocale } from "next-intl";
 
@@ -236,51 +240,13 @@ function CellDiagram({ variant }: { variant: string }) {
   );
 }
 
-const researchItems = [
-  {
-    year: "2002",
-    type: "Research",
-    category: "Animal study · Ingredients",
-    title: "Mitochondrial nutrients and the aging cell",
-    journal: "PNAS",
-    text: "Liu and colleagues studied acetyl-L-carnitine and R-alpha-lipoic acid in old rats. This is part of the scientific background behind our interest in cellular health. It is not a clinical trial of NuriCell or evidence of a benefit in people.",
-    url: "https://pubmed.ncbi.nlm.nih.gov/11854529/",
-  },
-  {
-    year: "2023",
-    type: "Research",
-    category: "Review · Biology of aging",
-    title: "Healthy aging has many moving parts",
-    journal: "Cell",
-    text: "The Hallmarks of Aging review describes interconnected biological processes, including mitochondrial dysfunction. It provides a framework for learning about aging, not proof that a supplement slows it.",
-    url: "https://pubmed.ncbi.nlm.nih.gov/36599349/",
-  },
-  {
-    year: "GUIDE",
-    type: "Education",
-    category: "Science explained",
-    title: "What are mitochondria?",
-    journal: "NHGRI",
-    text: "A short introduction from the National Human Genome Research Institute. Mitochondria are structures in cells that help turn energy from food into energy that cells can use.",
-    url: "https://www.genome.gov/genetics-glossary/Mitochondria",
-  },
-  {
-    year: "GUIDE",
-    type: "Education",
-    category: "Evidence overview",
-    title: "Antioxidants: what the evidence says",
-    journal: "NCCIH",
-    text: "The National Center for Complementary and Integrative Health explains what is known about antioxidant supplements and where the evidence is uncertain. The role of a nutrient in the body does not automatically establish a benefit from supplementation.",
-    url: "https://www.nccih.nih.gov/health/antioxidant-supplements-what-you-need-to-know",
-  },
-];
-
 export function Homepage() {
   const copy = useCopy();
   const locale = useLocale();
   const [menuOpen, setMenuOpen] = useState(false);
   const [scienceOpen, setScienceOpen] = useState(false);
   const [researchFilter, setResearchFilter] = useState("All");
+  const [researchOpen, setResearchOpen] = useState(false);
   const [modal, setModal] = useState<ModalContent | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const header = useRef<HTMLElement>(null);
@@ -671,6 +637,8 @@ export function Homepage() {
 
         <CustomerStories onOpenProduct={openProduct} />
 
+        <ScienceSection onOpenArticle={openArticle} onAsk={openAsk} />
+
         <section id="research" className={`${styles.section} ${styles.researchSection}`}>
           <div className={styles.researchIntro}>
             <div>
@@ -688,16 +656,24 @@ export function Homepage() {
             </p>
           </div>
           <div className={styles.researchFilters} aria-label={copy("Filter research")}>
-            {["All", "Research", "Education"].map((filter) => (
-              <button
-                key={filter}
-                aria-pressed={researchFilter === filter}
-                onClick={() => setResearchFilter(filter)}
-              >
-                {filter}
-                <span>{filter === "All" ? "04" : "02"}</span>
-              </button>
-            ))}
+            {["All", ...researchTypes].map((filter) => {
+              const count = researchItems.filter(
+                (item) => filter === "All" || item.type === filter,
+              ).length;
+              return (
+                <button
+                  key={filter}
+                  aria-pressed={researchFilter === filter}
+                  onClick={() => {
+                    setResearchFilter(filter);
+                    setResearchOpen(false);
+                  }}
+                >
+                  {copy(filter)}
+                  <span>{String(count).padStart(2, "0")}</span>
+                </button>
+              );
+            })}
           </div>
           <div className={styles.studyTableHeader} aria-hidden="true">
             <span>{copy("YEAR / TYPE")}</span>
@@ -708,8 +684,9 @@ export function Homepage() {
           <div className={styles.studyList}>
             {researchItems
               .filter((item) => researchFilter === "All" || researchFilter === item.type)
+              .slice(0, researchOpen ? undefined : 8)
               .map((item) => (
-                <details key={item.title} className={styles.study}>
+                <details key={item.url} className={styles.study}>
                   <summary>
                     <span className={styles.studyYear}>{copy(item.year)}</span>
                     <span className={styles.studyTitle}>
@@ -728,6 +705,24 @@ export function Homepage() {
                 </details>
               ))}
           </div>
+          {researchItems.filter((item) => researchFilter === "All" || researchFilter === item.type)
+            .length > 8 && (
+            <button
+              type="button"
+              className={styles.studyMore}
+              aria-expanded={researchOpen}
+              onClick={() => setResearchOpen((open) => !open)}
+            >
+              {researchOpen
+                ? copy("Show fewer")
+                : `${copy("Show all sources")} (${
+                    researchItems.filter(
+                      (item) => researchFilter === "All" || researchFilter === item.type,
+                    ).length
+                  })`}
+              {researchOpen ? <Minus size={18} /> : <Plus size={18} />}
+            </button>
+          )}
           <p className={styles.researchNote}>
             {copy(
               "Ingredient research and general science do not establish the effects of a finished BiGH product.",
@@ -777,9 +772,15 @@ export function Homepage() {
                   "From the first question to the details of a formula, we want you to feel informed.",
                 )}
               </p>
-              <a className={styles.textLink} href="#standards">
-                {copy("What matters to us")} <ArrowDown size={18} />
-              </a>
+              {/* A quiet route to the product at the page's end (Mo, September 24). */}
+              <div className={styles.aboutLinks}>
+                <button type="button" className={styles.textLink} onClick={() => openProduct(0)}>
+                  {copy("Discover NuriCell")} <ArrowRight size={18} />
+                </button>
+                <a className={styles.textLink} href="#standards">
+                  {copy("What matters to us")} <ArrowDown size={18} />
+                </a>
+              </div>
             </div>
           </div>
           <div id="standards" className={styles.standardsGrid}>
@@ -809,51 +810,10 @@ export function Homepage() {
             ))}
           </div>
         </section>
-
-        <section id="learn" className={`${styles.section} ${styles.learnSection}`}>
-          <div className={styles.learnHeading}>
-            <div>
-              <p className={styles.eyebrow}>{copy("06 / A LITTLE MORE UNDERSTANDING")}</p>
-              <h2>{copy("Stay curious.")}</h2>
-            </div>
-            <p>{copy("Simple science. Useful perspectives.")}</p>
-          </div>
-          <div className={styles.learnGrid}>
-            {scienceSteps.map((item, index) => (
-              <button
-                key={item.label}
-                className={styles.learnCard}
-                onClick={() => openArticle(index)}
-              >
-                <div className={`${styles.learnArt} ${styles[`learnArt${index}`]}`}>
-                  <CellDiagram variant={item.illustration} />
-                  <span className={styles.readTag}>
-                    {copy("A QUICK READ")} <ArrowUpRight size={16} />
-                  </span>
-                </div>
-                <p className={styles.eyebrow}>{copy(item.label)}</p>
-                <h3>
-                  {copy(
-                    [
-                      "The tiny structures doing big things.",
-                      "Cellular balance, without the jargon.",
-                      "Aging is more than one thing.",
-                    ][index],
-                  )}
-                </h3>
-              </button>
-            ))}
-          </div>
-        </section>
+        {/* The closing block "Start with your cells." (closing-section.tsx) is built but not shown:
+            Mo's idea of September 24 is to end the page on "Our purpose" instead. */}
       </main>
       <footer className={styles.footer}>
-        <div className={styles.footerTop}>
-          <p>{copy("BE IN GOOD HEALTH.")}</p>
-          <h2>{copy("Stay sharp. Live fully.")}</h2>
-          <a href="#products" className={styles.primaryButton}>
-            {copy("Explore BiGH")} <ArrowUpRight size={20} />
-          </a>
-        </div>
         <div className={styles.footerNavigation}>
           <div className={styles.footerBrand}>
             <Brand footer />

@@ -1,0 +1,514 @@
+.portraits {
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --ink: #102b50;
+  position: relative;
+  overflow: hidden;
+  background: var(--cobalt);
+  color: #fff;
+}
+.portraits ::selection {
+  background: var(--lime);
+  color: var(--ink);
+}
+
+.portraits .inner {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  grid-template-rows: auto auto 1fr auto;
+  grid-template-areas:
+    "figure head"
+    "figure note"
+    "figure story"
+    "figure people";
+  column-gap: clamp(32px, 5vw, 96px);
+  max-width: 1440px;
+  min-height: clamp(840px, 100svh, 1040px);
+  margin: 0 auto;
+  padding: clamp(80px, 8vw, 116px) clamp(24px, 5vw, 72px) 0;
+}
+
+/* Section heading: quiet, so the quote can be the loudest line on the page. */
+.portraits .head {
+  grid-area: head;
+}
+.portraits .head h2 {
+  font-size: clamp(2rem, 3.1vw, 3rem);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+}
+.portraits .head p {
+  max-width: 30em;
+  margin-top: 12px;
+  color: rgb(255 255 255 / 0.84);
+  font-size: 18px;
+  line-height: 1.5;
+}
+.portraits .note {
+  grid-area: note;
+  max-width: 34em;
+  margin-top: 14px;
+  color: rgb(255 255 255 / 0.8);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+/* The drawn figure stands on the section's bottom edge. */
+.portraits .figure {
+  position: relative;
+  grid-area: figure;
+  align-self: end;
+  justify-self: center;
+  margin: 0;
+  animation: enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.portraits .drift {
+  transform: translate3d(calc(var(--px, 0) * -18px), calc(var(--py, 0) * -10px), 0);
+  transition: transform 700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.portraits .figure img {
+  display: block;
+  width: auto;
+  height: min(84svh, 860px);
+  max-width: 100%;
+  object-fit: contain;
+  object-position: bottom;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.portraits .story {
+  grid-area: story;
+  align-self: center;
+  padding: clamp(28px, 4vw, 56px) 0 0;
+}
+.portraits .story > * {
+  animation: rise 760ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.portraits .story > :nth-child(2) {
+  animation-delay: 90ms;
+}
+.portraits .story > :nth-child(3) {
+  animation-delay: 160ms;
+}
+.portraits .title {
+  position: relative;
+  max-width: 11em;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(3rem, 5.4vw, 5.75rem);
+  font-weight: 400;
+  line-height: 0.98;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.portraits .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.4rem, 4.3vw, 4.5rem);
+  line-height: 1.14;
+  letter-spacing: 0;
+}
+.portraits .mark {
+  position: absolute;
+  top: 0.02em;
+  left: -0.48em;
+  color: var(--lime);
+}
+.portraits .quote {
+  max-width: 34em;
+  margin-top: 28px;
+  color: rgb(255 255 255 / 0.92);
+  font-size: clamp(1.125rem, 1.3vw, 1.3125rem);
+  line-height: 1.6;
+}
+.portraits .byline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-top: 26px;
+  font-size: 17px;
+  font-weight: 600;
+}
+.portraits .tag {
+  padding: 4px 11px;
+  border: 1px solid rgb(255 255 255 / 0.55);
+  border-radius: 999px;
+  color: rgb(255 255 255 / 0.92);
+  font-size: 13px;
+  font-weight: 500;
+}
+.portraits .art {
+  color: rgb(255 255 255 / 0.84);
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.portraits .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 60px;
+  margin-top: 32px;
+  padding: 8px 24px 8px 8px;
+  border-radius: 999px;
+  background: var(--lime);
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 200ms,
+    box-shadow 200ms;
+}
+.portraits .cta svg {
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.portraits .cta:hover {
+  background: #edf6ab;
+  box-shadow: 0 10px 28px -12px rgb(6 18 48 / 0.55);
+}
+.portraits .cta:hover svg {
+  transform: translate(3px, -3px);
+}
+.portraits .bottle {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #fff;
+}
+.portraits .bottle img {
+  width: 30px;
+  height: auto;
+}
+
+/* Who's speaking: drawn faces, large targets. */
+.portraits .people {
+  display: flex;
+  flex-wrap: wrap;
+  grid-area: people;
+  gap: 12px;
+  padding: 36px 0 clamp(48px, 6vw, 80px);
+}
+.portraits .people button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 68px;
+  padding: 6px 22px 6px 6px;
+  border: 1px solid rgb(255 255 255 / 0.32);
+  border-radius: 999px;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background 200ms,
+    color 200ms,
+    border-color 200ms;
+}
+.portraits .people button:hover {
+  background: rgb(255 255 255 / 0.1);
+}
+.portraits .people button[aria-pressed="true"] {
+  border-color: #fff;
+  background: #fff;
+  color: var(--ink);
+}
+.portraits .face {
+  display: block;
+  width: 56px;
+  height: 56px;
+  flex: none;
+  overflow: hidden;
+  border-radius: 50%;
+  background: rgb(255 255 255 / 0.16);
+  transition: background 200ms;
+}
+.portraits .people button[aria-pressed="true"] .face {
+  background: var(--lime);
+}
+.portraits .face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.portraits .person {
+  display: grid;
+  gap: 2px;
+}
+.portraits .person strong {
+  font-size: 15px;
+  font-weight: 600;
+}
+.portraits .person small {
+  font-size: 13px;
+  opacity: 0.8;
+}
+
+.portraits button:focus-visible {
+  outline: 3px solid #fff;
+  outline-offset: 3px;
+}
+.portraits .people button[aria-pressed="true"]:focus-visible {
+  outline-color: var(--lime);
+}
+
+/* Visual: hands. A tall arched window holding the looping hands-only moment. */
+.portraits .arch {
+  position: relative;
+  grid-area: figure;
+  align-self: center;
+  justify-self: center;
+  height: min(76svh, 720px);
+  aspect-ratio: 9 / 14;
+  max-width: 100%;
+  margin: 0 0 clamp(40px, 5vw, 72px);
+  overflow: hidden;
+  border-radius: 999px 999px 32px 32px;
+  background: #1d3d8f;
+  box-shadow: 0 34px 70px -34px rgb(6 18 48 / 0.7);
+  animation: enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.portraits .arch video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.portraits .pause {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px 0 13px;
+  border-radius: 999px;
+  background: rgb(16 43 80 / 0.74);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 200ms;
+}
+.portraits .pause:hover {
+  background: rgb(16 43 80 / 0.92);
+}
+
+/* Visual: object. One everyday object resting on a lime disc. */
+.portraits .object {
+  position: relative;
+  display: grid;
+  grid-area: figure;
+  align-self: center;
+  justify-self: center;
+  place-items: center;
+  width: min(100%, 580px);
+  margin: 0 0 clamp(40px, 5vw, 72px);
+  animation: enter 900ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+.portraits .disc {
+  grid-area: 1 / 1;
+  width: 82%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--lime);
+}
+.portraits .object .drift {
+  grid-area: 1 / 1;
+  width: 100%;
+}
+.portraits .object img {
+  display: block;
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 26px 28px rgb(6 18 48 / 0.32));
+  animation: bob 7s ease-in-out infinite alternate;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Visual: words. No picture; the quote is the artwork, centered like a magazine pull-quote. */
+.portraits[data-visual="words"] .inner {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: none;
+  grid-template-areas:
+    "head"
+    "note"
+    "people"
+    "story";
+  justify-items: center;
+  min-height: 0;
+  padding-bottom: clamp(72px, 9vw, 120px);
+  text-align: center;
+}
+.portraits[data-visual="words"] .head p,
+.portraits[data-visual="words"] .note {
+  margin-inline: auto;
+}
+.portraits[data-visual="words"] .people {
+  justify-content: center;
+  padding: 40px 0 0;
+}
+.portraits[data-visual="words"] .story {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.portraits[data-visual="words"] .mark {
+  position: static;
+  display: block;
+  height: 0.62em;
+  font-size: 1.7em;
+  line-height: 1;
+}
+.portraits[data-visual="words"] .quote {
+  margin-inline: auto;
+}
+.portraits[data-visual="words"] .byline {
+  justify-content: center;
+}
+.portraits[data-visual="words"] .people button {
+  padding: 10px 24px;
+}
+.portraits[data-visual="words"] .story {
+  padding-top: clamp(36px, 5vw, 64px);
+}
+.portraits[data-visual="words"] .title {
+  max-width: 13em;
+  font-size: clamp(3.25rem, 7.4vw, 6rem);
+  line-height: 0.96;
+}
+.portraits[data-visual="words"] .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(2.6rem, 5.6vw, 4.8rem);
+  line-height: 1.12;
+}
+.portraits[data-visual="words"] .quote {
+  max-width: 38em;
+  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translate3d(5%, 0, 0);
+    filter: blur(6px);
+  }
+}
+@keyframes bob {
+  from {
+    translate: 0 -6px;
+  }
+  to {
+    translate: 0 8px;
+  }
+}
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
+@media (max-width: 899px) {
+  .portraits .inner {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    grid-template-areas:
+      "head"
+      "note"
+      "people"
+      "figure"
+      "story";
+    min-height: 0;
+    padding: 64px 20px 56px;
+  }
+  .portraits .figure {
+    margin-top: 20px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.3);
+  }
+  .portraits .figure img {
+    height: clamp(340px, 52svh, 520px);
+  }
+  .portraits .story {
+    padding-top: 30px;
+  }
+  .portraits .title {
+    font-size: clamp(2.5rem, 10.5vw, 3.4rem);
+  }
+  .portraits .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+    font-size: clamp(2rem, 8.4vw, 2.75rem);
+  }
+  .portraits .mark {
+    position: static;
+    margin-right: 0.04em;
+  }
+  /* Phones: all three people in one row above the drawing, so a tap changes what's right below. */
+  .portraits .people {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    padding: 26px 0 0;
+  }
+  .portraits .people button {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    min-height: 0;
+    padding: 10px 4px 12px;
+    border-radius: 22px;
+    text-align: center;
+  }
+  .portraits .face {
+    width: 64px;
+    height: 64px;
+  }
+  .portraits .person {
+    justify-items: center;
+  }
+  .portraits .person strong {
+    font-size: 14px;
+  }
+  .portraits .cta {
+    display: flex;
+    width: 100%;
+  }
+  .portraits .cta > span:nth-child(2) {
+    flex: 1;
+  }
+  .portraits .arch {
+    width: min(100%, 380px);
+    height: auto;
+    aspect-ratio: 4 / 5;
+    margin: 20px 0 0;
+  }
+  .portraits .object {
+    width: min(100%, 420px);
+    margin: 16px 0 0;
+  }
+  .portraits[data-visual="words"] .people button {
+    padding: 12px 6px;
+  }
+  .portraits[data-visual="words"] .title {
+    font-size: clamp(2.6rem, 11vw, 3.6rem);
+  }
+  .portraits[data-visual="words"] .title:is(:lang(ko), :lang(ja), :lang(zh)) {
+    font-size: clamp(2.1rem, 8.8vw, 2.9rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portraits .figure,
+  .portraits .arch,
+  .portraits .object,
+  .portraits .object img,
+  .portraits .story > * {
+    animation: none;
+  }
+  .portraits .drift {
+    transform: none;
+    transition: none;
+  }
+}

@@ -1,8 +1,14 @@
 # BiGH brand & website cheat sheet
 
-Updated: September 23, 2026. Working brief — everything can be changed.
+Updated: September 24, 2026. Working brief — everything can be changed.
 
 **Chosen** means Mo selected it. **Proposed** means it still needs a decision.
+
+**Design reference — stated by Mo, September 24, 2026:** Timeline (timeline.com) is Mo's favorite overall design and vibe for this site. Use it as a reference for every section: one short idea per screen with calm space, full-bleed rounded photography with focus changes on scroll, a centered translucent "battery" with a small fact list, and the product set inside headline words. Keep BiGH's own palette and type, and keep navigation and labels large for older readers. That is the one part of Timeline Mo marked to avoid (Design Vault #045).
+
+**Education section — Glass cell chosen, September 24, 2026:** After declining the first round as plain, Mo chose the Glass cell look ("really pretty, very, very well done"): a warm-gold glass mitochondrion with real 3D depth, in the manner of Timeline's "cellular batteries" page. At her request, tabs at the top always show the topic (1 Mitochondria, 2 Free radicals, 3 Aging cells), and each topic has a matching picture. Energy flows out of the cell for mitochondria. For free radicals, a captioned three-step scene drawn inside the glass by the shader (nothing pasted on top, after Mo called the vector stars "very fake"): embers from making energy, one burning the wall, and antioxidant droplets of lime glass (a second render) catching the rest. For aging cells, a slider Mo can drag from 20 to 80 that turns the young render into a second render of the same cell grown old, patch by patch, while the energy flow slows, labeled "Illustration, not a measurement." It uses Mo's accepted copy. The research list below it ("Curiosity, with references.") grew from 4 to 36 checked sources on September 24 at Mo's request ("there'd better be more"), in three filters: Science, Ingredients, Guides; details in [research list candidates](docs/research-list-candidates.md). Rule: no rats mentioned in that section; say "animal study". "Our purpose" closes the page. See [science section](docs/science-section.md).
+
+**Customer stories — Still life chosen, September 24, 2026:** After rejecting customer photos, invented photo-real people and drawn people, Mo chose the Still life look: everyday objects around the real product bottle on cobalt, a big serif quote and a product link. "Okay for this section"; polish later. Samples stay labeled fictional. See [customer stories](docs/customer-stories-v2.md). This supersedes the September 23 story entries below.
 
 **Customer stories design feedback — September 23, 2026:** Mo found the original dark-blue paper presentation dull and requested three visually appealing, fun alternatives. The active review offers 1 Daybook (warm peach scrapbook), 2 Story Wall (three colorful illustrated cards), and 3 Spotlight (deep green with circular photography). Sticky numbered controls compare them on the same page. The previously accepted fictional stories remain clearly labeled, with new decorative still-life imagery. No alternative is chosen yet. See [comparison and assets](docs/customer-stories-comparison.md). This supersedes the single-design review below.
 
@@ -216,6 +222,8 @@ This is accepted working copy describing the formula's intended nutritional purp
 - Secondary button: **Explore all products**, leading to the product collection.
 
 This is accepted working copy, still editable. Mo has now reviewed and accepted the full homepage draft; visual design is next.
+
+**Closing block built, then set aside, September 24, 2026:** three looks were built (`?closing=1` space, `2` light, `3` field), all with the accepted words; Mo liked Space with a new constellation-of-cells picture, then chose not to show the block at all and to end the page on the research list and "Our purpose" instead. The block stays in the repo, unrendered. The footer's own "Stay sharp. Live fully." headline and button stepped aside for it (kept in `reference/closing-section/`). See [closing section](docs/closing-section.md).
 
 ## 3. Markets & website
 

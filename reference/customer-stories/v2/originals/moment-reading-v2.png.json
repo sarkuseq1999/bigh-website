@@ -1,0 +1,17 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "9:16",
+    "--resolution",
+    "2k",
+    "--quality",
+    "max",
+    "--background",
+    "opaque"
+  ],
+  "prompt": "Vertical 9:16 candid lifestyle photograph, shot on a 35mm lens with shallow depth of field, natural window light, warm but true-to-life color, fine film grain. No text, no logos, no brand labels, no readable writing anywhere. No face visible: the frame shows only hands and forearms.\n\nScene: late afternoon at a wooden desk beside a window. A man's hands in heather-grey cardigan cuffs hold a pair of reading glasses and are about to turn the page of an open hardcover book. Both open pages show elegant botanical line drawings only: a long leafy branch, a single flowering stem, and a few pressed-leaf studies in fine ink with soft green watercolor. Absolutely no circles, discs, dots, spheres, cells, or round specimens anywhere on the pages. Beside the book: a notebook with a pencil and faint, illegible handwriting, and a cup of tea. Warm sunlight falls across the pages. Composition: the open book and hands fill the center, light from the upper right.",
+  "generated": "2026-09-24 11:16:11",
+  "seconds": 51
+}

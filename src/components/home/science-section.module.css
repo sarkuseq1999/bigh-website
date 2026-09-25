@@ -1,0 +1,7 @@
+/* Shell only; the Glass cell owns its look in science-glass.module.css. */
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background: #fbfaf7;
+}

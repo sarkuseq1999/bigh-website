@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "1:1",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high"
+  ],
+  "prompt": "Extreme macro photograph of a freshly cut lemon: glistening translucent pale-yellow pulp cells full of juice, one droplet on the surface, bright natural light, shallow depth of field. Photorealistic, fresh and bright. No text.",
+  "generated": "2026-09-24 13:10:17",
+  "seconds": 34
+}
