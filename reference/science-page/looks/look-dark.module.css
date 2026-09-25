@@ -1,0 +1,567 @@
+.dark {
+  --cream: #fffaf2;
+  --soft: rgba(255, 250, 242, 0.78);
+  position: relative;
+  background: linear-gradient(180deg, var(--navy) 0%, #030d20 38%, var(--night) 62%, #030d20 100%);
+  color: var(--cream);
+}
+
+.eyebrow {
+  color: rgba(255, 250, 242, 0.7);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 1. The opening: the homepage hero's type, his photograph dissolving into the night. */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  max-width: 1440px;
+  min-height: max(720px, 100svh);
+  margin: 0 auto;
+  padding: 84px var(--gutter) 40px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 55% at 72% 44%, rgba(26, 64, 140, 0.45), transparent 70%),
+    radial-gradient(28% 34% at 70% 40%, rgba(243, 197, 106, 0.1), transparent 70%);
+}
+
+.heroCopy,
+.portrait {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  margin-top: 22px;
+  font-size: clamp(56px, 6vw, 104px);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: -0.055em;
+}
+
+.title > span {
+  display: block;
+}
+
+.accent {
+  color: var(--pale-blue);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.12em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+}
+
+.person {
+  margin-top: clamp(32px, 4vw, 52px);
+  padding-left: 20px;
+  border-left: 2px solid var(--gold-light);
+}
+
+.name {
+  font-size: 24px;
+  font-weight: 500;
+}
+
+.role {
+  margin-top: 2px;
+  color: var(--soft);
+}
+
+.storyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  margin-top: 36px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: #fff2de;
+  color: #0b1b34;
+  font-size: 17px;
+  font-weight: 500;
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.storyButton:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.portrait {
+  justify-self: center;
+  width: min(100%, 520px, 52svh);
+  aspect-ratio: 2 / 3;
+  margin: 0;
+}
+
+.portrait img {
+  object-fit: cover;
+  /* The studio ground is near black: feather every edge and he stands in the page's own dark.
+     The face (about 30% down) stays fully opaque; the frame's edges reach zero. */
+  mask-image: radial-gradient(ellipse 52% 52% at 50% 46%, #000 46%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 52% 52% at 50% 46%, #000 46%, transparent 100%);
+}
+
+.backlight {
+  position: absolute;
+  inset: 4% -10% 18%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(243, 197, 106, 0.2),
+    rgba(26, 64, 140, 0.18) 55%,
+    transparent
+  );
+  filter: blur(20px);
+  animation: breathe 7s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  50% {
+    opacity: 0.65;
+    transform: scale(1.05);
+  }
+}
+
+/* 2. One statement, centered. */
+.statementBlock {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: clamp(80px, 11vw, 160px) var(--gutter) clamp(40px, 6vw, 80px);
+  text-align: center;
+}
+
+.statement {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(42px, 5vw, 80px);
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+}
+
+.body {
+  max-width: 36em;
+  margin: 26px auto 0;
+  color: var(--soft);
+  font-size: 19px;
+}
+
+/* 3. One cell, three questions. The stage sticks while the track scrolls past. */
+.cellTrack {
+  position: relative;
+  height: 330svh;
+}
+
+.stage {
+  position: sticky;
+  top: 0;
+  display: grid;
+  /* minmax(0, 1fr): the oversized picture must not widen the column (it overflows, clipped). */
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  height: 100svh;
+  min-height: 640px;
+  padding: calc(84px + 8px) var(--gutter) clamp(28px, 5vh, 56px);
+  overflow: hidden;
+}
+
+/* The render is larger than its row (its dark margins run under the words), so the words and
+   tabs sit above it and the picture never takes a click. */
+.stageHead {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.stageTitle {
+  margin-top: 10px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(38px, 4.2vw, 64px);
+  line-height: 1;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.tabs button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 20px 0 8px;
+  border: 1px solid rgba(255, 250, 242, 0.24);
+  border-radius: 999px;
+  color: var(--soft);
+  font-size: 17px;
+  font-weight: 500;
+  transition:
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease;
+}
+
+.tabs button span {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid currentColor;
+  font-size: 14px;
+}
+
+.tabs button[aria-pressed="true"] {
+  background: var(--cream);
+  border-color: var(--cream);
+  color: #0b1b34;
+}
+
+/* align-content keeps the oversized picture centered in its row, overflowing evenly. */
+.cellWrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  justify-content: center;
+  min-height: 0;
+}
+
+.drop {
+  position: absolute;
+  z-index: 2;
+  left: var(--x);
+  top: var(--y);
+  width: var(--s);
+  height: auto;
+  translate: -50% -50%;
+  opacity: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 18px rgba(226, 237, 148, 0.35));
+}
+
+/* The glass fills about half the render's height; on short screens the height limits the size
+   so the cell stays clear of the tabs above and the words below. */
+.cell {
+  position: relative;
+  z-index: 1;
+  width: min(1180px, 78vw, calc((100svh - 470px) * 3.5));
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+  /* Feather the render's rectangle into the night. */
+  mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 50% 50% at 50% 50%, #000 62%, transparent 100%);
+}
+
+.halo {
+  position: absolute;
+  z-index: 0;
+  width: min(900px, 62vw);
+  aspect-ratio: 2 / 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(243, 184, 76, 0.34),
+    rgba(243, 184, 76, 0.08) 60%,
+    transparent
+  );
+  filter: blur(30px);
+  opacity: 0.45;
+}
+
+/* Balance: a second, lime glow joins the gold one behind the glass (antioxidant defenses beside
+   the energy). It sits behind the render, so nothing is pasted on the cell. */
+.lime {
+  position: absolute;
+  z-index: 0;
+  width: min(1040px, 72vw);
+  aspect-ratio: 2.1 / 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    transparent 30%,
+    rgba(226, 237, 148, 0.3) 62%,
+    rgba(226, 237, 148, 0.08) 82%,
+    transparent
+  );
+  filter: blur(24px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chapters {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  min-height: 150px;
+  text-align: center;
+}
+
+.chapter {
+  grid-area: 1 / 1;
+  max-width: 34em;
+  opacity: 0;
+  transform: translateY(14px);
+  transition:
+    opacity 0.55s ease,
+    transform 0.55s ease;
+}
+
+.chapter[data-active="true"] {
+  opacity: 1;
+  transform: none;
+}
+
+.chapter h3 {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(30px, 3vw, 44px);
+  line-height: 1.08;
+}
+
+.chapter p {
+  margin-top: 10px;
+  color: var(--soft);
+  font-size: 19px;
+}
+
+.chapter .note {
+  margin-top: 8px;
+  color: rgba(255, 250, 242, 0.56);
+  font-size: 15px;
+}
+
+/* 4. The record. */
+.highlights {
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: clamp(80px, 10vw, 150px) var(--gutter) 0;
+}
+
+.highlightRow {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3vw, 48px);
+  margin-top: 30px;
+}
+
+.highlight {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding-top: 24px;
+  border-top: 1px solid rgba(255, 250, 242, 0.2);
+  font-size: 18px;
+  color: rgba(255, 250, 242, 0.88);
+}
+
+.count {
+  color: var(--gold-light);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 44px;
+  line-height: 1;
+}
+
+.highlight a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: auto;
+  padding: 4px 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--cream);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.highlight a:hover {
+  color: var(--gold-light);
+}
+
+/* 5. Dr. Iris Wang, in words, and the formulas they made together. */
+.together {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 100px);
+  align-items: center;
+  max-width: var(--wide);
+  margin: 0 auto;
+  padding: clamp(96px, 12vw, 170px) var(--gutter) clamp(96px, 12vw, 170px);
+}
+
+.irisName {
+  margin-top: 14px;
+  color: var(--gold-light);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(50px, 5.4vw, 84px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.iris .body {
+  margin: 22px 0 0;
+}
+
+.formulas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+}
+
+.formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bottle {
+  position: relative;
+  width: min(100%, 240px);
+  aspect-ratio: 1230 / 1278;
+}
+
+.bottle::after {
+  content: "";
+  position: absolute;
+  left: 12%;
+  right: 12%;
+  bottom: -4%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(243, 197, 106, 0.32), transparent);
+  filter: blur(8px);
+}
+
+.bottle img {
+  z-index: 1;
+  object-fit: contain;
+}
+
+.formula figcaption {
+  display: grid;
+  gap: 6px;
+  max-width: 15em;
+  margin-top: 22px;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.formula strong {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.formula span {
+  color: var(--soft);
+}
+
+/* Reduced motion: no sticky stage; the cell once, and all three questions in a row. */
+.still .cellTrack {
+  height: auto;
+}
+
+.still .stage {
+  position: relative;
+  height: auto;
+  min-height: 0;
+}
+
+.still .tabs {
+  display: none;
+}
+
+.still .chapters {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px;
+}
+
+.still .chapter {
+  grid-area: auto;
+  opacity: 1;
+  transform: none;
+}
+
+.still .backlight {
+  animation: none;
+}
+
+@media (max-width: 900px) {
+  .hero {
+    grid-template-columns: 1fr;
+    padding-top: calc(72px + 24px);
+  }
+
+  .portrait {
+    grid-row: 1;
+    width: min(70vw, 340px);
+  }
+
+  .cell {
+    width: min(170vw, calc((100svh - 470px) * 3.5));
+  }
+
+  .halo,
+  .lime {
+    width: 130vw;
+  }
+
+  .drop {
+    left: var(--px);
+    top: var(--py);
+  }
+
+  .tabs {
+    gap: 6px;
+  }
+
+  .tabs button {
+    gap: 6px;
+    min-height: 44px;
+    padding: 0 12px 0 6px;
+    font-size: 15px;
+  }
+
+  .tabs button span {
+    width: 26px;
+    height: 26px;
+    font-size: 13px;
+  }
+
+  .highlightRow,
+  .together,
+  .still .chapters {
+    grid-template-columns: 1fr;
+  }
+
+  .stage {
+    padding-top: calc(72px + 8px);
+  }
+}

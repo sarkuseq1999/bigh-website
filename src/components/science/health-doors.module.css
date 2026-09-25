@@ -1,0 +1,157 @@
+.health {
+  padding: clamp(96px, 12vw, 170px) var(--gutter);
+  background: var(--paper-image), var(--paper-deep);
+  color: var(--ink);
+}
+
+.head {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  margin-top: 18px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(50px, 6vw, 92px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.text {
+  max-width: 34em;
+  margin: 26px auto 0;
+  color: var(--muted);
+  font-size: 20px;
+}
+
+.doors {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  max-width: var(--wide);
+  margin: clamp(56px, 7vw, 100px) auto 0;
+}
+
+.door {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity 0.9s ease,
+    transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition-delay: calc(var(--i) * 0.14s);
+}
+
+.doors[data-shown="true"] .door {
+  opacity: 1;
+  transform: none;
+}
+
+.circle {
+  position: relative;
+  width: min(300px, 100%);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--door-bg, #fff);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 24px 60px rgba(92, 72, 30, 0.12);
+}
+
+.circle img {
+  object-fit: cover;
+  transform: scale(1.12);
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.door:hover .circle img {
+  transform: scale(1.2);
+}
+
+/* The droplet is a cut-out on a clear ground: sit it on soft light instead of cropping it. */
+.drop {
+  background: radial-gradient(circle at 50% 42%, #ffffff 0%, #f6f8e2 58%, #e9eecb 100%);
+}
+
+.drop img {
+  object-fit: contain;
+  padding: 18%;
+  transform: none;
+}
+
+.door:hover .drop img {
+  transform: scale(1.06);
+}
+
+.topic {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.topic span {
+  color: var(--gold);
+}
+
+.doorTitle {
+  max-width: 13em;
+  margin-top: 12px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(27px, 2.3vw, 34px);
+  line-height: 1.1;
+}
+
+.preview {
+  max-width: 22em;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.soon {
+  margin-top: 20px;
+  padding: 6px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+@media (max-width: 900px) {
+  .doors {
+    grid-template-columns: 1fr;
+    max-width: 440px;
+    gap: 64px;
+  }
+
+  .circle {
+    width: min(260px, 72vw);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .door {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

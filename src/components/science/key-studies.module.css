@@ -1,0 +1,155 @@
+.studies {
+  padding: clamp(96px, 12vw, 170px) var(--gutter) clamp(80px, 9vw, 130px);
+  background: var(--paper-image), var(--paper);
+  color: var(--ink);
+}
+
+.studies > * {
+  max-width: var(--wide);
+  margin-inline: auto;
+}
+
+.head {
+  display: grid;
+  gap: 18px;
+  max-width: 900px;
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.title {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(50px, 6vw, 92px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.text {
+  max-width: 34em;
+  color: var(--body);
+  font-size: 20px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(16px, 2vw, 28px);
+  margin-top: clamp(48px, 6vw, 80px);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 100%;
+  padding: clamp(26px, 2.6vw, 38px);
+  border-radius: 24px;
+  border: 1px solid var(--card-line);
+  background: var(--card-bg);
+  backdrop-filter: blur(14px);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 0.35s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 60px color-mix(in srgb, var(--ink) 14%, transparent);
+}
+
+.year {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 64px;
+  line-height: 0.9;
+  color: var(--gold);
+  font-variant-numeric: lining-nums;
+}
+
+.meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 10px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.tag {
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--lime);
+  color: #242722;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.cardTitle {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(28px, 2.3vw, 34px);
+  line-height: 1.08;
+}
+
+.cardText {
+  color: var(--body);
+  font-size: 17px;
+}
+
+.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.journal {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 22px;
+}
+
+.more {
+  margin-top: 32px;
+}
+
+.more button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 26px;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.more button:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.all {
+  margin-top: 16px;
+}
+
+.note {
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 16px;
+}
+
+@media (max-width: 900px) {
+  .cards {
+    grid-template-columns: 1fr;
+  }
+}

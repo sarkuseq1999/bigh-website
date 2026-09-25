@@ -1,0 +1,1112 @@
+/* Look D, "Golden hour": parchment and espresso, amber light, film grain, slow camera moves.
+   Every rule is scoped under .golden; colors come from the look's tokens in science-page.module.css. */
+.golden {
+  --head: 84px;
+  --inset: clamp(12px, 1.6vw, 24px);
+  --cream: #fbf1df;
+  --espresso: #22150c;
+  position: relative;
+  background: var(--paper);
+  color: var(--ink);
+  overflow-x: clip;
+}
+
+/* Film grain: a tiny tiled noise, very faint. */
+.golden .grain {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  opacity: 0.07;
+}
+
+/* On parchment the grain fades out at the top and bottom, so sections meet without a seam. */
+.golden .window .grain,
+.golden .film > .grain {
+  -webkit-mask-image: linear-gradient(180deg, transparent, #000 14%, #000 80%, transparent);
+  mask-image: linear-gradient(180deg, transparent, #000 14%, #000 80%, transparent);
+}
+
+.golden .eyebrow {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 1. The hero: the desk at sunset, inside the page with a small margin and big rounded corners. */
+.golden .hero {
+  padding: calc(var(--head) + var(--inset) * 0.5) var(--inset) 0;
+}
+
+.golden .heroFrame {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  height: calc(100svh - var(--head) - var(--inset) * 1.5);
+  min-height: 540px;
+  border-radius: 28px;
+  background: #1c1009;
+  color: var(--cream);
+  transform-origin: 50% 0%;
+}
+
+/* Taller than the frame, so the picture can slide down as the page scrolls up. */
+.golden .heroMedia {
+  position: absolute;
+  inset: -12% 0 -2%;
+  will-change: transform, filter;
+}
+
+.golden .heroDrift {
+  position: absolute;
+  inset: 0;
+  transform-origin: 64% 58%;
+  animation: goldenDrift 40s ease-in-out infinite alternate;
+}
+
+.golden .heroImage {
+  object-fit: cover;
+  object-position: 58% 62%;
+}
+
+@keyframes goldenDrift {
+  from {
+    transform: scale(1.03) translate3d(0, 0, 0);
+  }
+  to {
+    transform: scale(1.12) translate3d(-1.8%, -1.2%, 0);
+  }
+}
+
+/* Warm light that breathes: light over the picture, not a shape on it. */
+.golden .heroLight {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+.golden .sunGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    42% 60% at 90% 32%,
+    rgba(255, 186, 100, 0.46),
+    rgba(255, 160, 70, 0.14) 48%,
+    transparent 78%
+  );
+  animation: goldenBreathe 7s ease-in-out infinite alternate;
+}
+
+.golden .sunBeam {
+  position: absolute;
+  inset: -20%;
+  background: linear-gradient(
+    118deg,
+    transparent 36%,
+    rgba(255, 204, 140, 0.13) 44%,
+    rgba(255, 214, 158, 0.2) 48%,
+    transparent 56%
+  );
+  animation: goldenBeam 19s ease-in-out infinite alternate;
+}
+
+@keyframes goldenBreathe {
+  from {
+    opacity: 0.5;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes goldenBeam {
+  from {
+    transform: translate3d(-7%, 0, 0);
+  }
+  to {
+    transform: translate3d(6%, 2%, 0);
+  }
+}
+
+/* A gentle scrim so the words always read, and a warm vignette. */
+.golden .heroShade {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background:
+    radial-gradient(120% 95% at 62% 48%, transparent 52%, rgba(18, 9, 3, 0.5) 100%),
+    linear-gradient(98deg, rgba(24, 13, 5, 0.66) 0%, rgba(24, 13, 5, 0.38) 36%, transparent 64%),
+    linear-gradient(0deg, rgba(18, 9, 3, 0.62) 0%, transparent 28%);
+}
+
+.golden .heroFrame .grain {
+  inset: -60px;
+  opacity: 0.11;
+  animation: goldenGrain 0.8s steps(3) infinite;
+}
+
+@keyframes goldenGrain {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  33% {
+    transform: translate3d(-22px, 14px, 0);
+  }
+  66% {
+    transform: translate3d(16px, -20px, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.golden .heroCopy {
+  position: absolute;
+  z-index: 4;
+  top: clamp(48px, 11svh, 132px);
+  left: clamp(24px, 5.4vw, 96px);
+  right: clamp(24px, 5.4vw, 96px);
+}
+
+.golden .heroEyebrow {
+  color: rgba(251, 241, 223, 0.84);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.golden .heroTitle {
+  max-width: 8.6em;
+  margin-top: clamp(18px, 2.4vw, 30px);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(54px, 7vw, 128px);
+  line-height: 0.95;
+  letter-spacing: -0.022em;
+  color: var(--cream);
+  text-shadow: 0 2px 34px rgba(20, 10, 3, 0.4);
+}
+
+.golden .heroTitle > span {
+  display: block;
+}
+
+.golden .heroAccent {
+  color: #f5c77a;
+}
+
+.golden .cue {
+  position: absolute;
+  z-index: 4;
+  left: clamp(18px, 3vw, 40px);
+  bottom: clamp(18px, 3vw, 36px);
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 54px;
+  padding: 6px 24px 6px 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(251, 241, 223, 0.26);
+  background: rgba(251, 241, 223, 0.12);
+  backdrop-filter: blur(12px);
+  color: var(--cream);
+  font-size: 16px;
+  font-weight: 500;
+  transition: background-color 0.3s ease;
+}
+
+.golden .cue:hover {
+  background: rgba(251, 241, 223, 0.22);
+}
+
+.golden .cueIcon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.golden .cueIcon svg {
+  animation: goldenNudge 2.6s ease-in-out infinite;
+}
+
+@keyframes goldenNudge {
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+.golden .label {
+  position: absolute;
+  z-index: 4;
+  top: clamp(14px, 1.8vw, 22px);
+  right: clamp(14px, 1.8vw, 22px);
+  padding: 5px 13px;
+  border-radius: 999px;
+  background: rgba(24, 13, 5, 0.42);
+  backdrop-filter: blur(8px);
+  color: rgba(251, 241, 223, 0.9);
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+/* 2. Dr. Liu: centered, window light sliding across the parchment behind him. */
+.golden .liu {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(110px, 13vw, 200px) var(--gutter) clamp(24px, 4vw, 60px);
+  text-align: center;
+}
+
+.golden .window {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(180deg, var(--paper) 0%, #ead8b9 26%, #e8d5b4 62%, var(--paper) 100%);
+}
+
+.golden .windowLight {
+  position: absolute;
+  top: 2%;
+  bottom: 18%;
+  left: 8%;
+  width: 84%;
+  background: linear-gradient(
+    116deg,
+    transparent 16%,
+    rgba(255, 247, 228, 0.95) 22%,
+    rgba(255, 247, 228, 0.95) 34%,
+    transparent 36.5%,
+    transparent 38.5%,
+    rgba(255, 247, 228, 0.95) 41%,
+    rgba(255, 247, 228, 0.95) 57%,
+    transparent 59.5%,
+    transparent 61.5%,
+    rgba(255, 247, 228, 0.9) 64%,
+    rgba(255, 247, 228, 0.9) 76%,
+    transparent 83%
+  );
+  filter: blur(14px);
+  -webkit-mask-image: radial-gradient(56% 50% at 50% 46%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(56% 50% at 50% 46%, #000 30%, transparent 100%);
+}
+
+.golden .portrait {
+  position: relative;
+  width: min(78vw, 440px);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #1b140f;
+  box-shadow:
+    0 70px 120px -50px rgba(70, 36, 8, 0.6),
+    0 26px 44px -26px rgba(70, 36, 8, 0.4),
+    0 0 0 1px rgba(168, 101, 20, 0.24),
+    18px -18px 44px -28px rgba(241, 185, 90, 0.75);
+}
+
+/* Light catching the frame's edge (the picture itself is untouched). */
+.golden .portrait::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 222, 165, 0.22),
+    inset -2px 2px 0 rgba(255, 214, 150, 0.5);
+}
+
+.golden .photo {
+  object-fit: cover;
+  object-position: 50% 22%;
+  will-change: filter, transform;
+}
+
+.golden .liuCopy {
+  max-width: 780px;
+  margin-top: clamp(44px, 5vw, 72px);
+}
+
+.golden .name {
+  margin-top: 14px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(50px, 5.4vw, 86px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+}
+
+.golden .statement {
+  margin-top: 24px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(29px, 2.7vw, 40px);
+  line-height: 1.15;
+  color: var(--blue);
+}
+
+.golden .body {
+  max-width: 33em;
+  margin: 20px auto 0;
+  color: var(--body);
+  font-size: 19px;
+  line-height: 1.65;
+}
+
+.golden .storyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  margin-top: 36px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #9a5a16, #7f4510);
+  color: #fff8ec;
+  font-size: 17px;
+  font-weight: 500;
+  box-shadow:
+    0 16px 34px -14px rgba(143, 79, 18, 0.7),
+    inset 0 1px 0 rgba(255, 222, 165, 0.35);
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.golden .storyButton:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 22px 40px -14px rgba(143, 79, 18, 0.75),
+    inset 0 1px 0 rgba(255, 222, 165, 0.45);
+}
+
+/* 3. His record: gold numbers on an espresso band. */
+.golden .record {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  margin: clamp(90px, 11vw, 160px) var(--inset) clamp(24px, 4vw, 56px);
+  padding: clamp(60px, 7vw, 110px) clamp(24px, 5vw, 88px) clamp(48px, 5.5vw, 84px);
+  border-radius: 28px;
+  color: #f5e8d2;
+  background:
+    radial-gradient(70% 90% at 92% -10%, rgba(241, 185, 90, 0.26), transparent 62%),
+    radial-gradient(60% 80% at -5% 110%, rgba(168, 101, 20, 0.2), transparent 62%),
+    linear-gradient(180deg, #2a1a0e, #1d1109);
+}
+
+.golden .record .grain {
+  opacity: 0.09;
+}
+
+.golden .recordLight {
+  position: absolute;
+  inset: -10% 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    116deg,
+    transparent 44%,
+    rgba(255, 196, 120, 0.1) 50%,
+    rgba(255, 196, 120, 0.1) 58%,
+    transparent 61% 63%,
+    rgba(255, 196, 120, 0.08) 66%,
+    rgba(255, 196, 120, 0.08) 74%,
+    transparent 80%
+  );
+  filter: blur(16px);
+  mix-blend-mode: screen;
+}
+
+.golden .record > p,
+.golden .numbers {
+  position: relative;
+  z-index: 4;
+  max-width: var(--wide);
+  margin-inline: auto;
+}
+
+.golden .recordEyebrow {
+  color: rgba(245, 232, 210, 0.74);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.golden .numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 32px;
+  border-top: 1px solid rgba(241, 185, 90, 0.3);
+}
+
+.golden .number {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: clamp(28px, 3.4vw, 48px) clamp(16px, 2.6vw, 40px) 0 0;
+}
+
+.golden .number + .number {
+  padding-left: clamp(16px, 2.6vw, 40px);
+  border-left: 1px solid rgba(241, 185, 90, 0.2);
+}
+
+.golden .value {
+  padding-top: 0.06em;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(84px, 9.6vw, 156px);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+  background: linear-gradient(180deg, #ffe2a8 0%, #f1b95a 48%, #c9852c 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.golden .numberLabel {
+  max-width: 17em;
+  color: rgba(245, 232, 210, 0.9);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.golden .darkSource {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 4px;
+  padding: 4px 0;
+  border-bottom: 1px solid currentColor;
+  color: rgba(245, 232, 210, 0.76);
+  font-size: 15px;
+}
+
+.golden .darkSource:hover {
+  color: var(--gold-light);
+}
+
+.golden .tribute {
+  margin-top: clamp(40px, 5vw, 64px);
+  padding-top: 26px;
+  border-top: 1px solid rgba(241, 185, 90, 0.18);
+  color: rgba(245, 232, 210, 0.78);
+  font-size: 17px;
+}
+
+.golden .tribute a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid currentColor;
+  color: #f5e8d2;
+  font-weight: 500;
+}
+
+/* 4. His path as a film strip. Phones and reduced motion: top to bottom (the default below);
+   wide screens with motion: pinned and sliding sideways (the media query further down). */
+.golden .film {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding: clamp(72px, 10vw, 120px) var(--gutter) clamp(56px, 8vw, 110px);
+  /* The research section below opens with look D's warm light at its top right
+     (--paper-image: 70% x 50% at 80% 0%). The strip ends with the same light, mirrored, so the
+     two meet without a seam. */
+  background:
+    radial-gradient(70% 420px at 80% 100%, rgba(241, 185, 90, 0.22), transparent 70%),
+    linear-gradient(
+      180deg,
+      var(--paper) 0%,
+      var(--paper-deep) 16%,
+      var(--paper-deep) 84%,
+      var(--paper) 100%
+    );
+}
+
+.golden .track {
+  position: relative;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.golden .leadTitle {
+  margin-top: 16px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(48px, 5vw, 80px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+.golden .hint {
+  display: none;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+}
+
+.golden .card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  aspect-ratio: 4 / 5;
+  border-radius: 22px;
+  background: #2a1a0e;
+  box-shadow: 0 44px 70px -44px rgba(60, 30, 6, 0.6);
+}
+
+.golden .cardMedia {
+  position: absolute;
+  inset: 0;
+  will-change: filter, transform;
+}
+
+.golden .cardMedia img {
+  object-fit: cover;
+}
+
+.golden .cardShade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(0deg, rgba(20, 11, 4, 0.84) 0%, rgba(20, 11, 4, 0.46) 34%, transparent 62%),
+    linear-gradient(180deg, rgba(20, 11, 4, 0.42) 0%, transparent 20%);
+}
+
+.golden .cardLabel {
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  left: 14px;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(24, 13, 5, 0.42);
+  backdrop-filter: blur(8px);
+  color: rgba(251, 241, 223, 0.9);
+  font-size: 15px;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+}
+
+.golden .cardWords {
+  position: absolute;
+  z-index: 2;
+  left: clamp(20px, 7%, 32px);
+  right: clamp(20px, 7%, 32px);
+  bottom: clamp(20px, 7%, 30px);
+  color: var(--cream);
+}
+
+.golden .mark {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(56px, 18vw, 92px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.golden .cardTitle {
+  margin-top: 12px;
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.golden .stopCopy {
+  padding-top: 20px;
+}
+
+.golden .stopText {
+  color: var(--body);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+.golden .source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 12px;
+  padding: 4px 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.golden .source:hover {
+  color: var(--blue);
+}
+
+/* "Today": a warm, dark room with the two formulas on a table in the last light; their credits
+   sit under each bottle. Phones: the words, then the bottles, inside the panel (rows 1 and 2),
+   the credits under it (row 3). Wide screens: words and bottles side by side (see below). */
+.golden .today {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: auto auto auto;
+  column-gap: 16px;
+}
+
+.golden .todayPanel {
+  position: relative;
+  grid-column: 1 / -1;
+  grid-row: 1 / span 2;
+  overflow: hidden;
+  border-radius: 22px;
+  color: var(--cream);
+  background:
+    radial-gradient(50% 34% at 70% 80%, rgba(241, 185, 90, 0.3), transparent 72%),
+    linear-gradient(180deg, transparent 62.5%, rgba(255, 214, 150, 0.2) 64%, transparent 66.5%),
+    linear-gradient(180deg, #24160b 0%, #3a2413 62%, #5a3919 64.5%, #3b2412 82%, #2a190c 100%);
+  box-shadow: 0 44px 70px -44px rgba(60, 30, 6, 0.6);
+}
+
+.golden .todayBeam {
+  position: absolute;
+  inset: -10%;
+  background: linear-gradient(
+    116deg,
+    transparent 40%,
+    rgba(255, 196, 120, 0.2) 46%,
+    rgba(255, 196, 120, 0.2) 55%,
+    transparent 58% 61%,
+    rgba(255, 196, 120, 0.16) 64%,
+    rgba(255, 196, 120, 0.16) 72%,
+    transparent 78%
+  );
+  filter: blur(14px);
+  mix-blend-mode: screen;
+  -webkit-mask-image: linear-gradient(180deg, #000 55%, transparent 70%);
+  mask-image: linear-gradient(180deg, #000 55%, transparent 70%);
+}
+
+.golden .todayWords {
+  position: relative;
+  z-index: 1;
+  grid-column: 1 / -1;
+  grid-row: 1;
+  align-self: start;
+  padding: clamp(22px, 2.4vw, 34px);
+}
+
+.golden .todayMark {
+  color: #f5c77a;
+}
+
+.golden .todayTitle {
+  margin-top: 12px;
+  color: var(--cream);
+  font-size: 21px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+/* Placed explicitly: the panel fills every column, so auto-placement would push the bottles
+   into new columns. */
+.golden .formula {
+  position: relative;
+  z-index: 1;
+  grid-row: 2 / span 2;
+  display: grid;
+  grid-template-rows: subgrid;
+  margin: 0;
+}
+
+.golden .formula:nth-of-type(1) {
+  grid-column: 1;
+}
+
+.golden .formula:nth-of-type(2) {
+  grid-column: 2;
+}
+
+.golden .bottle {
+  position: relative;
+  align-self: end;
+  justify-self: center;
+  width: 84%;
+  aspect-ratio: 1230 / 1278;
+  margin: 12px 0 26px;
+}
+
+.golden .bottle img {
+  object-fit: contain;
+  filter: drop-shadow(-12px 16px 14px rgba(10, 5, 2, 0.5));
+}
+
+.golden .credit {
+  display: grid;
+  align-content: start;
+  gap: 4px;
+  padding-top: 20px;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.golden .credit strong {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.golden .credit span {
+  color: var(--muted);
+}
+
+.golden .todayText {
+  max-width: 22em;
+  margin-top: 12px;
+  color: rgba(251, 241, 223, 0.86);
+}
+
+/* Dr. Iris Wang, in words only: her card is her name. */
+.golden .irisCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 28px;
+  min-height: 300px;
+  padding: clamp(22px, 2.4vw, 34px);
+  border-radius: 22px;
+  border: 1px solid var(--card-line);
+  background:
+    radial-gradient(90% 60% at 100% 0%, rgba(241, 185, 90, 0.2), transparent 70%),
+    linear-gradient(165deg, #fbf4e8 0%, #f4e5ca 100%);
+  box-shadow: 0 44px 70px -46px rgba(60, 30, 6, 0.5);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.golden .irisLight {
+  position: absolute;
+  inset: -10%;
+  z-index: -1;
+  background: linear-gradient(
+    116deg,
+    transparent 30%,
+    rgba(255, 250, 238, 0.95) 38%,
+    rgba(255, 250, 238, 0.95) 50%,
+    transparent 53% 56%,
+    rgba(255, 250, 238, 0.85) 59%,
+    rgba(255, 250, 238, 0.85) 70%,
+    transparent 78%
+  );
+  filter: blur(12px);
+}
+
+.golden .irisRole {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.golden .irisName {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--gold);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(56px, 16vw, 84px);
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+}
+
+.golden .irisText {
+  margin-top: 16px;
+  color: var(--body);
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+/* The line along the bottom of the strip (wide screens only). */
+.golden .rail {
+  display: none;
+}
+
+/* Wide screens: the words in the first column, a bottle in each of the other two. */
+@media (min-width: 901px) {
+  .golden .today {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-rows: minmax(440px, auto) auto;
+    column-gap: clamp(14px, 1.6vw, 26px);
+  }
+
+  .golden .todayPanel {
+    grid-row: 1;
+  }
+
+  .golden .todayWords {
+    grid-column: 1;
+  }
+
+  .golden .formula {
+    grid-row: 1 / span 2;
+  }
+
+  .golden .formula:nth-of-type(1) {
+    grid-column: 2;
+  }
+
+  .golden .formula:nth-of-type(2) {
+    grid-column: 3;
+  }
+
+  .golden .bottle {
+    margin: 0 0 7%;
+  }
+}
+
+/* Reduced motion on a wide screen: the stops in a calm grid, all lit. */
+@media (min-width: 901px) and (prefers-reduced-motion: reduce) {
+  .golden .track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 56px 32px;
+    max-width: var(--wide);
+  }
+
+  .golden .lead {
+    grid-column: 1 / -1;
+  }
+
+  .golden .today {
+    grid-column: span 2;
+  }
+
+  .golden .mark {
+    font-size: clamp(64px, 6vw, 92px);
+  }
+
+  .golden .irisName {
+    font-size: clamp(56px, 5vw, 80px);
+  }
+}
+
+/* Wide screens with motion: the strip is pinned and slides sideways. */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .golden .film {
+    height: 100svh;
+    min-height: 640px;
+    padding: 0;
+  }
+
+  .golden .track {
+    --card-w: clamp(290px, calc((100svh - 380px) * 0.8), 470px);
+    --card-h: calc(var(--card-w) * 1.25);
+    flex-direction: row;
+    align-items: flex-start;
+    gap: clamp(40px, 4vw, 72px);
+    width: max-content;
+    max-width: none;
+    height: 100%;
+    margin: 0;
+    /* On tall screens the cards and their words sit in the middle of the space above the line. */
+    padding: calc(
+        var(--head) +
+          max(clamp(20px, 4.5svh, 52px), (100svh - var(--head) - var(--card-h) - 260px) / 2)
+      )
+      calc(var(--gutter) + 2vw) 0 var(--gutter);
+  }
+
+  .golden .lead {
+    flex-shrink: 0;
+    width: clamp(340px, 30vw, 470px);
+    margin-right: clamp(0px, 3vw, 56px);
+  }
+
+  .golden .leadFrame {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    height: var(--card-h);
+  }
+
+  .golden .leadTitle {
+    font-size: clamp(56px, 5.4vw, 92px);
+  }
+
+  .golden .hint {
+    display: inline-flex;
+    padding-top: 22px;
+  }
+
+  .golden .stop {
+    flex-shrink: 0;
+    width: var(--card-w);
+  }
+
+  .golden .mark {
+    font-size: clamp(56px, calc(var(--card-w) * 0.23), 100px);
+  }
+
+  .golden .today {
+    width: calc(var(--card-h) * 1.72);
+    grid-template-rows: var(--card-h) auto;
+  }
+
+  .golden .irisCard {
+    height: var(--card-h);
+    min-height: 0;
+  }
+
+  .golden .irisName {
+    font-size: clamp(52px, calc(var(--card-w) * 0.2), 84px);
+  }
+
+  .golden .rail {
+    position: absolute;
+    z-index: 4;
+    display: block;
+    left: var(--gutter);
+    right: var(--gutter);
+    bottom: clamp(44px, 7svh, 72px);
+    height: 2px;
+  }
+
+  .golden .railLine {
+    position: absolute;
+    inset: 0;
+    border-radius: 2px;
+    background: rgba(43, 29, 18, 0.14);
+    overflow: hidden;
+  }
+
+  .golden .railFill {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, #e0a44a, var(--gold));
+    transform-origin: left center;
+    transform: scaleX(0);
+  }
+
+  .golden .tick {
+    position: absolute;
+    top: 14px;
+    left: 0;
+    transform: translateX(-50%);
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: color 0.4s ease;
+  }
+
+  .golden .tick::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -14px;
+    width: 1px;
+    height: 9px;
+    background: currentColor;
+    opacity: 0.6;
+  }
+
+  .golden .tick[data-on] {
+    color: var(--blue);
+  }
+
+  /* Words wait, dimmed, until their stop reaches the middle. */
+  .golden .stopCopy,
+  .golden .credit {
+    transition: opacity 0.6s ease;
+  }
+
+  .golden .stop:not([data-lit]) .stopCopy,
+  .golden .today:not([data-lit]) .credit {
+    opacity: 0.42;
+  }
+}
+
+/* Short wide screens: the line stays, the labels under it go. */
+@media (min-width: 901px) and (max-height: 760px) and (prefers-reduced-motion: no-preference) {
+  .golden .rail {
+    bottom: 26px;
+  }
+
+  .golden .tick {
+    display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .golden {
+    --head: 72px;
+  }
+}
+
+@media (max-width: 900px) {
+  .golden .heroImage {
+    object-position: 69% 50%;
+  }
+
+  .golden .heroTitle {
+    max-width: 7.2em;
+  }
+
+  .golden .numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .golden .number {
+    padding: 30px 0 30px;
+  }
+
+  .golden .number + .number {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid rgba(241, 185, 90, 0.2);
+  }
+}
+
+@media (max-width: 520px) {
+  .golden .cue {
+    padding-right: 18px;
+    font-size: 15px;
+  }
+
+  .golden .credit strong {
+    font-size: 25px;
+  }
+
+  .golden .credit {
+    font-size: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .golden .heroDrift,
+  .golden .sunGlow,
+  .golden .sunBeam,
+  .golden .heroFrame .grain,
+  .golden .cueIcon svg {
+    animation: none;
+  }
+}

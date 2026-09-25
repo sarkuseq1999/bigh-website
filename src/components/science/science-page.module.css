@@ -1,0 +1,202 @@
+/* The Science page shell. Resets use :where() so they carry no specificity: a single-class rule
+   in any section module (".lead { margin-top: … }") always wins over them (see AGENTS.md).
+   Colors: "Golden hour", Mo's pick of September 25, 2026 (warm parchment and espresso). The looks
+   that were not chosen, and their colors, are in reference/science-page/looks/. */
+.page {
+  --paper: #f3e9d8;
+  --paper-deep: #ebdcc2;
+  --ink: #2b1d12;
+  --muted: #6e5a45;
+  --body: #47352a;
+  --line: #d9c6a5;
+  --rule: #b89f7c;
+  --blue: #8f4f12;
+  --gold: #a86514;
+  --gold-light: #f1b95a;
+  --lime: #e2ed94;
+  --navy: #041328;
+  --pale-blue: #b9defb;
+  --gutter: clamp(20px, 5vw, 72px);
+  --wide: 1280px;
+  /* The light the "three key studies" section opens with. look-golden.module.css repeats it at the
+     bottom of the film strip so the two meet without a seam: change both together. */
+  --paper-image: radial-gradient(70% 50% at 80% 0%, rgba(241, 185, 90, 0.22), transparent 70%);
+  --door-bg: #fbf4e8;
+  --card-bg: #fbf4e8;
+  --card-line: #e2cfae;
+  --ask-bg:
+    radial-gradient(55% 70% at 85% 15%, rgba(241, 185, 90, 0.28), transparent 70%),
+    radial-gradient(45% 60% at 5% 95%, rgba(168, 101, 20, 0.3), transparent 70%), #23160d;
+  position: relative;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 18px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+:where(.page) :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+
+:where(.page) :where(button) {
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+}
+
+:where(.page) :where(h1, h2, h3, h4) {
+  font-weight: 400;
+  text-wrap: balance;
+}
+
+:where(.page) :where(p) {
+  text-wrap: pretty;
+}
+
+.skipLink {
+  position: fixed;
+  left: 20px;
+  top: -100px;
+  z-index: 100;
+  padding: 12px 20px;
+  color: #fff;
+  background: var(--blue);
+}
+
+.skipLink:focus {
+  top: 10px;
+}
+
+/* The story and support panel. */
+.dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(760px, calc(100% - 32px));
+  max-height: 88svh;
+  overflow-y: auto;
+  border: 0;
+  border-radius: 20px;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.65;
+}
+
+.dialog::backdrop {
+  background: #0b1424b3;
+  backdrop-filter: blur(6px);
+}
+
+.dialogInner {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  padding: 40px 44px 44px;
+}
+
+.dialogInner.textOnly {
+  grid-template-columns: 1fr;
+}
+
+.dialogPhoto {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #11161a;
+}
+
+.dialogPhoto img {
+  object-fit: cover;
+}
+
+.dialogHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  margin-bottom: 18px;
+}
+
+.dialogEyebrow {
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dialogTitle {
+  margin-top: 8px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(38px, 4vw, 52px);
+  line-height: 1.02;
+}
+
+.dialogRole {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
+.dialogBody {
+  display: grid;
+  gap: 16px;
+}
+
+.dialogLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  margin-top: 8px;
+}
+
+.closeButton {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  /* From the look's ink, so the X shows on light and dark panels alike. */
+  background: color-mix(in srgb, var(--ink) 9%, transparent);
+}
+
+.closeButton:hover {
+  background: color-mix(in srgb, var(--ink) 16%, transparent);
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  width: fit-content;
+  padding: 6px 0;
+  border-bottom: 1px solid currentColor;
+  font-size: 17px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.textLink:hover {
+  color: var(--blue);
+}
+
+@media (max-width: 700px) {
+  .dialogInner {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    padding: 26px 22px 30px;
+  }
+
+  .dialogPhoto {
+    width: 132px;
+  }
+}
