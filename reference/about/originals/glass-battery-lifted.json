@@ -1,0 +1,10 @@
+{
+  "file": "public/images/about/glass-battery-lifted.webp",
+  "derived_from": "public/images/science/glass-cell.webp (approved render, GPT Image 2.5) + glass-cell-depth.png",
+  "steps": [
+    "2026-09-25: resized to 1600 px wide; white ground turned into transparency (color-to-alpha from white, near-white ground outside the glass mapped to white first), matching look-glass-scene.ts. That intermediate (glass-battery.webp) is no longer kept.",
+    "2026-09-28: rows below the glass (from 73% of the height) moved up by 8.5% of the height, so the render's own soft shadow sits just under the glass instead of floating 13% below it. Same shift as the shader in look-glass-scene.ts. No other pixels changed."
+  ],
+  "ai_generation": "none (edits of the approved render only)",
+  "script": "one-off Pillow/numpy scripts during the Glass build"
+}
