@@ -1,7 +1,8 @@
-/* Copied from the Science page's chrome (bigh-science-page, site-chrome.module.css), minus its
-   dark header, so both pages match until the branches merge into a single component. */
+/* Same as the Science page's chrome (bigh-science-page, site-chrome.module.css), so both pages
+   share one header and footer until the branches merge into a single component. */
 
-/* Sticky, but it takes no room: the page's opening starts under it and pads its own top. */
+/* Sticky, but it takes no room: the page starts under it and pads its own top. Type: Switzer,
+   inherited from the page (about-page.module.css). */
 .header {
   --header-h: 84px;
   position: sticky;
@@ -9,13 +10,6 @@
   z-index: 40;
   height: var(--header-h);
   margin-bottom: calc(-1 * var(--header-h));
-  transition:
-    background-color 0.35s ease,
-    color 0.35s ease,
-    border-color 0.35s ease;
-}
-
-.light {
   color: var(--ink);
   background: rgba(251, 250, 247, 0.94);
   border-bottom: 1px solid rgba(36, 39, 34, 0.1);
@@ -138,10 +132,11 @@
 
 .footerMessage {
   margin-top: 30px;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(44px, 5vw, 76px);
-  line-height: 1;
-  letter-spacing: -0.01em;
+  font-family: var(--display-font);
+  font-size: clamp(40px, 4.4vw, 64px);
+  font-weight: var(--display-weight);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
 }
 
 .footerColumns {

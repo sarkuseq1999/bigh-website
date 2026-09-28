@@ -3,15 +3,15 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useCopy } from "@/i18n/use-copy";
-import { LookCalm } from "./look-calm";
+import { LookGlass } from "./look-glass";
 import { AboutFooter, AboutHeader } from "./site-chrome";
 import styles from "./about-page.module.css";
 
 export type LookProps = { onAsk: () => void };
 type Panel = "ask" | "support" | null;
 
-// The About page in look A, "Calm", which Mo picked on September 25, 2026, then the footer and the
-// Ask BiGH Science / support panel.
+// The About page (Mo's pick, Sept 28, 2026: look B "Glass", opening 3, Switzer type): the header,
+// the Glass page, the footer, and the Ask BiGH Science / support panel.
 export function AboutPage() {
   const copy = useCopy();
   const dialog = useRef<HTMLDialogElement>(null);
@@ -33,7 +33,7 @@ export function AboutPage() {
       </a>
       <AboutHeader onSupport={() => setPanel("support")} />
       <main id="about-main">
-        <LookCalm onAsk={() => setPanel("ask")} />
+        <LookGlass onAsk={() => setPanel("ask")} />
       </main>
       <AboutFooter onAsk={() => setPanel("ask")} onSupport={() => setPanel("support")} />
 

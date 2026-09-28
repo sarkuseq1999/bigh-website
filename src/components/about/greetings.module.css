@@ -1,0 +1,45 @@
+.greetings {
+  display: inline-block;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* All five stack in one grid cell, so the box is as wide as the longest and never jumps. */
+.stage {
+  display: inline-grid;
+}
+
+.word {
+  grid-area: 1 / 1;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.word[data-state="out"] {
+  opacity: 0;
+  transform: translateY(0.4em);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0 0.6em;
+  }
+
+  .word,
+  .word[data-state="out"] {
+    grid-area: auto;
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

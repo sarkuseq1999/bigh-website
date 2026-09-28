@@ -3,8 +3,8 @@
 // stays true without an exact start year; never name its earlier Asian brand), products are made
 // in California by a GMP-certified maker, the 45-day refund is current policy, and Ask BiGH Science
 // stays on the page before the service exists. BiGH was incorporated in California on 05/11/2016.
-// Mo picked look A, "Calm", the same day; the other review looks (B "Deep space", C "Bold" and an
-// A-then-B mix) are in the history at commit 2db8f07.
+// Earlier rounds are in the history (2db8f07, 57a1494) and in the backup zip named in
+// docs/about-page.md. Mo picked look B "Glass" with opening 3 and Switzer on Sept 28, 2026.
 
 export const about = {
   hero: {
@@ -21,11 +21,13 @@ export const about = {
   roots: {
     label: "Our scientific roots",
     title: "Our key formulas begin with scientists.",
-    text: "Dr. Jian Kang Liu, our Chief Scientific Advisor, studies mitochondria and aging. With Dr. Iris Wang, he developed NuriCell and Nature Calm.",
+    // Credits as BRAND-CHEATSHEET.md has them (Mo, Sept 25 and 28): NuriCell is Dr. Liu's alone;
+    // Nature Calm is Dr. Liu's and Dr. Iris Wang's.
+    text: "Dr. Jiankang Liu, our Chief Scientific Advisor, studies mitochondria and aging. He formulated NuriCell, and with Dr. Iris Wang, he developed Nature Calm.",
     stat: { value: "280+", label: "scientific papers by Dr. Liu" },
     link: "Meet our scientists",
     // Dr. Iris Wang is named in words only: she asked for no photograph on the website.
-    photo: { src: "/images/jiankang-liu.jpg", alt: "Dr. Jian Kang Liu" },
+    photo: { src: "/images/jiankang-liu.jpg", alt: "Dr. Jiankang Liu" },
   },
   experience: {
     label: "Our experience",
@@ -63,7 +65,23 @@ export const routes = {
   products: "/#products",
 } as const;
 
-// The opening photo: the coastal-walk artwork already approved for the homepage.
+// DRAFT: small new labels the page needs beyond the locked words. Mo approves them before launch.
+export const drafts = {
+  // "Answers in your language": hello in the site's five languages.
+  greetings: [
+    { lang: "en", text: "Hello." },
+    { lang: "zh-Hans", text: "你好。" },
+    { lang: "ko", text: "안녕하세요." },
+    { lang: "vi", text: "Xin chào." },
+    { lang: "ja", text: "こんにちは。" },
+  ],
+  languages: "English, Chinese, Korean, Vietnamese and Japanese",
+  // Shown on every AI-made picture, as on the Science page.
+  illustration: "Illustration",
+} as const;
+
+// The approved glass mitochondrion render and its depth map (homepage, GPT Image 2.5, Sept 2026).
 export const media = {
-  coast: "/images/life-in-full.png",
+  mitochondrion: "/images/science/glass-cell.webp",
+  mitochondrionDepth: "/images/science/glass-cell-depth.png",
 } as const;

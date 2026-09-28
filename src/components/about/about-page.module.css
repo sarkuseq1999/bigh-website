@@ -1,27 +1,29 @@
-/* The About page shell. The tokens match the Science page (bigh-science-page) so the two pages
-   read as one site. Resets use :where() so they carry no specificity: a single-class rule in any
-   look module always wins over them (see AGENTS.md). */
+/* The About page shell: header, footer and the Ask BiGH Science / support panel around the Glass
+   page. Resets use :where() so they carry no specificity: a single-class rule in any module always
+   wins over them (see AGENTS.md). */
 .page {
   --ink: #242722;
   --muted: #5b6059;
-  --blue: #2149a3;
-  --blue-deep: #17357a;
   --paper: #fbfaf7;
   --paper-deep: #f2f0e8;
   --line: #d8d9d2;
-  --gold: #a8741c;
-  --gold-light: #f3c56a;
-  --lime: #e2ed94;
-  --navy: #041328;
-  --night: #01050f;
-  --cream: #fffaf2;
   --gutter: clamp(20px, 5vw, 72px);
   --wide: 1280px;
+  /* Type (Mo, Sept 28, 2026): Switzer for everything, as on main (07529d5, "Switzer type across
+     the site"). It loads in about/page.tsx. The same tokens as main's pages; CJK and other scripts
+     fall through to the locale fonts in globals.css (--font-dm-sans). */
+  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
+  --sans: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --display-weight: 460;
+  --display-size: 0.84;
+  --display-track: -0.015em;
+  --lead-weight: 400;
+  --lead-track: -0.01em;
   position: relative;
   min-height: 100svh;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans);
+  font-family: var(--sans);
   font-size: 19px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -64,8 +66,8 @@
   top: -100px;
   z-index: 100;
   padding: 12px 20px;
-  color: #fff;
-  background: var(--blue);
+  color: var(--paper);
+  background: var(--ink);
 }
 
 .skipLink:focus {
@@ -112,9 +114,11 @@
 
 .dialogTitle {
   margin-top: 6px;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(38px, 5vw, 52px);
+  font-family: var(--display-font);
+  font-size: clamp(34px, 4.4vw, 46px);
+  font-weight: var(--display-weight);
   line-height: 1.05;
+  letter-spacing: -0.03em;
 }
 
 .closeButton {
@@ -159,8 +163,8 @@
   width: 30px;
   height: 30px;
   border-radius: 50%;
-  background: var(--lime);
-  font-size: 15px;
+  background: #f5e6c8;
+  font-size: 16px;
   font-weight: 600;
 }
 

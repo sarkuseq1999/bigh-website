@@ -36,15 +36,13 @@ function Logo({ footer = false }: { footer?: boolean }) {
   );
 }
 
-// Always light: look A runs on paper throughout. (Science's copy also turns dark over dark
-// sections; the shared header will need that when the branches merge.)
 export function AboutHeader({ onSupport }: { onSupport: () => void }) {
   const copy = useCopy();
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
 
   return (
-    <header className={`${styles.header} ${styles.light} ${open ? styles.open : ""}`}>
+    <header className={`${styles.header} ${open ? styles.open : ""}`}>
       <div className={styles.bar}>
         <Logo />
         <nav id="about-navigation" aria-label={copy("Main navigation")} className={styles.nav}>
@@ -91,7 +89,7 @@ export function AboutHeader({ onSupport }: { onSupport: () => void }) {
 export function AboutFooter({ onAsk, onSupport }: { onAsk: () => void; onSupport: () => void }) {
   const copy = useCopy();
   return (
-    <footer className={styles.footer} data-tone="light">
+    <footer className={styles.footer}>
       <div className={styles.footerTop}>
         <div>
           <Logo footer />
