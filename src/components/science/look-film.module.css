@@ -1,0 +1,1673 @@
+/* Look B, "Scroll film". A dark cinematic page: near-black navy with warm light, cream type.
+   Type (Mo, September 28): Fraunces for display, light (300-360) and soft, tight at large sizes,
+   its italic for accent lines; Hanken Grotesk for text, labels, captions and buttons.
+   One scale: hero / title / number / head / lead / body / label. Nothing under 15px.
+   "Film mode" (the held film) is wide screens with motion; phones and reduced motion get the
+   film's key frames as stacked stills. */
+
+.film {
+  --wide: 1280px;
+  --edge: max(var(--gutter), calc((100% - var(--wide)) / 2));
+  --warm: #e6b877;
+  --cream: #f3dcb2;
+  --white: #f6f0e6;
+  --display: var(--font-film-display), var(--font-instrument), Georgia, serif;
+  --text: var(--font-film-text), var(--font-dm-sans), system-ui, sans-serif;
+  /* The scale. */
+  --s-hero: clamp(40px, 6.3vw, 108px);
+  --s-title: clamp(42px, 4.6vw, 78px);
+  --s-number: clamp(84px, 10.4vw, 172px);
+  --s-head: clamp(25px, 2.1vw, 32px);
+  --s-lead: clamp(21px, 1.55vw, 24px);
+  --s-body: 19px;
+  --s-label: 15px;
+  position: relative;
+  /* Light spills past the frames; it never widens the page (clip keeps the film's sticky stage). */
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: var(--s-body);
+  line-height: 1.62;
+}
+
+/* The display face: Fraunces, light and soft. Its optical size follows the font size. */
+.title,
+.captionLine,
+.name,
+.value,
+.year,
+.sectionTitle,
+.formulasLine,
+.itemTitle,
+.headline,
+.productName,
+.studyTitle,
+.studyTag,
+.askTitle,
+.stepNumber,
+.creditRow dd,
+.subtitles li {
+  font-family: var(--display);
+  font-optical-sizing: auto;
+  font-variation-settings: "SOFT" 50;
+  font-weight: 320;
+}
+
+/* One label style for every small line: roles, sources, topics, status, the film's own marks. */
+.label {
+  color: var(--muted);
+  font-family: var(--text);
+  font-size: var(--s-label);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   1. The film. Default (phones, reduced motion): stacked stills with their captions. */
+
+.reel {
+  position: relative;
+}
+
+.stage {
+  position: relative;
+  background: var(--paper);
+}
+
+.shot {
+  position: relative;
+}
+
+.shot + .shot {
+  margin-top: clamp(72px, 10vw, 120px);
+}
+
+.shot[data-shot="bridge"] {
+  display: none;
+}
+
+.shotMedia {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #070a12;
+}
+
+.shotImage {
+  object-fit: cover;
+}
+
+/* The leaf shots, graded a touch warmer and softer in their greens (the film does the same). */
+.shot:nth-child(-n + 2) .shotImage {
+  filter: saturate(0.88) sepia(0.06);
+}
+
+/* The opening still: a full screen, the title over its darker lower part. */
+.shot:first-child .shotMedia {
+  aspect-ratio: auto;
+  height: min(100svh, 980px);
+  min-height: 620px;
+}
+
+.shot:first-child .shotImage {
+  object-position: var(--phone-crop, 50% 50%);
+}
+
+.shot:first-child .shotMedia::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(0deg, rgba(5, 7, 13, 0.92) 0%, rgba(5, 7, 13, 0.55) 34%, transparent 62%),
+    linear-gradient(180deg, rgba(5, 7, 13, 0.5) 0%, transparent 22%);
+}
+
+.titleBlock {
+  position: absolute;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: clamp(48px, 9svh, 96px);
+  z-index: 4;
+}
+
+.title,
+.captionLine {
+  color: var(--white);
+  font-size: var(--s-hero);
+  letter-spacing: -0.028em;
+  line-height: 1;
+  text-wrap: initial;
+}
+
+.titleLead,
+.titleAccent,
+.captionLead,
+.captionAccent {
+  display: block;
+}
+
+.titleAccent {
+  text-wrap: balance;
+}
+
+.titleAccent,
+.captionAccent {
+  color: var(--cream);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+}
+
+.word {
+  display: inline-block;
+}
+
+.caption {
+  position: relative;
+  z-index: 4;
+  padding: 32px var(--gutter) 0;
+}
+
+.captionLine {
+  line-height: 1.04;
+}
+
+/* SplitText's pieces (spans, so the paragraph stays valid): lines, their masks, words. */
+.caption .splitLine,
+.caption [class*="-mask"] {
+  display: block;
+  position: relative;
+}
+
+.caption .splitWord {
+  display: inline-block;
+  position: relative;
+}
+
+.captionNote {
+  max-width: 24em;
+  margin-top: 22px;
+  color: color-mix(in srgb, var(--white) 84%, transparent);
+  font-size: var(--s-lead);
+  line-height: 1.5;
+}
+
+.canvas,
+.flash,
+.shade,
+.curtain,
+.scrim,
+.fadeIn,
+.filmBar,
+.cue {
+  display: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The title's words rise one by one as the page opens (CSS, so nothing flashes first). */
+  .word {
+    animation: filmWord 1.35s cubic-bezier(0.2, 0.7, 0.2, 1) calc(0.5s + var(--w) * 0.085s) both;
+  }
+}
+
+@keyframes filmWord {
+  from {
+    opacity: 0;
+    transform: translateY(0.42em);
+    filter: blur(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+@keyframes filmFade {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+@keyframes filmCue {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+    transform-origin: 50% 0;
+  }
+  50% {
+    transform: scaleY(1);
+    transform-origin: 50% 0;
+  }
+}
+
+/* Film mode: the stage is held on screen while the film plays; the last screen of the reel is
+   the curtain, Dr. Liu's section rising over the final frame. */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .reel {
+    height: 560svh;
+  }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    overflow: hidden;
+    background: #05070d;
+  }
+
+  .shot,
+  .shot[data-shot="bridge"] {
+    display: block;
+    position: absolute;
+    inset: 0;
+  }
+
+  .shot + .shot {
+    margin-top: 0;
+  }
+
+  .shotMedia,
+  .shot:first-child .shotMedia {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: auto;
+    background: none;
+    transform-origin: 50% 50%;
+  }
+
+  .shot:first-child .shotImage {
+    object-position: 50% 50%;
+  }
+
+  .shot:first-child .shotMedia::after {
+    display: none;
+  }
+
+  /* Only the opening still shows before the film is ready; the rest wait for a fallback. */
+  .shot:not(:first-child) .shotMedia {
+    display: none;
+  }
+
+  .reel[data-fallback] .shot .shotMedia {
+    display: block;
+    will-change: transform, opacity;
+  }
+
+  .canvas {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+
+  .canvas canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .reel[data-film] .canvas {
+    opacity: 1;
+  }
+
+  .flash,
+  .shade {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .flash {
+    background: radial-gradient(120% 120% at 55% 50%, #fff4de 0%, #ffe2b0 45%, #f3c47e 100%);
+  }
+
+  .shade {
+    background: #05070d;
+  }
+
+  .curtain {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 5;
+    background: #05070d;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  /* A grade for the words: darker at the left and along the bottom (and a little at the top,
+     where the header's links sit over the picture). */
+  .scrim {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      linear-gradient(90deg, rgba(5, 7, 13, 0.6) 0%, rgba(5, 7, 13, 0.26) 34%, transparent 58%),
+      linear-gradient(0deg, rgba(5, 7, 13, 0.55) 0%, transparent 30%);
+  }
+
+  /* The film opens from black. */
+  .fadeIn {
+    display: block;
+    position: absolute;
+    inset: 0;
+    z-index: 6;
+    background: #05070d;
+    pointer-events: none;
+    animation: filmFade 1.9s cubic-bezier(0.4, 0, 0.2, 1) 0.1s forwards;
+  }
+
+  /* The headline sits on the opening picture's dark left side. */
+  .titleBlock {
+    top: clamp(120px, 27svh, 280px);
+    right: auto;
+    bottom: auto;
+    width: min(40vw, 640px);
+  }
+
+  .titleBlock .title {
+    font-size: clamp(50px, 4.9vw, 90px);
+  }
+
+  .caption {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 15svh;
+    width: min(44vw, 700px);
+    padding: 0;
+    visibility: hidden;
+  }
+
+  .caption .captionLine {
+    font-size: var(--s-title);
+  }
+
+  .filmBar {
+    display: flex;
+    position: absolute;
+    left: var(--gutter);
+    bottom: 34px;
+    z-index: 5;
+    width: min(36vw, 520px);
+    align-items: center;
+    gap: 18px;
+  }
+
+  .cue {
+    display: inline-flex;
+    position: absolute;
+    left: var(--gutter);
+    bottom: 76px;
+    z-index: 5;
+    align-items: center;
+    gap: 14px;
+    min-height: 44px;
+    color: color-mix(in srgb, var(--white) 78%, transparent);
+  }
+
+  .cueLine {
+    display: block;
+    width: 1px;
+    height: 28px;
+    background: currentColor;
+    animation: filmCue 2.6s ease-in-out infinite;
+  }
+}
+
+.filmBar .label,
+.pathBar .label {
+  flex: none;
+  color: color-mix(in srgb, var(--white) 60%, transparent);
+}
+
+.filmLine {
+  position: relative;
+  display: block;
+  flex: 1;
+  height: 1px;
+  background: rgba(247, 242, 233, 0.2);
+}
+
+.filmFill {
+  position: absolute;
+  inset: 0;
+  background: var(--white);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Shared pieces: section titles and texts, item titles, text buttons, sources. */
+
+.sectionTitle {
+  color: var(--white);
+  font-size: var(--s-title);
+  letter-spacing: -0.026em;
+  line-height: 1.02;
+}
+
+.sectionText {
+  max-width: 30em;
+  margin-top: 26px;
+  color: var(--body);
+  font-size: var(--s-body);
+}
+
+.itemTitle {
+  color: var(--white);
+  font-size: var(--s-head);
+  font-weight: 360;
+  letter-spacing: -0.012em;
+  line-height: 1.2;
+}
+
+.lead {
+  color: var(--ink);
+  font-size: var(--s-lead);
+  line-height: 1.5;
+}
+
+.film .textButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 0 0 2px;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 40%, transparent);
+  color: var(--ink);
+  font-family: var(--text);
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    color 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.film .textButton svg {
+  transition: transform 0.3s ease;
+}
+
+.film .textButton:hover {
+  border-color: var(--warm);
+  color: var(--warm);
+}
+
+.film .textButton:hover svg {
+  transform: translateX(3px);
+}
+
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  margin-top: 6px;
+  transition: color 0.25s ease;
+}
+
+.source:hover {
+  color: var(--ink);
+}
+
+/* ---------------------------------------------------------------------------------------------
+   2. Dr. Liu: a print on a dark wall, under a picture lamp. */
+
+.liu {
+  position: relative;
+  z-index: 2;
+  padding: clamp(104px, 12vw, 160px) 0 0;
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  /* The curtain: his section rises over the last frame of the film. */
+  .liu {
+    margin-top: -100svh;
+    padding-top: 34svh;
+    background: linear-gradient(
+      180deg,
+      rgba(5, 7, 13, 0) 0,
+      rgba(5, 7, 13, 0.88) 16svh,
+      var(--paper) 30svh
+    );
+  }
+}
+
+.liuInner {
+  display: grid;
+  grid-template-columns: minmax(0, 460px) minmax(0, 1fr);
+  gap: clamp(56px, 7vw, 120px);
+  align-items: center;
+  padding: 0 var(--edge);
+}
+
+.portrait {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  padding-top: clamp(56px, 9svh, 96px);
+}
+
+/* The picture lamp: a cone of warm light that falls from above onto the wall and the print. */
+.lamp {
+  position: absolute;
+  z-index: -1;
+  top: -22%;
+  left: -40%;
+  right: -40%;
+  height: 110%;
+  background: radial-gradient(
+    38% 56% at 50% 22%,
+    rgba(245, 206, 150, 0.24) 0%,
+    rgba(245, 206, 150, 0.11) 36%,
+    rgba(245, 206, 150, 0.03) 66%,
+    rgba(245, 206, 150, 0) 100%
+  );
+  /* No edge anywhere: the light falls in from above and fades out on every side. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 28%, #000 70%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 28%, #000 70%, transparent 100%);
+  pointer-events: none;
+}
+
+/* The portrait as a film still: no frame. The studio print's edges fade into the dark wall
+   (a mask on the frame, never a change to the photograph), so the grey backdrop behind him reads
+   as the lamp's light on the wall. */
+.print {
+  position: relative;
+  width: fit-content;
+}
+
+.photoFrame {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  /* The whole portrait fits on one screen, even on a short laptop screen (at most 460px wide). */
+  width: min(440px, calc((100svh - 190px) * 2 / 3));
+  min-width: 280px;
+  overflow: hidden;
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 10%, #000 80%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 14%, #000 86%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 10%, #000 80%, transparent 100%);
+  mask-composite: intersect;
+}
+
+.photo {
+  object-fit: cover;
+}
+
+.liuCopy {
+  max-width: 640px;
+}
+
+.name {
+  margin-top: 18px;
+  color: var(--white);
+  font-size: var(--s-hero);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+.headline {
+  max-width: 19em;
+  margin-top: 30px;
+  color: var(--cream);
+  font-size: var(--s-head);
+  font-style: italic;
+  font-weight: 320;
+  line-height: 1.25;
+}
+
+.intro {
+  max-width: 32em;
+  margin-top: 20px;
+  color: var(--body);
+}
+
+.liuCopy .textButton {
+  margin-top: 30px;
+}
+
+.record {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(28px, 4vw, 64px);
+  margin-top: clamp(120px, 14vw, 200px);
+  padding: 0 var(--edge);
+}
+
+.figure {
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
+}
+
+.value {
+  color: var(--white);
+  font-size: var(--s-number);
+  font-variant-numeric: lining-nums tabular-nums;
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.95;
+}
+
+.suffix {
+  color: var(--warm);
+}
+
+.figureLabel {
+  max-width: 17em;
+  margin-top: 20px;
+  color: var(--body);
+  line-height: 1.5;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   3. His path. Default: a column of frames. Wide screens with motion: a pinned sideways strip. */
+
+.path {
+  position: relative;
+  padding: clamp(130px, 14vw, 210px) 0 clamp(40px, 6vw, 80px);
+}
+
+.track {
+  display: grid;
+  gap: clamp(72px, 9vw, 110px);
+  padding: 0 var(--edge);
+}
+
+.pathLead .sectionText {
+  max-width: 19em;
+}
+
+.stop {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Each year overlaps the top of its frame, like a title laid over a film still. */
+.year {
+  position: relative;
+  z-index: 3;
+  margin: 0 0 -0.42em -0.04em;
+  color: var(--white);
+  text-shadow: 0 4px 40px rgba(0, 0, 0, 0.45);
+  pointer-events: none;
+  font-size: clamp(64px, 16vw, 128px);
+  font-variant-numeric: lining-nums;
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.9;
+}
+
+.frame {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  width: 100%;
+  max-width: 460px;
+  overflow: hidden;
+  background: #0b0d12;
+}
+
+.frameMedia {
+  position: absolute;
+  inset: 0;
+}
+
+.frameMedia img {
+  object-fit: cover;
+  /* Today: the film's own picture, in color, with the film's gentle warm grade. */
+  filter: saturate(0.86) sepia(0.08);
+}
+
+/* The memories: one warm archival grade (a duotone toward umber and cream, lifted blacks, soft
+   contrast), a lens vignette and film grain. Today stays in full color. */
+.archival .frameMedia img {
+  filter: grayscale(0.55) sepia(0.5) saturate(1.05) contrast(0.92) brightness(0.98);
+}
+
+.archival::before,
+.archival::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.archival::before {
+  z-index: 1;
+  background: #2e2319;
+  mix-blend-mode: lighten;
+}
+
+.archival::after {
+  z-index: 2;
+  background:
+    radial-gradient(120% 95% at 50% 45%, transparent 52%, rgba(14, 10, 6, 0.6) 100%),
+    url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='g'><feTurbulence type='fractalNoise' baseFrequency='1.7' numOctaves='1' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.9  0 0 0 0 0.85  0 0 0 0 0.75  0 0 0 0.32 0'/></filter><rect width='100%' height='100%' filter='url(%23g)'/></svg>");
+  opacity: 0.9;
+}
+
+.stopWords {
+  margin-top: 24px;
+}
+
+.stopText {
+  max-width: 22em;
+  margin-top: 12px;
+  color: var(--body);
+  line-height: 1.55;
+}
+
+.pathBar {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  margin: 48px var(--edge) 0;
+}
+
+.pathBar .filmLine {
+  display: none;
+}
+
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .path {
+    display: flex;
+    align-items: center;
+    height: 100svh;
+    padding: 84px 0 40px;
+    overflow: hidden;
+  }
+
+  .track {
+    display: flex;
+    align-items: flex-end;
+    gap: clamp(64px, 8vw, 130px);
+    width: max-content;
+    padding: 0 var(--gutter);
+    will-change: transform;
+  }
+
+  .pathLead {
+    flex: 0 0 clamp(320px, 30vw, 470px);
+    align-self: center;
+  }
+
+  .stop {
+    --frame-h: clamp(300px, 54svh, 560px);
+    grid-template-columns: calc(var(--frame-h) * 0.8) clamp(270px, 20vw, 310px);
+    grid-template-rows: auto auto;
+    column-gap: 36px;
+    align-items: end;
+  }
+
+  .year {
+    grid-column: 1 / -1;
+    font-size: clamp(64px, 12.5svh, 128px);
+  }
+
+  .frame {
+    width: calc(var(--frame-h) * 0.8);
+    max-width: none;
+    height: var(--frame-h);
+    aspect-ratio: auto;
+  }
+
+  .frameMedia {
+    will-change: filter, transform;
+  }
+
+  .stopWords {
+    margin-top: 0;
+    padding-bottom: 2px;
+  }
+
+  .pathBar {
+    position: absolute;
+    left: var(--gutter);
+    bottom: 32px;
+    width: min(36vw, 520px);
+    margin: 0;
+  }
+
+  .pathBar .filmLine {
+    display: block;
+  }
+}
+
+/* ---------------------------------------------------------------------------------------------
+   4. The formulas, on a lit stage. */
+
+.formulas {
+  position: relative;
+  padding: clamp(130px, 14vw, 210px) var(--edge) clamp(110px, 13vw, 180px);
+}
+
+.formulasLine {
+  max-width: 22em;
+  color: var(--white);
+  font-size: var(--s-title);
+  letter-spacing: -0.026em;
+  line-height: 1.04;
+}
+
+/* One composed product shot. NuriCell stands forward in the key light, with its credit right
+   under it; the four others are smaller and set back on the floor behind (their bases sit higher
+   and they get a little less light), each name tucked under its bottle, and one shared credit
+   line under the three bottles it names. Every caption is centered on its bottle. */
+.lineup {
+  --floor: 34px;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 2.15fr);
+  column-gap: clamp(24px, 3.4vw, 64px);
+  align-items: end;
+  margin-top: clamp(40px, 4.4vw, 64px);
+}
+
+.product {
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  text-align: center;
+}
+
+.set {
+  position: relative;
+  width: 100%;
+  height: clamp(170px, 15.5vw, 232px);
+}
+
+.leadProduct .set {
+  height: clamp(300px, 27vw, 410px);
+}
+
+.spot,
+.pool,
+.bottle,
+.reflection,
+.falloff,
+.unlit {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* The key light: one soft cone of warm light from above, falling on NuriCell. */
+.spot {
+  z-index: 0;
+  left: 50%;
+  bottom: var(--floor);
+  width: 190%;
+  height: 165%;
+  transform: translateX(-50%);
+  background: conic-gradient(
+    from 162deg at 50% -8%,
+    rgba(255, 220, 170, 0) 0deg,
+    rgba(255, 220, 170, 0.075) 12deg,
+    rgba(255, 220, 170, 0.11) 18deg,
+    rgba(255, 220, 170, 0.075) 24deg,
+    rgba(255, 220, 170, 0) 36deg
+  );
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 55%, #000 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 55%, #000 100%);
+}
+
+/* The pool each bottle stands in: warm and bright under NuriCell, cooler and dimmer behind. */
+.pool {
+  z-index: 1;
+  left: 50%;
+  bottom: var(--floor);
+  width: 140%;
+  height: 20%;
+  transform: translate(-50%, 50%);
+  background: radial-gradient(
+    closest-side,
+    rgba(200, 196, 190, 0.14),
+    rgba(200, 196, 190, 0.04) 55%,
+    rgba(200, 196, 190, 0) 100%
+  );
+}
+
+.leadProduct .pool {
+  width: 118%;
+  height: 18%;
+  background: radial-gradient(
+    closest-side,
+    rgba(255, 212, 158, 0.34),
+    rgba(255, 212, 158, 0.1) 55%,
+    rgba(255, 212, 158, 0) 100%
+  );
+}
+
+.bottle,
+.falloff,
+.unlit {
+  inset: 0 0 var(--floor) 0;
+}
+
+.bottle {
+  z-index: 2;
+}
+
+.bottle img,
+.reflection img {
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+
+/* The light across each bottle: a shadow in the bottle's own outline, so the label colors stay
+   true and simply sit in quieter light. The bottles behind get a little less light. */
+.falloff,
+.unlit {
+  z-index: 3;
+  -webkit-mask: var(--outline) 50% 100% / contain no-repeat;
+  mask: var(--outline) 50% 100% / contain no-repeat;
+}
+
+.falloff {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(6, 8, 14, 0.22) 12%,
+      rgba(6, 8, 14, 0.44) 58%,
+      rgba(6, 8, 14, 0.74) 100%
+    ),
+    linear-gradient(180deg, rgba(6, 8, 14, 0) 40%, rgba(6, 8, 14, 0.42) 100%);
+}
+
+.leadProduct .falloff {
+  background:
+    linear-gradient(
+      100deg,
+      rgba(6, 8, 14, 0) 22%,
+      rgba(6, 8, 14, 0.26) 60%,
+      rgba(6, 8, 14, 0.6) 100%
+    ),
+    linear-gradient(180deg, rgba(6, 8, 14, 0) 45%, rgba(6, 8, 14, 0.34) 100%);
+}
+
+/* Before the stage lights come up (set by the script, so it is never stuck on). */
+.unlit {
+  background: rgba(5, 7, 13, 0.78);
+  opacity: 0;
+}
+
+/* The glossy floor: a faint, fading mirror image under each bottle. */
+.reflection {
+  z-index: 1;
+  inset: 0 0 var(--floor) 0;
+  transform: scaleY(-1);
+  transform-origin: 50% 100%;
+  opacity: 0.08;
+  -webkit-mask-image: linear-gradient(0deg, #000 0%, transparent 24%);
+  mask-image: linear-gradient(0deg, #000 0%, transparent 24%);
+}
+
+.credit {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  padding-top: 8px;
+}
+
+.productName {
+  color: var(--white);
+  font-size: 22px;
+  font-weight: 340;
+  letter-spacing: -0.01em;
+  line-height: 1.15;
+}
+
+.creditText {
+  max-width: 17em;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.leadProduct .productName {
+  font-size: clamp(32px, 2.8vw, 42px);
+  font-weight: 300;
+}
+
+.leadProduct .creditText {
+  color: var(--body);
+  font-size: var(--s-body);
+}
+
+/* The row behind: four bottles, their names, then Nature Calm's own credit beside the one
+   shared line for the other three. */
+.backRow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  column-gap: clamp(12px, 1.6vw, 28px);
+  align-items: start;
+  padding-bottom: clamp(40px, 5vw, 64px);
+}
+
+.sharedCredit {
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  text-align: center;
+}
+
+.sharedCredit .creditText {
+  max-width: 30em;
+}
+
+.sharedNames {
+  display: none;
+}
+
+.floor {
+  display: none;
+}
+
+@media (min-width: 901px) {
+  .backRow .product,
+  .backRow .credit {
+    display: contents;
+  }
+
+  .backRow .set {
+    grid-column: var(--col);
+    grid-row: 1;
+  }
+
+  .backRow .productName {
+    grid-column: var(--col);
+    grid-row: 2;
+    justify-self: center;
+    padding-top: 8px;
+    text-align: center;
+  }
+
+  /* Nature Calm's own credit sits on the same line as the shared one beside it. */
+  .backRow .credit .creditText {
+    grid-column: var(--col);
+    grid-row: 3;
+    justify-self: center;
+    margin-top: 25px;
+    text-align: center;
+  }
+
+  /* A hairline over the three bottles it names, then the line. */
+  .sharedCredit {
+    grid-column: 2 / 5;
+    grid-row: 3;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--rule);
+  }
+
+  /* The floor behind: a faint receding plane from the back row's feet toward the viewer. */
+  .floor {
+    display: block;
+    grid-column: 1 / -1;
+    grid-row: 2 / 4;
+    z-index: -1;
+    margin: calc(-1 * var(--floor)) -8% calc(-1 * clamp(40px, 5vw, 64px));
+    background: linear-gradient(
+      180deg,
+      rgba(255, 226, 190, 0.045) 0%,
+      rgba(255, 226, 190, 0.015) 50%,
+      rgba(255, 226, 190, 0) 100%
+    );
+    border-top: 1px solid rgba(255, 236, 210, 0.08);
+    -webkit-mask-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      #000 16%,
+      #000 84%,
+      transparent 100%
+    );
+    mask-image: linear-gradient(90deg, transparent 0%, #000 16%, #000 84%, transparent 100%);
+  }
+}
+
+/* End credits: role on the left, name on the right. */
+.endCredits {
+  display: grid;
+  gap: 36px;
+  margin: clamp(104px, 11vw, 160px) 0 0;
+  padding-top: 48px;
+  border-top: 1px solid var(--line);
+}
+
+.creditRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr);
+  gap: clamp(24px, 4vw, 64px);
+  align-items: baseline;
+}
+
+.creditRow dt {
+  text-align: right;
+}
+
+.creditRow dd {
+  margin: 0;
+  color: var(--white);
+  font-size: clamp(32px, 3.2vw, 48px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+
+.creditRow dd span {
+  display: block;
+  max-width: 26em;
+  margin-top: 12px;
+  color: var(--body);
+  font-family: var(--text);
+  font-size: var(--s-body);
+  font-variation-settings: normal;
+  font-weight: 400;
+  letter-spacing: 0;
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   5. The research, as a film's end credits: centered blocks with room around them. */
+
+.research {
+  padding: clamp(140px, 15vw, 220px) var(--edge) clamp(60px, 7vw, 100px);
+}
+
+.creditsHead {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.creditsHead .sectionText {
+  max-width: 28em;
+}
+
+.studies {
+  display: grid;
+  margin: clamp(96px, 10vw, 140px) auto 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.study {
+  display: grid;
+  justify-items: center;
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+/* A short rule between credits. */
+.study + .study {
+  margin-top: clamp(80px, 8vw, 120px);
+}
+
+.study + .study::before {
+  content: "";
+  display: block;
+  width: 44px;
+  height: 1px;
+  margin: 0 auto clamp(80px, 8vw, 120px);
+  background: var(--rule);
+}
+
+.studyTitle {
+  max-width: 18em;
+  margin-top: 16px;
+  color: var(--white);
+  font-size: clamp(32px, 3.2vw, 48px);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.studyTag {
+  margin-top: 10px;
+  color: var(--cream);
+  font-size: var(--s-lead);
+  font-style: italic;
+}
+
+.studyText {
+  max-width: 34em;
+  margin-top: 20px;
+  color: var(--body);
+}
+
+.study .source {
+  margin-top: 16px;
+}
+
+.seeAllRow {
+  display: flex;
+  justify-content: center;
+  margin-top: clamp(88px, 9vw, 120px);
+}
+
+.all {
+  margin-top: 16px;
+}
+
+.note {
+  max-width: 40em;
+  margin: 56px auto 0;
+  color: var(--muted);
+  font-size: 16px;
+  text-align: center;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   6. Health, explained: three chapters, one treatment. */
+
+.health {
+  padding: clamp(140px, 15vw, 220px) var(--edge) clamp(130px, 14vw, 200px);
+}
+
+.healthHead .sectionText {
+  max-width: 34em;
+}
+
+/* Three frames edge to edge, like one strip of film; the words keep their own air. */
+.chapters {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4px;
+  margin-top: clamp(64px, 7vw, 96px);
+}
+
+.chapter {
+  display: flex;
+  flex-direction: column;
+}
+
+.chapter > :not(.chapterFrame) {
+  padding-right: clamp(20px, 3vw, 48px);
+}
+
+/* Every frame: the same navy ground, the same lens vignette; each render is laid onto the ground
+   with "lighten", so its own dark background disappears and only the glass and light remain. */
+.chapterFrame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: radial-gradient(80% 90% at 50% 50%, #0c1a33 0%, #070c18 55%, #04060c 100%);
+}
+
+.chapterFrame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  box-shadow: inset 0 0 90px 10px rgba(3, 4, 9, 0.85);
+  pointer-events: none;
+}
+
+.chapterMedia {
+  position: absolute;
+  inset: 0;
+  mix-blend-mode: lighten;
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.chapterMedia img {
+  object-fit: cover;
+  transform: scale(var(--fit, 1));
+  /* The render's own ground fades into the frame's, so no edge of the picture ever shows. */
+  -webkit-mask-image: radial-gradient(62% 66% at 50% 50%, #000 55%, transparent 100%);
+  mask-image: radial-gradient(62% 66% at 50% 50%, #000 55%, transparent 100%);
+}
+
+.dropMedia {
+  inset: 9% 22%;
+}
+
+.dropMedia img {
+  object-fit: contain;
+  transform: none;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.chapter:hover .chapterMedia {
+  transform: scale(1.035);
+}
+
+.chapter > .label {
+  margin-top: 26px;
+}
+
+.chapterNumber {
+  margin-right: 8px;
+  color: var(--warm);
+}
+
+.chapter .itemTitle {
+  margin-top: 10px;
+}
+
+.chapterText {
+  margin-top: 14px;
+  color: var(--body);
+}
+
+.soon {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.soon::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+}
+
+.illustrations {
+  margin-top: 36px;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   7. Ask BiGH Science: the questions as subtitles, over the film's last frame. */
+
+.ask {
+  padding: clamp(40px, 5vw, 80px) var(--edge) clamp(130px, 14vw, 200px);
+}
+
+/* No box: the dimmed frame fades into the page on every side. */
+.screen {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100vw;
+  min-height: min(80svh, 740px);
+  margin: 0 0 0 calc(50% - 50vw);
+  padding: 0 max(var(--gutter), calc((100vw - var(--wide)) / 2)) clamp(72px, 10svh, 110px);
+}
+
+.screenShot {
+  position: absolute;
+  inset: 0 0 0 22%;
+  opacity: 0.34;
+  mask-image: radial-gradient(56% 58% at 58% 52%, #000 34%, transparent 100%);
+  pointer-events: none;
+}
+
+.screenShot img {
+  object-fit: cover;
+  object-position: 30% 50%;
+  filter: saturate(0.8);
+}
+
+.askHead,
+.subtitleArea {
+  position: relative;
+  z-index: 2;
+}
+
+.askHead {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  padding-top: clamp(96px, 14svh, 140px);
+}
+
+.askTitle {
+  color: var(--white);
+  font-size: var(--s-hero);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 0.98;
+}
+
+.askHead .lead {
+  max-width: 16em;
+}
+
+.subtitleArea {
+  display: grid;
+  justify-items: center;
+  gap: 20px;
+  width: 100%;
+  margin-top: 72px;
+}
+
+.subtitles {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: center;
+}
+
+.subtitles li {
+  color: #fbf6ea;
+  font-size: clamp(30px, 3.2vw, 50px);
+  font-style: italic;
+  font-weight: 300;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.75);
+}
+
+/* With motion, one subtitle at a time, in step with the scroll. */
+.screen[data-cycle] .subtitles {
+  grid-template-areas: "line";
+}
+
+.screen[data-cycle] .subtitles li {
+  grid-area: line;
+  opacity: 0;
+  transform: translateY(8px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.screen[data-cycle] .subtitles li[data-on] {
+  opacity: 1;
+  transform: none;
+}
+
+.askBody {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 100px);
+  margin-top: clamp(40px, 5vw, 72px);
+}
+
+.askIntro .lead {
+  max-width: 24em;
+}
+
+.status {
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--rule);
+}
+
+.statusLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--warm);
+}
+
+.statusLabel::before {
+  content: "";
+  width: 24px;
+  height: 1px;
+  background: currentColor;
+}
+
+.statusNote {
+  max-width: 34em;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+.steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--rule);
+}
+
+.steps li {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr);
+  gap: 20px;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.stepNumber {
+  color: var(--warm);
+  font-size: 40px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+.steps p {
+  color: var(--body);
+  line-height: 1.55;
+}
+
+/* ---------------------------------------------------------------------------------------------
+   Smaller screens. */
+
+@media (max-width: 900px) {
+  .liuInner,
+  .askBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .liuInner {
+    gap: 44px;
+  }
+
+  .photoFrame {
+    width: min(76vw, 380px);
+    min-width: 0;
+  }
+
+  .record {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 52px;
+  }
+
+  .value {
+    font-size: clamp(84px, 26vw, 150px);
+  }
+
+  .chapters {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 64px;
+  }
+
+  .chapter > :not(.chapterFrame) {
+    padding-right: 0;
+  }
+
+  .creditRow {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .creditRow dt {
+    text-align: left;
+  }
+
+  .screen {
+    min-height: 580px;
+  }
+
+  .screenShot {
+    inset: 20% 0 0;
+    opacity: 0.3;
+    mask-image: radial-gradient(70% 55% at 50% 55%, #000 30%, transparent 100%);
+  }
+
+  .screenShot img {
+    object-position: 50% 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  /* Phones and tablets: NuriCell first, then the four in two columns, then the shared line. */
+  .lineup {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 56px;
+  }
+
+  .leadProduct .set {
+    height: clamp(280px, 78vw, 400px);
+  }
+
+  .backRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 36px;
+    padding-bottom: 0;
+  }
+
+  .backRow .set {
+    height: clamp(160px, 40vw, 220px);
+  }
+
+  .sharedCredit {
+    grid-column: 1 / -1;
+    padding-top: 20px;
+    border-top: 1px solid var(--rule);
+  }
+
+  .sharedNames {
+    display: block;
+    color: var(--white);
+    font-family: var(--display);
+    font-size: 22px;
+    font-variation-settings: "SOFT" 50;
+    font-weight: 340;
+    line-height: 1.3;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chapterMedia,
+  .film .textButton svg {
+    transition: none;
+  }
+}

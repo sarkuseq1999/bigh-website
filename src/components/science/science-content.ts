@@ -1,6 +1,6 @@
 // Words and facts for the Science page (/science). Mo's 9/16 plan: lead with the scientists, then
-// the research, health explained, and Ask BiGH Science. Mo chose look D, "Golden hour", on
-// September 25, 2026, after two rounds of three looks (the others: reference/science-page/looks/).
+// the research, health explained, and Ask BiGH Science. After three rounds Mo chose look B, "Scroll
+// film" (September 28, 2026); the others are in reference/science-page/looks/ and .../looks/round3/.
 //
 // Approved copy is marked "approved" with its date in BRAND-CHEATSHEET.md. Everything else is a
 // DRAFT line for this build, written from facts in RESEARCH-NOTES.md, and still needs Mo's words
@@ -107,7 +107,28 @@ export const formulas = [
     image: "/images/products/nature-calm.png",
     credit: "Developed by Dr. Jiankang Liu and Dr. Iris Wang.",
   },
+  // Mo, September 28, 2026: the other products were developed "under the direction and guidance
+  // of Dr. Liu and Iris Wang".
+  {
+    name: "Green Bee Propolis",
+    image: "/images/products/green-bee-propolis.png",
+    credit: "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang.",
+  },
+  {
+    name: "Advanced OPC Formula",
+    image: "/images/products/advanced-opc.png",
+    credit: "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang.",
+  },
+  {
+    name: "Turmerific",
+    image: "/images/products/turmerific.png",
+    credit: "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang.",
+  },
 ];
+
+// DRAFT (from Mo's September 28 note): one line that sums up the credits.
+export const formulasLine =
+  "Every BiGH formula was developed by our scientists or under their direction and guidance.";
 
 // DRAFT: his path (the film strip). Years only where a source gives one.
 export const pathStops = [

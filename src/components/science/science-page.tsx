@@ -4,23 +4,22 @@ import Image from "next/image";
 import { ArrowUpRight, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useCopy } from "@/i18n/use-copy";
-import { AskScience } from "./ask-science";
-import { HealthDoors } from "./health-doors";
-import { KeyStudies } from "./key-studies";
-import { LookGolden } from "./look-golden";
+import { LookFilm, filmTheme } from "./look-film";
 import { liu, liuStory } from "./science-content";
 import { ScienceFooter, ScienceHeader } from "./site-chrome";
+import { useSmoothScroll } from "./smooth-scroll";
 import styles from "./science-page.module.css";
 
-export type OpeningProps = { onStory: () => void };
 type Panel = "story" | "support" | null;
 
-// The Science page in Mo's 9/16 order: the scientists (look D, "Golden hour", his pick of
-// September 25), then three key studies, health explained, and Ask BiGH Science.
+// The Science page, in Mo's 9/16 order (the scientists, the research, health explained, Ask BiGH
+// Science), as look B "Scroll film": his pick of September 28, 2026 after three rounds. The looks
+// that were not chosen are in reference/science-page/looks/ (round 1-2) and .../looks/round3/.
 export function SciencePage() {
   const copy = useCopy();
   const dialog = useRef<HTMLDialogElement>(null);
   const [panel, setPanel] = useState<Panel>(null);
+  useSmoothScroll(true);
 
   useEffect(() => {
     const element = dialog.current;
@@ -30,18 +29,18 @@ export function SciencePage() {
   }, [panel]);
 
   return (
-    <div className={styles.page}>
+    <div className={styles.page} data-look="film" style={filmTheme.tokens}>
       <a href="#science-main" className={styles.skipLink}>
         {copy("Skip to content")}
       </a>
-      <ScienceHeader onSupport={() => setPanel("support")} />
+      <ScienceHeader
+        darkPage={filmTheme.footerTone === "dark"}
+        onSupport={() => setPanel("support")}
+      />
       <main id="science-main">
-        <LookGolden onStory={() => setPanel("story")} />
-        <KeyStudies />
-        <HealthDoors />
-        <AskScience />
+        <LookFilm onStory={() => setPanel("story")} />
       </main>
-      <ScienceFooter onSupport={() => setPanel("support")} />
+      <ScienceFooter tone={filmTheme.footerTone} onSupport={() => setPanel("support")} />
 
       <dialog
         ref={dialog}

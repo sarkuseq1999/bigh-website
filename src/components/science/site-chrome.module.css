@@ -22,9 +22,16 @@
 /* Over the dark opening: the same navy, see-through, so words sliding under it stay apart. */
 .dark {
   color: #fffaf2;
-  background: rgba(4, 19, 40, 0.62);
-  border-bottom: 1px solid rgba(255, 250, 242, 0.06);
-  backdrop-filter: blur(14px);
+  background: var(--header-dark, rgba(4, 19, 40, 0.62));
+  border-bottom: 1px solid var(--header-dark-line, rgba(255, 250, 242, 0.06));
+  backdrop-filter: var(--header-dark-blur, blur(14px));
+}
+
+/* Over a full-bleed film (data-tone="film"): the look decides how see-through the bar is. */
+.dark.film {
+  background: var(--header-film, var(--header-dark, rgba(4, 19, 40, 0.62)));
+  border-bottom-color: var(--header-film-line, var(--header-dark-line, rgba(255, 250, 242, 0.06)));
+  backdrop-filter: var(--header-film-blur, var(--header-dark-blur, blur(14px)));
 }
 
 .bar {
@@ -143,7 +150,7 @@
 
 .footerMessage {
   margin-top: 30px;
-  font-family: var(--font-instrument), Georgia, serif;
+  font-family: var(--display-font, var(--font-instrument)), Georgia, serif;
   font-size: clamp(44px, 5vw, 76px);
   line-height: 1;
   letter-spacing: -0.01em;
@@ -158,7 +165,7 @@
 .footerColumns h2 {
   margin-bottom: 16px;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -200,7 +207,7 @@
   max-width: var(--wide);
   margin: 22px auto 0;
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* Five links plus the language controls need about 1,100 px; below that the menu opens a panel. */

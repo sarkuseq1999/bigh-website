@@ -1,18 +1,21 @@
 /* The Science page shell. Resets use :where() so they carry no specificity: a single-class rule
    in any section module (".lead { margin-top: … }") always wins over them (see AGENTS.md).
-   Colors: "Golden hour", Mo's pick of September 25, 2026 (warm parchment and espresso). The looks
-   that were not chosen, and their colors, are in reference/science-page/looks/. */
+   Colors: light baby blue with the homepage's navy and blues (Mo, September 25, 2026: "light, baby
+   bluish ... works together with the homepage, and science relates to blue"), around look D's warm
+   photographs. The earlier parchment palette is in git history (65ad5f7); the looks that were not
+   chosen are in reference/science-page/looks/. */
 .page {
-  --paper: #f3e9d8;
-  --paper-deep: #ebdcc2;
-  --ink: #2b1d12;
-  --muted: #6e5a45;
-  --body: #47352a;
-  --line: #d9c6a5;
-  --rule: #b89f7c;
-  --blue: #8f4f12;
-  --gold: #a86514;
-  --gold-light: #f1b95a;
+  --paper: #eef5fc;
+  --paper-deep: #e2edf9;
+  --ink: #10233f;
+  --muted: #4f6380;
+  --body: #2a3d5a;
+  --line: #cddbec;
+  --rule: #9db2cb;
+  --blue: #2149a3;
+  /* "gold" is the accent's old name; in the blue theme it is a clear mid blue. */
+  --gold: #2d5bbf;
+  --gold-light: #b9defb;
   --lime: #e2ed94;
   --navy: #041328;
   --pale-blue: #b9defb;
@@ -20,18 +23,21 @@
   --wide: 1280px;
   /* The light the "three key studies" section opens with. look-golden.module.css repeats it at the
      bottom of the film strip so the two meet without a seam: change both together. */
-  --paper-image: radial-gradient(70% 50% at 80% 0%, rgba(241, 185, 90, 0.22), transparent 70%);
-  --door-bg: #fbf4e8;
-  --card-bg: #fbf4e8;
-  --card-line: #e2cfae;
+  --paper-image: radial-gradient(70% 50% at 80% 0%, rgba(185, 222, 251, 0.22), transparent 70%);
+  --door-bg: #f7fbff;
+  --card-bg: #f7fbff;
+  --card-line: #d5e3f3;
   --ask-bg:
-    radial-gradient(55% 70% at 85% 15%, rgba(241, 185, 90, 0.28), transparent 70%),
-    radial-gradient(45% 60% at 5% 95%, rgba(168, 101, 20, 0.3), transparent 70%), #23160d;
+    radial-gradient(55% 70% at 85% 15%, rgba(185, 222, 251, 0.18), transparent 70%),
+    radial-gradient(45% 60% at 5% 95%, rgba(33, 73, 163, 0.35), transparent 70%), #041328;
   position: relative;
   min-height: 100svh;
   background: var(--paper);
   color: var(--ink);
-  font-family: var(--font-sans);
+  /* --font-sans is never emitted (Tailwind's @theme inline), so it resolved to the system UI font.
+     A look may set --text-font / --display-font / --panel-radius for the shared header, footer and
+     story panel; DM Sans and Instrument Serif are the defaults. */
+  font-family: var(--text-font, var(--font-dm-sans)), Arial, Helvetica, sans-serif;
   font-size: 18px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -82,7 +88,7 @@
   max-height: 88svh;
   overflow-y: auto;
   border: 0;
-  border-radius: 20px;
+  border-radius: var(--panel-radius, 20px);
   padding: 0;
   background: var(--paper);
   color: var(--ink);
@@ -128,7 +134,7 @@
 
 .dialogEyebrow {
   color: var(--muted);
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -136,8 +142,9 @@
 
 .dialogTitle {
   margin-top: 8px;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(38px, 4vw, 52px);
+  font-family: var(--display-font, var(--font-instrument)), Georgia, serif;
+  font-size: clamp(36px, 3.6vw, 46px);
+  text-wrap: balance;
   line-height: 1.02;
 }
 

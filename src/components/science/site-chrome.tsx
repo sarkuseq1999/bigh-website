@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUp, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
@@ -36,17 +36,63 @@ function Logo({ light, footer = false }: { light: boolean; footer?: boolean }) {
   );
 }
 
-// Looks C and E (now in reference/science-page/looks/) also turned this header dark over dark
-// sections; bringing one back means adding that again (the .dark styles are still in the CSS).
-export function ScienceHeader({ onSupport }: { onSupport: () => void }) {
+// The header reads the section under it: over any element marked data-tone="dark" it turns dark
+// (white logo, light words), elsewhere it is light. data-tone="film" is dark too, but its background,
+// blur and hairline come from --header-film* (a see-through gradient over a full-bleed film), so big
+// headings in ordinary dark sections still get a solid translucent bar.
+// darkPage: the look's own paper is dark, so the open phone menu (painted in --paper/--ink) needs
+// the white logo too.
+export function ScienceHeader({
+  onSupport,
+  darkPage = false,
+}: {
+  onSupport: () => void;
+  darkPage?: boolean;
+}) {
   const copy = useCopy();
+  const header = useRef<HTMLElement>(null);
+  const [zoneTone, setZoneTone] = useState<string | undefined>(undefined);
   const [open, setOpen] = useState(false);
   const close = () => setOpen(false);
+  const overFilm = zoneTone === "film";
+  const dark = (zoneTone === "dark" || overFilm) && !open;
+  const lightLogo = open ? darkPage : dark;
+
+  useEffect(() => {
+    let frame = 0;
+    const check = () => {
+      frame = 0;
+      const element = header.current;
+      if (!element) return;
+      const y = element.getBoundingClientRect().bottom + 1;
+      const zone = document
+        .elementsFromPoint(4, y)
+        .map((node) => node.closest<HTMLElement>("[data-tone]"))
+        .find(Boolean);
+      setZoneTone(zone?.dataset.tone);
+    };
+    const schedule = () => {
+      if (!frame) frame = requestAnimationFrame(check);
+    };
+    schedule();
+    window.addEventListener("scroll", schedule, { passive: true });
+    window.addEventListener("resize", schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", schedule);
+      window.removeEventListener("resize", schedule);
+    };
+  }, []);
 
   return (
-    <header className={`${styles.header} ${styles.light} ${open ? styles.open : ""}`}>
+    <header
+      ref={header}
+      className={`${styles.header} ${dark ? styles.dark : styles.light} ${
+        dark && overFilm ? styles.film : ""
+      } ${open ? styles.open : ""}`}
+    >
       <div className={styles.bar}>
-        <Logo light={false} />
+        <Logo light={lightLogo} />
         <nav id="science-navigation" aria-label={copy("Main navigation")} className={styles.nav}>
           <Link href="/" onClick={close}>
             {copy("Home")}
@@ -88,13 +134,21 @@ export function ScienceHeader({ onSupport }: { onSupport: () => void }) {
   );
 }
 
-export function ScienceFooter({ onSupport }: { onSupport: () => void }) {
+// The footer takes its colors from the look's tokens (--paper-deep, --ink, --muted, --line); a dark
+// look passes tone="dark" so the white logo is used and the header turns dark over it.
+export function ScienceFooter({
+  onSupport,
+  tone = "light",
+}: {
+  onSupport: () => void;
+  tone?: "light" | "dark";
+}) {
   const copy = useCopy();
   return (
-    <footer className={styles.footer} data-tone="light">
+    <footer className={styles.footer} data-tone={tone}>
       <div className={styles.footerTop}>
         <div>
-          <Logo light={false} footer />
+          <Logo light={tone === "dark"} footer />
           <p className={styles.footerMessage}>{copy("Stay sharp. Live fully.")}</p>
         </div>
         <div className={styles.footerColumns}>

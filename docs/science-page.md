@@ -1,6 +1,42 @@
-# The Science page (September 25, 2026)
+# The Science page (September 25–28, 2026)
 
-## Mo picked D, "Golden hour"
+## Now: look B, "Scroll film" (Mo's pick, September 28)
+
+Round 2's D was still "boring, vibe coded" to Mo, so round 3 was a complete redesign in three choices
+(A Liquid light, B Scroll film, C Journal; built by three helpers, each screen scored by me against an
+8/10 bar). Mo chose **B** ("really good"), then asked for less generic fonts, an opening without the lab
+bench and beakers ("nature, with a touch of science"), and a 9/10 bar. He picked opening idea 2,
+"Nature under the lens".
+
+- `/science` always shows it (`look-film.tsx`, `film-scene.ts`, `film-fonts.ts`); the page shell is
+  `science-page.tsx` with the shared header/footer in `site-chrome.*` and Lenis smooth scrolling
+  (`smooth-scroll.ts`, the `lenis` package).
+- The film (a pinned WebGL stage scrubbed by scroll): the leaf under a lens (`film/lens-leaf.webp`) → through
+  the lens into the leaf's cells (`film/lens-cells.webp`) → the bright cell blooms into the glass mitochondrion
+  (`dark-cell.webp`) → a double exposure into the field of cells → Dr. Liu. Stills and prompts:
+  `reference/science-page/originals/film/`. All are AI illustrations, labeled "Illustration".
+- Type: Fraunces (display, light, SOFT 50) + Hanken Grotesk (text). The look passes `--display-font`,
+  `--text-font`, `--panel-radius` and the header tokens to the shared chrome.
+- Then, on a dark page: Dr. Liu (print fading into the wall), his record, his path as a strip of archival
+  film stills, the five formulas as one lit product shot (NuriCell: Dr. Liu; Nature Calm: Dr. Liu and
+  Dr. Iris Wang; the other three: "developed under the direction and guidance of" both, per Mo 9/28),
+  research as film credits (three key studies, "See all 36"), health explained, Ask BiGH Science.
+- Shared fixes this round: `--font-sans` was never emitted (the page fell back to the system font); the
+  page now uses `var(--text-font, var(--font-dm-sans))`. The header turns dark over `data-tone="dark"`
+  and see-through over `data-tone="film"` (`--header-film*`); shared labels are at least 15px.
+- Checks (September 28): `scripts/qa/qa_science_film.py` 45/45 (1440, 1280, 390, reduced motion, no
+  WebGL); `/kr/science` and `/cns/science` load with no errors, overflow or clipped words; tsc, ESLint,
+  Prettier clean. My scores: every main screen 9/10; two passing film frames about 8.
+- Review pages: round 3 choices https://claude.ai/artifact/QeNQmM9ViFgN9cbZfN1oTF , opening ideas
+  https://claude.ai/artifact/YTKK2qtpVzg5tByXNv4xX5 , final walkthrough
+  https://claude.ai/artifact/7gMuvYhQuXyoJNoqhGUBbS .
+- The other round-3 looks (A, C), round 2's D (with its blue recolor) and the shared sections only D used
+  are in `reference/science-page/looks/round3/`.
+
+Still open: a words pass on the DRAFT lines; translations of the new lines; merging the header with the
+product branch; the homepage's NuriCell credit; putting it online (ask Mo first).
+
+## Earlier: Mo picked D, "Golden hour" (September 25)
 
 "I like design D better." `/science` now always shows look D (`look-golden.*`). The switcher and the other
 five looks moved to `reference/science-page/looks/` (with a README and their color tokens), so any of them

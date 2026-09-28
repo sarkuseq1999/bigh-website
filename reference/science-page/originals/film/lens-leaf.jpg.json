@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini image generation (gemini-mcp, gemini-generate-image)",
+  "size": [
+    2752,
+    1536
+  ],
+  "aspect_ratio": "16:9",
+  "prompt": "Cinematic macro photograph, \"nature under the lens\": a fresh green leaf backlit by warm golden morning sun, and over part of it a round clear glass magnifying lens (like a microscope objective or a jeweler's loupe, no handle visible). Through the lens the leaf is magnified so its tiny cells and veins appear sharp, glowing gold and lime-green like a living scientific specimen; outside the lens the leaf falls into soft focus and deep green-black shadow. The left third of the frame is calm dark negative space for a headline. Precise, elegant, premium science photography, shallow depth of field, fine film grain. No hands, no people, no insects, no text.",
+  "purpose": "Shot 1 of the Scroll film: the opening (Mo picked this exact sample, idea 2).",
+  "generated": "2026-09-28",
+  "note": "AI illustration, not a photograph; the page labels it \"Illustration\"."
+}

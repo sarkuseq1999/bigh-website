@@ -1,0 +1,9 @@
+{
+  "tool": "Gemini MCP (mcp__gemini__gemini-generate-image)",
+  "model": "Gemini image generation (model chosen by the MCP server)",
+  "params": { "aspectRatio": "16:9", "imageSize": "2K", "style": "photorealistic cinematic macro photography" },
+  "prompt": "Extreme close-up macro photograph of a clear glass laboratory beaker filled with pale amber liquid, backlit by a low golden-hour sun so the liquid glows from within like warm honey light. The brightest glow sits exactly in the center of the frame: a soft luminous core of golden light inside the liquid, with gentle caustic ripples and a few tiny suspended bubbles catching the light. The curved glass wall and a faint engraved measurement line are softly out of focus at the edges. Background: warm amber and honey bokeh fading to deep brown shadow at the corners. Cinematic still, shallow depth of field, calm, premium, gentle film grain, the same warm late-afternoon palette as an editorial science photograph. No people, no hands, no faces, no readable text, no numbers, no logos, no labels, no red.",
+  "purpose": "Science page round 3, look B (Scroll film): the bridge shot between the golden desk and the glowing cell; the camera pushes into the beaker's light.",
+  "web_copy": "public/images/science-page/film/beaker-macro.webp (1920 wide, WebP q82)",
+  "generated": "2026-09-28"
+}

@@ -33,7 +33,7 @@
   padding-bottom: 12px;
   border-bottom: 1px dotted var(--rule);
   color: var(--muted);
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -95,13 +95,13 @@
   border-radius: 999px;
   background: var(--lime);
   color: #242722;
-  font-size: 13px;
+  font-size: 15px;
   font-weight: 500;
 }
 
 .journal {
   padding-top: 1px;
-  font-family: var(--font-instrument), Georgia, serif;
+  font-family: var(--display-font, var(--font-instrument)), Georgia, serif;
   font-size: 21px;
   line-height: 1.25;
 }
@@ -170,7 +170,7 @@
   .year {
     grid-column: 1;
     grid-row: 1;
-    font-size: 14px;
+    font-size: 15px;
   }
 
   .rowTitle {

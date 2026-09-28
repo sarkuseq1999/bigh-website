@@ -469,7 +469,7 @@ export function LookGolden({ onStory }: OpeningProps) {
               <h3 className={styles.todayTitle}>{copy(today.title)}</h3>
               <p className={`${styles.stopText} ${styles.todayText}`}>{copy(today.text)}</p>
             </div>
-            {formulas.map((formula) => (
+            {formulas.slice(0, 2).map((formula) => (
               <figure key={formula.name} className={styles.formula}>
                 <div className={styles.bottle} data-bottle>
                   <Image
