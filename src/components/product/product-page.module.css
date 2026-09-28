@@ -1,0 +1,54 @@
+/* Shared shell and tokens for the product page. The palette matches the newer homepage sections
+   (science-glass.module.css); --tint, --product-ink and --accent come from the product's data. */
+.page {
+  --ink: #102b50;
+  --text: #25303b;
+  --muted: #5b6672;
+  --cobalt: #284da8;
+  --lime: #e2ed94;
+  --olive: #8ea321;
+  --gold: #eaa43a;
+  --paper: #fbfaf7;
+  --navy: #041328;
+  --cream: #fffaf2;
+  --sky: #b9defb;
+  --line: #dcdfd8;
+  /* Type (Mo picked "Swiss" on September 28, 2026): Switzer for everything, loaded in the locale
+     layout. Headline rules read --display-font and three more tokens: --display-weight,
+     --display-size (multiplies font-size) and --display-track (added to letter-spacing;
+     --display-track-small where a rule had none); longer leads read --lead-*. CJK and other
+     scripts fall through to the locale fonts in globals.css. */
+  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
+  --sans: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --display-weight: 460;
+  --display-size: 0.84;
+  --display-track: -0.015em;
+  --display-track-small: -0.02em;
+  --lead-weight: 400;
+  --lead-track: -0.01em;
+  --gutter: clamp(20px, 5vw, 72px);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+
+  position: relative;
+  min-height: 100svh;
+  background: var(--paper);
+  color: var(--text);
+  font-family: var(--sans);
+  font-size: 18px;
+  line-height: 1.6;
+  overflow-x: clip;
+}
+
+.skip {
+  position: fixed;
+  left: 20px;
+  top: -100px;
+  z-index: 100;
+  padding: 12px 20px;
+  color: #fff;
+  background: var(--cobalt);
+  border-radius: 99px;
+}
+.skip:focus {
+  top: 12px;
+}

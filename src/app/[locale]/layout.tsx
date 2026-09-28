@@ -12,6 +12,11 @@ const sans = DM_Sans({
   variable: "--font-dm-sans",
   display: "swap",
 });
+// Switzer, the brand face (Mo, September 28, 2026). Its licence (ITF Free Font License) allows
+// web use but not redistributing the files, and this repository is public, so it loads from
+// Fontshare's own stylesheet rather than next/font/local.
+const SWITZER = "https://api.fontshare.com/v2/css?f[]=switzer@1,2&display=swap";
+
 const serif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
@@ -62,6 +67,9 @@ export default async function LocaleLayout({
   return (
     <html lang={languageTags[locale]}>
       <body className={`${sans.variable} ${serif.variable}`}>
+        <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
+        <link rel="stylesheet" href={SWITZER} precedence="default" />
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

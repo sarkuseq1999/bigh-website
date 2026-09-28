@@ -317,11 +317,11 @@
 .section .storyHeading h3 {
   max-width: 420px;
   margin-top: 13px;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(33px, 3vw, 44px);
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(33px, 3vw, 44px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
   line-height: 1.06;
-  letter-spacing: -0.035em;
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
   text-wrap: balance;
 }
 

@@ -23,11 +23,11 @@
 }
 .glass .heading {
   color: var(--ink);
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(3.1rem, 6.4vw, 6rem);
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(3.1rem, 6.4vw, 6rem) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
   line-height: 0.95;
-  letter-spacing: -0.02em;
+  letter-spacing: calc(-0.02em + var(--display-track, 0em));
 }
 .glass .heading:is(:lang(ko), :lang(ja), :lang(zh)) {
   font-size: clamp(2.5rem, 4.8vw, 4.5rem);
@@ -286,9 +286,10 @@
 }
 .glass .age strong {
   margin-top: 6px;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(2.6rem, 4vw, 3.6rem);
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(2.6rem, 4vw, 3.6rem) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
   font-variant-numeric: tabular-nums;
 }
 /* The age slider sits under the cell: drag it, or sweep a mouse over it. */
@@ -490,11 +491,11 @@
 }
 .glass .title {
   color: var(--ink);
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(2rem, 3vw, 3rem);
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(2rem, 3vw, 3rem) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
   line-height: 1.04;
-  letter-spacing: -0.015em;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
   text-wrap: balance;
 }
 .glass .title:is(:lang(ko), :lang(ja), :lang(zh)) {
