@@ -21,6 +21,7 @@ import { useRef, useState, type CSSProperties, type KeyboardEvent } from "react"
 import { useCopy } from "@/i18n/use-copy";
 import styles from "./products-lineup.module.css";
 import { ProductsLineupIntro } from "./products-lineup-intro";
+import { ProductAction } from "./product-action";
 
 const collection = [
   {
@@ -275,14 +276,14 @@ export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: numbe
                   <item.detailIcon size={18} strokeWidth={1.5} aria-hidden="true" />
                   <p>{copy(item.detail)}</p>
                 </div>
-                <button
-                  type="button"
+                <ProductAction
+                  name={item.name}
+                  onOpen={() => onOpenProduct(index)}
                   className={styles.discover}
-                  onClick={() => onOpenProduct(index)}
                 >
                   {copy("Discover {name}", { name: item.name })}
                   <ArrowUpRight size={19} aria-hidden="true" />
-                </button>
+                </ProductAction>
               </div>
             </div>
           ))}

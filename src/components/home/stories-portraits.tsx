@@ -12,6 +12,7 @@ import styles from "./stories-portraits.module.css";
 import { ShowroomStage } from "./stories-showroom";
 import { StillLifeStage } from "./stories-stilllife";
 import { useReducedMotion } from "./use-reduced-motion";
+import { ProductAction } from "./product-action";
 
 // Mo's chosen layout: a cobalt field, one story at a time, a big serif quote, and a product link.
 // `visual` decides what holds the stage. Customer photos, photo-real invented people, and drawn people
@@ -248,17 +249,17 @@ export function StoriesPortraits({
             <span className={styles.tag}>{copy("Fictional sample")}</span>
             {label && <span className={styles.art}>{copy(label)}</span>}
           </p>
-          <button
-            type="button"
+          <ProductAction
+            name={story.product}
+            onOpen={() => onOpenProduct(story.productIndex)}
             className={styles.cta}
-            onClick={() => onOpenProduct(story.productIndex)}
           >
             <span className={styles.bottle}>
               <Image src={story.productImage} width={96} height={96} sizes="48px" alt="" />
             </span>
             <span>{copy("Discover {name}", { name: story.product })}</span>
             <ArrowUpRight size={20} aria-hidden="true" />
-          </button>
+          </ProductAction>
         </article>
       </div>
     </div>

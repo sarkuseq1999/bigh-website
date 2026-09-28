@@ -6,6 +6,7 @@ import Image from "next/image";
 import { ArrowRight, Pause, Play } from "lucide-react";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import styles from "./hero-comparison.module.css";
+import { ProductAction } from "./product-action";
 
 const motionQuery = "(prefers-reduced-motion: reduce)";
 
@@ -149,9 +150,9 @@ export function DeepSpaceHero({ onDiscover }: { onDiscover: () => void }) {
           )}
         </p>
         <div className={styles.actions}>
-          <button type="button" onClick={onDiscover} className={styles.primary}>
+          <ProductAction name="NuriCell" onOpen={onDiscover} className={styles.primary}>
             {copy("Discover NuriCell")} <ArrowRight size={20} aria-hidden="true" />
-          </button>
+          </ProductAction>
           <a href="#scientists" className={styles.secondary}>
             {copy("Meet our scientists")} <ArrowRight size={18} aria-hidden="true" />
           </a>
