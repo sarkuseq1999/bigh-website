@@ -1,0 +1,337 @@
+/* Chapter 4, "The research" (September 25, 2026): the studies on a horizontal timeline, oldest first
+   (timeline.com/about's sideways timeline, from Mo's Design Vault). Each study stands on one line:
+   its year above, a dot on the line, and below it the kind of study, the title, the journal, a
+   plain note and a link out. Tokens come from .page and .chapters. Type for older readers: body
+   18px, labels 15px and up, tap targets 44px and up.
+
+   Two layouts (template-chapters-research.tsx):
+   - The list (phones, reduced motion, short windows): a row you swipe or scroll sideways, snapping
+     study by study, the next one peeking in. Buttons step through it with a mouse.
+   - Pinned (motion, 901px wide and 700px tall and up): a sticky full-screen stage; scrolling slides
+     the timeline sideways, a gold line fills along it and each year lights as the line reaches it.
+   The heading and the honesty line stay at the top in both. */
+
+.research {
+  /* A study's column and the space between columns. The gold line's length is worked out from
+     these, so it always runs from the first year to the last. */
+  --card: min(78vw, 360px);
+  --gap: 28px;
+  /* Wide screens: the soft edge at the left of the page's lane, where studies slide out of view,
+     and the wider one at the right edge of the screen, where they come in. */
+  --edge: 0px;
+  --fade: 0px;
+  --dot: 15px;
+  /* The space above and below the dots; the lines through them are placed with it. */
+  --mark-top: clamp(10px, 1.8svh, 16px);
+  --year-size: clamp(50px, 13vw, 64px);
+  padding-block: var(--section-y);
+}
+
+/* One column as wide as the screen: the timeline inside may be far wider, but never widens it. */
+.research .stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 44px);
+}
+
+/* ─── The heading and the honesty line ─── */
+.research .head {
+  display: grid;
+  gap: 18px;
+  padding-inline: var(--pad-x);
+}
+.research .heading {
+  max-width: 13ch;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(42px, 2.6vw + 22px, 72px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1.02;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+.research .honesty {
+  max-width: 44ch;
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* ─── The timeline ─── */
+.research .window {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-block: 14px 22px;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--pad-x);
+  scrollbar-color: var(--hair-strong) transparent;
+  scrollbar-width: thin;
+}
+/* The rail moves; the studies stand on it in a row. --lead is the space before the first. */
+.research .rail {
+  --lead: var(--pad-x);
+  position: relative;
+  width: max-content;
+  padding-inline: var(--lead) var(--pad-x);
+}
+.research .list {
+  display: flex;
+  gap: var(--gap);
+}
+.research .item {
+  position: relative;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: flex-start;
+  width: var(--card);
+  scroll-snap-align: start;
+}
+.research .year {
+  color: var(--muted);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(var(--year-size) * var(--display-size, 1));
+  line-height: 0.9;
+  letter-spacing: calc(-0.02em + var(--display-track, 0em));
+  font-variant-numeric: lining-nums;
+  transition: color 0.6s var(--calm);
+}
+/* The row the dots sit in. The years above it are one line each, 0.9 of their size tall, so the
+   line and the gold line below can be placed through the dots' centres. */
+.research .mark {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: var(--dot);
+  margin-block: var(--mark-top) clamp(14px, 2.6svh, 24px);
+}
+.research .line,
+.research .fill {
+  position: absolute;
+  top: calc(var(--year-size) * 0.9 + var(--mark-top) + var(--dot) / 2);
+  left: calc(var(--lead) + var(--dot) / 2);
+  translate: 0 -50%;
+  pointer-events: none;
+}
+/* From the first dot, past the last one, fading out. */
+.research .line {
+  width: calc((var(--count) - 1) * (var(--card) + var(--gap)) + var(--card) * 0.7);
+  height: 1.5px;
+  background: linear-gradient(
+    to right,
+    var(--hair-strong) calc(100% - var(--card) * 0.7),
+    transparent
+  );
+}
+/* The gold line, from the first year to the last. Full in the still layouts; scrolling fills it. */
+.research .fill {
+  width: calc((var(--count) - 1) * (var(--card) + var(--gap)));
+  height: 3px;
+  border-radius: 3px;
+  background: var(--gold);
+  transform-origin: 0 50%;
+}
+.research .dot {
+  position: absolute;
+  z-index: 2;
+  top: 0;
+  left: 0;
+  width: var(--dot);
+  height: var(--dot);
+  border: 2px solid var(--hair-strong);
+  border-radius: 50%;
+  background: var(--tc-bg);
+  transition:
+    background-color 0.5s var(--calm),
+    border-color 0.5s var(--calm),
+    box-shadow 0.6s var(--calm);
+}
+/* Reached by the gold line: the dot turns gold and the year takes the product's ink. The latest
+   one carries a soft halo, "you are here". */
+.research .item[data-lit="true"] .year {
+  color: var(--product-ink);
+}
+.research .item[data-lit="true"] .dot {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.research .item[data-current="true"] .dot {
+  box-shadow: 0 0 0 7px rgb(234 164 58 / 0.24);
+}
+
+.research .meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 14px;
+}
+.research .kind {
+  display: inline-flex;
+  align-items: center;
+  min-height: 34px;
+  padding: 0 14px;
+  border: 1.5px solid color-mix(in srgb, var(--product-ink) 40%, transparent);
+  border-radius: 999px;
+  color: var(--product-ink);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.research .journal {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.research .title {
+  margin-top: clamp(10px, 1.8svh, 16px);
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(27px, 0.6vw + 20px, 32px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+.research .note {
+  margin: clamp(8px, 1.3svh, 12px) 0 clamp(14px, 2.6svh, 24px);
+  color: var(--text);
+  font-size: 18px;
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+/* At the foot of every column, so the links line up. */
+.research .link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin-top: auto;
+  padding: 0 18px 0 22px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    border-color 0.3s var(--calm),
+    background-color 0.3s var(--calm);
+}
+.research .link:hover {
+  border-color: var(--ink);
+  background-color: rgb(255 255 255 / 0.6);
+}
+.research .link svg {
+  flex: none;
+}
+
+/* The list's buttons, only for a mouse (touch screens swipe). */
+.research .steps {
+  display: none;
+}
+@media (hover: hover) and (pointer: fine) {
+  .research .steps {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: -12px;
+    padding-inline: var(--pad-x);
+  }
+}
+.research .step {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+  transition:
+    border-color 0.3s var(--calm),
+    background-color 0.3s var(--calm);
+}
+.research .step:hover {
+  border-color: var(--ink);
+  background-color: rgb(255 255 255 / 0.6);
+}
+
+/* ─── Wide screens: the heading beside the honesty line. Studies slide out at the left edge of the
+   page's lane (fading as they go, see the script), so the chapter index's lane stays clear, and
+   come in from the right edge of the screen ─── */
+@media (min-width: 901px) {
+  .research {
+    --card: clamp(340px, 29vw, 430px);
+    --gap: clamp(48px, 4.4vw, 72px);
+    --edge: min(16px, var(--pad-x));
+    --fade: 48px;
+    --year-size: clamp(52px, min(3.4vw, 6svh) + 18px, 88px);
+  }
+  .research .head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 25rem);
+    align-items: end;
+    column-gap: clamp(32px, 5vw, 80px);
+  }
+  .research .window {
+    margin-left: calc(var(--pad-x) - var(--edge));
+    scroll-padding-inline: var(--edge) var(--pad-x);
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--edge),
+      #000 calc(100% - var(--fade)),
+      transparent
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent,
+      #000 var(--edge),
+      #000 calc(100% - var(--fade)),
+      transparent
+    );
+  }
+  .research .rail {
+    --lead: var(--edge);
+  }
+}
+
+/* ─── Pinned: a sticky full-screen stage; the timeline slides as you scroll ─── */
+@media (min-width: 901px) and (min-height: 700px) {
+  /* --scroll: how far the timeline travels, set by the script, plus the rests. */
+  .research[data-motion="on"] {
+    height: calc(100svh + var(--scroll, 0px));
+    padding-block: 0;
+  }
+  .research[data-motion="on"] .stage {
+    position: sticky;
+    top: 0;
+    grid-template-rows: auto minmax(0, 1fr);
+    gap: 0;
+    height: 100svh;
+    padding-block: clamp(32px, 7svh, 88px) clamp(16px, 3svh, 44px);
+  }
+  .research[data-motion="on"] .window {
+    align-self: center;
+    padding-block: 10px 14px;
+    overflow-x: clip;
+    overflow-y: visible;
+    scroll-snap-type: none;
+  }
+  .research[data-motion="on"] .rail {
+    will-change: transform;
+  }
+  .research[data-motion="on"] .steps {
+    display: none;
+  }
+}
+/* Below 1100px the chapter index is a pill at the top of the screen; the heading clears it. */
+@media (min-width: 901px) and (max-width: 1099px) and (min-height: 700px) {
+  .research[data-motion="on"] .stage {
+    padding-top: 92px;
+  }
+}

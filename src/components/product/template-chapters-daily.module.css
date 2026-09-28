@@ -1,0 +1,229 @@
+/* Chapter 6, "How to take it" (September 25, 2026): one bottle drawn as a month. A day for every
+   day the bottle lasts, each with that day's capsules; the days fill one after another as you
+   scroll, and a count climbs to the bottle's capsules and days (template-chapters-daily.tsx).
+   Tokens come from .page and .chapters. Type for older readers: body 18px and up, day numbers 15px.
+
+   The capsules are drawn in CSS: small upright pills, soft white with a warm cream half and a warm
+   shadow, standing in a neat row. Never dots or clusters (on a health page those read as germs).
+
+   Two layouts:
+   - Still (reduced motion, and windows under 600px tall): the whole month shown, filled.
+   - Pinned (motion, 600px tall and up): a sticky full-screen stage; the month is sized to fit
+     whatever height is left under the words, so it always shows whole. */
+
+.daily {
+  --cols: var(--cols-narrow);
+  --rows: var(--rows-narrow);
+  /* A day's width over its height. */
+  --ratio: 1.02;
+  --cell-gap: clamp(6px, 1.6vw, 12px);
+  --max-grid: 800px;
+  padding: var(--section-y) var(--pad-x);
+}
+@media (min-width: 700px) {
+  .daily {
+    --cols: var(--cols-wide);
+    --rows: var(--rows-wide);
+    --ratio: 1.22;
+  }
+}
+
+.daily .stage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+.daily .eyebrow {
+  color: var(--product-ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.daily .title {
+  max-width: 22ch;
+  margin-top: 10px;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(44px, 3.4vw + 20px, 92px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1;
+  letter-spacing: calc(-0.02em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+.daily .use {
+  max-width: 40ch;
+  margin-top: 14px;
+  color: var(--text);
+  font-size: clamp(18px, 0.4vw + 15px, 21px);
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+/* ─── The month ─── */
+.daily .calendar {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  margin-top: clamp(26px, 4svh, 48px);
+  container-type: inline-size;
+}
+.daily .grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+  gap: var(--cell-gap);
+  width: min(100%, var(--max-grid));
+}
+.daily .day {
+  position: relative;
+  aspect-ratio: var(--ratio);
+  border: 1px solid var(--hair);
+  border-radius: clamp(8px, 1.1vw, 14px);
+  container-type: size;
+  transition:
+    background-color 0.5s var(--calm),
+    border-color 0.5s var(--calm),
+    box-shadow 0.5s var(--calm);
+}
+/* A day taken: a soft wash of the product's ink, so the white capsules stand out on it. */
+.daily .day[data-filled="true"] {
+  border-color: transparent;
+  background-color: color-mix(in srgb, var(--product-ink) 10%, transparent);
+}
+/* The latest day, ringed in gold: "today" while it fills, the last day once it has. */
+.daily .day[data-today="true"] {
+  box-shadow: 0 0 0 2px var(--gold);
+}
+.daily .number {
+  position: absolute;
+  top: clamp(4px, 9cqh, 12px);
+  left: clamp(6px, 10cqi, 14px);
+  color: var(--muted);
+  font-size: clamp(15px, 16cqi, 18px);
+  font-weight: 600;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  transition: color 0.5s var(--calm);
+}
+.daily .day[data-filled="true"] .number {
+  color: var(--ink);
+}
+.daily .pills {
+  position: absolute;
+  right: 0;
+  bottom: 13cqh;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: clamp(2px, 5cqi, 7px);
+}
+.daily .pill {
+  /* As wide as the day's width allows for this many, never so wide that it cannot stand 2.5 times
+     as tall in the day's height: always a capsule's shape. */
+  --w: min(clamp(4px, 70cqi / (var(--n) + 1.3), 16px), 18cqh);
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--w);
+  height: calc(var(--w) * 2.5);
+  border-radius: 999px;
+  background: linear-gradient(to bottom, #fff 0 50%, #f4ecdf 50% 100%);
+  box-shadow:
+    inset 0 0 0 0.5px rgb(120 86 40 / 0.18),
+    0 1px 1.5px rgb(120 80 30 / 0.16),
+    0 5px 9px -5px rgb(150 100 40 / 0.5);
+  opacity: 0;
+  transform: translateY(-35%) scale(0.8);
+  transition:
+    opacity 0.4s var(--calm),
+    transform 0.6s var(--calm);
+  transition-delay: calc(var(--i) * 70ms);
+}
+/* A soft highlight down one side. */
+.daily .pill::after {
+  content: "";
+  position: absolute;
+  top: 12%;
+  bottom: 12%;
+  left: 22%;
+  width: 20%;
+  border-radius: 999px;
+  background: linear-gradient(to bottom, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0));
+}
+.daily .day[data-filled="true"] .pill {
+  opacity: 1;
+  transform: none;
+}
+.daily .times {
+  align-self: center;
+  color: var(--ink);
+  font-size: clamp(15px, 15cqi, 18px);
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* ─── The count, and the line on the last day ─── */
+.daily .count {
+  margin-top: clamp(20px, 3svh, 36px);
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  font-size: calc(clamp(30px, 1.4vw + 20px, 46px) * var(--display-size, 1));
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+.daily .then {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+  opacity: 0;
+  transition: opacity 0.8s var(--calm);
+}
+.daily .then[data-shown="true"] {
+  opacity: 1;
+}
+
+/* ─── Pinned: a sticky full-screen stage; the month fits the height left under the words ─── */
+@media (min-height: 600px) {
+  /* --extra: the scroll the month takes to fill, set from the number of days. */
+  .daily[data-motion="on"] {
+    height: calc(100svh + var(--extra));
+    padding: 0;
+  }
+  .daily[data-motion="on"] .stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding: clamp(40px, 8svh, 84px) var(--pad-x) clamp(28px, 5svh, 56px);
+  }
+  .daily[data-motion="on"] .calendar {
+    flex: 1 1 0;
+    min-height: 0;
+    container-type: size;
+  }
+  /* As wide as the space allows, or as the height allows for this many rows, whichever is less. */
+  .daily[data-motion="on"] .grid {
+    width: min(
+      100cqw,
+      var(--max-grid),
+      var(--cols) * var(--ratio) * (100cqh - (var(--rows) - 1) * var(--cell-gap)) / var(--rows) +
+        (var(--cols) - 1) * var(--cell-gap)
+    );
+  }
+}
+/* Below 1100px the chapter index is a pill at the top of the screen; the words clear it. */
+@media (min-height: 600px) and (max-width: 1099px) {
+  .daily[data-motion="on"] .stage {
+    padding-top: 84px;
+  }
+}
+/* Phones: clear of the preview switcher at the foot of the screen (it goes once a look is chosen). */
+@media (min-height: 600px) and (max-width: 420px) {
+  .daily[data-motion="on"] .stage {
+    padding-bottom: 88px;
+  }
+}

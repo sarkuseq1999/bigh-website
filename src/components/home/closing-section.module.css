@@ -36,11 +36,11 @@
   letter-spacing: 0;
 }
 .section .cells {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 1.16em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(1.16em * var(--accent-size, 1));
   font-style: italic;
-  font-weight: 400;
-  letter-spacing: -0.035em;
+  font-weight: var(--accent-weight, var(--display-weight, 400));
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
 }
 .section .text {
   max-width: 32em;

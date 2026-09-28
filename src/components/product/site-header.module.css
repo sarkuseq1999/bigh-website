@@ -1,0 +1,104 @@
+/* Large, high-contrast header for older readers (Design Vault #045: avoid Timeline's tiny nav). */
+.header {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 24px;
+  padding: 22px var(--gutter);
+}
+.light {
+  color: var(--ink);
+}
+.dark {
+  color: var(--cream);
+}
+.header .brand {
+  display: block;
+  width: 124px;
+}
+.crop {
+  display: block;
+  width: 100%;
+  /* The logo mark ends at row 706 of 811; the tagline below it is cropped away. */
+  aspect-ratio: 1448 / 710;
+  overflow: hidden;
+}
+.logo {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  gap: clamp(18px, 2.6vw, 40px);
+  font-size: 17px;
+  font-weight: 500;
+}
+.nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  text-underline-offset: 7px;
+  text-decoration-thickness: 1.5px;
+}
+.nav a:hover,
+.nav a[aria-current="page"] {
+  text-decoration-line: underline;
+}
+.header a:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+.header .utilities > * {
+  font-size: 15px;
+}
+/* HeaderUtilities is tuned for the dark homepage hero; retune its borders for light pages. */
+.light .utilities button {
+  border-color: rgb(16 43 80 / 0.32);
+  background: transparent;
+}
+.light .utilities select:focus-visible,
+.light .utilities a:focus-visible,
+.light .utilities button:focus-visible {
+  outline-color: var(--cobalt);
+}
+
+@media (max-width: 900px) {
+  .header {
+    grid-template-columns: auto 1fr;
+    row-gap: 6px;
+    padding-top: 12px;
+  }
+  .utilities {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    display: flex;
+    justify-content: flex-end;
+  }
+  .header .utilities > * {
+    font-size: 14px;
+  }
+  .header .brand {
+    width: 108px;
+  }
+  .nav {
+    justify-content: flex-end;
+    gap: 16px;
+    font-size: 16px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+}
+@media (max-width: 560px) {
+  .header {
+    grid-template-columns: 1fr;
+  }
+  .nav {
+    justify-content: flex-start;
+  }
+}

@@ -30,10 +30,11 @@
   text-wrap: initial;
 }
 .intro h2 span {
-  font-family: var(--font-instrument), Georgia, serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--accent-weight, var(--display-weight, 400));
   font-style: italic;
-  font-size: 1.12em;
-  letter-spacing: -0.035em;
+  font-size: calc(1.12em * var(--accent-size, 1));
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
 }
 .section .introText {
   padding-bottom: 6px;
@@ -63,10 +64,11 @@
 }
 .flagshipHeading h3 span {
   display: block;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 1.16em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--accent-weight, var(--display-weight, 400));
+  font-size: calc(1.16em * var(--accent-size, 1));
   font-style: italic;
-  letter-spacing: -0.03em;
+  letter-spacing: calc(-0.03em + var(--display-track, 0em));
 }
 .featureVisual {
   position: relative;
@@ -396,9 +398,10 @@
   border-bottom: 1px solid #dfe6ee;
 }
 .section[data-collection-design="3"] .intro h2 {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(55px, 5.5vw, 85px);
-  letter-spacing: -0.025em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(55px, 5.5vw, 85px) * var(--display-size, 1));
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
 }
 .editorial {
   display: grid;
@@ -441,9 +444,10 @@
   transform: rotate(7deg);
 }
 .editorial .flagshipHeading h3 {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(47px, 4vw, 62px);
-  letter-spacing: -0.025em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(47px, 4vw, 62px) * var(--display-size, 1));
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
 }
 .editorial .description {
   font-size: 17px;

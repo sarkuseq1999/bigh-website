@@ -31,7 +31,7 @@ const collection = [
     headline: "Stay sharp. Live fully.",
     description:
       "Our flagship supplement focuses on the health of your mitochondria—the tiny power plants that supply energy for your brain and body.",
-    detail: "Formulated by mitochondrial researcher Dr. Jian Kang Liu and Dr. Iris Wang.",
+    detail: "Formulated by Dr. Jiankang Liu.",
     detailIcon: Microscope,
     highlights: [
       { icon: Orbit, label: "Mitochondrial health" },

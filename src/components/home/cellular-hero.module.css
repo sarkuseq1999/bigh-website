@@ -126,10 +126,10 @@
 .title .cellLine {
   margin-top: 3px;
   color: #45637e;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 1.18em;
-  font-weight: 400;
-  letter-spacing: -0.035em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(1.18em * var(--accent-size, 1));
+  font-weight: var(--accent-weight, var(--display-weight, 400));
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
   line-height: 1;
 }
 

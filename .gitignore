@@ -64,3 +64,6 @@ Thumbs.db
 
 # QA captures
 scripts/qa/out/
+
+# python
+__pycache__/

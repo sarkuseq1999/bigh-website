@@ -8,6 +8,10 @@ export function useCopy() {
   const translate = useTranslations("Copy");
   return (source: string, values?: Record<string, string | number>) => {
     const key = (copyKeys as Record<string, string>)[source];
-    return key ? translate(key, values) : source;
+    if (key) return translate(key, values);
+    // Untranslated drafts still fill in their {placeholders}.
+    return values
+      ? source.replace(/\{(\w+)\}/g, (match, name) => String(values[name] ?? match))
+      : source;
   };
 }
