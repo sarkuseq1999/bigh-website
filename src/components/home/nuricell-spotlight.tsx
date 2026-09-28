@@ -37,8 +37,7 @@ export function NuriCellSpotlight({ onDiscover }: { onDiscover: () => void }) {
         <div className={styles.credit}>
           <FlaskConical size={25} strokeWidth={1.3} aria-hidden="true" />
           <p>
-            Formulated by mitochondrial researcher <strong>Dr. Jian Kang Liu</strong> and{" "}
-            <strong>Dr. Iris Wang.</strong>
+            Formulated by <strong>Dr. Jiankang Liu</strong>.
           </p>
         </div>
         <button type="button" onClick={onDiscover} className={styles.discover}>

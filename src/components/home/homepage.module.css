@@ -1,5 +1,18 @@
 .site {
   position: relative;
+  /* Type (Mo picked "Swiss" on September 28, 2026): Switzer for everything, loaded in the locale
+     layout. Headline rules read the --display-* tokens; em-sized accent spans read
+     --accent-size. Other scripts fall through to the locale fonts in globals.css. */
+  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
+  --display-weight: 460;
+  --display-size: 0.84;
+  --accent-size: 0.87;
+  --display-track: 0em;
+  --display-track-small: -0.02em;
+  --accent-weight: 400;
+  --lead-weight: 400;
+  --lead-track: -0.01em;
+  font-family: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
   --ink: #242722;
   --muted: #666a64;
   --blue: #2149a3;
@@ -40,7 +53,7 @@
 .site h3,
 .site h4 {
   font-weight: 450;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.03em;
   line-height: 1.06;
   text-wrap: balance;
 }
@@ -281,10 +294,12 @@
   box-shadow: 0 20px 25px #13234512;
 }
 .dropdown p {
-  font:
-    42px/1.2 var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(42px * var(--display-size, 1));
+  line-height: 1.2;
+  font-style: normal;
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
   margin-top: 15px;
 }
 .dropdownLinks {
@@ -445,10 +460,12 @@
   letter-spacing: 0.07em;
 }
 .photoCaption p {
-  font:
-    30px/0.98 var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(30px * var(--display-size, 1));
+  line-height: 0.98;
+  font-style: normal;
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
   margin-top: 6px;
 }
 .introStrip {
@@ -532,11 +549,12 @@
   border-radius: 50%;
 }
 .scientistCopy > h3 {
-  font:
-    clamp(30px, 3.1vw, 45px)/1.08 var(--font-instrument),
-    Georgia,
-    serif;
-  letter-spacing: -0.025em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(30px, 3.1vw, 45px) * var(--display-size, 1));
+  line-height: 1.08;
+  font-style: normal;
+  font-weight: var(--display-weight, 400);
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
   margin-top: 27px;
 }
 .scientistCopy > p:not(.eyebrow) {
@@ -574,10 +592,12 @@
   place-items: center;
   border: 1px solid #b6bbc1;
   border-radius: 50%;
-  font:
-    24px var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(24px * var(--display-size, 1));
+  line-height: normal;
+  font-style: normal;
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
 }
 .iris h4 {
   font-size: 20px;
@@ -661,10 +681,12 @@
   opacity: 0.3;
 }
 .storyVisual figcaption {
-  font:
-    29px/1.2 var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(29px * var(--display-size, 1));
+  line-height: 1.2;
+  font-style: normal;
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
   text-align: center;
 }
 .storyPagination {
@@ -821,10 +843,11 @@
   margin-top: 18px;
 }
 .serifLead {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 37px;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(37px * var(--display-size, 1));
   line-height: 1.1;
-  letter-spacing: -0.025em;
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
 }
 .flagshipCopy .serifLead {
   margin-top: 23px;
@@ -957,10 +980,12 @@
   margin-top: 22px;
 }
 .researchIntro > p {
-  font:
-    30px/1.25 var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(30px * var(--display-size, 1));
+  line-height: 1.25;
+  font-style: normal;
+  font-weight: var(--lead-weight, var(--display-weight, 400));
+  letter-spacing: var(--lead-track, var(--display-track-small, 0em));
 }
 .researchFilters {
   display: flex;
@@ -1035,10 +1060,12 @@
   letter-spacing: -0.025em;
 }
 .studyJournal {
-  font:
-    24px var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(24px * var(--display-size, 1));
+  line-height: normal;
+  font-style: normal;
+  font-weight: var(--lead-weight, var(--display-weight, 400));
+  letter-spacing: var(--lead-track, var(--display-track-small, 0em));
 }
 .studyPlus {
   transition: transform 0.2s;
@@ -1259,10 +1286,12 @@
   gap: 40px;
 }
 .customerNote p {
-  font:
-    29px/1.2 var(--font-instrument),
-    Georgia,
-    serif;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(29px * var(--display-size, 1));
+  line-height: 1.2;
+  font-style: normal;
+  font-weight: var(--lead-weight, var(--display-weight, 400));
+  letter-spacing: var(--lead-track, var(--display-track-small, 0em));
 }
 .customerNote span {
   font-size: 12px;

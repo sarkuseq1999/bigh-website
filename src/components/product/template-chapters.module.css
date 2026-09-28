@@ -1,0 +1,1206 @@
+/* Template 2, "Chapters" (September 25, 2026): the product page as a short film you scroll. One idea
+   per screen, a chapter index at the left (a pill at the top on smaller screens), and the page easing
+   between paper and the product's tint from chapter to chapter. Every rule is scoped under .chapters;
+   tokens come from .page (product-page.module.css). Type for older readers: body 18px and up,
+   labels 15px and up, tap targets 44px and up. */
+
+/* The page colour of the moment. Registered, so it eases, and so the index can wear it too. */
+@property --tc-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #fbfaf7;
+}
+
+.chapters {
+  --hair: rgb(16 43 80 / 0.14);
+  --hair-strong: rgb(16 43 80 / 0.3);
+  --measure: 1120px;
+  --rail-space: 0px;
+  --pad-x: var(--gutter);
+  --section-y: clamp(88px, 12svh, 150px);
+  --calm: cubic-bezier(0.22, 1, 0.36, 1);
+  /* The "why" chapter's night: the ground its photos are made on (sampled from NuriCell's bulb). */
+  --night: #061625;
+  --tc-bg: var(--paper);
+  position: relative;
+  color: var(--text);
+  background-color: var(--tc-bg);
+}
+.chapters[data-tone="tint"] {
+  --tc-bg: var(--tint);
+}
+.chapters[data-motion="on"] {
+  transition: --tc-bg 1.2s var(--calm);
+}
+/* Without motion each part simply paints its own colour. */
+.chapters[data-motion="off"] [data-tone="tint"] {
+  background-color: var(--tint);
+}
+.chapters[data-motion="off"] [data-tone="paper"] {
+  background-color: var(--paper);
+}
+/* Wide screens keep a lane free at both sides for the chapter index, so the page stays centred. */
+@media (min-width: 1100px) {
+  .chapters {
+    --rail-space: clamp(196px, 15vw, 236px);
+    --pad-x: var(--rail-space);
+  }
+}
+
+.chapters .srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+.chapters :is(a, button):focus-visible {
+  outline: 3px solid var(--cobalt);
+  outline-offset: 4px;
+}
+.chapters button {
+  color: inherit;
+}
+.chapters .chapter {
+  position: relative;
+}
+.chapters .chapter:focus {
+  outline: none;
+}
+/* SplitText masks clip at the line box; give descenders and the serif's overhangs room. Each
+   padding is cancelled by an equal negative margin, so splitting never moves the layout. Line masks
+   are blocks, whose top and bottom margins would collapse into each other, so they get room below
+   only. */
+.chapters :global(.tc-word-mask) {
+  margin: -0.08em -0.08em -0.16em;
+  padding: 0.08em 0.08em 0.16em;
+}
+.chapters :global(.tc-line-mask) {
+  margin: 0 -0.08em -0.16em;
+  padding: 0 0.08em 0.16em;
+}
+
+/* Shared type: a centred statement, a quiet lede, and a pill-shaped secondary button. */
+.chapters .chapterHead {
+  display: grid;
+  justify-items: center;
+  max-width: 920px;
+  margin: 0 auto clamp(40px, 6vw, 72px);
+  text-align: center;
+}
+.chapters .statement {
+  max-width: 18ch;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(44px, 4.2vw + 12px, 80px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1.02;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+.chapters .lede {
+  max-width: 46ch;
+  margin-top: 20px;
+  color: var(--muted);
+  font-size: clamp(19px, 0.4vw + 16px, 21px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.chapters .disclosure {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 22px 0 26px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  transition:
+    background-color 0.3s var(--calm),
+    border-color 0.3s var(--calm);
+}
+.chapters .disclosure:hover {
+  border-color: var(--ink);
+  background-color: rgb(255 255 255 / 0.55);
+}
+.chapters .disclosure svg {
+  flex: none;
+  transition: transform 0.4s var(--calm);
+}
+.chapters .disclosure[aria-expanded="true"] svg {
+  transform: rotate(45deg);
+}
+.chapters .panel {
+  animation: tcOpen 0.5s var(--calm) both;
+}
+.chapters .note {
+  max-width: 62ch;
+  margin: clamp(40px, 5vw, 64px) auto 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: pretty;
+}
+
+/* ─── The chapter index ─── */
+.chapters .index {
+  position: fixed;
+  z-index: 40;
+  transition:
+    opacity 0.5s var(--calm),
+    visibility 0s linear 0.5s,
+    translate 0.6s var(--calm);
+}
+.chapters .index[data-shown="false"] {
+  opacity: 0;
+  visibility: hidden;
+}
+.chapters .index[data-shown="true"] {
+  transition:
+    opacity 0.5s var(--calm),
+    visibility 0s,
+    translate 0.6s var(--calm);
+}
+.chapters .indexList {
+  position: relative;
+}
+.chapters .indexLink {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 4px 14px 4px 4px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.25;
+  text-decoration: none;
+  transform-origin: 20px 50%;
+  transition:
+    color 0.35s var(--calm),
+    transform 0.5s var(--calm);
+}
+.chapters .indexLink:hover {
+  color: var(--ink);
+}
+.chapters .indexNumber {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 50%;
+  background-color: var(--tc-bg);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.chapters .indexLink[aria-current] {
+  color: var(--ink);
+  font-weight: 600;
+  transform: scale(1.07);
+}
+.chapters .indexLink[aria-current] .indexNumber {
+  border-color: var(--ink);
+  background-color: var(--ink);
+  color: var(--cream);
+}
+
+/* Wide screens: a quiet rail at the left edge, wearing the page colour. */
+@media (min-width: 1100px) {
+  .chapters .index {
+    top: 50%;
+    left: max(14px, env(safe-area-inset-left));
+    transform: translateY(-50%);
+    padding: 12px 16px 12px 10px;
+    border-radius: 28px;
+    background-color: var(--tc-bg);
+  }
+  .chapters .index[data-shown="false"] {
+    translate: -14px 0;
+  }
+  .chapters .indexToggle {
+    display: none;
+  }
+  .chapters .indexList {
+    display: grid;
+    gap: 6px;
+  }
+  .chapters .indexList li {
+    position: relative;
+    z-index: 1;
+  }
+  /* The thread between the numbers, filled in up to the current chapter (Seed's progress, #041). */
+  .chapters .indexList::before,
+  .chapters .indexList::after {
+    content: "";
+    position: absolute;
+    top: 24px;
+    left: 19.25px;
+    width: 1.5px;
+  }
+  .chapters .indexList::before {
+    bottom: 24px;
+    background: var(--hair);
+  }
+  .chapters .indexList::after {
+    height: calc((100% - 48px) * var(--progress, 0));
+    background: var(--ink);
+    transition: height 0.7s var(--calm);
+  }
+}
+
+/* Smaller screens: a pill at the top ("3 / 7 · What's inside") that opens the list. */
+@media (max-width: 1099px) {
+  .chapters .index {
+    top: max(10px, env(safe-area-inset-top));
+    left: 50%;
+    display: grid;
+    justify-items: center;
+    width: max-content;
+    max-width: calc(100% - 24px);
+    transform: translateX(-50%);
+  }
+  .chapters .index[data-shown="false"] {
+    translate: 0 -12px;
+  }
+  .chapters .indexToggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    max-width: 100%;
+    min-height: 50px;
+    padding: 0 16px 0 20px;
+    border: 1px solid var(--hair);
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.94);
+    box-shadow: 0 12px 30px -14px rgb(16 43 80 / 0.42);
+    color: var(--ink);
+    font-size: 16px;
+    font-weight: 600;
+    white-space: nowrap;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  .chapters .toggleCount {
+    color: var(--product-ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .chapters .toggleDot {
+    color: var(--muted);
+  }
+  .chapters .toggleName {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .chapters .toggleIcon {
+    flex: none;
+    transition: transform 0.35s var(--calm);
+  }
+  .chapters .indexToggle[aria-expanded="true"] .toggleIcon {
+    transform: rotate(180deg);
+  }
+  .chapters .indexList {
+    display: none;
+  }
+  .chapters .index[data-open="true"] .indexList {
+    display: grid;
+    gap: 2px;
+    width: min(340px, calc(100vw - 24px));
+    margin-top: 8px;
+    padding: 8px;
+    border: 1px solid var(--hair);
+    border-radius: 26px;
+    background: #fff;
+    box-shadow: 0 28px 60px -26px rgb(16 43 80 / 0.5);
+    animation: tcOpen 0.35s var(--calm) both;
+  }
+  .chapters .index[data-open="true"] .indexLink {
+    min-height: 52px;
+    font-size: 17px;
+  }
+  .chapters .index[data-open="true"] .indexLink[aria-current] {
+    transform: none;
+  }
+  .chapters .index[data-open="true"] .indexNumber {
+    background-color: #fff;
+  }
+  .chapters .index[data-open="true"] .indexLink[aria-current] .indexNumber {
+    background-color: var(--ink);
+  }
+}
+
+/* Over a night chapter (the dark "why" photo) the index turns light: cream words on the night, the
+   current number filled with gold. The open phone list stays white, so it keeps its own inks. */
+.chapters[data-tone="night"] .index {
+  --tc-bg: var(--night);
+  --ink: var(--cream);
+  --muted: rgb(255 250 242 / 0.76);
+  --hair: rgb(255 250 242 / 0.22);
+  --hair-strong: rgb(255 250 242 / 0.4);
+}
+.chapters[data-tone="night"] .index[data-open="true"] .indexList {
+  --tc-bg: #fff;
+  --ink: #102b50;
+  --muted: #5b6672;
+  --hair: rgb(16 43 80 / 0.14);
+  --hair-strong: rgb(16 43 80 / 0.3);
+}
+@media (min-width: 1100px) {
+  .chapters .index {
+    transition:
+      opacity 0.5s var(--calm),
+      visibility 0s linear 0.5s,
+      translate 0.6s var(--calm),
+      background-color 0.6s var(--calm);
+  }
+  .chapters .index[data-shown="true"] {
+    transition:
+      opacity 0.5s var(--calm),
+      visibility 0s,
+      translate 0.6s var(--calm),
+      background-color 0.6s var(--calm);
+  }
+  /* No pill of its own over the night: the picture's warm light may reach under the rail. */
+  .chapters[data-tone="night"] .index {
+    background-color: transparent;
+  }
+  .chapters[data-tone="night"] .indexLink[aria-current] .indexNumber {
+    border-color: var(--gold);
+    background-color: var(--gold);
+    color: var(--navy);
+  }
+}
+@media (max-width: 1099px) {
+  .chapters .indexToggle {
+    transition:
+      background-color 0.6s var(--calm),
+      border-color 0.6s var(--calm),
+      color 0.6s var(--calm);
+  }
+  .chapters[data-tone="night"] .indexToggle {
+    background: rgb(6 22 37 / 0.82);
+    box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.7);
+  }
+  .chapters[data-tone="night"] .toggleCount {
+    color: var(--gold);
+  }
+}
+
+/* ─── 1 · Overview: the bottle set inside the headline words (Design Vault #006) ─── */
+.chapters .meet {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  min-height: 100svh;
+  padding: 148px var(--gutter) clamp(56px, 8svh, 96px);
+  text-align: center;
+}
+.chapters .eyebrow {
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+.chapters .eyebrow b {
+  color: var(--ink);
+  font-weight: 600;
+}
+/* The top margin, in em, leaves room for the bottle standing above the capitals. */
+.chapters .display {
+  max-width: 100%;
+  margin-top: 0.38em;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(52px, 8.6vw + 12px, 138px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1;
+  letter-spacing: calc(-0.02em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+/* Longer headlines (other products) step down a size so they stay a headline, not a paragraph. */
+.chapters .display[data-long="true"] {
+  font-size: clamp(44px, 5.4vw + 12px, 104px);
+}
+.chapters .display:is(:lang(ko), :lang(ja), :lang(zh)) {
+  font-size: clamp(44px, 6vw + 12px, 104px);
+  line-height: 1.12;
+  letter-spacing: 0;
+}
+@media (max-width: 700px) {
+  .chapters .display {
+    font-size: clamp(52px, 17vw, 88px);
+  }
+  .chapters .display[data-long="true"] {
+    font-size: clamp(40px, 11.5vw, 64px);
+  }
+}
+.chapters .glue {
+  white-space: nowrap;
+}
+/* The bottle stands on the baseline, a little taller than the capitals. The PNG has wide clear
+   margins (about 24% a side), so negative margins pull the words close; the top margin keeps the
+   line height even. */
+.chapters .inlineBottle {
+  display: inline-block;
+  height: 1.2em;
+  margin: -0.34em -0.19em 0 -0.21em;
+  vertical-align: -0.1em;
+}
+.chapters .inlineBottle img {
+  display: block;
+  width: auto;
+  height: 100%;
+  filter: drop-shadow(0 0.05em 0.05em rgb(16 43 80 / 0.2));
+}
+.chapters .purpose {
+  max-width: 44ch;
+  margin-top: clamp(22px, 3svh, 34px);
+  color: var(--text);
+  font-size: clamp(19px, 0.5vw + 15px, 22px);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+.chapters .highlights {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px 28px;
+  margin-top: 20px;
+}
+.chapters .highlights li {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.chapters .tick {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--lime);
+  color: var(--ink);
+}
+.chapters .meetCart {
+  width: min(100%, 360px);
+  margin-top: clamp(26px, 3.6svh, 40px);
+}
+.chapters .supply {
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.chapters .cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  margin-top: clamp(20px, 4svh, 44px);
+  padding: 0 10px;
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.3s var(--calm);
+}
+.chapters .cue:hover {
+  color: var(--ink);
+}
+.chapters .cueIcon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 50%;
+  color: var(--ink);
+}
+
+/* ─── 2 · Why: a photo that softens under one line (#007 → #009), then, for products without a
+   night photo (template-chapters-why.module.css), a short list on paper (#011) ─── */
+.chapters .photoStage {
+  padding: 16px var(--pad-x);
+}
+.chapters[data-motion="on"] .photoTrack {
+  height: 185svh;
+}
+.chapters[data-motion="on"] .photoStage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+.chapters .photoFrame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  height: min(86svh, 820px);
+  margin: 0;
+  overflow: hidden;
+  border-radius: 28px;
+  background: #cfd8de;
+  isolation: isolate;
+}
+.chapters[data-motion="on"] .photoFrame {
+  height: 100%;
+}
+.chapters .photoFrame img {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 42%;
+}
+.chapters .photoShade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(70% 60% at 50% 50%, rgb(4 19 40 / 0.46), rgb(4 19 40 / 0.2));
+}
+.chapters .photoLine {
+  max-width: 15ch;
+  padding: 0 24px;
+  color: #fffaf2;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(42px, 4.4vw + 14px, 94px) * var(--display-size, 1));
+  line-height: 1.02;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 2px 30px rgb(4 19 40 / 0.35);
+}
+
+.chapters .whyStage {
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: clamp(18px, 3svh, 34px);
+  padding: var(--section-y) var(--pad-x);
+  text-align: center;
+}
+/* The stage is pinned only in windows tall enough to hold it (not phones held sideways); shorter
+   ones get the still layout. Pinned, it wears the page colour itself. */
+@media (min-height: 561px) {
+  .chapters[data-motion="on"] .whyTrack {
+    height: calc(100svh + var(--beats, 5) * 40svh);
+  }
+  .chapters[data-motion="on"] .whyStage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding-block: clamp(84px, 11svh, 116px) clamp(36px, 6svh, 72px);
+    background-color: var(--tc-bg);
+  }
+}
+.chapters .whyLabel {
+  color: var(--product-ink);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.chapters .whyBody {
+  display: grid;
+  align-items: center;
+  justify-items: center;
+  gap: clamp(24px, 4vw, 64px);
+  width: 100%;
+  max-width: var(--measure);
+}
+.chapters .whyLines {
+  display: grid;
+  gap: 18px;
+  width: 100%;
+  max-width: 560px;
+  text-align: left;
+}
+.chapters .whyLine {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr);
+  gap: 16px;
+  align-items: start;
+  color: var(--text);
+  font-size: clamp(18px, 0.3vw + 16px, 20px);
+  line-height: 1.55;
+}
+.chapters .whyIndex {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  margin-top: -2px;
+  border: 1.5px solid var(--accent);
+  border-radius: 50%;
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+}
+.chapters .whyTitle {
+  max-width: 19ch;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(38px, 2.8vw + 18px, 68px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1.04;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+/* Pinned on smaller screens, the lines take turns in one place. */
+@media (max-width: 1099px) and (min-height: 561px) {
+  .chapters[data-motion="on"] .whyLine {
+    grid-area: 1 / 1;
+  }
+}
+
+/* ─── 3 · What's inside: the signature moment, then every ingredient ─── */
+/* The capsule moment places its captions at var(--gutter); inside this chapter the gutter clears the
+   chapter index. */
+@media (min-width: 1100px) {
+  .chapters .inside {
+    --gutter: var(--rail-space);
+  }
+}
+.chapters .insideBody {
+  padding: var(--section-y) var(--pad-x);
+}
+.chapters .ingredients {
+  max-width: var(--measure);
+  margin-inline: auto;
+  border-top: 1px solid var(--hair);
+}
+.chapters .ingredients + .ingredients {
+  border-top: 0;
+}
+.chapters .ingredient {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.5fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-areas: "amount name role";
+  gap: 10px clamp(20px, 3vw, 48px);
+  align-items: baseline;
+  padding: 28px 4px;
+  border-bottom: 1px solid var(--hair);
+}
+.chapters .amount {
+  grid-area: amount;
+  color: var(--product-ink);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  font-size: calc(clamp(38px, 1.6vw + 20px, 52px) * var(--display-size, 1));
+  line-height: 1;
+  white-space: nowrap;
+}
+.chapters .unit {
+  margin-left: 6px;
+  font-family: var(--sans);
+  font-size: 18px;
+  font-weight: 600;
+}
+.chapters .ingredientText {
+  grid-area: name;
+}
+.chapters .ingredientName {
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(28px, 0.8vw + 20px, 36px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  line-height: 1.08;
+}
+.chapters .ingredientForm {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.chapters .ingredientRole {
+  grid-area: role;
+  font-size: 18px;
+  line-height: 1.6;
+}
+.chapters .insideActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: clamp(32px, 4vw, 48px);
+}
+.chapters .labelPanel {
+  max-width: 760px;
+  margin: 24px auto 0;
+  padding: clamp(24px, 3vw, 36px);
+  border: 1px solid var(--hair);
+  border-radius: 24px;
+  background: #fff;
+}
+.chapters .labelTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 17px;
+  line-height: 1.45;
+}
+.chapters .labelTable caption {
+  padding-bottom: 12px;
+  color: var(--muted);
+  font-size: 16px;
+  text-align: left;
+}
+.chapters .labelTable :is(th, td) {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--hair);
+  text-align: left;
+  vertical-align: top;
+}
+.chapters .labelTable thead th {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 600;
+}
+.chapters .labelTable tbody th {
+  color: var(--ink);
+  font-weight: 500;
+}
+.chapters .labelTable :is(td, thead th:last-child) {
+  padding-left: 16px;
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+.chapters .other {
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.6;
+}
+@media (max-width: 860px) {
+  .chapters .ingredient {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "name amount"
+      "role role";
+    gap: 12px 20px;
+    padding: 24px 2px;
+  }
+}
+
+/* ─── 4 · The research: its own module, template-chapters-research.module.css ─── */
+
+/* ─── 5 · The people: a portrait and plain lines (Timeline #005); text only without a photo ─── */
+.chapters .people {
+  padding: var(--section-y) var(--pad-x);
+}
+.chapters .person {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.chapters .person + .person {
+  margin-top: clamp(56px, 8vw, 104px);
+}
+.chapters .portrait {
+  margin: 0;
+  overflow: hidden;
+  border-radius: 24px;
+  background: #2b2f33;
+  aspect-ratio: 4 / 5;
+}
+.chapters .portrait img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 22%;
+}
+.chapters .personName {
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(40px, 2.2vw + 22px, 60px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1;
+  letter-spacing: calc(-0.01em + var(--display-track, 0em));
+}
+.chapters .personTitle {
+  margin-top: 12px;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.45;
+}
+.chapters .personLead {
+  margin-top: 26px;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-weight: var(--lead-weight, var(--display-weight, 400));
+  letter-spacing: var(--lead-track, var(--display-track-small, 0em));
+  font-size: calc(clamp(25px, 0.9vw + 18px, 33px) * var(--display-size, 1));
+  line-height: 1.28;
+  text-wrap: pretty;
+}
+.chapters .personLine {
+  margin-top: 18px;
+  font-size: 19px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+/* People without a photo continue in the text column, under a thin rule. */
+.chapters .plainPeople {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1fr);
+  gap: clamp(32px, 5vw, 80px);
+  max-width: 1080px;
+  margin: clamp(48px, 6vw, 80px) auto 0;
+}
+.chapters .plainPeople[data-alone="true"] {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 720px;
+  margin-top: 0;
+  text-align: center;
+}
+.chapters .plainList {
+  display: grid;
+  gap: 36px;
+  grid-column: -2 / -1;
+}
+.chapters .plainPerson {
+  padding-top: 28px;
+  border-top: 1px solid var(--hair-strong);
+}
+.chapters .plainPerson .personName {
+  font-size: clamp(32px, 1.2vw + 22px, 42px);
+}
+.chapters .plainPerson .personLine:first-of-type {
+  margin-top: 16px;
+}
+@media (max-width: 860px) {
+  .chapters .person,
+  .chapters .plainPeople {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .chapters .portrait {
+    width: min(100%, 420px);
+  }
+  .chapters .plainList {
+    grid-column: auto;
+  }
+}
+
+/* ─── 6 · How to take it: its own module, template-chapters-daily.module.css ─── */
+
+/* ─── 7 · Buy: the bottle on the tint, then questions and the rest of the range ─── */
+.chapters .buyStage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0.95fr);
+  gap: clamp(32px, 5vw, 88px);
+  align-items: center;
+  min-height: 100svh;
+  max-width: calc(var(--measure) + 2 * var(--pad-x));
+  margin-inline: auto;
+  padding: var(--section-y) var(--pad-x);
+}
+/* Its own layer, so the floor shadow below the bottle never slips under the page colour. */
+.chapters .buyFigure {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  isolation: isolate;
+}
+.chapters .buyBottle {
+  position: relative;
+  display: block;
+}
+/* A soft floor shadow under the bottle's base. */
+.chapters .buyBottle::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  right: 20%;
+  bottom: -2.5%;
+  z-index: -1;
+  height: 7%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(16 43 80 / 0.26), rgb(16 43 80 / 0));
+}
+.chapters .buyBottle img {
+  display: block;
+  width: auto;
+  height: min(60svh, 560px);
+}
+.chapters .buyStage3d {
+  display: block;
+  width: min(100%, 56svh, 520px);
+}
+.chapters .buyText {
+  display: grid;
+  justify-items: start;
+}
+.chapters .buyEyebrow {
+  color: var(--product-ink);
+  font-size: 17px;
+  font-weight: 600;
+}
+.chapters .buyName {
+  margin-top: 12px;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(56px, 3.6vw + 30px, 104px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 0.95;
+  letter-spacing: calc(-0.02em + var(--display-track, 0em));
+}
+.chapters .buyFocus {
+  margin-top: 14px;
+  color: var(--text);
+  font-size: 20px;
+  line-height: 1.45;
+}
+.chapters .buyFacts {
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 440px;
+  margin-top: 30px;
+  padding-top: 26px;
+  border-top: 1px solid var(--hair-strong);
+}
+.chapters .buyFacts dt {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 500;
+}
+.chapters .buyFacts dd {
+  margin: 2px 0 0;
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.45;
+}
+.chapters .buyCart {
+  width: min(100%, 360px);
+  margin-top: 30px;
+}
+.chapters .credit {
+  max-width: 44ch;
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+@media (max-width: 860px) {
+  .chapters .buyStage {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    min-height: 0;
+  }
+  .chapters .buyBottle img {
+    height: min(46svh, 380px);
+  }
+}
+
+.chapters .questions {
+  padding: var(--section-y) var(--pad-x) clamp(56px, 7vw, 96px);
+}
+.chapters .blockTitle {
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: calc(clamp(40px, 2.4vw + 22px, 64px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1.02;
+  letter-spacing: calc(-0.01em + var(--display-track, 0em));
+  text-align: center;
+}
+.chapters .faq {
+  max-width: 860px;
+  margin: clamp(28px, 4vw, 44px) auto 0;
+  border-top: 1px solid var(--hair-strong);
+}
+.chapters .faqItem {
+  border-bottom: 1px solid var(--hair-strong);
+}
+.chapters .faqButton {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  min-height: 76px;
+  padding: 18px 4px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.4;
+  text-align: left;
+}
+.chapters .faqIcon {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--hair-strong);
+  border-radius: 50%;
+  transition:
+    transform 0.4s var(--calm),
+    background-color 0.3s var(--calm),
+    color 0.3s var(--calm);
+}
+.chapters .faqButton:hover .faqIcon {
+  border-color: var(--ink);
+}
+.chapters .faqButton[aria-expanded="true"] .faqIcon {
+  border-color: var(--ink);
+  background-color: var(--ink);
+  color: var(--cream);
+  transform: rotate(45deg);
+}
+.chapters .faqAnswer {
+  max-width: 64ch;
+  padding: 0 64px 26px 4px;
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.chapters .more {
+  padding: clamp(40px, 5vw, 72px) var(--pad-x) var(--section-y);
+}
+.chapters .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 16px;
+  max-width: var(--measure);
+  margin: clamp(28px, 4vw, 44px) auto 0;
+}
+.chapters .card {
+  display: grid;
+  grid-template-rows: auto auto 1fr;
+  gap: 6px;
+  height: 100%;
+  padding: 16px 18px 22px;
+  border-radius: 24px;
+  background: var(--card-tint);
+  color: var(--ink);
+  text-decoration: none;
+  transition:
+    transform 0.45s var(--calm),
+    box-shadow 0.45s var(--calm);
+}
+.chapters .card:hover {
+  box-shadow: 0 26px 44px -30px rgb(16 43 80 / 0.5);
+  transform: translateY(-3px);
+}
+.chapters .cardPlate {
+  display: grid;
+  place-items: center;
+  height: 196px;
+}
+.chapters .cardPlate img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+.chapters .cardName {
+  margin-top: 6px;
+  color: var(--card-ink);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  font-size: calc(28px * var(--display-size, 1));
+  line-height: 1.05;
+}
+.chapters .cardFocus {
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.45;
+}
+@media (max-width: 700px) {
+  .chapters .cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .chapters .card {
+    grid-template-columns: 96px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    align-content: center;
+    gap: 4px 16px;
+    padding: 12px 18px 12px 10px;
+  }
+  .chapters .cardPlate {
+    grid-row: 1 / span 2;
+    height: 112px;
+  }
+  .chapters .cardName {
+    align-self: end;
+    margin-top: 0;
+  }
+  .chapters .cardFocus {
+    align-self: start;
+  }
+}
+
+/* ─── Smaller screens: the header takes two rows, then three ─── */
+@media (max-width: 900px) {
+  .chapters .meet {
+    padding-top: 176px;
+  }
+}
+@media (max-width: 560px) {
+  .chapters .meet {
+    padding-top: 204px;
+  }
+  .chapters .faqAnswer {
+    padding-right: 4px;
+  }
+  .chapters .faqButton {
+    font-size: 19px;
+  }
+}
+
+/* With scripts and motion on, the first screen starts hidden, exactly where the intro starts, so
+   nothing flashes. The failsafe shows it anyway if the intro never runs. */
+@media (scripting: enabled) and (prefers-reduced-motion: no-preference) {
+  .chapters .meet:not([data-intro]) [data-intro-item] {
+    visibility: hidden;
+    animation: tcFailsafe 0s linear 2.8s forwards;
+  }
+}
+@keyframes tcFailsafe {
+  to {
+    visibility: visible;
+  }
+}
+@keyframes tcOpen {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chapters *,
+  .chapters *::before,
+  .chapters *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

@@ -26,10 +26,10 @@
 }
 
 .intro .second {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
   font-style: italic;
-  letter-spacing: -0.025em;
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
   word-spacing: 0.06em;
   color: #32749a;
 }

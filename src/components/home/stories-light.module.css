@@ -116,11 +116,11 @@
   max-width: 40rem;
 }
 .light .title {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(2.75rem, 4.6vw, 4.75rem);
-  font-weight: 400;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-size: calc(clamp(2.75rem, 4.6vw, 4.75rem) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
   line-height: 1;
-  letter-spacing: -0.015em;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
   text-wrap: balance;
 }
 .light .title:is(:lang(ko), :lang(ja), :lang(zh)) {

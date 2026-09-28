@@ -38,10 +38,11 @@
 }
 .title span {
   display: block;
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 1.12em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--accent-weight, var(--display-weight, 400));
+  font-size: calc(1.12em * var(--accent-size, 1));
   font-style: italic;
-  letter-spacing: -0.04em;
+  letter-spacing: calc(-0.04em + var(--display-track, 0em));
 }
 .visual {
   grid-area: visual;

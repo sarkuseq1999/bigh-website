@@ -1,0 +1,329 @@
+/* Chapter 2, "Why it matters", at night (September 25, 2026): a photo made for the chapter on a dark
+   ground, and the story told over it one idea per screen (template-chapters-why.tsx). The chapter
+   wears the photo's own ground (--night on .chapters, sampled from its pixels) and the photo's edges
+   are feathered, so the picture has no edges. Other tokens come from .page and .chapters.
+   Type for older readers: 20px and up, the source line 15px. Contrast on the night: cream about
+   17:1, the gold-cream figures about 13:1, the gold label about 8:1, the source line about 8:1.
+
+   Two layouts. Still (reduced motion, and windows too short to pin): the lit picture on top, every
+   figure and line below it. Pinned (motion, 561px tall and up): a sticky full-screen stage where
+   every moment takes its turn in one place; the words sit beside the picture on landscape screens
+   and under it on portrait ones. */
+
+.night {
+  --figure: #f6d7a6;
+  --quiet: rgb(255 250 242 / 0.72);
+  --gap: clamp(36px, 6svh, 64px);
+  /* Where the photo's subject sits, as a share of the picture (NuriCell: the bulb's filament).
+     Photos for this chapter are composed alike: the subject in the right half, hanging from the top. */
+  --focus-x: 69.3%;
+  --focus-y: 46%;
+  position: relative;
+  background-color: var(--night);
+  color: var(--cream);
+}
+.night .stage {
+  position: relative;
+  overflow: hidden;
+  padding-bottom: clamp(56px, 9svh, 104px);
+}
+
+/* ─── The picture: a frame the photo's shape, feathered into the night ─── */
+.night .picture {
+  position: relative;
+  height: clamp(300px, 62svh, 660px);
+  overflow: hidden;
+  transform-origin: var(--focus-x) 40%;
+}
+/* Centred on its subject; anchored at the top, where the bulb hangs from. */
+.night .frame {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 100%;
+  aspect-ratio: var(--ratio);
+  translate: calc(-1 * var(--focus-x)) 0;
+  transform-origin: var(--focus-x) var(--focus-y);
+  -webkit-mask-image:
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+    linear-gradient(to bottom, #000 82%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(to right, transparent, #000 10%, #000 90%, transparent),
+    linear-gradient(to bottom, #000 82%, transparent);
+  mask-composite: intersect;
+}
+.night .photo {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+/* The warm light the bulb throws into the room, over the lit photo. */
+.night .glow {
+  position: absolute;
+  top: var(--focus-y);
+  left: var(--focus-x);
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  translate: -50% -50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(255 198 122 / 0.3),
+    rgb(255 178 92 / 0.12) 42%,
+    rgb(255 160 70 / 0.04) 72%,
+    transparent
+  );
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+/* ─── The words ─── */
+.night .copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: clamp(18px, 3svh, 28px);
+  margin-top: -24px;
+  padding-inline: var(--gutter);
+  text-align: center;
+}
+.night .label {
+  color: var(--gold);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+.night .moments {
+  display: grid;
+  justify-items: center;
+  gap: var(--gap);
+  width: 100%;
+}
+.night .facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+  gap: 36px clamp(24px, 4vw, 64px);
+  width: 100%;
+  max-width: 820px;
+}
+.night .fact {
+  display: grid;
+  align-content: start;
+  justify-items: center;
+  gap: 16px;
+}
+.night .figure {
+  color: var(--figure);
+  font-family: var(--display-font);
+  font-size: calc(clamp(96px, 7vw + 64px, 168px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 0.84;
+  letter-spacing: calc(-0.03em + var(--display-track, 0em));
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
+}
+.night .unit {
+  margin-left: 0.03em;
+  font-size: 0.5em;
+  vertical-align: 0.72em;
+  letter-spacing: 0;
+}
+/* A figure that arrives with the light on carries a little of its glow. */
+.night .fact[data-lit="true"] .figure {
+  text-shadow: 0 0 0.22em rgb(234 164 58 / 0.36);
+}
+.night .factLine {
+  max-width: 23ch;
+  color: var(--cream);
+  font-size: clamp(20px, 0.5vw + 18px, 26px);
+  line-height: 1.4;
+  text-wrap: balance;
+}
+.night .comparison {
+  max-width: 17ch;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(32px, 2vw + 24px, 56px) * var(--display-size, 1));
+  line-height: 1.08;
+  letter-spacing: calc(-0.01em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+.night .line {
+  max-width: 26ch;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight, 400);
+  letter-spacing: var(--display-track-small, 0em);
+  font-size: calc(clamp(26px, 0.9vw + 21px, 38px) * var(--display-size, 1));
+  line-height: 1.16;
+  text-wrap: pretty;
+}
+/* Still, the lines read as one short passage. */
+.night .line + .line {
+  margin-top: calc(22px - var(--gap));
+}
+.night .title {
+  max-width: 14ch;
+  color: var(--cream);
+  font-family: var(--display-font);
+  font-size: calc(clamp(44px, 3vw + 30px, 84px) * var(--display-size, 1));
+  font-weight: var(--display-weight, 400);
+  line-height: 1.02;
+  letter-spacing: calc(-0.015em + var(--display-track, 0em));
+  text-wrap: balance;
+}
+.night .source {
+  position: relative;
+  margin: clamp(44px, 7svh, 72px) var(--gutter) 0;
+  color: var(--quiet);
+  font-size: 15px;
+  line-height: 1.5;
+  text-align: center;
+  text-wrap: balance;
+}
+/* The page's index turns light when this passes 45% of the window: when the night fills it. */
+.night .marker {
+  position: absolute;
+  top: 45svh;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
+}
+
+/* ─── Pinned: a sticky full-screen stage, one moment at a time ─── */
+@media (min-height: 561px) {
+  .night[data-motion="on"] {
+    height: calc(100svh + var(--beats) * var(--beat));
+  }
+  .night[data-motion="on"] .stage {
+    position: sticky;
+    top: 0;
+    height: 100svh;
+    padding: 0;
+  }
+  /* Portrait: the picture fills the upper part, the words sit below it. */
+  .night[data-motion="on"] .picture {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 57svh;
+  }
+  .night[data-motion="on"] .copy {
+    position: absolute;
+    inset: calc(57svh - 28px) 0 104px;
+    align-content: start;
+    margin: 0;
+  }
+  .night[data-motion="on"] .moments,
+  .night[data-motion="on"] .facts {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .night[data-motion="on"] .moments > *,
+  .night[data-motion="on"] .facts > * {
+    grid-area: 1 / 1;
+  }
+  .night[data-motion="on"] .moments > * {
+    align-self: start;
+    justify-self: center;
+  }
+  .night[data-motion="on"] .line + .line {
+    margin-top: 0;
+  }
+  /* Waiting for their turn; the timeline takes them from here. */
+  .night[data-motion="on"] .moments > :not(:first-child),
+  .night[data-motion="on"] .facts > :not(:first-child),
+  .night[data-motion="on"] [data-why-lit],
+  .night[data-motion="on"] [data-why-glow] {
+    opacity: 0;
+  }
+  /* Clear of the preview switcher at the foot of phone screens (it goes once a look is chosen). */
+  .night[data-motion="on"] .source {
+    position: absolute;
+    right: 0;
+    bottom: 36px;
+    left: 0;
+    margin: 0 var(--gutter);
+  }
+  .night[data-motion="on"] .figure {
+    font-size: clamp(104px, 28vw + 12px, 176px);
+  }
+  .night[data-motion="on"] .comparison {
+    font-size: clamp(30px, 3vw + 20px, 52px);
+  }
+  .night[data-motion="on"] .line {
+    font-size: clamp(25px, 1.6vw + 19px, 38px);
+  }
+  .night[data-motion="on"] .title {
+    font-size: clamp(40px, 4vw + 25px, 76px);
+  }
+}
+@media (min-height: 561px) and (max-width: 420px) {
+  .night[data-motion="on"] .copy {
+    bottom: 132px;
+  }
+  .night[data-motion="on"] .source {
+    bottom: 92px;
+  }
+}
+
+/* Landscape: the picture fills the stage, anchored top right; the words stand beside it. */
+@media (min-height: 561px) and (min-width: 900px) and (min-aspect-ratio: 5/4) {
+  .night[data-motion="on"] {
+    --frame-h: min(100svh, 66vw);
+  }
+  .night[data-motion="on"] .picture {
+    inset: 0;
+    height: auto;
+  }
+  .night[data-motion="on"] .frame {
+    right: 0;
+    left: auto;
+    height: var(--frame-h);
+    translate: 12% 0;
+  }
+  /* From the page's left lane to just short of the bulb (its glass starts at 53% of the photo). */
+  .night[data-motion="on"] .copy {
+    inset: 0 auto 0 var(--pad-x);
+    width: min(680px, calc(100% - var(--pad-x) - 0.35 * var(--frame-h) * var(--ratio) - 56px));
+    align-content: center;
+    justify-items: start;
+    padding: 72px 0 96px;
+    text-align: left;
+  }
+  .night[data-motion="on"] .moments {
+    justify-items: start;
+  }
+  .night[data-motion="on"] .moments > * {
+    align-self: center;
+    justify-self: start;
+  }
+  .night[data-motion="on"] .fact {
+    justify-items: start;
+  }
+  .night[data-motion="on"] .source {
+    right: auto;
+    bottom: 36px;
+    left: var(--pad-x);
+    margin: 0;
+    text-align: left;
+  }
+  .night[data-motion="on"] .figure {
+    font-size: clamp(170px, 14vw + 48px, 300px);
+  }
+  .night[data-motion="on"] .factLine {
+    font-size: clamp(24px, 0.8vw + 17px, 32px);
+  }
+  .night[data-motion="on"] .comparison {
+    font-size: clamp(44px, 2.2vw + 18px, 72px);
+  }
+  .night[data-motion="on"] .line {
+    font-size: clamp(34px, 1.3vw + 19px, 50px);
+  }
+  .night[data-motion="on"] .title {
+    font-size: clamp(56px, 3.2vw + 20px, 96px);
+  }
+}

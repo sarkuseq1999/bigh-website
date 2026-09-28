@@ -52,7 +52,7 @@
 .section .title {
   font-size: clamp(48px, 5.1vw, 84px);
   font-weight: 450;
-  letter-spacing: -0.05em;
+  letter-spacing: -0.035em;
   line-height: 1.07;
   text-wrap: initial;
 }
@@ -142,7 +142,7 @@
 .section[data-art-side="left"] .title {
   font-size: clamp(48px, 4.5vw, 74px);
   line-height: 1.08;
-  letter-spacing: -0.045em;
+  letter-spacing: -0.035em;
 }
 .section[data-art-side="left"] .title span {
   text-wrap: balance;
@@ -177,10 +177,11 @@
   --science-ink: #163f34;
 }
 .section[data-design="2"] .title {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(60px, 5.5vw, 90px);
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(60px, 5.5vw, 90px) * var(--display-size, 1));
   line-height: 1.02;
-  letter-spacing: -0.025em;
+  letter-spacing: calc(-0.025em + var(--display-track, 0em));
 }
 .section[data-design="2"] .eyebrow {
   color: #486c5e;
@@ -190,10 +191,11 @@
   --science-ink: #3d2925;
 }
 .section[data-design="3"] .title {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(62px, 5.8vw, 94px);
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(62px, 5.8vw, 94px) * var(--display-size, 1));
   line-height: 1.01;
-  letter-spacing: -0.035em;
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
 }
 .section[data-design="3"] .title span {
   font-style: italic;
@@ -211,10 +213,11 @@
   max-width: 950px;
 }
 .section[data-design="4"] .title span {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: 1.15em;
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--accent-weight, var(--display-weight, 400));
+  font-size: calc(1.15em * var(--accent-size, 1));
   font-style: italic;
-  letter-spacing: -0.035em;
+  letter-spacing: calc(-0.035em + var(--display-track, 0em));
 }
 .section[data-design="4"] .content {
   width: 35%;
@@ -266,10 +269,11 @@
   text-align: center;
 }
 .section[data-design="6"] .title {
-  font-family: var(--font-instrument), Georgia, serif;
-  font-size: clamp(64px, 7.6vw, 122px);
+  font-family: var(--display-font, var(--font-instrument), Georgia, serif);
+  font-weight: var(--display-weight, 400);
+  font-size: calc(clamp(64px, 7.6vw, 122px) * var(--display-size, 1));
   line-height: 1.01;
-  letter-spacing: -0.033em;
+  letter-spacing: calc(-0.033em + var(--display-track, 0em));
 }
 .section[data-design="6"] .content {
   width: 32%;
