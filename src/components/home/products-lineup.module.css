@@ -235,6 +235,13 @@
   background: linear-gradient(180deg, transparent 15%, #06161b24 35%, #06161bbb 100%);
 }
 
+/* For products with their own page, the picture and title open it. */
+.storyHeading .storyLink {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
 .storyImage {
   z-index: -2;
   object-fit: cover;

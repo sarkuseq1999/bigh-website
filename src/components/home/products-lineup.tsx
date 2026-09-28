@@ -21,7 +21,8 @@ import { useRef, useState, type CSSProperties, type KeyboardEvent } from "react"
 import { useCopy } from "@/i18n/use-copy";
 import styles from "./products-lineup.module.css";
 import { ProductsLineupIntro } from "./products-lineup-intro";
-import { ProductAction } from "./product-action";
+import { Link, useRouter } from "@/i18n/navigation";
+import { ProductAction, productPage } from "./product-action";
 
 const collection = [
   {
@@ -127,6 +128,7 @@ function colors(index: number): CSSProperties {
 
 export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: number) => void }) {
   const copy = useCopy();
+  const router = useRouter();
   const [selected, setSelected] = useState(0);
   const tabs = useRef<HTMLDivElement>(null);
   const storyFrame = useRef<HTMLDivElement>(null);
@@ -148,6 +150,13 @@ export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: numbe
         });
       });
     }
+  }
+
+  // Clicking the bottle that is already showing opens that product's page, when it has one.
+  function press(index: number) {
+    const page = productPage(collection[index].name);
+    if (selected === index && page) router.push(page);
+    else choose(index);
   }
 
   function navigate(event: KeyboardEvent<HTMLButtonElement>, index: number) {
@@ -202,7 +211,7 @@ export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: numbe
               style={colors(index)}
               data-product={index}
               data-flagship={index === 0}
-              onClick={() => choose(index)}
+              onClick={() => press(index)}
               onKeyDown={(event) => navigate(event, index)}
             >
               <span className={styles.visual}>
@@ -246,6 +255,15 @@ export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: numbe
               className={styles.story}
             >
               <div className={styles.storyHeading}>
+                {productPage(item.name) && (
+                  // The picture and title open the page too; the Discover link is the keyboard path.
+                  <Link
+                    href={productPage(item.name)!}
+                    className={styles.storyLink}
+                    aria-hidden="true"
+                    tabIndex={-1}
+                  />
+                )}
                 {selected === index && (
                   <Image
                     src={item.storyImage}

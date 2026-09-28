@@ -3,6 +3,8 @@
 import Image from "next/image";
 import gsap from "gsap";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { Link } from "@/i18n/navigation";
+import { productPage } from "./product-action";
 import { stories } from "./stories-data";
 import styles from "./stories-stilllife.module.css";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -247,13 +249,26 @@ export function StillLifeStage({ selected }: { selected: number }) {
           }
         >
           <div data-bob className={styles.bob}>
-            <Image
-              src={piece.src}
-              width={piece.w}
-              height={piece.h}
-              sizes="(max-width: 899px) 48vw, 22vw"
-              alt=""
-            />
+            {piece.src === nuricell.src ? (
+              // The bottle opens the product page; the story's Discover link is the keyboard path.
+              <Link href={productPage("NuriCell")!} tabIndex={-1} className={styles.productLink}>
+                <Image
+                  src={piece.src}
+                  width={piece.w}
+                  height={piece.h}
+                  sizes="(max-width: 899px) 48vw, 22vw"
+                  alt=""
+                />
+              </Link>
+            ) : (
+              <Image
+                src={piece.src}
+                width={piece.w}
+                height={piece.h}
+                sizes="(max-width: 899px) 48vw, 22vw"
+                alt=""
+              />
+            )}
           </div>
         </div>
       ))}
