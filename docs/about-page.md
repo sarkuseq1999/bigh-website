@@ -35,17 +35,15 @@ Round 1 is also in the history (`2db8f07`, `57a1494`).
 
 Switzer for everything (headings, body, header, footer, panel), with main's tokens on `.page` in
 `about-page.module.css` (`--display-font`, `--display-weight` 460, `--display-track` -0.015em,
-`--lead-weight`, `--lead-track`). It loads from Fontshare in `src/app/[locale]/about/page.tsx`:
-the same `<link rel="stylesheet" precedence="default">` href as main's locale layout (07529d5), so
-React renders it once after the merge; delete it there once this branch has merged main. NEVER
-commit the Switzer font files: the licence forbids redistribution and the repo is public. CJK and
-other scripts fall through to the locale fonts in `globals.css`.
+`--lead-weight`, `--lead-track`). It loads from Fontshare in main's locale layout
+(`src/app/[locale]/layout.tsx`). Headings sit at -0.02em in all; tighter closes Switzer's word
+spaces. NEVER commit the Switzer font files: the licence forbids redistribution and the repo is
+public. CJK and other scripts fall through to the locale fonts in `globals.css`.
 
-## At the merge (TODO)
+## Follow-ups (TODO)
 
 - The header and footer are this page's own copy (`site-chrome.tsx`); fold them into the shared
-  site header/footer when the branches land.
-- Remove the Fontshare link from `about/page.tsx` (main's layout loads it).
+  site header/footer.
 - Point `routes.scientists` at `/science` once the Science page lands.
 
 ## Words
