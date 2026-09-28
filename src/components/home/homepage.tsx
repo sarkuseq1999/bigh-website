@@ -25,6 +25,7 @@ import { researchItems, researchTypes } from "./research-data";
 import { ScienceSection } from "./science-section";
 import { HeaderUtilities } from "./header-utilities";
 import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { ProductAction } from "./product-action";
 
 const products = [
@@ -532,9 +533,10 @@ export function Homepage() {
           >
             {copy("Science")} <ChevronDown size={15} />
           </button>
-          <a href="#about" onClick={closeNav}>
+          {/* The About page (September 28, 2026), in the visitor's language. */}
+          <Link href="/about" onClick={closeNav}>
             {copy("About")}
-          </a>
+          </Link>
           <button onClick={openSupport}>{copy("Support")}</button>
           {scienceOpen && (
             <div id="science-navigation" className={styles.dropdown}>
@@ -851,7 +853,7 @@ export function Homepage() {
           </div>
           <div>
             <h3>{copy("Here for you")}</h3>
-            <a href="#about">{copy("About BiGH")}</a>
+            <Link href="/about">{copy("About BiGH")}</Link>
             <button onClick={openSupport}>{copy("Support & FAQs")}</button>
             <a href="#learn">{copy("Health, explained")}</a>
             <button onClick={openSupport}>

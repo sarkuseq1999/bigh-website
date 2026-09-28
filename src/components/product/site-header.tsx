@@ -35,7 +35,7 @@ export function SiteHeader({ tone }: { tone: "light" | "dark" }) {
           {copy("Products")}
         </Link>
         <Link href="/#learn">{copy("Science")}</Link>
-        <Link href="/#about">{copy("About")}</Link>
+        <Link href="/about">{copy("About")}</Link>
       </nav>
       <div className={styles.utilities}>
         <HeaderUtilities />
