@@ -29,7 +29,7 @@ export type ProductStudy = {
 export type ProductPerson = {
   name: string;
   title: string;
-  /** Only people who have agreed to a photograph have one (Dr. Iris Wang: text only). */
+  /** Only people who have agreed to a photograph have one; everyone else is text only. */
   photo?: Picture;
   lines: string[];
 };

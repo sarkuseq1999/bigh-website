@@ -95,9 +95,7 @@ function FlagshipDetails({ onOpenProduct }: { onOpenProduct: OpenProduct }) {
           "Our flagship supplement focuses on the health of your mitochondria—the tiny power plants that supply energy for your brain and body.",
         )}
       </p>
-      <p className={styles.credit}>
-        {copy("Formulated by mitochondrial researcher Dr. Jian Kang Liu and Dr. Iris Wang.")}
-      </p>
+      <p className={styles.credit}>{copy("Formulated by Dr. Jiankang Liu.")}</p>
       <button type="button" className={styles.discover} onClick={() => onOpenProduct(0)}>
         {copy("Discover NuriCell")} <ArrowUpRight size={19} aria-hidden="true" />
       </button>

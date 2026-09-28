@@ -102,7 +102,7 @@ const nuricell: ProductPage = {
   purpose:
     "Our flagship supplement focuses on the health of your mitochondria—the tiny power plants that supply energy for your brain and body.",
   highlights: ["Mitochondrial health", "Mental energy"],
-  credit: "Formulated by mitochondrial researcher Dr. Jian Kang Liu and Dr. Iris Wang.",
+  credit: "Formulated by Dr. Jiankang Liu.",
   accent: "#eaa43a",
   serving: {
     capsules: 3,
@@ -182,23 +182,18 @@ const nuricell: ProductPage = {
   ]),
   people: [
     {
-      name: "Dr. Jian Kang Liu",
+      name: "Dr. Jiankang Liu",
       title: "Chief Scientific Advisor, BiGH",
       photo: {
         src: "/images/jiankang-liu.jpg",
         width: 512,
         height: 768,
-        alt: "Portrait of Dr. Jian Kang Liu",
+        alt: "Portrait of Dr. Jiankang Liu",
       },
       lines: [
         "Dr. Liu is an internationally recognized scientist in mitochondrial biology and aging. His research explores the connections between cellular energy, nutrition, and how we age.",
         "As BiGH’s Chief Scientific Advisor, he brings decades of scientific experience to our purpose: helping people stay sharp, stay active, and live fully.",
       ],
-    },
-    {
-      name: "Dr. Iris Wang",
-      title: "Co-formulator of NuriCell",
-      lines: ["Dr. Iris Wang formulated NuriCell together with Dr. Liu."],
     },
   ],
   faq: [
