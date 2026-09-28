@@ -1,6 +1,7 @@
 /* Look B, "Scroll film". A dark cinematic page: near-black navy with warm light, cream type.
-   Type (Mo, September 28): Fraunces for display, light (300-360) and soft, tight at large sizes,
-   its italic for accent lines; Hanken Grotesk for text, labels, captions and buttons.
+   Type (Mo, September 28, second note): Switzer for everything, as on the NuriCell page and the
+   homepage (main 07529d5; loaded once in the locale layout): display at 460 with tight tracking,
+   accent lines told apart by color rather than italics, labels in sentence case.
    One scale: hero / title / number / head / lead / body / label. Nothing under 15px.
    "Film mode" (the held film) is wide screens with motion; phones and reduced motion get the
    film's key frames as stacked stills. */
@@ -11,13 +12,13 @@
   --warm: #e6b877;
   --cream: #f3dcb2;
   --white: #f6f0e6;
-  --display: var(--font-film-display), var(--font-instrument), Georgia, serif;
-  --text: var(--font-film-text), var(--font-dm-sans), system-ui, sans-serif;
+  --display: "Switzer", var(--font-dm-sans), Arial, sans-serif;
+  --text: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
   /* The scale. */
-  --s-hero: clamp(40px, 6.3vw, 108px);
-  --s-title: clamp(42px, 4.6vw, 78px);
-  --s-number: clamp(84px, 10.4vw, 172px);
-  --s-head: clamp(25px, 2.1vw, 32px);
+  --s-hero: clamp(38px, 5.5vw, 94px);
+  --s-title: clamp(38px, 4vw, 68px);
+  --s-number: clamp(78px, 9.4vw, 152px);
+  --s-head: clamp(24px, 1.9vw, 30px);
   --s-lead: clamp(21px, 1.55vw, 24px);
   --s-body: 19px;
   --s-label: 15px;
@@ -31,7 +32,7 @@
   line-height: 1.62;
 }
 
-/* The display face: Fraunces, light and soft. Its optical size follows the font size. */
+/* The display voice: Switzer at 460, tight, as on the NuriCell page. */
 .title,
 .captionLine,
 .name,
@@ -49,9 +50,8 @@
 .creditRow dd,
 .subtitles li {
   font-family: var(--display);
-  font-optical-sizing: auto;
-  font-variation-settings: "SOFT" 50;
-  font-weight: 320;
+  font-weight: 460;
+  letter-spacing: -0.03em;
 }
 
 /* One label style for every small line: roles, sources, topics, status, the film's own marks. */
@@ -59,10 +59,9 @@
   color: var(--muted);
   font-family: var(--text);
   font-size: var(--s-label);
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-weight: 600;
+  letter-spacing: 0;
   line-height: 1.5;
-  text-transform: uppercase;
 }
 
 .srOnly {
@@ -165,9 +164,7 @@
 .titleAccent,
 .captionAccent {
   color: var(--cream);
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.02em;
+  font-weight: 460;
 }
 
 .word {
@@ -478,7 +475,7 @@
 .itemTitle {
   color: var(--white);
   font-size: var(--s-head);
-  font-weight: 360;
+  font-weight: 460;
   letter-spacing: -0.012em;
   line-height: 1.2;
 }
@@ -580,9 +577,9 @@
   height: 110%;
   background: radial-gradient(
     38% 56% at 50% 22%,
-    rgba(245, 206, 150, 0.24) 0%,
-    rgba(245, 206, 150, 0.11) 36%,
-    rgba(245, 206, 150, 0.03) 66%,
+    rgba(245, 206, 150, 0.12) 0%,
+    rgba(245, 206, 150, 0.05) 36%,
+    rgba(245, 206, 150, 0.015) 66%,
     rgba(245, 206, 150, 0) 100%
   );
   /* No edge anywhere: the light falls in from above and fades out on every side. */
@@ -628,7 +625,7 @@
   margin-top: 18px;
   color: var(--white);
   font-size: var(--s-hero);
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.03em;
   line-height: 0.98;
 }
@@ -638,8 +635,8 @@
   margin-top: 30px;
   color: var(--cream);
   font-size: var(--s-head);
-  font-style: italic;
-  font-weight: 320;
+  font-weight: 460;
+  letter-spacing: -0.02em;
   line-height: 1.25;
 }
 
@@ -670,7 +667,7 @@
   color: var(--white);
   font-size: var(--s-number);
   font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.035em;
   line-height: 0.95;
 }
@@ -713,13 +710,13 @@
 .year {
   position: relative;
   z-index: 3;
-  margin: 0 0 -0.42em -0.04em;
+  margin: 0 0 -0.2em -0.04em;
   color: var(--white);
   text-shadow: 0 4px 40px rgba(0, 0, 0, 0.45);
   pointer-events: none;
   font-size: clamp(64px, 16vw, 128px);
   font-variant-numeric: lining-nums;
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.035em;
   line-height: 0.9;
 }
@@ -1038,7 +1035,7 @@
 .productName {
   color: var(--white);
   font-size: 22px;
-  font-weight: 340;
+  font-weight: 460;
   letter-spacing: -0.01em;
   line-height: 1.15;
 }
@@ -1052,7 +1049,7 @@
 
 .leadProduct .productName {
   font-size: clamp(32px, 2.8vw, 42px);
-  font-weight: 300;
+  font-weight: 460;
 }
 
 .leadProduct .creditText {
@@ -1176,7 +1173,7 @@
   margin: 0;
   color: var(--white);
   font-size: clamp(32px, 3.2vw, 48px);
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
@@ -1188,7 +1185,6 @@
   color: var(--body);
   font-family: var(--text);
   font-size: var(--s-body);
-  font-variation-settings: normal;
   font-weight: 400;
   letter-spacing: 0;
   line-height: 1.55;
@@ -1245,7 +1241,7 @@
   margin-top: 16px;
   color: var(--white);
   font-size: clamp(32px, 3.2vw, 48px);
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
@@ -1254,7 +1250,6 @@
   margin-top: 10px;
   color: var(--cream);
   font-size: var(--s-lead);
-  font-style: italic;
 }
 
 .studyText {
@@ -1446,7 +1441,7 @@
 .askTitle {
   color: var(--white);
   font-size: var(--s-hero);
-  font-weight: 300;
+  font-weight: 460;
   letter-spacing: -0.03em;
   line-height: 0.98;
 }
@@ -1474,10 +1469,9 @@
 
 .subtitles li {
   color: #fbf6ea;
-  font-size: clamp(30px, 3.2vw, 50px);
-  font-style: italic;
-  font-weight: 300;
-  letter-spacing: -0.01em;
+  font-size: clamp(28px, 2.9vw, 46px);
+  font-weight: 460;
+  letter-spacing: -0.025em;
   line-height: 1.2;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.75);
 }
@@ -1558,7 +1552,7 @@
 .stepNumber {
   color: var(--warm);
   font-size: 40px;
-  font-weight: 300;
+  font-weight: 460;
   line-height: 1;
 }
 
@@ -1659,8 +1653,8 @@
     color: var(--white);
     font-family: var(--display);
     font-size: 22px;
-    font-variation-settings: "SOFT" 50;
-    font-weight: 340;
+    font-weight: 460;
+    letter-spacing: -0.02em;
     line-height: 1.3;
   }
 }
@@ -1670,4 +1664,10 @@
   .film .textButton svg {
     transition: none;
   }
+}
+
+/* Eyebrows (his role, the health topics, "Questions like these", the status): the warm gold the
+   NuriCell page uses for its chapter eyebrows. Sources, notes and marks stay muted. */
+.film .eyebrow {
+  color: var(--warm);
 }

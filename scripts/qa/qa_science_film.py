@@ -164,9 +164,9 @@ with sync_playwright() as p:
           body: getComputedStyle(document.querySelector('#dr-liu [class*=intro]')).fontFamily,
           header: getComputedStyle(document.querySelector('header nav a')).fontFamily,
           loaded: [...new Set([...document.fonts].filter(f => f.status === 'loaded').map(f => f.family))].join('|') }))()""")
-        check(f"{label}: Fraunces for display, Hanken Grotesk for text (header too)",
-              "Fraunces" in fonts["h1"] and "Hanken" in fonts["body"] and "Hanken" in fonts["header"]
-              and "Fraunces" in fonts["loaded"] and "Hanken" in fonts["loaded"], str({k: v[:40] if k != "loaded" else v for k, v in fonts.items()}))
+        check(f"{label}: Switzer for display, text and header (as on the NuriCell page)",
+              fonts["h1"].startswith("Switzer") and fonts["body"].startswith("Switzer")
+              and fonts["header"].startswith("Switzer") and "Switzer" in fonts["loaded"], str({k: v[:40] if k != "loaded" else v for k, v in fonts.items()}))
         tone = page.evaluate("document.querySelector('[data-stage]').dataset.tone")
         check(f"{label}: the header over the film is see-through (film tone)", tone == "film", str(tone))
         shoot(page, f"{label}-film-00-open")

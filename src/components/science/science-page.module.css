@@ -133,11 +133,10 @@
 }
 
 .dialogEyebrow {
-  color: var(--muted);
+  color: var(--eyebrow, var(--muted));
   font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
 }
 
 .dialogTitle {

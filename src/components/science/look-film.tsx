@@ -8,7 +8,6 @@ import { ArrowRight, ArrowUpRight, Minus, Plus } from "lucide-react";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { researchItems } from "@/components/home/research-data";
 import { useCopy } from "@/i18n/use-copy";
-import { filmDisplay, filmText } from "./film-fonts";
 import { MARKS, OPENING, SHOTS, createFilm, frameAt, type FilmScene } from "./film-scene";
 import type { LookProps, LookTheme } from "./look-types";
 import { ResearchGroups } from "./research-library";
@@ -33,7 +32,7 @@ import styles from "./look-film.module.css";
 // into a field of cells. Then a dark, warm-lit page: Dr. Liu's portrait as a print under a picture
 // lamp, his record in big numbers, his path as a film strip, the five formulas on a lit stage, the
 // research as end credits, health in three chapters, and the questions as subtitles.
-// Type: Fraunces (light, soft) for display, Hanken Grotesk for everything else.
+// Type: Switzer for everything, as on the NuriCell page (loaded once in the locale layout).
 // Phones and reduced motion: the film's key frames as stacked stills with their captions.
 
 export const filmTheme: LookTheme = {
@@ -54,9 +53,11 @@ export const filmTheme: LookTheme = {
     "--card-line": "#232a3a",
     "--door-bg": "#0c111d",
     // The shared header, footer and story panel follow this look's type and corners.
-    "--display-font": `${filmDisplay.style.fontFamily}, var(--font-instrument)`,
-    "--text-font": `${filmText.style.fontFamily}, var(--font-dm-sans)`,
+    "--display-font": '"Switzer", var(--font-dm-sans)',
+    "--text-font": '"Switzer", var(--font-dm-sans)',
     "--panel-radius": "6px",
+    // Eyebrows in the shared story panel: the same warm gold as the page's own eyebrows.
+    "--eyebrow": "#e6b877",
     // The header: a quiet dark bar over the page, and over the film only a shadow falling from
     // the top edge (the stage is marked data-tone="film" while the film plays).
     "--header-dark": "rgba(5, 7, 13, 0.76)",
@@ -108,11 +109,11 @@ const PATH_PICTURES: Record<string, PathPicture> = {
     src: "/images/science-page/golden-okayama.webp",
     alt: "Illustration: a study desk at dusk with old books and an open brain atlas.",
   },
-  // Cropped toward the window light and the eucalyptus: the glassware stays small and soft.
+  // A Berkeley office window in late light, eucalyptus and golden hills outside (no glassware;
+  // made September 28 to replace the soft 2.5x crop of the lab bench). DRAFT alt text.
   "1994": {
-    src: "/images/science-page/golden-berkeley.webp",
-    alt: "Illustration: evening light through a laboratory window, eucalyptus trees outside.",
-    crop: { scale: 2.5, origin: "57% 0%" },
+    src: "/images/science-page/film/berkeley-window.webp",
+    alt: "Illustration: late light through an office window, eucalyptus trees and golden hills outside.",
   },
   "2002": {
     src: "/images/science-page/golden-journal.webp",
@@ -618,7 +619,7 @@ export function LookFilm({ onStory }: LookProps) {
   };
 
   return (
-    <div ref={root} className={`${styles.film} ${filmDisplay.variable} ${filmText.variable}`}>
+    <div ref={root} className={styles.film}>
       <section id="scientists" className={styles.scientists} data-tone="dark">
         {/* ---- The film. ---- */}
         <div className={styles.reel} data-reel>
@@ -719,7 +720,7 @@ export function LookFilm({ onStory }: LookProps) {
               </div>
             </figure>
             <div className={styles.liuCopy}>
-              <p className={styles.label} data-rise>
+              <p className={`${styles.label} ${styles.eyebrow}`} data-rise>
                 {copy(liu.role)}
               </p>
               <h2 className={styles.name} data-rise>
@@ -943,7 +944,7 @@ export function LookFilm({ onStory }: LookProps) {
                     />
                   </div>
                 </div>
-                <p className={styles.label}>
+                <p className={`${styles.label} ${styles.eyebrow}`}>
                   <span className={styles.chapterNumber}>{String(index + 1).padStart(2, "0")}</span>{" "}
                   {copy(door.topic)}
                 </p>
@@ -975,7 +976,7 @@ export function LookFilm({ onStory }: LookProps) {
             </p>
           </div>
           <div className={styles.subtitleArea}>
-            <p className={styles.label}>{copy(ask.examplesLabel)}</p>
+            <p className={`${styles.label} ${styles.eyebrow}`}>{copy(ask.examplesLabel)}</p>
             <ul className={styles.subtitles}>
               {ask.examples.map((question) => (
                 <li key={question} data-subtitle>
@@ -991,7 +992,9 @@ export function LookFilm({ onStory }: LookProps) {
               {copy(ask.text)}
             </p>
             <div className={styles.status} data-rise>
-              <p className={`${styles.label} ${styles.statusLabel}`}>{copy(ask.status)}</p>
+              <p className={`${styles.label} ${styles.eyebrow} ${styles.statusLabel}`}>
+                {copy(ask.status)}
+              </p>
               <p className={styles.statusNote}>{copy(ask.note)}</p>
             </div>
           </div>

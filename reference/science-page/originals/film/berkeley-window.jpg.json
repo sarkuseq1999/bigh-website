@@ -1,0 +1,17 @@
+{
+  "tool": "Gemini image generation (gemini-mcp)",
+  "size": [
+    1856,
+    2304
+  ],
+  "aspect_ratio": "4:5",
+  "prompt": "Cinematic still photograph, portrait orientation: the view from a quiet university research office in Berkeley, California in the mid-1990s on a warm late afternoon. A tall old wooden-framed window fills most of the frame; through it, the soft silhouettes of tall eucalyptus trees and a hazy golden hillside. On the windowsill in the foreground, a simple stack of old science notebooks and a small green potted plant catch the low sunlight; soft shadows of the window frame fall across the wall. Calm, nostalgic, warm, softly lit, shallow depth of field, fine film grain, like a still from a documentary film. No glassware, no beakers, no test tubes, no laboratory equipment, no people, no text.",
+  "crop": [
+    0,
+    138,
+    1299,
+    1761
+  ],
+  "note": "Cropped to exclude wall posters with garbled AI text. The 1994 (Berkeley) stop of the path. AI illustration.",
+  "generated": "2026-09-28"
+}
