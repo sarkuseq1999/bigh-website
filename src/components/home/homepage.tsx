@@ -25,6 +25,7 @@ import { researchItems, researchTypes } from "./research-data";
 import { ScienceSection } from "./science-section";
 import { HeaderUtilities } from "./header-utilities";
 import { useLocale } from "next-intl";
+import { ProductAction } from "./product-action";
 
 const products = [
   {
@@ -774,9 +775,13 @@ export function Homepage() {
               </p>
               {/* A quiet route to the product at the page's end (Mo, September 24). */}
               <div className={styles.aboutLinks}>
-                <button type="button" className={styles.textLink} onClick={() => openProduct(0)}>
+                <ProductAction
+                  name="NuriCell"
+                  onOpen={() => openProduct(0)}
+                  className={styles.textLink}
+                >
                   {copy("Discover NuriCell")} <ArrowRight size={18} />
-                </button>
+                </ProductAction>
                 <a className={styles.textLink} href="#standards">
                   {copy("What matters to us")} <ArrowDown size={18} />
                 </a>
@@ -828,9 +833,13 @@ export function Homepage() {
           <div>
             <h3>{copy("Products")}</h3>
             {products.map((product, index) => (
-              <button key={product.name} onClick={() => openProduct(index)}>
+              <ProductAction
+                key={product.name}
+                name={product.name}
+                onOpen={() => openProduct(index)}
+              >
                 {product.name}
-              </button>
+              </ProductAction>
             ))}
           </div>
           <div>
