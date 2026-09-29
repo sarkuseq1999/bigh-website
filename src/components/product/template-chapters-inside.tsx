@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Plus } from "lucide-react";
 import { useId, useRef, useState } from "react";
 import { useCopy } from "@/i18n/use-copy";
@@ -56,9 +57,23 @@ export function InsideChapter({
   const single = product.ingredients.length === 1;
   const first = long ? product.ingredients.slice(0, FIRST_ROWS) : product.ingredients;
   const rest = long ? product.ingredients.slice(FIRST_ROWS) : [];
+  const pictured = product.ingredients.some((ingredient) => ingredient.picture);
 
   const row = (ingredient: ProductIngredient) => (
     <li key={ingredient.key} className={styles.ingredient} data-reveal>
+      {pictured && (
+        <span className={styles.ingredientPicture} aria-hidden="true">
+          {ingredient.picture && (
+            <Image
+              src={ingredient.picture.src}
+              width={ingredient.picture.width}
+              height={ingredient.picture.height}
+              alt=""
+              sizes="(max-width: 860px) 60px, 88px"
+            />
+          )}
+        </span>
+      )}
       <p className={styles.amount}>
         {formatAmount(ingredient)}
         <span className={styles.unit}>{ingredient.unit}</span>
@@ -103,12 +118,21 @@ export function InsideChapter({
           </p>
         </header>
         {first.length > 0 && (
-          <ol className={`${styles.ingredients} ${single ? styles.single : ""}`}>
+          <ol
+            className={`${styles.ingredients} ${single ? styles.single : ""}`}
+            data-pictured={pictured || undefined}
+          >
             {first.map(row)}
           </ol>
         )}
         {rest.length > 0 && (
-          <ol id={moreId} className={styles.ingredients} start={first.length + 1} hidden={!showAll}>
+          <ol
+            id={moreId}
+            className={styles.ingredients}
+            data-pictured={pictured || undefined}
+            start={first.length + 1}
+            hidden={!showAll}
+          >
             {rest.map(row)}
           </ol>
         )}

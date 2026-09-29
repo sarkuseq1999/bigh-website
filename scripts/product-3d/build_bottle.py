@@ -37,6 +37,37 @@ def smooth1d(values, sigma):
     return np.convolve(padded, kernel, mode="valid")
 
 
+# Labels whose artwork runs off the photo's edge (a leaf, side lettering). See clean_edges.
+STRAY_EDGE_ART = {"advanced-opc"}
+
+
+def clean_edges(front, left_edge, right_edge):
+    """Replace edge colours that are artwork, not the label's plain ground, in place.
+
+    The ground is the edge pixels near the two strips' usual hue and colour strength. Where a row
+    has enough of them and an edge strays from their colour, that edge takes the ground's colour,
+    so a leaf or a word cut by the edge is not smeared round the whole back of the bottle."""
+    strips = np.concatenate([front[:, :90], front[:, -90:]], axis=1) / 255
+    top_c, low_c = strips.max(axis=2), strips.min(axis=2)
+    chroma = top_c - low_c
+    r, g, b = strips[..., 0], strips[..., 1], strips[..., 2]
+    safe = np.maximum(chroma, 1e-6)
+    sector = np.where(
+        top_c == r, ((g - b) / safe) % 6, np.where(top_c == g, (b - r) / safe + 2, (r - g) / safe + 4)
+    )
+    hue = sector * (np.pi / 3)
+    strength = chroma / np.maximum(top_c, 1e-6)
+    usual = np.angle(np.sum(strength * np.exp(1j * hue)))
+    plain = (np.abs(np.angle(np.exp(1j * (hue - usual)))) < np.radians(22)) & (
+        strength > 0.5 * np.median(strength)
+    )
+    count = plain.sum(axis=1)
+    ground = (strips * plain[..., None]).sum(axis=1) / np.maximum(count, 1)[:, None] * 255
+    for edge in (left_edge, right_edge):
+        stray = (count >= 40) & (np.abs(edge - ground).max(axis=1) > 24)
+        edge[stray] = ground[stray]
+
+
 def main(slug):
     source = ROOT / "public" / "images" / "products" / f"{slug}.png"
     rgba = np.asarray(Image.open(source).convert("RGBA")).astype(np.float32)
@@ -139,6 +170,10 @@ def main(slug):
     # reads as the label's plain background rather than streaks of its pattern.
     left_edge = front[:, :90].mean(axis=1)
     right_edge = front[:, -90:].mean(axis=1)
+    # Artwork cut by an edge (Advanced OPC's grape leaf) would smear round the whole back. Only
+    # for the labels listed, so the approved NuriCell label rebuilds exactly as before.
+    if slug in STRAY_EDGE_ART:
+        clean_edges(front, left_edge, right_edge)
     for edge in (left_edge, right_edge):
         for channel in range(3):
             edge[:, channel] = smooth1d(edge[:, channel], sigma=10)

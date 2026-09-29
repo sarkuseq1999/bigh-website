@@ -224,12 +224,13 @@ with sync_playwright() as p:
         pinned = page.evaluate("Math.round(document.querySelector('[data-path]').getBoundingClientRect().top)")
         check(f"{label}: the path is pinned and slides sideways", abs(pinned) <= 1 and x1 < x0 - distance * 0.9, f"top={pinned} x {x0:.0f} -> {x1:.0f} of {distance}")
 
-        # The formulas: one shared credit line under the three bottles it names.
+        # The formulas: one shared credit line under the two bottles it names (Propolis, Turmerific);
+        # NuriCell, Nature Calm and Advanced OPC (Dr. Iris Wang alone, Mo, September 29) keep their own.
         credit = page.evaluate("""(() => { const shared = document.querySelectorAll('[data-lineup] p[aria-hidden]');
           const own = [...document.querySelectorAll('[data-lineup] figcaption span')].filter(e => e.getBoundingClientRect().width > 2).length;
           return { shared: shared.length, own, text: shared[0]?.textContent.trim().slice(-60) }; })()""")
-        check(f"{label}: the formulas share one credit line; NuriCell and Nature Calm keep their own",
-              credit["shared"] == 1 and credit["own"] == 2, str(credit))
+        check(f"{label}: the formulas share one credit line; NuriCell, Nature Calm and Advanced OPC keep their own",
+              credit["shared"] == 1 and credit["own"] == 3, str(credit))
 
         # The formulas, research, health and ask, framed.
         for sel, name, offset in [("#film-formulas", "formulas", 130 if h > 800 else 100),

@@ -93,7 +93,8 @@ export const liuStory = {
 export const iris = {
   name: "Dr. Iris Wang",
   role: "Scientist and co-developer",
-  text: "Dr. Iris Wang developed Nature Calm together with Dr. Liu.",
+  // Draft, September 29, 2026: the second half follows Mo's Advanced OPC credit.
+  text: "Dr. Iris Wang developed Nature Calm together with Dr. Liu, and guided the formulation of Advanced OPC Formula.",
 };
 
 export const formulas = [
@@ -107,16 +108,19 @@ export const formulas = [
     image: "/images/products/nature-calm.png",
     credit: "Developed by Dr. Jiankang Liu and Dr. Iris Wang.",
   },
+  // Mo, September 29, 2026 (choosing between this page and the product page): Advanced OPC is
+  // credited to Dr. Iris Wang alone, the same words as on its product page.
+  // It stands beside Nature Calm, so the two products that share a credit sit together.
+  {
+    name: "Advanced OPC Formula",
+    image: "/images/products/advanced-opc.png",
+    credit: "Formulated under the guidance of Dr. Iris Wang.",
+  },
   // Mo, September 28, 2026: the other products were developed "under the direction and guidance
   // of Dr. Liu and Iris Wang".
   {
     name: "Green Bee Propolis",
     image: "/images/products/green-bee-propolis.png",
-    credit: "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang.",
-  },
-  {
-    name: "Advanced OPC Formula",
-    image: "/images/products/advanced-opc.png",
     credit: "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang.",
   },
   {
