@@ -88,6 +88,9 @@ export type ProductPage = ProductSummary & {
   ingredients: ProductIngredient[];
   otherIngredients: string;
   studies: ProductStudy[];
+  /** The research chapter's heading when "The research on the ingredients" is not true of every
+   *  study (Nature Calm leads with its scientists' own research on stress). */
+  researchTitle?: string;
   people: ProductPerson[];
   faq: { question: string; answer: string }[];
   caution: string;
