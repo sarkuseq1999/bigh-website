@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini image generation (gemini-mcp, gemini-generate-image)",
+  "size": [
+    5504,
+    3072
+  ],
+  "aspect_ratio": "16:9",
+  "prompt": "Extreme close-up, as if seen through a microscope, of the living cells of a green leaf in warm backlight: a calm, orderly honeycomb of translucent rounded plant cells with thin glowing walls, lit warm gold from behind, the cell walls tracing fine golden lines, the insides a soft translucent lime and amber. The image softly falls out of focus toward the edges in a circular vignette like a lens view. At the center, one cell glows brightest, a warm point of honey-gold light blooming outward, the light the camera will dive into. Deep dark green-black edges. Elegant, calm, premium scientific imagery, fine film grain, shallow depth of field. No dots, no particles, no specks, no clusters, no red, no bacteria, no text.",
+  "purpose": "Shot 2 of the Scroll film: through the lens into the leaf's cells; the film dives into the bright center cell, which becomes the glowing mitochondrion.",
+  "generated": "2026-09-28",
+  "note": "AI illustration, not a photograph; the page labels it \"Illustration\"."
+}

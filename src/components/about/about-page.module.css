@@ -60,6 +60,12 @@
   text-wrap: pretty;
 }
 
+/* Japanese: no line starts with small kana, "ー" or closing punctuation (header, page, footer,
+   panel). */
+.page:lang(ja) {
+  line-break: strict;
+}
+
 .skipLink {
   position: fixed;
   left: 20px;
