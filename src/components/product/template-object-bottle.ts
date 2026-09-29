@@ -1,6 +1,7 @@
 // A product bottle rebuilt in 3D from its approved front photo (scripts/product-3d/build_bottle.py):
-// the outline becomes a turned plastic body, the printed label is the photo's own artwork
-// unwrapped onto a sleeve, and the ribbed cap is a separate part that can unscrew.
+// the outline becomes a turned plastic body (or tinted glass, when the photo shows glass), the
+// printed label is the photo's own artwork unwrapped onto a sleeve, and the ribbed cap is a
+// separate part that can unscrew.
 // Model units: the bottle is 1 tall, standing on y = 0.
 
 import type * as T from "three";
@@ -11,7 +12,11 @@ import nuricell from "./bottles/nuricell.json";
 import turmerific from "./bottles/turmerific.json";
 import type { Three } from "./signature/rigs";
 
-export type BottleData = typeof nuricell;
+/**
+ * `glass`: the body is tinted glass of this colour, measured from the photo (Green Bee Propolis).
+ * `labelLight`: a pale label takes this share of the light (0–1), so its colours stay rich.
+ */
+export type BottleData = typeof nuricell & { glass?: { color: string }; labelLight?: number };
 
 // One file per product under bottles/, written by build_bottle.py. A product whose file is still
 // `null` has no 3D bottle yet, and its pages show the approved photo instead.
@@ -132,6 +137,17 @@ export function buildBottle(
   capSide.bumpScale = 2.2;
   // The grooves also take a little less light, so they read on the sunlit side too.
   capSide.map = ribs.shade;
+  // Amber glass (September 29, 2026), after the approved Propolis photo: the photo's own glass
+  // colour, and one smooth surface, so the room shows as crisp reflections on a deep, clear
+  // amber instead of a grey veil over it.
+  const glass = data.glass
+    ? new three.MeshPhysicalMaterial({
+        color: data.glass.color,
+        roughness: 0.06,
+        envMapIntensity: 1.4,
+      })
+    : null;
+  const shell = glass ?? plastic;
   const inside = new three.MeshStandardMaterial({
     color: "#d9d6cf",
     roughness: 0.9,
@@ -165,7 +181,7 @@ export function buildBottle(
     neckShade.set([value, value, value], i * 3);
   }
   bodyGeometry.setAttribute("color", new three.BufferAttribute(neckShade, 3));
-  const bodyPlastic = plastic.clone();
+  const bodyPlastic = shell.clone();
   bodyPlastic.vertexColors = true;
   const body = new three.Mesh(bodyGeometry, bodyPlastic);
   // The inner wall and the dark opening, seen only once the cap is off.
@@ -179,7 +195,7 @@ export function buildBottle(
   // Two thread rings on the neck.
   const threadGeometry = new three.TorusGeometry(neckR * 1.01, 0.0045, 8, 96);
   const threads = [0.35, 0.7].map((t) => {
-    const ring = new three.Mesh(threadGeometry, plastic);
+    const ring = new three.Mesh(threadGeometry, shell);
     ring.rotation.x = Math.PI / 2;
     ring.position.y = capBottom + (rim - capBottom) * t;
     return ring;
@@ -200,7 +216,9 @@ export function buildBottle(
   labelTexture.anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
   const labelMaterial = new three.MeshPhysicalMaterial({
     map: labelTexture,
-    color: options.labelTint ?? "#ffffff",
+    color:
+      options.labelTint ??
+      (data.labelLight ? new three.Color().setScalar(data.labelLight) : "#ffffff"),
     roughness: 0.45,
     clearcoat: 0.2,
     clearcoatRoughness: 0.3,
@@ -282,8 +300,8 @@ export function buildBottle(
         capTopGeometry,
         capInnerGeometry,
       ].forEach((geometry) => geometry.dispose());
-      [plastic, bodyPlastic, capSide, inside, opening, labelMaterial].forEach((material) =>
-        material.dispose(),
+      [plastic, glass, bodyPlastic, capSide, inside, opening, labelMaterial].forEach((material) =>
+        material?.dispose(),
       );
       [ribs.bump, ribs.shade, labelTexture].forEach((texture) => texture.dispose());
     },
