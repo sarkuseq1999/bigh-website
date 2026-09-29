@@ -6,7 +6,7 @@ import { useId, useRef, useState, type CSSProperties, type KeyboardEvent } from 
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "./add-to-cart";
-import { getSummary } from "./catalog";
+import { getSummary, productSlugs } from "./catalog";
 import { BottleStage } from "./signature/bottle-stage";
 import type { ProductPage, ProductSummary } from "./product-types";
 import { anchorId, useArrivals, type Chapter } from "./template-chapters-kit";
@@ -86,7 +86,9 @@ export function BuyChapter({
             {related.map((summary) => (
               <li key={summary.slug} data-reveal>
                 <Link
-                  href="/#products"
+                  href={
+                    productSlugs.includes(summary.slug) ? `/products/${summary.slug}` : "/#products"
+                  }
                   className={styles.card}
                   style={
                     { "--card-tint": summary.tint, "--card-ink": summary.ink } as CSSProperties

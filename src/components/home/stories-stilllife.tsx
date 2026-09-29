@@ -4,7 +4,7 @@ import Image from "next/image";
 import gsap from "gsap";
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "@/i18n/navigation";
-import { productPage } from "./product-action";
+import { useProductPage } from "./product-action";
 import { stories } from "./stories-data";
 import styles from "./stories-stilllife.module.css";
 import { useReducedMotion } from "./use-reduced-motion";
@@ -25,6 +25,11 @@ type Piece = {
 const V2 = "/images/stories/v2";
 const nuricell = { src: `${V2}/bottle-nuricell.webp`, w: 493, h: 900 };
 const propolis = { src: `${V2}/bottle-propolis.webp`, w: 492, h: 900 };
+// The product bottles among the pieces open their product's page, once it has one.
+const bottleProducts: Record<string, string> = {
+  [nuricell.src]: "NuriCell",
+  [propolis.src]: "Green Bee Propolis",
+};
 
 const arrangements: Record<(typeof stories)[number]["id"], Piece[]> = {
   lisa: [
@@ -131,6 +136,9 @@ const arrangements: Record<(typeof stories)[number]["id"], Piece[]> = {
 };
 
 export function StillLifeStage({ selected }: { selected: number }) {
+  const productPage = useProductPage();
+  const pageOf = (src: string) =>
+    bottleProducts[src] ? productPage(bottleProducts[src]) : undefined;
   const reducedMotion = useReducedMotion();
   const stage = useRef<HTMLDivElement>(null);
   const [shown, setShown] = useState(selected);
@@ -249,9 +257,9 @@ export function StillLifeStage({ selected }: { selected: number }) {
           }
         >
           <div data-bob className={styles.bob}>
-            {piece.src === nuricell.src ? (
+            {pageOf(piece.src) ? (
               // The bottle opens the product page; the story's Discover link is the keyboard path.
-              <Link href={productPage("NuriCell")!} tabIndex={-1} className={styles.productLink}>
+              <Link href={pageOf(piece.src)!} tabIndex={-1} className={styles.productLink}>
                 <Image
                   src={piece.src}
                   width={piece.w}

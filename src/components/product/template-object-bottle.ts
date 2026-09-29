@@ -4,12 +4,22 @@
 // Model units: the bottle is 1 tall, standing on y = 0.
 
 import type * as T from "three";
+import advancedOpc from "./bottles/advanced-opc.json";
+import greenBeePropolis from "./bottles/green-bee-propolis.json";
+import natureCalm from "./bottles/nature-calm.json";
 import nuricell from "./bottles/nuricell.json";
+import turmerific from "./bottles/turmerific.json";
 import type { Three } from "./signature/rigs";
 
 export type BottleData = typeof nuricell;
 
-export const bottles: Record<string, BottleData> = { nuricell };
+// One file per product under bottles/, written by build_bottle.py. A product whose file is still
+// `null` has no 3D bottle yet, and its pages show the approved photo instead.
+export const bottles: Record<string, BottleData> = Object.fromEntries(
+  ([nuricell, greenBeePropolis, advancedOpc, turmerific, natureCalm] as (BottleData | null)[])
+    .filter((bottle): bottle is BottleData => bottle !== null)
+    .map((bottle) => [bottle.slug, bottle]),
+);
 
 export type Bottle = {
   group: T.Group;
