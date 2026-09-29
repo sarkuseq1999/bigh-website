@@ -5,10 +5,12 @@ template filled with Advanced OPC Formula's data: `src/components/product/produc
 its 3D bottle (`bottles/advanced-opc.json`, `public/images/products/3d/advanced-opc-label.webp`) and
 its pictures in `public/images/products/advanced-opc/`. No catalog or homepage file changed.
 
-Two template changes, both optional for other products:
+Three template changes, safe for every product:
 
 - From the Nature Calm branch (`fc99a96`, cherry-picked as is): two-word names keep their space on
   phones ("AdvancedOPC Formula" before).
+- From the Green Bee Propolis branch (`5ad4310`, cherry-picked as is): 3D bottles start drawing
+  after a fast jump (the IntersectionObserver's newest entry decides).
 - Mo's "A" (September 28): `ProductIngredient.picture`, a small round photo leading an ingredient's
   row (`template-chapters-inside.tsx`, `.ingredientPicture` in `template-chapters.module.css`). Only
   when some ingredient has one; rows without keep an empty slot so names line up. NuriCell and
@@ -65,10 +67,11 @@ smeared round the whole back as a yellow band. NuriCell's label rebuilds byte fo
 
 ## Checks
 
-`python -X utf8 scripts/qa/qa_advanced_opc.py http://localhost:3011 --gpu`: 108 checks at 1440x900
+`python -X utf8 scripts/qa/qa_advanced_opc.py http://localhost:3011 --gpu`: 110 checks at 1440x900
 and 390x844, with and without motion (words in order, grapes dark then lit, no words over the
 grapes, contrast, no photo edge, the name's space and the eyebrow clear of it, 13 label amounts,
-the nine round photos, studies, Dr. Wang text only, calendar, credit, buy, questions, no sideways
+the nine round photos, studies, Dr. Wang text only, calendar, credit, buy, the Buy bottle after a
+fast jump, questions, no sideways
 scroll, no console errors, Korean route, homepage link). NuriCell's `qa_research_daily.py`,
 `qa_why_chapter.py` and `qa_hero_cutaway.py --gpu` pass on this branch.
 
