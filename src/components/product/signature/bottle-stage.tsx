@@ -30,10 +30,11 @@ export function BottleStage({ product, reduced }: { product: ProductPage; reduce
     let observer: IntersectionObserver | null = null;
     let tween: gsap.core.Tween | null = null;
 
-    // Build only when it is near the screen, so the page's first load stays light.
+    // Build only when it is near the screen, so the page's first load stays light. The newest
+    // entry decides (a fast jump can queue two in one call, see createLoop in rigs.ts).
     observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
+      (entries) => {
+        if (!entries[entries.length - 1].isIntersecting) return;
         observer?.disconnect();
         Promise.all([import("three"), import("./hero-scene")])
           .then(([three, { createHeroScene }]) => {
