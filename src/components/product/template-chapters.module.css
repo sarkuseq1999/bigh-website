@@ -739,6 +739,28 @@
   font-size: 18px;
   line-height: 1.6;
 }
+/* Optional round photos (Advanced OPC's plants, Mo, September 28, 2026): a picture leads each row,
+   and rows without one keep its column so amounts and names still line up. It sits centred on the
+   amount's line (the row aligns on baselines, which a picture has none of). */
+.chapters .ingredients[data-pictured] .ingredient {
+  grid-template-columns: 88px minmax(120px, 0.42fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-areas: "picture amount name role";
+}
+.chapters .ingredientPicture {
+  grid-area: picture;
+  align-self: start;
+  width: 88px;
+  aspect-ratio: 1;
+  margin-top: -14px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.chapters .ingredientPicture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .chapters .insideActions {
   display: flex;
   flex-wrap: wrap;
@@ -800,6 +822,17 @@
       "role role";
     gap: 12px 20px;
     padding: 24px 2px;
+  }
+  .chapters .ingredients[data-pictured] .ingredient {
+    grid-template-columns: 60px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "picture name amount"
+      "role role role";
+    column-gap: 16px;
+  }
+  .chapters .ingredientPicture {
+    width: 60px;
+    margin-top: -6px;
   }
 }
 

@@ -14,6 +14,12 @@ export type ProductIngredient = {
   unit: "mg" | "mcg" | "IU";
   /** Draft: what the nutrient does in the body in general. Never a claim about the product. */
   role?: string;
+  /**
+   * A small round photo of the plant or source, leading the ingredient's row (Mo, September 28,
+   * 2026, for Advanced OPC's plants). Decorative: the name beside it says what it is. When any
+   * ingredient has one, rows without keep the space so the names line up.
+   */
+  picture?: Omit<Picture, "alt">;
 };
 
 export type ProductStudy = {
