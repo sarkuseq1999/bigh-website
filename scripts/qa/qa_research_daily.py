@@ -165,7 +165,8 @@ RESEARCH = """(() => {
   const honesty = s.querySelector('[data-head] p');
   const cards = [...s.querySelectorAll('[data-study]')].map(li => {
     const r = li.getBoundingClientRect();
-    return r.left >= left && r.right <= right && r.top >= 0 && r.bottom <= innerHeight && opacity(li) > 0.99;
+    // 0.98: a jump can land at the tail of the chapter's scrubbed fade (0.987-0.992), invisible.
+    return r.left >= left && r.right <= right && r.top >= 0 && r.bottom <= innerHeight && opacity(li) > 0.98;
   });
   const sr = s.getBoundingClientRect();
   return {
