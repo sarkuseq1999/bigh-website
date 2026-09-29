@@ -8,7 +8,10 @@ Checks at 1440x900 and 390x844 with motion, then 1440x900 with reduced motion:
   six shown first, all 18 after "Show all"; 90 capsules, 3 a day, 30 days
 - the credit "Developed by Dr. Jiankang Liu and Dr. Iris Wang." and both people, Dr. Wang
   without a photograph
-- seven studies, oldest first, each link opening a new tab with rel="noopener"
+- seven studies, oldest first, each link opening a new tab with rel="noopener", under Nature Calm's
+  own heading ("The research behind the formula")
+- the "why" chapter shows the microscope pictures, off and on (qa_nature_calm_why.py checks the
+  chapter itself)
 - honesty: no "rat"/"rats", no "sleep", no "clinically proven" anywhere in the page text
 - phones: the giant name keeps its word space and stands centred ("Nature Calm", not "NatureCalm")
 - no horizontal page scroll at any step; no console errors or page errors
@@ -209,6 +212,17 @@ def facts(page, run):
     )
     check(f"{run}: only Dr. Liu pictured", alts == ["Portrait of Dr. Jiankang Liu"], str(alts))
 
+    heading = page.locator('[data-chapter="research"] h2').inner_text().replace("\n", " ").strip()
+    check(f"{run}: research heading is Nature Calm's own", heading == "The research behind the formula", heading)
+    why = page.evaluate(
+        """(() => { const s = document.querySelector('[data-chapter="why"]');
+          return [...s.querySelectorAll('img')].map(i => i.getAttribute('src')); })()"""
+    )
+    check(
+        f"{run}: why chapter shows the microscope, off and on",
+        any("why-microscope-off" in src for src in why) and any("why-microscope-on" in src for src in why),
+        str(why),
+    )
     years = page.evaluate(
         "[...document.querySelectorAll('[data-chapter=\"research\"] [data-study]')].map(li => li.querySelector('p').innerText.trim())"
     )

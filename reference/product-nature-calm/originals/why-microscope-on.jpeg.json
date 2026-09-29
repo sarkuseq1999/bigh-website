@@ -1,0 +1,26 @@
+{
+  "tool": "Gemini MCP",
+  "step": "gemini-continue-image-edit (edit of why-microscope-off)",
+  "settings": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K"
+  },
+  "prompt": "The exact same photograph with an identical microscope, angle, position, framing and size: now its built-in lamp is switched ON. A warm golden light rises from the lamp lens in the base, shines up through the condenser and the blank glass slide on the stage, and glows softly in the objective lens above it, with a gentle warm golden bloom around the slide. Warm gold highlights fall on the nearby metal. The rest of the microscope stays as it is. The background stays the same flat, even, very deep navy blue with no gradient. Do not move, resize or recrop anything. No specimen, no text.",
+  "generated": "2026-09-28",
+  "background_before": [
+    14.0,
+    27.0,
+    42.0
+  ],
+  "background_after": [
+    6.0,
+    22.0,
+    37.0
+  ],
+  "recomposed": {
+    "scale": 0.8,
+    "anchor_x": 0.69,
+    "anchor_y": 0,
+    "fade_from": 0.64
+  }
+}

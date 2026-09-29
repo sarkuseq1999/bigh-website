@@ -56,9 +56,9 @@ const ownStudies: ProductStudy[] = [
 
 // Nature Calm. Approved copy (BRAND-CHEATSHEET.md, September 21 and 25, 2026): the headline, the
 // purpose line, the credit and the focus. Label facts: the 2019 label saved from the old site
-// (old-storage/.../2019/04/sup_nature.png and ser_nature.png); Mo has not yet confirmed it is
-// current. Everything else (the "why" lines, the ingredient roles, Dr. Wang's lines, the FAQ and
-// the study notes above) is a draft for Mo.
+// (old-storage/.../2019/04/sup_nature.png and ser_nature.png), confirmed current by Mo on
+// September 28, 2026. Everything else (the "why" lines, the ingredient roles, Dr. Wang's lines,
+// the research heading, the FAQ and the study notes above) is a draft for Mo.
 const natureCalm: ProductPage = {
   ...natureCalmSummary,
   eyebrow: "For life’s demanding days",
@@ -75,11 +75,24 @@ const natureCalm: ProductPage = {
     use: "Take 3 capsules once a day, with or after a meal.",
     supply: "90 vegetarian capsules · 30-day supply",
   },
-  // No picture made for this page: the lines arrive on paper. "Dr.\u00a0" (a no-break space) keeps a
-  // title on the same line as the name.
+  // "Dr.\u00a0" (a no-break space) keeps a title on the same line as the name.
   why: {
     label: "Why stress matters to your cells",
     title: "Stress, seen from inside the cell.",
+    // Made for this page (Mo, September 28, 2026: "B"): a microscope in the dark whose lamp comes
+    // on as scientists enter the story. Gemini, prompts in reference/product-nature-calm/originals/.
+    // The slide is blank on purpose: nothing under the lens.
+    visual: {
+      src: "/images/products/nature-calm/why-microscope-off.webp",
+      width: 2752,
+      height: 1536,
+      alt: "A laboratory microscope on a dark background",
+      lit: {
+        src: "/images/products/nature-calm/why-microscope-on.webp",
+        width: 2752,
+        height: 1536,
+      },
+    },
     lines: [
       "Under stress, your body releases hormones that get it ready to respond.",
       "Scientists study what stress does inside your cells, including their mitochondria.",
@@ -240,6 +253,8 @@ const natureCalm: ProductPage = {
   // Sorted by year on the page. From the homepage's checked list: stress and mitochondria
   // (Picard & McEwen) and the CoQ10 review.
   studies: [...ownStudies, ...studies(["29389735/", "29459830/"])],
+  // The first three studies are about stress, not the ingredients.
+  researchTitle: "The research behind the formula",
   people: [
     {
       name: "Dr. Jiankang Liu",
