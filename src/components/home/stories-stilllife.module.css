@@ -53,6 +53,10 @@
 .stage .bob {
   rotate: var(--rot);
 }
+.stage .productLink {
+  display: block;
+  cursor: pointer;
+}
 .stage .bob img {
   display: block;
   width: 100%;

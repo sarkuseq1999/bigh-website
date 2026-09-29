@@ -64,8 +64,12 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) notFound();
   setRequestLocale(locale);
 
+  // globals.css scrolls smoothly for in-page jumps. data-scroll-behavior lets Next.js switch that
+  // off while it changes pages, so a new page opens at its top at once (Next.js 16 no longer does
+  // this by default). Without it the product page's scroll animations measured mid-glide and put
+  // visitors back where they were on the homepage (Mo, September 28, 2026).
   return (
-    <html lang={languageTags[locale]}>
+    <html lang={languageTags[locale]} data-scroll-behavior="smooth">
       <body className={`${sans.variable} ${serif.variable}`}>
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />

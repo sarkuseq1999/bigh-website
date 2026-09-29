@@ -10,6 +10,11 @@ const productPages: Record<string, string> = {
   NuriCell: "/products/nuricell",
 };
 
+/** The product's own page, when it has one. */
+export function productPage(name: string): string | undefined {
+  return productPages[name];
+}
+
 export function ProductAction({
   name,
   onOpen,
@@ -21,7 +26,7 @@ export function ProductAction({
   className?: string;
   children: ReactNode;
 }) {
-  const href = productPages[name];
+  const href = productPage(name);
   if (href) {
     return (
       <Link href={href} className={className}>
