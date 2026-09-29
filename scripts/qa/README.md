@@ -17,6 +17,7 @@ python -X utf8 scripts/qa/qa_green_bee_propolis.py http://localhost:3010
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
 python -X utf8 scripts/qa/qa_turmerific.py http://localhost:3012 --gpu
+python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3012 --product=turmerific
 ```
 
 `qa_why_chapter.py` and `qa_research_daily.py` check NuriCell unless given `--product=<slug>`; each

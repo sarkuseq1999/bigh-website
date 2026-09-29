@@ -1,8 +1,8 @@
 """QA for the Turmerific product page (/products/turmerific), the first product after NuriCell.
 
 At 1440x900 and 390x844, with motion and with reduced motion:
-- chapters: overview, why, inside, research, daily, buy, in that order (no people: nobody at BiGH
-  is credited with the formula), and the index numbers them 1 to 6
+- chapters: overview, why, inside, research, daily, buy, in that order (no People chapter until Mo
+  decides how the page shows its credit), and the index numbers them 1 to 6
 - overview: the big name reads "Turme" + "rific", the 3D bottle draws (data-status ready), the
   headline and the purpose (the approved homepage copy) are there
 - why: the night picture (the turmeric roots, off and lit) is loaded, with the title, three lines
@@ -228,6 +228,15 @@ with sync_playwright() as p:
         check(f"{run} no console errors or failed requests", not problems, "; ".join(problems[:4]))
         print("sheet", sheet(run, shots, 0.4 if w > 900 else 0.6))
         ctx.close()
+
+    # On narrow phones there is room for one line only above the giant name (Advanced OPC session,
+    # September 29): "Turmerific · From turmeric root" must not wrap at 360px.
+    ctx, page, problems = open_page(browser, URL, 360, 780, True)
+    lines = page.evaluate(
+        "(() => { const e = document.querySelector('[data-intro=\"eyebrow\"]'); const lh = parseFloat(getComputedStyle(e).lineHeight) || parseFloat(getComputedStyle(e).fontSize) * 1.3; return Math.round(e.getBoundingClientRect().height / lh); })()"
+    )
+    check("360px phone: the eyebrow is one line", lines == 1, f"{lines} lines")
+    ctx.close()
 
     ctx, page, problems = open_page(browser, BASE + "/", 1440, 900, False)
     links = page.evaluate("[...document.querySelectorAll('a[href*=\"/products/turmerific\"]')].length")

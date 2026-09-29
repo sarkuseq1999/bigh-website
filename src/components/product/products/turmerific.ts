@@ -102,7 +102,9 @@ const turmerific: ProductPage = {
   otherIngredients:
     "Other ingredients: rice flour, vegetable oil powder, vegetable cellulose (capsule), sunflower lecithin, stearic acid, maltodextrin, ascorbyl palmitate (vitamin C) and silicon dioxide.",
   studies: [...studies(["25277322/", "28074653/"]), ...longvidaStudies],
-  // No people chapter: no BiGH scientist is credited with Turmerific's formula.
+  // No credit line or People chapter yet. Mo's range credit (BRAND-CHEATSHEET.md, September 28)
+  // gives Turmerific "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris
+  // Wang.", as the Science page shows; how this page shows it is waiting on Mo.
   people: [],
   faq: [
     {

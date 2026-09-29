@@ -64,6 +64,17 @@ PRODUCTS = {
         "source": "Sources: Teixeira",
         "figures": ["7"],
     },
+    "turmerific": {
+        "beats": ["line-1", "line-2", "line-3", "title"],
+        "lines": [
+            "Curcumin is the compound that gives turmeric its golden colour.",
+            "On its own, very little of it reaches your bloodstream.",
+            "Longvida® carries curcumin in tiny particles of fat, designed to help your body absorb it.",
+            "A golden compound. A hard one to absorb.",
+        ],
+        "source": "Sources: NIH (NCCIH)",
+        "figures": [],
+    },
 }
 BEATS = PRODUCTS[SLUG]["beats"]
 LINES = PRODUCTS[SLUG]["lines"]
@@ -387,7 +398,8 @@ def run_motion(browser, label, w, h):
           f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
     later = [s["lit"] for f, (_, s) in zip(full, scan) if f and f[0] >= 1]
     check(f"{label}: once on, the light stays on to the end", later and min(later) >= 0.98, str(later))
-    counting = [s["counts"][-1] for f, (_, s) in zip(full, scan) if not f and 0 < s["lit"] < 1]
+    # A product without figures (Turmerific) has no count to read while the light comes on.
+    counting = [s["counts"][-1] for f, (_, s) in zip(full, scan) if not f and 0 < s["lit"] < 1 and s["counts"]]
     print(f"      (between the figures the count read {counting}, the light {[s['lit'] for f, (_, s) in zip(full, scan) if not f and 0 < s['lit'] < 1]})")
 
     # A picture at each beat, with the words checked against what is really behind them.
@@ -440,7 +452,7 @@ def run_motion(browser, label, w, h):
     check(f"{label}: a fast jump to the end settles on the title (light on), and straight back on the first moment (light off)",
           [k for k, v in enumerate(end["vis"]) if v >= 0.95] == [len(BEATS) - 1] and end["lit"] >= 0.98
           and [k for k, v in enumerate(back["vis"]) if v >= 0.95] == [0] and back["lit"] <= 0.02
-          and back["counts"] == [FIGURES[0]] * len(FIGURES),
+          and back["counts"] == ([FIGURES[0]] * len(FIGURES) if FIGURES else []),
           f"end={end['vis']} lit={end['lit']} back={back['vis']} lit={back['lit']} counts={back['counts']}")
     shots.take(page, "back-to-start")
 

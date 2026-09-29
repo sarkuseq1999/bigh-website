@@ -6,7 +6,9 @@ Not merged, not pushed.
 ## What is here
 
 - `src/components/product/products/turmerific.ts`: the page's data. Six chapters: overview, why,
-  inside, research, daily, buy. No People chapter: no BiGH scientist is credited with the formula.
+  inside, research, daily, buy. No credit line or People chapter yet: Mo's September 28 range credit
+  gives Turmerific "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang."
+  (the Science page shows it); how this page shows it is waiting on Mo.
 - Label facts: BiGH's own 2020 label from the old website (facts panel
   `bighnow.com/wp-content/uploads/2020/04/Supplement_facts_Turmerific_v2.jpg`, back
   `.../2020/03/1140_1183_Turmerific2.png`, left side `.../2020/04/Turmerific_Leftv2.png`). Mo confirmed
