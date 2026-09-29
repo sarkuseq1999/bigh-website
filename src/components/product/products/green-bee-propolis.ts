@@ -52,17 +52,15 @@ const moreStudies: ProductStudy[] = [
 ];
 
 // Green Bee Propolis (September 29, 2026). Approved copy (BRAND-CHEATSHEET.md, September 21): the
-// description, and the headline, shortened here to its first half (draft). Everything else is a
-// draft for Mo. Label facts (serving, amount, other ingredients, directions, caution): the 2019
-// label, from the old site's bottle pictures (old-storage/previous-site/.../2019/03/
-// 1140_1183_propolis_2-1.png and 3-1.png). Mo's own label photo had not arrived; AWAITING MO'S
-// CONFIRMATION that the 2019 label is current, as NuriCell's was on September 24.
+// headline and the description. Everything else is a draft for Mo. Label facts (serving, amount,
+// other ingredients, directions, caution): the 2019 label, from the old site's bottle pictures
+// (old-storage/previous-site/.../2019/03/1140_1183_propolis_2-1.png and 3-1.png), confirmed
+// current by Mo on September 29, 2026.
 const greenBeePropolis: ProductPage = {
   ...propolisSummary,
   eyebrow: "Made by bees",
-  // Draft: the approved headline's first half, so it stands in two lines like NuriCell's; the
-  // place stays in the highlights, the Why chapter and the buy chapter.
-  headlineLines: ["Distinctive", "green propolis."],
+  // The full approved headline (Mo, September 29: "2B", over a shorter two-line draft).
+  headlineLines: ["Distinctive green propolis", "from Minas Gerais, Brazil."],
   purpose:
     "Bees produce this green propolis from local plant resins. Its characteristic compounds include artepillin C—one reason researchers study Brazilian green propolis for its antioxidant properties.",
   highlights: ["Minas Gerais, Brazil", "Artepillin C"],

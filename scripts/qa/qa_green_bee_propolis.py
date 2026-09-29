@@ -7,8 +7,8 @@ This script checks what only this page has, at 1440x900 and 390x844 (and once wi
 - the opening: the headline, the eyebrow on one line and clear of the giant name, the name's two
   halves with a word space on phones and parted round the bottle on wide screens, the 3D bottle
   arriving in amber glass (not white plastic), no sideways scroll;
-- what's inside: one ingredient shown large (200 mg), and the full label (2019 label, awaiting Mo's
-  confirmation): the extract, its amount, the other ingredients;
+- what's inside: one ingredient shown large (200 mg), and the full label (the 2019 label, confirmed
+  current by Mo on September 29, 2026): the extract, its amount, the other ingredients;
 - buy: the 3D bottle, the directions and the supply, six questions that open, the four other
   products, and the footer's caution (bee products) and FDA line;
 - the homepage links here; no console errors, page errors or failed requests.
@@ -104,7 +104,7 @@ def run(browser, label, w, h):
     o = page.evaluate(OPENING)
     shot(page, f"{label}-opening")
     # The h1 also carries the name for screen readers and the split words' own copy.
-    check(f"{label} opening: the headline", "Distinctive green propolis." in o["h1"], o["h1"])
+    check(f"{label} opening: the headline", "Distinctive green propolis from Minas Gerais, Brazil." in o["h1"], o["h1"])
     check(f"{label} opening: the eyebrow, on one line",
           o["eyebrow"] == "Green Bee Propolis · Made by bees" and o["eyebrowBox"]["height"] < o["eyebrowLine"] * 1.5,
           f"{o['eyebrow']!r} {o['eyebrowBox']['height']:.0f}px")
