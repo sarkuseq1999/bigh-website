@@ -1,0 +1,73 @@
+/* Color tokens of the unchosen looks, saved from src/components/science/science-page.module.css
+   on September 25, 2026. Round 1 (A, B, C) used the base .page values; E and F had their own. */
+.page {
+  --ink: #242722;
+  --muted: #5b6059;
+  --blue: #2149a3;
+  --paper: #fbfaf7;
+  --paper-deep: #f2f0e8;
+  --line: #d8d9d2;
+  --gold: #a8741c;
+  --gold-light: #f3c56a;
+  --lime: #e2ed94;
+  --navy: #041328;
+  --night: #01050f;
+  --pale-blue: #b9defb;
+  --gutter: clamp(20px, 5vw, 72px);
+  --wide: 1280px;
+  /* Shared sections read these, so each look can recolor them. */
+  --body: #3b3f39;
+  --rule: #9da29a;
+  --paper-image: linear-gradient(transparent, transparent);
+  --door-bg: #fff;
+  --ask-bg:
+    radial-gradient(60% 70% at 85% 20%, rgba(243, 197, 106, 0.16), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgba(33, 73, 163, 0.35), transparent 70%), #041328;
+  --card-bg: #fff;
+  --card-line: #e4e2da;
+
+/* E: night sky, navy and gold all the way down. */
+.page[data-look="e"] {
+  --paper: #050d1c;
+  --paper-deep: #071329;
+  --ink: #f4efe4;
+  --muted: #a9b3c4;
+  --body: #d4d9e2;
+  --line: rgba(255, 250, 242, 0.14);
+  --rule: rgba(255, 250, 242, 0.24);
+  --blue: #b9defb;
+  --gold: #f3c56a;
+  --gold-light: #f3c56a;
+  --paper-image: radial-gradient(60% 40% at 50% 0%, rgba(33, 73, 163, 0.28), transparent 70%);
+  --door-bg: #0b1730;
+  --card-bg: rgba(255, 250, 242, 0.05);
+  --card-line: rgba(255, 250, 242, 0.14);
+  --ask-bg:
+    radial-gradient(60% 70% at 85% 20%, rgba(243, 197, 106, 0.14), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgba(33, 73, 163, 0.4), transparent 70%), #030a18;
+  color-scheme: dark;
+}
+
+/* F: glass, pearl blue-grey with iridescent light. */
+.page[data-look="f"] {
+  --paper: #eef1f6;
+  --paper-deep: #e4e8f0;
+  --ink: #17202d;
+  --muted: #566173;
+  --body: #2c3645;
+  --line: #cfd6e2;
+  --rule: #a9b3c3;
+  --blue: #3653b0;
+  --gold: #9a6a18;
+  --gold-light: #f1c46b;
+  --paper-image:
+    radial-gradient(45% 35% at 10% 10%, rgba(201, 195, 242, 0.45), transparent 70%),
+    radial-gradient(40% 35% at 95% 30%, rgba(207, 233, 247, 0.7), transparent 70%),
+    radial-gradient(40% 30% at 60% 100%, rgba(241, 196, 107, 0.18), transparent 70%);
+  --door-bg: #f8f9fc;
+  --card-bg: rgba(255, 255, 255, 0.55);
+  --card-line: rgba(255, 255, 255, 0.9);
+  --ask-bg:
+    radial-gradient(50% 60% at 85% 15%, rgba(201, 195, 242, 0.3), transparent 70%),
+    radial-gradient(50% 60% at 10% 90%, rgba(120, 190, 230, 0.25), transparent 70%), #121a33;
+}

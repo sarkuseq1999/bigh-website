@@ -54,9 +54,13 @@ export function LookGlass({ onAsk }: LookProps) {
   const batteryRef = useRef<HTMLDivElement>(null);
   const [ready, setReady] = useState(false);
 
-  // "45 days to decide." becomes "45 days" beside "to decide." in the spec list.
+  // "45 days to decide." becomes "45 days" beside "to decide." in the spec list. The number and
+  // its unit, then a space or comma: "45일, 결정할 시간." gives "45일" and "결정할 시간.".
   const refund = copy(about.promise.items[2].title);
-  const split = /^(\d+\s+\S+)\s+(.+)$/.exec(refund);
+  const split = /^(\d+\s*[^\s,，、]+)[\s,，、]+(.+)$/.exec(refund);
+  // "20+ years"; Chinese, Japanese and Korean set the unit right after the number ("20+年").
+  const years = copy(about.experience.stats[1].unit);
+  const yearsGap = CLOSE_UNIT.test(years) ? "" : " ";
   const facts: Fact[] = [
     { id: "papers", value: about.roots.stat.value, label: copy(about.roots.stat.label) },
     {
@@ -66,7 +70,7 @@ export function LookGlass({ onAsk }: LookProps) {
     },
     {
       id: "formula",
-      value: `${about.experience.stats[1].value} ${copy(about.experience.stats[1].unit)}`,
+      value: `${about.experience.stats[1].value}${yearsGap}${years}`,
       label: copy(about.experience.stats[1].label),
     },
     { id: "refund", value: split ? split[1] : "45", label: split ? split[2] : refund },
@@ -680,8 +684,9 @@ export function LookGlass({ onAsk }: LookProps) {
               </li>
               <li data-source="formula">
                 <span className={styles.number}>
-                  <CountUp to={20} suffix="+" />{" "}
-                  <span className={styles.unit}>{copy(about.experience.stats[1].unit)}</span>
+                  <CountUp to={20} suffix="+" />
+                  {yearsGap}
+                  <span className={styles.unit}>{years}</span>
                 </span>
                 <span className={styles.numberLabel}>{copy(about.experience.stats[1].label)}</span>
               </li>
@@ -762,11 +767,14 @@ export function LookGlass({ onAsk }: LookProps) {
   );
 }
 
-// One sentence per line ("What our name stands for." / "What our work is for."); languages
-// without ". " between sentences keep the line whole.
+// One sentence per line ("What our name stands for." / "What our work is for."), also after
+// Chinese and Japanese full stops, which take no space ("我们名字的含义。我们工作的意义。").
 function sentences(text: string) {
-  return text.split(/(?<=[.!?])\s+/);
+  return text.split(/(?<=[.!?])\s+|(?<=[。！？])(?=.)/).filter(Boolean);
 }
+
+// Scripts that set a unit right after its number, without a space.
+const CLOSE_UNIT = /^[\p{Script=Han}\p{Script=Hangul}\p{Script=Hiragana}\p{Script=Katakana}]/u;
 
 type Box = { left: number; top: number; width: number };
 

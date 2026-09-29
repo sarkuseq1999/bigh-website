@@ -1,0 +1,18 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": [
+    "--aspect_ratio",
+    "16:9",
+    "--resolution",
+    "2k",
+    "--quality",
+    "high",
+    "--image-references",
+    "reference/science-section/originals/sci2-glass.png"
+  ],
+  "prompt": "Use the reference image exactly: the same glass mitochondrion, the same shape, the same size and position in the frame, the same camera angle, the same clear glass shell and the same folded inner membranes glowing honey-gold. Change only the setting and the light. The background is now a smooth, deep midnight navy (#041328) that fades to near-black at the edges, with no texture, no floor and no shadow. The warm honey-gold light inside the folds is now the main light source: it glows softly from within and spills a faint warm halo into the dark around the glass. The clear glass shell catches thin, cool pale-blue rim highlights from a soft light above. A premium scientific 3D render: calm, elegant, museum quality, crisp detail. No text, no labels, no particles, no sparks, no red, no other objects.",
+  "purpose": "Science page look C (From the dark): the homepage glass cell, re-rendered on a dark ground.",
+  "credits": 2.75,
+  "generated": "2026-09-25 18:13"
+}

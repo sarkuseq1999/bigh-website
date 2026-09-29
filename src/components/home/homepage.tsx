@@ -544,19 +544,20 @@ function HomepageContent() {
                 <span className={styles.eyebrow}>{copy("THE SCIENCE OF FEELING INFORMED")}</span>
                 <p>{copy("Start with curiosity.")}</p>
               </div>
+              {/* The Science page (September 28, 2026), in the visitor's language. */}
               <div className={styles.dropdownLinks}>
-                <a href="#scientists" onClick={closeNav}>
+                <Link href="/science#scientists" onClick={closeNav}>
                   {copy("Our scientists")} <ArrowUpRight size={18} />
-                </a>
-                <a href="#cellular-health" onClick={closeNav}>
+                </Link>
+                <Link href="/science#health" onClick={closeNav}>
                   {copy("Cellular health, explained")} <ArrowUpRight size={18} />
-                </a>
-                <a href="#research" onClick={closeNav}>
+                </Link>
+                <Link href="/science#research" onClick={closeNav}>
                   {copy("Explore the research")} <ArrowUpRight size={18} />
-                </a>
-                <button onClick={openAsk}>
+                </Link>
+                <Link href="/science#ask" onClick={closeNav}>
                   {copy("Ask BiGH Science")} <ArrowUpRight size={18} />
-                </button>
+                </Link>
               </div>
             </div>
           )}
@@ -846,16 +847,16 @@ function HomepageContent() {
           </div>
           <div>
             <h3>{copy("Science")}</h3>
-            <a href="#scientists">{copy("Our scientists")}</a>
-            <a href="#cellular-health">{copy("Cellular health")}</a>
-            <a href="#research">{copy("Research library")}</a>
-            <button onClick={openAsk}>{copy("Ask BiGH Science")}</button>
+            <Link href="/science#scientists">{copy("Our scientists")}</Link>
+            <Link href="/science#health">{copy("Cellular health")}</Link>
+            <Link href="/science#research">{copy("Research library")}</Link>
+            <Link href="/science#ask">{copy("Ask BiGH Science")}</Link>
           </div>
           <div>
             <h3>{copy("Here for you")}</h3>
             <Link href="/about">{copy("About BiGH")}</Link>
             <button onClick={openSupport}>{copy("Support & FAQs")}</button>
-            <a href="#learn">{copy("Health, explained")}</a>
+            <Link href="/science#health">{copy("Health, explained")}</Link>
             <button onClick={openSupport}>
               {copy("Language help")} <Globe2 size={16} />
             </button>

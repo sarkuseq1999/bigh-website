@@ -1,0 +1,300 @@
+.portrait {
+  padding: 0 var(--gutter) clamp(96px, 11vw, 160px);
+  background: var(--paper);
+}
+
+.eyebrow {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* 1. One sentence, centered; the photograph starts rising into view below it. */
+.opening {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: calc(84px + clamp(72px, 14vh, 150px));
+  text-align: center;
+}
+
+.title {
+  max-width: 11.5em;
+  margin-top: 26px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(54px, 7vw, 118px);
+  line-height: 0.98;
+  letter-spacing: -0.02em;
+}
+
+/* 2. The photograph, centered, coming into focus. */
+.frame {
+  position: relative;
+  width: min(78vw, 460px);
+  aspect-ratio: 4 / 5;
+  margin: clamp(56px, 9vh, 96px) auto 0;
+  border-radius: 32px;
+  overflow: hidden;
+  background: #11161a;
+  box-shadow: 0 40px 90px rgba(17, 22, 26, 0.18);
+}
+
+.photo {
+  object-fit: cover;
+  object-position: 50% 22%;
+  will-change: filter, transform;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-left: -24px;
+  border-radius: 50%;
+  background: rgba(251, 250, 247, 0.9);
+  color: var(--ink);
+}
+
+.cue svg {
+  animation: nudge 2.4s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+.featureCopy {
+  max-width: 760px;
+  margin: clamp(48px, 6vw, 80px) auto 0;
+  text-align: center;
+}
+
+.featureCopy .body {
+  max-width: 34em;
+  margin-inline: auto;
+}
+
+.name {
+  margin-top: 14px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(46px, 5vw, 76px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.statement {
+  margin-top: 26px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(28px, 2.6vw, 38px);
+  line-height: 1.16;
+  color: var(--blue);
+}
+
+.body {
+  margin-top: 20px;
+  color: #3b3f39;
+  font-size: 19px;
+}
+
+.storyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 56px;
+  margin-top: 34px;
+  padding: 0 28px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 17px;
+  font-weight: 500;
+  transition: background-color 0.25s ease;
+}
+
+.storyButton:hover {
+  background: var(--blue);
+}
+
+/* 3. His record in three numbers. */
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: var(--wide);
+  margin: clamp(96px, 12vw, 170px) auto 0;
+  border-top: 1px dotted #9da29a;
+  border-bottom: 1px dotted #9da29a;
+}
+
+.number {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: clamp(32px, 4vw, 52px) clamp(18px, 3vw, 44px);
+}
+
+.number + .number {
+  border-left: 1px dotted #9da29a;
+}
+
+.value {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(76px, 8.4vw, 132px);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.label {
+  max-width: 16em;
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 6px;
+  padding: 4px 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.source:hover {
+  color: var(--blue);
+}
+
+.tribute {
+  max-width: var(--wide);
+  margin: 26px auto 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.tribute a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-bottom: 1px solid currentColor;
+  color: var(--ink);
+  font-weight: 500;
+}
+
+/* 4. Dr. Iris Wang in words, beside the two formulas they made together. */
+.together {
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1fr);
+  gap: clamp(40px, 6vw, 100px);
+  align-items: center;
+  max-width: var(--wide);
+  margin: clamp(96px, 12vw, 170px) auto 0;
+}
+
+.iris {
+  padding: clamp(36px, 4vw, 56px);
+  border-radius: 28px;
+  background: var(--paper-deep);
+  border: 1px solid #e6e2d6;
+}
+
+.irisName {
+  margin-top: 16px;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--gold);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(46px, 5vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.formulas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 40px);
+}
+
+.formula {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.bottle {
+  position: relative;
+  width: min(100%, 250px);
+  aspect-ratio: 1230 / 1278;
+}
+
+.bottle img {
+  object-fit: contain;
+  filter: drop-shadow(0 24px 24px rgba(20, 30, 40, 0.16));
+}
+
+.formula figcaption {
+  display: grid;
+  gap: 6px;
+  max-width: 15em;
+  margin-top: 18px;
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.formula strong {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+.formula span {
+  color: var(--muted);
+}
+
+@media (max-width: 900px) {
+  .together {
+    grid-template-columns: 1fr;
+  }
+
+  .opening {
+    padding-top: calc(72px + 64px);
+  }
+
+  .numbers {
+    grid-template-columns: 1fr;
+  }
+
+  .number + .number {
+    border-left: 0;
+    border-top: 1px dotted #9da29a;
+  }
+}
+
+@media (max-width: 520px) {
+  .formulas {
+    gap: 12px;
+  }
+
+  .formula strong {
+    font-size: 24px;
+  }
+
+  .formula figcaption {
+    font-size: 15px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cue svg {
+    animation: none;
+  }
+}
