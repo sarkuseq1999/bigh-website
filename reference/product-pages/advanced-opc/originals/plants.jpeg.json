@@ -1,0 +1,7 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": { "aspectRatio": "16:9", "imageSize": "4K", "style": "photorealistic" },
+  "prompt": "An editorial still life of plant ingredients, seen from slightly above at about a 40 degree angle, on a pale blush-pink linen cloth in soft morning window light from the left. Loosely arranged with generous calm space between them, grouped a little right of centre: a small cluster of deep red grapes with a few loose brown grape seeds beside it, a curled piece of reddish-brown maritime pine bark, a small unglazed ceramic dish of dark blue bilberries, a pinch of loose dried green tea and black tea leaves, a thin slice of orange, and one orange marigold flower.\n\nMuted, natural, true-to-life colours that sit well with blush pink and deep wine red. Shallow depth of field, soft shadows, fine linen texture, quiet and elegant, like a high-end magazine food and botanical photograph.\n\nNo text, no labels, no bottles, no capsules, no hands, no people, no watermark.",
+  "generated": "2026-09-28",
+  "derived": "public/images/products/advanced-opc/plants.webp: resized to 2752x1536, highlights above mid-grey pulled in by 20% and the whole 3% darker (so the photo moment's cream line stays at least 3:1 over the pale linen), otherwise untouched. An illustration of some of the formula's plant sources, not a photo of the product's actual raw materials."
+}

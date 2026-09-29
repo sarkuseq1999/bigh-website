@@ -226,7 +226,7 @@ export function ResearchChapter({
       <div className={styles.stage}>
         <header className={styles.head} data-head>
           <h2 id={titleId} className={styles.heading} data-heading>
-            {copy("The research on the ingredients")}
+            {copy(product.researchTitle ?? "The research on the ingredients")}
           </h2>
           <p className={styles.honesty}>{copy(product.notes.research)}</p>
         </header>

@@ -639,6 +639,14 @@
   gap: 18px;
 }
 
+/* The stat shares the heading's grid cell, so the heading keeps room for it: a heading that runs
+   to three lines (Japanese) would otherwise sit on the number. */
+@media (min-width: 1100px) {
+  .roots .head {
+    padding-bottom: calc(var(--t-number) * 0.78 + 36px);
+  }
+}
+
 .statValue {
   color: var(--g-ink);
   font-family: var(--g-sans);
@@ -940,6 +948,79 @@
   .secondary {
     width: 100%;
   }
+}
+
+/* ---- Other languages ----------------------------------------------------------------------
+   The chapters' words in Korean, Japanese, Chinese and Vietnamese (the h1 stays English and is
+   marked lang="en", so none of this touches it). Han, kana and Hangul fill the em box, so the
+   headings get room between their lines, and Japanese and Chinese drop the display tracking,
+   which crowds full-width characters. Korean already keeps its words whole (globals.css). */
+.glass :is(.statement, .heading):is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.26;
+}
+
+.glass .closingTitle:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.2;
+}
+
+.glass :is(.statement, .heading, .closingTitle):is(:lang(ja), :lang(zh)) {
+  letter-spacing: 0;
+}
+
+/* Japanese headings use the font's proportional widths, as Japanese display type is set; the
+   full-width default reads as letter-spaced at this size. */
+.glass :is(.statement, .heading, .closingTitle):lang(ja) {
+  font-feature-settings: "palt";
+}
+
+/* Japanese: the short lines (headings, labels, the promises, buttons) break between phrases,
+   not inside a word (auto-phrase: Chrome and Edge; other browsers keep the normal breaks).
+   Paragraphs break between characters, as Japanese is set, never before small kana or "ー"
+   (line-break: strict, on the whole page in about-page.module.css). */
+.glass
+  :is(
+    .kicker,
+    .label,
+    .lead,
+    .statement,
+    .heading,
+    .closingTitle,
+    .statLabel,
+    .numberLabel,
+    .factLabel,
+    .itemTitle,
+    .itemText,
+    .textLink,
+    .primary,
+    .secondary
+  ):lang(ja) {
+  word-break: auto-phrase;
+}
+
+/* Chinese: headings, labels and the promises break at their punctuation (the translations put a
+   comma where a line may end: "充实的人生，/ 由许多部分组成。"), and anywhere only when a phrase
+   is longer than the line. Keep each phrase short when editing these lines, or that fallback
+   can leave a lone "。" on a line. Paragraphs break between characters, as Chinese is set. */
+.glass
+  :is(
+    .kicker,
+    .label,
+    .statement,
+    .heading,
+    .closingTitle,
+    .statLabel,
+    .numberLabel,
+    .factLabel,
+    .itemTitle,
+    .itemText
+  ):lang(zh) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* The labels under the numbers wrap evenly, so no word is left alone on a line. */
+.glass :is(.statLabel, .numberLabel):not(:lang(en)) {
+  text-wrap: balance;
 }
 
 /* Landscape phones: too short to dock the battery above readable words, so the words get the

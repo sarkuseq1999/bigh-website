@@ -1,5 +1,6 @@
 "use client";
 
+import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 
 import Image from "next/image";
@@ -153,9 +154,9 @@ export function DeepSpaceHero({ onDiscover }: { onDiscover: () => void }) {
           <ProductAction name="NuriCell" onOpen={onDiscover} className={styles.primary}>
             {copy("Discover NuriCell")} <ArrowRight size={20} aria-hidden="true" />
           </ProductAction>
-          <a href="#scientists" className={styles.secondary}>
+          <Link href="/science" className={styles.secondary}>
             {copy("Meet our scientists")} <ArrowRight size={18} aria-hidden="true" />
-          </a>
+          </Link>
         </div>
       </div>
     </section>
