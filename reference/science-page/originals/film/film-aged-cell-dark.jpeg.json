@@ -1,0 +1,9 @@
+{
+  "tool": "Gemini MCP (mcp__gemini__gemini-generate-image)",
+  "model": "Gemini image generation (model chosen by the MCP server)",
+  "params": { "aspectRatio": "16:9", "imageSize": "2K", "style": "photorealistic 3D render" },
+  "prompt": "A premium scientific 3D render of a single mitochondrion made of clear glass, a horizontal bean shape centered in the frame, filling the middle half of the image, seen from the same slight top-down angle as a textbook illustration. Inside the thick glass shell, the folded inner membranes (cristae) are shown as an aged cell: their honey-gold light has faded to a dim, dusty amber and quiet grey, the folds are slightly slack and irregular, and the glass shell is frosted with a fine network of hairline crackle, like old glass. Only a faint warm glow remains deep inside. The background is a smooth, deep midnight navy (#041328) fading to near-black at the edges, with no texture, no floor and no shadow. Thin cool pale-blue rim highlights trace the top edge of the glass from a soft light above. Calm, elegant, museum quality, crisp detail. No text, no labels, no particles, no spots, no specks, no dots, no sparks, no red, no other objects.",
+  "purpose": "Science page round 3, look B (Scroll film): 'What happens to your cells as you age?' chapter picture on the dark page (the white-ground aged render does not sit on a dark page).",
+  "web_copy": "public/images/science-page/film/aged-cell-dark.webp (1920 wide, WebP q82)",
+  "generated": "2026-09-28"
+}

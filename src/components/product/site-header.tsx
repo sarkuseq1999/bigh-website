@@ -34,7 +34,7 @@ export function SiteHeader({ tone }: { tone: "light" | "dark" }) {
         <Link href="/#products" aria-current="page">
           {copy("Products")}
         </Link>
-        <Link href="/#learn">{copy("Science")}</Link>
+        <Link href="/science">{copy("Science")}</Link>
         <Link href="/about">{copy("About")}</Link>
       </nav>
       <div className={styles.utilities}>
