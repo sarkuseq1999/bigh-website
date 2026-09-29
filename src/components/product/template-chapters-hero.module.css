@@ -240,6 +240,13 @@
     column-gap: 0;
     translate: none;
   }
+  /* A name that parts at a space ("Nature Calm") keeps its word space when it stands whole, and
+     the two words centre together rather than on the join. */
+  .hero .giant[data-spaced] {
+    grid-template-columns: auto auto;
+    justify-content: center;
+    column-gap: 0.24em;
+  }
   .hero .stage {
     position: relative;
     inset: auto;

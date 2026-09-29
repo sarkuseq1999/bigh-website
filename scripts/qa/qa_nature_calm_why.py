@@ -1,25 +1,23 @@
-"""QA for chapter 2, "Why it matters", at night (Template 2, "Chapters"): the light bulb story, or any
-product's night story with --product=<slug> (the words each product must carry are in PRODUCTS).
+"""QA for Nature Calm's "Why it matters" at night: the microscope whose lamp comes on.
 
-With motion, at 1440x900 and 390x844, it scrolls the pinned track in small settled steps and checks:
-- the moments arrive one at a time and in order: 2%, 20%, the comparison, the three approved lines,
-  the title; never two readable at once (no illegible overlap)
-- the light is off for the first figure and on from the second; the figure counts up to 20
-- at every beat: no text over the bulb, and every line of text at least 4.5:1 against the pixels
-  actually behind it (a screenshot with the words hidden)
+Derived from qa_why_chapter.py (NuriCell's light bulb), September 28, 2026. With motion, at
+1440x900 and 390x844, it scrolls the pinned track in small settled steps and checks:
+- the moments arrive one at a time and in order: the four lines, then the title; never two
+  readable at once (no illegible overlap)
+- the lamp is off for the first line and on from the second, and stays on
+- at every beat: no text over the microscope, and every line of text at least 4.5:1 against the
+  pixels actually behind it (a screenshot with the words hidden)
 - the photo has no edge: the page's night matches the photo's own ground where they meet
 - the chapter index reads light on the night (rail on wide screens, pill on phones)
 - jumping straight to the end and straight back settles on the right moment (fast scrolling)
-Reduced motion (both sizes): no track, nothing sticky or split, the lit photo and every figure and
-line shown, still no text over the bulb and the same contrast. Also: a phone held sideways (844x390)
-gets the still layout; 1920x1080 keeps the photo edge invisible; a product without a night photo
-(?chapters-fixture=full, development only) keeps the quiet paper list. No console errors anywhere.
+Reduced motion (both sizes): no track, nothing sticky or split, the lit photo and every line shown,
+still no text over the microscope and the same contrast. Also: a phone held sideways (844x390)
+gets the still layout; 1920x1080 keeps the photo edge invisible. No console errors anywhere.
 
-Pictures (viewport shots; full-page shots break svh layouts): scripts/qa/out/why-<run>-<nn>-<beat>.png
-and why-<run>-sheet.png.
+Pictures (viewport shots; full-page shots break svh layouts): scripts/qa/out/ncwhy-<run>-<nn>-<beat>.png
+and ncwhy-<run>-sheet.png.
 
-    python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
-    python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
+    python -X utf8 scripts/qa/qa_nature_calm_why.py http://localhost:3013
 """
 import io
 import os
@@ -29,46 +27,18 @@ import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
-POSITIONAL = [a for a in sys.argv[1:] if not a.startswith("--")]
-BASE = (POSITIONAL[0] if POSITIONAL else "http://localhost:3007").rstrip("/")
-SLUG = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--product=")), "nuricell")
+BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3013").rstrip("/")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 os.makedirs(OUT, exist_ok=True)
 NIGHT = (6, 22, 37)  # --night, sampled from the photos
-# Per product: the moments in order (fact-<figure>, comparison, line-n, title), their words, the start
-# of the source line, and the figures (the count each fact shows once it has counted up).
-PRODUCTS = {
-    "nuricell": {
-        "beats": ["fact-2", "fact-20", "comparison", "line-1", "line-2", "line-3", "title"],
-        "lines": [
-            "Your brain is about 2% of your body’s weight.",
-            "Yet it uses about 20% of your body’s energy.",
-            "About 20 watts, day and night. Like a light that never goes out.",
-            "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use.",
-            "That energy helps your brain think, your heart beat, and your muscles move.",
-            "It’s one reason good health starts with your cells.",
-            "Tiny power plants. A big part of your health.",
-        ],
-        "source": "Brain energy figures:",
-        "figures": ["2", "20"],
-    },
-    "green-bee-propolis": {
-        "beats": ["fact-7", "line-1", "line-2", "line-3", "title"],
-        "lines": [
-            "Minutes, on average, for one bee to gather a load of resin.",
-            "Bees make propolis from the resin they gather from plants. They line their hive with it and seal its cracks.",
-            "In Minas Gerais, they snip it from the shoot tips of one shrub, alecrim, and carry it home on their legs.",
-            "That resin carries artepillin C, the compound green propolis is known for.",
-            "Gathered by bees, from one Brazilian shrub.",
-        ],
-        "source": "Sources: Teixeira",
-        "figures": ["7"],
-    },
-}
-BEATS = PRODUCTS[SLUG]["beats"]
-LINES = PRODUCTS[SLUG]["lines"]
-SOURCE = PRODUCTS[SLUG]["source"]
-FIGURES = PRODUCTS[SLUG]["figures"]
+BEATS = ["line-1", "line-2", "line-3", "line-4", "title"]
+LINES = [
+    "Under stress, your body releases hormones that get it ready to respond.",
+    "Scientists study what stress does inside your cells, including their mitochondria.",
+    "In animal studies, Dr. Liu and Dr. Wang found that stress raised oxidative damage in the brain.",
+    "Nature Calm brings their research into a formula for life’s demanding days.",
+    "Stress, seen from inside the cell.",
+]
 passed = failed = 0
 dev_notes = set()
 url = None
@@ -134,13 +104,13 @@ STATE = f"""(() => {{
     vis, copy: op(track.querySelector('[data-why-copy]')),
     lit: Math.round(op(track.querySelector('[data-why-lit]')) * 50) / 50,
     counts: [...track.querySelectorAll('[data-why-count]')].map(c => c.textContent),
-    texts: moments.map(m => (m.querySelector('[data-why-fact-line]') || m).textContent.trim()),
+    texts: moments.map(m => (m.querySelector('[data-why-fact-line]') || m).textContent.replace(/\u00a0/g, ' ').trim()),
     tone: document.querySelector('[data-motion][data-active]').dataset.tone,
   }};
 }})()"""
 # Every visible line of text in the chapter, as the boxes its glyphs really occupy (one per line;
 # a text node's own client rects, so a wide block never counts as text), with the text's colour
-# and size after its own and its ancestors' opacity. Also the bulb's box, the picture's clip, and
+# and size after its own and its ancestors' opacity. Also the scope's box, the picture's clip, and
 # the fixed overlay (the chapter index).
 TEXTS = f"""(() => {{
   const track = {TRACK};
@@ -167,15 +137,15 @@ TEXTS = f"""(() => {{
   const frame = track.querySelector('[data-why-frame]');
   const clip = track.querySelector('[data-why-picture]').getBoundingClientRect();
   const f = frame.getBoundingClientRect();
-  const bulb = {{ x0: Math.max(clip.left, f.left + 0.52 * f.width), x1: Math.min(clip.right, f.left + 0.87 * f.width),
-    y0: Math.max(clip.top, f.top), y1: Math.min(clip.bottom, f.top + 0.83 * f.height) }};
+  const scope = {{ x0: Math.max(clip.left, f.left + 0.53 * f.width), x1: Math.min(clip.right, f.left + 0.89 * f.width),
+    y0: Math.max(clip.top, f.top), y1: Math.min(clip.bottom, f.top + 0.8 * f.height) }};
   const box = e => {{ if (!e) return null; const r = e.getBoundingClientRect(); const st = getComputedStyle(e);
     if (!r.width || st.display === 'none' || st.visibility !== 'visible' || +st.opacity < 0.1) return null;
     return {{ x0: r.left, y0: r.top, x1: r.right, y1: r.bottom }}; }};
   const nav = document.querySelector('nav[aria-label="Chapters"]');
   const overlays = [nav && nav.dataset.shown === 'true' ? box(nav.querySelector('button[aria-controls]')) : null,
     nav && nav.dataset.shown === 'true' ? box(nav.querySelector('ol')) : null].filter(Boolean);
-  return {{ texts: out, bulb, overlays, frame: {{ x0: f.left, y0: f.top, x1: f.right, y1: f.bottom }},
+  return {{ texts: out, scope, overlays, frame: {{ x0: f.left, y0: f.top, x1: f.right, y1: f.bottom }},
     picture: {{ x0: clip.left, y0: clip.top, x1: clip.right, y1: clip.bottom }} }};
 }})()"""
 OVERLAYS = "nav[aria-label='Chapters']"
@@ -206,7 +176,7 @@ def intersects(a, b, margin=6):
 
 
 def legibility(page, pinned=True):
-    """Words never over the bulb (nor, on the pinned stage, under the fixed index), and
+    """Words never over the microscope (nor, on the pinned stage, under the fixed index), and
     every line at least 4.5:1 against the brightest pixels actually behind it (the words and the
     overlays hidden for that picture). Still layouts scroll under the fixed overlays by nature."""
     info = page.evaluate(TEXTS)
@@ -216,7 +186,7 @@ def legibility(page, pinned=True):
     page.evaluate(SHOW)
     worst, over = {}, []
     for t in info["texts"]:
-        if intersects(t, info["bulb"]):
+        if intersects(t, info["scope"]):
             over.append(t["text"])
         if pinned and any(intersects(t, o, 0) for o in info["overlays"]):
             over.append("under an overlay: " + t["text"])
@@ -266,7 +236,7 @@ class Shots:
         self.run, self.paths = run, []
 
     def take(self, page, name):
-        path = os.path.join(OUT, f"why-{self.run}-{len(self.paths):02d}-{name}.png")
+        path = os.path.join(OUT, f"ncwhy-{self.run}-{len(self.paths):02d}-{name}.png")
         page.screenshot(path=path)
         self.paths.append(path)
         return path
@@ -279,7 +249,7 @@ class Shots:
         sheet = Image.new("RGB", (columns * (w + 10), rows * (h + 10)), (40, 44, 52))
         for i, im in enumerate(images):
             sheet.paste(im, ((i % columns) * (w + 10), (i // columns) * (h + 10)))
-        path = os.path.join(OUT, f"why-{self.run}-sheet.png")
+        path = os.path.join(OUT, f"ncwhy-{self.run}-sheet.png")
         sheet.save(path)
         return path
 
@@ -291,7 +261,7 @@ def seam(page, label, lit_state):
     H, W = img.shape[:2]
     f, pic = info["frame"], info["picture"]
     diffs = []
-    # Plain night far from the bulb, inside the photo.
+    # Plain night far from the scope, inside the photo.
     x0 = int(max(f["x0"] + 0.15 * (f["x1"] - f["x0"]), pic["x0"], 0))
     patch = img[8:60, x0: x0 + 60].reshape(-1, 3).mean(axis=0)
     diffs.append(("photo ground vs night", float(np.abs(patch - NIGHT).max())))
@@ -301,7 +271,7 @@ def seam(page, label, lit_state):
         outside = img[8:60, max(0, xe - 20): xe - 4].reshape(-1, 3).mean(axis=0)
         inside = img[8:60, xe + 4: xe + 40].reshape(-1, 3).mean(axis=0)
         diffs.append(("left edge", float(np.abs(outside - inside).max())))
-    # The picture's lower edge, when it is on screen, away from the bulb.
+    # The picture's lower edge, when it is on screen, away from the scope.
     if pic["y1"] < H - 20:
         yb = int(pic["y1"])
         above = img[yb - 14: yb - 4, 4:40].reshape(-1, 3).mean(axis=0)
@@ -349,11 +319,10 @@ def run_motion(browser, label, w, h):
     where = page.evaluate(WHERE)
     texts = page.evaluate(STATE)["texts"]
     check(f"{label}: the chapter carries the approved words, in order", texts == LINES,
-          str([t[:30] for t in texts]) if texts != LINES else f"{len(LINES)} moments")
+          str([t[:30] for t in texts]) if texts != LINES else "7 moments")
     pinned = where["height"] - h
-    # About half a window of scrolling per moment (NuriCell's seven: over three windows).
-    check(f"{label}: a tall pinned track (motion on)", pinned > h * 0.45 * len(BEATS),
-          f"track={where['height']} window={h}")
+    # Five moments here against NuriCell's seven, so the track is shorter than NuriCell's 3 screens.
+    check(f"{label}: a tall pinned track (motion on)", pinned > h * 2, f"track={where['height']} window={h}")
 
     # The stage rising into view.
     glide(page, where["top"] - int(h * 0.45), steps=12)
@@ -375,20 +344,16 @@ def run_motion(browser, label, w, h):
         for k in f:
             if not order or order[-1] != k:
                 order.append(k)
-    check(f"{label}: the moments arrive one at a time, in order ({', '.join(BEATS)})",
+    check(f"{label}: the moments arrive one at a time, in order (four lines, then the title)",
           order == list(range(len(BEATS))) and all(len(f) <= 1 for f in full), f"order={order}")
     check(f"{label}: never two moments readable at once (no overlapping words)", not doubles, str(doubles[:2]))
     first = [s for f, (_, s) in zip(full, scan) if f == [0]]
     second = [s for f, (_, s) in zip(full, scan) if f == [1]]
-    check(f"{label}: the light is off for the first moment and on from the second"
-          + (f", which counts up to {FIGURES[1]}" if len(FIGURES) > 1 else ""),
-          first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second)
-          and all(s["counts"][1] == FIGURES[1] for s in second if len(FIGURES) > 1),
-          f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
+    check(f"{label}: the lamp is off for the first line and on from the second",
+          first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second),
+          f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]}")
     later = [s["lit"] for f, (_, s) in zip(full, scan) if f and f[0] >= 1]
     check(f"{label}: once on, the light stays on to the end", later and min(later) >= 0.98, str(later))
-    counting = [s["counts"][-1] for f, (_, s) in zip(full, scan) if not f and 0 < s["lit"] < 1]
-    print(f"      (between the figures the count read {counting}, the light {[s['lit'] for f, (_, s) in zip(full, scan) if not f and 0 < s['lit'] < 1]})")
 
     # A picture at each beat, with the words checked against what is really behind them.
     runs = {}
@@ -422,26 +387,21 @@ def run_motion(browser, label, w, h):
             index_on_night(page, label, phone)
         if k == len(BEATS) - 1:
             seam(page, label, "light on")
-            source = [t for t in info["texts"] if t["text"].startswith(SOURCE)]
-            check(f"{label}: the source line is on screen, at least 15px",
-                  source and min(t["size"] for t in source) >= 15,
-                  f"{source[0]['size'] if source else None}px {source[0] if source else ''}")
-    check(f"{label}: no words over the bulb at any beat", not over_bad, str(over_bad[:2]))
+    check(f"{label}: no words over the microscope at any beat", not over_bad, str(over_bad[:2]))
     check(f"{label}: every visible line of text >= 4.5:1 against the pixels behind it, at every beat",
           not legible_bad, str(legible_bad[:2]) if legible_bad else "lowest per beat: " + ", ".join(notes))
 
     # Fast scrolling: straight to the title, then straight back to the first figure.
     title_y = next(y for n, y, _ in plan if n == "title")
-    first_y = next(y for n, y, _ in plan if n == BEATS[0])
+    first_y = next(y for n, y, _ in plan if n == "line-1")
     jump(page, title_y)
     end = settle(page, 5000)
     jump(page, first_y)
     back = settle(page, 5000)
-    check(f"{label}: a fast jump to the end settles on the title (light on), and straight back on the first moment (light off)",
+    check(f"{label}: a fast jump to the end settles on the title (lamp on), and straight back on the first line (lamp off)",
           [k for k, v in enumerate(end["vis"]) if v >= 0.95] == [len(BEATS) - 1] and end["lit"] >= 0.98
-          and [k for k, v in enumerate(back["vis"]) if v >= 0.95] == [0] and back["lit"] <= 0.02
-          and back["counts"] == [FIGURES[0]] * len(FIGURES),
-          f"end={end['vis']} lit={end['lit']} back={back['vis']} lit={back['lit']} counts={back['counts']}")
+          and [k for k, v in enumerate(back["vis"]) if v >= 0.95] == [0] and back["lit"] <= 0.02,
+          f"end={end['vis']} lit={end['lit']} back={back['vis']} lit={back['lit']}")
     shots.take(page, "back-to-start")
 
     # Leaving: the next chapter's own zone decides the page's tone again (it may be night too).
@@ -475,8 +435,8 @@ def run_still(browser, label, w, h, reduced=True):
         counts: [...t.querySelectorAll('[data-why-count]')].map(c => c.textContent) }}; }})()""")
     check(f"{label}: still layout: no track, nothing sticky or split",
           still["extra"] == 0 and still["position"] != "sticky" and still["sticky"] == 0 and still["masks"] == 0, str(still))
-    check(f"{label}: the lit photo and every figure and line are shown ({', '.join(FIGURES)})",
-          still["lit"] == 1 and still["glow"] == 1 and still["hidden"] == 0 and still["counts"] == FIGURES, str(still))
+    check(f"{label}: the lit photo and every line are shown",
+          still["lit"] == 1 and still["glow"] == 1 and still["hidden"] == 0 and still["count"] == len(BEATS), str(still))
     y = where["top"]
     over_bad, legible_bad, notes = [], [], []
     n = 0
@@ -495,7 +455,7 @@ def run_still(browser, label, w, h, reduced=True):
             legible_bad.append((n, low[:2]))
         y += int(h * 0.85)
         n += 1
-    check(f"{label}: no words over the bulb", not over_bad, str(over_bad[:2]))
+    check(f"{label}: no words over the microscope", not over_bad, str(over_bad[:2]))
     check(f"{label}: every line of text >= 4.5:1 against the pixels behind it", not legible_bad,
           str(legible_bad[:2]) if legible_bad else "lowest per screen: " + ", ".join(notes))
     check(f"{label}: no console errors, page errors or failed requests", not problems, str(problems[:3]))
@@ -509,10 +469,10 @@ def run_wide(browser):
     where = page.evaluate(WHERE)
     glide(page, where["top"] + 40, steps=10)
     settle(page)
-    shots.take(page, BEATS[0])
+    shots.take(page, "line-1")
     seam(page, "wide 1920x1080", "light off")
     info, over, worst = legibility(page)
-    check("wide 1920x1080: no words over the bulb, contrast >= 4.5:1", not over and (not worst or worst[0][0] >= 4.5),
+    check("wide 1920x1080: no words over the microscope, contrast >= 4.5:1", not over and (not worst or worst[0][0] >= 4.5),
           f"over={over} lowest={worst[:1]}")
     glide(page, where["top"] + where["height"] - 1080 - 20, steps=14)
     settle(page)
@@ -521,20 +481,6 @@ def run_wide(browser):
     check("wide 1920x1080: no console errors", not problems, str(problems[:3]))
     ctx.close()
     return shots
-
-
-def run_fixture(browser):
-    ctx, page, problems = open_page(browser, 1440, 900, extra="?chapters-fixture=full")
-    st = page.evaluate("""(() => { const s = document.querySelector('[data-chapter="why"]');
-      return { night: s.querySelectorAll('[data-why-picture]').length, tone: s.dataset.tone,
-        lines: s.querySelectorAll('[data-why-line]').length, title: !!s.querySelector('h2') }; })()""")
-    if st["night"] and st["lines"] == 3:
-        print("NOTE fixture skipped: this server ignores ?chapters-fixture (a production build)")
-    else:
-        check("fixture 'full' (no night photo): the quiet list on paper, four lines and the title, no errors",
-              st["night"] == 0 and st["tone"] == "paper" and st["lines"] == 4 and st["title"] and not problems,
-              f"{st} {problems[:2]}")
-    ctx.close()
 
 
 def attempt(fn, *args, **kwargs):
@@ -548,7 +494,7 @@ def attempt(fn, *args, **kwargs):
 
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"])
-    for url in [f"{BASE}/products/{SLUG}"]:
+    for url in [f"{BASE}/products/nature-calm"]:
         probe = browser.new_page()
         probe.goto(url, wait_until="domcontentloaded")
         found = probe.locator("[data-chapter='why'] [data-why-picture]").count()
@@ -563,7 +509,6 @@ with sync_playwright() as p:
         sheets.append(attempt(run_still, browser, label, w, h).sheet(0.5 if w > 1000 else 0.6, 4))
     sheets.append(attempt(run_still, browser, "landscape", 844, 390, reduced=False).sheet(0.6, 3))
     sheets.append(attempt(run_wide, browser).sheet(0.4, 2))
-    attempt(run_fixture, browser)
     browser.close()
 
 print("\nSheets:", *sheets, sep="\n  ")

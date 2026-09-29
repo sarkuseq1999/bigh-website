@@ -295,7 +295,12 @@ export function HeroChapter({ product, chapter, chapters, reduced, onJump }: Pro
       }
     >
       <span className={styles.glow} aria-hidden="true" />
-      <p ref={giant} className={styles.giant} aria-hidden="true">
+      <p
+        ref={giant}
+        className={styles.giant}
+        data-spaced={product.name.startsWith(`${halves[0]} `) || undefined}
+        aria-hidden="true"
+      >
         <span data-giant-half="a">{halves[0]}</span>
         <span data-giant-half="b">{halves[1]}</span>
         <span className={styles.probe} data-probe>

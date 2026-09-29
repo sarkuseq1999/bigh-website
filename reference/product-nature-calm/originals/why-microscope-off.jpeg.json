@@ -1,0 +1,26 @@
+{
+  "tool": "Gemini MCP",
+  "step": "gemini-start-image-edit (new image)",
+  "settings": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K"
+  },
+  "prompt": "Photorealistic high-end editorial still life photograph. A modern laboratory light microscope with a matte black and white body and polished steel details, seen in a three-quarter side view, standing upright. Pitch-dark studio. The background is one flat, even, very deep navy blue (hex #061625) with no gradient, no texture, no vignette, no floor line visible.\n\nComposition: the microscope stands in the right half of a 16:9 frame. Its body spans from about 53% to 86% of the image width. The stage with a plain, blank glass slide and the objective lens above it sit at about 69% across and 46% down the frame. The eyepieces reach up toward the top edge; the base fades into darkness near the bottom. The whole left half of the frame is empty dark navy, reserved for text.\n\nThe microscope's lamp is switched OFF: the scene is lit only by a faint, cool rim light from the upper left that traces the edges of the metal and the lenses. Quiet, calm, understated.\n\nThe glass slide is completely clean and blank. No specimen, no cells, no people, no hands, no text, no logos, no brand names, no labels, no readable writing, no screens.",
+  "generated": "2026-09-28",
+  "background_before": [
+    9.0,
+    25.0,
+    41.0
+  ],
+  "background_after": [
+    6.0,
+    22.0,
+    37.0
+  ],
+  "recomposed": {
+    "scale": 0.8,
+    "anchor_x": 0.69,
+    "anchor_y": 0,
+    "fade_from": 0.64
+  }
+}

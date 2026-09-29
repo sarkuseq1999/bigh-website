@@ -26,7 +26,7 @@ import { ScienceSection } from "./science-section";
 import { HeaderUtilities } from "./header-utilities";
 import { useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ProductAction } from "./product-action";
+import { ProductAction, ProductPagesProvider } from "./product-action";
 
 const products = [
   {
@@ -242,7 +242,7 @@ function CellDiagram({ variant }: { variant: string }) {
   );
 }
 
-export function Homepage() {
+function HomepageContent() {
   const copy = useCopy();
   const locale = useLocale();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -913,5 +913,14 @@ export function Homepage() {
         )}
       </dialog>
     </div>
+  );
+}
+
+/** productPages: product name → its own page, for the products that have one (from the catalog). */
+export function Homepage({ productPages }: { productPages: Record<string, string> }) {
+  return (
+    <ProductPagesProvider pages={productPages}>
+      <HomepageContent />
+    </ProductPagesProvider>
   );
 }

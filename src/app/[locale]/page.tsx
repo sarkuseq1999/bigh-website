@@ -1,5 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { Homepage } from "@/components/home/homepage";
+import { productPageLinks } from "@/components/product/catalog";
 import { redirect } from "@/i18n/navigation";
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -7,5 +8,5 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   if (locale === "hken") redirect({ href: "/", locale: "cns" });
   setRequestLocale(locale);
 
-  return <Homepage />;
+  return <Homepage productPages={productPageLinks()} />;
 }

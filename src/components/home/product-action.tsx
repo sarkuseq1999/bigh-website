@@ -1,18 +1,28 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 import { Link } from "@/i18n/navigation";
 
-// Products with their own page (September 28, 2026: NuriCell). Their "Discover" actions are real
-// links to it, in the visitor's language; the rest still open the homepage's preview dialog until
-// their pages exist.
-const productPages: Record<string, string> = {
-  NuriCell: "/products/nuricell",
-};
+// Products with their own page open it from the homepage: their "Discover" actions become real
+// links (in the visitor's language), and their pictures open it too. The rest still open the
+// homepage's preview dialog. The list comes from the product catalog (catalog.ts, read on the
+// server by the homepage route), so a product's page links itself here as soon as it exists.
+const ProductPages = createContext<Record<string, string>>({});
 
-/** The product's own page, when it has one. */
-export function productPage(name: string): string | undefined {
-  return productPages[name];
+export function ProductPagesProvider({
+  pages,
+  children,
+}: {
+  pages: Record<string, string>;
+  children: ReactNode;
+}) {
+  return <ProductPages.Provider value={pages}>{children}</ProductPages.Provider>;
+}
+
+/** Look up a product's own page by its name; undefined when it has none yet. */
+export function useProductPage() {
+  const pages = useContext(ProductPages);
+  return (name: string): string | undefined => pages[name];
 }
 
 export function ProductAction({
@@ -26,7 +36,7 @@ export function ProductAction({
   className?: string;
   children: ReactNode;
 }) {
-  const href = productPage(name);
+  const href = useProductPage()(name);
   if (href) {
     return (
       <Link href={href} className={className}>
