@@ -29,7 +29,8 @@ answers 200 with no console errors or warnings; the h1 is the English "Be in Goo
 lang="en"; the tab title is translated; none of the page's English source sentences is left in the visible text,
 the dialogs, the aria-labels or the alt texts (allowed: the English h1 and names kept in Latin letters); and no
 heading, label or paragraph line is a lone character or starts with closing punctuation (1575x940 and 390x844).
-In Japanese, the glass after "Health." never touches a letter. Review shots of every chapter, the footer and the
+In Japanese and Vietnamese, the glass after "Health." never touches a letter. In Vietnamese, Chrome's DevTools
+font report shows every Vietnamese text drawn in Be Vietnam Pro only and the English h1 in Switzer only. Review shots of every chapter, the footer and the
 Ask panel: scripts/qa/out/about-i18n/<lang>-<desk|phone>-N-<part>.png.
 
 Pictures: scripts/qa/out/about-<size>-NN.png, viewport shots while scrolling (never full-page: svh layouts).
@@ -779,6 +780,42 @@ def shoot_chapters(page, loc, tag):
     page.wait_for_timeout(300)
 
 
+def vietnamese_type_check(page):
+    """Chrome's own answer (DevTools Protocol) to which faces drew the text: every Vietnamese heading, label, paragraph,
+    link and button in Be Vietnam Pro only (Switzer lacks most Vietnamese letters, so Chrome used to fill them from
+    Arial), and the English h1 in Switzer only."""
+    cdp = page.context.new_cdp_session(page)
+    cdp.send("DOM.enable")
+    cdp.send("CSS.enable")
+    count = page.evaluate(
+        """() => { let n = 0;
+            for (const e of document.querySelectorAll('header a, header button, main h1 span, main h2, main h3, main p, main li, main a, main button, footer p, footer a')) {
+              if (!e.getClientRects().length || ![...e.childNodes].some(c => c.nodeType === 3 && c.textContent.trim())) continue;
+              e.dataset.typeProbe = String(n++); }
+            return n; }"""
+    )
+    root = cdp.send("DOM.getDocument", {"depth": -1})["root"]["nodeId"]
+    vietnamese, english, wrong = {}, {}, []
+    for i in range(count):
+        node = cdp.send("DOM.querySelector", {"nodeId": root, "selector": f'[data-type-probe="{i}"]'})["nodeId"]
+        lang = page.evaluate(f"document.querySelector('[data-type-probe=\"{i}\"]').closest('[lang]').lang")
+        fonts = {f["familyName"]: f["glyphCount"] for f in cdp.send("CSS.getPlatformFontsForNode", {"nodeId": node})["fonts"]}
+        if lang not in ("vi", "en"):
+            continue  # the other languages' greetings
+        into = english if lang == "en" else vietnamese
+        for family, glyphs in fonts.items():
+            into[family] = into.get(family, 0) + glyphs
+        face = "Switzer" if lang == "en" else "Be Vietnam Pro"
+        if any(not family.startswith(face) for family in fonts):
+            wrong.append(f"{lang}:{i} {fonts}")
+    cdp.detach()
+    check(
+        "vn: Vietnamese text is drawn in Be Vietnam Pro only, and the English h1 in Switzer (DevTools fonts, header to footer)",
+        count > 20 and not wrong and any(f.startswith("Be Vietnam Pro") for f in vietnamese) and list(english) and all(f.startswith("Switzer") for f in english),
+        f"elements={count} vietnamese={vietnamese} english={english} wrong={wrong[:3]}",
+    )
+
+
 def i18n_checks(browser, sources):
     for loc in LOCALES:
         # Desktop: the page, the words, the title, the dialogs, the breaks, the pictures.
@@ -798,6 +835,8 @@ def i18n_checks(browser, sources):
             f"status={response.status} {head}",
         )
         check(f"{loc}: the tab title is translated", head["title"].startswith("BiGH — ") and head["title"] != "BiGH — About", head["title"])
+        if loc == "vn":
+            vietnamese_type_check(page)
         left = left_in_english(page, sources)
         # The dialogs: Ask BiGH Science from the closing, support from the header.
         page.locator("[data-chapter=closing] button").first.click()
@@ -839,16 +878,18 @@ def i18n_checks(browser, sources):
     check("hken: /hken/about goes to /cns/about, no errors", page.url.endswith("/cns/about") and lang == "zh-Hans" and not problems, f"url={page.url} lang={lang} {problems[:2]}")
     page.close()
 
-    # The English h1 in a translated page: the glass after "Health." never touches a letter.
-    bad = []
-    for w, h in ((1575, 940), (1280, 720), (390, 844)):
-        page, problems = open_page(browser, w, h, url=f"{BASE}/jp/about")
-        page.wait_for_timeout(1400)
-        geo = page.evaluate(OPENING)
-        if geo["placed"] != "true" or geo["titleHits"] or geo["otherHits"] or not geo["inView"] or problems:
-            bad.append((f"{w}x{h}", geo, problems[:2]))
-        page.close()
-    check("jp: the glass after the English title never touches a letter and sits in the first screen (1575x940, 1280x720, 390x844)", not bad, f"{bad[:2]}")
+    # The English h1 in a translated page: the glass after "Health." never touches a letter. Japanese, and
+    # Vietnamese, whose other words are set in Be Vietnam Pro around the Switzer title.
+    for loc in ("jp", "vn"):
+        bad = []
+        for w, h in ((1575, 940), (1280, 720), (390, 844)):
+            page, problems = open_page(browser, w, h, url=f"{BASE}/{loc}/about")
+            page.wait_for_timeout(1400)
+            geo = page.evaluate(OPENING)
+            if geo["placed"] != "true" or geo["titleHits"] or geo["otherHits"] or not geo["inView"] or problems:
+                bad.append((f"{w}x{h}", geo, problems[:2]))
+            page.close()
+        check(f"{loc}: the glass after the English title never touches a letter and sits in the first screen (1575x940, 1280x720, 390x844)", not bad, f"{bad[:2]}")
 
 
 SOURCES = catalog_checks()

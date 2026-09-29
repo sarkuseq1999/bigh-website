@@ -278,3 +278,11 @@
     justify-content: flex-start;
   }
 }
+/* Be Vietnam Pro runs wider than Switzer: at 18px the Vietnamese eyebrow took two lines on phones
+   and its second line met the name. At 16px (labels stay 15px and up) it keeps one line at 375 px
+   and up. */
+@media (max-width: 560px) {
+  .hero .eyebrow:lang(vi) {
+    font-size: 16px;
+  }
+}

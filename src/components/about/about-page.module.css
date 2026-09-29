@@ -10,11 +10,15 @@
   --gutter: clamp(20px, 5vw, 72px);
   --wide: 1280px;
   /* Type (Mo, Sept 28, 2026): Switzer for everything, as on main (07529d5, "Switzer type across
-     the site"). It loads in about/page.tsx. The same tokens as main's pages; CJK and other scripts
-     fall through to the locale fonts in globals.css (--font-dm-sans). */
-  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
-  --sans: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
-  --display-weight: 460;
+     the site"). It loads in the locale layout. The same tokens as main's pages; --font-brand
+     (globals.css) is Switzer, or Be Vietnam Pro in Vietnamese, with its own headline weight
+     (--font-brand-display-weight). The title stays in English and Switzer in every language, so
+     it keeps --switzer-weight. CJK and other scripts fall through to the locale fonts in
+     globals.css (--font-dm-sans). */
+  --display-font: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  --sans: var(--font-brand), var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --switzer-weight: 460;
+  --display-weight: var(--font-brand-display-weight, var(--switzer-weight));
   --display-size: 0.84;
   --display-track: -0.015em;
   --lead-weight: 400;

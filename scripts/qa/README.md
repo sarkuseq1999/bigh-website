@@ -12,6 +12,7 @@ python -X utf8 scripts/qa/qa_stories.py http://localhost:3007
 python -X utf8 scripts/qa/qa_hero_cutaway.py http://localhost:3007 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
+python -X utf8 scripts/qa/qa_vn_font.py http://localhost:3007
 python -X utf8 scripts/qa/qa_green_bee_propolis.py http://localhost:3010
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
@@ -37,6 +38,7 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
 | `qa_green_bee_propolis.py` | Green Bee Propolis's own facts: headline, name around the amber 3D bottle, 200 mg shown large, the full label, buy, questions, links |
 | `qa_turmerific.py`         | Turmerific's own facts: chapters, 3D bottle, both Why pictures, 1,000 mg shown large, six studies, calendar, banned words, sizes     |
 | `record_product_page.py`   | Videos of the product page: `opening.mp4` and `page.mp4` (needs ffmpeg; `--only page` redoes one)                                    |
+| `qa_vn_font.py`            | Vietnamese type: faces drawn (DevTools) on `/vn` pages and other languages; no tone mark touching the next line                      |
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the
