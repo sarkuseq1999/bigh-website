@@ -53,8 +53,8 @@ export const filmTheme: LookTheme = {
     "--card-line": "#232a3a",
     "--door-bg": "#0c111d",
     // The shared header, footer and story panel follow this look's type and corners.
-    "--display-font": '"Switzer", var(--font-dm-sans)',
-    "--text-font": '"Switzer", var(--font-dm-sans)',
+    "--display-font": "var(--font-brand), var(--font-dm-sans)",
+    "--text-font": "var(--font-brand), var(--font-dm-sans)",
     "--panel-radius": "6px",
     // Eyebrows in the shared story panel: the same warm gold as the page's own eyebrows.
     "--eyebrow": "#e6b877",
