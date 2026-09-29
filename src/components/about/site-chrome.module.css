@@ -139,6 +139,22 @@
   letter-spacing: -0.035em;
 }
 
+/* Other languages: when the tagline wraps, its two sentences wrap evenly ("생각은 선명하게. /
+   삶은 풍성하게."), with room between the lines for Han, kana and Hangul; Japanese and Chinese
+   lose the tight tracking, and Japanese breaks between phrases. */
+.footerMessage:not(:lang(en)) {
+  text-wrap: balance;
+}
+
+.footerMessage:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.2;
+}
+
+.footerMessage:is(:lang(ja), :lang(zh)) {
+  letter-spacing: 0;
+  word-break: auto-phrase;
+}
+
 .footerColumns {
   display: grid;
   grid-template-columns: 1fr 1fr;

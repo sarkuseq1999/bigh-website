@@ -9,10 +9,16 @@ import styles from "./acronym.module.css";
 // what it stands for, "Be in Good Health." The four initials stay put (in the look's accent
 // color) while the rest of each word opens out of them. It plays once on load; with reduced
 // motion it shows open. The heading's text is the full sentence, so screen readers and search
-// read "Be in Good Health." Where a translation isn't the English sentence, the translated title
-// shows as it is (the acronym only works in English).
+// read "Be in Good Health."
 //
 // Style it from the look with className (font, size, color) and --acronym-accent (the initials).
+
+// The title stays in English, with the unfold, in every language (Sept 28, 2026): it is what the
+// name BiGH stands for, like the logo, and the translated lead under it explains it. The h1 is
+// marked lang="en" so screen readers pronounce it as English.
+// To show translated titles instead, set this to false: other languages then get their
+// translated title as plain text (the acronym only works in English), and English is unchanged.
+export const TITLE_ALWAYS_ENGLISH = true;
 
 const PARTS = [
   ["B", "e"],
@@ -32,7 +38,7 @@ export function Acronym({
   delay?: number;
 }) {
   const copy = useCopy();
-  const title = copy(about.hero.title);
+  const title = TITLE_ALWAYS_ENGLISH ? about.hero.title : copy(about.hero.title);
   const heading = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
@@ -53,7 +59,13 @@ export function Acronym({
 
   // The visible letters are split into pieces, so the heading carries the sentence as its label.
   return (
-    <h1 ref={heading} id={id} className={`${styles.acronym} ${className}`} aria-label={title}>
+    <h1
+      ref={heading}
+      id={id}
+      lang="en"
+      className={`${styles.acronym} ${className}`}
+      aria-label={title}
+    >
       <span aria-hidden="true">
         {PARTS.map(([initial, rest], index) => (
           <span
