@@ -1,0 +1,15 @@
+{
+  "tool": "Higgsfield CLI (plan credits)",
+  "model": "gpt_image_2_5",
+  "params": {
+    "aspect_ratio": "16:9",
+    "resolution": "2k",
+    "quality": "high",
+    "width": 2688,
+    "height": 1520
+  },
+  "prompt": "A scientist's wooden desk by a tall window at sunset: an open lab notebook with faint handwritten notes, a brass microscope, a few clear glass flasks and a beaker holding pale amber liquid that glows in the sun, a pencil, warm dust in the light. Wide composition with calm empty space in the upper left third. Cinematic still-life photograph at golden hour: low warm sunlight raking across the scene, long soft shadows, amber and honey tones with deep brown shadows, shallow depth of field, gentle film grain, calm and premium, like an editorial photo for a science brand. No people, no hands, no faces, no readable text, no logos, no labels, no red.",
+  "purpose": "Science page look D (Golden hour). An illustration, not a photograph of a real place.",
+  "credits": 2.75,
+  "generated": "2026-09-25T19:13:45.176642Z"
+}

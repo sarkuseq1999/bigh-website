@@ -21,7 +21,16 @@ the spec list as the chapter slides away (desktop); the promise bars fill with h
 into place line by line; chapters take turns (sampled every 40 px, never two chapters' words at once); the paper
 warms and the glow grows with the charge; the loop rests when the visitor stops and sleeps offscreen; the pinned
 battery stops above the footer. A reduced-motion run shows the still render, every bar full and the list
-complete; a no-WebGL run keeps the still render; Korean renders.
+complete; a no-WebGL run keeps the still render.
+
+Other languages (kr, jp, cns, vn). The catalogs, read from the files: every string the About page shows or reads
+out has a key, the five catalogs have the same keys, and their {placeholders} match. Then per language: /xx/about
+answers 200 with no console errors or warnings; the h1 is the English "Be in Good Health." with its unfold and
+lang="en"; the tab title is translated; none of the page's English source sentences is left in the visible text,
+the dialogs, the aria-labels or the alt texts (allowed: the English h1 and names kept in Latin letters); and no
+heading, label or paragraph line is a lone character or starts with closing punctuation (1575x940 and 390x844).
+In Japanese, the glass after "Health." never touches a letter. Review shots of every chapter, the footer and the
+Ask panel: scripts/qa/out/about-i18n/<lang>-<desk|phone>-N-<part>.png.
 
 Pictures: scripts/qa/out/about-<size>-NN.png, viewport shots while scrolling (never full-page: svh layouts).
 Chromium runs on the real GPU (ANGLE/D3D11); pass --swiftshader to use the software renderer instead.
@@ -30,6 +39,7 @@ Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--swiftshader]
 """
 
 import io
+import json
 import os
 import re
 import sys
@@ -38,11 +48,14 @@ import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
+sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3009"
 URL = f"{BASE}/about"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
-os.makedirs(OUT, exist_ok=True)
+OUT_I18N = os.path.join(OUT, "about-i18n")
+REPO = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+os.makedirs(OUT_I18N, exist_ok=True)
 results = []
 
 LOCKED = [
@@ -601,6 +614,245 @@ def panel_checks(page, tag):
     check(f"{tag}: Support panel opens from the menu and closes", title == "BiGH support" and closed, f"title={title} closed={closed}")
 
 
+# ---- Other languages -------------------------------------------------------------------------
+
+LOCALES = ("kr", "jp", "cns", "vn")
+CATALOGS = ("en", "kr", "jp", "cns", "vn")
+# The About page's own files, and the shared header controls it shows.
+ABOUT_FILES = [
+    "src/components/about/about-page.tsx",
+    "src/components/about/site-chrome.tsx",
+    "src/components/about/look-glass.tsx",
+    "src/components/about/acronym.tsx",
+    "src/components/about/greetings.tsx",
+    "src/components/home/header-utilities.tsx",
+]
+# May stay in English on a translated page: the h1 (what the name stands for, kept English on purpose) and
+# names the catalogs keep in Latin letters.
+KEEP_ENGLISH = {"Be in Good Health.", "BiGH", "Dr. Jiankang Liu"}
+
+
+def read(path):
+    with open(os.path.join(REPO, path), encoding="utf-8") as f:
+        return f.read()
+
+
+def copy_literals(text):
+    """The string literals passed to copy(...), e.g. copy(open ? "Close menu" : "Open menu")."""
+    found = []
+    for m in re.finditer(r"\bcopy\(", text):
+        i = j = m.end()
+        depth = 1
+        while depth and j < len(text):
+            if text[j] == '"':
+                j += 1
+                while text[j] != '"':
+                    j += 2 if text[j] == "\\" else 1
+            elif text[j] == "(":
+                depth += 1
+            elif text[j] == ")":
+                depth -= 1
+            j += 1
+        inner = re.sub(r'[!=]==\s*"[^"]*"', "", text[i : j - 1])
+        found += re.findall(r'"((?:[^"\\]|\\.)*)"', inner)
+    return found
+
+
+def content_strings(text):
+    """The words in about-content.ts's `about` and `drafts` (not paths, numbers, or the greetings, which are
+    each written in their own language)."""
+    found = []
+    for name in ("about", "drafts"):
+        block = re.search(rf"export const {name} = \{{(.*?)\n\}} as const;", text, re.S).group(1)
+        block = re.sub(r"greetings: \[.*?\],", "", block, flags=re.S)
+        block = re.sub(r"^\s*//.*$", "", block, flags=re.M)
+        for key, value in re.findall(r'(?:(\w+):\s*)?"((?:[^"\\]|\\.)*)"', block):
+            if key in ("src", "value", "lang") or not value or value.startswith("/"):
+                continue
+            found.append(value)
+    return found
+
+
+def about_sources():
+    sources = content_strings(read("src/components/about/about-content.ts"))
+    for path in ABOUT_FILES:
+        sources += copy_literals(read(path))
+    return list(dict.fromkeys(s.replace('\\"', '"') for s in sources))
+
+
+def catalog_checks():
+    keys = json.loads(read("src/i18n/copy-keys.json"))
+    sources = about_sources()
+    missing = [s for s in sources if s not in keys]
+    check(f"i18n: every About string has a catalog key ({len(sources)} strings)", not missing and len(sources) > 60, f"missing={missing}")
+    page = read("src/app/[locale]/about/page.tsx")
+    check("i18n: the tab title's word comes from the catalogs", 'copyKeys["About"]' in page and "About" in keys)
+
+    copies = {loc: json.loads(read(f"messages/{loc}.json")).get("Copy", {}) for loc in CATALOGS}
+    ids = set(keys.values())
+    uneven = {loc: (len(ids - set(c)), len(set(c) - ids)) for loc, c in copies.items() if set(c) != ids}
+    check(f"i18n: the five catalogs have the same {len(ids)} keys as the source map", not uneven, f"(missing, extra)={uneven}")
+    # About strings only: two homepage eyebrows ("04 / FOLLOW THE EVIDENCE", "05 / BE IN GOOD HEALTH") differ
+    # from their English catalog text ("07 / …", "08 / …") on main; that is the homepage's to settle.
+    wrong_en = [s for s in sources if s in keys and copies["en"].get(keys[s]) != s]
+    check("i18n: the English catalog equals the About source text", not wrong_en, f"{wrong_en[:3]}")
+    holes = lambda t: sorted(re.findall(r"\{(\w+)\}", t or ""))
+    bad = [(loc, k) for loc in CATALOGS for s, k in keys.items() if holes(copies[loc].get(k)) != holes(s)]
+    check("i18n: every translation keeps the source's {placeholders}", not bad, f"{bad[:4]}")
+    hken = json.loads(read("messages/hken.json"))
+    check("i18n: hken.json stays empty (it falls back to English; /hken redirects to /cns)", hken == {}, f"{list(hken)[:3]}")
+    return sources
+
+
+# Every line of every leaf text block (heading, label, paragraph, link, button) in the page and footer. A new
+# line is where the next letter starts left of the last one, so it also reads the masked, shifted heading lines.
+LINES = r"""() => {
+  const out = [];
+  for (const el of document.querySelectorAll('main h2, main h3, main p, main [class*=abel], main a, main button, footer p, footer a, footer button, footer h2')) {
+    if (!el.getClientRects().length || el.closest('[aria-hidden=true]') || el.querySelector('p, h2, h3, [class*=abel]')) continue;
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const r = document.createRange(); const lines = []; let cur = '', left = null, top = null;
+    while (walker.nextNode()) {
+      const t = walker.currentNode;
+      for (let i = 0; i < t.length; i++) {
+        r.setStart(t, i); r.setEnd(t, i + 1); const b = r.getClientRects()[0]; const ch = t.data[i];
+        if (!b || b.width === 0 || /\s/.test(ch)) { cur += ch; continue; }
+        if (left !== null && (b.left < left - 1 || b.top > top + b.height * 1.2)) { lines.push(cur); cur = ''; }
+        left = b.left; top = b.top; cur += ch;
+      }
+    }
+    lines.push(cur);
+    out.push(lines.map(l => l.trim()).filter(Boolean));
+  }
+  return out;
+}"""
+CJK = r"[぀-ヿ㐀-鿿가-힯]"
+CLOSING_PUNCT = "。、，．：；！？）」』・ー"
+
+
+def line_checks(page, tag):
+    bad = []
+    for lines in page.evaluate(LINES):
+        for i, line in enumerate(lines if len(lines) > 1 else []):
+            core = re.sub(r"[。、，．：；！？」』,.:;!?]", "", line)
+            if (i and line[0] in CLOSING_PUNCT) or re.fullmatch(CJK, core):
+                bad.append(" / ".join(lines))
+                break
+    check(f"{tag}: no line is a lone character or starts with closing punctuation", not bad, f"{bad[:3]}")
+
+
+def left_in_english(page, sources):
+    """English source strings still showing, or read out (aria-label, alt), anywhere on the page."""
+    text = page.evaluate(
+        """() => [document.body.innerText, ...[...document.querySelectorAll('[aria-label]')].map(e => e.getAttribute('aria-label')),
+                  ...[...document.images].map(i => i.alt)].join('\\n')"""
+    )
+    left = []
+    for source in sources:
+        if source in KEEP_ENGLISH:
+            continue
+        pattern = r"(?<![A-Za-z])" + re.escape(source) + r"(?![A-Za-z])"
+        if re.search(pattern, text):
+            left.append(source)
+    return left
+
+
+def shoot_chapters(page, loc, tag):
+    """Viewport shots of each chapter where it is read, the footer and the Ask panel."""
+    shot = lambda part: page.screenshot(path=os.path.join(OUT_I18N, f"{loc}-{tag}-{part}.png"))
+    # A dialog closed with Escape hands focus back to its button; its focus ring is not part of the page.
+    page.evaluate("document.activeElement?.blur()")
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(1200)
+    shot("1-opening")
+    parts = (("purpose", "#purpose"), ("roots", "#roots"), ("experience", "#experience"), ("promise", "#promise"), ("closing", "[data-chapter=closing]"))
+    for i, (part, selector) in enumerate(parts, start=2):
+        scroll_to_chapter(page, selector, settle=2400)
+        shot(f"{i}-{part}")
+    page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+    page.wait_for_timeout(900)
+    shot("7-footer")
+    page.locator("[data-chapter=closing] button").first.click()
+    page.wait_for_timeout(700)
+    shot("8-ask")
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(300)
+
+
+def i18n_checks(browser, sources):
+    for loc in LOCALES:
+        # Desktop: the page, the words, the title, the dialogs, the breaks, the pictures.
+        page = browser.new_page(viewport={"width": 1575, "height": 940})
+        problems = watch(page)
+        response = page.goto(f"{BASE}/{loc}/about", wait_until="networkidle")
+        page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
+        page.wait_for_timeout(2200)
+        head = page.evaluate(
+            """() => { const h = document.querySelector('h1');
+                return { lang: h.lang, label: h.getAttribute('aria-label'), words: h.querySelectorAll(':scope > span > span').length,
+                         open: h.dataset.open ?? null, title: document.title, html: document.documentElement.lang }; }"""
+        )
+        check(
+            f"{loc}: /{loc}/about answers 200 and keeps the English h1 with its unfold (lang=en)",
+            response.status == 200 and head["lang"] == "en" and head["label"] == "Be in Good Health." and head["words"] == 4 and head["open"] == "true",
+            f"status={response.status} {head}",
+        )
+        check(f"{loc}: the tab title is translated", head["title"].startswith("BiGH — ") and head["title"] != "BiGH — About", head["title"])
+        left = left_in_english(page, sources)
+        # The dialogs: Ask BiGH Science from the closing, support from the header.
+        page.locator("[data-chapter=closing] button").first.click()
+        page.wait_for_timeout(500)
+        left += left_in_english(page, sources)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(300)
+        page.locator("header nav button").first.click()
+        page.wait_for_timeout(500)
+        support = page.evaluate("!!document.querySelector('dialog[open]')")
+        left += left_in_english(page, sources)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(300)
+        left = sorted(set(left))
+        check(f"{loc}: no English source sentence left on the page, in the dialogs, labels or alt texts", not left and support, f"left={left} supportOpened={support}")
+        line_checks(page, f"{loc}-desk")
+        shoot_chapters(page, loc, "desk")
+        check(f"{loc}-desk: no console errors or warnings", not problems, f"{problems[:3]}")
+        page.close()
+
+        # Phone: the breaks and the pictures.
+        page = browser.new_page(viewport={"width": 390, "height": 844})
+        problems = watch(page)
+        page.goto(f"{BASE}/{loc}/about", wait_until="networkidle")
+        page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
+        page.wait_for_timeout(2200)
+        line_checks(page, f"{loc}-phone")
+        overflow = page.evaluate("document.documentElement.scrollWidth - document.documentElement.clientWidth")
+        shoot_chapters(page, loc, "phone")
+        check(f"{loc}-phone: no sideways scrolling, no console errors or warnings", overflow == 0 and not problems, f"overflow={overflow} {problems[:3]}")
+        page.close()
+
+    # /hken is not a language of its own: it goes to the Chinese page, as the homepage and product pages do.
+    page = browser.new_page(viewport={"width": 1440, "height": 900})
+    problems = watch(page)
+    page.goto(f"{BASE}/hken/about", wait_until="networkidle")
+    page.wait_for_timeout(800)
+    lang = page.evaluate("document.documentElement.lang")
+    check("hken: /hken/about goes to /cns/about, no errors", page.url.endswith("/cns/about") and lang == "zh-Hans" and not problems, f"url={page.url} lang={lang} {problems[:2]}")
+    page.close()
+
+    # The English h1 in a translated page: the glass after "Health." never touches a letter.
+    bad = []
+    for w, h in ((1575, 940), (1280, 720), (390, 844)):
+        page, problems = open_page(browser, w, h, url=f"{BASE}/jp/about")
+        page.wait_for_timeout(1400)
+        geo = page.evaluate(OPENING)
+        if geo["placed"] != "true" or geo["titleHits"] or geo["otherHits"] or not geo["inView"] or problems:
+            bad.append((f"{w}x{h}", geo, problems[:2]))
+        page.close()
+    check("jp: the glass after the English title never touches a letter and sits in the first screen (1575x940, 1280x720, 390x844)", not bad, f"{bad[:2]}")
+
+
+SOURCES = catalog_checks()
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=LAUNCH)
     for w, h, tag in SIZES:
@@ -663,14 +915,8 @@ with sync_playwright() as p:
     page.close()
     nogl.close()
 
-    # Korean: the page renders (untranslated About lines fall back to English for now).
-    page = browser.new_page(viewport={"width": 1440, "height": 900})
-    problems = watch(page)
-    page.goto(f"{BASE}/kr/about", wait_until="networkidle")
-    page.wait_for_timeout(1500)
-    lang = page.evaluate("document.documentElement.lang")
-    check("kr-desk: the page renders in the Korean site with no errors", lang == "ko" and page.locator("h1").count() == 1 and not problems, f"lang={lang} {problems[:3]}")
-    page.close()
+    # Korean, Japanese, Chinese and Vietnamese.
+    i18n_checks(browser, SOURCES)
     browser.close()
 
 print(f"\n{sum(results)} passed, {len(results) - sum(results)} failed")

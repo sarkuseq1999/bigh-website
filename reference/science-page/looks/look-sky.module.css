@@ -1,0 +1,795 @@
+/* Look E, "Night sky". Everything sits on one sky (sky-scene.ts) that stays behind the section. */
+.sky {
+  --cream: #fffaf2;
+  --soft: rgba(244, 239, 228, 0.8);
+  --star-core: #fffdf6;
+  position: relative;
+  isolation: isolate;
+  overflow-x: clip;
+  background: var(--paper);
+  color: var(--ink);
+}
+
+/* The sky layer spans the whole section and takes no room; inside it the sky sticks to the
+   screen and stops at the section's end (never over the next section). Its gradient is the same
+   as the WebGL sky's, so the page reads as night before (or without) the stars. */
+.heavensTrack {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+}
+
+.heavens {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100lvh;
+  background: linear-gradient(180deg, #030812 0%, #050d1c 50%, #0a172e 100%);
+}
+
+.heavens canvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.4s ease;
+}
+
+.sky:not([data-sky="none"]) .heavens canvas {
+  opacity: 1;
+}
+
+.hero,
+.portrait,
+.journey,
+.horizon {
+  position: relative;
+  z-index: 1;
+}
+
+.eyebrow {
+  color: rgba(244, 239, 228, 0.72);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* 1. The hero: the sky, the homepage hero's words, one warm planet beside them. */
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: max(620px, 100svh);
+  padding: calc(84px + 32px) var(--gutter) 150px;
+  text-align: center;
+}
+
+.title {
+  margin-top: 26px;
+  font-size: clamp(50px, 6.6vw, 112px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.055em;
+  color: var(--ink);
+}
+
+.titleLead {
+  position: relative;
+  display: inline-block;
+}
+
+/* Where the planet stands (the WebGL sky reads this point): above the end of the first line. */
+.planet {
+  position: absolute;
+  right: -0.42em;
+  top: -0.36em;
+  width: 2px;
+  height: 2px;
+}
+
+.accent {
+  display: block;
+  margin-top: 0.06em;
+  color: var(--blue);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 1.1em;
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: -0.025em;
+  line-height: 1.02;
+}
+
+.cue {
+  position: absolute;
+  left: 50%;
+  bottom: clamp(28px, 6svh, 56px);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1px solid rgba(244, 239, 228, 0.22);
+  border-radius: 999px;
+  color: var(--soft);
+  font-size: 16px;
+  font-weight: 500;
+  white-space: nowrap;
+  translate: -50% 0;
+  transition:
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.cue:hover {
+  border-color: var(--gold);
+  color: var(--cream);
+}
+
+.cue svg {
+  animation: nudge 2.6s ease-in-out infinite;
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateY(4px);
+  }
+}
+
+/* 2. Dr. Liu: centered, a rounded frame with a thin rim of gold light, coming into focus. */
+.portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: clamp(48px, 10svh, 120px) var(--gutter) clamp(120px, 15vw, 220px);
+  text-align: center;
+}
+
+.frame {
+  position: relative;
+  width: min(78vw, 440px);
+  aspect-ratio: 4 / 5;
+  margin: 0;
+  border-radius: 30px;
+  overflow: hidden;
+  background: #0b1216;
+  box-shadow:
+    0 50px 120px rgba(0, 0, 0, 0.55),
+    0 0 90px rgba(243, 197, 106, 0.07);
+}
+
+/* The studio's grey ground darkens toward the frame's edge, into the night (his face, near the
+   middle, is untouched). */
+.frame::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  box-shadow: inset 0 0 70px 16px rgba(4, 11, 24, 0.62);
+  pointer-events: none;
+}
+
+/* Light catching the frame's edge: brightest at the top, like the planet's light from above. */
+.frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  background: linear-gradient(
+    170deg,
+    rgba(243, 197, 106, 0.9),
+    rgba(243, 197, 106, 0.18) 38%,
+    rgba(185, 222, 251, 0.1) 70%,
+    rgba(243, 197, 106, 0.4)
+  );
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: xor;
+  pointer-events: none;
+}
+
+.photo {
+  object-fit: cover;
+  object-position: 50% 22%;
+  will-change: filter, transform;
+}
+
+.intro {
+  max-width: 760px;
+  margin-top: clamp(44px, 6vw, 72px);
+}
+
+.name {
+  margin-top: 14px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(48px, 5.2vw, 80px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.statement {
+  margin-top: 24px;
+  color: var(--gold);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(28px, 2.7vw, 40px);
+  line-height: 1.16;
+}
+
+.body {
+  max-width: 34em;
+  margin: 20px auto 0;
+  color: var(--body);
+  font-size: 19px;
+}
+
+.storyButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 58px;
+  margin-top: 36px;
+  padding: 0 30px;
+  border-radius: 999px;
+  background: #fff2de;
+  color: #0b1b34;
+  font-size: 17px;
+  font-weight: 500;
+  transition:
+    background-color 0.25s ease,
+    transform 0.25s ease;
+}
+
+.storyButton:hover {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+/* 3. His path as a constellation. Wide screens: pinned, it slides sideways. Every stop is three
+   rows: the mark above the line, the star on it, the words below. */
+.journey {
+  overflow: hidden;
+}
+
+/* While the path slides, words at the screen's edges fade out instead of being cut off. */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .journey {
+    mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+  }
+}
+
+.track {
+  position: relative;
+  display: flex;
+  width: max-content;
+  height: 100svh;
+  min-height: 640px;
+  padding: 84px max(6vw, calc(50vw - 440px)) 0 8vw;
+}
+
+.guide,
+.litLine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  pointer-events: none;
+}
+
+.guide {
+  overflow: visible;
+}
+
+.guide path {
+  fill: none;
+  stroke: rgba(243, 197, 106, 0.3);
+  stroke-width: 1.2;
+  stroke-dasharray: 1.5 8;
+  stroke-linecap: round;
+}
+
+.litLine {
+  inset: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+.litLine svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  overflow: visible;
+  filter: drop-shadow(0 0 5px rgba(243, 197, 106, 0.55));
+}
+
+.litLine path {
+  fill: none;
+  stroke: #f6d38b;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* The point of light that draws the line. */
+.pen {
+  position: absolute;
+  left: -6px;
+  top: -6px;
+  z-index: 2;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--star-core) 0 22%,
+    rgba(255, 224, 160, 0.9) 42%,
+    rgba(243, 197, 106, 0) 72%
+  );
+  box-shadow: 0 0 22px 6px rgba(243, 197, 106, 0.28);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+
+/* The line runs a little above the middle, leaving room for the words below it. */
+.leadIn,
+.stop,
+.together {
+  grid-template-rows: minmax(0, 0.85fr) 0 minmax(0, 1.15fr);
+}
+
+.leadIn {
+  display: grid;
+  flex-shrink: 0;
+  width: clamp(330px, 29vw, 440px);
+  /* The first star waits just right of the point where the line starts drawing. */
+  margin-right: calc(62vw - 8vw - clamp(330px, 29vw, 440px));
+}
+
+.leadTop {
+  grid-row: 1;
+  align-self: end;
+  padding-bottom: 30px;
+}
+
+.leadTitle {
+  margin-top: 16px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(46px, 4.4vw, 72px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.hint {
+  display: inline-flex;
+  grid-row: 3;
+  align-self: start;
+  align-items: center;
+  gap: 10px;
+  padding-top: 30px;
+  color: var(--soft);
+  font-size: 17px;
+}
+
+.stop {
+  position: relative;
+  display: grid;
+  flex-shrink: 0;
+  width: clamp(290px, 25vw, 380px);
+  margin-right: 6vw;
+  translate: 0 var(--dy, 0px);
+}
+
+.mark {
+  grid-row: 1;
+  align-self: end;
+  padding-bottom: 38px;
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(64px, min(7vw, 12svh), 116px);
+  line-height: 0.86;
+  letter-spacing: -0.02em;
+}
+
+.star {
+  grid-row: 2;
+  position: relative;
+  top: -9px;
+  left: -2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    var(--star-core) 0 16%,
+    rgba(255, 226, 164, 0.95) 32%,
+    rgba(243, 197, 106, 0.32) 54%,
+    rgba(243, 197, 106, 0) 72%
+  );
+}
+
+.star::before {
+  content: "";
+  position: absolute;
+  inset: -34px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(243, 197, 106, 0.26),
+    rgba(243, 197, 106, 0.06) 52%,
+    rgba(243, 197, 106, 0)
+  );
+}
+
+.below {
+  grid-row: 3;
+  align-self: start;
+  padding-top: 44px;
+}
+
+.stopTitle {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.stopText {
+  max-width: 21em;
+  margin-top: 10px;
+  color: var(--body);
+  font-size: 18px;
+}
+
+/* The one number: at 2025, as his university reported it. */
+.papers {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(243, 197, 106, 0.28);
+}
+
+.papersValue {
+  flex-shrink: 0;
+  color: var(--gold);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(50px, min(4.6vw, 8svh), 70px);
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums;
+}
+
+.papersLabel {
+  max-width: 13em;
+  color: var(--soft);
+  font-size: 16px;
+  line-height: 1.35;
+}
+
+.source {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  width: fit-content;
+  margin-top: 16px;
+  padding: 4px 0;
+  border-bottom: 1px solid currentColor;
+  color: var(--soft);
+  font-size: 16px;
+}
+
+.source:hover {
+  color: var(--gold);
+}
+
+/* The end of the path: the two formulas standing on the night, and Dr. Iris Wang in words. */
+.together {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(2, clamp(160px, 15vw, 244px)) auto;
+  column-gap: clamp(26px, 2.6vw, 44px);
+  flex-shrink: 0;
+  margin-left: 1vw;
+}
+
+.formula {
+  display: grid;
+  grid-row: 1 / 4;
+  grid-template-rows: subgrid;
+  margin: 0;
+  text-align: center;
+}
+
+.bottle {
+  position: relative;
+  grid-row: 1;
+  align-self: end;
+  width: 100%;
+  aspect-ratio: 1230 / 1278;
+  margin-bottom: 20px;
+}
+
+/* A soft pool of warm light under each bottle. */
+.bottle::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: -9%;
+  height: 16%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(243, 197, 106, 0.5),
+    rgba(243, 197, 106, 0.14) 60%,
+    rgba(243, 197, 106, 0)
+  );
+  filter: blur(5px);
+}
+
+.bottle img {
+  z-index: 1;
+  object-fit: contain;
+  filter: drop-shadow(0 16px 20px rgba(0, 0, 0, 0.45));
+}
+
+.formula figcaption {
+  display: grid;
+  grid-row: 3;
+  align-self: start;
+  gap: 6px;
+  padding-top: 28px;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.formula strong {
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.1;
+}
+
+.formula span {
+  color: var(--soft);
+}
+
+.iris {
+  grid-column: 3;
+  grid-row: 1 / 4;
+  align-self: center;
+  width: clamp(300px, 25vw, 380px);
+  margin-left: clamp(8px, 2vw, 32px);
+  padding: clamp(28px, 2.6vw, 38px);
+  border: 1px solid rgba(243, 197, 106, 0.24);
+  border-radius: 24px;
+  background: rgba(7, 17, 36, 0.55);
+  backdrop-filter: blur(10px);
+}
+
+.irisName {
+  margin-top: 12px;
+  color: var(--gold);
+  font-family: var(--font-instrument), Georgia, serif;
+  font-size: clamp(44px, 3.8vw, 60px);
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.irisText {
+  margin-top: 16px;
+  color: var(--body);
+  font-size: 18px;
+}
+
+/* Stars and words wait, dimmed, until the line reaches them (only where the path is pinned). */
+@media (min-width: 901px) and (prefers-reduced-motion: no-preference) {
+  .mark,
+  .below,
+  .formula,
+  .iris {
+    transition:
+      opacity 0.8s ease,
+      transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .star {
+    opacity: 0.55;
+    transform: scale(0.7);
+    transition:
+      opacity 0.7s ease,
+      transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  .star::before {
+    opacity: 0;
+    transition: opacity 0.9s ease;
+  }
+
+  .stop:not([data-lit]) .mark {
+    opacity: 0.26;
+  }
+
+  .stop:not([data-lit]) .below {
+    opacity: 0.38;
+  }
+
+  .stop[data-lit] .star {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+
+  .stop[data-lit] .star::before {
+    opacity: 1;
+  }
+
+  .stop:not([data-lit]) .papersValue {
+    color: var(--ink);
+  }
+
+  .together:not([data-lit]) .formula,
+  .together:not([data-lit]) .iris {
+    opacity: 0.3;
+    transform: translateY(16px);
+  }
+
+  .together[data-lit] .formula:nth-child(2) {
+    transition-delay: 0.12s;
+  }
+
+  .together[data-lit] .iris {
+    transition-delay: 0.24s;
+  }
+}
+
+/* 4. The sky fades into the night of the shared sections below. The blue glow mirrors the
+   research section's own top glow, so the seam disappears. */
+.horizon {
+  height: clamp(160px, 26svh, 280px);
+  background:
+    radial-gradient(60% 100% at 50% 100%, rgba(33, 73, 163, 0.28), transparent 70%),
+    linear-gradient(180deg, rgba(5, 13, 28, 0), var(--paper) 92%);
+}
+
+/* Phones and reduced motion: the same path, top to bottom, every star lit, the sky still. */
+@media (max-width: 900px), (prefers-reduced-motion: reduce) {
+  .track {
+    flex-direction: column;
+    width: auto;
+    max-width: 820px;
+    height: auto;
+    min-height: 0;
+    margin: 0 auto;
+    padding: 24px var(--gutter) 40px calc(var(--gutter) + 44px);
+  }
+
+  .guide,
+  .litLine,
+  .pen,
+  .hint {
+    display: none;
+  }
+
+  .leadIn {
+    display: block;
+    width: auto;
+    margin: 0 0 64px -44px;
+  }
+
+  .leadTop {
+    padding: 0;
+  }
+
+  .stop {
+    display: flex;
+    flex-direction: column;
+    width: auto;
+    margin: 0 0 64px;
+    translate: none;
+  }
+
+  /* The line from this star down to the next. */
+  .stop:not(:nth-last-child(2))::before {
+    content: "";
+    position: absolute;
+    left: -33px;
+    top: 30px;
+    bottom: -94px;
+    width: 1.5px;
+    background: linear-gradient(180deg, rgba(246, 211, 139, 0.85), rgba(246, 211, 139, 0.45));
+  }
+
+  .mark,
+  .below {
+    align-self: auto;
+  }
+
+  .mark {
+    padding: 0;
+    font-size: 64px;
+  }
+
+  .star {
+    position: absolute;
+    left: -42px;
+    top: 21px;
+    transform: scale(1.15);
+  }
+
+  .below {
+    padding-top: 16px;
+  }
+
+  .together {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+    gap: 28px 16px;
+    margin: 8px 0 0 -44px;
+  }
+
+  .formula {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    grid-row: auto;
+  }
+
+  .bottle {
+    width: min(100%, 190px);
+    margin-bottom: 0;
+  }
+
+  .formula figcaption {
+    max-width: 14em;
+    padding-top: 26px;
+  }
+
+  .iris {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    width: auto;
+    margin: 20px 0 0;
+  }
+
+  .cue svg {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding-top: calc(72px + 24px);
+  }
+
+  /* Clear of the design switcher at the bottom of the screen. */
+  .cue {
+    bottom: 104px;
+  }
+
+  .planet {
+    right: 0.2em;
+    top: -0.9em;
+  }
+
+  .title {
+    font-size: clamp(46px, 12.4vw, 80px);
+  }
+}
+
+@media (max-width: 420px) {
+  .formula strong {
+    font-size: 24px;
+  }
+
+  .formula figcaption {
+    font-size: 15px;
+  }
+}
