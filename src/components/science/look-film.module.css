@@ -1057,8 +1057,8 @@
   font-size: var(--s-body);
 }
 
-/* The row behind: four bottles, their names, then Nature Calm's own credit beside the one
-   shared line for the other three. */
+/* The row behind: four bottles, their names, then the credits: a product's own under it, and one
+   shared line under the products that share one. */
 .backRow {
   position: relative;
   display: grid;
@@ -1106,7 +1106,7 @@
     text-align: center;
   }
 
-  /* Nature Calm's own credit sits on the same line as the shared one beside it. */
+  /* A product's own credit sits on the same line as the shared one beside it. */
   .backRow .credit .creditText {
     grid-column: var(--col);
     grid-row: 3;
@@ -1115,9 +1115,10 @@
     text-align: center;
   }
 
-  /* A hairline over the three bottles it names, then the line. */
+  /* A hairline over the bottles it names (set by the page, as the formulas' order allows), then
+     the line. */
   .sharedCredit {
-    grid-column: 2 / 5;
+    grid-column: var(--shared-cols, 2 / 5);
     grid-row: 3;
     margin-top: 12px;
     padding-top: 12px;
