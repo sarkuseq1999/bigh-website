@@ -19,7 +19,7 @@ Log in is now a standard link to that exact external destination, opening in the
 
 ## Translation maintenance
 
-`src/i18n/use-copy.ts` wraps next-intl. `copy-keys.json` maps readable English source strings to stable message IDs in the five `messages/*.json` catalogs. There are 244 matching entries per active language, including named placeholders, after Mo requested removal of the 2002 animal-study paragraph from Dr. Liu’s profile. Components render translated strings directly; no runtime DOM replacement or third-party translation widget is used.
+`src/i18n/use-copy.ts` wraps next-intl. `copy-keys.json` maps readable English source strings to stable message IDs in the five `messages/*.json` catalogs. There are 565 matching entries per active language (September 28, 2026, after the About page's 30 new keys, m545–m574; see `docs/about-page.md`), including named placeholders. Key numbers are never reused, so a few gaps remain from removed copy, such as the 2002 animal-study paragraph Mo asked to remove from Dr. Liu’s profile. `messages/hken.json` is `{}` on purpose: it falls back to English, and `/hken` redirects to `/cns`. Components render translated strings directly; no runtime DOM replacement or third-party translation widget is used.
 
 Add new copy to the source map and all five catalogs together. Keep product names unchanged and use only Dr. Iris Wang's public name. The non-English text is a draft translation of the existing preview, not independently reviewed by native speakers. This work does not approve new health claims or translate external research papers. The historical `original` and `spotlight` product modes remain preserved; their archived layouts were not separately localized.
 

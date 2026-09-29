@@ -53,14 +53,49 @@ languages, "Illustration") need Mo's OK before launch. Facts: formula ~23 years 
 name CellGen or say Asia knew it first; GMP-certified maker in California (confirm the
 certificate); 45-day refund current; BiGH incorporated 05/11/2016.
 
+## Languages (Sept 28, 2026)
+
+- Translated into Korean, Japanese, Simplified Chinese and Vietnamese: 67 strings (37 already had
+  keys and are reused, such as the header, footer and the two panels; 30 new keys, m545–m574), plus
+  the tab title, "BiGH — " and the existing "About" key. `hken.json` stays `{}`. `/hken/about` now
+  redirects to `/cns/about`, as the homepage and product pages do (before, it showed English and
+  logged an invalid-locale error).
+- DRAFT translations, not native-reviewed. Same understated voice; no new claims. Names and terms
+  follow the catalogs; credits follow m198's style (NuriCell by Dr. Liu alone, Nature Calm by Dr. Liu
+  with Dr. Iris Wang). Some Chinese and Japanese lines were reworded slightly so they break well (below).
+- The title stays English everywhere: "Be in Good Health." with the unfold, `lang="en"`, because it is
+  what the name BiGH stands for; the translated lead under it explains it. To show translated titles
+  instead, set `TITLE_ALWAYS_ENGLISH = false` in `acronym.tsx` (one line). The glass after "Health."
+  then sits the same in every language (checked in Japanese at three sizes).
+- Line breaks (CSS scoped to this page): Korean keeps whole words (globals.css). Japanese breaks
+  headings, labels and the promises between phrases (`word-break: auto-phrase`, Chrome and Edge
+  only) and never starts a line with small kana, "ー" or closing punctuation (`line-break: strict`).
+  Chinese headings, labels and promises break only at punctuation (`keep-all`): when editing them,
+  put a comma where a line may end and keep each phrase to 12 characters or fewer, or a lone "。" can
+  land on a line at 1100 px. Headings get line-height 1.26 in CJK; Japanese and Chinese drop the
+  negative tracking. Non-English number labels and the footer tagline wrap evenly (`balance`).
+- Vietnamese font: Switzer (as Fontshare serves it) has no Vietnamese stacked or hooked letters.
+  It lacks 92 of the 134 Vietnamese letters (ơ, ư, and every ạ ả ấ ầ ẩ ẫ ậ ẹ ẻ ẽ ế ề ể ễ ệ ọ ỏ ố ồ ổ ỗ
+  ộ ớ ờ ở ỡ ợ ụ ủ ứ ừ … form), checked in its cmap. Chrome then draws those letters one by one in
+  Arial (DM Sans, next in the stack, has no Vietnamese subset at all, so it can't help): the
+  Vietnamese purpose heading is 92 Switzer glyphs and 17 Arial glyphs (DevTools protocol), and it
+  shows up close (`scripts/qa/out/about-i18n/vn-font-mix-purpose.png`). This affects every
+  Switzer text in Vietnamese, header included. Not changed: the site-wide font loading is Mo's call
+  (one option: a face with a `vietnamese` subset in next/font, such as Be Vietnam Pro or Inter, for
+  `:lang(vi)` only).
+
 ## Check
 
 `python -X utf8 scripts/qa/qa_about.py http://localhost:3009` (real GPU by default; add
-`--swiftshader` for the software renderer): 66 checks on Sept 28, including Switzer loaded and
-first in every text role, the opening glass never touching a letter at six sizes, chapters taking
-turns (sampled every 40 px), reduced motion, no WebGL, footer and Korean. Also
-`npx prettier --check src/components/about`, `npx tsc --noEmit`, `npx eslint src/components/about`.
-Review screenshots: `scripts/qa/out/about-final/`.
+`--swiftshader` for the software renderer): 101 checks on Sept 28 (after the translations), including
+Switzer loaded and first in every text role, the opening glass never touching a letter at six sizes,
+chapters taking turns (sampled every 40 px), reduced motion, no WebGL, footer, and per language: the
+catalogs (keys, same key sets, placeholders), 200 with no console errors, the English h1, the
+translated tab title, no English source sentence left (page, panels, aria-labels, alt texts), no
+lone character or line-initial punctuation, `/hken/about` → `/cns/about`, and the Japanese opening
+glass. Also `npx prettier --check src/components/about messages src/i18n`, `npx tsc --noEmit`,
+`npm run lint`. Review screenshots: `scripts/qa/out/about-final/` (English) and
+`scripts/qa/out/about-i18n/<kr|jp|cns|vn>-<desk|phone>-N-<part>.png` (1575x940 and 390x844).
 
 ## Traps
 
