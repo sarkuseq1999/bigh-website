@@ -1,20 +1,22 @@
 """QA for the Advanced OPC Formula product page (Template 2, "Chapters"), September 28, 2026.
 
 At 1440x900 and 390x844 with motion, then both again with reduced motion:
-- the page answers in English and Korean; the chapter index has six chapters and no "The people"
-  (no formulation credit yet)
+- the page answers in English and Korean; the chapter index has seven chapters, "The people" with
+  Dr. Iris Wang, text only (she asked for no photograph)
 - overview: the name, the approved headline and purpose, the 3D bottle drawn (not the flat photo)
 - the photo moment: the still life loads and its line reads "Nine plant extracts. One formula."
 - why, at night (motion): the three lines and the title arrive one at a time, in order; the grapes
   are dark for the first line and lit from the second; no words over the grapes; every line at
   least 4.5:1 against the pixels behind it; no edge where the photo meets the page's night
-- inside: 13 ingredients; six rows, then "Show all 13 ingredients" opens the rest; the full label
-  table has the 13 amounts exactly as printed on the label, per serving of 2 capsules
+- inside: 13 ingredients; six rows, then "Show all 13 ingredients" opens the rest; the nine plant
+  rows lead with a round photo, the four others keep an empty slot; the full label table has the 13
+  amounts exactly as printed on the label, per serving of 2 capsules
 - research: five studies, oldest first, every link a PubMed page opening in a new tab with noopener
 - how to take it: "One bottle, two months." ending at 120 capsules and 60 days
-- buy: no credit line; the supply line; the four other products, NuriCell first, linking their pages
+- buy: the credit line (Dr. Iris Wang); the supply line; the four other products, NuriCell first, linking their pages
 - questions: six, the first one opens
 - homepage: Advanced OPC Formula's Discover link opens /products/advanced-opc
+- buy's 3D bottle draws after a fast jump straight to it, three fresh pages in a row
 - everywhere: no horizontal page scroll, no console errors or failed requests
 
 Pictures: scripts/qa/out/opc-<run>-<nn>-<name>.png (viewport shots; full-page shots break svh).
@@ -41,7 +43,10 @@ ARGS = (
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 os.makedirs(OUT, exist_ok=True)
 NIGHT = (6, 22, 37)
-CHAPTERS = ["Overview", "Why it matters", "What’s inside", "The research", "How to take it", "Buy"]
+CHAPTERS = ["Overview", "Why it matters", "What’s inside", "The research", "The people", "How to take it", "Buy"]
+CREDIT = "Formulated under the guidance of Dr. Iris Wang."
+# The nine plant rows carry a round photo; the vitamins and selenium do not.
+PICTURED = ["grape-seed", "pine-bark", "red-wine", "bilberry", "tea", "citrus", "noni", "lutein", "melilotus"]
 WHY = [
     "Making energy also makes a few free radicals—unstable molecules that can damage cells.",
     "Antioxidants keep them in balance. Your body makes its own, and plants are full of them.",
@@ -228,7 +233,7 @@ def page_checks(page, label, status, reduced):
     check(f"{label}: the page answers", status == 200, str(status))
     names = page.evaluate("""[...document.querySelectorAll("nav[aria-label='Chapters'] ol a")]
       .map(a => a.textContent.replace(/^\\s*\\d+\\s*/, '').trim())""")
-    check(f"{label}: six chapters, no 'The people'", names == CHAPTERS, str(names))
+    check(f"{label}: seven chapters, with 'The people'", names == CHAPTERS, str(names))
     hero = page.evaluate("""(() => ({ h1: document.querySelector('h1').textContent,
       stage: document.querySelector('[data-status]')?.dataset.status }))()""")
     check(f"{label}: overview names the product with the approved headline",
@@ -263,6 +268,16 @@ def page_checks(page, label, status, reduced):
       .map(r => [r.querySelector('th').textContent.trim(), r.querySelector('td').textContent.replace(/\\s+/g, ' ').trim()]))""")
     caption = page.evaluate("document.querySelector(\"[data-chapter='inside'] table caption\").textContent")
     check(f"{label}: all 13 ingredients open", rows == [6, 7], str(rows))
+    pics = page.evaluate("""[...document.querySelectorAll("[data-chapter='inside'] li")].map(li => {
+      const slot = li.querySelector(':scope > span[aria-hidden]'); const img = slot && slot.querySelector('img');
+      const r = slot && slot.getBoundingClientRect();
+      return { slot: !!slot, src: img ? decodeURIComponent(img.currentSrc || img.src) : null, ok: !!img && img.complete && img.naturalWidth > 0,
+        alt: img ? img.alt : null, round: slot ? getComputedStyle(slot).borderRadius : null, w: r ? Math.round(r.width) : 0 }; })""")
+    shown = [next((k for k in PICTURED if p["src"] and f"/{k}.webp" in p["src"]), None) for p in pics]
+    check(f"{label}: the nine plant rows show their round photo, the other four keep an empty slot",
+          shown == PICTURED + [None] * 4 and all(p["slot"] for p in pics) and all(p["ok"] for p in pics[:9])
+          and all(p["alt"] == "" for p in pics[:9]) and all(p["round"] == "50%" for p in pics),
+          str([(s, p["ok"], p["w"]) for s, p in zip(shown, pics)]))
     check(f"{label}: the full label matches the printed label, amount for amount", table == LABEL,
           str({k: v for k, v in table.items() if LABEL.get(k) != v}))
     check(f"{label}: the label is per serving of 2 capsules", "2 capsules" in caption, caption)
@@ -278,6 +293,11 @@ def page_checks(page, label, status, reduced):
           all(s["href"] and s["href"].startswith("https://pubmed.ncbi.nlm.nih.gov/") and s["target"] == "_blank"
               and "noopener" in s["rel"] for s in studies), str([s["href"] for s in studies]))
 
+    people = page.evaluate("""(() => { const s = document.querySelector("[data-chapter='people']");
+      return s ? { text: s.textContent, imgs: s.querySelectorAll('img').length } : null; })()""")
+    check(f"{label}: the people chapter names Dr. Iris Wang, text only (no photograph)",
+          people and "Dr. Iris Wang" in people["text"] and people["imgs"] == 0, str(people and people["imgs"]))
+
     # How to take it: the month fills to two months.
     daily = box(page, "[data-chapter='daily']")
     glide(page, daily["top"] + daily["height"] - page.viewport_size["height"], steps=16)
@@ -291,7 +311,7 @@ def page_checks(page, label, status, reduced):
     buy = page.evaluate("""(() => { const s = document.querySelector("[data-chapter='buy']");
       return { text: s.textContent, cards: [...s.querySelectorAll('ul a')].map(a => [a.textContent, a.getAttribute('href')]),
         questions: s.querySelectorAll('button[aria-expanded]').length }; })()""")
-    check(f"{label}: no credit line (still open)", "Formulated by" not in buy["text"] and "Developed by" not in buy["text"])
+    check(f"{label}: the credit line", CREDIT in buy["text"], CREDIT)
     check(f"{label}: the supply line", "120 vegetarian capsules · 60 servings" in buy["text"])
     check(f"{label}: four other products, NuriCell first, linking its page",
           len(buy["cards"]) == 4 and buy["cards"][0][0].startswith("NuriCell") and buy["cards"][0][1].endswith("/products/nuricell"),
@@ -362,6 +382,18 @@ def why_motion(page, label, run, w, h):
     check(f"{label}: every line at least 4.5:1 against the pixels behind it", worst_all >= 4.5, f"worst {worst_all}:1")
 
 
+def fast_jumps(browser, label, w, h):
+    """The buy chapter's bottle draws even after a fast jump straight to it (three fresh pages)."""
+    statuses = []
+    for _ in range(3):
+        ctx, page, problems, status = open_page(browser, w, h)
+        page.evaluate("window.scrollTo({top: document.querySelector('[data-chapter=\"buy\"]').offsetTop, behavior: 'instant'})")
+        page.wait_for_timeout(3500)
+        statuses.append(page.evaluate("document.querySelector('[data-chapter=\"buy\"] [data-status]')?.dataset.status"))
+        ctx.close()
+    check(f"{label}: after a fast jump to Buy the 3D bottle draws (3 of 3)", statuses == ["ready"] * 3, str(statuses))
+
+
 def run(browser, w, h, reduced):
     label = f"{w}x{h}{' reduced' if reduced else ''}"
     tag = f"{w}{'r' if reduced else ''}"
@@ -386,6 +418,7 @@ with sync_playwright() as p:
     for w, h in [(1440, 900), (390, 844)]:
         for reduced in (False, True):
             run(browser, w, h, reduced)
+        fast_jumps(browser, f"{w}x{h}", w, h)
     # The page exists in the other languages too, and the homepage links to it.
     ctx, page, problems, status = open_page(browser, 1440, 900, url=f"{BASE}/kr/products/advanced-opc")
     check("kr: the page answers in Korean", status == 200, str(status))

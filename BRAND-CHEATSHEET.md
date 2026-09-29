@@ -149,6 +149,8 @@ This accepted working copy describes the formulation's focus and its developers'
 
 This is accepted working copy describing the formula's intended nutritional purpose. It does not establish finished-product clinical efficacy, superiority, or passage across the blood–brain barrier. The precise scientist formulation credit remains open. See RESEARCH-NOTES.md for the historical label and evidence limits.
 
+**Advanced OPC Formula credit and label — decided by Mo, September 28, 2026:** Mo's words: “Formulated by the guidance of Dr. Iris Wang.” The product page says “Formulated under the guidance of Dr. Iris Wang.” (Dr. Wang is text only, no photograph.) Mo also confirmed the 2019 label is current: 2 capsules a serving, 60 servings, 120 vegetarian capsules, 13 ingredients. This supersedes every “Advanced OPC credit remains open” note in this sheet and in RESEARCH-NOTES.md.
+
 **Wider product range — assembled section accepted September 21, 2026:** After reviewing the four introductions and accepting the revised Nature Calm and Advanced OPC cards, Mo said, “Okay, everything's good. So what's next?” Record the assembled section as accepted working content. The product order is Green Bee Propolis, Advanced OPC Formula, Turmerific, Nature Calm. Use the latest accepted Advanced OPC and Nature Calm wording above, plus the following copy from the assembled review:
 
 - Opening headline: **Explore the rest of the BiGH range.**

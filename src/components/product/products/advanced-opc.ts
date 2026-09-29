@@ -3,14 +3,17 @@ import { studies } from "./studies";
 import { summaries } from "./summaries";
 
 const opcSummary = summaries.find((item) => item.slug === "advanced-opc")!;
+// Round photos of the plant sources (Mo, September 28: "A"); prompts in
+// reference/product-pages/advanced-opc/originals/ingredients.json.
+const PLANTS = "/images/products/advanced-opc/ingredients";
 
 // Advanced OPC Formula (docs/advanced-opc-page.md). Approved copy (BRAND-CHEATSHEET.md, September
 // 21, 2026): the headline, the purpose and "free radicals—unstable molecules that can damage cells"
 // from the homepage card; "Making energy also makes a few free radicals", "Antioxidants keep them in
 // balance" and "Your body also makes its own antioxidants" from the homepage's science section.
 // Label facts: the 2019 label and usage card from the old site (old-storage/.../uploads/2019/04/
-// sup_opc.png, ser_opc.png), NOT yet confirmed current by Mo. No formulation credit: still open
-// (ask Mo). Everything else is a draft for Mo.
+// sup_opc.png, ser_opc.png), confirmed current by Mo on September 28, 2026. Credit: Mo, the same
+// day. Everything else is a draft for Mo.
 const advancedOpc: ProductPage = {
   ...opcSummary,
   // Short on purpose: on phones the eyebrow must fit one line above the giant name (360px wide).
@@ -19,6 +22,8 @@ const advancedOpc: ProductPage = {
   purpose:
     "A diverse blend of concentrated plant extracts, bringing together antioxidant compounds from grape seeds, pine bark, and other botanical sources.",
   highlights: ["Nine plant extracts", "Vegetarian capsules"],
+  // Mo, September 28, 2026: "Formulated by the guidance of Dr. Iris Wang" (worded here as "under").
+  credit: "Formulated under the guidance of Dr. Iris Wang.",
   accent: "#d9785f",
   serving: {
     capsules: 2,
@@ -67,6 +72,7 @@ const advancedOpc: ProductPage = {
       amount: 25,
       unit: "mg",
       role: "Made from grape seeds, a rich source of OPCs.",
+      picture: { src: `${PLANTS}/grape-seed.webp`, width: 320, height: 320 },
     },
     {
       key: "pine-bark",
@@ -75,6 +81,7 @@ const advancedOpc: ProductPage = {
       amount: 25,
       unit: "mg",
       role: "From the bark of the maritime pine, also rich in OPCs.",
+      picture: { src: `${PLANTS}/pine-bark.webp`, width: 320, height: 320 },
     },
     {
       key: "red-wine",
@@ -83,6 +90,7 @@ const advancedOpc: ProductPage = {
       amount: 25,
       unit: "mg",
       role: "The plant compounds of red wine, concentrated.",
+      picture: { src: `${PLANTS}/red-wine.webp`, width: 320, height: 320 },
     },
     {
       key: "bilberry",
@@ -91,6 +99,7 @@ const advancedOpc: ProductPage = {
       amount: 25,
       unit: "mg",
       role: "A small dark berry that looks like a blueberry. Anthocyanins give it its deep colour.",
+      picture: { src: `${PLANTS}/bilberry.webp`, width: 320, height: 320 },
     },
     {
       key: "tea",
@@ -99,6 +108,7 @@ const advancedOpc: ProductPage = {
       amount: 40,
       unit: "mg",
       role: "White, green and black tea: three teas from the same plant, each with its own polyphenols.",
+      picture: { src: `${PLANTS}/tea.webp`, width: 320, height: 320 },
     },
     {
       key: "citrus",
@@ -107,6 +117,7 @@ const advancedOpc: ProductPage = {
       amount: 100,
       unit: "mg",
       role: "Flavonoids, a large family of plant compounds, from citrus fruit.",
+      picture: { src: `${PLANTS}/citrus.webp`, width: 320, height: 320 },
     },
     {
       key: "noni",
@@ -115,6 +126,7 @@ const advancedOpc: ProductPage = {
       amount: 25,
       unit: "mg",
       role: "Concentrated from the fruit of noni, a small evergreen tree of the Pacific Islands and Southeast Asia.",
+      picture: { src: `${PLANTS}/noni.webp`, width: 320, height: 320 },
     },
     {
       key: "lutein",
@@ -123,6 +135,7 @@ const advancedOpc: ProductPage = {
       amount: 3,
       unit: "mg",
       role: "A yellow plant pigment that collects in the retina, at the back of your eye.",
+      picture: { src: `${PLANTS}/lutein.webp`, width: 320, height: 320 },
     },
     {
       key: "melilotus",
@@ -131,6 +144,7 @@ const advancedOpc: ProductPage = {
       amount: 20,
       unit: "mg",
       role: "An extract of sweet clover, a yellow-flowered plant of the pea family.",
+      picture: { src: `${PLANTS}/melilotus.webp`, width: 320, height: 320 },
     },
     {
       key: "vitamin-c",
@@ -187,7 +201,18 @@ const advancedOpc: ProductPage = {
       url: "https://pubmed.ncbi.nlm.nih.gov/32990945/",
     },
   ],
-  people: [],
+  // Text only: Dr. Wang asked for no photograph. Her public name only (BRAND-CHEATSHEET.md). Her
+  // research with Dr. Liu on oxidative damage: RESEARCH-NOTES.md (1994 and 1996 animal studies).
+  people: [
+    {
+      name: "Dr. Iris Wang",
+      title: "Formulation guidance",
+      lines: [
+        "Advanced OPC Formula was formulated under Dr. Wang’s guidance.",
+        "In animal studies with Dr. Liu, she has researched oxidative damage: the harm free radicals can do inside cells.",
+      ],
+    },
+  ],
   faq: [
     {
       question: "What does OPC mean?",

@@ -1,0 +1,18 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": { "aspectRatio": "1:1", "imageSize": "1K", "style": "photorealistic" },
+  "generated": "2026-09-28",
+  "prompt": "A close-up still-life photograph, seen from directly above, of {subject}, filling the middle of a square frame, lying directly on one flat, evenly lit, plain soft blush-pink background (hex #f2dfe1) that is the same colour everywhere: no circle, no disc, no plate, no spotlight, no vignette, no props. Soft natural daylight from the upper left, a gentle soft shadow, true-to-life colour, crisp detail, calm and elegant, high-end editorial botanical photography. No text, no labels, no hands, no people. (The first two, grape seed and pine bark, used the earlier wording 'arranged to fill a round area in the middle of a square frame, on a plain soft blush-pink background (hex #f2dfe1) with no texture and no props'.)",
+  "subjects": {
+    "grape-seed": "a small neat heap of dried brown grape seeds (the small pear-shaped pips from inside grapes)",
+    "pine-bark": "a few pieces of reddish-brown maritime pine bark with their layered, plate-like texture",
+    "red-wine": "a small cluster of deep red-purple wine grapes on their thin stem, a natural bloom on the skins (no glass, no bottle)",
+    "bilberry": "a small heap of wild bilberries: small, round, very dark blue-black berries with a crown-shaped tip, some with a dusty bloom, with two small green bilberry leaves (no bowl)",
+    "tea": "three small neat heaps of loose dried tea leaves side by side and touching: pale silvery-green white tea buds, curled green tea leaves and dark twisted black tea leaves (no bowl, no spoon)",
+    "citrus": "half an orange and a thin round slice of lemon beside it, cut faces up showing the juicy segments (no board, no knife)",
+    "noni": "one whole ripe noni fruit (Morinda citrifolia): an oval, lumpy, knobbly fruit about the size of a small potato, pale yellow-green to creamy white, its skin covered in a pattern of small raised brown-dotted bumps, lying beside one glossy dark green noni leaf",
+    "lutein": "two vivid orange marigold flower heads (Tagetes) with ruffled petals (lutein on the label is marigold petal extract)",
+    "melilotus": "a few cut sprigs of yellow sweet clover (Melilotus officinalis): slender green stems with long narrow spikes of many tiny bright yellow pea-like flowers, and small leaves made of three toothed leaflets (no vase)"
+  },
+  "derived": "public/images/products/advanced-opc/ingredients/<key>.webp: cropped to a square around the subject (its enclosing circle plus 10%), the plain background moved to one exact colour (#f3e2e4) with the subject untouched, 320x320. Illustrations of the plant sources, not photos of the product's raw materials."
+}
