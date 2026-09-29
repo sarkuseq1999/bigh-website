@@ -21,6 +21,11 @@ from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[2]
 ARC = np.radians(70)  # front half-angle taken from the photo
+ARC_GLASS = np.radians(62)  # narrower on glass bottles: see the unwrap
+# A pale label (typical brightness above PALE) takes a little less of the studio's light, so its
+# golds stay rich instead of washing toward white. 0.88 was picked against the Propolis photo
+# (September 29, 2026; 1.0 read pale, 0.72 dull).
+PALE, PALE_LABEL_LIGHT = 200, 0.88
 TEXTURE_W, TEXTURE_H = 2048, 640
 
 
@@ -60,19 +65,40 @@ def main(slug):
     neck_radius = float(np.median(half[neck_top : neck_top + 12]))
     neck_bottom = next(y for y in range(neck_top, bottom) if half[y] > neck_radius * 1.04) - 1
 
-    # The label: rows whose middle is strongly coloured (printed), between shoulder and base.
+    # The body: white plastic, or tinted glass (Green Bee Propolis is amber, September 29, 2026).
+    # Glass is dark and strongly coloured where plastic is near white; its colour is the median of
+    # the glass under the label, where the photo has no print and few reflections.
     rgb = rgba[..., :3]
     mx = rgb.max(axis=2)
     mn = rgb.min(axis=2)
     saturation = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
-    band = saturation[:, int(axis) - 60 : int(axis) + 60].mean(axis=1)
-    label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 0.08]
+    luminance_map = rgb @ np.array([0.2126, 0.7152, 0.0722])
+    base_rows = slice(bottom - (bottom - top) // 12, bottom - 4)
+    base_mask = alpha[base_rows] > 250
+    glass = (
+        float(np.median(luminance_map[base_rows][base_mask])) < 110
+        and float(np.median(saturation[base_rows][base_mask])) > 0.5
+    )
+
+    # The label: between shoulder and base, the rows whose middle is printed. On plastic that is
+    # where the middle is strongly coloured; on coloured glass the glass is coloured too, so there
+    # it is where the middle is bright.
+    centre_band = slice(int(axis) - 60, int(axis) + 60)
+    if glass:
+        band = luminance_map[:, centre_band].mean(axis=1)
+        label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 120]
+    else:
+        band = saturation[:, centre_band].mean(axis=1)
+        label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 0.08]
     label_top, label_bottom = min(label_rows), max(label_rows)
 
-    # Unwrap: texture column u ↔ angle θ around the axis (front at the middle).
+    # Unwrap: texture column u ↔ angle θ around the axis (front at the middle). Propolis's label
+    # has narrow side panels (badges, the facts box) squeezed into the photo's last few degrees;
+    # on glass the front stops short of them, and the plain back continues from there.
+    arc = ARC_GLASS if glass else ARC
     label_h = label_bottom - label_top + 1
-    front_w = int(round(TEXTURE_W * (2 * ARC) / (2 * np.pi)))
-    thetas = np.linspace(-ARC, ARC, front_w)
+    front_w = int(round(TEXTURE_W * (2 * arc) / (2 * np.pi)))
+    thetas = np.linspace(-arc, arc, front_w)
     front = np.zeros((label_h, front_w, 3), dtype=np.float32)
     for i, y in enumerate(range(label_top, label_bottom + 1)):
         r = half[y] - 1.5
@@ -82,10 +108,25 @@ def main(slug):
         t = (xs - x0)[:, None]
         front[i] = rgb[y, x0] * (1 - t) + rgb[y, x1] * t
 
+    if glass:
+        # The photo looks down on the bottle a little, so the label's bottom edge curves up toward
+        # the sides and the glass shows below it there. Against dark glass the edge is easy to
+        # find: stretch each column so the label reaches the bottom of the strip, keeping the top.
+        rows = np.arange(label_h, dtype=np.float32)
+        front_luminance = front @ np.array([0.2126, 0.7152, 0.0722])
+        lowest = label_h - label_h // 8
+        for j in range(front_w):
+            printed = np.where(front_luminance[lowest:, j] > 120)[0]
+            edge = lowest + (printed[-1] if len(printed) else label_h - 1 - lowest)
+            source_rows = rows * (edge / max(1, label_h - 1))
+            for channel in range(3):
+                front[:, j, channel] = np.interp(source_rows, rows, front[:, j, channel])
+
     # Even out the photo's left-to-right shading (brighter middle, darker sides). Level to the
     # label's typical brightness, not its brightest column: the brightest is the studio glare in
     # the middle, and levelling up to it made the whole print paler than the photo (Mo, Sept 25).
     luminance = front @ np.array([0.2126, 0.7152, 0.0722])
+    pale = float(np.median(luminance)) > PALE
     column = smooth1d(np.median(luminance, axis=0), sigma=front_w * 0.08)
     gain = (np.median(column) / np.maximum(column, 1)) ** 0.85
     front = np.clip(front * gain[None, :, None], 0, 255)
@@ -102,10 +143,21 @@ def main(slug):
         for channel in range(3):
             edge[:, channel] = smooth1d(edge[:, channel], sigma=10)
     back_w = TEXTURE_W - front_w
+    if glass:
+        # Continue with the label's ground colour row by row (its cream between the gold borders),
+        # easing in from the front's edges, so the unseen back reads as plain label. The ground is
+        # the light end of each row (print and pattern are darker), so the lettering leaves no
+        # stripes behind.
+        typical = np.percentile(front, 80, axis=1)
+        for channel in range(3):
+            typical[:, channel] = smooth1d(typical[:, channel], sigma=3)
     for j in range(back_w):
         # Walk round the back from the right edge to the left edge.
         t = j / max(1, back_w - 1)
         column_colour = right_edge * (1 - t) + left_edge * t
+        if glass:
+            ease = np.exp(-min(j, back_w - 1 - j) / 60)
+            column_colour = column_colour * ease + typical * (1 - ease)
         x = (start + front_w + j) % TEXTURE_W
         wrap[:, x] = column_colour
     image = Image.fromarray(wrap.astype(np.uint8)).resize((TEXTURE_W, TEXTURE_H), Image.LANCZOS)
@@ -144,16 +196,22 @@ def main(slug):
             "top": fraction(label_top),
             "bottom": fraction(label_bottom),
             "radius": round(float(np.median(half[label_top:label_bottom])) / total, 5),
-            "arc": round(float(np.degrees(ARC)), 1),
+            "arc": round(float(np.degrees(arc)), 1),
         },
     }
+    if pale:
+        data["labelLight"] = PALE_LABEL_LIGHT
+    if glass:
+        # Only glass bottles say so; plastic ones (NuriCell's file) stay as they were.
+        glass_rgb = np.median(rgb[base_rows][base_mask], axis=0)
+        data["glass"] = {"color": "#" + "".join(f"{int(round(v)):02x}" for v in glass_rgb)}
     json_dir = ROOT / "src" / "components" / "product" / "bottles"
     json_dir.mkdir(parents=True, exist_ok=True)
     (json_dir / f"{slug}.json").write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(
         f"{slug}: bottle rows {top}-{bottom}, cap to {cap_bottom} (r {cap_radius:.0f}), "
         f"neck {neck_top}-{neck_bottom} (r {neck_radius:.0f}), label {label_top}-{label_bottom}, "
-        f"body r {body_radius:.0f}, axis {axis:.1f}"
+        f"body r {body_radius:.0f}, axis {axis:.1f}, {'glass' if glass else 'plastic'}, label median {np.median(luminance):.0f}"
     )
 
 
