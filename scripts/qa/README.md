@@ -12,6 +12,7 @@ python -X utf8 scripts/qa/qa_stories.py http://localhost:3007
 python -X utf8 scripts/qa/qa_hero_cutaway.py http://localhost:3007 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
+python -X utf8 scripts/qa/qa_vn_font.py http://localhost:3007
 ```
 
 | Script                   | Checks                                                                                                           |
@@ -28,6 +29,7 @@ python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
 | `qa_why_chapter.py`      | Product page: the Why chapter (bulb beats, contrast behind every line, no words over the bulb)                   |
 | `qa_research_daily.py`   | Product page: the research timeline and the month calendar, plus the development-only `?chapters-fixture=`       |
 | `record_product_page.py` | Videos of the product page: `opening.mp4` and `page.mp4` (needs ffmpeg; `--only page` redoes one)                |
+| `qa_vn_font.py`          | Vietnamese type: the faces Chrome drew (DevTools) on the `/vn` pages and in the other languages; `--shots tag`   |
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the

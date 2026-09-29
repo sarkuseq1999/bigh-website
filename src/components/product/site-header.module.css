@@ -101,4 +101,9 @@
   .nav {
     justify-content: flex-start;
   }
+  /* Be Vietnam Pro runs wider than Switzer: the four Vietnamese links need about 307 px, so the
+     gap gives way (16 px at 414, 13 at 390, 8 at 375) and each link stays on one line. */
+  .nav:lang(vi) {
+    gap: clamp(8px, (100vw - 350px) / 3, 16px);
+  }
 }

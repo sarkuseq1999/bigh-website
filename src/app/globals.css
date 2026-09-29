@@ -4,6 +4,13 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* The brand face. The page shells (homepage, product page, About) put var(--font-brand) at the
+   top of their font stacks. Switzer (Fontshare, loaded in the locale layout) for every language
+   but Vietnamese, which it cannot set: see html:lang(vi) below. */
+:root {
+  --font-brand: "Switzer";
+}
+
 html:lang(zh) body {
   --font-dm-sans: "PingFang SC", "Microsoft YaHei", sans-serif;
   --font-instrument: "Songti SC", "SimSun", serif;
@@ -21,9 +28,26 @@ html:lang(ja) body {
   --font-instrument: "Hiragino Mincho ProN", "Yu Mincho", serif;
   font-family: var(--font-dm-sans);
 }
+/* Vietnamese: Be Vietnam Pro (Mo, September 28, 2026; loaded in the locale layout for /vn only).
+   Switzer lacks 92 of the 134 Vietnamese letters and DM Sans has no Vietnamese subset, so Chrome
+   filled them from Arial letter by letter. Set on body, where next/font's variable lives: a var()
+   inside a custom property resolves where it is declared, so this must sit on or above the shells
+   that read --font-brand. */
 html:lang(vi) body {
+  --font-brand: var(--font-be-vietnam-pro);
+  /* Headlines (Switzer 450/460): Be Vietnam Pro 400 has the same stroke width; its 500 is visibly
+     bolder. The shells read this with Switzer's value as the fallback. */
+  --font-brand-display-weight: 400;
   --font-instrument: "Times New Roman", serif;
-  font-family: var(--font-dm-sans), Arial, sans-serif;
+  font-family: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  /* Vietnamese spaces every syllable, and the wider face left one alone at the end of a line
+     ("…của chúng / tôi"). Inherited; rules that choose balance keep it. */
+  text-wrap: pretty;
+}
+/* Words marked English on a Vietnamese page (the About page's h1, "Be in Good Health.") stay in
+   Switzer, at their own weight and size. */
+html:lang(vi) body [lang|="en"] {
+  font-family: "Switzer", var(--font-dm-sans), Arial, sans-serif;
 }
 
 @theme inline {

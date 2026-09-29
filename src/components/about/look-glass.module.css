@@ -367,7 +367,8 @@
   color: var(--g-ink);
   font-family: var(--g-sans);
   font-size: var(--t-hero);
-  font-weight: var(--g-head);
+  /* The title is English in Switzer in every language (acronym.tsx, globals.css). */
+  font-weight: var(--switzer-weight);
   line-height: 0.92;
   letter-spacing: calc(-0.015em + var(--display-track));
 }
@@ -947,6 +948,15 @@
   .primary,
   .secondary {
     width: 100%;
+  }
+
+  /* Vietnamese, in Be Vietnam Pro: "Khám phá sản phẩm của chúng tôi" fits one line at 390 px
+     with a little less side padding; narrower, it takes two even, centred lines. */
+  :is(.primary, .secondary):lang(vi) {
+    padding: 8px 20px;
+    line-height: 1.2;
+    text-align: center;
+    text-wrap: balance;
   }
 }
 

@@ -38,7 +38,9 @@ Switzer for everything (headings, body, header, footer, panel), with main's toke
 `--lead-weight`, `--lead-track`). It loads from Fontshare in main's locale layout
 (`src/app/[locale]/layout.tsx`). Headings sit at -0.02em in all; tighter closes Switzer's word
 spaces. NEVER commit the Switzer font files: the licence forbids redistribution and the repo is
-public. CJK and other scripts fall through to the locale fonts in `globals.css`.
+public. CJK and other scripts fall through to the locale fonts in `globals.css`. The stacks start
+with `var(--font-brand)` (Switzer; Be Vietnam Pro in Vietnamese, see Languages), and
+`--display-weight` reads `--font-brand-display-weight` with `--switzer-weight` (460) as fallback.
 
 ## Follow-ups (TODO)
 
@@ -74,27 +76,30 @@ certificate); 45-day refund current; BiGH incorporated 05/11/2016.
   put a comma where a line may end and keep each phrase to 12 characters or fewer, or a lone "。" can
   land on a line at 1100 px. Headings get line-height 1.26 in CJK; Japanese and Chinese drop the
   negative tracking. Non-English number labels and the footer tagline wrap evenly (`balance`).
-- Vietnamese font: Switzer (as Fontshare serves it) has no Vietnamese stacked or hooked letters.
-  It lacks 92 of the 134 Vietnamese letters (ơ, ư, and every ạ ả ấ ầ ẩ ẫ ậ ẹ ẻ ẽ ế ề ể ễ ệ ọ ỏ ố ồ ổ ỗ
-  ộ ớ ờ ở ỡ ợ ụ ủ ứ ừ … form), checked in its cmap. Chrome then draws those letters one by one in
-  Arial (DM Sans, next in the stack, has no Vietnamese subset at all, so it can't help): the
-  Vietnamese purpose heading is 92 Switzer glyphs and 17 Arial glyphs (DevTools protocol), and it
-  shows up close (`scripts/qa/out/about-i18n/vn-font-mix-purpose.png`). This affects every
-  Switzer text in Vietnamese, header included. Not changed: the site-wide font loading is Mo's call
-  (one option: a face with a `vietnamese` subset in next/font, such as Be Vietnam Pro or Inter, for
-  `:lang(vi)` only).
+- Vietnamese font: **Be Vietnam Pro** (Mo, Sept 28, 2026), site-wide for Vietnamese only. Switzer
+  (as Fontshare serves it) lacks 92 of the 134 Vietnamese letters (ơ, ư, and every ạ ả ấ ầ ẩ ẫ ậ ẹ ẻ
+  ẽ ế ề ể ễ ệ ọ ỏ ố ồ ổ ỗ ộ ớ ờ ở ỡ ợ ụ ủ ứ ừ … form), so Chrome drew them one by one in Arial (DM
+  Sans has no Vietnamese subset): the purpose heading was 92 Switzer glyphs and 17 Arial glyphs.
+  Now every Vietnamese text is Be Vietnam Pro only (DevTools protocol, checked by `qa_about.py`).
+  How it works, the weights and the other pages: `docs/header-and-languages.md`, "Vietnamese type".
+  On this page: the h1 stays English in Switzer at Switzer's weight (`--switzer-weight`, 460; a
+  `[lang|="en"]` rule in `globals.css`), so the glass beside it is placed as before (checked at
+  three sizes). Headings, numbers, the footer line and the panel title take Be Vietnam Pro 400
+  through `--display-weight` / `--g-head`. On phones the Vietnamese closing buttons have less side
+  padding and centred, balanced lines, so "Khám phá sản phẩm của chúng tôi" keeps one line at 390 px.
 
 ## Check
 
 `python -X utf8 scripts/qa/qa_about.py http://localhost:3009` (real GPU by default; add
-`--swiftshader` for the software renderer): 101 checks on Sept 28 (after the translations), including
-Switzer loaded and first in every text role, the opening glass never touching a letter at six sizes,
-chapters taking turns (sampled every 40 px), reduced motion, no WebGL, footer, and per language: the
-catalogs (keys, same key sets, placeholders), 200 with no console errors, the English h1, the
-translated tab title, no English source sentence left (page, panels, aria-labels, alt texts), no
-lone character or line-initial punctuation, `/hken/about` → `/cns/about`, and the Japanese opening
-glass. Also `npx prettier --check src/components/about messages src/i18n`, `npx tsc --noEmit`,
-`npm run lint`. Review screenshots: `scripts/qa/out/about-final/` (English) and
+`--swiftshader` for the software renderer): 103 checks on Sept 28 (after the translations and the
+Vietnamese font), including Switzer loaded and first in every text role, the opening glass never
+touching a letter at six sizes, chapters taking turns (sampled every 40 px), reduced motion, no
+WebGL, footer, and per language: the catalogs (keys, same key sets, placeholders), 200 with no
+console errors, the English h1, the translated tab title, no English source sentence left (page,
+panels, aria-labels, alt texts), no lone character or line-initial punctuation, `/hken/about` →
+`/cns/about`, the Japanese and Vietnamese opening glass, and in Vietnamese the faces Chrome actually
+drew (Be Vietnam Pro only; the English h1 Switzer only). Also
+`npx prettier --check src/components/about messages src/i18n`, `npx tsc --noEmit`, `npm run lint`. Review screenshots: `scripts/qa/out/about-final/` (English) and
 `scripts/qa/out/about-i18n/<kr|jp|cns|vn>-<desk|phone>-N-<part>.png` (1575x940 and 390x844).
 
 ## Traps

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { DM_Sans, Instrument_Serif } from "next/font/google";
+import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif } from "next/font/google";
 
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
@@ -16,6 +16,21 @@ const sans = DM_Sans({
 // web use but not redistributing the files, and this repository is public, so it loads from
 // Fontshare's own stylesheet rather than next/font/local.
 const SWITZER = "https://api.fontshare.com/v2/css?f[]=switzer@1,2&display=swap";
+
+// Be Vietnam Pro, for Vietnamese only (Mo, September 28, 2026): Switzer lacks 92 of the 134
+// Vietnamese letters, so Chrome drew them from Arial one by one. SIL Open Font License, so next/font
+// self-hosts it. globals.css points the brand-face token (--font-brand) at it for lang="vi", and
+// sets the headline weight (Switzer's 450/460) to 400, whose strokes match; the site's other
+// weights map to the static ones as usual (550 draws 600). Not preloaded, so other languages
+// never download it.
+const vietnamese = Be_Vietnam_Pro({
+  subsets: ["vietnamese", "latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  style: ["normal", "italic"],
+  variable: "--font-be-vietnam-pro",
+  display: "swap",
+  preload: false,
+});
 
 const serif = Instrument_Serif({
   subsets: ["latin"],
@@ -70,7 +85,9 @@ export default async function LocaleLayout({
   // visitors back where they were on the homepage (Mo, September 28, 2026).
   return (
     <html lang={languageTags[locale]} data-scroll-behavior="smooth">
-      <body className={`${sans.variable} ${serif.variable}`}>
+      <body
+        className={`${sans.variable} ${serif.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
+      >
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
         <link rel="stylesheet" href={SWITZER} precedence="default" />
