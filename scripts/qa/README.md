@@ -12,6 +12,7 @@ python -X utf8 scripts/qa/qa_stories.py http://localhost:3007
 python -X utf8 scripts/qa/qa_hero_cutaway.py http://localhost:3007 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
+python -X utf8 scripts/qa/qa_turmerific.py http://localhost:3012 --gpu
 ```
 
 | Script                   | Checks                                                                                                           |
@@ -27,6 +28,7 @@ python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
 | `qa_hero_cutaway.py`     | Product page: the "Big name" opening (name clear of the bottle, header, sideways scroll) and the capsule cutaway |
 | `qa_why_chapter.py`      | Product page: the Why chapter (bulb beats, contrast behind every line, no words over the bulb)                   |
 | `qa_research_daily.py`   | Product page: the research timeline and the month calendar, plus the development-only `?chapters-fixture=`       |
+| `qa_turmerific.py`       | Turmerific's page: chapters, 3D bottle, Why pictures, studies, calendar, banned words, sizes, a screenshot sheet |
 | `record_product_page.py` | Videos of the product page: `opening.mp4` and `page.mp4` (needs ffmpeg; `--only page` redoes one)                |
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls

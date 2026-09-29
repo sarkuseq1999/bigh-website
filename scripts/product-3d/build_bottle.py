@@ -32,6 +32,33 @@ def smooth1d(values, sigma):
     return np.convolve(padded, kernel, mode="valid")
 
 
+# Labels whose edges carry print (Turmerific: the Non-GMO badge on one side, the facts panel on the
+# other) would streak it right round the back. These take a plain back instead: each row's own
+# main colour (the orange ground, the brown bands).
+PLAIN_BACK = {"turmerific"}
+
+
+def row_colours(front):
+    """Each row's most common strong colour: the label's ground, whatever is printed over it.
+
+    Pale pixels do not count, or the rows through Turmerific's white oval would turn white."""
+    bins = (front // 16).astype(np.int32)
+    keys = bins[..., 0] * 256 + bins[..., 1] * 16 + bins[..., 2]
+    top, bottom = front.max(axis=2), front.min(axis=2)
+    strong = (top - bottom) / np.maximum(top, 1) > 0.35
+    colours = np.zeros((front.shape[0], 3), dtype=np.float32)
+    for y in range(front.shape[0]):
+        if strong[y].sum() < 20:
+            colours[y] = colours[y - 1] if y else np.median(front[y], axis=0)
+            continue
+        values, counts = np.unique(keys[y][strong[y]], return_counts=True)
+        colours[y] = front[y][keys[y] == values[np.argmax(counts)]].mean(axis=0)
+    # A light smoothing down the rows keeps the brown bands crisp but hides flicker between rows.
+    for channel in range(3):
+        colours[:, channel] = smooth1d(colours[:, channel], sigma=1.5)
+    return colours
+
+
 def main(slug):
     source = ROOT / "public" / "images" / "products" / f"{slug}.png"
     rgba = np.asarray(Image.open(source).convert("RGBA")).astype(np.float32)
@@ -54,8 +81,11 @@ def main(slug):
     body_radius = float(np.median(half[top + (bottom - top) // 2 : bottom - (bottom - top) // 6]))
     # Walk down from the top: the cap ends where the outline first narrows to the neck, and
     # the neck ends where it widens again into the shoulder.
+    # Start below the cap's rounded top edge: Turmerific's is rounder than NuriCell's and is still
+    # narrower than 90% of the cap 20 rows down, which read as the cap already ending there.
     cap_radius = float(np.median(half[top + 20 : top + 150]))
-    cap_bottom = next(y for y in range(top + 20, bottom) if half[y] < cap_radius * 0.9) - 1
+    cap_full = next(y for y in range(top, bottom) if half[y] >= cap_radius * 0.95)
+    cap_bottom = next(y for y in range(cap_full, bottom) if half[y] < cap_radius * 0.9) - 1
     neck_top = next(y for y in range(cap_bottom + 1, bottom) if half[y] < cap_radius * 0.82)
     neck_radius = float(np.median(half[neck_top : neck_top + 12]))
     neck_bottom = next(y for y in range(neck_top, bottom) if half[y] > neck_radius * 1.04) - 1
@@ -102,10 +132,16 @@ def main(slug):
         for channel in range(3):
             edge[:, channel] = smooth1d(edge[:, channel], sigma=10)
     back_w = TEXTURE_W - front_w
+    plain = row_colours(front) if slug in PLAIN_BACK else None
     for j in range(back_w):
         # Walk round the back from the right edge to the left edge.
         t = j / max(1, back_w - 1)
         column_colour = right_edge * (1 - t) + left_edge * t
+        if plain is not None:
+            # Leave each edge's colour over the first and last eighth, then settle on the plain back.
+            settle = np.clip(min(t, 1 - t) * 8, 0, 1)
+            settle = settle * settle * (3 - 2 * settle)
+            column_colour = column_colour * (1 - settle) + plain * settle
         x = (start + front_w + j) % TEXTURE_W
         wrap[:, x] = column_colour
     image = Image.fromarray(wrap.astype(np.uint8)).resize((TEXTURE_W, TEXTURE_H), Image.LANCZOS)

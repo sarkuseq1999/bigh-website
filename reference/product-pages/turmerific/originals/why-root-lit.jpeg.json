@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K",
+    "style": "photorealistic"
+  },
+  "prompt": "Low-key still-life photograph, photorealistic, 16:9 landscape. One fresh turmeric rhizome (Curcuma longa) lies on its side, freshly broken in two: the two pieces rest close together with the broken ends facing the camera, showing the vivid saturated golden-orange flesh inside, slightly moist and glistening, with fine fibrous texture; the outside is thin papery tan-brown skin with faint rings. A few small knobby side fingers on the root. Composition: the root sits in the right half of the frame, centred about 69 percent from the left edge and just under halfway down; it fills roughly a third of the frame's width; the whole left half of the frame is empty. Background and surface: completely plain, even, deep midnight-navy darkness (very dark blue, almost black), the root rests on nothing visible, no table edge, no scenery, no bokeh, no horizon, no gradient, the same dark navy right to every edge. Lighting: a single warm golden light from the upper left grazes the root so the broken golden-orange ends glow with a soft warm bloom, the skin shows a gentle rim light; everything else falls away into the dark navy. Cinematic, shallow depth of field, crisp detail on the broken flesh. No powder, no spoon, no bowl, no leaves, no flowers, no text, no logos, no frame.",
+  "generated": "2026-09-29",
+  "used_by": "scripts/product-pages/why_turmerific.py -> public/images/products/turmerific/why-root-on.webp and why-root-off.webp",
+  "note": "Illustrative mood picture made for the Why chapter, not a photograph of BiGH's ingredient. Gemini drew two cut roots rather than one broken root."
+}
