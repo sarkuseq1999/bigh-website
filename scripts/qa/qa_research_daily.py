@@ -18,6 +18,9 @@ Pictures: scripts/qa/out/rd-<run>-<nn>-<name>.png (viewport shots; full-page sho
 layouts), and rd-<run>-sheet.png, the shots of a run side by side.
 
     python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
+    python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
+
+The numbers above are NuriCell's; --product=<slug> checks another product against its own (PRODUCTS).
 """
 import os
 import sys
@@ -26,11 +29,25 @@ import time
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
-BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3007").rstrip("/")
-URL = f"{BASE}/products/nuricell"
+POSITIONAL = [a for a in sys.argv[1:] if not a.startswith("--")]
+BASE = (POSITIONAL[0] if POSITIONAL else "http://localhost:3007").rstrip("/")
+SLUG = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--product=")), "nuricell")
+URL = f"{BASE}/products/{SLUG}"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 os.makedirs(OUT, exist_ok=True)
-HONESTY = "These studies are about NuriCell’s ingredients, not the finished product."
+# Per product: the research note, how many studies, and the month (days, capsules a day, title).
+PRODUCTS = {
+    "nuricell": {"honesty": "These studies are about NuriCell’s ingredients, not the finished product.",
+                 "studies": 7, "days": 30, "pills": 3, "title": "One bottle, one month."},
+    "green-bee-propolis": {"honesty": "These studies are about propolis, not the finished product.",
+                           "studies": 7, "days": 60, "pills": 1, "title": "One bottle, two months."},
+}
+HONESTY = PRODUCTS[SLUG]["honesty"]
+STUDIES = PRODUCTS[SLUG]["studies"]
+DAYS = PRODUCTS[SLUG]["days"]
+PILLS = PRODUCTS[SLUG]["pills"]
+TITLE = PRODUCTS[SLUG]["title"]
+COUNT = f"{DAYS * PILLS} capsules · {DAYS} days"
 passed = failed = 0
 dev_notes = set()
 
@@ -133,9 +150,10 @@ RESEARCH = """(() => {
   const win = s.querySelector('[data-window]');
   const wide = innerWidth > 900;
   const wr = win.getBoundingClientRect();
-  // The window's soft edges: 16px at the left and 48px at the right on wide screens.
-  const left = Math.max(0, wr.left + (wide ? 16 : 0)) - 1;
-  const right = Math.min(innerWidth, wr.right - (wide ? 48 : 0)) + 1;
+  // The window's soft edges: 16px at the left and 48px at the right on wide screens. Two pixels'
+  // grace: the pinned stage's sub-pixel scroll can leave the first card 1.4px into the fade.
+  const left = Math.max(0, wr.left + (wide ? 16 : 0)) - 2;
+  const right = Math.min(innerWidth, wr.right - (wide ? 48 : 0)) + 2;
   const opacity = el => { let o = 1; for (let a = el; a && a !== document.body; a = a.parentElement) o *= +getComputedStyle(a).opacity; return o; };
   const shown = el => {
     const r = el.getBoundingClientRect();
@@ -219,10 +237,10 @@ def research_view(page, label, w, h, reduced, shots):
     state = page.evaluate(RESEARCH)
     count = len(state["cards"])
     years = [int(y) for y in state["years"]]
-    check(f"{label} research: {count} studies, oldest first", count == 7 and years == sorted(years), str(state["years"]))
+    check(f"{label} research: {count} studies, oldest first", count == STUDIES and years == sorted(years), str(state["years"]))
     check(f"{label} research: honesty line is the product's research note", HONESTY in state["honestyText"], state["honestyText"][:60])
     links = page.evaluate("""[...document.querySelectorAll('[data-chapter="research"] [data-study] a')].map(a => [a.target, a.rel, a.href.startsWith('https://')])""")
-    check(f"{label} research: every study links out, new tab, rel=noopener", len(links) == 7 and all(t == "_blank" and "noopener" in r and ok for t, r, ok in links), str(links[:1]))
+    check(f"{label} research: every study links out, new tab, rel=noopener", len(links) == STUDIES and all(t == "_blank" and "noopener" in r and ok for t, r, ok in links), str(links[:1]))
 
     seen = [False] * count
     heading_ok, sideways_ok, lit_trace, stops = [], [], [], []
@@ -245,7 +263,7 @@ def research_view(page, label, w, h, reduced, shots):
         pinned = [s for s in stops if s["inPin"]]
         check(f"{label} research: the stage is pinned (sticky, top 0) all through the chapter",
               pinned and all(s["pinned"] and abs(s["stageTop"]) <= 1 for s in pinned), str([(s["pinned"], s["stageTop"]) for s in pinned[:3]]))
-        check(f"{label} research: the gold line lights the years one by one (1 at the start, all 7 at the end, never fewer on the way down)",
+        check(f"{label} research: the gold line lights the years one by one (1 at the start, all {STUDIES} at the end, never fewer on the way down)",
               lit_trace[0] == 1 and lit_trace[-1] == count and all(b >= a for a, b in zip(lit_trace, lit_trace[1:])), str(lit_trace))
         # Scroll fast back to the start: the timeline and the lights settle back.
         jump(page, where["top"] + 2)
@@ -334,7 +352,7 @@ def daily_view(page, label, w, h, reduced, shots):
     where = box(page, "daily")
     expect_pin = not reduced and h >= 600
     first = page.evaluate(DAILY)
-    check(f"{label} daily: the title and 30 days, 3 capsules each", first["title"] == "One bottle, one month." and first["days"] == 30 and first["pills"] == 3,
+    check(f"{label} daily: the title and {DAYS} days, {PILLS} capsules each", first["title"] == TITLE and first["days"] == DAYS and first["pills"] == PILLS,
           f"title={first['title']!r} days={first['days']} pills={first['pills']}")
     trace, sideways, inview = [], [], []
     if expect_pin:
@@ -355,8 +373,8 @@ def daily_view(page, label, w, h, reduced, shots):
         end = page.evaluate(DAILY)
         check(f"{label} daily: the month fills day by day as you scroll down (never goes back)",
               trace[0] < 10 and all(b >= a for a, b in zip(trace, trace[1:])) and len(set(trace)) >= 6, str(trace))
-        check(f"{label} daily: it ends full: 30 days, '90 capsules · 30 days', 'Then a new bottle.' shown, day 30 ringed",
-              end["filled"] == 30 and end["count"] == "90 capsules · 30 days" and end["thenOpacity"] > 0.99 and end["today"] == 29,
+        check(f"{label} daily: it ends full: {DAYS} days, '{COUNT}', 'Then a new bottle.' shown, day {DAYS} ringed",
+              end["filled"] == DAYS and end["count"] == COUNT and end["thenOpacity"] > 0.99 and end["today"] == DAYS - 1,
               f"filled={end['filled']} count={end['count']!r} then={end['thenOpacity']} today={end['today']}")
         check(f"{label} daily: pinned, and the whole month on screen while pinned", inview and all(inview), f"{inview.count(False)} of {len(inview)} off")
         # Back up a little: fewer days. Then fast jumps both ways land right.
@@ -370,7 +388,7 @@ def daily_view(page, label, w, h, reduced, shots):
         page.wait_for_timeout(700)
         top = page.evaluate(DAILY)
         check(f"{label} daily: scrolling back un-fills, fast jumps settle both ways",
-              0 < middle["filled"] < 30 and bottom["filled"] == 30 and top["filled"] == 0,
+              0 < middle["filled"] < DAYS and bottom["filled"] == DAYS and top["filled"] == 0,
               f"middle={middle['filled']} bottom={bottom['filled']} top={top['filled']} ({top['count']!r})")
     else:
         jump(page, where["top"])
@@ -383,7 +401,7 @@ def daily_view(page, label, w, h, reduced, shots):
         s = page.evaluate(DAILY)
         sideways.append(s["sideways"])
         check(f"{label} daily: still: the whole month filled, the full count and the last line shown",
-              not s["pinned"] and s["filled"] == 30 and s["count"] == "90 capsules · 30 days" and s["thenOpacity"] > 0.99,
+              not s["pinned"] and s["filled"] == DAYS and s["count"] == COUNT and s["thenOpacity"] > 0.99,
               f"pinned={s['pinned']} filled={s['filled']} count={s['count']!r} then={s['thenOpacity']}")
     check(f"{label} daily: no horizontal page scroll at any step", all(sideways), str(sideways.count(False)))
 
@@ -426,7 +444,7 @@ def run_fixtures(browser):
     for w, h, run in ((1440, 900, "full-desk"), (390, 844, "full-phone")):
         ctx, page, problems = open_page(browser, w, h, fixture="full")
         where = box(page, "research")
-        seen = [False] * 14
+        seen = [False] * (2 * STUDIES)
         if w > 900:
             for i in range(31):
                 glide(page, where["top"] + (where["height"] - h) * i / 30, steps=3)
@@ -450,9 +468,9 @@ def run_fixtures(browser):
         shots.take(page, f"{run}-daily")
         s = page.evaluate(DAILY)
         sideways = page.evaluate(NO_SIDEWAYS)
-        check(f"{run} fixture: all 14 studies come fully into view; 6 capsules a day; no sideways scroll; no errors",
-              all(seen) and s["pills"] == 6 and s["filled"] == 30 and sideways and not problems,
-              f"seen={seen.count(True)}/14 pills={s['pills']} filled={s['filled']} sideways={sideways} {problems[:2]}")
+        check(f"{run} fixture: all {2 * STUDIES} studies come fully into view; 6 capsules a day; no sideways scroll; no errors",
+              all(seen) and s["pills"] == 6 and s["filled"] == DAYS and sideways and not problems,
+              f"seen={seen.count(True)}/{2 * STUDIES} pills={s['pills']} filled={s['filled']} sideways={sideways} {problems[:2]}")
         ctx.close()
     return shots
 
