@@ -90,6 +90,11 @@ export type ProductPage = ProductSummary & {
   /** The product's own moment inside the template. NuriCell: the capsule opens. */
   signature?: "capsule";
   /**
+   * Where the opening parts the name around the bottle, when the break nearest the middle would
+   * mislead. Without it the name parts there (Nuri | Cell).
+   */
+  nameHalves?: [string, string];
+  /**
    * How the ingredients work together (Mo, September 28, 2026: "the most important part").
    * Each link joins two ingredients by key. Lines describe the nutrients in general and what
    * researchers studied; the note says so. Drafts until Mo approves them.
