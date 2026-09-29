@@ -4,8 +4,9 @@ import Image from "next/image";
 import gsap from "gsap";
 import { MotionPathPlugin } from "gsap/MotionPathPlugin";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowDown, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { articles, facts, images, intro, type ScienceDesignProps } from "./science-data";
 import styles from "./science-glass.module.css";
@@ -673,9 +674,9 @@ export function ScienceGlass({ onOpenArticle }: ScienceDesignProps) {
       </div>
 
       <div className={styles.foot}>
-        <a href="#research" className={styles.explore}>
-          {copy(intro.button)} <ArrowDown size={19} aria-hidden="true" />
-        </a>
+        <Link href="/science" className={styles.explore}>
+          {copy(intro.button)} <ArrowRight size={19} aria-hidden="true" />
+        </Link>
       </div>
     </div>
   );

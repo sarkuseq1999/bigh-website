@@ -58,10 +58,9 @@ export const about = {
   },
 } as const;
 
-// Where the page's links lead while the Science page lives on its own branch. Point "scientists"
-// at "/science" once that branch lands.
+// Where the page's links lead. The Science page landed on main on September 28, 2026.
 export const routes = {
-  scientists: "/#scientists",
+  scientists: "/science",
   products: "/#products",
 } as const;
 
