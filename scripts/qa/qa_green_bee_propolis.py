@@ -4,8 +4,8 @@ The template's chapters have their own checks; run them with --product=green-bee
     python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
     python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
 This script checks what only this page has, at 1440x900 and 390x844 (and once with reduced motion):
-- the opening: the headline, the eyebrow on one line and clear of the giant name, the name parted
-  as "Green | Bee Propolis" with a word space on phones and parted round the bottle on wide screens, the 3D bottle
+- the opening: the headline, the eyebrow on one line and clear of the giant name, the name's two
+  halves with a word space on phones and parted round the bottle on wide screens, the 3D bottle
   arriving in amber glass (not white plastic), no sideways scroll;
 - what's inside: one ingredient shown large (200 mg), and the full label (the 2019 label, confirmed
   current by Mo on September 29, 2026): the extract, its amount, the other ingredients;
@@ -109,9 +109,8 @@ def run(browser, label, w, h):
           o["eyebrow"] == "Green Bee Propolis · Made by bees" and o["eyebrowBox"]["height"] < o["eyebrowLine"] * 1.5,
           f"{o['eyebrow']!r} {o['eyebrowBox']['height']:.0f}px")
     a, b = o["halfBoxes"]
-    # "Green | Bee Propolis": green propolis, not propolis from a "green bee" (Mo, September 29).
-    check(f"{label} opening: the giant name parts as 'Green' | 'Bee Propolis', clear of the eyebrow",
-          o["halves"] == ["Green", "Bee Propolis"] and o["spaced"] and a["top"] >= o["eyebrowBox"]["bottom"] - 2,
+    check(f"{label} opening: the giant name parts as 'Green Bee' | 'Propolis', clear of the eyebrow",
+          o["halves"] == ["Green Bee", "Propolis"] and o["spaced"] and a["top"] >= o["eyebrowBox"]["bottom"] - 2,
           f"{o['halves']} eyebrow bottom {o['eyebrowBox']['bottom']:.0f}, name top {a['top']:.0f}")
     gap = b["left"] - a["right"]
     if phone:

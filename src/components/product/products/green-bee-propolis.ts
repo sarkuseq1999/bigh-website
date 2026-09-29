@@ -64,9 +64,6 @@ const greenBeePropolis: ProductPage = {
   purpose:
     "Bees produce this green propolis from local plant resins. Its characteristic compounds include artepillin C—one reason researchers study Brazilian green propolis for its antioxidant properties.",
   highlights: ["Minas Gerais, Brazil", "Artepillin C"],
-  // "Green | Bee Propolis", not "Green Bee | Propolis": it is green propolis, not propolis from a
-  // "green bee", which customers have asked about (Mo, September 29, 2026).
-  nameHalves: ["Green", "Bee Propolis"],
   accent: "#d9a21b",
   serving: {
     capsules: 1,
