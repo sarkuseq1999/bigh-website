@@ -238,9 +238,9 @@ def page_checks(page, label, status, reduced):
       const e = document.querySelector('[data-intro="eyebrow"]').getBoundingClientRect();
       const a = g.querySelector('[data-giant-half="a"]').getBoundingClientRect();
       const b = g.querySelector('[data-giant-half="b"]').getBoundingClientRect();
-      return { spaced: g.hasAttribute('data-spaced'), gap: Math.round(b.left - a.right), stacked: Math.abs(a.top - b.top) > 4,
+      return { spaced: g.hasAttribute('data-spaced'), gap: Math.round(b.left - a.right), size: parseFloat(getComputedStyle(g).fontSize), stacked: Math.abs(a.top - b.top) > 4,
         eyebrowBottom: Math.round(e.bottom), nameTop: Math.round(Math.min(a.top, b.top) + 0.12 * a.height) }; })()""")
-    check(f"{label}: the giant name keeps its word space", name["spaced"] and (name["stacked"] or name["gap"] >= 8), str(name))
+    check(f"{label}: the giant name keeps its word space", name["spaced"] and (name["stacked"] or name["gap"] >= 0.15 * name["size"]), str(name))
     check(f"{label}: the eyebrow stands clear of the giant name", name["eyebrowBottom"] <= name["nameTop"], str(name))
     photo = page.evaluate("""(() => { const img = document.querySelector('[data-photo]');
       const line = document.querySelector('[data-photo-line]');
