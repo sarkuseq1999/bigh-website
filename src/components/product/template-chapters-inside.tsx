@@ -52,6 +52,8 @@ export function InsideChapter({
   useArrivals(root, reduced);
 
   const long = product.ingredients.length > LONG_LIST;
+  // A single-ingredient formula (Green Bee Propolis) shows its one amount large, on its own.
+  const single = product.ingredients.length === 1;
   const first = long ? product.ingredients.slice(0, FIRST_ROWS) : product.ingredients;
   const rest = long ? product.ingredients.slice(FIRST_ROWS) : [];
 
@@ -100,7 +102,11 @@ export function InsideChapter({
                 })}
           </p>
         </header>
-        {first.length > 0 && <ol className={styles.ingredients}>{first.map(row)}</ol>}
+        {first.length > 0 && (
+          <ol className={`${styles.ingredients} ${single ? styles.single : ""}`}>
+            {first.map(row)}
+          </ol>
+        )}
         {rest.length > 0 && (
           <ol id={moreId} className={styles.ingredients} start={first.length + 1} hidden={!showAll}>
             {rest.map(row)}
