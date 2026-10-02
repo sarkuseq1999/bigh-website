@@ -4,9 +4,10 @@ import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
-import { useEffect, useId, useRef, type CSSProperties } from "react";
+import { useEffect, useId, useMemo, useRef, type CSSProperties } from "react";
 import { useCopy } from "@/i18n/use-copy";
 import type { ProductPage, ProductWhy } from "./product-types";
+import { createWhyScenes, type WhyScenes } from "./signature/why-scenes";
 import { anchorId, lineClass, wordClass, type Chapter, type Tone } from "./template-chapters-kit";
 import shared from "./template-chapters.module.css";
 import styles from "./template-chapters-why.module.css";
@@ -72,16 +73,19 @@ const REST = 1.1;
 
 /** When each hand-over starts and how long it takes, and the story's whole length. The track's
  * height and the timeline both come from here, so scroll and story always line up. */
-function story(count: number, lit: boolean) {
+function story(count: number, lit: boolean, early = false) {
   const changes: { at: number; span: number; lightsOn: boolean }[] = [];
-  let at = HOLD;
+  // With scenes, each hand-over brings the next photo, so the light comes on earlier: while the
+  // first moment rests, in a lead of its own before the first hand-over.
+  const lead = lit && early ? SWITCH : 0;
+  let at = HOLD + lead;
   for (let index = 1; index < count; index += 1) {
-    const lightsOn = lit && index === 1;
+    const lightsOn = lit && !early && index === 1;
     const span = lightsOn ? SWITCH : CHANGE;
     changes.push({ at, span, lightsOn });
     at += span + (index === count - 1 ? REST : HOLD);
   }
-  return { changes, total: count > 1 ? at : HOLD + REST };
+  return { changes, lead, total: count > 1 ? at : HOLD + lead + REST };
 }
 
 function NightStage({
@@ -99,10 +103,58 @@ function NightStage({
 }) {
   const copy = useCopy();
   const track = useRef<HTMLDivElement>(null);
+  const canvas = useRef<HTMLCanvasElement>(null);
   const lit = visual.lit;
   const facts = why.facts ?? [];
+  const scenes = useMemo(() => why.scenes ?? [], [why.scenes]);
   const count = facts.length + (why.comparison ? 1 : 0) + why.lines.length + 1;
-  const { total } = story(count, Boolean(lit));
+  const { total } = story(count, Boolean(lit), scenes.length > 0);
+  // Where the scenes stand (0: the first photo; 1.5: halfway to the third), for the WebGL wash.
+  const progress = useRef(0);
+  const washer = useRef<WhyScenes | null>(null);
+
+  // The scenes' liquid wash, drawn over the photos once every photo is on the GPU. Until then, and
+  // wherever WebGL fails, the photos simply cross-fade (the same timeline drives both).
+  useEffect(() => {
+    const element = canvas.current;
+    if (reduced || !element || scenes.length === 0) return;
+    let cancelled = false;
+    let built: WhyScenes | null = null;
+    const first = lit ?? visual;
+    const style = getComputedStyle(element);
+    const focus: [number, number] = [
+      parseFloat(style.getPropertyValue("--focus-x")) / 100 || 0.693,
+      parseFloat(style.getPropertyValue("--focus-y")) / 100 || 0.46,
+    ];
+    createWhyScenes(
+      element,
+      [first.src, ...scenes.map((scene) => scene.src)],
+      [0, ...scenes.map((scene) => scene.ripple ?? 0)],
+      focus,
+      () => {
+        if (!cancelled) element.dataset.ready = "true";
+      },
+    )
+      .then((scenesOnGpu) => {
+        if (cancelled) {
+          scenesOnGpu.dispose();
+          return;
+        }
+        built = scenesOnGpu;
+        washer.current = scenesOnGpu;
+        scenesOnGpu.setProgress(progress.current);
+        element.style.opacity = progress.current > 0 ? "1" : "0";
+      })
+      .catch(() => {
+        // No WebGL: the cross-fade carries the story.
+        element.dataset.ready = "false";
+      });
+    return () => {
+      cancelled = true;
+      washer.current = null;
+      built?.dispose();
+    };
+  }, [reduced, scenes, lit, visual]);
 
   // One scrubbed timeline over a tall track with a sticky stage (only in windows tall enough to
   // hold it; shorter ones, and reduced motion, get the still layout from the CSS). Every moment
@@ -133,7 +185,18 @@ function NightStage({
             ? SplitText.create(title, { type: "lines", mask: "lines", linesClass: lineClass })
             : null;
           const counters: { node: Text; original: string }[] = [];
-          const plan = story(moments.length, Boolean(litPhoto));
+          const sceneLayers = q("[data-why-scene]") as HTMLElement[];
+          const plan = story(moments.length, Boolean(litPhoto), sceneLayers.length > 0);
+          // One number for where the scenes stand; the wash reads it, and only shows itself once
+          // the story has left the first photo (before that, the photo's own light is coming on).
+          const stand = { value: 0 };
+          const showScenes = () => {
+            progress.current = stand.value;
+            washer.current?.setProgress(stand.value);
+            if (canvas.current && washer.current) {
+              canvas.current.style.opacity = stand.value > 0 ? "1" : "0";
+            }
+          };
 
           // The stage rises into place with the picture settling and the first moment arriving,
           // so it never arrives empty.
@@ -157,9 +220,51 @@ function NightStage({
             0,
           );
 
+          if (plan.lead && litPhoto) {
+            // Scenes: the light comes on under the first moment, in its own lead.
+            timeline.fromTo(
+              litPhoto,
+              { opacity: 0 },
+              { opacity: 1, duration: plan.lead * 0.72, ease: "power2.inOut" },
+              HOLD * 0.5,
+            );
+            if (glow) {
+              timeline.fromTo(
+                glow,
+                { opacity: 0, scale: 0.55 },
+                { opacity: 1, scale: 1, duration: plan.lead * 0.8, ease: "power1.out" },
+                HOLD * 0.5 + plan.lead * 0.12,
+              );
+            }
+          }
+
           plan.changes.forEach(({ at, span, lightsOn }, index) => {
             const previous = moments[index];
             const current = moments[index + 1];
+            // A scene that starts with this moment washes in while the words hand over. Its photo
+            // also fades in underneath, which is all there is where WebGL is missing.
+            sceneLayers.forEach((layer, k) => {
+              if (Number(layer.dataset.from) !== index + 1) return;
+              timeline
+                .fromTo(
+                  stand,
+                  { value: k },
+                  {
+                    value: k + 1,
+                    duration: span * 1.25,
+                    ease: "power1.inOut",
+                    immediateRender: false,
+                    onUpdate: showScenes,
+                  },
+                  at - span * 0.1,
+                )
+                .fromTo(
+                  layer,
+                  { opacity: 0 },
+                  { opacity: 1, duration: span * 0.9, ease: "power1.inOut" },
+                  at,
+                );
+            });
             if (lightsOn && litPhoto) {
               // Warming up: slow at first, then the filament is bright and the room glows.
               timeline.fromTo(
@@ -306,13 +411,24 @@ function NightStage({
         <div className={styles.picture} data-why-picture>
           <div className={styles.frame} data-why-frame>
             <Image {...picture(visual)} alt={copy(visual.alt)} />
-            {lit && (
-              <>
-                {/* The same picture with its light on, over the first; it shares the description. */}
-                <Image {...picture(lit)} alt="" data-why-lit />
-                <span className={styles.glow} aria-hidden="true" data-why-glow />
-              </>
+            {/* The same picture with its light on, over the first; it shares the description. */}
+            {lit && <Image {...picture(lit)} alt="" data-why-lit />}
+            {/* Scenes: one photo per idea, decorative (the words carry the story), and the WebGL
+                wash between them over all the photos, under the bulb's glow. */}
+            {scenes.map((scene) => (
+              <Image
+                key={scene.src}
+                {...picture(scene)}
+                alt=""
+                className={`${styles.photo} ${styles.scene}`}
+                data-why-scene
+                data-from={scene.from}
+              />
+            ))}
+            {scenes.length > 0 && !reduced && (
+              <canvas ref={canvas} className={styles.wash} aria-hidden="true" />
             )}
+            {lit && <span className={styles.glow} aria-hidden="true" data-why-glow />}
           </div>
         </div>
         <div className={styles.copy} data-why-copy>

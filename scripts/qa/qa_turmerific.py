@@ -3,11 +3,13 @@
 At 1440x900 and 390x844, with motion and with reduced motion:
 - chapters: overview, why, inside, research, daily, buy, in that order (no People chapter until Mo
   decides how the page shows its credit), and the index numbers them 1 to 6
-- overview: the big name reads "Turme" + "rific", the 3D bottle draws (data-status ready), the
-  headline and the purpose (the approved homepage copy) are there
-- why: the night picture (the turmeric roots, off and lit) is loaded, with the title, three lines
-  and the source line; the eyebrow is the page's own ("From turmeric root"), so the buy chapter
-  does not say "Advanced curcumin" twice
+- overview: the big name reads "Turm" + "erific" (halves within 1.25x of each other's width), the
+  3D bottle draws (data-status ready), the headline and the purpose (the approved homepage copy)
+  are there
+- why: one picture per line (the roots, off and lit; a glass of water; golden droplets), joined by
+  a WebGL liquid wash with motion (none with reduced motion), with the title, three lines and the
+  source line; the eyebrow is the page's own ("From turmeric root"), so the buy chapter does not
+  say "Advanced curcumin" twice
 - inside: one ingredient, 1,000 mg, the label panel opens with the label form, the amount and the
   other ingredients
 - research: six studies, oldest first, every link to PubMed in a new tab with rel=noopener
@@ -109,7 +111,12 @@ def content_checks(page, label):
     ids = page.evaluate("[...document.querySelectorAll('[data-chapter]')].map(s => s.dataset.chapter)")
     check(f"{label} chapters in order, no people", ids == CHAPTERS, str(ids))
     halves = page.evaluate("[...document.querySelectorAll('[data-giant-half]')].map(s => s.textContent)")
-    check(f"{label} big name reads Turme|rific", halves == ["Turme", "rific"], str(halves))
+    check(f"{label} big name reads Turm|erific", halves == ["Turm", "erific"], str(halves))
+    # Balanced halves (Mo, October 2): neither is more than 1.25 times as wide as the other.
+    widths = page.evaluate("[...document.querySelectorAll('[data-giant-half]')].map(s => s.getBoundingClientRect().width)")
+    if widths and min(widths) > 0:
+        ratio = max(widths) / min(widths)
+        check(f"{label} big name halves balanced", ratio <= 1.25, f"ratio {ratio:.2f}")
     h1 = page.evaluate("document.querySelector('h1').textContent")
     check(f"{label} headline", "Turmeric," in h1 and "advanced by neuroscience." in h1, h1)
     text = page.evaluate("document.body.innerText")
@@ -124,9 +131,15 @@ def content_checks(page, label):
         why[:80].replace("\n", " "),
     )
     pictures = page.evaluate(
-        "[...document.querySelectorAll('[data-chapter=\"why\"] img')].map(i => [i.currentSrc.includes('why-root-o'), i.complete && i.naturalWidth > 0])"
+        "[...document.querySelectorAll('[data-chapter=\"why\"] img')].map(i => [i.currentSrc.split('/').pop().split('?')[0], i.complete && i.naturalWidth > 0])"
     )
-    check(f"{label} why: both root pictures load", len(pictures) >= 2 and all(a and b for a, b in pictures), str(pictures))
+    names = [name for name, _ in pictures]
+    check(
+        f"{label} why: the roots (off, on), the glass and the droplets all load",
+        all(any(n.startswith(s) for n in names) for s in ("why-root-off", "why-root-on", "why-glass-on", "why-drops-on"))
+        and all(ok for _, ok in pictures),
+        str(pictures),
+    )
     buy_head = page.evaluate("[...document.querySelectorAll('[data-chapter=\"buy\"] p')].slice(0, 2).map(p => p.textContent)")
     check(f"{label} buy: eyebrow and focus differ", len(buy_head) == 2 and buy_head[0] != buy_head[1], str(buy_head))
     rows = page.evaluate("[...document.querySelectorAll('[data-chapter=\"inside\"] ol li')].map(li => li.innerText.replace(/\\s+/g, ' '))")
@@ -222,6 +235,11 @@ with sync_playwright() as p:
         page.wait_for_timeout(2500)
         walk(page, run, w, h, shots)
         content_checks(page, run)
+        # The liquid wash between the why scenes: WebGL with motion, nothing with reduced motion.
+        wash = page.evaluate(
+            "(() => { const c = document.querySelector('[data-chapter=\"why\"] canvas'); return c ? c.dataset.ready || 'pending' : 'none'; })()"
+        )
+        check(f"{run} why: the liquid wash is {'off' if reduced else 'on'}", wash == ("none" if reduced else "true"), wash)
         sizes = page.evaluate(SIZES)
         check(f"{run} no text under 15px", not sizes["bad"], "; ".join(sizes["bad"]))
         check(f"{run} links and buttons at least 44x44", not sizes["tiny"], "; ".join(sizes["tiny"]))

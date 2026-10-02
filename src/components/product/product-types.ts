@@ -70,12 +70,26 @@ export type ProductWhy = {
   comparison?: string;
   /** Where the figures come from, shown small at the foot of the chapter. */
   source?: string;
+  /**
+   * More photos for the night story, one per idea (Turmerific, October 2, 2026). Each takes over
+   * from the moment `from` (0 is the first figure, comparison or line; the title is the last) with
+   * a liquid wash drawn in WebGL. Framed like the visual, on the same night, subject at the same
+   * point. With scenes, the visual's light comes on while the first moment is on screen, before
+   * the first hand-over. `ripple` is a faint living ripple for liquid scenes (about 0.003).
+   * The words carry the story, so the scenes are decorative to screen readers.
+   */
+  scenes?: (Omit<Picture, "alt"> & { from: number; ripple?: number })[];
 };
 
 export type ProductPage = ProductSummary & {
   eyebrow: string;
   /** Headline broken into lines; the product picture may sit between them. */
   headlineLines: string[];
+  /**
+   * Where the giant name parts round the bottle, when the automatic split looks lopsided.
+   * Turmerific: "Turm | erific" sets two halves of nearly equal width (Mo, October 2, 2026).
+   */
+  nameHalves?: [string, string];
   purpose: string;
   highlights: string[];
   credit?: string;

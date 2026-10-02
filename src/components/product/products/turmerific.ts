@@ -55,6 +55,9 @@ const turmerific: ProductPage = {
   ...turmerificSummary,
   eyebrow: "From turmeric root",
   headlineLines: ["Turmeric,", "advanced by neuroscience."],
+  // "Turme | rific" was lopsided: in Switzer the first half is 1.9 times as wide as the second.
+  // "Turm | erific" is 1.1 (Mo, October 2, 2026: "doesn't look balanced").
+  nameHalves: ["Turm", "erific"],
   purpose:
     "Featuring Longvida® curcumin, developed with neuroscientists at the University of California, Los Angeles. Its specialized delivery system is designed to improve how your body absorbs turmeric’s active compound.",
   highlights: ["Longvida® curcumin", "Designed for absorption"],
@@ -68,8 +71,10 @@ const turmerific: ProductPage = {
   },
   // Sources: NCCIH, "Turmeric" (updated April 2025): curcumin gives turmeric its colour; Nelson
   // et al., J Med Chem 2017: curcumin is poorly absorbed; Gota et al. 2010: solid lipid particles.
-  // The picture, like the other products' (September 29): fresh turmeric roots cut open in the dark,
-  // their golden flesh lit as you scroll. A Gemini render; prompt in
+  // One picture per line (Mo, October 2, 2026: the same picture under every line "doesn't look that
+  // interesting"; Timeline's How it works changes its picture as you scroll): the roots light up
+  // gold; powder sinks in a glass of water (curcumin barely dissolves in water); tiny golden droplets
+  // of oil ("tiny particles of fat"); the lit roots again under the title. Gemini renders, prompts in
   // reference/product-pages/turmerific/originals/, made with scripts/product-pages/why_turmerific.py.
   why: {
     label: "Why the form matters",
@@ -86,6 +91,23 @@ const turmerific: ProductPage = {
       alt: "Fresh turmeric roots, cut open, on a dark background",
       lit: { src: "/images/products/turmerific/why-root-on.webp", width: 2752, height: 1536 },
     },
+    scenes: [
+      {
+        src: "/images/products/turmerific/why-glass-on.webp",
+        width: 2752,
+        height: 1536,
+        from: 1,
+        ripple: 0.003,
+      },
+      {
+        src: "/images/products/turmerific/why-drops-on.webp",
+        width: 2752,
+        height: 1536,
+        from: 2,
+        ripple: 0.0025,
+      },
+      { src: "/images/products/turmerific/why-root-on.webp", width: 2752, height: 1536, from: 3 },
+    ],
     source:
       "Sources: NIH (NCCIH); Nelson and colleagues, J Med Chem 2017; Gota and colleagues, 2010.",
   },

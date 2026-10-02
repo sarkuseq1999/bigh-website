@@ -74,12 +74,15 @@ PRODUCTS = {
         ],
         "source": "Sources: NIH (NCCIH)",
         "figures": [],
+        # Scenes: a photo per line, so the light comes on under the first line, not at the second.
+        "light_first": True,
     },
 }
 BEATS = PRODUCTS[SLUG]["beats"]
 LINES = PRODUCTS[SLUG]["lines"]
 SOURCE = PRODUCTS[SLUG]["source"]
 FIGURES = PRODUCTS[SLUG]["figures"]
+LIGHT_FIRST = PRODUCTS[SLUG].get("light_first", False)
 passed = failed = 0
 dev_notes = set()
 url = None
@@ -391,11 +394,17 @@ def run_motion(browser, label, w, h):
     check(f"{label}: never two moments readable at once (no overlapping words)", not doubles, str(doubles[:2]))
     first = [s for f, (_, s) in zip(full, scan) if f == [0]]
     second = [s for f, (_, s) in zip(full, scan) if f == [1]]
-    check(f"{label}: the light is off for the first moment and on from the second"
-          + (f", which counts up to {FIGURES[1]}" if len(FIGURES) > 1 else ""),
-          first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second)
-          and all(s["counts"][1] == FIGURES[1] for s in second if len(FIGURES) > 1),
-          f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
+    if LIGHT_FIRST:
+        check(f"{label}: the light is off as the first moment arrives, on before the second",
+              first and second and first[0]["lit"] <= 0.02 and first[-1]["lit"] >= 0.98
+              and all(s["lit"] >= 0.98 for s in second),
+              f"first={[s['lit'] for s in first]} second={[s['lit'] for s in second]}")
+    else:
+        check(f"{label}: the light is off for the first moment and on from the second"
+              + (f", which counts up to {FIGURES[1]}" if len(FIGURES) > 1 else ""),
+              first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second)
+              and all(s["counts"][1] == FIGURES[1] for s in second if len(FIGURES) > 1),
+              f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
     later = [s["lit"] for f, (_, s) in zip(full, scan) if f and f[0] >= 1]
     check(f"{label}: once on, the light stays on to the end", later and min(later) >= 0.98, str(later))
     # A product without figures (Turmerific) has no count to read while the light comes on.
@@ -411,7 +420,10 @@ def run_motion(browser, label, w, h):
     plan = []
     for k, name in enumerate(BEATS):
         if k in runs:
-            plan.append((name, scan[runs[k][len(runs[k]) // 2]][0], k))
+            # With the light coming on under the first moment, its middle is half lit: take its
+            # start, in the dark, for the "light off" checks.
+            at = runs[k][0] if (k == 0 and LIGHT_FIRST) else runs[k][len(runs[k]) // 2]
+            plan.append((name, scan[at][0], k))
         if k == 0 and switch:
             plan.append(("switching-on", scan[switch[len(switch) // 2]][0], None))
     legible_bad, over_bad, notes = [], [], []
