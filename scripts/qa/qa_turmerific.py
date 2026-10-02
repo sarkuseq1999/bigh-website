@@ -1,8 +1,8 @@
 """QA for the Turmerific product page (/products/turmerific), the first product after NuriCell.
 
 At 1440x900 and 390x844, with motion and with reduced motion:
-- chapters: overview, why, inside, research, daily, buy, in that order (no People chapter until Mo
-  decides how the page shows its credit), and the index numbers them 1 to 6
+- chapters: overview, why, inside, research, daily, buy, in that order (no People chapter: Mo chose
+  the credit line alone, under Add to cart), and the index numbers them 1 to 6
 - overview: the big name reads "Turm" + "erific" (halves within 1.25x of each other's width), the
   3D bottle draws (data-status ready), the headline and the purpose (the approved homepage copy)
   are there
@@ -169,6 +169,16 @@ def content_checks(page, label):
         f"{label} buy: supply, directions, five questions",
         "60 vegetarian capsules · 30 servings" in buy and "Take 1 to 2 capsules a day" in buy and faq >= 5,
         f"questions {faq}",
+    )
+    # The range credit sits right under Add to cart (Mo, October 2, 2026: "D 1").
+    credit = page.evaluate(
+        "(() => { const b = [...document.querySelectorAll('[data-chapter=\"buy\"] button')].find(e => /Add to cart/.test(e.textContent)); const box = b && b.closest('div'); return box ? box.parentElement.textContent : ''; })()"
+    )
+    check(
+        f"{label} buy: the credit under Add to cart",
+        # The credit keeps "Dr." with each name with a no-break space.
+        "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang." in credit.replace("\xa0", " "),
+        credit[:90],
     )
     html = page.content()
     check(f"{label} never names the ingredient's maker", "verdure" not in html.lower())

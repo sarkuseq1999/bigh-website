@@ -64,6 +64,11 @@ const greenBeePropolis: ProductPage = {
   purpose:
     "Bees produce this green propolis from local plant resins. Its characteristic compounds include artepillin C—one reason researchers study Brazilian green propolis for its antioxidant properties.",
   highlights: ["Minas Gerais, Brazil", "Artepillin C"],
+  // The range credit (BRAND-CHEATSHEET.md, September 28, as the Science page shows), placed under
+  // Add to cart (Mo, October 2, 2026, with Turmerific's: "Propolis yes"). "Dr.\u00a0" keeps each
+  // title on the same line as its name.
+  credit:
+    "Developed under the direction and guidance of Dr.\u00a0Jiankang Liu and Dr.\u00a0Iris Wang.",
   accent: "#d9a21b",
   serving: {
     capsules: 1,

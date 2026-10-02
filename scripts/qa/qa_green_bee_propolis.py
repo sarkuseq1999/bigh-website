@@ -163,6 +163,9 @@ def run(browser, label, w, h):
     check(f"{label} buy: the 3D bottle in amber glass", buy["status"] == "ready" and amber > 3000,
           f"status={buy['status']} amber pixels={amber}")
     check(f"{label} buy: directions and supply", "Take 1 capsule a day." in buy["text"] and "60 vegetarian capsules · 60-day supply" in buy["text"])
+    # The range credit under Add to cart (Mo, October 2, 2026).
+    check(f"{label} buy: the credit under Add to cart",
+          "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris Wang." in buy["text"].replace("\xa0", " "))
     check(f"{label} buy: six questions", len(buy["questions"]) == 6, str(buy["questions"]))
     first = page.locator("[data-chapter='buy'] button[aria-expanded]").first
     first.scroll_into_view_if_needed()

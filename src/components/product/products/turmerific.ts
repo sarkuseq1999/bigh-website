@@ -49,8 +49,10 @@ const longvidaStudies: ProductStudy[] = [
 // never say UCLA developed, tested or endorsed Turmerific itself (Mo, September 21).
 // Label facts: BiGH's own 2020 Turmerific label (supplement facts, suggested use, other
 // ingredients, precaution and caution), read from bighnow.com on September 28; Mo confirmed on
-// September 29 that it is still the current label. Mo approved every new line on September 29.
-// A liver-safety answer (NCCIH, April 2025) was left out until Mo has researched it herself.
+// September 29 that it is still the current label. Mo approved every new line on September 29, and
+// on October 2 the Why story, the eyebrow and the source line ("A yes, B yes, C yes"). A
+// liver-safety answer (NCCIH, April 2025) is left out until Mo has researched it herself; she chose
+// to go live without it ("E 1").
 const turmerific: ProductPage = {
   ...turmerificSummary,
   eyebrow: "From turmeric root",
@@ -61,6 +63,11 @@ const turmerific: ProductPage = {
   purpose:
     "Featuring Longvida® curcumin, developed with neuroscientists at the University of California, Los Angeles. Its specialized delivery system is designed to improve how your body absorbs turmeric’s active compound.",
   highlights: ["Longvida® curcumin", "Designed for absorption"],
+  // The range credit (BRAND-CHEATSHEET.md, September 28, as the Science page shows), placed under
+  // Add to cart like NuriCell's (Mo, October 2, 2026: "D 1"). "Dr.\u00a0" (a no-break space, as on
+  // Nature Calm) keeps each title on the same line as its name.
+  credit:
+    "Developed under the direction and guidance of Dr.\u00a0Jiankang Liu and Dr.\u00a0Iris Wang.",
   accent: "#e98b2a",
   serving: {
     capsules: 2,
@@ -124,9 +131,7 @@ const turmerific: ProductPage = {
   otherIngredients:
     "Other ingredients: rice flour, vegetable oil powder, vegetable cellulose (capsule), sunflower lecithin, stearic acid, maltodextrin, ascorbyl palmitate (vitamin C) and silicon dioxide.",
   studies: [...studies(["25277322/", "28074653/"]), ...longvidaStudies],
-  // No credit line or People chapter yet. Mo's range credit (BRAND-CHEATSHEET.md, September 28)
-  // gives Turmerific "Developed under the direction and guidance of Dr. Jiankang Liu and Dr. Iris
-  // Wang.", as the Science page shows; how this page shows it is waiting on Mo.
+  // No People chapter: Mo chose the credit line alone (October 2, 2026: "D 1").
   people: [],
   faq: [
     {
