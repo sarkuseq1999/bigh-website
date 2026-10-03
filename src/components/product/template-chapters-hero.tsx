@@ -119,7 +119,7 @@ export function HeroChapter({ product, chapter, chapters, reduced, onJump }: Pro
   const lines = product.headlineLines.map((line) => copy(line));
   const next = chapters[1];
   const [nameFit, setNameFit] = useState<{ size: number; y: number | null } | null>(null);
-  const halves = splitName(product.name);
+  const halves = product.nameHalves ?? splitName(product.name);
 
   // The two halves and the bottle's gap between them fill the width. Both halves sit in
   // equal columns so the gap stays centred on the bottle; measure once the face is in. On wide
@@ -295,7 +295,12 @@ export function HeroChapter({ product, chapter, chapters, reduced, onJump }: Pro
       }
     >
       <span className={styles.glow} aria-hidden="true" />
-      <p ref={giant} className={styles.giant} aria-hidden="true">
+      <p
+        ref={giant}
+        className={styles.giant}
+        data-spaced={product.name.startsWith(`${halves[0]} `) || undefined}
+        aria-hidden="true"
+      >
         <span data-giant-half="a">{halves[0]}</span>
         <span data-giant-half="b">{halves[1]}</span>
         <span className={styles.probe} data-probe>

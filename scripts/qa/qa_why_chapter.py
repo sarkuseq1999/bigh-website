@@ -1,4 +1,5 @@
-"""QA for chapter 2, "Why it matters", at night (Template 2, "Chapters"): the light bulb story.
+"""QA for chapter 2, "Why it matters", at night (Template 2, "Chapters"): the light bulb story, or any
+product's night story with --product=<slug> (the words each product must carry are in PRODUCTS).
 
 With motion, at 1440x900 and 390x844, it scrolls the pinned track in small settled steps and checks:
 - the moments arrive one at a time and in order: 2%, 20%, the comparison, the three approved lines,
@@ -18,6 +19,7 @@ Pictures (viewport shots; full-page shots break svh layouts): scripts/qa/out/why
 and why-<run>-sheet.png.
 
     python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
+    python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
 """
 import io
 import os
@@ -27,21 +29,60 @@ import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
 
-BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3007").rstrip("/")
+POSITIONAL = [a for a in sys.argv[1:] if not a.startswith("--")]
+BASE = (POSITIONAL[0] if POSITIONAL else "http://localhost:3007").rstrip("/")
+SLUG = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--product=")), "nuricell")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out")
 os.makedirs(OUT, exist_ok=True)
 NIGHT = (6, 22, 37)  # --night, sampled from the photos
-BEATS = ["fact-2", "fact-20", "comparison", "line-1", "line-2", "line-3", "title"]
-LINES = [
-    "Your brain is about 2% of your body’s weight.",
-    "Yet it uses about 20% of your body’s energy.",
-    "About 20 watts, day and night. Like a light that never goes out.",
-    "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use.",
-    "That energy helps your brain think, your heart beat, and your muscles move.",
-    "It’s one reason good health starts with your cells.",
-    "Tiny power plants. A big part of your health.",
-]
-SOURCE = "Brain energy figures: Raichle & Gusnard, PNAS 2002."
+# Per product: the moments in order (fact-<figure>, comparison, line-n, title), their words, the start
+# of the source line, and the figures (the count each fact shows once it has counted up).
+PRODUCTS = {
+    "nuricell": {
+        "beats": ["fact-2", "fact-20", "comparison", "line-1", "line-2", "line-3", "title"],
+        "lines": [
+            "Your brain is about 2% of your body’s weight.",
+            "Yet it uses about 20% of your body’s energy.",
+            "About 20 watts, day and night. Like a light that never goes out.",
+            "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use.",
+            "That energy helps your brain think, your heart beat, and your muscles move.",
+            "It’s one reason good health starts with your cells.",
+            "Tiny power plants. A big part of your health.",
+        ],
+        "source": "Brain energy figures:",
+        "figures": ["2", "20"],
+    },
+    "green-bee-propolis": {
+        "beats": ["fact-7", "line-1", "line-2", "line-3", "title"],
+        "lines": [
+            "Minutes, on average, for one bee to gather a load of resin.",
+            "Bees make propolis from the resin they gather from plants. They line their hive with it and seal its cracks.",
+            "In Minas Gerais, they snip it from the shoot tips of one shrub, alecrim, and carry it home on their legs.",
+            "That resin carries artepillin C, the compound green propolis is known for.",
+            "Gathered by bees, from one Brazilian shrub.",
+        ],
+        "source": "Sources: Teixeira",
+        "figures": ["7"],
+    },
+    "turmerific": {
+        "beats": ["line-1", "line-2", "line-3", "title"],
+        "lines": [
+            "Curcumin is the compound that gives turmeric its golden colour.",
+            "On its own, very little of it reaches your bloodstream.",
+            "Longvida® carries curcumin in tiny particles of fat, designed to help your body absorb it.",
+            "A golden compound. A hard one to absorb.",
+        ],
+        "source": "Sources: NIH (NCCIH)",
+        "figures": [],
+        # Scenes: a photo per line, so the light comes on under the first line, not at the second.
+        "light_first": True,
+    },
+}
+BEATS = PRODUCTS[SLUG]["beats"]
+LINES = PRODUCTS[SLUG]["lines"]
+SOURCE = PRODUCTS[SLUG]["source"]
+FIGURES = PRODUCTS[SLUG]["figures"]
+LIGHT_FIRST = PRODUCTS[SLUG].get("light_first", False)
 passed = failed = 0
 dev_notes = set()
 url = None
@@ -322,9 +363,11 @@ def run_motion(browser, label, w, h):
     where = page.evaluate(WHERE)
     texts = page.evaluate(STATE)["texts"]
     check(f"{label}: the chapter carries the approved words, in order", texts == LINES,
-          str([t[:30] for t in texts]) if texts != LINES else "7 moments")
+          str([t[:30] for t in texts]) if texts != LINES else f"{len(LINES)} moments")
     pinned = where["height"] - h
-    check(f"{label}: a tall pinned track (motion on)", pinned > h * 3, f"track={where['height']} window={h}")
+    # About half a window of scrolling per moment (NuriCell's seven: over three windows).
+    check(f"{label}: a tall pinned track (motion on)", pinned > h * 0.45 * len(BEATS),
+          f"track={where['height']} window={h}")
 
     # The stage rising into view.
     glide(page, where["top"] - int(h * 0.45), steps=12)
@@ -346,18 +389,26 @@ def run_motion(browser, label, w, h):
         for k in f:
             if not order or order[-1] != k:
                 order.append(k)
-    check(f"{label}: the moments arrive one at a time, in order (2%, 20%, comparison, three lines, title)",
+    check(f"{label}: the moments arrive one at a time, in order ({', '.join(BEATS)})",
           order == list(range(len(BEATS))) and all(len(f) <= 1 for f in full), f"order={order}")
     check(f"{label}: never two moments readable at once (no overlapping words)", not doubles, str(doubles[:2]))
     first = [s for f, (_, s) in zip(full, scan) if f == [0]]
     second = [s for f, (_, s) in zip(full, scan) if f == [1]]
-    check(f"{label}: the light is off for 2% and on from 20%, which counts up to 20",
-          first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second)
-          and all(s["counts"][1] == "20" for s in second),
-          f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
+    if LIGHT_FIRST:
+        check(f"{label}: the light is off as the first moment arrives, on before the second",
+              first and second and first[0]["lit"] <= 0.02 and first[-1]["lit"] >= 0.98
+              and all(s["lit"] >= 0.98 for s in second),
+              f"first={[s['lit'] for s in first]} second={[s['lit'] for s in second]}")
+    else:
+        check(f"{label}: the light is off for the first moment and on from the second"
+              + (f", which counts up to {FIGURES[1]}" if len(FIGURES) > 1 else ""),
+              first and second and all(s["lit"] <= 0.02 for s in first) and all(s["lit"] >= 0.98 for s in second)
+              and all(s["counts"][1] == FIGURES[1] for s in second if len(FIGURES) > 1),
+              f"off={[s['lit'] for s in first]} on={[s['lit'] for s in second]} counts={[s['counts'] for s in second]}")
     later = [s["lit"] for f, (_, s) in zip(full, scan) if f and f[0] >= 1]
     check(f"{label}: once on, the light stays on to the end", later and min(later) >= 0.98, str(later))
-    counting = [s["counts"][1] for f, (_, s) in zip(full, scan) if not f and 0 < s["lit"] < 1]
+    # A product without figures (Turmerific) has no count to read while the light comes on.
+    counting = [s["counts"][-1] for f, (_, s) in zip(full, scan) if not f and 0 < s["lit"] < 1 and s["counts"]]
     print(f"      (between the figures the count read {counting}, the light {[s['lit'] for f, (_, s) in zip(full, scan) if not f and 0 < s['lit'] < 1]})")
 
     # A picture at each beat, with the words checked against what is really behind them.
@@ -369,7 +420,10 @@ def run_motion(browser, label, w, h):
     plan = []
     for k, name in enumerate(BEATS):
         if k in runs:
-            plan.append((name, scan[runs[k][len(runs[k]) // 2]][0], k))
+            # With the light coming on under the first moment, its middle is half lit: take its
+            # start, in the dark, for the "light off" checks.
+            at = runs[k][0] if (k == 0 and LIGHT_FIRST) else runs[k][len(runs[k]) // 2]
+            plan.append((name, scan[at][0], k))
         if k == 0 and switch:
             plan.append(("switching-on", scan[switch[len(switch) // 2]][0], None))
     legible_bad, over_bad, notes = [], [], []
@@ -392,7 +446,7 @@ def run_motion(browser, label, w, h):
             index_on_night(page, label, phone)
         if k == len(BEATS) - 1:
             seam(page, label, "light on")
-            source = [t for t in info["texts"] if t["text"].startswith("Brain energy")]
+            source = [t for t in info["texts"] if t["text"].startswith(SOURCE)]
             check(f"{label}: the source line is on screen, at least 15px",
                   source and min(t["size"] for t in source) >= 15,
                   f"{source[0]['size'] if source else None}px {source[0] if source else ''}")
@@ -402,15 +456,15 @@ def run_motion(browser, label, w, h):
 
     # Fast scrolling: straight to the title, then straight back to the first figure.
     title_y = next(y for n, y, _ in plan if n == "title")
-    first_y = next(y for n, y, _ in plan if n == "fact-2")
+    first_y = next(y for n, y, _ in plan if n == BEATS[0])
     jump(page, title_y)
     end = settle(page, 5000)
     jump(page, first_y)
     back = settle(page, 5000)
-    check(f"{label}: a fast jump to the end settles on the title (light on), and straight back on 2% (light off)",
+    check(f"{label}: a fast jump to the end settles on the title (light on), and straight back on the first moment (light off)",
           [k for k, v in enumerate(end["vis"]) if v >= 0.95] == [len(BEATS) - 1] and end["lit"] >= 0.98
           and [k for k, v in enumerate(back["vis"]) if v >= 0.95] == [0] and back["lit"] <= 0.02
-          and back["counts"] == ["2", "2"],
+          and back["counts"] == ([FIGURES[0]] * len(FIGURES) if FIGURES else []),
           f"end={end['vis']} lit={end['lit']} back={back['vis']} lit={back['lit']} counts={back['counts']}")
     shots.take(page, "back-to-start")
 
@@ -445,8 +499,8 @@ def run_still(browser, label, w, h, reduced=True):
         counts: [...t.querySelectorAll('[data-why-count]')].map(c => c.textContent) }}; }})()""")
     check(f"{label}: still layout: no track, nothing sticky or split",
           still["extra"] == 0 and still["position"] != "sticky" and still["sticky"] == 0 and still["masks"] == 0, str(still))
-    check(f"{label}: the lit photo and every figure and line are shown (2% and 20%)",
-          still["lit"] == 1 and still["glow"] == 1 and still["hidden"] == 0 and still["counts"] == ["2", "20"], str(still))
+    check(f"{label}: the lit photo and every figure and line are shown ({', '.join(FIGURES)})",
+          still["lit"] == 1 and still["glow"] == 1 and still["hidden"] == 0 and still["counts"] == FIGURES, str(still))
     y = where["top"]
     over_bad, legible_bad, notes = [], [], []
     n = 0
@@ -479,7 +533,7 @@ def run_wide(browser):
     where = page.evaluate(WHERE)
     glide(page, where["top"] + 40, steps=10)
     settle(page)
-    shots.take(page, "fact-2")
+    shots.take(page, BEATS[0])
     seam(page, "wide 1920x1080", "light off")
     info, over, worst = legibility(page)
     check("wide 1920x1080: no words over the bulb, contrast >= 4.5:1", not over and (not worst or worst[0][0] >= 4.5),
@@ -518,7 +572,7 @@ def attempt(fn, *args, **kwargs):
 
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"])
-    for url in [f"{BASE}/products/nuricell"]:
+    for url in [f"{BASE}/products/{SLUG}"]:
         probe = browser.new_page()
         probe.goto(url, wait_until="domcontentloaded")
         found = probe.locator("[data-chapter='why'] [data-why-picture]").count()

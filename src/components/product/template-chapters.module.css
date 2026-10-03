@@ -739,6 +739,28 @@
   font-size: 18px;
   line-height: 1.6;
 }
+/* Optional round photos (Advanced OPC's plants, Mo, September 28, 2026): a picture leads each row,
+   and rows without one keep its column so amounts and names still line up. It sits centred on the
+   amount's line (the row aligns on baselines, which a picture has none of). */
+.chapters .ingredients[data-pictured] .ingredient {
+  grid-template-columns: 88px minmax(120px, 0.42fr) minmax(0, 1fr) minmax(0, 1.2fr);
+  grid-template-areas: "picture amount name role";
+}
+.chapters .ingredientPicture {
+  grid-area: picture;
+  align-self: start;
+  width: 88px;
+  aspect-ratio: 1;
+  margin-top: -14px;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.chapters .ingredientPicture img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
 .chapters .insideActions {
   display: flex;
   flex-wrap: wrap;
@@ -792,6 +814,33 @@
   font-size: 17px;
   line-height: 1.6;
 }
+/* One ingredient (Green Bee Propolis, September 29, 2026): its amount stands alone and large, like
+   the Why chapter's figures, with the name, the label's wording and the role centred beneath. */
+.chapters .single {
+  border-top: 0;
+}
+.chapters .single .ingredient {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas: "amount" "name" "role";
+  justify-items: center;
+  gap: 22px;
+  padding: clamp(20px, 3svh, 36px) 4px 0;
+  border-bottom: 0;
+  text-align: center;
+}
+.chapters .single .amount {
+  font-size: calc(clamp(96px, 7vw + 64px, 168px) * var(--display-size, 1));
+  line-height: 0.84;
+  letter-spacing: calc(-0.03em + var(--display-track, 0em));
+  font-variant-numeric: lining-nums;
+}
+.chapters .single .unit {
+  margin-left: 0.3em;
+  font-size: max(22px, 0.2em);
+}
+.chapters .single .ingredientRole {
+  max-width: 38ch;
+}
 @media (max-width: 860px) {
   .chapters .ingredient {
     grid-template-columns: minmax(0, 1fr) auto;
@@ -800,6 +849,17 @@
       "role role";
     gap: 12px 20px;
     padding: 24px 2px;
+  }
+  .chapters .ingredients[data-pictured] .ingredient {
+    grid-template-columns: 60px minmax(0, 1fr) auto;
+    grid-template-areas:
+      "picture name amount"
+      "role role role";
+    column-gap: 16px;
+  }
+  .chapters .ingredientPicture {
+    width: 60px;
+    margin-top: -6px;
   }
 }
 

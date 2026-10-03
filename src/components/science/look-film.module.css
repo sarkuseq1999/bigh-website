@@ -12,8 +12,8 @@
   --warm: #e6b877;
   --cream: #f3dcb2;
   --white: #f6f0e6;
-  --display: "Switzer", var(--font-dm-sans), Arial, sans-serif;
-  --text: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --display: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  --text: var(--font-brand), var(--font-dm-sans), Arial, Helvetica, sans-serif;
   /* The scale. */
   --s-hero: clamp(38px, 5.5vw, 94px);
   --s-title: clamp(38px, 4vw, 68px);
@@ -50,7 +50,7 @@
 .creditRow dd,
 .subtitles li {
   font-family: var(--display);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.03em;
 }
 
@@ -164,7 +164,7 @@
 .titleAccent,
 .captionAccent {
   color: var(--cream);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
 }
 
 .word {
@@ -475,7 +475,7 @@
 .itemTitle {
   color: var(--white);
   font-size: var(--s-head);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.012em;
   line-height: 1.2;
 }
@@ -625,7 +625,7 @@
   margin-top: 18px;
   color: var(--white);
   font-size: var(--s-hero);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.03em;
   line-height: 0.98;
 }
@@ -635,7 +635,7 @@
   margin-top: 30px;
   color: var(--cream);
   font-size: var(--s-head);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.02em;
   line-height: 1.25;
 }
@@ -667,7 +667,7 @@
   color: var(--white);
   font-size: var(--s-number);
   font-variant-numeric: lining-nums tabular-nums;
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.035em;
   line-height: 0.95;
 }
@@ -716,7 +716,7 @@
   pointer-events: none;
   font-size: clamp(64px, 16vw, 128px);
   font-variant-numeric: lining-nums;
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.035em;
   line-height: 0.9;
 }
@@ -1035,7 +1035,7 @@
 .productName {
   color: var(--white);
   font-size: 22px;
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.01em;
   line-height: 1.15;
 }
@@ -1049,7 +1049,7 @@
 
 .leadProduct .productName {
   font-size: clamp(32px, 2.8vw, 42px);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
 }
 
 .leadProduct .creditText {
@@ -1057,8 +1057,8 @@
   font-size: var(--s-body);
 }
 
-/* The row behind: four bottles, their names, then Nature Calm's own credit beside the one
-   shared line for the other three. */
+/* The row behind: four bottles, their names, then the credits: a product's own under it, and one
+   shared line under the products that share one. */
 .backRow {
   position: relative;
   display: grid;
@@ -1106,7 +1106,7 @@
     text-align: center;
   }
 
-  /* Nature Calm's own credit sits on the same line as the shared one beside it. */
+  /* A product's own credit sits on the same line as the shared one beside it. */
   .backRow .credit .creditText {
     grid-column: var(--col);
     grid-row: 3;
@@ -1115,9 +1115,10 @@
     text-align: center;
   }
 
-  /* A hairline over the three bottles it names, then the line. */
+  /* A hairline over the bottles it names (set by the page, as the formulas' order allows), then
+     the line. */
   .sharedCredit {
-    grid-column: 2 / 5;
+    grid-column: var(--shared-cols, 2 / 5);
     grid-row: 3;
     margin-top: 12px;
     padding-top: 12px;
@@ -1173,7 +1174,7 @@
   margin: 0;
   color: var(--white);
   font-size: clamp(32px, 3.2vw, 48px);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.02em;
   line-height: 1.05;
 }
@@ -1241,7 +1242,7 @@
   margin-top: 16px;
   color: var(--white);
   font-size: clamp(32px, 3.2vw, 48px);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
@@ -1441,7 +1442,7 @@
 .askTitle {
   color: var(--white);
   font-size: var(--s-hero);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.03em;
   line-height: 0.98;
 }
@@ -1470,7 +1471,7 @@
 .subtitles li {
   color: #fbf6ea;
   font-size: clamp(28px, 2.9vw, 46px);
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   letter-spacing: -0.025em;
   line-height: 1.2;
   text-shadow: 0 2px 18px rgba(0, 0, 0, 0.75);
@@ -1552,7 +1553,7 @@
 .stepNumber {
   color: var(--warm);
   font-size: 40px;
-  font-weight: 460;
+  font-weight: var(--font-brand-display-weight, 460);
   line-height: 1;
 }
 
@@ -1653,7 +1654,7 @@
     color: var(--white);
     font-family: var(--display);
     font-size: 22px;
-    font-weight: 460;
+    font-weight: var(--font-brand-display-weight, 460);
     letter-spacing: -0.02em;
     line-height: 1.3;
   }

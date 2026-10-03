@@ -60,6 +60,19 @@
   width: 100%;
   height: 100%;
 }
+/* Scenes (Turmerific): later photos, hidden until the story reaches them; the WebGL wash between
+   them lies over every photo, exactly their size, and shows only once the story leaves the first. */
+.night .scene {
+  opacity: 0;
+}
+.night .wash {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
 /* The warm light the bulb throws into the room, over the lit photo. */
 .night .glow {
   position: absolute;

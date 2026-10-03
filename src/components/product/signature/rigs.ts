@@ -124,8 +124,10 @@ export function createLoop(target: HTMLElement, frame: (now: number) => void) {
   };
   let onScreen = false;
   const sync = () => (onScreen && !document.hidden ? start() : stop());
-  const observer = new IntersectionObserver(([entry]) => {
-    onScreen = entry.isIntersecting;
+  // The newest entry decides. A fast jump can queue two in one call (still below the screen, then
+  // on it); reading the first left the loop stopped and the bottle never drawn (September 29, 2026).
+  const observer = new IntersectionObserver((entries) => {
+    onScreen = entries[entries.length - 1].isIntersecting;
     sync();
   });
   observer.observe(target);

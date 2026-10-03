@@ -3,8 +3,8 @@
   /* Type (Mo picked "Swiss" on September 28, 2026): Switzer for everything, loaded in the locale
      layout. Headline rules read the --display-* tokens; em-sized accent spans read
      --accent-size. Other scripts fall through to the locale fonts in globals.css. */
-  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
-  --display-weight: 460;
+  --display-font: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  --display-weight: var(--font-brand-display-weight, 460);
   --display-size: 0.84;
   --accent-size: 0.87;
   --display-track: 0em;
@@ -12,7 +12,7 @@
   --accent-weight: 400;
   --lead-weight: 400;
   --lead-track: -0.01em;
-  font-family: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-brand), var(--font-dm-sans), Arial, Helvetica, sans-serif;
   --ink: #242722;
   --muted: #666a64;
   --blue: #2149a3;
@@ -52,7 +52,7 @@
 .site h2,
 .site h3,
 .site h4 {
-  font-weight: 450;
+  font-weight: var(--font-brand-display-weight, 450);
   letter-spacing: -0.03em;
   line-height: 1.06;
   text-wrap: balance;

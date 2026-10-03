@@ -53,8 +53,8 @@ export const filmTheme: LookTheme = {
     "--card-line": "#232a3a",
     "--door-bg": "#0c111d",
     // The shared header, footer and story panel follow this look's type and corners.
-    "--display-font": '"Switzer", var(--font-dm-sans)',
-    "--text-font": '"Switzer", var(--font-dm-sans)',
+    "--display-font": "var(--font-brand), var(--font-dm-sans)",
+    "--text-font": "var(--font-brand), var(--font-dm-sans)",
     "--panel-radius": "6px",
     // Eyebrows in the shared story panel: the same warm gold as the page's own eyebrows.
     "--eyebrow": "#e6b877",
@@ -577,6 +577,8 @@ export function LookFilm({ onStory }: LookProps) {
     (formula, index) => formulas.findIndex((other) => other.credit === formula.credit) !== index,
   )?.credit;
   const sharedNames = formulas.filter((formula) => formula.credit === sharedCredit);
+  // The back row's columns it spans on wide screens (the back row starts at the second formula).
+  const sharedColumns = `${formulas.indexOf(sharedNames[0])} / ${formulas.indexOf(sharedNames[sharedNames.length - 1]) + 1}`;
 
   // One bottle on the stage: its pool of light, its reflection, the bottle, the light falling
   // across it (a shadow in its own outline, so the label colors stay true), and its credit.
@@ -833,7 +835,12 @@ export function LookFilm({ onStory }: LookProps) {
             <span className={styles.floor} aria-hidden="true" />
             {formulas.slice(1).map((formula, index) => bottle(formula, index + 1))}
             {sharedCredit && (
-              <p className={styles.sharedCredit} aria-hidden="true" data-rise>
+              <p
+                className={styles.sharedCredit}
+                style={{ "--shared-cols": sharedColumns } as CSSProperties}
+                aria-hidden="true"
+                data-rise
+              >
                 <span className={styles.sharedNames}>
                   {sharedNames.map((formula) => formula.name).join(" · ")}
                 </span>

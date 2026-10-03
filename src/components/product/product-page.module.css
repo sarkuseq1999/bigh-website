@@ -18,9 +18,9 @@
      --display-size (multiplies font-size) and --display-track (added to letter-spacing;
      --display-track-small where a rule had none); longer leads read --lead-*. CJK and other
      scripts fall through to the locale fonts in globals.css. */
-  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
-  --sans: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
-  --display-weight: 460;
+  --display-font: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  --sans: var(--font-brand), var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --display-weight: var(--font-brand-display-weight, 460);
   --display-size: 0.84;
   --display-track: -0.015em;
   --display-track-small: -0.02em;

@@ -51,10 +51,15 @@
 }
 .section .title {
   font-size: clamp(48px, 5.1vw, 84px);
-  font-weight: 450;
+  font-weight: var(--font-brand-display-weight, 450);
   letter-spacing: -0.035em;
   line-height: 1.07;
   text-wrap: initial;
+}
+/* Vietnamese: Be Vietnam Pro runs wider than Switzer, and without this a sentence's last
+   syllable sat alone on a line ("tí / hon."). */
+.section .title:lang(vi) {
+  text-wrap: pretty;
 }
 .title span {
   display: block;

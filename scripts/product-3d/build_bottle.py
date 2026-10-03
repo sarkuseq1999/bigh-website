@@ -21,6 +21,11 @@ from PIL import Image, ImageFilter
 
 ROOT = Path(__file__).resolve().parents[2]
 ARC = np.radians(70)  # front half-angle taken from the photo
+ARC_GLASS = np.radians(62)  # narrower on glass bottles: see the unwrap
+# A pale label (typical brightness above PALE) takes a little less of the studio's light, so its
+# golds stay rich instead of washing toward white. 0.88 was picked against the Propolis photo
+# (September 29, 2026; 1.0 read pale, 0.72 dull).
+PALE, PALE_LABEL_LIGHT = 200, 0.88
 TEXTURE_W, TEXTURE_H = 2048, 640
 
 
@@ -30,6 +35,64 @@ def smooth1d(values, sigma):
     kernel /= kernel.sum()
     padded = np.pad(values, radius, mode="edge")
     return np.convolve(padded, kernel, mode="valid")
+
+
+# Labels whose edges carry print (Turmerific: the Non-GMO badge on one side, the facts panel on the
+# other) would streak it right round the back. These take a plain back instead: each row's own
+# main colour (the orange ground, the brown bands).
+PLAIN_BACK = {"turmerific"}
+
+
+def row_colours(front):
+    """Each row's most common strong colour: the label's ground, whatever is printed over it.
+
+    Pale pixels do not count, or the rows through Turmerific's white oval would turn white."""
+    bins = (front // 16).astype(np.int32)
+    keys = bins[..., 0] * 256 + bins[..., 1] * 16 + bins[..., 2]
+    top, bottom = front.max(axis=2), front.min(axis=2)
+    strong = (top - bottom) / np.maximum(top, 1) > 0.35
+    colours = np.zeros((front.shape[0], 3), dtype=np.float32)
+    for y in range(front.shape[0]):
+        if strong[y].sum() < 20:
+            colours[y] = colours[y - 1] if y else np.median(front[y], axis=0)
+            continue
+        values, counts = np.unique(keys[y][strong[y]], return_counts=True)
+        colours[y] = front[y][keys[y] == values[np.argmax(counts)]].mean(axis=0)
+    # A light smoothing down the rows keeps the brown bands crisp but hides flicker between rows.
+    for channel in range(3):
+        colours[:, channel] = smooth1d(colours[:, channel], sigma=1.5)
+    return colours
+
+
+# Labels whose artwork runs off the photo's edge (a leaf, side lettering). See clean_edges.
+STRAY_EDGE_ART = {"advanced-opc"}
+
+
+def clean_edges(front, left_edge, right_edge):
+    """Replace edge colours that are artwork, not the label's plain ground, in place.
+
+    The ground is the edge pixels near the two strips' usual hue and colour strength. Where a row
+    has enough of them and an edge strays from their colour, that edge takes the ground's colour,
+    so a leaf or a word cut by the edge is not smeared round the whole back of the bottle."""
+    strips = np.concatenate([front[:, :90], front[:, -90:]], axis=1) / 255
+    top_c, low_c = strips.max(axis=2), strips.min(axis=2)
+    chroma = top_c - low_c
+    r, g, b = strips[..., 0], strips[..., 1], strips[..., 2]
+    safe = np.maximum(chroma, 1e-6)
+    sector = np.where(
+        top_c == r, ((g - b) / safe) % 6, np.where(top_c == g, (b - r) / safe + 2, (r - g) / safe + 4)
+    )
+    hue = sector * (np.pi / 3)
+    strength = chroma / np.maximum(top_c, 1e-6)
+    usual = np.angle(np.sum(strength * np.exp(1j * hue)))
+    plain = (np.abs(np.angle(np.exp(1j * (hue - usual)))) < np.radians(22)) & (
+        strength > 0.5 * np.median(strength)
+    )
+    count = plain.sum(axis=1)
+    ground = (strips * plain[..., None]).sum(axis=1) / np.maximum(count, 1)[:, None] * 255
+    for edge in (left_edge, right_edge):
+        stray = (count >= 40) & (np.abs(edge - ground).max(axis=1) > 24)
+        edge[stray] = ground[stray]
 
 
 def main(slug):
@@ -54,25 +117,49 @@ def main(slug):
     body_radius = float(np.median(half[top + (bottom - top) // 2 : bottom - (bottom - top) // 6]))
     # Walk down from the top: the cap ends where the outline first narrows to the neck, and
     # the neck ends where it widens again into the shoulder.
+    # Start below the cap's rounded top edge: Turmerific's is rounder than NuriCell's and is still
+    # narrower than 90% of the cap 20 rows down, which read as the cap already ending there.
     cap_radius = float(np.median(half[top + 20 : top + 150]))
-    cap_bottom = next(y for y in range(top + 20, bottom) if half[y] < cap_radius * 0.9) - 1
+    cap_full = next(y for y in range(top, bottom) if half[y] >= cap_radius * 0.95)
+    cap_bottom = next(y for y in range(cap_full, bottom) if half[y] < cap_radius * 0.9) - 1
     neck_top = next(y for y in range(cap_bottom + 1, bottom) if half[y] < cap_radius * 0.82)
     neck_radius = float(np.median(half[neck_top : neck_top + 12]))
     neck_bottom = next(y for y in range(neck_top, bottom) if half[y] > neck_radius * 1.04) - 1
 
-    # The label: rows whose middle is strongly coloured (printed), between shoulder and base.
+    # The body: white plastic, or tinted glass (Green Bee Propolis is amber, September 29, 2026).
+    # Glass is dark and strongly coloured where plastic is near white; its colour is the median of
+    # the glass under the label, where the photo has no print and few reflections.
     rgb = rgba[..., :3]
     mx = rgb.max(axis=2)
     mn = rgb.min(axis=2)
     saturation = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
-    band = saturation[:, int(axis) - 60 : int(axis) + 60].mean(axis=1)
-    label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 0.08]
+    luminance_map = rgb @ np.array([0.2126, 0.7152, 0.0722])
+    base_rows = slice(bottom - (bottom - top) // 12, bottom - 4)
+    base_mask = alpha[base_rows] > 250
+    glass = (
+        float(np.median(luminance_map[base_rows][base_mask])) < 110
+        and float(np.median(saturation[base_rows][base_mask])) > 0.5
+    )
+
+    # The label: between shoulder and base, the rows whose middle is printed. On plastic that is
+    # where the middle is strongly coloured; on coloured glass the glass is coloured too, so there
+    # it is where the middle is bright.
+    centre_band = slice(int(axis) - 60, int(axis) + 60)
+    if glass:
+        band = luminance_map[:, centre_band].mean(axis=1)
+        label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 120]
+    else:
+        band = saturation[:, centre_band].mean(axis=1)
+        label_rows = [y for y in range(neck_bottom, bottom) if band[y] > 0.08]
     label_top, label_bottom = min(label_rows), max(label_rows)
 
-    # Unwrap: texture column u ↔ angle θ around the axis (front at the middle).
+    # Unwrap: texture column u ↔ angle θ around the axis (front at the middle). Propolis's label
+    # has narrow side panels (badges, the facts box) squeezed into the photo's last few degrees;
+    # on glass the front stops short of them, and the plain back continues from there.
+    arc = ARC_GLASS if glass else ARC
     label_h = label_bottom - label_top + 1
-    front_w = int(round(TEXTURE_W * (2 * ARC) / (2 * np.pi)))
-    thetas = np.linspace(-ARC, ARC, front_w)
+    front_w = int(round(TEXTURE_W * (2 * arc) / (2 * np.pi)))
+    thetas = np.linspace(-arc, arc, front_w)
     front = np.zeros((label_h, front_w, 3), dtype=np.float32)
     for i, y in enumerate(range(label_top, label_bottom + 1)):
         r = half[y] - 1.5
@@ -82,10 +169,25 @@ def main(slug):
         t = (xs - x0)[:, None]
         front[i] = rgb[y, x0] * (1 - t) + rgb[y, x1] * t
 
+    if glass:
+        # The photo looks down on the bottle a little, so the label's bottom edge curves up toward
+        # the sides and the glass shows below it there. Against dark glass the edge is easy to
+        # find: stretch each column so the label reaches the bottom of the strip, keeping the top.
+        rows = np.arange(label_h, dtype=np.float32)
+        front_luminance = front @ np.array([0.2126, 0.7152, 0.0722])
+        lowest = label_h - label_h // 8
+        for j in range(front_w):
+            printed = np.where(front_luminance[lowest:, j] > 120)[0]
+            edge = lowest + (printed[-1] if len(printed) else label_h - 1 - lowest)
+            source_rows = rows * (edge / max(1, label_h - 1))
+            for channel in range(3):
+                front[:, j, channel] = np.interp(source_rows, rows, front[:, j, channel])
+
     # Even out the photo's left-to-right shading (brighter middle, darker sides). Level to the
     # label's typical brightness, not its brightest column: the brightest is the studio glare in
     # the middle, and levelling up to it made the whole print paler than the photo (Mo, Sept 25).
     luminance = front @ np.array([0.2126, 0.7152, 0.0722])
+    pale = float(np.median(luminance)) > PALE
     column = smooth1d(np.median(luminance, axis=0), sigma=front_w * 0.08)
     gain = (np.median(column) / np.maximum(column, 1)) ** 0.85
     front = np.clip(front * gain[None, :, None], 0, 255)
@@ -98,14 +200,35 @@ def main(slug):
     # reads as the label's plain background rather than streaks of its pattern.
     left_edge = front[:, :90].mean(axis=1)
     right_edge = front[:, -90:].mean(axis=1)
+    # Artwork cut by an edge (Advanced OPC's grape leaf) would smear round the whole back. Only
+    # for the labels listed, so the approved NuriCell label rebuilds exactly as before.
+    if slug in STRAY_EDGE_ART:
+        clean_edges(front, left_edge, right_edge)
     for edge in (left_edge, right_edge):
         for channel in range(3):
             edge[:, channel] = smooth1d(edge[:, channel], sigma=10)
     back_w = TEXTURE_W - front_w
+    plain = row_colours(front) if slug in PLAIN_BACK else None
+    if glass:
+        # Continue with the label's ground colour row by row (its cream between the gold borders),
+        # easing in from the front's edges, so the unseen back reads as plain label. The ground is
+        # the light end of each row (print and pattern are darker), so the lettering leaves no
+        # stripes behind.
+        typical = np.percentile(front, 80, axis=1)
+        for channel in range(3):
+            typical[:, channel] = smooth1d(typical[:, channel], sigma=3)
     for j in range(back_w):
         # Walk round the back from the right edge to the left edge.
         t = j / max(1, back_w - 1)
         column_colour = right_edge * (1 - t) + left_edge * t
+        if plain is not None:
+            # Leave each edge's colour over the first and last eighth, then settle on the plain back.
+            settle = np.clip(min(t, 1 - t) * 8, 0, 1)
+            settle = settle * settle * (3 - 2 * settle)
+            column_colour = column_colour * (1 - settle) + plain * settle
+        if glass:
+            ease = np.exp(-min(j, back_w - 1 - j) / 60)
+            column_colour = column_colour * ease + typical * (1 - ease)
         x = (start + front_w + j) % TEXTURE_W
         wrap[:, x] = column_colour
     image = Image.fromarray(wrap.astype(np.uint8)).resize((TEXTURE_W, TEXTURE_H), Image.LANCZOS)
@@ -144,16 +267,22 @@ def main(slug):
             "top": fraction(label_top),
             "bottom": fraction(label_bottom),
             "radius": round(float(np.median(half[label_top:label_bottom])) / total, 5),
-            "arc": round(float(np.degrees(ARC)), 1),
+            "arc": round(float(np.degrees(arc)), 1),
         },
     }
+    if pale:
+        data["labelLight"] = PALE_LABEL_LIGHT
+    if glass:
+        # Only glass bottles say so; plastic ones (NuriCell's file) stay as they were.
+        glass_rgb = np.median(rgb[base_rows][base_mask], axis=0)
+        data["glass"] = {"color": "#" + "".join(f"{int(round(v)):02x}" for v in glass_rgb)}
     json_dir = ROOT / "src" / "components" / "product" / "bottles"
     json_dir.mkdir(parents=True, exist_ok=True)
     (json_dir / f"{slug}.json").write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
     print(
         f"{slug}: bottle rows {top}-{bottom}, cap to {cap_bottom} (r {cap_radius:.0f}), "
         f"neck {neck_top}-{neck_bottom} (r {neck_radius:.0f}), label {label_top}-{label_bottom}, "
-        f"body r {body_radius:.0f}, axis {axis:.1f}"
+        f"body r {body_radius:.0f}, axis {axis:.1f}, {'glass' if glass else 'plastic'}, label median {np.median(luminance):.0f}"
     )
 
 

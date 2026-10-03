@@ -8,7 +8,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the brush line draws itself (ink on the canvas, its progress grows with the scroll and reaches
     the end); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, a
-    bottle picture opens its preview, Discover NuriCell links to its page; the stories say
+    bottle picture links to its own product page, Discover NuriCell links to its page; the stories say
     "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, the
     age slider ages the cell and "Illustration, not a measurement" shows; research: filters and
     show all; no sideways scrolling; every image loads; text at least 15 px (reading text at least
@@ -296,10 +296,17 @@ def run(browser, look, mobile):
         "turmeric" in headline.lower() and "Longvida" in credit,
         headline,
     )
-    page.locator("#products [data-brush=bottles] button", has=page.locator("img[alt*='Green Bee Propolis']")).click()
-    page.wait_for_timeout(500)
-    product_title = dialog_title(page)
-    check(f"{tag}: a bottle picture opens its preview", product_title == "Green Bee Propolis" and close_dialog(page), product_title)
+    # Since all five products have their own page (main, October 2026), every bottle picture links
+    # to it; a product without a page would open its preview dialog instead (ProductAction).
+    bottle_links = page.evaluate(
+        "[...document.querySelectorAll('#products [data-brush=bottles] a')].map(a => a.getAttribute('href'))"
+    )
+    expected = ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
+    check(
+        f"{tag}: every bottle picture links to its product page",
+        all(any((h or "").endswith(f"/products/{slug}") for h in bottle_links) for slug in expected),
+        str(bottle_links),
+    )
     page.locator("#products button[aria-pressed]", has_text="NuriCell").click()
     page.wait_for_timeout(600)
     discover = page.locator("#ink-product-panel a", has_text="Discover NuriCell").get_attribute("href")

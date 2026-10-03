@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K",
+    "style": "photorealistic"
+  },
+  "prompt": "Low-key macro nature photograph, photorealistic, 16:9 landscape. A single slender shoot tip of the alecrim shrub (Baccharis dracunculifolia) from the highlands of Minas Gerais, Brazil, rises from the bottom edge of the frame: a tight cluster of narrow, fresh green young leaves at the apex, the leaf buds glistening with tiny translucent beads of sticky golden-green plant resin. One honeybee (Apis mellifera) perches at the shoot tip, working the resin with its front legs; a small glossy pellet of amber-green resin is packed in the pollen basket on its hind leg. Composition: the shoot and the bee sit in the right half of the frame; the shoot tip with the bee is about 69 percent from the left edge and just under halfway down; the whole left half of the frame is empty. Background: completely plain, even, deep midnight-navy darkness (very dark blue, almost black), with no scenery, no bokeh, no horizon, no gradient, the same dark navy right to every edge. Lighting: the first warm golden light of sunrise catches the shoot tip from behind and to the side, so the resin beads, the leaf edges and the bee's fine hairs and wing edges glow warm gold, with a soft golden bloom around the tip; everything else falls away into the dark navy. Cinematic, shallow depth of field, crisp detail on the bee and the resin, true-to-life bee anatomy: six legs, two pairs of transparent wings, two antennae. No text, no logos, no flowers, no honeycomb, no honey, no frame.",
+  "generated": "2026-09-29",
+  "used_by": "scripts/product-pages/why_propolis.py -> public/images/products/green-bee-propolis/why-bee-on.webp and why-bee-off.webp",
+  "note": "Illustrative mood picture made for the Why chapter, not a photograph of BiGH's supplier. Draft for Mo."
+}

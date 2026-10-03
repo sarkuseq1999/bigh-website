@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K",
+    "style": "photorealistic"
+  },
+  "prompt": "Low-key macro photograph, photorealistic, 16:9 landscape. Hundreds of tiny perfectly round golden droplets, like miniature glossy pearls of golden oil, float suspended in clear dark liquid, spread evenly in a loose rounded cloud; each droplet is translucent with a bright warm-gold glowing core, a crisp specular highlight and a thin luminous rim; droplets near the focal plane are razor sharp, those in front and behind melt into soft round golden bokeh, giving real depth. Composition: the cloud of droplets fills the right half of the frame, densest around a point about 69 percent from the left edge and just under halfway down, thinning out toward its edges; the whole left half of the frame is empty. Background: completely plain, even, deep midnight-navy darkness (very dark blue, almost black), no scenery, no container visible, no horizon, no gradient, the same dark navy right to every edge. Lighting: a single warm golden light from the upper left, so the droplets glow warm gold against the navy; everything else falls away into darkness. Cinematic, elegant, scientific macro photography. No bubbles of air, no text, no logos, no frame, no glass edges, no cells, no microbes.",
+  "generated": "2026-10-02",
+  "used_by": "scripts/product-pages/why_turmerific.py drops -> public/images/products/turmerific/why-drops-on.webp",
+  "note": "Illustrative picture for the line about Longvida's 'tiny particles of fat'. Warm gold, glossy and crisp on purpose, so it reads as oil droplets and never as a germ cluster (no-pathogen rule); the script fades it out on the left so it never sits under the words."
+}

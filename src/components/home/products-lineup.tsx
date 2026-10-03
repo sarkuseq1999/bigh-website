@@ -22,7 +22,7 @@ import { useCopy } from "@/i18n/use-copy";
 import styles from "./products-lineup.module.css";
 import { ProductsLineupIntro } from "./products-lineup-intro";
 import { Link, useRouter } from "@/i18n/navigation";
-import { ProductAction, productPage } from "./product-action";
+import { ProductAction, useProductPage } from "./product-action";
 
 const collection = [
   {
@@ -129,6 +129,7 @@ function colors(index: number): CSSProperties {
 export function ProductsLineup({ onOpenProduct }: { onOpenProduct: (index: number) => void }) {
   const copy = useCopy();
   const router = useRouter();
+  const productPage = useProductPage();
   const [selected, setSelected] = useState(0);
   const tabs = useRef<HTMLDivElement>(null);
   const storyFrame = useRef<HTMLDivElement>(null);

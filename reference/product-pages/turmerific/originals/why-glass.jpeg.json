@@ -1,0 +1,12 @@
+{
+  "tool": "Gemini MCP (gemini-generate-image)",
+  "params": {
+    "aspectRatio": "16:9",
+    "imageSize": "2K",
+    "style": "photorealistic"
+  },
+  "prompt": "Low-key still-life photograph, photorealistic, 16:9 landscape. A single clear, thin-walled drinking glass of still water stands upright. Bright golden-orange turmeric powder has just been sprinkled in: most of it is sinking slowly through the water in soft drifting plumes and wisps, and much of it has already settled as a thick golden layer on the bottom of the glass; the water above stays mostly clear, only faintly tinted. A few fine golden grains still float at the surface. Composition: the glass sits in the right half of the frame, its centre about 69 percent from the left edge and just under halfway down; the glass is about half the frame's height; the whole left half of the frame is empty. Background and surface: completely plain, even, deep midnight-navy darkness (very dark blue, almost black), no visible table edge, no scenery, no bokeh, no horizon, no gradient, the same dark navy right to every edge. Lighting: a single warm golden light from the upper left passes through the glass, so the golden plumes and the settled layer glow warmly, with fine glints on the glass rim and a soft golden caustic on the dark ground beneath; everything else falls away into the dark navy. Cinematic, shallow depth of field, crisp detail on the sinking powder. No spoon, no straw, no ice, no bubbles, no hands, no text, no logos, no frame.",
+  "generated": "2026-10-02",
+  "used_by": "scripts/product-pages/why_turmerific.py glass -> public/images/products/turmerific/why-glass-on.webp",
+  "note": "Illustrative picture for the line 'On its own, very little of it reaches your bloodstream.' (curcumin barely dissolves in water). Gemini added a beam of light at the top left; the script turns everything outside the glass into the chapter's night."
+}
