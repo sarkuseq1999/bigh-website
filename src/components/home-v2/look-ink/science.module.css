@@ -1,0 +1,253 @@
+/* "Make sense of the science." */
+
+.science {
+  position: relative;
+  padding: clamp(72px, 8vw, 128px) 0 clamp(64px, 7vw, 112px);
+}
+
+.layout {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+}
+
+.copy {
+  min-width: 0;
+}
+
+.science .intro {
+  max-width: 30em;
+  margin-top: 20px;
+}
+
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 30px;
+  margin-top: clamp(36px, 4vw, 52px);
+  border-bottom: 1px solid var(--line);
+}
+
+.science .tab {
+  position: relative;
+  min-height: 56px;
+  padding: 8px 0 12px;
+  color: var(--muted);
+  font-size: 21px;
+  font-weight: 450;
+  transition: color 0.5s var(--ease);
+}
+
+.science .tab:hover,
+.science .tab[aria-selected="true"] {
+  color: var(--ink);
+}
+
+.tab::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 2px;
+  background: var(--ink);
+  scale: 0 1;
+  transform-origin: left;
+  transition: scale 0.7s var(--ease);
+}
+
+.tab[aria-selected="true"]::after {
+  scale: 1 1;
+}
+
+.panel {
+  padding-top: 28px;
+  animation: settle 0.9s var(--ease) both;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+.science .articleTitle {
+  margin: 0 0 14px;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 450;
+  line-height: 1.25;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+.science .facts {
+  display: grid;
+  gap: 10px;
+  margin: 22px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 22px 1fr;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.facts li::before {
+  content: "";
+  width: 12px;
+  height: 1px;
+  margin-top: 0.8em;
+  background: var(--ink);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  margin-top: 32px;
+}
+
+/* One painting, three states. */
+.figure {
+  position: relative;
+  margin: 0 calc(-0.6 * var(--gutter)) 0 0;
+}
+
+.stage {
+  position: relative;
+  aspect-ratio: 2000 / 1493;
+}
+
+.layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+
+.layer[data-on="true"] {
+  opacity: 1;
+}
+
+.aged[data-on="true"] {
+  opacity: var(--aged);
+  transition: opacity 0.25s linear;
+}
+
+/* While the slider moves, the two paintings cross-fade at the slider's pace. */
+.figure[data-topic="2"] .layer {
+  transition: opacity 0.25s linear;
+}
+
+.caption {
+  position: absolute;
+  top: 3%;
+  left: 5%;
+  margin: 0;
+}
+
+.age {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px 22px;
+  max-width: 480px;
+  margin: 8px auto 0;
+  opacity: 0;
+  transition: opacity 0.7s var(--ease);
+}
+
+.age[data-on="true"] {
+  opacity: 1;
+}
+
+.ageLabel {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  font-size: 18px;
+}
+
+.ageLabel strong {
+  min-width: 2ch;
+  font-size: 30px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.range {
+  --fill: 30%;
+  width: 100%;
+  height: 44px;
+  margin: 0;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 2px;
+  background: linear-gradient(to right, var(--ink) var(--fill), var(--hair) var(--fill));
+}
+
+.range::-moz-range-track {
+  height: 2px;
+  background: var(--hair);
+}
+
+.range::-moz-range-progress {
+  height: 2px;
+  background: var(--ink);
+}
+
+.range::-webkit-slider-thumb {
+  width: 22px;
+  height: 22px;
+  margin-top: -10px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+  appearance: none;
+}
+
+.range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+.science .honesty {
+  grid-column: 1 / -1;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 500;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel {
+    animation: none;
+  }
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
+
+  .figure {
+    margin: 0 -4vw;
+  }
+}

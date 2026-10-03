@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided crop as the approved composition reference and paint it again as a museum-quality East Asian ink-wash (sumi-e) landscape on warm rice paper, in a wide panoramic format. Keep the reference's composition: pale, distant misty mountain ridges at the upper left and upper right; across the right half, layered mountain ranges that grow darker and nearer toward the lower right, with confident dry-brush texture, a few tiny pine trees on the nearest ridges, and valleys filled with soft drifting white mist; the left side and the lower left stay calm, almost empty paper with only the faintest mist, because large text will sit there. Ink only: sumi black and layered transparent grey washes, wet-in-wet bleeding edges, visible brush texture and paper fibre, the hand of a master painter, airy and luminous, with great depth from near to far. Ground: plain warm rice paper (#F6F3EC) with faint natural fibres, evenly lit, no vignette, no stains. Remove everything that is not landscape: no bird, no sun, no moon, no thin line or path crossing the sky or the hills, no text, no buttons, no boxes or pale rectangles. No colour at all, only ink greys on paper. No seal, no stamp, no signature, no calligraphy, no border, no frame. The painting fills the frame edge to edge.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\crops\\landscape.png"
+  ],
+  "made": "20261002-143442"
+}

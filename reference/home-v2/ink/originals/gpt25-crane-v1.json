@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided crop as the approved reference and paint the crane again on its own, as a museum-quality sumi-e ink painting on plain warm rice paper: one red-crowned crane in flight, in the same pose and angle as the reference (both wings raised high in an upstroke, the long neck stretched forward to the right, beak pointing right, legs trailing straight behind and slightly down). Anatomically correct: exactly two wings, two thin legs with small feet, one head, one long beak. The white body and wing feathers are unpainted paper with delicate pale grey wash shading; the black flight feathers along the inner trailing edge of the wings and the black neck are painted in confident wet sumi strokes; fine dry-brush line work on the feather edges. The small crown patch on the head is a tiny touch of gold leaf, not red. Same placement and scale as the reference, the whole bird inside the frame with clear empty paper margins all round. Plain empty rice paper ground (#F6F3EC), evenly lit. No mountains, no mist, no sun, no lines, no text, no seal, no signature, no border. Nothing red anywhere.",
+  "settings": {
+    "aspect_ratio": "3:2",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\crops\\crane.png"
+  ],
+  "made": "20261002-143513"
+}

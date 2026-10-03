@@ -1,0 +1,324 @@
+/* "Good science. Real people." */
+
+.scientists {
+  --gap: clamp(40px, 7.8vw, 120px);
+  position: relative;
+  padding: clamp(40px, 5vw, 80px) 0 clamp(64px, 7vw, 112px);
+}
+
+/* The top: headline, photograph and record on one grid; as the crane comp shows, the headline sits
+   to the right of the photograph, beside the record. */
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: var(--gap);
+  align-items: center;
+}
+
+.scientists .top {
+  grid-template-areas:
+    "photo head"
+    "photo facts";
+  grid-template-rows: auto 1fr;
+}
+
+.head {
+  position: relative;
+  display: grid;
+  grid-area: head;
+}
+
+.portrait {
+  grid-area: photo;
+}
+
+.scientists .facts {
+  grid-area: facts;
+}
+
+.scientists .head {
+  align-self: end;
+  justify-items: start;
+}
+
+.scientists .facts {
+  align-self: start;
+  margin-top: clamp(32px, 3.4vw, 52px);
+}
+
+.scientists .title > span {
+  display: inline;
+}
+
+.scientists .intro {
+  max-width: 30em;
+  margin-top: 16px;
+}
+
+@media (min-width: 900px) {
+  /* The crane: the label hangs in the photograph's column, beside the headline, its leader
+     reaching the line in the gap between the columns. */
+  .scientists .head .station {
+    position: absolute;
+    right: calc(100% + var(--gap) / 2 - 10px);
+    top: 18px;
+    --leader: calc(var(--gap) / 2 - 22px);
+  }
+}
+
+/* Dr. Liu: the real photograph in a white mat on one breath of ink. */
+.portrait {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  padding: clamp(28px, 3.4vw, 52px) 0 0;
+}
+
+.scientists .portrait {
+  padding-top: 72px;
+}
+
+.halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: min(118%, 520px);
+  height: auto;
+  translate: -50% -56%;
+  pointer-events: none;
+}
+
+.mat {
+  position: relative;
+  display: block;
+  width: clamp(200px, 19vw, 270px);
+  padding: 10px;
+  background: #fbf9f4;
+  box-shadow:
+    0 22px 44px -22px rgba(12, 11, 10, 0.42),
+    0 3px 8px rgba(12, 11, 10, 0.1);
+}
+
+.photo {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 26%;
+}
+
+.scientists .who {
+  position: relative;
+  margin-top: 26px;
+  font-size: 18px;
+  line-height: 1.4;
+  text-align: center;
+}
+
+.who span {
+  display: block;
+}
+
+.who span:first-child {
+  font-weight: 500;
+}
+
+.who span:not(:first-child) {
+  color: var(--muted);
+}
+
+.scientists .facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  margin: 0;
+}
+
+.scientists .facts dt {
+  font-size: clamp(50px, 5vw, 80px);
+}
+
+.facts > div {
+  min-width: 0;
+}
+
+.facts dt {
+  font-size: clamp(54px, 5.6vw, 88px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-variant-numeric: lining-nums;
+  white-space: nowrap;
+}
+
+.unit {
+  font-size: 0.32em;
+  font-weight: 450;
+  letter-spacing: -0.01em;
+}
+
+.facts dd {
+  max-width: 14em;
+  margin: 16px 0 0;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-size: 18px;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* What his work asks: the question at the left, the answer at the right, the brush line running
+   down the gap between them. */
+.work,
+.ask {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  column-gap: var(--gap);
+}
+
+.work {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  margin-top: clamp(64px, 7vw, 112px);
+  align-items: start;
+}
+
+.scientists .heading {
+  margin: 0;
+  font-size: clamp(28px, 2.5vw, 38px);
+  font-weight: 450;
+  line-height: 1.18;
+  letter-spacing: -0.02em;
+  text-wrap: balance;
+}
+
+.workMain {
+  max-width: 38em;
+}
+
+/* The question with its station label beside it, the leader reaching the line in the gap. */
+.workHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.workHead .heading {
+  flex: 1 1 auto;
+  max-width: 11.5em;
+}
+
+@media (min-width: 900px) {
+  .workHead .station {
+    flex: 0 0 9.2em;
+    width: auto;
+    margin: 8px calc(var(--gap) / -2 + 10px) 0 0;
+    text-align: right;
+    text-wrap: balance;
+    --leader: calc(var(--gap) / 2 - 22px);
+  }
+}
+
+.workMain .more {
+  margin-top: 28px;
+}
+
+.iris {
+  margin-top: clamp(36px, 3.6vw, 52px);
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+
+.scientists .irisName {
+  margin: 0 0 4px;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+/* Ask BiGH Science: one calm line of its own, on the same columns. */
+.ask {
+  align-items: end;
+  margin-top: clamp(64px, 7vw, 112px);
+}
+
+.scientists .askTitle {
+  max-width: 11em;
+  font-size: clamp(34px, 3.2vw, 50px);
+}
+
+.askBody {
+  display: grid;
+  justify-items: start;
+  gap: 22px;
+  max-width: 38em;
+}
+
+.scientists .askText {
+  margin: 0;
+}
+
+@media (max-width: 899px) {
+  .scientists .top {
+    grid-template-areas:
+      "head"
+      "photo"
+      "facts";
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+    row-gap: 28px;
+  }
+
+  .scientists .head {
+    align-self: start;
+    justify-items: start;
+    margin: 0;
+    text-align: left;
+  }
+
+  .head .station {
+    order: 1;
+    margin: 14px 0 0;
+  }
+
+  .head .intro {
+    order: 2;
+  }
+
+  .scientists .portrait {
+    padding-top: 28px;
+  }
+
+  .scientists .facts {
+    margin-top: 0;
+  }
+
+  .workHead {
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .work,
+  .ask {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+
+  .scientists .facts {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .facts > div {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    align-items: end;
+    gap: 16px;
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+}

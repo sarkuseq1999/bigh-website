@@ -1,0 +1,19 @@
+/* The brush line's layer: on the paper itself, under the paintings and the words (the look's root
+   is its own stacking group, so the paper is the backdrop). Ink multiplies with the paper, and the
+   paintings multiply over it, as layers of real ink do. */
+.layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+}
+
+.tile {
+  position: absolute;
+  left: 0;
+  display: block;
+}

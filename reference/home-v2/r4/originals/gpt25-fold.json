@@ -1,0 +1,17 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Full-page desktop homepage design for BiGH, a premium science-led supplement brand for cellular health and long, full lives, shown as one long scrolled web page on a tall portrait canvas (about three screens of a 1440px-wide site), flat, no device frame. Japanese paper craft meets modern Swiss typography: cream washi paper with visible fibre, vermilion origami, crisp fold-white crease lines, sumi black text, one small gold dot. Theme: one fold at a time, the origami crane as the East Asian symbol of long life.\n\nAt the very top, a slim navigation bar: the logo BiGH in bold black sans-serif with a small green leaf above the letter i on the left, and on the right the links Home, Products, Science, About, Support, Log in, an outlined Sign up pill, and English.\n\nThe opening screen: on the left a small vermilion tag reading One fold at a time, then a very large near-black Swiss sans-serif headline in three lines reading Good health then starts with then your cells. (line breaks only, no extra punctuation), a short paragraph: Developed by scientists with deep expertise in cellular health and aging, BiGH's key formulas share one purpose: helping you stay sharp, stay active, and live fully., and two pill buttons: a solid vermilion one reading Discover NuriCell and an outlined one reading Meet our scientists. On the right, a big square of vermilion washi lying flat with fold-white crease lines and a finished vermilion origami crane rising from its centre, soft window light and a gentle shadow.\n\nNext: a small caption Why cellular health matters above the headline Tiny power plants. A big part of your health. Beside it, a beautiful folded-paper sculpture of a mitochondrion (an elongated oval organelle) made from vermilion and cream washi with crisp pleated folds inside like its inner membranes, and three numbered fold-steps: 01 Inside many of your body's cells are mitochondria, tiny power plants that turn energy from food into a form your cells can use. 02 That energy helps your brain think, your heart beat, and your muscles move. 03 It's one reason good health starts with your cells.\n\nNext: a small caption Our scientific roots above the headline Good science. Real people. On the left an empty plain pale-grey rectangular photo frame with nothing inside, its corner tucked into a folded washi corner, captioned Dr. Jiankang Liu, Chief Scientific Advisor, BiGH. On the right three large thin numerals with captions: 280+ scientific papers by Dr. Liu; 2016 BiGH founded in California; 20+ years NuriCell's formula, unchanged.\n\nAt the bottom: a small caption Explore our products. above the headline Find your starting point., five plain white blank supplement bottles with completely empty labels, each standing on its own folded square of coloured washi (vermilion, honey yellow, berry, turmeric orange, leaf green), named underneath NuriCell, Green Bee Propolis, Advanced OPC Formula, Turmerific, Nature Calm.\n\nPrecise, calm, premium, generous space. Every word crisp and spelled exactly. Do not print any layout labels, section names, slashes or extra words. No people.",
+  "settings": {
+    "aspect_ratio": "9:16",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "made": "20261002-140923",
+  "response_fields": {
+    "model": "marketing-studio/image/flare",
+    "submitted_at": "20261002-140923",
+    "unquoted_ok_by": "Mo 10/2",
+    "status": "completed",
+    "request_id": "1c302f69-3f66-438b-bfd6-fc30c4c2d0c0"
+  }
+}

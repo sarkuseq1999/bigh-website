@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided crop as the approved reference and paint the mitochondrion again on its own, as a museum-quality East Asian ink-wash painting on warm rice paper: one large elongated oval mitochondrion seen at a slight angle, tilted from lower left to upper right, exactly as in the reference. Its thick outer membrane is a soft grey wash with a darker sumi rim and wet edges bleeding gently into the paper fibres; inside, the folded inner membranes (cristae) are bold, flowing, S-shaped sumi brush strokes with dry-brush streaks, as in the reference; at the centre two of the folds are made of real gold leaf, and a soft warm golden light glows from the middle. Everything else is ink: sumi black and transparent grey washes, visible brush texture, the hand of a master painter. Same placement and scale as the reference, the whole organelle inside the frame with clear empty paper margins all round. Plain empty warm rice paper ground (#F6F3EC). Remove all labels, leader lines and text, and the thin line trailing out at the lower left. No colour other than ink and gold, nothing red, no seal, no signature, no border.",
+  "settings": {
+    "aspect_ratio": "4:3",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\crops\\mito-cell.png"
+  ],
+  "made": "20261002-143650"
+}

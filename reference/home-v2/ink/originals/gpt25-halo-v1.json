@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided crop as the reference for the soft ink halo only, and paint it again on its own: one round ink-wash bloom on warm rice paper, a soft circular cloud of transparent grey sumi wash, darker and denser toward its outer ring and fading to almost nothing at its centre, with feathered wet edges bleeding into the paper fibres, like one breath of ink. Centred, filling about four fifths of the frame, with clear empty paper margins. The centre is empty paper, because a photograph will be placed over it. Remove the photograph, its white frame and the caption: no photo, no frame, no person, no text, no seal, no border. Ink greys only, no colour.",
+  "settings": {
+    "aspect_ratio": "1:1",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\crops\\liu-halo-cell.png"
+  ],
+  "made": "20261002-143727"
+}

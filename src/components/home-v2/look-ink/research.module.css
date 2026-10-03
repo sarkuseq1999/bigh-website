@@ -1,0 +1,242 @@
+/* "Curiosity, with references." The brush line is the index's spine. */
+
+.research {
+  --spine-gap: clamp(64px, 8.4vw, 128px);
+  position: relative;
+  padding: clamp(64px, 7vw, 112px) 0 clamp(64px, 7vw, 112px);
+}
+
+/* The title and the words either side of the spine. */
+.top {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--spine-gap);
+  align-items: start;
+}
+
+.side {
+  min-width: 0;
+}
+
+/* The headline with its station label beside it, the leader reaching the spine. */
+.titleRow {
+  position: relative;
+}
+
+@media (min-width: 900px) {
+  .titleRow .station {
+    position: absolute;
+    top: 0.75em;
+    right: calc(var(--spine-gap) / -2 + 10px);
+    white-space: nowrap;
+    --leader: calc(var(--spine-gap) / 2 - 22px);
+  }
+}
+
+.research .intro {
+  max-width: 30em;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
+
+.research .filter {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 450;
+  transition:
+    background-color 0.5s var(--ease),
+    color 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+}
+
+.research .filter:hover {
+  border-color: var(--ink);
+}
+
+.research .filter[aria-pressed="true"] {
+  border-color: var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.count {
+  font-size: 15px;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+/* The sources, two columns either side of the spine, each pinned to it by a leader line from
+   its year. */
+.list {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--spine-gap);
+  margin: clamp(48px, 5vw, 72px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.entry {
+  position: relative;
+  border-top: 1px solid var(--line);
+}
+
+.entry::after {
+  content: "";
+  position: absolute;
+  top: 37px;
+  width: calc(var(--spine-gap) / 2 - 10px);
+  height: 1px;
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.entry:nth-child(odd)::after {
+  left: 100%;
+}
+
+.entry:nth-child(even)::after {
+  right: 100%;
+}
+
+.summary {
+  display: grid;
+  grid-template-columns: 70px minmax(0, 1fr) 44px;
+  align-items: start;
+  gap: 16px;
+  padding: 22px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.year {
+  padding-top: 2px;
+  font-size: 26px;
+  font-weight: 300;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.what {
+  display: grid;
+  gap: 4px;
+}
+
+.category {
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.itemTitle {
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+.journal {
+  color: var(--muted);
+  font-size: 16px;
+}
+
+.toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  transition:
+    rotate 0.6s var(--ease),
+    border-color 0.5s var(--ease);
+}
+
+.summary:hover .toggle {
+  border-color: var(--ink);
+}
+
+.item[open] .toggle {
+  rotate: 45deg;
+}
+
+.more {
+  display: grid;
+  justify-items: start;
+  gap: 6px;
+  padding: 0 0 24px 86px;
+}
+
+.more p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.foot {
+  display: grid;
+  justify-items: center;
+  gap: 22px;
+  margin-top: 72px;
+  text-align: center;
+}
+
+.showCount {
+  font-size: 15px;
+  opacity: 0.7;
+}
+
+.research .note {
+  max-width: 40em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+@media (max-width: 899px) {
+  .top,
+  .list {
+    grid-template-columns: 1fr;
+  }
+
+  .titleRow {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .entry::after {
+    display: none;
+  }
+
+  .summary {
+    grid-template-columns: 60px minmax(0, 1fr) 44px;
+    gap: 12px;
+  }
+
+  .more {
+    padding: 0 0 22px 72px;
+  }
+
+  .foot {
+    justify-items: start;
+    text-align: left;
+  }
+}

@@ -1,0 +1,148 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-02T00:00:00.000Z",
+  "title": "Design System: BiGH — Ink & Gold",
+  "extensions": {
+    "colorMeta": {
+      "gold-leaf": { "role": "primary", "displayName": "Gold Leaf", "canonical": "oklch(70.8% 0.122 85)", "tonalRamp": ["#2b1f08", "#45330f", "#5f4816", "#7d5f1c", "#a17d2c", "#c49a3a", "#ddbd6f", "#f3e3b8"] },
+      "sumi-ink": { "role": "neutral", "displayName": "Sumi Ink", "canonical": "oklch(15.0% 0.003 68)", "tonalRamp": ["#0c0b0a", "#252423", "#413f3e", "#5f5d5c", "#81807e", "#a6a4a3", "#cccac9", "#f0eeec"] },
+      "brush-ink": { "role": "neutral", "displayName": "Brush Ink", "canonical": "oklch(18.7% 0.004 85)", "tonalRamp": ["#0c0b09", "#252422", "#41403d", "#5f5d5b", "#81807d", "#a6a4a2", "#cccac7", "#f0eeeb"] },
+      "ink-grey": { "role": "neutral", "displayName": "Ink Grey", "canonical": "oklch(42.5% 0.010 85)", "tonalRamp": ["#0d0b07", "#26241e", "#423f3a", "#605d57", "#838079", "#a8a49d", "#cecac3", "#f2eee7"] },
+      "rice-paper": { "role": "neutral", "displayName": "Rice Paper", "canonical": "oklch(96.6% 0.013 82)", "tonalRamp": ["#0e0b06", "#27241d", "#433f38", "#615d55", "#848078", "#a9a49c", "#cfcac1", "#f3eee5"] },
+      "mount-paper": { "role": "neutral", "displayName": "Mount Paper", "canonical": "oklch(98.2% 0.007 89)", "tonalRamp": ["#0c0b08", "#252420", "#41403c", "#5f5d59", "#82807c", "#a6a4a0", "#cccac5", "#f0eee9"] },
+      "hairline": { "role": "neutral", "displayName": "Hairline", "canonical": "rgba(28, 27, 25, 0.16)" },
+      "hairline-strong": { "role": "neutral", "displayName": "Strong Hairline", "canonical": "rgba(28, 27, 25, 0.28)" },
+      "pill-hover": { "role": "neutral", "displayName": "Pill Hover", "canonical": "#3a3833" },
+      "selection-gold": { "role": "neutral", "displayName": "Selection Gold", "canonical": "oklch(88.8% 0.061 89)" }
+    },
+    "typographyMeta": {
+      "display-opening": { "displayName": "Opening display", "purpose": "The three-line opening headline only; scales with the comp unit; phones clamp(40px, 12vw, 56px)." },
+      "display": { "displayName": "Display", "purpose": "Every section headline, balanced." },
+      "headline": { "displayName": "Headline", "purpose": "The chosen product's headline." },
+      "body": { "displayName": "Body", "purpose": "Reading text, in Ink Grey." },
+      "label": { "displayName": "Label", "purpose": "Pills, text links, small headings." },
+      "station": { "displayName": "Station", "purpose": "Section labels pinned to the brush line." },
+      "caption": { "displayName": "Caption", "purpose": "Figure captions and honesty labels; the 15px floor." }
+    },
+    "shadows": [
+      { "name": "photo-mount", "value": "0 22px 44px -22px rgba(12, 11, 10, 0.42), 0 3px 8px rgba(12, 11, 10, 0.1)", "purpose": "Only under the paper mat holding Dr. Liu's real photograph." }
+    ],
+    "motion": [
+      { "name": "breath", "value": "2.4s", "purpose": "The one breathing rhythm every motion is built from." },
+      { "name": "ease", "value": "cubic-bezier(0.22, 0.61, 0.36, 1)", "purpose": "The one ease: a slow exhale." },
+      { "name": "ink-bloom", "value": "mask-size 0% to 280% over calc(var(--breath) * 1.25); blur 5px to 0 over var(--breath)", "purpose": "Paintings spread into the paper through an ink-blot mask as they enter." },
+      { "name": "crane-glide", "value": "calc(var(--breath) * 4) ease-in-out infinite alternate", "purpose": "The crane floats; off under reduced motion." },
+      { "name": "cell-breathe", "value": "calc(var(--breath) * 2) ease-in-out infinite alternate, opacity to 0.55", "purpose": "The gold folds glow; off under reduced motion." },
+      { "name": "brush-draw", "value": "scroll-driven, head reaches 78% down the window", "purpose": "The brush line paints itself as the reader scrolls; ink stays; full line still under reduced motion." },
+      { "name": "station-reach", "value": "leader scale 0.7s; label opacity 0.9s, 0.25s delay", "purpose": "A station appears when the brush reaches it." },
+      { "name": "state", "value": "0.5s", "purpose": "Colour and border transitions on pills, links, tabs, chips." },
+      { "name": "settle", "value": "0.9s, fade and rise 8-10px", "purpose": "Panels entering after a choice." }
+    ],
+    "breakpoints": [
+      { "name": "phone", "value": "720px" },
+      { "name": "stack", "value": "900px" },
+      { "name": "narrow", "value": "560px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Pill",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "The solid sumi pill for the main action.",
+      "html": "<a class=\"ds-pill\" href=\"#\">Discover NuriCell <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.5\"><path d=\"M5 12h14M13 6l6 6-6 6\"/></svg></a>",
+      "css": ".ds-pill { display: inline-flex; align-items: center; gap: 10px; min-height: 54px; padding: 0 28px; border: 1.5px solid #0c0b0a; border-radius: 999px; background: #0c0b0a; color: #f8f3ea; font-family: Switzer, Arial, sans-serif; font-size: 20px; font-weight: 450; line-height: 1; text-decoration: none; transition: background-color .5s cubic-bezier(.22,.61,.36,1), border-color .5s cubic-bezier(.22,.61,.36,1); } .ds-pill svg { transition: transform .5s cubic-bezier(.22,.61,.36,1); } .ds-pill:hover { background: #3a3833; border-color: #3a3833; } .ds-pill:hover svg { transform: translateX(3px); } .ds-pill:focus-visible { outline: 2px solid #0c0b0a; outline-offset: 4px; }"
+    },
+    {
+      "name": "Ghost Pill",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "The outlined pill for the second action.",
+      "html": "<button class=\"ds-pill-ghost\">Meet our scientists</button>",
+      "css": ".ds-pill-ghost { display: inline-flex; align-items: center; min-height: 54px; padding: 0 28px; border: 1.5px solid #0c0b0a; border-radius: 999px; background: transparent; color: #0c0b0a; font-family: Switzer, Arial, sans-serif; font-size: 20px; font-weight: 450; line-height: 1; transition: background-color .5s cubic-bezier(.22,.61,.36,1); } .ds-pill-ghost:hover { background: rgba(12,11,10,.07); } .ds-pill-ghost:focus-visible { outline: 2px solid #0c0b0a; outline-offset: 4px; }"
+    },
+    {
+      "name": "Text Link",
+      "kind": "custom",
+      "description": "Ink link with a hairline underline that darkens on hover.",
+      "html": "<a class=\"ds-link\" href=\"#\">Learn the science</a>",
+      "css": ".ds-link { display: inline-flex; align-items: center; min-height: 48px; color: #0c0b0a; font-family: Switzer, Arial, sans-serif; font-size: 19px; font-weight: 450; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 8px; text-decoration-color: rgba(28,27,25,.28); transition: text-decoration-color .5s cubic-bezier(.22,.61,.36,1); } .ds-link:hover { text-decoration-color: #0c0b0a; } .ds-link:focus-visible { outline: 2px solid #0c0b0a; outline-offset: 4px; border-radius: 6px; }"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "filter-chip",
+      "description": "Outlined pill filter; selected fills with ink.",
+      "html": "<button class=\"ds-chip\" aria-pressed=\"false\">Mitochondria <span class=\"ds-chip-count\">12</span></button> <button class=\"ds-chip\" aria-pressed=\"true\">All <span class=\"ds-chip-count\">36</span></button>",
+      "css": ".ds-chip { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 18px; border: 1px solid rgba(28,27,25,.28); border-radius: 999px; background: transparent; color: #0c0b0a; font-family: Switzer, Arial, sans-serif; font-size: 18px; font-weight: 450; transition: background-color .5s cubic-bezier(.22,.61,.36,1), color .5s cubic-bezier(.22,.61,.36,1), border-color .5s cubic-bezier(.22,.61,.36,1); } .ds-chip:hover { border-color: #0c0b0a; } .ds-chip[aria-pressed=\"true\"] { background: #0c0b0a; border-color: #0c0b0a; color: #f8f3ea; } .ds-chip-count { font-size: 15px; font-variant-numeric: tabular-nums; } .ds-chip:focus-visible { outline: 2px solid #0c0b0a; outline-offset: 4px; }"
+    },
+    {
+      "name": "Tabs",
+      "kind": "nav",
+      "description": "Text tabs on a hairline; the selected one grows a 2px ink underline from the left.",
+      "html": "<div class=\"ds-tabs\" role=\"tablist\"><button class=\"ds-tab\" role=\"tab\" aria-selected=\"true\">Energy</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Ageing</button><button class=\"ds-tab\" role=\"tab\" aria-selected=\"false\">Stress</button></div>",
+      "css": ".ds-tabs { display: flex; gap: 4px 30px; border-bottom: 1px solid rgba(28,27,25,.16); } .ds-tab { position: relative; min-height: 56px; padding: 8px 0 12px; border: 0; background: none; color: #514e48; font-family: Switzer, Arial, sans-serif; font-size: 21px; font-weight: 450; transition: color .5s cubic-bezier(.22,.61,.36,1); } .ds-tab::after { content: \"\"; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px; background: #0c0b0a; transform: scaleX(0); transform-origin: left; transition: transform .7s cubic-bezier(.22,.61,.36,1); } .ds-tab:hover, .ds-tab[aria-selected=\"true\"] { color: #0c0b0a; } .ds-tab[aria-selected=\"true\"]::after { transform: scaleX(1); } .ds-tab:focus-visible { outline: 2px solid #0c0b0a; outline-offset: 4px; }"
+    },
+    {
+      "name": "Station",
+      "kind": "custom",
+      "description": "A section label pinned to the brush line by a 1px leader; appears when the brush reaches it. Only where the line passes.",
+      "html": "<p class=\"ds-station\">Follow the evidence</p>",
+      "css": ".ds-station { display: flex; align-items: center; gap: 12px; width: max-content; margin: 0; color: #0c0b0a; font-family: Switzer, Arial, sans-serif; font-size: 17px; font-weight: 450; line-height: 1.3; } .ds-station::before { content: \"\"; flex: none; width: 30px; height: 1px; background: rgba(12,11,10,.62); }"
+    },
+    {
+      "name": "Honesty Tag",
+      "kind": "chip",
+      "refersTo": "honesty-tag",
+      "description": "The outlined label on every fictional sample; illustrations carry the same voice as a plain caption.",
+      "html": "<span class=\"ds-honesty\">Fictional sample</span> <span class=\"ds-caption\">Illustration</span>",
+      "css": ".ds-honesty { display: inline-flex; align-items: center; min-height: 30px; padding: 0 12px; border: 1px solid rgba(28,27,25,.28); border-radius: 999px; color: #514e48; font-family: Switzer, Arial, sans-serif; font-size: 15px; } .ds-caption { color: #514e48; font-family: Switzer, Arial, sans-serif; font-size: 15px; font-weight: 450; line-height: 1.4; margin-left: 12px; }"
+    },
+    {
+      "name": "Bottle on Ink Pool",
+      "kind": "card",
+      "description": "A product bottle standing in its own multiplied ink-wash pool and contact pool, its name underneath; no card, no shadow.",
+      "html": "<div class=\"ds-stand\"><span class=\"ds-pool\"></span><span class=\"ds-foot\"></span><span class=\"ds-bottle\"></span><button class=\"ds-name\" aria-pressed=\"true\">NuriCell</button></div>",
+      "css": ".ds-stand { position: relative; display: grid; justify-items: center; width: 180px; padding-top: 10px; background: #f8f3ea; } .ds-pool { position: absolute; left: 50%; top: 150px; width: 82%; aspect-ratio: 1 / .42; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(20,19,17,.38), rgba(20,19,17,.12) 60%, transparent); mix-blend-mode: multiply; } .ds-foot { position: absolute; left: 50%; top: 178px; width: 56%; aspect-ratio: 1 / .12; transform: translateX(-50%); border-radius: 50%; background: radial-gradient(closest-side, rgba(20,19,17,.7), transparent); mix-blend-mode: multiply; } .ds-bottle { position: relative; width: 70px; height: 175px; border-radius: 14px 14px 6px 6px; background: #e9e4da; } .ds-name { position: relative; margin-top: 34px; padding: 6px 4px 10px; border: 0; background: none; color: #514e48; font-family: Switzer, Arial, sans-serif; font-size: 20px; font-weight: 450; } .ds-name::after { content: \"\"; position: absolute; left: 50%; bottom: 0; width: 44px; height: 2px; background: #0c0b0a; transform: translateX(-50%) scaleX(0); transition: transform .7s cubic-bezier(.22,.61,.36,1); } .ds-name:hover, .ds-name[aria-pressed=\"true\"] { color: #0c0b0a; } .ds-name[aria-pressed=\"true\"]::after { transform: translateX(-50%) scaleX(1); }"
+    }
+  ],
+  "narrative": {
+    "northStar": "One Breath of Ink",
+    "overview": "The page is an East Asian ink-wash painting on warm rice paper. Paintings, paper, type and one continuous brush line carry everything; there are no cards, no gradient fills, no red and no seals. A single gold leaf appears only where energy is meant: the sun, and the two folds inside the mitochondrion where energy is made. Switzer sets the words large and calm, in sentence case, beside paintings that bloom into the paper as they arrive.\n\nThe signature is the brush line. It leaves the crane's trailing legs (or the cell's foot), draws itself down the page as the visitor reads, and pins each section's label to itself with a fine leader line, so the page reads as one timeline painted in one stroke. Density is low: one idea per screen, generous paper, nothing boxed.\n\nEvery motion breathes at the same slow pace (`--breath: 2.4s`, ease `cubic-bezier(0.22, 0.61, 0.36, 1)`). With reduced motion the page is complete and still from the first frame, the whole brush line already painted.",
+    "keyCharacteristics": [
+      "Rice paper with real fibre (a tiled 800px paper texture over the paper colour), never flat white.",
+      "Sumi ink and ink-wash greys for everything; gold leaf only inside paintings, only for energy.",
+      "Paintings have their paper divided out and multiply onto the page's own paper.",
+      "One continuous calligraphic brush line on desktop; stations pinned to it by hairline leaders.",
+      "Switzer at 400/450/500, sentence case, never letter-spaced capitals.",
+      "Large type and 48px+ targets for older readers.",
+      "Honesty labels on every illustration and sample, set quietly but never hidden."
+    ],
+    "rules": [
+      { "name": "The One Gold Leaf Rule", "body": "Gold is energy and only appears painted into the plates. If you are reaching for gold on a UI element, use sumi ink instead.", "section": "colors" },
+      { "name": "The No Red, No Seal Rule", "body": "The genre's red seal is refused on purpose: no red anywhere, no stamps, no chops. This is a confirmed brand departure from the ink tradition, not an oversight.", "section": "colors" },
+      { "name": "The Sentence Case Rule", "body": "Labels, stations, captions, footer headings: sentence case at normal tracking. Never small letter-spaced capitals.", "section": "typography" },
+      { "name": "The CJK Room Rule", "body": "Korean, Japanese and Chinese headlines take line-height 1.22, tracking -0.01em, `word-break: keep-all`; the opening headline drops to 86 comp px so it stays clear of the crane.", "section": "typography" },
+      { "name": "The Desktop Line Rule", "body": "The page-long brush line exists only at 720px and wider. On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening, and stations sit in the flow under their headings with a 22px leader.", "section": "layout" },
+      { "name": "The Multiply Rule", "body": "Every ink painting ships with its paper divided out and is placed with `mix-blend-mode: multiply`, so the page's own rice paper shows through it. Never place an ink plate on a box or with its own paper colour.", "section": "elevation" },
+      { "name": "The Ink Pool Rule", "body": "Products never sit on cards or drop shadows. Each bottle stands in its own ink-wash pool (the painted pool, foreshortened, about 82% of the stand's width, its core just under the base) plus a small dense contact pool (56%) where the base meets the paper, both multiplied.", "section": "elevation" }
+    ],
+    "dos": [
+      "**Do** set every surface on the rice paper with its fibre texture.",
+      "**Do** multiply every ink painting onto the paper, with its own paper divided out.",
+      "**Do** keep gold inside the paintings and only for energy.",
+      "**Do** run every motion on the one breath (2.4s) and the one ease, and make the reduced-motion page complete and still.",
+      "**Do** keep text at 15px or larger, navigation at 18px or larger, and targets at 48px or taller.",
+      "**Do** label every illustration, sample and research limit in caption type.",
+      "**Do** keep the page-long brush line on desktop only; phones keep the opening's own stroke."
+    ],
+    "donts": [
+      "**Don't** use cards, boxed panels or gradient fills; space, hairlines and paintings separate content.",
+      "**Don't** use red, seals or stamps.",
+      "**Don't** put gold on buttons, rules, links or labels.",
+      "**Don't** set labels in small letter-spaced capitals.",
+      "**Don't** add drop shadows; the photo mount is the only one.",
+      "**Don't** invent a station label to decorate a heading; stations exist only where the brush line passes."
+    ]
+  }
+}

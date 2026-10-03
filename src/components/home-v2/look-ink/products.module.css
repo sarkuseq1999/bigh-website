@@ -1,0 +1,302 @@
+/* "Find your starting point." */
+
+.products {
+  position: relative;
+  padding: clamp(64px, 7vw, 112px) 0 clamp(40px, 4vw, 64px);
+}
+
+.inner {
+  position: relative;
+}
+
+.head {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.head {
+  position: relative;
+}
+
+.products .title {
+  margin-top: 0;
+}
+
+@media (min-width: 900px) {
+  .head .station {
+    position: absolute;
+    right: 0;
+    top: 18px;
+    max-width: 12em;
+    text-align: right;
+    text-wrap: balance;
+    --leader: 34px;
+  }
+
+  /* The centred headline keeps clear of the label in every language. */
+  .products .title {
+    max-width: calc(100% - 560px);
+    text-wrap: balance;
+  }
+}
+
+.products .intro {
+  max-width: 30em;
+  margin-top: 18px;
+  text-wrap: balance;
+}
+
+/* Five bottles on ink, as the comps show. */
+.row {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 2vw, 32px);
+  margin-top: clamp(48px, 6vw, 88px);
+}
+
+.item {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+}
+
+.bottle {
+  display: block;
+  width: 100%;
+  border-radius: 12px;
+}
+
+/* The bottle photographs carry transparent margins (the bottle is 52% of the picture's width and
+   its base sits at 96% of its height): the stand is a little wider than its column so each bottle
+   reads at a proper size. */
+.stand {
+  position: relative;
+  display: block;
+  width: min(112%, 250px);
+  margin: 0 -6%;
+}
+
+/* Each bottle's own ink pool, laid flat on the ground (the painted pool, foreshortened): about one
+   and a half times the bottle's width, its darkest core just under the bottle's base. */
+.shadow {
+  position: absolute;
+  left: 53%;
+  top: 76%;
+  width: 82%;
+  height: auto;
+  aspect-ratio: 1 / 0.42;
+  object-fit: fill;
+  translate: -50% 0;
+}
+
+/* The contact shadow: the same ink, small and dense, where the base meets the paper. */
+.contact {
+  position: absolute;
+  left: 50%;
+  top: 92.6%;
+  width: 56%;
+  height: auto;
+  aspect-ratio: 1 / 0.12;
+  object-fit: fill;
+  translate: -50% 0;
+}
+
+.image {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 96%;
+  transition: scale 0.9s var(--ease);
+}
+
+.item[data-active="true"] .image {
+  scale: 1.03;
+}
+
+.products .name {
+  position: relative;
+  min-height: 52px;
+  margin-top: 34px;
+  padding: 6px 4px 10px;
+  color: var(--muted);
+  font-size: 20px;
+  font-weight: 450;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+  transition: color 0.5s var(--ease);
+}
+
+.products .name:hover,
+.products .name[aria-pressed="true"] {
+  color: var(--ink);
+}
+
+.name::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 44px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  translate: -50% 0;
+  scale: 0 1;
+  transition: scale 0.7s var(--ease);
+}
+
+.name[aria-pressed="true"]::after {
+  scale: 1 1;
+}
+
+/* The chosen product's words. */
+.panel {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(32px, 5vw, 88px);
+  max-width: 1080px;
+  margin: clamp(72px, 7vw, 108px) auto 0;
+}
+
+.panelHead,
+.panelBody {
+  animation: settle 0.9s var(--ease) both;
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+.products .focus {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 450;
+}
+
+.products .focus::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: color-mix(in srgb, var(--ink) 55%, transparent);
+}
+
+.products .headline {
+  margin: 0;
+  font-size: clamp(30px, 2.8vw, 42px);
+  font-weight: var(--display-weight);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.products .highlights {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 22px;
+  margin: 26px 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 18px;
+  font-weight: 450;
+}
+
+.highlights li {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.highlights li::before {
+  content: "";
+  width: 14px;
+  height: 1px;
+  background: var(--ink);
+}
+
+.products .credit {
+  margin: 20px 0 30px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panelHead,
+  .panelBody {
+    animation: none;
+  }
+}
+
+@media (max-width: 899px) {
+  .head .station {
+    order: 1;
+    margin: 14px 0 0;
+  }
+
+  .head .intro {
+    order: 2;
+  }
+}
+
+@media (max-width: 900px) {
+  .row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    row-gap: 28px;
+  }
+
+  .panel {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 560px) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .products .name {
+    font-size: 18px;
+  }
+}
+
+/* Phones: the five bottles in one row you can swipe, standing on the brush line's ground. */
+@media (max-width: 720px) {
+  .row {
+    display: flex;
+    gap: 6px;
+    margin: 40px calc(-1 * var(--gutter)) 0;
+    padding: 0 var(--gutter) 6px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+
+  .row::-webkit-scrollbar {
+    display: none;
+  }
+
+  .item {
+    flex: 0 0 40vw;
+    scroll-snap-align: center;
+  }
+
+  .stand {
+    width: 46vw;
+    margin: 0 -3vw;
+  }
+
+  .products .name {
+    font-size: 17px;
+  }
+}

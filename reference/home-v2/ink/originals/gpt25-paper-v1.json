@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A flat, evenly lit, straight-on scan of plain handmade warm rice paper (xuan paper) in a soft ivory colour (#F6F3EC), with very faint natural plant fibres and gentle, even mottling, subtle and calm, the same tone everywhere. Perfectly uniform lighting, no vignette, no shadows, no folds, no creases, no stains, no ink, no marks, no text. Edge-to-edge paper texture only.",
+  "settings": {
+    "aspect_ratio": "1:1",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\crops\\paper-raw.png"
+  ],
+  "made": "20261002-143615"
+}

@@ -1,0 +1,134 @@
+/* "Tiny power plants." */
+
+.cellular {
+  position: relative;
+  padding: clamp(80px, 9vw, 140px) 0 clamp(56px, 6vw, 96px);
+}
+
+.cellular .grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(48px, 7.4vw, 112px);
+}
+
+.words {
+  position: relative;
+  max-width: 34rem;
+}
+
+.cellular .title {
+  margin-top: 0;
+}
+
+/* The station label sits beside the headline, across the column gap (the brush passes through
+   the gap). */
+@media (min-width: 900px) {
+  .cellular .station {
+    position: absolute;
+    top: 0.45em;
+    left: calc(100% + clamp(48px, 7.4vw, 112px) / 2 + 8px);
+    --leader: 28px;
+  }
+}
+
+.cellular .lines {
+  margin: clamp(36px, 4vw, 52px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lines li {
+  display: grid;
+  grid-template-columns: 52px 1fr;
+  gap: 8px;
+  padding: 18px 0 20px;
+  border-top: 1px solid var(--line);
+}
+
+.lines li:last-child {
+  border-bottom: 1px solid var(--line);
+}
+
+.number {
+  padding-top: 3px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+.text {
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.cellular .link {
+  margin-top: 28px;
+}
+
+.figure {
+  position: relative;
+  margin: 0 calc(-1 * var(--gutter)) 0 -2vw;
+}
+
+.mito {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.figure figcaption {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 4%;
+}
+
+@media (max-width: 899px) {
+  .words {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .words > * {
+    order: 2;
+  }
+
+  .words > .title {
+    order: 0;
+  }
+
+  .words > .station {
+    order: 1;
+    margin: 14px 0 0;
+  }
+}
+
+@media (max-width: 720px) {
+  .lines li {
+    grid-template-columns: 40px 1fr;
+  }
+
+  .text {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 900px) {
+  .cellular .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .figure {
+    margin: 0 -8vw 0 -4vw;
+  }
+
+  .figure figcaption {
+    position: static;
+    padding-right: calc(8vw + var(--gutter));
+    text-align: right;
+  }
+}

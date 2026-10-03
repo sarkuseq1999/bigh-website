@@ -1,0 +1,178 @@
+/* The close. */
+
+.purpose {
+  position: relative;
+  padding: clamp(24px, 3vw, 48px) 0 clamp(64px, 7vw, 120px);
+}
+
+/* The painting is full width; its upper half is open sky for the statement. */
+.scene {
+  position: relative;
+}
+
+.painting {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 420px;
+  object-fit: cover;
+  object-position: 50% 100%;
+  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+}
+
+.statement {
+  position: absolute;
+  inset: 0 0 auto;
+  padding-top: clamp(24px, 4vw, 72px);
+}
+
+/* The statement, with its station label beside the first line, where the brush comes down. */
+.titleBox {
+  position: relative;
+  width: fit-content;
+}
+
+@media (min-width: 900px) {
+  /* Room for the station label beside the statement in every language. */
+  .titleBox {
+    max-width: calc(100% - 17em);
+  }
+}
+
+@media (min-width: 900px) {
+  .titleBox .station {
+    position: absolute;
+    left: calc(100% + 72px);
+    top: 0.9em;
+    --leader: 30px;
+  }
+}
+
+.purpose .title {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(42px, 5.2vw, 84px);
+  font-weight: var(--display-weight);
+  line-height: 1;
+  letter-spacing: -0.034em;
+}
+
+.title > span {
+  display: block;
+}
+
+.tag {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 12px;
+}
+
+.body {
+  position: relative;
+  margin-top: clamp(56px, 7vw, 112px);
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
+  gap: clamp(32px, 5vw, 88px);
+}
+
+.purpose .graphic {
+  margin: 0;
+  font-size: clamp(32px, 3vw, 46px);
+  font-weight: var(--display-weight);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+}
+
+.graphic > span {
+  display: block;
+}
+
+.graphic > span:last-child {
+  color: var(--muted);
+}
+
+.opening {
+  display: grid;
+  align-content: start;
+  gap: 24px;
+}
+
+.purpose .lead {
+  margin: 0;
+  font-size: clamp(21px, 1.7vw, 25px);
+  line-height: 1.45;
+  letter-spacing: -0.008em;
+}
+
+.purpose .paragraph + .paragraph {
+  margin-top: 14px;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  margin-top: 32px;
+}
+
+.standards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(24px, 3.4vw, 56px);
+  margin: clamp(72px, 8vw, 120px) 0 0;
+  padding: 0;
+  list-style: none;
+  scroll-margin-top: 140px;
+}
+
+.standards li {
+  padding-top: 22px;
+  border-top: 1px solid var(--hair);
+}
+
+.purpose .standardTitle {
+  margin: 0 0 10px;
+  font-size: clamp(22px, 1.8vw, 26px);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+}
+
+@media (max-width: 900px) {
+  .columns,
+  .standards {
+    grid-template-columns: 1fr;
+  }
+
+  .scene {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .painting {
+    min-height: 0;
+    aspect-ratio: 5 / 4;
+    object-position: 22% 100%;
+  }
+
+  .titleBox .station {
+    margin: 14px 0 0;
+  }
+
+  .statement {
+    position: relative;
+    order: -1;
+    padding-top: 0;
+    margin-bottom: 0;
+  }
+
+  .tag {
+    position: static;
+    align-self: flex-end;
+    margin: 6px var(--gutter) 0 0;
+  }
+}

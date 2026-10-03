@@ -1,0 +1,17 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Full-page desktop homepage design for BiGH, a premium science-led supplement brand, shown as one long scrolled web page on a tall portrait canvas (about three screens of a 1440px-wide site), flat, no device frame. Modern Swiss typography meets East Asian ink-wash painting on warm rice paper, with one gold accent.\n\nAt the very top, a slim navigation bar: the logo BiGH in bold black sans-serif with a small green leaf above the letter i on the left, and on the right the links Home, Products, Science, About, Support, Log in, an outlined Sign up pill, and English.\n\nThe opening screen: on the left a very large near-black Swiss sans-serif headline in three lines, Good health / starts with / your cells. (render the line breaks, never print slash characters), then a short paragraph: Developed by scientists with deep expertise in cellular health and aging, BiGH's key formulas share one purpose: helping you stay sharp, stay active, and live fully. Then two pill buttons: a solid black one reading Discover NuriCell and an outlined one reading Meet our scientists. On the right, a vast ink-wash painting of a mitochondrion, an elongated oval organelle painted in black sumi ink with soft grey washes bleeding into the paper, its folded inner membranes in expressive dry brush, with one luminous gold-leaf stroke glowing inside; fine hairline labels with leader lines read Outer membrane, Inner folds, Where energy is made.\n\nA thin continuous ink brush line flows out of the painting and winds down the whole page, linking every part.\n\nNext, centered: a small caption Why cellular health matters above a big headline Tiny power plants. A big part of your health. Below it the brush line passes three short numbered lines: 01 Inside many of your body's cells are mitochondria, tiny power plants that turn energy from food into a form your cells can use. 02 That energy helps your brain think, your heart beat, and your muscles move. 03 It's one reason good health starts with your cells.\n\nNext: a small caption Our scientific roots above the headline Good science. Real people. On the left an empty plain pale-grey rectangular photo frame with nothing inside, resting on a soft ink-wash halo, captioned Dr. Jiankang Liu, Chief Scientific Advisor, BiGH. On the right three large thin numerals with captions: 280+ scientific papers by Dr. Liu; 2016 BiGH founded in California; 20+ years NuriCell's formula, unchanged.\n\nAt the bottom: a small caption Explore our products. above the headline Find your starting point., and five plain white blank supplement bottles with completely empty labels standing in a row with soft ink-wash shadows, named underneath NuriCell, Green Bee Propolis, Advanced OPC Formula, Turmerific, Nature Calm.\n\nMuseum-grade restraint, generous space, calm and luminous. Colours only rice-paper white, sumi black, ink greys and one gold. Every word crisp and spelled exactly, with no added punctuation. Do not print any layout labels, section names, slashes or extra words. No red, no seals, no people.",
+  "settings": {
+    "aspect_ratio": "9:16",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "made": "20261002-140849",
+  "response_fields": {
+    "model": "marketing-studio/image/flare",
+    "submitted_at": "20261002-140849",
+    "unquoted_ok_by": "Mo 10/2",
+    "status": "completed",
+    "request_id": "2bce5c46-e4b1-43db-916c-a4905134a7b8"
+  }
+}

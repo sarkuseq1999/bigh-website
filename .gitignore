@@ -67,3 +67,12 @@ scripts/qa/out/
 
 # python
 __pycache__/
+
+# Impeccable design-process scratch (mocks, catalog, local config)
+.impeccable/mocks/
+.impeccable/catalog/
+.impeccable/config.local.json
+.impeccable/review/
+.impeccable/build/
+.impeccable/questions/
+reference/home-v2/ink/work/

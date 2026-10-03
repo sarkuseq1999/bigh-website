@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided painting as the exact reference and paint the same mitochondrion again, in the same place, at the same size and angle, with the same paper, the same gold-leaf folds and the same brush style, to illustrate oxidative stress kept in balance: along its upper right end the outer membrane is slightly roughened and frayed, and a few short, fast, broken dry-brush flicks of grey ink fly off from that edge into the empty paper, like sparks of restless energy; everything else stays calm and whole. The flicks are thin streaks, not dots, spots, blobs or particles. Plain empty warm rice paper ground (#F6F3EC). No text, no labels, no lines, no seal, no border, nothing red.",
+  "settings": {
+    "aspect_ratio": "4:3",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\originals\\gpt25-mito-v1.png"
+  ],
+  "made": "20261002-143908"
+}

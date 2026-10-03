@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A museum-quality East Asian ink-wash landscape on warm rice paper in a wide panoramic format, painted with the same brush style, ink and paper as the reference: a calm sea of white mist, low distant mountain ridges in pale grey washes along the horizon, a single ancient pine tree on a rocky outcrop rising at the lower left, painted with confident dry-brush; a large round sun of real gold leaf sitting low above the mist on the right; far away, two small red-crowned cranes in flight toward the sun, their crowns touched with gold, not red. The whole upper half is calm empty paper sky for a headline. Ink greys and sumi black only, plus the one gold-leaf sun. No text, no seal, no stamp, no signature, no calligraphy, no border, nothing red.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-home\\reference\\home-v2\\ink\\originals\\gpt25-landscape-v1.png"
+  ],
+  "made": "20261002-143956"
+}

@@ -1,0 +1,15 @@
+{"name": "landscape-v1", "prompt": "landscape.txt", "aspect": "21:9", "refs": ["reference/home-v2/ink/crops/landscape.png"]}
+{"name": "crane-v1", "prompt": "crane.txt", "aspect": "3:2", "refs": ["reference/home-v2/ink/crops/crane.png"]}
+{"name": "sun-v1", "prompt": "sun.txt", "aspect": "1:1", "refs": ["reference/home-v2/ink/crops/sun.png"]}
+{"name": "paper-v1", "prompt": "paper.txt", "aspect": "1:1", "refs": ["reference/home-v2/ink/crops/paper-raw.png"]}
+{"name": "mito-v1", "prompt": "mito.txt", "aspect": "4:3", "refs": ["reference/home-v2/ink/crops/mito-cell.png"]}
+{"name": "halo-v1", "prompt": "halo.txt", "aspect": "1:1", "refs": ["reference/home-v2/ink/crops/liu-halo-cell.png"]}
+{"name": "shadow-v1", "prompt": "shadow.txt", "aspect": "21:9", "refs": []}
+{"name": "mito-aged-v1", "prompt": "mito-aged.txt", "aspect": "4:3", "refs": ["reference/home-v2/ink/originals/gpt25-mito-v1.png"]}
+{"name": "mito-radicals-v1", "prompt": "mito-radicals.txt", "aspect": "4:3", "refs": ["reference/home-v2/ink/originals/gpt25-mito-v1.png"]}
+{"name": "purpose-v1", "prompt": "purpose.txt", "aspect": "21:9", "refs": ["reference/home-v2/ink/originals/gpt25-landscape-v1.png"]}
+{"name": "story-morning-v1", "prompt": "story-morning.txt", "aspect": "3:4", "refs": ["reference/home-v2/ink/originals/gpt25-landscape-v1.png"]}
+{"name": "story-reading-v1", "prompt": "story-reading.txt", "aspect": "3:4", "refs": ["reference/home-v2/ink/originals/gpt25-landscape-v1.png"]}
+{"name": "story-source-v1", "prompt": "story-source.txt", "aspect": "3:4", "refs": ["reference/home-v2/ink/originals/gpt25-landscape-v1.png"]}
+{"name": "shadow-v2", "prompt": "shadow2.txt", "aspect": "16:9", "refs": ["reference/home-v2/ink/crops/shadow-cell-comp.png"]}
+{"name": "mito-closeup-v1", "prompt": "mito-closeup.txt", "aspect": "4:3", "refs": ["reference/home-v2/ink/crops/mito-gold-detail.png"]}
