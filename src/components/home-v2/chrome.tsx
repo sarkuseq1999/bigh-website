@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUp, Menu, X } from "lucide-react";
-import { useEffect, useRef, useState, type FocusEvent, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type FocusEvent, type ReactNode } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { ProductAction } from "@/components/home/product-action";
 import { Link } from "@/i18n/navigation";
@@ -169,6 +169,22 @@ export function HomeHeader({
   );
 }
 
+/** The promise breaks only between its sentences ("Stay sharp." / "Live fully."), in every
+ *  language: each sentence is one unbroken piece unless it is too long for the line. */
+function Sentences({ text }: { text: string }) {
+  const parts = text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu) ?? [text];
+  return (
+    <>
+      {parts.map((part, i) => (
+        <Fragment key={part}>
+          <span className={styles.sentence}>{part.trimEnd()}</span>
+          {i < parts.length - 1 && (/\s$/.test(part) ? " " : <wbr />)}
+        </Fragment>
+      ))}
+    </>
+  );
+}
+
 export function HomeFooter({
   closing,
 }: {
@@ -188,16 +204,43 @@ export function HomeFooter({
     const words = paragraph?.firstElementChild;
     const column = paragraph?.parentElement?.parentElement;
     if (!paragraph || !words || !column || !hasClosing) return;
+    // The words' own line boxes (text only: a sentence that wraps inside its inline block still
+    // reports the block's full width, so the blocks themselves are not measured).
+    const boxes = () => {
+      const found: DOMRect[] = [];
+      const walker = document.createTreeWalker(words, NodeFilter.SHOW_TEXT);
+      const range = document.createRange();
+      while (walker.nextNode()) {
+        range.selectNodeContents(walker.currentNode);
+        found.push(...range.getClientRects());
+      }
+      return found.filter((box) => box.width > 0);
+    };
+    const lines = () => new Set(boxes().map((box) => Math.round(box.top))).size;
     const fit = () => {
       paragraph.style.width = "";
-      paragraph.style.width = `${Math.ceil(words.getBoundingClientRect().width) + 1}px`;
+      const natural = lines();
+      const text = boxes();
+      if (!text.length) return;
+      const left = Math.min(...text.map((box) => box.left));
+      const right = Math.max(...text.map((box) => box.right));
+      let width = Math.ceil(right - left) + 1;
+      paragraph.style.width = `${width}px`;
+      // Never let the fitted width push a word onto a line of its own.
+      for (let i = 0; i < 12 && lines() > natural; i++) {
+        width += 4;
+        paragraph.style.width = `${width}px`;
+      }
     };
     fit();
     const observer = new ResizeObserver(fit);
     observer.observe(column);
+    // A face that arrives late (Vietnamese, the CJK fallbacks) changes the lines' widths.
     document.fonts?.ready.then(fit);
+    document.fonts?.addEventListener("loadingdone", fit);
     return () => {
       observer.disconnect();
+      document.fonts?.removeEventListener("loadingdone", fit);
       paragraph.style.width = "";
     };
   }, [hasClosing]);
@@ -212,7 +255,9 @@ export function HomeFooter({
             data-brush="footer-promise"
           >
             <p ref={message} className={styles.footerMessage}>
-              <span data-brush="footer-tagline">{copy(footer.tagline)}</span>
+              <span data-brush="footer-tagline">
+                <Sentences text={copy(footer.tagline)} />
+              </span>
             </p>
             {closing}
           </div>

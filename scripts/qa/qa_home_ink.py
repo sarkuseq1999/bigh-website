@@ -1043,6 +1043,29 @@ def run_reduced(browser, look):
     context.close()
 
 
+def run_vietnamese(browser, mobile):
+    """Vietnamese readers get one face: Be Vietnam Pro through the brand token, never Arial filling
+    the letters Switzer lacks (Chrome's own record of the fonts it used, glyph by glyph)."""
+    tag = f"vn {'phone' if mobile else 'desk'}"
+    size = (390, 844) if mobile else (1536, 1000)
+    context, page, response, problems = open_page(browser, f"{BASE}/vn", size, mobile)
+    check(f"{tag}: answers 200", response and response.status == 200)
+    cdp = context.new_cdp_session(page)
+    cdp.send("DOM.enable")
+    cdp.send("CSS.enable")
+    root = cdp.send("DOM.getDocument")["root"]["nodeId"]
+    ids = cdp.send("DOM.querySelectorAll", {"nodeId": root, "selector": "h1, h2, h3, p"})["nodeIds"]
+    glyphs = {}
+    for node in ids:
+        for font in cdp.send("CSS.getPlatformFontsForNode", {"nodeId": node})["fonts"]:
+            glyphs[font["familyName"]] = glyphs.get(font["familyName"], 0) + font["glyphCount"]
+    arial = sum(n for name, n in glyphs.items() if "Arial" in name)
+    brand = sum(n for name, n in glyphs.items() if "Be Vietnam Pro" in name)
+    check(f"{tag}: no Arial glyphs in any h1, h2, h3 or paragraph", arial == 0 and brand > 500, str(glyphs))
+    check(f"{tag}: no sideways scrolling", page.evaluate("document.documentElement.scrollWidth") <= size[0])
+    context.close()
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=GPU)
     run(browser, "home", mobile=False)
@@ -1053,6 +1076,8 @@ with sync_playwright() as p:
     run_opens(browser)
     run_korean(browser, mobile=False)
     run_korean(browser, mobile=True)
+    run_vietnamese(browser, mobile=False)
+    run_vietnamese(browser, mobile=True)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

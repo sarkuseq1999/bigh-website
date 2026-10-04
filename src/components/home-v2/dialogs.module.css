@@ -26,7 +26,7 @@
   background-image: var(--paper-fibre, none);
   background-size: 800px 800px;
   color: var(--dialog-ink, var(--ink, #242722));
-  font-family: var(--sans, "Switzer", Arial, sans-serif);
+  font-family: var(--sans, var(--font-brand), Arial, sans-serif);
   -webkit-font-smoothing: antialiased;
   /* Closed (and leaving): a little lower and clear. It leaves quickly; see [open] for arriving. */
   opacity: 0;

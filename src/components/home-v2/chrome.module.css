@@ -298,6 +298,10 @@
   margin-top: 0;
 }
 
+.sentence {
+  display: inline-block;
+}
+
 .withClosing .footerMessage {
   max-width: 6.2em;
   text-wrap: balance;
@@ -311,9 +315,12 @@
   font-size: clamp(34px, 2.8vw, 46px);
 }
 
-/* Vietnamese runs wider: three lines, a little smaller, so the picture keeps its place beside. */
+/* Vietnamese: the promise's two sentences, one to a line (balancing finds that break), a size
+   smaller so the picture still stands beside them on a wide window; on a phone it stands under
+   them, at the right. */
 .withClosing .footerMessage:lang(vi) {
-  font-size: clamp(36px, 3.9vw, 58px);
+  max-width: none;
+  font-size: clamp(30px, 2.45vw, 37px);
 }
 
 .footerMessage:not(:lang(en)) {

@@ -211,6 +211,11 @@
   letter-spacing: -0.01em;
 }
 
+/* Vietnamese runs wider; no one-word last line ("nào."). */
+.purpose .standardTitle:lang(vi) {
+  text-wrap: balance;
+}
+
 @media (max-width: 899px) {
   .columns,
   .standards {

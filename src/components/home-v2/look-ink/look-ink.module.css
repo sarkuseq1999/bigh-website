@@ -16,9 +16,9 @@
   --gold-ink: #7d5f1c;
   --gutter: clamp(22px, 7.7vw, 132px);
   --wide: 1300px;
-  --display-font: "Switzer", var(--font-dm-sans), Arial, sans-serif;
-  --sans: "Switzer", var(--font-dm-sans), Arial, Helvetica, sans-serif;
-  --display-weight: 500;
+  --display-font: var(--font-brand), var(--font-dm-sans), Arial, sans-serif;
+  --sans: var(--font-brand), var(--font-dm-sans), Arial, Helvetica, sans-serif;
+  --display-weight: var(--font-brand-display-weight, 500);
   /* One breathing rhythm for every motion on the page: a slow exhale. */
   --breath: 2.4s;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -52,9 +52,9 @@
   --line: rgba(28, 27, 25, 0.16);
   --hair: rgba(28, 27, 25, 0.28);
   --accent: #c49a3a;
-  --display-font: "Switzer", Arial, sans-serif;
-  --sans: "Switzer", Arial, sans-serif;
-  --display-weight: 500;
+  --display-font: var(--font-brand), Arial, sans-serif;
+  --sans: var(--font-brand), Arial, sans-serif;
+  --display-weight: var(--font-brand-display-weight, 500);
   --breath: 2.4s;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --paper-fibre: url("/images/home-v2/ink/paper.webp");

@@ -335,8 +335,19 @@
   font-size: calc(86 * var(--u));
 }
 
+/* Vietnamese: Be Vietnam Pro is wider than Switzer, and its stacked tone marks need the taller
+   line (globals.css), so the headline sets smaller to keep clear of the crane. */
+.opening .title:lang(vi) {
+  font-size: calc(82 * var(--u));
+  letter-spacing: -0.025em;
+}
+
 @media (max-width: 720px) {
   .opening .title:is(:lang(ko), :lang(ja), :lang(zh)) {
     font-size: clamp(34px, 10vw, 48px);
+  }
+
+  .opening .title:lang(vi) {
+    font-size: clamp(32px, 9.2vw, 44px);
   }
 }
