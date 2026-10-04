@@ -78,7 +78,7 @@
 }
 
 /* Narrow windows crop the painting to the pine; the cranes' sky is out of the frame. */
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .flight {
     display: none;
   }
@@ -121,6 +121,8 @@
   font-weight: var(--display-weight);
   line-height: 1;
   letter-spacing: -0.034em;
+  /* Where a sentence needs two lines (phones), it breaks evenly: no word alone on a line. */
+  text-wrap: balance;
 }
 
 .title > span {
@@ -209,7 +211,7 @@
   letter-spacing: -0.01em;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .columns,
   .standards {
     grid-template-columns: 1fr;
@@ -237,7 +239,9 @@
     margin-bottom: 0;
   }
 
-  .tag {
+  /* Two classes deeper than the shared .caption rule (margin: 0), which otherwise wins and
+     leaves the label against the window's edge. */
+  .purpose .scene .tag {
     position: static;
     align-self: flex-end;
     margin: 6px var(--gutter) 0 0;

@@ -161,12 +161,12 @@ A near-monochrome of sumi ink on warm paper, with one gold that belongs to the p
 
 Content sits in a 1300px measure inside a fluid gutter (clamp(22px, 7.7vw, 132px); the cell opening uses clamp(22px, 5.7vw, 100px)). Sections breathe on clamp-based vertical padding of roughly 64–140px; nothing is boxed, so space and hairlines do the separating.
 
-The openings are measured from their approved 1536×1000 comps. One unit (`min(100vw / 1536, 100svh / 1000)`) scales every painting and line of type so the comp holds from 1280 to 1600 wide and on short windows, while text never drops below reading size. The opening is one viewport tall (100svh, 680–1180px).
+The openings are measured from their approved 1536×1000 comps. One unit (`min(100vw / 1536, opening height / 1000)`) scales every painting and line of type so the comp holds from 1280 to 1600 wide and on short windows, while text never drops below reading size. The opening is one viewport tall (100svh, 680–1180px), and never much taller than the comp at its width (76vw: a tablet held upright gets a compact opening, with the next block in the same window). Above 1536px wide the page's column centres; the opening's words stay on its left edge (under the logo), and the crane, the sun and the stroke move in with them on a frame that stops stretching at 1812px.
 
 Breakpoints: 900px (two-column blocks collapse, stations leave the margin), 720px (phone layouts: the opening becomes a stacked picture then words, bottles become a swipeable snap row), 560px (product grid to two columns where the row is not swiping).
 
 ### Named Rules
-**The Desktop Line Rule.** The page-long brush line exists only at 720px and wider. On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening, and stations sit in the flow under their headings with a 22px leader. The three standards' rules and the closing stroke under the footer's promise are on every screen.
+**The Desktop Line Rule.** The page-long brush line exists only where the blocks are two columns (900px and wider): it is routed through the gaps between the columns, and on one column it would run through the words (October 4; it was 720px before, which let it cross the headlines on a tablet held upright). On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening (721–899px: the comp's flight stroke), and stations sit in the flow under their headings with a 22px leader. The three standards' rules and the closing stroke under the footer's promise are on every screen.
 
 ## Elevation & Depth
 

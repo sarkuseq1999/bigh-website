@@ -110,6 +110,8 @@ export function Products() {
           aria-live="polite"
           data-brush="product-panel"
         >
+          {/* Where the brush line passes these words, out in the margin (brush-route.ts). */}
+          <span className={styles.pass} aria-hidden="true" data-brush="product-pass" />
           <div key={`head-${active}`} className={styles.panelHead}>
             <h3 className={styles.headline}>{copy(product.headline)}</h3>
             <p className={styles.focus}>{copy(product.focus)}</p>

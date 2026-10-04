@@ -23,6 +23,11 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - phones: the opening keeps its own line; no stray strokes below it (the page line is
     desktop-only, the lead's decision of October 2) until the closing stroke under the footer's
     promise, which every screen gets (October 3).
+  - other window sizes (October 4): a wide desktop (2560x1440: the opening's words start at the
+    page column's left edge, under the logo, clear of the crane); a tablet held upright
+    (820x1180: the blocks are one column, so no page line runs through them; the opening's words
+    fit, clear of the crane); a small phone (320x568: no words past the window's edge, no
+    headline word alone on a line; the footer's links at least 44 px tall).
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -522,6 +527,115 @@ def run_short(browser, look):
     context.close()
 
 
+def opening_boxes(page):
+    """The opening's headline, crane, first block headline and logo, as [left, top, right, bottom]."""
+    return page.evaluate(
+        """(() => { const box = (s) => { const b = document.querySelector(s).getBoundingClientRect();
+              return [b.left, b.top, b.right, b.bottom]; };
+            return { title: box('#opening-title'), crane: box('#top [data-brush=crane]'),
+              column: box('#cellular-title'), logo: box('header a[href] img'),
+              opening: box('#top'),
+              words: [...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
+                const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; }) }; })()"""
+    )
+
+
+def run_sizes(browser, look):
+    """Window sizes the comp was not drawn for: a wide desktop, a tablet held upright, a small phone."""
+    # Wide desktop: the page's column is centred; the opening's words stand on its left edge.
+    tag = f"{look} 2560x1440"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (2560, 1440), False)
+    b = opening_boxes(page)
+    check(
+        f"{tag}: the opening's words start at the page column's left edge, under the logo",
+        abs(b["title"][0] - b["column"][0]) <= 2 and abs(b["title"][0] - b["logo"][0]) <= 12,
+        f"title {b['title'][0]:.0f}, column {b['column'][0]:.0f}, logo {b['logo'][0]:.0f}",
+    )
+    height = b["opening"][3] - b["opening"][1]
+    check(
+        f"{tag}: the crane flies clear of the headline",
+        b["crane"][3] - b["title"][1] <= 0.03 * height and all(w[3] <= b["opening"][3] for w in b["words"]),
+        f"crane bottom {b['crane'][3]:.0f}, headline top {b['title'][1]:.0f}",
+    )
+    shoot(page, f"{look}-2560-00-top")
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # Tablet held upright: one-column blocks, so no page line; the opening is the comp, compact.
+    tag = f"{look} 820x1180"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (820, 1180), False)
+    b = opening_boxes(page)
+    height = b["opening"][3] - b["opening"][1]
+    check(
+        f"{tag}: the opening's words fit, clear of the crane",
+        b["crane"][3] - b["title"][1] <= 0.03 * height
+        and all(w[0] >= 0 and w[2] <= 820 and w[3] <= b["opening"][3] for w in b["words"]),
+        f"crane bottom {b['crane'][3]:.0f}, headline top {b['title'][1]:.0f}, opening {height:.0f}",
+    )
+    shoot(page, f"{look}-820-00-top")
+    stray = []
+    for block in ("#cellular", "#scientists", "#products", "#science"):
+        scroll_to(page, top_of(page, block), 1600)
+        stray.append(ink_in_view(page))
+    shoot(page, f"{look}-820-01-science")
+    check(f"{tag}: no page line through the one-column blocks", sum(stray) == 0, f"ink {stray}")
+    wide = page.evaluate("document.documentElement.scrollWidth")
+    check(f"{tag}: no sideways scrolling", wide <= 820, f"scrollWidth {wide}")
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # Small phone: nothing past the window's edge, no headline word alone on a line.
+    tag = f"{look} 320x568"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (320, 568), True)
+    total = page.evaluate("document.documentElement.scrollHeight")
+    y = 0
+    while y < total:
+        page.evaluate(f"window.scrollTo(0, {y})")
+        page.wait_for_timeout(60)
+        y += 284
+    past = page.evaluate(
+        """(() => { const out = []; const root = document.querySelector('[data-look=ink]');
+          const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+          for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+            const e = n.parentElement;
+            if (!n.nodeValue.trim() || !e.checkVisibility({ checkOpacity: true, checkVisibilityCSS: true })) continue;
+            if (e.closest('[data-brush=bottles], dialog, [inert]') || e.getBoundingClientRect().width <= 2) continue;
+            const r = document.createRange(); r.selectNodeContents(n);
+            for (const b of r.getClientRects()) if (b.width > 1 && (b.right > innerWidth + 0.5 || b.left < -0.5)) {
+              out.push(n.nodeValue.trim().slice(0, 30)); break; }
+          }
+          return out; })()"""
+    )
+    check(f"{tag}: no words past the window's edge", not past, "; ".join(past[:4]))
+    alone = page.evaluate(
+        """(() => { const out = [];
+          for (const h of document.querySelectorAll('[data-look=ink] h1, [data-look=ink] h2')) {
+            const blocks = [...h.children].filter(c => getComputedStyle(c).display === 'block');
+            for (const block of blocks.length ? blocks : [h]) {
+              const rows = new Map(); const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT);
+              for (let n = walker.nextNode(); n; n = walker.nextNode()) { const re = /\\S+/g; let m;
+                while ((m = re.exec(n.nodeValue))) { const r = document.createRange();
+                  r.setStart(n, m.index); r.setEnd(n, m.index + m[0].length);
+                  const k = Math.round(r.getBoundingClientRect().top / 6); rows.set(k, (rows.get(k) || 0) + 1); } }
+              const counts = [...rows.entries()].sort((a, b) => a[0] - b[0]).map(x => x[1]);
+              if (counts.length >= 2 && counts.reduce((s, c) => s + c, 0) >= 3 && counts.some(c => c === 1))
+                out.push(block.textContent.trim().slice(0, 30)); } }
+          return out; })()"""
+    )
+    check(f"{tag}: no headline word alone on a line", not alone, "; ".join(alone[:4]))
+    low = page.evaluate(
+        """[...document.querySelectorAll('footer a, footer button')]
+          .filter(e => e.getBoundingClientRect().width && e.getBoundingClientRect().height < 44)
+          .map(e => `${Math.round(e.getBoundingClientRect().height)}px ${(e.textContent || '').trim().slice(0, 24)}`)"""
+    )
+    check(f"{tag}: the footer's links at least 44 px tall", not low, "; ".join(low[:4]))
+    wide = page.evaluate("document.documentElement.scrollWidth")
+    check(f"{tag}: no sideways scrolling", wide <= 320, f"scrollWidth {wide}")
+    shoot(page, f"{look}-320-00-footer")
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+
 def run_korean(browser, mobile):
     tag = f"kr {'phone' if mobile else 'desk'}"
     size = (390, 844) if mobile else (1440, 900)
@@ -573,6 +687,7 @@ with sync_playwright() as p:
     run(browser, "home", mobile=False)
     run(browser, "home", mobile=True)
     run_short(browser, "home")
+    run_sizes(browser, "home")
     run_reduced(browser, "home")
     run_korean(browser, mobile=False)
     run_korean(browser, mobile=True)

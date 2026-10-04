@@ -1,14 +1,25 @@
 /* The crane opening, measured from the approved comp (1536 x 1000). --u is one comp pixel at the
    window's size (the smaller of width and height decides), so every painting and every line of
    type keeps the comp's proportions from 1280 to 1600 wide and at short windows; text never
-   drops under the sizes older readers need. Paintings sit at their region boxes. */
+   drops under the sizes older readers need. Paintings sit at their region boxes.
+
+   Windows the comp was not drawn for:
+   - --h is the opening's own height: the window's, between 680 and 1180 px. It sets --u (not
+     the window's height), so on a very tall or very short window the paintings and the type
+     still fit the box they sit in.
+   - Tall, narrow windows (a tablet held upright): the opening is never much taller than the comp
+     at that width (76vw), so the crane, the mountains and the words stay one picture instead of
+     drifting apart; the next block follows in the same window.
+   - Wide windows: the page's column stops growing at --wide and centres. --inset is how far it
+     has moved in from the gutter; the words, the crane, the sun and the stroke move in with it,
+     on a frame that stops stretching at 1812 px (the comp at its largest --u). */
 
 .opening {
-  --u: min(100vw / 1536, 100svh / 1000);
+  --h: clamp(680px, 100svh, clamp(680px, 76vw, 1180px));
+  --u: min(100vw / 1536, var(--h) / 1000);
+  --inset: max(0px, (100% - var(--wide)) / 2 - var(--gutter));
   position: relative;
-  height: 100svh;
-  min-height: 680px;
-  max-height: 1180px;
+  height: var(--h);
 }
 
 .art {
@@ -17,9 +28,32 @@
   pointer-events: none;
 }
 
+/* What the brush line measures the opening's stroke on (brush-route.ts): the stage is the frame
+   the paintings sit on; the flight path hangs from the crane's top edge at the comp's scale, so
+   the stroke leaves the crane the same way however tall the opening is. */
+.stage,
+.flightPath {
+  position: absolute;
+  left: var(--inset);
+  width: min(100%, 1812px);
+}
+
+.stage {
+  top: 0;
+  height: 100%;
+}
+
+.flightPath {
+  top: 10%;
+  height: calc(1000 * var(--u));
+}
+
 /* Region landscape: x 0, y 30%, w 100%, h 70%. Its lowest mountains dissolve into the paper, as
-   mist does, so the page continues without an edge. */
+   mist does, so the page continues without an edge. On a window wider than the painting (2400 x
+   1029) for its height, the box cuts the painting's top off (--crop): there the top edge
+   dissolves into mist too, instead of slicing the far ridges flat. No crop, no fade. */
 .landscape {
+  --crop: max(0px, 100vw * 1029 / 2400 - 0.7 * var(--h));
   position: absolute;
   left: 0;
   top: 30%;
@@ -27,7 +61,13 @@
   height: 70%;
   object-fit: cover;
   object-position: 62% 100%;
-  mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0,
+    #000 min(var(--crop) * 1.4, 120px),
+    #000 72%,
+    transparent 100%
+  );
   translate: 0 var(--settle, 0);
 }
 
@@ -35,7 +75,7 @@
    a few pixels against the pointer (far things move least). */
 .sun {
   position: absolute;
-  left: 60%;
+  left: calc(var(--inset) + min(60%, 1087.2px));
   top: 10%;
   width: calc(290 * var(--u));
   translate: calc(var(--lean-x, 0) * -7px) calc(var(--sink, 0px) + var(--lean-y, 0) * -4px);
@@ -95,7 +135,7 @@
 /* Region crane: x 20%, y 10%, w 40%, h 40%. It floats on the air in the page's slow breath. */
 .crane {
   position: absolute;
-  left: 20%;
+  left: calc(var(--inset) + min(20%, 362.4px));
   top: 10%;
   width: calc(614 * var(--u));
   transform-origin: 70% 60%;
@@ -146,7 +186,7 @@
 /* Regions headline, intro, cta-primary, cta-secondary: the lower left, on calm paper. */
 .copy {
   position: absolute;
-  left: var(--gutter);
+  left: calc(var(--gutter) + var(--inset));
   bottom: calc(37 * var(--u));
   z-index: 2;
 }
@@ -223,15 +263,15 @@
     display: flex;
     flex-direction: column;
     height: auto;
-    min-height: 0;
-    max-height: none;
     padding: 72px 0 40px;
   }
 
+  /* 320 px tall on a phone; from about 560 px wide (a small tablet) it grows with the window
+     again, so the crane, which is as wide as the window allows, still fits inside it. */
   .art {
     position: relative;
     inset: auto;
-    height: min(78vw, 320px);
+    height: max(min(78vw, 320px), 57vw);
     overflow: hidden;
   }
 

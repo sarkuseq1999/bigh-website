@@ -36,9 +36,10 @@
     --leader: 34px;
   }
 
-  /* The centred headline keeps clear of the label in every language. */
+  /* The centred headline keeps clear of the label in every language; on the narrowest
+     two-column windows it still has room for two full lines (no word alone on a third). */
   .products .title {
-    max-width: calc(100% - 560px);
+    max-width: max(100% - 560px, 6.4em);
     text-wrap: balance;
   }
 }
@@ -168,11 +169,27 @@
 
 /* The chosen product's words. */
 .panel {
+  position: relative;
   display: grid;
   grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
   gap: clamp(32px, 5vw, 88px);
   max-width: 1080px;
   margin: clamp(72px, 7vw, 108px) auto 0;
+}
+
+/* Where the brush line passes the words on its way down the left margin: where the comp's own
+   sweep runs (7.45vw from the window's edge; on a wide window, 40px outside the page's column),
+   and never nearer than 34px to the words, which reach the gutter on narrower windows.
+   --panel-left and --column-left are those edges, measured from the window's. */
+.pass {
+  --panel-left: max(var(--gutter), (100vw - 1080px) / 2);
+  --column-left: max(var(--gutter), (100vw - var(--wide)) / 2);
+  position: absolute;
+  top: -6px;
+  left: min(-34px, max(7.45vw, var(--column-left) - 40px) - var(--panel-left));
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 .panelHead,
@@ -262,10 +279,20 @@
   }
 }
 
-@media (max-width: 900px) {
+/* One column (a tablet held upright): three bottles, then two, the second row centred under the
+   first like the headline above them (six half-columns; each bottle takes two). */
+@media (max-width: 899px) {
   .row {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
     row-gap: 28px;
+  }
+
+  .item {
+    grid-column: span 2;
+  }
+
+  .item:nth-child(4) {
+    grid-column: 2 / span 2;
   }
 
   .panel {

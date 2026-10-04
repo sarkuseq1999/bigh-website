@@ -17,32 +17,51 @@ export type Waypoint = {
   load?: number;
 };
 
-/** A point given in the comp's own pixels (1536 x 1000) on the opening. */
+/** A point given in the comp's own pixels (1536 x 1000) on the opening's stage (the frame its
+ *  paintings sit on: the whole opening, until a wide window lets the page's column centre). */
 const comp = (x: number, y: number, w: number, ink = 1): Waypoint => ({
-  at: "opening",
+  at: "opening-stage",
   fx: x / 1536,
   fy: y / 1000,
   w,
   ink,
 });
 
+/** A point on the crane's flight path, in the comp's pixels: measured down from the crane's top
+ *  edge (y 100 in the comp) at the comp's scale, so the stroke leaves the crane the same way
+ *  when the opening is taller than the comp. At the comp's own shape it is `comp` exactly. */
+const flight = (x: number, y: number, w: number, ink = 1): Waypoint => ({
+  at: "opening-flight",
+  fx: x / 1536,
+  fy: (y - 100) / 1000,
+  w,
+  ink,
+});
+
 // Crane comp: the line leaves the crane's trailing legs, rides the air to the right, flicks up
-// and lifts off over the far ridges; a new stroke drops from behind the near peaks and runs down
-// to the bottom left, on into the page.
-const crane: Waypoint[] = [
+// and lifts off over the far ridges...
+const craneFlight: Waypoint[] = [
   { at: "crane", fx: 0.477, fy: 0.786, w: 0.8, ink: 0.5 },
-  comp(640, 437, 1.3),
-  comp(720, 452, 1.9),
-  comp(800, 458, 2.3),
-  comp(880, 452, 2.5),
-  comp(960, 456, 2.8),
-  comp(1012, 472, 3.2),
-  comp(1062, 500, 4),
-  comp(1112, 519, 5),
-  comp(1172, 524, 5.6),
-  comp(1230, 511, 5, 0.8),
-  comp(1268, 497, 3, 0.45),
-  comp(1292, 490, 1, 0),
+  flight(640, 437, 1.3),
+  flight(720, 452, 1.9),
+  flight(800, 458, 2.3),
+  flight(880, 452, 2.5),
+  flight(960, 456, 2.8),
+  flight(1012, 472, 3.2),
+  flight(1062, 500, 4),
+  flight(1112, 519, 5),
+  flight(1172, 524, 5.6),
+  flight(1230, 511, 5, 0.8),
+  flight(1268, 497, 3, 0.45),
+  flight(1292, 490, 1, 0),
+];
+
+// ...a new stroke drops from behind the near peaks and runs down to the bottom left, on into the
+// page. (Between the phone and the two-column page, 721 to 899 px, there is no page for it to
+// run into and the words no longer shrink out of its way: there the opening keeps the flight
+// stroke alone, as the phone's opening keeps its own.)
+const crane: Waypoint[] = [
+  ...craneFlight,
   comp(1302, 560, 0, 0),
   comp(1263, 624, 1, 0.15),
   comp(1242, 660, 2.6),
@@ -96,7 +115,8 @@ const craneToScience: Waypoint[] = [
 // Shared: behind the photograph and out at its right; down the gap between the two columns, past
 // the station beside "What happens inside our cells…" and Ask BiGH Science; across to the right
 // margin and the products' station; down to the bottles and under their row, as the ground they
-// stand on; down the left margin beside the story painting, across above "Make sense of the
+// stand on; into the left margin before the chosen product's words (product-pass keeps it clear
+// of them where the margin is narrow) and down beside the story painting, across above "Make sense of the
 // science." and down the far side of its painting; under it to the research spine (past the
 // station beside its headline), down between the sources, out around the notes and across to the
 // purpose's station; then it lifts off in the open sky, before the painting.
@@ -114,6 +134,7 @@ const shared: Waypoint[] = [
   on("bottles", 0.96, 1, 3, 1, 0, 30),
   on("bottles", 0.5, 1, 2.4, 1, 0, 38),
   on("bottles", 0.04, 1, 2.6, 1, 0, 30),
+  on("product-pass", 0, 0, 2.8),
   on("stories", 0.03, 0.08, 3.2),
   on("stories", 0.034, 0.5, 3.4),
   on("stories", 0.03, 0.94, 3),
@@ -138,7 +159,9 @@ const shared: Waypoint[] = [
 
 // Phones: at 390 the gutter cannot hold a page-long line without crowding the words, so the
 // page line is dropped on phones (the lead's decision, October 2): each opening keeps its own
-// line, and the station labels sit under their headings with their leader lines.
+// line, and the station labels sit under their headings with their leader lines. The same holds
+// wherever the blocks are one column (under 900 px): the route above is drawn for two columns
+// and would run through the words.
 const lift = (at: string, fx: number, fy: number): Waypoint => ({ at, fx, fy, w: 0, ink: 0 });
 
 // The close, on every screen: the brush travels off the paper down to the footer, reloads, and
@@ -177,10 +200,15 @@ const cranePhone: Waypoint[] = [
   lift("opening-art", 0.97, 1.0),
 ];
 
-/** The opening's waypoints, the route through the rest of the page (none on phones), then the
- *  three standards' rules and the closing stroke under the footer's promise (every screen). */
-export function route(phone = false): Waypoint[] {
-  return phone
-    ? [...cranePhone, ...standards, ...promise]
-    : [...crane, ...craneToScience, ...shared, ...standards, ...promise];
+/** Which page the line is drawn on: the phone's own opening (720 px and under), the comp's
+ *  opening over one-column blocks (721 to 899 px), or the two-column page (900 px and up). */
+export type Layout = "phone" | "column" | "page";
+
+/** The opening's waypoints, the route through the rest of the page (only where the blocks are
+ *  two columns), then the three standards' rules and the closing stroke under the footer's
+ *  promise (every screen). */
+export function route(layout: Layout): Waypoint[] {
+  if (layout === "phone") return [...cranePhone, ...standards, ...promise];
+  if (layout === "column") return [...craneFlight, ...standards, ...promise];
+  return [...crane, ...craneToScience, ...shared, ...standards, ...promise];
 }

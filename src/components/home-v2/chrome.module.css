@@ -34,7 +34,8 @@
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 32px;
-  max-width: 1600px;
+  /* The page's column (the look's .wrap): on a wide window the logo stays over the words. */
+  max-width: calc(var(--wide, 1336px) + 2 * var(--gutter));
   height: 100%;
   margin: 0 auto;
   padding: 0 var(--gutter);
@@ -151,10 +152,12 @@
   border-bottom: 1px solid var(--footer-line, var(--line));
 }
 
+/* 40 px down to a 390 px phone; on a narrower one it shrinks with the window (as the look's
+   headlines do), so the closing picture still stands beside it. */
 .footerMessage {
   margin-top: 30px;
   font-family: var(--display-font);
-  font-size: clamp(40px, 4.4vw, 64px);
+  font-size: clamp(min(40px, 10.26vw), 4.4vw, 64px);
   font-weight: var(--display-weight);
   line-height: 1.02;
   letter-spacing: -0.035em;
@@ -249,10 +252,13 @@
   font-size: 15px;
 }
 
+/* A full-size target around the small link, without moving the line it sits on. */
 .footerBottom a {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-height: 44px;
+  margin: -10px 0;
 }
 
 .footerNote {
@@ -325,7 +331,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .footerTop {
     grid-template-columns: 1fr;
   }
@@ -334,5 +340,10 @@
 @media (max-width: 620px) {
   .footerColumns {
     grid-template-columns: 1fr 1fr;
+  }
+
+  /* The third list stands alone on its row: it takes the row, so its links stay on one line. */
+  .footerColumns > :nth-child(3):last-child {
+    grid-column: 1 / -1;
   }
 }

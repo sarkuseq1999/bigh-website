@@ -230,7 +230,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 899px) {
   .spread {
     grid-template-columns: 1fr;
   }
@@ -247,9 +247,14 @@
     gap: 4px;
   }
 
+  /* Three equal columns; on the narrowest phones a column grows to keep its name on one line. */
   .choices {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(min-content, 1fr));
+  }
+
+  .choiceName {
+    white-space: nowrap;
   }
 
   .stories .choice {

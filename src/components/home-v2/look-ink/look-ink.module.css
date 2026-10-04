@@ -248,11 +248,13 @@
   text-decoration-color: var(--ink);
 }
 
+/* 40 px down to a 390 px phone; on a narrower one the headline shrinks with the window, so a
+   line that fits at 390 ("Tiny power plants.") still fits and no word is left alone. */
 .look .display {
   margin: 0;
   font-family: var(--display-font);
   font-weight: var(--display-weight);
-  font-size: clamp(40px, 3.9vw, 62px);
+  font-size: clamp(min(40px, 10.26vw), 3.9vw, 62px);
   line-height: 1.04;
   letter-spacing: -0.03em;
   text-wrap: balance;
@@ -486,5 +488,13 @@
 
   .look .station::before {
     transform-origin: left center !important;
+  }
+}
+
+/* Small phones: a shorter leader, so the longest label still sits on one line at 360 px. */
+@media (max-width: 379px) {
+  .look .station {
+    gap: 10px;
+    --leader: 16px;
   }
 }

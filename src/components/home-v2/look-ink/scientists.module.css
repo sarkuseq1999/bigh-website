@@ -356,9 +356,11 @@
     gap: 14px;
   }
 
+  /* minmax(0, ...): a long station label wraps inside the column instead of widening it past
+     the window (a 320 px phone). */
   .work,
   .ask {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
     row-gap: 28px;
   }
 

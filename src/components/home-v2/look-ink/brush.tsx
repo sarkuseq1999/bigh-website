@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { route, type Waypoint } from "./brush-route";
+import { route, type Layout, type Waypoint } from "./brush-route";
 import styles from "./brush.module.css";
 
 // The page's signature: one continuous ink brush line that draws itself down the whole page as
@@ -439,11 +439,18 @@ export function BrushLine({ motion }: { motion: boolean }) {
       dpr = Math.min(2, window.devicePixelRatio || 1);
       width = root.clientWidth;
       const scale = Math.min(1.15, Math.max(0.62, width / 1536));
-      samples = sample(measure(root, route(width < 720)), scale);
+      // The same breakpoints as the stylesheets: the phone's own opening at 720 px and under,
+      // the two-column page (the one the page line is routed through) from 900 px.
+      const layout: Layout = window.matchMedia("(max-width: 720px)").matches
+        ? "phone"
+        : window.matchMedia("(min-width: 900px)").matches
+          ? "page"
+          : "column";
+      samples = sample(measure(root, route(layout)), scale);
       const top = root.getBoundingClientRect().top;
       const hero = root.querySelector<HTMLElement>('[data-brush="opening"]');
       const heroBottom = hero ? hero.getBoundingClientRect().bottom - top : 0;
-      material(samples, width >= 720 ? heroBottom : -1, scale);
+      material(samples, layout === "phone" ? -1 : heroBottom, scale);
       // Each section label is reached when the brush comes level with it.
       stations = [...root.querySelectorAll<HTMLElement>("[data-station]")].map((element) => {
         const box = element.getBoundingClientRect();

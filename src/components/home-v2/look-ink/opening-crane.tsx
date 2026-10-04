@@ -104,6 +104,9 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
       data-brush="opening"
     >
       <div ref={art} className={styles.art} aria-hidden="true" data-brush="opening-art">
+        {/* What the brush line measures the opening's stroke on (see opening.module.css). */}
+        <span className={styles.stage} data-brush="opening-stage" />
+        <span className={styles.flightPath} data-brush="opening-flight" />
         <span className={styles.sun}>
           <Image
             className={styles.leaf}
