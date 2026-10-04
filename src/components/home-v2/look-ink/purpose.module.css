@@ -173,6 +173,12 @@
   font-size: clamp(21px, 1.7vw, 25px);
   line-height: 1.45;
   letter-spacing: -0.008em;
+  text-wrap: balance;
+}
+
+/* The page's reading measure (about 65 characters to a line), however wide the column. */
+.purpose .columns .paragraph {
+  max-width: 30em;
 }
 
 .purpose .paragraph + .paragraph {

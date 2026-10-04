@@ -39,6 +39,9 @@
   font-family: var(--sans);
   font-size: 19px;
   line-height: 1.6;
+  /* No paragraph ends on one short word, where the browser can set lines that way (inherited;
+     headlines and other rules that choose balance keep it). */
+  text-wrap: pretty;
   -webkit-font-smoothing: antialiased;
 }
 

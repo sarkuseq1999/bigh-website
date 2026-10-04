@@ -34,7 +34,7 @@
 }
 
 .research .intro {
-  max-width: 30em;
+  max-width: 27em;
 }
 
 .filters {
@@ -76,8 +76,9 @@
   opacity: 0.7;
 }
 
-/* The sources, two columns either side of the spine, each pinned to it by a leader line from
-   its year. */
+/* The sources: notes either side of the spine. Each is its year, then its title, then two quiet
+   lines; the year, the round toggle and (on two columns) the leader to the spine share one line,
+   --pin down from the note's top edge. */
 .list {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -88,33 +89,22 @@
 }
 
 .entry {
+  --pin: 38px;
   position: relative;
   border-top: 1px solid var(--line);
 }
 
-.entry::after {
-  content: "";
-  position: absolute;
-  top: 37px;
-  width: calc(var(--spine-gap) / 2 - 10px);
-  height: 1px;
-  background: color-mix(in srgb, var(--ink) 55%, transparent);
-}
-
-.entry:nth-child(odd)::after {
-  left: 100%;
-}
-
-.entry:nth-child(even)::after {
-  right: 100%;
-}
-
+/* One column and narrow columns: the year heads the note, the toggle at the end of its line,
+   so the title has the whole width. */
 .summary {
   display: grid;
-  grid-template-columns: 70px minmax(0, 1fr) 44px;
-  align-items: start;
-  gap: 16px;
-  padding: 22px 0;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  grid-template-areas:
+    "year toggle"
+    "what what";
+  align-items: center;
+  gap: 4px 16px;
+  padding: 16px 0 22px;
   cursor: pointer;
   list-style: none;
 }
@@ -124,37 +114,62 @@
 }
 
 .year {
-  padding-top: 2px;
-  font-size: 26px;
+  grid-area: year;
+  font-size: 24px;
   font-weight: 300;
-  line-height: 1.1;
+  line-height: 28px;
   letter-spacing: -0.02em;
-  font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* A guide has no year: its word sits in the year's place as a label, in sentence case like
+   every label on the page. */
+.year[data-word] {
+  font-size: 17px;
+  font-weight: 450;
+  letter-spacing: 0;
+  text-transform: lowercase;
+}
+
+.year[data-word]::first-letter {
+  text-transform: uppercase;
 }
 
 .what {
+  grid-area: what;
   display: grid;
-  gap: 4px;
+  gap: 2px;
 }
 
-.category {
+/* The title carries the note (the headline weight: Vietnamese has its own, as in the headlines). */
+.itemTitle {
+  margin-bottom: 2px;
+  font-size: 20px;
+  font-weight: var(--display-weight);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  text-wrap: balance;
+}
+
+/* A title that needs two lines breaks between words (Korean) or phrases (Japanese). */
+.itemTitle:lang(ko) {
+  word-break: keep-all;
+}
+
+.itemTitle:lang(ja) {
+  word-break: auto-phrase;
+}
+
+.category,
+.journal {
   color: var(--muted);
   font-size: 15px;
-  font-weight: 500;
-}
-
-.itemTitle {
-  font-size: 19px;
   font-weight: 450;
   line-height: 1.4;
 }
 
-.journal {
-  color: var(--muted);
-  font-size: 16px;
-}
-
 .toggle {
+  grid-area: toggle;
   display: grid;
   place-items: center;
   width: 44px;
@@ -168,34 +183,28 @@
     color 0.5s var(--ease);
 }
 
-.summary:hover .toggle {
-  border-color: var(--ink);
-  background: var(--ink);
-  color: var(--paper);
-}
-
-.itemTitle {
-  text-decoration: underline 1px transparent;
-  text-underline-offset: 6px;
-  transition: text-decoration-color 0.5s var(--ease);
-}
-
-.summary:hover .itemTitle {
-  text-decoration-color: var(--hair);
+@media (hover: hover) {
+  .summary:hover .toggle {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
 }
 
 .item[open] .toggle {
   rotate: 45deg;
 }
 
+/* Open: what the source tells us, in a reading measure, and the page's text link. */
 .more {
   display: grid;
   justify-items: start;
   gap: 6px;
-  padding: 0 0 24px 86px;
+  padding: 0 0 24px;
 }
 
-.more p {
+.research .more p {
+  max-width: 32em;
   margin: 0;
   color: var(--muted);
   font-size: 18px;
@@ -204,23 +213,150 @@
 
 .foot {
   display: grid;
-  justify-items: center;
+  justify-items: start;
   gap: 22px;
   margin-top: 72px;
-  text-align: center;
 }
 
 .showCount {
   font-size: 15px;
+  font-variant-numeric: tabular-nums;
   opacity: 0.7;
 }
 
 .research .note {
-  max-width: 40em;
+  max-width: 34em;
   margin: 0;
   color: var(--muted);
   font-size: 17px;
   line-height: 1.55;
+}
+
+/* Two columns: the notes hang on the spine, so they need no rules between them. The leader is
+   a hairline from each note to the spine at the height of its year (from the toggle on the left
+   of the spine, to the year on the right of it). */
+@media (min-width: 900px) {
+  .entry {
+    border-top: 0;
+  }
+
+  .entry::before,
+  .entry::after {
+    content: "";
+    position: absolute;
+    top: var(--pin);
+    width: calc(var(--spine-gap) / 2 - 21px);
+    height: 1px;
+    background: var(--ink);
+    pointer-events: none;
+  }
+
+  .entry::after {
+    opacity: 0.55;
+  }
+
+  /* The note that is pointed at, reached with the keyboard or open answers on its leader: ink
+     draws out from the note to the line (the stations' leaders grow the same way). */
+  .entry::before {
+    scale: 0 1;
+    transition: scale 0.5s var(--ease);
+  }
+
+  .entry:nth-child(odd)::before,
+  .entry:nth-child(odd)::after {
+    left: calc(100% + 8px);
+    transform-origin: left center;
+  }
+
+  .entry:nth-child(even)::before,
+  .entry:nth-child(even)::after {
+    right: calc(100% + 8px);
+    transform-origin: right center;
+  }
+
+  .entry:has(.item[open])::before,
+  .entry:has(.summary:focus-visible)::before {
+    scale: 1 1;
+    transition-duration: 0.7s;
+  }
+
+  @media (hover: hover) {
+    .entry:has(.summary:hover)::before {
+      scale: 1 1;
+      transition-duration: 0.7s;
+    }
+  }
+
+  .foot {
+    justify-items: center;
+    text-align: center;
+  }
+
+  .research .note {
+    text-wrap: balance;
+  }
+}
+
+/* Wide columns: the year beside the title, on one baseline. */
+@media (min-width: 1200px) {
+  .summary {
+    grid-template-columns: 70px minmax(0, 1fr) 44px;
+    grid-template-areas: "year what toggle";
+    align-items: baseline;
+    padding: 24px 0;
+  }
+
+  .toggle {
+    align-self: start;
+    margin-top: -8px;
+  }
+
+  .more {
+    padding-left: 86px;
+  }
+}
+
+/* Motion, in the page's settle: a note that arrives (another filter, "show all") fades in and
+   rises, one after another; what a source tells us settles in the same way when it opens. */
+@media (prefers-reduced-motion: no-preference) {
+  .entry[data-in] {
+    animation: settle 0.9s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 55ms);
+  }
+
+  .item[open] .more {
+    animation: settle 0.9s var(--ease);
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* One column (no page-long line to keep up with): the note also opens and closes at the page's
+   pace, where the browser can ease to a content's own height. */
+@media (max-width: 899px) and (prefers-reduced-motion: no-preference) {
+  @supports selector(::details-content) and (interpolate-size: allow-keywords) {
+    .item {
+      interpolate-size: allow-keywords;
+    }
+
+    .item::details-content {
+      block-size: 0;
+      overflow-y: clip;
+      transition:
+        block-size 0.45s var(--ease),
+        content-visibility 0.45s allow-discrete;
+    }
+
+    .item[open]::details-content {
+      block-size: auto;
+      transition-duration: 0.7s;
+    }
+  }
 }
 
 @media (max-width: 899px) {
@@ -235,22 +371,18 @@
     gap: 14px;
     margin-bottom: 20px;
   }
+}
 
-  .entry::after {
-    display: none;
+/* In a narrow column the introduction runs to four lines; they break evenly, so it does not
+   end on two stray words. */
+@media (max-width: 1199px) {
+  .research .intro {
+    text-wrap: balance;
   }
+}
 
-  .summary {
-    grid-template-columns: 60px minmax(0, 1fr) 44px;
-    gap: 12px;
-  }
-
-  .more {
-    padding: 0 0 22px 72px;
-  }
-
-  .foot {
-    justify-items: start;
-    text-align: left;
+@media (max-width: 560px) {
+  .itemTitle {
+    font-size: 19px;
   }
 }

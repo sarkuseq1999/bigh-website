@@ -41,6 +41,18 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     window, Tab goes from its button into it, Escape closes it, and Support opened from it hands
     focus back to the menu button; with reduced motion a sheet and the menu are whole at once;
     in Korean the Support sheet and the menu open inside the window.
+  - the research index (October 4): on two columns every note is pinned to the spine (year,
+    toggle and leader on one line, no rules between notes; the year beside the title on a wide
+    window, heading the note on a narrow one), its leader answers in ink when the note is
+    pointed at or open, what a source tells us settles in above the page's text link, rows that
+    arrive settle in (the first six stay put on "show all"), "show fewer" keeps its button under
+    the pointer, a guide's label is sentence case and clear of the title (English, Vietnamese),
+    no straight apostrophes; on a phone the notes are on hairlines with the title at the whole
+    width, a note eases open and the toggle is not left filled after a tap; with reduced motion
+    rows and an opened note are there at once.
+  - fine typography (October 4, desktop and phone): no paragraph ends on a single word, none of
+    two or more lines runs past 76 characters, and the sample story's opening quotation mark
+    hangs in the margin.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -1066,6 +1078,283 @@ def run_vietnamese(browser, mobile):
     context.close()
 
 
+# The research index's notes (the first six): where the year, the toggle and the leader sit.
+NOTES = """() => {
+  const list = document.querySelector('#research ul');
+  return [...list.children].slice(0, 6).map((li) => {
+    const box = li.getBoundingClientRect();
+    const summary = li.querySelector('summary');
+    const [year, what, toggle] = summary.children;
+    const title = what.children[0];
+    const centre = (e) => { const r = e.getBoundingClientRect(); return r.top + r.height / 2 - box.top; };
+    const lead = getComputedStyle(li, '::after');
+    const y = year.getBoundingClientRect(), t = title.getBoundingClientRect(), g = toggle.getBoundingClientRect();
+    return {
+      year: centre(year), toggle: centre(toggle),
+      leader: lead.content === 'none' ? null : parseFloat(lead.top) + 0.5,
+      leaderWidth: lead.content === 'none' ? 0 : parseFloat(lead.width),
+      rule: parseFloat(getComputedStyle(li).borderTopWidth),
+      beside: y.right <= t.left + 0.5, above: y.bottom <= t.top + 0.5,
+      titleWidth: t.width, rowWidth: box.width, toggleSize: [g.width, g.height],
+      summary: summary.getBoundingClientRect().height,
+      label: [getComputedStyle(year).textTransform, getComputedStyle(year, '::first-letter').textTransform],
+    };
+  });
+}"""
+LEADER = "(n) => getComputedStyle(document.querySelector(`#research ul > li:nth-child(${n})`), '::before').scale"
+ROW_OPACITY = "[...document.querySelectorAll('#research ul > li')].map((e) => +(+getComputedStyle(e).opacity).toFixed(2))"
+ROW_HEIGHT = "document.querySelector('#research ul > li:nth-child(2)').getBoundingClientRect().height"
+MORE_OPACITY = "+getComputedStyle(document.querySelector('#research details[open] > div')).opacity"
+
+# The page's paragraphs, line by line: one that ends on a single word, one that runs too wide;
+# and the sample story's opening quotation mark.
+TYPE = """() => {
+  const root = document.querySelector('[data-look=ink]');
+  const out = { wrap: getComputedStyle(root).textWrapStyle, widows: [], wide: [] };
+  // (a station label is not a paragraph: beside the products it sits on two lines in the margin)
+  for (const p of root.querySelectorAll('main p:not([data-station])')) {
+    if (!p.checkVisibility()) continue;
+    const walker = document.createTreeWalker(p, NodeFilter.SHOW_TEXT);
+    const lines = new Map();
+    for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+      const re = /\\S+/g; let m;
+      while ((m = re.exec(n.nodeValue))) {
+        const range = document.createRange(); range.setStart(n, m.index); range.setEnd(n, m.index + m[0].length);
+        const r = range.getClientRects()[0]; if (!r || !r.width) continue;
+        const key = Math.round((r.top + r.height / 2) / 8);
+        lines.set(key, (lines.get(key) || []).concat(m[0]));
+      }
+    }
+    const rows = [...lines.entries()].sort((a, b) => a[0] - b[0]).map((x) => x[1].join(' '));
+    if (rows.length < 2) continue;
+    if (!rows[rows.length - 1].includes(' ')) out.widows.push(rows[rows.length - 1]);
+    const longest = Math.max(...rows.map((r) => r.length));
+    if (longest > 76) out.wide.push(`${longest}: ${rows[0].slice(0, 30)}`);
+  }
+  const quote = document.querySelector('#stories h3');
+  const mark = quote.querySelector('span');
+  const range = document.createRange(); range.setStart(mark.nextSibling, 0); range.setEnd(mark.nextSibling, 1);
+  const left = quote.getBoundingClientRect().left;
+  out.hang = [mark.textContent, +(mark.getBoundingClientRect().right - left).toFixed(1), +(range.getBoundingClientRect().left - left).toFixed(1), +(document.querySelector('#stories blockquote p').getBoundingClientRect().left - left).toFixed(1), Math.round(mark.getBoundingClientRect().left)];
+  return out;
+}"""
+
+
+def run_research(browser):
+    """The research index (October 4). Two columns: every note is pinned to the spine (its year,
+    its round toggle and its leader on one line, no rules between notes), the leader answers in ink
+    when the note is pointed at or open, what a source tells us settles in, rows that arrive settle
+    in, "show fewer" keeps its button under the pointer, a guide's label is sentence case and clear
+    of the title, and no straight apostrophes are left. One column: notes on hairlines, the year
+    heading the note, the title at the whole width, the note easing open. Reduced motion: all of
+    it at once."""
+    tag = "research desk"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False)
+    scroll_to(page, top_of(page, "#research ul") - 220, 1500)
+    notes = page.evaluate(NOTES)
+    check(
+        f"{tag}: every note's year, toggle and leader share one line (year beside the title, no rules)",
+        len(notes) == 6
+        and all(
+            n["leader"] is not None
+            and abs(n["year"] - n["toggle"]) <= 2
+            and abs(n["leader"] - n["toggle"]) <= 2
+            and n["leaderWidth"] >= 12
+            and n["rule"] == 0
+            and n["beside"]
+            for n in notes
+        ),
+        str([(round(n["year"]), round(n["toggle"]), n["leader"], n["leaderWidth"], n["rule"]) for n in notes[:2]]),
+    )
+    rest = page.evaluate(LEADER, 3)
+    page.hover("#research ul > li:nth-child(3) summary")
+    page.wait_for_timeout(900)
+    pointed = page.evaluate(LEADER, 3)
+    page.mouse.move(5, 5)
+    page.wait_for_timeout(700)
+    left = page.evaluate(LEADER, 3)
+    page.locator("#research ul > li:nth-child(3) summary").click()
+    page.mouse.move(5, 5)
+    page.wait_for_timeout(100)
+    arriving = page.evaluate(MORE_OPACITY)
+    page.wait_for_timeout(1300)
+    settled = page.evaluate(MORE_OPACITY)
+    opened = page.evaluate(LEADER, 3)
+    link = page.evaluate(
+        "(() => { const a = document.querySelector('#research details[open] a'); const s = getComputedStyle(a); return [s.textUnderlineOffset, s.textDecorationThickness, a.target, Math.round(a.getBoundingClientRect().height)]; })()"
+    )
+    shoot(page, "research-desk-00-open")
+    check(
+        f"{tag}: the leader answers in ink when the note is pointed at or open",
+        rest.startswith("0") and pointed in ("1", "1 1") and left.startswith("0") and opened in ("1", "1 1"),
+        f"{rest} | {pointed} | {left} | {opened}",
+    )
+    check(
+        f"{tag}: what a source tells us settles in; its link is the page's text link",
+        arriving < 0.9 and settled == 1 and link == ["8px", "1px", "_blank", 48],
+        f"{arriving:.2f} -> {settled} | {link}",
+    )
+    page.locator("#research ul > li:nth-child(3) summary").click()
+    page.click("#research button[aria-pressed] >> nth=2")
+    page.wait_for_timeout(60)
+    arriving = page.evaluate(ROW_OPACITY)
+    page.wait_for_timeout(1800)
+    settled = page.evaluate(ROW_OPACITY)
+    page.click("#research button[aria-expanded]")
+    page.wait_for_timeout(60)
+    more = page.evaluate(ROW_OPACITY)
+    page.wait_for_timeout(1800)
+    everything = page.evaluate(ROW_OPACITY)
+    check(
+        f"{tag}: rows that arrive settle in (a filter: all six; show all: the new ones only)",
+        len(arriving) == 6
+        and max(arriving) < 0.9
+        and settled == [1] * 6
+        and len(more) == 17
+        and more[:6] == [1] * 6
+        and max(more[6:]) < 0.9
+        and everything == [1] * 17,
+        f"{arriving} -> {settled} | {more[:9]}",
+    )
+    button = page.locator("#research button[aria-expanded]")
+    button.scroll_into_view_if_needed()
+    page.wait_for_timeout(500)
+    before = button.bounding_box()["y"]
+    button.click()
+    page.wait_for_timeout(600)
+    moved = button.bounding_box()["y"] - before
+    fewer = page.locator("#research ul > li").count()
+    check(f"{tag}: show fewer keeps its button under the pointer", abs(moved) <= 2 and fewer == 6, f"moved {moved:.1f}, rows {fewer}")
+    page.click("#research button[aria-pressed] >> nth=3")
+    page.wait_for_timeout(1500)
+    guides = page.evaluate(NOTES)
+    word = page.evaluate("document.querySelector('#research summary > span').innerText")
+    shoot(page, "research-desk-01-guides")
+    check(
+        f"{tag}: a guide's label is sentence case and clear of the title",
+        all(g["label"] == ["lowercase", "uppercase"] and (g["beside"] or g["above"]) for g in guides) and word == "Guide",
+        f"{word} {guides[0]['label']}",
+    )
+    page.click("#research button[aria-pressed] >> nth=0")
+    page.click("#research button[aria-expanded]")
+    page.wait_for_timeout(400)
+    words = page.evaluate("document.querySelector('#research').textContent")
+    rows = page.locator("#research ul > li").count()
+    check(f"{tag}: all 36 sources, no straight apostrophes", rows == 36 and "'" not in words and "Curcumin’s" in words, f"rows {rows}")
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # A narrow two-column window: the year heads the note, the leader still on its line.
+    tag = "research 1024"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1024, 768), False)
+    scroll_to(page, top_of(page, "#research ul") - 220, 1500)
+    notes = page.evaluate(NOTES)
+    shoot(page, "research-1024-00")
+    check(
+        f"{tag}: the year heads each note, the leader on its line",
+        all(
+            n["above"] and n["leader"] is not None and abs(n["leader"] - n["toggle"]) <= 2 and abs(n["year"] - n["toggle"]) <= 2 and n["rule"] == 0
+            for n in notes
+        ),
+        str([(round(n["year"]), round(n["toggle"]), n["leader"]) for n in notes[:2]]),
+    )
+    context.close()
+
+    # A phone: one column, on hairlines.
+    tag = "research phone"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (390, 844), True)
+    scroll_to(page, top_of(page, "#research ul") - 160, 1500)
+    notes = page.evaluate(NOTES)
+    check(
+        f"{tag}: notes on hairlines, the year heading the note, the title at the whole width, 44 px toggle",
+        all(
+            n["rule"] == 1
+            and n["leader"] is None
+            and n["above"]
+            and n["titleWidth"] >= n["rowWidth"] - 1
+            and n["toggleSize"] == [44, 44]
+            and n["summary"] >= 44
+            for n in notes
+        ),
+        str([(n["rule"], n["leader"], round(n["titleWidth"]), n["toggleSize"]) for n in notes[:2]]),
+    )
+    eases = page.evaluate("CSS.supports('selector(::details-content)') && CSS.supports('interpolate-size', 'allow-keywords')")
+    closed = page.evaluate(ROW_HEIGHT)
+    page.locator("#research ul > li:nth-child(2) summary").tap()
+    page.wait_for_timeout(120)
+    opening = page.evaluate(ROW_HEIGHT)
+    page.wait_for_timeout(1200)
+    opened = page.evaluate(ROW_HEIGHT)
+    filled = page.evaluate("getComputedStyle(document.querySelector('#research ul > li:nth-child(2) summary > span:last-child')).backgroundColor")
+    shoot(page, "research-phone-00-open")
+    check(
+        f"{tag}: a note eases open; the toggle is not left filled after a tap",
+        opened > closed + 80 and (closed < opening < opened if eases else opening == opened) and filled == "rgba(0, 0, 0, 0)",
+        f"{closed:.0f} -> {opening:.0f} -> {opened:.0f}, toggle {filled}",
+    )
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # Reduced motion: rows and what a source tells us are there at once.
+    tag = "research reduced motion"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False, reduced=True)
+    scroll_to(page, top_of(page, "#research ul") - 220, 900)
+    page.click("#research button[aria-pressed] >> nth=2")
+    page.wait_for_timeout(60)
+    rows = page.evaluate(ROW_OPACITY)
+    page.locator("#research ul > li:nth-child(1) summary").click()
+    page.wait_for_timeout(60)
+    words = page.evaluate(MORE_OPACITY)
+    check(f"{tag}: rows and an opened note are there at once", rows == [1] * 6 and words == 1, f"{rows} | {words}")
+    context.close()
+
+    # Vietnamese: the longest label in the year's place.
+    tag = "research vn"
+    context, page, response, problems = open_page(browser, f"{BASE}/vn", (1536, 1000), False)
+    scroll_to(page, top_of(page, "#research ul") - 220, 900)
+    page.click("#research button[aria-pressed] >> nth=3")
+    page.wait_for_timeout(1500)
+    guides = page.evaluate(NOTES)
+    word = page.evaluate("document.querySelector('#research summary > span').innerText")
+    shoot(page, "research-vn-00-guides")
+    check(
+        f"{tag}: the guide label is sentence case and clear of the title",
+        all(g["beside"] or g["above"] for g in guides) and word.replace("\n", " ") == "Hướng dẫn",
+        word,
+    )
+    context.close()
+
+
+def run_type(browser, mobile):
+    """Fine typography (October 4): lines are set so no paragraph ends on a single word, no
+    paragraph of two or more lines runs past about 75 characters, and the sample story's opening
+    quotation mark hangs in the margin (its first letter on the same edge as the lines under it)."""
+    tag = f"type {'phone' if mobile else 'desk'}"
+    size = (390, 844) if mobile else (1536, 1000)
+    context, page, response, problems = open_page(browser, f"{BASE}/", size, mobile)
+    total = page.evaluate("document.documentElement.scrollHeight")
+    y = 0
+    while y < total:
+        page.evaluate(f"window.scrollTo(0, {y})")
+        page.wait_for_timeout(60)
+        y += size[1] // 2
+    scroll_to(page, top_of(page, "#stories h3") - 300, 1200)
+    shoot(page, f"type-{'phone' if mobile else 'desk'}-00-quote")
+    found = page.evaluate(TYPE)
+    check(
+        f"{tag}: no paragraph ends on a single word; none runs past 76 characters a line",
+        found["wrap"] == "pretty" and not found["widows"] and not found["wide"],
+        f"{found['wrap']} | widows {found['widows']} | wide {found['wide']}",
+    )
+    mark, mark_right, letter, lines, mark_left = found["hang"]
+    check(
+        f"{tag}: the story's opening quotation mark hangs in the margin",
+        mark == "“" and abs(mark_right) <= 1 and abs(letter) <= 1 and abs(lines) <= 1 and mark_left >= 4,
+        str(found["hang"]),
+    )
+    context.close()
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=GPU)
     run(browser, "home", mobile=False)
@@ -1078,6 +1367,9 @@ with sync_playwright() as p:
     run_korean(browser, mobile=True)
     run_vietnamese(browser, mobile=False)
     run_vietnamese(browser, mobile=True)
+    run_research(browser)
+    run_type(browser, mobile=False)
+    run_type(browser, mobile=True)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

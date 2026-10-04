@@ -157,6 +157,8 @@ A near-monochrome of sumi ink on warm paper, with one gold that belongs to the p
 
 **The CJK Room Rule.** Korean, Japanese and Chinese headlines take line-height 1.22, tracking -0.01em, `word-break: keep-all`; the opening headline drops to 86 comp px so it stays clear of the crane.
 
+**The Set Lines Rule.** Reading text is set with `text-wrap: pretty` from the page's root (no paragraph ends on one short word); headlines and short statements choose `balance`. A paragraph of reading text keeps a measure of about 30em (about 65 characters a line) however wide its column. An opening quotation mark hangs in the margin, so the first letter stands on the same edge as the lines under it. Text links and hover underlines are 1px, 8px below the baseline.
+
 ## Layout
 
 Content sits in a 1300px measure inside a fluid gutter (clamp(22px, 7.7vw, 132px); the cell opening uses clamp(22px, 5.7vw, 100px)). Sections breathe on clamp-based vertical padding of roughly 64–140px; nothing is boxed, so space and hairlines do the separating.
@@ -219,6 +221,9 @@ One painted stroke, not a traced path: calligraphic width, ragged paper-tooth ed
 
 ### Stations
 A station is a short sentence-case label (17px/450, Sumi Ink) pinned to the brush line by a 1px leader at 62% ink (28–34px long on desktop). It sits in the margin beside its heading with the leader pointing at the line, and appears only when the brush reaches it: the leader draws out over 0.7s, the words fade in over 0.9s. A station exists only where the line passes and carries words that already exist; it is not a heading decoration.
+
+### Research Index
+"Curiosity, with references." is a set of notes pinned to the brush line, which runs down the middle of them as the index's spine (900px and wider). A note is its year (24px/300, tabular figures; a guide has a word in the year's place, set as a 17px/450 sentence-case label), its title (20px at the headline weight, balanced) and two caption lines (the kind of source, where it was published), with the round toggle (44px). The year, the toggle and a 1px leader to the spine share one line, and there are no rules between pinned notes. From 1200px the year sits beside the title on one baseline; narrower, it heads the note so the title has the whole width. A note that is pointed at, reached with the keyboard or open answers on its leader: ink draws out from the note to the spine (0.7s). What a source tells us settles in (0.9s) above the page's text link; rows that arrive with a filter or "show all" settle in 55ms apart, and "show fewer" keeps its button under the pointer. One column (under 900px): no spine, so the notes sit on hairlines and ease open to their own height. Reduced motion: all of it at once.
 
 ### Cell Labels
 In the cell opening, three hairline labels (max(16px, 20 comp px)/450) sit at the ends of leader lines drawn into the painting itself.

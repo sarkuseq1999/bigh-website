@@ -212,6 +212,11 @@
   max-width: 38em;
 }
 
+/* The page's reading measure (about 65 characters to a line), however wide the column. */
+.scientists .workMain > p {
+  max-width: 30em;
+}
+
 /* The question with its station label: the label sits on its own line at the column's right
    edge, its leader reaching the line in the gap, and the question takes the column's full
    measure under it (beside each other, the question was squeezed into four and five lines). */

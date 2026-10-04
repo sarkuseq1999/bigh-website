@@ -114,6 +114,13 @@
   text-wrap: balance;
 }
 
+/* The opening quotation mark hangs in the margin, so the quote's first letter stands on the
+   same edge as the lines under it. */
+.stories .quoteTitle .hang {
+  position: absolute;
+  translate: -100% 0;
+}
+
 .stories .quote {
   max-width: 30em;
   margin: 24px 0 0;
@@ -192,7 +199,7 @@
 
 .choice:hover .choiceName {
   text-decoration: underline;
-  text-underline-offset: 6px;
+  text-underline-offset: 8px;
   text-decoration-thickness: 1px;
 }
 

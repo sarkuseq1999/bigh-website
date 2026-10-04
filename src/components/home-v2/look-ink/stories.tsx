@@ -60,7 +60,10 @@ export function Stories() {
             </header>
 
             <article key={story.id} className={styles.story} aria-live="polite">
-              <h3 className={styles.quoteTitle}>“{copy(story.title)}”</h3>
+              <h3 className={styles.quoteTitle}>
+                <span className={styles.hang}>“</span>
+                {copy(story.title)}”
+              </h3>
               <blockquote className={styles.quote}>
                 <p>{copy(story.quote)}</p>
               </blockquote>
