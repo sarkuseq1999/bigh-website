@@ -85,6 +85,37 @@
   border-color: var(--ink);
 }
 
+/* Navigation: on a mouse, an ink underline draws under the link you point at (the current page
+   keeps its own). */
+@media (hover: hover) and (min-width: 1101px) {
+  .look :global(#home-navigation) > :is(a, button):hover {
+    opacity: 1;
+  }
+
+  .look :global(#home-navigation) > :is(a, button)::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 8px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transform-origin: left center;
+    transition: scale 0.5s var(--ease);
+  }
+
+  .look :global(#home-navigation) > :is(a, button):is(:hover, [aria-current="page"])::after {
+    scale: 1 1;
+  }
+}
+
+/* The window's own scrollbar, in ink on paper. */
+:global(html):has(.look) {
+  scrollbar-color: #9d978b #f4efe5;
+}
+
 .look ::selection {
   background: #ead9ad;
   color: var(--ink);
@@ -167,6 +198,35 @@
 .look .pillGhost:hover {
   background: color-mix(in srgb, var(--ink) 7%, transparent);
   border-color: var(--ink);
+}
+
+/* With a mouse, the outlined pill fills the way a drop of ink spreads in water: from the point
+   where the pointer came in (--mx / --my, set by look-ink.tsx), out to the whole pill. */
+@media (hover: hover) and (pointer: fine) {
+  .look .pillGhost {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+  }
+
+  .look .pillGhost::before {
+    content: "";
+    position: absolute;
+    inset: -1.5px;
+    z-index: -1;
+    background: var(--ink);
+    clip-path: circle(0% at var(--mx, 50%) var(--my, 100%));
+    transition: clip-path 0.75s var(--ease);
+  }
+
+  .look .pillGhost:hover {
+    background: transparent;
+    color: var(--paper);
+  }
+
+  .look .pillGhost:hover::before {
+    clip-path: circle(120% at var(--mx, 50%) var(--my, 100%));
+  }
 }
 
 .look .textLink {
@@ -257,6 +317,64 @@
   transition:
     --bloom calc(var(--breath) * 1.25) var(--ease) calc(var(--bloom-delay, 0) * 1ms),
     filter var(--breath) var(--ease) calc(var(--bloom-delay, 0) * 1ms);
+}
+
+/* Gold leaf is metal. A band of light crosses each painting's leaf (and only the leaf: --gold is
+   that painting's gold mask) as the painting travels up the window, the way a gilded page
+   catches the light when you tilt it. It waits for the painting to bloom. Browsers without
+   scroll-driven animation get the same band every few breaths; reduced motion gets none. */
+.look .gold {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(112deg, transparent 37%, rgb(255 244 214 / 0.52) 50%, transparent 63%)
+    no-repeat;
+  background-size: 260% 100%;
+  background-position: 150% 0;
+  -webkit-mask: var(--gold) center / 100% 100% no-repeat;
+  mask: var(--gold) center / 100% 100% no-repeat;
+  mix-blend-mode: screen;
+  opacity: 0;
+  transition: opacity 1.2s var(--ease);
+}
+
+.look [data-bloom="done"] + .gold {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .look .gold {
+    animation: glint calc(var(--breath) * 4) var(--ease) infinite;
+  }
+
+  @supports (animation-timeline: view()) {
+    .look .gold {
+      animation: glint-pass linear both;
+      animation-timeline: view();
+      animation-range: cover 18% cover 84%;
+    }
+  }
+}
+
+@keyframes glint {
+  0%,
+  52% {
+    background-position: 150% 0;
+  }
+
+  100% {
+    background-position: -50% 0;
+  }
+}
+
+@keyframes glint-pass {
+  from {
+    background-position: 92% 0;
+  }
+
+  to {
+    background-position: 8% 0;
+  }
 }
 
 /* The shared footer, held to the look's reading sizes: no small letter-spaced capitals. */

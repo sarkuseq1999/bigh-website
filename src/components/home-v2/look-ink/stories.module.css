@@ -42,6 +42,12 @@
   margin: 0 0 0 calc(-0.4 * var(--gutter));
 }
 
+/* While the figure blooms it is one group (the mask and the blur isolate it), so the group itself
+   multiplies onto the paper; otherwise the paintings' white would show as a box. */
+.painting:is([data-bloom="waiting"], [data-bloom="in"]) {
+  mix-blend-mode: multiply;
+}
+
 .still {
   grid-area: 1 / 1;
   display: block;

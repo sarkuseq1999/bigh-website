@@ -17,7 +17,8 @@
   min-width: 0;
 }
 
-.science .intro {
+/* One class deeper than the shared .body rule, which the built site loads after this one. */
+.science .copy .intro {
   max-width: 30em;
   margin-top: 20px;
 }
@@ -123,6 +124,21 @@
 .stage {
   position: relative;
   aspect-ratio: 2000 / 1493;
+}
+
+/* While the stage blooms it is one group (the mask and the blur isolate it), so the group itself
+   multiplies onto the paper; otherwise the paintings' white would show as a box. */
+.stage:is([data-bloom="waiting"], [data-bloom="in"]) {
+  mix-blend-mode: multiply;
+}
+
+/* Light on the two gold folds of the close view. */
+.stage > .leafLight {
+  opacity: 0;
+}
+
+.stage[data-bloom="done"] > .leafLight[data-on="true"] {
+  opacity: 1;
 }
 
 .layer {

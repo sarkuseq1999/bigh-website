@@ -101,7 +101,7 @@
     order: 0;
   }
 
-  .words > .station {
+  .cellular .words > .station {
     order: 1;
     margin: 14px 0 0;
   }

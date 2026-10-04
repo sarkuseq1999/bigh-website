@@ -126,7 +126,9 @@ export function HomeFooter() {
       <div className={styles.footerTop}>
         <div>
           <Logo footer />
-          <p className={styles.footerMessage}>{copy(footer.tagline)}</p>
+          <p className={styles.footerMessage}>
+            <span data-brush="footer-tagline">{copy(footer.tagline)}</span>
+          </p>
         </div>
         <div className={styles.footerColumns}>
           <div>

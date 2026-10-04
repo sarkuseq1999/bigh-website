@@ -5,8 +5,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the page answers 200; no page errors, console errors or failed requests; the blocks in order
     (top, cellular, scientists, products, stories, science, research, purpose, then the footer);
     one h1; the header's links; the opening's paintings loaded and its words clear of each other;
-    the brush line draws itself (ink on the canvas, its progress grows with the scroll and reaches
-    the end); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
+    the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
+    promise); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, a
     bottle picture links to its own product page, Discover NuriCell links to its page; the stories say
     "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, the
@@ -19,7 +20,8 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - reduced motion: the whole brush line from the first frame (ink down at the research spine),
     every painting shown, no errors.
   - phones: the opening keeps its own line; no stray strokes below it (the page line is
-    desktop-only, the lead's decision of October 2).
+    desktop-only, the lead's decision of October 2) until the closing stroke under the footer's
+    promise, which every screen gets (October 3).
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -138,7 +140,7 @@ def page_checks(page, tag, width, view_h, problems):
         y += view_h // 2
     page.wait_for_timeout(1500)
     broken = page.evaluate(
-        "[...document.querySelectorAll('img')].filter(i => getComputedStyle(i).display !== 'none' && (!i.complete || i.naturalWidth === 0)).map(i => i.currentSrc || i.src)"
+        "[...document.querySelectorAll('img')].filter(i => i.getClientRects().length > 0 && (!i.complete || i.naturalWidth === 0)).map(i => i.currentSrc || i.src)"
     )
     check(f"{tag}: every image loads", not broken, str(broken[:4]))
     wide = page.evaluate("document.documentElement.scrollWidth")
@@ -228,10 +230,12 @@ def run(browser, look, mobile):
     start_ink = ink_in_view(page)
     start_progress = progress(page)
     # Desktop: the page line starts in the opening and draws on. Phones (lead's decision, October
-    # 2): the opening keeps its own line, drawn in full; there is no page line below it.
+    # 2): the opening keeps its own line, drawn in full; there is no page line below it until the
+    # closing stroke under the footer's promise (October 3), so the opening is a small part of
+    # the whole route on every screen.
     check(
         f"{tag}: the brush line leaves the opening",
-        start_ink > 40 and (start_progress > 0.99 if mobile else 0 < start_progress < 0.3),
+        start_ink > 40 and 0 < start_progress < 0.3,
         f"ink {start_ink}, progress {start_progress:.3f}",
     )
     shoot(page, f"{name}-00-top")
@@ -393,13 +397,40 @@ def run(browser, look, mobile):
     )
     page.click("#research button[aria-pressed]:has-text('All')")
 
-    # Purpose: the brush line comes to rest in the closing painting.
+    # Purpose: the brush line lifts off in the closing painting (the rest of its route is the
+    # lifted travel to the footer and the closing stroke).
     scroll_to(page, top_of(page, "#purpose") + (0 if mobile else 40), 2600)
     shoot(page, f"{name}-08-purpose")
     scroll_to(page, top_of(page, "#purpose") + 500, 2600)
     end_progress = progress(page)
-    check(f"{tag}: the brush line reaches the purpose", end_progress > 0.97, f"progress {end_progress:.3f}")
-    scroll_to(page, top_of(page, "footer"), 900)
+    check(f"{tag}: the brush line reaches the purpose", end_progress > 0.88, f"progress {end_progress:.3f}")
+    # The footer: the line comes to rest as one stroke under the promise.
+    scroll_to(page, page.evaluate("document.documentElement.scrollHeight"), 2600)
+    rest_progress = progress(page)
+    stroke = page.evaluate(
+        """(() => {
+          const t = document.querySelector('[data-brush="footer-tagline"]');
+          if (!t) return -1;
+          const b = t.getBoundingClientRect();
+          let ink = 0;
+          for (const c of document.querySelectorAll('[data-brush-layer] canvas')) {
+            if (!c.width) continue;
+            const r = c.getBoundingClientRect();
+            const k = c.width / r.width;
+            const y0 = Math.max(0, b.bottom - 6 - r.top), y1 = Math.min(r.height, b.bottom + 40 - r.top);
+            if (y1 <= y0) continue;
+            const x0 = Math.max(0, b.left - 30 - r.left), x1 = Math.min(r.width, b.right + 30 - r.left);
+            const data = c.getContext('2d').getImageData(Math.floor(x0 * k), Math.floor(y0 * k), Math.max(1, Math.floor((x1 - x0) * k)), Math.max(1, Math.floor((y1 - y0) * k))).data;
+            for (let i = 3; i < data.length; i += 16) if (data[i] > 120) ink++;
+          }
+          return ink;
+        })()"""
+    )
+    check(
+        f"{tag}: the brush line ends as the stroke under the footer's promise",
+        rest_progress >= 0.999 and stroke > 40,
+        f"progress {rest_progress:.3f}, ink under the promise {stroke}",
+    )
     shoot(page, f"{name}-09-footer")
 
     page_checks(page, tag, width, view_h, problems)

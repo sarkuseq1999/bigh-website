@@ -10,7 +10,8 @@ import styles from "./brush.module.css";
 // paper-tooth edges; the painter reloads about every thousand pixels, so each stroke lands loaded
 // and tapers thin, and as the ink runs out dry-brush streaks (flying white) open up inside the
 // stroke. In the crane opening the line keeps the approved hero's own stroke. The brush lifts off
-// the paper where the route says so (ink 0).
+// the paper where the route says so (ink 0), and reloads where it says so (fresh): the page ends
+// on one loaded stroke under the footer's promise.
 // Section labels ([data-station]) are pinned to the line and appear as the brush reaches them.
 //
 // The route is a list of waypoints pinned to the blocks' own elements ([data-brush] anchors),
@@ -36,6 +37,10 @@ type Sample = {
   dry: number;
   /** True inside the crane opening: painted with the hero's own calligraphic stroke. */
   classic: boolean;
+  /** The painter reloads here: a new stroke begins. */
+  fresh: boolean;
+  /** How heavily the brush is loaded (1 = the page's usual stroke). */
+  load: number;
 };
 
 const TILE = 1200;
@@ -62,7 +67,7 @@ function smooth(edge0: number, edge1: number, x: number) {
   return t * t * (3 - 2 * t);
 }
 
-type Point = { x: number; y: number; w: number; ink: number };
+type Point = { x: number; y: number; w: number; ink: number; fresh: boolean; load: number };
 
 /** Measure the route's waypoints on the page, relative to the look's root. */
 function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
@@ -81,6 +86,8 @@ function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
       y: box.top - origin.top + box.height * point.fy + (point.dy ?? 0),
       w: point.w ?? 3,
       ink: point.ink ?? 1,
+      fresh: point.fresh ?? false,
+      load: point.load ?? 1,
     });
   }
   return points;
@@ -131,6 +138,8 @@ function sample(points: Point[], scale: number): Sample[] {
         wb: 0,
         dry: 0,
         classic: false,
+        fresh: p1.fresh && k === (i === 1 ? 0 : 1),
+        load: p1.load + (p2.load - p1.load) * e,
       });
     }
   }
@@ -181,6 +190,11 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
   let length = 1150;
   for (let i = start; i < samples.length; i++) {
     const p = samples[i];
+    if (p.fresh) {
+      cycleStart = p.s;
+      cycle++;
+      length = 1150;
+    }
     while (p.s - cycleStart > length) {
       cycleStart += length;
       cycle++;
@@ -191,7 +205,7 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
     const land = cycle === 0 ? 1 : smooth(0, 0.05, phase);
     const load = land * Math.pow(1 - phase, 0.85);
     const loaded = Math.pow(Math.max(0, p.ink), 0.6);
-    p.w = (1.0 + 2.6 * load) * scale * loaded * (0.92 + 0.16 * noise(p.s / 90, 13));
+    p.w = (1.0 + 2.6 * load) * scale * loaded * p.load * (0.92 + 0.16 * noise(p.s / 90, 13));
     p.dry = Math.min(1, Math.max(smooth(0.16, 0.9, phase), (1 - p.ink) * 1.2));
     // Paper tooth: each edge catches the fibres on its own, more as the brush dries.
     const tooth = 0.18 + 0.22 * p.dry;
@@ -507,6 +521,11 @@ export function BrushLine({ motion }: { motion: boolean }) {
       const view = window.innerHeight;
       const scrollTop = -root.getBoundingClientRect().top;
       if (motion && introDone) target = Math.max(target, reach(scrollTop + view * 0.78));
+      // At the very bottom of the page the last stroke always finishes, however tall the window.
+      const page = document.documentElement;
+      if (motion && introDone && window.scrollY + view >= page.scrollHeight - 4) {
+        target = samples[samples.length - 1].s + 1;
+      }
       if (motion) {
         const gap = target - head;
         head = Math.abs(gap) < 0.6 ? target : head + gap * 0.085;

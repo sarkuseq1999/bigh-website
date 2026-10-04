@@ -1,4 +1,6 @@
-/* "Good science. Real people." */
+/* "Good science. Real people." Rules that share an element with a shared class (.wrap, .display,
+   .body, .station) are scoped one class deeper than the shared rule: the built site loads the
+   shared stylesheet after this one, so a tie on specificity would go to the shared rule. */
 
 .scientists {
   --gap: clamp(40px, 7.8vw, 120px);
@@ -19,7 +21,8 @@
   grid-template-areas:
     "photo head"
     "photo facts";
-  grid-template-rows: auto 1fr;
+  /* Two even rows: the headline and the record meet at the photograph's middle. */
+  grid-template-rows: auto auto;
 }
 
 .head {
@@ -46,22 +49,34 @@
   margin-top: clamp(32px, 3.4vw, 52px);
 }
 
-.scientists .title > span {
+.scientists .head .title > span {
   display: inline;
 }
 
-.scientists .intro {
+.scientists .head .intro {
   max-width: 30em;
   margin-top: 16px;
 }
 
 @media (min-width: 900px) {
-  /* The crane: the label hangs in the photograph's column, beside the headline, its leader
-     reaching the line in the gap between the columns. */
+  /* The label hangs at the top of the photograph's column, above the mat, its leader reaching
+     the line in the gap between the columns. It is placed from the grid, not from the headline
+     (which sits lower, level with the photograph's middle), so it clears the mat at every
+     width: its right edge is the second column's width plus half the gap from the grid's edge. */
+  .scientists .top {
+    position: relative;
+  }
+
+  .scientists .head {
+    position: static;
+  }
+
   .scientists .head .station {
     position: absolute;
-    right: calc(100% + var(--gap) / 2 - 10px);
     top: 18px;
+    right: calc(
+      var(--gutter) + (100% - 2 * var(--gutter) - var(--gap)) * 7 / 12 + var(--gap) / 2 - 10px
+    );
     --leader: calc(var(--gap) / 2 - 22px);
   }
 }
@@ -133,7 +148,7 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: clamp(20px, 3vw, 48px);
-  margin: 0;
+  margin: clamp(36px, 3.6vw, 56px) 0 0;
 }
 
 .scientists .facts dt {
@@ -179,9 +194,8 @@
   column-gap: var(--gap);
 }
 
-.work {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  margin-top: clamp(64px, 7vw, 112px);
+.scientists .work {
+  margin-top: clamp(56px, 6vw, 96px);
   align-items: start;
 }
 
@@ -198,24 +212,23 @@
   max-width: 38em;
 }
 
-/* The question with its station label beside it, the leader reaching the line in the gap. */
+/* The question with its station label: the label sits on its own line at the column's right
+   edge, its leader reaching the line in the gap, and the question takes the column's full
+   measure under it (beside each other, the question was squeezed into four and five lines). */
 .workHead {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
+  flex-direction: column-reverse;
+  gap: 18px;
 }
 
 .workHead .heading {
-  flex: 1 1 auto;
-  max-width: 11.5em;
+  max-width: 12.5em;
 }
 
 @media (min-width: 900px) {
-  .workHead .station {
-    flex: 0 0 9.2em;
-    width: auto;
-    margin: 8px calc(var(--gap) / -2 + 10px) 0 0;
+  .scientists .workHead .station {
+    align-self: flex-end;
+    margin: 0 calc(var(--gap) / -2 + 10px) 0 0;
     text-align: right;
     text-wrap: balance;
     --leader: calc(var(--gap) / 2 - 22px);
@@ -239,12 +252,12 @@
 }
 
 /* Ask BiGH Science: one calm line of its own, on the same columns. */
-.ask {
+.scientists .ask {
   align-items: end;
-  margin-top: clamp(64px, 7vw, 112px);
+  margin-top: clamp(56px, 6vw, 96px);
 }
 
-.scientists .askTitle {
+.scientists .ask .askTitle {
   max-width: 11em;
   font-size: clamp(34px, 3.2vw, 50px);
 }
@@ -278,7 +291,7 @@
     text-align: left;
   }
 
-  .head .station {
+  .scientists .head .station {
     order: 1;
     margin: 14px 0 0;
   }

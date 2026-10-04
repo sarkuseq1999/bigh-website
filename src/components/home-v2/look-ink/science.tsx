@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
 import { useHomeDialogs } from "../dialogs";
-import { mito } from "./assets";
+import { gold, mito } from "./assets";
 import base from "./look-ink.module.css";
 import styles from "./science.module.css";
 
@@ -136,6 +136,11 @@ export function Science() {
               loading="lazy"
               data-on={topic === 2}
               style={{ ["--aged" as string]: aged }}
+            />
+            <span
+              className={`${base.gold} ${styles.leafLight}`}
+              data-on={topic === 0}
+              style={{ ["--gold" as string]: `url(${gold.closeup})` }}
             />
           </div>
           <figcaption className={`${base.caption} ${styles.caption}`}>

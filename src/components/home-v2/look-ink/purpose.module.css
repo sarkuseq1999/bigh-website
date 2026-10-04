@@ -2,7 +2,7 @@
 
 .purpose {
   position: relative;
-  padding: clamp(24px, 3vw, 48px) 0 clamp(64px, 7vw, 120px);
+  padding: clamp(24px, 3vw, 48px) 0 clamp(40px, 4vw, 64px);
 }
 
 /* The painting is full width; its upper half is open sky for the statement. */
@@ -20,7 +20,73 @@
   mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
 }
 
-.statement {
+/* Light on the low sun's leaf. On narrow windows the painting is cropped to the pine and the
+   sun is out of the frame. */
+.purpose .scene > .sunLight {
+  bottom: auto;
+  aspect-ratio: 2400 / 1029;
+}
+
+/* The two cranes, on their own layer at their place in the painting (purpose.tsx sets the box).
+   As the painting rises into the window they fly up from the lower left to that place, toward
+   the sun; they ride the air in the page's slow breath. Without scroll-driven animation, or with
+   reduced motion, they are simply there, as painted. */
+.flight {
+  position: absolute;
+  aspect-ratio: 326 / 172;
+  pointer-events: none;
+  /* The moving layer is its own group, so the group multiplies (as the painting does). */
+  mix-blend-mode: multiply;
+}
+
+.cranes {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .cranes {
+    animation: ride calc(var(--breath) * 3) ease-in-out infinite alternate;
+  }
+
+  @supports (animation-timeline: view()) {
+    .flight {
+      animation: fly-home linear both;
+      animation-timeline: view();
+      animation-range: entry 30% cover 62%;
+    }
+  }
+}
+
+@keyframes fly-home {
+  from {
+    translate: -92% 44%;
+  }
+}
+
+@keyframes ride {
+  to {
+    transform: translate3d(0, -5%, 0) rotate(-0.8deg);
+  }
+}
+
+@media (max-width: 979px) {
+  .purpose .scene > .sunLight {
+    display: none;
+  }
+}
+
+/* Narrow windows crop the painting to the pine; the cranes' sky is out of the frame. */
+@media (max-width: 900px) {
+  .flight {
+    display: none;
+  }
+}
+
+/* .statement and .body share their element with the shared .wrap rule, which the built site
+   loads after this stylesheet: scoped under .purpose so their spacing wins in either order. */
+.purpose .statement {
   position: absolute;
   inset: 0 0 auto;
   padding-top: clamp(24px, 4vw, 72px);
@@ -67,7 +133,7 @@
   bottom: 12px;
 }
 
-.body {
+.purpose .body {
   position: relative;
   margin-top: clamp(56px, 7vw, 112px);
 }
@@ -159,11 +225,11 @@
     object-position: 22% 100%;
   }
 
-  .titleBox .station {
+  .purpose .titleBox .station {
     margin: 14px 0 0;
   }
 
-  .statement {
+  .purpose .statement {
     position: relative;
     order: -1;
     padding-top: 0;

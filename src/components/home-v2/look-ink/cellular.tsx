@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { cellular } from "../content";
-import { mito } from "./assets";
+import { gold, mito } from "./assets";
 import base from "./look-ink.module.css";
 import styles from "./cellular.module.css";
 
@@ -61,6 +61,7 @@ export function Cellular() {
             sizes="(max-width: 900px) 92vw, 50vw"
             data-bloom=""
           />
+          <span className={base.gold} style={{ ["--gold" as string]: `url(${gold.mito})` }} />
           <figcaption className={base.caption}>{copy(cellular.caption)}</figcaption>
         </figure>
       </div>

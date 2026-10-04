@@ -34,6 +34,14 @@ export const mito: Record<"glow" | "closeup" | "aged" | "radicals", Picture> = {
   radicals: { src: `${I}/mito-radicals.webp`, width: 1600, height: 1195 },
 };
 
+/** Where each painting is gold leaf, as an alpha mask (build_assets.py gold): the page lays a
+ *  moving band of light over the painting through it, so only the leaf catches the light. */
+export const gold = {
+  mito: `${I}/mito-gold.webp`,
+  closeup: `${I}/mito-closeup-gold.webp`,
+  purpose: `${I}/purpose-gold.webp`,
+};
+
 /** One breath of ink behind Dr. Liu's photograph (ink). */
 export const halo: Picture = { src: `${I}/halo.webp`, width: 1100, height: 1100 };
 
@@ -51,5 +59,19 @@ export const storyPaintings: Record<string, Picture> = {
   susan: { src: `${I}/story-source.webp`, width: 1200, height: 1607 },
 };
 
-/** The close: an old pine over a sea of mist, the gold sun low, two cranes flying home (ink). */
-export const purposePainting: Picture = { src: `${I}/purpose.webp`, width: 2400, height: 1029 };
+/** The close: an old pine over a sea of mist, the gold sun low (ink). Its two cranes fly on their
+ *  own layer (purposeCranes); the whole painting is the plate reference/home-v2/ink/plates/purpose.png. */
+export const purposePainting: Picture = {
+  src: `${I}/purpose-land.webp`,
+  width: 2400,
+  height: 1029,
+};
+
+/** The two cranes of the close, lifted out of the painting so they can fly (ink). `box` is where
+ *  they sit in the painting, as fractions of its width and height (build_assets.py CRANES). */
+export const purposeCranes = {
+  src: `${I}/purpose-cranes.webp`,
+  width: 326,
+  height: 172,
+  box: { left: 1500 / 2400, top: 468 / 1029, width: 326 / 2400 },
+};

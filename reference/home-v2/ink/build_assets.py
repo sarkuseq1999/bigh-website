@@ -129,6 +129,54 @@ def bloom_mask(size=512, seed=4):
     print("bloom-mask.png", (OUT / "bloom-mask.png").stat().st_size // 1024, "KB")
 
 
+def gold_mask(name, width=1000, sat_from=0.38, bright_from=0.3):
+    """Where a shipped painting is gold leaf, as an alpha mask (<name>-gold.webp): the page lays
+    a moving band of light over the painting through it, so only the leaf catches the light.
+    Gold = warm hue, clearly saturated; the soft glow around it stays out."""
+    from PIL import ImageFilter
+
+    img = Image.open(PLATES / f"{name}.png").convert("RGB")
+    img = img.resize((width, round(img.height * width / img.width)), Image.LANCZOS)
+    arr = np.asarray(img).astype(np.float32) / 255
+    r, g, b = arr[..., 0], arr[..., 1], arr[..., 2]
+    hi, lo = arr.max(axis=2), arr.min(axis=2)
+    sat = (hi - lo) / np.maximum(hi, 1e-4)
+    warm = (r >= g) & (g > b)
+    hue = np.where(warm, 60 * (g - b) / np.maximum(hi - lo, 1e-4), 0)  # 0..60 degrees
+    in_hue = np.clip((hue - 24) / 8, 0, 1) * np.clip((58 - hue) / 6, 0, 1)
+    alpha = np.clip((sat - sat_from) / 0.22, 0, 1) * in_hue * np.clip((hi - bright_from) / 0.2, 0, 1)
+    mask = Image.fromarray((alpha * 255).astype(np.uint8), "L").filter(ImageFilter.GaussianBlur(1.2))
+    white = Image.new("L", mask.size, 255)
+    rgba = Image.merge("RGBA", (white, white, white, mask))
+    path = OUT / f"{name}-gold.webp"
+    rgba.save(path, "WEBP", quality=80, method=6)
+    cover = float((np.asarray(mask) > 128).mean())
+    print(f"{path.relative_to(REPO)}  {mask.width}x{mask.height}  {path.stat().st_size // 1024} KB  gold {cover:.1%}")
+
+
+CRANES = (1500, 468, 1826, 640)  # the two cranes, in the 2400-wide purpose painting
+
+
+def lift_cranes(img):
+    """The close's two cranes fly on their own layer: cut them out of the painting (the sky
+    behind them is inpainted from the paper around them) and return (painting, cranes)."""
+    import cv2
+
+    arr = np.asarray(img).copy()
+    x0, y0, x1, y1 = CRANES
+    box = arr[y0:y1, x0:x1].copy()
+    dark = (box.min(axis=2) < 240).astype(np.uint8) * 255
+    dark = cv2.dilate(dark, np.ones((7, 7), np.uint8))
+    arr[y0:y1, x0:x1] = cv2.inpaint(box, dark, 5, cv2.INPAINT_TELEA)
+    # The cranes on white, the frame feathered so no rectangle multiplies onto the page.
+    h, w = y1 - y0, x1 - x0
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    edge = np.minimum.reduce([xx, yy, w - 1 - xx, h - 1 - yy])
+    keep = np.clip(edge / 18, 0, 1)[..., None]
+    cranes = box.astype(np.float32) * keep + 255 * (1 - keep)
+    return Image.fromarray(arr), Image.fromarray(cranes.astype(np.uint8))
+
+
 def save(img, name, width=None, quality=84):
     OUT.mkdir(parents=True, exist_ok=True)
     if width and img.width > width:
@@ -177,7 +225,13 @@ def build(name):
         ink_amount = (1 - core**2.2) * falloff[..., None]
         save(Image.fromarray((255 * (1 - ink_amount)).astype(np.uint8)), "pool-foot", 600, 82)
     elif name == "purpose":
-        save(ink(load("purpose-v1"), (0, 0, 2688, 200)), "purpose", 2400, 82)
+        full = ink(load("purpose-v1"), (0, 0, 2688, 200))
+        full = full.resize((2400, round(full.height * 2400 / full.width)), Image.LANCZOS)
+        save(full, "purpose", 2400, 82)  # the whole painting: the plate, and the gold mask's source
+        # What the page ships (October 3): the land and sky, and the two cranes on their own layer.
+        painting, cranes = lift_cranes(full)
+        save(painting, "purpose-land", 2400, 82)
+        save(cranes, "purpose-cranes", None, 88)
     elif name.startswith("story-"):
         save(ink(load(f"{name}-v1"), (0, 0, 1744, 200)), name, 1200, 82)
     elif name == "mito-closeup":
@@ -185,12 +239,17 @@ def build(name):
         save(vignette(ink(load("mito-closeup-v1"), (0, 1600, 120, 1744))), "mito-closeup", 1600, 82)
     elif name == "bloom":
         bloom_mask()
+    elif name == "gold":
+        # The light-catching masks for the gold leaf inside the paintings (October 3).
+        gold_mask("mito")
+        gold_mask("mito-closeup", bright_from=0.5)  # the dark strokes over the leaf stay out
+        gold_mask("purpose", sat_from=0.2)  # the low sun's leaf is paler
     else:
         raise SystemExit(f"unknown asset {name}")
 
 
 if __name__ == "__main__":
     everything = ["landscape", "crane", "sun", "paper", "mito", "mito-aged", "mito-radicals",
-                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom"]
+                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom", "gold"]
     for item in sys.argv[1:] or everything:
         build(item)

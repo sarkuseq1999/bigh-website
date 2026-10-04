@@ -6,13 +6,14 @@ import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
 import { useHomeDialogs } from "../dialogs";
-import { purposePainting } from "./assets";
+import { gold, purposeCranes, purposePainting } from "./assets";
 import base from "./look-ink.module.css";
 import styles from "./purpose.module.css";
 
 // The close, a bookend to the crane: an old pine over a sea of mist, the gold-leaf sun low on the
-// horizon, two cranes flying home; the purpose sits in its open sky, and the brush line comes to
-// rest in the painting. Below it, on paper: why we do it and the three standards we keep.
+// horizon, two cranes flying home (on their own layer: they fly toward the sun as the painting
+// comes into view); the purpose sits in its open sky, and the brush line lifts off in the
+// painting. Below it, on paper: why we do it and the three standards we keep.
 export function Purpose() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -35,6 +36,29 @@ export function Purpose() {
           data-bloom=""
           data-brush="purpose-painting"
         />
+        <span
+          className={`${base.gold} ${styles.sunLight}`}
+          style={{ ["--gold" as string]: `url(${gold.purpose})` }}
+        />
+        <span
+          className={styles.flight}
+          style={{
+            left: `${purposeCranes.box.left * 100}%`,
+            top: `${purposeCranes.box.top * 100}%`,
+            width: `${purposeCranes.box.width * 100}%`,
+          }}
+        >
+          <Image
+            className={`${base.ink} ${styles.cranes}`}
+            src={purposeCranes.src}
+            alt=""
+            width={purposeCranes.width}
+            height={purposeCranes.height}
+            sizes="(max-width: 979px) 1px, 14vw"
+            data-bloom=""
+            style={{ ["--bloom-delay" as string]: 500 }}
+          />
+        </span>
         <div className={`${base.wrap} ${styles.statement}`}>
           <div className={styles.titleBox}>
             <h2 id="purpose-title" className={styles.title}>

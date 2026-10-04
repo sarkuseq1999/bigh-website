@@ -11,6 +11,10 @@ export type Waypoint = {
   dy?: number;
   w?: number;
   ink?: number;
+  /** The painter reloads the brush here: a new stroke lands, loaded. */
+  fresh?: boolean;
+  /** How heavily loaded the brush is from here on (1 = the page's usual stroke). */
+  load?: number;
 };
 
 /** A point given in the comp's own pixels (1536 x 1000) on the opening. */
@@ -137,6 +141,20 @@ const shared: Waypoint[] = [
 // line, and the station labels sit under their headings with their leader lines.
 const lift = (at: string, fx: number, fy: number): Waypoint => ({ at, fx, fy, w: 0, ink: 0 });
 
+// The close, on every screen: the brush travels off the paper down to the footer, reloads, and
+// lays one confident stroke under the promise ("Stay sharp. Live fully."), sagging a little in
+// the middle and flicking up as it lifts. The line that left the crane ends here.
+const T = "footer-tagline";
+const promise: Waypoint[] = [
+  { at: T, fx: -0.04, fy: 1, dy: 8, w: 0, ink: 0 },
+  { at: T, fx: -0.008, fy: 1, dy: 13, w: 3, ink: 1, fresh: true, load: 2.2 },
+  { at: T, fx: 0.24, fy: 1, dy: 18, w: 3, ink: 1, load: 2.2 },
+  { at: T, fx: 0.56, fy: 1, dy: 19, w: 3, ink: 1, load: 2 },
+  { at: T, fx: 0.84, fy: 1, dy: 14, w: 3, ink: 0.9, load: 1.8 },
+  { at: T, fx: 0.97, fy: 1, dy: 8, w: 2, ink: 0.55, load: 1.5 },
+  { at: T, fx: 1.02, fy: 1, dy: 0, w: 0, ink: 0 },
+];
+
 const cranePhone: Waypoint[] = [
   { at: "crane", fx: 0.477, fy: 0.786, w: 0.8, ink: 0.5 },
   on("opening-art", 0.72, 0.7, 2.4),
@@ -144,7 +162,8 @@ const cranePhone: Waypoint[] = [
   lift("opening-art", 0.97, 1.0),
 ];
 
-/** The opening's waypoints, then the route through the rest of the page (none on phones). */
+/** The opening's waypoints, the route through the rest of the page (none on phones), and the
+ *  closing stroke under the footer's promise (every screen). */
 export function route(phone = false): Waypoint[] {
-  return phone ? cranePhone : [...crane, ...craneToScience, ...shared];
+  return phone ? [...cranePhone, ...promise] : [...crane, ...craneToScience, ...shared, ...promise];
 }

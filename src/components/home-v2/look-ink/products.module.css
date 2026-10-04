@@ -24,7 +24,9 @@
 }
 
 @media (min-width: 900px) {
-  .head .station {
+  /* Scoped one class deeper than the shared .station and .body rules, which the built site
+     loads after this stylesheet. */
+  .products .head .station {
     position: absolute;
     right: 0;
     top: 18px;
@@ -41,7 +43,7 @@
   }
 }
 
-.products .intro {
+.products .head .intro {
   max-width: 30em;
   margin-top: 18px;
   text-wrap: balance;
@@ -71,23 +73,35 @@
    its base sits at 96% of its height): the stand is a little wider than its column so each bottle
    reads at a proper size. */
 .stand {
+  --stand: min(146%, 340px);
   position: relative;
   display: block;
-  width: min(112%, 250px);
-  margin: 0 -6%;
+  width: var(--stand);
+  margin: 0 calc((100% - var(--stand)) / 2);
 }
 
 /* Each bottle's own ink pool, laid flat on the ground (the painted pool, foreshortened): about one
    and a half times the bottle's width, its darkest core just under the bottle's base. */
 .shadow {
   position: absolute;
-  left: 53%;
-  top: 76%;
-  width: 82%;
+  left: 52%;
+  top: 79%;
+  width: 60%;
   height: auto;
   aspect-ratio: 1 / 0.42;
   object-fit: fill;
   translate: -50% 0;
+  /* The pool is a pale wash until its bottle is chosen; then the ink gathers under it. */
+  opacity: 0.5;
+  transform-origin: 47% 40%;
+  transition:
+    opacity 0.9s var(--ease),
+    scale 0.9s var(--ease);
+}
+
+.item[data-active="true"] .shadow {
+  opacity: 0.92;
+  scale: 1.1;
 }
 
 /* The contact shadow: the same ink, small and dense, where the base meets the paper. */
@@ -112,7 +126,7 @@
 }
 
 .item[data-active="true"] .image {
-  scale: 1.03;
+  scale: 1.045;
 }
 
 .products .name {
@@ -238,7 +252,7 @@
 }
 
 @media (max-width: 899px) {
-  .head .station {
+  .products .head .station {
     order: 1;
     margin: 14px 0 0;
   }
@@ -292,7 +306,7 @@
   }
 
   .stand {
-    width: 46vw;
+    --stand: 46vw;
     margin: 0 -3vw;
   }
 
