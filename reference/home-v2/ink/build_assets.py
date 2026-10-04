@@ -237,6 +237,14 @@ def build(name):
     elif name == "mito-closeup":
         # The gold folds, close: the frame's edges dissolve into the paper like a wet wash.
         save(vignette(ink(load("mito-closeup-v1"), (0, 1600, 120, 1744))), "mito-closeup", 1600, 82)
+    elif name == "crane-rest":
+        # Round 5 (October 3): the crane at rest, for the page's last line. Ink on paper (its white
+        # is the page's own paper), cropped to the bird with its reed and the water at its feet.
+        img = ink(load("crane-rest-v1"), (0, 0, 420, 300), gain=1.02)
+        save(img.crop((430, 130, 1610, 1950)), "crane-rest", 560, 86)
+    elif name == "inkstone":
+        # Round 5: a brush on its inkstone, for "Good questions deserve clear answers."
+        save(ink(load("inkstone-v1"), (0, 0, 500, 160), gain=1.02), "inkstone", 1200, 84)
     elif name == "bloom":
         bloom_mask()
     elif name == "gold":
@@ -250,6 +258,6 @@ def build(name):
 
 if __name__ == "__main__":
     everything = ["landscape", "crane", "sun", "paper", "mito", "mito-aged", "mito-radicals",
-                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom", "gold"]
+                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom", "gold", "crane-rest", "inkstone"]
     for item in sys.argv[1:] or everything:
         build(item)

@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
 import { useHomeDialogs } from "../dialogs";
-import { crane } from "./assets";
+import { crane, craneFlight } from "./assets";
 import { useMist } from "./mist";
 import base from "./look-ink.module.css";
 import styles from "./opening.module.css";
@@ -15,7 +15,8 @@ import styles from "./opening.module.css";
 // misty mountains, the crane of long life in flight, a gold-leaf sun; the three-line headline at
 // the lower left on calm paper, the intro and two pills under it. The brush line that leaves the
 // crane is the page's own (brush.tsx). The painting is alive: mist drifts through the mountains
-// (mist.ts), light crosses the gold leaf, and the crane and the sun sit at their own depths.
+// (mist.ts), light crosses the gold leaf, the sun sits at its own depth, and the crane glides and,
+// every few breaths, beats its wings once (the same painting, animated).
 export function OpeningCrane({ motion }: { motion: boolean }) {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -23,6 +24,36 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
   const landscape = useRef<HTMLImageElement>(null);
   const mist = useRef<HTMLCanvasElement>(null);
   useMist(art, landscape, mist, motion);
+
+  // The wingbeat: once the still crane has bloomed, the animated painting is fetched; it opens on
+  // the same pose, so it takes the still's place unseen and then beats its wings.
+  const bird = useRef<HTMLImageElement>(null);
+  const [flight, setFlight] = useState<string | null>(null);
+  const [flying, setFlying] = useState(false);
+  useEffect(() => {
+    const still = bird.current;
+    if (!still || !motion) return;
+    let timer = 0;
+    const bloomed = () => still.dataset.bloom === "done";
+    const begin = () => {
+      // The animated painting is a megabyte or two: not for visitors who asked to save data.
+      const link = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+      if (link?.saveData) return;
+      const phone = window.matchMedia("(max-width: 720px)").matches;
+      timer = window.setTimeout(() => setFlight(phone ? craneFlight.small : craneFlight.src), 400);
+    };
+    const watcher = new MutationObserver(() => {
+      if (!bloomed()) return;
+      watcher.disconnect();
+      begin();
+    });
+    if (bloomed()) begin();
+    else watcher.observe(still, { attributes: true, attributeFilter: ["data-bloom"] });
+    return () => {
+      watcher.disconnect();
+      window.clearTimeout(timer);
+    };
+  }, [motion]);
 
   // Depth as you leave the opening: the sun sinks slowly behind the ridges and the mountains
   // settle a little, while the crane (its own gentle float in CSS) stays on its flight path.
@@ -101,18 +132,24 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
           style={{ ["--bloom-delay" as string]: 200, ["--bloom-origin" as string]: "72% 60%" }}
         />
         <canvas ref={mist} className={`${base.ink} ${styles.landscape} ${styles.mist}`} />
-        <Image
-          className={styles.crane}
-          src={crane.crane.src}
-          alt=""
-          width={crane.crane.width}
-          height={crane.crane.height}
-          sizes="(max-width: 720px) 70vw, 40vw"
-          loading="eager"
-          data-brush="crane"
-          data-bloom="waiting"
-          style={{ ["--bloom-delay" as string]: 600 }}
-        />
+        <span className={styles.crane} data-brush="crane" data-flying={motion && flying}>
+          <Image
+            ref={bird}
+            className={styles.bird}
+            src={crane.crane.src}
+            alt=""
+            width={crane.crane.width}
+            height={crane.crane.height}
+            sizes="(max-width: 720px) 70vw, 40vw"
+            loading="eager"
+            data-bloom="waiting"
+            style={{ ["--bloom-delay" as string]: 600 }}
+          />
+          {motion && flight && (
+            // eslint-disable-next-line @next/next/no-img-element -- an animated painting: the image optimizer would still it
+            <img className={styles.wingbeat} src={flight} alt="" onLoad={() => setFlying(true)} />
+          )}
+        </span>
       </div>
 
       <div className={styles.copy}>

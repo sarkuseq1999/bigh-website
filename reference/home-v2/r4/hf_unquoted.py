@@ -28,8 +28,10 @@ MODEL = "marketing-studio/image/flare"
 REPO = Path(__file__).resolve().parents[3]
 STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/HiggsfieldAPI/bigh-home"))
 LOCK = STATE / "submit.lock"
-LEDGER = STATE / "ledger-r4-gpt.jsonl"
-MAX_JOBS = 60  # about $3 at $0.05 a job; inside Mo's $20 round budget
+# Round 5 (October 3): Mo gave $15 for the crane homepage's second polish round; this round's
+# GPT Image 2.5 jobs are counted on their own (round 4's 19 jobs stay in ledger-r4-gpt.jsonl).
+LEDGER = STATE / "ledger-r5-gpt.jsonl"
+MAX_JOBS = 40  # about $2 at $0.05 a job ($2.80 if no refund); with hf_run.py's $11, under $15
 
 
 def jobs_so_far():
@@ -74,7 +76,7 @@ def main():
     try:
         if args.ref:
             data["image_urls"] = [hf_api.upload(r)["public_url"] for r in args.ref]
-        record = {"model": MODEL, "input": data, "submitted_at": stamp, "approved_by": "Mo 10/2"}
+        record = {"model": MODEL, "input": data, "submitted_at": stamp, "approved_by": "Mo 10/3"}
         job.write_text(json.dumps(record, indent=2), encoding="utf-8")
         response = hf_api.api("POST", MODEL, data)
         record.update(response)

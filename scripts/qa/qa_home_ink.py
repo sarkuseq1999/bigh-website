@@ -7,7 +7,8 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     one h1; the header's links; the opening's paintings loaded and its words clear of each other;
     the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
-    promise); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    promise, beside the crane at rest, after one short rule over each of the three standards);
+    the opening crane beats its wings (the animated painting takes the still's place); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, a
     bottle picture links to its own product page, Discover NuriCell links to its page; the stories say
     "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, the
@@ -212,9 +213,19 @@ def run(browser, look, mobile):
 
     # The opening: paintings loaded, words clear of each other, the brush line leaving it.
     art = page.evaluate(
-        "[...document.querySelectorAll('#top img')].map(i => i.complete && i.naturalWidth > 0)"
+        "[...document.querySelectorAll('#top img:not([src*=crane-flight])')].map(i => i.complete && i.naturalWidth > 0)"
     )
     check(f"{tag}: the opening's paintings have loaded", art and all(art), str(art))
+    # The wingbeat: the animated painting is fetched once the still has bloomed, and takes its place.
+    try:
+        page.wait_for_selector("#top [data-brush=crane][data-flying=true]", timeout=15000)
+        flying = True
+    except Exception:  # noqa: BLE001
+        flying = False
+    wing = page.evaluate(
+        "(() => { const i = document.querySelector('#top img[src*=crane-flight]'); return i ? [i.complete, i.naturalWidth, getComputedStyle(i).opacity] : null })()"
+    )
+    check(f"{tag}: the crane beats its wings", flying and wing and wing[0] and wing[1] > 0 and wing[2] == "1", str(wing))
     boxes = page.evaluate(
         """[...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
             const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; })"""
@@ -280,6 +291,16 @@ def run(browser, look, mobile):
           return [i.naturalWidth, Math.round(i.getBoundingClientRect().width)]; })()"""
     )
     check(f"{tag}: Dr. Liu's photo shown at a sharp size", liu[0] >= liu[1], f"natural {liu[0]} shown {liu[1]} css px")
+    page.evaluate("document.querySelector('#scientists img[src*=inkstone]')?.scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(900)
+    still_life = page.evaluate(
+        "(() => { const i = document.querySelector('#scientists img[src*=inkstone]'); return i ? [i.complete && i.naturalWidth > 0, i.closest('figure')?.textContent.trim()] : null })()"
+    )
+    check(
+        f"{tag}: Ask BiGH Science's painting shows, labelled Illustration",
+        bool(still_life) and still_life[0] and "Illustration" in (still_life[1] or ""),
+        str(still_life),
+    )
     iris = page.locator("#scientists", has_text="Dr. Iris Wang").count()
     iris_photo = page.locator("#scientists img[alt*='Iris']").count()
     check(f"{tag}: Dr. Iris Wang in words only", iris == 1 and iris_photo == 0)
@@ -403,7 +424,13 @@ def run(browser, look, mobile):
     shoot(page, f"{name}-08-purpose")
     scroll_to(page, top_of(page, "#purpose") + 500, 2600)
     end_progress = progress(page)
-    check(f"{tag}: the brush line reaches the purpose", end_progress > 0.88, f"progress {end_progress:.3f}")
+    # Phones have no page line: there the route is the opening's stroke, then the lifted travel to
+    # the standards' rules and the closing stroke, so less of it lies above this point.
+    check(
+        f"{tag}: the brush line reaches the purpose",
+        end_progress > (0.6 if mobile else 0.85),
+        f"progress {end_progress:.3f}",
+    )
     # The footer: the line comes to rest as one stroke under the promise.
     scroll_to(page, page.evaluate("document.documentElement.scrollHeight"), 2600)
     rest_progress = progress(page)
@@ -431,6 +458,41 @@ def run(browser, look, mobile):
         rest_progress >= 0.999 and stroke > 40,
         f"progress {rest_progress:.3f}, ink under the promise {stroke}",
     )
+    rest = page.evaluate(
+        """(() => {
+          const i = document.querySelector('footer img[src*="crane-rest"]');
+          const t = document.querySelector('[data-brush="footer-tagline"]');
+          if (!i || !t) return null;
+          const a = i.getBoundingClientRect(), b = t.getBoundingClientRect();
+          return [i.complete && i.naturalWidth > 0, Math.round(a.left - b.right), Math.round(a.bottom - b.bottom)];
+        })()"""
+    )
+    check(
+        f"{tag}: the crane at rest stands beside the promise",
+        bool(rest) and rest[0] and 0 < rest[1] < 80 and 0 < rest[2] < 60,
+        str(rest),
+    )
+    # The three standards: each rule is a stroke of the brush.
+    scroll_to(page, top_of(page, "#ink-standards") - 300, 2200)
+    rules = page.evaluate(
+        """(() => [...document.querySelectorAll('#ink-standards > li')].map(li => {
+          const b = li.getBoundingClientRect();
+          let ink = 0;
+          for (const c of document.querySelectorAll('[data-brush-layer] canvas')) {
+            if (!c.width) continue;
+            const r = c.getBoundingClientRect();
+            const k = c.width / r.width;
+            const y0 = Math.max(0, b.top - 8 - r.top), y1 = Math.min(r.height, b.top + 10 - r.top);
+            if (y1 <= y0) continue;
+            const x0 = Math.max(0, b.left - r.left), x1 = Math.min(r.width, b.right - r.left);
+            const data = c.getContext('2d').getImageData(Math.floor(x0 * k), Math.floor(y0 * k), Math.max(1, Math.floor((x1 - x0) * k)), Math.max(1, Math.floor((y1 - y0) * k))).data;
+            for (let i = 3; i < data.length; i += 16) if (data[i] > 90) ink++;
+          }
+          return ink;
+        }))()"""
+    )
+    check(f"{tag}: a brush rule over each of the three standards", len(rules) == 3 and all(r > 12 for r in rules), str(rules))
+    scroll_to(page, page.evaluate("document.documentElement.scrollHeight"), 900)
     shoot(page, f"{name}-09-footer")
 
     page_checks(page, tag, width, view_h, problems)
@@ -499,7 +561,7 @@ def run_reduced(browser, look):
     check(f"{tag}: the whole brush line from the first frame", whole >= 0.999 and end_ink > 40, f"progress {whole}, ink {end_ink}")
     check(f"{tag}: every painting shown (no bloom waiting)", hidden == 0, str(hidden))
     gliding = page.evaluate(
-        "[...document.querySelectorAll('#top img')].filter(i => getComputedStyle(i).display !== 'none' && getComputedStyle(i).animationName !== 'none').length"
+        "[...document.querySelectorAll('#top img, #top [data-brush=crane]')].filter(i => getComputedStyle(i).display !== 'none' && getComputedStyle(i).animationName !== 'none').length + document.querySelectorAll('#top img[src*=crane-flight]').length"
     )
     check(f"{tag}: nothing moves", gliding == 0, str(gliding))
     check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))

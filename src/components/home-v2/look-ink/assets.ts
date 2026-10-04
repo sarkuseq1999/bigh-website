@@ -23,6 +23,20 @@ export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
   sun: { src: `${I}/sun.webp`, width: 760, height: 743 },
 };
 
+/** The opening crane's wingbeat (round 5): the same painting brought to life by a Kling loop, cut
+ *  out frame by frame like the still (build_crane_flight.py). An animated webp: the glide pose
+ *  is held, then one slow wingbeat, forever. `small` is for phones. */
+export const craneFlight = {
+  src: `${I}/crane-flight.webp`,
+  small: `${I}/crane-flight-600.webp`,
+};
+
+/** The crane at rest, standing on the page's last brush stroke (ink). */
+export const craneRest: Picture = { src: `${I}/crane-rest.webp`, width: 560, height: 864 };
+
+/** A brush at rest on its inkstone, beside "Good questions deserve clear answers." (ink). */
+export const inkstone: Picture = { src: `${I}/inkstone.webp`, width: 1200, height: 896 };
+
 /** The ink mitochondrion with its two gold-leaf folds (ink), a close view, and two variations. */
 export const mito: Record<"glow" | "closeup" | "aged" | "radicals", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },

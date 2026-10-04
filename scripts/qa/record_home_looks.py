@@ -1,10 +1,11 @@
 """Record calm scroll-through videos of the homepage redesign looks on the real GPU.
 
 Usage: python -X utf8 scripts/qa/record_home_looks.py [base] [out-dir] [--looks home,kr,jp]
-       [--phone]
+       [--phone] [--pause 11000]
 Writes <out-dir>/<look>.mp4 (desktop 1280×800) or <look>-phone.mp4 (390×844). H.264, no sound.
-The page waits on the opening, then scrolls at a steady reading pace to the bottom. The review
-switcher is hidden.
+The page waits on the opening (--pause, milliseconds; 4500 by default, 11000 shows the crane's
+first wingbeat), then scrolls at a steady reading pace to the bottom. The review switcher is
+hidden.
 """
 
 import subprocess
@@ -14,7 +15,9 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
-args = [a for a in sys.argv[1:] if not a.startswith("--")]
+PAUSE = int(sys.argv[sys.argv.index("--pause") + 1]) if "--pause" in sys.argv else 4500
+skip = {sys.argv[i + 1] for i, a in enumerate(sys.argv[:-1]) if a in ("--looks", "--pause")}
+args = [a for a in sys.argv[1:] if not a.startswith("--") and a not in skip]
 BASE = args[0] if args else "http://localhost:3014"
 OUT = Path(args[1]) if len(args) > 1 else Path(__file__).parent / "out" / "home-videos"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -76,7 +79,7 @@ with sync_playwright() as p:
             url = f"{BASE}/" if look == "home" else f"{BASE}/{look}"  # "home" = the homepage; else a locale
             page.goto(url, wait_until="networkidle", timeout=120000)
             page.add_style_tag(content="[data-look-switcher]{display:none!important}")
-            page.evaluate(SCROLL, {"speed": 300 if PHONE else 420, "pause": 4500})
+            page.evaluate(SCROLL, {"speed": 300 if PHONE else 420, "pause": PAUSE})
             video = page.video.path()
             ctx.close()
             encode(video, OUT / f"{look}{'-phone' if PHONE else ''}.mp4")

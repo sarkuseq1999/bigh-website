@@ -98,9 +98,32 @@
   left: 20%;
   top: 10%;
   width: calc(614 * var(--u));
-  height: auto;
   transform-origin: 70% 60%;
   animation: glide calc(var(--breath) * 4) ease-in-out infinite alternate;
+}
+
+.bird {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The wingbeat (an animated painting in the still's own box): it opens on the still's pose, so
+   the two change places unseen. */
+.wingbeat {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.crane[data-flying="true"] .wingbeat {
+  opacity: 1;
+}
+
+.crane[data-flying="true"] .bird {
+  visibility: hidden;
 }
 
 @keyframes glide {

@@ -111,8 +111,8 @@ export function Purpose() {
         </div>
 
         <ul id="ink-standards" className={styles.standards}>
-          {purpose.standards.map((item) => (
-            <li key={item.title}>
+          {purpose.standards.map((item, i) => (
+            <li key={item.title} data-brush={`standard-${i}`}>
               <h3 className={styles.standardTitle}>{copy(item.title)}</h3>
               <p className={base.body}>{copy(item.text)}</p>
             </li>

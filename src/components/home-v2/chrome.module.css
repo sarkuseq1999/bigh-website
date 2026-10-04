@@ -160,6 +160,40 @@
   letter-spacing: -0.035em;
 }
 
+/* The promise, and beside it whatever the look closes on. With a closing picture the promise
+   sets on two lines, so the picture stands beside it on the same ground. */
+.promise {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0 clamp(14px, 2.6vw, 40px);
+  width: fit-content;
+  max-width: 100%;
+  margin-top: 30px;
+}
+
+.promise .footerMessage {
+  margin-top: 0;
+}
+
+.withClosing .footerMessage {
+  max-width: 6.2em;
+  text-wrap: balance;
+}
+
+/* Korean and Japanese set the promise as two sentences, one to a line, a little smaller so the
+   closing picture still stands beside them on a wide window (on a phone it stands under them,
+   at the right, where the row wraps). */
+.withClosing .footerMessage:is(:lang(ko), :lang(ja)) {
+  max-width: none;
+  font-size: clamp(34px, 2.8vw, 46px);
+}
+
+/* Vietnamese runs wider: three lines, a little smaller, so the picture keeps its place beside. */
+.withClosing .footerMessage:lang(vi) {
+  font-size: clamp(36px, 3.9vw, 58px);
+}
+
 .footerMessage:not(:lang(en)) {
   text-wrap: balance;
 }

@@ -1,0 +1,10 @@
+{
+  "model": "kling-video/v3.0/pro/image-to-video",
+  "prompt": "A hand-painted sumi-e ink painting of a red-crowned crane in flight on plain rice paper. The crane beats its wings slowly and gracefully: both wings sweep down, then rise back up to the starting pose, one calm full wingbeat. The body, the neck and the trailing legs stay almost still, and the bird stays in exactly the same place and at the same size in the frame. The painting style, the ink brush texture and the paper stay exactly as in the image. Plain empty rice paper background, unchanged. Locked-off camera, no zoom, no pan, no new objects, no text.",
+  "usd": "0.476",
+  "made": "20261003-114957",
+  "files": [
+    "crane-fly-v1.mp4"
+  ],
+  "from_image": "reference/home-v2/ink/originals/gpt25-crane-v1.png"
+}

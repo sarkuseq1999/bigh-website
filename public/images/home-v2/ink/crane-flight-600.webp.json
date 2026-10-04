@@ -1,0 +1,10 @@
+{
+  "prompt": "Use the provided crop as the approved reference and paint the crane again on its own, as a museum-quality sumi-e ink painting on plain warm rice paper: one red-crowned crane in flight, in the same pose and angle as the reference (both wings raised high in an upstroke, the long neck stretched forward to the right, beak pointing right, legs trailing straight behind and slightly down). Anatomically correct: exactly two wings, two thin legs with small feet, one head, one long beak. The white body and wing feathers are unpainted paper with delicate pale grey wash shading; the black flight feathers along the inner trailing edge of the wings and the black neck are painted in confident wet sumi strokes; fine dry-brush line work on the feather edges. The small crown patch on the head is a tiny touch of gold leaf, not red. Same placement and scale as the reference, the whole bird inside the frame with clear empty paper margins all round. Plain empty rice paper ground (#F6F3EC), evenly lit. No mountains, no mist, no sun, no lines, no text, no seal, no signature, no border. Nothing red anywhere.\n",
+  "createdAt": "2026-10-02T22:53:13.417Z",
+  "motion": {
+    "model": "kling-video/v3.0/pro/image-to-video",
+    "prompt": "A hand-painted sumi-e ink painting of a red-crowned crane in flight on plain rice paper. The crane beats its wings slowly and gracefully: both wings sweep down, then rise back up to the starting pose, one calm full wingbeat. The body, the neck and the trailing legs stay almost still, and the bird stays in exactly the same place and at the same size in the frame. The painting style, the ink brush texture and the paper stay exactly as in the image. Plain empty rice paper background, unchanged. Locked-off camera, no zoom, no pan, no new objects, no text.",
+    "made": "20261003-114957",
+    "from": "the approved crane painting (first and last frame)"
+  }
+}

@@ -52,16 +52,20 @@ export function Cellular() {
         </div>
 
         <figure className={styles.figure} data-brush="cellular-mito">
-          <Image
-            className={`${base.ink} ${styles.mito}`}
-            src={mito.glow.src}
-            alt={copy("A mitochondrion, painted in ink, with two gold folds where energy is made")}
-            width={mito.glow.width}
-            height={mito.glow.height}
-            sizes="(max-width: 900px) 92vw, 50vw"
-            data-bloom=""
-          />
-          <span className={base.gold} style={{ ["--gold" as string]: `url(${gold.mito})` }} />
+          <span className={styles.body}>
+            <Image
+              className={`${base.ink} ${styles.mito}`}
+              src={mito.glow.src}
+              alt={copy(
+                "A mitochondrion, painted in ink, with two gold folds where energy is made",
+              )}
+              width={mito.glow.width}
+              height={mito.glow.height}
+              sizes="(max-width: 900px) 92vw, 50vw"
+              data-bloom=""
+            />
+            <span className={base.gold} style={{ ["--gold" as string]: `url(${gold.mito})` }} />
+          </span>
           <figcaption className={base.caption}>{copy(cellular.caption)}</figcaption>
         </figure>
       </div>

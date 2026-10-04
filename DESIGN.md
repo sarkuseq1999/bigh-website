@@ -166,7 +166,7 @@ The openings are measured from their approved 1536×1000 comps. One unit (`min(1
 Breakpoints: 900px (two-column blocks collapse, stations leave the margin), 720px (phone layouts: the opening becomes a stacked picture then words, bottles become a swipeable snap row), 560px (product grid to two columns where the row is not swiping).
 
 ### Named Rules
-**The Desktop Line Rule.** The page-long brush line exists only at 720px and wider. On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening, and stations sit in the flow under their headings with a 22px leader. The closing stroke under the footer's promise is on every screen.
+**The Desktop Line Rule.** The page-long brush line exists only at 720px and wider. On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening, and stations sit in the flow under their headings with a 22px leader. The three standards' rules and the closing stroke under the footer's promise are on every screen.
 
 ## Elevation & Depth
 
@@ -207,7 +207,7 @@ Text tabs on a hairline base, 21px/450, Ink Grey idle; selected turns ink and a 
 The shared header starts clear over the opening, so the painting runs to the top of the window, and turns to 93% paper with a hairline under it once the page has scrolled 48px; 80–90px tall; links clamp(18px, 1.302vw, 20px)/450 and never below 18px; no divider before Log in. With a mouse, a 2px ink underline draws from the left under the link you point at (0.5s); the current page keeps its own.
 
 ### Brush Line (signature)
-One painted stroke, not a traced path: calligraphic width, ragged paper-tooth edges, reloads about every thousand pixels so each stroke lands loaded and tapers, with dry-brush streaks as the ink runs out. It is routed through waypoints pinned to each block's own anchors and re-measured on every layout change. Width at the 1536 comp runs from under 1px to 5.6px, scaled by width/1536 clamped to 0.62–1.15; the brush can lift off the paper. It draws as the reader scrolls (reaching about 78% down the window) and once painted the ink stays. It lifts off in the closing painting's sky, travels off the paper to the footer, reloads, and ends as one loaded stroke (about twice the page's usual width) under the footer's promise: the line that left the crane comes to rest under "Stay sharp. Live fully." Reduced motion: the full line from the first frame.
+One painted stroke, not a traced path: calligraphic width, ragged paper-tooth edges, reloads about every thousand pixels so each stroke lands loaded and tapers, with dry-brush streaks as the ink runs out. It is routed through waypoints pinned to each block's own anchors and re-measured on every layout change. Width at the 1536 comp runs from under 1px to 5.6px, scaled by width/1536 clamped to 0.62–1.15; the brush can lift off the paper. It draws as the reader scrolls (reaching about 78% down the window) and once painted the ink stays. It lifts off in the closing painting's sky, touches down three times as a short, lightly loaded rule over each of the three standards (they have no hairline of their own), travels on to the footer, reloads, and ends as one loaded stroke (about twice the page's usual width) under the footer's promise and the crane at rest beside it: the line that left the crane in flight comes to rest as the ground the crane stands on, under "Stay sharp. Live fully." Reduced motion: the full line from the first frame.
 
 ### Stations
 A station is a short sentence-case label (17px/450, Sumi Ink) pinned to the brush line by a 1px leader at 62% ink (28–34px long on desktop). It sits in the margin beside its heading with the leader pointing at the line, and appears only when the brush reaches it: the leader draws out over 0.7s, the words fade in over 0.9s. A station exists only where the line passes and carries words that already exist; it is not a heading decoration.
@@ -215,8 +215,11 @@ A station is a short sentence-case label (17px/450, Sumi Ink) pinned to the brus
 ### Cell Labels
 In the cell opening, three hairline labels (max(16px, 20 comp px)/450) sit at the ends of leader lines drawn into the painting itself.
 
+### Closing
+The footer's promise sets on two lines with the crane at rest standing beside it (ink, multiplied; 88–124px wide), both on the closing brush stroke. The crane opens the page in flight, flies home in the closing painting, and rests here.
+
 ### Honesty Labels
-Every illustration says so: "Illustration" captions on painted stills, "Illustrations" on the science stage, "Illustration, not a measurement" (16px/500, centred) under the age slider, "Illustrative view" on the cell figure, an outlined "Fictional sample" pill (30px, 15px, Ink Grey) in every story byline, and the research limit note. Caption size and Ink Grey, placed on or beside the image; never removed, never smaller than 15px.
+Every illustration says so: "Illustration" captions on painted stills (the three story still lifes and the brush on its inkstone beside Ask BiGH Science), "Illustrations" on the science stage, "Illustration, not a measurement" (16px/500, centred) under the age slider, "Illustrative view" on the cell figure, an outlined "Fictional sample" pill (30px, 15px, Ink Grey) in every story byline, and the research limit note. Caption size and Ink Grey, placed on or beside the image; never removed, never smaller than 15px.
 
 ### Motion
 - **Ink bloom:** each painting spreads into the paper through an ink blot's soft mask, from 0% to 280% over 1.25 breaths, unblurring from 5px over one breath, with optional per-painting delay and origin. Opening paintings are marked waiting from the server so they bloom rather than flash.
@@ -225,6 +228,8 @@ Every illustration says so: "Illustration" captions on painted stills, "Illustra
 - **Mist:** the opening's landscape is drawn on a canvas with two slow banks of mist drifting through it. Mist is bare paper, so it only takes ink away: the far, pale ridges dissolve and return while the near, dark pines hold. The canvas takes the still painting's place once it has bloomed (same pixels, same multiply) and the mist rises over two breaths. No WebGL, a software renderer or reduced motion: the still painting stays.
 - **Light on leaf:** gold leaf is metal. A pale, warm band of light (screen) crosses each painting's leaf, held inside the leaf by that painting's own gold mask: every four breaths on the opening's sun; on the cell's two gold folds, the close view's folds and the closing sun it crosses as the painting travels up the window, so the leaf is lit when it is in front of you. This is light inside a painting, not a gradient fill on the interface.
 - **Depth:** leaving the opening, the sun sinks behind the ridges and the mountains settle; with a mouse the sun leans a few pixels against the pointer.
+- **Wingbeat:** the opening crane is the approved painting brought to life (a Kling loop from the still, cut out frame by frame like the still, shipped as an animated webp). It holds the glide pose, then beats its wings once, slowly, about every four breaths. It is fetched after the still has bloomed and opens on the still's pose, so the two change places unseen. Reduced motion keeps the still.
+- **Arrival:** the cell in "Tiny power plants." settles as it comes into view: a tenth smaller and turned five degrees at first, at rest by the time it is centred (scroll-driven; still without it).
 - **Flight:** the closing painting's two cranes are their own layer. As the painting rises into the window they fly up from the lower left to their painted place, toward the sun, and ride the air (3 breaths, alternate). Without scroll-driven animation they are simply there, as painted.
 
 ## Do's and Don'ts

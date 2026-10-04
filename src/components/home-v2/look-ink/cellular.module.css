@@ -75,6 +75,33 @@
   margin: 0 calc(-1 * var(--gutter)) 0 -2vw;
 }
 
+/* The painting and the light on its gold, as one body. It settles into place as it comes into
+   view: a little smaller and turned at first, at rest by the time it is centred. The body is its
+   own group while it moves, so the group multiplies onto the paper (as the painting does). */
+.body {
+  position: relative;
+  display: block;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .body {
+      transform-origin: 46% 54%;
+      animation: arrive linear both;
+      animation-timeline: view();
+      animation-range: entry 0% cover 46%;
+    }
+  }
+}
+
+@keyframes arrive {
+  from {
+    scale: 0.9;
+    rotate: -5deg;
+  }
+}
+
 .mito {
   display: block;
   width: 100%;

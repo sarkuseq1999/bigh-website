@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useCopy } from "@/i18n/use-copy";
 import { facts, scientists } from "../content";
 import { useHomeDialogs } from "../dialogs";
-import { halo, liu } from "./assets";
+import { halo, inkstone, liu } from "./assets";
 import base from "./look-ink.module.css";
 import styles from "./scientists.module.css";
 
@@ -27,7 +27,8 @@ function Figure({ value }: { value: string }) {
 // "Good science. Real people." Dr. Liu's real photograph in a white mat, resting on one breath of
 // ink (his name and field under it), and his record in large thin numerals; as the crane comp
 // shows, the headline sits to the right of the photograph, beside the record. Then what his work asks, Dr. Iris Wang in words
-// only, and Ask BiGH Science, on two columns with the brush line running down between them.
+// only, and Ask BiGH Science (its words beside a brush at rest on an inkstone), on two columns
+// with the brush line running down between them.
 export function Scientists() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -130,10 +131,24 @@ export function Scientists() {
       <div className={`${base.wrap} ${styles.ask}`} data-brush="ask">
         <h3 className={`${base.display} ${styles.askTitle}`}>{copy(scientists.ask.title)}</h3>
         <div className={styles.askBody} data-brush="ask-body">
-          <p className={`${base.body} ${styles.askText}`}>{copy(scientists.ask.text)}</p>
-          <button type="button" className={base.pill} onClick={dialogs.openAsk}>
-            {copy(scientists.ask.link)} <ArrowRight size={18} aria-hidden="true" />
-          </button>
+          <div className={styles.askWords}>
+            <p className={`${base.body} ${styles.askText}`}>{copy(scientists.ask.text)}</p>
+            <button type="button" className={base.pill} onClick={dialogs.openAsk}>
+              {copy(scientists.ask.link)} <ArrowRight size={18} aria-hidden="true" />
+            </button>
+          </div>
+          <figure className={styles.askArt} aria-hidden="true">
+            <Image
+              className={`${base.ink} ${styles.inkstone}`}
+              src={inkstone.src}
+              alt=""
+              width={inkstone.width}
+              height={inkstone.height}
+              sizes="(max-width: 899px) 70vw, 300px"
+              data-bloom=""
+            />
+            <figcaption className={base.caption}>{copy("Illustration")}</figcaption>
+          </figure>
         </div>
       </div>
     </section>

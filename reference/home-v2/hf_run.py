@@ -38,16 +38,18 @@ import hf_api  # noqa: E402
 
 REPO = Path(__file__).resolve().parents[2]
 STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/HiggsfieldAPI/bigh-home"))
-# Round 3 (Sept 29, later): Mo gave $20 of Higgsfield API budget for this round. Round 2's jobs
-# stay in ledger.jsonl; this round counts only ledger-r3.jsonl.
-LEDGER = STATE / "ledger-r3.jsonl"
+# Round 5 (October 3): Mo gave $15 for the crane homepage's second polish round. Earlier rounds
+# stay in ledger.jsonl / ledger-r3.jsonl; this round counts only ledger-r5.jsonl. Quoted jobs
+# (Kling) may use up to $11; GPT Image 2.5 (hf_unquoted.py, ledger-r5-gpt.jsonl) is capped at 40
+# jobs (about $2 to $2.80), so the two together stay under $15.
+LEDGER = STATE / "ledger-r5.jsonl"
 LOCK = STATE / "submit.lock"
-ROUND_BUDGET = Decimal("19.00")  # keep a margin under Mo's $20 for rounding.
+ROUND_BUDGET = Decimal("11.00")
 LOOK_BUDGET = {
     "iris": Decimal("6.00"),
     "everyday": Decimal("6.50"),
     "botanical": Decimal("6.00"),
-    "ink": Decimal("5.00"),  # round 4 (Oct 2): Kling loops for the Ink & Gold build
+    "ink": Decimal("11.00"),  # round 5 (Oct 3): Kling loops for the crane homepage
 }
 JOB_CAP = {"image": Decimal("0.25"), "video": Decimal("0.80")}
 LOOKS = set(LOOK_BUDGET)

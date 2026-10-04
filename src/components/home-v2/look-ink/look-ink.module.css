@@ -377,6 +377,17 @@
   }
 }
 
+/* The crane at rest beside the footer's promise. Its feet are 8% up from the picture's bottom
+   edge; it is set down so they stand on the closing brush stroke under the promise. */
+.look .rest {
+  flex: none;
+  width: clamp(80px, 8.2vw, 124px);
+  height: auto;
+  /* Where the promise is too long to share a line (the row wraps), it stands at the right. */
+  margin-left: auto;
+  translate: 0 calc(8% + 12px);
+}
+
 /* The shared footer, held to the look's reading sizes: no small letter-spaced capitals. */
 .look :global(footer) > div:first-child > div:first-child > p {
   text-wrap: balance;

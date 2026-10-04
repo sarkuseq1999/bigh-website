@@ -142,9 +142,24 @@ const shared: Waypoint[] = [
 const lift = (at: string, fx: number, fy: number): Waypoint => ({ at, fx, fy, w: 0, ink: 0 });
 
 // The close, on every screen: the brush travels off the paper down to the footer, reloads, and
-// lays one confident stroke under the promise ("Stay sharp. Live fully."), sagging a little in
-// the middle and flicking up as it lifts. The line that left the crane ends here.
-const T = "footer-tagline";
+// lays one confident stroke under the promise ("Stay sharp. Live fully.") and the crane at rest
+// beside it (the ground it stands on), sagging a little in the middle and flicking up as it
+// lifts. The line that left the crane in flight ends under the crane at rest.
+/** One short, lightly loaded stroke along the top edge of a block: a rule the brush paints. */
+const rule = (at: string): Waypoint[] => [
+  { at, fx: -0.02, fy: 0, dy: -2, w: 0, ink: 0 },
+  { at, fx: 0, fy: 0, dy: 0, w: 2, ink: 1, fresh: true, load: 0.62 },
+  { at, fx: 0.4, fy: 0, dy: 2, w: 2, ink: 1, load: 0.58 },
+  { at, fx: 0.8, fy: 0, dy: 1, w: 2, ink: 0.8, load: 0.5 },
+  { at, fx: 1, fy: 0, dy: -1, w: 1, ink: 0.4, load: 0.42 },
+  { at, fx: 1.02, fy: 0, dy: -4, w: 0, ink: 0 },
+];
+
+// Before the close, on every screen: the brush touches down three times, one rule over each of
+// the three standards we keep.
+const standards: Waypoint[] = [0, 1, 2].flatMap((i) => rule(`standard-${i}`));
+
+const T = "footer-promise";
 const promise: Waypoint[] = [
   { at: T, fx: -0.04, fy: 1, dy: 8, w: 0, ink: 0 },
   { at: T, fx: -0.008, fy: 1, dy: 13, w: 3, ink: 1, fresh: true, load: 2.2 },
@@ -162,8 +177,10 @@ const cranePhone: Waypoint[] = [
   lift("opening-art", 0.97, 1.0),
 ];
 
-/** The opening's waypoints, the route through the rest of the page (none on phones), and the
- *  closing stroke under the footer's promise (every screen). */
+/** The opening's waypoints, the route through the rest of the page (none on phones), then the
+ *  three standards' rules and the closing stroke under the footer's promise (every screen). */
 export function route(phone = false): Waypoint[] {
-  return phone ? [...cranePhone, ...promise] : [...crane, ...craneToScience, ...shared, ...promise];
+  return phone
+    ? [...cranePhone, ...standards, ...promise]
+    : [...crane, ...craneToScience, ...shared, ...standards, ...promise];
 }

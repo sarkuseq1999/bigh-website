@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowUp, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { ProductAction } from "@/components/home/product-action";
 import { Link } from "@/i18n/navigation";
@@ -118,17 +118,53 @@ export function HomeHeader({
   );
 }
 
-export function HomeFooter() {
+export function HomeFooter({
+  closing,
+}: {
+  /** What the look closes on, set beside the promise (the Ink look: its crane at rest). */
+  closing?: ReactNode;
+} = {}) {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
+  const message = useRef<HTMLParagraphElement>(null);
+  const hasClosing = Boolean(closing);
+
+  // A paragraph that wraps keeps its full width, however short its lines are. With a closing
+  // picture beside it, the promise is narrowed to its longest line, so the picture stands next
+  // to the words and not across a gap.
+  useEffect(() => {
+    const paragraph = message.current;
+    const words = paragraph?.firstElementChild;
+    const column = paragraph?.parentElement?.parentElement;
+    if (!paragraph || !words || !column || !hasClosing) return;
+    const fit = () => {
+      paragraph.style.width = "";
+      paragraph.style.width = `${Math.ceil(words.getBoundingClientRect().width) + 1}px`;
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(column);
+    document.fonts?.ready.then(fit);
+    return () => {
+      observer.disconnect();
+      paragraph.style.width = "";
+    };
+  }, [hasClosing]);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
         <div>
           <Logo footer />
-          <p className={styles.footerMessage}>
-            <span data-brush="footer-tagline">{copy(footer.tagline)}</span>
-          </p>
+          <div
+            className={`${styles.promise} ${closing ? styles.withClosing : ""}`}
+            data-brush="footer-promise"
+          >
+            <p ref={message} className={styles.footerMessage}>
+              <span data-brush="footer-tagline">{copy(footer.tagline)}</span>
+            </p>
+            {closing}
+          </div>
         </div>
         <div className={styles.footerColumns}>
           <div>

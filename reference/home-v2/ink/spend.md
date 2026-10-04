@@ -1,0 +1,3 @@
+- 20261003-114957 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v1` $0.476
+- 20261003 Higgsfield marketing-studio/image/flare (GPT Image 2.5) `crane-rest-v1` ~$0.05
+- 20261003 Higgsfield marketing-studio/image/flare (GPT Image 2.5) `inkstone-v1` ~$0.05
