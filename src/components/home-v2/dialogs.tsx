@@ -1,16 +1,21 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, X } from "lucide-react";
+import { ArrowUpRight, Plus, X } from "lucide-react";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useCopy } from "@/i18n/use-copy";
 import { products, scienceImages } from "./content";
+import { lockPageScroll } from "./lock-scroll";
 import styles from "./dialogs.module.css";
 
 // The homepage's preview dialogs (product, Dr. Liu, Ask BiGH Science, support, the three short
 // explainers), moved out of home/homepage.tsx unchanged in wording so every look shares them.
 // The explainers show pictures only when the page passes its own (`articleImages`); the Ink & Gold
 // homepage passes none (its paintings carry the science).
+// One sheet of the page's paper for all of them: the label and the close button stay at its top
+// while the words scroll under; it settles in and leaves in CSS (dialogs.module.css), so the words
+// stay in it while it leaves. Focus moves in when it opens and goes back to the button that
+// opened it (the browser's own dialog behaviour).
 
 type Dialogs = {
   openProduct: (index: number) => void;
@@ -103,22 +108,28 @@ export function HomeDialogs({
   const copy = useCopy();
   const dialog = useRef<HTMLDialogElement>(null);
   const [content, setContent] = useState<Content | null>(null);
+  const [open, setOpen] = useState(false);
+  // Each opening starts fresh: at the top, with every question closed.
+  const [round, setRound] = useState(0);
 
   useEffect(() => {
-    if (!content) return;
+    if (!open) return;
     const element = dialog.current;
-    if (element && !element.open) element.showModal();
-    const previous = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.body.style.overflow = previous;
-    };
-  }, [content]);
+    if (element && !element.open) {
+      element.scrollTop = 0;
+      element.showModal();
+    }
+    return lockPageScroll();
+  }, [open]);
 
-  const close = () => {
-    dialog.current?.close();
-    setContent(null);
+  const show = (next: Content) => {
+    setContent(next);
+    setRound((count) => count + 1);
+    setOpen(true);
   };
+
+  // Closing fires the dialog's own "close" event (as Escape does), which lets the page go.
+  const close = () => dialog.current?.close();
 
   const link = (href: string, label: string) => (
     <a className={styles.textLink} href={href} target="_blank" rel="noreferrer">
@@ -130,12 +141,12 @@ export function HomeDialogs({
     openProduct(index) {
       const product = products[index];
       const details = productDetails[index];
-      setContent({
+      show({
         eyebrow: copy(details.category),
         title: product.name,
         body: (
           <>
-            <div className={styles.productPicture} style={{ background: product.tint }}>
+            <div className={styles.productPicture}>
               <Image
                 src={product.image}
                 alt={copy("{name} bottle", { name: product.name })}
@@ -159,7 +170,7 @@ export function HomeDialogs({
       });
     },
     openScientist() {
-      setContent({
+      show({
         eyebrow: copy("Meet the scientists"),
         title: copy("Dr. Jiankang Liu"),
         body: (
@@ -188,7 +199,7 @@ export function HomeDialogs({
       });
     },
     openAsk() {
-      setContent({
+      show({
         eyebrow: copy("A planned customer benefit"),
         title: copy("Ask BiGH Science"),
         body: (
@@ -198,7 +209,7 @@ export function HomeDialogs({
                 "Good questions deserve clear explanations. We are developing a way for BiGH customers to explore broader health and science questions with input from participating scientists.",
               )}
             </p>
-            <ol className={styles.list}>
+            <ol className={styles.list} role="list">
               <li>
                 {copy(
                   "Start with a question about topics such as cellular health, nutrition, or healthy aging.",
@@ -228,7 +239,7 @@ export function HomeDialogs({
       });
     },
     openSupport() {
-      setContent({
+      show({
         eyebrow: copy("Here to help"),
         title: copy("BiGH support"),
         body: (
@@ -257,8 +268,13 @@ export function HomeDialogs({
                   "Use the language selector at the top of the page to switch between English, Simplified Chinese, Korean, Vietnamese, and Japanese.",
                 ],
               ].map(([question, answer]) => (
-                <details key={question}>
-                  <summary>{copy(question)}</summary>
+                <details key={question} name="home-support">
+                  <summary>
+                    <span>{copy(question)}</span>
+                    <span className={styles.toggle} aria-hidden="true">
+                      <Plus size={20} />
+                    </span>
+                  </summary>
                   <p>{copy(answer)}</p>
                 </details>
               ))}
@@ -269,7 +285,7 @@ export function HomeDialogs({
     },
     openArticle(index) {
       const item = explainers[index];
-      setContent({
+      show({
         eyebrow: copy("Health, explained simply"),
         title: copy(item.title),
         body: (
@@ -280,7 +296,7 @@ export function HomeDialogs({
               </div>
             )}
             <p>{copy(item.text)}</p>
-            <p>{copy(item.note)}</p>
+            <p className={styles.key}>{copy(item.note)}</p>
             <p>
               {copy(
                 "Understanding a biological process is a starting point. It does not tell us whether a particular supplement will change that process or improve health.",
@@ -301,8 +317,10 @@ export function HomeDialogs({
         ref={dialog}
         className={styles.dialog}
         aria-labelledby="home-dialog-title"
-        onCancel={close}
-        onClose={() => setContent(null)}
+        // Lenis (the page's smooth scrolling) leaves the wheel alone here: the sheet scrolls, and
+        // the page under it stays put.
+        data-lenis-prevent=""
+        onClose={() => setOpen(false)}
         onClick={(event) => {
           if (event.target !== event.currentTarget) return;
           const box = event.currentTarget.getBoundingClientRect();
@@ -316,7 +334,7 @@ export function HomeDialogs({
         }}
       >
         {content && (
-          <div className={styles.inner}>
+          <>
             <div className={styles.head}>
               <p className={styles.eyebrow}>{content.eyebrow}</p>
               <button
@@ -324,16 +342,17 @@ export function HomeDialogs({
                 className={styles.close}
                 onClick={close}
                 aria-label={copy("Close details")}
-                autoFocus
               >
-                <X size={24} />
+                <X size={24} aria-hidden="true" />
               </button>
             </div>
-            <h2 id="home-dialog-title" className={styles.title}>
-              {content.title}
-            </h2>
-            <div className={styles.body}>{content.body}</div>
-          </div>
+            <div className={styles.words} key={round}>
+              <h2 id="home-dialog-title" className={styles.title}>
+                {content.title}
+              </h2>
+              <div className={styles.body}>{content.body}</div>
+            </div>
+          </>
         )}
       </dialog>
     </DialogContext.Provider>

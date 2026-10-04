@@ -28,6 +28,19 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     (820x1180: the blocks are one column, so no page line runs through them; the opening's words
     fit, clear of the crane); a small phone (320x568: no words past the window's edge, no
     headline word alone on a line; the footer's links at least 44 px tall).
+  - everything that opens, and the keyboard path (October 4): "Skip to content" is the first Tab
+    stop and puts focus at the page's words; every header control shows the ink focus ring and is
+    48 px tall; each of the seven sheets (Support from the header and the footer, Dr. Liu, Ask
+    BiGH Science, the three explainers) opens from the keyboard with focus inside, keeps focus,
+    closes on Escape and hands focus back to its button; the sheet is the page's paper on an ink
+    wash and settles in; no button opens the product preview any more (all five products link to
+    their pages); the wheel scrolls a long sheet, not the page under it; on a phone each sheet
+    sits inside the window with no sideways scrolling, text at least 15 px, targets at least
+    48 px and the close button in view when it scrolls; the menu (phone and a tablet held
+    upright) is a full sheet with the page locked under it, links at least 48 px tall inside the
+    window, Tab goes from its button into it, Escape closes it, and Support opened from it hands
+    focus back to the menu button; with reduced motion a sheet and the menu are whole at once;
+    in Korean the Support sheet and the menu open inside the window.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -636,6 +649,354 @@ def run_sizes(browser, look):
     context.close()
 
 
+INK = "rgb(12, 11, 10)"
+SUPPORT = "document.querySelector('#home-navigation > button')"
+SHEETS = [
+    ("Support (header)", SUPPORT, None),
+    ("Dr. Liu", "document.querySelectorAll('#scientists button')[0]", None),
+    ("Ask BiGH Science", "document.querySelectorAll('#scientists button')[1]", None),
+    ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 0),
+    ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 1),
+    ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 2),
+    ("Support (footer)", "document.querySelector('footer button')", None),
+]
+MENU_BUTTON = "button[aria-controls='home-navigation']"
+ACTIVE = "(document.activeElement.getAttribute('aria-label') || document.activeElement.textContent || '').trim().slice(0, 28)"
+
+
+def ring(page):
+    """Is the focused control's ring the page's ink ring (2 px, solid, sumi ink)?"""
+    return page.evaluate(
+        f"(() => {{ const s = getComputedStyle(document.activeElement); return s.outlineStyle === 'solid' && parseFloat(s.outlineWidth) >= 2 && s.outlineColor === '{INK}'; }})()"
+    )
+
+
+def open_sheet(page, opener, topic=None, wait=1200):
+    """Open a sheet the way a keyboard does: focus its button, press Enter."""
+    if topic is not None:
+        page.evaluate(
+            f"document.querySelectorAll('#science [role=tab]')[{topic}].scrollIntoView({{ block: 'center', behavior: 'instant' }})"
+        )
+        page.wait_for_timeout(500)
+        page.locator("#science [role=tab]").nth(topic).click()
+        page.wait_for_timeout(900)
+    page.evaluate(
+        f"(() => {{ const e = {opener}; e.scrollIntoView({{ block: 'center', behavior: 'instant' }}); e.focus(); window.__opener = e; }})()"
+    )
+    page.wait_for_timeout(400)
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(wait)
+
+
+def run_opens(browser):
+    """Everything the page opens, and the keyboard path through it."""
+    # Desktop: the keyboard path, and each sheet from the keyboard.
+    tag = "opens desk"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1440, 900), False)
+    page.keyboard.press("Tab")
+    page.wait_for_timeout(300)
+    first = page.evaluate(f"[{ACTIVE}, getComputedStyle(document.activeElement).opacity]")
+    shoot(page, "opens-desk-00-skip")
+    # Tab on: the logo, the five links, Log in and the language (Sign up is a placeholder, off).
+    stops, pale = [], []
+    for _ in range(9):
+        page.keyboard.press("Tab")
+        page.wait_for_timeout(200)
+        if not page.evaluate("!!document.activeElement.closest('header')"):
+            break
+        name = page.evaluate(ACTIVE)
+        stops.append(name)
+        if not ring(page):
+            pale.append(name)
+    check(
+        f"{tag}: the header's eight controls each show the ink focus ring",
+        len(stops) == 8 and not pale,
+        f"{len(stops)} stops {stops}, without the ring: {pale}",
+    )
+    page.evaluate("document.querySelector('[data-look=ink] > a').focus()")
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(400)
+    landed = page.evaluate("document.activeElement.tagName")
+    page.keyboard.press("Tab")
+    page.wait_for_timeout(300)
+    after = page.evaluate("!!document.activeElement.closest('#top')")
+    check(
+        f"{tag}: Skip to content is the first Tab stop and puts focus at the page's words",
+        first == ["Skip to content", "1"] and landed == "MAIN" and after,
+        f"{first}, landed on {landed}, next stop in the opening {after}",
+    )
+    low = page.evaluate(
+        """[...document.querySelectorAll('#home-navigation a, #home-navigation button, #home-navigation select')]
+          .filter(e => e.getBoundingClientRect().height < 48)
+          .map(e => `${Math.round(e.getBoundingClientRect().height)}px ${e.textContent.trim().slice(0, 14)}`)"""
+    )
+    check(f"{tag}: the header's controls at least 48 px tall", not low, "; ".join(low))
+    page.evaluate("window.scrollTo(0, 0)")
+
+    unopened, loose, unreturned, pale = [], [], [], []
+    surface = None
+    settle = None
+    for name, opener, topic in SHEETS:
+        open_sheet(page, opener, topic, wait=0)
+        try:
+            page.wait_for_function("document.querySelector('dialog').open", timeout=3000)
+        except Exception:  # noqa: BLE001
+            unopened.append(name)
+            continue
+        early = float(page.evaluate("getComputedStyle(document.querySelector('dialog')).opacity"))
+        page.wait_for_timeout(1300)
+        state = page.evaluate(
+            """(() => { const d = document.querySelector('dialog'); const s = getComputedStyle(d); const b = getComputedStyle(d, '::backdrop');
+              return { inside: d.contains(document.activeElement), title: d.querySelector('h2').textContent.trim(), opacity: s.opacity,
+                paper: s.backgroundImage.includes('paper'), shadow: s.boxShadow, radius: parseFloat(s.borderRadius),
+                wash: b.backgroundColor, blur: b.backdropFilter }; })()"""
+        )
+        if not state["inside"] or not state["title"]:
+            unopened.append(name)
+        if not ring(page):
+            pale.append(name)
+        if surface is None:
+            surface = state
+            settle = (early, float(state["opacity"]))
+            shoot(page, "opens-desk-01-sheet")
+        for _ in range(6):
+            page.keyboard.press("Tab")
+            page.wait_for_timeout(90)
+            where = page.evaluate(
+                "(() => { const a = document.activeElement; return document.querySelector('dialog').contains(a) ? 'in' : a === document.body ? 'body' : 'out'; })()"
+            )
+            if where == "out":
+                loose.append(name)
+                break
+            if where == "in" and not ring(page):
+                pale.append(f"{name}: {page.evaluate(ACTIVE)}")
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(600)
+        back = page.evaluate("[document.querySelector('dialog').open, document.activeElement === window.__opener, document.body.style.overflow]")
+        if back != [False, True, ""]:
+            unreturned.append(f"{name} {back}")
+    check(f"{tag}: seven sheets open from the keyboard with focus inside", not unopened, f"not opened: {unopened}")
+    check(f"{tag}: focus stays in each sheet, with the ink focus ring", not loose and not pale, f"left the sheet: {loose}; no ring: {pale[:4]}")
+    check(
+        f"{tag}: Escape closes each sheet, focus returns to its button and the page scrolls again",
+        not unreturned,
+        "; ".join(unreturned[:3]),
+    )
+    warm = [int(v) for v in (surface or {}).get("wash", "").replace("rgba(", "").replace("rgb(", "").split(")")[0].split(",")[:3] if v.strip().isdigit()]
+    check(
+        f"{tag}: the sheet is the page's paper (its fibre, no shadow, square corners) on a warm ink wash",
+        bool(surface)
+        and surface["paper"]
+        and surface["shadow"] == "none"
+        and surface["radius"] <= 4
+        and surface["blur"] == "none"
+        and len(warm) == 3
+        and warm[0] >= warm[2],
+        str(surface),
+    )
+    check(
+        f"{tag}: the sheet settles in (not at once) and is whole within the breath",
+        bool(settle) and settle[0] < 1 and settle[1] == 1,
+        f"opacity as it opens {settle and settle[0]:.2f}, at rest {settle and settle[1]}",
+    )
+    preview = page.evaluate(
+        """[[...document.querySelectorAll('footer > div:first-child > div:last-child > div:first-child a')].length,
+            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:first-child > div:last-child > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
+    )
+    check(
+        f"{tag}: no button opens the product preview (all five products link to their pages)",
+        preview[0] == 5 and not preview[1],
+        str(preview),
+    )
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # A short window: the wheel scrolls the sheet, and the page under it stays where it is.
+    tag = "opens 1280x640"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1280, 640), False)
+    open_sheet(page, SHEETS[1][1])
+    before = page.evaluate("[scrollY, document.querySelector('dialog').scrollHeight - document.querySelector('dialog').clientHeight]")
+    page.mouse.move(640, 320)
+    for _ in range(6):
+        page.mouse.wheel(0, 120)
+        page.wait_for_timeout(120)
+    page.wait_for_timeout(1300)
+    moved = page.evaluate("[scrollY, document.querySelector('dialog').scrollTop]")
+    check(
+        f"{tag}: the wheel scrolls a long sheet, not the page under it",
+        before[1] > 20 and moved[0] == before[0] and moved[1] >= before[1] - 2,
+        f"page {before[0]} -> {moved[0]}, sheet scrolled {moved[1]} of {before[1]}",
+    )
+    context.close()
+
+    # Phone: each sheet in the window; the menu.
+    tag = "opens phone"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (390, 844), True)
+    outside, small, lost = [], [], []
+    for name, opener, topic in SHEETS:
+        if name == "Support (header)":
+            page.click(MENU_BUTTON)
+            page.wait_for_timeout(900)
+        open_sheet(page, opener, topic)
+        m = page.evaluate(
+            """(() => { const d = document.querySelector('dialog'); if (!d.open) return null; const b = d.getBoundingClientRect();
+              const sizes = []; const walker = document.createTreeWalker(d, NodeFilter.SHOW_TEXT);
+              for (let n = walker.nextNode(); n; n = walker.nextNode()) if (n.nodeValue.trim()) sizes.push(parseFloat(getComputedStyle(n.parentElement).fontSize));
+              const targets = [...d.querySelectorAll('a, button, summary')].map(e => Math.round(e.getBoundingClientRect().height));
+              d.scrollTo(0, 99999);
+              const c = d.querySelector('button[aria-label]').getBoundingClientRect();
+              return { box: [b.left, b.top, b.right, b.bottom].map(Math.round), wide: [d.scrollWidth, d.clientWidth, document.documentElement.scrollWidth],
+                text: Math.min(...sizes), target: Math.min(...targets), scrolls: d.scrollHeight > d.clientHeight + 4,
+                close: c.top >= b.top && c.bottom <= b.bottom && c.right <= b.right && c.width >= 48 }; })()"""
+        )
+        if name == "Ask BiGH Science":
+            page.wait_for_timeout(300)
+            shoot(page, "opens-phone-01-sheet-end")
+        if not m or m["box"][0] < 0 or m["box"][1] < 0 or m["box"][2] > 390 or m["box"][3] > 844 or m["wide"][0] > m["wide"][1] or m["wide"][2] > 390:
+            outside.append(f"{name} {m and m['box']} {m and m['wide']}")
+        if m and (m["text"] < 15 or m["target"] < 48):
+            small.append(f"{name} text {m['text']} target {m['target']}")
+        if m and not m["close"]:
+            lost.append(name)
+        if m:
+            closed = close_dialog(page)
+            if not closed:
+                outside.append(f"{name} did not close")
+    check(f"{tag}: each sheet sits inside the window, no sideways scrolling", not outside, "; ".join(outside[:3]))
+    check(f"{tag}: sheet text at least 15 px, targets at least 48 px", not small, "; ".join(small[:3]))
+    check(f"{tag}: the close button stays in view when a sheet scrolls", not lost, str(lost))
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    for size, mobile in (((390, 844), True), ((820, 1180), False)):
+        tag = f"opens {'phone' if mobile else '820x1180'}"
+        context, page, response, problems = open_page(browser, f"{BASE}/", size, mobile)
+        page.evaluate(f"document.querySelector(\"{MENU_BUTTON}\").focus()")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(1500)
+        menu = page.evaluate(
+            """(() => { const n = document.querySelector('#home-navigation'); const b = n.getBoundingClientRect(); const s = getComputedStyle(n);
+              const links = [...n.querySelectorAll(':scope > a, :scope > button')].map(e => { const r = e.getBoundingClientRect();
+                return [Math.round(r.left), Math.round(r.right), Math.round(r.height), parseFloat(getComputedStyle(e).fontSize), getComputedStyle(e).opacity]; });
+              const rest = [...n.querySelectorAll(':scope > div a, :scope > div button, :scope > div select')].map(e => { const r = e.getBoundingClientRect();
+                return [Math.round(r.left), Math.round(r.right), Math.round(r.height), parseFloat(getComputedStyle(e).fontSize), Math.round(r.bottom)]; });
+              return { shown: s.display !== 'none', box: [Math.round(b.top), Math.round(b.bottom)], paper: s.backgroundImage.includes('paper'), links, rest,
+                locked: document.body.style.overflow, wide: document.documentElement.scrollWidth, win: [innerWidth, innerHeight],
+                expanded: document.querySelector('header button[aria-controls]').getAttribute('aria-expanded') }; })()"""
+        )
+        shoot(page, f"opens-{'phone' if mobile else '820'}-00-menu")
+        check(
+            f"{tag}: the menu opens as a full sheet of the page's paper, the page locked under it",
+            menu["shown"] and menu["expanded"] == "true" and menu["paper"] and menu["box"][1] >= size[1] - 1 and menu["locked"] == "hidden",
+            f"box {menu['box']}, paper {menu['paper']}, body overflow {menu['locked']!r}",
+        )
+        every = menu["links"] + menu["rest"]
+        check(
+            f"{tag}: five menu links, each at least 48 px tall and 18 px type, every control inside the window",
+            len(menu["links"]) == 5
+            and all(l[2] >= 48 and l[3] >= 18 and l[4] == "1" for l in menu["links"])
+            and all(r[2] >= 48 and r[3] >= 18 and r[4] <= size[1] for r in menu["rest"])
+            and all(e[0] >= 0 and e[1] <= size[0] for e in every)
+            and menu["wide"] <= size[0],
+            f"links {menu['links']}, rest {menu['rest']}",
+        )
+        walk = []
+        for _ in range(3):
+            page.keyboard.press("Tab")
+            page.wait_for_timeout(150)
+            walk.append(page.evaluate(f"[!!document.activeElement.closest('#home-navigation'), {ACTIVE}]"))
+        ringed = ring(page)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(500)
+        shut = page.evaluate(f"[document.querySelector('header button[aria-controls]').getAttribute('aria-expanded'), {ACTIVE}, document.body.style.overflow]")
+        check(
+            f"{tag}: Tab goes from the menu's button into the menu; Escape closes it, focus back on the button",
+            all(w[0] for w in walk) and ringed and shut == ["false", "Open menu", ""],
+            f"{walk}, ring {ringed}, after Escape {shut}",
+        )
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(900)
+        page.evaluate(f"{SUPPORT}.focus()")
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(1300)
+        title = dialog_title(page)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(600)
+        home = page.evaluate(f"[document.querySelector('dialog').open, {ACTIVE}]")
+        check(
+            f"{tag}: Support opened from the menu hands focus back to the menu's button",
+            title == "BiGH support" and home == [False, "Open menu"],
+            f"{title!r}, then {home}",
+        )
+        check(f"{tag}: no errors (menu)", not problems, "; ".join(problems[:3]))
+        context.close()
+
+    # Reduced motion: a sheet and the menu are whole at once, and a sheet is gone at once.
+    tag = "opens reduced motion"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1440, 900), False, reduced=True)
+    open_sheet(page, SUPPORT, wait=0)
+    page.wait_for_function("document.querySelector('dialog').open", timeout=3000)
+    whole = page.evaluate(
+        """(() => { const d = document.querySelector('dialog'); const s = getComputedStyle(d); const b = getComputedStyle(d, '::backdrop');
+          return [s.opacity, s.translate, b.opacity, b.maskImage, d.getAnimations().length]; })()"""
+    )
+    page.keyboard.press("Escape")
+    gone = page.evaluate("getComputedStyle(document.querySelector('dialog')).display")
+    check(
+        f"{tag}: a sheet is whole at once and gone at once",
+        whole[0] == "1" and whole[1] in ("none", "0px") and whole[2] == "1" and whole[3] == "none" and whole[4] == 0 and gone == "none",
+        f"{whole}, after Escape display {gone}",
+    )
+    context.close()
+    context, page, response, problems = open_page(browser, f"{BASE}/", (390, 844), True, reduced=True)
+    page.click(MENU_BUTTON)
+    still = page.evaluate(
+        """(() => { const n = document.querySelector('#home-navigation');
+          return [getComputedStyle(n).display, ...[n, ...n.children].map(e => getComputedStyle(e).opacity + ' ' + getComputedStyle(e).animationName)]; })()"""
+    )
+    check(
+        f"{tag}: the menu is whole at once",
+        still[0] == "flex" and all(v == "1 none" for v in still[1:]),
+        str(still),
+    )
+    check(f"{tag}: no errors (opens)", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # Korean, on a phone: the Support sheet and the menu.
+    tag = "opens kr phone"
+    context, page, response, problems = open_page(browser, f"{BASE}/kr", (390, 844), True)
+    page.click(MENU_BUTTON)
+    page.wait_for_timeout(1300)
+    links = page.evaluate(
+        "[...document.querySelectorAll('#home-navigation > a, #home-navigation > button')].map(e => { const r = e.getBoundingClientRect(); return [e.textContent.trim(), Math.round(r.right), Math.round(r.height)]; })"
+    )
+    shoot(page, "opens-kr-phone-00-menu")
+    page.locator("#home-navigation > button").click()
+    page.wait_for_timeout(1300)
+    sheet = page.evaluate(
+        """(() => { const d = document.querySelector('dialog'); const b = d.getBoundingClientRect();
+          return [d.open, d.querySelector('h2').textContent.trim(), Math.round(b.left), Math.round(b.right), d.scrollWidth <= d.clientWidth, document.documentElement.scrollWidth, d.querySelectorAll('details').length]; })()"""
+    )
+    shoot(page, "opens-kr-phone-01-sheet")
+    check(
+        f"{tag}: the menu and the Support sheet open in Korean, inside the window",
+        len(links) == 5
+        and all(l[1] <= 390 and l[2] >= 48 for l in links)
+        and "고객" in links[4][0]
+        and sheet[0]
+        and "BiGH" in sheet[1]
+        and sheet[1] != "BiGH support"
+        and sheet[2] >= 0
+        and sheet[3] <= 390
+        and sheet[4]
+        and sheet[5] <= 390
+        and sheet[6] == 4,
+        f"{links} | {sheet}",
+    )
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+
 def run_korean(browser, mobile):
     tag = f"kr {'phone' if mobile else 'desk'}"
     size = (390, 844) if mobile else (1440, 900)
@@ -689,6 +1050,7 @@ with sync_playwright() as p:
     run_short(browser, "home")
     run_sizes(browser, "home")
     run_reduced(browser, "home")
+    run_opens(browser)
     run_korean(browser, mobile=False)
     run_korean(browser, mobile=True)
     browser.close()

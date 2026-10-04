@@ -1,96 +1,266 @@
-/* The shared preview dialog. Colors follow the look's tokens (--paper, --ink, --muted, --line,
-   --accent), with the About dialog's sizes: 19px reading text, 17px+ controls. */
+/* The homepage's preview sheet. It is the page's own world: a sheet of the same rice paper (with
+   its fibre) laid on a wash of thinned ink, with no shadow, no box inside it and square paper
+   corners; hairlines, type and space do the separating, as on the page. Colors and the breath
+   come from the look's tokens, passed with `:global(body):has(.look) { … }` because the dialog
+   sits beside the look's root; the fallbacks keep it solid and readable without them.
+   Sizes are the page's: 19px reading text, 15px captions, 48px targets. */
 
 .dialog {
-  width: min(680px, calc(100vw - 28px));
-  max-height: min(88vh, 920px);
+  --pad: clamp(24px, 4.4vw, 52px);
+  --rule: var(--line, rgba(28, 27, 25, 0.16));
+  --rule-strong: var(--hair, rgba(28, 27, 25, 0.28));
+  --settle: var(--ease, cubic-bezier(0.22, 0.61, 0.36, 1));
+  width: min(680px, calc(100vw - 24px));
+  max-width: none;
+  max-height: min(calc(100vh - 40px), 880px);
+  max-height: min(calc(100dvh - 40px), 880px);
   margin: auto;
   padding: 0;
   border: 0;
-  border-radius: 28px;
-  /* The dialog sits beside the look's root, so a look passes its tokens with
-     `:global(body):has(.look) { … }`; the fallbacks keep it solid and in Switzer. */
-  background: var(--dialog-bg, var(--paper, #fbfaf7));
+  border-radius: 2px;
+  overflow: hidden auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #9d978b transparent;
+  background-color: var(--dialog-bg, var(--paper, #fbfaf7));
+  background-image: var(--paper-fibre, none);
+  background-size: 800px 800px;
   color: var(--dialog-ink, var(--ink, #242722));
   font-family: var(--sans, "Switzer", Arial, sans-serif);
-  box-shadow: 0 40px 120px rgba(10, 14, 20, 0.28);
+  -webkit-font-smoothing: antialiased;
+  /* Closed (and leaving): a little lower and clear. It leaves quickly; see [open] for arriving. */
+  opacity: 0;
+  translate: 0 10px;
+  transition:
+    opacity 0.3s var(--settle),
+    translate 0.3s var(--settle),
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
 }
 
+/* Arriving: the sheet settles the way the page's panels do (rising 10px over 0.9s); it clears
+   sooner than it settles, so its words are not read through the page's for long. */
+.dialog[open] {
+  opacity: 1;
+  translate: 0 0;
+  transition-duration: 0.45s, 0.9s, 0.9s, 0.9s;
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+.dialog:not([open]) {
+  pointer-events: none;
+}
+
+/* The page under the sheet goes under a wash of thinned sumi ink: a warm grey laid over it, which
+   darkens the paper and quiets the ink beneath (not a black scrim, and nothing is blurred). It
+   spreads from the middle of the window the way the page's paintings bloom into the paper,
+   through the same ink-blot mask, in one breath; at rest the mask covers the whole window. */
 .dialog::backdrop {
-  background: rgba(14, 18, 24, 0.5);
-  backdrop-filter: blur(6px);
+  background-color: rgb(96 91 83 / 0.64);
+  opacity: 0;
+  transition:
+    opacity 0.3s var(--settle, ease),
+    overlay 0.3s allow-discrete,
+    display 0.3s allow-discrete;
 }
 
-.inner {
-  padding: clamp(24px, 4vw, 44px);
+.dialog[open]::backdrop {
+  opacity: 1;
+  transition-duration: 0.9s;
 }
 
+@starting-style {
+  .dialog[open]::backdrop {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .dialog::backdrop {
+    -webkit-mask: var(--wash-mask, none) 50% 46% / 280% 280% no-repeat;
+    mask: var(--wash-mask, none) 50% 46% / 280% 280% no-repeat;
+  }
+
+  .dialog[open]::backdrop {
+    transition:
+      opacity 0.9s var(--settle, ease),
+      mask-size var(--breath, 2.4s) var(--settle, ease),
+      -webkit-mask-size var(--breath, 2.4s) var(--settle, ease),
+      overlay 0.9s allow-discrete,
+      display 0.9s allow-discrete;
+  }
+
+  @starting-style {
+    .dialog[open]::backdrop {
+      -webkit-mask-size: 40% 40%;
+      mask-size: 40% 40%;
+    }
+  }
+}
+
+/* Reduced motion: the sheet and the wash are simply there, and simply gone. */
+@media (prefers-reduced-motion: reduce) {
+  .dialog,
+  .dialog::backdrop,
+  .dialog[open],
+  .dialog[open]::backdrop {
+    transition: none;
+  }
+}
+
+.dialog ::selection {
+  background: #ead9ad;
+  color: var(--ink, #0c0b0a);
+}
+
+.dialog :focus-visible {
+  outline: 2px solid var(--ink, #0c0b0a);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+/* The label and the close button stay at the top of the sheet; the words pass under the same
+   paper. A hairline appears under them once the words have moved (where the browser can tie it
+   to the sheet's own scrolling). */
 .head {
+  position: sticky;
+  top: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  padding: clamp(14px, 2.6vw, 28px) clamp(14px, 2.6vw, 28px) 10px var(--pad);
+  background: inherit;
+}
+
+.head::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 1px;
+  background: var(--rule);
+  opacity: 0;
+}
+
+@supports (animation-timeline: scroll()) {
+  .head::after {
+    animation: rule linear both;
+    animation-timeline: scroll(nearest block);
+    animation-range: 0 28px;
+  }
+}
+
+@keyframes rule {
+  to {
+    opacity: 1;
+  }
 }
 
 .eyebrow {
   color: var(--muted);
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.3;
 }
 
+/* The outlined pill's round twin; it fills with ink under the pointer, as the page's toggles do. */
 .close {
+  flex: none;
   display: grid;
   place-items: center;
   width: 48px;
   height: 48px;
-  border: 1px solid var(--line);
+  border: 1.5px solid var(--ink, currentColor);
   border-radius: 50%;
-  color: inherit;
+  color: var(--ink, inherit);
+  transition:
+    background-color 0.5s var(--settle),
+    color 0.5s var(--settle);
 }
 
-.close:hover {
-  background: color-mix(in srgb, var(--ink) 6%, transparent);
+@media (hover: hover) {
+  .close:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+.dialog .close:focus-visible {
+  border-radius: 50%;
+}
+
+.words {
+  padding: clamp(4px, 1vw, 10px) var(--pad) var(--pad);
 }
 
 .title {
-  margin-top: 18px;
   font-family: var(--display-font);
-  font-size: clamp(34px, 4.4vw, 46px);
-  font-weight: var(--display-weight);
-  line-height: 1.04;
+  font-size: clamp(32px, 4.2vw, 44px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.06;
   letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+/* Korean, Japanese and Chinese: the page's room for display lines. */
+.title:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+}
+
+.title:lang(ko) {
+  word-break: keep-all;
+}
+
+.title:lang(ja) {
+  word-break: auto-phrase;
 }
 
 .body {
   display: grid;
   gap: 16px;
-  margin-top: 22px;
+  margin-top: clamp(18px, 2.2vw, 26px);
+  color: var(--muted);
   font-size: 19px;
-  line-height: 1.55;
+  line-height: 1.6;
 }
 
 .body h3 {
-  margin-top: 10px;
+  margin-top: 14px;
+  color: var(--ink);
   font-size: 20px;
-  font-weight: 600;
+  font-weight: 500;
+  line-height: 1.3;
 }
 
+/* A key line, in ink. */
+.body .key {
+  color: var(--ink);
+  font-weight: 450;
+}
+
+/* A bottle stands on the paper, never on a tinted card. */
 .productPicture {
   display: grid;
   place-items: center;
-  padding: 24px;
-  border-radius: 22px;
+  padding: 4px 0;
 }
 
 .productPicture img {
-  width: min(240px, 60%);
+  width: min(220px, 56%);
   height: auto;
 }
 
 .articlePicture {
   overflow: hidden;
-  border-radius: 22px;
-  background: #f4f1ea;
+  border-radius: 2px;
 }
 
 .articlePicture img {
@@ -99,57 +269,189 @@
   height: auto;
 }
 
+/* What is not ready yet, said plainly: a hairline, the page's outlined honesty tag, the words. */
 .note {
-  padding: 18px 20px;
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--ink) 5%, var(--paper));
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-top: 10px;
+  padding-top: 24px;
+  border-top: 1px solid var(--rule);
   font-size: 17px;
+  line-height: 1.55;
 }
 
 .note strong {
-  display: block;
-  margin-bottom: 4px;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 450;
+  line-height: 1.2;
 }
 
+/* Numbered lines on hairlines, as in "Tiny power plants." */
 .list {
+  counter-reset: line;
   display: grid;
-  gap: 10px;
-  padding-left: 24px;
-  list-style: decimal;
+  margin-top: 8px;
+}
+
+.list li {
+  counter-increment: line;
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 8px;
+  padding: 17px 0 19px;
+  border-top: 1px solid var(--rule);
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.list li::before {
+  content: counter(line, decimal-leading-zero);
+  padding-top: 3px;
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+/* The list's last hairline is the note's own. */
+.list + .note {
+  margin-top: -16px;
+}
+
+/* Questions on hairlines; each opens with the page's round toggle. */
+.faq {
+  margin-top: 8px;
 }
 
 .faq details {
-  border-top: 1px solid var(--line);
+  border-top: 1px solid var(--rule);
 }
 
 .faq details:last-child {
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid var(--rule);
 }
 
 .faq summary {
-  padding: 16px 0;
-  font-size: 18px;
-  font-weight: 600;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 16px;
+  min-height: 76px;
+  padding: 14px 0;
+  color: var(--ink);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
   cursor: pointer;
+  list-style: none;
 }
 
-.faq p {
-  padding-bottom: 16px;
+.faq summary::-webkit-details-marker {
+  display: none;
 }
 
+.toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--rule-strong);
+  border-radius: 50%;
+  transition:
+    rotate 0.6s var(--settle),
+    border-color 0.5s var(--settle),
+    background-color 0.5s var(--settle),
+    color 0.5s var(--settle);
+}
+
+@media (hover: hover) {
+  .faq summary:hover .toggle {
+    border-color: var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+  }
+}
+
+.faq details[open] .toggle {
+  rotate: 45deg;
+}
+
+.faq details p {
+  padding: 0 60px 26px 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .faq details[open] p {
+    animation: answer 0.9s var(--settle) both;
+  }
+}
+
+@keyframes answer {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* The page's text link: ink, with a hairline underline that darkens. */
 .textLink {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   width: fit-content;
-  padding-bottom: 3px;
-  border-bottom: 1.5px solid currentColor;
-  font-size: 17px;
-  font-weight: 500;
+  min-height: 48px;
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  text-decoration-color: var(--rule-strong);
+  transition: text-decoration-color 0.5s var(--settle);
+}
+
+.textLink:hover {
+  text-decoration-color: var(--ink);
+}
+
+.textLink svg {
+  flex: none;
+  transition: translate 0.5s var(--settle);
+}
+
+.textLink:hover svg {
+  translate: 2px -2px;
+}
+
+.body h3 + .textLink,
+.textLink + .textLink,
+.textLink + .small {
+  margin-top: -12px;
 }
 
 .small {
   color: var(--muted);
   font-size: 15px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+@media (max-width: 560px) {
+  .faq summary {
+    font-size: 19px;
+  }
+
+  .faq details p {
+    padding-right: 0;
+  }
 }

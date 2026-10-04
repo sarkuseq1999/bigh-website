@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { useSmoothScroll } from "@/components/science/smooth-scroll";
+import { useCopy } from "@/i18n/use-copy";
 import { HomeFooter, HomeHeader } from "../chrome";
 import { BrushLine } from "./brush";
 import { Cellular } from "./cellular";
@@ -24,8 +25,12 @@ import styles from "./look-ink.module.css";
 // into the paper as it enters; mist drifts through the opening's mountains and light crosses the
 // gold leaf; every motion breathes at the same slow pace. Reduced motion: a complete still page
 // with the whole brush line.
+// Keyboard: the first Tab shows "Skip to content" (as on the About, Science and product pages),
+// which puts focus at the start of the page's words, past the header's links.
 export function LookInk() {
+  const copy = useCopy();
   const root = useRef<HTMLDivElement>(null);
+  const main = useRef<HTMLElement>(null);
   const motion = useMotionOk();
   useSmoothScroll(motion);
   useBloom(root, motion);
@@ -33,8 +38,20 @@ export function LookInk() {
 
   return (
     <div ref={root} className={styles.look} data-look="ink">
+      <a
+        href="#main"
+        className={styles.skip}
+        onClick={(event) => {
+          // Focus moves by hand: the page's smooth scrolling takes over links to #anchors.
+          event.preventDefault();
+          window.scrollTo(0, 0);
+          main.current?.focus({ preventScroll: true });
+        }}
+      >
+        {copy("Skip to content")}
+      </a>
       <HomeHeader overlay solidAfter={48} />
-      <main>
+      <main ref={main} id="main" tabIndex={-1}>
         <OpeningCrane motion={motion} />
         <Cellular />
         <Scientists />
