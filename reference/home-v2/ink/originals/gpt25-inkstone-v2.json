@@ -1,0 +1,14 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided paintings only as the reference for the brush hand: the same painter, the same wet sumi ink, the same warm rice paper. Paint a new, quiet still life in that hand, as a bold freehand ink-wash painting made with a large soft brush in few strokes: a calligraphy brush resting across the rim of a dark stone inkstone, and a small round water dropper standing beside it, seen from a low three-quarter view. Objects only. The inkstone is one bold, wet, deep sumi-black mass laid down in two or three broad strokes, darkest in its well where the ink pools, with a paler grey wet wash on its rim and a soft bleeding edge where wet ink ran into the paper. The brush lies diagonally across the stone: its handle is two long, confident, thin ink lines with a pale wash between them, its tip is a dark pointed stroke still wet with ink, and around its ferrule there is a tiny band of gold leaf, the only colour in the picture. The water dropper is a small round pot painted in one turn of grey wash with a darker mouth. Under the objects there is only a loose, pale, wet shadow wash that fades into the paper. There is no sheet of paper, no mat, no cloth, no table edge and no drawn outline under them. The washes are smooth and wet, with a few dry-brush streaks where the brush ran out of ink. No grain, no stippling, no dots, no pencil, no hatching, no charcoal texture. The group is centred and fills about two thirds of the frame, with wide clear empty paper on every side. Its edges dissolve softly into the paper and nothing is cut off. Plain empty warm rice paper ground, evenly lit. No people, no hands, no writing, no characters, no text, no seal, no signature, no border, no background scene. Ink greys and that one touch of gold only. Nothing red.",
+  "settings": {
+    "aspect_ratio": "4:3",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/home-v2/ink/originals/gpt25-story-morning-v1.png",
+    "reference/home-v2/ink/originals/gpt25-crane-v1.png"
+  ],
+  "made": "20261004-004917"
+}

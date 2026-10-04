@@ -25,17 +25,20 @@ export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
 
 /** The opening crane's wingbeat (round 5): the same painting brought to life by a Kling loop, cut
  *  out frame by frame like the still (build_crane_flight.py). An animated webp: the glide pose
- *  is held, then one slow wingbeat, forever. `small` is for phones. */
+ *  is held, then one slow wingbeat, forever. `small` is for phones. v2 (October 4): the far wing
+ *  stays behind the head in the down-stroke, and the files are 40% lighter. */
 export const craneFlight = {
-  src: `${I}/crane-flight.webp`,
-  small: `${I}/crane-flight-600.webp`,
+  src: `${I}/crane-flight-v2.webp`,
+  small: `${I}/crane-flight-v2-600.webp`,
 };
 
-/** The crane at rest, standing on the page's last brush stroke (ink). */
-export const craneRest: Picture = { src: `${I}/crane-rest.webp`, width: 560, height: 864 };
+/** The crane at rest, standing on the page's last brush stroke (ink). v2: painted again in the
+ *  flying crane's hand; its feet are 8% above the picture's bottom edge (look-ink.module.css). */
+export const craneRest: Picture = { src: `${I}/crane-rest-v2.webp`, width: 560, height: 864 };
 
-/** A brush at rest on its inkstone, beside "Good questions deserve clear answers." (ink). */
-export const inkstone: Picture = { src: `${I}/inkstone.webp`, width: 1200, height: 896 };
+/** A brush at rest on its inkstone, beside "Good questions deserve clear answers." (ink). v2:
+ *  smooth wet washes, no drawn sheet of paper. */
+export const inkstone: Picture = { src: `${I}/inkstone-v2.webp`, width: 1200, height: 896 };
 
 /** The ink mitochondrion with its two gold-leaf folds (ink), a close view, and two variations. */
 export const mito: Record<"glow" | "closeup" | "aged" | "radicals", Picture> = {

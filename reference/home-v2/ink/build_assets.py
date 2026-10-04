@@ -240,11 +240,18 @@ def build(name):
     elif name == "crane-rest":
         # Round 5 (October 3): the crane at rest, for the page's last line. Ink on paper (its white
         # is the page's own paper), cropped to the bird with its reed and the water at its feet.
-        img = ink(load("crane-rest-v1"), (0, 0, 420, 300), gain=1.02)
-        save(img.crop((430, 130, 1610, 1950)), "crane-rest", 560, 86)
+        # v2 (night loop, October 4): painted again in the flying crane's hand (one wet black
+        # stroke for the neck, a calligraphic contour, heavy tail plumes), so it reads at 80 px.
+        # The crop keeps the page's geometry: the feet (y 1825) stand 8% above the bottom edge.
+        img = ink(load("crane-rest-v2"), (0, 0, 420, 300), gain=1.02)
+        save(img.crop((384, 36, 1644, 1980)), "crane-rest-v2", 560, 86)
     elif name == "inkstone":
         # Round 5: a brush on its inkstone, for "Good questions deserve clear answers."
-        save(ink(load("inkstone-v1"), (0, 0, 500, 160), gain=1.02), "inkstone", 1200, 84)
+        # v2 (night loop, October 4; the third take, originals/gpt25-inkstone-v3.png): smooth wet
+        # washes and one solid black, no grain and no drawn sheet of paper. Cropped a little
+        # closer (the same 4:3), so the objects carry at 220 px.
+        img = ink(load("inkstone-v3"), (0, 0, 500, 160), gain=1.02)
+        save(img.crop((249, 158, 2232, 1639)), "inkstone-v2", 1200, 84)
     elif name == "bloom":
         bloom_mask()
     elif name == "gold":
