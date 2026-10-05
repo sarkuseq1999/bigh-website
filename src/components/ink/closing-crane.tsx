@@ -5,7 +5,7 @@ import { craneRest } from "@/components/home-v2/look-ink/assets";
 import base from "./ink.module.css";
 
 // The page's last painting: the crane that opened the page in flight, now at rest, large beside
-// the footer's promise and facing it, on the closing brush stroke (brush-route.ts `promise`).
+// the footer's promise and facing it, on the closing brush stroke (route-kit.ts `footerEnding`).
 // Its bloom is the page's arrival.
 export function ClosingCrane() {
   return (

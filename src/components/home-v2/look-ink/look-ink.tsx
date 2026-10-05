@@ -5,6 +5,7 @@ import { useSmoothScroll } from "@/components/science/smooth-scroll";
 import { useCopy } from "@/i18n/use-copy";
 import { HomeFooter, HomeHeader } from "@/components/ink/chrome";
 import { BrushLine } from "@/components/ink/brush";
+import { route } from "./brush-route";
 import { Cellular } from "./cellular";
 import { ClosingCrane } from "@/components/ink/closing-crane";
 import { useBloom, useInkFill, useMotionOk } from "@/components/ink/motion";
@@ -62,7 +63,7 @@ export function LookInk() {
         <Purpose />
       </main>
       <HomeFooter closing={<ClosingCrane />} />
-      <BrushLine motion={motion} />
+      <BrushLine motion={motion} route={route} />
     </div>
   );
 }

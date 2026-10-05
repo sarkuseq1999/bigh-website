@@ -8,6 +8,7 @@ compares them with a saved set.
 usage:
   python -X utf8 scripts/qa/home_snapshot.py capture <base-url> <name>
   python -X utf8 scripts/qa/home_snapshot.py compare <base-url> <name> [against=baseline]
+  python -X utf8 scripts/qa/home_snapshot.py layout <base-url> -
 
 A run empties its own folder first, so compare needs a new name (never the set it compares with), and
 a folder whose name starts with "baseline" that already holds shots is only replaced with --force.
@@ -87,6 +88,23 @@ def compare(name: str, against: str) -> bool:
     return ok
 
 
+def layout_check(base: str) -> bool:
+    """The brush layer says which layout it drew, and redraws when the window crosses 900px."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(viewport={"width": 1440, "height": 900})
+        page.goto(f"{base}/", wait_until="networkidle", timeout=120000)
+        page.wait_for_timeout(800)
+        first = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout ?? null")
+        page.set_viewport_size({"width": 800, "height": 900})
+        page.wait_for_timeout(1200)
+        second = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout ?? null")
+        browser.close()
+    ok = first == "page" and second == "column"
+    print(f"{'ok  ' if ok else 'FAIL'} layout: {first} at 1440, {second} at 800")
+    return ok
+
+
 def refuse(message: str) -> None:
     print(f"ERROR {message}")
     sys.exit(2)
@@ -95,7 +113,7 @@ def refuse(message: str) -> None:
 if __name__ == "__main__":
     force = "--force" in sys.argv[1:]
     args = [a for a in sys.argv[1:] if a != "--force"]
-    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare"):
+    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare", "layout"):
         refuse(__doc__)
     mode, base, name = args[0], args[1], args[2]
     against = args[3] if len(args) > 3 else "baseline"
@@ -104,6 +122,8 @@ if __name__ == "__main__":
         refuse(f"'{name}' and '{against}' are the same set: pick a new name for this run")
     if name.startswith("baseline") and any((OUT / name).glob("*.png")) and not force:
         refuse(f"'{name}' already holds a baseline and this would replace it: add --force to do that on purpose")
+    if mode == "layout":
+        sys.exit(0 if layout_check(base) else 1)
     capture(base, name)
     if mode == "compare":
         passed = compare(name, against)

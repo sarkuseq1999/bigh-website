@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { route, type Layout, type Waypoint } from "@/components/home-v2/look-ink/brush-route";
+import type { Layout, Waypoint } from "./route-kit";
 import styles from "./brush.module.css";
 
 // The page's signature: one continuous ink brush line that draws itself down the whole page as
@@ -515,7 +515,14 @@ function paint(
 
 type Tile = { index: number; canvas: HTMLCanvasElement; drawn: number; live: boolean };
 
-export function BrushLine({ motion }: { motion: boolean }) {
+export function BrushLine({
+  motion,
+  route,
+}: {
+  motion: boolean;
+  /** The page's route for each layout (the page's own [data-brush] anchors). */
+  route: (layout: Layout) => Waypoint[];
+}) {
   const layer = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -551,6 +558,7 @@ export function BrushLine({ motion }: { motion: boolean }) {
       const heroBottom = hero ? hero.getBoundingClientRect().bottom - top : 0;
       material(samples, layout === "phone" ? -1 : heroBottom, scale);
       host.dataset.lifts = JSON.stringify(lifts(samples));
+      host.dataset.layout = layout;
       // Each section label is reached when the brush comes level with it.
       stations = [...root.querySelectorAll<HTMLElement>("[data-station]")].map((element) => {
         const box = element.getBoundingClientRect();
@@ -709,7 +717,7 @@ export function BrushLine({ motion }: { motion: boolean }) {
       tiles.forEach((tile) => tile.canvas.remove());
       stations.forEach((station) => delete station.element.dataset.reached);
     };
-  }, [motion]);
+  }, [motion, route]);
 
   return <div ref={layer} className={styles.layer} aria-hidden="true" data-brush-layer />;
 }
