@@ -1,0 +1,1238 @@
+/* Menu bar option C, "Inscription" (October 5, 2026). The title at the head of a hanging scroll:
+   the mark in the middle of the bar, two links on each side of it, set as one balanced line.
+   Every rule is scoped under .root: the homepage's resets and the look's header rules would
+   otherwise win over single-class rules. */
+
+/* How far the scroll is let down (0 rolled up, 1 down): the desktop drop-downs (r) and the
+   narrow window's menu (s). Registered, so they can breathe from one to the other. */
+@property --insc-r {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-s {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+.root {
+  /* The bar over the opening, and the bar once the page has moved on. */
+  --tall: clamp(88px, 6.6vw, 104px);
+  --small: clamp(70px, 5vw, 76px);
+  --mark-tall: clamp(116px, 9.4vw, 150px);
+  --mark-small: clamp(94px, 6.8vw, 108px);
+  --h: var(--tall);
+  --mark: var(--mark-tall);
+  /* One spacing for the whole line: between the links and on each side of the mark. */
+  --gap: clamp(26px, 2.6vw, 44px);
+  /* The torn edge at the foot of the scroll (the mask strip's height). */
+  --deckle: 56px;
+  /* Let down, slowing as it reaches its length; rolled back up briskly. */
+  --unroll: cubic-bezier(0.3, 0.62, 0.24, 1);
+  --rollup: cubic-bezier(0.5, 0, 0.7, 0.4);
+  --insc-r: 0;
+  --insc-s: 0;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--tall);
+  margin-bottom: calc(-1 * var(--tall));
+  color: var(--ink);
+  /* The header's box is the tall bar's; once the bar is smaller the space under it is the page's. */
+  pointer-events: none;
+  transition:
+    --insc-r 0.3s var(--rollup),
+    --insc-s 0.3s var(--rollup);
+}
+
+.root[data-size="small"] {
+  --h: var(--small);
+  --mark: var(--mark-small);
+}
+
+.root[data-unrolled] {
+  --insc-r: 1;
+  transition:
+    --insc-r 0.85s var(--unroll),
+    --insc-s 0.3s var(--rollup);
+}
+
+.root[data-menu] {
+  --insc-s: 1;
+  transition:
+    --insc-r 0.3s var(--rollup),
+    --insc-s 0.85s var(--unroll);
+}
+
+.root[data-tone="dark"] {
+  color: #fff;
+}
+
+/* ---------------------------------------------------------------- the ground and its brush rule */
+
+/* Rice paper with its fibre: clear over the opening, 93% once the page moves on, the whole sheet
+   while a drop-down or the menu is down (so bar and scroll are one paper). */
+.ground {
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--h);
+  background-color: var(--paper);
+  background-image: var(--paper-fibre);
+  background-size: 800px 800px;
+  opacity: 0;
+  transition:
+    height 0.6s var(--ease),
+    opacity 0.6s var(--ease);
+}
+
+.root[data-ground="solid"] .ground {
+  opacity: 0.93;
+  /* Beyond the brush rule (outside the column, over a painting) the paper fades, so the bar's
+     only edge is ink. */
+  mask-image: linear-gradient(#000 calc(100% - 9px), transparent);
+}
+
+.root[data-ground="paper"] .ground {
+  opacity: 1;
+  transition:
+    height 0.6s var(--ease),
+    opacity 0.25s var(--ease);
+}
+
+/* The bar's edge is ink, not a hairline: one long, fine, dry brush line across the page's column,
+   laid from left to right as the bar settles. */
+.rule {
+  position: absolute;
+  z-index: -1;
+  top: calc(var(--h) - 10px);
+  left: 50%;
+  width: min(var(--wide, 1300px), 100% - 2 * var(--gutter));
+  height: 20px;
+  translate: -50% 0;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/rule.webp") 0 0 / 100% 100% no-repeat;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transition:
+    top 0.6s var(--ease),
+    opacity 0.3s var(--ease),
+    clip-path 0s linear 0.3s;
+}
+
+.root[data-ground="solid"] .rule {
+  opacity: 0.78;
+  clip-path: inset(0 0 0 0);
+  transition:
+    top 0.6s var(--ease),
+    opacity 0.3s var(--ease),
+    clip-path 1.1s var(--ease) 0.12s;
+}
+
+/* ---------------------------------------------------------------- the bar */
+
+/* Three columns: the two sides share what the mark leaves, so the mark stands at the centre. */
+.root .bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  column-gap: var(--gap);
+  max-width: calc(var(--wide, 1300px) + 2 * var(--gutter));
+  height: var(--h);
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+  font-size: clamp(18px, 1.302vw, 20px);
+  font-weight: 450;
+  line-height: 1.2;
+  pointer-events: auto;
+  transition: height 0.6s var(--ease);
+}
+
+.left,
+.right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  min-width: 0;
+  /* The words stand level with the mark's letters (its leaf rises above them): the sides sit a
+     little lower and the mark a little higher than the bar's middle. */
+  margin-top: calc(var(--mark) * 0.134);
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--gap);
+}
+
+.root .bar a.mark[href] {
+  position: relative;
+  top: calc(var(--mark) * -0.02);
+  display: block;
+  width: var(--mark);
+  transition:
+    width 0.6s var(--ease),
+    top 0.6s var(--ease);
+}
+
+.root .link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 48px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+/* With a mouse, an ink underline draws out from the middle of the word you point at (the open
+   drop-down keeps its own). */
+.word {
+  position: relative;
+}
+
+.word::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -8px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  scale: 0 1;
+  transition: scale 0.5s var(--ease);
+}
+
+@media (hover: hover) {
+  .root .link:hover .word::after {
+    scale: 1 1;
+  }
+}
+
+.root .link[aria-expanded="true"] .word::after {
+  scale: 1 1;
+}
+
+.chevron {
+  flex: none;
+  transition: rotate 0.5s var(--ease);
+}
+
+.root [aria-expanded="true"] > .chevron {
+  rotate: 180deg;
+}
+
+/* The language (left), Log in and Sign up (right): the shared component, in the bar's voice.
+   It is placed twice and each place shows its own part. */
+.root :is(.language, .account, .sheetFoot) > div {
+  gap: 18px;
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.root :is(.language, .account, .sheetFoot) :is(a, button, select, label) {
+  color: inherit;
+  font-weight: inherit;
+}
+
+.root .language :is(a, button),
+.root .account label {
+  display: none;
+}
+
+.root :is(.account, .sheetFoot) a {
+  position: relative;
+  min-height: 48px;
+  padding: 0 2px;
+}
+
+.root :is(.account, .sheetFoot) a::after {
+  content: "";
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  bottom: 6px;
+  height: 2px;
+  border-radius: 2px;
+  background: currentColor;
+  scale: 0 1;
+  transition: scale 0.5s var(--ease);
+}
+
+@media (hover: hover) {
+  .root :is(.account, .sheetFoot) a:hover {
+    text-decoration: none;
+  }
+
+  .root :is(.account, .sheetFoot) a:hover::after {
+    scale: 1 1;
+  }
+}
+
+.root :is(.account, .sheetFoot) button {
+  min-height: 48px;
+  padding: 0 22px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  line-height: 1;
+}
+
+/* The picker is as wide as the language it shows, so its arrow sits beside the word. */
+.root :is(.language, .account) label {
+  gap: 8px;
+  min-height: 48px;
+}
+
+.root :is(.language, .account) select {
+  max-width: none;
+  min-height: 48px;
+  padding: 0 22px 0 0;
+  field-sizing: content;
+}
+
+.root :is(.language, .account) option {
+  background: var(--paper, #fff);
+  color: var(--ink, #111);
+}
+
+.root :is(.language, .account, .sheetFoot) :focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+@supports (appearance: base-select) {
+  .root :is(.language, .account) select,
+  .root :is(.language, .account) select::picker(select) {
+    appearance: base-select;
+  }
+
+  .root :is(.language, .account) select {
+    display: inline-flex;
+    align-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  .root :is(.language, .account) select::picker-icon {
+    display: none;
+  }
+
+  .root :is(.language, .account) select::picker(select) {
+    min-width: 232px;
+    margin-block: 8px;
+    padding: 8px;
+    border: 1px solid var(--hair, rgba(28, 27, 25, 0.28));
+    border-radius: 2px;
+    background-color: var(--paper, #fff);
+    background-image: var(--paper-fibre, none);
+    background-size: 800px 800px;
+    color: var(--ink, #111);
+    font-size: 19px;
+    font-weight: 450;
+    line-height: 1.3;
+  }
+
+  .root :is(.language, .account) option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 16px 0 12px;
+    border-radius: 2px;
+    background: transparent;
+    transition: background-color 0.3s var(--ease);
+  }
+
+  .root :is(.language, .account) option:is(:hover, :focus-visible) {
+    background: color-mix(in srgb, var(--ink, #111) 8%, transparent);
+    outline: 0;
+  }
+
+  .root :is(.language, .account) option:checked {
+    font-weight: 500;
+  }
+}
+
+.root .menuButton {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  min-width: 48px;
+  min-height: 48px;
+  margin-left: -12px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+}
+
+/* Japanese and Vietnamese set About, Log in and Sign up long. Just above the menu's breakpoint
+   (1101-1400px) the line keeps its two-and-two around the centred mark by drawing in: a smaller
+   mark and closer spacing that grow back to the usual ones as the window widens, a slimmer
+   Sign up, and side margins that narrow toward 28px under about 1220px. */
+@media (min-width: 1101px) and (max-width: 1400px) {
+  .root:is(:lang(ja), :lang(vi)) {
+    --gap: calc(20px + (100vw - 1101px) * 0.045);
+    --mark-tall: calc(100px + (100vw - 1101px) * 0.1);
+    --mark-small: calc(94px + (100vw - 1101px) * 0.03);
+  }
+
+  .root:is(:lang(ja), :lang(vi)) .bar {
+    padding-inline: min(var(--gutter), calc(28px + (100vw - 1101px) * 0.5));
+  }
+
+  .root:is(:lang(ja), :lang(vi)) :is(.left, .right) {
+    gap: 20px;
+  }
+
+  .root:is(:lang(ja), :lang(vi)) .account > div {
+    gap: 16px;
+  }
+
+  .root:is(:lang(ja), :lang(vi)) .account button {
+    padding: 0 16px;
+  }
+}
+
+/* ---------------------------------------------------------------- the scroll (desktop drop-downs) */
+
+/* The paper the drop-downs are written on, let down from under the bar: the leading edge is torn
+   rice paper (a mask strip that travels down with it); once down, it hangs there. */
+.paper {
+  position: absolute;
+  z-index: -2;
+  top: var(--h);
+  left: 0;
+  right: 0;
+  height: var(--insc-panel-h);
+  background-color: var(--paper);
+  background-image: var(--paper-fibre);
+  background-size: 800px 800px;
+  background-position: 0 calc(-1 * var(--h));
+  mask-image: linear-gradient(#000, #000), url("/images/home-v2/nav/inscription/deckle.png");
+  mask-size:
+    100% calc(var(--insc-r) * 100% - var(--deckle) + 4px),
+    1200px var(--deckle);
+  mask-position:
+    0 0,
+    0 calc(var(--insc-r) * (100% + var(--deckle)) - var(--deckle));
+  mask-repeat: no-repeat, repeat-x;
+  pointer-events: none;
+}
+
+/* A faint wash of thinned ink over the page under the scroll. */
+.wash {
+  position: fixed;
+  z-index: -3;
+  inset: 0;
+  background: rgb(96 91 83 / 0.22);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s var(--ease);
+}
+
+.root:is([data-unrolled], [data-menu]) .wash {
+  opacity: 1;
+  pointer-events: auto;
+  transition: opacity 0.8s var(--ease);
+}
+
+/* What is written on the scroll: each drop-down carries the same paper (so its ink paintings
+   multiply onto paper) and is revealed with it, just above the torn edge. Moving between the
+   two keeps the scroll down and cross-fades what is on it. */
+.panel {
+  position: absolute;
+  top: var(--h);
+  left: 0;
+  right: 0;
+  height: var(--insc-panel-h);
+  background-color: var(--paper);
+  background-image: var(--paper-fibre);
+  background-size: 800px 800px;
+  background-position: 0 calc(-1 * var(--h));
+  clip-path: inset(0 0 calc(100% * (1 - var(--insc-r)) + var(--deckle)) 0);
+  color: var(--ink);
+  visibility: hidden;
+  opacity: 0;
+  transition:
+    opacity 0.3s var(--ease),
+    visibility 0s linear 0.3s;
+}
+
+.panel[data-shown] {
+  visibility: visible;
+  opacity: 1;
+  transition:
+    opacity 0.45s var(--ease) 0.08s,
+    visibility 0s;
+}
+
+.panelInner {
+  display: grid;
+  justify-items: center;
+  padding: clamp(34px, 3vw, 48px) var(--gutter) calc(var(--deckle) + clamp(16px, 1.6vw, 28px));
+  text-align: center;
+}
+
+.root .panelTitle {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: clamp(30px, 2.8vw, 42px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+.root .panelTitle:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+/* Products: the five standing in a row, each on a pale pool, one painted ground under them. */
+.shelfWrap {
+  /* The picture's height (the bottle is about 93% of it). */
+  --stand: clamp(158px, 11.6vw, 182px);
+  position: relative;
+  width: min(100%, 1160px);
+  margin-top: clamp(26px, 2.4vw, 38px);
+}
+
+/* Five equal columns, so the row is symmetric about the middle bottle. */
+.shelf {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(6px, 1vw, 16px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.shelfGround {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--stand) * 0.972);
+  width: calc(100% - 24px);
+  height: 16px;
+  translate: -50% -50%;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/brush-5.webp") center / 100% 100% no-repeat;
+  opacity: 0.42;
+  pointer-events: none;
+}
+
+/* (Beats the look's rule that sizes a header's first picture link as its logo.) */
+.root .shelf a.product[href] {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  width: 100%;
+  padding: 0 6px 8px;
+  border-radius: 6px;
+  color: inherit;
+}
+
+.stand {
+  position: relative;
+  display: block;
+  width: calc(var(--stand) * 1230 / 1278);
+  aspect-ratio: 1230 / 1278;
+}
+
+.pool {
+  position: absolute;
+  left: 52%;
+  top: 80%;
+  width: 62%;
+  height: auto;
+  aspect-ratio: 1 / 0.36;
+  object-fit: fill;
+  translate: -50% 0;
+  mix-blend-mode: multiply;
+  opacity: 0.42;
+  transition: opacity 0.6s var(--ease);
+}
+
+.contact {
+  position: absolute;
+  left: 50%;
+  top: 92.6%;
+  width: 56%;
+  height: auto;
+  aspect-ratio: 1 / 0.12;
+  object-fit: fill;
+  translate: -50% 0;
+  mix-blend-mode: multiply;
+  opacity: 0.8;
+}
+
+.bottle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition: translate 0.6s var(--ease);
+}
+
+@media (hover: hover) {
+  .root .product:hover .bottle {
+    translate: 0 -6px;
+  }
+
+  .root .product:hover .pool {
+    opacity: 0.3;
+  }
+}
+
+.root .product:focus-visible .bottle {
+  translate: 0 -6px;
+}
+
+.productName {
+  margin-top: 18px;
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.productFocus {
+  max-width: 12em;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Science: four parts, each a painting, its name and its line. */
+.gallery {
+  display: flex;
+  justify-content: center;
+  gap: clamp(16px, 2.2vw, 40px);
+  margin: clamp(26px, 2.4vw, 38px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.root .gallery a.part[href] {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  width: clamp(200px, 15vw, 236px);
+  padding-bottom: 8px;
+  border-radius: 6px;
+  color: inherit;
+}
+
+.frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(clamp(158px, 11.6vw, 182px) - 6px);
+}
+
+.painting {
+  object-fit: contain;
+  mix-blend-mode: multiply;
+  transition:
+    opacity 0.6s var(--ease),
+    scale 0.6s var(--ease);
+}
+
+/* The reading still life is tall: its table, book and cup, the rest of the room dissolving. */
+.painting[data-painting="story-reading-v2"] {
+  object-fit: cover;
+  object-position: 50% 80%;
+  mask-image: radial-gradient(closest-side, #000 58%, transparent);
+}
+
+/* Dr. Liu's real photograph: a print on a paper mat, never multiplied. */
+.mat {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  display: block;
+  height: 100%;
+  padding: 7px;
+  background: #fbf9f4;
+  box-shadow:
+    0 12px 22px -12px rgba(12, 11, 10, 0.42),
+    0 2px 5px rgba(12, 11, 10, 0.1);
+  translate: -50% -50%;
+  transition:
+    opacity 0.6s var(--ease),
+    scale 0.6s var(--ease);
+}
+
+.photo {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+/* Pointing at a part brings its painting forward; the others ease back. */
+.gallery:has(.part:is(:hover, :focus-visible)) .painting {
+  opacity: 0.5;
+}
+
+/* The photograph eases back less: a real print, never faded to a ghost. */
+.gallery:has(.part:is(:hover, :focus-visible)) .mat {
+  opacity: 0.66;
+}
+
+.root .gallery .part:is(:hover, :focus-visible) :is(.painting, .mat) {
+  opacity: 1;
+  scale: 1.05;
+}
+
+.partLabel {
+  margin-top: 18px;
+  font-size: 20px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.partCaption {
+  max-width: 14em;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Japanese and Chinese lines break between phrases, not inside them. */
+.root
+  :is(.panelTitle, .productFocus, .partLabel, .partCaption, .sheetProductName):is(
+    :lang(ja),
+    :lang(zh)
+  ) {
+  word-break: auto-phrase;
+}
+
+.root :is(.productFocus, .partCaption):lang(ko) {
+  word-break: keep-all;
+}
+
+/* The text link under each drop-down (and in the menu). */
+.root a.more[href] {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: clamp(20px, 2vw, 30px);
+  color: var(--ink);
+  font-size: 19px;
+  font-weight: 450;
+  text-decoration: underline 1px var(--hair);
+  text-underline-offset: 8px;
+  transition: text-decoration-color 0.5s var(--ease);
+}
+
+.root a.more[href] svg {
+  transition: translate 0.5s var(--ease);
+}
+
+@media (hover: hover) {
+  .root a.more[href]:hover {
+    text-decoration-color: var(--ink);
+  }
+
+  .root a.more[href]:hover svg {
+    translate: 3px 0;
+  }
+}
+
+/* What is on the scroll settles as the paper reaches it. */
+@media (prefers-reduced-motion: no-preference) {
+  .root[data-unrolled]
+    .panel[data-shown]
+    :is(
+      .panelTitle,
+      .bottle,
+      .productName,
+      .productFocus,
+      .frame,
+      .partLabel,
+      .partCaption,
+      .more
+    ) {
+    animation: insc-settle 0.9s var(--ease) backwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-unrolled]
+    .panel[data-shown]
+    :is(.productName, .productFocus, .partLabel, .partCaption) {
+    animation-delay: calc(0.24s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-unrolled] .panel[data-shown] .more {
+    animation-delay: 0.42s;
+  }
+
+  /* A bottle's pool arrives with it (never a shadow without its bottle). */
+  .root[data-unrolled] .panel[data-shown] :is(.pool, .contact) {
+    animation: insc-fade 0.9s var(--ease) backwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 60ms);
+  }
+}
+
+@keyframes insc-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes insc-settle {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+/* ---------------------------------------------------------------- the narrow window */
+
+.sheet {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .root {
+    --tall: 76px;
+    --small: 64px;
+    --mark-tall: clamp(98px, 13vw, 124px);
+    --mark-small: clamp(90px, 11vw, 108px);
+    --gap: 12px;
+    --below: 52px;
+  }
+
+  .root .bar {
+    font-size: clamp(18px, 2.4vw, 20px);
+  }
+
+  .root .language,
+  .root .links,
+  .panel,
+  .paper {
+    display: none;
+  }
+
+  .root .menuButton {
+    display: inline-flex;
+  }
+
+  /* The language stands at the right, opposite "Menu"; Log in and Sign up are in the menu. */
+  .root .account :is(a, button) {
+    display: none;
+  }
+
+  .root .account label {
+    display: inline-flex;
+  }
+
+  .right {
+    justify-content: flex-end;
+  }
+
+  .root .sheet {
+    position: absolute;
+    top: var(--h);
+    left: 0;
+    right: 0;
+    display: block;
+    /* Full height: at rest its torn edge lies just under the window's foot (it shows while the
+       scroll is let down). */
+    height: calc(100vh - var(--h) + var(--below));
+    height: calc(100dvh - var(--h) + var(--below));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--paper);
+    background-image: var(--paper-fibre);
+    background-size: 800px 800px;
+    background-position: 0 calc(-1 * var(--h));
+    color: var(--ink);
+    mask-image: linear-gradient(#000, #000), url("/images/home-v2/nav/inscription/deckle.png");
+    mask-size:
+      100% calc(var(--insc-s) * 100% - var(--deckle) + 4px),
+      1200px var(--deckle);
+    mask-position:
+      0 0,
+      0 calc(var(--insc-s) * (100% + var(--deckle)) - var(--deckle));
+    mask-repeat: no-repeat, repeat-x;
+    pointer-events: auto;
+    visibility: hidden;
+    transition: visibility 0s linear 0.3s;
+  }
+
+  .root[data-menu] .sheet {
+    visibility: visible;
+    transition: visibility 0s;
+  }
+}
+
+/* Phones: the language without its globe, so "Menu", the mark and the language share the line. */
+@media (max-width: 560px) {
+  .root .bar {
+    column-gap: 8px;
+    padding-inline: max(20px, var(--gutter) - 8px);
+  }
+
+  .root .account label > svg:first-child {
+    display: none;
+  }
+
+  .root .account select {
+    padding-right: 18px;
+  }
+}
+
+/* "Tiếng Việt" is too long to sit beside the mark on a small phone: there the picker shows its
+   globe (its name for screen readers stays "Chọn ngôn ngữ"). */
+@media (max-width: 400px) {
+  .root:lang(vi) .account label > svg:first-child {
+    position: absolute;
+    left: 8px;
+    display: block;
+    width: 21px;
+    height: 21px;
+    stroke-width: 1.6;
+    pointer-events: none;
+  }
+
+  .root:lang(vi) .account select {
+    width: 52px;
+    field-sizing: fixed;
+    color: transparent;
+  }
+}
+
+.sheetInner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100%;
+  padding: clamp(16px, 4.4vh, 64px) var(--gutter) calc(var(--below, 0px) + 28px);
+  text-align: center;
+}
+
+.root .sheetLink {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: clamp(64px, 10vh, 108px);
+  padding: 0 8px;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: clamp(30px, min(5.2vw, 5.2vh), 44px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  cursor: pointer;
+}
+
+.root .sheetLink .chevron {
+  width: 0.7em;
+  height: 0.7em;
+}
+
+.root .sheetLink:is(:lang(ko), :lang(ja), :lang(zh)) {
+  letter-spacing: -0.01em;
+}
+
+/* A short, sure brush mark between the lines, like the marks between the columns of an
+   inscription: real ink, loaded at its start, dry at its end. */
+.dab {
+  display: block;
+  flex: none;
+  width: 64px;
+  height: 9px;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/brush-2.webp") center / 100% 100% no-repeat;
+  opacity: 0.82;
+}
+
+.sheetPart {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  width: 100%;
+}
+
+.sheetFold {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows 0.6s var(--ease);
+}
+
+.sheetPart[data-open] .sheetFold {
+  grid-template-rows: 1fr;
+}
+
+.sheetFoldInner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  min-height: 0;
+  overflow-x: visible;
+  overflow-y: clip;
+}
+
+.sheetFoldInner > .more {
+  margin-bottom: 18px;
+}
+
+/* Phones: the five in a row you can swipe, starting on the left margin and running off the
+   right edge (about two and a half in view, the third cut through its bottle). */
+.sheetShelfWrap {
+  --stand: 33vw;
+  position: relative;
+  width: calc(100% + 2 * var(--gutter));
+  margin: 4px calc(-1 * var(--gutter)) 0;
+}
+
+.sheetGround {
+  display: none;
+}
+
+.sheetShelf {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  padding: 6px var(--gutter) 8px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: var(--gutter);
+  scrollbar-width: none;
+  list-style: none;
+}
+
+.sheetShelf > li {
+  flex: none;
+  scroll-snap-align: start;
+}
+
+.sheetShelf > li:first-child {
+  margin-left: auto;
+}
+
+.sheetShelf > li:last-child {
+  margin-right: auto;
+}
+
+.root .sheetShelf a.sheetProduct[href] {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  width: 35vw;
+  padding: 2px 0 8px;
+  border-radius: 6px;
+  color: var(--ink);
+}
+
+.sheetProductFocus {
+  display: none;
+}
+
+.sheetProductName {
+  margin-top: 10px;
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+/* A tablet (700px and wider): the menu opens with the five already standing in a row, centred on
+   one painted ground, each with its name and focus line; the links are a step larger. */
+@media (min-width: 700px) {
+  .root .sheetLink {
+    min-height: clamp(72px, 9.4vh, 104px);
+    font-size: clamp(38px, 5.6vw, 44px);
+  }
+
+  .sheetShelfWrap {
+    --stand: clamp(130px, 19vw, 170px);
+    width: calc(100% + 2 * var(--gutter) - 48px);
+    margin-inline: calc(24px - var(--gutter));
+  }
+
+  .sheetShelf {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 4px;
+    padding: 6px 0 8px;
+    overflow: visible;
+  }
+
+  .sheetShelf > li:is(:first-child, :last-child) {
+    margin: 0;
+  }
+
+  .root .sheetShelf a.sheetProduct[href] {
+    width: 100%;
+    padding: 2px 4px 8px;
+  }
+
+  .sheetGround {
+    position: absolute;
+    top: calc(6px + var(--stand) * 0.972);
+    left: 50%;
+    display: block;
+    width: calc(100% - 16px);
+    height: 14px;
+    translate: -50% -50%;
+    background: var(--ink);
+    mask: url("/images/home-v2/nav/brush-5.webp") center / 100% 100% no-repeat;
+    opacity: 0.42;
+    pointer-events: none;
+  }
+
+  .sheetProductFocus {
+    display: block;
+    max-width: 11em;
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.35;
+    text-wrap: balance;
+  }
+}
+
+.sheetList {
+  display: grid;
+  justify-items: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.root .sheetList a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 52px;
+  color: var(--ink);
+  font-size: clamp(20px, 2.6vw, 22px);
+  font-weight: 450;
+}
+
+/* Under the links, where there is room, the painting the inscription stands over: the crane at
+   rest (the page's own last painting), ink multiplied on the scroll's paper. It gives way, whole,
+   when an unfolded part needs the room. */
+.sheetPainting {
+  flex: 1 1 0;
+  width: 100%;
+  min-height: 0;
+  padding-top: 20px;
+  container-type: size;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.sheetCrane {
+  display: block;
+  width: auto;
+  height: min(100cqh, 260px);
+  mix-blend-mode: multiply;
+}
+
+@container (max-height: 150px) {
+  .sheetCrane {
+    display: none;
+  }
+}
+
+.sheetFoot {
+  margin-top: auto;
+  padding-top: clamp(28px, 5vh, 56px);
+}
+
+.root .sheetFoot > div {
+  justify-content: center;
+  gap: 32px;
+  font-size: 20px;
+  font-weight: 450;
+}
+
+.root .sheetFoot label {
+  display: none;
+}
+
+/* The menu's lines settle as the paper reaches them. */
+@media (prefers-reduced-motion: no-preference) {
+  .root[data-menu] .sheetInner > :not(.sheetPainting),
+  .root[data-menu] .sheetCrane {
+    animation: insc-settle 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--n, 0) * 60ms);
+  }
+
+  .sheetInner > :nth-child(2) {
+    --n: 1;
+  }
+
+  .sheetInner > :nth-child(3) {
+    --n: 2;
+  }
+
+  .sheetInner > :nth-child(4) {
+    --n: 3;
+  }
+
+  .sheetInner > :nth-child(5) {
+    --n: 4;
+  }
+
+  .sheetInner > :nth-child(6) {
+    --n: 5;
+  }
+
+  .sheetInner > :nth-child(7) {
+    --n: 6;
+  }
+
+  .sheetInner > :nth-child(8) {
+    --n: 8;
+  }
+
+  .sheetInner > :nth-child(9) {
+    --n: 9;
+  }
+}
+
+/* Reduced motion: no unrolling, no settling; everything is simply there or gone. */
+@media (prefers-reduced-motion: reduce) {
+  .root,
+  .root[data-unrolled],
+  .root[data-menu],
+  .root *,
+  .root *::after {
+    transition: none !important;
+    animation: none !important;
+  }
+}

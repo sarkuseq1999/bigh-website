@@ -49,9 +49,13 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
   const clearTimer = () => window.clearTimeout(timer.current);
 
   /** A pointer resting on a panel's button opens it after a short pause (no flicker in passing). */
+  const hoverOpened = useRef({ id: null as NavPanelId | null, at: 0 });
   const hoverOpen = useCallback((id: NavPanelId) => {
     clearTimer();
-    timer.current = window.setTimeout(() => setPanel(id), 90);
+    timer.current = window.setTimeout(() => {
+      hoverOpened.current = { id, at: performance.now() };
+      setPanel(id);
+    }, 90);
   }, []);
 
   /** Leaving the button and the panel closes it a moment later (time to cross the gap). */
@@ -62,9 +66,14 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
 
   const hoverStay = useCallback(() => clearTimer(), []);
 
+  // A click that follows the pointer's own opening (the visitor points, the panel opens, then they
+  // click as they would on any button) keeps the panel open instead of closing it again.
   const togglePanel = useCallback((id: NavPanelId) => {
     clearTimer();
-    setPanel((current) => (current === id ? null : id));
+    const hovered = hoverOpened.current;
+    const justOpened = hovered.id === id && performance.now() - hovered.at < 1500;
+    hoverOpened.current = { id: null, at: 0 };
+    setPanel((current) => (current === id ? (justOpened ? id : null) : id));
   }, []);
 
   const openPanel = useRef<NavPanelId | null>(null);

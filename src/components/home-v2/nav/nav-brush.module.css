@@ -1,0 +1,1285 @@
+/* Menu bar option A, "Brush" (October 5, 2026). The bar you know, painted in ink: one calm line,
+   clear over the opening painting and 93% rice paper with its fibre once the page moves; the link
+   you point at gets a real sumi brush stroke under it, painted in from left to right. Products and
+   Science open one full-width sheet of the page's paper under the bar. Every rule is scoped under
+   .header (the homepage's resets and the look's header rules would otherwise win). */
+
+.header {
+  --bar-h: clamp(80px, 5.86vw, 90px);
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  height: var(--bar-h);
+  margin-bottom: calc(-1 * var(--bar-h));
+  color: var(--ink);
+  font-family: var(--sans);
+}
+
+.header[data-tone="dark"] {
+  color: #fff;
+}
+
+/* The seven strokes (black on transparent, loaded at the left, a dry tail at the right). */
+.header .s1 {
+  --stroke: url("/images/home-v2/nav/brush/calm-1.webp");
+}
+
+.header .s2 {
+  --stroke: url("/images/home-v2/nav/brush/calm-2.webp");
+}
+
+.header .s3 {
+  --stroke: url("/images/home-v2/nav/brush/calm-3.webp");
+}
+
+.header .s4 {
+  --stroke: url("/images/home-v2/nav/brush/calm-4.webp");
+}
+
+.header .s5 {
+  --stroke: url("/images/home-v2/nav/brush/calm-5.webp");
+}
+
+.header .s6 {
+  --stroke: url("/images/home-v2/nav/brush/calm-6.webp");
+}
+
+.header .s7 {
+  --stroke: url("/images/home-v2/nav/brush/calm-7.webp");
+}
+
+/* The bar's paper: 93% rice paper with its fibre once scrolled, its lower edge the paper's own
+   fibre feathering out over a few pixels (no ruled line); the whole sheet while a drop-down or
+   the menu is open under it, with a hairline between the two. Clear over the opening. */
+.header .ground {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  backdrop-filter: blur(12px);
+  transition: opacity 0.5s var(--ease);
+}
+
+.header .ground::before,
+.header .ground::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.header .ground::before {
+  bottom: -10px;
+  background-color: var(--paper);
+  background-image: var(--paper-fibre, none);
+  background-size: 800px 800px;
+  /* Rice paper is translucent: ink under the bar shows only as a faint, diffused shade. */
+  opacity: 0.95;
+  mask:
+    linear-gradient(#000, #000) 0 0 / 100% calc(100% - 10px) no-repeat,
+    url("/images/home-v2/nav/brush/deckle.webp") 0 100% / 800px 10px repeat-x;
+  transition: opacity 0.5s var(--ease);
+}
+
+/* The edge itself: a soft line of ink at low strength along the paper's ragged edge, so the bar
+   reads as a sheet of rice paper lying over the page (and words passing under it pass under an
+   edge, never an invisible cut). While a sheet is open under the bar it is a plain hairline. */
+.header .ground::after {
+  top: auto;
+  bottom: -10px;
+  height: 10px;
+  background: rgb(28 27 25 / 0.3);
+  mask: url("/images/home-v2/nav/brush/deckle-line.webp") 0 0 / 800px 10px repeat-x;
+  transition:
+    opacity 0.3s var(--ease),
+    background-color 0.3s var(--ease);
+}
+
+.header[data-state="open"] .ground::after {
+  bottom: 0;
+  height: 1px;
+  background: var(--line);
+  mask: none;
+}
+
+.header:is([data-state="solid"], [data-state="open"]) .ground {
+  opacity: 1;
+}
+
+.header[data-state="open"] .ground::before {
+  opacity: 1;
+}
+
+.header .bar {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 32px;
+  /* The page's column: on a wide window the logo stays over the words. */
+  max-width: calc(var(--wide, 1300px) + 2 * var(--gutter));
+  height: 100%;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* A touch larger than the look's logo (its rule forces ~98px on the first logo link). */
+.header .bar .logo[data-nav-logo] {
+  display: block;
+  width: clamp(108px, 7.7vw, 118px);
+}
+
+/* The look's logo rule catches any first link holding a picture (a bottle, a painting): they
+   keep their own width here. */
+.header a[href]:first-child:has(img):not([data-nav-logo]) {
+  width: auto;
+}
+
+.header .links {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(16px, 1.85vw, 30px);
+  font-size: clamp(18px, 1.302vw, 20px);
+  font-weight: 450;
+  line-height: 1.2;
+}
+
+.header .link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  min-height: 48px;
+  padding: 0 2px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.header .chev {
+  flex: none;
+  margin-top: 2px;
+  transition: rotate 0.5s var(--ease);
+}
+
+/* "Opens": a small v painted in one stroke (calm-7 laid as a v), loaded on its left arm. */
+.header .tick {
+  display: inline-block;
+  width: 15px;
+  height: 11px;
+  margin-left: 1px;
+  background: currentColor;
+  mask: url("/images/home-v2/nav/brush/tick.webp") 50% 50% / contain no-repeat;
+}
+
+.header [aria-expanded="true"] > .chev {
+  rotate: 180deg;
+}
+
+/* The painted underline: one of the seven strokes as a mask on the word's own ink, a little past
+   the word's left edge, its dry tail running past the right. It paints in from left to right (a
+   soft edge travelling along it, 0.45s) and is erased from right to left when the pointer leaves. */
+.header .word {
+  position: relative;
+  display: inline-block;
+}
+
+.header .word::after {
+  content: "";
+  position: absolute;
+  left: -0.24em;
+  right: -0.7em;
+  bottom: -0.52em;
+  height: 0.4em;
+  background: currentColor;
+  pointer-events: none;
+  mask:
+    var(--stroke) 0 0 / 100% 100% no-repeat,
+    linear-gradient(90deg, #000 46%, transparent 54%) 100% 0 / 230% 100% no-repeat;
+  mask-composite: intersect;
+  transition: mask-position 0.35s var(--ease);
+}
+
+.header :is(.link, .part, .product, .textLink):focus-visible .word::after,
+.header .link[aria-expanded="true"] .word::after,
+.header .part[data-on] .word::after,
+.header .menuButton .word::after {
+  mask-position:
+    0 0,
+    0 0;
+  transition-duration: 0.45s;
+}
+
+/* The part of the homepage being read: its link carries the stroke, painted in slowly as the
+   part arrives, lifted as it leaves. */
+.header .link[data-reading] .word::after {
+  mask-position:
+    0 0,
+    0 0;
+  transition-duration: 0.9s;
+}
+
+/* One stroke in the bar at a time: an open drop-down, or the link being pointed at, takes it over
+   from the part being read. */
+.header[data-state="open"] .link[data-reading]:not([aria-expanded="true"]) .word::after {
+  mask-position:
+    100% 0,
+    100% 0;
+  transition-duration: 0.35s;
+}
+
+@media (hover: hover) {
+  .header .links:has(.link:hover, .utilities a:hover) .link[data-reading]:not(:hover) .word::after {
+    mask-position:
+      100% 0,
+      100% 0;
+    transition-duration: 0.35s;
+  }
+}
+
+@media (hover: hover) {
+  .header :is(.link, .part, .product, .textLink):hover .word::after {
+    mask-position:
+      0 0,
+      0 0;
+    transition-duration: 0.45s;
+  }
+}
+
+/* Log in, Sign up and the language picker (a component shared with the other pages), in this
+   bar's voice: the links' size and weight, Log in painted like a link, Sign up the outlined pill
+   (1.5px, 48px), the picker as wide as the language it shows. */
+.header .utilities {
+  display: flex;
+  align-items: center;
+  margin-left: clamp(0px, 0.5vw, 8px);
+}
+
+.header :is(.utilities, .footUtilities) > div {
+  gap: clamp(16px, 1.85vw, 30px);
+  padding: 0;
+  border: 0;
+  color: inherit;
+  font-size: inherit;
+}
+
+.header :is(.utilities, .footUtilities) :is(a, button, select, label) {
+  color: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.header :is(.utilities, .footUtilities) a {
+  position: relative;
+  min-height: 48px;
+  padding: 0 2px;
+}
+
+.header :is(.utilities, .footUtilities) a:hover {
+  text-decoration: none;
+}
+
+.header .utilities a::after {
+  content: "";
+  position: absolute;
+  left: -0.24em;
+  right: -0.7em;
+  bottom: 3px;
+  height: 0.36em;
+  background: currentColor;
+  pointer-events: none;
+  mask:
+    url("/images/home-v2/nav/brush/calm-2.webp") 0 0 / 100% 100% no-repeat,
+    linear-gradient(90deg, #000 46%, transparent 54%) 100% 0 / 230% 100% no-repeat;
+  mask-composite: intersect;
+  transition: mask-position 0.35s var(--ease);
+}
+
+.header .utilities a:focus-visible::after {
+  mask-position:
+    0 0,
+    0 0;
+  transition-duration: 0.45s;
+}
+
+@media (hover: hover) {
+  .header .utilities a:hover::after {
+    mask-position:
+      0 0,
+      0 0;
+    transition-duration: 0.45s;
+  }
+}
+
+.header :is(.utilities, .footUtilities) button {
+  position: relative;
+  min-height: 48px;
+  padding: 0 23.5px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  line-height: 1;
+}
+
+/* Sign up's outline is painted: one brush loop round the words, loaded where it starts (upper
+   left), dry where it closes, its tail passing just inside the start (ring.webp, a 9-slice: the
+   two ends keep their shape, the straight runs stretch with the words). */
+.header :is(.utilities, .footUtilities) button::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border: 28px solid transparent;
+  border-image: url("/images/home-v2/nav/brush/ring.webp") 84 / 28px stretch;
+  pointer-events: none;
+}
+
+.header :is(.utilities, .footUtilities) label {
+  gap: 8px;
+  min-height: 48px;
+}
+
+.header :is(.utilities, .footUtilities) select {
+  max-width: none;
+  min-height: 48px;
+  padding: 0 22px 0 0;
+  field-sizing: content;
+}
+
+.header :is(.utilities, .footUtilities) option {
+  background: var(--paper, #fff);
+  color: var(--ink, #111);
+}
+
+.header :is(.utilities, .footUtilities) :focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+}
+
+/* Where the browser lets a page draw the list itself, the languages open on the page's paper. */
+@supports (appearance: base-select) {
+  .header :is(.utilities, .footUtilities) select,
+  .header :is(.utilities, .footUtilities) select::picker(select) {
+    appearance: base-select;
+  }
+
+  .header :is(.utilities, .footUtilities) select {
+    display: inline-flex;
+    align-items: center;
+    border: 0;
+    background: transparent;
+  }
+
+  .header :is(.utilities, .footUtilities) select::picker-icon {
+    display: none;
+  }
+
+  .header :is(.utilities, .footUtilities) select::picker(select) {
+    min-width: 232px;
+    margin-block: 8px;
+    padding: 8px;
+    border: 1px solid var(--hair, rgba(28, 27, 25, 0.28));
+    border-radius: 2px;
+    background-color: var(--paper, #fff);
+    background-image: var(--paper-fibre, none);
+    background-size: 800px 800px;
+    color: var(--ink, #111);
+    font-size: 19px;
+    font-weight: 450;
+    line-height: 1.3;
+  }
+
+  .header :is(.utilities, .footUtilities) option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 16px 0 12px;
+    border-radius: 2px;
+    background: transparent;
+    transition: background-color 0.3s var(--ease, ease);
+  }
+
+  .header :is(.utilities, .footUtilities) option:is(:hover, :focus-visible) {
+    background: color-mix(in srgb, var(--ink, #111) 8%, transparent);
+    outline: 0;
+  }
+
+  .header :is(.utilities, .footUtilities) option:checked {
+    font-weight: 500;
+  }
+}
+
+/* The narrow window's button, in words: "Menu", and "Close" with its cross while the sheet is
+   open. Its word stands on a painted stroke (no pointer to paint it on a phone). */
+.header .menuButton {
+  display: none;
+  align-items: center;
+  justify-self: end;
+  gap: 8px;
+  min-height: 48px;
+  margin-right: -2px;
+  padding: 0 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.2;
+  cursor: pointer;
+}
+
+/* The faint ink wash over the page while a drop-down is open (much lighter than the dialogs'). */
+.header .wash {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  background: rgb(96 91 83 / 0.2);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.25s var(--ease),
+    visibility 0s 0.25s;
+}
+
+.header .wash[data-open] {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.7s var(--ease);
+}
+
+/* The drop-down sheet: the page's rice paper with its fibre (continuing the bar's), full width
+   under the bar, a hairline under it, no shadow. It opens downward (0.7s) and leaves in 0.25s. */
+.header .sheet {
+  position: absolute;
+  top: var(--bar-h);
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-color: var(--paper);
+  background-image: var(--paper-fibre, none);
+  background-size: 800px 800px;
+  background-position: 0 calc(-1 * var(--bar-h));
+  border-bottom: 1px solid var(--line);
+  clip-path: inset(0 0 100% 0);
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 0.25s var(--ease),
+    clip-path 0s 0.25s,
+    visibility 0s 0.25s;
+}
+
+.header .sheet[data-open] {
+  clip-path: inset(0 0 0 0);
+  opacity: 1;
+  visibility: visible;
+  transition:
+    clip-path 0.7s var(--ease),
+    opacity 0.2s var(--ease);
+}
+
+/* Both panels lie on the sheet at its top, each the sheet's full width (the pointer is always
+   over the open one); the sheet is as tall as the panel shown (nav-brush.tsx measures it). */
+.header .stack {
+  position: relative;
+}
+
+.header .panel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: visibility 0s 0.25s;
+}
+
+.header .panel[data-open] {
+  pointer-events: auto;
+  visibility: visible;
+  transition: none;
+}
+
+.header .column {
+  display: grid;
+  column-gap: clamp(40px, 5vw, 80px);
+  max-width: calc(var(--wide, 1300px) + 2 * var(--gutter));
+  margin: 0 auto;
+  padding: clamp(36px, 3.3vw, 52px) var(--gutter) clamp(40px, 3.6vw, 56px);
+}
+
+/* What is on the sheet settles the way the page's panels do: it rises 10px and fades in (0.7s,
+   one piece a moment after another), and fades out in 0.25s. Each piece moves by itself, never a
+   group around a painting, so the paintings keep multiplying onto the sheet's paper. */
+.header .rise {
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+
+.header .panel[data-open] .rise {
+  opacity: 1;
+  animation: rise 0.7s var(--ease) backwards;
+  animation-delay: calc(80ms + var(--i, 0) * 55ms);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+.header .lede {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 0;
+}
+
+.header .headline {
+  max-width: 11em;
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(30px, 2.8vw, 42px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+}
+
+/* The text link: 19px/450 ink on a hairline 8px under the words; the brush paints over the
+   hairline when it is pointed at, and the arrow moves on 3px. */
+.header .textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 48px;
+  margin-top: 28px;
+  color: inherit;
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.25;
+}
+
+.header .textLink .word::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -7px;
+  height: 1px;
+  background: var(--hair);
+  transition: opacity 0.4s var(--ease);
+}
+
+.header .arrow {
+  flex: none;
+  transition: translate 0.5s var(--ease);
+}
+
+@media (hover: hover) {
+  .header .textLink:hover .word::before {
+    opacity: 0;
+  }
+
+  .header :is(.textLink, .part, .figure):hover .arrow {
+    translate: 3px 0;
+  }
+}
+
+.header .textLink:focus-visible .word::before {
+  opacity: 0;
+}
+
+/* Products: the invitation at the left; at the right the five bottles stand in one row on one
+   painted ground at low ink, each on a pale pool, its name and focus under it. */
+.header .productsPanel {
+  grid-template-columns: minmax(240px, 1fr) minmax(0, 3fr);
+  align-items: start;
+}
+
+/* Every bottle stands the same height, never wider than its column: the height is worked out
+   from the window (the sheet's column, less the invitation's), so the ground under all five
+   always meets their bases. */
+.header .shelf {
+  --gap: clamp(8px, 1.1vw, 18px);
+  --avail: calc(min(100vw - 2 * var(--gutter), var(--wide, 1300px)) - clamp(40px, 5vw, 80px));
+  --col: calc((var(--avail) - max(240px, var(--avail) / 4) - 4 * var(--gap)) / 5);
+  --stand-h: min(clamp(150px, 11.2vw, 172px), var(--col) * 1278 / 1230);
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0 var(--gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* The ground: one long stroke under all five, at the bottles' base. */
+.header .shelf::before {
+  content: "";
+  position: absolute;
+  left: -3%;
+  right: -7%;
+  top: calc(var(--stand-h) * 0.965 - 9px);
+  height: 17px;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/brush/calm-5.webp") 0 0 / 100% 100% no-repeat;
+  opacity: 0;
+  transition: opacity 0.25s var(--ease);
+}
+
+.header .panel[data-open] .shelf::before {
+  opacity: 0.3;
+  animation: ground 0.9s var(--ease) backwards;
+  animation-delay: 60ms;
+}
+
+@keyframes ground {
+  from {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+.header .product {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-width: 0;
+  color: inherit;
+  text-align: center;
+}
+
+.header .stand {
+  position: relative;
+  display: block;
+  width: calc(var(--stand-h) * 1230 / 1278);
+  aspect-ratio: 1230 / 1278;
+}
+
+/* A pale ink pool under each bottle (the page's painted pool, foreshortened) and the small dense
+   one where its base meets the paper, both multiplied onto the sheet. */
+.header .pool {
+  position: absolute;
+  left: 22%;
+  top: 79%;
+  width: 60%;
+  height: auto;
+  aspect-ratio: 1 / 0.42;
+  object-fit: fill;
+  mix-blend-mode: multiply;
+}
+
+.header .contact {
+  position: absolute;
+  left: 22%;
+  top: 92.6%;
+  width: 56%;
+  height: auto;
+  aspect-ratio: 1 / 0.12;
+  object-fit: fill;
+  mix-blend-mode: multiply;
+}
+
+.header .panel[data-open] .pool {
+  opacity: 0.42;
+}
+
+.header .panel[data-open] .contact {
+  opacity: 0.7;
+  transition: opacity 0.6s var(--ease);
+}
+
+.header .bottle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transition:
+    opacity 0.25s var(--ease),
+    translate 0.6s var(--ease);
+}
+
+@media (hover: hover) {
+  .header .product:hover .bottle {
+    translate: 0 -6px;
+  }
+
+  .header .panel[data-open] .product:hover .contact {
+    opacity: 0.45;
+  }
+}
+
+.header .product:focus-visible .bottle {
+  translate: 0 -6px;
+}
+
+.header .name {
+  display: block;
+  margin-top: 14px;
+  font-size: 19px;
+  font-weight: 450;
+  line-height: 1.25;
+  text-wrap: balance;
+}
+
+.header .focus {
+  display: block;
+  max-width: 13em;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 450;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+/* Science: the four parts as a big list on hairlines at the left; their paintings, captioned, at
+   the right. Pointing at a part brings its painting forward; the others ease back. */
+.header .sciencePanel {
+  grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
+  align-items: start;
+}
+
+.header .parts {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.header .parts > li {
+  border-bottom: 1px solid var(--line);
+}
+
+.header .part {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: clamp(58px, 4.2vw, 66px);
+  padding: 4px 0 8px;
+  color: inherit;
+  font-family: var(--display-font);
+  font-size: clamp(26px, 2.15vw, 33px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.header .part .arrow {
+  opacity: 0.5;
+  transition:
+    translate 0.5s var(--ease),
+    opacity 0.5s var(--ease);
+}
+
+.header .part[data-on] .arrow,
+.header .part:focus-visible .arrow {
+  translate: 3px 0;
+  opacity: 1;
+}
+
+.header .sciencePanel .textLink {
+  margin-top: 22px;
+}
+
+.header .figures {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(16px, 1.7vw, 28px);
+  align-items: start;
+}
+
+.header .figure {
+  display: grid;
+  gap: 16px;
+  min-width: 0;
+  color: inherit;
+}
+
+.header .pic {
+  position: relative;
+  display: block;
+  height: clamp(150px, 11.8vw, 190px);
+}
+
+.header .painting {
+  object-fit: contain;
+  object-position: 0 100%;
+  mix-blend-mode: multiply;
+}
+
+/* The still life is painted to its paper's edge: cropped round its table and dissolved into the
+   sheet, as the homepage shows it. */
+.header .painting[data-still] {
+  object-fit: cover;
+  object-position: 50% 82%;
+  mask-image:
+    linear-gradient(to right, transparent 0, #000 8%, #000 86%, transparent 100%),
+    linear-gradient(to bottom, transparent 0, #000 10%, #000 84%, transparent 100%);
+  mask-composite: intersect;
+}
+
+/* Dr. Liu's real photograph on its paper mat (a photo: never multiplied). */
+.header .mat {
+  display: block;
+  width: fit-content;
+  height: 100%;
+  padding: 7px;
+  background: #fbf9f4;
+  box-shadow:
+    0 14px 26px -16px rgba(12, 11, 10, 0.42),
+    0 2px 5px rgba(12, 11, 10, 0.08);
+}
+
+.header .mat img {
+  display: block;
+  width: auto;
+  height: 100%;
+}
+
+.header .caption {
+  display: block;
+  font-size: 16px;
+  font-weight: 450;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+.header .caption .arrow {
+  display: inline-block;
+  margin-left: 6px;
+  vertical-align: -2px;
+}
+
+.header .panel[data-open] .figure :is(.painting, .mat) {
+  transition: opacity 0.5s var(--ease);
+}
+
+.header .panel[data-open] .sciencePanel[data-part] .figure:not([data-on]) :is(.painting, .mat) {
+  opacity: 0.55;
+}
+
+/* 1101-1365px: three pictures (Dr. Liu, the cell, the still life), so their captions keep room
+   (two lines at most); the inkstone joins them from 1366px. Pointing at "Ask BiGH Science" then
+   dims nothing. */
+@media (min-width: 1101px) and (max-width: 1365px) {
+  .header .figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .header .figure:nth-child(4) {
+    display: none;
+  }
+
+  .header
+    .panel[data-open]
+    .sciencePanel[data-part="3"]
+    .figure:not([data-on])
+    :is(.painting, .mat) {
+    opacity: 1;
+  }
+}
+
+/* Korean, Japanese and Chinese: the headline takes the room CJK needs; Japanese breaks between
+   phrases, Korean keeps whole words. */
+.header :is(.headline, .part):is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+}
+
+.header :is(.headline, .part, .caption, .name, .focus, .textLink, .foldLink, .miniName):lang(ja) {
+  word-break: auto-phrase;
+}
+
+.header :is(.headline, .part, .caption, .name, .focus, .textLink, .foldLink, .miniName):lang(ko) {
+  word-break: keep-all;
+}
+
+/* Just above the menu's breakpoint (1101-1240px) the bar draws in a little, so Vietnamese, the
+   longest, still sits on one line inside the page's column. */
+@media (min-width: 1101px) and (max-width: 1240px) {
+  .header .bar {
+    gap: 20px;
+  }
+
+  .header .bar .logo[data-nav-logo] {
+    width: 104px;
+  }
+
+  .header .links,
+  .header .utilities > div {
+    gap: 14px;
+  }
+
+  .header .utilities {
+    margin-left: 0;
+  }
+
+  .header .utilities button {
+    padding: 0 17.5px;
+  }
+}
+
+/* --- The narrow window (1100px and under): the button says Menu; the links are a full sheet of
+   the page's paper, the page locked under it. --- */
+.header .menu {
+  display: none;
+}
+
+@media (max-width: 1100px) {
+  .header {
+    --bar-h: 72px;
+  }
+
+  .header .bar .logo[data-nav-logo] {
+    width: clamp(100px, 13vw, 112px);
+  }
+
+  .header :is(.links, .sheet, .wash) {
+    display: none;
+  }
+
+  .header .menuButton {
+    display: inline-flex;
+  }
+
+  .header .menu {
+    position: absolute;
+    top: var(--bar-h);
+    left: 0;
+    right: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - var(--bar-h));
+    height: calc(100dvh - var(--bar-h));
+    padding: clamp(4px, 1.4vh, 20px) var(--gutter) max(24px, env(safe-area-inset-bottom));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    background-color: var(--paper);
+    background-image: var(--paper-fibre, none);
+    background-size: 800px 800px;
+    background-position: 0 calc(-1 * var(--bar-h));
+    color: var(--ink);
+  }
+
+  .header .lines {
+    flex: none;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .header .lines > li {
+    border-bottom: 1px solid var(--line);
+  }
+
+  /* One link to a line, in the display voice: 30px on a phone, up to 44px on a tablet. */
+  .header .line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    width: 100%;
+    min-height: clamp(64px, 9vh, 92px);
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font-family: var(--display-font);
+    font-size: clamp(30px, min(5.2vw, 5.2vh), 44px);
+    font-weight: var(--display-weight, 500);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  .header .line:is(:lang(ko), :lang(ja), :lang(zh)) {
+    letter-spacing: -0.01em;
+  }
+
+  .header .line .chev {
+    margin-top: 0;
+    opacity: 0.8;
+  }
+
+  .header .line .tick {
+    width: 24px;
+    height: 17px;
+  }
+
+  /* Products and Science unfold under their line. */
+  .header .fold {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.55s var(--ease);
+  }
+
+  .header .fold[data-open] {
+    grid-template-rows: 1fr;
+  }
+
+  .header .foldInner {
+    min-height: 0;
+    margin: 0 calc(-1 * var(--gutter));
+    padding: 0 var(--gutter);
+    overflow: hidden;
+  }
+
+  .header .fold[data-open] .foldInner {
+    padding-bottom: 14px;
+  }
+
+  /* The five bottles as a row to swipe: it starts on the page's gutter and runs off the screen's
+     right edge, about two and a half showing, the third cut through its bottle (a plain cue to
+     swipe, never a name that seems clipped). */
+  .header .row {
+    --item: clamp(124px, 35vw, 150px);
+    position: relative;
+    display: flex;
+    gap: 12px;
+    margin: 2px calc(-1 * var(--gutter)) 4px;
+    padding: 0 var(--gutter) 6px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: var(--gutter);
+    scrollbar-width: none;
+    list-style: none;
+  }
+
+  .header .row::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* One painted ground under all five, running with the row as it is swiped. */
+  .header .row::before {
+    content: "";
+    position: absolute;
+    left: calc(var(--gutter) - 6px);
+    top: calc(var(--item) * 0.96 * 0.965 - 8px);
+    width: calc(5 * var(--item) + 4 * 12px + 24px);
+    height: 15px;
+    background: var(--ink);
+    mask: url("/images/home-v2/nav/brush/calm-5.webp") 0 0 / 100% 100% no-repeat;
+    opacity: 0.3;
+  }
+
+  .header .row > li {
+    --stand-h: calc(var(--item) * 0.96);
+    flex: none;
+    width: var(--item);
+    scroll-snap-align: start;
+  }
+
+  .header .mini {
+    display: grid;
+    justify-items: center;
+    color: inherit;
+    text-align: center;
+  }
+
+  .header .mini .stand {
+    width: calc(var(--stand-h) * 1230 / 1278);
+  }
+
+  .header .mini .pool {
+    opacity: 0.42;
+  }
+
+  .header .mini .contact {
+    opacity: 0.7;
+  }
+
+  .header .miniName {
+    margin-top: 8px;
+    font-size: 17px;
+    font-weight: 450;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+
+  .header .row + .foldLink {
+    margin-top: 6px;
+  }
+
+  .header .foldList {
+    margin: 0;
+    padding: 0 0 4px;
+    list-style: none;
+  }
+
+  .header .foldLink {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 52px;
+    color: inherit;
+    font-size: clamp(20px, 2.6vw, 24px);
+    font-weight: 450;
+    line-height: 1.25;
+  }
+
+  .header .foldLink svg {
+    flex: none;
+    opacity: 0.6;
+  }
+
+  /* The foot: the crane at rest on a short painted stroke, beside Log in, Sign up and the
+     language, the way the homepage's footer ends. */
+  .header .foot {
+    --crane-h: clamp(140px, 21vh, 180px);
+    position: relative;
+    flex: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: auto;
+    padding: clamp(28px, 5vh, 56px) 0 22px;
+  }
+
+  .header .footUtilities {
+    position: relative;
+    z-index: 1;
+    min-width: 0;
+    padding-bottom: 10px;
+  }
+
+  .header .footUtilities > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    font-size: 20px;
+    font-weight: 450;
+  }
+
+  .header .footUtilities button {
+    margin: 4px 0;
+  }
+
+  .header .crane {
+    position: relative;
+    z-index: 1;
+    flex: none;
+    width: auto;
+    height: var(--crane-h);
+    /* Its feet are 8% above the picture's foot: they stand on the stroke. */
+    margin-bottom: calc(var(--crane-h) * -0.08);
+    mix-blend-mode: multiply;
+  }
+
+  .header .footStroke {
+    position: absolute;
+    left: -6px;
+    right: calc(-1 * var(--gutter));
+    bottom: 16px;
+    height: 12px;
+    background: var(--ink);
+    mask: url("/images/home-v2/nav/brush/calm-1.webp") 0 0 / 100% 100% no-repeat;
+  }
+}
+
+/* A tablet held upright (700px and wider): the sheet opens with Products unfolded, and the five
+   bottles stand in one row across the column on one painted ground, as in the desktop sheet. */
+@media (min-width: 700px) and (max-width: 1100px) {
+  .header .row {
+    --gap: 12px;
+    --stand-h: min(150px, (100vw - 2 * var(--gutter) - 4 * var(--gap)) / 5 * 0.96);
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0 var(--gap);
+    margin: 6px 0 2px;
+    padding: 0 0 4px;
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  .header .row > li {
+    --stand-h: inherit;
+    width: auto;
+  }
+
+  .header .row::before {
+    left: -2%;
+    right: -6%;
+    top: calc(var(--stand-h) * 0.965 - 8px);
+    width: auto;
+  }
+}
+
+/* A tablet: Log in, Sign up and the language on one line beside the crane. */
+@media (min-width: 600px) and (max-width: 1100px) {
+  .header .foot {
+    --crane-h: clamp(160px, 22vh, 250px);
+  }
+
+  .header .footUtilities > div {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 28px;
+  }
+}
+
+/* The menu arrives the way the page's panels settle: the sheet clears, and each line rises into
+   place 70ms after the one above it. */
+@media (max-width: 1100px) and (prefers-reduced-motion: no-preference) {
+  .header .menu {
+    animation: sheet 0.3s var(--ease) backwards;
+  }
+
+  .header :is(.lines > li, .footUtilities, .crane, .footStroke) {
+    animation: line 0.9s var(--ease) backwards;
+    animation-delay: calc(var(--n, 1) * 70ms);
+  }
+
+  .header .footStroke {
+    animation-name: stroke;
+  }
+}
+
+@keyframes sheet {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes line {
+  from {
+    opacity: 0;
+    translate: 0 10px;
+  }
+}
+
+@keyframes stroke {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+}
+
+/* Reduced motion: everything simply there, or gone. */
+@media (prefers-reduced-motion: reduce) {
+  .header *,
+  .header *::before,
+  .header *::after,
+  .header .sheet,
+  .header .sheet[data-open],
+  .header .wash,
+  .header .wash[data-open] {
+    animation: none !important;
+    transition: none !important;
+  }
+}

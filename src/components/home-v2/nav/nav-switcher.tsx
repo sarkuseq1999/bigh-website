@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 // Review only (October 5, 2026): a small chip in the corner to flip between today's menu bar and
 // the three options. Hidden with `?rec=1` (recordings). Not part of any design.
 const options = [
-  { key: undefined, label: "Today" },
+  { key: "today", label: "Today" },
   { key: "a", label: "A" },
   { key: "b", label: "B" },
   { key: "c", label: "C" },
@@ -21,7 +21,7 @@ export function NavSwitcher({ current }: { current?: string }) {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
   if (hidden) return null;
-  const active = options.some((option) => option.key === current) ? current : undefined;
+  const active = options.some((option) => option.key === current) ? current : "today";
   return (
     <nav
       aria-label="Menu bar options (review)"
@@ -45,7 +45,7 @@ export function NavSwitcher({ current }: { current?: string }) {
         return (
           <a
             key={option.label}
-            href={option.key ? `?nav=${option.key}` : "?"}
+            href={`?nav=${option.key}`}
             aria-current={on ? "true" : undefined}
             style={{
               display: "inline-flex",
