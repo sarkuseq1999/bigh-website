@@ -7,7 +7,6 @@ import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from 
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import type { HeaderProps } from "../chrome";
 import { useHomeDialogs } from "../dialogs";
 import {
   navProducts,
@@ -20,7 +19,7 @@ import { NavLogo } from "./nav-logo";
 import { useNav } from "./use-nav";
 import styles from "./nav-inscription.module.css";
 
-// Menu bar option C, "Inscription" (October 5, 2026). A Chinese hanging scroll carries its title
+// The menu bar, "Inscription" (Mo's pick, October 5, 2026). A Chinese hanging scroll carries its title
 // centred above the painting; this bar does the same over the crane. The BiGH mark stands in the
 // middle, large, with two links on each side of it (Products, Science | About, Support) set as one
 // balanced line; the language at the far left, Log in and Sign up at the far right. Over the
@@ -33,13 +32,39 @@ import styles from "./nav-inscription.module.css";
 // language; the menu is a full-height scroll let down the same way.
 // Each drop-down's links follow its button in the page, so Tab goes from the button into them.
 
-export function NavInscription({ overlay = false, tone = "light", solidAfter = 80 }: HeaderProps) {
+/** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
+export type NavCurrent = "home" | "products" | "science" | "about";
+
+export type NavInscriptionProps = {
+  /** The page the bar is on. */
+  current?: NavCurrent;
+  /** Start clear over the page's opening picture; it turns to paper once the page scrolls. */
+  overlay?: boolean;
+  /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
+  tone?: "light" | "dark";
+  /** Scroll distance (px) after which the bar settles on paper. */
+  solidAfter?: number;
+};
+
+export function NavInscription({
+  current = "home",
+  overlay = false,
+  tone = "light",
+  solidAfter = 80,
+}: NavInscriptionProps) {
   const copy = useCopy();
   const locale = useLocale();
   const dialogs = useHomeDialogs();
   const nav = useNav({ overlay, solidAfter });
   const { solid, panel, closePanel, menuOpen, setMenuOpen, menuButton } = nav;
   const cjk = locale === "jp" || locale === "cns" || locale === "hken";
+
+  // The drop-downs' pictures load once the visitor reaches for the bar (the pointer on it, focus
+  // in it, a tap on Menu), so the bottles are there as the scroll unrolls, without loading them on
+  // every visit to the page.
+  const [warm, setWarm] = useState(false);
+  const loading = warm ? "eager" : "lazy";
+  const reach = () => setWarm(true);
 
   // The scroll keeps showing the last drop-down while it rolls back up.
   const [shown, setShown] = useState<NavPanelId>("products");
@@ -104,11 +129,17 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
       data-menu={menuOpen ? "" : undefined}
       style={{ "--insc-panel-h": `${panelHeight}px` } as CSSProperties}
       onBlur={nav.onHeaderBlur}
+      onFocus={reach}
     >
       <span className={styles.ground} aria-hidden="true" />
       <span className={styles.rule} aria-hidden="true" />
 
-      <nav id="site-navigation" aria-label={copy("Main navigation")} className={styles.bar}>
+      <nav
+        id="site-navigation"
+        aria-label={copy("Main navigation")}
+        className={styles.bar}
+        onPointerEnter={reach}
+      >
         <div className={styles.left}>
           <div className={styles.language}>
             <HeaderUtilities />
@@ -121,6 +152,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
             aria-expanded={menuOpen}
             aria-controls="nav-sheet"
             data-nav-menu-button=""
+            onPointerDown={reach}
             onClick={() => {
               if (!menuOpen) {
                 setPart(window.matchMedia("(min-width: 700px)").matches ? "products" : null);
@@ -136,6 +168,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
               {...nav.triggerProps("products")}
               className={styles.link}
               data-nav-trigger="products"
+              data-current={current === "products" ? "" : undefined}
             >
               <span className={styles.word}>{copy("Products")}</span>
               <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
@@ -158,7 +191,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
                           className={styles.product}
                           onClick={() => closePanel()}
                         >
-                          <Bottle src={product.bottle.src} sizes="180px" />
+                          <Bottle src={product.bottle.src} sizes="180px" loading={loading} />
                           <span className={styles.productName}>{copy(product.name)}</span>
                           <span className={styles.productFocus}>{copy(product.focus)}</span>
                         </Link>
@@ -180,6 +213,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
               {...nav.triggerProps("science")}
               className={styles.link}
               data-nav-trigger="science"
+              data-current={current === "science" ? "" : undefined}
             >
               <span className={styles.word}>{copy("Science")}</span>
               <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
@@ -205,6 +239,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
                                 width={item.image.width}
                                 height={item.image.height}
                                 sizes="120px"
+                                loading={loading}
                                 className={styles.photo}
                               />
                             </span>
@@ -214,6 +249,7 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
                               alt=""
                               fill
                               sizes="280px"
+                              loading={loading}
                               className={styles.painting}
                               data-painting={item.image.src.split("/").pop()?.split(".")[0]}
                             />
@@ -242,7 +278,11 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
 
         <div className={styles.right}>
           <div className={styles.links}>
-            <Link href="/about" className={styles.link}>
+            <Link
+              href="/about"
+              className={styles.link}
+              aria-current={current === "about" ? "page" : undefined}
+            >
               <span className={styles.word}>{copy("About")}</span>
             </Link>
             <button type="button" className={styles.link} onClick={openSupport}>
@@ -284,7 +324,11 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
                       className={styles.sheetProduct}
                       onClick={() => setMenuOpen(false)}
                     >
-                      <Bottle src={product.bottle.src} sizes="(max-width: 699px) 34vw, 150px" />
+                      <Bottle
+                        src={product.bottle.src}
+                        sizes="(max-width: 699px) 34vw, 150px"
+                        loading={loading}
+                      />
                       <span className={styles.sheetProductName}>{copy(product.name)}</span>
                       <span className={styles.sheetProductFocus}>{copy(product.focus)}</span>
                     </Link>
@@ -327,7 +371,12 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
             </Link>
           </SheetPart>
           <span className={styles.dab} aria-hidden="true" />
-          <Link href="/about" className={styles.sheetLink} onClick={() => setMenuOpen(false)}>
+          <Link
+            href="/about"
+            className={styles.sheetLink}
+            aria-current={current === "about" ? "page" : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
             {copy("About")}
           </Link>
           <span className={styles.dab} aria-hidden="true" />
@@ -354,7 +403,15 @@ export function NavInscription({ overlay = false, tone = "light", solidAfter = 8
 }
 
 /** A product photograph standing on its pale ink pool. */
-function Bottle({ src, sizes }: { src: string; sizes: string }) {
+function Bottle({
+  src,
+  sizes,
+  loading,
+}: {
+  src: string;
+  sizes: string;
+  loading: "eager" | "lazy";
+}) {
   return (
     <span className={styles.stand}>
       <Image
@@ -364,6 +421,7 @@ function Bottle({ src, sizes }: { src: string; sizes: string }) {
         width={900}
         height={482}
         sizes="120px"
+        loading={loading}
       />
       <Image
         className={styles.contact}
@@ -372,8 +430,17 @@ function Bottle({ src, sizes }: { src: string; sizes: string }) {
         width={600}
         height={170}
         sizes="100px"
+        loading={loading}
       />
-      <Image className={styles.bottle} src={src} alt="" width={1230} height={1278} sizes={sizes} />
+      <Image
+        className={styles.bottle}
+        src={src}
+        alt=""
+        width={1230}
+        height={1278}
+        sizes={sizes}
+        loading={loading}
+      />
     </span>
   );
 }

@@ -1,9 +1,9 @@
-// Adds menu bar option A's ("Brush", October 5, 2026) two new words to the five catalogs: the
+// Adds the menu bar's (October 5, 2026) two new words to the five catalogs (m585, m586): the
 // narrow window's menu button says "Menu", and "Close" while its sheet is open (its accessible
 // names stay the existing "Open menu" / "Close menu"). DRAFT translations, not native-reviewed;
 // they follow the catalogs' own "Open menu" / "Close menu" (m224, m225). hken.json stays {}
 // (/hken redirects to /cns). Run once from the repo root (a key already present is reused):
-//   node reference/nav/translations-brush.cjs
+//   node reference/nav/translations-nav.cjs
 // Row order: [en, cns (Simplified Chinese), kr, vn, jp]
 const fs = require("node:fs");
 const entries = [

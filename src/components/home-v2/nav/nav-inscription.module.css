@@ -1,4 +1,4 @@
-/* Menu bar option C, "Inscription" (October 5, 2026). The title at the head of a hanging scroll:
+/* The menu bar, "Inscription" (Mo's pick, October 5, 2026). The title at the head of a hanging scroll:
    the mark in the middle of the bar, two links on each side of it, set as one balanced line.
    Every rule is scoped under .root: the homepage's resets and the look's header rules would
    otherwise win over single-class rules. */
@@ -220,7 +220,7 @@
   }
 }
 
-.root .link[aria-expanded="true"] .word::after {
+.root .link:is([aria-expanded="true"], [aria-current="page"], [data-current]) .word::after {
   scale: 1 1;
 }
 
@@ -962,6 +962,13 @@
 
 .root .sheetLink:is(:lang(ko), :lang(ja), :lang(zh)) {
   letter-spacing: -0.01em;
+}
+
+/* The page the menu is open on keeps its ink underline, under the word. */
+.root .sheetLink[aria-current="page"] {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.26em;
 }
 
 /* A short, sure brush mark between the lines, like the marks between the columns of an
