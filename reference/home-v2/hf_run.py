@@ -42,14 +42,17 @@ STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/Higgsfi
 # stay in ledger.jsonl / ledger-r3.jsonl; this round counts only ledger-r5.jsonl. Quoted jobs
 # (Kling) may use up to $11; GPT Image 2.5 (hf_unquoted.py, ledger-r5-gpt.jsonl) is capped at 40
 # jobs (about $2 to $2.80), so the two together stay under $15.
-LEDGER = STATE / "ledger-r5.jsonl"
+# Round 6 (October 4, evening): Mo gave $10 for ten more rounds on the English homepage. Quoted
+# jobs (Kling) may use up to $7.20 here; GPT Image 2.5 (hf_unquoted.py, ledger-r6-gpt.jsonl) is
+# capped at 40 jobs (about $2 to $2.80), so the two together stay under $10.
+LEDGER = STATE / "ledger-r6.jsonl"
 LOCK = STATE / "submit.lock"
-ROUND_BUDGET = Decimal("11.00")
+ROUND_BUDGET = Decimal("7.20")
 LOOK_BUDGET = {
     "iris": Decimal("6.00"),
     "everyday": Decimal("6.50"),
     "botanical": Decimal("6.00"),
-    "ink": Decimal("11.00"),  # round 5 (Oct 3): Kling loops for the crane homepage
+    "ink": Decimal("7.20"),  # round 6 (Oct 4): the crane homepage's ten rounds
 }
 JOB_CAP = {"image": Decimal("0.25"), "video": Decimal("0.80")}
 LOOKS = set(LOOK_BUDGET)
