@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { AboutPage } from "@/components/about/about-page";
+import { AboutInk } from "@/components/about/about-ink";
+import { ProductPagesProvider } from "@/components/home/product-action";
+import { SiteDialogs } from "@/components/ink/dialogs";
+import { productPageLinks } from "@/components/product/catalog";
 import copyKeys from "@/i18n/copy-keys.json";
 import { redirect } from "@/i18n/navigation";
 
@@ -13,6 +16,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return { title: `BiGH — ${translate(copyKeys["About"])}` };
 }
 
+// The About page in the Ink & Gold look (October 5, 2026), on the shared kit and sheets.
 // Switzer, the site's type, loads in the locale layout. /hken goes to Chinese, as on the homepage
 // and the product pages.
 export default async function Page({ params }: { params: Params }) {
@@ -20,5 +24,11 @@ export default async function Page({ params }: { params: Params }) {
   if (locale === "hken") redirect({ href: "/about", locale: "cns" });
   setRequestLocale(locale);
 
-  return <AboutPage />;
+  return (
+    <ProductPagesProvider pages={productPageLinks()}>
+      <SiteDialogs>
+        <AboutInk />
+      </SiteDialogs>
+    </ProductPagesProvider>
+  );
 }

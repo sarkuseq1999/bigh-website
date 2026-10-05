@@ -1,0 +1,474 @@
+/* About in the Ink & Gold look (October 5, 2026). Layout from the approved mockup
+   (reference/ink-pages/mockups/about.jpg): an opening of words beside the ink cell, then four
+   parts in a three-zone grid (station, the brush line's lane, content), then the centred pause.
+   Rhythm Rule spacing: 215px of paper before a chapter, 160px between blocks, 110px between the
+   parts of a block, 70-100px inside one. */
+
+:global([data-page="about"]) .opening {
+  padding: calc(var(--header-h, 88px) + clamp(40px, 6vw, 96px)) 0 clamp(64px, 8vw, 140px);
+}
+
+:global([data-page="about"]) .openingGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 6fr) minmax(0, 6fr);
+  align-items: center;
+  gap: clamp(24px, 4vw, 72px);
+}
+
+:global([data-page="about"]) .kicker {
+  margin: 0 0 18px;
+  color: var(--muted);
+  font-size: 19px;
+  font-weight: 450;
+}
+
+/* The acronym: the four initials in sumi ink, the rest of each word in ink grey. */
+:global([data-page="about"]) .title {
+  --acronym-accent: var(--ink);
+  margin: 0;
+  color: var(--muted);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(56px, 7.4vw, 124px);
+  line-height: 0.96;
+  letter-spacing: -0.035em;
+}
+
+/* "Be in Good" / "Health." on two lines, before, during and after the unfold (the acronym keeps
+   each word whole; left to itself the open title would stay on one line and run into the cell).
+   As on the glass page Mo approved: "BiG" over "H" while it holds, then each word opens. */
+:global([data-page="about"]) .title > span {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+:global([data-page="about"]) .title > span > span:nth-child(4) {
+  flex-basis: 100%;
+}
+
+:global([data-page="about"]) .lead {
+  margin: clamp(22px, 2.4vw, 36px) 0 0;
+  color: var(--muted);
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+:global([data-page="about"]) .lead span {
+  display: block;
+}
+
+:global([data-page="about"]) .cell {
+  position: relative;
+  margin: 0;
+  /* The painting runs a little past the column into the gutter, as on the homepage. */
+  margin-right: calc(-0.5 * var(--gutter));
+}
+
+/* The painting, its light band and its charge layer are one group (the charge's saturation
+   blend works on the painting alone), and the group multiplies onto the page's paper, so the
+   painting's own paper never shows as a box. */
+:global([data-page="about"]) .cellBody {
+  position: relative;
+  display: block;
+  isolation: isolate;
+  mix-blend-mode: multiply;
+}
+
+:global([data-page="about"]) .cellBody img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The gold leaf comes up as the page opens: until the painting has bloomed, its leaf is
+   drained of colour (a grey layer, masked to the leaf, in saturation blend); then the layer
+   fades over one and a half breaths. Reduced motion: no layer, the leaf is up. */
+:global([data-page="about"]) .charge {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: #8a867e;
+  -webkit-mask: var(--gold) center / 100% 100% no-repeat;
+  mask: var(--gold) center / 100% 100% no-repeat;
+  mix-blend-mode: saturation;
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-page="about"]) .charge {
+    opacity: 1;
+    transition: opacity calc(var(--breath) * 1.5) var(--ease) calc(var(--breath) * 0.4);
+  }
+
+  :global([data-page="about"]) [data-bloom="done"] ~ .charge {
+    opacity: 0;
+  }
+}
+
+:global([data-page="about"]) .cell figcaption {
+  position: absolute;
+  right: calc(0.5 * var(--gutter));
+  bottom: 4%;
+}
+
+/* The four parts: station | the line's lane | content. */
+:global([data-page="about"]) .part {
+  padding: clamp(80px, 8.3vw, 160px) 0 0;
+  scroll-margin-top: calc(var(--header-h, 88px) + 24px);
+}
+
+:global([data-page="about"]) .partGrid {
+  display: grid;
+  grid-template-columns: minmax(172px, 1.5fr) clamp(48px, 5vw, 88px) minmax(0, 8.5fr);
+  align-items: start;
+}
+
+/* Qualified by its element so the margin outranks the kit's .look .station (margin: 0) whatever
+   order the built stylesheets load in. */
+:global([data-page="about"]) p.station {
+  grid-column: 1;
+  justify-self: end;
+  margin-top: 0.55em;
+}
+
+/* Reduced motion: the whole line is there from the first frame, so every station is too. */
+@media (prefers-reduced-motion: reduce) {
+  :global([data-page="about"]) p.station[data-station][data-reached="false"] {
+    opacity: 1;
+    transition: none;
+  }
+
+  :global([data-page="about"]) p.station[data-station][data-reached="false"]::before {
+    scale: 1 1;
+    transition: none;
+  }
+}
+
+:global([data-page="about"]) .content {
+  grid-column: 3;
+  min-width: 0;
+}
+
+:global([data-page="about"]) .statement > span {
+  display: block;
+}
+
+/* The parts' headings sit a step under the purpose's statement, as in the mockup (about 49px at
+   1536: the statement leads, the parts follow). Qualified by its element so it outranks the kit's
+   .look .display whatever order the built stylesheets load in. */
+:global([data-page="about"]) h2.heading {
+  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  line-height: 1.08;
+}
+
+:global([data-page="about"]) .body {
+  max-width: 30em;
+  margin: clamp(20px, 2vw, 32px) 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+:global([data-page="about"]) .roots {
+  display: grid;
+  grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  align-items: center;
+  gap: clamp(32px, 5vw, 88px);
+}
+
+/* Dr. Liu's print: his real photograph on its paper mat (cropped to 4:5 as on the homepage),
+   centred on one breath of ink about 1.84 times its width. The print is as wide as its mat and
+   stands in from the column's edge by the halo's spread, so the halo starts where the words do
+   and the brush line in the margin passes beside it, never through it. */
+:global([data-page="about"]) .print {
+  --mat: clamp(220px, 16.4vw, 256px);
+  position: relative;
+  justify-self: start;
+  width: var(--mat);
+  margin: 0 0 0 calc(var(--mat) * 0.42);
+}
+
+:global([data-page="about"]) .halo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--mat) * 1.84);
+  max-width: none;
+  height: auto;
+  translate: -50% -52%;
+  pointer-events: none;
+}
+
+/* The photo mount: the page's only shadow. */
+:global([data-page="about"]) .mount {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #fbf9f4;
+  box-shadow:
+    0 22px 44px -22px rgba(12, 11, 10, 0.42),
+    0 3px 8px rgba(12, 11, 10, 0.1);
+}
+
+:global([data-page="about"]) .mount img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 26%;
+}
+
+/* The print laid down: as the halo blooms into the paper, the print rises 12px into place while
+   its shadow grows from nothing, in one breath. Reduced motion: there, still. */
+@media (prefers-reduced-motion: no-preference) {
+  :global([data-page="about"]) .halo[data-bloom="waiting"] + .mount {
+    translate: 0 12px;
+    box-shadow:
+      0 0 0 -22px rgba(12, 11, 10, 0),
+      0 0 0 rgba(12, 11, 10, 0);
+  }
+
+  :global([data-page="about"]) .halo[data-bloom="in"] + .mount {
+    transition:
+      translate var(--breath) var(--ease),
+      box-shadow var(--breath) var(--ease);
+  }
+}
+
+:global([data-page="about"]) .rootsWords {
+  display: grid;
+  justify-items: start;
+  gap: 0;
+}
+
+:global([data-page="about"]) .rootsWords > a {
+  margin-top: clamp(24px, 2.4vw, 36px);
+}
+
+:global([data-page="about"]) .figures {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(20px, 3vw, 48px);
+  margin: clamp(32px, 3.4vw, 56px) 0 0;
+}
+
+/* Each figure stands on its hairline, its words under it (the mockup's record). */
+:global([data-page="about"]) .figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  /* Held to the top, so the figures and their hairlines line up when one label takes two lines. */
+  justify-content: flex-end;
+  gap: 0;
+}
+
+:global([data-page="about"]) .figures dt {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+:global([data-page="about"]) .figures dd {
+  margin: 0;
+  white-space: nowrap;
+}
+
+:global([data-page="about"]) .figure {
+  font-size: clamp(48px, 4.6vw, 76px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+:global([data-page="about"]) .unit {
+  font-size: clamp(26px, 2.4vw, 38px);
+  font-weight: 300;
+  line-height: 1;
+}
+
+:global([data-page="about"]) .promise {
+  display: grid;
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(28px, 4vw, 72px);
+}
+
+:global([data-page="about"]) .promises {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(40px, 4vw, 64px) clamp(28px, 3vw, 56px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Each promise sits under a short rule the brush paints (the route's rule over promise-N). */
+:global([data-page="about"]) .promises li {
+  padding-top: 22px;
+}
+
+:global([data-page="about"]) .promises h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+:global([data-page="about"]) .promises p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+:global([data-page="about"]) .greetings {
+  margin-top: 14px;
+}
+
+/* The pause: centred, the inkstone small over the words. About 175px of paper above it; under
+   it, the footer's own room makes up the silence before the closing band (about 215px to the
+   crane at rest). */
+:global([data-page="about"]) .closing {
+  padding: clamp(100px, 9vw, 185px) 0 clamp(40px, 4vw, 64px);
+}
+
+:global([data-page="about"]) .pause {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+:global([data-page="about"]) .inkstone {
+  position: relative;
+  width: min(26vw, 400px);
+  margin: 0 0 clamp(24px, 2.4vw, 40px);
+}
+
+:global([data-page="about"]) .inkstone img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+:global([data-page="about"]) .inkstone figcaption {
+  position: absolute;
+  right: -2em;
+  bottom: 0;
+}
+
+:global([data-page="about"]) .pause .body {
+  margin-inline: auto;
+}
+
+:global([data-page="about"]) .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+
+/* Under 1200px the two would crowd one another: the print stands over the words, and the
+   promises' heading over the promises. */
+@media (min-width: 900px) and (max-width: 1199px) {
+  :global([data-page="about"]) .roots {
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(64px, 7vw, 80px);
+    padding-top: 56px;
+  }
+
+  :global([data-page="about"]) .promise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+  }
+}
+
+/* One column (under 900px): no page-long line, so the stations sit over their parts. */
+@media (max-width: 899px) {
+  :global([data-page="about"]) .openingGrid,
+  :global([data-page="about"]) .roots,
+  :global([data-page="about"]) .promise {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* About 120px of paper from the opening's words to the purpose (the Phone Rule's chapter). */
+  :global([data-page="about"]) .opening {
+    padding-bottom: 12px;
+  }
+
+  :global([data-page="about"]) .cell {
+    margin-right: 0;
+    order: -1;
+  }
+
+  /* No line in the margin: the print is centred, with room for its halo above and below. */
+  :global([data-page="about"]) .print {
+    --mat: min(240px, 66vw);
+    justify-self: center;
+    margin: 56px 0 40px;
+  }
+
+  :global([data-page="about"]) .partGrid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+  }
+
+  :global([data-page="about"]) p.station,
+  :global([data-page="about"]) .content {
+    grid-column: 1;
+    justify-self: start;
+  }
+
+  :global([data-page="about"]) .part {
+    padding-top: 104px;
+  }
+
+  :global([data-page="about"]) .closing {
+    padding: 96px 0 40px;
+  }
+
+  :global([data-page="about"]) .inkstone {
+    width: 70vw;
+  }
+}
+
+@media (max-width: 720px) {
+  /* A phone opens on the painting: the cell runs a little past both edges of the screen (its
+     own paper margin is clear), its caption kept inside the window. */
+  :global([data-page="about"]) .cell {
+    width: 118vw;
+    margin-inline: calc((100% - 118vw) / 2);
+  }
+
+  :global([data-page="about"]) .cell figcaption {
+    right: calc(9vw + var(--gutter));
+    bottom: 6%;
+  }
+
+  :global([data-page="about"]) .figures,
+  :global([data-page="about"]) .promises {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  /* A phone sets each figure and its words on one hairline across the column. */
+  :global([data-page="about"]) .figures > div {
+    flex-direction: row-reverse;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--line);
+  }
+
+  :global([data-page="about"]) .figures dt {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    text-align: right;
+  }
+}
