@@ -47,8 +47,6 @@ type Sample = {
   /** The anchors of the two waypoints this sample lies between (for checks: where it lifts). */
   from: string;
   to: string;
-  /** At a reload: how far its one load of ink lasts (0: the usual STROKE_MAX). */
-  reach: number;
 };
 
 const TILE = 1200;
@@ -83,7 +81,6 @@ type Point = {
   ink: number;
   fresh: boolean;
   load: number;
-  reach: number;
 };
 
 /** Measure the route's waypoints on the page, relative to the look's root. */
@@ -120,7 +117,6 @@ function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
       ink: point.ink ?? 1,
       fresh: point.fresh ?? false,
       load: point.load ?? 1,
-      reach: point.reach ?? 0,
     });
   }
   return points;
@@ -176,7 +172,6 @@ function sample(points: Point[], scale: number): Sample[] {
         turn: 0,
         from: p1.at,
         to: p2.at,
-        reach: p1.reach,
       });
     }
   }
@@ -250,7 +245,7 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
     const lifts = end < b - 1;
     const run = samples[end].s - samples[a].s;
     const total = lifts ? Math.max(run, STROKE_LIFT) : Math.max(run, 400);
-    const loads = Math.max(1, Math.ceil(total / (samples[a].reach || STROKE_MAX)));
+    const loads = Math.max(1, Math.ceil(total / STROKE_MAX));
     const length = total / loads;
     for (let i = a; i < b; i++) {
       const p = samples[i];

@@ -124,11 +124,12 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - the brush line as one gesture (round 9, October 5): it passes the science in the gap between
     its words and its painting; every station's leader meets the line (1536x1000 and 1280x800,
     the whole line drawn). Round 9's lift over the picker was turned round ON PURPOSE (October 5,
-    Mo saw a broken line): the line keeps going, laying one ground under all five picker bottles
-    below their names (20 px or more under the chosen name's underline, never over a bottle or a
-    name), turning in the right margin (40 px or more from the last name) and coming back over the
-    stories' heading (40 px or more above it) into the gap, unbroken from the big bottle's ground
-    to the story gap (1440x900, and run_line at 900, 1024, 1280, 1440, 1536, 1600 and 1920).
+    Mo saw a broken line): the line keeps going in one S, laying its ground under the first two
+    picker bottles below their names (20 px or more under the chosen name's underline, never over
+    a bottle or a name) and bending broadly down into the story gap, with no return (no ink under
+    the last two bottles or beyond them) and 40 px or more clear of the stories' heading, unbroken
+    from the big bottle's ground to the story gap (1440x900, and run_line at 900, 1024, 1280,
+    1440, 1536, 1600 and 1920).
   - the page line's continuity (run_line, October 5): on every two-column width the route the
     page actually draws (the layer's data-lifts) leaves the paper only at the designed lifts
     named in DESIGNED_LIFTS; a new lift fails until it is added there on purpose.
@@ -396,21 +397,22 @@ PICKER = """(() => {
 
 def line_at_picker(page, tag):
     """The brush line round the products' picker (the whole line drawn, the picker in the window):
-    one ground under all five below their names, never over a bottle or a name, 20 px or more
-    under the chosen name's underline, a turn in the right margin 40 px or more from the last
-    name, 40 px or more above the stories' heading, and unbroken from the big bottle's ground to
-    the story gap."""
+    the S (Mo, October 5): one ground under the first two small bottles below their names, never
+    over a bottle or a name, 20 px or more under the chosen name's underline; then one broad bend
+    down into the story gap, unbroken from the big bottle's ground, with no return and no turn in
+    the right margin (no ink under the last two bottles or beyond them), 40 px or more clear of
+    the stories' heading."""
     width = page.evaluate("innerWidth")
     g = page.evaluate(PICKER)
     pl, pt, pr, pb = g["picker"]
-    under = [ink_in_box(page, l, pb + 6, r, pb + 64) for l, _, r, _ in g["picks"]]
+    under = [ink_in_box(page, l, pb + 6, r, pb + 64) for l, _, r, _ in g["picks"][:2]]
     over = [ink_in_box(page, *box) for box in g["minis"]] + [
         ink_in_box(page, l - 4, t - 4, r + 4, b + 4) for l, t, r, b in g["names"]
     ]
     check(
-        f"{tag}: the brush lays one ground under all five picker bottles, below their names, never over them",
+        f"{tag}: the brush lays its ground under the first two picker bottles, below their names, never over a bottle or a name",
         all(u > 30 for u in under) and not any(over),
-        f"ground under each {under}, over bottles and names {over}",
+        f"ground under the first two {under}, over bottles and names {over}",
     )
     ul, ut, ur, ub = g["underline"]
     near = ink_in_box(page, ul - 12, ut - 30, ur + 12, ub + 20)
@@ -420,16 +422,14 @@ def line_at_picker(page, tag):
         near == 0 and below > 30,
         f"ink within 20 px of the underline {near}, the ground below it {below}",
     )
-    nl, nt, nr, nb = g["names"][-1]
-    turn = ink_in_box(page, pr, pb, width, pb + 120)
-    by_name = ink_in_box(page, nl - 40, nt - 40, nr + 40, nb + 40)
     tl, tt, tr, tb = g["title"]
+    beyond = ink_in_box(page, g["picks"][3][0], pt, width, tt)
     over_title = ink_in_box(page, tl - 4, tt - 40, tr + 4, tb)
     joined, how = ink_joined(page, g["ground"], g["gap"])
     check(
-        f"{tag}: unbroken from the big bottle's ground, round the right margin and over the stories' heading (40 px clear) into the gap",
-        joined and turn > 30 and by_name == 0 and over_title == 0,
-        f"{how}, turn in the margin {turn}, within 40 px of the last name {by_name}, within 40 px of the heading {over_title}",
+        f"{tag}: unbroken from the big bottle's ground, one bend down into the story gap (no return, 40 px clear of the heading)",
+        joined and beyond == 0 and over_title == 0,
+        f"{how}, under the last two bottles or beyond them {beyond}, within 40 px of the heading {over_title}",
     )
 
 
@@ -1317,10 +1317,10 @@ def run(browser, look, mobile):
         )
         # Round 9 lifted the brush at the end of the big bottle's ground and landed it again under
         # the picker. Mo saw a broken line (October 5), so this check is turned round ON PURPOSE:
-        # the line keeps going. It bows down past the left of the picker, lays one ground under
-        # all five bottles below their names (never over a bottle or a name, clear of the chosen
-        # name's underline), turns in the right margin and comes back over the stories' heading
-        # into the gap, unbroken (run_line holds it at every two-column width).
+        # the line keeps going, in one S. It bows down past the left of the picker, lays its
+        # ground under the first two bottles below their names (never over a bottle or a name,
+        # clear of the chosen name's underline) and bends broadly down into the story gap,
+        # unbroken (run_line holds it at every two-column width).
         page.evaluate("document.querySelector('#products [data-brush=bottles]').scrollIntoView({block: 'center'})")
         page.wait_for_timeout(2600)
         line_at_picker(page, tag)
