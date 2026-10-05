@@ -72,7 +72,31 @@
 
 .figure {
   position: relative;
-  margin: 0 calc(-1 * var(--gutter)) 0 -2vw;
+}
+
+/* The page's biggest painting after the opening (round 4: huge here, large on the science stage,
+   small beside Ask BiGH Science). It starts in the column gap (80px into it at 1536, its paper
+   corner only) and runs off the right edge of the window, which falls at 78% of its width: past
+   the gold folds, through the cell's far end (the look's root clips it, so nothing scrolls
+   sideways). It stops growing at 1280px, so on a very wide window it stays beside its words. It
+   also runs 8% of its width into the block's padding above and below. The column's width is
+   worked out from the window (6 of the grid's 11 parts), so the label can use it too. */
+@media (min-width: 900px) {
+  .cellular .figure {
+    --area: calc(
+      (min(100vw - 2 * var(--gutter), var(--wide)) - clamp(48px, 7.4vw, 112px)) * 6 / 11
+    );
+    --reach: min(80px, 5.2vw);
+    --room: max(var(--gutter), (100vw - var(--wide)) / 2);
+    --w: min((var(--area) + var(--reach) + var(--room)) / 0.78, 1280px);
+    width: var(--w);
+    margin: calc(-0.08 * var(--w)) 0 calc(-0.08 * var(--w)) calc(-1 * var(--reach));
+  }
+
+  /* The label stands at the column's right edge, inside the window. */
+  .cellular .figure figcaption {
+    right: calc(var(--w) - var(--area) - var(--reach));
+  }
 }
 
 /* The painting and the light on its gold, as one body. It settles into place as it comes into
@@ -146,11 +170,14 @@
 
 @media (max-width: 899px) {
   .cellular .grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: minmax(0, 1fr);
   }
 
+  /* One column: the cell runs off both edges of the screen (124vw wide, centred on its body),
+     the words at the gutter. */
   .figure {
-    margin: 0 -8vw 0 -4vw;
+    width: 124vw;
+    margin: -4vw 0 -2vw calc(-1 * var(--gutter) - 16vw);
   }
 
   .figure figcaption {

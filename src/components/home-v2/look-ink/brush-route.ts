@@ -98,16 +98,16 @@ const station = (id: string, side: "left" | "right", w = 3): Waypoint =>
 const SPINE = -56;
 
 // Crane page: from the landscape the line drops straight down through the gap beside "Tiny
-// power plants." (past its station label), wraps the mitochondrion's lower left side, and comes
-// back under the words to the gap between Dr. Liu's photograph and his record (the crane comp
-// sets the headline to the right of the photo), past that station, and bows in toward the print
-// ("liu" is the mat), running down beside it, never under it, like a stroke framing a print.
+// power plants." (past its station label), between the words and the big cell (round 4: the
+// cell is the page's biggest painting, so the line keeps to the gap and bows toward the cell's
+// lower end instead of wrapping under it), and on down to the gap between Dr. Liu's photograph
+// and his record, past that station, and bows in toward the print ("liu" is the mat), running
+// down beside it, never under it, like a stroke framing a print.
 const craneToScience: Waypoint[] = [
   station("cellular", "right", 3),
-  on("cellular-mito", 0, 0.42, 3.4, 1, -54),
-  on("cellular-mito", 0.04, 0.78, 3.6),
-  on("cellular-mito", 0.2, 1.0, 3),
-  on("cellular", 0.44, 1, 2.6, 1, 0, -14),
+  on("cellular-words", 1, 0.42, 3.4, 1, 56),
+  on("cellular-words", 1, 0.86, 3.6, 1, 74),
+  on("cellular", 0.47, 1, 3, 1, 0, -30),
   station("scientists", "left", 3),
   on("liu", 1, 0.18, 3, 1, 36),
 ];
@@ -117,8 +117,10 @@ const craneToScience: Waypoint[] = [
 // BiGH Science; on down the same gap into the products, past their station and between the big
 // bottle and its words; there the brush reloads and lays one stroke under the bottle, the ground
 // it stands on (as the crane at rest stands on the closing stroke), and runs on into the left
-// margin, past the picker and down beside the story painting; across above "Make sense of the
-// science." and down the far side of its painting; under it to the research spine (past the
+// margin, past the picker; then (round 4: the story still life now runs off the left edge) it
+// sweeps right above the still life and down the gap between it and the sample's words, past the
+// story names; across above "Make sense of the science." and down the far side of its painting;
+// under it to the research spine (past the
 // station beside its headline), down between the sources, out around the notes and across to the
 // purpose's station; then it lifts off in the open sky, before the painting.
 const shared: Waypoint[] = [
@@ -138,10 +140,12 @@ const shared: Waypoint[] = [
   { at: "stage", fx: 0.1, fy: 0.97, w: 3.2, load: 1.4 },
   { at: "stage", fx: 0, fy: 1, dx: -46, dy: 64, w: 2.8, load: 1 },
   on("bottles", 0, 0.5, 2.8, 1, -40),
-  on("stories", 0.03, 0.08, 3.2),
-  on("stories", 0.034, 0.5, 3.4),
-  on("stories", 0.03, 0.94, 3),
-  on("science", 0.25, 0, 2.6, 0.8, 0, 42),
+  on("stories", 0.12, 0, 2.8, 1, 0, 20),
+  on("stories", 0.4, 0, 2.6, 0.9, 0, 56),
+  on("story-words", 0, 0.14, 3, 1, -56),
+  on("story-words", 0, 0.55, 3.4, 1, -56),
+  on("story-words", 0, 1, 3, 1, -56),
+  on("story-choices", 1, 0.5, 2.8, 1, 44),
   on("science", 0.62, 0, 3, 1, 0, 52),
   on("science-mito", 1.0, 0.08, 3.2, 1, 16),
   on("science-mito", 1.0, 0.6, 3.4, 1, 20),

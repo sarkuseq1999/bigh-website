@@ -41,7 +41,7 @@ export function Stories() {
                 aria-hidden={i !== index}
                 width={storyPaintings[item.id].width}
                 height={storyPaintings[item.id].height}
-                sizes="(max-width: 900px) 90vw, 40vw"
+                sizes="(max-width: 899px) 100vw, min(52vw, 860px)"
                 data-on={i === index}
               />
             ))}
@@ -50,7 +50,7 @@ export function Stories() {
             </figcaption>
           </figure>
 
-          <div className={styles.words}>
+          <div className={styles.words} data-brush="story-words">
             <header className={styles.head}>
               <h2 id="stories-title" className={base.display}>
                 {copy(storiesIntro.title)}
@@ -84,7 +84,12 @@ export function Stories() {
         </div>
 
         <div className={styles.controls}>
-          <div className={styles.choices} role="group" aria-label={copy("Choose a story")}>
+          <div
+            className={styles.choices}
+            role="group"
+            aria-label={copy("Choose a story")}
+            data-brush="story-choices"
+          >
             {stories.map((item, i) => (
               <button
                 key={item.id}

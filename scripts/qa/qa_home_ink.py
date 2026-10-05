@@ -72,6 +72,15 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     desktop, 44 to 52 on a phone), one sentence to a line, over a hairline and before the links,
     with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
     which blooms only once all of it is in the window.
+  - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
+    the page's biggest painting after the opening (at least 1.3 times the science stage, which is
+    at least 1.8 times the inkstone), runs off the right edge of the window with its gold folds
+    inside it, keeps clear of its words' column and keeps its label in the window; the story
+    still life runs off the left edge (about half the window wide), its label in the window, the
+    quotation set large (4vw), the names and arrows under it and working; on a phone both run to
+    both edges of the screen; with reduced motion (the whole line drawn) the brush line runs down
+    the gaps beside both paintings and never over their subjects, their words or the story's
+    names and arrows.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -290,6 +299,26 @@ EDGES = """(() => {
   return out;
 })()"""
 
+# Round 4: the three painting sizes. The cell (its figure, unturned) and its words, the story
+# still life and its words, the quotation's size, the story's names and arrows, and the science
+# stage and the inkstone for scale, as [left, top, right, bottom] in the window.
+PAINTINGS = """(() => {
+  const r = (s) => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const text = (s) => { const g = document.createRange(); g.selectNodeContents(document.querySelector(s)); const b = g.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  return {
+    win: innerWidth,
+    cell: r('#cellular [data-brush=cellular-mito]'), cellWords: r('#cellular [data-brush=cellular-words]'),
+    cellCap: text('#cellular figcaption'), cellLines: r('#cellular ol'),
+    still: r('#stories [data-brush=story-painting]'), stillTag: r('#stories figcaption'),
+    storyWords: r('#stories [data-brush=story-words]'), storyHead: r('#stories header'), story: r('#stories article'),
+    quote: parseFloat(getComputedStyle(document.querySelector('#stories article h3')).fontSize),
+    choices: r('#stories [data-brush=story-choices]'), arrows: r('#stories button[aria-label="Next sample story"]'),
+    arrowsBox: r('#stories button[aria-label="Previous sample story"]'),
+    science: r('#science [data-brush=science-mito]'), inkstone: r('#scientists img[src*=inkstone]'),
+  };
+})()"""
+
+
 # The finale (round 3): the promise in its own band at the top of the footer, before the link
 # columns and over a hairline; its size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
@@ -462,6 +491,33 @@ def run(browser, look, mobile):
     lines = page.locator("#cellular ol li").count()
     check(f"{tag}: three numbered lines", lines == 3, str(lines))
     shoot(page, f"{name}-01-cellular")
+    # Round 4: three painting sizes. The cell is the page's biggest painting after the opening.
+    g = page.evaluate(PAINTINGS)
+    cl, ct, cr, cb = g["cell"]
+    cw = cr - cl
+    cap = g["cellCap"]
+    if mobile:
+        check(
+            f"{tag}: the cell runs to both edges of the screen, its label in the window",
+            cl <= 0 and cr >= g["win"] and cap[0] >= 0 and cap[2] <= g["win"],
+            f"cell {cl:.0f} to {cr:.0f}, label {cap[0]:.0f} to {cap[2]:.0f}",
+        )
+    else:
+        sci = g["science"][2] - g["science"][0]
+        stone = g["inkstone"][2] - g["inkstone"][0]
+        check(
+            f"{tag}: three painting sizes: the cell, then the science stage, then the inkstone",
+            cw >= 1.3 * sci and sci >= 1.8 * stone,
+            f"cell {cw:.0f}, science {sci:.0f}, inkstone {stone:.0f} css px",
+        )
+        check(
+            f"{tag}: the cell runs off the window's right edge, its gold inside it, clear of its words, its label in view",
+            cr >= g["win"] + 0.12 * cw
+            and cl + 0.65 * cw <= g["win"] - 40
+            and cl >= g["cellWords"][2]
+            and cap[2] <= g["win"] - 20,
+            f"cell {cl:.0f} to {cr:.0f} (window {g['win']}), words end {g['cellWords'][2]:.0f}, label ends {cap[2]:.0f}",
+        )
 
     # Scientists and dialogs.
     scroll_to(page, top_of(page, "#scientists") + (40 if mobile else 0), 1200)
@@ -647,6 +703,34 @@ def run(browser, look, mobile):
     page.wait_for_timeout(1200)
     quote_title = page.locator("#stories article h3").text_content()
     check(f"{tag}: a name chooses its story", "read up" in quote_title, quote_title)
+    # Round 4: the still life runs off the window's edge; the quotation is set large; the names
+    # and arrows stay under it and work.
+    g = page.evaluate(PAINTINGS)
+    sl, st, sr, sb = g["still"]
+    if mobile:
+        check(
+            f"{tag}: the still life runs to both edges of the screen, its label at the gutter",
+            sl <= 0 and sr >= g["win"] and g["stillTag"][0] >= 16,
+            f"still life {sl:.0f} to {sr:.0f}, label at {g['stillTag'][0]:.0f}",
+        )
+    else:
+        check(
+            f"{tag}: the still life runs off the window's left edge, about half the window wide, its label in view",
+            sl <= -0.08 * (sr - sl)
+            and sr - sl >= 0.47 * g["win"]
+            and sr <= g["storyWords"][0] - 40
+            and g["stillTag"][0] >= 16,
+            f"still life {sl:.0f} to {sr:.0f}, words from {g['storyWords'][0]:.0f}, label at {g['stillTag'][0]:.0f}",
+        )
+        check(
+            f"{tag}: the quotation set large, the names and arrows under the still life",
+            g["quote"] >= 0.039 * g["win"] and g["choices"][1] >= sb - 1 and g["arrows"][1] >= sb - 1,
+            f"quotation {g['quote']:.1f} px, names from {g['choices'][1]:.0f}, still life ends {sb:.0f}",
+        )
+    page.click("#stories button[aria-label='Next sample story']")
+    page.wait_for_timeout(1000)
+    after = page.locator("#stories article h3").text_content()
+    check(f"{tag}: the arrow goes on to the next story", "source" in after, after)
 
     # Science.
     scroll_to(page, top_of(page, "#science") + (0 if mobile else 40), 1500)
@@ -1348,6 +1432,39 @@ def run_reduced(browser, look):
         f"{tag}: the brush line runs beside Dr. Liu's print, never under it",
         under == 0 and close == 0 and beside > 200,
         f"under {under}, within 16 px {close}, beside {beside}",
+    )
+    # Round 4: the brush line keeps to the gaps beside the two big paintings: never over the cell's
+    # body or its words, never over the still life's objects, the sample's words or the names and
+    # arrows (the whole line is drawn from the first frame here).
+    page.evaluate("document.querySelector('#cellular [data-brush=cellular-mito]').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(900)
+    g = page.evaluate(PAINTINGS)
+    cl, ct, cr, cb = g["cell"]
+    cw, chh = cr - cl, cb - ct
+    wl, wt, wr, wb = g["cellWords"]
+    words = ink_in_box(page, wl - 4, wt, wr + 4, wb)
+    body = ink_in_box(page, cl + 0.2 * cw, ct + 0.12 * chh, min(cr, g["win"]), ct + 0.9 * chh)
+    gap = ink_in_box(page, wr + 4, g["cellLines"][1], cl + 0.15 * cw, g["cellLines"][3])
+    check(
+        f"{tag}: the brush line runs down between the cell and its words, over neither",
+        words == 0 and body == 0 and gap > 100,
+        f"over the words {words}, over the cell {body}, in the gap {gap}",
+    )
+    page.evaluate("document.querySelector('#stories [data-brush=story-painting]').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(900)
+    g = page.evaluate(PAINTINGS)
+    sl, st, sr, sb = g["still"]
+    sw, sh = sr - sl, sb - st
+    wl, wt, wr, wb = g["storyWords"]
+    subject = ink_in_box(page, max(0, sl), st + 0.1 * sh, sl + 0.8 * sw, sb - 0.06 * sh)
+    words = ink_in_box(page, wl, wt, wr + 4, wb)
+    gap = ink_in_box(page, sr, st + 0.2 * sh, wl, st + 0.8 * sh)
+    names = ink_in_box(page, *g["choices"])
+    arrows = ink_in_box(page, g["arrowsBox"][0] - 4, g["arrowsBox"][1] - 4, g["arrows"][2] + 4, g["arrows"][3] + 4)
+    check(
+        f"{tag}: the brush line runs down between the still life and its words, over neither, nor the names or arrows",
+        subject == 0 and words == 0 and names == 0 and arrows == 0 and gap > 100,
+        f"over the still life {subject}, the words {words}, the names {names}, the arrows {arrows}; in the gap {gap}",
     )
     scroll_to(page, top_of(page, "#products [data-brush=bottles]") - 500, 900)
     page.locator("#products button[aria-pressed]", has_text="Nature Calm").click()
