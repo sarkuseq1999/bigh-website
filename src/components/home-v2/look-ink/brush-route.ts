@@ -113,8 +113,10 @@ const craneToScience: Waypoint[] = [
 ];
 
 // Shared: down beside the print, easing out past its lower corner (clear of his name); down the
-// gap between the two columns, past the station beside "What happens inside our cells…" and Ask
-// BiGH Science; on down the same gap into the products, past their station and between the big
+// gap between the two columns, past the station beside "What happens inside our cells…"; then
+// (round 6: Ask BiGH Science is the page's one centred pause) it swings out into the left margin
+// and runs quietly down beside the pause, clear of its painting and words, and back in to the
+// gap above the products' headline; on down that gap into the products, past their station and between the big
 // bottle and its words; there the brush reloads and lays one stroke under the bottle, the ground
 // it stands on (as the crane at rest stands on the closing stroke), and runs on into the left
 // margin, past the picker; then (round 4: the story still life now runs off the left edge) it
@@ -128,8 +130,11 @@ const shared: Waypoint[] = [
   on("liu", 1, 0.94, 3.2, 1, 38),
   station("work", "left", 3.2),
   on("work-main", 0, 0.6, 3.4, 1, SPINE),
-  on("ask-body", 0, 0.3, 3, 1, SPINE),
-  on("ask-body", 0, 1, 2.8, 1, SPINE + 4, 46),
+  on("work-main", 0, 0.96, 3.2, 1, SPINE - 24),
+  on("ask", 0.3, 0, 3, 1, 0, -40),
+  on("ask", 0.2, 0.42, 3.2),
+  on("ask", 0.17, 0.84, 3.2),
+  on("ask", 0.28, 1, 2.8, 1, 0, 80),
   station("products", "right", 3),
   on("product-spine", 0, 0.28, 3),
   on("product-spine", 0, 0.66, 2.6),

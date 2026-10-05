@@ -452,7 +452,7 @@
 .look .rest {
   flex: none;
   width: auto;
-  height: clamp(208px, 20.8vw, 340px);
+  height: clamp(208px, min(20.8vw, 33vh), 340px);
   /* Where the promise is too long to share a line (the row wraps), it stands at the right. */
   margin-left: auto;
   translate: 0 calc(8% + 12px);

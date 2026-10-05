@@ -2,7 +2,9 @@
 
 .stories {
   position: relative;
-  padding: clamp(64px, 7vw, 112px) 0 clamp(56px, 6vw, 96px);
+  /* 160 px of paper from the products and, with the science's padding, to the science (1536;
+     104 on a phone; DESIGN.md, the Rhythm Rule). */
+  padding: clamp(64px, 5.8vw, 112px) 0 clamp(40px, 3vw, 64px);
 }
 
 .inner {

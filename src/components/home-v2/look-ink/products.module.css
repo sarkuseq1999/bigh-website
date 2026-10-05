@@ -49,10 +49,12 @@
     align-items: start;
   }
 
+  /* Round 6: the heading parts from the stage as the research index's heading parts from its
+     notes (about 96 px of paper at 1536). */
   .show,
   .words {
     grid-row: 2;
-    margin-top: clamp(36px, 4vw, 64px);
+    margin-top: clamp(36px, 5.6vw, 88px);
   }
 
   .show {

@@ -27,9 +27,11 @@ function Figure({ value }: { value: string }) {
 // "Good science. Real people." Dr. Liu's real photograph, large, in a white mat laid down on one
 // breath of ink as it blooms, his name set as a name under it; as the crane comp shows, the
 // headline sits to the right of the photograph, above his record in large thin numerals, which
-// ends on the mat's lower edge. Then what his work asks, Dr. Iris Wang in words only, and Ask
-// BiGH Science (its words beside a brush at rest on an inkstone), on two columns with the brush
-// line running down between them, beside the print and never under it.
+// ends on the mat's lower edge. Then what his work asks and Dr. Iris Wang in words only, on two
+// columns with the brush line running down between them, beside the print and never under it.
+// Last, Ask BiGH Science is the page's one centred pause (round 6): a small painting of a brush
+// at rest on its inkstone, the headline, words and button centred under it on open paper, the
+// brush line passing it in the margin.
 export function Scientists() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -133,27 +135,27 @@ export function Scientists() {
       </div>
 
       <div className={`${base.wrap} ${styles.ask}`} data-brush="ask">
+        <figure className={styles.askArt} aria-hidden="true" data-brush="ask-art">
+          <Image
+            className={`${base.ink} ${styles.inkstone}`}
+            src={inkstone.src}
+            alt=""
+            width={inkstone.width}
+            height={inkstone.height}
+            sizes="(max-width: 899px) 70vw, 400px"
+            data-bloom=""
+          />
+          <figcaption className={base.caption}>{copy("Illustration")}</figcaption>
+        </figure>
         <h3 className={`${base.display} ${styles.askTitle}`}>{copy(scientists.ask.title)}</h3>
-        <div className={styles.askBody} data-brush="ask-body">
-          <div className={styles.askWords}>
-            <p className={`${base.body} ${styles.askText}`}>{copy(scientists.ask.text)}</p>
-            <button type="button" className={base.pill} onClick={dialogs.openAsk}>
-              {copy(scientists.ask.link)} <ArrowRight size={18} aria-hidden="true" />
-            </button>
-          </div>
-          <figure className={styles.askArt} aria-hidden="true">
-            <Image
-              className={`${base.ink} ${styles.inkstone}`}
-              src={inkstone.src}
-              alt=""
-              width={inkstone.width}
-              height={inkstone.height}
-              sizes="(max-width: 899px) 70vw, 300px"
-              data-bloom=""
-            />
-            <figcaption className={base.caption}>{copy("Illustration")}</figcaption>
-          </figure>
-        </div>
+        <p className={`${base.body} ${styles.askText}`}>{copy(scientists.ask.text)}</p>
+        <button
+          type="button"
+          className={`${base.pill} ${styles.askButton}`}
+          onClick={dialogs.openAsk}
+        >
+          {copy(scientists.ask.link)} <ArrowRight size={18} aria-hidden="true" />
+        </button>
       </div>
     </section>
   );

@@ -2,7 +2,8 @@
 
 .science {
   position: relative;
-  padding: clamp(72px, 8vw, 128px) 0 clamp(64px, 7vw, 112px);
+  /* 160 px of paper either side at 1536, 104 on a phone (DESIGN.md, the Rhythm Rule). */
+  padding: clamp(50px, 5.8vw, 96px) 0 clamp(28px, 3.1vw, 64px);
 }
 
 .layout {

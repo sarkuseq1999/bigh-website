@@ -3,7 +3,8 @@
 .research {
   --spine-gap: clamp(64px, 8.4vw, 128px);
   position: relative;
-  padding: clamp(64px, 7vw, 112px) 0 clamp(64px, 7vw, 112px);
+  /* Below: the purpose's chapter silence, about 215 px of paper at 1536, 120 on a phone. */
+  padding: clamp(64px, 7vw, 112px) 0 clamp(88px, 6.25vw, 112px);
 }
 
 /* The title and the words either side of the spine. */

@@ -88,6 +88,12 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     their own flying layer and the light on the sun's leaf; the stories open with their heading,
     then the still life, then the sample; the still lifes ship at their full 1744 px; the three
     science topics sit on one line and the age slider takes no room until its topic.
+  - one centred pause and the page's rhythm (round 6, October 4): Ask BiGH Science's painting,
+    headline, words and button are centred (the painting 300 to 410 px on desktop, about 70vw on
+    a phone), its headline on two lines with no word alone, open paper above and below it; with
+    the whole line drawn (1536 and 1440) the brush line passes it in the left margin, over none of
+    it; on a phone no empty band between the story arrows and the science; at 1280x800, 1440x900
+    and 1536x1000 the last screen shows the whole crane at rest, clear of the header.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -1887,6 +1893,98 @@ def run_type(browser, mobile):
     context.close()
 
 
+PAUSE = """(() => {
+  const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const ask = document.querySelector('#scientists [data-brush=ask]');
+  const img = ask.querySelector('img'), h = ask.querySelector('h3'), p = ask.querySelector('p'), btn = ask.querySelector('button');
+  const cs = getComputedStyle(ask), box = r(ask);
+  const mid = (box[0] + parseFloat(cs.paddingLeft) + box[2] - parseFloat(cs.paddingRight)) / 2;
+  const rows = new Map(); const walker = document.createTreeWalker(h, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) { const re = /\\S+/g; let m;
+    while ((m = re.exec(n.nodeValue))) { const rg = document.createRange(); rg.setStart(n, m.index); rg.setEnd(n, m.index + m[0].length);
+      const k = Math.round(rg.getBoundingClientRect().top / 6); rows.set(k, (rows.get(k) || 0) + 1); } }
+  return { win: innerWidth, mid, img: r(img), title: r(h), text: r(p), button: r(btn),
+    rows: [...rows.entries()].sort((a, b) => a[0] - b[0]).map((x) => x[1]),
+    work: r(document.querySelector('#scientists [data-brush=work-main]')),
+    products: r(document.querySelector('#products h2')),
+    arrows: r([...document.querySelectorAll('#stories button[aria-label]')].pop()),
+    science: r(document.querySelector('#science h2')) };
+})()"""
+
+
+def run_pause(browser):
+    """Round 6: Ask BiGH Science is the page's one centred pause, on open paper; the brush line
+    passes it in the margin; the phone has no empty band before the science; on a short laptop
+    window the last screen shows the whole crane at rest, clear of the header."""
+    for size, mobile in (((1536, 1000), False), ((1440, 900), False), ((390, 844), True)):
+        tag = f"pause {size[0]}"
+        context, page, response, problems = open_page(browser, f"{BASE}/", size, mobile, reduced=not mobile)
+        page.evaluate("document.querySelector('#scientists [data-brush=ask]').scrollIntoView({block: 'center'})")
+        page.wait_for_timeout(900)
+        g = page.evaluate(PAUSE)
+        off = [abs((b[0] + b[2]) / 2 - g["mid"]) for b in (g["img"], g["title"], g["text"], g["button"])]
+        width = g["img"][2] - g["img"][0]
+        modest = 0.66 * g["win"] <= width <= 0.74 * g["win"] if mobile else 300 <= width <= 410
+        check(
+            f"{tag}: the painting, headline, words and button are centred, the painting modest",
+            max(off) <= 2 and modest and g["img"][3] <= g["title"][1] + 24 and g["title"][3] <= g["text"][1],
+            f"off centre {max(off):.1f} px, painting {width:.0f} px",
+        )
+        check(
+            f"{tag}: the pause's headline sets on two lines, no word alone on one",
+            len(g["rows"]) == 2 and min(g["rows"]) >= 2,
+            f"words per line {g['rows']}",
+        )
+        above = g["img"][1] - g["work"][3]
+        below = g["products"][1] - g["button"][3]
+        room = (64, 160) if mobile else (120, 260)
+        check(
+            f"{tag}: open paper above and below the pause",
+            room[0] <= above <= room[1] and room[0] <= below <= room[1] + 40,
+            f"above {above:.0f}, below {below:.0f} px",
+        )
+        if mobile:
+            page.evaluate("document.querySelector('#science h2').scrollIntoView({block: 'center'})")
+            page.wait_for_timeout(500)
+            g = page.evaluate(PAUSE)
+            band = g["science"][1] - g["arrows"][3]
+            check(f"{tag}: no empty band between the story arrows and the science", band <= 110, f"{band:.0f} px")
+        else:
+            pad = 10
+            over = sum(
+                ink_in_box(page, b[0] - pad, b[1] - pad, b[2] + pad, b[3] + pad)
+                for b in (g["img"], g["title"], g["text"], g["button"])
+            )
+            left = min(g["img"][0], g["title"][0], g["text"][0]) - pad
+            beside = ink_in_box(page, 0, g["img"][1], left, g["button"][3])
+            right = ink_in_box(page, max(g["title"][2], g["img"][2]) + pad, g["img"][1], g["win"], g["button"][3])
+            check(
+                f"{tag}: the brush line passes the pause in the left margin, over none of it",
+                over == 0 and beside > 200 and right == 0,
+                f"over it {over}, beside it {beside}, at its right {right}",
+            )
+        shoot(page, f"pause-{size[0]}")
+        check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+        context.close()
+
+    for size in ((1280, 800), (1440, 900), (1536, 1000)):
+        tag = f"last screen {size[0]}x{size[1]}"
+        context, page, response, problems = open_page(browser, f"{BASE}/", size, False, reduced=True)
+        page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+        page.wait_for_timeout(900)
+        crane, header = page.evaluate(
+            """[document.querySelector('footer img:not([alt=BiGH])').getBoundingClientRect().top,
+               document.querySelector('header:has(#home-navigation)').getBoundingClientRect().bottom]"""
+        )
+        check(
+            f"{tag}: the whole crane at rest, clear of the header",
+            crane >= header + 8,
+            f"crane top {crane:.0f}, header {header:.0f}",
+        )
+        shoot(page, f"last-{size[0]}x{size[1]}")
+        context.close()
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=GPU)
     run(browser, "home", mobile=False)
@@ -1902,6 +2000,7 @@ with sync_playwright() as p:
     run_research(browser)
     run_type(browser, mobile=False)
     run_type(browser, mobile=True)
+    run_pause(browser)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

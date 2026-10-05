@@ -2,7 +2,9 @@
 
 .cellular {
   position: relative;
-  padding: clamp(80px, 9vw, 140px) 0 clamp(56px, 6vw, 96px);
+  /* The page's rhythm (DESIGN.md, the Rhythm Rule): 160 px of paper after the opening at 1536,
+     104 on a phone. */
+  padding: clamp(62px, 11.7vw, 190px) 0 clamp(56px, 6vw, 96px);
 }
 
 .cellular .grid {
