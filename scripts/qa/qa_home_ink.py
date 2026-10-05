@@ -9,8 +9,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, beside the crane at rest, after one short rule over each of the three standards);
     the opening crane beats its wings (the animated painting takes the still's place); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
-    past its own pixels; the products: five real bottles, choosing a name shows its words, a
-    bottle picture links to its own product page, Discover NuriCell links to its page; the stories say
+    past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
+    is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
+    words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
+    Discover link to its page; the stories say
     "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, the
     age slider ages the cell and "Illustration, not a measurement" shows; research: filters and
     show all; no sideways scrolling; every image loads; text at least 15 px (reading text at least
@@ -57,6 +59,13 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     a phone; still never past its own pixels), his name at headline size (30 px or more), the
     print laid down with its one shadow (there and still with reduced motion), and the brush line
     running down beside the print, never under it.
+  - the products showroom (round 2, October 4): on two columns the headline stands at the left
+    with its station beside it on the brush line; pointing at a picker bottle previews it on the
+    stage and moving away brings the chosen one back; the stage bottle cross-fades (not at once);
+    the brush line runs down the gap between the big bottle and its words and lays a stroke under
+    the bottle (its ground), never over the words and never around them; on a phone the chosen
+    bottle is large (about 70vw), the picker (a swipeable snap row) comes straight under it and
+    the words after; with reduced motion a choice is on the stage at once.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -192,6 +201,57 @@ def ink_by_print(page, x0, x1, side):
         }""",
         [x0, x1, side],
     )
+
+
+def ink_in_box(page, x0, y0, x1, y1):
+    """Dark brush pixels inside a rectangle of the window (viewport coordinates)."""
+    return page.evaluate(
+        """([x0, y0, x1, y1]) => {
+          let ink = 0;
+          for (const c of document.querySelectorAll('[data-brush-layer] canvas')) {
+            if (!c.width) continue;
+            const b = c.getBoundingClientRect();
+            const l = Math.max(x0, b.left), r = Math.min(x1, b.right);
+            const t = Math.max(y0, b.top), bo = Math.min(y1, b.bottom);
+            if (r - l < 1 || bo - t < 1) continue;
+            const k = c.width / b.width;
+            const d = c.getContext('2d').getImageData(Math.floor((l - b.left) * k), Math.floor((t - b.top) * k),
+              Math.max(1, Math.floor((r - l) * k)), Math.max(1, Math.floor((bo - t) * k))).data;
+            for (let i = 3; i < d.length; i += 4) if (d[i] > 40) ink++;
+          }
+          return ink;
+        }""",
+        [x0, y0, x1, y1],
+    )
+
+
+# The products stage: the shown bottle's picture, the stage link, the words, the picker, the head.
+STAGE = """(() => {
+  const shown = document.querySelector('#products [data-brush=stage] img[data-shown=true]');
+  const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  return {
+    src: shown ? shown.getAttribute('src') : '', opacity: shown ? +getComputedStyle(shown).opacity : 0,
+    shownCount: document.querySelectorAll('#products [data-brush=stage] img[data-shown=true]').length,
+    stand: shown ? r(shown) : null,
+    link: document.querySelector('#products [data-brush=stage] a')?.getAttribute('href') || '',
+    discover: document.querySelector('#ink-product-panel a')?.getAttribute('href') || '',
+    headline: document.querySelector('#ink-product-panel h3')?.textContent || '',
+    words: r(document.querySelector('#ink-product-panel')),
+    picker: r(document.querySelector('#products [data-brush=bottles]')),
+    title: r(document.querySelector('#products-title')),
+    titleAlign: getComputedStyle(document.querySelector('#products-title')).textAlign,
+    station: r(document.querySelector('#products [data-station]')),
+    column: r(document.querySelector('#products > div')),
+    gutter: parseFloat(getComputedStyle(document.querySelector('#products > div')).paddingLeft),
+  };
+})()"""
+SLUGS = [
+    ("NuriCell", "nuricell", "nuricell.png"),
+    ("Green Bee Propolis", "green-bee-propolis", "green-bee-propolis.png"),
+    ("Advanced OPC Formula", "advanced-opc", "advanced-opc.png"),
+    ("Turmerific", "turmerific", "turmerific.png"),
+    ("Nature Calm", "nature-calm", "nature-calm.png"),
+]
 
 
 def print_at_rest(page):
@@ -393,6 +453,38 @@ def run(browser, look, mobile):
         "[...document.querySelectorAll('#products [data-brush=bottles] img')].filter(i => i.src.includes('products') && i.complete && i.naturalWidth > 0).length"
     )
     check(f"{tag}: five real bottles", bottles == 5, str(bottles))
+    stage = page.evaluate(STAGE)
+    stand_w = stage["stand"][2] - stage["stand"][0] if stage["stand"] else 0
+    stand_h = stage["stand"][3] - stage["stand"][1] if stage["stand"] else 0
+    big = stand_w >= 0.66 * width if mobile else stand_h >= 440
+    check(
+        f"{tag}: NuriCell is chosen first, large on the stage",
+        "nuricell" in stage["src"] and stage["shownCount"] == 1 and big,
+        f"{stage['src'][-40:]}, stage picture {stand_w:.0f} x {stand_h:.0f}",
+    )
+    if mobile:
+        snap = page.evaluate(
+            "(() => { const p = document.querySelector('#products [data-brush=bottles]'); return [getComputedStyle(p).scrollSnapType, p.scrollWidth > p.clientWidth]; })()"
+        )
+        check(
+            f"{tag}: the chosen bottle, the picker straight under it (a swipeable row), then its words",
+            stage["picker"][1] >= stage["stand"][3] - 4
+            and stage["picker"][1] - stage["stand"][3] <= 90
+            and stage["words"][1] >= stage["picker"][3]
+            and "mandatory" in snap[0]
+            and snap[1],
+            f"stand bottom {stage['stand'][3]:.0f}, picker {stage['picker'][1]:.0f}-{stage['picker'][3]:.0f}, words {stage['words'][1]:.0f}, snap {snap}",
+        )
+    else:
+        left = stage["column"][0] + stage["gutter"]
+        check(
+            f"{tag}: the headline stands at the left, its station beside it on the brush line",
+            abs(stage["title"][0] - left) <= 2
+            and stage["titleAlign"] in ("start", "left")
+            and stage["station"][0] > stage["title"][2]
+            and stage["station"][1] < stage["title"][3],
+            f"title {stage['title'][0]:.0f} (column {left:.0f}), {stage['titleAlign']}, station at {stage['station'][0]:.0f}",
+        )
     page.locator("#products button[aria-pressed]", has_text="Turmerific").click()
     page.wait_for_timeout(900)
     headline = page.locator("#ink-product-panel h3").text_content()
@@ -402,26 +494,82 @@ def run(browser, look, mobile):
         "turmeric" in headline.lower() and "Longvida" in credit,
         headline,
     )
-    # Since all five products have their own page (main, October 2026), every bottle picture links
-    # to it; a product without a page would open its preview dialog instead (ProductAction).
-    bottle_links = page.evaluate(
-        "[...document.querySelectorAll('#products [data-brush=bottles] a')].map(a => a.getAttribute('href'))"
-    )
-    expected = ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
+    # Round 2 (October 4) changed this ON PURPOSE: the picker bottles choose, and the big stage
+    # bottle and Discover link to the shown product's page (before, every small bottle picture was
+    # itself a link). So every product page is reached through the stage: choosing each picker
+    # bottle puts its bottle, its words and both links on the stage.
+    seen = []
+    for label, slug, image in SLUGS:
+        page.locator("#products button[aria-pressed]", has_text=label).click()
+        page.wait_for_timeout(700)
+        now = page.evaluate(STAGE)
+        pressed = page.evaluate(
+            "[...document.querySelectorAll('#products [data-brush=bottles] button')].map(b => b.getAttribute('aria-pressed'))"
+        )
+        seen.append(
+            (
+                image in now["src"]
+                and now["link"].endswith(f"/products/{slug}")
+                and now["discover"].endswith(f"/products/{slug}")
+                and pressed.count("true") == 1,
+                now["headline"],
+            )
+        )
     check(
-        f"{tag}: every bottle picture links to its product page",
-        all(any((h or "").endswith(f"/products/{slug}") for h in bottle_links) for slug in expected),
-        str(bottle_links),
+        f"{tag}: choosing each picker bottle puts its bottle, words and both links on the stage (all five pages reachable)",
+        all(ok for ok, _ in seen) and len({h for _, h in seen}) == 5,
+        " | ".join(f"{'ok' if ok else 'NO'} {h[:18]}" for ok, h in seen),
     )
     page.locator("#products button[aria-pressed]", has_text="NuriCell").click()
     page.wait_for_timeout(600)
     discover = page.locator("#ink-product-panel a", has_text="Discover NuriCell").get_attribute("href")
-    picture = page.locator("#products [data-brush=bottles] a").first.get_attribute("href")
+    picture = page.locator("#products [data-brush=stage] a").first.get_attribute("href")
     check(
-        f"{tag}: NuriCell's picture and Discover link to its page",
+        f"{tag}: NuriCell's big bottle and Discover link to its page",
         (discover or "").endswith("/products/nuricell") and (picture or "").endswith("/products/nuricell"),
         f"{discover} | {picture}",
     )
+    if not mobile:
+        # Pointing previews; moving away brings the chosen one back; the change cross-fades.
+        page.hover("#products [data-brush=bottles] button:nth-child(3)")
+        page.wait_for_timeout(120)
+        mid = page.evaluate(STAGE)
+        page.wait_for_timeout(900)
+        hovered = page.evaluate(STAGE)
+        page.mouse.move(4, 4)
+        page.wait_for_timeout(900)
+        back = page.evaluate(STAGE)
+        check(
+            f"{tag}: pointing at a picker bottle previews it; moving away brings the chosen one back",
+            "advanced-opc" in hovered["src"]
+            and "antioxidant" in hovered["headline"]
+            and hovered["link"].endswith("/products/advanced-opc")
+            and "nuricell" in back["src"]
+            and back["link"].endswith("/products/nuricell"),
+            f"{hovered['src'][-22:]} {hovered['headline'][:20]} -> {back['src'][-18:]}",
+        )
+        check(
+            f"{tag}: the stage bottle cross-fades (not at once)",
+            0 < mid["opacity"] < 1 and hovered["opacity"] == 1,
+            f"opacity at 120 ms {mid['opacity']:.2f}, at rest {hovered['opacity']}",
+        )
+        # The brush line: down the gap between the big bottle and its words, and one stroke under
+        # the bottle as its ground; never over the words, never round them.
+        page.evaluate("document.querySelector('#products [data-brush=stage]').scrollIntoView({block: 'center'})")
+        page.wait_for_timeout(2600)
+        now = page.evaluate(STAGE)
+        l, t, r, b = now["stand"]
+        base = t + 0.968 * (b - t)
+        ground = ink_in_box(page, l + 0.2 * (r - l), base - 6, l + 0.8 * (r - l), base + 16)
+        gap = ink_in_box(page, r, t + 0.2 * (b - t), now["words"][0] - 8, t + 0.6 * (b - t))
+        wl, wt, wr, wb = now["words"]
+        over = ink_in_box(page, wl - 6, wt, wr + 6, wb)
+        beyond = ink_in_box(page, wr + 6, wt, wr + 400, wb)
+        check(
+            f"{tag}: the brush line runs between the big bottle and its words and lays its ground under the bottle",
+            ground > 200 and gap > 100 and over == 0 and beyond == 0,
+            f"ground {ground}, gap {gap}, over the words {over}, beyond them {beyond}",
+        )
 
     # Stories.
     scroll_to(page, top_of(page, "#stories article") - (120 if mobile else 220), 1200)
@@ -1104,6 +1252,15 @@ def run_reduced(browser, look):
         f"{tag}: the brush line runs beside Dr. Liu's print, never under it",
         under == 0 and close == 0 and beside > 200,
         f"under {under}, within 16 px {close}, beside {beside}",
+    )
+    scroll_to(page, top_of(page, "#products [data-brush=bottles]") - 500, 900)
+    page.locator("#products button[aria-pressed]", has_text="Nature Calm").click()
+    page.wait_for_timeout(60)
+    instant = page.evaluate(STAGE)
+    check(
+        f"{tag}: a choice is on the stage at once",
+        "nature-calm" in instant["src"] and instant["opacity"] == 1,
+        f"{instant['src'][-22:]} opacity {instant['opacity']}",
     )
     scroll_to(page, top_of(page, "#research") + 200, 1200)
     end_ink = ink_in_view(page)

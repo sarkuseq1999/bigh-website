@@ -146,7 +146,7 @@ A near-monochrome of sumi ink on warm paper, with one gold that belongs to the p
 ### Hierarchy
 - **Opening display** (500, 99 comp px scaled by the opening unit, 0.905): the three-line opening headline only. Phones: clamp(40px, 12vw, 56px) at 0.96.
 - **Display** (500, clamp(40px, 3.9vw, 62px), 1.04, -0.03em, balanced): every section headline.
-- **Headline** (500, clamp(30px, 2.8vw, 42px), 1.12): the chosen product's headline; sample-story quotes run larger, clamp(34px, 3.4vw, 54px) at 1.08.
+- **Headline** (500, clamp(30px, 2.8vw, 42px), 1.12): sheet titles and names; sample-story quotes run larger, clamp(34px, 3.4vw, 54px) at 1.08. The chosen product's headline on the products stage is display voice, a touch under the section's own (clamp(40px, 3.7vw, 57px), 1.04), and breaks only between its sentences.
 - **Body** (400, 19px, 1.6, Ink Grey): reading text. 18px on phones in the opening.
 - **Label** (450, 19px, 1.3): pills, text links, small headings. Tabs run 21px, product names 20px.
 - **Station** (450, 17px, 1.3, Sumi Ink): section labels on the brush line.
@@ -165,7 +165,7 @@ Content sits in a 1300px measure inside a fluid gutter (clamp(22px, 7.7vw, 132px
 
 The openings are measured from their approved 1536×1000 comps. One unit (`min(100vw / 1536, opening height / 1000)`) scales every painting and line of type so the comp holds from 1280 to 1600 wide and on short windows, while text never drops below reading size. The opening is one viewport tall (100svh, 680–1180px), and never much taller than the comp at its width (76vw: a tablet held upright gets a compact opening, with the next block in the same window). Above 1536px wide the page's column centres; the opening's words stay on its left edge (under the logo), and the crane, the sun and the stroke move in with them on a frame that stops stretching at 1812px.
 
-Breakpoints: 900px (two-column blocks collapse, stations leave the margin), 720px (phone layouts: the opening becomes a stacked picture then words, bottles become a swipeable snap row), 560px (product grid to two columns where the row is not swiping).
+Breakpoints: 900px (two-column blocks collapse, stations leave the margin), 720px (phone layouts: the opening becomes a stacked picture then words, the products' picker becomes a swipeable snap row).
 
 ### Named Rules
 **The Desktop Line Rule.** The page-long brush line exists only where the blocks are two columns (900px and wider): it is routed through the gaps between the columns, and on one column it would run through the words (October 4; it was 720px before, which let it cross the headlines on a tablet held upright). On phones the gutter cannot hold it without crowding the words, so each opening keeps only its own short stroke inside the opening (721–899px: the comp's flight stroke), and stations sit in the flow under their headings with a 22px leader. The three standards' rules and the closing stroke under the footer's promise are on every screen.
@@ -180,7 +180,9 @@ Flat by material, not by shadow. Depth comes from layers of ink: paintings and t
 ### Named Rules
 **The Multiply Rule.** Every ink painting ships with its paper divided out and is placed with `mix-blend-mode: multiply`, so the page's own rice paper shows through it. Never place an ink plate on a box or with its own paper colour.
 
-**The Ink Pool Rule.** Products never sit on cards or drop shadows. Each bottle stands in its own ink-wash pool (the painted pool, foreshortened, about 60% of the stand's width, its core just under the base) plus a small dense contact pool (56%) where the base meets the paper, both multiplied. The stand is 146% of its column, up to 340px, so the bottles have presence. A pool is a pale wash (50%) until its bottle is chosen; then the ink gathers under it (92%, 1.1×) over 0.9s.
+**The Ink Pool Rule.** Products never sit on cards or drop shadows. Each bottle stands in its own ink-wash pool (the painted pool, foreshortened, about 60% of the stand's width, its core just under the base) plus a small dense contact pool (56%) where the base meets the paper, both multiplied; the pools scale with the stand.
+
+**The Showroom Rule.** The products block is a stage, not a shelf. On two columns (the scientists' 5/7 columns and gap, so the brush line runs straight on down the same gap) the chosen bottle stands large at the left (its picture the column's width up to 490px: the bottle about 470px tall at 1536) in its gathered pool (92%, 1.1×), on the brush line, which reloads beside it and lays one stroke under it as its ground; its words sit at the right (headline, focus, highlights, description, credit, Discover), held at the tallest product's height so nothing moves while you preview. NuriCell is chosen first. Under the stage the five stand small in a quiet picker row (about 136px stands, names under them at 18px; the chosen one has the 2px ink underline and the gathered pool, the rest a pale wash at 50%). Pointing at a picker bottle or reaching it with the keyboard previews it; click, tap or Enter chooses it. The stage bottle cross-fades in 0.5s (the new one over the last), its pool gathers again over 0.9s and the words settle. The big bottle and Discover go to the shown product's page; the picker only chooses. The headline sits at the left with its station on the line beside it and the intro under the station. One column: the big bottle (70vw on a phone), the picker straight under it (a swipeable snap row on a phone), then the words, so what you tap and what changes share the window. Reduced motion: every change is instant.
 
 ## Shapes
 

@@ -2,26 +2,36 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { useState } from "react";
+import { useState, type FocusEvent, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
-import { products, productsIntro } from "../content";
+import { Sentences } from "../chrome";
+import { products, productsIntro, type HomeProduct } from "../content";
 import { useHomeDialogs } from "../dialogs";
 import { contactShadow, shadow } from "./assets";
 import base from "./look-ink.module.css";
 import styles from "./products.module.css";
 
-// "Find your starting point." The five real bottles (the approved photographs, never generated)
-// each stand in their own ink-wash pool, seated on its darkest core with a small contact shadow at
-// the base, as the comps show; the brush line runs beneath the row, dividing it from the chosen
-// product's words. Each bottle picture is the product's
-// action (NuriCell opens its page, the rest the product preview); pointing at one, or choosing its
-// name, shows its headline, words, credit and Discover button below.
+// "Find your starting point." A showroom, not a shelf: the chosen bottle (the approved
+// photographs, never generated) stands large on the stage in its gathered ink pool, on the brush
+// line that is its ground, with its words beside it at display size; NuriCell is chosen first.
+// Under the stage the five stand small in a quiet picker row (on one column it comes straight
+// after the big bottle, so what you tap and what changes share the window; it comes before the
+// words in the page's order too, so choosing comes before discovering). Pointing at one (or
+// reaching it with the keyboard) previews it on the stage; choosing it (click, tap, Enter) keeps
+// it. The big bottle and the Discover button go to the shown product's page (ProductAction), so
+// every product page stays one click away.
 export function Products() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
-  const [active, setActive] = useState(0);
-  const product = products[active];
+  const [chosen, setChosen] = useState(0);
+  const [preview, setPreview] = useState<number | null>(null);
+  const shown = preview ?? chosen;
+  const product = products[shown];
+
+  const leave = (event: FocusEvent<HTMLDivElement>) => {
+    if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setPreview(null);
+  };
 
   return (
     <section
@@ -32,109 +42,178 @@ export function Products() {
     >
       <div className={`${base.wrap} ${styles.inner}`}>
         <header className={styles.head}>
-          <p
-            className={`${base.station} ${styles.station}`}
-            data-station=""
-            data-side="left"
-            data-brush="st-products"
-          >
-            {copy(productsIntro.title)}
-          </p>
-          <h2 id="products-title" className={`${base.display} ${styles.title}`}>
+          <h2 id="products-title" className={base.display}>
             {copy(productsIntro.headline)}
           </h2>
-          <p className={`${base.body} ${styles.intro}`}>{copy(productsIntro.text)}</p>
+          <div className={styles.lede}>
+            <p
+              className={`${base.station} ${styles.station}`}
+              data-station=""
+              data-side="right"
+              data-brush="st-products"
+            >
+              {copy(productsIntro.title)}
+            </p>
+            <p className={`${base.body} ${styles.intro}`}>{copy(productsIntro.text)}</p>
+          </div>
         </header>
 
+        <div className={styles.show} data-brush="stage">
+          {/* The brush line comes down here, between the bottle and its words (brush-route.ts),
+              and turns under the bottle as its ground. */}
+          <span className={styles.spine} aria-hidden="true" data-brush="product-spine" />
+          <ProductAction
+            name={product.name}
+            onOpen={() => dialogs.openProduct(product.index)}
+            className={styles.stand}
+          >
+            {/* Keyed by the shown bottle, so its ink gathers again each time it changes. */}
+            <Image
+              key={`pool-${shown}`}
+              className={`${base.ink} ${styles.pool}`}
+              src={shadow.src}
+              alt=""
+              width={shadow.width}
+              height={shadow.height}
+              sizes="(max-width: 720px) 46vw, 330px"
+            />
+            <Image
+              className={`${base.ink} ${styles.contact}`}
+              src={contactShadow.src}
+              alt=""
+              width={contactShadow.width}
+              height={contactShadow.height}
+              sizes="(max-width: 720px) 40vw, 280px"
+            />
+            {products.map((item, i) => (
+              <Image
+                key={item.name}
+                className={styles.big}
+                data-shown={i === shown}
+                src={item.image}
+                alt={i === shown ? copy("{name} bottle", { name: item.name }) : ""}
+                width={item.size.width}
+                height={item.size.height}
+                sizes="(max-width: 720px) 70vw, (max-width: 899px) 46vw, 490px"
+                loading="eager"
+              />
+            ))}
+          </ProductAction>
+        </div>
+
         <div
-          className={styles.row}
+          className={styles.picker}
           role="group"
           aria-label={copy("BiGH products")}
           data-brush="bottles"
+          onMouseLeave={() => setPreview(null)}
+          onBlur={leave}
         >
           {products.map((item, i) => (
-            <div key={item.name} className={styles.item} data-active={active === i}>
-              <ProductAction
-                name={item.name}
-                onOpen={() => dialogs.openProduct(item.index)}
-                className={styles.bottle}
-              >
-                <span
-                  className={styles.stand}
-                  onMouseEnter={() => setActive(i)}
-                  onFocus={() => setActive(i)}
-                >
-                  <Image
-                    className={`${base.ink} ${styles.shadow}`}
-                    src={shadow.src}
-                    alt=""
-                    width={shadow.width}
-                    height={shadow.height}
-                    sizes="240px"
-                  />
-                  <Image
-                    className={`${base.ink} ${styles.contact}`}
-                    src={contactShadow.src}
-                    alt=""
-                    width={contactShadow.width}
-                    height={contactShadow.height}
-                    sizes="160px"
-                  />
-                  <Image
-                    className={styles.image}
-                    src={item.image}
-                    alt={copy("{name} bottle", { name: item.name })}
-                    width={item.size.width}
-                    height={item.size.height}
-                    sizes="(max-width: 720px) 52vw, 290px"
-                    loading="eager"
-                  />
-                </span>
-              </ProductAction>
-              <button
-                type="button"
-                aria-pressed={active === i}
-                aria-controls="ink-product-panel"
-                className={styles.name}
-                onClick={() => setActive(i)}
-              >
-                {copy(item.name)}
-              </button>
-            </div>
+            <button
+              key={item.name}
+              type="button"
+              className={styles.pick}
+              aria-pressed={chosen === i}
+              aria-controls="ink-product-panel"
+              data-shown={shown === i}
+              onMouseEnter={() => setPreview(i)}
+              onFocus={() => setPreview(i)}
+              onClick={() => setChosen(i)}
+            >
+              <span className={styles.mini}>
+                <Image
+                  className={`${base.ink} ${styles.miniPool}`}
+                  src={shadow.src}
+                  alt=""
+                  width={shadow.width}
+                  height={shadow.height}
+                  sizes="100px"
+                />
+                <Image
+                  className={`${base.ink} ${styles.miniContact}`}
+                  src={contactShadow.src}
+                  alt=""
+                  width={contactShadow.width}
+                  height={contactShadow.height}
+                  sizes="80px"
+                />
+                <Image
+                  className={styles.miniBottle}
+                  src={item.image}
+                  alt=""
+                  width={item.size.width}
+                  height={item.size.height}
+                  sizes="(max-width: 720px) 34vw, 140px"
+                  loading="eager"
+                />
+              </span>
+              <span className={styles.name}>{copy(item.name)}</span>
+            </button>
           ))}
         </div>
 
-        <div
-          id="ink-product-panel"
-          className={styles.panel}
-          aria-live="polite"
-          data-brush="product-panel"
-        >
-          {/* Where the brush line passes these words, out in the margin (brush-route.ts). */}
-          <span className={styles.pass} aria-hidden="true" data-brush="product-pass" />
-          <div key={`head-${active}`} className={styles.panelHead}>
-            <h3 className={styles.headline}>{copy(product.headline)}</h3>
-            <p className={styles.focus}>{copy(product.focus)}</p>
-            <ul className={styles.highlights}>
-              {product.highlights.map((highlight) => (
-                <li key={highlight}>{copy(highlight)}</li>
-              ))}
-            </ul>
+        {/* The shown product's words over five invisible copies (one per product), so the stage
+            keeps the tallest one's height and nothing under it moves while you preview. */}
+        <div className={styles.words}>
+          <div id="ink-product-panel" aria-live="polite">
+            <Words product={product} keyed={shown}>
+              <ProductAction
+                name={product.name}
+                onOpen={() => dialogs.openProduct(product.index)}
+                className={base.pill}
+              >
+                {copy("Discover {name}", { name: product.name })}{" "}
+                <ArrowRight size={18} aria-hidden="true" />
+              </ProductAction>
+            </Words>
           </div>
-          <div key={`body-${active}`} className={styles.panelBody}>
-            <p className={base.body}>{copy(product.description)}</p>
-            <p className={styles.credit}>{copy(product.credit)}</p>
-            <ProductAction
-              name={product.name}
-              onOpen={() => dialogs.openProduct(product.index)}
-              className={base.pill}
-            >
-              {copy("Discover {name}", { name: product.name })}{" "}
-              <ArrowRight size={18} aria-hidden="true" />
-            </ProductAction>
-          </div>
+          {products.map((item) => (
+            <div key={item.name} className={styles.ghost} aria-hidden="true" inert>
+              <Words product={item}>
+                <span className={base.pill}>
+                  {copy("Discover {name}", { name: item.name })}{" "}
+                  <ArrowRight size={18} aria-hidden="true" />
+                </span>
+              </Words>
+            </div>
+          ))}
         </div>
       </div>
     </section>
+  );
+}
+
+/** One product's words: headline, focus, highlights, description, credit and its action. Keyed
+ *  by the shown product, the words settle in each time it changes. */
+function Words({
+  product,
+  keyed,
+  children,
+}: {
+  product: HomeProduct;
+  keyed?: number;
+  children: ReactNode;
+}) {
+  const copy = useCopy();
+  return (
+    <>
+      <div key={`head-${keyed}`} className={styles.panelHead}>
+        <h3 className={styles.headline}>
+          <Sentences text={copy(product.headline)} />
+        </h3>
+        <p className={styles.focus}>{copy(product.focus)}</p>
+        <ul className={styles.highlights}>
+          {product.highlights.map((highlight) => (
+            <li key={highlight}>{copy(highlight)}</li>
+          ))}
+        </ul>
+      </div>
+      <div key={`body-${keyed}`} className={styles.panelBody}>
+        <p className={base.body}>{copy(product.description)}</p>
+        <p className={styles.credit}>{copy(product.credit)}</p>
+        {children}
+      </div>
+    </>
   );
 }

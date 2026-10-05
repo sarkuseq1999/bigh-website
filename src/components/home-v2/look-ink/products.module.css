@@ -1,6 +1,11 @@
-/* "Find your starting point." */
+/* "Find your starting point." A showroom, not a shelf: the chosen bottle stands large on the
+   stage with its words beside it; the five wait in a quiet picker row under it. Rules that meet
+   a shared one (.station, .body, .pill) are scoped one class deeper: the built site loads the
+   shared stylesheet after this one. */
 
 .products {
+  /* The scientists block's columns and gap, so the brush line keeps running down the same gap. */
+  --gap: clamp(40px, 7.8vw, 120px);
   position: relative;
   padding: clamp(64px, 7vw, 112px) 0 clamp(40px, 4vw, 64px);
 }
@@ -9,81 +14,106 @@
   position: relative;
 }
 
+/* The headline at the left; at the right, on the brush line, its station label and the intro. */
 .head {
   display: grid;
-  justify-items: center;
-  text-align: center;
+  justify-items: start;
 }
 
-.head {
-  position: relative;
-}
-
-.products .title {
-  margin-top: 0;
-}
-
-@media (min-width: 900px) {
-  /* Scoped one class deeper than the shared .station and .body rules, which the built site
-     loads after this stylesheet. */
-  .products .head .station {
-    position: absolute;
-    right: 0;
-    top: 18px;
-    max-width: 12em;
-    text-align: right;
-    text-wrap: balance;
-    --leader: 34px;
-  }
-
-  /* The centred headline keeps clear of the label in every language; on the narrowest
-     two-column windows it still has room for two full lines (no word alone on a third). */
-  .products .title {
-    max-width: max(100% - 560px, 6.4em);
-    text-wrap: balance;
-  }
+.lede {
+  display: grid;
+  justify-items: start;
 }
 
 .products .head .intro {
   max-width: 30em;
-  margin-top: 18px;
   text-wrap: balance;
 }
 
-/* Five bottles on ink, as the comps show. */
-.row {
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(8px, 2vw, 32px);
-  margin-top: clamp(48px, 6vw, 88px);
+/* Two columns: the headline and the big bottle at the left, the words at the right, the picker
+   across both. (The picker comes before the words in the page's order: see products.tsx.) */
+@media (min-width: 900px) {
+  .inner,
+  .head {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    column-gap: var(--gap);
+  }
+
+  .inner {
+    display: grid;
+    align-items: center;
+  }
+
+  .head {
+    grid-column: 1 / -1;
+    align-items: start;
+  }
+
+  .show,
+  .words {
+    grid-row: 2;
+    margin-top: clamp(36px, 4vw, 64px);
+  }
+
+  .show {
+    grid-column: 1;
+  }
+
+  .words {
+    grid-column: 2;
+  }
+
+  .picker {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+
+  /* The label sits level with the headline's first line; its leader reaches back across half the
+     gap to the line, so its words start on the column's edge, over the intro's. */
+  .lede {
+    padding-top: calc(clamp(40px, 3.9vw, 62px) * 0.52 - 11px);
+  }
+
+  .products .lede .station {
+    margin-left: calc(var(--gap) / -2 + 8px);
+    --leader: calc(var(--gap) / 2 - 20px);
+  }
+
+  .products .head .intro {
+    margin-top: 14px;
+  }
 }
 
-.item {
-  display: grid;
-  justify-items: center;
-  align-content: start;
+/* The stage: the big bottle. */
+.show {
+  position: relative;
 }
 
-.bottle {
+/* Where the brush line runs: down the middle of the gap, beside the bottle (brush-route.ts). */
+.spine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(100% + var(--gap) / 2 - 0.5px);
+  width: 1px;
+  pointer-events: none;
+}
+
+/* The photographs carry transparent margins (the bottle is about 52% of the picture's width and
+   its base sits at 96% of its height). The stage picture is its column's width, up to 490 px:
+   the bottle stands about 470 px tall at a 1536 window. */
+.stand {
+  position: relative;
   display: block;
-  width: 100%;
+  width: min(100%, 490px);
+  aspect-ratio: 1230 / 1278;
+  margin: 0 auto;
   border-radius: 12px;
 }
 
-/* The bottle photographs carry transparent margins (the bottle is 52% of the picture's width and
-   its base sits at 96% of its height): the stand is a little wider than its column so each bottle
-   reads at a proper size. */
-.stand {
-  --stand: min(146%, 340px);
-  position: relative;
-  display: block;
-  width: var(--stand);
-  margin: 0 calc((100% - var(--stand)) / 2);
-}
-
-/* Each bottle's own ink pool, laid flat on the ground (the painted pool, foreshortened): about one
-   and a half times the bottle's width, its darkest core just under the bottle's base. */
-.shadow {
+/* The chosen bottle's ink pool, gathered (the painted pool, foreshortened, its darkest core just
+   under the base). Each time the shown bottle changes the ink gathers again from a pale wash. */
+.pool {
   position: absolute;
   left: 52%;
   top: 79%;
@@ -92,21 +122,22 @@
   aspect-ratio: 1 / 0.42;
   object-fit: fill;
   translate: -50% 0;
-  /* The pool is a pale wash until its bottle is chosen; then the ink gathers under it. */
-  opacity: 0.5;
   transform-origin: 47% 40%;
-  transition:
-    opacity 0.9s var(--ease),
-    scale 0.9s var(--ease);
-}
-
-.item[data-active="true"] .shadow {
   opacity: 0.92;
   scale: 1.1;
+  animation: gather 0.9s var(--ease) both;
+}
+
+@keyframes gather {
+  from {
+    opacity: 0.5;
+    scale: 1;
+  }
 }
 
 /* The contact shadow: the same ink, small and dense, where the base meets the paper. */
-.contact {
+.contact,
+.miniContact {
   position: absolute;
   left: 50%;
   top: 92.6%;
@@ -117,84 +148,48 @@
   translate: -50% 0;
 }
 
-.image {
-  position: relative;
-  display: block;
+/* The five photographs, stacked: the shown one comes in over the last (0.5 s) while the last
+   one fades out under it. */
+.big {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   width: 100%;
-  height: auto;
-  transform-origin: 50% 96%;
-  transition: scale 0.9s var(--ease);
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s var(--ease) 0.2s;
 }
 
-.item[data-active="true"] .image {
-  scale: 1.045;
+.big[data-shown="true"] {
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.5s var(--ease);
 }
 
-.products .name {
-  position: relative;
-  min-height: 52px;
-  margin-top: 34px;
-  padding: 6px 4px 10px;
-  color: var(--muted);
-  font-size: 20px;
-  font-weight: 450;
-  line-height: 1.25;
-  text-align: center;
-  text-wrap: balance;
-  transition: color 0.5s var(--ease);
-}
-
-.products .name:hover,
-.products .name[aria-pressed="true"] {
-  color: var(--ink);
-}
-
-.name::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: 0;
-  width: 44px;
-  height: 2px;
-  border-radius: 2px;
-  background: var(--ink);
-  translate: -50% 0;
-  scale: 0 1;
-  transition: scale 0.7s var(--ease);
-}
-
-.name[aria-pressed="true"]::after {
-  scale: 1 1;
-}
-
-/* The chosen product's words. */
-.panel {
-  position: relative;
+/* The words: the shown product's over five invisible copies, so the stage keeps one height. */
+.words {
   display: grid;
-  grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-  gap: clamp(32px, 5vw, 88px);
-  max-width: 1080px;
-  margin: clamp(72px, 7vw, 108px) auto 0;
+  align-items: start;
 }
 
-/* Where the brush line passes the words on its way down the left margin: where the comp's own
-   sweep runs (7.45vw from the window's edge; on a wide window, 40px outside the page's column),
-   and never nearer than 34px to the words, which reach the gutter on narrower windows.
-   --panel-left and --column-left are those edges, measured from the window's. */
-.pass {
-  --panel-left: max(var(--gutter), (100vw - 1080px) / 2);
-  --column-left: max(var(--gutter), (100vw - var(--wide)) / 2);
-  position: absolute;
-  top: -6px;
-  left: min(-34px, max(7.45vw, var(--column-left) - 40px) - var(--panel-left));
-  width: 1px;
-  height: 1px;
+.words > * {
+  grid-area: 1 / 1;
+  min-width: 0;
+}
+
+.ghost {
+  visibility: hidden;
   pointer-events: none;
 }
 
 .panelHead,
 .panelBody {
   animation: settle 0.9s var(--ease) both;
+}
+
+.ghost .panelHead,
+.ghost .panelBody {
+  animation: none;
 }
 
 @keyframes settle {
@@ -204,11 +199,24 @@
   }
 }
 
+/* The chosen product's headline at display size, a touch under the section's own (each of its
+   sentences holds on one line in the column from about 1040 px up; it breaks only between them). */
+.products .headline {
+  max-width: 12em;
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(40px, 3.7vw, 57px);
+  font-weight: var(--display-weight);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
 .products .focus {
   display: flex;
   align-items: center;
   gap: 12px;
-  margin: 16px 0 0;
+  margin: 22px 0 0;
   color: var(--muted);
   font-size: 18px;
   font-weight: 450;
@@ -216,25 +224,17 @@
 
 .products .focus::before {
   content: "";
+  flex: none;
   width: 26px;
   height: 1px;
   background: color-mix(in srgb, var(--ink) 55%, transparent);
-}
-
-.products .headline {
-  margin: 0;
-  font-size: clamp(30px, 2.8vw, 42px);
-  font-weight: var(--display-weight);
-  line-height: 1.12;
-  letter-spacing: -0.022em;
-  text-wrap: balance;
 }
 
 .products .highlights {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 22px;
-  margin: 26px 0 0;
+  margin: 14px 0 0;
   padding: 0;
   list-style: none;
   font-size: 18px;
@@ -254,87 +254,201 @@
   background: var(--ink);
 }
 
+.panelBody {
+  margin-top: clamp(24px, 2.4vw, 36px);
+}
+
+.products .panelBody > p:first-child {
+  max-width: 30em;
+}
+
 .products .credit {
-  margin: 20px 0 30px;
+  max-width: 30em;
+  margin: 14px 0 30px;
   color: var(--muted);
   font-size: 17px;
   line-height: 1.5;
 }
 
+/* The picker: the five, small, each on its own pale pool; the chosen one's pool gathers and its
+   name is underlined in ink. Pointing at one previews it on the stage; choosing it keeps it. */
+.picker {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(8px, 1.6vw, 28px);
+  margin-top: clamp(56px, 5.6vw, 88px);
+}
+
+.products .pick {
+  display: grid;
+  justify-items: center;
+  align-content: start;
+  min-width: 0;
+  padding: 0 0 4px;
+  border: 0;
+  border-radius: 12px;
+  background: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+.mini {
+  --mini: clamp(112px, 8.8vw, 136px);
+  position: relative;
+  display: block;
+  width: var(--mini);
+  aspect-ratio: 1230 / 1278;
+}
+
+.miniPool {
+  position: absolute;
+  left: 52%;
+  top: 79%;
+  width: 60%;
+  height: auto;
+  aspect-ratio: 1 / 0.42;
+  object-fit: fill;
+  translate: -50% 0;
+  /* A pale wash until its bottle is chosen; then the ink gathers under it. */
+  opacity: 0.5;
+  transform-origin: 47% 40%;
+  transition:
+    opacity 0.9s var(--ease),
+    scale 0.9s var(--ease);
+}
+
+.pick[aria-pressed="true"] .miniPool {
+  opacity: 0.92;
+  scale: 1.1;
+}
+
+.miniBottle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+  transform-origin: 50% 96%;
+  transition: scale 0.7s var(--ease);
+}
+
+.pick[data-shown="true"] .miniBottle {
+  scale: 1.05;
+}
+
+.products .name {
+  position: relative;
+  display: block;
+  margin-top: 14px;
+  padding: 6px 4px 12px;
+  color: var(--muted);
+  font-size: 18px;
+  font-weight: 450;
+  line-height: 1.25;
+  text-align: center;
+  text-wrap: balance;
+  transition: color 0.5s var(--ease);
+}
+
+.pick[data-shown="true"] .name,
+.pick[aria-pressed="true"] .name {
+  color: var(--ink);
+}
+
+.name::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 44px;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--ink);
+  translate: -50% 0;
+  scale: 0 1;
+  transition: scale 0.7s var(--ease);
+}
+
+.pick[aria-pressed="true"] .name::after {
+  scale: 1 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  .pool,
   .panelHead,
   .panelBody {
     animation: none;
   }
+
+  .big,
+  .big[data-shown="true"],
+  .miniPool,
+  .miniBottle,
+  .name::after {
+    transition: none;
+  }
 }
 
+/* One column (a tablet held upright, a phone): the headline, its label and the intro; the chosen
+   bottle, the picker right under it (what you tap and what changes share the window), then the
+   words. Nothing follows the words but the next block, so they keep their own height. */
 @media (max-width: 899px) {
-  .products .head .station {
-    order: 1;
+  .products .lede .station {
     margin: 14px 0 0;
   }
 
-  .head .intro {
-    order: 2;
+  .products .head .intro {
+    margin-top: 16px;
+  }
+
+  .show {
+    margin-top: clamp(28px, 5vw, 44px);
+  }
+
+  .picker {
+    margin-top: clamp(22px, 5vw, 32px);
+  }
+
+  .words {
+    margin-top: clamp(32px, 6vw, 48px);
+  }
+
+  .ghost,
+  .spine {
+    display: none;
+  }
+
+  .stand {
+    width: min(46vw, 400px);
   }
 }
 
-/* One column (a tablet held upright): three bottles, then two, the second row centred under the
-   first like the headline above them (six half-columns; each bottle takes two). */
-@media (max-width: 899px) {
-  .row {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    row-gap: 28px;
-  }
-
-  .item {
-    grid-column: span 2;
-  }
-
-  .item:nth-child(4) {
-    grid-column: 2 / span 2;
-  }
-
-  .panel {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-@media (max-width: 560px) {
-  .row {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .products .name {
-    font-size: 18px;
-  }
-}
-
-/* Phones: the five bottles in one row you can swipe, standing on the brush line's ground. */
+/* Phones: the chosen bottle large, then the five in one row you can swipe. */
 @media (max-width: 720px) {
-  .row {
+  .stand {
+    width: 70vw;
+  }
+
+  .picker {
     display: flex;
-    gap: 6px;
-    margin: 40px calc(-1 * var(--gutter)) 0;
+    gap: 2px;
+    margin-inline: calc(-1 * var(--gutter));
     padding: 0 var(--gutter) 6px;
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
   }
 
-  .row::-webkit-scrollbar {
+  .picker::-webkit-scrollbar {
     display: none;
   }
 
-  .item {
-    flex: 0 0 40vw;
+  .products .pick {
+    flex: 0 0 32vw;
     scroll-snap-align: center;
   }
 
-  .stand {
-    --stand: 46vw;
-    margin: 0 -3vw;
+  .mini {
+    --mini: 30vw;
   }
 
   .products .name {

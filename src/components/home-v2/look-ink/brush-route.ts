@@ -113,10 +113,11 @@ const craneToScience: Waypoint[] = [
 ];
 
 // Shared: down beside the print, easing out past its lower corner (clear of his name); down the
-// gap between the two columns, past the station beside "What happens inside our cells…" and Ask BiGH Science; across to the right
-// margin and the products' station; down to the bottles and under their row, as the ground they
-// stand on; into the left margin before the chosen product's words (product-pass keeps it clear
-// of them where the margin is narrow) and down beside the story painting, across above "Make sense of the
+// gap between the two columns, past the station beside "What happens inside our cells…" and Ask
+// BiGH Science; on down the same gap into the products, past their station and between the big
+// bottle and its words; there the brush reloads and lays one stroke under the bottle, the ground
+// it stands on (as the crane at rest stands on the closing stroke), and runs on into the left
+// margin, past the picker and down beside the story painting; across above "Make sense of the
 // science." and down the far side of its painting; under it to the research spine (past the
 // station beside its headline), down between the sources, out around the notes and across to the
 // purpose's station; then it lifts off in the open sky, before the painting.
@@ -127,13 +128,16 @@ const shared: Waypoint[] = [
   on("work-main", 0, 0.6, 3.4, 1, SPINE),
   on("ask-body", 0, 0.3, 3, 1, SPINE),
   on("ask-body", 0, 1, 2.8, 1, SPINE + 4, 46),
-  on("scientists", 0.75, 1, 2.8, 1, 0, -10),
-  station("products", "left", 3),
-  on("bottles", 1.02, 0.55, 3.2),
-  on("bottles", 0.96, 1, 3, 1, 0, 30),
-  on("bottles", 0.5, 1, 2.4, 1, 0, 38),
-  on("bottles", 0.04, 1, 2.6, 1, 0, 30),
-  on("product-pass", 0, 0, 2.8),
+  station("products", "right", 3),
+  on("product-spine", 0, 0.28, 3),
+  on("product-spine", 0, 0.66, 2.6),
+  { at: "product-spine", fx: 0, fy: 0.86, dx: -6, w: 3, fresh: true, load: 1.2 },
+  { at: "stage", fx: 0.9, fy: 0.974, w: 3.4, load: 1.7 },
+  { at: "stage", fx: 0.62, fy: 0.982, w: 3.8, load: 1.9 },
+  { at: "stage", fx: 0.36, fy: 0.982, w: 3.8, load: 1.8 },
+  { at: "stage", fx: 0.1, fy: 0.97, w: 3.2, load: 1.4 },
+  { at: "stage", fx: 0, fy: 1, dx: -46, dy: 64, w: 2.8, load: 1 },
+  on("bottles", 0, 0.5, 2.8, 1, -40),
   on("stories", 0.03, 0.08, 3.2),
   on("stories", 0.034, 0.5, 3.4),
   on("stories", 0.03, 0.94, 3),

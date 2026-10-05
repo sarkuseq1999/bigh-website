@@ -170,8 +170,9 @@ export function HomeHeader({
 }
 
 /** The promise breaks only between its sentences ("Stay sharp." / "Live fully."), in every
- *  language: each sentence is one unbroken piece unless it is too long for the line. */
-function Sentences({ text }: { text: string }) {
+ *  language: each sentence is one unbroken piece unless it is too long for the line. (The
+ *  products' headlines are set the same way.) */
+export function Sentences({ text }: { text: string }) {
   const parts = text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu) ?? [text];
   return (
     <>
