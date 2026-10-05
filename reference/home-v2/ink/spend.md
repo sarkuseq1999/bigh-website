@@ -4,3 +4,6 @@
 - 20261004 Higgsfield marketing-studio/image/flare (GPT Image 2.5) `crane-rest-v2` ~$0.05 (shipped as crane-rest-v2.webp)
 - 20261004 Higgsfield marketing-studio/image/flare (GPT Image 2.5) `inkstone-v2` ~$0.05 (not used: still grainy)
 - 20261004 Higgsfield marketing-studio/image/flare (GPT Image 2.5) `inkstone-v3` ~$0.05 (shipped as inkstone-v2.webp)
+- 20261005-012336 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v3` $0.476 (round 8; shipped as crane-flight-v3.webp)
+- 20261005-012838 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v4` $0.476 (round 8, cfg_scale 0.7; not used: the wings went to outlines like v1)
+- 20261005-013326 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v5` $0.476 (round 8; not used: crown painted red, outline wings)

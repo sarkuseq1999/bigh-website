@@ -8,7 +8,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, beside the crane at rest, after one short rule over each of the three standards);
-    the opening crane beats its wings (the animated painting takes the still's place); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    the opening crane beats its wings (the animated painting takes the still's place) and stays a
+    painting through the beat (its thinnest frame keeps at least 45% of the held pose's solid black
+    ink: round 8; the old take fell to 38%); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
     words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
@@ -134,6 +136,26 @@ results = []
 def check(name, ok, detail=""):
     results.append((name, bool(ok), detail))
     print(("PASS " if ok else "FAIL ") + name + (f"  [{detail}]" if detail else ""))
+
+
+def ink_through_beat(page, src):
+    """The wingbeat picture's solid black ink (dark areas at least 7 px across, so its thin lines
+    are left out; 5 px in the phones' small picture) in its thinnest frame, as a share of the held
+    pose's, and its frame count."""
+    import io
+
+    import numpy as np
+    from PIL import Image, ImageFilter, ImageSequence
+
+    picture = Image.open(io.BytesIO(page.request.get(src).body()))
+    k = 7 if picture.width >= 900 else 5
+    solid = []
+    for frame in ImageSequence.Iterator(picture):
+        a = np.asarray(frame.convert("RGBA")).astype(np.float32)
+        lum = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
+        dark = Image.fromarray((((lum < 80) & (a[..., 3] > 128)) * 255).astype(np.uint8))
+        solid.append(int((np.asarray(dark.filter(ImageFilter.MinFilter(k)).filter(ImageFilter.MaxFilter(k))) > 0).sum()))
+    return min(solid) / max(solid[0], 1), len(solid)
 
 
 def scroll_to(page, y, wait=700):
@@ -795,6 +817,14 @@ def run(browser, look, mobile):
         "(() => { const i = document.querySelector('#top img[src*=crane-flight]'); return i ? [i.complete, i.naturalWidth, getComputedStyle(i).opacity] : null })()"
     )
     check(f"{tag}: the crane beats its wings", flying and wing and wing[0] and wing[1] > 0 and wing[2] == "1", str(wing))
+    # Round 8: the wingbeat stays a painting (the old take turned into an outline drawing mid-beat).
+    src = page.evaluate("document.querySelector('#top img[src*=crane-flight]')?.currentSrc || ''")
+    thinnest, frames = ink_through_beat(page, src) if src else (0, 0)
+    check(
+        f"{tag}: the wingbeat keeps its black ink through the beat",
+        frames > 30 and thinnest >= 0.45,
+        f"thinnest frame {thinnest:.0%} of the held pose's solid ink, {frames} frames, {src[-28:]}",
+    )
     boxes = page.evaluate(
         """[...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
             const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; })"""
