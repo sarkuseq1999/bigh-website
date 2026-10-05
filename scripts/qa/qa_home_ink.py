@@ -110,8 +110,17 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     painting, slider, index or words (1536x1000 and 1280x800, the whole line
     drawn); on a short window (1366x657) the whole pinned painting, slider and honesty line stay
     in the window; on a narrow one (1024x768) where a topic is taller than the room under the
-    index, the index stays put and nothing dissolves. Phones and reduced motion keep the three
-    tabs (no tall scroll, nothing pinned), with their checks as before.
+    index, the block is the tabbed one instead (round 10, on purpose; it used to keep the index
+    static beside a pinned painting); at 900x1000 the index sets its topics on one line. Phones
+    and reduced motion keep the three tabs (no tall scroll, nothing pinned), with their checks as
+    before.
+  - authored arrivals and the finish (round 10, October 5): the products' big bottle rises 10px
+    onto its ground as its pool gathers and the picker's five follow 70ms apart, waiting visibly
+    out of view, never on a page opened at the products, never with reduced motion; choosing a
+    product keeps the cross-fade without a rise; changing the story blooms the new still life
+    through the ink mask (names and arrows), at once with reduced motion; at 900px the brush line
+    keeps clear of the story names; the last screen shows the whole crane at 1280x720 and
+    1536x864 too.
   - the brush line as one gesture (round 9, October 5): it lifts at the end of the ground under
     the big bottle and lands again under the picker (no ink over the picker or in the margin
     beside it); it passes the science in the gap between its words and its painting; every
@@ -715,38 +724,62 @@ def run_story(browser):
         context.close()
     # A short laptop window (1366x657): the painting gives way so all of it, the slider and its
     # honesty line stay in the window while pinned. A narrow one (1024x768), where a topic is
-    # taller than the room under the index: the index stays put and nothing dissolves, the
-    # painting is still pinned.
+    # taller than the room under the index: the tabbed block instead (round 10).
     for size in ((1366, 657), (1024, 768)):
         tag = f"story {size[0]}x{size[1]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False)
         walk_to(page, top_of(page, "#science"), 600)
+        if size[1] >= 700:
+            # Round 10 changed this ON PURPOSE: where a topic is taller than the room under the
+            # index the index used to stay put (static) while the painting stayed pinned, so the
+            # index scrolled away from a pinned painting. Now the block gives way to the tabbed
+            # block there: nothing pinned, the three topics on one line, one panel at a time.
+            k = page.evaluate(
+                """(() => { const s = document.querySelector('#science');
+                  const tabs = [...s.querySelectorAll('[role=tab]')].map(t => Math.round(t.getBoundingClientRect().top));
+                  return { story: s.dataset.story, tabs, panels: s.querySelectorAll('[role=tabpanel]').length,
+                    sticky: getComputedStyle(s.querySelector('figure')).position, steps: s.querySelectorAll('[data-step]').length }; })()"""
+            )
+            page.click("#science [role=tab]:has-text('Aging cells')")
+            page.wait_for_timeout(1300)
+            aged = page.evaluate(STORY_STATE)
+            check(
+                f"{tag}: a topic taller than the room under the index: the tabbed block instead, its three topics on one line",
+                k["story"] == "false" and len(k["tabs"]) == 3 and len(set(k["tabs"])) == 1 and k["panels"] == 1
+                and k["sticky"] != "sticky" and k["steps"] == 0 and aged["topic"] == 2,
+                f"{k}, after choosing Aging cells topic {aged['topic']}",
+            )
+            shoot(page, "story-1024x768-tabs")
+            wide = page.evaluate("document.documentElement.scrollWidth")
+            check(f"{tag}: no sideways scrolling, no errors", wide <= size[0] and not problems, f"scrollWidth {wide}; {problems[:2]}")
+            context.close()
+            continue
         walk_to(page, story_landing(page, 2), 2600)
         st = page.evaluate(STORY_STATE)
-        k = page.evaluate(
-            """(() => { const s = document.querySelector('#science'); return { cramped: s.dataset.cramped,
-              index: getComputedStyle(s.querySelector('nav')).position,
-              anim: getComputedStyle(s.querySelector('[data-step="0"] > p')).animationName }; })()"""
+        check(
+            f"{tag}: on a short window the whole painting, its slider and honesty line stay in the window, pinned",
+            st["story"] == "true" and abs(st["fig"][1] - st["pin"]) <= 1 and st["fig"][3] <= size[1]
+            and st["age"][3] <= size[1] and st["topic"] == 2,
+            f"painting {st['fig'][1]:.0f} to {st['fig'][3]:.0f}, slider ends {st['age'][3]:.0f}, window {size[1]}",
         )
-        if size[1] < 700:
-            check(
-                f"{tag}: on a short window the whole painting, its slider and honesty line stay in the window, pinned",
-                st["story"] == "true" and abs(st["fig"][1] - st["pin"]) <= 1 and st["fig"][3] <= size[1]
-                and st["age"][3] <= size[1] and st["topic"] == 2,
-                f"painting {st['fig'][1]:.0f} to {st['fig'][3]:.0f}, slider ends {st['age'][3]:.0f}, window {size[1]}",
-            )
-        else:
-            walk_to(page, story_landing(page, 1), 1200)
-            st = page.evaluate(STORY_STATE)
-            check(
-                f"{tag}: a topic taller than the room under the index: the index stays put, nothing dissolves, the painting pinned",
-                k["cramped"] == "true" and k["index"] == "static" and k["anim"] == "none"
-                and abs(st["fig"][1] - st["pin"]) <= 1 and st["topic"] == 1,
-                f"{k}, painting at {st['fig'][1]:.0f} (pin {st['pin']:.0f}), topic {st['topic']}",
-            )
         wide = page.evaluate("document.documentElement.scrollWidth")
         check(f"{tag}: no sideways scrolling, no errors", wide <= size[0] and not problems, f"scrollWidth {wide}; {problems[:2]}")
         context.close()
+    # Round 10: on a narrow two-column window the index sets its three topics on one line (at 21px
+    # "Aging cells" broke onto a row of its own), and where a topic fits, the story runs.
+    context, page, response, problems = open_page(browser, f"{BASE}/", (900, 1000), False)
+    walk_to(page, top_of(page, "#science"), 600)
+    k = page.evaluate(
+        """(() => { const s = document.querySelector('#science'); const nav = s.querySelector('nav');
+          return { story: s.dataset.story, tops: nav ? [...nav.querySelectorAll('button')].map(b => Math.round(b.getBoundingClientRect().top)) : [],
+            font: nav ? parseFloat(getComputedStyle(nav.querySelector('button')).fontSize) : 0 }; })()"""
+    )
+    check(
+        "story 900x1000: the scroll story runs, its index's three topics on one line",
+        k["story"] == "true" and len(k["tops"]) == 3 and len(set(k["tops"])) == 1 and k["font"] >= 17,
+        str(k),
+    )
+    context.close()
 
 
 def page_checks(page, tag, width, view_h, problems):
@@ -2362,7 +2395,8 @@ def run_pause(browser):
         check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
         context.close()
 
-    for size in ((1280, 800), (1440, 900), (1536, 1000)):
+    # Round 10: also the shorter windows (1280x720 cut the crane's head by 22 px, 1536x864 by 20).
+    for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864)):
         tag = f"last screen {size[0]}x{size[1]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False, reduced=True)
         page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
@@ -2378,6 +2412,190 @@ def run_pause(browser):
         )
         shoot(page, f"last-{size[0]}x{size[1]}")
         context.close()
+
+
+# Round 10: the products' arrival. The stage's and the picker's state, the shown bottle, the
+# layer it rises in, its pool and the picker's five bottles.
+ARRIVE = """(() => {
+  const s = document.querySelector('#products [data-brush=stage]');
+  const row = document.querySelector('#products [data-brush=bottles]');
+  const big = s.querySelector('img[data-shown=true]');
+  const lift = big.parentElement;
+  const pool = s.querySelector('a > img');
+  const minis = [...row.querySelectorAll('button > span:first-child')];
+  const cs = (e) => getComputedStyle(e);
+  return {
+    stage: s.dataset.arrive || '', row: row.dataset.arrive || '',
+    top: big.getBoundingClientRect().top + scrollY, bigOpacity: +cs(big).opacity,
+    lift: cs(lift).translate, liftAnim: cs(lift).animationName, liftOpacity: +cs(lift).opacity,
+    pool: +(+cs(pool).opacity).toFixed(3), poolAnim: cs(pool).animationName,
+    poolRunning: pool.getAnimations().some((a) => a.playState === 'running'),
+    minis: minis.map((m) => +(+cs(m).opacity).toFixed(3)),
+    delays: minis.map((m) => cs(m).animationDelay),
+  };
+})()"""
+
+# Round 10: the stories' still lifes (opacity, animations, mask, bloom size, blur) and the quote.
+STILLS = """(() => [...document.querySelectorAll('#stories figure img')].map((e) => {
+  const c = getComputedStyle(e);
+  return { on: e.dataset.on, opacity: +(+c.opacity).toFixed(3), anim: c.animationName,
+    mask: c.maskImage || c.webkitMaskImage || '', bloom: c.getPropertyValue('--bloom').trim(),
+    filter: c.filter, settle: getComputedStyle(document.querySelector('#stories article')).animationName };
+}))()"""
+
+
+def run_arrivals(browser):
+    """Round 10 (October 5), authored arrivals. The products: as the stage comes into view the
+    big bottle rises 10 px onto its ground while its pool gathers (one breath), and the picker's
+    five bottles follow 70 ms apart; out of view they wait visibly (never invisible), a page
+    opened with the stage in view does not wait, choosing another product keeps the cross-fade
+    and the pool gathering without a rise, and reduced motion marks nothing. The stories:
+    changing the story blooms the new still life through the ink mask over its own edges while
+    the last one dissolves (names and arrows); reduced motion swaps at once. At 900 px the brush
+    line keeps clear of the story names."""
+    tag = "arrival 1536"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False)
+    a0 = page.evaluate(ARRIVE)
+    check(
+        f"{tag}: out of view the stage and the picker wait, visibly (the bottle whole, the picker in a paler ink)",
+        a0["stage"] == "waiting" and a0["row"] == "waiting" and a0["bigOpacity"] == 1 and a0["liftOpacity"] == 1
+        and a0["lift"] == "0px 10px" and a0["pool"] <= 0.55 and all(0.35 <= m <= 0.45 for m in a0["minis"]),
+        f"{a0['stage']}/{a0['row']}, bottle {a0['bigOpacity']}, lift {a0['lift']}, pool {a0['pool']}, minis {a0['minis']}",
+    )
+    stage_top = top_of(page, "#products [data-brush=stage]")
+    walk_to(page, stage_top - 380, 0)
+    a1 = page.evaluate(ARRIVE)
+    page.wait_for_timeout(450)
+    a2 = page.evaluate(ARRIVE)
+    page.wait_for_timeout(3000)
+    a3 = page.evaluate(ARRIVE)
+    rise = a0["top"] - a3["top"]
+    check(
+        f"{tag}: as the stage comes into view the bottle rises 10 px onto its ground while its pool gathers, in one breath",
+        a1["stage"] == "in" and a1["liftAnim"] != "none" and 0.5 < a2["pool"] < 0.9 and a3["stage"] == "done"
+        and abs(rise - 10) <= 1.5 and a3["lift"] in ("none", "0px") and a3["pool"] >= 0.9,
+        f"{a1['stage']} -> {a3['stage']}, rose {rise:.1f} px, pool {a0['pool']} -> {a2['pool']} -> {a3['pool']}",
+    )
+    row_top = top_of(page, "#products [data-brush=bottles]")
+    walk_to(page, row_top - 520, 0)
+    page.wait_for_timeout(200)
+    b1 = page.evaluate(ARRIVE)
+    page.wait_for_timeout(3400)
+    b2 = page.evaluate(ARRIVE)
+    stagger = [round(float(d[:-1]) * (1000 if d.endswith("s") and not d.endswith("ms") else 1)) for d in b1["delays"]]
+    check(
+        f"{tag}: the picker's five bottles follow, 70 ms apart, and come to rest whole",
+        b1["row"] == "in" and stagger == [120, 190, 260, 330, 400] and b1["minis"] == sorted(b1["minis"], reverse=True)
+        and b1["minis"][0] > b1["minis"][4] and b2["row"] == "done" and all(m == 1 for m in b2["minis"]),
+        f"delays {stagger}, opacity at 200 ms {b1['minis']}, at rest {b2['minis']}",
+    )
+    page.locator("#products button[aria-pressed]", has_text="Turmerific").click()
+    page.wait_for_timeout(120)
+    c1 = page.evaluate(ARRIVE)
+    page.wait_for_timeout(1200)
+    c2 = page.evaluate(ARRIVE)
+    check(
+        f"{tag}: choosing another product keeps the cross-fade and the pool gathering, without a rise",
+        0 < c1["bigOpacity"] < 1 and c1["liftAnim"] == "none" and c1["lift"] in ("none", "0px") and c1["poolRunning"]
+        and c2["bigOpacity"] == 1 and abs(c2["top"] - a3["top"]) <= 0.5,
+        f"bottle at 120 ms {c1['bigOpacity']:.2f}, lift {c1['lift']} {c1['liftAnim']}, pool gathering {c1['poolRunning']}, moved {c2['top'] - a3['top']:.1f} px",
+    )
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # A page opened at the products (#products: the jump comes after the page wakes, so the stage
+    # may arrive as the window lands on it) is never left waiting.
+    context, page, response, problems = open_page(browser, f"{BASE}/#products", (1536, 1000), False)
+    d = page.evaluate(ARRIVE)
+    check(
+        "arrival 1536: opened at the products, nothing is left waiting",
+        d["stage"] in ("", "done") and d["lift"] in ("none", "0px")
+        and d["bigOpacity"] == 1 and d["pool"] >= 0.9,
+        f"stage '{d['stage']}', picker '{d['row']}', lift {d['lift']}, pool {d['pool']}",
+    )
+    context.close()
+
+    # Reduced motion: nothing is marked, nothing moves.
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False, reduced=True)
+    r0 = page.evaluate(ARRIVE)
+    walk_to(page, top_of(page, "#products [data-brush=bottles]") - 600, 100)
+    r1 = page.evaluate(ARRIVE)
+    check(
+        "arrival reduced motion: the products are simply there (no waiting, no rise, no stagger)",
+        r0["stage"] == r0["row"] == r1["stage"] == r1["row"] == "" and r1["lift"] in ("none", "0px")
+        and all(m == 1 for m in r0["minis"] + r1["minis"]) and abs(r0["top"] - r1["top"]) <= 0.5,
+        f"{r0['stage']}/{r0['row']} -> {r1['stage']}/{r1['row']}, minis {r1['minis']}",
+    )
+    # ...and a story swaps at once.
+    page.evaluate("document.querySelector('#stories figure').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(500)
+    page.locator("#stories button[aria-pressed]", has_text="Michael R.").click()
+    page.wait_for_timeout(80)
+    s = page.evaluate(STILLS)
+    check(
+        "stories reduced motion: changing the story swaps the still life at once",
+        s[1]["opacity"] == 1 and s[0]["opacity"] == 0 and s[1]["anim"] == "none" and s[1]["settle"] == "none",
+        f"opacities {[x['opacity'] for x in s]}, animation {s[1]['anim']}",
+    )
+    context.close()
+
+    # The stories: the new still life blooms through the ink blot.
+    tag = "stories 1536"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False)
+    page.evaluate("document.querySelector('#stories figure').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(4200)
+    s0 = page.evaluate(STILLS)
+    page.locator("#stories button[aria-pressed]", has_text="Michael R.").click()
+    page.wait_for_timeout(300)
+    s1 = page.evaluate(STILLS)
+    page.wait_for_timeout(3600)
+    s2 = page.evaluate(STILLS)
+    shoot(page, "stories-bloomed")
+    mid = s1[1]
+    size = float(mid["bloom"].rstrip("%") or 0)
+    check(
+        f"{tag}: changing the story blooms the new still life through the ink mask over its own edges; the last one dissolves",
+        s0[0]["anim"] == "none"
+        and "unfold" in mid["anim"] and "sharpen" in mid["anim"] and mid["opacity"] == 1
+        and "bloom-mask" in mid["mask"] and mid["mask"].count("linear-gradient") == 2 and 2 < size < 278
+        and 0 < s1[0]["opacity"] < 1 and "settle" in mid["settle"]
+        and s2[1]["bloom"] == "280%" and s2[0]["opacity"] == 0 and s2[1]["opacity"] == 1,
+        f"first still {s0[0]['anim']}; at 300 ms bloom {mid['bloom']}, {mid['anim']}, last one {s1[0]['opacity']}; then {s2[1]['bloom']}, last {s2[0]['opacity']}",
+    )
+    page.click("#stories button[aria-label='Next sample story']")
+    page.wait_for_timeout(300)
+    s3 = page.evaluate(STILLS)
+    check(
+        f"{tag}: the arrows bloom the next still life the same way",
+        s3[2]["on"] == "true" and "unfold" in s3[2]["anim"] and 2 < float(s3[2]["bloom"].rstrip("%") or 0) < 278,
+        f"third still {s3[2]['on']} {s3[2]['anim']} at {s3[2]['bloom']}",
+    )
+    check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
+
+    # At 900 px the brush line keeps clear of the story names (round 10: it touched "Susan L.").
+    tag = "stories 900"
+    context, page, response, problems = open_page(browser, f"{BASE}/", (900, 1000), False)
+    total = page.evaluate("document.documentElement.scrollHeight")
+    y = 0
+    while y < total:
+        page.evaluate(f"window.scrollTo(0, {y})")
+        page.wait_for_timeout(40)
+        y += 200
+    page.evaluate("document.querySelector('[data-brush=story-choices]').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(900)
+    boxes = page.evaluate(
+        "[...document.querySelectorAll('[data-brush=story-choices] button')].map(b => { const r = b.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; })"
+    )
+    hits = [ink_in_box(page, l - 8, t - 8, r + 8, b + 8) for l, t, r, b in boxes]
+    passing = ink_in_box(page, boxes[-1][2] + 8, boxes[-1][1], boxes[-1][2] + 140, boxes[-1][3])
+    check(
+        f"{tag}: the brush line passes the story names clear of them (8 px or more)",
+        not any(hits) and passing > 50,
+        f"ink on the names {hits}, beside the last {passing}",
+    )
+    shoot(page, "stories-900-names")
+    context.close()
 
 
 with sync_playwright() as p:
@@ -2397,6 +2615,7 @@ with sync_playwright() as p:
     run_type(browser, mobile=False)
     run_type(browser, mobile=True)
     run_pause(browser)
+    run_arrivals(browser)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

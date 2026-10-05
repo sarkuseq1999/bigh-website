@@ -38,6 +38,56 @@ export function useInkFill(root: RefObject<HTMLElement | null>) {
 }
 
 /**
+ * Authored arrivals (round 10): the element is marked [data-arrive="waiting"] only once the
+ * observer has reported it out of the window, then "in" when enough of it has come into view (a
+ * share of it, or of the window), then "done" after `duration` ms. Its default is therefore the
+ * finished, visible state: if the observer never reports, nothing waits; if it is already in view,
+ * it simply stays. Reduced motion: nothing is marked.
+ */
+export function useArrival(
+  target: RefObject<HTMLElement | null>,
+  motion: boolean,
+  share: number,
+  duration: number,
+) {
+  useEffect(() => {
+    const element = target.current;
+    if (!element || !motion) return;
+    let timer = 0;
+    let first = true;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (first) {
+          first = false;
+          if (entry.isIntersecting) {
+            observer.disconnect();
+            return;
+          }
+          element.dataset.arrive = "waiting";
+          return;
+        }
+        const room = entry.rootBounds?.height ?? window.innerHeight;
+        if (
+          entry.isIntersecting &&
+          (entry.intersectionRatio >= share || entry.intersectionRect.height >= room * 0.35)
+        ) {
+          observer.disconnect();
+          element.dataset.arrive = "in";
+          timer = window.setTimeout(() => (element.dataset.arrive = "done"), duration);
+        }
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: [0, 0.15, 0.3, share] },
+    );
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+      window.clearTimeout(timer);
+      delete element.dataset.arrive;
+    };
+  }, [target, motion, share, duration]);
+}
+
+/**
  * Ink blooms: every painting marked [data-bloom] spreads into the paper through an ink blot's
  * soft edge as it enters the window, in the page's one breath (look-ink.module.css). The
  * opening's paintings are marked "waiting" from the server, so they bloom on arrival instead of

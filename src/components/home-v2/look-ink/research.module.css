@@ -71,6 +71,32 @@
   color: var(--paper);
 }
 
+/* Narrower two-column windows (round 10): the four filters on one line where they fit (at 18px
+   padding they broke three and one at 1280, "Guides" alone on the second row), two and two
+   where they do not, as on a phone. */
+@media (min-width: 900px) and (max-width: 1439px) {
+  .research .filter {
+    padding: 0 16px;
+  }
+}
+
+@media (min-width: 900px) and (max-width: 1339px) {
+  /* (an empty line-wide item after the second breaks the row; half the gap either side of it) */
+  .filters {
+    row-gap: 5px;
+  }
+
+  .filters::after {
+    content: "";
+    flex-basis: 100%;
+    order: 1;
+  }
+
+  .filters > :nth-child(n + 3) {
+    order: 2;
+  }
+}
+
 .count {
   font-size: 15px;
   font-variant-numeric: tabular-nums;

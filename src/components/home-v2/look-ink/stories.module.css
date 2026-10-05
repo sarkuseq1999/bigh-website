@@ -105,6 +105,70 @@
   opacity: 1;
 }
 
+/* Changing the story (round 10): the new still life blooms through the page's ink blot, laid over
+   its own dissolving edges (intersect), as every painting arrives, while the last one dissolves
+   on six tenths of a breath. The first still life arrives with the figure's own bloom. */
+@media (prefers-reduced-motion: no-preference) {
+  .painting[data-turned="true"] .still[data-on="true"] {
+    -webkit-mask-image:
+      url("/images/home-v2/ink/bloom-mask.png"),
+      linear-gradient(to right, transparent 0, #000 6%, #000 84%, transparent 100%),
+      linear-gradient(to bottom, transparent 0, #000 8%, #000 84%, transparent 100%);
+    mask-image:
+      url("/images/home-v2/ink/bloom-mask.png"),
+      linear-gradient(to right, transparent 0, #000 6%, #000 84%, transparent 100%),
+      linear-gradient(to bottom, transparent 0, #000 8%, #000 84%, transparent 100%);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position:
+      50% 62%,
+      0 0,
+      0 0;
+    mask-position:
+      50% 62%,
+      0 0,
+      0 0;
+    -webkit-mask-size:
+      var(--bloom) var(--bloom),
+      100% 100%,
+      100% 100%;
+    mask-size:
+      var(--bloom) var(--bloom),
+      100% 100%,
+      100% 100%;
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+    transition: none;
+    animation:
+      unfold calc(var(--breath) * 1.25) var(--ease) both,
+      sharpen var(--breath) var(--ease) both;
+  }
+
+  .painting[data-turned="true"] .still:not([data-on="true"]) {
+    transition: opacity calc(var(--breath) * 0.6) var(--ease);
+  }
+}
+
+@keyframes unfold {
+  from {
+    --bloom: 0%;
+  }
+
+  to {
+    --bloom: 280%;
+  }
+}
+
+@keyframes sharpen {
+  from {
+    filter: blur(5px);
+  }
+
+  to {
+    filter: blur(0);
+  }
+}
+
 .tag {
   position: absolute;
   left: var(--gutter);
@@ -212,6 +276,19 @@
 @media (min-width: 900px) {
   .stories .choice {
     min-width: min(180px, (100vw - 2 * var(--gutter) - clamp(32px, 6vw, 104px)) * 5 / 33);
+  }
+
+  /* The last name keeps no paper after it (round 10: at 900px its empty right margin reached into
+     the gap, under the brush line); its underline is as long as the others'. */
+  .stories .choice:last-child {
+    min-width: calc(
+      min(180px, (100vw - 2 * var(--gutter) - clamp(32px, 6vw, 104px)) * 5 / 33) - 28px
+    );
+    padding-right: 0;
+  }
+
+  .stories .choice:last-child::before {
+    right: 0;
   }
 }
 

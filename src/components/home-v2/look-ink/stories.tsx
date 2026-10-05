@@ -19,8 +19,16 @@ export function Stories() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
   const [index, setIndex] = useState(0);
+  // Once a reader changes the story, each new still life blooms through the ink blot (round 10);
+  // the first one arrives with the figure's own bloom.
+  const [turned, setTurned] = useState(false);
   const story = stories[index];
-  const go = (step: number) => setIndex((index + step + stories.length) % stories.length);
+  const choose = (next: number) => {
+    if (next === index) return;
+    setTurned(true);
+    setIndex(next);
+  };
+  const go = (step: number) => choose((index + step + stories.length) % stories.length);
 
   return (
     <section
@@ -31,7 +39,12 @@ export function Stories() {
     >
       <div className={`${base.wrap} ${styles.inner}`}>
         <div className={styles.spread}>
-          <figure className={styles.painting} data-brush="story-painting" data-bloom="">
+          <figure
+            className={styles.painting}
+            data-brush="story-painting"
+            data-bloom=""
+            data-turned={turned}
+          >
             {stories.map((item, i) => (
               <Image
                 key={item.id}
@@ -96,7 +109,7 @@ export function Stories() {
                 type="button"
                 className={styles.choice}
                 aria-pressed={index === i}
-                onClick={() => setIndex(i)}
+                onClick={() => choose(i)}
               >
                 <span className={styles.choiceName}>{item.name}</span>
                 <span className={styles.choiceTopic}>{copy(item.topic)}</span>

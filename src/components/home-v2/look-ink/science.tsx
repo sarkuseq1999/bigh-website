@@ -48,10 +48,41 @@ function useScrollStory() {
   return story;
 }
 
+/** Where a topic would not fit the room under the pinned index (round 10: a narrow window such
+ *  as 1024x768), the block is the tabbed one instead of a story whose index scrolls away. The
+ *  story measures itself and gives way; it is tried again when the window's width changes or it
+ *  grows tall enough that the topic could fit (not when a tablet's toolbar slides in or out). */
+type Shortfall = { width: number; height: number; need: number };
+
+function useStoryFits(wanted: boolean) {
+  const [short, setShort] = useState<Shortfall | null>(null);
+  useEffect(() => {
+    if (!wanted || !short) return;
+    // (once the window has stopped changing, so a drag does not flip the block back and forth)
+    let timer = 0;
+    const retry = () => {
+      window.clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        if (window.innerWidth !== short.width || window.innerHeight >= short.height + short.need) {
+          setShort(null);
+        }
+      }, 300);
+    };
+    window.addEventListener("resize", retry);
+    return () => {
+      window.removeEventListener("resize", retry);
+      window.clearTimeout(timer);
+    };
+  }, [wanted, short]);
+  return { fits: !short, giveWay: setShort };
+}
+
 export function Science() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
-  const story = useScrollStory();
+  const wanted = useScrollStory();
+  const { fits, giveWay } = useStoryFits(wanted);
+  const story = wanted && fits;
   const [topic, setTopic] = useState(0);
   const [age, setAge] = useState(45);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -86,6 +117,12 @@ export function Science() {
     if (!story || !root || !stage || !bar) return;
     let line = 0;
     let frame = 0;
+    /** The story gives way to the tabs only on a measure made with the page's own fonts (the
+     *  first one once they have loaded), and afterwards only when the window's width changes (a
+     *  height change keeps the story, its index static). */
+    let judging = false;
+    let judged = false;
+    const width = window.innerWidth;
     const follow = () => {
       frame = 0;
       if (gliding.current) return;
@@ -119,8 +156,14 @@ export function Science() {
       root.style.setProperty("--last", `${stage.offsetHeight - bar.offsetHeight}px`);
       root.style.setProperty("--fade", `${landing.current + LEAD - 6}px`);
       // A topic taller than the room under the index could only be read by passing under it:
-      // there the index stays put and nothing dissolves (science.module.css).
-      root.dataset.cramped = String(tallest > view - landing.current - LEAD);
+      // there the block gives way to the tabs. (If only the window's height has changed since,
+      // the index stays where it is instead and nothing dissolves: science.module.css.)
+      const need = tallest - (view - landing.current - LEAD);
+      if (need > 0 && (judging || (judged && window.innerWidth !== width))) {
+        giveWay({ width: window.innerWidth, height: view, need });
+        return;
+      }
+      root.dataset.cramped = String(need > 0);
       follow();
     };
     const onScroll = () => {
@@ -133,7 +176,15 @@ export function Science() {
     window.addEventListener("scroll", onScroll, { passive: true });
     measure();
     let live = true;
-    document.fonts?.ready.then(() => live && measure());
+    const settle = () => {
+      if (!live) return;
+      judging = true;
+      measure();
+      judging = false;
+      judged = true;
+    };
+    if (document.fonts) document.fonts.ready.then(settle);
+    else settle();
     return () => {
       live = false;
       observer.disconnect();
@@ -144,7 +195,7 @@ export function Science() {
       for (const name of ["--pin", "--area", "--last", "--fade"]) root.style.removeProperty(name);
       delete root.dataset.cramped;
     };
-  }, [story]);
+  }, [story, giveWay]);
 
   /** Glide the page until topic i has arrived under the index (the topic is chosen at once). */
   const go = useCallback((i: number) => {

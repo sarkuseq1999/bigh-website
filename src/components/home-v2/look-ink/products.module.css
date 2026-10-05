@@ -151,7 +151,14 @@
 }
 
 /* The five photographs, stacked: the shown one comes in over the last (0.5 s) while the last
-   one fades out under it. */
+   one fades out under it. They stand in one layer over the pool, which rises on the arrival. */
+.lift {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: block;
+}
+
 .big {
   position: absolute;
   inset: 0;
@@ -372,6 +379,69 @@
 
 .pick[aria-pressed="true"] .name::after {
   scale: 1 1;
+}
+
+/* The arrival (round 10; products.tsx marks it): until the stage comes into view the big bottle
+   stands 10px low, its pool a pale wash and its contact shadow faint; then, in one breath, the
+   photograph rises into its place on the ground as the pool gathers under it and the contact
+   shadow darkens where its base meets the paper. The picker's five follow as their row comes
+   into view, rising 10px out of a paler ink, 70ms apart. The default is the finished state, so
+   nothing can be left waiting. */
+@media (prefers-reduced-motion: no-preference) {
+  .show[data-arrive="waiting"] .lift {
+    translate: 0 10px;
+  }
+
+  .show[data-arrive="waiting"] .pool {
+    opacity: 0.5;
+    scale: 1;
+    animation: none;
+  }
+
+  .show[data-arrive="waiting"] .contact {
+    opacity: 0.35;
+  }
+
+  .show[data-arrive="in"] .lift {
+    animation: rise var(--breath) var(--ease) both;
+  }
+
+  .show[data-arrive="in"] .pool {
+    animation: gather var(--breath) var(--ease) both;
+  }
+
+  .show[data-arrive="in"] .contact {
+    animation: land var(--breath) var(--ease) both;
+  }
+
+  .picker[data-arrive="waiting"] .mini {
+    translate: 0 10px;
+    opacity: 0.4;
+  }
+
+  .picker[data-arrive="in"] .mini {
+    animation: rise-faint var(--breath) var(--ease) both;
+    animation-delay: calc(120ms + var(--i, 0) * 70ms);
+  }
+}
+
+@keyframes rise {
+  from {
+    translate: 0 10px;
+  }
+}
+
+@keyframes land {
+  from {
+    opacity: 0.35;
+  }
+}
+
+@keyframes rise-faint {
+  from {
+    translate: 0 10px;
+    opacity: 0.4;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

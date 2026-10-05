@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { useState, type FocusEvent, type ReactNode } from "react";
+import { useRef, useState, type CSSProperties, type FocusEvent, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { Sentences } from "../chrome";
@@ -10,6 +10,7 @@ import { products, productsIntro, type HomeProduct } from "../content";
 import { useHomeDialogs } from "../dialogs";
 import { contactShadow, shadow } from "./assets";
 import base from "./look-ink.module.css";
+import { useArrival, useMotionOk } from "./motion";
 import styles from "./products.module.css";
 
 // "Find your starting point." A showroom, not a shelf: the chosen bottle (the approved
@@ -21,9 +22,19 @@ import styles from "./products.module.css";
 // reaching it with the keyboard) previews it on the stage; choosing it (click, tap, Enter) keeps
 // it. The big bottle and the Discover button go to the shown product's page (ProductAction), so
 // every product page stays one click away.
+//
+// Round 10, the arrival: as the stage comes into view the big bottle rises 10px onto its ground
+// while its ink pool gathers (one breath), and as the picker comes into view its five bottles
+// follow, 70ms apart (useArrival: the finished state is the default, so nothing can be left
+// waiting). Choosing another product keeps the cross-fade and the pool gathering again.
 export function Products() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
+  const motion = useMotionOk();
+  const stage = useRef<HTMLDivElement>(null);
+  const row = useRef<HTMLDivElement>(null);
+  useArrival(stage, motion, 0.45, 2700);
+  useArrival(row, motion, 0.3, 3100);
   const [chosen, setChosen] = useState(0);
   const [preview, setPreview] = useState<number | null>(null);
   const shown = preview ?? chosen;
@@ -58,7 +69,7 @@ export function Products() {
           </div>
         </header>
 
-        <div className={styles.show} data-brush="stage">
+        <div ref={stage} className={styles.show} data-brush="stage">
           {/* The brush line comes down here, between the bottle and its words (brush-route.ts),
               and turns under the bottle as its ground. */}
           <span className={styles.spine} aria-hidden="true" data-brush="product-spine" />
@@ -85,23 +96,27 @@ export function Products() {
               height={contactShadow.height}
               sizes="(max-width: 720px) 40vw, 280px"
             />
-            {products.map((item, i) => (
-              <Image
-                key={item.name}
-                className={styles.big}
-                data-shown={i === shown}
-                src={item.image}
-                alt={i === shown ? copy("{name} bottle", { name: item.name }) : ""}
-                width={item.size.width}
-                height={item.size.height}
-                sizes="(max-width: 720px) 70vw, (max-width: 899px) 46vw, 490px"
-                loading="eager"
-              />
-            ))}
+            {/* The five photographs rise together on the stage's arrival. */}
+            <span className={styles.lift}>
+              {products.map((item, i) => (
+                <Image
+                  key={item.name}
+                  className={styles.big}
+                  data-shown={i === shown}
+                  src={item.image}
+                  alt={i === shown ? copy("{name} bottle", { name: item.name }) : ""}
+                  width={item.size.width}
+                  height={item.size.height}
+                  sizes="(max-width: 720px) 70vw, (max-width: 899px) 46vw, 490px"
+                  loading="eager"
+                />
+              ))}
+            </span>
           </ProductAction>
         </div>
 
         <div
+          ref={row}
           className={styles.picker}
           role="group"
           aria-label={copy("BiGH products")}
@@ -117,6 +132,7 @@ export function Products() {
               aria-pressed={chosen === i}
               aria-controls="ink-product-panel"
               data-shown={shown === i}
+              style={{ "--i": i } as CSSProperties}
               onMouseEnter={() => setPreview(i)}
               onFocus={() => setPreview(i)}
               onClick={() => setChosen(i)}

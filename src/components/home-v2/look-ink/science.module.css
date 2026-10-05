@@ -267,6 +267,20 @@
   }
 }
 
+/* Narrow two-column windows (round 10): the three topics on one line, spread across the words'
+   column (at 21px with the 30px gap "Aging cells" broke onto a line of its own and the index
+   grew to two rows). */
+@media (min-width: 900px) and (max-width: 1179px) {
+  .tabs {
+    justify-content: space-between;
+    gap: 0 12px;
+  }
+
+  .science .tab {
+    font-size: clamp(17px, 1.98vw, 21px);
+  }
+}
+
 /* The scroll story (round 7): 900px and wider, with motion (science.tsx turns it on and measures
    it). The painting is pinned centred in the window under the header (--pin) and the index is
    pinned level with its top; each topic stands under the index with the next waiting just below

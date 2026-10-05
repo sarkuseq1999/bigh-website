@@ -178,7 +178,13 @@ const onward: Waypoint[] = [
   gap("story-painting", "story-words", 0.38, -11),
   gap("story-painting", "story-words", 0.8, -5),
   gap("story-painting", "story-words", 1, -9),
-  // (where a narrower window brings the story names into the gap, it gives way just enough)
+  // (where a narrower window brings the story names into the gap, it gives way just enough, from
+  // the names' top edge on)
+  {
+    ...gap("story-painting", "story-words", 0, -9),
+    level: "story-choices",
+    clear: ["story-choices", 24],
+  },
   { ...gap("story-painting", "story-words", 1, -9, 120), clear: ["story-choices", 36] },
   fresh(gap("science-copy", "science-rail", 0, -2, -42)),
   gap("science-copy", "science-rail", 0.24, 3),
