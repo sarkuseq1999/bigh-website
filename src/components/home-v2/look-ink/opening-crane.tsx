@@ -5,10 +5,10 @@ import { useEffect, useRef, useState } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { crane, craneFlight } from "./assets";
 import { useMist } from "./mist";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./opening.module.css";
 
 // Opening 2, "the crane" (Mo's approved comp, October 2, 2026): a full-width ink landscape of

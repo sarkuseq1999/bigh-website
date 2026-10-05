@@ -6,9 +6,9 @@ import { useState } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { stories, storiesIntro } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { storyPaintings } from "./assets";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./stories.module.css";
 
 // "In their own words." Each fictional sample pairs a quiet ink still life of its everyday moment

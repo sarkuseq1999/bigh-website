@@ -4,9 +4,9 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useCopy } from "@/i18n/use-copy";
 import { facts, scientists } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { halo, inkstone, liu } from "./assets";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./scientists.module.css";
 
 /** A fact's number is set large and any words around it small ("20+ years", "20년 이상", "Hơn 20

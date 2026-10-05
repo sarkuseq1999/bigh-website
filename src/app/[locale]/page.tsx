@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { ProductPagesProvider } from "@/components/home/product-action";
-import { HomeDialogs } from "@/components/home-v2/dialogs";
+import { HomeDialogs } from "@/components/ink/dialogs";
 import { LookInk } from "@/components/home-v2/look-ink/look-ink";
 import { productPageLinks } from "@/components/product/catalog";
 import { redirect } from "@/i18n/navigation";

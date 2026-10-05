@@ -5,9 +5,9 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { gold, purposeCranes, purposePainting } from "./assets";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
 
 // The close, a bookend to the crane: an old pine over a sea of mist, the gold-leaf sun low on the

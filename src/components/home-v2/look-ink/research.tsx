@@ -5,7 +5,7 @@ import { type CSSProperties, useState } from "react";
 import { flushSync } from "react-dom";
 import { useCopy } from "@/i18n/use-copy";
 import { research, researchItems, researchTypes } from "../content";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./research.module.css";
 
 // "Curiosity, with references." The brush line becomes the index's spine: it runs down the

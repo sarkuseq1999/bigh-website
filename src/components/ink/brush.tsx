@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { route, type Layout, type Waypoint } from "./brush-route";
+import { route, type Layout, type Waypoint } from "@/components/home-v2/look-ink/brush-route";
 import styles from "./brush.module.css";
 
 // The page's signature: one continuous ink brush line that draws itself down the whole page as

@@ -5,9 +5,9 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "re
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { gold, mito } from "./assets";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
 
 // "Make sense of the science." Three topics beside the SAME ink mitochondrion: close in on its two

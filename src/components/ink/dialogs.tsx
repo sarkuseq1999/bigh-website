@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ArrowUpRight, Plus, X } from "lucide-react";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useCopy } from "@/i18n/use-copy";
-import { products, scienceImages } from "./content";
+import { products, scienceImages } from "@/components/home-v2/content";
 import { lockPageScroll } from "./lock-scroll";
 import styles from "./dialogs.module.css";
 

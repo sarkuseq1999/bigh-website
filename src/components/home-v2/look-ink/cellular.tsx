@@ -6,7 +6,7 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { cellular } from "../content";
 import { gold, mito } from "./assets";
-import base from "./look-ink.module.css";
+import base from "@/components/ink/ink.module.css";
 import styles from "./cellular.module.css";
 
 // "Tiny power plants." The opening dives from the landscape into the cell: the words at the left

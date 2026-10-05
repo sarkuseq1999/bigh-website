@@ -7,7 +7,7 @@ import { HeaderUtilities } from "@/components/home/header-utilities";
 import { ProductAction } from "@/components/home/product-action";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { footer, products } from "./content";
+import { footer, products } from "@/components/home-v2/content";
 import { useHomeDialogs } from "./dialogs";
 import { lockPageScroll } from "./lock-scroll";
 import styles from "./chrome.module.css";

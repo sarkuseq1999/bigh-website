@@ -5,12 +5,12 @@ import { ArrowRight } from "lucide-react";
 import { useRef, useState, type CSSProperties, type FocusEvent, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
-import { Sentences } from "../chrome";
+import { Sentences } from "@/components/ink/chrome";
 import { products, productsIntro, type HomeProduct } from "../content";
-import { useHomeDialogs } from "../dialogs";
+import { useHomeDialogs } from "@/components/ink/dialogs";
 import { contactShadow, shadow } from "./assets";
-import base from "./look-ink.module.css";
-import { useArrival, useMotionOk } from "./motion";
+import base from "@/components/ink/ink.module.css";
+import { useArrival, useMotionOk } from "@/components/ink/motion";
 import styles from "./products.module.css";
 
 // "Find your starting point." A showroom, not a shelf: the chosen bottle (the approved
