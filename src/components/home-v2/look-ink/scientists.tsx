@@ -4,7 +4,7 @@ import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useCopy } from "@/i18n/use-copy";
 import { facts, scientists } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { halo, inkstone, liu } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./scientists.module.css";
@@ -34,7 +34,7 @@ function Figure({ value }: { value: string }) {
 // brush line passing it in the margin.
 export function Scientists() {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
 
   return (
     <section

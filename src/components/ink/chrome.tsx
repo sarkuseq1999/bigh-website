@@ -8,13 +8,14 @@ import { ProductAction } from "@/components/home/product-action";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { footer, products } from "@/components/home-v2/content";
-import { useHomeDialogs } from "./dialogs";
+import { useSiteDialogs } from "./dialogs";
 import { lockPageScroll } from "./lock-scroll";
 import styles from "./chrome.module.css";
 
-// Header and footer for the redesigned homepage. Same shape, sizes and links as the About and
-// Science pages' chrome (large navigation for older readers, Design Vault #045), so the whole site
-// reads as one. A look can start the header transparent over a full-bleed opening (`overlay`) and
+// Header and footer for every ink page (the homepage first, October 2; shared October 5, 2026).
+// Same shape, sizes and links as the About and Science pages' chrome (large navigation for older
+// readers, Design Vault #045), so the whole site reads as one. The page's own link carries
+// aria-current. A look can start the header transparent over a full-bleed opening (`overlay`) and
 // pick light or dark ink for that state (`tone`); it turns solid paper once the page scrolls.
 // On a narrow window the links are a menu: a full sheet of the page's paper under the bar. Its
 // button comes before it in the page, so Tab goes from the button into the links; Escape closes
@@ -45,11 +46,17 @@ function Logo({ footer: isFooter = false, light = false }: { footer?: boolean; l
   );
 }
 
-export function HomeHeader({
+/** Which page the header is on: its link is marked as the current page. */
+export type Current = "home" | "products" | "science" | "about";
+
+export function SiteHeader({
+  current,
   overlay = false,
   tone = "light",
   solidAfter = 80,
 }: {
+  /** The page this header is on. */
+  current: Current;
   /** Start transparent over the opening picture. */
   overlay?: boolean;
   /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
@@ -58,7 +65,7 @@ export function HomeHeader({
   solidAfter?: number;
 }) {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const [open, setOpen] = useState(false);
   const [solid, setSolid] = useState(!overlay);
   const menuButton = useRef<HTMLButtonElement>(null);
@@ -136,16 +143,34 @@ export function HomeHeader({
           // The open menu scrolls by itself; Lenis leaves the wheel alone over it.
           data-lenis-prevent={open ? "" : undefined}
         >
-          <Link href="/" aria-current="page" onClick={close}>
+          <Link href="/" aria-current={current === "home" ? "page" : undefined} onClick={close}>
             {copy("Home")}
           </Link>
-          <a href="#products" onClick={close}>
-            {copy("Products")}
-          </a>
-          <Link href="/science" onClick={close}>
+          {current === "home" ? (
+            <a href="#products" onClick={close}>
+              {copy("Products")}
+            </a>
+          ) : (
+            <Link
+              href="/#products"
+              aria-current={current === "products" ? "page" : undefined}
+              onClick={close}
+            >
+              {copy("Products")}
+            </Link>
+          )}
+          <Link
+            href="/science"
+            aria-current={current === "science" ? "page" : undefined}
+            onClick={close}
+          >
             {copy("Science")}
           </Link>
-          <Link href="/about" onClick={close}>
+          <Link
+            href="/about"
+            aria-current={current === "about" ? "page" : undefined}
+            onClick={close}
+          >
             {copy("About")}
           </Link>
           <button
@@ -186,14 +211,14 @@ export function Sentences({ text }: { text: string }) {
   );
 }
 
-export function HomeFooter({
+export function SiteFooter({
   closing,
 }: {
   /** What the look closes on, set beside the promise (the Ink look: its crane at rest). */
   closing?: ReactNode;
 } = {}) {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const message = useRef<HTMLParagraphElement>(null);
   const hasClosing = Boolean(closing);
 

@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "re
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { gold, mito } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
@@ -79,7 +79,7 @@ function useStoryFits(wanted: boolean) {
 
 export function Science() {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const wanted = useScrollStory();
   const { fits, giveWay } = useStoryFits(wanted);
   const story = wanted && fits;

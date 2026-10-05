@@ -9,6 +9,7 @@ usage:
   python -X utf8 scripts/qa/home_snapshot.py capture <base-url> <name>
   python -X utf8 scripts/qa/home_snapshot.py compare <base-url> <name> [against=baseline]
   python -X utf8 scripts/qa/home_snapshot.py layout <base-url> -
+  python -X utf8 scripts/qa/home_snapshot.py nav <base-url> -
 
 A run empties its own folder first, so compare needs a new name (never the set it compares with), and
 a folder whose name starts with "baseline" that already holds shots is only replaced with --force.
@@ -105,6 +106,28 @@ def layout_check(base: str) -> bool:
     return ok
 
 
+def nav_check(base: str) -> bool:
+    """One header for every ink page: the homepage marks Home as the current page and keeps its
+    in-page Products link; the root carries data-page."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(viewport={"width": 1440, "height": 900})
+        page.goto(f"{base}/", wait_until="networkidle", timeout=120000)
+        state = page.evaluate(
+            """() => {
+              const nav = document.querySelector('#home-navigation');
+              const current = [...nav.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim());
+              const products = [...nav.querySelectorAll('a')].find(a => a.textContent.trim() === 'Products');
+              return { current, products: products?.getAttribute('href'),
+                       page: document.querySelector('[data-look="ink"]')?.dataset.page ?? null };
+            }"""
+        )
+        browser.close()
+    ok = state == {"current": ["Home"], "products": "#products", "page": "home"}
+    print(f"{'ok  ' if ok else 'FAIL'} nav: {state}")
+    return ok
+
+
 def refuse(message: str) -> None:
     print(f"ERROR {message}")
     sys.exit(2)
@@ -113,7 +136,7 @@ def refuse(message: str) -> None:
 if __name__ == "__main__":
     force = "--force" in sys.argv[1:]
     args = [a for a in sys.argv[1:] if a != "--force"]
-    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare", "layout"):
+    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare", "layout", "nav"):
         refuse(__doc__)
     mode, base, name = args[0], args[1], args[2]
     against = args[3] if len(args) > 3 else "baseline"
@@ -124,6 +147,8 @@ if __name__ == "__main__":
         refuse(f"'{name}' already holds a baseline and this would replace it: add --force to do that on purpose")
     if mode == "layout":
         sys.exit(0 if layout_check(base) else 1)
+    if mode == "nav":
+        sys.exit(0 if nav_check(base) else 1)
     capture(base, name)
     if mode == "compare":
         passed = compare(name, against)

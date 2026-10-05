@@ -5,7 +5,7 @@ import { ArrowDown, ArrowRight } from "lucide-react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { gold, purposeCranes, purposePainting } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
@@ -16,7 +16,7 @@ import styles from "./purpose.module.css";
 // painting. Below it, on paper: why we do it and the three standards we keep.
 export function Purpose() {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
 
   return (
     <section

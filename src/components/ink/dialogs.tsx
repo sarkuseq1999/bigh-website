@@ -27,9 +27,9 @@ type Dialogs = {
 
 const DialogContext = createContext<Dialogs | null>(null);
 
-export function useHomeDialogs(): Dialogs {
+export function useSiteDialogs(): Dialogs {
   const value = useContext(DialogContext);
-  if (!value) throw new Error("useHomeDialogs needs <HomeDialogs>");
+  if (!value) throw new Error("useSiteDialogs needs <SiteDialogs>");
   return value;
 }
 
@@ -97,7 +97,7 @@ const explainers = [
   },
 ];
 
-export function HomeDialogs({
+export function SiteDialogs({
   children,
   articleImages,
 }: {

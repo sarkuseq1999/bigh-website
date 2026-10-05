@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { crane, craneFlight } from "./assets";
 import { useMist } from "./mist";
 import base from "@/components/ink/ink.module.css";
@@ -19,7 +19,7 @@ import styles from "./opening.module.css";
 // every few breaths, beats its wings once (the same painting, animated).
 export function OpeningCrane({ motion }: { motion: boolean }) {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const art = useRef<HTMLDivElement>(null);
   const landscape = useRef<HTMLImageElement>(null);
   const mist = useRef<HTMLCanvasElement>(null);

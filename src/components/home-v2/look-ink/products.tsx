@@ -7,7 +7,7 @@ import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { Sentences } from "@/components/ink/chrome";
 import { products, productsIntro, type HomeProduct } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { contactShadow, shadow } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import { useArrival, useMotionOk } from "@/components/ink/motion";
@@ -29,7 +29,7 @@ import styles from "./products.module.css";
 // waiting). Choosing another product keeps the cross-fade and the pool gathering again.
 export function Products() {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const motion = useMotionOk();
   const stage = useRef<HTMLDivElement>(null);
   const row = useRef<HTMLDivElement>(null);

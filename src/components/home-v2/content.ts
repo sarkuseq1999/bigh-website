@@ -64,7 +64,7 @@ export const productsIntro = {
 };
 
 // The five products in the lineup order, with the words Mo accepted (September 21–28).
-// `index` matches the product dialog order in HomeDialogs.
+// `index` matches the product dialog order in SiteDialogs.
 export const products = [
   {
     index: 0,

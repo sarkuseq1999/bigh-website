@@ -6,7 +6,7 @@ import { useState } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { stories, storiesIntro } from "../content";
-import { useHomeDialogs } from "@/components/ink/dialogs";
+import { useSiteDialogs } from "@/components/ink/dialogs";
 import { storyPaintings } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./stories.module.css";
@@ -17,7 +17,7 @@ import styles from "./stories.module.css";
 // choose a story.
 export function Stories() {
   const copy = useCopy();
-  const dialogs = useHomeDialogs();
+  const dialogs = useSiteDialogs();
   const [index, setIndex] = useState(0);
   // Once a reader changes the story, each new still life blooms through the ink blot (round 10);
   // the first one arrives with the figure's own bloom.

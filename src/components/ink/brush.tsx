@@ -520,7 +520,10 @@ export function BrushLine({
   route,
 }: {
   motion: boolean;
-  /** The page's route for each layout (the page's own [data-brush] anchors). */
+  /**
+   * The page's route for each layout (the page's own [data-brush] anchors). Pass a stable
+   * reference (a module-level function): the layer is rebuilt whenever the route's identity changes.
+   */
   route: (layout: Layout) => Waypoint[];
 }) {
   const layer = useRef<HTMLDivElement>(null);

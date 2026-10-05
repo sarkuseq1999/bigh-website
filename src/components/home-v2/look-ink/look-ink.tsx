@@ -1,14 +1,8 @@
 "use client";
 
-import { useRef } from "react";
-import { useSmoothScroll } from "@/components/science/smooth-scroll";
-import { useCopy } from "@/i18n/use-copy";
-import { HomeFooter, HomeHeader } from "@/components/ink/chrome";
-import { BrushLine } from "@/components/ink/brush";
+import { InkPage } from "@/components/ink/ink-page";
 import { route } from "./brush-route";
 import { Cellular } from "./cellular";
-import { ClosingCrane } from "@/components/ink/closing-crane";
-import { useBloom, useInkFill, useMotionOk } from "@/components/ink/motion";
 import { OpeningCrane } from "./opening-crane";
 import { Products } from "./products";
 import { Purpose } from "./purpose";
@@ -16,7 +10,6 @@ import { Research } from "./research";
 import { Science } from "./science";
 import { Scientists } from "./scientists";
 import { Stories } from "./stories";
-import styles from "@/components/ink/ink.module.css";
 
 // The homepage, "Ink & Gold" (round 4, October 2, 2026; Mo picked the crane): one ink-painting
 // world on warm rice paper with a single gold leaf for energy. The crane of long life over misty
@@ -29,41 +22,20 @@ import styles from "@/components/ink/ink.module.css";
 // Keyboard: the first Tab shows "Skip to content" (as on the About, Science and product pages),
 // which puts focus at the start of the page's words, past the header's links.
 export function LookInk() {
-  const copy = useCopy();
-  const root = useRef<HTMLDivElement>(null);
-  const main = useRef<HTMLElement>(null);
-  const motion = useMotionOk();
-  useSmoothScroll(motion);
-  useBloom(root, motion);
-  useInkFill(root);
-
   return (
-    <div ref={root} className={styles.look} data-look="ink">
-      <a
-        href="#main"
-        className={styles.skip}
-        onClick={(event) => {
-          // Focus moves by hand: the page's smooth scrolling takes over links to #anchors.
-          event.preventDefault();
-          window.scrollTo(0, 0);
-          main.current?.focus({ preventScroll: true });
-        }}
-      >
-        {copy("Skip to content")}
-      </a>
-      <HomeHeader overlay solidAfter={48} />
-      <main ref={main} id="main" tabIndex={-1}>
-        <OpeningCrane motion={motion} />
-        <Cellular />
-        <Scientists />
-        <Products />
-        <Stories />
-        <Science />
-        <Research />
-        <Purpose />
-      </main>
-      <HomeFooter closing={<ClosingCrane />} />
-      <BrushLine motion={motion} route={route} />
-    </div>
+    <InkPage current="home" route={route}>
+      {(motion) => (
+        <>
+          <OpeningCrane motion={motion} />
+          <Cellular />
+          <Scientists />
+          <Products />
+          <Stories />
+          <Science />
+          <Research />
+          <Purpose />
+        </>
+      )}
+    </InkPage>
   );
 }

@@ -1,6 +1,6 @@
 import { setRequestLocale } from "next-intl/server";
 import { ProductPagesProvider } from "@/components/home/product-action";
-import { HomeDialogs } from "@/components/ink/dialogs";
+import { SiteDialogs } from "@/components/ink/dialogs";
 import { LookInk } from "@/components/home-v2/look-ink/look-ink";
 import { productPageLinks } from "@/components/product/catalog";
 import { redirect } from "@/i18n/navigation";
@@ -15,9 +15,9 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
 
   return (
     <ProductPagesProvider pages={productPageLinks()}>
-      <HomeDialogs>
+      <SiteDialogs>
         <LookInk />
-      </HomeDialogs>
+      </SiteDialogs>
     </ProductPagesProvider>
   );
 }
