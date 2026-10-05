@@ -61,9 +61,10 @@ Mockup: `about.jpg`. The page keeps its sections and words.
   stays: B, i, G and H in sumi ink, the other letters in ink grey (the mockup got this partly wrong;
   build it right). Beside it the ink mitochondrion (the homepage's cell painting) in place of the
   glass render.
-- The glass cell's charge becomes gold leaf: as the stats arrive on scroll, light crosses the gold
-  folds and the leaf comes up (light-on-leaf, held in the cell's gold mask). The count-up stats stay,
-  set as large thin numerals on hairlines.
+- The glass cell's charge becomes gold leaf: the cell blooms with its leaf drained of colour, and
+  the leaf comes up over one and a half breaths once the bloom is done (the page opening is the
+  charge). Light crosses the leaf as on the homepage. The count-up figures stay, as large thin
+  numerals on hairlines.
 - The brush line leaves the cell and runs down the left; stations: Our purpose, Our scientific
   roots, Our experience, Our promise.
 - Our scientific roots: Dr. Liu's real photo on the paper mat with the ink halo (the photo mount

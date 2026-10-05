@@ -234,6 +234,13 @@ def line_and_focus(browser):
     charge = page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity")
     check("reduced motion: gold leaf fully up", float(charge) == 0, charge)
     context.close()
+    # With motion: the cell blooms with its leaf drained, then the leaf comes up.
+    context, page, response, errors, failed = open_page(browser, 1440, 900)
+    early = float(page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity"))
+    page.wait_for_timeout(9000)
+    late = float(page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity"))
+    check("motion: the gold leaf comes up after the bloom", early > 0.5 and late < 0.05, [early, late])
+    context.close()
     # Deep link lands below the header.
     context, page, response, errors, failed = open_page(browser, 1440, 900, path="/about#promise")
     page.wait_for_timeout(1500)
