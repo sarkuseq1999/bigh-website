@@ -8,6 +8,9 @@ compares them with a saved set.
 usage:
   python -X utf8 scripts/qa/home_snapshot.py capture <base-url> <name>
   python -X utf8 scripts/qa/home_snapshot.py compare <base-url> <name> [against=baseline]
+
+A run empties its own folder first, so compare needs a new name (never the set it compares with), and
+a folder whose name starts with "baseline" that already holds shots is only replaced with --force.
 """
 
 import sys
@@ -62,6 +65,9 @@ def compare(name: str, against: str) -> bool:
     new, old = OUT / name, OUT / against
     ok = True
     names = sorted({f.name for f in old.glob("*.png")} | {f.name for f in new.glob("*.png")})
+    if not names:
+        print(f"FAIL no shots found in {against} or {name}: nothing was compared")
+        return False
     for file in names:
         a, b = old / file, new / file
         if not a.exists() or not b.exists():
@@ -81,11 +87,25 @@ def compare(name: str, against: str) -> bool:
     return ok
 
 
+def refuse(message: str) -> None:
+    print(f"ERROR {message}")
+    sys.exit(2)
+
+
 if __name__ == "__main__":
-    mode, base, name = sys.argv[1], sys.argv[2], sys.argv[3]
+    force = "--force" in sys.argv[1:]
+    args = [a for a in sys.argv[1:] if a != "--force"]
+    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare"):
+        refuse(__doc__)
+    mode, base, name = args[0], args[1], args[2]
+    against = args[3] if len(args) > 3 else "baseline"
+    if mode == "compare" and name == against:
+        # capture() empties its folder first, so this would compare a fresh set with itself.
+        refuse(f"'{name}' and '{against}' are the same set: pick a new name for this run")
+    if name.startswith("baseline") and any((OUT / name).glob("*.png")) and not force:
+        refuse(f"'{name}' already holds a baseline and this would replace it: add --force to do that on purpose")
     capture(base, name)
     if mode == "compare":
-        against = sys.argv[4] if len(sys.argv) > 4 else "baseline"
         passed = compare(name, against)
         print("PASS" if passed else "FAIL")
         sys.exit(0 if passed else 1)
