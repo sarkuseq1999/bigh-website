@@ -44,6 +44,11 @@ type Sample = {
   load: number;
   /** How sharply the line turns here (0 straight, toward 1 a hairpin). */
   turn: number;
+  /** The anchors of the two waypoints this sample lies between (for checks: where it lifts). */
+  from: string;
+  to: string;
+  /** At a reload: how far its one load of ink lasts (0: the usual STROKE_MAX). */
+  reach: number;
 };
 
 const TILE = 1200;
@@ -70,7 +75,16 @@ function smooth(edge0: number, edge1: number, x: number) {
   return t * t * (3 - 2 * t);
 }
 
-type Point = { x: number; y: number; w: number; ink: number; fresh: boolean; load: number };
+type Point = {
+  at: string;
+  x: number;
+  y: number;
+  w: number;
+  ink: number;
+  fresh: boolean;
+  load: number;
+  reach: number;
+};
 
 /** Measure the route's waypoints on the page, relative to the look's root. */
 function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
@@ -99,12 +113,14 @@ function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
     const rows = point.level ? boxOf(point.level) : box;
     if (!rows || rows.height === 0) continue;
     points.push({
+      at: point.at,
       x: x - origin.left,
       y: rows.top - origin.top + rows.height * point.fy + (point.dy ?? 0),
       w: point.w ?? 3,
       ink: point.ink ?? 1,
       fresh: point.fresh ?? false,
       load: point.load ?? 1,
+      reach: point.reach ?? 0,
     });
   }
   return points;
@@ -158,6 +174,9 @@ function sample(points: Point[], scale: number): Sample[] {
         fresh: p1.fresh && k === (i === 1 ? 0 : 1),
         load: p1.load + (p2.load - p1.load) * e,
         turn: 0,
+        from: p1.at,
+        to: p2.at,
+        reach: p1.reach,
       });
     }
   }
@@ -231,7 +250,7 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
     const lifts = end < b - 1;
     const run = samples[end].s - samples[a].s;
     const total = lifts ? Math.max(run, STROKE_LIFT) : Math.max(run, 400);
-    const loads = Math.max(1, Math.ceil(total / STROKE_MAX));
+    const loads = Math.max(1, Math.ceil(total / (samples[a].reach || STROKE_MAX)));
     const length = total / loads;
     for (let i = a; i < b; i++) {
       const p = samples[i];
@@ -268,6 +287,37 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
   }
   // Join the opening's line without a seam: the first page sample overlaps the last classic one.
   if (start > 0) samples[start - 1].w = Math.max(samples[start - 1].w, samples[start].w);
+}
+
+/**
+ * Where the drawn line is off the paper: each run of samples too thin to paint (the painters'
+ * own thresholds), as [the anchor it lifts after, the anchor it lands at, its length along the
+ * path, its top, its bottom] in page pixels. Published on the layer for the checks, so the
+ * route's lifts can be held to a list of designed ones.
+ */
+function lifts(samples: Sample[]) {
+  const out: [string, string, number, number, number][] = [];
+  let a = -1;
+  for (let i = 0; i <= samples.length; i++) {
+    const p = samples[i];
+    const off = !!p && p.w <= (p.classic ? 0.25 : 0.2);
+    if (off && a < 0) a = i;
+    if (!off && a >= 0) {
+      const run = samples.slice(a, i);
+      const ys = run.map((q) => q.y);
+      const [first, last] = [run[0], run[run.length - 1]];
+      const length = Math.round(last.s - first.s);
+      out.push([
+        first.from,
+        last.to,
+        length,
+        Math.round(Math.min(...ys)),
+        Math.round(Math.max(...ys)),
+      ]);
+      a = -1;
+    }
+  }
+  return out;
 }
 
 /**
@@ -505,6 +555,7 @@ export function BrushLine({ motion }: { motion: boolean }) {
       const hero = root.querySelector<HTMLElement>('[data-brush="opening"]');
       const heroBottom = hero ? hero.getBoundingClientRect().bottom - top : 0;
       material(samples, layout === "phone" ? -1 : heroBottom, scale);
+      host.dataset.lifts = JSON.stringify(lifts(samples));
       // Each section label is reached when the brush comes level with it.
       stations = [...root.querySelectorAll<HTMLElement>("[data-station]")].map((element) => {
         const box = element.getBoundingClientRect();

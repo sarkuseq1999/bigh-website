@@ -121,10 +121,18 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     through the ink mask (names and arrows), at once with reduced motion; at 900px the brush line
     keeps clear of the story names; the last screen shows the whole crane at 1280x720 and
     1536x864 too.
-  - the brush line as one gesture (round 9, October 5): it lifts at the end of the ground under
-    the big bottle and lands again under the picker (no ink over the picker or in the margin
-    beside it); it passes the science in the gap between its words and its painting; every
-    station's leader meets the line (1536x1000 and 1280x800, the whole line drawn).
+  - the brush line as one gesture (round 9, October 5): it passes the science in the gap between
+    its words and its painting; every station's leader meets the line (1536x1000 and 1280x800,
+    the whole line drawn). Round 9's lift over the picker was turned round ON PURPOSE (October 5,
+    Mo saw a broken line): the line keeps going, laying one ground under all five picker bottles
+    below their names (20 px or more under the chosen name's underline, never over a bottle or a
+    name), turning in the right margin (40 px or more from the last name) and coming back over the
+    stories' heading (40 px or more above it) into the gap, unbroken from the big bottle's ground
+    to the story gap (1440x900, and run_line at 900, 1024, 1280, 1440, 1536, 1600 and 1920).
+  - the page line's continuity (run_line, October 5): on every two-column width the route the
+    page actually draws (the layer's data-lifts) leaves the paper only at the designed lifts
+    named in DESIGNED_LIFTS; a new lift fails until it is added there on purpose.
+    `--only=line` runs just these checks.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -320,6 +328,154 @@ def ink_in_box(page, x0, y0, x1, y1):
         }""",
         [x0, y0, x1, y1],
     )
+
+
+def ink_joined(page, a, b):
+    """Is there one unbroken run of brush ink from near window point a to near window point b?
+    (The tiles' ink inside the window, flood-filled; a break wider than 2 px parts it.)"""
+    return page.evaluate(
+        """([ax, ay, bx, by]) => {
+          const W = innerWidth, H = innerHeight;
+          const c = document.createElement('canvas'); c.width = W; c.height = H;
+          const ctx = c.getContext('2d');
+          for (const t of document.querySelectorAll('[data-brush-layer] canvas')) {
+            if (!t.width) continue;
+            const r = t.getBoundingClientRect();
+            ctx.drawImage(t, r.left, r.top, r.width, r.height);
+          }
+          const d = ctx.getImageData(0, 0, W, H).data;
+          const ink = new Uint8Array(W * H);
+          for (let i = 0; i < W * H; i++) ink[i] = d[i * 4 + 3] > 40 ? 1 : 0;
+          const near = (x, y) => { let best = -1, bd = 1e9;
+            for (let yy = Math.max(0, Math.round(y) - 14); yy <= Math.min(H - 1, Math.round(y) + 14); yy++)
+              for (let xx = Math.max(0, Math.round(x) - 14); xx <= Math.min(W - 1, Math.round(x) + 14); xx++)
+                if (ink[yy * W + xx]) { const e = (xx - x) ** 2 + (yy - y) ** 2; if (e < bd) { bd = e; best = yy * W + xx; } }
+            return best; };
+          const s = near(ax, ay), e = near(bx, by);
+          if (s < 0 || e < 0) return [false, s < 0 ? 'no ink at the start' : 'no ink at the end'];
+          const seen = new Uint8Array(W * H); const q = [s]; seen[s] = 1;
+          while (q.length) {
+            const i = q.pop(); if (i === e) return [true, 'joined'];
+            const x = i % W, y = (i - x) / W;
+            for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) {
+              const xx = x + dx, yy = y + dy;
+              if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+              const j = yy * W + xx; if (ink[j] && !seen[j]) { seen[j] = 1; q.push(j); }
+            }
+          }
+          return [false, 'broken'];
+        }""",
+        [a[0], a[1], b[0], b[1]],
+    )
+
+
+# The picker and its neighbours, for the brush line: each pick's box, each small bottle (the
+# photograph's middle, where the bottle stands), each name's words, the chosen name's 2px
+# underline, the stories' heading (its words), the big bottle's ground and the story gap.
+PICKER = """(() => {
+  const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const text = (e) => { const g = document.createRange(); g.selectNodeContents(e); return r(g); };
+  const picks = [...document.querySelectorAll('#products [data-brush=bottles] button')];
+  const chosen = picks.find(p => p.getAttribute('aria-pressed') === 'true').querySelector('span:last-child');
+  const c = r(chosen), cx = (c[0] + c[2]) / 2;
+  const stand = r(document.querySelector('#products [data-brush=stage] img[data-shown=true]'));
+  const painting = r(document.querySelector('[data-brush=story-painting]'));
+  const words = r(document.querySelector('[data-brush=story-words]'));
+  return {
+    picker: r(document.querySelector('#products [data-brush=bottles]')),
+    picks: picks.map(r),
+    minis: picks.map(p => { const [l, t, rr, b] = r(p.querySelector('img:last-of-type')); const w = rr - l; return [l + 0.22 * w, t, rr - 0.22 * w, t + 0.96 * (b - t)]; }),
+    names: picks.map(p => text(p.querySelector('span:last-child'))),
+    underline: [cx - 22, c[3] - 2, cx + 22, c[3]],
+    title: text(document.querySelector('#stories-title')),
+    ground: [(stand[0] + stand[2]) / 2, stand[1] + 0.968 * (stand[3] - stand[1])],
+    gap: [(painting[2] + words[0]) / 2 - 8, words[1] + 60],
+  };
+})()"""
+
+
+def line_at_picker(page, tag):
+    """The brush line round the products' picker (the whole line drawn, the picker in the window):
+    one ground under all five below their names, never over a bottle or a name, 20 px or more
+    under the chosen name's underline, a turn in the right margin 40 px or more from the last
+    name, 40 px or more above the stories' heading, and unbroken from the big bottle's ground to
+    the story gap."""
+    width = page.evaluate("innerWidth")
+    g = page.evaluate(PICKER)
+    pl, pt, pr, pb = g["picker"]
+    under = [ink_in_box(page, l, pb + 6, r, pb + 64) for l, _, r, _ in g["picks"]]
+    over = [ink_in_box(page, *box) for box in g["minis"]] + [
+        ink_in_box(page, l - 4, t - 4, r + 4, b + 4) for l, t, r, b in g["names"]
+    ]
+    check(
+        f"{tag}: the brush lays one ground under all five picker bottles, below their names, never over them",
+        all(u > 30 for u in under) and not any(over),
+        f"ground under each {under}, over bottles and names {over}",
+    )
+    ul, ut, ur, ub = g["underline"]
+    near = ink_in_box(page, ul - 12, ut - 30, ur + 12, ub + 20)
+    below = ink_in_box(page, ul - 12, ub + 20, ur + 12, ub + 70)
+    check(
+        f"{tag}: the ground passes under the chosen name 20 px or more clear of its underline",
+        near == 0 and below > 30,
+        f"ink within 20 px of the underline {near}, the ground below it {below}",
+    )
+    nl, nt, nr, nb = g["names"][-1]
+    turn = ink_in_box(page, pr, pb, width, pb + 120)
+    by_name = ink_in_box(page, nl - 40, nt - 40, nr + 40, nb + 40)
+    tl, tt, tr, tb = g["title"]
+    over_title = ink_in_box(page, tl - 4, tt - 40, tr + 4, tb)
+    joined, how = ink_joined(page, g["ground"], g["gap"])
+    check(
+        f"{tag}: unbroken from the big bottle's ground, round the right margin and over the stories' heading (40 px clear) into the gap",
+        joined and turn > 30 and by_name == 0 and over_title == 0,
+        f"{how}, turn in the margin {turn}, within 40 px of the last name {by_name}, within 40 px of the heading {over_title}",
+    )
+
+
+# The brush line's designed lifts on the two-column page: the only places the page line may leave
+# the paper, each as (the anchor it lifts after, the anchor it lands at), as the brush layer
+# publishes them (data-lifts, brush.tsx). The picker's lift (round 9) was taken out on Mo's word
+# (October 5): a new lift must be added here on purpose.
+DESIGNED_LIFTS = {
+    ("opening-flight", "opening-stage"): "the opening's own lift over the far ridges",
+    ("purpose-painting", "standard-0"): "the lift into the closing painting's sky, on to the first standard's rule",
+    ("standard-0", "standard-1"): "the travel between the standards' rules",
+    ("standard-1", "standard-2"): "the travel between the standards' rules",
+    ("standard-2", "footer-promise"): "the travel to the footer's closing stroke",
+}
+LIFT_MIN = 40  # px of path off the paper; anything shorter is a taper, not a lift
+LINE_SIZES = [(900, 1000), (1024, 1000), (1280, 800), (1440, 900), (1536, 1000), (1600, 1000), (1920, 1080)]
+
+
+def run_line(browser):
+    """The page line's continuity on every two-column width (the guard round 9's picker gap slipped
+    past): it leaves the paper only at the designed lifts above, read from the route the page
+    actually draws; and round the picker it runs on unbroken (the whole line drawn: reduced motion)."""
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False)
+    for w, h in LINE_SIZES:
+        page.set_viewport_size({"width": w, "height": h})
+        page.wait_for_timeout(900)
+        lifts = page.evaluate("JSON.parse(document.querySelector('[data-brush-layer]')?.dataset.lifts || 'null')")
+        real = [l for l in (lifts or []) if l[2] > LIFT_MIN]
+        stray = [f"{a} -> {b} ({n} px at y {y0}-{y1})" for a, b, n, y0, y1 in real if (a, b) not in DESIGNED_LIFTS]
+        seen = {(a, b) for a, b, *_ in real}
+        read = lifts is not None and ("opening-flight", "opening-stage") in seen and ("standard-2", "footer-promise") in seen
+        check(
+            f"line {w}x{h}: the page line leaves the paper only at its designed lifts",
+            read and not stray,
+            ("; ".join(stray) or f"{len(real)} lifts, all designed") if read else f"lifts not readable: {lifts}",
+        )
+    context.close()
+    context, page, response, problems = open_page(browser, f"{BASE}/", (1536, 1000), False, reduced=True)
+    for w, h in LINE_SIZES:
+        page.set_viewport_size({"width": w, "height": h})
+        page.wait_for_timeout(700)
+        page.evaluate("document.querySelector('#products [data-brush=bottles]').scrollIntoView({block: 'center'})")
+        page.wait_for_timeout(500)
+        line_at_picker(page, f"line {w}x{h}")
+    check("line: no errors", not problems, "; ".join(problems[:3]))
+    context.close()
 
 
 # The products stage: the shown bottle's picture, the stage link, the words, the picker, the head.
@@ -1159,20 +1315,15 @@ def run(browser, look, mobile):
             ground > 200 and gap > 100 and over == 0 and beyond == 0,
             f"ground {ground}, gap {gap}, over the words {over}, beyond them {beyond}",
         )
-        # Round 9: the picker's five bottles fill the width, so the brush lifts at the end of the
-        # ground and lands again under them: no ink over the picker or in the margin beside it
-        # (the old loop), and a new stroke in the band under it.
+        # Round 9 lifted the brush at the end of the big bottle's ground and landed it again under
+        # the picker. Mo saw a broken line (October 5), so this check is turned round ON PURPOSE:
+        # the line keeps going. It bows down past the left of the picker, lays one ground under
+        # all five bottles below their names (never over a bottle or a name, clear of the chosen
+        # name's underline), turns in the right margin and comes back over the stories' heading
+        # into the gap, unbroken (run_line holds it at every two-column width).
         page.evaluate("document.querySelector('#products [data-brush=bottles]').scrollIntoView({block: 'center'})")
         page.wait_for_timeout(2600)
-        pl, pt, pr, pb = page.evaluate(STAGE)["picker"]
-        over = ink_in_box(page, pl - 4, pt, pr + 4, pb)
-        margin = ink_in_box(page, 0, pt, pl - 4, pb) + ink_in_box(page, pr + 4, pt, width, pb)
-        landing = ink_in_box(page, pl, pb, pr, pb + 170)
-        check(
-            f"{tag}: the brush lifts over the picker and lands again under it, never round it",
-            over == 0 and margin == 0 and landing > 30,
-            f"over the picker {over}, beside it {margin}, landed under it {landing}",
-        )
+        line_at_picker(page, tag)
 
     # Stories.
     scroll_to(page, top_of(page, "#stories article") - (120 if mobile else 220), 1200)
@@ -2598,8 +2749,16 @@ def run_arrivals(browser):
     context.close()
 
 
+ONLY = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--only=")), None)
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=GPU)
+    if ONLY == "line":
+        run_line(browser)
+        browser.close()
+        passed = sum(1 for r in results if r[1])
+        print(f"\n{passed}/{len(results)} checks passed.")
+        sys.exit(0 if passed == len(results) else 1)
     run(browser, "home", mobile=False)
     run(browser, "home", mobile=True)
     run_short(browser, "home")
@@ -2616,6 +2775,7 @@ with sync_playwright() as p:
     run_type(browser, mobile=True)
     run_pause(browser)
     run_arrivals(browser)
+    run_line(browser)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

@@ -24,6 +24,9 @@ export type Waypoint = {
   fresh?: boolean;
   /** How heavily loaded the brush is from here on (1 = the page's usual stroke). */
   load?: number;
+  /** At a reload: how far (px) this one load of ink lasts, for a stroke meant to run long and
+   *  thin out as one (it is not shared out into even loads). */
+  reach?: number;
 };
 
 /** A point given in the comp's own pixels (1536 x 1000) on the opening's stage (the frame its
@@ -141,15 +144,19 @@ const cranePage: Waypoint[] = [
 // left of it, like a bracket, clear of its painting and words, and back in to the gap beside the
 // products' headline, past that station (a reload) and down between the big bottle and its
 // words. There it reloads once more and lays one heavy stroke under the bottle, the ground it
-// stands on (as the crane at rest stands on the closing stroke), and lifts off the paper at its
-// end. The picker's five bottles fill the page's width, so the brush does not thread around
-// them: it touches down again under them, in the gap between the still life and the sample's
-// words, and runs straight down it past the story names into the gap between the science's words
-// and its painting (in the scroll story the painting is pinned inside its column, so the gap
-// stays clear at every scroll), reloading level with its headline and again with its second
-// topic, drifting out a little to the research index's spine. Past its station it is the index's spine, then
-// it bends once round the right of "Show all sources" and its note, past the purpose's station,
-// and lifts off in the open sky of the closing painting.
+// stands on (as the crane at rest stands on the closing stroke). It stays on the paper (Mo,
+// October 5: round 9's lift here read as a broken line): past the bottle's left it bows down in
+// the margin past the left of the picker, reloads and lays one ground from left to right under
+// all five small bottles, below their names (clear of the chosen one's underline), turns round in
+// the right margin, and comes back, thinner as its ink runs out, sagging a little over the
+// stories' heading and well clear of it, into the gap between the still life and the sample's
+// words. There it reloads and runs straight down past the story names into the gap between the
+// science's words and its painting (in the scroll story the painting is pinned inside its column,
+// so the gap stays clear at every scroll), reloading level with its headline and again with its
+// second topic, drifting out a little to the research index's spine. Past its station it is the
+// index's spine, then it bends once round the right of "Show all sources" and its note, past the
+// purpose's station, and lifts off in the open sky of the closing painting. Its only lifts on
+// this page are the designed ones the checks list (scripts/qa/qa_home_ink.py, DESIGNED_LIFTS).
 const onward: Waypoint[] = [
   station("work", "left", 3.2),
   on("work-main", 0, 0.55, 3.4, 1, -58),
@@ -168,13 +175,27 @@ const onward: Waypoint[] = [
   { at: "stage", fx: 0.62, fy: 0.982, w: 3.8, load: 1.9 },
   { at: "stage", fx: 0.36, fy: 0.982, w: 3.8, load: 1.8 },
   { at: "stage", fx: 0.1, fy: 0.97, w: 3.2, load: 1.4 },
-  { at: "stage", fx: 0.02, fy: 0.968, w: 2.4, ink: 0.45, load: 1.2 },
-  { at: "stage", fx: -0.05, fy: 0.962, w: 0, ink: 0 },
-  // (it comes down out of the air from the left, so the new stroke lands with a turned head, a
-  // little under the picker's names)
-  { ...gap("story-painting", "story-words", 1, -40, -2, 0), level: "bottles" },
-  { ...gap("story-painting", "story-words", 1, -17, 28, 0), level: "bottles" },
-  fresh({ ...gap("story-painting", "story-words", 1, -8, 60), level: "bottles" }),
+  // (the bow down past the left of the picker, in the margin, clear of the first small bottle)
+  { at: "bottles", fx: 0, fy: 0.5, dx: -36, load: 1.3 },
+  // (the picker's ground: one load that runs on, thinning, through the turn and the return)
+  { at: "bottles", fx: 0.06, fy: 1, dy: 25, fresh: true, load: 1.25, reach: 2600 },
+  { at: "bottles", fx: 0.3, fy: 1, dy: 29, load: 1.5 },
+  { at: "bottles", fx: 0.62, fy: 1, dy: 32, load: 1.75 },
+  { at: "bottles", fx: 0.9, fy: 1, dy: 31, load: 1.9 },
+  // (the round turn in the right margin)
+  { at: "bottles", fx: 1, fy: 1, dx: 12, dy: 30, load: 1.85 },
+  { at: "bottles", fx: 1, fy: 1, dx: 29, dy: 36, load: 1.75 },
+  { at: "bottles", fx: 1, fy: 1, dx: 37, dy: 51, load: 1.65 },
+  { at: "bottles", fx: 1, fy: 1, dx: 29, dy: 66, load: 1.6 },
+  { at: "bottles", fx: 1, fy: 1, dx: 12, dy: 72, load: 1.55 },
+  // (the return, drifting down over the stories' heading and well clear of it, into the gap)
+  { at: "bottles", fx: 0.82, fy: 1, dy: 78, load: 1.9 },
+  { at: "bottles", fx: 0.6, fy: 0, dy: -56, level: "story-words", load: 2 },
+  { at: "story-words", fx: 0, fy: 0, dx: 10, dy: -62, load: 2 },
+  // (it turns down into the gap in one round bend, and reloads)
+  gap("story-painting", "story-words", 0, 9, -44),
+  gap("story-painting", "story-words", 0, -7, -6),
+  fresh(gap("story-painting", "story-words", 0, -8, 26)),
   gap("story-painting", "story-words", 0.38, -11),
   gap("story-painting", "story-words", 0.8, -5),
   gap("story-painting", "story-words", 1, -9),

@@ -33,6 +33,13 @@
 /* Two columns: the headline and the big bottle at the left, the words at the right, the picker
    across both. (The picker comes before the words in the page's order: see products.tsx.) */
 @media (min-width: 900px) {
+  /* Under the picker the brush line turns in the right margin and comes back over the stories'
+     heading (brush-route.ts): below about 1400 px a little more paper keeps that turn round and
+     the return well clear of the heading. */
+  .products {
+    padding-bottom: max(clamp(40px, 4vw, 64px), calc(100px - 3.3vw));
+  }
+
   .inner,
   .head {
     grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
