@@ -342,7 +342,9 @@
 }
 
 /* Ink blooms (motion only): a painting spreads into the paper through an ink blot's soft,
-   irregular edge, slightly soft at first, in the page's one breath. */
+   irregular edge, slightly soft at first, in the page's one breath. A painting whose edges
+   dissolve through its own mask names that mask --edge (and uses it): the blot is laid over it
+   (intersect), so the painting never shows a hard edge, before, during or after its bloom. */
 @property --bloom {
   syntax: "<percentage>";
   inherits: false;
@@ -351,14 +353,25 @@
 
 .look [data-bloom="waiting"],
 .look [data-bloom="in"] {
-  -webkit-mask-image: url("/images/home-v2/ink/bloom-mask.png");
-  mask-image: url("/images/home-v2/ink/bloom-mask.png");
+  -webkit-mask-image:
+    url("/images/home-v2/ink/bloom-mask.png"), var(--edge, linear-gradient(#000, #000));
+  mask-image: url("/images/home-v2/ink/bloom-mask.png"), var(--edge, linear-gradient(#000, #000));
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
-  -webkit-mask-position: var(--bloom-origin, 50% 50%);
-  mask-position: var(--bloom-origin, 50% 50%);
-  -webkit-mask-size: var(--bloom) var(--bloom);
-  mask-size: var(--bloom) var(--bloom);
+  -webkit-mask-position:
+    var(--bloom-origin, 50% 50%),
+    0 0;
+  mask-position:
+    var(--bloom-origin, 50% 50%),
+    0 0;
+  -webkit-mask-size:
+    var(--bloom) var(--bloom),
+    100% 100%;
+  mask-size:
+    var(--bloom) var(--bloom),
+    100% 100%;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
 }
 
 .look [data-bloom="waiting"] {
@@ -432,22 +445,26 @@
   }
 }
 
-/* The crane at rest beside the footer's promise. Its feet are 8% up from the picture's bottom
-   edge; it is set down so they stand on the closing brush stroke under the promise. */
+/* The crane at rest, the page's last painting, beside the footer's promise: it answers the crane
+   in flight at the top, its head well over the words, and it blooms in as the page arrives. Its
+   feet are 8% up from the picture's bottom edge; it is set down so they stand on the closing
+   brush stroke under the promise. */
 .look .rest {
   flex: none;
-  width: clamp(80px, 8.2vw, 124px);
-  height: auto;
+  width: auto;
+  height: clamp(208px, 20.8vw, 340px);
   /* Where the promise is too long to share a line (the row wraps), it stands at the right. */
   margin-left: auto;
   translate: 0 calc(8% + 12px);
 }
 
-/* The shared footer, held to the look's reading sizes: no small letter-spaced capitals. */
-.look :global(footer) > div:first-child > div:first-child > p {
-  text-wrap: balance;
+@media (max-width: 720px) {
+  .look .rest {
+    height: clamp(104px, 34vw, 200px);
+  }
 }
 
+/* The shared footer, held to the look's reading sizes: no small letter-spaced capitals. */
 .look :global(footer) h2 {
   font-size: 15px;
   font-weight: 500;

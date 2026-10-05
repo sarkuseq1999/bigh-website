@@ -36,7 +36,7 @@ function Logo({ footer: isFooter = false, light = false }: { footer?: boolean; l
           alt={copy("BiGH")}
           width={1448}
           height={811}
-          sizes={isFooter ? "170px" : "136px"}
+          sizes="136px"
           loading={isFooter ? "lazy" : "eager"}
           className={styles.logoImage}
         />
@@ -203,6 +203,7 @@ export function HomeFooter({
   useEffect(() => {
     const paragraph = message.current;
     const words = paragraph?.firstElementChild;
+    // The finale's band, whose width decides where the lines break.
     const column = paragraph?.parentElement?.parentElement;
     if (!paragraph || !words || !column || !hasClosing) return;
     // The words' own line boxes (text only: a sentence that wraps inside its inline block still
@@ -246,22 +247,25 @@ export function HomeFooter({
     };
   }, [hasClosing]);
 
+  // The finale first: the promise in its own band, large, with the look's closing picture beside
+  // it. Under a hairline, the logo, the links and the legal lines are a calmer second tier (on
+  // two columns the copyright line and "Back to top" sit under the logo, level with the last
+  // link; on one column they follow the links).
   return (
     <footer className={styles.footer}>
+      <div className={styles.finale}>
+        <div className={styles.promise} data-brush="footer-promise">
+          <p ref={message} className={styles.footerMessage}>
+            <span data-brush="footer-tagline">
+              <Sentences text={copy(footer.tagline)} />
+            </span>
+          </p>
+          {closing}
+        </div>
+      </div>
       <div className={styles.footerTop}>
-        <div>
+        <div className={styles.footerBrand}>
           <Logo footer />
-          <div
-            className={`${styles.promise} ${closing ? styles.withClosing : ""}`}
-            data-brush="footer-promise"
-          >
-            <p ref={message} className={styles.footerMessage}>
-              <span data-brush="footer-tagline">
-                <Sentences text={copy(footer.tagline)} />
-              </span>
-            </p>
-            {closing}
-          </div>
         </div>
         <div className={styles.footerColumns}>
           <div>
@@ -292,14 +296,14 @@ export function HomeFooter({
             <Link href="/science#health">{copy("Health, explained")}</Link>
           </div>
         </div>
-      </div>
-      <div className={styles.footerBottom}>
-        <span>
-          © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
-        </span>
-        <a href="#top">
-          {copy("Back to top")} <ArrowUp size={16} />
-        </a>
+        <div className={styles.footerBottom}>
+          <span>
+            © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
+          </span>
+          <a href="#top">
+            {copy("Back to top")} <ArrowUp size={16} />
+          </a>
+        </div>
       </div>
       <p className={styles.footerNote}>{copy(footer.note)}</p>
     </footer>

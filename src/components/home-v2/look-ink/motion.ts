@@ -41,7 +41,8 @@ export function useInkFill(root: RefObject<HTMLElement | null>) {
  * Ink blooms: every painting marked [data-bloom] spreads into the paper through an ink blot's
  * soft edge as it enters the window, in the page's one breath (look-ink.module.css). The
  * opening's paintings are marked "waiting" from the server, so they bloom on arrival instead of
- * flashing; reduced motion shows everything at once.
+ * flashing; reduced motion shows everything at once. A painting marked [data-bloom-whole] (the
+ * crane at rest, whose bloom is the page's arrival) waits until all of it is in the window.
  */
 export function useBloom(root: RefObject<HTMLElement | null>, motion: boolean) {
   useEffect(() => {
@@ -59,23 +60,27 @@ export function useBloom(root: RefObject<HTMLElement | null>, motion: boolean) {
       const delay = Number(getComputedStyle(target).getPropertyValue("--bloom-delay")) || 0;
       timers.push(window.setTimeout(() => (target.dataset.bloom = "done"), 3400 + delay));
     };
-    const observer = new IntersectionObserver(
-      (entries) =>
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          observer.unobserve(entry.target);
-          open(entry.target as HTMLElement);
-        }),
-      { rootMargin: "0px 0px -8% 0px" },
-    );
+    const watch = (threshold: number) =>
+      new IntersectionObserver(
+        (entries, observer) =>
+          entries.forEach((entry) => {
+            if (!entry.isIntersecting || entry.intersectionRatio < threshold) return;
+            observer.unobserve(entry.target);
+            open(entry.target as HTMLElement);
+          }),
+        { rootMargin: "0px 0px -8% 0px", threshold },
+      );
+    const entering = watch(0);
+    const whole = watch(0.98);
     targets.forEach((target) => {
       if (target.dataset.bloom !== "done" && target.dataset.bloom !== "in") {
         target.dataset.bloom = "waiting";
       }
-      observer.observe(target);
+      (target.hasAttribute("data-bloom-whole") ? whole : entering).observe(target);
     });
     return () => {
-      observer.disconnect();
+      entering.disconnect();
+      whole.disconnect();
       timers.forEach((timer) => window.clearTimeout(timer));
     };
   }, [root, motion]);

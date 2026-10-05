@@ -169,8 +169,9 @@ const lift = (at: string, fx: number, fy: number): Waypoint => ({ at, fx, fy, w:
 
 // The close, on every screen: the brush travels off the paper down to the footer, reloads, and
 // lays one confident stroke under the promise ("Stay sharp. Live fully.") and the crane at rest
-// beside it (the ground it stands on), sagging a little in the middle and flicking up as it
-// lifts. The line that left the crane in flight ends under the crane at rest.
+// beside it (the ground it stands on), sagging a little in the middle, still loaded under the
+// crane's feet (they stand at about 0.88 of the band), and flicking up as it lifts past its
+// tail. The line that left the crane in flight ends under the crane at rest.
 /** One short, lightly loaded stroke along the top edge of a block: a rule the brush paints. */
 const rule = (at: string): Waypoint[] => [
   { at, fx: -0.02, fy: 0, dy: -2, w: 0, ink: 0 },
@@ -191,9 +192,9 @@ const promise: Waypoint[] = [
   { at: T, fx: -0.008, fy: 1, dy: 13, w: 3, ink: 1, fresh: true, load: 2.2 },
   { at: T, fx: 0.24, fy: 1, dy: 18, w: 3, ink: 1, load: 2.2 },
   { at: T, fx: 0.56, fy: 1, dy: 19, w: 3, ink: 1, load: 2 },
-  { at: T, fx: 0.84, fy: 1, dy: 14, w: 3, ink: 0.9, load: 1.8 },
-  { at: T, fx: 0.97, fy: 1, dy: 8, w: 2, ink: 0.55, load: 1.5 },
-  { at: T, fx: 1.02, fy: 1, dy: 0, w: 0, ink: 0 },
+  { at: T, fx: 0.88, fy: 1, dy: 14, w: 3, ink: 1, load: 1.9 },
+  { at: T, fx: 1.0, fy: 1, dy: 8, w: 2.4, ink: 0.7, load: 1.6 },
+  { at: T, fx: 1.06, fy: 1, dy: 0, w: 0, ink: 0 },
 ];
 
 const cranePhone: Waypoint[] = [

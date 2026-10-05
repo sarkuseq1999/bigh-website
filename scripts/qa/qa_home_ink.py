@@ -66,6 +66,12 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the bottle (its ground), never over the words and never around them; on a phone the chosen
     bottle is large (about 70vw), the picker (a swipeable snap row) comes straight under it and
     the words after; with reduced motion a choice is on the stage at once.
+  - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
+    the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
+    place); the promise stands large in its own band at the top of the footer (56 px or more on
+    desktop, 44 to 52 on a phone), one sentence to a line, over a hairline and before the links,
+    with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
+    which blooms only once all of it is in the window.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -262,6 +268,49 @@ def print_at_rest(page):
     )
 
 
+# Every blooming painting with its own edge mask (--edge): its computed mask in each bloom state,
+# read on a hidden copy. [has a gradient, has the ink blot, mask-composite].
+EDGES = """(() => {
+  const out = [];
+  for (const e of document.querySelectorAll('[data-look=ink] [data-bloom]')) {
+    if (!getComputedStyle(e).getPropertyValue('--edge').trim()) continue;
+    const copy = e.cloneNode(false);
+    copy.removeAttribute('src'); copy.removeAttribute('srcset');
+    copy.style.visibility = 'hidden';
+    e.after(copy);
+    const seen = {};
+    for (const s of ['waiting', 'in', 'done']) {
+      copy.dataset.bloom = s;
+      const c = getComputedStyle(copy);
+      seen[s] = [c.maskImage.includes('gradient'), c.maskImage.includes('bloom-mask'), c.maskComposite];
+    }
+    copy.remove();
+    out.push([e.getAttribute('data-brush') || e.closest('section')?.id, seen]);
+  }
+  return out;
+})()"""
+
+# The finale (round 3): the promise in its own band at the top of the footer, before the link
+# columns and over a hairline; its size, its lines (one sentence to each), the crane's height.
+FINALE = """(() => {
+  const f = document.querySelector('footer');
+  const band = f.querySelector('[data-brush="footer-promise"]');
+  const t = band.querySelector('[data-brush="footer-tagline"]');
+  const i = band.querySelector('img');
+  const tier = f.querySelector('h2').closest('div').parentElement.parentElement;
+  const b = band.getBoundingClientRect(), c = tier.getBoundingClientRect();
+  const parts = [...t.querySelectorAll(':scope > span')];
+  return {
+    first: f.firstElementChild.contains(band), above: Math.round(c.top - b.bottom),
+    hairline: getComputedStyle(tier).borderTopWidth,
+    font: parseFloat(getComputedStyle(t.closest('p')).fontSize),
+    crane: Math.round(i.getBoundingClientRect().height),
+    lines: parts.map(s => new Set([...s.getClientRects()].map(r => Math.round(r.top))).size),
+    rows: new Set(parts.map(s => Math.round(s.getBoundingClientRect().top))).size,
+  };
+})()"""
+
+
 def page_checks(page, tag, width, view_h, problems):
     """Images, sideways scrolling, sizes, targets, errors, after scrolling the whole page."""
     total = page.evaluate("document.documentElement.scrollHeight")
@@ -369,6 +418,22 @@ def run(browser, look, mobile):
     ]
     inside = all(b[0] >= 0 and b[2] <= width for b in boxes)
     check(f"{tag}: the opening's words sit clear, inside the window", not overlaps and inside, f"{len(overlaps)} overlaps")
+    # Round 3: a painting whose edges dissolve through its own mask (the opening's landscape, the
+    # closing painting) keeps that edge before, during and after its bloom: the ink blot is laid
+    # over it (intersect), never in its place. Read on a hidden copy of each, so the page's own
+    # paintings (and the mist waiting on the landscape's bloom) are left alone.
+    edges = page.evaluate(EDGES)
+    held = all(
+        all(s[0] and s[1] and "intersect" in s[2] for s in (e[1]["waiting"], e[1]["in"]))
+        and e[1]["done"][0]
+        and not e[1]["done"][1]
+        for e in edges
+    )
+    check(
+        f"{tag}: paintings with their own soft edge keep it while they bloom",
+        len(edges) >= 2 and held,
+        str(edges),
+    )
     start_ink = ink_in_view(page)
     start_progress = progress(page)
     # Desktop: the page line starts in the opening and draws on. Phones (lead's decision, October
@@ -660,8 +725,25 @@ def run(browser, look, mobile):
         end_progress > (0.6 if mobile else 0.85),
         f"progress {end_progress:.3f}",
     )
+    # Round 3: the crane at rest blooms only once all of it is in the window (its bloom is the
+    # page's arrival): half in view it still waits; at the page's end it has bloomed.
+    crane_rest = "document.querySelector('footer img[src*=\"crane-rest\"]')"
+    scroll_to(
+        page,
+        page.evaluate(
+            f"(() => {{ const b = {crane_rest}.getBoundingClientRect(); return b.top + scrollY - innerHeight + b.height * 0.5; }})()"
+        ),
+        900,
+    )
+    half_bloom = page.evaluate(f"{crane_rest}.dataset.bloom")
     # The footer: the line comes to rest as one stroke under the promise.
     scroll_to(page, page.evaluate("document.documentElement.scrollHeight"), 2600)
+    end_bloom = page.evaluate(f"{crane_rest}.dataset.bloom")
+    check(
+        f"{tag}: the crane at rest blooms once it is whole in the window",
+        half_bloom == "waiting" and end_bloom in ("in", "done"),
+        f"half in view {half_bloom}, at the end {end_bloom}",
+    )
     rest_progress = progress(page)
     stroke = page.evaluate(
         """(() => {
@@ -700,6 +782,20 @@ def run(browser, look, mobile):
         f"{tag}: the crane at rest stands beside the promise",
         bool(rest) and rest[0] and 0 < rest[1] < 80 and 0 < rest[2] < 60,
         str(rest),
+    )
+    finale = page.evaluate(FINALE)
+    font_ok = 44 <= finale["font"] <= 52 if mobile else finale["font"] >= 56
+    crane_ok = 120 <= finale["crane"] <= 150 if mobile else 260 <= finale["crane"] <= 340
+    check(
+        f"{tag}: the finale: the promise large in its own band, over a hairline, before the links",
+        finale["first"]
+        and finale["above"] >= 40
+        and finale["hairline"] == "1px"
+        and font_ok
+        and crane_ok
+        and finale["lines"] == [1, 1]
+        and finale["rows"] == 2,
+        str(finale),
     )
     # The three standards: each rule is a stroke of the brush.
     scroll_to(page, top_of(page, "#ink-standards") - 300, 2200)
@@ -1011,8 +1107,8 @@ def run_opens(browser):
         f"opacity as it opens {settle and settle[0]:.2f}, at rest {settle and settle[1]}",
     )
     preview = page.evaluate(
-        """[[...document.querySelectorAll('footer > div:first-child > div:last-child > div:first-child a')].length,
-            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:first-child > div:last-child > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
+        """[[...document.querySelectorAll('footer > div:nth-child(2) > div:nth-child(2) > div:first-child a')].length,
+            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:nth-child(2) > div:nth-child(2) > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
     )
     check(
         f"{tag}: no button opens the product preview (all five products link to their pages)",

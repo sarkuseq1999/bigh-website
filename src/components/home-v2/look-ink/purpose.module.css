@@ -17,7 +17,9 @@
   min-height: 420px;
   object-fit: cover;
   object-position: 50% 100%;
-  mask-image: linear-gradient(to bottom, #000 80%, transparent 100%);
+  /* Its foot dissolves into the paper; the bloom keeps this edge (look-ink.module.css). */
+  --edge: linear-gradient(to bottom, #000 80%, transparent 100%);
+  mask-image: var(--edge);
 }
 
 /* Light on the low sun's leaf. On narrow windows the painting is cropped to the pine and the

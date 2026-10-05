@@ -4,8 +4,9 @@ import Image from "next/image";
 import { craneRest } from "./assets";
 import base from "./look-ink.module.css";
 
-// The page's last picture: the crane that opened the page in flight, now at rest. It stands
-// beside the footer's promise, on the closing brush stroke (brush-route.ts `promise`).
+// The page's last painting: the crane that opened the page in flight, now at rest, large beside
+// the footer's promise and facing it, on the closing brush stroke (brush-route.ts `promise`).
+// Its bloom is the page's arrival.
 export function ClosingCrane() {
   return (
     <Image
@@ -14,9 +15,12 @@ export function ClosingCrane() {
       alt=""
       width={craneRest.width}
       height={craneRest.height}
-      sizes="140px"
+      sizes="(max-width: 720px) 23vw, 220px"
+      // It blooms once all of it is in the window, spreading up from low on the bird, toward the
+      // stroke it stands on (72% is as low as the blot's origin goes and still covers it whole).
       data-bloom=""
-      style={{ ["--bloom-delay" as string]: 300 }}
+      data-bloom-whole=""
+      style={{ ["--bloom-delay" as string]: 250, ["--bloom-origin" as string]: "50% 72%" }}
     />
   );
 }

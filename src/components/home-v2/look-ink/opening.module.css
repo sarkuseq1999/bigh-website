@@ -61,13 +61,15 @@
   height: 70%;
   object-fit: cover;
   object-position: 62% 100%;
-  mask-image: linear-gradient(
+  /* The bloom keeps this edge while the painting spreads in (look-ink.module.css). */
+  --edge: linear-gradient(
     to bottom,
     transparent 0,
     #000 min(var(--crop) * 1.4, 120px),
     #000 72%,
     transparent 100%
   );
+  mask-image: var(--edge);
   translate: 0 var(--settle, 0);
 }
 
@@ -295,7 +297,7 @@
     max-width: none;
     height: 66%;
     object-position: 70% 100%;
-    mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 70%, transparent 100%);
+    --edge: linear-gradient(to bottom, transparent 0, #000 22%, #000 70%, transparent 100%);
   }
 
   .copy {
