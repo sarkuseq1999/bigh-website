@@ -10,6 +10,10 @@ import { useCopy } from "@/i18n/use-copy";
 import { footer, products } from "./content";
 import { useHomeDialogs } from "./dialogs";
 import { lockPageScroll } from "./lock-scroll";
+import { NavBrush } from "./nav/nav-brush";
+import { NavInscription } from "./nav/nav-inscription";
+import { NavStone } from "./nav/nav-stone";
+import { NavSwitcher } from "./nav/nav-switcher";
 import styles from "./chrome.module.css";
 
 // Header and footer for the redesigned homepage. Same shape, sizes and links as the About and
@@ -20,7 +24,13 @@ import styles from "./chrome.module.css";
 // button comes before it in the page, so Tab goes from the button into the links; Escape closes
 // it and hands focus back to the button; tabbing out of it closes it.
 
-function Logo({ footer: isFooter = false, light = false }: { footer?: boolean; light?: boolean }) {
+export function Logo({
+  footer: isFooter = false,
+  light = false,
+}: {
+  footer?: boolean;
+  light?: boolean;
+}) {
   const copy = useCopy();
   return (
     <Link
@@ -45,18 +55,38 @@ function Logo({ footer: isFooter = false, light = false }: { footer?: boolean; l
   );
 }
 
-export function HomeHeader({
-  overlay = false,
-  tone = "light",
-  solidAfter = 80,
-}: {
+export type HeaderProps = {
   /** Start transparent over the opening picture. */
   overlay?: boolean;
   /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
   tone?: "light" | "dark";
   /** Scroll distance (px) after which the header turns solid. */
   solidAfter?: number;
-}) {
+};
+
+/** Menu bar options under review (October 5, 2026): `?nav=a|b|c`; anything else is today's bar. */
+export function HomeHeader({
+  variant,
+  review = false,
+  ...props
+}: HeaderProps & { variant?: string; review?: boolean }) {
+  const Bar =
+    variant === "a"
+      ? NavBrush
+      : variant === "b"
+        ? NavStone
+        : variant === "c"
+          ? NavInscription
+          : TodayHeader;
+  return (
+    <>
+      <Bar {...props} />
+      {review && <NavSwitcher current={variant} />}
+    </>
+  );
+}
+
+function TodayHeader({ overlay = false, tone = "light", solidAfter = 80 }: HeaderProps) {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
   const [open, setOpen] = useState(false);

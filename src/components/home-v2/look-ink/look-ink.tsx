@@ -27,7 +27,7 @@ import styles from "./look-ink.module.css";
 // with the whole brush line.
 // Keyboard: the first Tab shows "Skip to content" (as on the About, Science and product pages),
 // which puts focus at the start of the page's words, past the header's links.
-export function LookInk() {
+export function LookInk({ nav, review = false }: { nav?: string; review?: boolean } = {}) {
   const copy = useCopy();
   const root = useRef<HTMLDivElement>(null);
   const main = useRef<HTMLElement>(null);
@@ -50,7 +50,7 @@ export function LookInk() {
       >
         {copy("Skip to content")}
       </a>
-      <HomeHeader overlay solidAfter={48} />
+      <HomeHeader overlay solidAfter={48} variant={nav} review={review} />
       <main ref={main} id="main" tabIndex={-1}>
         <OpeningCrane motion={motion} />
         <Cellular />
