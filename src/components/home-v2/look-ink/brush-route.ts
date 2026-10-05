@@ -152,9 +152,13 @@ const shared: Waypoint[] = [
   on("story-words", 0, 1, 3, 1, -56),
   on("story-choices", 1, 0.5, 2.8, 1, 44),
   on("science", 0.62, 0, 3, 1, 0, 52),
-  on("science-mito", 1.0, 0.08, 3.2, 1, 16),
-  on("science-mito", 1.0, 0.6, 3.4, 1, 20),
-  on("science-mito", 0.78, 1, 3, 1, 0, 36),
+  // The science painting's column (round 7: in the scroll story the painting is pinned inside
+  // it, so the line keeps to the column's far side, top to bottom, and only turns in under it).
+  on("science-rail", 0.9, 0, 3.1, 1, 0, -24),
+  on("science-rail", 1.0, 0, 3.2, 1, 14, 70),
+  on("science-rail", 1.0, 0.6, 3.4, 1, 18),
+  on("science-rail", 1.0, 1, 3.2, 1, 16, -40),
+  on("science-rail", 0.78, 1, 3, 1, 0, 36),
   on("research", 0.52, 0, 2.8, 1, 0, 24),
   station("research", "left", 3),
   on("research-list", 0.5, 0, 3.2, 1, 0, -8),

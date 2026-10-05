@@ -43,7 +43,8 @@
 }
 
 .science .tab:hover,
-.science .tab[aria-selected="true"] {
+.science .tab[aria-selected="true"],
+.science .tab[aria-current="step"] {
   color: var(--ink);
 }
 
@@ -60,7 +61,8 @@
   transition: scale 0.7s var(--ease);
 }
 
-.tab[aria-selected="true"]::after {
+.tab[aria-selected="true"]::after,
+.tab[aria-current="step"]::after {
   scale: 1 1;
 }
 
@@ -116,10 +118,16 @@
   margin-top: 32px;
 }
 
-/* One painting, three states. */
+/* One painting, three states. Its column (the rail) is the brush line's anchor: it never moves,
+   while in the scroll story the painting inside it is pinned. */
+.rail {
+  min-width: 0;
+  margin: 0 calc(-0.6 * var(--gutter)) 0 0;
+}
+
 .figure {
   position: relative;
-  margin: 0 calc(-0.6 * var(--gutter)) 0 0;
+  margin: 0;
 }
 
 .stage {
@@ -259,12 +267,180 @@
   }
 }
 
+/* The scroll story (round 7): 900px and wider, with motion (science.tsx turns it on and measures
+   it). The painting is pinned centred in the window under the header (--pin) and the index is
+   pinned level with its top; each topic stands under the index with the next waiting just below
+   (--area), and the last one ends level with the painting (--last), so the index, the last topic
+   and the painting leave together, without a jump. The rail (the painting's column) never
+   moves; the brush line runs down its far side. */
+@media (min-width: 900px) and (prefers-reduced-motion: no-preference) {
+  .science.story .layout {
+    align-items: stretch;
+  }
+
+  /* A pinned box is its own group (sticky makes a stacking context), so the paintings' multiply
+     would stop at its edge and show their white: the group itself multiplies onto the paper
+     (its ink words are unchanged by it; the slider's paper thumb is white, which multiplies to
+     the paper exactly). */
+  .science.story .figure {
+    position: sticky;
+    top: var(--pin, 120px);
+    mix-blend-mode: multiply;
+    /* On a short window the painting gives way so all of it, the slider and its honesty line
+       stay in the window while it is pinned (the header, the slider and some paper: 236px). */
+    max-width: calc((100svh - 236px) * 2000 / 1493);
+    margin-inline: auto;
+  }
+
+  .science.story .range::-webkit-slider-thumb {
+    background: #fff;
+  }
+
+  .science.story .range::-moz-range-thumb {
+    background: #fff;
+  }
+
+  .science.story .track {
+    margin-top: clamp(36px, 4vw, 52px);
+  }
+
+  .science.story .track > .tabs {
+    position: sticky;
+    top: var(--pin, 120px);
+    z-index: 1;
+    margin-top: 0;
+  }
+
+  .science.story .step {
+    box-sizing: border-box;
+    min-height: var(--area, 80vh);
+    padding-top: 48px;
+  }
+
+  .science.story .copy > .step {
+    min-height: var(--last, 560px);
+  }
+
+  /* As a topic leaves its place it dissolves into the paper, whole (with its heading, so no
+     paragraph is left without one), before its heading reaches the index (scroll-driven); the
+     last topic leaves with the painting. Where a topic is taller than the room under the index
+     (a short or narrow window: science.tsx marks it cramped) the index stays where it is
+     instead, and nothing dissolves. */
+  @supports (animation-timeline: view()) {
+    .science.story:not([data-cramped="true"]) .step {
+      timeline-scope: --science-head;
+      /* The next topic waits faint at the foot of the window and comes into focus as its heading
+         nears the reading line (78% down the window), while the last one dissolves. */
+      animation: focus linear both;
+      animation-timeline: --science-head;
+      animation-range: entry calc(22vh - 80px) entry 22vh;
+    }
+
+    .science.story:not([data-cramped="true"]) .step > h3 {
+      view-timeline: --science-head block;
+      view-timeline-inset: var(--fade, 340px) 0px;
+    }
+
+    .science.story:not([data-cramped="true"]) .track .step > * {
+      animation: dissolve linear both;
+      animation-timeline: --science-head;
+      animation-range: exit 0px exit 60px;
+    }
+
+    /* The light crosses the close view's gold folds while its topic is read (the painting is
+       pinned, so it follows the topic, not the painting). */
+    .science.story {
+      timeline-scope: --science-mito;
+    }
+
+    .science.story [data-step="0"] {
+      view-timeline: --science-mito block;
+    }
+
+    .science.story .stage > .leafLight {
+      animation: leaf-pass linear both;
+      animation-timeline: --science-mito;
+      animation-range: cover 12% cover 50%;
+    }
+  }
+
+  /* Without scroll-driven animation the index stays where it is (no line passes under it). */
+  @supports not (animation-timeline: view()) {
+    .science.story .track > .tabs {
+      position: static;
+    }
+  }
+
+  .science.story[data-cramped="true"] .track > .tabs {
+    position: static;
+  }
+
+  /* A new topic's painting blooms through the ink blot, as every painting enters the page,
+     while the last one dissolves on the breath. */
+  .science.story .figure .layer[data-on="true"] {
+    -webkit-mask: url("/images/home-v2/ink/bloom-mask.png") 50% 50% / var(--bloom) var(--bloom)
+      no-repeat;
+    mask: url("/images/home-v2/ink/bloom-mask.png") 50% 50% / var(--bloom) var(--bloom) no-repeat;
+    transition: opacity 0.25s linear;
+    animation:
+      unfold calc(var(--breath) * 1.25) var(--ease) both,
+      sharpen var(--breath) var(--ease) both;
+  }
+
+  .science.story .figure .layer:not([data-on="true"]) {
+    transition: opacity calc(var(--breath) * 0.6) var(--ease);
+  }
+}
+
+@keyframes focus {
+  from {
+    opacity: 0.25;
+  }
+}
+
+@keyframes dissolve {
+  to {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+@keyframes leaf-pass {
+  from {
+    background-position: 92% 0;
+  }
+
+  to {
+    background-position: 8% 0;
+  }
+}
+
+@keyframes unfold {
+  from {
+    --bloom: 0%;
+  }
+
+  to {
+    --bloom: 280%;
+  }
+}
+
+@keyframes sharpen {
+  from {
+    filter: blur(5px);
+  }
+
+  to {
+    filter: blur(0);
+  }
+}
+
 @media (max-width: 899px) {
   .layout {
     grid-template-columns: 1fr;
   }
 
-  .figure {
+  .rail {
     margin: 0 -4vw;
   }
 }

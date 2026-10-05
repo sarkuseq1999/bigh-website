@@ -94,6 +94,21 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the whole line drawn (1536 and 1440) the brush line passes it in the left margin, over none of
     it; on a phone no empty band between the story arrows and the science; at 1280x800, 1440x900
     and 1536x1000 the last screen shows the whole crane at rest, clear of the header.
+  - the science as a scroll story (round 7, October 4): on two columns with motion the block is
+    about two windows tall, its painting pinned beside the words; the desktop checks that
+    clicked the three tabs are replaced on purpose: scrolling to each topic shows its words
+    (earlier ones dissolved) beside its painting, pinned with the index level with it; the index
+    glides to a topic; a topic leaves whole (its heading with its words) and between two topics a
+    heading always stands in focus under the index (the next comes into focus as one leaves);
+    the age slider ages the
+    cell on the third topic, with its honesty line;
+    each topic's explainer opens its own sheet; the painting, the index and the last topic leave
+    together with no jump; the brush line passes in the far margin beside the pinned painting,
+    never over the painting, slider, index or words (1536x1000 and 1280x800, the whole line
+    drawn); on a short window (1366x657) the whole pinned painting, slider and honesty line stay
+    in the window; on a narrow one (1024x768) where a topic is taller than the room under the
+    index, the index stays put and nothing dissolves. Phones and reduced motion keep the three
+    tabs (no tall scroll, nothing pinned), with their checks as before.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -385,6 +400,304 @@ FINALE = """(() => {
     rows: new Set(parts.map(s => Math.round(s.getBoundingClientRect().top))).size,
   };
 })()"""
+
+
+def set_age(page, value):
+    """Move the age slider (as a hand would) and read the age shown, the honesty line's opacity
+    and the aged painting's opacity."""
+    page.evaluate(
+        f"""(() => {{ const input = document.querySelector('#science input[type=range]');
+          const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
+          set.call(input, '{value}'); input.dispatchEvent(new Event('input', {{ bubbles: true }})); }})()"""
+    )
+    page.wait_for_timeout(1200)
+    age = page.locator("#science label strong").first.text_content()
+    honesty = page.evaluate(
+        "(() => { const e = [...document.querySelectorAll('#science p')].find(s => s.textContent.includes('Illustration, not a measurement')); if (!e) return 0; return +getComputedStyle(e.parentElement).opacity; })()"
+    )
+    aged = float(
+        page.evaluate(
+            "(() => { const i = [...document.querySelectorAll('#science img')].find(i => i.src.includes('mito-aged')); return i ? +getComputedStyle(i).opacity : 0; })()"
+        )
+    )
+    return age, honesty, aged
+
+
+# Round 7: the science block's mode (the scroll story or the tabs) and its height.
+TABBED = """(() => { const s = document.querySelector('#science');
+  return { story: s.dataset.story, tabs: s.querySelectorAll('[role=tab]').length, height: s.offsetHeight,
+    sticky: getComputedStyle(s.querySelector('figure')).position }; })()"""
+
+# Round 7: the scroll story's state: the pinned painting and index, the topic shown, each topic's
+# heading (top, bottom, opacity, words) and each painting layer's opacity (closeup, young, radicals,
+# aged), in the window.
+STORY_STATE = """(() => {
+  const s = document.querySelector('#science'); const cs = getComputedStyle(s);
+  const fig = s.querySelector('figure'); const nav = s.querySelector('nav');
+  const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const pin = parseFloat(cs.getPropertyValue('--pin'));
+  return { story: s.dataset.story, height: s.offsetHeight, sticky: getComputedStyle(fig).position,
+    tabs: s.querySelectorAll('[role=tab]').length, steps: s.querySelectorAll('[data-step]').length,
+    pin, landing: pin + (nav ? nav.offsetHeight : 0), topic: +fig.dataset.topic,
+    current: nav ? [...nav.querySelectorAll('button')].findIndex(b => b.getAttribute('aria-current') === 'step') : -1,
+    fig: r(fig), stage: r(fig.firstElementChild), age: r(fig.querySelector('input').closest('div')),
+    index: nav ? r(nav) : null, scroll: scrollY,
+    titles: [...s.querySelectorAll('[data-step] h3')].map(h => [r(h)[1], r(h)[3], +getComputedStyle(h).opacity * +getComputedStyle(h.parentElement).opacity, h.textContent]),
+    words: [...s.querySelectorAll('[data-step]')].map(e => { const k = [...e.children].map(r);
+      return [Math.min(...k.map(b => b[0])), Math.min(...k.map(b => b[1])), Math.max(...k.map(b => b[2])), Math.max(...k.map(b => b[3]))]; }),
+    layers: [...fig.querySelectorAll('img')].map(i => +getComputedStyle(i).opacity),
+  };
+})()"""
+
+
+def walk_to(page, y, wait=2600):
+    """Scroll there the way a reader does (in short steps), then wait for the painting."""
+    cur = page.evaluate("scrollY")
+    step = 150 if y > cur else -150
+    while abs(y - cur) > 150:
+        cur += step
+        page.evaluate(f"window.scrollTo(0, {int(cur)})")
+        page.wait_for_timeout(30)
+    page.evaluate(f"window.scrollTo(0, {int(y)})")
+    page.wait_for_timeout(wait)
+
+
+def story_landing(page, i):
+    """The scroll position at which topic i has arrived under the pinned index."""
+    return page.evaluate(
+        f"""(() => {{ const s = document.querySelector('#science'); const nav = s.querySelector('nav');
+          const landing = parseFloat(getComputedStyle(s).getPropertyValue('--pin')) + nav.offsetHeight;
+          return Math.round(scrollY + s.querySelectorAll('[data-step]')[{i}].getBoundingClientRect().top - landing); }})()"""
+    )
+
+
+def painting_shows(state, i):
+    """Is topic i's painting the one on the stage (the others gone)?"""
+    a = state["layers"]
+    if i == 0:
+        return a[0] >= 0.95 and a[2] <= 0.05 and a[3] <= 0.05
+    if i == 1:
+        return a[2] >= 0.95 and a[0] <= 0.05 and a[3] <= 0.05
+    return a[1] + a[3] >= 0.95 and a[0] <= 0.05 and a[2] <= 0.05
+
+
+def science_story(page, tag, name, view_h):
+    """Round 7 (October 4): on two columns with motion "Make sense of the science." is a scroll
+    story, one idea per screen. This replaces, on purpose, the desktop checks that clicked the
+    three tabs: scrolling to each topic shows its words and its painting (pinned beside them),
+    the index takes you to a topic, the age slider still ages the cell on the third, each topic's
+    explainer opens its own sheet, and the pinned painting leaves with the last topic, no jump."""
+    s = page.evaluate(STORY_STATE)
+    check(
+        f"{tag}: the science is a scroll story, about two windows tall, its painting pinned",
+        s["story"] == "true" and s["tabs"] == 0 and s["steps"] == 3 and s["sticky"] == "sticky"
+        and 1.8 * view_h <= s["height"] <= 4 * view_h,
+        f"story {s['story']}, height {s['height']} ({s['height'] / view_h:.1f} windows), {s['sticky']}",
+    )
+    seen, bad = [], []
+    for i in range(3):
+        walk_to(page, story_landing(page, i))
+        st = page.evaluate(STORY_STATE)
+        shoot(page, f"{name}-05-science-step{i + 1}")
+        top, bottom, opacity, words = st["titles"][i]
+        earlier = [t[2] for t in st["titles"][:i]]
+        ok = (
+            st["topic"] == i
+            and st["current"] == i
+            and opacity >= 0.99
+            and top >= st["landing"] - 1
+            and bottom <= view_h
+            and all(o <= 0.01 for o in earlier)
+            and painting_shows(st, i)
+            and abs(st["fig"][1] - st["pin"]) <= 1
+            and abs(st["index"][1] - st["pin"]) <= 1
+        )
+        seen.append(f"{i + 1}: topic {st['topic']} index {st['current']} words {top:.0f}-{bottom:.0f} at {opacity:.2f}, earlier {earlier}, layers {st['layers']}, painting at {st['fig'][1]:.0f} (pin {st['pin']:.0f})")
+        if not ok:
+            bad.append(i + 1)
+    check(
+        f"{tag}: scrolling to each topic shows its words beside its painting, pinned (earlier words gone)",
+        not bad,
+        f"wrong: {bad}; " + " | ".join(seen),
+    )
+    # A topic leaves whole: just past its place every line of it is equally faded (no paragraph
+    # left without its heading).
+    walk_to(page, story_landing(page, 1) + 28, 400)
+    fades = page.evaluate(
+        "[...document.querySelectorAll('#science [data-step=\"1\"] > *')].map(e => +(+getComputedStyle(e).opacity).toFixed(2))"
+    )
+    check(
+        f"{tag}: a topic leaves whole, its heading with its words",
+        len(fades) == 4 and max(fades) - min(fades) <= 0.02 and 0.15 <= fades[0] <= 0.85,
+        f"opacity of heading, words, facts, links {fades}",
+    )
+    # Wherever the reader stops between two topics, a topic's heading stands in the room under
+    # the index, at least half in focus (the words are never all gone: as one leaves, the next
+    # comes into focus).
+    a, b = story_landing(page, 0), story_landing(page, 1)
+    walk_to(page, a, 600)
+    empty = []
+    for y in range(a, b + 1, 40):
+        page.evaluate(f"window.scrollTo(0, {y})")
+        page.wait_for_timeout(70)
+        st = page.evaluate(STORY_STATE)
+        if not any(o >= 0.5 and t >= st["landing"] - 1 and bo <= view_h for t, bo, o, _ in st["titles"]):
+            empty.append(y - a)
+    check(
+        f"{tag}: between two topics a heading always stands under the index, in focus",
+        not empty,
+        f"no heading at {empty} px past the first topic (of {b - a})",
+    )
+    walk_to(page, story_landing(page, 2))
+    # The third topic: the age slider still ages the cell, with its honesty line.
+    age, honesty, aged = set_age(page, 70)
+    check(
+        f"{tag}: on the third topic the age slider ages the cell; honesty label shown",
+        age == "70" and honesty > 0.9 and 0.7 < aged < 0.9,
+        f"age {age}, label {honesty}, aged {aged:.2f}",
+    )
+    shoot(page, f"{name}-06-science-age")
+    set_age(page, 45)
+    # The index: choosing a topic glides the page until that topic has arrived.
+    reached = []
+    for i, label in ((0, "Mitochondria"), (1, "Free radicals"), (2, "Aging cells")):
+        page.click(f"#science nav button:has-text('{label}')")
+        page.wait_for_timeout(2600)
+        st = page.evaluate(STORY_STATE)
+        top = st["titles"][i][0]
+        reached.append((i, st["topic"], st["current"], round(top - st["landing"]), st["titles"][i][2]))
+    check(
+        f"{tag}: choosing a topic in the index glides to it",
+        all(t == i and c == i and 40 <= d <= 56 and o >= 0.99 for i, t, c, d, o in reached),
+        f"(topic, shown, index, words below the index, opacity) {reached}",
+    )
+    # Each topic's explainer opens its own sheet.
+    titles = []
+    for i in range(3):
+        page.evaluate(f"document.querySelector('#science [data-step=\"{i}\"] button').scrollIntoView({{block: 'center'}})")
+        page.wait_for_timeout(1700)
+        page.click(f"#science [data-step=\"{i}\"] button")
+        page.wait_for_timeout(700)
+        titles.append(dialog_title(page))
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(600)
+    check(
+        f"{tag}: each topic's explainer opens its own sheet",
+        all(titles) and len(set(titles)) == 3,
+        " | ".join(titles),
+    )
+    # The end: from the last topic's arrival the painting, the index and the last topic's words
+    # leave together, with the scroll, and before it the painting holds still: no jump.
+    release = story_landing(page, 2)
+    walk_to(page, release - 200, 900)
+    trace = []
+    for k in range(21):
+        page.evaluate(f"window.scrollTo(0, {release - 200 + 20 * k})")
+        page.wait_for_timeout(60)
+        st = page.evaluate(STORY_STATE)
+        trace.append((st["scroll"], st["fig"][1], st["index"][1], st["titles"][2][0]))
+    pin = st["pin"]
+    off = [
+        round(f - (pin - max(0, y - release)), 1)
+        for y, f, _, _ in trace
+    ]
+    together = [round((f - i), 1) for _, f, i, _ in trace]
+    step_words = [round(trace[k + 1][3] - trace[k][3], 1) for k in range(10, 20)]
+    check(
+        f"{tag}: the pinned painting holds still, then leaves with the index and the last topic (no jump)",
+        max(abs(v) for v in off) <= 1.5 and max(together) - min(together) <= 1.5 and all(abs(d + 20) <= 1.5 for d in step_words),
+        f"painting off its expected place {off}; painting minus index {sorted(set(together))}; last words per 20 px {step_words}",
+    )
+    shoot(page, f"{name}-05-science-release")
+
+
+def run_story(browser):
+    """Round 7: the brush line passes the scroll story down the far margin, beside the pinned
+    painting, and never over the painting, the age slider, the index or the words (at 1536x1000,
+    after scrolling to the end so the whole line is drawn); no sideways scrolling; the same story
+    holds at 1280x800."""
+    for size in ((1536, 1000), (1280, 800)):
+        tag = f"story {size[0]}x{size[1]}"
+        context, page, response, problems = open_page(browser, f"{BASE}/", size, False)
+        total = page.evaluate("document.documentElement.scrollHeight")
+        y = 0
+        while y < total:
+            page.evaluate(f"window.scrollTo(0, {y})")
+            page.wait_for_timeout(40)
+            y += 200
+        try:
+            page.wait_for_function("+document.querySelector('[data-brush-layer]').dataset.progress >= 0.999", timeout=15000)
+        except Exception:  # noqa: BLE001
+            pass
+        top = top_of(page, "#science")
+        stops = [("start", top - 40)] + [(f"topic {i + 1}", story_landing(page, i)) for i in range(3)]
+        stops.insert(2, ("between 1 and 2", (stops[1][1] + story_landing(page, 1)) // 2))
+        stops.append(("after", stops[-1][1] + 240))
+        over, beside = [], []
+        for label, at in stops:
+            walk_to(page, at, 1600)
+            st = page.evaluate(STORY_STATE)
+            fl, ft, fr, fb = st["stage"]
+            inset = 0.08 if label == "start" else 0.0
+            w, h = fr - fl, fb - ft
+            hits = {
+                "painting": ink_in_box(page, fl + inset * w, ft + inset * h, fr - inset * w, fb - inset * h),
+                "slider": ink_in_box(page, *st["age"]) if st["topic"] == 2 else 0,
+                "index": ink_in_box(page, *st["index"]),
+            }
+            for i, box in enumerate(st["words"]):
+                if box[3] > 0 and box[1] < size[1] and st["titles"][i][2] > 0.05:
+                    hits[f"words {i + 1}"] = ink_in_box(page, box[0] - 4, box[1], box[2] + 4, box[3])
+            hits = {k: v for k, v in hits.items() if v}
+            if hits:
+                over.append(f"{label}: {hits}")
+            if label.startswith("topic"):
+                beside.append(ink_in_box(page, st["fig"][2], max(st["fig"][1], 90), size[0], st["fig"][3]))
+            if size[0] == 1536:
+                shoot(page, f"story-{size[0]}-{label.replace(' ', '-')}")
+        check(
+            f"{tag}: the brush line passes the scroll story in the far margin, never over the painting, slider, index or words",
+            not over and all(b > 150 for b in beside),
+            f"over: {over}; beside the pinned painting at each topic {beside}",
+        )
+        wide = page.evaluate("document.documentElement.scrollWidth")
+        check(f"{tag}: no sideways scrolling", wide <= size[0], f"scrollWidth {wide}")
+        check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
+        context.close()
+    # A short laptop window (1366x657): the painting gives way so all of it, the slider and its
+    # honesty line stay in the window while pinned. A narrow one (1024x768), where a topic is
+    # taller than the room under the index: the index stays put and nothing dissolves, the
+    # painting is still pinned.
+    for size in ((1366, 657), (1024, 768)):
+        tag = f"story {size[0]}x{size[1]}"
+        context, page, response, problems = open_page(browser, f"{BASE}/", size, False)
+        walk_to(page, top_of(page, "#science"), 600)
+        walk_to(page, story_landing(page, 2), 2600)
+        st = page.evaluate(STORY_STATE)
+        k = page.evaluate(
+            """(() => { const s = document.querySelector('#science'); return { cramped: s.dataset.cramped,
+              index: getComputedStyle(s.querySelector('nav')).position,
+              anim: getComputedStyle(s.querySelector('[data-step="0"] > p')).animationName }; })()"""
+        )
+        if size[1] < 700:
+            check(
+                f"{tag}: on a short window the whole painting, its slider and honesty line stay in the window, pinned",
+                st["story"] == "true" and abs(st["fig"][1] - st["pin"]) <= 1 and st["fig"][3] <= size[1]
+                and st["age"][3] <= size[1] and st["topic"] == 2,
+                f"painting {st['fig'][1]:.0f} to {st['fig'][3]:.0f}, slider ends {st['age'][3]:.0f}, window {size[1]}",
+            )
+        else:
+            walk_to(page, story_landing(page, 1), 1200)
+            st = page.evaluate(STORY_STATE)
+            check(
+                f"{tag}: a topic taller than the room under the index: the index stays put, nothing dissolves, the painting pinned",
+                k["cramped"] == "true" and k["index"] == "static" and k["anim"] == "none"
+                and abs(st["fig"][1] - st["pin"]) <= 1 and st["topic"] == 1,
+                f"{k}, painting at {st['fig'][1]:.0f} (pin {st['pin']:.0f}), topic {st['topic']}",
+            )
+        wide = page.evaluate("document.documentElement.scrollWidth")
+        check(f"{tag}: no sideways scrolling, no errors", wide <= size[0] and not problems, f"scrollWidth {wide}; {problems[:2]}")
+        context.close()
 
 
 def page_checks(page, tag, width, view_h, problems):
@@ -812,9 +1125,19 @@ def run(browser, look, mobile):
     # Science.
     scroll_to(page, top_of(page, "#science") + (0 if mobile else 40), 1500)
     shoot(page, f"{name}-05-science")
+    # Round 7: on two columns with motion the science is a scroll story (its own checks); phones
+    # keep the three tabs, checked as before.
+    if not mobile:
+        science_story(page, tag, name, view_h)
     # Round 5: on a phone the three topics sit on one line, and the age slider takes no room
     # under the stage until its own topic is chosen.
     if mobile:
+        k = page.evaluate(TABBED)
+        check(
+            f"{tag}: the science keeps its three tabs (no tall scroll, nothing pinned)",
+            k["story"] == "false" and k["tabs"] == 3 and k["sticky"] != "sticky" and k["height"] < 2 * view_h,
+            str(k),
+        )
         t = page.evaluate(
             """(() => ({ tops: [...document.querySelectorAll('#science [role=tab]')].map(t => Math.round(t.getBoundingClientRect().top)),
               age: getComputedStyle(document.querySelector('#science input[type=range]').closest('div')).display }))()"""
@@ -824,41 +1147,26 @@ def run(browser, look, mobile):
             len(t["tops"]) == 3 and len(set(t["tops"])) == 1 and t["age"] == "none",
             str(t),
         )
-    page.click("#science [role=tab]:has-text('Free radicals')")
-    page.wait_for_timeout(1300)
-    radicals = page.locator("#science [role=tabpanel] h3").text_content()
-    page.click("#science [role=tab]:has-text('Aging cells')")
-    page.wait_for_timeout(1300)
-    aging = page.locator("#science [role=tabpanel] h3").text_content()
-    page.evaluate(
-        """(() => { const input = document.querySelector('#science input[type=range]');
-          const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
-          set.call(input, '70'); input.dispatchEvent(new Event('input', { bubbles: true })); })()"""
-    )
-    page.wait_for_timeout(1200)
-    age = page.locator("#science label strong").first.text_content()
-    honesty = page.evaluate(
-        "(() => { const e = [...document.querySelectorAll('#science p')].find(s => s.textContent.includes('Illustration, not a measurement')); if (!e) return 0; return +getComputedStyle(e.parentElement).opacity; })()"
-    )
-    aged = float(
-        page.evaluate(
-            "(() => { const i = [...document.querySelectorAll('#science img')].find(i => i.src.includes('mito-aged')); return i ? +getComputedStyle(i).opacity : 0; })()"
-        )
-    )
-    if mobile:
+        page.click("#science [role=tab]:has-text('Free radicals')")
+        page.wait_for_timeout(1300)
+        radicals = page.locator("#science [role=tabpanel] h3").text_content()
+        page.click("#science [role=tab]:has-text('Aging cells')")
+        page.wait_for_timeout(1300)
+        aging = page.locator("#science [role=tabpanel] h3").text_content()
+        age, honesty, aged = set_age(page, 70)
         scroll_to(page, top_of(page, "#science figure") - 90, 900)
-    shoot(page, f"{name}-06-science-age")
-    check(
-        f"{tag}: three topics switch the words",
-        "free radicals" in radicals.lower() and "age" in aging.lower(),
-        f"{radicals} | {aging}",
-    )
-    check(
-        f"{tag}: the age slider ages the cell; honesty label shown",
-        age == "70" and honesty > 0.9 and 0.7 < aged < 0.9,
-        f"age {age}, label {honesty}, aged {aged:.2f}",
-    )
-    page.click("#science [role=tab]:has-text('Mitochondria')")
+        shoot(page, f"{name}-06-science-age")
+        check(
+            f"{tag}: three topics switch the words",
+            "free radicals" in radicals.lower() and "age" in aging.lower(),
+            f"{radicals} | {aging}",
+        )
+        check(
+            f"{tag}: the age slider ages the cell; honesty label shown",
+            age == "70" and honesty > 0.9 and 0.7 < aged < 0.9,
+            f"age {age}, label {honesty}, aged {aged:.2f}",
+        )
+        page.click("#science [role=tab]:has-text('Mitochondria')")
 
     # Research.
     scroll_to(page, top_of(page, "#research") + (0 if mobile else 40), 900)
@@ -1150,9 +1458,10 @@ SHEETS = [
     ("Support (header)", SUPPORT, None),
     ("Dr. Liu", "document.querySelectorAll('#scientists button')[0]", None),
     ("Ask BiGH Science", "document.querySelectorAll('#scientists button')[1]", None),
-    ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 0),
-    ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 1),
-    ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button')].pop()", 2),
+    # The tabs' panel (phones, reduced motion) or, in the scroll story (round 7), the topic's own.
+    ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"0\"] button')].pop()", 0),
+    ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"1\"] button')].pop()", 1),
+    ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"2\"] button')].pop()", 2),
     ("Support (footer)", "document.querySelector('footer button')", None),
 ]
 MENU_BUTTON = "button[aria-controls='home-navigation']"
@@ -1168,7 +1477,7 @@ def ring(page):
 
 def open_sheet(page, opener, topic=None, wait=1200):
     """Open a sheet the way a keyboard does: focus its button, press Enter."""
-    if topic is not None:
+    if topic is not None and page.locator("#science [role=tab]").count():
         page.evaluate(
             f"document.querySelectorAll('#science [role=tab]')[{topic}].scrollIntoView({{ block: 'center', behavior: 'instant' }})"
         )
@@ -1569,6 +1878,21 @@ def run_reduced(browser, look):
         f"{tag}: the brush line runs down between the still life and its words, over neither, nor the names or arrows",
         subject == 0 and words == 0 and names == 0 and arrows == 0 and gap > 100,
         f"over the still life {subject}, the words {words}, the names {names}, the arrows {arrows}; in the gap {gap}",
+    )
+    # Round 7: with reduced motion the science keeps its three tabs (no tall scroll, nothing
+    # pinned), and the brush line still passes down the far side of its painting, over none of it.
+    page.evaluate("document.querySelector('#science figure').scrollIntoView({block: 'center'})")
+    page.wait_for_timeout(900)
+    k = page.evaluate(TABBED)
+    st = page.evaluate(STORY_STATE)
+    fl, ft, fr, fb = st["stage"]
+    over = ink_in_box(page, fl + 0.06 * (fr - fl), ft + 0.08 * (fb - ft), fr - 0.03 * (fr - fl), fb)
+    side = ink_in_box(page, fr, ft, 1440, fb)
+    check(
+        f"{tag}: the science keeps its three tabs; the brush line passes beside its painting, not over it",
+        k["story"] == "false" and k["tabs"] == 3 and k["sticky"] != "sticky" and k["height"] < 1.6 * 900
+        and over == 0 and side > 150,
+        f"{k}; over the painting {over}, beside it {side}",
     )
     scroll_to(page, top_of(page, "#products [data-brush=bottles]") - 500, 900)
     page.locator("#products button[aria-pressed]", has_text="Nature Calm").click()
@@ -1992,6 +2316,7 @@ with sync_playwright() as p:
     run_short(browser, "home")
     run_sizes(browser, "home")
     run_reduced(browser, "home")
+    run_story(browser)
     run_opens(browser)
     run_korean(browser, mobile=False)
     run_korean(browser, mobile=True)
