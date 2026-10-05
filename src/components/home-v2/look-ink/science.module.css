@@ -267,3 +267,29 @@
     margin: 0 -4vw;
   }
 }
+
+/* Phones (round 5): the three topics on one line, spread across the column (at 21px they broke
+   two and one, the chosen one's underline stranded between the rows). 17px at 390, never under
+   15px (360). */
+@media (max-width: 720px) {
+  .tabs {
+    justify-content: space-between;
+    gap: 0 12px;
+  }
+
+  .science .tab {
+    font-size: min(17px, 4.36vw);
+  }
+
+  /* The age slider takes its room only with its own topic (kept for the others, its empty room
+     left a gap of about 80px under the stage); it fades in when it comes. */
+  .age:not([data-on="true"]) {
+    display: none;
+  }
+
+  @starting-style {
+    .age[data-on="true"] {
+      opacity: 0;
+    }
+  }
+}

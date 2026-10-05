@@ -421,19 +421,31 @@
     margin-top: 12px;
   }
 
+  /* Round 5: on a phone the headline sets on two lines (at 34px it took three, "deserve" alone
+     on the middle one). */
+  .scientists .ask .askTitle {
+    font-size: min(34px, 8vw);
+  }
+
   .scientists .facts {
     grid-template-columns: 1fr;
     gap: 28px;
   }
 
+  /* Each figure and its words share one row on a hairline across the column (round 5: the rule
+     stood over the words alone, and read as a stray line). */
   .facts > div {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
     align-items: end;
     gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
   }
 
   .facts dd {
     margin: 0;
+    padding-top: 0;
+    border-top: 0;
   }
 }

@@ -69,11 +69,13 @@ export const contactShadow: Picture = { src: `${I}/pool-foot.webp`, width: 600, 
 /** Dr. Liu's only photograph (512 x 768), never shown larger than its own pixels allow. */
 export const liu: Picture = { src: "/images/jiankang-liu.jpg", width: 512, height: 768 };
 
-/** Ink still lifes for the sample stories: objects only, never people (ink). */
+/** Ink still lifes for the sample stories: objects only, never people (ink). v2 (round 5): built
+ *  at the originals' full width (1744px; they were 1200px), sharp at their large size on 2x
+ *  screens. */
 export const storyPaintings: Record<string, Picture> = {
-  lisa: { src: `${I}/story-morning.webp`, width: 1200, height: 1607 },
-  michael: { src: `${I}/story-reading.webp`, width: 1200, height: 1607 },
-  susan: { src: `${I}/story-source.webp`, width: 1200, height: 1607 },
+  lisa: { src: `${I}/story-morning-v2.webp`, width: 1744, height: 2336 },
+  michael: { src: `${I}/story-reading-v2.webp`, width: 1744, height: 2336 },
+  susan: { src: `${I}/story-source-v2.webp`, width: 1744, height: 2336 },
 };
 
 /** The close: an old pine over a sea of mist, the gold sun low (ink). Its two cranes fly on their

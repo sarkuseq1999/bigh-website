@@ -39,8 +39,12 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
       // The animated painting is a megabyte or two: not for visitors who asked to save data.
       const link = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
       if (link?.saveData) return;
+      // Phones take the small one only where it is sharp enough: the phone's crane is nearly the
+      // window's width (round 5), which on a 2x screen needs the full picture.
       const phone = window.matchMedia("(max-width: 720px)").matches;
-      timer = window.setTimeout(() => setFlight(phone ? craneFlight.small : craneFlight.src), 400);
+      const pixels = still.getBoundingClientRect().width * window.devicePixelRatio;
+      const small = phone && pixels <= 640;
+      timer = window.setTimeout(() => setFlight(small ? craneFlight.small : craneFlight.src), 400);
     };
     const watcher = new MutationObserver(() => {
       if (!bloomed()) return;
@@ -143,7 +147,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
             alt=""
             width={crane.crane.width}
             height={crane.crane.height}
-            sizes="(max-width: 720px) 70vw, 40vw"
+            sizes="(max-width: 720px) 96vw, 40vw"
             loading="eager"
             data-bloom="waiting"
             style={{ ["--bloom-delay" as string]: 600 }}

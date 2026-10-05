@@ -1,4 +1,6 @@
 {
   "prompt": "A museum-quality East Asian ink-wash still life on warm rice paper, painted with the same brush style and paper as the reference: a broken piece of honeycomb with a few glistening drops of resin, beside a branch of a wild shrub with many small narrow leaves, and a small ceramic dish, as if gathered on a hillside in Brazil. Sumi black and transparent grey washes only, with a single subtle touch of gold leaf on the resin drops; confident dry-brush detail, generous empty paper around the objects, the group placed in the lower two thirds of the frame. No bees, no insects, no people, no hands, no text, no labels, no bottles, no seal, no signature, no border, nothing red.\n",
-  "createdAt": "2026-10-02T22:53:14.187Z"
+  "createdAt": "2026-10-02T22:53:14.187Z",
+  "original": "reference/home-v2/ink/originals/gpt25-story-source-v1.png",
+  "built": "2026-10-04 (round 5): the original's full 1744px width, paper divided out (build_assets.py story-source)"
 }

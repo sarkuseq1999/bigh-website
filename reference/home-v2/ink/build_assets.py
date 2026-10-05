@@ -233,7 +233,10 @@ def build(name):
         save(painting, "purpose-land", 2400, 82)
         save(cranes, "purpose-cranes", None, 88)
     elif name.startswith("story-"):
-        save(ink(load(f"{name}-v1"), (0, 0, 1744, 200)), name, 1200, 82)
+        # v2 (round 5, October 4): the still lifes now run large (to 860px wide, the whole screen
+        # on a phone), so they ship at the originals' full 1744px width (they were 1200px and
+        # looked soft on 2x screens); new filenames, so the image optimizer serves the new pixels.
+        save(ink(load(f"{name}-v1"), (0, 0, 1744, 200)), f"{name}-v2", 1800, 82)
     elif name == "mito-closeup":
         # The gold folds, close: the frame's edges dissolve into the paper like a wet wash.
         save(vignette(ink(load("mito-closeup-v1"), (0, 1600, 120, 1744))), "mito-closeup", 1600, 82)

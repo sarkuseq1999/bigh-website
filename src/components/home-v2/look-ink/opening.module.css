@@ -268,25 +268,28 @@
     padding: 72px 0 40px;
   }
 
-  /* 320 px tall on a phone; from about 560 px wide (a small tablet) it grows with the window
-     again, so the crane, which is as wide as the window allows, still fits inside it. */
+  /* Round 5: the first screen is a painting first. About 46% of a phone's height (388 px at
+     390 x 844), never under 88% of its width (where a browser's bars shorten the window), never
+     so tall that the headline leaves a short window (a phone on its side), at most 480 px. */
   .art {
     position: relative;
     inset: auto;
-    height: max(min(78vw, 320px), 57vw);
+    height: clamp(240px, min(max(46svh, 88vw), 100svh - 200px), 480px);
     overflow: hidden;
   }
 
   .sun {
-    left: 66%;
-    top: 7%;
-    width: 25vw;
+    left: 67%;
+    top: 4%;
+    width: 27vw;
   }
 
+  /* The bird spans about 62% of the window (its picture is 96vw, the bird 65% of it), flying in
+     from the left edge toward the sun, its beak under the sun's lower edge. */
   .crane {
-    left: 3%;
-    top: 8%;
-    width: 76vw;
+    left: -11vw;
+    top: 4%;
+    width: 96vw;
   }
 
   .landscape {
@@ -318,16 +321,20 @@
     line-height: 1.45;
   }
 
+  /* The two pills, one over the other, each the column's full width (ragged widths read as an
+     accident; side by side they do not fit at reading size). */
   .actions {
+    flex-direction: column;
     gap: 12px;
-    margin-top: 22px;
+    margin-top: 24px;
   }
 
   .opening .actions > a,
   .opening .actions > button {
-    min-height: 50px;
+    width: 100%;
+    min-height: 54px;
     padding: 0 22px;
-    font-size: 17px;
+    font-size: 18px;
   }
 }
 

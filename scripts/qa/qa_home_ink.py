@@ -81,6 +81,13 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     both edges of the screen; with reduced motion (the whole line drawn) the brush line runs down
     the gaps beside both paintings and never over their subjects, their words or the story's
     names and arrows.
+  - the phone as its own design (round 5, October 4): the opening is a painting first (its
+    picture at least 44% of the window's height, the bird at least 58% of its width, a wingbeat
+    picture sharp for the screen) with its two pills one over the other at the column's full
+    width; the closing painting keeps the gold sun and both cranes in the window, the cranes on
+    their own flying layer and the light on the sun's leaf; the stories open with their heading,
+    then the still life, then the sample; the still lifes ship at their full 1744 px; the three
+    science topics sit on one line and the age slider takes no room until its topic.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -319,6 +326,40 @@ PAINTINGS = """(() => {
 })()"""
 
 
+# Round 5, phones: the opening's picture, the bird's width (its picture is 64.6% bird), the
+# wingbeat picture's own width and the pixels the crane needs on this screen (the full picture is
+# 900), the two pills and the words' column, as [left, top, right, bottom].
+PHONE_OPENING = """(() => {
+  const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const art = document.querySelector('#top [data-brush=opening-art]').getBoundingClientRect();
+  const crane = document.querySelector('#top [data-brush=crane]').getBoundingClientRect();
+  const flight = document.querySelector('#top img[src*=crane-flight]');
+  const title = document.querySelector('#opening-title');
+  const pills = [...title.parentElement.querySelectorAll(':scope > div > a, :scope > div > button')].map(r);
+  return { art: art.height, bird: crane.width * 0.646, flight: flight ? flight.naturalWidth : 0,
+    need: Math.min(900, Math.round(crane.width * devicePixelRatio)), pills,
+    col: r(title.parentElement.querySelector('p')) };
+})()"""
+
+# Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width) and the
+# cranes' layer fall in the window, and whether the cranes and the light on the leaf are shown.
+PURPOSE_FRAME = """(() => {
+  const p = document.querySelector('#purpose [data-brush=purpose-painting]').getBoundingClientRect();
+  const f = document.querySelector('#purpose img[src*=purpose-cranes]');
+  const b = f.parentElement.getBoundingClientRect();
+  const light = document.querySelector('#purpose [data-brush=purpose-painting] + span');
+  return { sun: [Math.round(p.left + 0.767 * p.width), Math.round(p.left + 0.846 * p.width)],
+    cranes: [Math.round(b.left), Math.round(b.right)], flight: getComputedStyle(f.parentElement).display,
+    light: getComputedStyle(light).display, loaded: f.complete && f.naturalWidth > 0 };
+})()"""
+
+# Round 5: each story still life's own picture width (the file the optimizer is given).
+STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stories figure img')].map((i) =>
+  new Promise((ok) => { const u = new URL(i.getAttribute('src'), location.href);
+    const im = new Image(); im.onload = () => ok(im.naturalWidth); im.onerror = () => ok(0);
+    im.src = u.searchParams.get('url') || u.pathname; }))))()"""
+
+
 # The finale (round 3): the promise in its own band at the top of the footer, before the link
 # columns and over a hairline; its size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
@@ -447,6 +488,24 @@ def run(browser, look, mobile):
     ]
     inside = all(b[0] >= 0 and b[2] <= width for b in boxes)
     check(f"{tag}: the opening's words sit clear, inside the window", not overlaps and inside, f"{len(overlaps)} overlaps")
+    # Round 5: the phone's opening is a painting first: the picture about 46% of the window's
+    # height, the bird about 62% of its width (a wingbeat picture sharp for the screen: the full
+    # one on a 2x screen), and the two pills one over the other at the column's full width, 52 px or taller.
+    if mobile:
+        o = page.evaluate(PHONE_OPENING)
+        check(
+            f"{tag}: the opening is a painting first, the crane nearly the window's width",
+            o["art"] >= 0.44 * view_h and o["bird"] >= 0.58 * width and o["flight"] >= o["need"],
+            f"picture {o['art']:.0f} px tall, bird {o['bird']:.0f} px wide, wingbeat picture {o['flight']} px (needs {o['need']})",
+        )
+        pills, col = o["pills"], o["col"]
+        check(
+            f"{tag}: the opening's two pills stack at the column's full width",
+            len(pills) == 2
+            and all(abs(p[0] - col[0]) < 1 and abs(p[2] - col[2]) < 1 and p[3] - p[1] >= 52 for p in pills)
+            and pills[1][1] >= pills[0][3],
+            f"pills {[[round(v) for v in p] for p in pills]}, column {round(col[0])} to {round(col[2])}",
+        )
     # Round 3: a painting whose edges dissolve through its own mask (the opening's landscape, the
     # closing painting) keeps that edge before, during and after its bloom: the ink blot is laid
     # over it (intersect), never in its place. Read on a hidden copy of each, so the page's own
@@ -713,6 +772,18 @@ def run(browser, look, mobile):
             sl <= 0 and sr >= g["win"] and g["stillTag"][0] >= 16,
             f"still life {sl:.0f} to {sr:.0f}, label at {g['stillTag'][0]:.0f}",
         )
+        # Round 5: the block opens with its heading; the still life sits between it and the sample.
+        check(
+            f"{tag}: the stories open with their heading, then the still life, then the sample",
+            g["storyHead"][3] <= st + 1 and g["story"][1] >= sb - 1,
+            f"heading ends {g['storyHead'][3]:.0f}, still life {st:.0f} to {sb:.0f}, sample from {g['story'][1]:.0f}",
+        )
+        widths = page.evaluate(STILL_SOURCE)
+        check(
+            f"{tag}: the still lifes ship at their full 1744 px (sharp on 2x screens)",
+            len(widths) == 3 and all(w >= 1700 for w in widths),
+            str(widths),
+        )
     else:
         check(
             f"{tag}: the still life runs off the window's left edge, about half the window wide, its label in view",
@@ -735,6 +806,18 @@ def run(browser, look, mobile):
     # Science.
     scroll_to(page, top_of(page, "#science") + (0 if mobile else 40), 1500)
     shoot(page, f"{name}-05-science")
+    # Round 5: on a phone the three topics sit on one line, and the age slider takes no room
+    # under the stage until its own topic is chosen.
+    if mobile:
+        t = page.evaluate(
+            """(() => ({ tops: [...document.querySelectorAll('#science [role=tab]')].map(t => Math.round(t.getBoundingClientRect().top)),
+              age: getComputedStyle(document.querySelector('#science input[type=range]').closest('div')).display }))()"""
+        )
+        check(
+            f"{tag}: the three topics sit on one line; the age slider waits for its topic",
+            len(t["tops"]) == 3 and len(set(t["tops"])) == 1 and t["age"] == "none",
+            str(t),
+        )
     page.click("#science [role=tab]:has-text('Free radicals')")
     page.wait_for_timeout(1300)
     radicals = page.locator("#science [role=tabpanel] h3").text_content()
@@ -800,6 +883,21 @@ def run(browser, look, mobile):
     # lifted travel to the footer and the closing stroke).
     scroll_to(page, top_of(page, "#purpose") + (0 if mobile else 40), 2600)
     shoot(page, f"{name}-08-purpose")
+    # Round 5: on a phone the closing painting is framed for the window: the gold sun and both
+    # cranes inside it, the cranes on their own (flying) layer, the light on the sun's leaf on.
+    if mobile:
+        c = page.evaluate(PURPOSE_FRAME)
+        check(
+            f"{tag}: the closing painting keeps the gold sun and both cranes in the window, flying",
+            0 <= c["sun"][0]
+            and c["sun"][1] <= width
+            and 0 <= c["cranes"][0]
+            and c["cranes"][1] <= width
+            and c["flight"] != "none"
+            and c["light"] != "none"
+            and c["loaded"],
+            str(c),
+        )
     scroll_to(page, top_of(page, "#purpose") + 500, 2600)
     end_progress = progress(page)
     # Phones have no page line: there the route is the opening's stroke, then the lifted travel to

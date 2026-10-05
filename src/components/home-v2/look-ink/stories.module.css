@@ -275,6 +275,25 @@
 @media (max-width: 899px) {
   .spread {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 12px;
+  }
+
+  /* One column (round 5): the heading first, then the still life, then the sample's words, so
+     the section opens with its title (not a picture under the last block's button) and the
+     painting sits beside the story it illustrates. */
+  .stories .words {
+    display: contents;
+  }
+
+  .stories .head {
+    order: -1;
+  }
+
+  /* The painting parts the heading from the sample, so the sample needs no rule of its own. */
+  .stories .story {
+    margin-top: 8px;
+    padding-top: 0;
+    border-top: 0;
   }
 
   /* One column: the still life runs to both edges of the screen, its label at the gutter. */
@@ -293,10 +312,13 @@
     gap: 4px;
   }
 
-  /* Three equal columns; on the narrowest phones a column grows to keep its name on one line. */
+  /* The three names across the column, each as wide as its words (round 5: in equal thirds
+     "Morning routine" broke onto two lines beside one-line neighbours); on the narrowest phones
+     a column shrinks to its longest word. */
   .choices {
     display: grid;
-    grid-template-columns: repeat(3, minmax(min-content, 1fr));
+    grid-template-columns: repeat(3, auto);
+    justify-content: space-between;
   }
 
   .choiceName {

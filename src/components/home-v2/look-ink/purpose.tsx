@@ -26,39 +26,44 @@ export function Purpose() {
       data-brush="purpose"
     >
       <div className={styles.scene}>
-        <Image
-          className={`${base.ink} ${styles.painting}`}
-          src={purposePainting.src}
-          alt=""
-          width={purposePainting.width}
-          height={purposePainting.height}
-          sizes="100vw"
-          data-bloom=""
-          data-brush="purpose-painting"
-        />
-        <span
-          className={`${base.gold} ${styles.sunLight}`}
-          style={{ ["--gold" as string]: `url(${gold.purpose})` }}
-        />
-        <span
-          className={styles.flight}
-          style={{
-            left: `${purposeCranes.box.left * 100}%`,
-            top: `${purposeCranes.box.top * 100}%`,
-            width: `${purposeCranes.box.width * 100}%`,
-          }}
-        >
+        {/* The painting with its layers (the light on the sun's leaf, the two cranes). On two
+            columns it is the scene itself; on one column it is a frame of its own, so a phone
+            sees the cranes flying home to the sun (purpose.module.css). */}
+        <div className={styles.plate}>
           <Image
-            className={`${base.ink} ${styles.cranes}`}
-            src={purposeCranes.src}
+            className={`${base.ink} ${styles.painting}`}
+            src={purposePainting.src}
             alt=""
-            width={purposeCranes.width}
-            height={purposeCranes.height}
-            sizes="(max-width: 979px) 1px, 14vw"
+            width={purposePainting.width}
+            height={purposePainting.height}
+            sizes="(max-width: 899px) min(220vw, 1500px), 100vw"
             data-bloom=""
-            style={{ ["--bloom-delay" as string]: 500 }}
+            data-brush="purpose-painting"
           />
-        </span>
+          <span
+            className={`${base.gold} ${styles.sunLight}`}
+            style={{ ["--gold" as string]: `url(${gold.purpose})` }}
+          />
+          <span
+            className={styles.flight}
+            style={{
+              left: `${purposeCranes.box.left * 100}%`,
+              top: `${purposeCranes.box.top * 100}%`,
+              width: `${purposeCranes.box.width * 100}%`,
+            }}
+          >
+            <Image
+              className={`${base.ink} ${styles.cranes}`}
+              src={purposeCranes.src}
+              alt=""
+              width={purposeCranes.width}
+              height={purposeCranes.height}
+              sizes="(max-width: 899px) 30vw, 14vw"
+              data-bloom=""
+              style={{ ["--bloom-delay" as string]: 500 }}
+            />
+          </span>
+        </div>
         <div className={`${base.wrap} ${styles.statement}`}>
           <div className={styles.titleBox}>
             <h2 id="purpose-title" className={styles.title}>

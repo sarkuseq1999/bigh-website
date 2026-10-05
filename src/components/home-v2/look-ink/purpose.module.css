@@ -22,9 +22,15 @@
   mask-image: var(--edge);
 }
 
-/* Light on the low sun's leaf. On narrow windows the painting is cropped to the pine and the
-   sun is out of the frame. */
-.purpose .scene > .sunLight {
+/* The painting and its layers. On two columns the frame is the scene itself (this box steps
+   aside); on one column it is a frame of its own (below). */
+.plate {
+  display: contents;
+}
+
+/* Light on the low sun's leaf. Just above one column (900 to 979px) the painting's minimum height
+   crops its sides, and the leaf's light would miss the leaf. */
+.purpose .scene .sunLight {
   bottom: auto;
   aspect-ratio: 2400 / 1029;
 }
@@ -73,15 +79,8 @@
   }
 }
 
-@media (max-width: 979px) {
-  .purpose .scene > .sunLight {
-    display: none;
-  }
-}
-
-/* Narrow windows crop the painting to the pine; the cranes' sky is out of the frame. */
-@media (max-width: 899px) {
-  .flight {
+@media (min-width: 900px) and (max-width: 979px) {
+  .purpose .scene .sunLight {
     display: none;
   }
 }
@@ -235,10 +234,25 @@
     flex-direction: column;
   }
 
+  /* One column (round 5): the painting is too wide to keep both the pine and the sun, so a phone
+     sees the story's end: the two cranes flying home to the low gold sun over the sea of mist.
+     The frame is the painting at 220% of the window (to 1500px), moved left until the sun's
+     centre (81% of its width) stands at 76% of the window, its right edge never inside it; the
+     window's edges cut only mist and far ridges (the look's root clips the rest). Its open sky
+     lies under the statement's last lines, so the cranes fly about 60px under its label. */
+  .plate {
+    --pw: min(220vw, 1500px);
+    --shift: clamp(0px, 0.81 * var(--pw) - 76vw, var(--pw) - 100vw);
+    position: relative;
+    display: block;
+    flex: none;
+    width: var(--pw);
+    max-width: none;
+    margin: calc(60px - 0.195 * var(--pw)) 0 0 calc(-1 * var(--shift));
+  }
+
   .painting {
     min-height: 0;
-    aspect-ratio: 5 / 4;
-    object-position: 22% 100%;
   }
 
   .purpose .titleBox .station {
@@ -252,11 +266,15 @@
     margin-bottom: 0;
   }
 
-  /* Two classes deeper than the shared .caption rule (margin: 0), which otherwise wins and
-     leaves the label against the window's edge. */
+  /* The label rests on the painting's misty foot, at the gutter (as on two columns). */
   .purpose .scene .tag {
-    position: static;
-    align-self: flex-end;
-    margin: 6px var(--gutter) 0 0;
+    bottom: 2px;
+  }
+}
+
+/* Small phones: "Help you live fully." keeps one line (42px at 390; at 360 it broke in two). */
+@media (max-width: 720px) {
+  .purpose .title {
+    font-size: min(42px, 11.4vw);
   }
 }
