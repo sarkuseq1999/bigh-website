@@ -1,0 +1,11 @@
+{
+  "model": "kling-video/v3.0/pro/image-to-video",
+  "prompt": "This sumi-e ink painting of a red-crowned crane comes to life and flies on plain rice paper. Starting at once, the crane makes two slow, full wingbeats, one straight after the other with no pause between them: each time the raised wings sweep down below the body, the far wing passing behind the head and neck, then they rise back up, and the second beat ends in the raised pose of the first image. The painting stays a painting on every frame: every feather is painted with soft wet washes of grey and black ink, not drawn with lines; the black flight feathers stay solid, wet sumi black; the soft grey ink wash on the wings, the body and the underside stays; the brush texture and the dry-brush feather edges stay; the black neck, the small gold crown and the long beak stay unchanged. The wings never turn into white outlines or line art. With each down-stroke the body lifts a little and with each up-stroke it settles back, and the trailing legs sway slightly; the long neck and the head stay steady, and the crane keeps its size and roughly its place in the frame. Plain empty rice paper, evenly lit, unchanged. Locked-off camera, no zoom, no pan, no new objects, no text, nothing else changes.",
+  "usd": "0.476",
+  "made": "20261005-123059",
+  "files": [
+    "crane-fly-v8.mp4"
+  ],
+  "from_image": "reference/home-v2/ink/originals/gpt25-crane-v1.png",
+  "verdict": "not used: crown gold and close to v3, but two beats with a pause at the raised pose, the body locked, and the wings edge-on and thin at the bottom of each stroke (thinnest frame 36% of the first pose's solid ink); built for comparison as build_crane_flight.py v8-trial"
+}

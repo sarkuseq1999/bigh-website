@@ -15,8 +15,9 @@ import styles from "./opening.module.css";
 // misty mountains, the crane of long life in flight, a gold-leaf sun; the three-line headline at
 // the lower left on calm paper, the intro and two pills under it. The brush line that leaves the
 // crane is the page's own (brush.tsx). The painting is alive: mist drifts through the mountains
-// (mist.ts), light crosses the gold leaf, the sun sits at its own depth, and the crane glides and,
-// every few breaths, beats its wings once (the same painting, animated).
+// (mist.ts), light crosses the gold leaf, the sun sits at its own depth, and the crane flies on:
+// one slow wingbeat a breath, its body lifting with each stroke (the same painting, animated),
+// while the whole bird rides the air in a slow float of its own (opening.module.css).
 export function OpeningCrane({ motion }: { motion: boolean }) {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -26,7 +27,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
   useMist(art, landscape, mist, motion);
 
   // The wingbeat: once the still crane has bloomed, the animated painting is fetched; it opens on
-  // the same pose, so it takes the still's place unseen and then beats its wings.
+  // the same pose, so it takes the still's place unseen and then flies on.
   const bird = useRef<HTMLImageElement>(null);
   const [flight, setFlight] = useState<string | null>(null);
   const [flying, setFlying] = useState(false);

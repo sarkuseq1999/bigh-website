@@ -35,11 +35,25 @@ behind the head by itself. One retouch: a brush knot at the far wing's tip (c045
 were not used: crane-fly-v4 (cfg_scale 0.7) lost the wash like v1, and crane-fly-v5 painted the
 crown red. The moving frames are a notch lower in quality (74), for the same weight as v2.
 
+v4 (October 5, Mo: "it only moves its wings, looks a little fake"), from crane-fly-v3's cut frames
+(the same painting, retouch and quality as v3): the crane flies on. No held pose: every frame
+plays in turn, 40 ms each, so one wingbeat takes one of the page's breaths (2.4 s; the take itself
+is a slow-motion beat of 5 s), and the last frame runs straight into the first (the take's first
+and last frames are the same painting). And the whole bird rides its beat (ride()): the body
+lifts as the wings press down and settles as they rise, pitching a hair so the trailing legs swing
+behind it. Kling would not do that part: three new takes asked for steady beats with the body
+rising and falling (crane-fly-v6 to v8, prompts in originals/), and in all three the head stayed
+within half a pixel of its place while only the wings moved; they also kept a pause with the
+wings raised, and on the down-stroke their wings went thinner than v3's (thinnest frame 35% of the
+first pose's solid ink; v3 keeps 52%), and v6 painted the crown red. gold_crown() is kept for a
+take that does. The page adds its own slow float (opening.module.css), out of step with the beat.
+
 Output: public/images/home-v2/ink/crane-flight-<version>.webp (900 px) and
 crane-flight-<version>-600.webp (phones).
 
 usage: python -X utf8 reference/home-v2/ink/build_crane_flight.py <version> [--frames-only]
            [--cut A-B]   (cut only frames A to B, e.g. to judge a take's mid-beat on grey)
+           [--out DIR]   (a trial build somewhere else)
 """
 
 import subprocess
@@ -51,7 +65,7 @@ from PIL import Image, _webp  # _webp: Pillow's own animation encoder (12.1), fo
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
-OUT = REPO / "public/images/home-v2/ink"
+OUT_DIR = REPO / "public/images/home-v2/ink"
 STEP = 2  # every second frame: 12 a second from Kling's 24
 FRAME_MS = 70  # a little faster than filmed (83 ms), so the beat is about four seconds
 LEAD_MS = 1400  # the glide before the first beat (and the start of every glide after it)
@@ -93,11 +107,37 @@ def retouch_v3(images):
     return images
 
 
+def gold_crown(images):
+    """Kling sometimes paints the crown red mid-take (it knows the species); the painting's crown
+    is a touch of gold leaf. Reddish pixels around the head (top right of the frame) take the
+    first frame's gold (200, 172, 112) at their own lightness."""
+    gold = np.array([200, 172, 112], np.float32)
+    for image in images:
+        head = image[300:760, 950:1450].astype(np.float32)
+        r, g, b = head[..., 0], head[..., 1], head[..., 2]
+        red = (r - g > 40) & (r - b > 40) & (head[..., 3] > 0)
+        if not red.any():
+            continue
+        light = (0.299 * r + 0.587 * g + 0.114 * b)[red] / (0.299 * 200 + 0.587 * 172 + 0.114 * 112)
+        head[red, :3] = np.clip(gold[None, :] * light[:, None], 0, 255)
+        image[300:760, 950:1450] = head.astype(np.uint8)
+    return images
+
+
 TAKES = {
     "v2": {"source": "crane-fly-v1.mp4", "work": "crane-flight", "same_as_first": (1, 2),
            "retouch": retouch_v2, "quality": 76},
     "v3": {"source": "crane-fly-v3.mp4", "work": "crane-flight-v3", "same_as_first": (),
            "retouch": retouch_v3, "quality": 74},
+    # ride: (lift as a share of the frame's height, pitch in degrees, frames the pitch lags)
+    "v4": {"source": "crane-fly-v3.mp4", "work": "crane-flight-v3", "same_as_first": (),
+           "retouch": retouch_v3, "quality": 74, "loop": True, "pace": 40, "ride": (0.014, 0.8, 2)},
+    # The best of the October 5 takes, built the same way for comparison (not shipped: its wings
+    # thin out on the down-stroke to 36% of the first pose's solid ink, and 12 frames a second).
+    # Frames 1, 2, 31 to 33 and 59 are the raised pose again (Kling's pauses), so they are dropped.
+    "v8-trial": {"source": "crane-fly-v8.mp4", "work": "crane-flight-v8", "same_as_first": (),
+                 "drop": (1, 2, 31, 32, 33, 59), "retouch": None, "quality": 74, "loop": True,
+                 "ride": (0.014, 0.8, 2)},
 }
 
 
@@ -131,6 +171,34 @@ def cut_all(take, files, only=None):
     return out
 
 
+def ride(take, images, order):
+    """The whole bird rides its own wingbeat (v4): the body lifts as the wings press down and
+    settles as they rise, and pitches a hair nose-up with the lift, so the trailing legs swing
+    a little behind it. The wings' depth in each frame (how low the bird's top edge is: high
+    with the wings raised, low with them down) drives both, the pitch a few frames later (the
+    legs lag). Frame 0 keeps the still's place exactly (the swap stays unseen)."""
+    lift, pitch, lag = take["ride"]
+    tops = []
+    for i in order:
+        rows = np.nonzero((images[i][..., 3] > 128).any(axis=1))[0]
+        tops.append(rows[0])
+    tops = np.array(tops, np.float32)
+    depth = (tops - tops.min()) / max(tops.max() - tops.min(), 1)
+    depth = (np.roll(depth, 1) + 2 * depth + np.roll(depth, -1)) / 4  # smooth, as a loop
+    rise = depth - depth[0]
+    tilt = np.roll(depth, lag) - np.roll(depth, lag)[0]
+    height = images[0].shape[0]
+    shoulder = (740, 580)  # where the wings meet the body, in the 1600 x 1062 frame
+    for k, i in enumerate(order):
+        if k == 0:
+            continue
+        frame = Image.fromarray(images[i], "RGBA").convert("RGBa")  # premultiplied: clean edges
+        frame = frame.rotate(pitch * tilt[k], Image.BICUBIC, center=shoulder,
+                             translate=(0, -lift * height * rise[k]))
+        images[i] = np.asarray(frame.convert("RGBA")).copy()
+    return images
+
+
 def sized(image, width):
     """One frame at the shipping width, its alpha snapped to solid inside and clear outside."""
     height = round(1062 * width / 1600)
@@ -140,11 +208,23 @@ def sized(image, width):
     return Image.fromarray(small, "RGBA")
 
 
+def played(take, images):
+    return [i for i in range(1, len(images)) if i not in take["same_as_first"] and i not in take.get("drop", ())]
+
+
 def animate(take, images, width, name, quality):
-    beat = [i for i in range(1, len(images)) if i not in take["same_as_first"]]
-    # Glide (the first frame), the beat, then the first frame again for the long glide.
+    beat = played(take, images)
     # (frame, milliseconds, quality, alpha quality)
-    plan = [(0, LEAD_MS, 82, 100)] + [(i, FRAME_MS, quality, 70) for i in beat] + [(0, HOLD_MS, 82, 100)]
+    if take.get("loop"):
+        # v4: no holds. Every frame at the footage's own pace (12 a second), the last one running
+        # straight back into the first; the first keeps the still's quality (the swap frame).
+        pace = take.get("pace", 1000 * STEP / 24)
+        stamps = [round(k * pace) for k in range(len(beat) + 2)]
+        steps = [b - a for a, b in zip(stamps, stamps[1:])]
+        plan = [(0, steps[0], 82, 100)] + [(i, ms, quality, 70) for i, ms in zip(beat, steps[1:])]
+    else:
+        # Glide (the first frame), the beat, then the first frame again for the long glide.
+        plan = [(0, LEAD_MS, 82, 100)] + [(i, FRAME_MS, quality, 70) for i in beat] + [(0, HOLD_MS, 82, 100)]
     ready = {i: sized(images[i], width) for i in {0, *beat}}
     encoder = _webp.WebPAnimEncoder(ready[0].size, 0, 0, False, 3, 5, False, False)
     at = 0
@@ -152,18 +232,21 @@ def animate(take, images, width, name, quality):
         encoder.add(ready[i].getim(), at, False, q, alpha_q, 4)  # method 6 hangs for minutes
         at += ms
     encoder.add(None, at, False, quality, 100, 0)
-    path = OUT / name
+    path = OUT_DIR / name
     path.write_bytes(encoder.assemble("", "", ""))
-    print(f"{path.relative_to(REPO)}  {ready[0].width}x{ready[0].height}  {len(plan)} frames  "
+    print(f"{path}  {ready[0].width}x{ready[0].height}  {len(plan)} frames  "
           f"{at / 1000:.2f} s a loop  {path.stat().st_size // 1024} KB")
 
 
 if __name__ == "__main__":
-    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    valued = {sys.argv[i + 1] for i, a in enumerate(sys.argv[:-1]) if a in ("--cut", "--out")}
+    args = [a for a in sys.argv[1:] if not a.startswith("--") and a not in valued]
     if not args or args[0] not in TAKES:
-        raise SystemExit(f"usage: build_crane_flight.py <{'|'.join(TAKES)}> [--frames-only] [--cut A-B]")
+        raise SystemExit(f"usage: build_crane_flight.py <{'|'.join(TAKES)}> [--frames-only] [--cut A-B] [--out DIR]")
     version = args[0]
     take = TAKES[version]
+    if "--out" in sys.argv:  # a trial build somewhere else than the site's pictures
+        OUT_DIR = Path(sys.argv[sys.argv.index("--out") + 1]).resolve()
     only = None
     if "--cut" in sys.argv:
         a, b = sys.argv[sys.argv.index("--cut") + 1].split("-")
@@ -174,5 +257,7 @@ if __name__ == "__main__":
     if "--frames-only" not in sys.argv and only is None:
         images = [np.asarray(Image.open(c).convert("RGBA")).copy() for c in cuts]
         fixed = take["retouch"](images) if take["retouch"] else images
+        if take.get("ride"):
+            fixed = ride(take, fixed, [0, *played(take, fixed)])
         animate(take, fixed, 900, f"crane-flight-{version}.webp", take["quality"])
         animate(take, fixed, 600, f"crane-flight-{version}-600.webp", take["quality"])

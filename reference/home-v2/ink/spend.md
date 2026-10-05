@@ -7,3 +7,6 @@
 - 20261005-012336 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v3` $0.476 (round 8; shipped as crane-flight-v3.webp)
 - 20261005-012838 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v4` $0.476 (round 8, cfg_scale 0.7; not used: the wings went to outlines like v1)
 - 20261005-013326 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v5` $0.476 (round 8; not used: crown painted red, outline wings)
+- 20261005-122148 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v6` $0.476 (crane flies on; not used: crown red, outline wings, body locked)
+- 20261005-122632 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v7` $0.476 (crane flies on; not used: body locked, pause, outline wings)
+- 20261005-123059 Higgsfield kling-video/v3.0/pro/image-to-video `crane-fly-v8` $0.476 (crane flies on; not used: body locked, pause, thin wings; v4 re-times v3 instead)
