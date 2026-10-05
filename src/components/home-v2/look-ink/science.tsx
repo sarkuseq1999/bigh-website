@@ -233,7 +233,7 @@ export function Science() {
       data-story={story}
     >
       <div className={`${base.wrap} ${styles.layout}`}>
-        <div className={styles.copy}>
+        <div className={styles.copy} data-brush="science-copy">
           <h2 id="science-title" className={base.display}>
             {copy(science.title)}
           </h2>

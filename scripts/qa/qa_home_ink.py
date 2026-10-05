@@ -105,12 +105,17 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the age slider ages the
     cell on the third topic, with its honesty line;
     each topic's explainer opens its own sheet; the painting, the index and the last topic leave
-    together with no jump; the brush line passes in the far margin beside the pinned painting,
-    never over the painting, slider, index or words (1536x1000 and 1280x800, the whole line
+    together with no jump; the brush line passes beside the pinned painting (round 9: in the gap
+    between the words and the painting's column, no longer the far margin), never over the
+    painting, slider, index or words (1536x1000 and 1280x800, the whole line
     drawn); on a short window (1366x657) the whole pinned painting, slider and honesty line stay
     in the window; on a narrow one (1024x768) where a topic is taller than the room under the
     index, the index stays put and nothing dissolves. Phones and reduced motion keep the three
     tabs (no tall scroll, nothing pinned), with their checks as before.
+  - the brush line as one gesture (round 9, October 5): it lifts at the end of the ground under
+    the big bottle and lands again under the picker (no ink over the picker or in the margin
+    beside it); it passes the science in the gap between its words and its painting; every
+    station's leader meets the line (1536x1000 and 1280x800, the whole line drawn).
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -266,6 +271,24 @@ def ink_by_print(page, x0, x1, side):
         }""",
         [x0, x1, side],
     )
+
+
+def stations_on_line(page):
+    """Round 9: each station's leader meets the brush line: ink just past the leader's tip, level
+    with it (data-side names the side of the line the label sits on). Returns (label, ink)."""
+    out = []
+    count = page.evaluate("document.querySelectorAll('[data-station]').length")
+    for i in range(count):
+        page.evaluate(f"document.querySelectorAll('[data-station]')[{i}].scrollIntoView({{block: 'center'}})")
+        page.wait_for_timeout(450)
+        l, t, r, b, side, text = page.evaluate(
+            f"""(() => {{ const e = document.querySelectorAll('[data-station]')[{i}]; const k = e.getBoundingClientRect();
+              return [k.left, k.top, k.right, k.bottom, e.dataset.side, e.textContent.trim()]; }})()"""
+        )
+        cy = (t + b) / 2
+        x0, x1 = (r + 2, r + 18) if side == "left" else (l - 18, l - 2)
+        out.append((text, ink_in_box(page, x0, cy - 7, x1, cy + 7)))
+    return out
 
 
 def ink_in_box(page, x0, y0, x1, y1):
@@ -463,6 +486,7 @@ STORY_STATE = """(() => {
     pin, landing: pin + (nav ? nav.offsetHeight : 0), topic: +fig.dataset.topic,
     current: nav ? [...nav.querySelectorAll('button')].findIndex(b => b.getAttribute('aria-current') === 'step') : -1,
     fig: r(fig), stage: r(fig.firstElementChild), age: r(fig.querySelector('input').closest('div')),
+    copy: r(s.querySelector('[data-brush=science-copy]')),
     index: nav ? r(nav) : null, scroll: scrollY,
     titles: [...s.querySelectorAll('[data-step] h3')].map(h => [r(h)[1], r(h)[3], +getComputedStyle(h).opacity * +getComputedStyle(h.parentElement).opacity, h.textContent]),
     words: [...s.querySelectorAll('[data-step]')].map(e => { const k = [...e.children].map(r);
@@ -634,10 +658,11 @@ def science_story(page, tag, name, view_h):
 
 
 def run_story(browser):
-    """Round 7: the brush line passes the scroll story down the far margin, beside the pinned
-    painting, and never over the painting, the age slider, the index or the words (at 1536x1000,
-    after scrolling to the end so the whole line is drawn); no sideways scrolling; the same story
-    holds at 1280x800."""
+    """Round 7: the brush line passes the scroll story beside the pinned painting, never over the
+    painting, the age slider, the index or the words (at 1536x1000, after scrolling to the end so
+    the whole line is drawn); no sideways scrolling; the same story holds at 1280x800. Round 9:
+    it passes in the gap between the words and the painting's column (no longer in the far
+    margin), and every station's leader meets the line."""
     for size in ((1536, 1000), (1280, 800)):
         tag = f"story {size[0]}x{size[1]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False)
@@ -674,14 +699,16 @@ def run_story(browser):
             if hits:
                 over.append(f"{label}: {hits}")
             if label.startswith("topic"):
-                beside.append(ink_in_box(page, st["fig"][2], max(st["fig"][1], 90), size[0], st["fig"][3]))
+                beside.append(ink_in_box(page, st["copy"][2], max(st["fig"][1], 90), st["fig"][0], st["fig"][3]))
             if size[0] == 1536:
                 shoot(page, f"story-{size[0]}-{label.replace(' ', '-')}")
         check(
-            f"{tag}: the brush line passes the scroll story in the far margin, never over the painting, slider, index or words",
+            f"{tag}: the brush line passes the scroll story in the gap beside the painting, never over the painting, slider, index or words",
             not over and all(b > 150 for b in beside),
-            f"over: {over}; beside the pinned painting at each topic {beside}",
+            f"over: {over}; in the gap beside the pinned painting at each topic {beside}",
         )
+        missed = [f"{text} {ink}" for text, ink in stations_on_line(page) if ink == 0]
+        check(f"{tag}: every station's leader meets the brush line", not missed, f"no ink at the leader's tip: {missed}")
         wide = page.evaluate("document.documentElement.scrollWidth")
         check(f"{tag}: no sideways scrolling", wide <= size[0], f"scrollWidth {wide}")
         check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
@@ -1098,6 +1125,20 @@ def run(browser, look, mobile):
             f"{tag}: the brush line runs between the big bottle and its words and lays its ground under the bottle",
             ground > 200 and gap > 100 and over == 0 and beyond == 0,
             f"ground {ground}, gap {gap}, over the words {over}, beyond them {beyond}",
+        )
+        # Round 9: the picker's five bottles fill the width, so the brush lifts at the end of the
+        # ground and lands again under them: no ink over the picker or in the margin beside it
+        # (the old loop), and a new stroke in the band under it.
+        page.evaluate("document.querySelector('#products [data-brush=bottles]').scrollIntoView({block: 'center'})")
+        page.wait_for_timeout(2600)
+        pl, pt, pr, pb = page.evaluate(STAGE)["picker"]
+        over = ink_in_box(page, pl - 4, pt, pr + 4, pb)
+        margin = ink_in_box(page, 0, pt, pl - 4, pb) + ink_in_box(page, pr + 4, pt, width, pb)
+        landing = ink_in_box(page, pl, pb, pr, pb + 170)
+        check(
+            f"{tag}: the brush lifts over the picker and lands again under it, never round it",
+            over == 0 and margin == 0 and landing > 30,
+            f"over the picker {over}, beside it {margin}, landed under it {landing}",
         )
 
     # Stories.
@@ -1917,9 +1958,9 @@ def run_reduced(browser, look):
     st = page.evaluate(STORY_STATE)
     fl, ft, fr, fb = st["stage"]
     over = ink_in_box(page, fl + 0.06 * (fr - fl), ft + 0.08 * (fb - ft), fr - 0.03 * (fr - fl), fb)
-    side = ink_in_box(page, fr, ft, 1440, fb)
+    side = ink_in_box(page, st["copy"][2], ft, st["fig"][0], fb)
     check(
-        f"{tag}: the science keeps its three tabs; the brush line passes beside its painting, not over it",
+        f"{tag}: the science keeps its three tabs; the brush line passes beside its painting (in the gap), not over it",
         k["story"] == "false" and k["tabs"] == 3 and k["sticky"] != "sticky" and k["height"] < 1.6 * 900
         and over == 0 and side > 150,
         f"{k}; over the painting {over}, beside it {side}",

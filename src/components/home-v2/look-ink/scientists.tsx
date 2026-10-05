@@ -147,8 +147,12 @@ export function Scientists() {
           />
           <figcaption className={base.caption}>{copy("Illustration")}</figcaption>
         </figure>
-        <h3 className={`${base.display} ${styles.askTitle}`}>{copy(scientists.ask.title)}</h3>
-        <p className={`${base.body} ${styles.askText}`}>{copy(scientists.ask.text)}</p>
+        <h3 className={`${base.display} ${styles.askTitle}`} data-brush="ask-title">
+          {copy(scientists.ask.title)}
+        </h3>
+        <p className={`${base.body} ${styles.askText}`} data-brush="ask-text">
+          {copy(scientists.ask.text)}
+        </p>
         <button
           type="button"
           className={`${base.pill} ${styles.askButton}`}

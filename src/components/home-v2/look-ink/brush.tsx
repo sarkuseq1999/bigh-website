@@ -7,11 +7,12 @@ import styles from "./brush.module.css";
 // The page's signature: one continuous ink brush line that draws itself down the whole page as
 // you scroll, from the crane's flight path through every block to the
 // purpose. It is painted, not traced: one continuous stroke envelope with calligraphic width and
-// paper-tooth edges; the painter reloads about every thousand pixels, so each stroke lands loaded
-// and tapers thin, and as the ink runs out dry-brush streaks (flying white) open up inside the
-// stroke. In the crane opening the line keeps the approved hero's own stroke. The brush lifts off
-// the paper where the route says so (ink 0), and reloads where it says so (fresh): the page ends
-// on one loaded stroke under the footer's promise.
+// paper-tooth edges; the painter reloads where something begins (about every thousand pixels:
+// beside a station, under the big bottle, where the brush lands again), so each stroke lands
+// loaded at a place that means something and tapers thin, and as the ink runs out dry-brush
+// streaks (flying white) open up inside the stroke. In the crane opening the line keeps the
+// approved hero's own stroke. The brush lifts off the paper where the route says so (ink 0), and
+// reloads where it says so (fresh): the page ends on one loaded stroke under the footer's promise.
 // Section labels ([data-station]) are pinned to the line and appear as the brush reaches them.
 //
 // The route is a list of waypoints pinned to the blocks' own elements ([data-brush] anchors),
@@ -41,6 +42,8 @@ type Sample = {
   fresh: boolean;
   /** How heavily the brush is loaded (1 = the page's usual stroke). */
   load: number;
+  /** How sharply the line turns here (0 straight, toward 1 a hairpin). */
+  turn: number;
 };
 
 const TILE = 1200;
@@ -74,16 +77,30 @@ function measure(root: HTMLElement, waypoints: Waypoint[]): Point[] {
   const origin = root.getBoundingClientRect();
   const points: Point[] = [];
   const boxes = new Map<string, DOMRect | null>();
-  for (const point of waypoints) {
-    if (!boxes.has(point.at)) {
-      const element = root.querySelector<HTMLElement>(`[data-brush="${point.at}"]`);
-      boxes.set(point.at, element ? element.getBoundingClientRect() : null);
+  const boxOf = (at: string) => {
+    if (!boxes.has(at)) {
+      const element = root.querySelector<HTMLElement>(`[data-brush="${at}"]`);
+      boxes.set(at, element ? element.getBoundingClientRect() : null);
     }
-    const box = boxes.get(point.at);
+    return boxes.get(at);
+  };
+  for (const point of waypoints) {
+    const box = boxOf(point.at);
     if (!box || box.width === 0) continue;
+    const before = point.after ? boxOf(point.after) : null;
+    if (point.after && (!before || before.width === 0)) continue;
+    let x =
+      (before ? (before.right + box.left) / 2 : box.left + box.width * point.fx) + (point.dx ?? 0);
+    const keep = point.clear ? boxOf(point.clear[0]) : null;
+    if (point.clear && keep && keep.width > 0) {
+      const [, by] = point.clear;
+      x = by > 0 ? Math.max(x, keep.right + by) : Math.min(x, keep.left + by);
+    }
+    const rows = point.level ? boxOf(point.level) : box;
+    if (!rows || rows.height === 0) continue;
     points.push({
-      x: box.left - origin.left + box.width * point.fx + (point.dx ?? 0),
-      y: box.top - origin.top + box.height * point.fy + (point.dy ?? 0),
+      x: x - origin.left,
+      y: rows.top - origin.top + rows.height * point.fy + (point.dy ?? 0),
       w: point.w ?? 3,
       ink: point.ink ?? 1,
       fresh: point.fresh ?? false,
@@ -140,6 +157,7 @@ function sample(points: Point[], scale: number): Sample[] {
         classic: false,
         fresh: p1.fresh && k === (i === 1 ? 0 : 1),
         load: p1.load + (p2.load - p1.load) * e,
+        turn: 0,
       });
     }
   }
@@ -159,6 +177,7 @@ function sample(points: Point[], scale: number): Sample[] {
     const a = out[Math.max(0, i - span)];
     const b = out[Math.min(out.length - 1, i + span)];
     const turn = Math.abs(a.nx * b.ny - a.ny * b.nx);
+    p.turn = turn;
     const press = 1 + 0.7 * smooth(0.04, 0.34, turn);
     const breath = 0.32 + 1.45 * Math.pow(noise(p.s / 310, 7), 1.4);
     const grain = 0.9 + 0.2 * noise(p.s / 9, 11);
@@ -171,11 +190,21 @@ function sample(points: Point[], scale: number): Sample[] {
   return out;
 }
 
+/** The longest stroke one load of ink makes; a longer one is shared out into even loads. */
+const STROKE_MAX = 1500;
+/** A stroke that ends by lifting off the paper still has ink when it lifts (the ground under the
+ *  big bottle, the three rules, the closing stroke): its ink lasts as if it ran this far. */
+const STROKE_LIFT = 1150;
+
 /**
- * The brush's life below the opening: reload cycles of about a thousand pixels. Each stroke lands
- * loaded (about 3.6 px at the comp's width), then thins toward about 1 px and dries as the ink
- * runs out; where the route lifts the brush (ink 0) it tapers to nothing. Samples above
- * `classicUntil` (page y) keep the opening's own stroke, untouched.
+ * The brush's life below the opening. The painter reloads where the route says (fresh: beside a
+ * station, under the big bottle, where the brush touches down again), so each stroke lands loaded
+ * at a place that means something (about 3.6 px at the comp's width) and has thinned toward
+ * about 1 px and dried by the next reload; a stroke longer than STROKE_MAX is shared out into even
+ * loads. Along the way the hand slows and presses a little wider where the line turns, and the
+ * pressure breathes on the long runs, so no stretch is mechanically even. Where the route lifts
+ * the brush (ink 0) the stroke tapers to nothing and ends. Samples above `classicUntil` (page y)
+ * keep the opening's own stroke, untouched.
  */
 function material(samples: Sample[], classicUntil: number, scale: number) {
   let start = -1;
@@ -185,28 +214,53 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
     if (!p.classic && start < 0) start = i;
   }
   if (start < 0) return;
-  let cycle = 0;
-  let cycleStart = samples[start].s;
-  let length = 1150;
+  // Where each stroke begins: the first page sample, then every reload.
+  const strokes = [start];
+  for (let i = start + 1; i < samples.length; i++) if (samples[i].fresh) strokes.push(i);
+  for (let k = 0; k < strokes.length; k++) {
+    const a = strokes[k];
+    const b = k + 1 < strokes.length ? strokes[k + 1] : samples.length;
+    // The stroke's ink ends at the next reload, or earlier where the brush lifts off the paper.
+    let end = b - 1;
+    for (let i = a + 1; i < b; i++) {
+      if (samples[i].ink < 0.02) {
+        end = i;
+        break;
+      }
+    }
+    const lifts = end < b - 1;
+    const run = samples[end].s - samples[a].s;
+    const total = lifts ? Math.max(run, STROKE_LIFT) : Math.max(run, 400);
+    const loads = Math.max(1, Math.ceil(total / STROKE_MAX));
+    const length = total / loads;
+    for (let i = a; i < b; i++) {
+      const p = samples[i];
+      const along = p.s - samples[a].s;
+      const piece = Math.min(loads - 1, Math.floor(along / length));
+      const into = along - piece * length;
+      const phase = Math.min(1, into / length);
+      // The first stroke picks up where the opening's line leaves off, already loaded; every
+      // other one lands, pressing to its full load over its first few dozen pixels.
+      const first = k === 0 && piece === 0;
+      const land = first ? 1 : smooth(0, 36 * scale, into);
+      const load = land * Math.pow(1 - phase, 0.85);
+      const loaded = Math.pow(Math.max(0, p.ink), 0.6);
+      const width = (1.0 + 2.6 * load) * scale * loaded * p.load;
+      if (first) {
+        // The opening's own line (and on a phone, the opening's whole stroke) as approved.
+        p.w = width * (0.92 + 0.16 * noise(p.s / 90, 13));
+      } else {
+        // The brush's head where it lands: it presses down, then lifts a little into the stroke.
+        const head = 1 + 0.42 * smooth(4, 22, into) * (1 - smooth(26, 90, into));
+        const press = 1 + 0.35 * smooth(0.05, 0.3, p.turn);
+        const breath = 0.78 + 0.3 * noise(p.s / 340, 13) + 0.14 * noise(p.s / 80, 19);
+        p.w = width * head * press * breath;
+      }
+      p.dry = Math.min(1, Math.max(smooth(0.16, 0.9, phase), (1 - p.ink) * 1.2));
+    }
+  }
   for (let i = start; i < samples.length; i++) {
     const p = samples[i];
-    if (p.fresh) {
-      cycleStart = p.s;
-      cycle++;
-      length = 1150;
-    }
-    while (p.s - cycleStart > length) {
-      cycleStart += length;
-      cycle++;
-      length = 950 + 420 * hash(cycle, 77);
-    }
-    const phase = (p.s - cycleStart) / length;
-    // The first stroke picks up where the opening's line leaves off, already loaded.
-    const land = cycle === 0 ? 1 : smooth(0, 0.05, phase);
-    const load = land * Math.pow(1 - phase, 0.85);
-    const loaded = Math.pow(Math.max(0, p.ink), 0.6);
-    p.w = (1.0 + 2.6 * load) * scale * loaded * p.load * (0.92 + 0.16 * noise(p.s / 90, 13));
-    p.dry = Math.min(1, Math.max(smooth(0.16, 0.9, phase), (1 - p.ink) * 1.2));
     // Paper tooth: each edge catches the fibres on its own, more as the brush dries.
     const tooth = 0.18 + 0.22 * p.dry;
     p.jl = 1 - tooth / 2 + tooth * noise(p.s / 1.7, 31) + 0.08 * noise(p.s / 11, 33);

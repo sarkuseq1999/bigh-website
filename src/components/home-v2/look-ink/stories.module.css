@@ -207,6 +207,14 @@
   text-align: left;
 }
 
+/* Two columns: the three names stay under the still life (a third of its column each, 180 px at
+   most), so the brush line runs on down the gap beside them instead of bending round them. */
+@media (min-width: 900px) {
+  .stories .choice {
+    min-width: min(180px, (100vw - 2 * var(--gutter) - clamp(32px, 6vw, 104px)) * 5 / 33);
+  }
+}
+
 .choice::before {
   content: "";
   position: absolute;

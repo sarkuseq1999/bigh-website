@@ -7,6 +7,15 @@ export type Waypoint = {
   at: string;
   fx: number;
   fy: number;
+  /** In the gap after this anchor: x is the middle between its right edge and the left edge of
+   *  `at` (fx is then ignored), so the line keeps to the middle of a column gap at every width. */
+  after?: string;
+  /** The height is read off this anchor's box instead of `at`'s (fy, dy). */
+  level?: string;
+  /** Never nearer than this many pixels to that anchor: past its right edge (pixels > 0) or
+   *  before its left edge (pixels < 0). Where a narrower window brings the anchor closer, the
+   *  line gives way just enough. */
+  clear?: [string, number];
   dx?: number;
   dy?: number;
   w?: number;
@@ -94,79 +103,96 @@ const station = (id: string, side: "left" | "right", w = 3): Waypoint =>
     ? { at: `st-${id}`, fx: 0, fy: 0.5, dx: -8, w }
     : { at: `st-${id}`, fx: 1, fy: 0.5, dx: 8, w };
 
-/** Half the scientists block's column gap (clamp(40px, 7.8vw, 120px)) at a 1440 window. */
-const SPINE = -56;
+/** A point in the middle of the gap between two columns (`after` is the left one). */
+const gap = (after: string, at: string, fy: number, dx = 0, dy = 0, ink = 1): Waypoint => ({
+  at,
+  after,
+  fx: 0,
+  fy,
+  dx,
+  dy,
+  w: 3,
+  ink,
+});
 
-// Crane page: from the landscape the line drops straight down through the gap beside "Tiny
-// power plants." (past its station label), between the words and the big cell (round 4: the
-// cell is the page's biggest painting, so the line keeps to the gap and bows toward the cell's
-// lower end instead of wrapping under it), and on down to the gap between Dr. Liu's photograph
-// and his record, past that station, and bows in toward the print ("liu" is the mat), running
-// down beside it, never under it, like a stroke framing a print.
-const craneToScience: Waypoint[] = [
+/** The painter reloads here: a new stroke lands, loaded. */
+const fresh = (point: Waypoint, load?: number): Waypoint => ({ ...point, fresh: true, load });
+
+// The page (round 9: one gesture, not a path that dodges). Below the opening the line is one long,
+// quiet vertical down the gap between the page's two columns, from the cell to the research
+// index, with only a few authored moments; it reloads where something begins (beside a station,
+// under the big bottle, where it touches down again), so every stroke lands loaded at a place
+// that means something.
+//
+// From the landscape it drops down the gap between "Tiny power plants." and the big cell, past
+// that station; reloads beside "Our scientific roots" and leans calmly in beside Dr. Liu's print
+// (never under it, clear of its halo's heart), easing back out to the gap past the station
+// beside "What happens inside our cells…".
+const cranePage: Waypoint[] = [
   station("cellular", "right", 3),
-  on("cellular-words", 1, 0.42, 3.4, 1, 56),
-  on("cellular-words", 1, 0.86, 3.6, 1, 74),
-  on("cellular", 0.47, 1, 3, 1, 0, -30),
-  station("scientists", "left", 3),
-  on("liu", 1, 0.18, 3, 1, 36),
+  on("cellular-words", 1, 0.55, 3.4, 1, 60),
+  on("cellular", 0.466, 1, 3.2, 1, 0, -40),
+  fresh(station("scientists", "left", 3)),
+  on("liu", 1, 0.4, 3.2, 1, 54),
+  on("liu", 1, 0.84, 3.2, 1, 64),
 ];
 
-// Shared: down beside the print, easing out past its lower corner (clear of his name); down the
-// gap between the two columns, past the station beside "What happens inside our cells…"; then
-// (round 6: Ask BiGH Science is the page's one centred pause) it swings out into the left margin
-// and runs quietly down beside the pause, clear of its painting and words, and back in to the
-// gap above the products' headline; on down that gap into the products, past their station and between the big
-// bottle and its words; there the brush reloads and lays one stroke under the bottle, the ground
-// it stands on (as the crane at rest stands on the closing stroke), and runs on into the left
-// margin, past the picker; then (round 4: the story still life now runs off the left edge) it
-// sweeps right above the still life and down the gap between it and the sample's words, past the
-// story names; across above "Make sense of the science." and down the far side of its painting;
-// under it to the research spine (past the
-// station beside its headline), down between the sources, out around the notes and across to the
-// purpose's station; then it lifts off in the open sky, before the painting.
-const shared: Waypoint[] = [
-  on("liu", 1, 0.52, 3.2, 1, 24),
-  on("liu", 1, 0.94, 3.2, 1, 38),
+// Then the pause (Ask BiGH Science, centred): the brush reloads and makes one calm bow out to the
+// left of it, like a bracket, clear of its painting and words, and back in to the gap beside the
+// products' headline, past that station (a reload) and down between the big bottle and its
+// words. There it reloads once more and lays one heavy stroke under the bottle, the ground it
+// stands on (as the crane at rest stands on the closing stroke), and lifts off the paper at its
+// end. The picker's five bottles fill the page's width, so the brush does not thread around
+// them: it touches down again under them, in the gap between the still life and the sample's
+// words, and runs straight down it past the story names into the gap between the science's words
+// and its painting (in the scroll story the painting is pinned inside its column, so the gap
+// stays clear at every scroll), reloading level with its headline and again with its second
+// topic, drifting out a little to the research index's spine. Past its station it is the index's spine, then
+// it bends once round the right of "Show all sources" and its note, past the purpose's station,
+// and lifts off in the open sky of the closing painting.
+const onward: Waypoint[] = [
   station("work", "left", 3.2),
-  on("work-main", 0, 0.6, 3.4, 1, SPINE),
-  on("work-main", 0, 0.96, 3.2, 1, SPINE - 24),
-  on("ask", 0.3, 0, 3, 1, 0, -40),
-  on("ask", 0.2, 0.42, 3.2),
-  on("ask", 0.17, 0.84, 3.2),
-  on("ask", 0.28, 1, 2.8, 1, 0, 80),
-  station("products", "right", 3),
-  on("product-spine", 0, 0.28, 3),
-  on("product-spine", 0, 0.66, 2.6),
+  on("work-main", 0, 0.55, 3.4, 1, -58),
+  fresh(on("work-main", 0, 1, 3.2, 1, -88, -30)),
+  // (clear of the painting's top corner, down beside the headline's whole measure and past its
+  // words, then back in toward the products)
+  on("ask-art", 0, 0, 3, 1, -40, -14),
+  { ...on("ask-title", 0, 0, 3, 1, -28), clear: ["ask-text", -40] },
+  { ...on("ask-title", 0, 1, 3, 1, -28), clear: ["ask-text", -40] },
+  on("ask-text", 0, 1, 3, 1, -40, 40),
+  on("ask", 0.5, 1, 3, 1, -204, 104),
+  fresh(station("products", "right", 3)),
+  on("product-spine", 0, 0.32, 3),
   { at: "product-spine", fx: 0, fy: 0.86, dx: -6, w: 3, fresh: true, load: 1.2 },
   { at: "stage", fx: 0.9, fy: 0.974, w: 3.4, load: 1.7 },
   { at: "stage", fx: 0.62, fy: 0.982, w: 3.8, load: 1.9 },
   { at: "stage", fx: 0.36, fy: 0.982, w: 3.8, load: 1.8 },
   { at: "stage", fx: 0.1, fy: 0.97, w: 3.2, load: 1.4 },
-  { at: "stage", fx: 0, fy: 1, dx: -46, dy: 64, w: 2.8, load: 1 },
-  on("bottles", 0, 0.5, 2.8, 1, -40),
-  on("stories", 0.12, 0, 2.8, 1, 0, 20),
-  on("stories", 0.4, 0, 2.6, 0.9, 0, 56),
-  on("story-words", 0, 0.14, 3, 1, -56),
-  on("story-words", 0, 0.55, 3.4, 1, -56),
-  on("story-words", 0, 1, 3, 1, -56),
-  on("story-choices", 1, 0.5, 2.8, 1, 44),
-  on("science", 0.62, 0, 3, 1, 0, 52),
-  // The science painting's column (round 7: in the scroll story the painting is pinned inside
-  // it, so the line keeps to the column's far side, top to bottom, and only turns in under it).
-  on("science-rail", 0.9, 0, 3.1, 1, 0, -24),
-  on("science-rail", 1.0, 0, 3.2, 1, 14, 70),
-  on("science-rail", 1.0, 0.6, 3.4, 1, 18),
-  on("science-rail", 1.0, 1, 3.2, 1, 16, -40),
-  on("science-rail", 0.78, 1, 3, 1, 0, 36),
-  on("research", 0.52, 0, 2.8, 1, 0, 24),
-  station("research", "left", 3),
+  { at: "stage", fx: 0.02, fy: 0.968, w: 2.4, ink: 0.45, load: 1.2 },
+  { at: "stage", fx: -0.05, fy: 0.962, w: 0, ink: 0 },
+  // (it comes down out of the air from the left, so the new stroke lands with a turned head, a
+  // little under the picker's names)
+  { ...gap("story-painting", "story-words", 1, -40, -2, 0), level: "bottles" },
+  { ...gap("story-painting", "story-words", 1, -17, 28, 0), level: "bottles" },
+  fresh({ ...gap("story-painting", "story-words", 1, -8, 60), level: "bottles" }),
+  gap("story-painting", "story-words", 0.38, -11),
+  gap("story-painting", "story-words", 0.8, -5),
+  gap("story-painting", "story-words", 1, -9),
+  // (where a narrower window brings the story names into the gap, it gives way just enough)
+  { ...gap("story-painting", "story-words", 1, -9, 120), clear: ["story-choices", 36] },
+  fresh(gap("science-copy", "science-rail", 0, -2, -42)),
+  gap("science-copy", "science-rail", 0.24, 3),
+  fresh(gap("science-copy", "science-rail", 0.47, 0)),
+  gap("science-copy", "science-rail", 0.72, 5),
+  gap("science-copy", "science-rail", 0.97, 8),
+  fresh(station("research", "left", 3)),
   on("research-list", 0.5, 0, 3.2, 1, 0, -8),
-  on("research-list", 0.503, 0.5, 3.4),
-  on("research-list", 0.5, 1, 3, 1, 0, 20),
-  on("research-list", 0.76, 1, 2.6, 1, 0, 34),
-  on("research-list", 1.0, 1, 2.8, 1, 10, 80),
-  on("research", 0.94, 1, 2.8, 1, 0, -30),
+  on("research-list", 0.5, 0.5, 3.4),
+  on("research-list", 0.5, 1, 3, 1, 0, -40),
+  // Round the right of the centred "Show all sources" (about 240 px wide) and its note (about
+  // 360 px): pixels from the index's spine, which is their centre.
+  on("research-list", 0.5, 1, 2.8, 1, 162, 69),
+  on("research-list", 0.5, 1, 2.8, 1, 216, 178),
   station("purpose", "right", 2.8),
   on("purpose-painting", 0.6, 0.27, 2.2),
   on("purpose-painting", 0.588, 0.33, 1.2, 0.5),
@@ -227,5 +253,5 @@ export type Layout = "phone" | "column" | "page";
 export function route(layout: Layout): Waypoint[] {
   if (layout === "phone") return [...cranePhone, ...standards, ...promise];
   if (layout === "column") return [...craneFlight, ...standards, ...promise];
-  return [...crane, ...craneToScience, ...shared, ...standards, ...promise];
+  return [...crane, ...cranePage, ...onward, ...standards, ...promise];
 }
