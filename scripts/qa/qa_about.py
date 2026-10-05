@@ -2,7 +2,8 @@
 reference/ink-pages/mockups/about.jpg).
 
 At 1440x900 and 390x844, then the opening at 1280x720, 1536x1000, 1024x768, 900x1100, 768x1024
-and 360x780: answers 200; no console errors or warnings; no failed requests; one h1, English
+and 360x780: answers 200; no console errors or warnings (except the built site's link-prefetch
+CSS preload note, see PREFETCH_CSS); no failed requests; one h1, English
 "Be in Good Health." with lang="en"; every locked line is on the page; no WebGL canvas in the
 page; every painting multiplies onto the paper and the page wears the paper texture; the header
 marks About as the current page and its Products link goes to /#products; no sideways scrolling;
@@ -22,6 +23,7 @@ Usage: python -X utf8 scripts/qa/qa_about.py [base-url]
 """
 
 import os
+import re
 import sys
 
 from playwright.sync_api import sync_playwright
@@ -69,6 +71,24 @@ def check(name, ok, detail=""):
     print(f"{'PASS' if ok else 'FAIL'} {name}{(' — ' + str(detail)) if detail and not ok else ''}")
 
 
+# One warning is not counted, and only on the built site: Chrome's note that a stylesheet of
+# ANOTHER route was preloaded and not used. Next's <Link> prefetch (production only) adds
+# <link rel="preload" as="style"> for each linked route's CSS. Evidence (next start, 1440x900,
+# scrolled, October 5, 2026; task5-fix1-preload-evidence.log): the homepage shows it 3 times (the
+# product page's, Science's and About's CSS), /science once (the homepage's CSS), /about 3 times
+# (the product page's, Science's and the homepage's CSS); with the router's prefetch requests
+# blocked it never appears on any of them. qa_home_ink.py counts console errors only, so it never
+# sees this warning. Only this exact message for a /_next/static/*.css file is ignored.
+PREFETCH_CSS = re.compile(
+    r"^The resource \S+/_next/static/\S+\.css was preloaded using link preload but not used "
+    r"within a few seconds from the window's load event\."
+)
+
+
+def counted(message):
+    return not (message.type == "warning" and PREFETCH_CSS.match(message.text))
+
+
 def open_page(browser, width, height, path="/about", reduced=False, block_images=False):
     context = browser.new_context(
         viewport={"width": width, "height": height},
@@ -76,7 +96,10 @@ def open_page(browser, width, height, path="/about", reduced=False, block_images
     )
     page = context.new_page()
     errors, failed = [], []
-    page.on("console", lambda m: errors.append(m.text) if m.type in ("error", "warning") else None)
+    page.on(
+        "console",
+        lambda m: errors.append(m.text) if m.type in ("error", "warning") and counted(m) else None,
+    )
     page.on("pageerror", lambda e: errors.append(str(e)))
     page.on("requestfailed", lambda r: failed.append(r.url))
     if block_images:
