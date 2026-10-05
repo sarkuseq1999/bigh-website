@@ -24,11 +24,12 @@ function Figure({ value }: { value: string }) {
   );
 }
 
-// "Good science. Real people." Dr. Liu's real photograph in a white mat, resting on one breath of
-// ink (his name and field under it), and his record in large thin numerals; as the crane comp
-// shows, the headline sits to the right of the photograph, beside the record. Then what his work asks, Dr. Iris Wang in words
-// only, and Ask BiGH Science (its words beside a brush at rest on an inkstone), on two columns
-// with the brush line running down between them.
+// "Good science. Real people." Dr. Liu's real photograph, large, in a white mat laid down on one
+// breath of ink as it blooms, his name set as a name under it; as the crane comp shows, the
+// headline sits to the right of the photograph, above his record in large thin numerals, which
+// ends on the mat's lower edge. Then what his work asks, Dr. Iris Wang in words only, and Ask
+// BiGH Science (its words beside a brush at rest on an inkstone), on two columns with the brush
+// line running down between them, beside the print and never under it.
 export function Scientists() {
   const copy = useCopy();
   const dialogs = useHomeDialogs();
@@ -62,28 +63,31 @@ export function Scientists() {
           </p>
         </header>
 
-        <figure className={styles.portrait} data-brush="liu">
-          <Image
-            className={`${base.ink} ${styles.halo}`}
-            src={halo.src}
-            alt=""
-            width={halo.width}
-            height={halo.height}
-            sizes="(max-width: 900px) 80vw, 34vw"
-            data-bloom=""
-          />
-          <span className={styles.mat}>
+        <figure className={styles.portrait}>
+          <span className={styles.print} data-brush="liu">
             <Image
-              className={styles.photo}
-              src={liu.src}
-              alt={copy(scientists.name)}
-              width={liu.width}
-              height={liu.height}
-              sizes="270px"
+              className={`${base.ink} ${styles.halo}`}
+              src={halo.src}
+              alt=""
+              width={halo.width}
+              height={halo.height}
+              sizes="(max-width: 899px) 100vw, 740px"
+              data-bloom=""
             />
+            <span className={styles.mat}>
+              <Image
+                className={styles.photo}
+                src={liu.src}
+                alt={copy(scientists.name)}
+                width={liu.width}
+                height={liu.height}
+                sizes="(max-width: 899px) 260px, 380px"
+              />
+            </span>
           </span>
           <figcaption className={styles.who}>
-            <span>{copy(scientists.name)},</span> <span>{copy(scientists.role)}</span>
+            <span className={styles.name}>{copy(scientists.name)}</span>
+            <span>{copy(scientists.role)}</span>
             <span>{copy(scientists.specialty)}</span>
           </figcaption>
         </figure>

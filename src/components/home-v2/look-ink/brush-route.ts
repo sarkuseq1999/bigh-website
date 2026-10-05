@@ -100,7 +100,8 @@ const SPINE = -56;
 // Crane page: from the landscape the line drops straight down through the gap beside "Tiny
 // power plants." (past its station label), wraps the mitochondrion's lower left side, and comes
 // back under the words to the gap between Dr. Liu's photograph and his record (the crane comp
-// sets the headline to the right of the photo), past that station, into the photo from above.
+// sets the headline to the right of the photo), past that station, and bows in toward the print
+// ("liu" is the mat), running down beside it, never under it, like a stroke framing a print.
 const craneToScience: Waypoint[] = [
   station("cellular", "right", 3),
   on("cellular-mito", 0, 0.42, 3.4, 1, -54),
@@ -108,12 +109,11 @@ const craneToScience: Waypoint[] = [
   on("cellular-mito", 0.2, 1.0, 3),
   on("cellular", 0.44, 1, 2.6, 1, 0, -14),
   station("scientists", "left", 3),
-  on("liu", 0.74, 0.1, 3),
-  on("liu", 0.56, 0.2, 3),
+  on("liu", 1, 0.18, 3, 1, 36),
 ];
 
-// Shared: behind the photograph and out at its right; down the gap between the two columns, past
-// the station beside "What happens inside our cells…" and Ask BiGH Science; across to the right
+// Shared: down beside the print, easing out past its lower corner (clear of his name); down the
+// gap between the two columns, past the station beside "What happens inside our cells…" and Ask BiGH Science; across to the right
 // margin and the products' station; down to the bottles and under their row, as the ground they
 // stand on; into the left margin before the chosen product's words (product-pass keeps it clear
 // of them where the margin is narrow) and down beside the story painting, across above "Make sense of the
@@ -121,9 +121,8 @@ const craneToScience: Waypoint[] = [
 // station beside its headline), down between the sources, out around the notes and across to the
 // purpose's station; then it lifts off in the open sky, before the painting.
 const shared: Waypoint[] = [
-  on("liu", 0.6, 0.45, 3),
-  on("liu", 0.84, 0.62, 3.2),
-  on("facts", 0, 0.92, 3.2, 1, SPINE),
+  on("liu", 1, 0.52, 3.2, 1, 24),
+  on("liu", 1, 0.94, 3.2, 1, 38),
   station("work", "left", 3.2),
   on("work-main", 0, 0.6, 3.4, 1, SPINE),
   on("ask-body", 0, 0.3, 3, 1, SPINE),

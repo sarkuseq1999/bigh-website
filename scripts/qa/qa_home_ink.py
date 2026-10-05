@@ -53,6 +53,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - fine typography (October 4, desktop and phone): no paragraph ends on a single word, none of
     two or more lines runs past 76 characters, and the sample story's opening quotation mark
     hangs in the margin.
+  - Dr. Liu (round 1, October 4): his photograph large (at least 340 px wide on desktop, 240 on
+    a phone; still never past its own pixels), his name at headline size (30 px or more), the
+    print laid down with its one shadow (there and still with reduced motion), and the brush line
+    running down beside the print, never under it.
 
 Pictures: scripts/qa/out/home-ink/<page>-<tag>-NN-<block>.png (viewport shots).
 
@@ -158,6 +162,43 @@ def ink_in_view(page):
           }
           return ink;
         })()"""
+    )
+
+
+def ink_by_print(page, x0, x1, side):
+    """Dark brush pixels in a band of the page level with Dr. Liu's print (the mat): from x0 to x1
+    px off the mat's left edge (side "left") or right edge (side "right"); side "mat" is the mat
+    itself."""
+    return page.evaluate(
+        """([x0o, x1o, side]) => {
+          const e = document.querySelector('#scientists [data-brush=liu] > span');
+          if (!e) return -1;
+          const box = e.getBoundingClientRect();
+          const edge = side === 'right' ? box.right : box.left;
+          const x0 = edge + x0o, x1 = side === 'mat' ? box.right : edge + x1o;
+          let ink = 0;
+          for (const c of document.querySelectorAll('[data-brush-layer] canvas')) {
+            if (!c.width) continue;
+            const b = c.getBoundingClientRect();
+            const l = Math.max(x0, b.left), r = Math.min(x1, b.right);
+            const t = Math.max(box.top, b.top), bo = Math.min(box.bottom, b.bottom);
+            if (r - l < 1 || bo - t < 1) continue;
+            const k = c.width / b.width;
+            const d = c.getContext('2d').getImageData(Math.floor((l - b.left) * k), Math.floor((t - b.top) * k),
+              Math.max(1, Math.floor((r - l) * k)), Math.max(1, Math.floor((bo - t) * k))).data;
+            for (let i = 3; i < d.length; i += 4) if (d[i] > 40) ink++;
+          }
+          return ink;
+        }""",
+        [x0, x1, side],
+    )
+
+
+def print_at_rest(page):
+    """Dr. Liu's print laid down: no lift left, and the mount's one shadow at full strength."""
+    return page.evaluate(
+        """(() => { const m = getComputedStyle(document.querySelector('#scientists [data-brush=liu] > span'));
+          return [m.translate, m.boxShadow.includes('0.42')]; })()"""
     )
 
 
@@ -321,6 +362,16 @@ def run(browser, look, mobile):
           return [i.naturalWidth, Math.round(i.getBoundingClientRect().width)]; })()"""
     )
     check(f"{tag}: Dr. Liu's photo shown at a sharp size", liu[0] >= liu[1], f"natural {liu[0]} shown {liu[1]} css px")
+    # Round 1 (October 4): the photograph is the block's centre of gravity, his name set as a name.
+    name_px = page.evaluate("parseFloat(getComputedStyle(document.querySelector('#scientists figcaption span')).fontSize)")
+    big = 240 if mobile else 340
+    check(
+        f"{tag}: Dr. Liu's photograph large, his name at headline size",
+        liu[1] >= big and name_px >= 30,
+        f"photo {liu[1]} css px (>= {big}), name {name_px:.1f} px",
+    )
+    rest = print_at_rest(page)
+    check(f"{tag}: Dr. Liu's print laid down, with its one shadow", rest[0] == "none" and rest[1], str(rest))
     page.evaluate("document.querySelector('#scientists img[src*=inkstone]')?.scrollIntoView({block: 'center'})")
     page.wait_for_timeout(900)
     still_life = page.evaluate(
@@ -1040,6 +1091,19 @@ def run_reduced(browser, look):
     shoot(page, f"{look}-reduced-00-top")
     hidden = page.evaluate(
         "[...document.querySelectorAll('[data-bloom]')].filter(e => e.dataset.bloom !== 'done').length"
+    )
+    rest = print_at_rest(page)
+    check(f"{tag}: Dr. Liu's print there and still, with its shadow", rest[0] == "none" and rest[1], str(rest))
+    # The brush line frames the print: it runs down beside the mat (within 120 px of its right
+    # edge, level with it) and never under it, nor within 16 px of it.
+    scroll_to(page, top_of(page, "#scientists") - 40, 1200)
+    under = ink_by_print(page, 0, 0, "mat")
+    close = ink_by_print(page, 0, 16, "right")
+    beside = ink_by_print(page, 0, 120, "right")
+    check(
+        f"{tag}: the brush line runs beside Dr. Liu's print, never under it",
+        under == 0 and close == 0 and beside > 200,
+        f"under {under}, within 16 px {close}, beside {beside}",
     )
     scroll_to(page, top_of(page, "#research") + 200, 1200)
     end_ink = ink_in_view(page)

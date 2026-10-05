@@ -175,7 +175,7 @@ Breakpoints: 900px (two-column blocks collapse, stations leave the margin), 720p
 Flat by material, not by shadow. Depth comes from layers of ink: paintings and the brush line multiply onto the paper, the brush layer sits under the paintings and words, and mist dissolves through masks at painting edges so the page continues without a seam.
 
 ### Shadow Vocabulary
-- **Photo mount** (`box-shadow: 0 22px 44px -22px rgba(12, 11, 10, 0.42), 0 3px 8px rgba(12, 11, 10, 0.1)`): only under the paper mat that holds Dr. Liu's real photograph, so a real print reads as an object on the paper.
+- **Photo mount** (`box-shadow: 0 22px 44px -22px rgba(12, 11, 10, 0.42), 0 3px 8px rgba(12, 11, 10, 0.1)`): only under the paper mat that holds Dr. Liu's real photograph, so a real print reads as an object on the paper. The print is the scientists block's centre of gravity: on two columns the photograph is 24.75vw wide up to 380px (never past its own 512 pixels), 260px on a phone, on an ink halo about 1.84 times its width; his name under it at headline size (clamp(30px, 2.6vw, 42px), display weight) with role and field at 19px Ink Grey; the headline, intro and record sit beside the print's lower part, the record's last line on the mat's lower edge. The page's brush line runs down beside the mat, never under it.
 
 ### Named Rules
 **The Multiply Rule.** Every ink painting ships with its paper divided out and is placed with `mix-blend-mode: multiply`, so the page's own rice paper shows through it. Never place an ink plate on a box or with its own paper colour.
@@ -236,6 +236,7 @@ Every illustration says so: "Illustration" captions on painted stills (the three
 
 ### Motion
 - **Ink bloom:** each painting spreads into the paper through an ink blot's soft mask, from 0% to 280% over 1.25 breaths, unblurring from 5px over one breath, with optional per-painting delay and origin. Opening paintings are marked waiting from the server so they bloom rather than flash.
+- **Print laid down:** as Dr. Liu's halo blooms, his print rises 12px into place while the mount's shadow grows from nothing, in one breath. Reduced motion: there, still.
 - **Breathing:** the crane glides (4 breaths, alternate); the gold folds of the cell glow up to 55% (2 breaths, alternate). Both stop under reduced motion.
 - **Settle:** panels enter over 0.9s by fading and rising 8–10px. State transitions run 0.5s; underline and leader growth 0.7s. The opening's words arrive the same way, like ink settling: each headline line, then the intro, then the pills rise 0.24em and sharpen from an 8px blur over 0.75 breaths, 0.14s apart.
 - **Mist:** the opening's landscape is drawn on a canvas with two slow banks of mist drifting through it. Mist is bare paper, so it only takes ink away: the far, pale ridges dissolve and return while the near, dark pines hold. The canvas takes the still painting's place once it has bloomed (same pixels, same multiply) and the mist rises over two breaths. No WebGL, a software renderer or reduced motion: the still painting stays.
