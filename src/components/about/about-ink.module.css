@@ -4,8 +4,10 @@
    Rhythm Rule spacing: 215px of paper before a chapter, 160px between blocks, 110px between the
    parts of a block, 70-100px inside one. */
 
+/* The header floats over the opening (it is transparent there), so the opening starts 88px down: a
+   plain length, as the header's own height is out of reach of the page (see .part). */
 :global([data-page="about"]) .opening {
-  padding: calc(var(--header-h, 88px) + clamp(40px, 6vw, 96px)) 0 clamp(64px, 8vw, 140px);
+  padding: calc(88px + clamp(40px, 6vw, 96px)) 0 clamp(64px, 8vw, 140px);
 }
 
 :global([data-page="about"]) .openingGrid {
@@ -23,7 +25,7 @@
    has no dead band; the purpose follows in the same window. */
 @media (min-width: 900px) {
   :global([data-page="about"]) .opening {
-    padding: calc(var(--header-h, 88px) + clamp(40px, 7.2vw, 112px)) 0 clamp(24px, 3.4vw, 60px);
+    padding: calc(88px + clamp(40px, 7.2vw, 112px)) 0 clamp(24px, 3.4vw, 60px);
   }
 
   :global([data-page="about"]) .openingGrid {
@@ -159,10 +161,27 @@
   bottom: 4%;
 }
 
-/* The four parts: station | the line's lane | content. */
+/* The four parts: station | the line's lane | content.
+   Deep links (/about#promise): the part's first words land 108px from the top of the window, about
+   24px under the header (84px on a desktop, 72-80px under 1100px). The page scrolls to the part's
+   top edge less its scroll margin, and the document already keeps 150px of scroll-padding-top
+   (globals.css), so the margin is that much less (a negative value) and takes back the part's own
+   top padding and the distance down to the first words (--part-lead: the station sits over the
+   heading on one column). The header's height is not read: it is a custom property of the header
+   itself, out of reach of the parts, and the landing holds for any bar between 60 and 100px. */
 :global([data-page="about"]) .part {
-  padding: clamp(80px, 8.3vw, 160px) 0 0;
-  scroll-margin-top: calc(var(--header-h, 88px) + 24px);
+  --part-pad: clamp(80px, 8.3vw, 160px);
+  --part-lead: 0px;
+  padding: var(--part-pad) 0 0;
+  scroll-margin-top: calc(108px - 150px - var(--part-pad) - var(--part-lead));
+}
+
+/* Under 1200px Dr. Liu's print stands over the roots' words (the heading is 480-600px down), so a
+   deep link to that part shows its station label first, with the print under it. */
+@media (max-width: 1199px) {
+  :global([data-page="about"]) .part:global(#roots) {
+    --part-lead: 9px;
+  }
 }
 
 :global([data-page="about"]) .partGrid {
@@ -495,8 +514,10 @@
     grid-column: 1;
   }
 
+  /* The station label (with its leader and gap) stands over each part's heading: 67px. */
   :global([data-page="about"]) .part {
-    padding-top: 104px;
+    --part-pad: 104px;
+    --part-lead: 67px;
   }
 
   :global([data-page="about"]) .closing {

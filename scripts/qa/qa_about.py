@@ -13,7 +13,9 @@ text at least 15px and navigation at least 18px; links and buttons in the page a
 the cell sits in the first screen and never touches the title or the opening words; four
 stations; the Support and Ask BiGH Science sheets open, close and hand focus back.
 Desktop only (900px and wider): the brush layer draws the page layout, and its ink passes each
-station's leader. Review focus: /about#promise lands below the header; Skip to content puts focus
+station's leader. Review focus: each part's deep link (/about#purpose, #roots, #experience, #promise) lands its heading
+(its station, where a print stands over the words) 0-48px under the header at 1440, 1024, 768 and 390;
+Skip to content puts focus
 at the words; with pictures blocked every heading and paragraph is visible.
 Reduced motion: every painting shown, the gold leaf fully up, the whole line drawn.
 Other languages (kr, jp, cns, vn): 200, no console errors, the h1 stays English, no English
@@ -58,9 +60,10 @@ into it.
 Menu bar (October 5, 2026, the Inscription bar merged from main): from /vn/about and /kr/about
 every link of the bar and of the narrow window's menu stays in that language, About is the current
 page, and clicks on a product, "Explore our products.", a Science part, the mark and the phone
-menu's first product land on the localized pages.
+menu's first product land on the localized pages ("Explore our products." on that language's
+homepage, its products section in view).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4,round5,nav_locales]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4,round5,line_and_focus,deep_links,languages,nav_locales]
 """
 
 import math
@@ -1021,6 +1024,16 @@ def line_and_focus(browser):
     check("reduced motion: every painting shown", bloom)
     charge = page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity")
     check("reduced motion: gold leaf fully up", float(charge) == 0, charge)
+    # The brush layer's effect runs twice under reduced motion (the preference starts true, then
+    # flips); the first run's late font relayout must not add a second set of canvases (TILE in
+    # src/components/ink/brush.tsx is 1200px).
+    page.wait_for_timeout(1000)
+    tiles = page.evaluate(
+        """() => { const host = document.querySelector('[data-lifts]');
+                   return { canvases: host.querySelectorAll('canvas').length,
+                            need: Math.ceil(host.offsetHeight / 1200), height: host.offsetHeight }; }"""
+    )
+    check("reduced motion 1440: the brush holds one set of canvas tiles", tiles["canvases"] == tiles["need"] and tiles["need"] > 0, tiles)
     context.close()
     # With motion: the cell blooms with its leaf drained, then the leaf comes up.
     context, page, response, errors, failed = open_page(browser, 1440, 900)
@@ -1028,14 +1041,6 @@ def line_and_focus(browser):
     page.wait_for_timeout(9000)
     late = float(page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity"))
     check("motion: the gold leaf comes up after the bloom", early > 0.5 and late < 0.05, [early, late])
-    context.close()
-    # Deep link lands below the header.
-    context, page, response, errors, failed = open_page(browser, 1440, 900, path="/about#promise")
-    page.wait_for_timeout(1500)
-    gap = page.evaluate(
-        "document.querySelector('#promise-title').getBoundingClientRect().top - document.querySelector('header').getBoundingClientRect().bottom"
-    )
-    check("/about#promise lands below the header", gap >= 0, gap)
     context.close()
     # Skip to content, on a page opened without a #fragment: after /about#promise the browser
     # starts Tab from the fragment's target (the next stop is the pause's Ask button), as it should.
@@ -1063,6 +1068,61 @@ def line_and_focus(browser):
     )
     check("pictures blocked: every heading and paragraph visible", not hidden, hidden[:5])
     context.close()
+
+
+def settle(page, still=300, limit=5000):
+    """Wait for a smooth scroll to end: scrollY unchanged for `still` ms (at most `limit` ms)."""
+    last, held, waited = None, 0, 0
+    while held < still and waited < limit:
+        page.wait_for_timeout(50)
+        waited += 50
+        y = page.evaluate("window.scrollY")
+        held = held + 50 if y == last else 0
+        last = y
+    return last
+
+
+# Where a deep link lands: the section's heading (the part's first words) sits 0-48px under the
+# header's bottom, measured at run time (the header's height is not assumed). The part's scroll
+# margin works against the page's own scroll-padding-top (150px, globals.css) and the part's top
+# padding. Exception: under 1200px Dr. Liu's print stands over the roots' words, so that section's
+# first content is its station label (the heading is 480-600px lower); landing on the heading
+# would scroll the portrait away.
+DEEP_LINK_JS = """([id, lead]) => {
+  const target = document.querySelector(lead === 'heading' ? `#${id}-title` : `#${id} [data-station]`);
+  const header = document.querySelector('header').getBoundingClientRect().bottom;
+  return { scrollY: Math.round(window.scrollY), header: Math.round(header),
+           gap: Math.round(target.getBoundingClientRect().top - header) };
+}"""
+
+
+def deep_links(browser):
+    # Each size is one browser context: a first visit to /about warms the fonts into the cache, then
+    # every deep link is a fresh load of the page. On a cold load the dev server's web fonts can
+    # arrive after the page has started scrolling; the roots part then reflows (39px shorter at 390)
+    # and the smooth scroll, already aimed, ends that far too low (the heading under the header; 4 of
+    # 10 cold dev loads at 390 for #promise, 0 of 10 on the built site and 0 of 6 on the built site
+    # behind a slow network and CPU). The check is about the landing the CSS sets, so fonts are in.
+    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844)]:
+        context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
+        warm = context.new_page()
+        warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
+        warm.evaluate("document.fonts.ready.then(() => true)")
+        warm.close()
+        for anchor in ["purpose", "roots", "experience", "promise"]:
+            page = context.new_page()
+            page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
+            page.evaluate("document.fonts.ready.then(() => true)")
+            settle(page)
+            lead = "station" if anchor == "roots" and width < 1200 else "heading"
+            at = page.evaluate(DEEP_LINK_JS, [anchor, lead])
+            check(
+                f"{width}x{height} /about#{anchor}: the {lead} lands 0-48px under the header ({at['gap']}px)",
+                at["scrollY"] > 0 and 0 <= at["gap"] <= 48,
+                at,
+            )
+            page.close()
+        context.close()
 
 
 def languages(browser):
@@ -1153,7 +1213,21 @@ def nav_locales(browser):
             item = items.first if pick == "first" else items.last if pick == "last" else items.nth(1)
             item.click()
             page.wait_for_url(f"**{want}", timeout=30000)
-            check(f"{tag}: {trigger} link lands on {want}", page.url.endswith(want), page.url)
+            if want.endswith("#products"):
+                # The language's homepage, scrolled to its products section.
+                settle(page)
+                home = page.evaluate(
+                    """() => { const r = document.getElementById('products')?.getBoundingClientRect();
+                               return { url: location.pathname + location.hash, lang: document.documentElement.lang,
+                                        inView: !!r && r.top < innerHeight && r.bottom > 0, top: r ? Math.round(r.top) : null }; }"""
+                )
+                check(
+                    f"{tag}: Explore our products. goes to the {locale} homepage's products section",
+                    home["url"].replace("/#", "#") == want and home["inView"] and home["lang"] != "en",
+                    home,
+                )
+            else:
+                check(f"{tag}: {trigger} link lands on {want}", page.url.endswith(want), page.url)
         page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
         page.click("[data-nav-logo]")
         page.wait_for_url(f"**/{locale}", timeout=30000)
@@ -1173,7 +1247,7 @@ def nav_locales(browser):
 
 
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, round5, line_and_focus, languages, languages_layout, nav_locales]
+GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, round5, line_and_focus, deep_links, languages, languages_layout, nav_locales]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

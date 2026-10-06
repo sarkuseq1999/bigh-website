@@ -10,6 +10,7 @@ usage:
   python -X utf8 scripts/qa/home_snapshot.py compare <base-url> <name> [against=baseline]
   python -X utf8 scripts/qa/home_snapshot.py layout <base-url> -
   python -X utf8 scripts/qa/home_snapshot.py nav <base-url> -   (the menu bar on / and /about)
+  python -X utf8 scripts/qa/home_snapshot.py tiles <base-url> -
 
 A run empties its own folder first, so compare needs a new name (never the set it compares with), and
 a folder whose name starts with "baseline" that already holds shots is only replaced with --force.
@@ -150,6 +151,35 @@ def nav_check(base: str) -> bool:
     return ok
 
 
+# The brush layer's canvas tile height (TILE in src/components/ink/brush.tsx).
+BRUSH_TILE = 1200
+
+
+def tiles_check(base: str) -> bool:
+    """With reduced motion the brush layer's effect runs twice (the motion preference starts true and
+    flips to false); the first run's late font relayout must not add a second set of canvases to the
+    same layer: it holds exactly the tiles the page needs, one set."""
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+        page = context.new_page()
+        page.goto(f"{base}/", wait_until="networkidle", timeout=120000)
+        page.evaluate("document.fonts.ready.then(() => true)")
+        page.wait_for_timeout(2000)
+        state = page.evaluate(
+            """(tile) => {
+              const host = document.querySelector('[data-lifts]');
+              return { canvases: host.querySelectorAll('canvas').length,
+                       need: Math.ceil(host.offsetHeight / tile), height: host.offsetHeight };
+            }""",
+            BRUSH_TILE,
+        )
+        browser.close()
+    ok = state["canvases"] == state["need"] and state["need"] > 0
+    print(f"{'ok  ' if ok else 'FAIL'} tiles: {state['canvases']} canvases for {state['need']} tiles (layer {state['height']}px)")
+    return ok
+
+
 def refuse(message: str) -> None:
     print(f"ERROR {message}")
     sys.exit(2)
@@ -158,7 +188,7 @@ def refuse(message: str) -> None:
 if __name__ == "__main__":
     force = "--force" in sys.argv[1:]
     args = [a for a in sys.argv[1:] if a != "--force"]
-    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare", "layout", "nav"):
+    if len(args) < 3 or len(args) > 4 or args[0] not in ("capture", "compare", "layout", "nav", "tiles"):
         refuse(__doc__)
     mode, base, name = args[0], args[1], args[2]
     against = args[3] if len(args) > 3 else "baseline"
@@ -171,6 +201,8 @@ if __name__ == "__main__":
         sys.exit(0 if layout_check(base) else 1)
     if mode == "nav":
         sys.exit(0 if nav_check(base) else 1)
+    if mode == "tiles":
+        sys.exit(0 if tiles_check(base) else 1)
     capture(base, name)
     if mode == "compare":
         passed = compare(name, against)
