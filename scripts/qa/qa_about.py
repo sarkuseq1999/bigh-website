@@ -13,8 +13,10 @@ text at least 15px and navigation at least 18px; links and buttons in the page a
 the cell sits in the first screen and never touches the title or the opening words; four
 stations; the Support and Ask BiGH Science sheets open, close and hand focus back.
 Desktop only (900px and wider): the brush layer draws the page layout, and its ink passes each
-station's leader. Review focus: each part's deep link (/about#purpose, #roots, #experience, #promise) lands its heading
-(its station, where a print stands over the words) 0-48px under the header at 1440, 1024, 768 and 390;
+station's leader. Review focus: each part's deep link (/about#purpose, #roots, #experience, #promise)
+lands its heading (its station, where a print stands over the words) 0-48px under the header at 1440
+and 1024; on one column (834, 768, 390 and 360 wide) it lands the station label 8-40px under the
+header's box, clear of it, with the heading below it fully in the window;
 Skip to content puts focus
 at the words; with pictures blocked every heading and paragraph is visible.
 Reduced motion: every painting shown, the gold leaf fully up, the whole line drawn.
@@ -1082,18 +1084,32 @@ def settle(page, still=300, limit=5000):
     return last
 
 
-# Where a deep link lands: the section's heading (the part's first words) sits 0-48px under the
-# header's bottom, measured at run time (the header's height is not assumed). The part's scroll
-# margin works against the page's own scroll-padding-top (150px, globals.css) and the part's top
-# padding. Exception: under 1200px Dr. Liu's print stands over the roots' words, so that section's
-# first content is its station label (the heading is 480-600px lower); landing on the heading
-# would scroll the portrait away.
+# Where a deep link lands. The header's box is the tall bar's (88px under 1333px, 95px at 1440), and
+# its bottom is measured at run time (the header's height is not assumed). The part's scroll margin
+# works against the page's own scroll-padding-top (150px, globals.css) and the part's top padding.
+#   Two columns (900px and wider): the section's heading (the part's first words) sits 0-48px under
+#   the header's bottom. Exception: under 1200px Dr. Liu's print stands over the roots' words, so that
+#   section's first content is its station label (the heading is 480-600px lower); landing on the
+#   heading would scroll the portrait away.
+#   One column (under 900px): the STATION LABEL lands 8-40px under the header's bottom (about 20px),
+#   clear of the header's box (the label stands about 58px over its heading; landing the heading let
+#   the label slide under the bar, its brush rule cutting through the words), and the heading, which
+#   follows the label, is fully in the window and not under the bar.
 DEEP_LINK_JS = """([id, lead]) => {
   const target = document.querySelector(lead === 'heading' ? `#${id}-title` : `#${id} [data-station]`);
-  const header = document.querySelector('header').getBoundingClientRect().bottom;
-  return { scrollY: Math.round(window.scrollY), header: Math.round(header),
-           gap: Math.round(target.getBoundingClientRect().top - header) };
+  const label = document.querySelector(`#${id} [data-station]`).getBoundingClientRect();
+  const heading = document.querySelector(`#${id}-title`).getBoundingClientRect();
+  const bar = document.querySelector('header').getBoundingClientRect();
+  const r = (b) => ({ left: Math.round(b.left), top: Math.round(b.top), right: Math.round(b.right), bottom: Math.round(b.bottom) });
+  return { scrollY: Math.round(window.scrollY), header: Math.round(bar.bottom),
+           gap: Math.round(target.getBoundingClientRect().top - bar.bottom),
+           labelGap: Math.round(label.top - bar.bottom), headingGap: Math.round(heading.top - bar.bottom),
+           bar: r(bar), label: r(label), heading: r(heading), win: window.innerHeight };
 }"""
+
+
+def overlaps(a, b):
+    return a["left"] < b["right"] and a["right"] > b["left"] and a["top"] < b["bottom"] and a["bottom"] > b["top"]
 
 
 def deep_links(browser):
@@ -1103,7 +1119,8 @@ def deep_links(browser):
     # and the smooth scroll, already aimed, ends that far too low (the heading under the header; 4 of
     # 10 cold dev loads at 390 for #promise, 0 of 10 on the built site and 0 of 6 on the built site
     # behind a slow network and CPU). The check is about the landing the CSS sets, so fonts are in.
-    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844)]:
+    sizes = [(1440, 900), (1024, 768), (834, 1112), (768, 1024), (390, 844), (360, 780)]
+    for width, height in sizes:
         context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
         warm = context.new_page()
         warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
@@ -1114,13 +1131,28 @@ def deep_links(browser):
             page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
             page.evaluate("document.fonts.ready.then(() => true)")
             settle(page)
-            lead = "station" if anchor == "roots" and width < 1200 else "heading"
+            one_column = width < 900
+            lead = "station" if one_column or (anchor == "roots" and width < 1200) else "heading"
             at = page.evaluate(DEEP_LINK_JS, [anchor, lead])
-            check(
-                f"{width}x{height} /about#{anchor}: the {lead} lands 0-48px under the header ({at['gap']}px)",
-                at["scrollY"] > 0 and 0 <= at["gap"] <= 48,
-                at,
-            )
+            if one_column:
+                clear = not overlaps(at["label"], at["bar"])
+                check(
+                    f"{width}x{height} /about#{anchor}: the station label lands 8-40px under the header, clear of its box ({at['labelGap']}px)",
+                    at["scrollY"] > 0 and 8 <= at["labelGap"] <= 40 and clear,
+                    at,
+                )
+                head = at["heading"]
+                check(
+                    f"{width}x{height} /about#{anchor}: the heading under it is fully in the window, below the header ({at['headingGap']}px)",
+                    at["headingGap"] >= 0 and head["top"] >= 0 and head["bottom"] <= at["win"],
+                    at,
+                )
+            else:
+                check(
+                    f"{width}x{height} /about#{anchor}: the {lead} lands 0-48px under the header ({at['gap']}px)",
+                    at["scrollY"] > 0 and 0 <= at["gap"] <= 48,
+                    at,
+                )
             page.close()
         context.close()
 

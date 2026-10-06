@@ -162,22 +162,31 @@
 }
 
 /* The four parts: station | the line's lane | content.
-   Deep links (/about#promise): the part's first words land 108px from the top of the window, about
-   24px under the header (84px on a desktop, 72-80px under 1100px). The page scrolls to the part's
-   top edge less its scroll margin, and the document already keeps 150px of scroll-padding-top
-   (globals.css), so the margin is that much less (a negative value) and takes back the part's own
-   top padding and the distance down to the first words (--part-lead: the station sits over the
-   heading on one column). The header's height is not read: it is a custom property of the header
-   itself, out of reach of the parts, and the landing holds for any bar between 60 and 100px. */
+   Deep links (/about#promise): the part's first words land --part-land from the top of the window,
+   under the header. The page scrolls to the part's top edge less its scroll margin, and the document
+   already keeps 150px of scroll-padding-top (globals.css), so the margin is that much less (a
+   negative value) and takes back the part's own top padding (--part-pad) and the distance from there
+   down to the words that land (--part-lead: 0 where the heading lands, 9px where the station label
+   does). Which words land is set by --part-lead, so the landing is worked out from the label's own
+   position, not the heading's.
+   The header's height is not read: --tall is a custom property of the header itself (the Inscription
+   bar, nav-inscription.module.css), out of reach of the parts, so --part-land is the one constant
+   kept. The bar's box is 76px up to 1100px, 88px to 1333px, 95px at 1440 and 104px from 1576 (the
+   bar painted once the page has moved on is 64px up to 1100px, then 70-76px, its brush rule 10px
+   deeper). Two columns (900px and up): --part-land is 108px, the heading's top, so it lands 32px
+   under the box at 900-1100px, 20px at 1333, 13px at 1440 and 4px from 1576, and 32-44px under the
+   painted bar throughout. One column: see the 899px rule. */
 :global([data-page="about"]) .part {
   --part-pad: clamp(80px, 8.3vw, 160px);
+  --part-land: 108px;
   --part-lead: 0px;
   padding: var(--part-pad) 0 0;
-  scroll-margin-top: calc(108px - 150px - var(--part-pad) - var(--part-lead));
+  scroll-margin-top: calc(var(--part-land) - 150px - var(--part-pad) - var(--part-lead));
 }
 
 /* Under 1200px Dr. Liu's print stands over the roots' words (the heading is 480-600px down), so a
-   deep link to that part shows its station label first, with the print under it. */
+   deep link to that part shows its station label first, with the print under it. The label stands
+   9px under the part's padding: p.station's margin-top, 0.55em of the kit's 17px. */
 @media (max-width: 1199px) {
   :global([data-page="about"]) .part:global(#roots) {
     --part-lead: 9px;
@@ -514,10 +523,15 @@
     grid-column: 1;
   }
 
-  /* The station label (with its leader and gap) stands over each part's heading: 67px. */
+  /* A deep link lands the station label, not the heading: the label stands 58px over its heading
+     (its own 22px row, its 14px margin and the grid's 22px gap), so landing the heading left the label under the bar, its
+     brush rule cutting through the words. The bar's box is 76px on one column, so the label's top
+     lands at 96px, 20px under it (32px under the painted bar, 22px under its rule), and the
+     heading follows 58px lower, in view. The label stands 9px under the part's padding, as above. */
   :global([data-page="about"]) .part {
     --part-pad: 104px;
-    --part-lead: 67px;
+    --part-land: 96px;
+    --part-lead: 9px;
   }
 
   :global([data-page="about"]) .closing {
