@@ -24,31 +24,46 @@ export const navProductsIntro = {
   allLink: "/#products",
 };
 
-/** The Science page's four parts (the footer's Science column), each with an ink painting. */
+/** The Science page's four parts (the footer's Science column), each with its picture and its
+ *  place on the Science page. Dr. Liu's is his real photograph (a print, never
+ *  multiplied); the others are ink paintings with their paper divided out. `plate` names how the
+ *  picture is placed so the four stand at one weight (round 5). */
 export const navScience = [
   {
     label: "Our scientists",
     href: "/science#scientists",
     caption: "Good science. Real people.",
-    image: { src: "/images/jiankang-liu.jpg", width: 512, height: 768, photo: true },
+    image: { src: "/images/jiankang-liu.jpg", width: 512, height: 768, plate: "print" },
   },
   {
     label: "Cellular health",
     href: "/science#health",
     caption: "Tiny power plants.",
-    image: { src: "/images/home-v2/ink/mito.webp", width: 0, height: 0, photo: false },
+    image: { src: "/images/home-v2/ink/mito.webp", width: 2000, height: 1493, plate: "cell" },
   },
   {
     label: "Research library",
     href: "/science#research",
     caption: "Curiosity, with references.",
-    image: { src: "/images/home-v2/ink/story-reading-v2.webp", width: 0, height: 0, photo: false },
+    // The homepage's reading still life, cut to its table group and given body
+    // (reference/nav/make_science_plates.py).
+    image: {
+      src: "/images/home-v2/nav/inscription/reading-still-life.webp",
+      width: 1696,
+      height: 1100,
+      plate: "reading",
+    },
   },
   {
     label: "Ask BiGH Science",
     href: "/science#ask",
     caption: "Good questions deserve clear answers.",
-    image: { src: "/images/home-v2/ink/inkstone-v2.webp", width: 0, height: 0, photo: false },
+    image: {
+      src: "/images/home-v2/ink/inkstone-v2.webp",
+      width: 1200,
+      height: 896,
+      plate: "inkstone",
+    },
   },
 ] as const;
 

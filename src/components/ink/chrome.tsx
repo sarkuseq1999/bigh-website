@@ -8,7 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { footer, products } from "@/components/home-v2/content";
 import { useSiteDialogs } from "./dialogs";
-import { NavInscription, type NavCurrent } from "./nav/nav-inscription";
+import { NavInscription, type NavCurrent, type NavFollow } from "./nav/nav-inscription";
 import styles from "./chrome.module.css";
 
 // Header and footer for every ink page (the homepage first, October 2; shared October 5, 2026).
@@ -44,20 +44,37 @@ export type Current = NavCurrent;
 /** The site's menu bar (see nav/nav-inscription.tsx). */
 export function SiteHeader({
   current,
+  follow,
   overlay = false,
   tone = "light",
   solidAfter = 80,
+  settledBy,
 }: {
   /** The page this header is on. */
   current: Current;
+  /** The homepage only (it has no link of its own): while one of these parts is being read, its
+   *  drop-down's word carries the painted stroke. Pass a stable (module-level) object. Other pages
+   *  leave it out: their own word carries the stroke. */
+  follow?: NavFollow;
   /** Start transparent over the opening picture. */
   overlay?: boolean;
   /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
   tone?: "light" | "dark";
-  /** Scroll distance (px) after which the header turns solid. */
+  /** Scroll distance (px) at which the header starts to settle onto paper. */
   solidAfter?: number;
+  /** Scroll distance (px) by which it has settled (default: solidAfter + 192). */
+  settledBy?: number;
 }) {
-  return <NavInscription current={current} overlay={overlay} tone={tone} solidAfter={solidAfter} />;
+  return (
+    <NavInscription
+      current={current}
+      follow={follow}
+      overlay={overlay}
+      tone={tone}
+      solidAfter={solidAfter}
+      settledBy={settledBy}
+    />
+  );
 }
 
 /** The promise breaks only between its sentences ("Stay sharp." / "Live fully."), in every

@@ -17,16 +17,79 @@
   initial-value: 0;
 }
 
+/* How far the title has settled with the scroll (round 9; 0 over the opening, 1 settled): the bar's
+   geometry (g), the paper under its words (q), the mist at its foot (m) and the painted rule (d).
+   See "The title settles with the scroll" below. */
+@property --insc-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-q {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-m {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-d {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* The mark's two sizes in pixels, for the script that measures their ratio. */
+@property --insc-mark-tall {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --insc-mark-small {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .root {
   /* The bar over the opening, and the bar once the page has moved on. */
   --tall: clamp(88px, 6.6vw, 104px);
-  --small: clamp(70px, 5vw, 76px);
+  --small: clamp(74px, 5.3vw, 82px);
   --mark-tall: clamp(116px, 9.4vw, 150px);
   --mark-small: clamp(94px, 6.8vw, 108px);
   --h: var(--tall);
   --mark: var(--mark-tall);
+  /* How far the mark stands above the bar's middle (a share of its width); the words follow it,
+     so they stay level with its letters. The small bar lifts it a little more, clear of the rule. */
+  --lift-tall: 0.02;
+  --lift-small: 0.045;
+  --lift: var(--lift-tall);
+  --insc-mark-tall: var(--mark-tall);
+  --insc-mark-small: var(--mark-small);
+  /* While the title settles the bar keeps its tall layout and draws its way to the small one:
+     how far the bar's foot rises (dh), how far the links beside the mark move in toward it (dx),
+     and how far the mark's middle (dym) and the words (dyw) rise, all from the two layouts. */
+  --insc-dh: calc(var(--tall) - var(--small));
+  --insc-dx: calc((var(--mark-tall) - var(--mark-small)) / 2);
+  --insc-dym: calc(
+    (var(--small) - var(--tall)) / 2 + var(--lift-tall) * var(--mark-tall) - var(--lift-small) *
+      var(--mark-small)
+  );
+  --insc-dyw: calc(
+    (var(--small) - var(--tall)) / 2 + (0.0875 - var(--lift-small)) * var(--mark-small) -
+      (0.0875 - var(--lift-tall)) * var(--mark-tall)
+  );
   /* One spacing for the whole line: between the links and on each side of the mark. */
   --gap: clamp(26px, 2.6vw, 44px);
+  /* The bar's side margins: the page's column, unless a language needs the outer groups to stand
+     a little further out (see "Long languages" below). */
+  --pad: var(--gutter);
   /* The torn edge at the foot of the scroll (the mask strip's height). */
   --deckle: 56px;
   /* Let down, slowing as it reaches its length; rolled back up briskly. */
@@ -50,6 +113,7 @@
 .root[data-size="small"] {
   --h: var(--small);
   --mark: var(--mark-small);
+  --lift: var(--lift-small);
 }
 
 .root[data-unrolled] {
@@ -72,8 +136,9 @@
 
 /* ---------------------------------------------------------------- the ground and its brush rule */
 
-/* Rice paper with its fibre: clear over the opening, 93% once the page moves on, the whole sheet
-   while a drop-down or the menu is down (so bar and scroll are one paper). */
+/* Rice paper with its fibre: clear over the opening, a solid sheet once the page moves on (nothing
+   of the page shows through behind the bar's words), the whole sheet while a drop-down or the menu
+   is down (so bar and scroll are one paper). */
 .ground {
   position: absolute;
   z-index: -2;
@@ -91,10 +156,12 @@
 }
 
 .root[data-ground="solid"] .ground {
-  opacity: 0.93;
-  /* Beyond the brush rule (outside the column, over a painting) the paper fades, so the bar's
-     only edge is ink. */
-  mask-image: linear-gradient(#000 calc(100% - 9px), transparent);
+  /* The paper runs on a little past the brush rule, solid under all of its ink, then fades: a line
+     of the page at the bar's edge goes under paper and comes out below the rule, never crossed by
+     it, and a painting still runs up softly to the bar. */
+  height: calc(var(--h) + 22px);
+  opacity: 1;
+  mask-image: linear-gradient(#000 calc(100% - 14px), transparent);
 }
 
 .root[data-ground="paper"] .ground {
@@ -104,33 +171,286 @@
     opacity 0.25s var(--ease);
 }
 
-/* The bar's edge is ink, not a hairline: one long, fine, dry brush line across the page's column,
-   laid from left to right as the bar settles. */
+/* The bar's edge is ink, not a hairline: one real painted line across the page's column
+   (inscription/rule-whole.webp, cut by reference/nav/make_rule_stroke.py from a GPT Image 2.5
+   painting). It touches down on the left with a fine tip, runs thin with a faint waver, and over its
+   last third the bristles part into flying-white strands that run dry before the right end. Kept at
+   the painting's own proportions (body about 3px at 1536), never thinner than a hair on a phone;
+   its middle sits on the bar's foot, on solid paper. */
+@property --insc-draw {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
 .rule {
+  /* How much of the stroke is laid (0 none, 1 whole), from its loaded end; and the soft leading
+     edge of the ink as it goes down. */
+  --insc-draw: 1;
+  --insc-lead: 36px;
   position: absolute;
   z-index: -1;
-  top: calc(var(--h) - 10px);
+  top: calc(var(--h) - 1px);
   left: 50%;
-  width: min(var(--wide, 1300px), 100% - 2 * var(--gutter));
-  height: 20px;
-  translate: -50% 0;
-  background: var(--ink);
-  mask: url("/images/home-v2/nav/inscription/rule.webp") 0 0 / 100% 100% no-repeat;
+  /* As wide as the bar's line: where the outer groups stand further out, the rule runs out with
+     them. */
+  width: min(var(--wide, 1300px) + 2 * (var(--gutter) - var(--pad)), 100% - 2 * var(--pad));
+  min-height: 10px;
+  aspect-ratio: 2433 / 30;
+  translate: -50% -50%;
+  /* How far it is laid: a soft-edged mask that grows from the left. (On its own element, not as a
+     second mask layer: WebKit, Safari's engine, drew an intersected pair of layers wrongly.) */
+  mask: linear-gradient(90deg, #000 calc(100% - var(--insc-lead)), transparent) 0 0 /
+    calc(var(--insc-draw) * (100% + var(--insc-lead))) 100% no-repeat;
   opacity: 0;
-  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
   transition:
     top 0.6s var(--ease),
-    opacity 0.3s var(--ease),
-    clip-path 0s linear 0.3s;
+    opacity 0.3s var(--ease);
+}
+
+/* The stroke itself: ink through the painting's alpha. */
+.rule::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
 }
 
 .root[data-ground="solid"] .rule {
-  opacity: 0.78;
-  clip-path: inset(0 0 0 0);
-  transition:
-    top 0.6s var(--ease),
-    opacity 0.3s var(--ease),
-    clip-path 1.1s var(--ease) 0.12s;
+  opacity: 0.75;
+}
+
+/* Over the opening, the reader's scroll lays the stroke (not a timed sweep): from its loaded end,
+   between 60px and 280px down the page (the bar settles at 48px), and back as the reader returns.
+   A page that opens on paper, and reduced motion: there whole. */
+@keyframes insc-draw {
+  from {
+    --insc-draw: 0;
+  }
+
+  to {
+    --insc-draw: 1;
+  }
+}
+
+/* (Where the title settles with the scroll, the rule is laid with it: see below.) */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-overlay]:not([data-settle]) .rule {
+      animation: insc-draw linear both;
+      animation-timeline: scroll(root);
+      animation-range: 60px 280px;
+    }
+  }
+}
+
+/* Without scroll-driven animation: laid as the bar settles (1.4s), lifted once it has faded. */
+@supports not (animation-timeline: scroll()) {
+  .root:not([data-settle], [data-ground="solid"]) .rule {
+    --insc-draw: 0;
+    transition:
+      top 0.6s var(--ease),
+      opacity 0.3s var(--ease),
+      --insc-draw 0s linear 0.3s;
+  }
+
+  .root:not([data-settle])[data-ground="solid"] .rule {
+    transition:
+      top 0.6s var(--ease),
+      opacity 0.3s var(--ease),
+      --insc-draw 1.4s var(--ease) 0.12s;
+  }
+}
+
+/* ---------------------------------------------------------------- the title settles with the scroll */
+
+/* Round 9. Over the opening the bar is the painting's title: tall, clear, the mark large. As the
+   reader scrolls on it settles into the bar of the page, tied to the reader's hand instead of a
+   timed change at a threshold: between 48px and 240px down the page (--insc-from, --insc-to) the
+   mark shrinks to its small size and rises, the words rise with its letters and the links beside
+   it close in, the bar's foot rises to the small bar's, rice paper comes in under the words, and
+   the painted rule is laid from its loaded end. Scrolling back up undoes it exactly.
+
+   - The paper comes in first (90% within the settle's first 15px, whole by half way): the
+     painting reaches the words from about 60px down on a phone and 80px on a desktop (the crane's
+     wing tips, the sun's rim), and by then the words stand on paper, so they read as on the
+     settled bar (17:1 against the ground under their letters all the way, measured).
+   - Mist: while the rule is being laid, the painting does not meet a cut paper edge. It sinks
+     into mist, a second sheet of the same paper whose foot falls away softly over 56-84px under
+     the bar (the opening's own mist), which thins away as the rule is laid; once the bar has
+     landed the rule is its edge (round 1's clean edge).
+   - It is drawn, not laid out: the bar keeps its tall layout until the settle is complete, and
+     the mark scales and moves, the words and links move, and the paper, the mist, the rule and
+     anything hung from the bar's foot (the drop-downs' scroll, the menu) rise with it, all as
+     transforms and opacity. At the end the bar takes the small layout in the same frame, the
+     same picture, so the change is never seen. The mark's scale is the ratio of its two sizes,
+     measured by the script (--insc-k).
+   - Where the browser runs scroll-driven animation (Chrome, Edge, Safari 26), the four values
+     follow the page's scroll in the stylesheet; elsewhere (Firefox) the script writes the same
+     values on each frame the page moves (use-nav.ts, settleValues; keep the two in step).
+   - Reduced motion: two states, the title over the opening and the bar on paper (past 48px). */
+@keyframes insc-g {
+  from {
+    --insc-g: 0;
+  }
+
+  to {
+    --insc-g: 1;
+  }
+}
+
+@keyframes insc-q {
+  0% {
+    --insc-q: 0;
+  }
+
+  8% {
+    --insc-q: 0.9;
+  }
+
+  25% {
+    --insc-q: 0.97;
+  }
+
+  50%,
+  100% {
+    --insc-q: 1;
+  }
+}
+
+@keyframes insc-m {
+  0% {
+    --insc-m: 0;
+  }
+
+  8% {
+    --insc-m: 0.9;
+  }
+
+  40% {
+    --insc-m: 0.85;
+  }
+
+  100% {
+    --insc-m: 0;
+  }
+}
+
+@keyframes insc-d {
+  from {
+    --insc-d: 0;
+  }
+
+  to {
+    --insc-d: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-settle] {
+      animation:
+        insc-g cubic-bezier(0.45, 0, 0.3, 1) both,
+        insc-q linear both,
+        insc-m linear both,
+        insc-d linear both;
+      /* (Said again: the build writes a list of animations out with 0s durations.) */
+      animation-duration: auto;
+      animation-timeline: scroll(root);
+      animation-range:
+        var(--insc-from) var(--insc-to),
+        var(--insc-from) var(--insc-to),
+        var(--insc-from) var(--insc-to),
+        calc(var(--insc-from) + (var(--insc-to) - var(--insc-from)) / 12) var(--insc-to);
+    }
+  }
+}
+
+/* The settle changes the bar's layout only where it ends, at once (no timed change of sizes). */
+.root[data-settle] :is(.ground, .mist, .rule),
+.root[data-settle] .bar,
+.root[data-settle] :is(.left, .right),
+.root[data-settle] .bar a.mark[href] {
+  transition: none;
+}
+
+.root[data-settle][data-ground="paper"] .ground {
+  transition: opacity 0.25s var(--ease);
+}
+
+.root[data-settle][data-size="tall"] .bar a.mark[href] {
+  translate: 0 calc(var(--insc-dym) * var(--insc-g));
+  scale: calc(1 - (1 - var(--insc-k, 0.72)) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] :is(.language, .menuButton, .account) {
+  translate: 0 calc(var(--insc-dyw) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] .left .link {
+  translate: calc(var(--insc-dx) * var(--insc-g)) calc(var(--insc-dyw) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] .right .link {
+  translate: calc(-1 * var(--insc-dx) * var(--insc-g)) calc(var(--insc-dyw) * var(--insc-g));
+}
+
+/* The sheets rise in whole pixels: where a drop-down is opened part way through the settle, the
+   bar's paper and the scroll's meet edge to edge, and at a fraction of a pixel the wash under them
+   showed through the seam as a grey hairline. */
+.root[data-settle][data-size="tall"] :is(.ground, .mist, .paper, .panel, .sheet) {
+  translate: 0 round(calc(-1 * var(--insc-dh) * var(--insc-g)), 1px);
+}
+
+.root[data-settle][data-size="tall"] .rule {
+  --insc-draw: var(--insc-d);
+  translate: -50% calc(-50% - var(--insc-dh) * var(--insc-g));
+}
+
+/* The paper under the words: the settled bar's sheet (it runs on past the rule, then fades), its
+   fibre placed where the settled bar's will be. */
+.root[data-ground="settling"] .ground {
+  height: calc(var(--h) + 22px);
+  background-position: 0 var(--insc-dh);
+  opacity: var(--insc-q);
+  mask-image: linear-gradient(#000 calc(100% - 14px), transparent);
+}
+
+.root[data-ground="settling"] .rule {
+  opacity: calc(0.75 * var(--insc-q));
+}
+
+/* The mist: a second sheet of the same paper, as solid as the bar's under the words, whose foot
+   falls away softly over a long way instead of ending at the rule (an eased fall, so it has no
+   edge of its own). Laid over the bar's sheet, fibre on fibre in the same place, it adds nothing
+   where both are whole; at the foot, the more mist, the softer the edge the painting meets. */
+.mist {
+  --fall: clamp(56px, 5vw, 84px);
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--h) + 8px + var(--fall));
+  background-color: var(--paper);
+  background-image: var(--paper-fibre);
+  background-size: 800px 800px;
+  background-position: 0 var(--insc-dh);
+  mask-image: linear-gradient(
+    #000 calc(100% - var(--fall)),
+    rgb(0 0 0 / 0.74) calc(100% - 0.75 * var(--fall)),
+    rgb(0 0 0 / 0.42) calc(100% - 0.5 * var(--fall)),
+    rgb(0 0 0 / 0.15) calc(100% - 0.25 * var(--fall)),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+.root[data-ground="settling"] .mist {
+  opacity: var(--insc-m);
 }
 
 /* ---------------------------------------------------------------- the bar */
@@ -144,7 +464,7 @@
   max-width: calc(var(--wide, 1300px) + 2 * var(--gutter));
   height: var(--h);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--pad);
   font-size: clamp(18px, 1.302vw, 20px);
   font-weight: 450;
   line-height: 1.2;
@@ -161,7 +481,8 @@
   min-width: 0;
   /* The words stand level with the mark's letters (its leaf rises above them): the sides sit a
      little lower and the mark a little higher than the bar's middle. */
-  margin-top: calc(var(--mark) * 0.134);
+  margin-top: calc(var(--mark) * (0.175 - 2 * var(--lift)));
+  transition: margin-top 0.6s var(--ease);
 }
 
 .links {
@@ -172,12 +493,31 @@
 
 .root .bar a.mark[href] {
   position: relative;
-  top: calc(var(--mark) * -0.02);
+  top: calc(var(--mark) * -1 * var(--lift));
   display: block;
   width: var(--mark);
   transition:
     width 0.6s var(--ease),
     top 0.6s var(--ease);
+}
+
+/* Round 10. The mark's picture runs edge to edge (its leaf touches the top, its letters the foot),
+   so a ring on the link itself sat on the leaf. The mark's target reaches a little round the
+   picture (48px or more tall in the small bar and on a phone, where the picture is 44-51px), and
+   the keyboard's ring is drawn on that, with air round the leaf and the letters. */
+.root .bar a.mark[href]::before {
+  content: "";
+  position: absolute;
+  inset: -5px -12px;
+  border-radius: 10px;
+}
+
+.root .bar a.mark[href]:focus-visible {
+  outline: none;
+}
+
+.root .bar a.mark[href]:focus-visible::before {
+  outline: 2px solid currentColor;
 }
 
 .root .link {
@@ -193,6 +533,15 @@
   font: inherit;
   white-space: nowrap;
   cursor: pointer;
+}
+
+/* A word as short as two Chinese, Japanese or Korean characters (帮助, 关于, 登录) is about 40px
+   wide: its target reaches out to 48px, evenly either side, without moving a word (round 10). */
+.root .link::before,
+.root :is(.account, .sheetFoot) a::before {
+  content: "";
+  position: absolute;
+  inset: 0 min(0px, (100% - 48px) / 2);
 }
 
 /* With a mouse, an ink underline draws out from the middle of the word you point at (the open
@@ -220,17 +569,135 @@
   }
 }
 
-.root .link:is([aria-expanded="true"], [aria-current="page"], [data-current]) .word::after {
+.root .link[aria-expanded="true"] .word::after {
   scale: 1 1;
 }
 
+/* One line at a time. While a scroll is down only its button carries a line: moving across to the
+   other drop-down, the button left behind drops its line at once, and pointing at another word
+   draws none until the scroll is up. Pointing from word to word, the last one lets go at once. */
+.root[data-unrolled] .link:not([aria-expanded="true"]) .word::after {
+  scale: 0 1;
+  transition: none;
+}
+
+@media (hover: hover) {
+  .root .bar:has(.link:hover) .link:not(:hover) .word::after {
+    transition: none;
+  }
+}
+
+/* Where you are, in ink (round 6). The current page's word carries a short painted stroke under it
+   instead of the fine line: a real sumi stroke (inscription/current-stroke.webp, cut by
+   reference/nav/make_current_stroke.py from a painting of short strokes, its wave straightened and
+   its pressed head drawn in, so it reads as one light, sure stroke rather than a squiggle or a
+   blot). It lands a little loaded at the left and dries out into flying-white at the right (its
+   ink about nine tenths of the word's width), about 7px tall, its middle where the fine line runs,
+   at 85% ink. So: a fine line = "you are pointing", a brush stroke = "you are here". On the
+   homepage the same stroke follows the reader (under Products while the products are read, under
+   Science in the cellular, science and research parts), in lighter ink, and gives way to a word
+   pointed at or an open drop-down (one mark at a time), coming back after. */
+@property --insc-ink {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+.root .link:is([aria-current="page"], [data-current]) .word::after {
+  scale: 0 1;
+}
+
+.ink {
+  /* How much of the stroke is laid (0 none, 1 whole), from its loaded end, with a soft leading
+     edge (as the bar's rule). */
+  --insc-ink: 0;
+  --insc-ink-lead: 14px;
+  position: absolute;
+  top: calc(100% + 7px);
+  /* Under its word, a hair longer than it; under a short word (two Chinese, Japanese or Korean
+     characters: 产品, 製品, 제품, 소개) never shorter than about three characters, so it still
+     reads as a stroke, not a dab (round 8). There it runs a little past both ends of the word: a
+     third of the extra length before it, the rest after it, so its loaded body sits centred under
+     the word and only the dry tail runs on toward the chevron (under it, never through it). */
+  left: calc(min(0px, (100% - 2.8em) * 0.3) - 1px);
+  width: max(100% + 2px, 2.8em);
+  height: clamp(6px, 0.36em, 8px);
+  translate: 0 -50%;
+  mask: linear-gradient(90deg, #000 calc(100% - var(--insc-ink-lead)), transparent) 0 0 /
+    calc(var(--insc-ink) * (100% + var(--insc-ink-lead))) 100% no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  /* Lifted: the ink fades off the paper, then the stroke is ready to be laid again. */
+  transition:
+    opacity 0.45s var(--ease),
+    --insc-ink 0s linear 0.45s;
+}
+
+.ink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") 0 0 / 100% 100% no-repeat;
+}
+
+/* Laid from its loaded end over 0.9s. */
+.root [data-ink] .ink {
+  --insc-ink: 1;
+  opacity: 0.85;
+  transition:
+    opacity 0.2s var(--ease),
+    --insc-ink 0.9s var(--ease);
+}
+
+/* The current page's: laid as the page opens. */
+@keyframes insc-ink {
+  from {
+    --insc-ink: 0;
+  }
+
+  to {
+    --insc-ink: 1;
+  }
+}
+
+.root [data-ink="here"] .ink {
+  animation: insc-ink 0.9s var(--ease) 0.35s backwards;
+}
+
+/* The reader's: lighter, diluted ink (it says what you are reading, not where you are; at 50% it
+   read as a flat grey bar), and it gives way while a drop-down is down or a word of the bar is
+   pointed at. */
+.root [data-ink="reading"] .ink {
+  opacity: 0.6;
+}
+
+.root[data-unrolled] [data-ink="reading"] .ink {
+  --insc-ink: 0;
+  opacity: 0;
+  transition:
+    opacity 0.3s var(--ease),
+    --insc-ink 0s linear 0.3s;
+}
+
+@media (hover: hover) {
+  .root .bar:has(.link:hover, .account a:hover) [data-ink="reading"] .ink {
+    --insc-ink: 0;
+    opacity: 0;
+    transition:
+      opacity 0.3s var(--ease),
+      --insc-ink 0s linear 0.3s;
+  }
+}
+
+/* An open part's chevron turns over through a flat line, never through a sideways arrow. */
 .chevron {
   flex: none;
-  transition: rotate 0.5s var(--ease);
+  transition: scale 0.4s var(--ease);
 }
 
 .root [aria-expanded="true"] > .chevron {
-  rotate: 180deg;
+  scale: 1 -1;
 }
 
 /* The language (left), Log in and Sign up (right): the shared component, in the bar's voice.
@@ -314,6 +781,34 @@
   outline-offset: 4px;
 }
 
+/* The keyboard's ring in the bar (round 10): 2px of ink round the words, about 44px tall and centred
+   on them (round the 48px targets it ran down onto the settled bar's brush rule), with 8px of air
+   at their sides. Drawn on a box laid round the control. The language picker's goes round all of
+   it, its globe, the language and its arrow (on the select alone it left the globe outside). */
+.root
+  :is(
+    .link,
+    .menuButton,
+    .account a,
+    .sheetFoot a,
+    .language select,
+    .account select
+  ):focus-visible {
+  outline: none;
+}
+
+.root .link:focus-visible::after,
+.root .menuButton:focus-visible::after,
+.root :is(.account, .sheetFoot) a:focus-visible::before,
+.root :is(.language, .account) label:has(select:focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.6em - 8px) -6px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
+  pointer-events: none;
+}
+
 @supports (appearance: base-select) {
   .root :is(.language, .account) select,
   .root :is(.language, .account) select::picker(select) {
@@ -368,6 +863,7 @@
 }
 
 .root .menuButton {
+  position: relative;
   display: none;
   align-items: center;
   gap: 8px;
@@ -383,31 +879,77 @@
   white-space: nowrap;
 }
 
-/* Japanese and Vietnamese set About, Log in and Sign up long. Just above the menu's breakpoint
-   (1101-1400px) the line keeps its two-and-two around the centred mark by drawing in: a smaller
-   mark and closer spacing that grow back to the usual ones as the window widens, a slimmer
-   Sign up, and side margins that narrow toward 28px under about 1220px. */
-@media (min-width: 1101px) and (max-width: 1400px) {
+/* Long languages (round 8). The bar is three groups: the language, the inscription (two links,
+   the mark, two links) and the account. The space between a group and the inscription is what
+   tells them apart, so it must always be clearly wider than the spacing between the links (about
+   twice it, never under one and a half times). The mark stays centred and the words never shrink
+   under 18px, so where a language sets its words long the bar finds the room around them:
+   - Every language, just above the menu's breakpoint (1101-1185px): the language and the account
+     stand a little further out toward the window's edges, so the groups keep their air there.
+   - Japanese and Vietnamese set About, Log in and Sign up long (Japanese 私たちについて,
+     ログイン, 新規登録). The outer groups stand further out (side margins from 32px at 1101px
+     back to the page's column, Japanese always 32px beyond it), the spacing is a tenth closer
+     (from 22px at 1101px), the mark steps down a little just above the breakpoint (104px at
+     1101px, the usual 116px from 1201px), and below 1400px Sign up's outline is slimmer.
+   - Japanese below 1340px: Sign up is written like Log in (no outline), which frees the room the
+     outline took; the pair still reads as one group by its spacing (closer than the links). */
+@media (min-width: 1101px) {
+  .root {
+    --pad: min(var(--gutter), 62px + (100vw - 1101px) * 0.35);
+  }
+
   .root:is(:lang(ja), :lang(vi)) {
-    --gap: calc(20px + (100vw - 1101px) * 0.045);
-    --mark-tall: calc(100px + (100vw - 1101px) * 0.1);
-    --mark-small: calc(94px + (100vw - 1101px) * 0.03);
+    --gap: min(0.9 * clamp(26px, 2.6vw, 44px), 22px + (100vw - 1101px) * 0.04);
+    --mark-tall: min(clamp(116px, 9.4vw, 150px), 104px + (100vw - 1101px) * 0.12);
+    --mark-small: min(clamp(94px, 6.8vw, 108px), 94px + (100vw - 1101px) * 0.03);
+    --pad: min(var(--gutter), 32px + (100vw - 1101px) * 0.25);
   }
 
-  .root:is(:lang(ja), :lang(vi)) .bar {
-    padding-inline: min(var(--gutter), calc(28px + (100vw - 1101px) * 0.5));
+  .root:lang(ja) {
+    --pad: min(var(--gutter) - 32px, 32px + (100vw - 1101px) * 0.25);
   }
+}
 
-  .root:is(:lang(ja), :lang(vi)) :is(.left, .right) {
-    gap: 20px;
-  }
-
+@media (min-width: 1101px) and (max-width: 1399px) {
   .root:is(:lang(ja), :lang(vi)) .account > div {
     gap: 16px;
   }
 
   .root:is(:lang(ja), :lang(vi)) .account button {
     padding: 0 16px;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1339px) {
+  .root:lang(ja) .account > div {
+    gap: 18px;
+  }
+
+  .root:lang(ja) .account button {
+    position: relative;
+    padding: 0 2px;
+    border: 0;
+    border-radius: 0;
+  }
+
+  /* Its line, as Log in's, once it leads somewhere. */
+  .root:lang(ja) .account button::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transition: scale 0.5s var(--ease);
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1339px) and (hover: hover) {
+  .root:lang(ja) .account button:enabled:hover::after {
+    scale: 1 1;
   }
 }
 
@@ -437,12 +979,14 @@
   pointer-events: none;
 }
 
-/* A faint wash of thinned ink over the page under the scroll. */
+/* A faint wash of thinned ink over the page under the scroll: enough (round 9: 28%, from 22%) that
+   a headline the scroll's torn edge falls across recedes behind it; at a third it turned the page
+   grey. */
 .wash {
   position: fixed;
   z-index: -3;
   inset: 0;
-  background: rgb(96 91 83 / 0.22);
+  background: rgb(96 91 83 / 0.28);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s var(--ease);
@@ -455,8 +999,8 @@
 }
 
 /* What is written on the scroll: each drop-down carries the same paper (so its ink paintings
-   multiply onto paper) and is revealed with it, just above the torn edge. Moving between the
-   two keeps the scroll down and cross-fades what is on it. */
+   multiply onto paper) and is revealed with it, just above the torn edge. Opening one shows it at
+   once (the unrolling reveals it). */
 .panel {
   position: absolute;
   top: var(--h);
@@ -470,25 +1014,53 @@
   clip-path: inset(0 0 calc(100% * (1 - var(--insc-r)) + var(--deckle)) 0);
   color: var(--ink);
   visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 0.3s var(--ease),
-    visibility 0s linear 0.3s;
 }
 
 .panel[data-shown] {
+  z-index: 1;
   visibility: visible;
-  opacity: 1;
-  transition:
-    opacity 0.45s var(--ease) 0.08s,
-    visibility 0s;
 }
 
+/* Moving straight across from one to the other keeps the scroll down and lays the new writing
+   over the old: the new panel, on its own paper and on top, fades in quickly (front-loaded) while
+   the old one under it thins away more slowly (0.25s, even; round 11: the two rows stand their
+   parts in different places, so a bottle left whole under the Science pictures showed through
+   them for a moment), and goes once it is covered. One of the two is always most of the way in,
+   so the scroll is never empty. */
+.root[data-swap] .panel:not([data-shown]) {
+  transition: visibility 0s linear 0.45s;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .root[data-swap] .panel:not([data-shown]) {
+    animation: insc-leave 0.25s linear forwards;
+  }
+}
+
+@keyframes insc-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+/* What is written on a drop-down: its title, the row, and the link to all of them, centred. The
+   page is as long as the taller drop-down's (the scroll never changes length) and the link stands
+   at its foot, so the two links share one line. */
 .panelInner {
   display: grid;
+  grid-template-rows: auto auto 1fr;
   justify-items: center;
+  min-height: 100%;
   padding: clamp(34px, 3vw, 48px) var(--gutter) calc(var(--deckle) + clamp(16px, 1.6vw, 28px));
   text-align: center;
+}
+
+/* The title's room: as tall as the taller of the two titles (measured in the component), the title
+   at its foot, so the two rows start on one line. */
+.panelHead {
+  display: grid;
+  align-items: end;
+  min-height: var(--insc-title-h, 0px);
 }
 
 .root .panelTitle {
@@ -508,49 +1080,153 @@
   word-break: keep-all;
 }
 
-/* Products: the five standing in a row, each on a pale pool, one painted ground under them. */
-.shelfWrap {
-  /* The picture's height (the bottle is about 93% of it). */
-  --stand: clamp(158px, 11.6vw, 182px);
+/* Round 11 (Mo's pick, over round 4's showroom): each drop-down is one row, everything at once.
+   Products: the five real bottles side by side, each on its own pale pool, standing on one painted
+   ground line (round 4's row). Science: its four parts, each picture at round 5's one weight. Under
+   each picture its name (21px) and its line (17px Ink Grey); each part is one link. The two rows are
+   two pages of one book: the same width, the pictures in rooms of one height on one line, the names
+   on one line. */
+.shelf {
+  /* The pictures' rooms' height (a bottle is about 93% of it). */
+  --stand: clamp(180px, 13vw, 220px);
   position: relative;
-  width: min(100%, 1160px);
-  margin-top: clamp(26px, 2.4vw, 38px);
+  width: min(100% + 2 * var(--gutter) - 80px, 1240px);
+  margin-top: clamp(20px, 1.8vw, 28px);
 }
 
-/* Five equal columns, so the row is symmetric about the middle bottle. */
-.shelf {
+/* One column each, at least as wide as its name where the name keeps to one line (the products'
+   names, their own in every language). The rows of pictures, names and lines are shared (subgrid),
+   so every name stands on one line and every line starts on one line, however a neighbour wraps. */
+.shelfRow {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: clamp(6px, 1vw, 16px);
+  grid-template-columns: repeat(var(--count, 5), minmax(min-content, 1fr));
+  grid-template-rows: auto auto auto;
+  column-gap: clamp(8px, 1.2vw, 20px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-.shelfGround {
-  position: absolute;
-  left: 50%;
-  top: calc(var(--stand) * 0.972);
-  width: calc(100% - 24px);
-  height: 16px;
-  translate: -50% -50%;
-  background: var(--ink);
-  mask: url("/images/home-v2/nav/brush-5.webp") center / 100% 100% no-repeat;
-  opacity: 0.42;
-  pointer-events: none;
+.shelfRow > li {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
 }
 
 /* (Beats the look's rule that sizes a header's first picture link as its logo.) */
-.root .shelf a.product[href] {
+.root .shelfRow a.item[href] {
+  position: relative;
   display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
   justify-items: center;
-  align-content: start;
-  width: 100%;
-  padding: 0 6px 8px;
-  border-radius: 6px;
-  color: inherit;
+  align-items: start;
+  padding: 0 4px 8px;
+  color: var(--ink);
 }
 
+/* Its focus ring goes round the whole part (picture, name and line), drawn over the picture. */
+.root .shelfRow a.item[href]:focus-visible {
+  outline: none;
+}
+
+.root .shelfRow a.item[href]:focus-visible::after {
+  content: "";
+  position: absolute;
+  inset: -8px -2px -2px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
+  pointer-events: none;
+}
+
+/* A name stands at the foot of the names' row, so it is always right over its own line: where one
+   name wraps (Vietnamese "Các nhà khoa học của chúng tôi"), the others share its last line instead
+   of standing a line above their captions. */
+.itemName {
+  align-self: end;
+  margin-top: 14px;
+  font-size: 21px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.shelf[data-row="products"] .itemName {
+  white-space: nowrap;
+}
+
+/* Pointing at a part (or reaching it by keyboard) paints the fine ink line under its name, drawn
+   out from the middle of each of its lines (0.5s); the one left behind lets go at once, so only
+   one name is ever lined. */
+.itemName > span {
+  padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) 50% 100% / 0% 2px no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@media (hover: hover) {
+  .root .shelfRow a.item[href]:hover .itemName > span {
+    background-size: 100% 2px;
+    transition: background-size 0.5s var(--ease);
+  }
+
+  .root .shelfRow:has(a.item:hover) a.item[href]:not(:hover) .itemName > span {
+    background-size: 0% 2px;
+    transition: none;
+  }
+}
+
+.root .shelfRow a.item[href]:focus-visible .itemName > span {
+  background-size: 100% 2px;
+  transition: background-size 0.5s var(--ease);
+}
+
+.itemLine {
+  max-width: min(100%, 13em);
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Products: the ground, one real painted line (the bar's own stroke at its own proportions: a fine
+   tip where the brush lands, a thin body, dry strands at its end), the bottles' feet on it. Never
+   squashed into a rod. */
+.shelfGround {
+  position: absolute;
+  left: 50%;
+  top: calc(var(--stand) * 0.962);
+  width: calc(100% - 40px);
+  aspect-ratio: 2433 / 42;
+  translate: -50% -50%;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* Pointing at a product lifts its bottle a little off its pool. */
+@media (hover: hover) {
+  .root .shelf a.item[href]:hover .bottle {
+    translate: 0 -6px;
+  }
+
+  .root .shelf a.item[href]:hover .pool {
+    opacity: 0.38;
+  }
+}
+
+.root .shelf a.item[href]:focus-visible .bottle {
+  translate: 0 -6px;
+}
+
+.root .shelf a.item[href]:focus-visible .pool {
+  opacity: 0.38;
+}
+
+/* A product photograph standing on its pale ink pool (the narrow window's menu). */
 .stand {
   position: relative;
   display: block;
@@ -593,95 +1269,72 @@
   transition: translate 0.6s var(--ease);
 }
 
-@media (hover: hover) {
-  .root .product:hover .bottle {
-    translate: 0 -6px;
-  }
-
-  .root .product:hover .pool {
-    opacity: 0.3;
-  }
+/* In the Products row: the photograph's clear margins may reach over a neighbour's (only the bottle
+   needs its room), and its pool is gathered, as on the homepage's stage and a little paler: the
+   painted pool foreshortened, its darkest core just under the base. */
+.shelf .stand {
+  margin-inline: calc(var(--stand) * -0.2);
 }
 
-.root .product:focus-visible .bottle {
-  translate: 0 -6px;
+.shelf .pool {
+  top: 79%;
+  width: 60%;
+  aspect-ratio: 1 / 0.42;
+  mask-image: radial-gradient(closest-side, #000 72%, transparent);
+  opacity: 0.55;
 }
 
-.productName {
-  margin-top: 18px;
-  font-size: 19px;
-  font-weight: 450;
-  line-height: 1.3;
-  text-wrap: balance;
-}
-
-.productFocus {
-  max-width: 12em;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.35;
-  text-wrap: balance;
-}
-
-/* Science: four parts, each a painting, its name and its line. */
-.gallery {
-  display: flex;
-  justify-content: center;
-  gap: clamp(16px, 2.2vw, 40px);
-  margin: clamp(26px, 2.4vw, 38px) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.root .gallery a.part[href] {
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  width: clamp(200px, 15vw, 236px);
-  padding-bottom: 8px;
-  border-radius: 6px;
-  color: inherit;
-}
-
-.frame {
+/* Science's pictures (round 5): Dr. Liu's real photograph and three ink paintings at one weight,
+   each centred in a room the size of a bottle's: the print on its paper mat at 80% of the room's
+   height (never multiplied; the one sanctioned mount shadow), the paintings (their paper divided
+   out, multiplied) a little wider than the room (--over on each side), the inkstone most, for the
+   paper round it. No halo: tried behind all four, it read as a grey disc and muddied the cell.
+   Centred by their insets, never a translate (the settle moves them). */
+.room {
   position: relative;
   display: block;
-  width: 100%;
-  height: calc(clamp(158px, 11.6vw, 182px) - 6px);
+  width: calc(var(--stand) * 1230 / 1278);
+  aspect-ratio: 1230 / 1278;
 }
 
-.painting {
-  object-fit: contain;
-  mix-blend-mode: multiply;
+.plate {
+  --over: 0%;
+  position: absolute;
+  inset: 0 calc(-1 * var(--over));
+  display: block;
+  width: calc(100% + 2 * var(--over));
+  max-width: none;
+  height: auto;
+  margin: auto;
   transition:
-    opacity 0.6s var(--ease),
+    opacity 0.6s var(--ease) 0.12s,
     scale 0.6s var(--ease);
 }
 
-/* The reading still life is tall: its table, book and cup, the rest of the room dissolving. */
-.painting[data-painting="story-reading-v2"] {
-  object-fit: cover;
-  object-position: 50% 80%;
-  mask-image: radial-gradient(closest-side, #000 58%, transparent);
+img.plate {
+  mix-blend-mode: multiply;
 }
 
-/* Dr. Liu's real photograph: a print on a paper mat, never multiplied. */
-.mat {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  display: block;
-  height: 100%;
-  padding: 7px;
+.plate[data-plate="cell"] {
+  --over: 4%;
+}
+
+.plate[data-plate="reading"] {
+  --over: 8%;
+}
+
+.plate[data-plate="inkstone"] {
+  --over: 14%;
+}
+
+.root .plate[data-plate="print"] {
+  width: fit-content;
+  height: 80%;
+  padding: clamp(4px, 0.36vw, 6px);
   background: #fbf9f4;
   box-shadow:
     0 12px 22px -12px rgba(12, 11, 10, 0.42),
     0 2px 5px rgba(12, 11, 10, 0.1);
-  translate: -50% -50%;
-  transition:
-    opacity 0.6s var(--ease),
-    scale 0.6s var(--ease);
 }
 
 .photo {
@@ -690,48 +1343,53 @@
   height: 100%;
 }
 
-/* Pointing at a part brings its painting forward; the others ease back. */
-.gallery:has(.part:is(:hover, :focus-visible)) .painting {
-  opacity: 0.5;
+/* Pointing at a part (or reaching it by keyboard) brings its picture gently forward and the
+   others ease back a little, never to a ghost (the print, a real photograph, least). They come
+   back a moment later, so crossing the gap from one part to the next never flickers the row. */
+@media (hover: hover) {
+  .shelfRow:has(a.item:hover) .plate {
+    opacity: 0.7;
+    transition-delay: 0s;
+  }
+
+  .shelfRow:has(a.item:hover) .plate[data-plate="print"] {
+    opacity: 0.8;
+  }
+
+  .root .shelfRow a.item[href]:hover .plate[data-plate] {
+    opacity: 1;
+    scale: 1.04;
+  }
 }
 
-/* The photograph eases back less: a real print, never faded to a ghost. */
-.gallery:has(.part:is(:hover, :focus-visible)) .mat {
-  opacity: 0.66;
+.shelfRow:has(a.item:focus-visible) .plate {
+  opacity: 0.7;
+  transition-delay: 0s;
 }
 
-.root .gallery .part:is(:hover, :focus-visible) :is(.painting, .mat) {
+.shelfRow:has(a.item:focus-visible) .plate[data-plate="print"] {
+  opacity: 0.8;
+}
+
+.root .shelfRow a.item[href]:focus-visible .plate[data-plate] {
   opacity: 1;
-  scale: 1.05;
+  scale: 1.04;
 }
 
-.partLabel {
-  margin-top: 18px;
-  font-size: 20px;
-  font-weight: 450;
-  line-height: 1.3;
-  text-wrap: balance;
+/* A focus line or caption keeps its phrases whole where they fit: a narrow line breaks between
+   them first (round 8: on a phone, Japanese 確かな科学を。/ その向こうにいる人。, not
+   その向こうに / いる人。; Vietnamese "Sức khỏe tế bào &" / "năng lượng tinh thần", not
+   "… & năng" / "lượng …"). */
+.phrase {
+  display: inline-block;
 }
 
-.partCaption {
-  max-width: 14em;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.35;
-  text-wrap: balance;
-}
-
-/* Japanese and Chinese lines break between phrases, not inside them. */
-.root
-  :is(.panelTitle, .productFocus, .partLabel, .partCaption, .sheetProductName):is(
-    :lang(ja),
-    :lang(zh)
-  ) {
+/* Japanese and Chinese lines break between phrases, not inside them; Korean between words. */
+.root :is(.panelTitle, .itemName, .itemLine):is(:lang(ja), :lang(zh)) {
   word-break: auto-phrase;
 }
 
-.root :is(.productFocus, .partCaption):lang(ko) {
+.root :is(.itemName, .itemLine):lang(ko) {
   word-break: keep-all;
 }
 
@@ -764,38 +1422,61 @@
   }
 }
 
-/* What is on the scroll settles as the paper reaches it. */
+/* Under a drop-down's row it stands at the scroll's foot, on one line on both. */
+.root .panelInner > a.more[href] {
+  align-self: end;
+  margin-top: clamp(16px, 1.5vw, 24px);
+}
+
+/* What is on the scroll settles as the paper reaches it. Only the pieces themselves move and fade,
+   never a box around a multiplied painting or pool (that would isolate its blend). */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-unrolled]
+  .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
-    :is(
-      .panelTitle,
-      .bottle,
-      .productName,
-      .productFocus,
-      .frame,
-      .partLabel,
-      .partCaption,
-      .more
-    ) {
+    :is(.panelTitle, .plate, .itemName, .itemLine, .more) {
     animation: insc-settle 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled]
-    .panel[data-shown]
-    :is(.productName, .productFocus, .partLabel, .partCaption) {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.itemName, .itemLine) {
     animation-delay: calc(0.24s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled] .panel[data-shown] .more {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .more {
     animation-delay: 0.42s;
   }
 
-  /* A bottle's pool arrives with it (never a shadow without its bottle). */
-  .root[data-unrolled] .panel[data-shown] :is(.pool, .contact) {
+  /* A bottle, a photograph, never fades: half see-through it read as a pale ghost of a bottle
+     (round 9). It is there as the unrolling paper reaches it, crisp as the names, and only rises
+     into place with them; its pool and the ground line come in under it (never a shadow without
+     its bottle). */
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .shelf .bottle {
+    animation: insc-rise 0.9s var(--ease) backwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-unrolled]:not([data-swap])
+    .panel[data-shown]
+    :is(.shelf .pool, .shelf .contact, .shelfGround) {
     animation: insc-fade 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
+  }
+
+  /* A swap: the new panel fades in whole over the old one, and what is written on it settles into
+     place as it comes (rising only; it never fades on its own, so the scroll is never blank). The
+     fade is front-loaded (the site's expo-out, as on the product pages) and short (0.3s; round 11:
+     the two rows stand their parts in different places, and over 0.45s the bottles still showed
+     through the Science pictures 170ms in): the new writing is most of the way in within a few
+     frames, so the two never stand over each other as a double exposure. */
+  .root[data-swap] .panel[data-shown] {
+    animation: insc-fade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .root[data-unrolled][data-swap]
+    .panel[data-shown]
+    :is(.panelTitle, .bottle, .plate, .itemName, .itemLine, .more) {
+    animation: insc-rise 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 }
 
@@ -812,6 +1493,12 @@
   }
 }
 
+@keyframes insc-rise {
+  from {
+    translate: 0 8px;
+  }
+}
+
 /* ---------------------------------------------------------------- the narrow window */
 
 .sheet {
@@ -821,11 +1508,15 @@
 @media (max-width: 1100px) {
   .root {
     --tall: 76px;
-    --small: 64px;
+    --small: 70px;
     --mark-tall: clamp(98px, 13vw, 124px);
     --mark-small: clamp(90px, 11vw, 108px);
     --gap: 12px;
     --below: 52px;
+  }
+
+  .root {
+    --lift-small: 0.03;
   }
 
   .root .bar {
@@ -868,6 +1559,9 @@
     height: calc(100dvh - var(--h) + var(--below));
     overflow-y: auto;
     overscroll-behavior: contain;
+    /* The menu runs on under the window's foot (--below): stepping through it from the keyboard
+       keeps the focused line, and its ring, above the foot (round 10). */
+    scroll-padding-block: 16px calc(var(--below) + 24px);
     background-color: var(--paper);
     background-image: var(--paper-fibre);
     background-size: 800px 800px;
@@ -960,27 +1654,48 @@
   height: 0.7em;
 }
 
+/* Its focus ring hugs the word (round 10): drawn round the line's whole room (64-108px tall) it
+   ran across the brush marks between the lines. */
+.root .sheetLink {
+  position: relative;
+}
+
+.root .sheetLink:focus-visible {
+  outline: none;
+}
+
+.root .sheetLink:focus-visible::before {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.55em - 10px) -4px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
+}
+
 .root .sheetLink:is(:lang(ko), :lang(ja), :lang(zh)) {
   letter-spacing: -0.01em;
 }
 
-/* The page the menu is open on keeps its ink underline, under the word. */
-.root .sheetLink[aria-current="page"] {
+/* The page the menu is open on keeps a fine ink underline under its word. (Round 6 tried the bar's
+   painted stroke here: at the menu's size it is the twin of the brush marks between the lines, so
+   the current word read as having a second mark under it.) */
+.root .sheetLink:is([aria-current="page"], [data-current]) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.26em;
 }
 
 /* A short, sure brush mark between the lines, like the marks between the columns of an
-   inscription: real ink, loaded at its start, dry at its end. */
+   inscription: the bar's own straight painted stroke (inscription/current-stroke.webp), loaded at
+   its start, dry at its end. Straight, so at a phone's size it reads as brush, never as a "~". */
 .dab {
   display: block;
   flex: none;
-  width: 64px;
-  height: 9px;
+  width: 72px;
+  height: 7px;
   background: var(--ink);
-  mask: url("/images/home-v2/nav/brush-2.webp") center / 100% 100% no-repeat;
-  opacity: 0.82;
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") center / 100% 100% no-repeat;
+  opacity: 0.8;
 }
 
 .sheetPart {
@@ -990,11 +1705,20 @@
   width: 100%;
 }
 
+/* A part folds open on the site's ease and, when it folds away alone, gently from rest (an
+   ease-in-out), so what it carries (the words under it, on a tablet the crane's room) moves calmly
+   both ways. Folding away while the other part unfolds, both share the site's ease, so the menu's
+   length holds steady and its foot stays put. */
 .sheetFold {
   display: grid;
   grid-template-rows: 0fr;
   width: 100%;
-  transition: grid-template-rows 0.6s var(--ease);
+  transition: grid-template-rows 0.6s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.sheetPart[data-open] .sheetFold,
+.sheetInner:has(> .sheetPart[data-open]) .sheetFold {
+  transition-timing-function: var(--ease);
 }
 
 .sheetPart[data-open] .sheetFold {
@@ -1010,174 +1734,293 @@
   overflow-y: clip;
 }
 
-.sheetFoldInner > .more {
-  margin-bottom: 18px;
+/* Folding away, what the part holds fades as the fold shuts over it (each piece itself, never the
+   rows as a block, so the paintings and pools stay multiplied), so no sliver of a picture is left
+   at the fold's edge; folding open, it is simply there as the fold reaches it. */
+.sheetPart:not([data-open])
+  :is(
+    .bottle,
+    .pool,
+    .contact,
+    .thumbPlate,
+    .thumbPrint,
+    .sheetRowName,
+    .sheetRowLine,
+    .sheetFoldInner > .more
+  ) {
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
 }
 
-/* Phones: the five in a row you can swipe, starting on the left margin and running off the
-   right edge (about two and a half in view, the third cut through its bottle). */
-.sheetShelfWrap {
-  --stand: 33vw;
-  position: relative;
-  width: calc(100% + 2 * var(--gutter));
-  margin: 4px calc(-1 * var(--gutter)) 0;
-}
-
-.sheetGround {
-  display: none;
-}
-
-.sheetShelf {
-  display: flex;
-  gap: 6px;
-  margin: 0;
-  padding: 6px var(--gutter) 8px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--gutter);
-  scrollbar-width: none;
-  list-style: none;
-}
-
-.sheetShelf > li {
-  flex: none;
-  scroll-snap-align: start;
-}
-
-.sheetShelf > li:first-child {
-  margin-left: auto;
-}
-
-.sheetShelf > li:last-child {
-  margin-right: auto;
-}
-
-.root .sheetShelf a.sheetProduct[href] {
+/* Products and Science unfold as rows (round 7; Seed's pattern, Mo's like): each a link with its
+   picture at the left, standing on its pale pool (the five bottles) or set at the desktop's one
+   weight (Dr. Liu's print on its mat, the three ink paintings multiplied a little wider than the
+   picture's room), and its name (21px, the headline voice) and line at the right. One centred
+   column, every row whole on the screen: nothing runs off the edge, nothing to swipe. */
+.sheetRows {
+  --thumb: 76px;
   display: grid;
-  justify-items: center;
-  align-content: start;
-  width: 35vw;
-  padding: 2px 0 8px;
-  border-radius: 6px;
-  color: var(--ink);
-}
-
-.sheetProductFocus {
-  display: none;
-}
-
-.sheetProductName {
-  margin-top: 10px;
-  font-size: 17px;
-  font-weight: 450;
-  line-height: 1.25;
-  text-wrap: balance;
-}
-
-/* A tablet (700px and wider): the menu opens with the five already standing in a row, centred on
-   one painted ground, each with its name and focus line; the links are a step larger. */
-@media (min-width: 700px) {
-  .root .sheetLink {
-    min-height: clamp(72px, 9.4vh, 104px);
-    font-size: clamp(38px, 5.6vw, 44px);
-  }
-
-  .sheetShelfWrap {
-    --stand: clamp(130px, 19vw, 170px);
-    width: calc(100% + 2 * var(--gutter) - 48px);
-    margin-inline: calc(24px - var(--gutter));
-  }
-
-  .sheetShelf {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
-    padding: 6px 0 8px;
-    overflow: visible;
-  }
-
-  .sheetShelf > li:is(:first-child, :last-child) {
-    margin: 0;
-  }
-
-  .root .sheetShelf a.sheetProduct[href] {
-    width: 100%;
-    padding: 2px 4px 8px;
-  }
-
-  .sheetGround {
-    position: absolute;
-    top: calc(6px + var(--stand) * 0.972);
-    left: 50%;
-    display: block;
-    width: calc(100% - 16px);
-    height: 14px;
-    translate: -50% -50%;
-    background: var(--ink);
-    mask: url("/images/home-v2/nav/brush-5.webp") center / 100% 100% no-repeat;
-    opacity: 0.42;
-    pointer-events: none;
-  }
-
-  .sheetProductFocus {
-    display: block;
-    max-width: 11em;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.35;
-    text-wrap: balance;
-  }
-}
-
-.sheetList {
-  display: grid;
-  justify-items: center;
-  margin: 0;
+  width: min(100%, 352px);
+  margin: 2px 0 0;
   padding: 0;
   list-style: none;
 }
 
-.root .sheetList a {
-  display: inline-flex;
+.root .sheetRows a.sheetRow[href] {
+  display: grid;
+  grid-template-columns: var(--thumb) minmax(0, 1fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  column-gap: 20px;
   align-items: center;
-  min-height: 52px;
+  min-height: calc(var(--thumb) + 16px);
+  padding: 8px 0;
   color: var(--ink);
-  font-size: clamp(20px, 2.6vw, 22px);
-  font-weight: 450;
+  text-align: start;
 }
 
-/* Under the links, where there is room, the painting the inscription stands over: the crane at
-   rest (the page's own last painting), ink multiplied on the scroll's paper. It gives way, whole,
-   when an unfolded part needs the room. */
-.sheetPainting {
-  flex: 1 1 0;
-  width: 100%;
-  min-height: 0;
-  padding-top: 20px;
-  container-type: size;
-  display: grid;
-  place-items: center;
+/* Its focus ring is drawn on the row's own edge, top and foot, with 8px of air at its sides
+   (round 10: 2px out, the first row's ring ran past the fold's top and was cut off). */
+.root .sheetRows a.sheetRow[href] {
+  position: relative;
+}
+
+.root .sheetRows a.sheetRow[href]:focus-visible {
+  outline: none;
+}
+
+.root .sheetRows a.sheetRow[href]:focus-visible::before {
+  content: "";
+  position: absolute;
+  inset: 0 -8px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
   pointer-events: none;
 }
 
-.sheetCrane {
+.sheetThumb {
+  --stand: var(--thumb);
+  position: relative;
+  display: grid;
+  grid-row: 1 / -1;
+  place-items: center;
+  width: var(--thumb);
+  height: var(--thumb);
+}
+
+.sheetRowName {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--display-font);
+  font-size: 21px;
+  font-weight: var(--display-weight, 500);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+}
+
+.sheetRowLine {
+  grid-column: 2;
+  grid-row: 3;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+/* Japanese and Chinese lines break between phrases, not inside them; Korean between words. */
+.root :is(.sheetRowName, .sheetRowLine):is(:lang(ja), :lang(zh)) {
+  word-break: auto-phrase;
+}
+
+.root :is(.sheetRowName, .sheetRowLine):lang(ko) {
+  word-break: keep-all;
+}
+
+/* Science's pictures at the desktop's one weight: the print at 80% of the room on its mat (the one
+   sanctioned mount shadow, never multiplied), the paintings multiplied a little wider than it (the
+   cell 4% each side, the reading still life 8%, the inkstone 14% for the paper round it). */
+.thumbPlate {
+  --over: 0%;
   display: block;
-  width: auto;
-  height: min(100cqh, 260px);
+  width: calc(100% + 2 * var(--over));
+  max-width: none;
+  height: auto;
+  margin-inline: calc(-1 * var(--over));
   mix-blend-mode: multiply;
 }
 
-@container (max-height: 150px) {
-  .sheetCrane {
-    display: none;
+.thumbPlate[data-plate="cell"] {
+  --over: 4%;
+}
+
+.thumbPlate[data-plate="reading"] {
+  --over: 8%;
+}
+
+.thumbPlate[data-plate="inkstone"] {
+  --over: 14%;
+}
+
+.root .thumbPrint {
+  display: block;
+  height: 80%;
+  padding: 3px;
+  background: #fbf9f4;
+  box-shadow:
+    0 8px 14px -8px rgba(12, 11, 10, 0.42),
+    0 1px 3px rgba(12, 11, 10, 0.1);
+}
+
+/* The link under the rows; its arrow stays with its last word. */
+.root .sheetFoldInner > a.more[href] {
+  display: inline-block;
+  max-width: min(100%, 352px);
+  margin: 8px 0 20px;
+  padding-block: 10px;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tail {
+  white-space: nowrap;
+}
+
+.tail > svg {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: -3px;
+}
+
+/* A tablet (700px and wider): the rows stand side by side instead, the five bottles (or the four
+   pictures) in one row, each on its own pool (no shared ground), the names and their lines under
+   them, each on one line with its neighbours'; the words are a step larger. */
+@media (min-width: 700px) {
+  .root .sheetLink {
+    min-height: clamp(72px, 7.6vh, 84px);
+    font-size: clamp(38px, 5.6vw, 44px);
+  }
+
+  .sheetRows {
+    --thumb: clamp(122px, 16vw, 160px);
+    grid-template-columns: repeat(var(--count, 5), minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: 12px;
+    width: min(calc(100% + 2 * var(--gutter) - 32px), 1000px);
+    margin: 6px calc(16px - var(--gutter)) 0;
+  }
+
+  .sheetRows[data-sheet-rows="science"] {
+    --count: 4;
+  }
+
+  .sheetRows > li {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+
+  .root .sheetRows a.sheetRow[href] {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    align-items: start;
+    min-height: 0;
+    padding: 4px 0 10px;
+    text-align: center;
+  }
+
+  .sheetThumb {
+    grid-row: 1;
+  }
+
+  .sheetRowName {
+    grid-column: 1;
+    margin-top: 12px;
+    font-size: 20px;
+    text-wrap: balance;
+  }
+
+  .sheetRowLine {
+    grid-column: 1;
+    max-width: 11em;
+    font-size: 16px;
+    text-wrap: balance;
+  }
+
+  .root .sheetFoldInner > a.more[href] {
+    max-width: 100%;
   }
 }
 
-.sheetFoot {
+/* The menu ends where the page ends (round 7): the crane at rest (the page's own last painting)
+   standing on a short loaded brush stroke, the footer's finale in miniature, with Log in and Sign
+   up under it. It stands at the foot of the menu: when there is room, at the foot of the window;
+   when a part unfolds, it is carried down calmly with the fold and waits at the end of the
+   scrolling menu (it never vanishes). Ink, multiplied on the menu's paper; the stroke under its
+   feet is the bar's own straight stroke, laid under the crane. */
+.sheetFinale {
+  --above: 28px;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
   margin-top: auto;
-  padding-top: clamp(28px, 5vh, 56px);
+  padding-top: var(--above);
+  pointer-events: none;
+}
+
+/* The crane's room (its picture's proportions) and the ground under its feet. On a phone a set
+   size from the window's height (about 220px on a 390x844 phone, never under 130px), so the menu
+   with its four words shows the whole finale; unfolding a part carries it down whole. */
+.sheetStand {
+  position: relative;
+  display: block;
+  flex: none;
+  height: clamp(130px, calc(44svh - 150px), 230px);
+  aspect-ratio: 560 / 864;
+}
+
+/* A tablet: the crane takes the room left under the words (130px to 230px), so a tablet held
+   upright shows it whole under the unfolded Products; when the room changes it eases with the
+   fold, never popping. */
+@media (min-width: 700px) {
+  .sheetFinale {
+    flex: 1 0 auto;
+  }
+
+  .sheetStand {
+    flex: 1 1 0;
+    height: auto;
+    min-height: 130px;
+    max-height: 230px;
+  }
+}
+
+.sheetGround {
+  position: absolute;
+  top: 89.5%;
+  left: -10%;
+  width: 126%;
+  height: 8%;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") 0 50% / 100% auto no-repeat;
+  opacity: 0.72;
+}
+
+.sheetCrane {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
+}
+
+.sheetFoot {
+  flex: none;
+  padding-top: 14px;
 }
 
 .root .sheetFoot > div {
@@ -1191,12 +2034,47 @@
   display: none;
 }
 
-/* The menu's lines settle as the paper reaches them. */
+/* The menu's lines settle as the paper reaches them; an unfolding part's rows settle row by row as
+   the fold opens. Always piece by piece (each word, bottle, pool, picture and name), never as one
+   block: the pools, the paintings and the crane are multiplied onto the paper, and a block fading
+   round them would show their white as boxes until it stopped. */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-menu] .sheetInner > :not(.sheetPainting),
+  .root[data-menu] .sheetInner > :not(.sheetFinale, .sheetPart),
+  .root[data-menu] .sheetPart > .sheetLink,
   .root[data-menu] .sheetCrane {
     animation: insc-settle 0.9s var(--ease) backwards;
     animation-delay: calc(0.16s + var(--n, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetGround {
+    animation: insc-fade 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--n, 0) * 60ms);
+  }
+
+  /* The part a tablet opens with settles with the menu, row by row. */
+  .root[data-menu]
+    .sheetPart[data-open]:not([data-by-hand])
+    :is(.bottle, .thumbPlate, .thumbPrint, .sheetRowName, .sheetRowLine) {
+    animation: insc-settle 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetPart[data-open]:not([data-by-hand]) :is(.pool, .contact) {
+    animation: insc-fade 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetPart[data-open]:not([data-by-hand]) .sheetFoldInner > .more {
+    animation: insc-settle 0.9s var(--ease) 0.46s backwards;
+  }
+
+  /* A part the visitor unfolds: its rows are there as the fold reaches them (never a blank fold
+     waiting for them), rising into place one after another. */
+  .root[data-menu]
+    .sheetPart[data-open][data-by-hand]
+    :is(.bottle, .thumbPlate, .thumbPrint, .sheetRowName, .sheetRowLine, .sheetFoldInner > .more) {
+    animation: insc-rise 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 
   .sheetInner > :nth-child(2) {

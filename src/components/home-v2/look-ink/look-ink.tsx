@@ -1,6 +1,7 @@
 "use client";
 
 import { InkPage } from "@/components/ink/ink-page";
+import type { NavFollow } from "@/components/ink/nav/nav-inscription";
 import { route } from "./brush-route";
 import { Cellular } from "./cellular";
 import { OpeningCrane } from "./opening-crane";
@@ -10,6 +11,11 @@ import { Research } from "./research";
 import { Science } from "./science";
 import { Scientists } from "./scientists";
 import { Stories } from "./stories";
+
+// The parts of the page that belong to the bar's two drop-downs: while one is being read, its word
+// in the bar carries the painted stroke (none over the opening, the scientists, the stories or the
+// purpose). A module-level constant: the bar watches the parts again whenever its identity changes.
+const FOLLOW: NavFollow = { products: ["products"], science: ["cellular", "science", "research"] };
 
 // The homepage, "Ink & Gold" (round 4, October 2, 2026; Mo picked the crane): one ink-painting
 // world on warm rice paper with a single gold leaf for energy. The crane of long life over misty
@@ -23,7 +29,7 @@ import { Stories } from "./stories";
 // which puts focus at the start of the page's words, past the header's links.
 export function LookInk() {
   return (
-    <InkPage current="home" route={route}>
+    <InkPage current="home" route={route} follow={FOLLOW}>
       {(motion) => (
         <>
           <OpeningCrane motion={motion} />

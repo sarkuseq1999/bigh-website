@@ -7,10 +7,84 @@ import type { NavPanelId } from "./nav-data";
 /** The bar holds every link from this width up; under it the links are the phone/tablet menu. */
 export const DESKTOP_QUERY = "(min-width: 1101px)";
 
+/** Reduced motion: the bar has two states, the title over the opening and the bar on paper. */
+const REDUCED = "(prefers-reduced-motion: reduce)";
+
+/** Where the browser runs scroll-driven animation, the bar's stylesheet settles the title itself. */
+const scrollTimelines = () =>
+  typeof CSS !== "undefined" && CSS.supports("animation-timeline: scroll()");
+
+/**
+ * The title settling with the scroll (round 9), as the browser's own scroll-driven animation does
+ * it in the stylesheet (nav-inscription.module.css, "The title settles with the scroll"): where
+ * that is missing (Firefox), the same values are written from the page's scroll position on each
+ * frame it moves. `t` is how far through the settle the page is (0 at its start, 1 at its end).
+ * - g, the bar's geometry (the mark, the words, the bar's height): eased in and out, so the title
+ *   starts to settle gently and lands softly.
+ * - q, the paper under the words: in early, so the bar's words always stand on paper by the time
+ *   the painting slides up behind them.
+ * - m, the mist the painting dissolves into at the bar's foot: in with the paper, and gone as the
+ *   bar lands (from then on the painted rule is the bar's edge).
+ * - d, how far the painted rule is laid: with the scroll, from just after the paper starts.
+ */
+function settleValues(t: number) {
+  const clamp = (v: number) => Math.min(1, Math.max(0, v));
+  const stops = (points: [number, number][]) => {
+    const x = clamp(t);
+    for (let i = 1; i < points.length; i++) {
+      const [x0, y0] = points[i - 1];
+      const [x1, y1] = points[i];
+      if (x <= x1) return y0 + ((y1 - y0) * (x - x0)) / (x1 - x0);
+    }
+    return points[points.length - 1][1];
+  };
+  return {
+    g: bezier(SETTLE_EASE, clamp(t)),
+    q: stops(PAPER_STOPS),
+    m: stops(MIST_STOPS),
+    d: clamp((t - RULE_FROM) / (1 - RULE_FROM)),
+  };
+}
+
+// Keep these four in step with the stylesheet's (insc-g's timing function, insc-q's and insc-m's
+// keyframes, insc-d's range).
+const SETTLE_EASE = [0.45, 0, 0.3, 1] as const;
+const PAPER_STOPS: [number, number][] = [
+  [0, 0],
+  [0.08, 0.9],
+  [0.25, 0.97],
+  [0.5, 1],
+  [1, 1],
+];
+const MIST_STOPS: [number, number][] = [
+  [0, 0],
+  [0.08, 0.9],
+  [0.4, 0.85],
+  [1, 0],
+];
+const RULE_FROM = 1 / 12;
+
+/** A CSS cubic-bezier timing function at progress x. */
+function bezier([x1, y1, x2, y2]: readonly [number, number, number, number], x: number) {
+  const curve = (a: number, b: number, s: number) =>
+    3 * a * s * (1 - s) ** 2 + 3 * b * s ** 2 * (1 - s) + s ** 3;
+  let lo = 0;
+  let hi = 1;
+  for (let i = 0; i < 24; i++) {
+    const mid = (lo + hi) / 2;
+    if (curve(x1, x2, mid) < x) lo = mid;
+    else hi = mid;
+  }
+  return curve(y1, y2, (lo + hi) / 2);
+}
+
 /**
  * What every menu bar option shares, so the three designs differ in looks, not in manners:
  *
- * - `solid`: the page has scrolled past `solidAfter` (the bar leaves the opening painting).
+ * - `solid`: the bar has left the opening painting and stands small on paper. With `settledBy`
+ *   (round 9) the title settles with the scroll from `solidAfter` to `settledBy` and is solid from
+ *   there (with reduced motion: two states, solid past `solidAfter`); without it, solid past
+ *   `solidAfter`.
  * - `direction`: the last scroll direction, for a bar that steps aside while you read down.
  * - `panel`: the desktop drop-down that is open (Products or Science). A pointer opens it after a
  *   short pause and closes it a moment after leaving both the button and the panel; a click or
@@ -19,32 +93,77 @@ export const DESKTOP_QUERY = "(min-width: 1101px)";
  * - `menuOpen`: the narrow window's menu sheet. While it is open the page under it stays put,
  *   Escape closes it (focus back to its button), and it closes when the window grows into the bar.
  */
-export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: number }) {
+export function useNav({
+  overlay,
+  solidAfter,
+  settledBy,
+}: {
+  overlay: boolean;
+  solidAfter: number;
+  settledBy?: number;
+}) {
   const [solid, setSolid] = useState(!overlay);
   const [direction, setDirection] = useState<"up" | "down">("up");
   const [panel, setPanel] = useState<NavPanelId | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
+  const header = useRef<HTMLElement>(null);
   const menuButton = useRef<HTMLButtonElement>(null);
   const triggers = useRef<Partial<Record<NavPanelId, HTMLButtonElement | null>>>({});
   const timer = useRef<number | undefined>(undefined);
 
-  // Scroll: solid after the opening's first few pixels; the direction of travel; and an open
-  // drop-down closes once the page moves on under it.
+  // Scroll: solid once the title has settled (or, with reduced motion or without a settle, after
+  // the opening's first few pixels); the direction of travel; and an open drop-down closes once
+  // the page moves on under it. Where the browser has no scroll-driven animation, the settle's
+  // values are written here, once per frame the page moves.
   useEffect(() => {
     let last = window.scrollY;
+    let frame = 0;
+    const reduced = window.matchMedia(REDUCED);
+    const settles = () => overlay && settledBy !== undefined && !reduced.matches;
+    const byHand = settledBy !== undefined && !scrollTimelines();
+    const write = () => {
+      frame = 0;
+      const node = header.current;
+      if (!node || settledBy === undefined) return;
+      const on = settles();
+      const values = settleValues((window.scrollY - solidAfter) / (settledBy - solidAfter));
+      for (const [key, value] of Object.entries(values)) {
+        if (on) node.style.setProperty(`--insc-${key}`, value.toFixed(4));
+        else node.style.removeProperty(`--insc-${key}`);
+      }
+    };
     const update = () => {
       const y = window.scrollY;
-      if (overlay) setSolid(y > solidAfter);
+      if (overlay) setSolid(settles() ? y >= settledBy! : y > solidAfter);
+      if (byHand && !frame) frame = requestAnimationFrame(write);
       if (Math.abs(y - last) > 6) {
         setDirection(y > last ? "down" : "up");
         if (Math.abs(y - last) > 24) setPanel(null);
         last = y;
       }
     };
+    // While the title settles, the stylesheet scales the large mark down to the small one: the
+    // ratio of their two sizes, measured again whenever the window changes size.
+    const measure = () => {
+      const node = header.current;
+      if (!node) return;
+      const style = getComputedStyle(node);
+      const tall = parseFloat(style.getPropertyValue("--insc-mark-tall"));
+      const small = parseFloat(style.getPropertyValue("--insc-mark-small"));
+      if (tall > 0 && small > 0) node.style.setProperty("--insc-k", (small / tall).toFixed(5));
+    };
+    measure();
     update();
     window.addEventListener("scroll", update, { passive: true });
-    return () => window.removeEventListener("scroll", update);
-  }, [overlay, solidAfter]);
+    window.addEventListener("resize", measure);
+    reduced.addEventListener("change", update);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", measure);
+      reduced.removeEventListener("change", update);
+    };
+  }, [overlay, solidAfter, settledBy]);
 
   const clearTimer = () => window.clearTimeout(timer.current);
 
@@ -81,10 +200,13 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
     openPanel.current = panel;
   }, [panel]);
 
+  // Focus handed back to the bar never moves the page: the bar is always in view, but it sits
+  // inside the page's 150px scroll padding (globals.css), so a plain focus() would scroll the page
+  // to bring it "out from under the header" (about 480px up at 1536x900).
   const closePanel = useCallback((returnFocus = false) => {
     clearTimer();
     const current = openPanel.current;
-    if (current && returnFocus) triggers.current[current]?.focus();
+    if (current && returnFocus) triggers.current[current]?.focus({ preventScroll: true });
     setPanel(null);
   }, []);
 
@@ -119,7 +241,7 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
         if (target.matches(":open")) return;
       }
       setMenuOpen(false);
-      menuButton.current?.focus();
+      menuButton.current?.focus({ preventScroll: true });
     };
     const desktop = window.matchMedia(DESKTOP_QUERY);
     const onDesktop = () => {
@@ -174,6 +296,7 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
   });
 
   return {
+    header,
     solid,
     direction,
     panel,
