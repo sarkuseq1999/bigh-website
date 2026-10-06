@@ -12,6 +12,10 @@ On the real GPU (ANGLE/D3D11):
     Enter opens, Tab steps into the panel, Escape closes and hands focus back; the Tab order
     follows the line; a visible ring on the keyboard's focus; Support opens its sheet; scrolled,
     the bar settles small with its painted rule; a product link goes to its page.
+  - scrolled (desktop, phone, tablet 768): the bar is solid paper. A headline, a paragraph and a
+    text link of the page are each put behind the bar's words and on its brush rule, and the band
+    from the bar's top to just under the rule's ink must not change by more than 6 levels (round 1:
+    at 93% paper the page ghosted behind the words and the rule struck through lines under it).
   - reduced motion: the scroll is down at once.
   - phone 390x844: the menu opens and locks the page, the button says Close, Escape closes it and
     hands focus back, the Close button closes it, Products and Science fold open one at a time,
@@ -24,8 +28,10 @@ Pictures land in scripts/qa/out/nav/.
 """
 
 import sys
+from io import BytesIO
 from pathlib import Path
 
+from PIL import Image, ImageChops
 from playwright.sync_api import sync_playwright
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
@@ -69,6 +75,57 @@ def focused(page):
 
 def menu_open(page):
     return page.evaluate("document.querySelector('header').hasAttribute('data-menu')")
+
+
+# Lines of the page to put under the scrolled bar: a headline, a paragraph and a text link past the
+# opening, each by the middle of its first line (document y), visible (not waiting to be revealed).
+LINES = """() => {
+  const first = el => { const r = document.createRange(); r.selectNodeContents(el);
+    const box = [...r.getClientRects()].find(b => b.width > 40 && b.height > 8); return box; };
+  const pick = sel => [...document.querySelectorAll(sel)].find(el => {
+    if (el.closest('header, footer, dialog')) return false;
+    const b = first(el); return b && b.top + scrollY > 1200 && el.textContent.trim().length > 12 &&
+      el.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+  });
+  return ['main h2', 'main p', 'main a'].map(pick).filter(Boolean).map(el => { const b = first(el);
+    return { text: el.textContent.trim().slice(0, 28), y: b.top + scrollY + b.height / 2 }; });
+}"""
+
+
+def scroll_to(page, y):
+    page.evaluate(f"window.scrollTo(0, {y})")
+    page.mouse.wheel(0, 1)
+    page.wait_for_timeout(1400)
+
+
+def solid_bar(page, tag):
+    """Round 1: once the page moves on, the bar is a solid sheet of paper. Lines of the page are put
+    behind its words and on its brush rule; from the bar's top to just under the rule's ink, the bar
+    must look the same whatever is under it (nothing ghosts through it, nothing is crossed by the
+    rule)."""
+    size = page.viewport_size
+    page.mouse.move(size["width"] / 2, size["height"] - 4)
+    scroll_to(page, 1400)
+    bar = page.evaluate("document.querySelector('#site-navigation').getBoundingClientRect().bottom")
+    band = {"x": 0, "y": 0, "width": size["width"], "height": round(bar) + 6}
+    shots, placed = [], []
+    for line in page.evaluate(LINES):
+        for at in (bar / 2, bar):
+            scroll_to(page, round(line["y"] - at))
+            y = line["y"] - page.evaluate("scrollY")
+            placed.append(f"{line['text']!r} at {y:.0f}")
+            shots.append(Image.open(BytesIO(page.screenshot(clip=band))).convert("RGB"))
+    page.screenshot(path=str(OUT / f"{tag}-solid-bar.png"), clip=band)
+    worst = max(
+        (max(hi for _, hi in ImageChops.difference(shots[0], shot).getextrema()) for shot in shots[1:]),
+        default=255,
+    )
+    check(
+        f"{tag}: scrolled, the bar is solid paper (no page line shows through it or meets its rule)",
+        len(shots) >= 4 and worst <= 6,
+        f"bar {bar:.0f} px, band to {band['height']} px; most any pixel changed: {worst} levels; "
+        + "; ".join(placed),
+    )
 
 
 def desktop(browser):
@@ -230,9 +287,10 @@ def desktop(browser):
     )
     check(
         "desk: scrolled, the bar settles small with its painted rule",
-        info["size"] == "small" and float(info["rule"]) > 0.5 and 70 <= info["bar"] <= 78,
+        info["size"] == "small" and float(info["rule"]) > 0.5 and 74 <= info["bar"] <= 82,
         info,
     )
+    solid_bar(page, "desk")
 
     page.evaluate("window.scrollTo(0, 0)")
     page.wait_for_timeout(600)
@@ -261,6 +319,8 @@ def phone(browser):
     page.goto(URL, wait_until="networkidle")
     page.wait_for_timeout(2000)
     page.screenshot(path=str(OUT / "phone-top.png"))
+    solid_bar(page, "phone")
+    scroll_to(page, 0)
     btn = page.locator("[data-nav-menu-button]")
     btn.click()
     page.wait_for_timeout(1200)
@@ -326,6 +386,13 @@ def tablet(browser):
         page.locator('[data-nav-sheet-toggle="products"]').get_attribute("aria-expanded") == "true"
         and page.locator("[data-nav-sheet] a", has_text="Nature Calm").is_visible(),
     )
+    page.close()
+
+    page = browser.new_page(viewport={"width": 768, "height": 1024})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    solid_bar(page, "tablet 768")
     page.close()
 
 

@@ -95,8 +95,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     headline, words and button are centred (the painting 300 to 410 px on desktop, about 70vw on
     a phone), its headline on two lines with no word alone, open paper above and below it; with
     the whole line drawn (1536 and 1440) the brush line passes it in the left margin, over none of
-    it; on a phone no empty band between the story arrows and the science; at 1280x800, 1440x900
-    and 1536x1000 the last screen shows the whole crane at rest, clear of the header.
+    it; on a phone no empty band between the story arrows and the science; at 1280x800, 1440x900,
+    1536x1000, 1280x720, 1536x864, 1366x657 and 1440x700 the last screen shows the whole crane at
+    rest and the whole promise, clear of the header.
   - the science as a scroll story (round 7, October 4): on two columns with motion the block is
     about two windows tall, its painting pinned beside the words; the desktop checks that
     clicked the three tabs are replaced on purpose: scrolling to each topic shows its words
@@ -2526,7 +2527,8 @@ PAUSE = """(() => {
 def run_pause(browser):
     """Round 6: Ask BiGH Science is the page's one centred pause, on open paper; the brush line
     passes it in the margin; the phone has no empty band before the science; on a short laptop
-    window the last screen shows the whole crane at rest, clear of the header."""
+    window the last screen shows the whole crane at rest and the whole promise, clear of the
+    header."""
     for size, mobile in (((1536, 1000), False), ((1440, 900), False), ((390, 844), True)):
         tag = f"pause {size[0]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, mobile, reduced=not mobile)
@@ -2579,19 +2581,22 @@ def run_pause(browser):
         context.close()
 
     # Round 10: also the shorter windows (1280x720 cut the crane's head by 22 px, 1536x864 by 20).
-    for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864)):
+    # Menu bar round 1 (October 5): the solid bar hid half of "Stay sharp." at 1366x657 (the window
+    # of a 1366x768 laptop), so the promise's top must clear the bar too, at 1366x657 and 1440x700.
+    for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864), (1366, 657), (1440, 700)):
         tag = f"last screen {size[0]}x{size[1]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False, reduced=True)
         page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
         page.wait_for_timeout(900)
-        crane, header = page.evaluate(
+        crane, promise, header = page.evaluate(
             """[document.querySelector('footer img:not([alt=BiGH])').getBoundingClientRect().top,
+               document.querySelector('footer [data-brush=footer-promise] p').getBoundingClientRect().top,
                document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
         )
         check(
-            f"{tag}: the whole crane at rest, clear of the header",
-            crane >= header + 8,
-            f"crane top {crane:.0f}, header {header:.0f}",
+            f"{tag}: the whole crane at rest and the whole promise, clear of the header",
+            crane >= header + 8 and promise >= header + 8,
+            f"crane top {crane:.0f}, promise top {promise:.0f}, header {header:.0f}",
         )
         shoot(page, f"last-{size[0]}x{size[1]}")
         context.close()
