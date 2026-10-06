@@ -106,7 +106,7 @@ meaning in the reader's language. Section ids stay (`purpose`, `roots`, `experie
 `closing`) so deep links keep working.
 
 **Signature moment: the name writes itself.** On arrival the four letters of BiGH are painted in
-one after another, each revealed along its strokes by a feathered brush mask, within one breath
+left to right through a dry-brush wipe (a mask with a ragged bristle edge), within one breath
 (2.4s, the shared ease); then the i's gold dot comes up. The watercolor band spreads out from the
 middle as the name finishes. Each chapter letter writes itself the same way when it reaches the
 reading line; the tree's rings draw outward from the heart and the gold ring lights last; the
@@ -114,8 +114,8 @@ pool under Dr. Liu and the four dots bloom through the shared ink-blot mask, the
 another. Reduced motion: everything complete and still from the first paint.
 
 **Paintings** (GPT Image 2.5, paper divided out as for the homepage's paintings; gold leaf as
-masks): the word BiGH; the letters B, i, G and H alone in the same hand (cropped from the word if
-that is clean, else painted to match it); the watercolor band; the pool; the tree rings; a sheet of
+masks): the word BiGH; the letters B, i, G and H, each painted alone in the same hand (the word's
+painting as their reference); the watercolor band; the pool; the tree rings; a sheet of
 four dots. About nine pictures, about 25 jobs with retakes, about $1.25, inside the $5 Mo gave on
 October 6. Honesty tag "Illustration" on the tree rings (it pictures something); the letters,
 band, pool and dots are brushwork like the brush line and carry none. Mockup weak spots to fix in
