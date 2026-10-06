@@ -23,14 +23,26 @@ On the real GPU (ANGLE/D3D11):
   - tablet 834x1112: the menu opens with Products unfolded.
   - Vietnamese and Japanese at 1101 and 1280 px: the bar's three groups stay apart and inside the
     window.
+  - filmed at real speed (round 2; every frame the compositor draws, plus the bar's state on every
+    frame the page draws): Science opening (from the tall bar and from the scrolled bar) and
+    Products opening show no light box behind a painting or a pool: no sample of a multiplied
+    picture is more than 4 levels lighter than the paper beside it, on any frame (two frames
+    running) once the scroll has reached it. Moving from one drop-down to the other (both ways):
+    the scroll's ink never drops below 60% of the lighter drop-down's, one drop-down is always drawn
+    whole, only one word is ever underlined and no chevron is ever turned sideways; pointing on to
+    About keeps one line. The tablet menu opens, and the phone menu's Products unfolds, with no
+    light box round the pools and the chevron turning over, never sideways.
   - no page errors or console errors anywhere.
 Pictures land in scripts/qa/out/nav/.
 """
 
+import base64
+import math
 import sys
 from io import BytesIO
 from pathlib import Path
 
+import numpy as np
 from PIL import Image, ImageChops
 from playwright.sync_api import sync_playwright
 
@@ -125,6 +137,296 @@ def solid_bar(page, tag):
         len(shots) >= 4 and worst <= 6,
         f"bar {bar:.0f} px, band to {band['height']} px; most any pixel changed: {worst} levels; "
         + "; ".join(placed),
+    )
+
+
+# ---------------------------------------------------------------- round 2: filmed at real speed
+
+# The bar's state on every frame the page draws: how far the scroll and the menu are let down, the
+# open drop-down, each drop-down's opacity and visibility, each word's underline, each chevron's
+# turn, and where the menu's folds end.
+LOGGER = """() => {
+  const h = document.querySelector('header');
+  const words = [...document.querySelectorAll('#site-navigation [class*="word"]')];
+  const chevrons = [...document.querySelectorAll('[data-nav-trigger] svg, [data-nav-sheet-toggle] svg')];
+  const panels = [...document.querySelectorAll('[data-nav-panel]')];
+  window.__log = []; window.__logging = true;
+  const tick = () => {
+    const hs = getComputedStyle(h);
+    window.__log.push({
+      t: performance.timeOrigin + performance.now(),
+      r: parseFloat(hs.getPropertyValue('--insc-r')) || 0,
+      s: parseFloat(hs.getPropertyValue('--insc-s')) || 0,
+      open: (h.querySelector('[data-nav-panel][data-open]') || {}).dataset?.navPanel || null,
+      panels: panels.map(p => { const s = getComputedStyle(p);
+        return { id: p.dataset.navPanel, o: +s.opacity, vis: s.visibility }; }),
+      lines: words.filter(w => (parseFloat(getComputedStyle(w, '::after').scale) || 0) > 0.04)
+        .map(w => w.textContent.trim()),
+      chev: chevrons.filter(c => c.getBoundingClientRect().width > 0).map(c => getComputedStyle(c).rotate),
+      folds: [...document.querySelectorAll('[data-nav-sheet] [id^="nav-sheet-"]')].map(f => {
+        const r = f.getBoundingClientRect(); return { id: f.id, bottom: r.bottom }; }),
+    });
+    if (window.__logging) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}"""
+
+# The multiplied pictures in a drop-down or a fold (paintings and pools; the contact shadows sit
+# under the bottles' feet, so they are left out), where each is drawn.
+PICTURES = """(sel) => {
+  const drawn = img => {
+    const r = img.getBoundingClientRect(); const s = getComputedStyle(img);
+    const nw = img.naturalWidth || r.width, nh = img.naturalHeight || r.height;
+    if (s.objectFit !== 'contain') return { x: r.x, y: r.y, w: r.width, h: r.height };
+    const k = Math.min(r.width / nw, r.height / nh);
+    return { x: r.x + (r.width - nw * k) / 2, y: r.y + (r.height - nh * k) / 2, w: nw * k, h: nh * k };
+  };
+  return [...document.querySelectorAll(sel + ' img')].filter(img => {
+    const s = getComputedStyle(img);
+    return s.mixBlendMode === 'multiply' && s.display !== 'none' && img.getBoundingClientRect().width > 4;
+  }).map((img, i) => {
+    const kind = /pool/.test(img.className) ? 'pool' : /contact/.test(img.className) ? 'contact' : 'painting';
+    return { name: (img.dataset.painting || kind) + '#' + i, kind, ...drawn(img) };
+  }).filter(p => p.kind !== 'contact');
+}"""
+
+# Paper beside the pictures: the middle of each gap between neighbouring items on one row.
+GAPS = """(sel) => { const items = [...document.querySelectorAll(sel)].map(li => li.getBoundingClientRect())
+  .filter(r => r.width > 0); const out = [];
+  for (let i = 1; i < items.length; i++)
+    if (Math.abs(items[i].top - items[i - 1].top) < 4) out.push((items[i - 1].right + items[i].left) / 2);
+  return out; }"""
+
+
+class Film:
+    """Every frame the compositor draws (CDP screencast, with wall-clock times) while `act` runs,
+    and the bar's state on every frame the page draws."""
+
+    def __init__(self, page):
+        self.page = page
+        self.cdp = page.context.new_cdp_session(page)
+        self.raw = []
+        self.cdp.on("Page.screencastFrame", self._frame)
+
+    def _frame(self, ev):
+        self.raw.append((ev["metadata"]["timestamp"] * 1000.0, ev["data"]))
+        try:
+            self.cdp.send("Page.screencastFrameAck", {"sessionId": ev["sessionId"]})
+        except Exception:
+            pass
+
+    def shoot(self, act, ms):
+        self.raw = []
+        self.page.evaluate(LOGGER)
+        self.page.evaluate(
+            """() => { window.__t0 = 0; const mark = () => { window.__t0 ||= performance.timeOrigin + performance.now(); };
+            for (const type of ['pointerdown', 'touchstart']) document.addEventListener(type, mark, { capture: true, once: true }); }"""
+        )
+        self.cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
+        self.page.wait_for_timeout(150)
+        act()
+        self.page.wait_for_timeout(ms)
+        self.cdp.send("Page.stopScreencast")
+        self.page.evaluate("window.__logging = false")
+        self.page.wait_for_timeout(80)
+        self.log = self.page.evaluate("window.__log")
+        self.t0 = self.page.evaluate("window.__t0") or self.log[0]["t"] + 150
+        return self
+
+    def frames(self, t0=None):
+        """(ms since t0, wall time, picture) for every frame filmed."""
+        t0 = self.t0 if t0 is None else t0
+        return [
+            (tw - t0, tw, Image.open(BytesIO(base64.b64decode(data))).convert("RGB"))
+            for tw, data in self.raw
+        ]
+
+    def state(self, tw):
+        """The bar's state on the page's last frame at or before wall time tw."""
+        best = self.log[0]
+        for entry in self.log:
+            if entry["t"] > tw:
+                break
+            best = entry
+        return best
+
+
+def luma(img):
+    return np.asarray(img.convert("L"), dtype=np.float32)
+
+
+def box_mean(a, box, k):
+    x0, y0, x1, y1 = (int(round(v * k)) for v in box)
+    return float(a[y0:y1, x0:x1].mean())
+
+
+def samples(pic):
+    """Boxes inside a picture. A painting: a grid over it. A pool: its picture's upper corners beside
+    the bottle's foot, white in the picture (so exactly the paper under multiply)."""
+    x, y, w, h = pic["x"], pic["y"], pic["w"], pic["h"]
+    if pic["kind"] == "pool":
+        return [
+            (bx, y + h * fy, bx + 4, y + h * fy + 4)
+            for fy in (0.04, 0.22)
+            for bx in (x + 1, x + w - 5)
+        ]
+    return [
+        (x + 10 + (w - 28) * i / 5, y + 10 + (h - 28) * j / 3, x + 18 + (w - 28) * i / 5, y + 18 + (h - 28) * j / 3)
+        for i in range(6)
+        for j in range(4)
+    ]
+
+
+def light_boxes(film, pics, gaps, reveal, width, lo, hi):
+    """Under multiply nothing in a picture can be lighter than the paper it lies on; an isolated blend
+    shows the picture's white paper as a light box. For each picture, frame by frame from lo to hi ms:
+    its lightest sample minus the paper beside it at the same height, counting only what the scroll
+    (or fold) has already let down, with a margin. A value counts when two frames running show it.
+    Returns {picture: (worst levels, frames measured)}."""
+    series = {p["name"]: [] for p in pics}
+    for t, tw, img in film.frames():
+        if not lo - 40 <= t <= hi:
+            continue
+        a, k = luma(img), img.width / width
+        edge = reveal(film.state(tw - 60))
+        for pic in pics:
+            best = None
+            for box in samples(pic):
+                if box[3] > edge - 10 or box[0] < 0 or box[2] > width:
+                    continue
+                cy = (box[1] + box[3]) / 2
+                refs = [(g - 3, cy - 4, g + 3, cy + 4) for g in gaps if 0 < g < width]
+                if refs:
+                    d = box_mean(a, box, k) - sum(box_mean(a, r, k) for r in refs) / len(refs)
+                    best = d if best is None else max(best, d)
+            series[pic["name"]].append((t, best))
+    out = {}
+    for name, s in series.items():
+        held = [min(u, v) for (tu, u), (_, v) in zip(s, s[1:]) if u is not None and v is not None and tu >= lo]
+        out[name] = (round(max(held), 1) if held else None, sum(1 for t, v in s if v is not None and t >= lo))
+    return out
+
+
+def no_light_box(name, found, frames=6):
+    check(
+        name,
+        found and all(v is not None and v <= 4 and n >= frames for v, n in found.values()),
+        {k: f"{v:+} levels over {n} frames" if v is not None else "not measured" for k, (v, n) in found.items()},
+    )
+
+
+def sideways(rotate):
+    """A chevron turned more than 20 degrees off pointing up or down."""
+    deg = 0.0 if rotate in ("", "none") else float(rotate.split()[-1].replace("deg", ""))
+    return abs(math.sin(math.radians(deg))) > math.sin(math.radians(20))
+
+
+def warm(page):
+    """Point at the bar so the drop-downs' pictures load, wait for them, then leave."""
+    page.mouse.move(1100, 40)
+    page.wait_for_timeout(300)
+    page.wait_for_function(
+        "[...document.querySelectorAll('[data-nav-panel] img')].every(i => i.complete && i.naturalWidth > 0)",
+        timeout=30000,
+    )
+    page.mouse.move(760, 880)
+    page.wait_for_timeout(900)
+
+
+def drop_down_motion(browser):
+    """Round 2: opening a drop-down shows no light box; moving between them shows no empty scroll,
+    no second underline and no sideways chevron. Filmed from the tall bar and from the scrolled bar."""
+    for scrolled in (False, True):
+        tag = "desk scrolled" if scrolled else "desk"
+        page = browser.new_page(viewport={"width": 1536, "height": 900})
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2500)
+        page.mouse.move(760, 880)
+        if scrolled:
+            scroll_to(page, 1400)
+        warm(page)
+        film = Film(page)
+        deckle = page.evaluate("parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle'))")
+        for panel in ("science", "products"):
+            box = page.locator(f'[data-nav-trigger="{panel}"]').bounding_box()
+            film.shoot(lambda: page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1500)
+            sel = f'[data-nav-panel="{panel}"]'
+            top, height = page.evaluate(
+                f"(() => {{ const r = document.querySelector('{sel}').getBoundingClientRect(); return [r.top, r.height]; }})()"
+            )
+            found = light_boxes(
+                film,
+                page.evaluate(PICTURES, sel),
+                page.evaluate(GAPS, f"{sel} li"),
+                lambda e: top + e["r"] * height - deckle,
+                1536,
+                250,
+                1500,
+            )
+            what = "behind its paintings" if panel == "science" else "around the bottles' pools"
+            no_light_box(f"{tag}: {panel.capitalize()} opens with no light box {what} (filmed at real speed)", found)
+            page.screenshot(path=str(OUT / f"{tag.replace(' ', '-')}-{panel}-filmed.png"))
+            if panel == "science":
+                page.keyboard.press("Escape")
+                page.mouse.move(760, 880)
+                page.wait_for_timeout(900)
+        if not scrolled:
+            switches(page, film)
+        page.close()
+
+
+def switches(page, film):
+    """Products is down. Point across to Science and back, then on to About, filming each move."""
+    band = page.evaluate(
+        """() => { const top = document.querySelector('[data-nav-panel] h2').getBoundingClientRect().top;
+        const foot = Math.max(...[...document.querySelectorAll('[data-nav-panel] a[class*=more]')]
+          .map(a => a.getBoundingClientRect().bottom));
+        return [120, Math.round(top - 6), 1416, Math.round(foot + 6)]; }"""
+    )
+
+    def ink(img):
+        a = luma(img)[band[1] : band[3], band[0] : band[2]]
+        return float(np.clip(np.median(a) - a - 6, 0, None).mean())
+
+    for leave, arrive in (("products", "science"), ("science", "products")):
+        before = ink(Image.open(BytesIO(page.screenshot())))
+        box = page.locator(f'[data-nav-trigger="{arrive}"]').bounding_box()
+        film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4), 1100)
+        page.wait_for_timeout(900)
+        after = ink(Image.open(BytesIO(page.screenshot())))
+        flip = next((e["t"] for e in film.log if e["open"] == arrive), None)
+        if flip is None:
+            check(f"desk: {leave} -> {arrive}: the move happened", False, "it never opened")
+            continue
+        lighter = min(before, after)
+        shares = [round(ink(img) / lighter, 2) for t, _, img in film.frames(flip) if -20 <= t <= 800]
+        check(
+            f"desk: {leave.capitalize()} -> {arrive.capitalize()}: the scroll is never empty (filmed: its ink never below 60% of the lighter drop-down's)",
+            len(shares) >= 10 and min(shares) >= 0.6,
+            f"least {min(shares, default=0)} over {len(shares)} frames; at rest {before:.1f} -> {after:.1f}",
+        )
+        during = [e for e in film.log if flip - 40 <= e["t"] <= flip + 900]
+        thin = [round(e["t"] - flip) for e in during if not any(p["vis"] == "visible" and p["o"] >= 0.6 for p in e["panels"])]
+        check(
+            f"desk: {leave.capitalize()} -> {arrive.capitalize()}: one drop-down always drawn whole (at least 60%), every frame",
+            len(during) >= 30 and not thin,
+            f"{len(during)} frames; thin at {thin[:5]} ms",
+        )
+        two = [(round(e["t"] - flip), e["lines"]) for e in during if len(e["lines"]) > 1]
+        turned = [(round(e["t"] - flip), e["chev"]) for e in during if any(sideways(r) for r in e["chev"])]
+        check(
+            f"desk: {leave.capitalize()} -> {arrive.capitalize()}: only one word underlined and no chevron sideways, every frame",
+            len(during) >= 30 and not two and not turned,
+            f"{len(during)} frames; two lines {two[:3]}; sideways {turned[:3]}",
+        )
+    box = page.locator("#site-navigation a[href$='/about']").bounding_box()
+    film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=6), 1300)
+    two = [(round(e["t"] - film.t0), e["lines"]) for e in film.log if len(e["lines"]) > 1]
+    check(
+        "desk: pointing from the open Products on to About, one line at a time (filmed)",
+        not two and not is_open(page, "products") and film.log[-1]["lines"] == ["About"],
+        f"{len(film.log)} frames; two lines {two[:3]}; last {film.log[-1]['lines']}",
     )
 
 
@@ -372,6 +674,45 @@ def phone(browser):
     check("phone: a product link goes to its page", "/products/nuricell" in page.url, page.url)
     page.close()
 
+    # Round 2: Products unfolds, filmed at real speed.
+    page = browser.new_page(
+        viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2
+    )
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2500)
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1500)
+    toggle = page.locator('[data-nav-sheet-toggle="products"]')
+    toggle.click()
+    page.wait_for_function(
+        "[...document.querySelectorAll('#nav-sheet-products img')].every(i => i.complete && i.naturalWidth > 0)",
+        timeout=30000,
+    )
+    page.wait_for_timeout(900)
+    toggle.click()
+    page.wait_for_timeout(1000)
+    box = toggle.bounding_box()
+    film = Film(page).shoot(lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1100)
+    # The row runs off the right edge (a swipe away): the pools in the window are measured.
+    found = light_boxes(
+        film,
+        [p for p in page.evaluate(PICTURES, "#nav-sheet-products") if p["x"] + 6 < 390],
+        page.evaluate(GAPS, "#nav-sheet-products li"),
+        lambda e: next(f["bottom"] for f in e["folds"] if f["id"] == "nav-sheet-products"),
+        390,
+        0,
+        1000,
+    )
+    no_light_box("phone: Products unfolds with no light box around the pools (filmed at real speed)", found, frames=4)
+    turned = [round(e["t"] - film.t0) for e in film.log if any(sideways(r) for r in e["chev"])]
+    check(
+        "phone: its chevron never turns sideways, every frame",
+        len(film.log) >= 30 and not turned,
+        f"{len(film.log)} frames; sideways at {turned[:5]} ms",
+    )
+    page.close()
+
 
 def tablet(browser):
     page = browser.new_page(viewport={"width": 834, "height": 1112})
@@ -393,6 +734,38 @@ def tablet(browser):
     page.goto(URL, wait_until="networkidle")
     page.wait_for_timeout(2000)
     solid_bar(page, "tablet 768")
+    page.close()
+
+    # Round 2: the menu opens with Products unfolded; its pools stay multiplied while it settles.
+    page = browser.new_page(viewport={"width": 834, "height": 1112})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2500)
+    btn = page.locator("[data-nav-menu-button]")
+    btn.click()
+    page.wait_for_function(
+        "[...document.querySelectorAll('[data-nav-sheet] img')].every(i => i.complete && i.naturalWidth > 0)",
+        timeout=30000,
+    )
+    page.wait_for_timeout(800)
+    btn.click()
+    page.wait_for_timeout(1200)
+    box = btn.bounding_box()
+    film = Film(page).shoot(lambda: page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1600)
+    deckle = page.evaluate("parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle'))")
+    top, height = page.evaluate(
+        "(() => { const r = document.querySelector('[data-nav-sheet]').getBoundingClientRect(); return [r.top, r.height]; })()"
+    )
+    found = light_boxes(
+        film,
+        page.evaluate(PICTURES, "#nav-sheet-products"),
+        page.evaluate(GAPS, "#nav-sheet-products li"),
+        lambda e: top + e["s"] * height - deckle,
+        834,
+        200,
+        1500,
+    )
+    no_light_box("tablet: the menu opens with no light box around the bottles' pools (filmed at real speed)", found)
     page.close()
 
 
@@ -430,6 +803,7 @@ with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
         desktop(browser)
+        drop_down_motion(browser)
     if ONLY in (None, "phone"):
         phone(browser)
     if ONLY in (None, "tablet"):

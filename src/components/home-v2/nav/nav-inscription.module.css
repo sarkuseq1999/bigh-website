@@ -232,13 +232,30 @@
   scale: 1 1;
 }
 
+/* One line at a time. While a scroll is down only its button carries a line: moving across to the
+   other drop-down, the button left behind drops its line at once, and pointing at another word
+   draws none until the scroll is up. Pointing from word to word, the last one lets go at once. */
+.root[data-unrolled]
+  .link:not([aria-expanded="true"], [aria-current="page"], [data-current])
+  .word::after {
+  scale: 0 1;
+  transition: none;
+}
+
+@media (hover: hover) {
+  .root .bar:has(.link:hover) .link:not(:hover) .word::after {
+    transition: none;
+  }
+}
+
+/* An open part's chevron turns over through a flat line, never through a sideways arrow. */
 .chevron {
   flex: none;
-  transition: rotate 0.5s var(--ease);
+  transition: scale 0.4s var(--ease);
 }
 
 .root [aria-expanded="true"] > .chevron {
-  rotate: 180deg;
+  scale: 1 -1;
 }
 
 /* The language (left), Log in and Sign up (right): the shared component, in the bar's voice.
@@ -463,8 +480,8 @@
 }
 
 /* What is written on the scroll: each drop-down carries the same paper (so its ink paintings
-   multiply onto paper) and is revealed with it, just above the torn edge. Moving between the
-   two keeps the scroll down and cross-fades what is on it. */
+   multiply onto paper) and is revealed with it, just above the torn edge. Opening one shows it at
+   once (the unrolling reveals it). */
 .panel {
   position: absolute;
   top: var(--h);
@@ -478,18 +495,18 @@
   clip-path: inset(0 0 calc(100% * (1 - var(--insc-r)) + var(--deckle)) 0);
   color: var(--ink);
   visibility: hidden;
-  opacity: 0;
-  transition:
-    opacity 0.3s var(--ease),
-    visibility 0s linear 0.3s;
 }
 
 .panel[data-shown] {
+  z-index: 1;
   visibility: visible;
-  opacity: 1;
-  transition:
-    opacity 0.45s var(--ease) 0.08s,
-    visibility 0s;
+}
+
+/* Moving straight across from one to the other keeps the scroll down and lays the new writing
+   over the old: the new panel, on its own paper and on top, fades in while the old one stays whole
+   under it and goes only once it is covered. The scroll is never empty or ghosted. */
+.root[data-swap] .panel:not([data-shown]) {
+  transition: visibility 0s linear 0.45s;
 }
 
 .panelInner {
@@ -652,6 +669,8 @@
   color: inherit;
 }
 
+/* The frame never moves or fades as a whole: that would isolate its painting's multiply and show
+   the painting's white paper as a box until it stopped. Its painting (or print) settles itself. */
 .frame {
   position: relative;
   display: block;
@@ -674,19 +693,20 @@
   mask-image: radial-gradient(closest-side, #000 58%, transparent);
 }
 
-/* Dr. Liu's real photograph: a print on a paper mat, never multiplied. */
+/* Dr. Liu's real photograph: a print on a paper mat, never multiplied, centred in its frame
+   (without a translate, which the settle uses; and at the photograph's own proportions). */
 .mat {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  inset: 0;
   display: block;
+  width: fit-content;
   height: 100%;
+  margin-inline: auto;
   padding: 7px;
   background: #fbf9f4;
   box-shadow:
     0 12px 22px -12px rgba(12, 11, 10, 0.42),
     0 2px 5px rgba(12, 11, 10, 0.1);
-  translate: -50% -50%;
   transition:
     opacity 0.6s var(--ease),
     scale 0.6s var(--ease);
@@ -772,16 +792,18 @@
   }
 }
 
-/* What is on the scroll settles as the paper reaches it. */
+/* What is on the scroll settles as the paper reaches it. Only the pieces themselves move and fade,
+   never a box around a multiplied painting or pool (that would isolate its blend). */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-unrolled]
+  .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
     :is(
       .panelTitle,
       .bottle,
       .productName,
       .productFocus,
-      .frame,
+      .painting,
+      .mat,
       .partLabel,
       .partCaption,
       .more
@@ -790,20 +812,45 @@
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled]
+  .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
     :is(.productName, .productFocus, .partLabel, .partCaption) {
     animation-delay: calc(0.24s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled] .panel[data-shown] .more {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .more {
     animation-delay: 0.42s;
   }
 
   /* A bottle's pool arrives with it (never a shadow without its bottle). */
-  .root[data-unrolled] .panel[data-shown] :is(.pool, .contact) {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.pool, .contact) {
     animation: insc-fade 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
+  }
+
+  /* A swap: the new panel fades in whole over the old one, and what is written on it settles into
+     place as it comes (rising only; it never fades on its own, so the scroll is never blank). The
+     fade is front-loaded (the site's expo-out, as on the product pages): the new writing is most of
+     the way in within a few frames, so the two never stand over each other as a double exposure. */
+  .root[data-swap] .panel[data-shown] {
+    animation: insc-fade 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .root[data-unrolled][data-swap]
+    .panel[data-shown]
+    :is(
+      .panelTitle,
+      .bottle,
+      .productName,
+      .productFocus,
+      .painting,
+      .mat,
+      .partLabel,
+      .partCaption,
+      .more
+    ) {
+    animation: insc-rise 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 }
 
@@ -816,6 +863,12 @@
 @keyframes insc-settle {
   from {
     opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@keyframes insc-rise {
+  from {
     translate: 0 8px;
   }
 }
@@ -1203,11 +1256,21 @@
   display: none;
 }
 
-/* The menu's lines settle as the paper reaches them. */
+/* The menu's lines settle as the paper reaches them. An unfolded part settles piece by piece (its
+   word, each bottle, each name), never as one block: its pools and the crane are multiplied onto
+   the paper, and a block fading round them would show their white as boxes until it stopped. */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-menu] .sheetInner > :not(.sheetPainting),
+  .root[data-menu] .sheetInner > :not(.sheetPainting, .sheetPart),
+  .root[data-menu] .sheetPart > .sheetLink,
+  .root[data-menu] .sheetFoldInner > :not(.sheetShelfWrap),
+  .root[data-menu] .sheetShelf :is(.bottle, .sheetProductName, .sheetProductFocus),
   .root[data-menu] .sheetCrane {
     animation: insc-settle 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--n, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetShelfWrap :is(.pool, .contact, .sheetGround) {
+    animation: insc-fade 0.9s var(--ease) backwards;
     animation-delay: calc(0.16s + var(--n, 0) * 60ms);
   }
 

@@ -66,9 +66,19 @@ export function NavInscription({
   const loading = warm ? "eager" : "lazy";
   const reach = () => setWarm(true);
 
-  // The scroll keeps showing the last drop-down while it rolls back up.
+  // The scroll keeps showing the last drop-down while it rolls back up. Moving straight across from
+  // one drop-down to the other (the scroll stays down) is a swap: the new writing is laid over the
+  // old instead of settling onto a fresh scroll.
   const [shown, setShown] = useState<NavPanelId>("products");
-  if (panel && panel !== shown) setShown(panel);
+  const [swap, setSwap] = useState(false);
+  const [lastPanel, setLastPanel] = useState<NavPanelId | null>(panel);
+  if (panel !== lastPanel) {
+    setLastPanel(panel);
+    if (panel) {
+      setSwap(lastPanel !== null);
+      if (panel !== shown) setShown(panel);
+    }
+  }
 
   // The narrow window's menu: one of its two parts (Products, Science) is unfolded at a time.
   // On a tablet (700px and wider) it opens with Products unfolded: the five fit in one row.
@@ -126,6 +136,7 @@ export function NavInscription({
       data-ground={ground}
       data-tone={clear ? tone : "light"}
       data-unrolled={panel ? "" : undefined}
+      data-swap={swap ? "" : undefined}
       data-menu={menuOpen ? "" : undefined}
       style={{ "--insc-panel-h": `${panelHeight}px` } as CSSProperties}
       onBlur={nav.onHeaderBlur}
