@@ -30,10 +30,10 @@ STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/Higgsfi
 LOCK = STATE / "submit.lock"
 # Round 5 (October 3): Mo gave $15 for the crane homepage's second polish round; this round's
 # GPT Image 2.5 jobs are counted on their own (round 4's 19 jobs stay in ledger-r4-gpt.jsonl).
-LEDGER = STATE / "ledger-nav-gpt.jsonl"
-# Menu bar options (October 5): Mo gave $5; GPT Image 2.5 jobs capped at 30 (about $1.50, $2.10 if
-# no refund).
-MAX_JOBS = 30
+LEDGER = STATE / "ledger-nav-rounds-gpt.jsonl"
+# Menu bar, ten improvement rounds (October 5): Mo gave another $5; GPT Image 2.5 jobs capped at 40
+# (about $2, $2.80 if no refund). The options round used 1 job in ledger-nav-gpt.jsonl.
+MAX_JOBS = 40
 
 
 def jobs_so_far():
@@ -78,7 +78,7 @@ def main():
     try:
         if args.ref:
             data["image_urls"] = [hf_api.upload(r)["public_url"] for r in args.ref]
-        record = {"model": MODEL, "input": data, "submitted_at": stamp, "approved_by": "Mo 10/5 menu bar $5"}
+        record = {"model": MODEL, "input": data, "submitted_at": stamp, "approved_by": "Mo 10/5 menu bar rounds $5"}
         job.write_text(json.dumps(record, indent=2), encoding="utf-8")
         response = hf_api.api("POST", MODEL, data)
         record.update(response)
