@@ -9,13 +9,13 @@ import {
 } from "@/components/ink/route-kit";
 
 // The About page's brush line (October 5, 2026; mockup reference/ink-pages/mockups/about.jpg).
-// On two columns it leaves the foot of the ink cell, sweeps down to the left and runs down the
-// page's left margin, past the four stations (each label sits left of the line, its leader
-// pointing at it), reloading beside each. Then it touches down four times, one short rule over
-// each promise, travels to the footer and lays the stroke the crane at rest stands on.
-// Under 900px the line would run through the words: on a tablet held upright the opening's stroke
-// runs from the cell's foot to the first station's leader; then (and on a phone) only the four rules
-// and the footer's stroke.
+// On two columns it sets down on the paper beside the foot of the ink cell, sweeps down to the
+// left and runs down the page's left margin, past the four stations (each label sits left of the
+// line, its leader pointing at it), reloading beside each. Then it touches down four times, one
+// short rule over each promise, travels to the footer and lays the stroke the crane at rest stands
+// on. Under 900px the line would run through the words: on a tablet held upright the opening's
+// stroke runs from beside the cell's foot to the first station's leader; then (and on a phone)
+// only the four rules and the footer's stroke.
 //
 // The opening has no approved stroke of its own to keep (the homepage's crane stroke is), so the
 // About opening carries no "opening" anchor and the whole line is painted as the page's brush
@@ -68,34 +68,41 @@ const cell = (fx: number, fy: number, load: number, ink = 1): Waypoint => ({
   load,
 });
 
-/** A point set off from the painting's lower-left edge (where its outer wash ends, at fx 0.203 /
- *  fy 0.85 of the picture) by fixed pixels along the edge's outward normal (down and to the left),
- *  so the gap to the painting is the same at every size. */
-const offEdge = (out: number, load = 1.9, ink = 1): Waypoint => ({
-  ...on("about-cell", 0.203, 0.85, 3, ink, -0.56 * out, 0.83 * out),
+/** A point beside the cell's foot: `left` pixels to the left of and `down` pixels below the
+ *  painting's lower-left outer-wash point (fx 0.203 / fy 0.85 of the picture; the lowest ink of
+ *  its left lobe lies a few pixels under it). Fixed pixels, so the gap to the painting holds at
+ *  every size. */
+const foot = (left: number, down: number, load: number): Waypoint => ({
+  ...on("about-cell", 0.203, 0.85, 3, 1, -left, down),
   load,
 });
 
-/** The line begins as a brush set down on the paper under the cell, never as something growing out
- *  of it: the first touch lands about 22px clear of the painting's outer wash, rounded and pressed
- *  (the page's first stroke starts at its full load, with no thin lead-in; the head's first few
- *  pixels carry a little less ink, so its end is round, not cut), then moves straight off along the
- *  edge's normal, down and to the left, and falls steeply before it starts to turn. */
+/** The line begins as a brush set down on the paper beside the cell's foot, already travelling
+ *  left, never as something hanging from the painting. The first touch sits about 25px under the
+ *  foot's lowest ink and a little to its left, so the painting lies above the stroke's end, not
+ *  ahead of it: the stroke's axis runs level along the paper over its first 40px (never
+ *  climbing), then drifts down by degrees into the fall, and the cell's underside slopes away to
+ *  the right behind it. The head is a pressed, round tip. The kit lands the page's first stroke
+ *  at the load its waypoints give it (no thin lead-in), so the tip carries a quarter of the load
+ *  and swells to the full load within five pixels (a round end, not a square cut), holds it for a
+ *  dozen pixels (the press) and thins into the run. The ink stays at 1 here, so the head is wet,
+ *  with no dry-brush streaks. */
 const leaving: Waypoint[] = [
-  offEdge(22, 2.05, 0.8),
-  offEdge(27, 2.1),
-  offEdge(62, 1.8),
-  cell(0.115, 1.047, 1.8),
+  foot(12, 26, 0.5),
+  foot(17, 26.1, 1.9),
+  foot(28, 26.4, 1.9),
+  foot(52, 27.5, 1.6),
+  foot(80, 34, 1.62),
 ];
 
-// Two columns: out of the cell the sweep falls, then runs left over the open paper in a long, slow
-// sag (its middle halfway between the station and the cell, never nearer the station than 150px)
-// and turns down in one broad bend (fixed pixels from the station, so the bend keeps its size at
-// every width) to meet the first leader as the vertical, pressing into the turn. Down the margin
-// it lands beside each station, swells through the middle, wavers a little (a calm lean beside
-// Dr. Liu's print), and arrives at the next station still holding ink; past the last station it
-// sweeps left as it lifts. Every load stays within the homepage's brush (its strokes run to 1.9,
-// its closing stroke to 2.2).
+// Two columns: from beside the cell's foot the sweep runs left over the open paper, falling into a
+// long, slow sag (its middle halfway between the station and the cell, never nearer the station
+// than 150px) and turns down in one broad bend (fixed pixels from the station, so the bend keeps
+// its size at every width) to meet the first leader as the vertical, pressing into the turn. Down
+// the margin it lands beside each station, swells through the middle, wavers a little (a calm lean
+// beside Dr. Liu's print), and arrives at the next station still holding ink; past the last
+// station it sweeps left as it lifts. Every load stays within the homepage's brush (its strokes
+// run to 1.9, its closing stroke to 2.2).
 const page: Waypoint[] = [
   ...leaving,
   {
@@ -109,7 +116,7 @@ const page: Waypoint[] = [
     w: 3,
     load: 1.7,
   },
-  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 2 },
+  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 1.9 },
   { ...on("st-purpose", 1, 0.5, 3.4, 1, 22, -46), load: 1.9 },
   ...arrive("purpose", 1.9),
   land("purpose"),
@@ -130,12 +137,13 @@ const page: Waypoint[] = [
 ];
 
 // One column (721-899px, the cell beside the words): the page's line arrives at its first station.
-// Out of the cell's foot it falls, sweeps left under the opening's words and comes down into the
-// tip of the "Our purpose" leader (the leader's free end, at the left of the label), where it lifts:
-// it ends where the station hangs, never in open paper.
+// From beside the cell's foot it runs left on a gentle fall (no tick under the painting), sweeps
+// under the opening's words and comes down into the tip of the "Our purpose" leader (the leader's
+// free end, at the left of the label), where it lifts: it ends where the station hangs, never in
+// open paper.
 const column: Waypoint[] = [
   ...leaving,
-  cell(-0.12, 1.12, 1.8),
+  cell(-0.14, 1.03, 1.6),
   { ...on("st-purpose", 0, 0.5, 3, 1, 70, -50), load: 1.6 },
   { ...on("st-purpose", 0, 0.5, 3, 1, 22, -14), load: 1.3 },
   { ...lift("st-purpose", 0, 0.5) },

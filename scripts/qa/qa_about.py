@@ -47,7 +47,13 @@ Third review round (October 5, 2026): the line starts clear of the painting (no 
 every two-column and tablet size; just above the stacking breakpoint the promises keep a reading
 measure (columns 250px or more, titles on one line, text in three lines or fewer).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4]
+Fourth review round (October 5, 2026): the line sets down beside the cell's foot already travelling
+left (level or drifting down, never climbing) with the painting above its end, not ahead of it (the
+stroke's aim 45 degrees or more off the painting's nearest ink); on a tablet no tick under the cell
+(the first 60px level and left); the head is a round, pressed tip, wider than the run, thinning
+into it.
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4,round5]
 """
 
 import math
@@ -828,6 +834,126 @@ def round4(browser):
         context.close()
 
 
+def stroke_head(page, width):
+    """The brush's head beside the cell's foot, read off the pixels (the whole line drawn): the tip
+    (the end of the core ink nearest the painting), the heading of the first 40px from it, the
+    angle between the stroke's aim (its axis, backwards out of the tip) and the painting's nearest
+    ink, the course of the first 60px in 10px steps, and the core-ink width (alpha over 140, in px
+    across the stroke) along the first 40px. Angles: `lean` is measured from straight left, down
+    positive (a climbing stroke leans negative)."""
+    import numpy as np
+
+    g = cell_foot(page, width)
+    ink, core, edge = np.argwhere(g["ink"]), np.argwhere(g["core"]), g["edge"]
+    if not len(ink) or not len(core) or not len(edge):
+        return None
+    dist = distances(ink, edge)
+    dist[g["mask"][ink[:, 0], ink[:, 1]]] = 0
+    near = ink[int(np.argmin(dist))].astype(float)
+
+    def heading(origin, reach=40):
+        sel = core[np.sqrt(((core - origin) ** 2).sum(1)) < reach]
+        d = sel.mean(0) - origin
+        return d / (np.linalg.norm(d) or 1)
+
+    # A first axis from the ink nearest the painting; the end of the stroke is the core pixel
+    # farthest back along it. Then the real axis of the first 40px, from the centres of two slabs
+    # of the stroke (2-14px and 26-40px in), so a corner pixel of the end does not tilt it.
+    d0 = heading(near)
+    about = core[np.sqrt(((core - near) ** 2).sum(1)) < 60]
+    tip = about[int(np.argmax(((about - near) * -d0).sum(1)))].astype(float)
+    along0 = ((core - tip) * d0).sum(1)
+    first, later = core[(along0 >= 2) & (along0 < 14)], core[(along0 >= 26) & (along0 < 40)]
+    if len(first) < 4 or len(later) < 4:
+        return None
+    d = later.mean(0) - first.mean(0)
+    d = d / (np.linalg.norm(d) or 1)  # (dy, dx)
+    lean = math.degrees(math.atan2(d[0], -d[1]))
+    along = (core * d).sum(1)
+    along -= along.min()
+    end = core[along < 3].mean(0)  # the centre of the end, 3px deep
+    v = edge[int(np.argmin(((edge - end) ** 2).sum(1)))] - end
+    v = v / (np.linalg.norm(v) or 1)
+    aim = math.degrees(math.acos(max(-1.0, min(1.0, float((-d * v).sum())))))
+    centres = [end]
+    for a in range(10, 61, 10):
+        sel = core[np.abs(along - a) < 5]
+        centres.append(sel.mean(0) if len(sel) else centres[-1])
+    steps = []
+    for p, q in zip(centres, centres[1:]):
+        dy, dx = q - p
+        steps.append({"lean": round(math.degrees(math.atan2(dy, -dx)) if (dx or dy) else 0.0), "dy": round(float(dy), 1)})
+    widths = [round(float(((along >= a - 1) & (along < a + 1)).sum()) / 2, 1) for a in range(1, 41)]
+    # How square the end is: the core ink over the stroke's first half-width (from the end), as a
+    # share of the rectangle a square cut at the head's width would fill (1.0; a half-round end
+    # fills about 0.78). On a 4px head (the tablet's brush scale) the pixel grid cannot show an end
+    # rounder than about 0.88.
+    head = max(widths[5:14])
+    fill = float((along < head / 2).sum()) / max(1.0, (head / 2) * head)
+    ox, oy = g["origin"]
+    return {
+        "tip": (int(end[1]) + ox, int(end[0]) + oy),
+        "lean": round(lean),
+        "aim": round(aim),
+        "steps": steps,
+        "widths": widths,
+        "fill": round(fill, 2),
+        "gap": round(float(dist.min()), 1),
+    }
+
+
+def round5(browser):
+    """The finish review's fourth round (Task 9 fix round 4): the line's start no longer reads as
+    something hanging from the cell."""
+    sizes = [(1536, 1000), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (834, 1112), (721, 1000)]
+    for width, height in sizes:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        tag = f"{width}x{height}"
+        h = stroke_head(page, width)
+        if h is None:
+            check(f"{tag} the stroke sets down beside the cell, not aimed at it", False, "no ink found")
+            check(f"{tag} a round, pressed head thinning into the run", False, "no ink found")
+            context.close()
+            continue
+        # 1. The brush sets down already travelling left (level or drifting down-left, never
+        # climbing, its first 40px within 25 degrees of level), and the painting lies above or beside
+        # the stroke's end, not ahead of it: the angle between the stroke's aim (its axis, backwards
+        # out of the tip) and the painting's nearest ink is 45 degrees or more. On 1e463c0 the first
+        # segment ran along the painting's normal, so its axis pointed straight back into the lobe
+        # (aim about 0 degrees, lean about 50).
+        check(
+            f"{tag} the stroke sets down beside the cell, not aimed at it",
+            h["aim"] >= 45 and -5 <= h["lean"] <= 25,
+            {"aim": h["aim"], "lean": h["lean"], "tip": h["tip"], "gap": h["gap"]},
+        )
+        # 2. On a tablet held upright no tick under the cell: the first 60px of the stroke run left,
+        # level or gently down (each 10px step within 35 degrees of level, never climbing, turning no
+        # more than 25 degrees from the step before). On 1e463c0 a steep tick fell from the foot and
+        # kinked into the run.
+        if width < 900:
+            turns = [abs(a["lean"] - b["lean"]) for a, b in zip(h["steps"], h["steps"][1:])]
+            check(
+                f"{tag} no tick under the cell: the first 60px run level and left",
+                all(-8 <= s["lean"] <= 35 and s["dy"] >= -2 for s in h["steps"]) and all(t <= 25 for t in turns),
+                {"steps": h["steps"], "turns": turns},
+            )
+        # 3. A round, pressed head that thins into the run: the end is round, not a square cut (the
+        # core ink over the first half-width fills at most 85% of a square cut's rectangle; read
+        # where the head is 5px or more, since a 4px head, the tablet's brush scale, narrows 2-3-4
+        # over its last pixels and the grid cannot show rounder), the head (6-14px in) is wider
+        # than the run (30-40px in) by a tenth or more, and from 6px in the stroke holds 3px of
+        # core ink everywhere over its first 40px. On 1e463c0 the end was a square cut (fill about
+        # 0.9-1.0) at the run's full width.
+        w = h["widths"]
+        head, run = max(w[5:14]), sum(w[29:40]) / len(w[29:40])
+        check(
+            f"{tag} a round, pressed head thinning into the run",
+            (head < 5 or h["fill"] <= 0.85) and head >= 1.1 * run and min(w[5:40]) >= 3,
+            {"fill": h["fill"], "head": head, "run": round(run, 1), "min6to40": min(w[5:40]), "widths": w[:16]},
+        )
+        context.close()
+
+
 def line_and_focus(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     layout = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout")
@@ -933,7 +1059,7 @@ def languages_layout(browser):
 
 
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, line_and_focus, languages, languages_layout]
+GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, round5, line_and_focus, languages, languages_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:
