@@ -17,6 +17,11 @@ import { Scientists } from "./scientists";
 import { Stories } from "./stories";
 import styles from "./look-ink.module.css";
 
+// The parts of the page that belong to the bar's two drop-downs: while one is being read, its word
+// in the bar carries the painted stroke (none over the opening, the scientists, the stories or the
+// purpose).
+const FOLLOW = { products: ["products"], science: ["cellular", "science", "research"] } as const;
+
 // The homepage, "Ink & Gold" (round 4, October 2, 2026; Mo picked the crane): one ink-painting
 // world on warm rice paper with a single gold leaf for energy. The crane of long life over misty
 // mountains opens it. One continuous brush line draws itself down the page as you read
@@ -50,7 +55,7 @@ export function LookInk() {
       >
         {copy("Skip to content")}
       </a>
-      <HomeHeader overlay solidAfter={48} />
+      <HomeHeader overlay solidAfter={48} follow={FOLLOW} />
       <main ref={main} id="main" tabIndex={-1}>
         <OpeningCrane motion={motion} />
         <Cellular />

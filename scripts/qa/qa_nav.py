@@ -46,6 +46,17 @@ On the real GPU (ANGLE/D3D11):
     time, no painting's paper as a light box; swapping back in from Products on a painting, no
     light box behind it.
   - reduced motion: the scroll is down at once.
+  - the painted stroke (round 6) at 1536x900: the homepage marks no page (no aria-current, no
+    data-current, no stroke "here" in the bar). The stroke follows the reader: none over the
+    opening, the scientists, the stories or the purpose; under Products while #products is read;
+    under Science in #cellular, #science and #research; laid whole (its ink 50%+) a moment after the
+    part arrives, gone (ink 0) a moment after it leaves; in the pixels its ink runs under the word
+    from its first letter over 75%+ of it, 3-8px thick, centred where the fine line runs and clear of
+    the chevron. Exactly one painted stroke at a time on every frame the page draws while the whole
+    page is read down at a few hundred px a second. Pointing at About or opening a drop-down lifts
+    it (ink 0) and it comes back after; with reduced motion it is there whole at once. On a phone
+    the bar shows no stroke. Escape from a drop-down, scrolled, hands focus back without moving
+    the page (the page's 150px scroll padding made a plain focus() jump it about 480px up).
   - phone 390x844: the menu opens and locks the page, the button says Close, Escape closes it and
     hands focus back, the Close button closes it, Products and Science fold open one at a time,
     Support opens its sheet, a product link goes to its page.
@@ -260,6 +271,9 @@ def solid_bar(page, tag):
     rule)."""
     size = page.viewport_size
     page.mouse.move(size["width"] / 2, size["height"] - 4)
+    # The reading stroke (round 6) comes and goes with the part of the page being read, on purpose;
+    # it is held out here, where only the paper and its rule are compared.
+    held = page.add_style_tag(content="[data-nav-ink] { visibility: hidden !important; }")
     scroll_to(page, 1400)
     bar = page.evaluate("document.querySelector('#site-navigation').getBoundingClientRect().bottom")
     band = {"x": 0, "y": 0, "width": size["width"], "height": round(bar) + 6}
@@ -271,6 +285,7 @@ def solid_bar(page, tag):
             placed.append(f"{line['text']!r} at {y:.0f}")
             shots.append(Image.open(BytesIO(page.screenshot(clip=band))).convert("RGB"))
     page.screenshot(path=str(OUT / f"{tag}-solid-bar.png"), clip=band)
+    held.evaluate("el => el.remove()")
     worst = max(
         (max(hi for _, hi in ImageChops.difference(shots[0], shot).getextrema()) for shot in shots[1:]),
         default=255,
@@ -1655,12 +1670,223 @@ def languages(browser):
             )
             page.close()
 
+# Round 6: the painted stroke under a word. Each ink of the bar's three words (Products, Science,
+# About): which state its link gives it, and how much ink it shows.
+INKS = """() => [...document.querySelectorAll('#site-navigation [data-nav-ink]')].map(i => {
+  const link = i.closest('a, button'); const s = getComputedStyle(i); const r = i.getBoundingClientRect();
+  return { word: link.innerText.trim(), state: link.dataset.ink || '', opacity: +s.opacity,
+    draw: parseFloat(s.getPropertyValue('--insc-ink')), shown: r.width > 0 && r.height > 0 }; })"""
+
+# Where a part of the homepage is put under the reading band (40-42% down the window): a third of
+# the way into it, or for a part that marks nothing, its middle.
+PUT = """([id, share]) => { const r = document.getElementById(id).getBoundingClientRect();
+  return r.top + scrollY + r.height * share - innerHeight * 0.41; }"""
+
+
+def put(page, part, share=1 / 3, wait=1500):
+    y = page.evaluate(PUT, [part, share])
+    page.evaluate(f"window.scrollTo(0, {y})")
+    page.mouse.wheel(0, 1)
+    page.wait_for_timeout(wait)
+    return page.evaluate(INKS)
+
+
+def inked(inks):
+    return [i["word"] for i in inks if i["opacity"] > 0.02]
+
+
+def stroke_pixels(page, word):
+    """The stroke under `word` in the pixels: where its ink runs (columns at least 40 levels darker
+    than the paper), its thickness, and the word's, the fine line's and the chevron's places."""
+    box = page.evaluate(
+        """w => { const link = [...document.querySelectorAll('#site-navigation [data-nav-ink]')]
+        .map(i => i.closest('a, button')).find(l => l.innerText.trim() === w);
+      const word = link.querySelector('[data-nav-ink]').parentElement;
+      const r = word.getBoundingClientRect(); const after = getComputedStyle(word, '::after');
+      const chev = link.querySelector('svg'); const c = chev && chev.getBoundingClientRect();
+      return { left: r.left, right: r.right, bottom: r.bottom, chevron: c ? c.left : null,
+        line: r.bottom - parseFloat(after.bottom) - parseFloat(after.height) / 2 }; }""",
+        word,
+    )
+    top = round(box["bottom"]) + 1
+    clip = {"x": round(box["left"]) - 12, "y": top, "width": round(box["right"] - box["left"]) + 40, "height": 13}
+    a = np.asarray(Image.open(BytesIO(page.screenshot(clip=clip))).convert("L"), dtype=np.float32)
+    paper = float(np.median(a[:, -6:]))
+    dark = (paper - a) > 40
+    cols = np.where(dark.any(axis=0))[0]
+    rows = np.where(dark.any(axis=1))[0]
+    if not len(cols):
+        return {"ink": False, **box}
+    body = dark[:, cols.min() : cols.min() + max(4, (cols.max() - cols.min()) // 2)]
+    return {
+        "ink": True,
+        "from": clip["x"] + int(cols.min()),
+        "to": clip["x"] + int(cols.max()),
+        "thick": float(np.median(body.sum(axis=0))),
+        "mid": top + (rows.min() + rows.max() + 1) / 2,
+        **box,
+    }
+
+
+def reading_stroke(browser):
+    """Round 6: the painted stroke. The homepage marks no page; its stroke follows the reader."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    page.mouse.move(768, 896)
+
+    marks = page.evaluate(
+        """() => ({ aria: [...document.querySelectorAll('header [aria-current]')].map(e => e.innerText.trim()),
+        current: [...document.querySelectorAll('header [data-current]')].map(e => e.innerText.trim()),
+        here: [...document.querySelectorAll('header [data-ink="here"]')].map(e => e.innerText.trim()) })"""
+    )
+    check(
+        "stroke: the homepage marks no page (no aria-current, no data-current, no stroke 'here')",
+        not marks["aria"] and not marks["current"] and not marks["here"],
+        marks,
+    )
+    inks = page.evaluate(INKS)
+    check(
+        "stroke: one ink under each of Products, Science and About; none shown over the opening",
+        [i["word"] for i in inks] == ["Products", "Science", "About"] and not inked(inks),
+        inks,
+    )
+
+    expect = [
+        ("cellular", 1 / 3, "Science"),
+        ("scientists", 0.5, None),
+        ("products", 1 / 3, "Products"),
+        ("stories", 0.5, None),
+        ("science", 1 / 3, "Science"),
+        ("research", 1 / 3, "Science"),
+        ("purpose", 0.5, None),
+    ]
+    for part, share, word in expect:
+        inks = put(page, part, share)
+        states = [i["word"] for i in inks if i["state"]]
+        whole = [i for i in inks if i["word"] == word and i["opacity"] >= 0.5 and i["draw"] == 1]
+        if word:
+            ok = states == [word] and inked(inks) == [word] and whole
+        else:
+            ok = not states and not inked(inks)
+        check(
+            f"stroke: reading #{part}, {'under ' + word if word else 'no stroke'}",
+            ok,
+            [(i["word"], i["state"], round(i["opacity"], 2), round(i["draw"], 2)) for i in inks],
+        )
+        if part != "products":
+            continue
+        page.screenshot(path=str(OUT / "stroke-products.png"), clip={"x": 300, "y": 0, "width": 940, "height": 110})
+        px = stroke_pixels(page, "Products")
+        span = px["right"] - px["left"]
+        check(
+            "stroke: in the pixels, under the word from its first letter over 75%+ of it, 3-8px thick, "
+            "where the fine line runs (3px), clear of the chevron",
+            px["ink"]
+            and abs(px["from"] - px["left"]) <= 3
+            and px["to"] - px["from"] >= 0.75 * span
+            and 3 <= px["thick"] <= 8
+            and abs(px["mid"] - px["line"]) <= 3
+            and (px["chevron"] is None or px["to"] <= px["chevron"] - 2),
+            {k: (round(v, 1) if isinstance(v, float) else v) for k, v in px.items()},
+        )
+        # Pointing at About lifts it; it comes back once the pointer leaves the bar. (The pointer is
+        # moved by hand: a locator's hover scrolls the page to the sticky bar's place in the flow.)
+        def point(selector):
+            r = page.evaluate(f"(() => {{ const r = document.querySelector('{selector}').getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; }})()")
+            page.mouse.move(r[0], r[1], steps=4)
+
+        point('#site-navigation a[href$="/about"]')
+        page.wait_for_timeout(700)
+        pointed = page.evaluate(INKS)
+        page.mouse.move(768, 896)
+        page.wait_for_timeout(1300)
+        back = page.evaluate(INKS)
+        check(
+            "stroke: pointing at About lifts it, and it is laid again after",
+            not inked(pointed) and inked(back) == ["Products"] and back[0]["draw"] == 1,
+            f"pointing: {inked(pointed)}; after: {[(i['word'], round(i['opacity'], 2)) for i in back if i['opacity'] > 0.02]}",
+        )
+        # An open drop-down takes over; once it has rolled back up the stroke comes back.
+        point('[data-nav-trigger="science"]')
+        page.wait_for_timeout(700)
+        opened = page.evaluate(INKS)
+        was_open = is_open(page, "science")
+        y0 = page.evaluate("scrollY")
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(300)
+        y1 = page.evaluate("scrollY")
+        check(
+            "desk: Escape hands focus back to the button without moving the page (scrolled)",
+            abs(y1 - y0) <= 1 and page.evaluate("document.activeElement?.dataset.navTrigger") == "science",
+            f"scrollY {y0} -> {y1}",
+        )
+        page.mouse.move(768, 896)
+        page.wait_for_timeout(1300)
+        closed = page.evaluate(INKS)
+        check(
+            "stroke: an open drop-down lifts it, and it is laid again once the scroll is up",
+            was_open and not inked(opened) and inked(closed) == ["Products"],
+            f"open: {was_open} {inked(opened)}; closed: {inked(closed)}",
+        )
+
+    # Every frame the page draws while the page is read down at a few hundred px a second: never
+    # more than one stroke with ink.
+    put(page, "top", 0, 800)
+    page.evaluate(
+        """() => { window.__inks = { max: 0, frames: 0, seen: new Set() }; const loop = () => {
+      const on = [...document.querySelectorAll('#site-navigation [data-nav-ink]')]
+        .filter(i => +getComputedStyle(i).opacity > 0.02);
+      window.__inks.max = Math.max(window.__inks.max, on.length); window.__inks.frames++;
+      on.forEach(i => window.__inks.seen.add(i.closest('a, button').innerText.trim()));
+      if (!window.__inks.stop) requestAnimationFrame(loop); }; requestAnimationFrame(loop); }"""
+    )
+    end = page.evaluate("document.getElementById('purpose').getBoundingClientRect().top + scrollY")
+    while page.evaluate("scrollY") < end:
+        page.mouse.wheel(0, 120)
+        page.wait_for_timeout(150)
+    page.wait_for_timeout(800)
+    film = page.evaluate(
+        "(() => { window.__inks.stop = true; return { max: window.__inks.max, frames: window.__inks.frames, seen: [...window.__inks.seen] }; })()"
+    )
+    check(
+        "stroke: exactly one painted stroke at a time, every frame, reading the whole page down",
+        film["max"] == 1 and film["frames"] > 100 and sorted(film["seen"]) == ["Products", "Science"],
+        film,
+    )
+    page.close()
+
+    page = browser.new_page(viewport={"width": 1536, "height": 900}, reduced_motion="reduce")
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    page.mouse.move(768, 896)
+    inks = put(page, "products", wait=250)
+    check(
+        "reduced motion: the stroke is simply there",
+        inked(inks) == ["Products"] and inks[0]["draw"] == 1 and inks[0]["opacity"] >= 0.5,
+        inks,
+    )
+    page.close()
+
+    page = browser.new_page(
+        viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2
+    )
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    inks = put(page, "products")
+    check("phone: the bar shows no stroke", not any(i["shown"] for i in inks), inks)
+    page.close()
+
 
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
         desktop(browser)
         rule_checks(browser)
+        reading_stroke(browser)
         drop_down_motion(browser)
     if ONLY in (None, "desk", "showroom"):
         showroom_layout(browser)

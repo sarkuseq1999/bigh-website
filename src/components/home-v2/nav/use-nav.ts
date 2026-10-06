@@ -81,10 +81,13 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
     openPanel.current = panel;
   }, [panel]);
 
+  // Focus handed back to the bar never moves the page: the bar is always in view, but it sits
+  // inside the page's 150px scroll padding (globals.css), so a plain focus() would scroll the page
+  // to bring it "out from under the header" (about 480px up at 1536x900).
   const closePanel = useCallback((returnFocus = false) => {
     clearTimer();
     const current = openPanel.current;
-    if (current && returnFocus) triggers.current[current]?.focus();
+    if (current && returnFocus) triggers.current[current]?.focus({ preventScroll: true });
     setPanel(null);
   }, []);
 
@@ -119,7 +122,7 @@ export function useNav({ overlay, solidAfter }: { overlay: boolean; solidAfter: 
         if (target.matches(":open")) return;
       }
       setMenuOpen(false);
-      menuButton.current?.focus();
+      menuButton.current?.focus({ preventScroll: true });
     };
     const desktop = window.matchMedia(DESKTOP_QUERY);
     const onDesktop = () => {

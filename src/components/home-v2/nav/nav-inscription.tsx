@@ -36,13 +36,24 @@ import styles from "./nav-inscription.module.css";
 // what is written on it. On a narrow window: "Menu", the mark, the
 // language; the menu is a full-height scroll let down the same way.
 // Each drop-down's links follow its button in the page, so Tab goes from the button into them.
+// Where you are is written in ink (round 6): the current page's word carries a short painted brush
+// stroke under it (inscription/current-stroke.webp, cut by reference/nav/make_current_stroke.py from
+// a real painted stroke), laid from the left as the page opens; pointing at a word draws only a
+// fine line. On the homepage, which has no link of its own, the stroke follows the reader: while a
+// part of the page that belongs to Products or Science is being read, that word carries it.
 
 /** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
 export type NavCurrent = "home" | "products" | "science" | "about";
 
+/** The homepage's parts that belong to each drop-down (the ids of their sections). */
+export type NavFollow = Partial<Record<NavPanelId, readonly string[]>>;
+
 export type NavInscriptionProps = {
   /** The page the bar is on. */
   current?: NavCurrent;
+  /** On the homepage: while one of these parts is being read, its drop-down's word carries the
+   *  painted stroke (it paints in as the part arrives and lifts as it leaves). */
+  follow?: NavFollow;
   /** Start clear over the page's opening picture; it turns to paper once the page scrolls. */
   overlay?: boolean;
   /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
@@ -53,6 +64,7 @@ export type NavInscriptionProps = {
 
 export function NavInscription({
   current = "home",
+  follow,
   overlay = false,
   tone = "light",
   solidAfter = 80,
@@ -63,6 +75,13 @@ export function NavInscription({
   const nav = useNav({ overlay, solidAfter });
   const { solid, panel, closePanel, menuOpen, setMenuOpen, menuButton } = nav;
   const cjk = locale === "jp" || locale === "cns" || locale === "hken";
+
+  // The painted stroke: under the current page's word ("here"), or on the homepage under the word
+  // whose part of the page is being read ("reading"). A page with a link of its own never follows
+  // the reader, so there is only ever one stroke.
+  const reading = useReading(current === "home" ? follow : undefined);
+  const inked = (id: NavCurrent) =>
+    current === id ? "here" : current === "home" && reading === id ? "reading" : undefined;
 
   // The drop-downs' pictures load once the visitor reaches for the bar (the pointer on it, focus
   // in it, a tap on Menu), so the bottles are there as the scroll unrolls, without loading them on
@@ -170,7 +189,7 @@ export function NavInscription({
     if (menuOpen) {
       // From the menu, focus goes to its button first: the sheet hands focus back to where it
       // was when it closes, and this link is gone by then.
-      menuButton.current?.focus();
+      menuButton.current?.focus({ preventScroll: true });
       setMenuOpen(false);
     }
     closePanel();
@@ -235,8 +254,12 @@ export function NavInscription({
               className={styles.link}
               data-nav-trigger="products"
               data-current={current === "products" ? "" : undefined}
+              data-ink={inked("products")}
             >
-              <span className={styles.word}>{copy("Products")}</span>
+              <span className={styles.word}>
+                {copy("Products")}
+                <Ink />
+              </span>
               <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
             </button>
             <div
@@ -300,8 +323,12 @@ export function NavInscription({
               className={styles.link}
               data-nav-trigger="science"
               data-current={current === "science" ? "" : undefined}
+              data-ink={inked("science")}
             >
-              <span className={styles.word}>{copy("Science")}</span>
+              <span className={styles.word}>
+                {copy("Science")}
+                <Ink />
+              </span>
               <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
             </button>
             <div
@@ -369,8 +396,12 @@ export function NavInscription({
               href="/about"
               className={styles.link}
               aria-current={current === "about" ? "page" : undefined}
+              data-ink={inked("about")}
             >
-              <span className={styles.word}>{copy("About")}</span>
+              <span className={styles.word}>
+                {copy("About")}
+                <Ink />
+              </span>
             </Link>
             <button type="button" className={styles.link} onClick={openSupport}>
               <span className={styles.word}>{copy("Support")}</span>
@@ -398,6 +429,7 @@ export function NavInscription({
           <SheetPart
             id="products"
             label={copy("Products")}
+            here={current === "products"}
             open={fold === "products"}
             onToggle={() => setFold(fold === "products" ? null : "products")}
           >
@@ -436,6 +468,7 @@ export function NavInscription({
           <SheetPart
             id="science"
             label={copy("Science")}
+            here={current === "science"}
             open={fold === "science"}
             onToggle={() => setFold(fold === "science" ? null : "science")}
           >
@@ -487,6 +520,53 @@ export function NavInscription({
       </div>
     </header>
   );
+}
+
+/** The painted stroke under a word (shown by its link's `data-ink`: "here" for the current page,
+ *  "reading" for the homepage's part being read). */
+function Ink() {
+  return <span className={styles.ink} data-nav-ink="" aria-hidden="true" />;
+}
+
+/** Which drop-down's part of the homepage is being read: the part that crosses a thin band a
+ *  little above the window's middle (where the eye rests while reading down), or none. */
+function useReading(follow: NavFollow | undefined) {
+  const [reading, setReading] = useState<NavPanelId | null>(null);
+  useEffect(() => {
+    if (!follow) return;
+    const parts = (Object.entries(follow) as [NavPanelId, readonly string[]][]).flatMap(
+      ([id, sections]) =>
+        sections.flatMap((section) => {
+          const node = document.getElementById(section);
+          return node ? [{ id, node }] : [];
+        }),
+    );
+    if (!parts.length) return;
+    const inBand = new Set<Element>();
+    const observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) inBand.add(entry.target);
+          else inBand.delete(entry.target);
+        }
+        // At a seam two parts can share the band for a moment: the one further down the page is
+        // the one arriving.
+        const hit = parts
+          .filter((part) => inBand.has(part.node))
+          .sort((a, b) =>
+            a.node.compareDocumentPosition(b.node) & Node.DOCUMENT_POSITION_FOLLOWING ? 1 : -1,
+          )[0];
+        setReading(hit ? hit.id : null);
+      },
+      { rootMargin: "-40% 0px -58% 0px" },
+    );
+    parts.forEach((part) => observer.observe(part.node));
+    return () => {
+      observer.disconnect();
+      setReading(null);
+    };
+  }, [follow]);
+  return reading;
 }
 
 /** Which of a showroom's names is shown: the one a pointer rests on (about a tenth of a second,
@@ -622,16 +702,19 @@ function Bottle({
   );
 }
 
-/** One of the menu's two folding parts: its word, and under it what it holds. */
+/** One of the menu's two folding parts: its word, and under it what it holds. `here`: the page the
+ *  menu is open on is one of its parts (its word keeps the ink underline). */
 function SheetPart({
   id,
   label,
+  here,
   open,
   onToggle,
   children,
 }: {
   id: NavPanelId;
   label: string;
+  here: boolean;
   open: boolean;
   onToggle: () => void;
   children: ReactNode;
@@ -644,6 +727,7 @@ function SheetPart({
         aria-expanded={open}
         aria-controls={`nav-sheet-${id}`}
         data-nav-sheet-toggle={id}
+        data-current={here ? "" : undefined}
         onClick={onToggle}
       >
         {label}

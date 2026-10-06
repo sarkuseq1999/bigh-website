@@ -289,16 +289,14 @@
   }
 }
 
-.root .link:is([aria-expanded="true"], [aria-current="page"], [data-current]) .word::after {
+.root .link[aria-expanded="true"] .word::after {
   scale: 1 1;
 }
 
 /* One line at a time. While a scroll is down only its button carries a line: moving across to the
    other drop-down, the button left behind drops its line at once, and pointing at another word
    draws none until the scroll is up. Pointing from word to word, the last one lets go at once. */
-.root[data-unrolled]
-  .link:not([aria-expanded="true"], [aria-current="page"], [data-current])
-  .word::after {
+.root[data-unrolled] .link:not([aria-expanded="true"]) .word::after {
   scale: 0 1;
   transition: none;
 }
@@ -306,6 +304,104 @@
 @media (hover: hover) {
   .root .bar:has(.link:hover) .link:not(:hover) .word::after {
     transition: none;
+  }
+}
+
+/* Where you are, in ink (round 6). The current page's word carries a short painted stroke under it
+   instead of the fine line: a real sumi stroke (inscription/current-stroke.webp, cut by
+   reference/nav/make_current_stroke.py from a painting of short strokes, its wave straightened and
+   its pressed head drawn in, so it reads as one light, sure stroke rather than a squiggle or a
+   blot). It lands a little loaded at the left and dries out into flying-white at the right (its
+   ink about nine tenths of the word's width), about 7px tall, its middle where the fine line runs,
+   at 85% ink. So: a fine line = "you are pointing", a brush stroke = "you are here". On the
+   homepage the same stroke follows the reader (under Products while the products are read, under
+   Science in the cellular, science and research parts), in lighter ink, and gives way to a word
+   pointed at or an open drop-down (one mark at a time), coming back after. */
+@property --insc-ink {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
+.root .link:is([aria-current="page"], [data-current]) .word::after {
+  scale: 0 1;
+}
+
+.ink {
+  /* How much of the stroke is laid (0 none, 1 whole), from its loaded end, with a soft leading
+     edge (as the bar's rule). */
+  --insc-ink: 0;
+  --insc-ink-lead: 14px;
+  position: absolute;
+  top: calc(100% + 7px);
+  left: 0;
+  right: -2%;
+  height: clamp(6px, 0.36em, 8px);
+  translate: 0 -50%;
+  mask: linear-gradient(90deg, #000 calc(100% - var(--insc-ink-lead)), transparent) 0 0 /
+    calc(var(--insc-ink) * (100% + var(--insc-ink-lead))) 100% no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  /* Lifted: the ink fades off the paper, then the stroke is ready to be laid again. */
+  transition:
+    opacity 0.45s var(--ease),
+    --insc-ink 0s linear 0.45s;
+}
+
+.ink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: currentColor;
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") 0 0 / 100% 100% no-repeat;
+}
+
+/* Laid from its loaded end over 0.9s. */
+.root [data-ink] .ink {
+  --insc-ink: 1;
+  opacity: 0.85;
+  transition:
+    opacity 0.2s var(--ease),
+    --insc-ink 0.9s var(--ease);
+}
+
+/* The current page's: laid as the page opens. */
+@keyframes insc-ink {
+  from {
+    --insc-ink: 0;
+  }
+
+  to {
+    --insc-ink: 1;
+  }
+}
+
+.root [data-ink="here"] .ink {
+  animation: insc-ink 0.9s var(--ease) 0.35s backwards;
+}
+
+/* The reader's: lighter, diluted ink (it says what you are reading, not where you are; at 50% it
+   read as a flat grey bar), and it gives way while a drop-down is down or a word of the bar is
+   pointed at. */
+.root [data-ink="reading"] .ink {
+  opacity: 0.6;
+}
+
+.root[data-unrolled] [data-ink="reading"] .ink {
+  --insc-ink: 0;
+  opacity: 0;
+  transition:
+    opacity 0.3s var(--ease),
+    --insc-ink 0s linear 0.3s;
+}
+
+@media (hover: hover) {
+  .root .bar:has(.link:hover, .account a:hover) [data-ink="reading"] .ink {
+    --insc-ink: 0;
+    opacity: 0;
+    transition:
+      opacity 0.3s var(--ease),
+      --insc-ink 0s linear 0.3s;
   }
 }
 
@@ -1113,8 +1209,10 @@ img.plate {
   letter-spacing: -0.01em;
 }
 
-/* The page the menu is open on keeps its ink underline, under the word. */
-.root .sheetLink[aria-current="page"] {
+/* The page the menu is open on keeps a fine ink underline under its word. (Round 6 tried the bar's
+   painted stroke here: at the menu's size it is the twin of the brush marks between the lines, so
+   the current word read as having a second mark under it.) */
+.root .sheetLink:is([aria-current="page"], [data-current]) {
   text-decoration: underline;
   text-decoration-thickness: 2px;
   text-underline-offset: 0.26em;
