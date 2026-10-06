@@ -965,6 +965,16 @@ def line_and_focus(browser):
     check("reduced motion: every painting shown", bloom)
     charge = page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity")
     check("reduced motion: gold leaf fully up", float(charge) == 0, charge)
+    # The brush layer's effect runs twice under reduced motion (the preference starts true, then
+    # flips); the first run's late font relayout must not add a second set of canvases (TILE in
+    # src/components/ink/brush.tsx is 1200px).
+    page.wait_for_timeout(1000)
+    tiles = page.evaluate(
+        """() => { const host = document.querySelector('[data-lifts]');
+                   return { canvases: host.querySelectorAll('canvas').length,
+                            need: Math.ceil(host.offsetHeight / 1200), height: host.offsetHeight }; }"""
+    )
+    check("reduced motion 1440: the brush holds one set of canvas tiles", tiles["canvases"] == tiles["need"] and tiles["need"] > 0, tiles)
     context.close()
     # With motion: the cell blooms with its leaf drained, then the leaf comes up.
     context, page, response, errors, failed = open_page(browser, 1440, 900)

@@ -543,6 +543,9 @@ export function BrushLine({
     let dpr = Math.min(2, window.devicePixelRatio || 1);
     let width = 0;
     let stations: { element: HTMLElement; s: number }[] = [];
+    // False once this run is cleaned up: a late font relayout from a stale run (reduced motion runs
+    // the effect twice) must not append a second set of tiles to the shared layer.
+    let alive = true;
 
     const layout = () => {
       dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -710,8 +713,11 @@ export function BrushLine({
     observer.observe(root);
     layout();
     window.addEventListener("scroll", schedule, { passive: true });
-    document.fonts?.ready.then(relayout);
+    document.fonts?.ready.then(() => {
+      if (alive) relayout();
+    });
     return () => {
+      alive = false;
       observer.disconnect();
       window.clearTimeout(timer);
       cancelAnimationFrame(raf);

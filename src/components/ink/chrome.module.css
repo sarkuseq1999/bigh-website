@@ -1,6 +1,7 @@
-/* The About/Science chrome (about/site-chrome.module.css), with a transparent start for looks that
-   open on a full-bleed picture. Colors come from the look's tokens; the header can be tuned with
-   --chrome-bg / --chrome-ink / --chrome-line, the footer with --footer-bg / --footer-ink. */
+/* The shared header and footer (formerly the About page's own site chrome), with a transparent
+   start for looks that open on a full-bleed picture. Colors come from the look's tokens; the
+   header can be tuned with --chrome-bg / --chrome-ink / --chrome-line, the footer with
+   --footer-bg / --footer-ink. */
 
 .header {
   --header-h: 84px;
