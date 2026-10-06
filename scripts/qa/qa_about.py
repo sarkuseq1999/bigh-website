@@ -19,6 +19,7 @@ source sentence left visible; in Vietnamese the brush line still meets every sta
 late font arrives. Every language (and English) at 1440x900, 1024x768, 768x1024, 390x844 and
 360x780: no word crosses the page's side margins; in Korean, Japanese, Chinese and Vietnamese no
 line holds one character and none starts with closing punctuation (or, in Japanese, a small kana).
+Vietnamese at 390: the closing pills' text-wrap is balance and the wrapped pill's two lines are even.
 Resizing from 1440 to 820 wide redraws the brush line for one column.
 
 Pictures: scripts/qa/out/about-ink/<size>-NN.png (viewport shots while scrolling).
@@ -399,6 +400,18 @@ def languages_layout(browser):
             if lang != "en":
                 bad = page.evaluate(BREAKS_JS, lang)
                 check(f"{tag} no bad line break", not bad, bad[:3])
+            if lang == "vn" and width == 390:
+                # "Khám phá sản phẩm của chúng tôi" takes two lines on a phone; they must be even
+                # (an earlier selector matched nothing and left 239px over 91px).
+                pills = page.evaluate(
+                    """[...document.querySelectorAll('main [class*=actions] a, main [class*=actions] button')].map(e => {
+                         const r = document.createRange(); r.selectNodeContents(e);
+                         const widths = {}; for (const x of r.getClientRects()) if (x.width > 4) widths[Math.round(x.top)] = (widths[Math.round(x.top)] || 0) + x.width;
+                         return { wrap: getComputedStyle(e).textWrap, widths: Object.values(widths).map(Math.round) }; })"""
+                )
+                check(f"{tag} closing pills balance their lines (computed text-wrap)", len(pills) == 2 and all(p["wrap"] == "balance" for p in pills), pills)
+                two = [p["widths"] for p in pills if len(p["widths"]) == 2]
+                check(f"{tag} the pill's two lines are even", bool(two) and all(min(w) / max(w) >= 0.6 for w in two), pills)
             context.close()
 
 

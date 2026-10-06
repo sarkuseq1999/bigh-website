@@ -533,8 +533,9 @@
     font-size: clamp(26px, 8.2vw, 32px);
   }
 
-  /* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines. */
-  :global([data-page="about"]) .actions .pill:lang(vi) {
+  /* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines. The pills
+     carry the kit's .pill (a different module's class), so they are reached by their elements. */
+  :global([data-page="about"]) .actions :is(a, button):lang(vi) {
     text-wrap: balance;
   }
 }
