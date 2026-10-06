@@ -1,0 +1,11 @@
+{
+  "model": "kling-video/v3.0/pro/image-to-video",
+  "prompt": "This sumi-e ink painting of a crane comes to life and flies on plain rice paper, exactly the way a real crane flies. The wings start moving in the very first moment and never pause: three slow, deep, even wingbeats fill the clip, about one and a half seconds each. On every beat the raised wings sweep down in a full stroke below the body, the far wing passing behind the head and neck, then they lift back up; the last up-stroke ends in the raised pose of the first image just as the clip ends. The whole bird is alive in the air: with each down-stroke the body, neck and head lift slightly, and with each up-stroke they sink back slightly, a gentle rise and fall; the long legs trail behind and sway a little; the long neck stays stretched out and straight, the head steady and level, the beak pointing ahead. The crane stays about the same size and roughly in the same place in the frame. The painting stays a painting on every frame: the black flight feathers stay solid, wet sumi black; the soft grey ink wash on the wings, the body and the underside stays; the brush texture and the dry-brush feather edges stay; the black neck, the long beak and the tiny pale gold crown on top of the head stay exactly as in the first image. The wings never turn into white outlines or line art. One head, one beak, two wings, two legs. Plain empty rice paper, evenly lit, unchanged. Locked-off camera, no zoom, no pan, no new objects, no text, nothing else changes.",
+  "usd": "0.476",
+  "made": "20261005-122632",
+  "files": [
+    "crane-fly-v7.mp4"
+  ],
+  "from_image": "reference/home-v2/ink/originals/gpt25-crane-v1.png",
+  "verdict": "not used: crown gold, but two beats with a pause at the raised pose, the body locked, and the wings went to outlines at the bottom of each stroke (thinnest frame 35% of the first pose's solid ink)"
+}

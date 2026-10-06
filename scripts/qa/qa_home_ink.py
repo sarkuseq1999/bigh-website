@@ -9,8 +9,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, beside the crane at rest, after one short rule over each of the three standards);
     the opening crane beats its wings (the animated painting takes the still's place) and stays a
-    painting through the beat (its thinnest frame keeps at least 45% of the held pose's solid black
-    ink: round 8; the old take fell to 38%); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    painting through the beat (its thinnest frame keeps at least 45% of the first pose's solid black
+    ink: round 8; the old take fell to 38%), its wingbeats run without a pause (October 5: no frame
+    held longer than 300 ms; the old loop held the wings up for seconds), and it beats twice and
+    then rests on the still's pose (Mo, October 5: loop count 2, the last frame the first); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
     words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
@@ -163,8 +165,9 @@ def check(name, ok, detail=""):
 
 def ink_through_beat(page, src):
     """The wingbeat picture's solid black ink (dark areas at least 7 px across, so its thin lines
-    are left out; 5 px in the phones' small picture) in its thinnest frame, as a share of the held
-    pose's, and its frame count."""
+    are left out; 5 px in the phones' small picture) in its thinnest frame, as a share of the first
+    pose's (the still's), its frame count, its longest frame in milliseconds, its loop count (0 =
+    forever) and how far its last frame is from its first (mean difference, premultiplied, 0-255)."""
     import io
 
     import numpy as np
@@ -173,12 +176,18 @@ def ink_through_beat(page, src):
     picture = Image.open(io.BytesIO(page.request.get(src).body()))
     k = 7 if picture.width >= 900 else 5
     solid = []
+    longest = 0
+    first = last = None
     for frame in ImageSequence.Iterator(picture):
         a = np.asarray(frame.convert("RGBA")).astype(np.float32)
+        longest = max(longest, int(frame.info.get("duration") or 0))  # known once the frame is loaded
+        last = np.concatenate([a[..., :3] * a[..., 3:] / 255, a[..., 3:]], axis=-1)
+        first = last if first is None else first
         lum = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
         dark = Image.fromarray((((lum < 80) & (a[..., 3] > 128)) * 255).astype(np.uint8))
         solid.append(int((np.asarray(dark.filter(ImageFilter.MinFilter(k)).filter(ImageFilter.MaxFilter(k))) > 0).sum()))
-    return min(solid) / max(solid[0], 1), len(solid)
+    rest = float(np.abs(last - first).mean())
+    return min(solid) / max(solid[0], 1), len(solid), longest, int(picture.info.get("loop", 0)), rest
 
 
 def scroll_to(page, y, wait=700):
@@ -948,7 +957,7 @@ def page_checks(page, tag, width, view_h, problems):
         y += view_h // 2
     page.wait_for_timeout(1500)
     broken = page.evaluate(
-        "[...document.querySelectorAll('img')].filter(i => i.getClientRects().length > 0 && (!i.complete || i.naturalWidth === 0)).map(i => i.currentSrc || i.src)"
+        "[...document.querySelectorAll('img')].filter(i => i.getClientRects().length > 0 && !i.closest('[data-nav-panel]:not([data-open]), header:not([data-menu]) [data-nav-sheet]') && (!i.complete || i.naturalWidth === 0)).map(i => i.currentSrc || i.src)"
     )
     check(f"{tag}: every image loads", not broken, str(broken[:4]))
     wide = page.evaluate("document.documentElement.scrollWidth")
@@ -998,25 +1007,27 @@ def run(browser, look, mobile):
     check(f"{tag}: footer present", page.locator("footer").count() >= 1)
     check(f"{tag}: one h1", page.locator("h1").count() == 1)
 
-    # Header links.
-    if mobile:
-        page.click("button[aria-controls='home-navigation']")
-        page.wait_for_timeout(300)
+    # Header links (the menu bar "Inscription", October 5, 2026; scripts/qa/qa_nav.py checks how it
+    # behaves): Products and Science open their drop-downs, no "Home" (the mark goes home).
     nav = page.evaluate(
-        "[...document.querySelectorAll('#home-navigation > a')].map(a => [a.textContent.trim(), a.getAttribute('href')])"
+        """(() => { const n = document.querySelector('#site-navigation');
+          return { triggers: [...n.querySelectorAll('[data-nav-trigger]')].map(b => b.dataset.navTrigger),
+            about: n.querySelector('a[href$="/about"]')?.getAttribute('href') || '',
+            support: [...n.querySelectorAll('button')].some(b => b.textContent.trim() === 'Support'),
+            home: [...n.querySelectorAll('a')].some(a => a.textContent.trim() === 'Home'),
+            products: n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]').length,
+            science: n.querySelectorAll('[data-nav-panel=science] a[href*="/science#"]').length }; })()"""
     )
-    hrefs = {text: href for text, href in nav}
     check(
         f"{tag}: header links",
-        hrefs.get("Products") == "#products"
-        and (hrefs.get("Science") or "").endswith("/science")
-        and (hrefs.get("About") or "").endswith("/about")
-        and page.locator("#home-navigation button", has_text="Support").count() == 1,
+        nav["triggers"] == ["products", "science"]
+        and nav["about"].endswith("/about")
+        and nav["support"]
+        and not nav["home"]
+        and nav["products"] == 5
+        and nav["science"] == 4,
         str(nav),
     )
-    if mobile:
-        page.click("button[aria-controls='home-navigation']")
-        page.wait_for_timeout(300)
 
     # The opening: paintings loaded, words clear of each other, the brush line leaving it.
     art = page.evaluate(
@@ -1035,11 +1046,27 @@ def run(browser, look, mobile):
     check(f"{tag}: the crane beats its wings", flying and wing and wing[0] and wing[1] > 0 and wing[2] == "1", str(wing))
     # Round 8: the wingbeat stays a painting (the old take turned into an outline drawing mid-beat).
     src = page.evaluate("document.querySelector('#top img[src*=crane-flight]')?.currentSrc || ''")
-    thinnest, frames = ink_through_beat(page, src) if src else (0, 0)
+    thinnest, frames, longest, loops, rest = ink_through_beat(page, src) if src else (0, 0, 0, -1, 99)
     check(
         f"{tag}: the wingbeat keeps its black ink through the beat",
         frames > 30 and thinnest >= 0.45,
-        f"thinnest frame {thinnest:.0%} of the held pose's solid ink, {frames} frames, {src[-28:]}",
+        f"thinnest frame {thinnest:.0%} of the first pose's solid ink, {frames} frames, {src[-28:]}",
+    )
+    # October 5 (Mo): the wings beat without a pause. The old loop held the wings-up pose for 1.4 s
+    # and 4.2 s around each beat, which read as fake; no frame may stay longer than 300 ms. Changed
+    # ON PURPOSE the same day (Mo: "fly like 2 times, then stop"): the beats still run without a
+    # pause, and the rest after them is the picture stopping (its loop count), not a held frame.
+    check(
+        f"{tag}: the crane's wingbeats run without a pause (no frame held over 300 ms)",
+        frames > 30 and 0 < longest <= 300,
+        f"longest frame {longest} ms",
+    )
+    # Mo (October 5): two beats, then the crane rests for good in the still painting's pose. The
+    # picture plays twice (loop count 2) and its last frame, where it stops, is its first pose.
+    check(
+        f"{tag}: the crane beats twice, then rests on the still's pose (loop count 2, last frame = first)",
+        loops == 2 and rest <= 0.8,
+        f"loop count {loops}, last frame differs from the first by {rest:.2f} (0-255)",
     )
     boxes = page.evaluate(
         """[...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
@@ -1604,7 +1631,9 @@ def opening_boxes(page):
         """(() => { const box = (s) => { const b = document.querySelector(s).getBoundingClientRect();
               return [b.left, b.top, b.right, b.bottom]; };
             return { title: box('#opening-title'), crane: box('#top [data-brush=crane]'),
-              column: box('#cellular-title'), logo: box('header a[href] img'),
+              column: box('#cellular-title'),
+              bar: (() => { const l = [...document.querySelectorAll('#site-navigation label')].find(e => e.getClientRects().length);
+                const b = l.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; })(),
               opening: box('#top'),
               words: [...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
                 const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; }) }; })()"""
@@ -1618,9 +1647,9 @@ def run_sizes(browser, look):
     context, page, response, problems = open_page(browser, f"{BASE}/", (2560, 1440), False)
     b = opening_boxes(page)
     check(
-        f"{tag}: the opening's words start at the page column's left edge, under the logo",
-        abs(b["title"][0] - b["column"][0]) <= 2 and abs(b["title"][0] - b["logo"][0]) <= 12,
-        f"title {b['title'][0]:.0f}, column {b['column'][0]:.0f}, logo {b['logo'][0]:.0f}",
+        f"{tag}: the opening's words start at the page column's left edge, under the bar's first control",
+        abs(b["title"][0] - b["column"][0]) <= 2 and abs(b["title"][0] - b["bar"][0]) <= 12,
+        f"title {b['title'][0]:.0f}, column {b['column'][0]:.0f}, bar {b['bar'][0]:.0f}",
     )
     height = b["opening"][3] - b["opening"][1]
     check(
@@ -1708,7 +1737,11 @@ def run_sizes(browser, look):
 
 
 INK = "rgb(12, 11, 10)"
-SUPPORT = "document.querySelector('#home-navigation > button')"
+# The visible Support in the header: the bar's on a desktop, the open menu's on a phone.
+SUPPORT = (
+    "[...document.querySelectorAll('header button:not([data-nav-menu-button]):not([data-nav-trigger])"
+    ":not([data-nav-sheet-toggle]):not(:disabled)')].find(b => b.getClientRects().length)"
+)
 SHEETS = [
     ("Support (header)", SUPPORT, None),
     ("Dr. Liu", "document.querySelectorAll('#scientists button')[0]", None),
@@ -1719,7 +1752,8 @@ SHEETS = [
     ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"2\"] button')].pop()", 2),
     ("Support (footer)", "document.querySelector('footer button')", None),
 ]
-MENU_BUTTON = "button[aria-controls='home-navigation']"
+MENU_BUTTON = "[data-nav-menu-button]"
+SHEET = "[data-nav-sheet]"
 ACTIVE = "(document.activeElement.getAttribute('aria-label') || document.activeElement.textContent || '').trim().slice(0, 28)"
 
 
@@ -1756,7 +1790,8 @@ def run_opens(browser):
     page.wait_for_timeout(300)
     first = page.evaluate(f"[{ACTIVE}, getComputedStyle(document.activeElement).opacity]")
     shoot(page, "opens-desk-00-skip")
-    # Tab on: the logo, the five links, Log in and the language (Sign up is a placeholder, off).
+    # Tab on: the language, Products, Science, the mark, About, Support and Log in (Sign up is a
+    # placeholder, off).
     stops, pale = [], []
     for _ in range(9):
         page.keyboard.press("Tab")
@@ -1768,8 +1803,8 @@ def run_opens(browser):
         if not ring(page):
             pale.append(name)
     check(
-        f"{tag}: the header's eight controls each show the ink focus ring",
-        len(stops) == 8 and not pale,
+        f"{tag}: the header's seven controls each show the ink focus ring",
+        len(stops) == 7 and not pale,
         f"{len(stops)} stops {stops}, without the ring: {pale}",
     )
     page.evaluate("document.querySelector('[data-look=ink] > a').focus()")
@@ -1785,7 +1820,8 @@ def run_opens(browser):
         f"{first}, landed on {landed}, next stop in the opening {after}",
     )
     low = page.evaluate(
-        """[...document.querySelectorAll('#home-navigation a, #home-navigation button, #home-navigation select')]
+        """[...document.querySelectorAll('#site-navigation a, #site-navigation button, #site-navigation select')]
+          .filter(e => e.getClientRects().length && !e.closest('[data-nav-panel]'))
           .filter(e => e.getBoundingClientRect().height < 48)
           .map(e => `${Math.round(e.getBoundingClientRect().height)}px ${e.textContent.trim().slice(0, 14)}`)"""
     )
@@ -1934,14 +1970,17 @@ def run_opens(browser):
         page.keyboard.press("Enter")
         page.wait_for_timeout(1500)
         menu = page.evaluate(
-            """(() => { const n = document.querySelector('#home-navigation'); const b = n.getBoundingClientRect(); const s = getComputedStyle(n);
-              const links = [...n.querySelectorAll(':scope > a, :scope > button')].map(e => { const r = e.getBoundingClientRect();
+            """(() => { const n = document.querySelector('[data-nav-sheet]'); const b = n.getBoundingClientRect(); const s = getComputedStyle(n);
+              const paper = [n, ...n.querySelectorAll('*'), ...document.querySelectorAll('header > span')]
+                .some(e => getComputedStyle(e).backgroundImage.includes('paper'));
+              const lines = [...new Set(n.querySelectorAll('[data-nav-sheet-toggle], [class*=sheetLink]'))].map(e => { const r = e.getBoundingClientRect();
                 return [Math.round(r.left), Math.round(r.right), Math.round(r.height), parseFloat(getComputedStyle(e).fontSize), getComputedStyle(e).opacity]; });
-              const rest = [...n.querySelectorAll(':scope > div a, :scope > div button, :scope > div select')].map(e => { const r = e.getBoundingClientRect();
+              const rest = [...n.querySelectorAll('[class*=sheetFoot] a, [class*=sheetFoot] button, [class*=sheetFoot] select')]
+                .filter(e => e.getClientRects().length).map(e => { const r = e.getBoundingClientRect();
                 return [Math.round(r.left), Math.round(r.right), Math.round(r.height), parseFloat(getComputedStyle(e).fontSize), Math.round(r.bottom)]; });
-              return { shown: s.display !== 'none', box: [Math.round(b.top), Math.round(b.bottom)], paper: s.backgroundImage.includes('paper'), links, rest,
+              return { shown: document.querySelector('header').hasAttribute('data-menu') && s.display !== 'none', box: [Math.round(b.top), Math.round(b.bottom)], paper, links: lines, rest,
                 locked: document.body.style.overflow, wide: document.documentElement.scrollWidth, win: [innerWidth, innerHeight],
-                expanded: document.querySelector('header button[aria-controls]').getAttribute('aria-expanded') }; })()"""
+                expanded: document.querySelector('[data-nav-menu-button]').getAttribute('aria-expanded') }; })()"""
         )
         shoot(page, f"opens-{'phone' if mobile else '820'}-00-menu")
         check(
@@ -1951,26 +1990,30 @@ def run_opens(browser):
         )
         every = menu["links"] + menu["rest"]
         check(
-            f"{tag}: five menu links, each at least 48 px tall and 18 px type, every control inside the window",
-            len(menu["links"]) == 5
+            f"{tag}: four menu lines (Products, Science, About, Support), each at least 48 px tall and 18 px type, every control inside the window",
+            len(menu["links"]) == 4
             and all(l[2] >= 48 and l[3] >= 18 and l[4] == "1" for l in menu["links"])
             and all(r[2] >= 48 and r[3] >= 18 and r[4] <= size[1] for r in menu["rest"])
             and all(e[0] >= 0 and e[1] <= size[0] for e in every)
             and menu["wide"] <= size[0],
             f"links {menu['links']}, rest {menu['rest']}",
         )
+        # From the menu's button Tab passes the bar's mark (and the language where the bar shows it)
+        # and goes into the menu; every stop stays in the header.
         walk = []
-        for _ in range(3):
+        for _ in range(4):
             page.keyboard.press("Tab")
             page.wait_for_timeout(150)
-            walk.append(page.evaluate(f"[!!document.activeElement.closest('#home-navigation'), {ACTIVE}]"))
+            walk.append(page.evaluate(f"[!!document.activeElement.closest('header'), {ACTIVE}, !!document.activeElement.closest('{SHEET}')]"))
+            if walk[-1][2]:
+                break
         ringed = ring(page)
         page.keyboard.press("Escape")
         page.wait_for_timeout(500)
-        shut = page.evaluate(f"[document.querySelector('header button[aria-controls]').getAttribute('aria-expanded'), {ACTIVE}, document.body.style.overflow]")
+        shut = page.evaluate(f"[document.querySelector('{MENU_BUTTON}').getAttribute('aria-expanded'), {ACTIVE}, document.body.style.overflow]")
         check(
             f"{tag}: Tab goes from the menu's button into the menu; Escape closes it, focus back on the button",
-            all(w[0] for w in walk) and ringed and shut == ["false", "Open menu", ""],
+            all(w[0] for w in walk) and walk[-1][2] and ringed and shut == ["false", "Open menu", ""],
             f"{walk}, ring {ringed}, after Escape {shut}",
         )
         page.keyboard.press("Enter")
@@ -2009,13 +2052,17 @@ def run_opens(browser):
     context.close()
     context, page, response, problems = open_page(browser, f"{BASE}/", (390, 844), True, reduced=True)
     page.click(MENU_BUTTON)
+    page.wait_for_timeout(60)
     still = page.evaluate(
-        """(() => { const n = document.querySelector('#home-navigation');
-          return [getComputedStyle(n).display, ...[n, ...n.children].map(e => getComputedStyle(e).opacity + ' ' + getComputedStyle(e).animationName)]; })()"""
+        """(() => { const n = document.querySelector('[data-nav-sheet]');
+          const running = document.getAnimations().filter(a => a.playState === 'running' && n.contains(a.effect?.target)).length;
+          const lines = [...n.querySelectorAll('[data-nav-sheet-toggle], [class*=sheetLink]')].map(e => getComputedStyle(e).opacity);
+          return { shown: getComputedStyle(n).display !== 'none' && document.querySelector('header').hasAttribute('data-menu'),
+            running, lines }; })()"""
     )
     check(
         f"{tag}: the menu is whole at once",
-        still[0] == "flex" and all(v == "1 none" for v in still[1:]),
+        still["shown"] and still["running"] == 0 and all(o == "1" for o in still["lines"]),
         str(still),
     )
     check(f"{tag}: no errors (opens)", not problems, "; ".join(problems[:3]))
@@ -2027,10 +2074,10 @@ def run_opens(browser):
     page.click(MENU_BUTTON)
     page.wait_for_timeout(1300)
     links = page.evaluate(
-        "[...document.querySelectorAll('#home-navigation > a, #home-navigation > button')].map(e => { const r = e.getBoundingClientRect(); return [e.textContent.trim(), Math.round(r.right), Math.round(r.height)]; })"
+        "[...new Set(document.querySelectorAll('[data-nav-sheet] [data-nav-sheet-toggle], [data-nav-sheet] [class*=sheetLink]'))].map(e => { const r = e.getBoundingClientRect(); return [e.textContent.trim(), Math.round(r.right), Math.round(r.height)]; })"
     )
     shoot(page, "opens-kr-phone-00-menu")
-    page.locator("#home-navigation > button").click()
+    page.evaluate(f"{SUPPORT}.click()")
     page.wait_for_timeout(1300)
     sheet = page.evaluate(
         """(() => { const d = document.querySelector('dialog'); const b = d.getBoundingClientRect();
@@ -2039,9 +2086,9 @@ def run_opens(browser):
     shoot(page, "opens-kr-phone-01-sheet")
     check(
         f"{tag}: the menu and the Support sheet open in Korean, inside the window",
-        len(links) == 5
+        len(links) == 4
         and all(l[1] <= 390 and l[2] >= 48 for l in links)
-        and "고객" in links[4][0]
+        and "고객" in links[3][0]
         and sheet[0]
         and "BiGH" in sheet[1]
         and sheet[1] != "BiGH support"
@@ -2554,7 +2601,7 @@ def run_pause(browser):
         page.wait_for_timeout(900)
         crane, header = page.evaluate(
             """[document.querySelector('footer img:not([alt=BiGH])').getBoundingClientRect().top,
-               document.querySelector('header:has(#home-navigation)').getBoundingClientRect().bottom]"""
+               document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
         )
         check(
             f"{tag}: the whole crane at rest, clear of the header",

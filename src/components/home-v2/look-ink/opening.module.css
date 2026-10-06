@@ -134,14 +134,20 @@
   visibility: hidden;
 }
 
-/* Region crane: x 20%, y 10%, w 40%, h 40%. It floats on the air in the page's slow breath. */
+/* Region crane: x 20%, y 10%, w 40%, h 40%. The whole bird rides the air: a slow rise and fall
+   of a few pixels and a hair of pitch, on two cycles of their own (about 13 s and 21 s), out of
+   step with its two wingbeats (2.4 s each, in the picture) and with each other; it goes on
+   gliding after the wings have stopped. Small, so the page's brush line still leaves from under
+   its trailing legs. */
 .crane {
   position: absolute;
   left: calc(var(--inset) + min(20%, 362.4px));
   top: 10%;
   width: calc(614 * var(--u));
-  transform-origin: 70% 60%;
-  animation: glide calc(var(--breath) * 4) ease-in-out infinite alternate;
+  transform-origin: 62% 60%;
+  animation:
+    ride calc(var(--breath) * 2.7) ease-in-out infinite alternate,
+    pitch calc(var(--breath) * 4.3) ease-in-out -3s infinite alternate;
 }
 
 .bird {
@@ -168,13 +174,23 @@
   visibility: hidden;
 }
 
-@keyframes glide {
+@keyframes ride {
   from {
-    transform: translate3d(0, 0, 0) rotate(0deg);
+    translate: -0.15% 0.9%;
   }
 
   to {
-    transform: translate3d(0.4%, -1.6%, 0) rotate(-0.7deg);
+    translate: 0.15% -0.9%;
+  }
+}
+
+@keyframes pitch {
+  from {
+    rotate: 0.3deg;
+  }
+
+  to {
+    rotate: -0.45deg;
   }
 }
 

@@ -1,0 +1,11 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Seven short horizontal brush strokes of black sumi ink on plain white paper, stacked one above another with wide white space between them. Each is a single confident stroke from a soft round calligraphy brush, each a slightly different length and weight: the brush lands loaded and pressed at the left, travels right with a slight natural waver, and lifts into a tapering dry-brush flick at the right end where the bristles split into fine flying-white streaks. Ragged paper-tooth edges, a faint bleed into the fibres. Pure white background, no text, no seal, no signature, no shadows, no paper texture, flat even lighting, photographed straight from above, high contrast, crisp detail.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [],
+  "made": "20261005-133605"
+}

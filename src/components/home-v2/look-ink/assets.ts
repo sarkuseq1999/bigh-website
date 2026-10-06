@@ -24,13 +24,15 @@ export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
 };
 
 /** The opening crane's wingbeat (round 5): the same painting brought to life by a Kling loop, cut
- *  out frame by frame like the still (build_crane_flight.py). An animated webp: the glide pose
- *  is held, then one slow wingbeat, forever. `small` is for phones. v3 (October 5, round 8): a
- *  new take in which the black flight feathers stay solid ink through the beat (the old one
- *  turned into an outline drawing mid-beat); the same weight as v2. */
+ *  out frame by frame like the still (build_crane_flight.py). An animated webp. `small` is for
+ *  phones. v3 (October 5, round 8): a take in which the black flight feathers stay solid ink
+ *  through the beat. v4 (October 5): no held pose, one wingbeat a breath (2.4 s), and the whole
+ *  bird lifts as its wings press down and settles as they rise. v4-twice (Mo, October 5: "fly
+ *  like 2 times, then stop"): two beats, then the picture stops for good on the still's pose
+ *  (its loop count is 2 and its last frame is the first pose again). */
 export const craneFlight = {
-  src: `${I}/crane-flight-v3.webp`,
-  small: `${I}/crane-flight-v3-600.webp`,
+  src: `${I}/crane-flight-v4-twice.webp`,
+  small: `${I}/crane-flight-v4-twice-600.webp`,
 };
 
 /** The crane at rest, standing on the page's last brush stroke (ink). v2: painted again in the

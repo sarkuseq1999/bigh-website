@@ -22,9 +22,6 @@
   /* One breathing rhythm for every motion on the page: a slow exhale. */
   --breath: 2.4s;
   --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
-  --chrome-bg: color-mix(in srgb, #f8f3ea 93%, transparent);
-  --chrome-ink: #0c0b0a;
-  --chrome-line: rgba(28, 27, 25, 0.14);
   --footer-bg: transparent;
   --footer-ink: #0c0b0a;
   --footer-muted: #514e48;
@@ -65,72 +62,6 @@
   --dialog-bg: #f8f3ea;
   --dialog-ink: #0c0b0a;
   background: #f8f3ea;
-}
-
-/* The comp's header: a taller bar, navigation at the comp's size (it scales with the window on
-   desktop, as the comp does, and never drops under 18 px), no divider before Log in, and the
-   hairline rule under it. */
-.look :global(header):has(:global(#home-navigation)) {
-  --header-h: clamp(80px, 5.86vw, 90px);
-}
-
-.look :global(#home-navigation) {
-  font-weight: 450;
-}
-
-/* The bar (wider than 1100 px; under that the links are the menu, sized in chrome.module.css). */
-@media (min-width: 1101px) {
-  .look :global(#home-navigation) {
-    gap: clamp(18px, 2vw, 32px);
-    font-size: clamp(18px, 1.302vw, 20px);
-  }
-
-  .look :global(#home-navigation) > div {
-    border-left-color: transparent;
-    margin-left: 0;
-    padding-left: 0;
-  }
-
-  .look :global(#home-navigation) > div > div {
-    gap: clamp(18px, 2vw, 32px);
-    font-size: clamp(18px, 1.302vw, 20px);
-  }
-}
-
-.look :global(#home-navigation) > div button {
-  border-color: var(--ink);
-}
-
-/* Navigation: on a mouse, an ink underline draws under the link you point at (the current page
-   keeps its own). Log in is one of the links. */
-@media (hover: hover) and (min-width: 1101px) {
-  .look :global(#home-navigation) > :is(a, button):hover {
-    opacity: 1;
-  }
-
-  .look :global(#home-navigation) > div a:hover {
-    text-decoration: none;
-  }
-
-  .look :global(#home-navigation) > :is(a, button)::after,
-  .look :global(#home-navigation) > div a::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 8px;
-    height: 2px;
-    border-radius: 2px;
-    background: currentColor;
-    scale: 0 1;
-    transform-origin: left center;
-    transition: scale 0.5s var(--ease);
-  }
-
-  .look :global(#home-navigation) > :is(a, button):is(:hover, [aria-current="page"])::after,
-  .look :global(#home-navigation) > div a:hover::after {
-    scale: 1 1;
-  }
 }
 
 /* The window's own scrollbar, in ink on paper. */
@@ -199,11 +130,6 @@
 /* Ink paintings with their paper divided out: ink on the page's own paper. */
 .look .ink {
   mix-blend-mode: multiply;
-}
-
-/* The comp's logo is smaller than the shared default. */
-.look :global(header) a[href]:first-child:has(img) {
-  width: clamp(90px, 6.4vw, 98px);
 }
 
 /* Pill buttons from the comp: a solid sumi pill and a hairline outlined one. */
