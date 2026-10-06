@@ -53,26 +53,78 @@ Pieces:
 - **Sheets**: the homepage's dialog sheet (paper sheet on an ink wash) for anything a page opens.
 - **Motion hooks**: `useMotionOk`, `useArrival`, `useInkFill`, settle.
 
-## About (stage 1)
+## About (stage 1), redesigned October 6: "The name, on a folded letter"
 
-Mockup: `about.jpg`. The page keeps its sections and words.
+The first ink About (built October 5 from `about.jpg`, commits up to c30a489) is replaced. Mo,
+October 6: it was "a copycat" of the homepage. Pages share the theme (paper, ink, one gold leaf,
+type, header, footer and its crane), but each page has its own layout, paintings and signature
+moment. Of three concepts (A the name written by hand, B a painting album, C one drop of ink) Mo
+asked for a blend and approved it ("1", October 6): mockup
+`reference/ink-pages/mockups/about-d.png`. The page keeps its words (`about-content.ts`).
 
-- Opening: "About BiGH", then "Be in Good Health." at display-opening scale. The acronym treatment
-  stays: B, i, G and H in sumi ink, the other letters in ink grey (the mockup got this partly wrong;
-  build it right). Beside it the ink mitochondrion (the homepage's cell painting) in place of the
-  glass render.
-- The glass cell's charge becomes gold leaf: the cell blooms with its leaf drained of colour, and
-  the leaf comes up over one and a half breaths once the bloom is done (the page opening is the
-  charge). Light crosses the leaf as on the homepage. The count-up figures stay, as large thin
-  numerals on hairlines.
-- The brush line leaves the cell and runs down the left; stations: Our purpose, Our scientific
-  roots, Our experience, Our promise.
-- Our scientific roots: Dr. Liu's real photo on the paper mat with the ink halo (the photo mount
-  shadow). Our promise: four promises, each under a short brush-stroke rule; the greetings stay.
-- Curious about the science?: the page's centred pause with the homepage's inkstone painting above
-  it. It is the same invitation (Ask BiGH Science) as the homepage's pause, so it keeps the same
-  picture.
-- Removed: `look-glass` and `look-glass-scene` (WebGL glass), the glass renders.
+**Idea.** The page is one letter on slightly aged paper, folded and opened again. BiGH is written
+large by hand at the top; each brushed letter opens one part of the page: **B**e (our purpose),
+**i**n (our scientific roots), **G**ood (our experience and our promise), **H**ealth (Ask BiGH
+Science).
+
+**Paper and folds (this page only).** The page's paper is the shared rice paper aged a little:
+warmer, softly darker towards the sheet's sides, a few very faint age spots; never dirty. Drawn
+in CSS on the page root, so it stays crisp at every size. The folds are CSS too: a horizontal
+crease (a soft shadow beside a thin highlight) across the full width between parts, and from
+900px up one vertical crease down the middle of the sheet. Phones keep the horizontal creases
+only: their one column has no two sides. The folds replace the brush line on this page (no brush
+line, no stations: that is the homepage's signature). The header turns to this paper once
+scrolled.
+
+**Parts, top to bottom** (desktop; phones stack each part in one column):
+
+1. Opening, centred across the fold: the painted word BiGH (one painting, a calm, steady
+   calligrapher's brush, never wild; the dot of the i in gold leaf), then "About BiGH", "Be in Good
+   Health." (the acronym treatment stays) and the lead. Under them one long horizontal grey
+   watercolor band feathering out to both edges of the sheet.
+2. **Be**, our purpose. Left half: the painted B with "e" in the sans. Right half: the label "Our
+   purpose", the two lines, the mission.
+3. **in**, our scientific roots. The sides swap: left half the label, title, text and "Meet our
+   scientists"; right half the painted i (gold-leaf dot) with "n", and Dr. Liu's real photo on its
+   paper mat resting on a soft pool of grey watercolor (the photo mount shadow stays).
+4. **Good**, our experience. Left half: the painted G with "ood", and below it a painted tree-trunk
+   cross-section: at least 20 organic rings, one ring about ten from the bark in gold leaf. Its
+   meaning, told in the alt text: the rings inside the gold one are the formula's years before
+   BiGH began in 2016. Right half: label, "Our flagship formula is older than BiGH." and the three
+   figures (280+, 2016, 20+) as large thin numerals on hairlines, counting up as today. Then, across
+   both halves, our promise: label, "What you can count on." and the four promises in a row, each
+   under a small round watercolor dot, each dot a different tone from deep ink to pale; the
+   greetings stay under the fourth.
+5. **Health**, centred across the fold: a very big painted H (about the height of the opening
+   word) with "ealth", clear paper under it, then "Curious about the science?", the text, Ask BiGH
+   Science (solid pill, opens the sheet) and Explore our products (outlined). Then the shared
+   footer with the crane.
+
+The brushed chapter words spell the brand's name, like the logo: they stay in English in every
+language and are hidden from screen readers (`aria-hidden`); each part's heading carries the
+meaning in the reader's language. Section ids stay (`purpose`, `roots`, `experience`, `promise`,
+`closing`) so deep links keep working.
+
+**Signature moment: the name writes itself.** On arrival the four letters of BiGH are painted in
+one after another, each revealed along its strokes by a feathered brush mask, within one breath
+(2.4s, the shared ease); then the i's gold dot comes up. The watercolor band spreads out from the
+middle as the name finishes. Each chapter letter writes itself the same way when it reaches the
+reading line; the tree's rings draw outward from the heart and the gold ring lights last; the
+pool under Dr. Liu and the four dots bloom through the shared ink-blot mask, the dots one after
+another. Reduced motion: everything complete and still from the first paint.
+
+**Paintings** (GPT Image 2.5, paper divided out as for the homepage's paintings; gold leaf as
+masks): the word BiGH; the letters B, i, G and H alone in the same hand (cropped from the word if
+that is clean, else painted to match it); the watercolor band; the pool; the tree rings; a sheet of
+four dots. About nine pictures, about 25 jobs with retakes, about $1.25, inside the $5 Mo gave on
+October 6. Honesty tag "Illustration" on the tree rings (it pictures something); the letters,
+band, pool and dots are brushwork like the brush line and carry none. Mockup weak spots to fix in
+the real paintings: the i of "in" must read as a letter, not a blot; the rings must look painted,
+not machine-drawn.
+
+**Removed from About:** the ink mitochondrion and its gold charge, the inkstone, the halo, the
+brush line and its stations (`about-route.ts`), and their styles. `InkPage` takes the brush route
+as optional so a page can have none. The homepage must not change (the stage 0 gate applies).
 
 ## Product template and NuriCell (stage 2)
 
@@ -150,10 +202,10 @@ New paintings, made the way the homepage's were: GPT Image 2.5 through the Higgs
 gold masks cut with `reference/home-v2/ink/build_assets.py`. Bottles and Dr. Liu's photo are never
 generated. Ledger per stage in `reference/ink-pages/spend.md`.
 
-Estimated new paintings: about 24 (About 0, NuriCell 3: lantern, capsule texture, day dots;
-four products about 10; Science about 9; a few spares), with retakes about 70 pictures, about
-$3.50. No video is planned; motion is
-code. **Spend cap needs Mo's approval before stage 1** (asking for $5).
+Estimated new paintings: about 33 (About about 9, see its section; NuriCell 3: lantern, capsule
+texture, day dots; four products about 10; Science about 9; a few spares), with retakes about 95
+pictures, about $4.75. No video is planned; motion is code. Mo approved $5 for stage 1 on October
+5 and another $5 for the About redesign on October 6; later stages ask again.
 
 ## Words and languages
 
