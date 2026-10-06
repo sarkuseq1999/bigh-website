@@ -28,10 +28,12 @@ import styles from "./nav-inscription.module.css";
 // scroll.
 // Products and Science let down a sheet of rice paper from under the bar, the way a hanging scroll
 // unrolls: revealed top to bottom, its leading edge torn rice paper, over a faint ink wash on the
-// page. What is on it is centred under the bar. Products is a showroom (round 4): the five names
-// large at the left, each a link, and the bottle of the one pointed at (or reached by keyboard)
-// standing large at the right. Moving from one drop-down to the other keeps the scroll down and
-// changes only what is written on it. On a narrow window: "Menu", the mark, the
+// page. What is on it is centred under the bar. Both are showrooms, two pages of one book: the
+// names large at the left, each a link, and the picture of the one pointed at (or reached by
+// keyboard) standing large at the right, in the same place on both (round 4: the five products and
+// their bottles; round 5: the Science page's four parts, Dr. Liu's print and three ink paintings
+// set at one weight). Moving from one drop-down to the other keeps the scroll down and changes only
+// what is written on it. On a narrow window: "Menu", the mark, the
 // language; the menu is a full-height scroll let down the same way.
 // Each drop-down's links follow its button in the page, so Tab goes from the button into them.
 
@@ -83,53 +85,72 @@ export function NavInscription({
     }
   }
 
-  // Products is a showroom: the five names, and the bottle of the one pointed at (or reached by
-  // keyboard) standing large beside them; NuriCell first. `moved` is set once the visitor has
-  // changed the bottle, so from then on it only cross-fades (it settled in with the scroll). Once
-  // the scroll has rolled back up it is NuriCell again for the next time.
-  const [showroom, setShowroom] = useState({ pick: 0, moved: false });
-  const { pick, moved } = showroom;
-  const picked = navProducts[pick];
-  const show = (i: number) =>
-    setShowroom((now) => (now.pick === i ? now : { pick: i, moved: true }));
-  // A pointer shows a product once it rests on its name (about a tenth of a second), so passing
-  // over other names on the way across to "Discover" does not change the bottle.
-  const pointTimer = useRef<number | undefined>(undefined);
-  const pointAt = (i: number) => {
-    window.clearTimeout(pointTimer.current);
-    pointTimer.current = window.setTimeout(() => show(i), 110);
-  };
-  const pointAway = () => window.clearTimeout(pointTimer.current);
-  useEffect(() => {
-    if (panel) return;
-    window.clearTimeout(pointTimer.current);
-    const timer = window.setTimeout(() => setShowroom({ pick: 0, moved: false }), 420);
-    return () => window.clearTimeout(timer);
-  }, [panel]);
+  // Both drop-downs are showrooms (rounds 4 and 5), two pages of one book: the names large at the
+  // left, and the picture of the one pointed at (or reached by keyboard) standing large at the
+  // right; the first shown first.
+  const products = useShowroom(panel !== null);
+  const science = useShowroom(panel !== null);
+  const product = navProducts[products.pick];
+  const part = navScience[science.pick];
 
   // The narrow window's menu: one of its two parts (Products, Science) is unfolded at a time.
   // On a tablet (700px and wider) it opens with Products unfolded: the five fit in one row.
-  const [part, setPart] = useState<NavPanelId | null>(null);
+  const [fold, setFold] = useState<NavPanelId | null>(null);
   const [wasOpen, setWasOpen] = useState(menuOpen);
   if (menuOpen !== wasOpen) {
     setWasOpen(menuOpen);
-    if (!menuOpen) setPart(null);
+    if (!menuOpen) setFold(null);
   }
 
   // The scroll is as long as the taller of the two drop-downs, so it never changes length when
-  // you move from one to the other.
+  // you move from one to the other. And the two showrooms share one page layout: their names
+  // columns are as wide, and their rows as tall, as the larger of the two, so the names start on
+  // the same edge and line, the pictures stand in the same place, and the links under them share
+  // a line. Measured from what is written (each name, link and stand at its own size), never from
+  // the stretched columns, so it follows the window both ways.
   const productsInner = useRef<HTMLDivElement>(null);
   const scienceInner = useRef<HTMLDivElement>(null);
-  const [panelHeight, setPanelHeight] = useState(0);
+  const [layout, setLayout] = useState({ panel: 0, row: 0, names: 0 });
   useEffect(() => {
     const inners = [productsInner.current, scienceInner.current].filter(
       (node): node is HTMLDivElement => Boolean(node),
     );
-    const measure = () =>
-      setPanelHeight(Math.ceil(Math.max(0, ...inners.map((node) => node.offsetHeight))));
+    const columns = inners.flatMap((inner) => [
+      ...inner.querySelectorAll<HTMLElement>("[data-showroom]"),
+    ]);
+    const pieces = columns.flatMap((column) => [
+      ...column.querySelectorAll<HTMLElement>(":scope > *, :scope li > a"),
+    ]);
+    const outer = (node: Element) => {
+      const style = getComputedStyle(node);
+      return (
+        node.getBoundingClientRect().height +
+        parseFloat(style.marginTop) +
+        parseFloat(style.marginBottom)
+      );
+    };
+    const measure = () => {
+      const row = Math.max(
+        0,
+        ...columns.map((column) => [...column.children].reduce((sum, c) => sum + outer(c), 0)),
+      );
+      const names = Math.max(
+        0,
+        ...columns
+          .filter((column) => column.dataset.showroom === "names")
+          .flatMap((column) => [...column.querySelectorAll<HTMLElement>(":scope > a, li > a")])
+          .map((link) => Math.ceil(link.getBoundingClientRect().width)),
+      );
+      const panel = Math.max(0, ...inners.map((node) => node.offsetHeight));
+      setLayout((now) =>
+        now.panel === Math.ceil(panel) && now.row === Math.ceil(row) && now.names === names
+          ? now
+          : { panel: Math.ceil(panel), row: Math.ceil(row), names },
+      );
+    };
     measure();
     const observer = new ResizeObserver(measure);
-    inners.forEach((node) => observer.observe(node));
+    [...inners, ...pieces].forEach((node) => observer.observe(node));
     document.fonts?.ready.then(measure);
     return () => observer.disconnect();
   }, []);
@@ -166,7 +187,13 @@ export function NavInscription({
       data-unrolled={panel ? "" : undefined}
       data-swap={swap ? "" : undefined}
       data-menu={menuOpen ? "" : undefined}
-      style={{ "--insc-panel-h": `${panelHeight}px` } as CSSProperties}
+      style={
+        {
+          "--insc-panel-h": `${layout.panel}px`,
+          "--insc-row-h": `${layout.row}px`,
+          "--insc-names-w": `${layout.names}px`,
+        } as CSSProperties
+      }
       onBlur={nav.onHeaderBlur}
       onFocus={reach}
     >
@@ -194,7 +221,7 @@ export function NavInscription({
             onPointerDown={reach}
             onClick={() => {
               if (!menuOpen) {
-                setPart(window.matchMedia("(min-width: 700px)").matches ? "products" : null);
+                setFold(window.matchMedia("(min-width: 700px)").matches ? "products" : null);
               }
               setMenuOpen(!menuOpen);
             }}
@@ -219,86 +246,53 @@ export function NavInscription({
               data-shown={shown === "products" ? "" : undefined}
             >
               <div ref={productsInner} className={styles.panelInner}>
-                <div className={styles.showroom}>
-                  <div className={styles.names}>
-                    <ul className={styles.nameList}>
-                      {navProducts.map((product, i) => (
-                        <li key={product.slug} style={{ "--i": i } as CSSProperties}>
-                          <Link
-                            href={product.href}
-                            className={styles.nameLink}
-                            data-shown={pick === i ? "" : undefined}
-                            onPointerEnter={(event) => {
-                              if (event.pointerType === "mouse") pointAt(i);
-                            }}
-                            onPointerLeave={pointAway}
-                            onFocus={(event) => {
-                              if (event.currentTarget.matches(":focus-visible")) show(i);
-                            }}
-                            onClick={() => closePanel()}
-                          >
-                            <span className={styles.nameText}>{copy(product.name)}</span>
-                            <span className={styles.nameFocus}>{copy(product.focus)}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                    <Link
-                      href={navProductsIntro.allLink}
-                      className={styles.more}
-                      onClick={() => closePanel()}
-                    >
-                      {copy(navProductsIntro.title)}
-                      <ArrowRight size={18} aria-hidden="true" />
-                    </Link>
-                  </div>
-                  <div className={styles.stage} data-moved={moved ? "" : undefined}>
-                    <Link
-                      href={picked.href}
-                      className={styles.stageStand}
-                      tabIndex={-1}
-                      aria-hidden="true"
-                      onClick={() => closePanel()}
-                    >
-                      <Image
-                        key={`pool-${pick}`}
-                        className={styles.stagePool}
-                        src="/images/home-v2/ink/pool.webp"
-                        alt=""
-                        width={900}
-                        height={482}
-                        sizes="240px"
-                        loading={loading}
-                      />
-                      <Image
-                        className={styles.stageContact}
-                        src="/images/home-v2/ink/pool-foot.webp"
-                        alt=""
-                        width={600}
-                        height={170}
-                        sizes="200px"
-                        loading={loading}
-                      />
-                      {navProducts.map((product, i) => (
-                        <Image
-                          key={product.slug}
-                          className={styles.big}
-                          data-shown={pick === i ? "" : undefined}
-                          src={product.bottle.src}
-                          alt=""
-                          width={1230}
-                          height={1278}
-                          sizes="(min-width: 1652px) 366px, (min-width: 1218px) 22.2vw, 270px"
-                          loading={loading}
-                        />
-                      ))}
-                    </Link>
-                    <Link href={picked.href} className={styles.more} onClick={() => closePanel()}>
-                      {copy("Discover {name}", { name: copy(picked.name) })}
-                      <ArrowRight size={18} aria-hidden="true" />
-                    </Link>
-                  </div>
-                </div>
+                <Showroom
+                  room={products}
+                  items={navProducts.map((item) => ({
+                    href: item.href,
+                    name: copy(item.name),
+                    line: copy(item.focus),
+                  }))}
+                  more={{ href: navProductsIntro.allLink, text: copy(navProductsIntro.title) }}
+                  link={{
+                    href: product.href,
+                    text: copy("Discover {name}", { name: copy(product.name) }),
+                  }}
+                  onGo={() => closePanel()}
+                >
+                  <Image
+                    key={`pool-${products.pick}`}
+                    className={styles.stagePool}
+                    src="/images/home-v2/ink/pool.webp"
+                    alt=""
+                    width={900}
+                    height={482}
+                    sizes="240px"
+                    loading={loading}
+                  />
+                  <Image
+                    className={styles.stageContact}
+                    src="/images/home-v2/ink/pool-foot.webp"
+                    alt=""
+                    width={600}
+                    height={170}
+                    sizes="200px"
+                    loading={loading}
+                  />
+                  {navProducts.map((item, i) => (
+                    <Image
+                      key={item.slug}
+                      className={styles.big}
+                      data-shown={products.pick === i ? "" : undefined}
+                      src={item.bottle.src}
+                      alt=""
+                      width={1230}
+                      height={1278}
+                      sizes="(min-width: 1652px) 366px, (min-width: 1218px) 22.2vw, 270px"
+                      loading={loading}
+                    />
+                  ))}
+                </Showroom>
               </div>
             </div>
             <button
@@ -317,50 +311,51 @@ export function NavInscription({
               data-shown={shown === "science" ? "" : undefined}
             >
               <div ref={scienceInner} className={styles.panelInner}>
-                <h2 className={styles.panelTitle}>{copy(navScienceIntro.title)}</h2>
-                <ul className={styles.gallery}>
-                  {navScience.map((item, i) => (
-                    <li key={item.href} style={{ "--i": i } as CSSProperties}>
-                      <Link href={item.href} className={styles.part} onClick={() => closePanel()}>
-                        <span className={styles.frame}>
-                          {item.image.photo ? (
-                            <span className={styles.mat}>
-                              <Image
-                                src={item.image.src}
-                                alt=""
-                                width={item.image.width}
-                                height={item.image.height}
-                                sizes="120px"
-                                loading={loading}
-                                className={styles.photo}
-                              />
-                            </span>
-                          ) : (
-                            <Image
-                              src={item.image.src}
-                              alt=""
-                              fill
-                              sizes="280px"
-                              loading={loading}
-                              className={styles.painting}
-                              data-painting={item.image.src.split("/").pop()?.split(".")[0]}
-                            />
-                          )}
-                        </span>
-                        <span className={styles.partLabel}>{copy(item.label)}</span>
-                        <span className={styles.partCaption}>{caption(item.caption)}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href={navScienceIntro.href}
-                  className={styles.more}
-                  onClick={() => closePanel()}
+                <Showroom
+                  room={science}
+                  items={navScience.map((item) => ({
+                    href: item.href,
+                    name: copy(item.label),
+                    line: caption(item.caption),
+                  }))}
+                  more={{ href: navScienceIntro.href, text: copy(navScienceIntro.link) }}
+                  link={{ href: part.href, text: copy(part.link) }}
+                  onGo={() => closePanel()}
                 >
-                  {copy(navScienceIntro.link)}
-                  <ArrowRight size={18} aria-hidden="true" />
-                </Link>
+                  {navScience.map((item, i) =>
+                    item.image.plate === "print" ? (
+                      <span
+                        key={item.href}
+                        className={styles.plate}
+                        data-plate="print"
+                        data-shown={science.pick === i ? "" : undefined}
+                      >
+                        <Image
+                          className={styles.photo}
+                          src={item.image.src}
+                          alt=""
+                          width={item.image.width}
+                          height={item.image.height}
+                          sizes="(min-width: 1652px) 192px, (min-width: 1218px) 11.6vw, 140px"
+                          loading={loading}
+                        />
+                      </span>
+                    ) : (
+                      <Image
+                        key={item.href}
+                        className={styles.plate}
+                        data-plate={item.image.plate}
+                        data-shown={science.pick === i ? "" : undefined}
+                        src={item.image.src}
+                        alt=""
+                        width={item.image.width}
+                        height={item.image.height}
+                        sizes="(min-width: 1652px) 470px, (min-width: 1218px) 28.4vw, 350px"
+                        loading={loading}
+                      />
+                    ),
+                  )}
+                </Showroom>
               </div>
             </div>
           </div>
@@ -403,8 +398,8 @@ export function NavInscription({
           <SheetPart
             id="products"
             label={copy("Products")}
-            open={part === "products"}
-            onToggle={() => setPart(part === "products" ? null : "products")}
+            open={fold === "products"}
+            onToggle={() => setFold(fold === "products" ? null : "products")}
           >
             <div className={styles.sheetShelfWrap}>
               <span className={styles.sheetGround} aria-hidden="true" />
@@ -441,8 +436,8 @@ export function NavInscription({
           <SheetPart
             id="science"
             label={copy("Science")}
-            open={part === "science"}
-            onToggle={() => setPart(part === "science" ? null : "science")}
+            open={fold === "science"}
+            onToggle={() => setFold(fold === "science" ? null : "science")}
           >
             <ul className={styles.sheetList}>
               {navScience.map((item) => (
@@ -491,6 +486,96 @@ export function NavInscription({
         </div>
       </div>
     </header>
+  );
+}
+
+/** Which of a showroom's names is shown: the one a pointer rests on (about a tenth of a second,
+ *  so passing over other names on the way across to the link under the picture changes nothing)
+ *  or the keyboard reaches. `moved` is set once the visitor has changed it, so from then on the
+ *  picture only cross-fades (it settled in with the scroll). Once the scroll has rolled back up
+ *  it is the first again for the next time. */
+function useShowroom(open: boolean) {
+  const [state, setState] = useState({ pick: 0, moved: false });
+  const timer = useRef<number | undefined>(undefined);
+  const show = (i: number) => setState((now) => (now.pick === i ? now : { pick: i, moved: true }));
+  const pointAt = (i: number) => {
+    window.clearTimeout(timer.current);
+    timer.current = window.setTimeout(() => show(i), 110);
+  };
+  const pointAway = () => window.clearTimeout(timer.current);
+  useEffect(() => {
+    if (open) return;
+    window.clearTimeout(timer.current);
+    const reset = window.setTimeout(() => setState({ pick: 0, moved: false }), 420);
+    return () => window.clearTimeout(reset);
+  }, [open]);
+  return { ...state, show, pointAt, pointAway };
+}
+
+/** One drop-down as a showroom: the names large at the left, each a link with its line under it,
+ *  and the link to all of them; at the right the shown one's picture (the children, stacked) with
+ *  its own link under it, on the same line. */
+function Showroom({
+  room,
+  items,
+  more,
+  link,
+  onGo,
+  children,
+}: {
+  room: ReturnType<typeof useShowroom>;
+  items: { href: string; name: string; line: string }[];
+  more: { href: string; text: string };
+  link: { href: string; text: string };
+  onGo: () => void;
+  children: ReactNode;
+}) {
+  return (
+    <div className={styles.showroom}>
+      <div className={styles.names} data-showroom="names">
+        <ul className={styles.nameList}>
+          {items.map((item, i) => (
+            <li key={item.href} style={{ "--i": i } as CSSProperties}>
+              <Link
+                href={item.href}
+                className={styles.nameLink}
+                data-shown={room.pick === i ? "" : undefined}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === "mouse") room.pointAt(i);
+                }}
+                onPointerLeave={room.pointAway}
+                onFocus={(event) => {
+                  if (event.currentTarget.matches(":focus-visible")) room.show(i);
+                }}
+                onClick={onGo}
+              >
+                <span className={styles.nameText}>{item.name}</span>
+                <span className={styles.nameFocus}>{item.line}</span>
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <Link href={more.href} className={styles.more} onClick={onGo}>
+          {more.text}
+          <ArrowRight size={18} aria-hidden="true" />
+        </Link>
+      </div>
+      <div className={styles.stage} data-showroom="stage" data-moved={room.moved ? "" : undefined}>
+        <Link
+          href={link.href}
+          className={styles.stageStand}
+          tabIndex={-1}
+          aria-hidden="true"
+          onClick={onGo}
+        >
+          {children}
+        </Link>
+        <Link href={link.href} className={styles.more} onClick={onGo}>
+          {link.text}
+          <ArrowRight size={18} aria-hidden="true" />
+        </Link>
+      </div>
+    </div>
   );
 }
 

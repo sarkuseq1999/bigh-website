@@ -577,32 +577,18 @@
   text-align: center;
 }
 
-.root .panelTitle {
-  margin: 0;
-  color: var(--ink);
-  font-family: var(--display-font);
-  font-size: clamp(30px, 2.8vw, 42px);
-  font-weight: var(--display-weight, 500);
-  line-height: 1.12;
-  letter-spacing: -0.022em;
-  text-wrap: balance;
-}
-
-.root .panelTitle:is(:lang(ko), :lang(ja), :lang(zh)) {
-  line-height: 1.22;
-  letter-spacing: -0.01em;
-  word-break: keep-all;
-}
-
-/* Products: a showroom (round 4; Timeline's pattern in the homepage's language). The five names
-   large at the left in the headline voice, each a link with its focus line under it: they are
-   the targets. At the right the shown product's bottle stands large on its gathered pool, with
-   "Discover <name>" under it. The pair is centred under the bar, as everything on the scroll. */
+/* Both drop-downs are showrooms (rounds 4 and 5; Timeline's pattern in the homepage's language),
+   two pages of one book. The names large at the left in the headline voice, each a link with its
+   line under it: they are the targets. At the right the shown one's picture stands large, with its
+   link under it on the same line as the link under the names. The pair is centred under the bar,
+   as everything on the scroll. The two share one page layout (measured in the component): the
+   names column as wide and the row as tall as the larger of the two, so moving from one to the
+   other the names start on the same edge and line and the picture stands in the same place. */
 .showroom {
   display: grid;
   grid-template-columns: minmax(0, max-content) minmax(0, max-content);
+  grid-template-rows: minmax(var(--insc-row-h, 0px), auto);
   justify-content: center;
-  align-items: center;
   column-gap: clamp(72px, 9vw, 168px);
   width: 100%;
   text-align: start;
@@ -610,7 +596,9 @@
 
 .names {
   display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
   justify-items: start;
+  min-width: var(--insc-names-w, 0px);
 }
 
 .nameList {
@@ -667,6 +655,7 @@
 }
 
 .root .names > a.more[href] {
+  align-self: end;
   margin-top: clamp(10px, 1.2vw, 18px);
 }
 
@@ -788,67 +777,68 @@
   transition: translate 0.6s var(--ease);
 }
 
-/* Science: four parts, each a painting, its name and its line. */
-.gallery {
-  display: flex;
-  justify-content: center;
-  gap: clamp(16px, 2.2vw, 40px);
-  margin: clamp(26px, 2.4vw, 38px) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.root .gallery a.part[href] {
-  display: grid;
-  justify-items: center;
-  align-content: start;
-  width: clamp(200px, 15vw, 236px);
-  padding-bottom: 8px;
-  border-radius: 6px;
-  color: inherit;
-}
-
-/* The frame never moves or fades as a whole: that would isolate its painting's multiply and show
-   the painting's white paper as a box until it stopped. Its painting (or print) settles itself. */
-.frame {
-  position: relative;
-  display: block;
-  width: 100%;
-  height: calc(clamp(158px, 11.6vw, 182px) - 6px);
-}
-
-.painting {
-  object-fit: contain;
-  mix-blend-mode: multiply;
-  transition:
-    opacity 0.6s var(--ease),
-    scale 0.6s var(--ease);
-}
-
-/* The reading still life is tall: its table, book and cup, the rest of the room dissolving. */
-.painting[data-painting="story-reading-v2"] {
-  object-fit: cover;
-  object-position: 50% 80%;
-  mask-image: radial-gradient(closest-side, #000 58%, transparent);
-}
-
-/* Dr. Liu's real photograph: a print on a paper mat, never multiplied, centred in its frame
-   (without a translate, which the settle uses; and at the photograph's own proportions). */
-.mat {
+/* Science's pictures (round 5): Dr. Liu's real photograph and three ink paintings, at one weight.
+   Each stands centred in the same stand as the bottles, in the same place, sized to fill about
+   the room a bottle does: the print on its paper mat at 80% of the stand's height (never
+   multiplied; the one sanctioned mount shadow), the paintings (their paper divided out,
+   multiplied) a little wider than the stand (--over on each side), the inkstone most, for the
+   paper round it. No halo: tried behind all four, it read as a grey disc and muddied the cell.
+   Stacked. The shown one comes in over the last (0.5s, front-loaded, as the bottles do), but the
+   last one fades out at the same time instead of staying whole under it: they are ink on the
+   same paper, so holding it would only double the two paintings. The print always lies on top
+   (a real print over the paintings, as on a table) and goes fastest (0.16s): a painting coming in
+   multiplied over a fading print would stand on a grey card; under it, the photograph simply
+   thins away over the painting. Centred by their insets, never a translate (the settle moves
+   them). */
+.plate {
+  --over: 0%;
   position: absolute;
-  inset: 0;
+  inset: 0 calc(-1 * var(--over));
+  z-index: 1;
   display: block;
+  width: calc(100% + 2 * var(--over));
+  max-width: none;
+  height: auto;
+  margin: auto;
+  opacity: 0;
+  transition: opacity 0.35s var(--ease);
+}
+
+.plate[data-plate="print"]:not([data-shown]) {
+  transition-duration: 0.16s;
+}
+
+.plate[data-shown] {
+  z-index: 2;
+  opacity: 1;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+img.plate {
+  mix-blend-mode: multiply;
+}
+
+.plate[data-plate="cell"] {
+  --over: 4%;
+}
+
+.plate[data-plate="reading"] {
+  --over: 8%;
+}
+
+.plate[data-plate="inkstone"] {
+  --over: 14%;
+}
+
+.root .plate[data-plate="print"] {
+  z-index: 3;
   width: fit-content;
-  height: 100%;
-  margin-inline: auto;
-  padding: 7px;
+  height: 80%;
+  padding: 8px;
   background: #fbf9f4;
   box-shadow:
-    0 12px 22px -12px rgba(12, 11, 10, 0.42),
-    0 2px 5px rgba(12, 11, 10, 0.1);
-  transition:
-    opacity 0.6s var(--ease),
-    scale 0.6s var(--ease);
+    0 16px 30px -16px rgba(12, 11, 10, 0.42),
+    0 2px 6px rgba(12, 11, 10, 0.1);
 }
 
 .photo {
@@ -857,48 +847,12 @@
   height: 100%;
 }
 
-/* Pointing at a part brings its painting forward; the others ease back. */
-.gallery:has(.part:is(:hover, :focus-visible)) .painting {
-  opacity: 0.5;
-}
-
-/* The photograph eases back less: a real print, never faded to a ghost. */
-.gallery:has(.part:is(:hover, :focus-visible)) .mat {
-  opacity: 0.66;
-}
-
-.root .gallery .part:is(:hover, :focus-visible) :is(.painting, .mat) {
-  opacity: 1;
-  scale: 1.05;
-}
-
-.partLabel {
-  margin-top: 18px;
-  font-size: 20px;
-  font-weight: 450;
-  line-height: 1.3;
-  text-wrap: balance;
-}
-
-.partCaption {
-  max-width: 14em;
-  margin-top: 4px;
-  color: var(--muted);
-  font-size: 16px;
-  line-height: 1.35;
-  text-wrap: balance;
-}
-
 /* Japanese and Chinese lines break between phrases, not inside them. */
-.root
-  :is(.panelTitle, .nameFocus, .partLabel, .partCaption, .sheetProductName):is(
-    :lang(ja),
-    :lang(zh)
-  ) {
+.root :is(.nameFocus, .sheetProductName):is(:lang(ja), :lang(zh)) {
   word-break: auto-phrase;
 }
 
-.root :is(.nameFocus, .partCaption):lang(ko) {
+.root .nameFocus:lang(ko) {
   word-break: keep-all;
 }
 
@@ -934,16 +888,12 @@
 /* What is on the scroll settles as the paper reaches it. Only the pieces themselves move and fade,
    never a box around a multiplied painting or pool (that would isolate its blend). */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-unrolled]:not([data-swap])
-    .panel[data-shown]
-    :is(.panelTitle, .nameText, .nameFocus, .painting, .mat, .partLabel, .partCaption, .more) {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.nameText, .nameFocus, .more) {
     animation: insc-settle 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled]:not([data-swap])
-    .panel[data-shown]
-    :is(.nameFocus, .partLabel, .partCaption) {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .nameFocus {
     animation-delay: calc(0.24s + var(--i, 0) * 60ms);
   }
 
@@ -951,12 +901,13 @@
     animation-delay: 0.42s;
   }
 
-  /* The showroom's bottle settles with its names; once the visitor points at another product it
-     only cross-fades. */
+  /* The showroom's picture settles with its names; once the visitor points at another it only
+     cross-fades. (The picture itself moves and fades, never its stand: that would isolate the
+     paintings' multiply.) */
   .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
     .stage:not([data-moved])
-    .big[data-shown] {
+    :is(.big, .plate)[data-shown] {
     animation: insc-settle 0.9s var(--ease) 0.2s backwards;
   }
 
@@ -974,14 +925,15 @@
     animation: insc-fade 0.45s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .root[data-unrolled][data-swap]
-    .panel[data-shown]
-    :is(.panelTitle, .nameText, .nameFocus, .painting, .mat, .partLabel, .partCaption, .more) {
+  .root[data-unrolled][data-swap] .panel[data-shown] :is(.nameText, .nameFocus, .more) {
     animation: insc-rise 0.7s var(--ease) backwards;
     animation-delay: calc(var(--i, 0) * 40ms);
   }
 
-  .root[data-unrolled][data-swap] .panel[data-shown] .stage:not([data-moved]) .big[data-shown] {
+  .root[data-unrolled][data-swap]
+    .panel[data-shown]
+    .stage:not([data-moved])
+    :is(.big, .plate)[data-shown] {
     animation: insc-rise 0.7s var(--ease) backwards;
   }
 }
