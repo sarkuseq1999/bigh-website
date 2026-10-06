@@ -7,7 +7,9 @@ before every push or demo-alias change.
 
 `/about` renders `AboutInk` (`src/components/about/about-ink.tsx`, `about-ink.module.css`,
 `about-route.ts`) on the shared ink kit in `src/components/ink/` (`InkPage`, the brush line, the
-site header and footer, the Support and Ask BiGH Science sheets, `route-kit.ts`). Design: the
+site header and footer, the Support and Ask BiGH Science sheets, `route-kit.ts`). The site header is
+the menu bar Mo picked on October 5, "Inscription" (`src/components/ink/nav/`, from main; on
+/about it starts clear over the opening and marks About as the current page). Design: the
 approved mockup `reference/ink-pages/mockups/about.jpg` and `DESIGN.md`. The paintings are the
 homepage's (`src/components/home-v2/look-ink/assets`), and Dr. Liu's photo is
 `public/images/jiankang-liu.jpg`.

@@ -5,8 +5,10 @@ At 1440x900 and 390x844, then the opening at 1280x720, 1536x1000, 1024x768, 900x
 and 360x780: answers 200; no console errors or warnings (except the built site's link-prefetch
 CSS preload note, see PREFETCH_CSS); no failed requests; one h1, English
 "Be in Good Health." with lang="en"; every locked line is on the page; no WebGL canvas in the
-page; every painting multiplies onto the paper and the page wears the paper texture; the header
-marks About as the current page and its Products link goes to /#products; no sideways scrolling;
+page; every painting multiplies onto the paper and the page wears the paper texture; the menu bar
+("Inscription", #site-navigation) marks About as the current page, in the bar and in the narrow
+window's menu; it has no Home link (the mark goes home) and its Products drop-down holds the five
+product pages and "Explore our products." (/#products); no sideways scrolling;
 text at least 15px and navigation at least 18px; links and buttons in the page at least 48px tall;
 the cell sits in the first screen and never touches the title or the opening words; four
 stations; the Support and Ask BiGH Science sheets open, close and hand focus back.
@@ -53,7 +55,12 @@ stroke's aim 45 degrees or more off the painting's nearest ink); on a tablet no 
 (the first 60px level and left); the head is a round, pressed tip, wider than the run, thinning
 into it.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4,round5]
+Menu bar (October 5, 2026, the Inscription bar merged from main): from /vn/about and /kr/about
+every link of the bar and of the narrow window's menu stays in that language, About is the current
+page, and clicks on a product, "Explore our products.", a Science part, the mark and the phone
+menu's first product land on the localized pages.
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4,round5,nav_locales]
 """
 
 import math
@@ -120,8 +127,24 @@ PREFETCH_CSS = re.compile(
 )
 
 
+# A second warning is not counted, and only on the dev server: Next's dev-only LCP note for the
+# cell's painting. On /about that one file is both the opening's cell (priority: eager and
+# preloaded) and the menu bar's Science painting (lazy until the visitor reaches for the bar). Next's
+# dev check (next/dist/shared/lib/get-img-props.js) keys images by their src URL, and both render the
+# same one (/_next/image?url=...mito.webp&w=3840&q=75), so whichever re-rendered last speaks for
+# both and the cell's LCP is reported as lazy (October 5, 2026, merging the Inscription bar; seen
+# intermittently on /about, /vn/about, /kr/about). The built site never logs it. Only this exact
+# message for mito.webp is ignored, and desktop_and_phone checks that the cell really is eager and
+# preloaded.
+DEV_LCP_MITO = re.compile(
+    r'^Image with src "/images/home-v2/ink/mito\.webp" was detected as the Largest Contentful Paint \(LCP\)\.'
+)
+
+
 def counted(message):
-    return not (message.type == "warning" and PREFETCH_CSS.match(message.text))
+    if message.type != "warning":
+        return True
+    return not (PREFETCH_CSS.match(message.text) or DEV_LCP_MITO.match(message.text))
 
 
 def open_page(browser, width, height, path="/about", reduced=False, block_images=False):
@@ -274,13 +297,34 @@ def desktop_and_phone(browser):
         check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
         paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
         check(f"{tag} paper texture", "paper.webp" in paper, paper)
+        # The menu bar ("Inscription", nav-inscription.tsx): About is the current page in the bar
+        # and in the narrow window's menu; there is no Home link (the mark goes home); Products is
+        # a drop-down holding the five product pages and "Explore our products." (/#products).
         nav = page.evaluate(
-            """() => { const n = document.querySelector('#home-navigation');
+            """() => { const n = document.querySelector('#site-navigation');
+                 const sheet = document.querySelector('[data-nav-sheet]');
+                 const panel = document.querySelector('[data-nav-panel="products"]');
+                 const trigger = document.querySelector('[data-nav-trigger="products"]');
                  return { current: [...n.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()),
-                          products: [...n.querySelectorAll('a')].find(a => a.textContent.trim() === 'Products')?.getAttribute('href') }; }"""
+                          menuCurrent: [...sheet.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()),
+                          home: [...document.querySelectorAll('header a')].filter(a => a.textContent.trim() === 'Home').length,
+                          mark: n.querySelector('[data-nav-logo]')?.getAttribute('href') ?? null,
+                          productsControls: trigger?.getAttribute('aria-controls') === panel?.id,
+                          productPages: [...panel.querySelectorAll('a[href*="/products/"]')].length,
+                          productsAll: [...panel.querySelectorAll('a')].map(a => a.getAttribute('href')).filter(h => h.endsWith('/#products')) }; }"""
         )
-        check(f"{tag} header marks About", nav["current"] == ["About"], nav)
-        check(f"{tag} Products goes home", (nav["products"] or "").endswith("/#products"), nav)
+        check(f"{tag} header marks About", nav["current"] == ["About"] and nav["menuCurrent"] == ["About"], nav)
+        check(f"{tag} no Home link; the mark goes home", nav["home"] == 0 and nav["mark"] == "/", nav)
+        check(
+            f"{tag} Products opens the five products and Explore goes home",
+            nav["productsControls"] and nav["productPages"] == 5 and len(nav["productsAll"]) == 1,
+            nav,
+        )
+        if width >= 1101:
+            words = page.evaluate(
+                "[...document.querySelectorAll('#site-navigation [data-nav-trigger], #site-navigation a[href$=\"/about\"], #site-navigation button')].filter(e => e.offsetParent && ['Products', 'Science', 'About', 'Support'].includes(e.textContent.trim())).map(e => [e.textContent.trim(), parseFloat(getComputedStyle(e).fontSize)])"
+            )
+            check(f"{tag} navigation at least 18px", len(words) == 4 and all(s >= 18 for _, s in words), words)
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag} no sideways scrolling", sideways <= 0, sideways)
         small = page.evaluate(
@@ -298,10 +342,22 @@ def desktop_and_phone(browser):
         cell = page.evaluate(CELL_JS)
         check(f"{tag} cell in the first screen", cell["inFirst"], cell)
         check(f"{tag} cell clear of the words", not cell["hit"], cell)
+        # The cell is the first screen's painting: it is not lazy and the page preloads it (Next's
+        # priority image: a <link rel="preload" as="image"> in the head; see DEV_LCP_MITO).
+        eager = page.evaluate(
+            """(() => { const i = document.querySelector('[data-brush="about-cell"] img');
+                 const preload = [...document.querySelectorAll('link[rel=preload][as=image]')]
+                   .some(l => ((l.getAttribute('imagesrcset') || '') + (l.getAttribute('href') || '')).includes('mito.webp'));
+                 return { loading: i.getAttribute('loading'), preload }; })()"""
+        )
+        check(f"{tag} the cell loads eagerly and is preloaded", eager["loading"] != "lazy" and eager["preload"], eager)
         # Sheets: Support from the header (menu on a phone), Ask from the pause.
         if width < 1101:
-            page.click("button[aria-controls='home-navigation']")
-        page.click("#home-navigation button:has-text('Support')")
+            page.click("[data-nav-menu-button]")
+            page.wait_for_timeout(900)
+            page.click("[data-nav-sheet] button:has-text('Support')")
+        else:
+            page.click("#site-navigation button:has-text('Support')")
         page.wait_for_timeout(900)
         check(f"{tag} Support sheet opens", page.evaluate("!!document.querySelector('dialog[open]')"))
         page.keyboard.press("Escape")
@@ -1058,8 +1114,66 @@ def languages_layout(browser):
             context.close()
 
 
+# The menu bar keeps the visitor's language off the homepage: from /<locale>/about every link of
+# the bar and of the narrow window's menu stays in that locale, and following them (a click, as a
+# visitor would) lands on the localized page.
+NAV_LINKS_JS = """() => {
+  const n = document.querySelector('#site-navigation');
+  const sheet = document.querySelector('[data-nav-sheet]');
+  const own = (root) => [...root.querySelectorAll('a')].map(a => a.getAttribute('href')).filter(h => h.startsWith('/'));
+  return { bar: own(n), menu: own(sheet), mark: n.querySelector('[data-nav-logo]').getAttribute('href'),
+           current: [...n.querySelectorAll('[aria-current=page]')].map(a => a.getAttribute('href')),
+           menuCurrent: [...sheet.querySelectorAll('[aria-current=page]')].map(a => a.getAttribute('href')) };
+}"""
+
+
+def nav_locales(browser):
+    for locale in ["vn", "kr"]:
+        tag = f"{locale} nav"
+        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{locale}/about")
+        links = page.evaluate(NAV_LINKS_JS)
+        own = [h for h in links["bar"] + links["menu"] if h != links["mark"]]
+        stray = [h for h in own if not h.startswith(f"/{locale}/") and not h.startswith(f"/{locale}#")]
+        check(f"{tag}: every bar and menu link stays in the language", own and not stray and links["mark"] == f"/{locale}", [links["mark"], stray])
+        check(
+            f"{tag}: About is the current page",
+            links["current"] == [f"/{locale}/about"] and links["menuCurrent"] == [f"/{locale}/about"],
+            links,
+        )
+        # Clicks: the first product, "Explore our products.", a Science part, and the mark.
+        for trigger, pick, want in [
+            ("products", "first", f"/{locale}/products/nuricell"),
+            ("products", "last", f"/{locale}#products"),
+            ("science", "nth1", f"/{locale}/science#health"),
+        ]:
+            page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
+            page.click(f'[data-nav-trigger="{trigger}"]')
+            page.wait_for_timeout(1200)
+            items = page.locator(f'[data-nav-panel="{trigger}"] a')
+            item = items.first if pick == "first" else items.last if pick == "last" else items.nth(1)
+            item.click()
+            page.wait_for_url(f"**{want}", timeout=30000)
+            check(f"{tag}: {trigger} link lands on {want}", page.url.endswith(want), page.url)
+        page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
+        page.click("[data-nav-logo]")
+        page.wait_for_url(f"**/{locale}", timeout=30000)
+        check(f"{tag}: the mark goes to the language's homepage", page.url.rstrip("/").endswith(f"/{locale}"), page.url)
+        check(f"{tag}: no console errors or warnings", not errors, errors[:3])
+        context.close()
+    # The phone menu, once: a product from the menu's Products part.
+    context, page, response, errors, failed = open_page(browser, 390, 844, path="/vn/about")
+    page.click("[data-nav-menu-button]")
+    page.wait_for_timeout(1000)
+    page.click('[data-nav-sheet-toggle="products"]')
+    page.wait_for_timeout(1000)
+    page.locator("[data-nav-sheet] a[href*='/products/']").first.click()
+    page.wait_for_url("**/vn/products/nuricell", timeout=30000)
+    check("vn nav: the phone menu's product link lands on /vn/products/nuricell", page.url.endswith("/vn/products/nuricell"), page.url)
+    context.close()
+
+
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, round5, line_and_focus, languages, languages_layout]
+GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, round5, line_and_focus, languages, languages_layout, nav_locales]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:
