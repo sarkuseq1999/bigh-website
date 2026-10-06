@@ -61,6 +61,23 @@ On the real GPU (ANGLE/D3D11):
     hands focus back, the Close button closes it, Products and Science fold open one at a time,
     Support opens its sheet, a product link goes to its page.
   - tablet 834x1112: the menu opens with Products unfolded.
+  - the menu's rows and finale (round 7). Phones 390x844, 360x780, 430x932 and 360x640, and
+    Vietnamese and Japanese at 390x844 (and Vietnamese at 360x780): Products unfolds as five rows
+    and Science as four, every name written out and unclipped, every row (name, line, picture)
+    inside the window's width, nothing cut off at a side and nothing scrolling sideways; in
+    English at the three phones all of them in view at once without scrolling; rows 56px+ tall,
+    names 20px+, lines 16px+; the link under the rows keeps its arrow on its last word's line.
+    With the four words alone (780px tall and more) the crane stands whole at the foot with Log
+    in and Sign up under it, no scrolling; with Science unfolded, scrolled to the end, the same,
+    the menu scrolling on its own while the page under it stays put. Filmed frame by frame at
+    390x844: as Products unfolds the crane is carried down (never up), and folding it away brings
+    it back, never hidden, faded or jumping (no frame over 64px). Tablets: 834x1112 and 768x1024
+    open with Products unfolded (the five in a row, all in view, focus lines on one line, no
+    hollow over 120px between Support and the crane, the crane whole at the foot); 1024x768 opens
+    with the four words and the crane; Science shows its four in a row, captions on one line.
+    On the upright tablet the crane eases (never pops) as Science replaces Products and folds
+    away. Filmed at real speed on a phone: Science unfolding and the menu opening show no light
+    box round the paintings or the crane.
   - Vietnamese and Japanese at 1101 and 1280 px: the bar's three groups stay apart and inside the
     window.
   - filmed at real speed (round 2; every frame the compositor draws, plus the bar's state on every
@@ -1485,6 +1502,284 @@ def desktop(browser):
     page.close()
 
 
+# ---------------------------------------------------------------- round 7: the menu's rows and finale
+
+# Paper beside the pictures of a menu's rows (one column on a phone): left of the pictures' room
+# and in the gap between it and the words, past any painting's overhang.
+ROWGAPS = """(sel) => { const t = [...document.querySelectorAll(sel + ' [class*="sheetThumb"]')]
+  .map(e => e.getBoundingClientRect()).filter(r => r.width > 0);
+  if (!t.length) return []; return [t[0].left - 14, t[0].right + 16]; }"""
+
+# The open menu as a visitor sees it: the visible part of the sheet (from the bar to the window's
+# foot), each unfolded row (its link, picture, name and line), the four words, the link under the
+# rows (and where its arrow stands against its last word), the crane and Log in / Sign up.
+MENU = """() => {
+  const box = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, w: r.width, h: r.height }; };
+  const sheet = document.querySelector('[data-nav-sheet]');
+  const bar = document.querySelector('#site-navigation').getBoundingClientRect();
+  const fold = sheet.querySelector('[class*="sheetPart"][data-open]');
+  const rows = fold ? [...fold.querySelectorAll('[class*="sheetRow"][href]')].map(a => {
+    const name = a.querySelector('[class*="sheetRowName"]'), line = a.querySelector('[class*="sheetRowLine"]');
+    const thumb = a.querySelector('[class*="sheetThumb"]');
+    return { name: name.textContent.trim(), link: box(a), nameBox: box(name), lineBox: box(line), thumb: box(thumb),
+      nameSize: parseFloat(getComputedStyle(name).fontSize), lineSize: parseFloat(getComputedStyle(line).fontSize),
+      clipped: [name, line].some(e => e.scrollWidth > e.clientWidth + 1) };
+  }) : [];
+  const more = fold && fold.querySelector('a[class*="more"]');
+  let arrow = null;
+  if (more) {
+    const tail = more.querySelector('[class*="tail"]'); const svg = tail.querySelector('svg');
+    const range = document.createRange(); range.selectNodeContents(tail.firstChild);
+    const lines = [...range.getClientRects()]; const last = lines[lines.length - 1]; const s = svg.getBoundingClientRect();
+    arrow = { sameLine: s.top < last.bottom && s.bottom > last.top, gap: Math.round(s.left - last.right) };
+  }
+  const crane = sheet.querySelector('[class*="sheetCrane"]');
+  const words = [...sheet.querySelectorAll(':scope [class*="sheetInner"] > a, :scope [class*="sheetInner"] > button, [data-nav-sheet-toggle]')]
+    .map(e => ({ text: e.textContent.trim(), ...box(e) }));
+  const foot = [...sheet.querySelectorAll('[class*="sheetFoot"] a, [class*="sheetFoot"] button')]
+    .filter(e => e.getBoundingClientRect().width > 0).map(e => ({ text: e.textContent.trim(), ...box(e) }));
+  return { W: innerWidth, H: innerHeight, top: bar.bottom, scrollTop: sheet.scrollTop,
+    scrollable: sheet.scrollHeight - sheet.clientHeight,
+    hscroll: sheet.scrollWidth > sheet.clientWidth + 1 || document.documentElement.scrollWidth > innerWidth + 1,
+    rows, arrow, crane: box(crane), craneOpacity: +getComputedStyle(crane).opacity, words, foot,
+    pageY: scrollY, locked: document.body.style.overflow === 'hidden' };
+}"""
+
+
+def inside(b, m, pad=0):
+    """A box wholly inside the visible menu: the window's width, from the bar down to its foot."""
+    return b["left"] >= -pad and b["right"] <= m["W"] + pad and b["top"] >= m["top"] - pad and b["bottom"] <= m["H"] + pad
+
+
+def sheet_end(page):
+    page.evaluate("(() => { const s = document.querySelector('[data-nav-sheet]'); s.scrollTop = s.scrollHeight; })()")
+    page.wait_for_timeout(500)
+
+
+def sheet_top(page):
+    page.evaluate("document.querySelector('[data-nav-sheet]').scrollTop = 0")
+    page.wait_for_timeout(300)
+
+
+def unfold(page, part):
+    toggle = page.locator(f'[data-nav-sheet-toggle="{part}"]')
+    if toggle.get_attribute("aria-expanded") != "true":
+        toggle.click()
+    page.wait_for_timeout(1300)
+    sheet_top(page)
+
+
+def rows_checks(tag, m, count, full=True):
+    """Every row of an unfolded part whole on the screen: its name and line written out, unclipped,
+    inside the window's width (and, `full`, all of them in view at once without scrolling), each
+    row a 56px+ target, names 20px+ and lines 16px+; the link under them keeps its arrow with its
+    last word; nothing scrolls sideways."""
+    rows = m["rows"]
+    check(f"{tag}: {count} rows, every name written out", len(rows) == count and all(r["name"] for r in rows),
+          [r["name"] for r in rows])
+    out = [r["name"] for r in rows if not (r["nameBox"]["left"] >= 0 and r["nameBox"]["right"] <= m["W"]
+           and r["lineBox"]["left"] >= 0 and r["lineBox"]["right"] <= m["W"] and r["thumb"]["left"] >= 0
+           and r["thumb"]["right"] <= m["W"])]
+    check(f"{tag}: every row inside the window's width, nothing cut off at a side", not out, out)
+    if full:
+        hidden = [r["name"] for r in rows if not (inside(r["nameBox"], m) and inside(r["lineBox"], m) and inside(r["thumb"], m, 2))]
+        check(f"{tag}: all {count} in view at once, no scrolling (name, line and picture)", not hidden,
+              {"hidden": hidden, "H": m["H"], "last": round(rows[-1]["link"]["bottom"]) if rows else None})
+    small = [(r["name"], round(r["link"]["h"]), r["nameSize"], r["lineSize"]) for r in rows
+             if r["link"]["h"] < 56 or r["link"]["w"] < 48 or r["nameSize"] < 20 or r["lineSize"] < 16]
+    check(f"{tag}: rows 56px+ tall, names 20px+, lines 16px+", not small,
+          small or f"{min(round(r['link']['h']) for r in rows)}px rows, {rows[0]['nameSize']}px names" if rows else "none")
+    check(f"{tag}: no word clipped", not any(r["clipped"] for r in rows))
+    check(f"{tag}: the link's arrow stays with its last word", m["arrow"] and m["arrow"]["sameLine"] and 0 <= m["arrow"]["gap"] <= 16, m["arrow"])
+    check(f"{tag}: nothing scrolls sideways", not m["hscroll"])
+
+
+def finale_checks(tag, m, at_once):
+    """The crane at the foot, whole on the screen, with Log in and Sign up under it."""
+    c = m["crane"]
+    foot = {f["text"]: f for f in m["foot"]}
+    ok = inside(c, m) and c["h"] >= 120 and m["craneOpacity"] > 0.99 and foot and all(inside(f, m) for f in foot.values()) \
+        and all(f["top"] >= c["bottom"] - 4 for f in foot.values())
+    check(f"{tag}: the crane stands whole at the foot, Log in and Sign up under it" + (" (no scrolling)" if at_once else " (scrolled to the end)"),
+          ok and (not at_once or m["scrollTop"] == 0),
+          {"crane": [round(c["top"]), round(c["bottom"]), round(c["h"])], "H": m["H"], "foot": [round(f["top"]) for f in foot.values()],
+           "scrollTop": m["scrollTop"]})
+
+
+# The crane on every frame the page draws while a part folds open or shut: where its top is, its
+# height, and whether it is drawn (never hidden, never faded).
+CRANE_LOG = """() => { const c = document.querySelector('[data-nav-sheet] [class*="sheetCrane"]');
+  window.__crane = []; window.__craneOn = true;
+  const tick = () => { const r = c.getBoundingClientRect(); const s = getComputedStyle(c);
+    window.__crane.push({ t: performance.now(), top: r.top, h: r.height, o: +s.opacity, d: s.display, v: s.visibility });
+    if (window.__craneOn) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick); }"""
+
+
+def crane_motion(page, tag, act, ms=1200):
+    """Filmed frame by frame: the crane never disappears or jumps while a part folds (it eases with
+    the fold: no frame moves it more than 64px, or changes its size by more than 12px)."""
+    page.evaluate(CRANE_LOG)
+    page.wait_for_timeout(100)
+    act()
+    page.wait_for_timeout(ms)
+    page.evaluate("window.__craneOn = false")
+    log = page.evaluate("window.__crane")
+    gone = [round(e["t"] - log[0]["t"]) for e in log if e["h"] < 100 or e["o"] < 0.99 or e["d"] == "none" or e["v"] == "hidden"]
+    jumps = [round(abs(b["top"] - a["top"])) for a, b in zip(log, log[1:])]
+    sizes = [round(abs(b["h"] - a["h"]), 1) for a, b in zip(log, log[1:])]
+    moved = round(log[-1]["top"] - log[0]["top"])
+    check(
+        f"{tag}: the crane eases with the fold, never pops (every frame drawn whole, no jump)",
+        len(log) >= 30 and not gone and max(jumps) <= 64 and max(sizes) <= 12,
+        f"{len(log)} frames, moved {moved}px, largest step {max(jumps)}px, size step {max(sizes)}px, hidden at {gone[:4]}",
+    )
+    return log
+
+
+def phone_rows(browser):
+    """Round 7: the phone menu's rows and finale at three phones (and a short one), in English,
+    Vietnamese and Japanese."""
+    for loc, w, h, full in (
+        ("en", 390, 844, True), ("en", 360, 780, True), ("en", 430, 932, True), ("en", 360, 640, False),
+        ("vn", 390, 844, False), ("jp", 390, 844, False), ("vn", 360, 780, False),
+    ):
+        tag = f"phone {loc} {w}x{h}"
+        page = browser.new_page(viewport={"width": w, "height": h}, is_mobile=True, has_touch=True, device_scale_factor=2)
+        watch(page)
+        page.goto(BASE + ("/" if loc == "en" else f"/{loc}"), wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.locator("[data-nav-menu-button]").click()
+        page.wait_for_timeout(1400)
+        m = page.evaluate(MENU)
+        if h >= 780:
+            finale_checks(f"{tag} menu", m, at_once=True)
+        unfold(page, "products")
+        page.screenshot(path=str(OUT / f"phone-{loc}-{w}-products.png"))
+        m = page.evaluate(MENU)
+        rows_checks(f"{tag} Products", m, 5, full)
+        unfold(page, "science")
+        page.screenshot(path=str(OUT / f"phone-{loc}-{w}-science.png"))
+        m = page.evaluate(MENU)
+        rows_checks(f"{tag} Science", m, 4, full)
+        y = m["pageY"]
+        sheet_end(page)
+        page.mouse.wheel(0, 400)
+        page.wait_for_timeout(500)
+        m = page.evaluate(MENU)
+        page.screenshot(path=str(OUT / f"phone-{loc}-{w}-foot.png"))
+        finale_checks(f"{tag} Science unfolded", m, at_once=False)
+        check(f"{tag}: the menu scrolls on its own, the page under it stays put", m["locked"] and m["pageY"] == y and m["scrollTop"] > 0,
+              {"locked": m["locked"], "pageY": [y, m["pageY"]], "scrollTop": m["scrollTop"]})
+        page.close()
+
+    # The crane, filmed: Products folding open and shut at 390x844.
+    page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1500)
+    toggle = page.locator('[data-nav-sheet-toggle="products"]')
+    box = toggle.bounding_box()
+    tap = lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)  # noqa: E731
+    log = crane_motion(page, "phone 390x844, Products unfolds", tap)
+    check("phone 390x844: the crane is carried down, never up, as Products unfolds",
+          all(b["top"] >= a["top"] - 0.5 for a, b in zip(log, log[1:])) and log[-1]["top"] > log[0]["top"] + 200,
+          f"{round(log[0]['top'])} -> {round(log[-1]['top'])}")
+    crane_motion(page, "phone 390x844, Products folds away", tap)
+    page.close()
+
+
+def tablet_rows(browser):
+    """Round 7: the tablet menu. Held upright it opens with Products unfolded, the five in a row,
+    the four words and the crane at the foot all on the screen (no hollow over 120px between
+    Support and the crane); the names' lines start on one line; Science shows its four the same
+    way. Held sideways (1024x768) it opens with the four words and the crane."""
+    for w, h in ((834, 1112), (768, 1024), (1024, 768)):
+        tag = f"tablet {w}x{h}"
+        page = browser.new_page(viewport={"width": w, "height": h})
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.locator("[data-nav-menu-button]").click()
+        page.wait_for_timeout(1500)
+        m = page.evaluate(MENU)
+        page.screenshot(path=str(OUT / f"tablet-{w}x{h}-menu.png"))
+        upright = h >= 900
+        check(f"{tag}: the menu opens " + ("with Products unfolded" if upright else "with the four words"),
+              (len(m["rows"]) == 5) == upright, len(m["rows"]))
+        finale_checks(f"{tag} menu", m, at_once=True)
+        support = next(wd for wd in m["words"] if wd["text"] in ("Support",))
+        ink_top = m["crane"]["top"] + m["crane"]["h"] * 0.08
+        check(f"{tag}: no hollow over 120px between Support and the crane", ink_top - support["bottom"] <= 120 or not upright,
+              f"{round(ink_top - support['bottom'])}px")
+        if upright:
+            rows_checks(f"{tag} Products", m, 5)
+            lines = [round(r["lineBox"]["top"]) for r in m["rows"]]
+            check(f"{tag}: the five focus lines start on one line", max(lines) - min(lines) <= 1, lines)
+        unfold(page, "science")
+        m = page.evaluate(MENU)
+        page.screenshot(path=str(OUT / f"tablet-{w}x{h}-science.png"))
+        rows_checks(f"{tag} Science", m, 4, full=upright)
+        lines = [round(r["lineBox"]["top"]) for r in m["rows"]]
+        check(f"{tag}: the four captions start on one line", max(lines) - min(lines) <= 1, lines)
+        sheet_end(page)
+        finale_checks(f"{tag} Science unfolded", page.evaluate(MENU), at_once=False)
+        page.close()
+
+    # Upright, moving from Products to Science: the crane eases with the fold, never pops.
+    page = browser.new_page(viewport={"width": 834, "height": 1112})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1500)
+    crane_motion(page, "tablet 834x1112, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+    crane_motion(page, "tablet 834x1112, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+    page.close()
+
+
+def menu_light_boxes(browser):
+    """Round 7, filmed at real speed on a phone: Science unfolding (Dr. Liu's print and the three
+    paintings settle onto the paper) and the menu opening with its crane: no painting's paper, and
+    not the crane's, ever shows as a light box."""
+    page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    btn = page.locator("[data-nav-menu-button]")
+    btn.click()
+    page.wait_for_timeout(600)
+    toggle = page.locator('[data-nav-sheet-toggle="science"]')
+    toggle.click()
+    page.wait_for_function(
+        "[...document.querySelectorAll('[data-nav-sheet] img')].every(i => i.complete && i.naturalWidth > 0)", timeout=30000
+    )
+    page.wait_for_timeout(900)
+    toggle.click()
+    page.wait_for_timeout(1000)
+    box = toggle.bounding_box()
+    film = Film(page).shoot(lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1300)
+    pics = [p for p in page.evaluate(PICTURES, "#nav-sheet-science") if p["y"] + p["h"] < 844]
+    found = light_boxes(
+        film, pics, page.evaluate(ROWGAPS, "#nav-sheet-science"),
+        lambda e: next(f["bottom"] for f in e["folds"] if f["id"] == "nav-sheet-science"), 390, 0, 1200,
+    )
+    no_light_box("phone: Science unfolds with no light box round its paintings (filmed at real speed)", found, frames=4)
+    btn.click()
+    page.wait_for_timeout(1200)
+    film = Film(page).shoot(lambda: btn.tap(), 1500)
+    deckle = page.evaluate("parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle'))")
+    top, height = page.evaluate(
+        "(() => { const r = document.querySelector('[data-nav-sheet]').getBoundingClientRect(); return [r.top, r.height]; })()"
+    )
+    crane = page.evaluate(PICTURES, '[data-nav-sheet] [class*="sheetFinale"]')
+    found = light_boxes(film, crane, [16, 374], lambda e: top + e["s"] * height - deckle, 390, 300, 1400)
+    no_light_box("phone: the menu opens with the crane multiplied on its paper, no light box (filmed at real speed)", found, frames=4)
+    page.close()
+
+
 def phone(browser):
     page = browser.new_page(
         viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2
@@ -1566,11 +1861,12 @@ def phone(browser):
     page.wait_for_timeout(1000)
     box = toggle.bounding_box()
     film = Film(page).shoot(lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1100)
-    # The row runs off the right edge (a swipe away): the pools in the window are measured.
+    # Five rows in one column (round 7): every pool on the screen is measured, against the paper
+    # beside the pictures' column.
     found = light_boxes(
         film,
-        [p for p in page.evaluate(PICTURES, "#nav-sheet-products") if p["x"] + 6 < 390],
-        page.evaluate(GAPS, "#nav-sheet-products li"),
+        [p for p in page.evaluate(PICTURES, "#nav-sheet-products") if p["y"] + p["h"] < 844],
+        page.evaluate(ROWGAPS, "#nav-sheet-products"),
         lambda e: next(f["bottom"] for f in e["folds"] if f["id"] == "nav-sheet-products"),
         390,
         0,
@@ -1898,8 +2194,11 @@ with sync_playwright() as p:
         science_motion(browser)
     if ONLY in (None, "phone"):
         phone(browser)
+        phone_rows(browser)
+        menu_light_boxes(browser)
     if ONLY in (None, "tablet"):
         tablet(browser)
+        tablet_rows(browser)
     if ONLY in (None, "lang"):
         languages(browser)
     browser.close()

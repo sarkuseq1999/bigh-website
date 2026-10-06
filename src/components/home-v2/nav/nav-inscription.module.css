@@ -944,7 +944,7 @@ img.plate {
 }
 
 /* Japanese and Chinese lines break between phrases, not inside them. */
-.root :is(.nameFocus, .sheetProductName):is(:lang(ja), :lang(zh)) {
+.root .nameFocus:is(:lang(ja), :lang(zh)) {
   word-break: auto-phrase;
 }
 
@@ -1219,15 +1219,16 @@ img.plate {
 }
 
 /* A short, sure brush mark between the lines, like the marks between the columns of an
-   inscription: real ink, loaded at its start, dry at its end. */
+   inscription: the bar's own straight painted stroke (inscription/current-stroke.webp), loaded at
+   its start, dry at its end. Straight, so at a phone's size it reads as brush, never as a "~". */
 .dab {
   display: block;
   flex: none;
-  width: 64px;
-  height: 9px;
+  width: 72px;
+  height: 7px;
   background: var(--ink);
-  mask: url("/images/home-v2/nav/brush-2.webp") center / 100% 100% no-repeat;
-  opacity: 0.82;
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") center / 100% 100% no-repeat;
+  opacity: 0.8;
 }
 
 .sheetPart {
@@ -1237,11 +1238,20 @@ img.plate {
   width: 100%;
 }
 
+/* A part folds open on the site's ease and, when it folds away alone, gently from rest (an
+   ease-in-out), so what it carries (the words under it, on a tablet the crane's room) moves calmly
+   both ways. Folding away while the other part unfolds, both share the site's ease, so the menu's
+   length holds steady and its foot stays put. */
 .sheetFold {
   display: grid;
   grid-template-rows: 0fr;
   width: 100%;
-  transition: grid-template-rows 0.6s var(--ease);
+  transition: grid-template-rows 0.6s cubic-bezier(0.45, 0, 0.2, 1);
+}
+
+.sheetPart[data-open] .sheetFold,
+.sheetInner:has(> .sheetPart[data-open]) .sheetFold {
+  transition-timing-function: var(--ease);
 }
 
 .sheetPart[data-open] .sheetFold {
@@ -1257,174 +1267,279 @@ img.plate {
   overflow-y: clip;
 }
 
-.sheetFoldInner > .more {
-  margin-bottom: 18px;
+/* Folding away, what the part holds fades as the fold shuts over it (each piece itself, never the
+   rows as a block, so the paintings and pools stay multiplied), so no sliver of a picture is left
+   at the fold's edge; folding open, it is simply there as the fold reaches it. */
+.sheetPart:not([data-open])
+  :is(
+    .bottle,
+    .pool,
+    .contact,
+    .thumbPlate,
+    .thumbPrint,
+    .sheetRowName,
+    .sheetRowLine,
+    .sheetFoldInner > .more
+  ) {
+  opacity: 0;
+  transition: opacity 0.3s var(--ease);
 }
 
-/* Phones: the five in a row you can swipe, starting on the left margin and running off the
-   right edge (about two and a half in view, the third cut through its bottle). */
-.sheetShelfWrap {
-  --stand: 33vw;
-  position: relative;
-  width: calc(100% + 2 * var(--gutter));
-  margin: 4px calc(-1 * var(--gutter)) 0;
-}
-
-.sheetGround {
-  display: none;
-}
-
-.sheetShelf {
-  display: flex;
-  gap: 6px;
-  margin: 0;
-  padding: 6px var(--gutter) 8px;
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  scroll-padding-inline: var(--gutter);
-  scrollbar-width: none;
-  list-style: none;
-}
-
-.sheetShelf > li {
-  flex: none;
-  scroll-snap-align: start;
-}
-
-.sheetShelf > li:first-child {
-  margin-left: auto;
-}
-
-.sheetShelf > li:last-child {
-  margin-right: auto;
-}
-
-.root .sheetShelf a.sheetProduct[href] {
+/* Products and Science unfold as rows (round 7; Seed's pattern, Mo's like): each a link with its
+   picture at the left, standing on its pale pool (the five bottles) or set at the desktop's one
+   weight (Dr. Liu's print on its mat, the three ink paintings multiplied a little wider than the
+   picture's room), and its name (21px, the headline voice) and line at the right. One centred
+   column, every row whole on the screen: nothing runs off the edge, nothing to swipe. */
+.sheetRows {
+  --thumb: 76px;
   display: grid;
-  justify-items: center;
-  align-content: start;
-  width: 35vw;
-  padding: 2px 0 8px;
-  border-radius: 6px;
-  color: var(--ink);
-}
-
-.sheetProductFocus {
-  display: none;
-}
-
-.sheetProductName {
-  margin-top: 10px;
-  font-size: 17px;
-  font-weight: 450;
-  line-height: 1.25;
-  text-wrap: balance;
-}
-
-/* A tablet (700px and wider): the menu opens with the five already standing in a row, centred on
-   one painted ground, each with its name and focus line; the links are a step larger. */
-@media (min-width: 700px) {
-  .root .sheetLink {
-    min-height: clamp(72px, 9.4vh, 104px);
-    font-size: clamp(38px, 5.6vw, 44px);
-  }
-
-  .sheetShelfWrap {
-    --stand: clamp(130px, 19vw, 170px);
-    width: calc(100% + 2 * var(--gutter) - 48px);
-    margin-inline: calc(24px - var(--gutter));
-  }
-
-  .sheetShelf {
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 4px;
-    padding: 6px 0 8px;
-    overflow: visible;
-  }
-
-  .sheetShelf > li:is(:first-child, :last-child) {
-    margin: 0;
-  }
-
-  .root .sheetShelf a.sheetProduct[href] {
-    width: 100%;
-    padding: 2px 4px 8px;
-  }
-
-  .sheetGround {
-    position: absolute;
-    top: calc(6px + var(--stand) * 0.972);
-    left: 50%;
-    display: block;
-    width: calc(100% - 16px);
-    height: 14px;
-    translate: -50% -50%;
-    background: var(--ink);
-    mask: url("/images/home-v2/nav/brush-5.webp") center / 100% 100% no-repeat;
-    opacity: 0.42;
-    pointer-events: none;
-  }
-
-  .sheetProductFocus {
-    display: block;
-    max-width: 11em;
-    margin-top: 4px;
-    color: var(--muted);
-    font-size: 15px;
-    line-height: 1.35;
-    text-wrap: balance;
-  }
-}
-
-.sheetList {
-  display: grid;
-  justify-items: center;
-  margin: 0;
+  width: min(100%, 352px);
+  margin: 2px 0 0;
   padding: 0;
   list-style: none;
 }
 
-.root .sheetList a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 52px;
-  color: var(--ink);
-  font-size: clamp(20px, 2.6vw, 22px);
-  font-weight: 450;
-}
-
-/* Under the links, where there is room, the painting the inscription stands over: the crane at
-   rest (the page's own last painting), ink multiplied on the scroll's paper. It gives way, whole,
-   when an unfolded part needs the room. */
-.sheetPainting {
-  flex: 1 1 0;
-  width: 100%;
-  min-height: 0;
-  padding-top: 20px;
-  container-type: size;
+.root .sheetRows a.sheetRow[href] {
   display: grid;
-  place-items: center;
-  pointer-events: none;
+  grid-template-columns: var(--thumb) minmax(0, 1fr);
+  grid-template-rows: 1fr auto auto 1fr;
+  column-gap: 20px;
+  align-items: center;
+  min-height: calc(var(--thumb) + 16px);
+  padding: 8px 0;
+  color: var(--ink);
+  text-align: start;
 }
 
-.sheetCrane {
+.root .sheetRows a.sheetRow[href]:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.sheetThumb {
+  --stand: var(--thumb);
+  position: relative;
+  display: grid;
+  grid-row: 1 / -1;
+  place-items: center;
+  width: var(--thumb);
+  height: var(--thumb);
+}
+
+.sheetRowName {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: var(--display-font);
+  font-size: 21px;
+  font-weight: var(--display-weight, 500);
+  line-height: 1.2;
+  letter-spacing: -0.012em;
+}
+
+.sheetRowLine {
+  grid-column: 2;
+  grid-row: 3;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.35;
+}
+
+/* Japanese and Chinese lines break between phrases, not inside them; Korean between words. */
+.root :is(.sheetRowName, .sheetRowLine):is(:lang(ja), :lang(zh)) {
+  word-break: auto-phrase;
+}
+
+.root :is(.sheetRowName, .sheetRowLine):lang(ko) {
+  word-break: keep-all;
+}
+
+/* Science's pictures at the desktop's one weight: the print at 80% of the room on its mat (the one
+   sanctioned mount shadow, never multiplied), the paintings multiplied a little wider than it (the
+   cell 4% each side, the reading still life 8%, the inkstone 14% for the paper round it). */
+.thumbPlate {
+  --over: 0%;
   display: block;
-  width: auto;
-  height: min(100cqh, 260px);
+  width: calc(100% + 2 * var(--over));
+  max-width: none;
+  height: auto;
+  margin-inline: calc(-1 * var(--over));
   mix-blend-mode: multiply;
 }
 
-@container (max-height: 150px) {
-  .sheetCrane {
-    display: none;
+.thumbPlate[data-plate="cell"] {
+  --over: 4%;
+}
+
+.thumbPlate[data-plate="reading"] {
+  --over: 8%;
+}
+
+.thumbPlate[data-plate="inkstone"] {
+  --over: 14%;
+}
+
+.root .thumbPrint {
+  display: block;
+  height: 80%;
+  padding: 3px;
+  background: #fbf9f4;
+  box-shadow:
+    0 8px 14px -8px rgba(12, 11, 10, 0.42),
+    0 1px 3px rgba(12, 11, 10, 0.1);
+}
+
+/* The link under the rows; its arrow stays with its last word. */
+.root .sheetFoldInner > a.more[href] {
+  display: inline-block;
+  max-width: min(100%, 352px);
+  margin: 8px 0 20px;
+  padding-block: 10px;
+  line-height: 1.4;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.tail {
+  white-space: nowrap;
+}
+
+.tail > svg {
+  display: inline-block;
+  margin-left: 10px;
+  vertical-align: -3px;
+}
+
+/* A tablet (700px and wider): the rows stand side by side instead, the five bottles (or the four
+   pictures) in one row, each on its own pool (no shared ground), the names and their lines under
+   them, each on one line with its neighbours'; the words are a step larger. */
+@media (min-width: 700px) {
+  .root .sheetLink {
+    min-height: clamp(72px, 7.6vh, 84px);
+    font-size: clamp(38px, 5.6vw, 44px);
+  }
+
+  .sheetRows {
+    --thumb: clamp(122px, 16vw, 160px);
+    grid-template-columns: repeat(var(--count, 5), minmax(0, 1fr));
+    grid-template-rows: auto auto auto;
+    column-gap: 12px;
+    width: min(calc(100% + 2 * var(--gutter) - 32px), 1000px);
+    margin: 6px calc(16px - var(--gutter)) 0;
+  }
+
+  .sheetRows[data-sheet-rows="science"] {
+    --count: 4;
+  }
+
+  .sheetRows > li {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+  }
+
+  .root .sheetRows a.sheetRow[href] {
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    align-items: start;
+    min-height: 0;
+    padding: 4px 0 10px;
+    text-align: center;
+  }
+
+  .sheetThumb {
+    grid-row: 1;
+  }
+
+  .sheetRowName {
+    grid-column: 1;
+    margin-top: 12px;
+    font-size: 20px;
+    text-wrap: balance;
+  }
+
+  .sheetRowLine {
+    grid-column: 1;
+    max-width: 11em;
+    font-size: 16px;
+    text-wrap: balance;
+  }
+
+  .root .sheetFoldInner > a.more[href] {
+    max-width: 100%;
   }
 }
 
-.sheetFoot {
+/* The menu ends where the page ends (round 7): the crane at rest (the page's own last painting)
+   standing on a short loaded brush stroke, the footer's finale in miniature, with Log in and Sign
+   up under it. It stands at the foot of the menu: when there is room, at the foot of the window;
+   when a part unfolds, it is carried down calmly with the fold and waits at the end of the
+   scrolling menu (it never vanishes). Ink, multiplied on the menu's paper; the stroke under its
+   feet is the bar's own straight stroke, laid under the crane. */
+.sheetFinale {
+  --above: 28px;
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
   margin-top: auto;
-  padding-top: clamp(28px, 5vh, 56px);
+  padding-top: var(--above);
+  pointer-events: none;
+}
+
+/* The crane's room (its picture's proportions) and the ground under its feet. On a phone a set
+   size from the window's height (about 220px on a 390x844 phone, never under 130px), so the menu
+   with its four words shows the whole finale; unfolding a part carries it down whole. */
+.sheetStand {
+  position: relative;
+  display: block;
+  flex: none;
+  height: clamp(130px, calc(44svh - 150px), 230px);
+  aspect-ratio: 560 / 864;
+}
+
+/* A tablet: the crane takes the room left under the words (130px to 230px), so a tablet held
+   upright shows it whole under the unfolded Products; when the room changes it eases with the
+   fold, never popping. */
+@media (min-width: 700px) {
+  .sheetFinale {
+    flex: 1 0 auto;
+  }
+
+  .sheetStand {
+    flex: 1 1 0;
+    height: auto;
+    min-height: 130px;
+    max-height: 230px;
+  }
+}
+
+.sheetGround {
+  position: absolute;
+  top: 89.5%;
+  left: -10%;
+  width: 126%;
+  height: 8%;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/current-stroke.webp") 0 50% / 100% auto no-repeat;
+  opacity: 0.72;
+}
+
+.sheetCrane {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  mix-blend-mode: multiply;
+}
+
+.sheetFoot {
+  flex: none;
+  padding-top: 14px;
 }
 
 .root .sheetFoot > div {
@@ -1438,22 +1553,47 @@ img.plate {
   display: none;
 }
 
-/* The menu's lines settle as the paper reaches them. An unfolded part settles piece by piece (its
-   word, each bottle, each name), never as one block: its pools and the crane are multiplied onto
-   the paper, and a block fading round them would show their white as boxes until it stopped. */
+/* The menu's lines settle as the paper reaches them; an unfolding part's rows settle row by row as
+   the fold opens. Always piece by piece (each word, bottle, pool, picture and name), never as one
+   block: the pools, the paintings and the crane are multiplied onto the paper, and a block fading
+   round them would show their white as boxes until it stopped. */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-menu] .sheetInner > :not(.sheetPainting, .sheetPart),
+  .root[data-menu] .sheetInner > :not(.sheetFinale, .sheetPart),
   .root[data-menu] .sheetPart > .sheetLink,
-  .root[data-menu] .sheetFoldInner > :not(.sheetShelfWrap),
-  .root[data-menu] .sheetShelf :is(.bottle, .sheetProductName, .sheetProductFocus),
   .root[data-menu] .sheetCrane {
     animation: insc-settle 0.9s var(--ease) backwards;
     animation-delay: calc(0.16s + var(--n, 0) * 60ms);
   }
 
-  .root[data-menu] .sheetShelfWrap :is(.pool, .contact, .sheetGround) {
+  .root[data-menu] .sheetGround {
     animation: insc-fade 0.9s var(--ease) backwards;
     animation-delay: calc(0.16s + var(--n, 0) * 60ms);
+  }
+
+  /* The part a tablet opens with settles with the menu, row by row. */
+  .root[data-menu]
+    .sheetPart[data-open]:not([data-by-hand])
+    :is(.bottle, .thumbPlate, .thumbPrint, .sheetRowName, .sheetRowLine) {
+    animation: insc-settle 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetPart[data-open]:not([data-by-hand]) :is(.pool, .contact) {
+    animation: insc-fade 0.9s var(--ease) backwards;
+    animation-delay: calc(0.16s + var(--i, 0) * 60ms);
+  }
+
+  .root[data-menu] .sheetPart[data-open]:not([data-by-hand]) .sheetFoldInner > .more {
+    animation: insc-settle 0.9s var(--ease) 0.46s backwards;
+  }
+
+  /* A part the visitor unfolds: its rows are there as the fold reaches them (never a blank fold
+     waiting for them), rising into place one after another. */
+  .root[data-menu]
+    .sheetPart[data-open][data-by-hand]
+    :is(.bottle, .thumbPlate, .thumbPrint, .sheetRowName, .sheetRowLine, .sheetFoldInner > .more) {
+    animation: insc-rise 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 
   .sheetInner > :nth-child(2) {

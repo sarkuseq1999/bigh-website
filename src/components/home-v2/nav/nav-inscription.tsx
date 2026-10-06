@@ -34,13 +34,20 @@ import styles from "./nav-inscription.module.css";
 // their bottles; round 5: the Science page's four parts, Dr. Liu's print and three ink paintings
 // set at one weight). Moving from one drop-down to the other keeps the scroll down and changes only
 // what is written on it. On a narrow window: "Menu", the mark, the
-// language; the menu is a full-height scroll let down the same way.
+// language; the menu is a full-height scroll let down the same way (round 7): its four words
+// centred, Products and Science unfolding as rows (each picture with its name and line; on a
+// tablet side by side), and at its foot the page's own finale, the crane at rest on its brush
+// ground, with Log in and Sign up under it.
 // Each drop-down's links follow its button in the page, so Tab goes from the button into them.
 // Where you are is written in ink (round 6): the current page's word carries a short painted brush
 // stroke under it (inscription/current-stroke.webp, cut by reference/nav/make_current_stroke.py from
 // a real painted stroke), laid from the left as the page opens; pointing at a word draws only a
 // fine line. On the homepage, which has no link of its own, the stroke follows the reader: while a
 // part of the page that belongs to Products or Science is being read, that word carries it.
+
+/** The menu opens with Products unfolded on a tablet held upright (room for the five in a row and
+ *  every word under them); on a phone or a short window it opens with the four words. */
+const TABLET_TALL = "(min-width: 700px) and (min-height: 900px)";
 
 /** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
 export type NavCurrent = "home" | "products" | "science" | "about";
@@ -113,8 +120,17 @@ export function NavInscription({
   const part = navScience[science.pick];
 
   // The narrow window's menu: one of its two parts (Products, Science) is unfolded at a time.
-  // On a tablet (700px and wider) it opens with Products unfolded: the five fit in one row.
+  // On a tablet held upright (700px wide and 900px tall or more) it opens with Products unfolded:
+  // the five stand in one row and fill the room under the words. It always opens at its top.
   const [fold, setFold] = useState<NavPanelId | null>(null);
+  // A part the visitor unfolds (not the one a tablet opens with): its rows are there as the fold
+  // reaches them, rising into place, instead of settling in with the menu.
+  const [byHand, setByHand] = useState(false);
+  const unfold = (id: NavPanelId) => {
+    setByHand(true);
+    setFold(fold === id ? null : id);
+  };
+  const sheet = useRef<HTMLDivElement>(null);
   const [wasOpen, setWasOpen] = useState(menuOpen);
   if (menuOpen !== wasOpen) {
     setWasOpen(menuOpen);
@@ -240,7 +256,9 @@ export function NavInscription({
             onPointerDown={reach}
             onClick={() => {
               if (!menuOpen) {
-                setFold(window.matchMedia("(min-width: 700px)").matches ? "products" : null);
+                setFold(window.matchMedia(TABLET_TALL).matches ? "products" : null);
+                setByHand(false);
+                if (sheet.current) sheet.current.scrollTop = 0;
               }
               setMenuOpen(!menuOpen);
             }}
@@ -419,6 +437,7 @@ export function NavInscription({
 
       {/* The narrow window's menu: a full-height scroll let down from under the bar. */}
       <div
+        ref={sheet}
         id="nav-sheet"
         className={styles.sheet}
         data-nav-sheet=""
@@ -431,37 +450,36 @@ export function NavInscription({
             label={copy("Products")}
             here={current === "products"}
             open={fold === "products"}
-            onToggle={() => setFold(fold === "products" ? null : "products")}
+            byHand={byHand}
+            onToggle={() => unfold("products")}
           >
-            <div className={styles.sheetShelfWrap}>
-              <span className={styles.sheetGround} aria-hidden="true" />
-              <ul className={styles.sheetShelf}>
-                {navProducts.map((product) => (
-                  <li key={product.slug}>
-                    <Link
-                      href={product.href}
-                      className={styles.sheetProduct}
-                      onClick={() => setMenuOpen(false)}
-                    >
+            <ul className={styles.sheetRows} data-sheet-rows="products">
+              {navProducts.map((product, i) => (
+                <li key={product.slug} style={{ "--i": i } as CSSProperties}>
+                  <Link
+                    href={product.href}
+                    className={styles.sheetRow}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span className={styles.sheetThumb}>
                       <Bottle
                         src={product.bottle.src}
-                        sizes="(max-width: 699px) 34vw, 150px"
+                        sizes="(max-width: 699px) 80px, 150px"
                         loading={loading}
                       />
-                      <span className={styles.sheetProductName}>{copy(product.name)}</span>
-                      <span className={styles.sheetProductFocus}>{copy(product.focus)}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                    </span>
+                    <span className={styles.sheetRowName}>{copy(product.name)}</span>
+                    <span className={styles.sheetRowLine}>{copy(product.focus)}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
             <Link
               href={navProductsIntro.allLink}
               className={styles.more}
               onClick={() => setMenuOpen(false)}
             >
-              {copy(navProductsIntro.title)}
-              <ArrowRight size={18} aria-hidden="true" />
+              <Tail text={copy(navProductsIntro.title)} />
             </Link>
           </SheetPart>
           <span className={styles.dab} aria-hidden="true" />
@@ -470,13 +488,45 @@ export function NavInscription({
             label={copy("Science")}
             here={current === "science"}
             open={fold === "science"}
-            onToggle={() => setFold(fold === "science" ? null : "science")}
+            byHand={byHand}
+            onToggle={() => unfold("science")}
           >
-            <ul className={styles.sheetList}>
-              {navScience.map((item) => (
-                <li key={item.href}>
-                  <Link href={item.href} onClick={() => setMenuOpen(false)}>
-                    {copy(item.label)}
+            <ul className={styles.sheetRows} data-sheet-rows="science">
+              {navScience.map((item, i) => (
+                <li key={item.href} style={{ "--i": i } as CSSProperties}>
+                  <Link
+                    href={item.href}
+                    className={styles.sheetRow}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    <span className={styles.sheetThumb}>
+                      {item.image.plate === "print" ? (
+                        <span className={styles.thumbPrint}>
+                          <Image
+                            className={styles.photo}
+                            src={item.image.src}
+                            alt=""
+                            width={item.image.width}
+                            height={item.image.height}
+                            sizes="(max-width: 699px) 56px, 96px"
+                            loading={loading}
+                          />
+                        </span>
+                      ) : (
+                        <Image
+                          className={styles.thumbPlate}
+                          data-plate={item.image.plate}
+                          src={item.image.src}
+                          alt=""
+                          width={item.image.width}
+                          height={item.image.height}
+                          sizes="(max-width: 699px) 100px, 170px"
+                          loading={loading}
+                        />
+                      )}
+                    </span>
+                    <span className={styles.sheetRowName}>{copy(item.label)}</span>
+                    <span className={styles.sheetRowLine}>{caption(item.caption)}</span>
                   </Link>
                 </li>
               ))}
@@ -486,8 +536,7 @@ export function NavInscription({
               className={styles.more}
               onClick={() => setMenuOpen(false)}
             >
-              {copy(navScienceIntro.link)}
-              <ArrowRight size={18} aria-hidden="true" />
+              <Tail text={copy(navScienceIntro.link)} />
             </Link>
           </SheetPart>
           <span className={styles.dab} aria-hidden="true" />
@@ -503,15 +552,21 @@ export function NavInscription({
           <button type="button" className={styles.sheetLink} onClick={openSupport}>
             {copy("Support")}
           </button>
-          <div className={styles.sheetPainting} aria-hidden="true">
-            <Image
-              className={styles.sheetCrane}
-              src="/images/home-v2/ink/crane-rest-v2.webp"
-              alt=""
-              width={560}
-              height={864}
-              sizes="170px"
-            />
+          {/* The menu ends where the page ends: the crane at rest on its brush ground (the footer's
+              finale in miniature), with Log in and Sign up under it. */}
+          <div className={styles.sheetFinale} aria-hidden="true">
+            <span className={styles.sheetStand}>
+              <span className={styles.sheetGround} />
+              <Image
+                className={styles.sheetCrane}
+                src="/images/home-v2/ink/crane-rest-v2.webp"
+                alt=""
+                width={560}
+                height={864}
+                sizes="150px"
+                loading={loading}
+              />
+            </span>
           </div>
           <div className={styles.sheetFoot}>
             <HeaderUtilities />
@@ -659,6 +714,23 @@ function Showroom({
   );
 }
 
+/** A link's words with its arrow kept on the last word's line, so the arrow never stands alone on
+ *  a line of its own (Vietnamese sets "Explore our products." long). Words without spaces keep
+ *  their last two characters with it. */
+function Tail({ text }: { text: string }) {
+  const space = text.lastIndexOf(" ");
+  const cut = space > 0 ? space + 1 : text.length > 6 ? text.length - 2 : 0;
+  return (
+    <>
+      {text.slice(0, cut)}
+      <span className={styles.tail}>
+        {text.slice(cut)}
+        <ArrowRight size={18} aria-hidden="true" />
+      </span>
+    </>
+  );
+}
+
 /** A product photograph standing on its pale ink pool. */
 function Bottle({
   src,
@@ -709,6 +781,7 @@ function SheetPart({
   label,
   here,
   open,
+  byHand,
   onToggle,
   children,
 }: {
@@ -716,11 +789,16 @@ function SheetPart({
   label: string;
   here: boolean;
   open: boolean;
+  byHand: boolean;
   onToggle: () => void;
   children: ReactNode;
 }) {
   return (
-    <div className={styles.sheetPart} data-open={open ? "" : undefined}>
+    <div
+      className={styles.sheetPart}
+      data-open={open ? "" : undefined}
+      data-by-hand={byHand ? "" : undefined}
+    >
       <button
         type="button"
         className={styles.sheetLink}
