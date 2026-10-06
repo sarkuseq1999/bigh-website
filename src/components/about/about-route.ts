@@ -68,14 +68,24 @@ const cell = (fx: number, fy: number, load: number, ink = 1): Waypoint => ({
   load,
 });
 
-/** The stroke out of the cell, as in the comp: it grows out of the dark membrane at the cell's
- *  lower left (a thin first touch), lands loaded on the membrane's lower edge, and leaves the
- *  painting falling steeply down and to the left before it starts to turn. */
+/** A point set off from the painting's lower-left edge (where its outer wash ends, at fx 0.203 /
+ *  fy 0.85 of the picture) by fixed pixels along the edge's outward normal (down and to the left),
+ *  so the gap to the painting is the same at every size. */
+const offEdge = (out: number, load = 1.9, ink = 1): Waypoint => ({
+  ...on("about-cell", 0.203, 0.85, 3, ink, -0.56 * out, 0.83 * out),
+  load,
+});
+
+/** The line begins as a brush set down on the paper under the cell, never as something growing out
+ *  of it: the first touch lands about 22px clear of the painting's outer wash, rounded and pressed
+ *  (the page's first stroke starts at its full load, with no thin lead-in; the head's first few
+ *  pixels carry a little less ink, so its end is round, not cut), then moves straight off along the
+ *  edge's normal, down and to the left, and falls steeply before it starts to turn. */
 const leaving: Waypoint[] = [
-  cell(0.27, 0.8, 0.45, 0.5),
-  fresh(cell(0.235, 0.86, 1.3), 1.3),
-  cell(0.195, 0.95, 1.6),
-  cell(0.115, 1.047, 1.9),
+  offEdge(22, 2.05, 0.8),
+  offEdge(27, 2.1),
+  offEdge(62, 1.8),
+  cell(0.115, 1.047, 1.8),
 ];
 
 // Two columns: out of the cell the sweep falls, then runs left over the open paper in a long, slow
@@ -97,9 +107,9 @@ const page: Waypoint[] = [
     dy: -104,
     clear: ["st-purpose", 150],
     w: 3,
-    load: 1.9,
+    load: 1.7,
   },
-  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 1.9 },
+  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 2 },
   { ...on("st-purpose", 1, 0.5, 3.4, 1, 22, -46), load: 1.9 },
   ...arrive("purpose", 1.9),
   land("purpose"),

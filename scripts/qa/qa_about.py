@@ -42,7 +42,12 @@ painting; on a tablet the stroke out of the cell ends at the tip of the first st
 touches no words; the promise heading beside the list, level with its first rule, the list's right
 edge on the figures'.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3]
+Third review round (October 5, 2026): the line starts clear of the painting (no brush ink within
+12px of its ink, outer wash included) with a loaded landing (3px of real ink over its first 30px) at
+every two-column and tablet size; just above the stacking breakpoint the promises keep a reading
+measure (columns 250px or more, titles on one line, text in three lines or fewer).
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3,round4]
 """
 
 import math
@@ -729,6 +734,100 @@ def round3(browser):
         context.close()
 
 
+# The painting's own ink (its paper is divided out: anything darker than 236 of 255 is ink or wash)
+# at its drawn size, as a string of rows of 0/1 over the picture's box.
+PAINTING_JS = """() => { const img = document.querySelector('[data-brush="about-cell"] img'); const b = img.getBoundingClientRect();
+  const c = document.createElement('canvas'); c.width = Math.round(b.width); c.height = Math.round(b.height);
+  const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+  const d = x.getImageData(0, 0, c.width, c.height).data; const rows = [];
+  for (let y = 0; y < c.height; y++) { let s = ''; for (let i = y * c.width * 4; i < (y + 1) * c.width * 4; i += 4)
+    s += (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) < 236 ? '1' : '0'; rows.push(s); }
+  return { left: b.left, top: b.top + scrollY, rows }; }"""
+
+
+def cell_foot(page, width, pad=140):
+    """The painting's ink and the brush layer's ink around the cell, on one page-pixel grid: a dict
+    with the painting's boundary points, the brush's ink (alpha over 40) and core ink (over 140)."""
+    import numpy as np
+
+    paint = page.evaluate(PAINTING_JS)
+    rows = paint["rows"]
+    ph, pw = len(rows), len(rows[0])
+    x0, y0 = max(0, int(paint["left"]) - pad), int(paint["top"]) - pad
+    x1, y1 = min(width, int(paint["left"]) + pw + pad), int(paint["top"]) + ph + pad
+    mask = np.zeros((y1 - y0, x1 - x0), dtype=bool)
+    pm = np.array([[ch == "1" for ch in r] for r in rows], dtype=bool)
+    ox, oy = int(paint["left"]) - x0, int(paint["top"]) - y0
+    sx0, sx1 = max(0, -ox), min(pw, mask.shape[1] - ox)
+    mask[oy:oy + ph, ox + sx0:ox + sx1] = pm[:, sx0:sx1]
+    inner = mask.copy()
+    inner[1:-1, 1:-1] = mask[1:-1, 1:-1] & mask[:-2, 1:-1] & mask[2:, 1:-1] & mask[1:-1, :-2] & mask[1:-1, 2:]
+    edge = np.argwhere(mask & ~inner)
+    ink = np.array(ink_grid(page, x0, y0, x1, y1, 40), dtype=bool)
+    core = np.array(ink_grid(page, x0, y0, x1, y1, 140), dtype=bool)
+    return {"origin": (x0, y0), "mask": mask, "edge": edge, "ink": ink, "core": core}
+
+
+def distances(points, edge):
+    """Each point's distance to the nearest painting boundary point (chunked, numpy only)."""
+    import numpy as np
+
+    out = np.full(len(points), np.inf)
+    for i in range(0, len(points), 2000):
+        p = points[i:i + 2000][:, None, :].astype(float)
+        out[i:i + 2000] = np.sqrt(((p - edge[None, :, :]) ** 2).sum(-1)).min(1)
+    return out
+
+
+def round4(browser):
+    """The finish review's third round (Task 9 fix round 3)."""
+    import numpy as np
+
+    # 1. The line starts as a brush set down on the paper under the cell, never as something growing
+    # out of it: no brush ink inside the painting or within 12px of its ink (its outer wash included),
+    # and the stroke's first 30px hold 3px or more of real ink (alpha over 140) across it: a loaded,
+    # blunt landing, no needle lead-in and no neck. On 2a18847 it began as a hairline inside the
+    # membrane, ran as a filament and pinched before it swelled.
+    for width, height in [(1536, 1000), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (834, 1112), (721, 1000)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        g = cell_foot(page, width)
+        tag = f"{width}x{height}"
+        pts = np.argwhere(g["ink"])
+        if not len(pts) or not len(g["edge"]):
+            check(f"{tag} the line starts clear of the painting (12px)", False, "no ink found")
+            check(f"{tag} the line's first 30px are loaded (3px of real ink)", False, "no ink found")
+            context.close()
+            continue
+        inside = int((g["ink"] & g["mask"]).sum())
+        dist = distances(pts, g["edge"])
+        dist[g["mask"][pts[:, 0], pts[:, 1]]] = 0
+        near = int((dist < 12).sum())
+        check(f"{tag} the line starts clear of the painting (12px)", near == 0, {"within_12px": near, "inside": inside, "nearest": round(float(dist.min()), 1)})
+        start = pts[int(np.argmin(dist))]
+        cores = np.argwhere(g["core"])
+        rad = np.sqrt(((cores - start) ** 2).sum(1)) if len(cores) else np.array([])
+        across = [int(((rad >= d - 0.5) & (rad < d + 0.5)).sum()) for d in range(3, 31, 3)]
+        check(f"{tag} the line's first 30px are loaded (3px of real ink)", bool(across) and min(across) >= 3, {"start": (int(start[1]) + g["origin"][0], int(start[0]) + g["origin"][1]), "across": across})
+        context.close()
+
+    # 2. Round the stacking breakpoint the promises keep a reading measure: each of the two list
+    # columns 250px wide or more, every title on one line and no description over three lines. At
+    # 1200-1279px the heading stands over the list (beside it the columns were 219-238px and two
+    # titles wrapped); from 1280px it stands beside it.
+    for width, height in [(1200, 800), (1240, 800), (1280, 800)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        cols = page.evaluate(
+            """() => [...document.querySelectorAll('[data-brush^="promise-"]')].map(li => {
+                 const lines = (e) => { const r = document.createRange(); r.selectNodeContents(e);
+                   return new Set([...r.getClientRects()].filter(x => x.width > 0).map(x => Math.round(x.top))).size; };
+                 return { w: Math.round(li.getBoundingClientRect().width), title: lines(li.querySelector('h3')), text: lines(li.querySelector('p')) }; })"""
+        )
+        tag = f"{width}x{height}"
+        check(f"{tag} the promises keep a reading measure (250px or more)", cols and min(c["w"] for c in cols) >= 250, cols)
+        check(f"{tag} every promise title on one line, no text over three", cols and all(c["title"] == 1 and c["text"] <= 3 for c in cols), cols)
+        context.close()
+
+
 def line_and_focus(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     layout = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout")
@@ -834,7 +933,7 @@ def languages_layout(browser):
 
 
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, round2, round3, line_and_focus, languages, languages_layout]
+GROUPS = [desktop_and_phone, openings, finish, round2, round3, round4, line_and_focus, languages, languages_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

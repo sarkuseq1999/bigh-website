@@ -350,17 +350,21 @@
 
 /* As in the comp, "What you can count on." stands beside its two-by-two list, level with the first
    row: the page's one heading-beside-list moment (the paper under the short heading, beside the
-   taller list, is the comp's breathing room). The list ends on the figures' right edge above it. */
+   taller list, is the comp's breathing room). The list ends on the figures' right edge above it.
+   The heading's column is just wider than its longer line ("can count on.", 5.7 of the heading's
+   size; --heading is h2.heading's size), so the list keeps the rest: each promise's title holds one
+   line from 1280px (about 256px a column there). Narrower, the heading stands over the list. */
 :global([data-page="about"]) .promise {
+  --heading: clamp(36px, 3.2vw, 50px);
   display: grid;
-  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
-  gap: clamp(28px, 4vw, 72px);
+  grid-template-columns: minmax(0, calc(var(--heading) * 5.95)) minmax(0, 1fr);
+  gap: clamp(28px, 2.8vw, 56px);
 }
 
 :global([data-page="about"]) .promises {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(32px, 3vw, 48px) clamp(28px, 3vw, 56px);
+  gap: clamp(32px, 3vw, 48px) clamp(28px, 2.4vw, 48px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -432,15 +436,18 @@
   margin-top: clamp(28px, 2.6vw, 40px);
 }
 
-/* Under 1200px the two would crowd one another: the print stands over the words, and the
-   promises' heading over the promises. */
+/* Under 1200px the print and the words would crowd one another: the print stands over them. */
 @media (min-width: 900px) and (max-width: 1199px) {
   :global([data-page="about"]) .roots {
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(64px, 7vw, 80px);
     padding-top: 56px;
   }
+}
 
+/* Under 1280px the promises' titles would wrap beside the heading (columns under 240px): the
+   heading stands over the list. */
+@media (min-width: 900px) and (max-width: 1279px) {
   :global([data-page="about"]) .promise {
     grid-template-columns: minmax(0, 1fr);
     gap: 48px;
