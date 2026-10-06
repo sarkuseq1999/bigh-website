@@ -1022,189 +1022,208 @@
 }
 
 /* Moving straight across from one to the other keeps the scroll down and lays the new writing
-   over the old: the new panel, on its own paper and on top, fades in while the old one stays whole
-   under it and goes only once it is covered. The scroll is never empty or ghosted. */
+   over the old: the new panel, on its own paper and on top, fades in quickly (front-loaded) while
+   the old one under it thins away more slowly (0.25s, even; round 11: the two rows stand their
+   parts in different places, so a bottle left whole under the Science pictures showed through
+   them for a moment), and goes once it is covered. One of the two is always most of the way in,
+   so the scroll is never empty. */
 .root[data-swap] .panel:not([data-shown]) {
   transition: visibility 0s linear 0.45s;
 }
 
+@media (prefers-reduced-motion: no-preference) {
+  .root[data-swap] .panel:not([data-shown]) {
+    animation: insc-leave 0.25s linear forwards;
+  }
+}
+
+@keyframes insc-leave {
+  to {
+    opacity: 0;
+  }
+}
+
+/* What is written on a drop-down: its title, the row, and the link to all of them, centred. The
+   page is as long as the taller drop-down's (the scroll never changes length) and the link stands
+   at its foot, so the two links share one line. */
 .panelInner {
   display: grid;
+  grid-template-rows: auto auto 1fr;
   justify-items: center;
+  min-height: 100%;
   padding: clamp(34px, 3vw, 48px) var(--gutter) calc(var(--deckle) + clamp(16px, 1.6vw, 28px));
   text-align: center;
 }
 
-/* Both drop-downs are showrooms (rounds 4 and 5; Timeline's pattern in the homepage's language),
-   two pages of one book. The names large at the left in the headline voice, each a link with its
-   line under it: they are the targets. At the right the shown one's picture stands large, with its
-   link under it on the same line as the link under the names. The pair is centred under the bar,
-   as everything on the scroll. The two share one page layout (measured in the component): the
-   names column as wide and the row as tall as the larger of the two, so moving from one to the
-   other the names start on the same edge and line and the picture stands in the same place. */
-.showroom {
+/* The title's room: as tall as the taller of the two titles (measured in the component), the title
+   at its foot, so the two rows start on one line. */
+.panelHead {
   display: grid;
-  grid-template-columns: minmax(0, max-content) minmax(0, max-content);
-  grid-template-rows: minmax(var(--insc-row-h, 0px), auto);
-  justify-content: center;
-  column-gap: clamp(72px, 9vw, 168px);
-  width: 100%;
-  text-align: start;
+  align-items: end;
+  min-height: var(--insc-title-h, 0px);
 }
 
-.names {
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  justify-items: start;
-  min-width: var(--insc-names-w, 0px);
+.root .panelTitle {
+  margin: 0;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: clamp(30px, 2.8vw, 42px);
+  font-weight: var(--display-weight, 500);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
 }
 
-.nameList {
+.root .panelTitle:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+  word-break: keep-all;
+}
+
+/* Round 11 (Mo's pick, over round 4's showroom): each drop-down is one row, everything at once.
+   Products: the five real bottles side by side, each on its own pale pool, standing on one painted
+   ground line (round 4's row). Science: its four parts, each picture at round 5's one weight. Under
+   each picture its name (21px) and its line (17px Ink Grey); each part is one link. The two rows are
+   two pages of one book: the same width, the pictures in rooms of one height on one line, the names
+   on one line. */
+.shelf {
+  /* The pictures' rooms' height (a bottle is about 93% of it). */
+  --stand: clamp(180px, 13vw, 220px);
+  position: relative;
+  width: min(100% + 2 * var(--gutter) - 80px, 1240px);
+  margin-top: clamp(20px, 1.8vw, 28px);
+}
+
+/* One column each, at least as wide as its name where the name keeps to one line (the products'
+   names, their own in every language). The rows of pictures, names and lines are shared (subgrid),
+   so every name stands on one line and every line starts on one line, however a neighbour wraps. */
+.shelfRow {
   display: grid;
+  grid-template-columns: repeat(var(--count, 5), minmax(min-content, 1fr));
+  grid-template-rows: auto auto auto;
+  column-gap: clamp(8px, 1.2vw, 20px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Each name is a link only as wide as its words, so the pointer leaves it on its way across. */
-.root .nameList a.nameLink[href] {
+.shelfRow > li {
   display: grid;
-  justify-items: start;
-  justify-self: start;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+}
+
+/* (Beats the look's rule that sizes a header's first picture link as its logo.) */
+.root .shelfRow a.item[href] {
   position: relative;
-  padding: clamp(3px, 0.5vh, 5px) 0 clamp(4px, 0.65vh, 6px);
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  justify-items: center;
+  align-items: start;
+  padding: 0 4px 8px;
   color: var(--ink);
 }
 
-/* Its focus ring keeps to its own line (round 10): 4px out, it ran within 2px of the next name. */
-.root .nameList a.nameLink[href]:focus-visible {
+/* Its focus ring goes round the whole part (picture, name and line), drawn over the picture. */
+.root .shelfRow a.item[href]:focus-visible {
   outline: none;
 }
 
-.root .nameList a.nameLink[href]:focus-visible::before {
+.root .shelfRow a.item[href]:focus-visible::after {
   content: "";
   position: absolute;
-  inset: -1px -10px;
+  inset: -8px -2px -2px;
   border-radius: 6px;
   outline: 2px solid currentColor;
   pointer-events: none;
 }
 
-.nameText {
-  position: relative;
-  font-family: var(--display-font);
-  /* The headline voice; on a short window it gives a little (never under 28px). */
-  font-size: clamp(28px, min(2.1vw, 4.6vh), 32px);
-  font-weight: var(--display-weight, 500);
-  line-height: 1.12;
-  letter-spacing: -0.022em;
+/* A name stands at the foot of the names' row, so it is always right over its own line: where one
+   name wraps (Vietnamese "Các nhà khoa học của chúng tôi"), the others share its last line instead
+   of standing a line above their captions. */
+.itemName {
+  align-self: end;
+  margin-top: 14px;
+  font-size: 21px;
+  font-weight: 450;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.shelf[data-row="products"] .itemName {
   white-space: nowrap;
 }
 
-/* The shown product's name carries the 2px ink line, drawn from the middle (0.5s); the name left
-   behind lets go of its line at once, so only one name is ever underlined. */
-.nameText::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 2px;
-  border-radius: 2px;
-  background: currentColor;
-  scale: 0 1;
+/* Pointing at a part (or reaching it by keyboard) paints the fine ink line under its name, drawn
+   out from the middle of each of its lines (0.5s); the one left behind lets go at once, so only
+   one name is ever lined. */
+.itemName > span {
+  padding-bottom: 3px;
+  background: linear-gradient(currentColor, currentColor) 50% 100% / 0% 2px no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 
-.nameLink[data-shown] .nameText::after {
-  scale: 1 1;
-  transition: scale 0.5s var(--ease);
-}
+@media (hover: hover) {
+  .root .shelfRow a.item[href]:hover .itemName > span {
+    background-size: 100% 2px;
+    transition: background-size 0.5s var(--ease);
+  }
 
-.nameFocus {
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 17px;
-  line-height: 1.35;
-}
-
-.root .names > a.more[href] {
-  align-self: end;
-  margin-top: clamp(10px, 1.2vw, 18px);
-}
-
-/* The bottle in the room above its link; the link on the same line as "Explore our products." */
-.stage {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  align-items: center;
-  align-self: stretch;
-  justify-items: center;
-}
-
-.root .stage a.stageStand[href] {
-  position: relative;
-  display: block;
-  height: clamp(280px, 23vw, 380px);
-  aspect-ratio: 1230 / 1278;
-}
-
-.stagePool {
-  position: absolute;
-  left: 52%;
-  top: 79%;
-  width: 60%;
-  height: auto;
-  aspect-ratio: 1 / 0.42;
-  object-fit: fill;
-  translate: -50% 0;
-  transform-origin: 47% 40%;
-  mix-blend-mode: multiply;
-  mask-image: radial-gradient(closest-side, #000 72%, transparent);
-  opacity: 0.92;
-  scale: 1.1;
-  animation: insc-gather 0.9s var(--ease) both;
-}
-
-@keyframes insc-gather {
-  from {
-    opacity: 0.5;
-    scale: 1;
+  .root .shelfRow:has(a.item:hover) a.item[href]:not(:hover) .itemName > span {
+    background-size: 0% 2px;
+    transition: none;
   }
 }
 
-.stageContact {
+.root .shelfRow a.item[href]:focus-visible .itemName > span {
+  background-size: 100% 2px;
+  transition: background-size 0.5s var(--ease);
+}
+
+.itemLine {
+  max-width: min(100%, 13em);
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.35;
+  text-wrap: balance;
+}
+
+/* Products: the ground, one real painted line (the bar's own stroke at its own proportions: a fine
+   tip where the brush lands, a thin body, dry strands at its end), the bottles' feet on it. Never
+   squashed into a rod. */
+.shelfGround {
   position: absolute;
   left: 50%;
-  top: 92.6%;
-  width: 56%;
-  height: auto;
-  aspect-ratio: 1 / 0.12;
-  object-fit: fill;
-  translate: -50% 0;
-  mix-blend-mode: multiply;
-  opacity: 0.85;
+  top: calc(var(--stand) * 0.962);
+  width: calc(100% - 40px);
+  aspect-ratio: 2433 / 42;
+  translate: -50% -50%;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-/* The five photographs, stacked: the shown one comes in over the last (0.5s, front-loaded, so
-   the two labels are never long half and half) while the last fades out under it. */
-.big {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.3s var(--ease) 0.2s;
+/* Pointing at a product lifts its bottle a little off its pool. */
+@media (hover: hover) {
+  .root .shelf a.item[href]:hover .bottle {
+    translate: 0 -6px;
+  }
+
+  .root .shelf a.item[href]:hover .pool {
+    opacity: 0.38;
+  }
 }
 
-.big[data-shown] {
-  z-index: 2;
-  opacity: 1;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.root .shelf a.item[href]:focus-visible .bottle {
+  translate: 0 -6px;
 }
 
-.root .stage > a.more[href] {
-  margin-top: 6px;
+.root .shelf a.item[href]:focus-visible .pool {
+  opacity: 0.38;
 }
 
 /* A product photograph standing on its pale ink pool (the narrow window's menu). */
@@ -1250,41 +1269,46 @@
   transition: translate 0.6s var(--ease);
 }
 
-/* Science's pictures (round 5): Dr. Liu's real photograph and three ink paintings, at one weight.
-   Each stands centred in the same stand as the bottles, in the same place, sized to fill about
-   the room a bottle does: the print on its paper mat at 80% of the stand's height (never
-   multiplied; the one sanctioned mount shadow), the paintings (their paper divided out,
-   multiplied) a little wider than the stand (--over on each side), the inkstone most, for the
+/* In the Products row: the photograph's clear margins may reach over a neighbour's (only the bottle
+   needs its room), and its pool is gathered, as on the homepage's stage and a little paler: the
+   painted pool foreshortened, its darkest core just under the base. */
+.shelf .stand {
+  margin-inline: calc(var(--stand) * -0.2);
+}
+
+.shelf .pool {
+  top: 79%;
+  width: 60%;
+  aspect-ratio: 1 / 0.42;
+  mask-image: radial-gradient(closest-side, #000 72%, transparent);
+  opacity: 0.55;
+}
+
+/* Science's pictures (round 5): Dr. Liu's real photograph and three ink paintings at one weight,
+   each centred in a room the size of a bottle's: the print on its paper mat at 80% of the room's
+   height (never multiplied; the one sanctioned mount shadow), the paintings (their paper divided
+   out, multiplied) a little wider than the room (--over on each side), the inkstone most, for the
    paper round it. No halo: tried behind all four, it read as a grey disc and muddied the cell.
-   Stacked. The shown one comes in over the last (0.5s, front-loaded, as the bottles do), but the
-   last one fades out at the same time instead of staying whole under it: they are ink on the
-   same paper, so holding it would only double the two paintings. The print always lies on top
-   (a real print over the paintings, as on a table) and goes fastest (0.16s): a painting coming in
-   multiplied over a fading print would stand on a grey card; under it, the photograph simply
-   thins away over the painting. Centred by their insets, never a translate (the settle moves
-   them). */
+   Centred by their insets, never a translate (the settle moves them). */
+.room {
+  position: relative;
+  display: block;
+  width: calc(var(--stand) * 1230 / 1278);
+  aspect-ratio: 1230 / 1278;
+}
+
 .plate {
   --over: 0%;
   position: absolute;
   inset: 0 calc(-1 * var(--over));
-  z-index: 1;
   display: block;
   width: calc(100% + 2 * var(--over));
   max-width: none;
   height: auto;
   margin: auto;
-  opacity: 0;
-  transition: opacity 0.35s var(--ease);
-}
-
-.plate[data-plate="print"]:not([data-shown]) {
-  transition-duration: 0.16s;
-}
-
-.plate[data-shown] {
-  z-index: 2;
-  opacity: 1;
-  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition:
+    opacity 0.6s var(--ease) 0.12s,
+    scale 0.6s var(--ease);
 }
 
 img.plate {
@@ -1304,20 +1328,52 @@ img.plate {
 }
 
 .root .plate[data-plate="print"] {
-  z-index: 3;
   width: fit-content;
   height: 80%;
-  padding: 8px;
+  padding: clamp(4px, 0.36vw, 6px);
   background: #fbf9f4;
   box-shadow:
-    0 16px 30px -16px rgba(12, 11, 10, 0.42),
-    0 2px 6px rgba(12, 11, 10, 0.1);
+    0 12px 22px -12px rgba(12, 11, 10, 0.42),
+    0 2px 5px rgba(12, 11, 10, 0.1);
 }
 
 .photo {
   display: block;
   width: auto;
   height: 100%;
+}
+
+/* Pointing at a part (or reaching it by keyboard) brings its picture gently forward and the
+   others ease back a little, never to a ghost (the print, a real photograph, least). They come
+   back a moment later, so crossing the gap from one part to the next never flickers the row. */
+@media (hover: hover) {
+  .shelfRow:has(a.item:hover) .plate {
+    opacity: 0.7;
+    transition-delay: 0s;
+  }
+
+  .shelfRow:has(a.item:hover) .plate[data-plate="print"] {
+    opacity: 0.8;
+  }
+
+  .root .shelfRow a.item[href]:hover .plate[data-plate] {
+    opacity: 1;
+    scale: 1.04;
+  }
+}
+
+.shelfRow:has(a.item:focus-visible) .plate {
+  opacity: 0.7;
+  transition-delay: 0s;
+}
+
+.shelfRow:has(a.item:focus-visible) .plate[data-plate="print"] {
+  opacity: 0.8;
+}
+
+.root .shelfRow a.item[href]:focus-visible .plate[data-plate] {
+  opacity: 1;
+  scale: 1.04;
 }
 
 /* A focus line or caption keeps its phrases whole where they fit: a narrow line breaks between
@@ -1328,12 +1384,12 @@ img.plate {
   display: inline-block;
 }
 
-/* Japanese and Chinese lines break between phrases, not inside them. */
-.root .nameFocus:is(:lang(ja), :lang(zh)) {
+/* Japanese and Chinese lines break between phrases, not inside them; Korean between words. */
+.root :is(.panelTitle, .itemName, .itemLine):is(:lang(ja), :lang(zh)) {
   word-break: auto-phrase;
 }
 
-.root .nameFocus:lang(ko) {
+.root :is(.itemName, .itemLine):lang(ko) {
   word-break: keep-all;
 }
 
@@ -1366,15 +1422,23 @@ img.plate {
   }
 }
 
+/* Under a drop-down's row it stands at the scroll's foot, on one line on both. */
+.root .panelInner > a.more[href] {
+  align-self: end;
+  margin-top: clamp(16px, 1.5vw, 24px);
+}
+
 /* What is on the scroll settles as the paper reaches it. Only the pieces themselves move and fade,
    never a box around a multiplied painting or pool (that would isolate its blend). */
 @media (prefers-reduced-motion: no-preference) {
-  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.nameText, .nameFocus, .more) {
+  .root[data-unrolled]:not([data-swap])
+    .panel[data-shown]
+    :is(.panelTitle, .plate, .itemName, .itemLine, .more) {
     animation: insc-settle 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .nameFocus {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.itemName, .itemLine) {
     animation-delay: calc(0.24s + var(--i, 0) * 60ms);
   }
 
@@ -1382,50 +1446,37 @@ img.plate {
     animation-delay: 0.42s;
   }
 
-  /* The showroom's picture settles with its names; once the visitor points at another it only
-     cross-fades. (The picture itself moves and fades, never its stand: that would isolate the
-     paintings' multiply.) A painting fades in as ink does. The bottle, a photograph, does not:
-     half see-through it read as a pale ghost of a bottle for half a second (round 9), so it is
-     simply there as the unrolling paper reaches it, crisp as the names, and only rises into place
-     with them. */
-  .root[data-unrolled]:not([data-swap])
-    .panel[data-shown]
-    .stage:not([data-moved])
-    .plate[data-shown] {
-    animation: insc-settle 0.9s var(--ease) 0.2s backwards;
+  /* A bottle, a photograph, never fades: half see-through it read as a pale ghost of a bottle
+     (round 9). It is there as the unrolling paper reaches it, crisp as the names, and only rises
+     into place with them; its pool and the ground line come in under it (never a shadow without
+     its bottle). */
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .shelf .bottle {
+    animation: insc-rise 0.9s var(--ease) backwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
   .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
-    .stage:not([data-moved])
-    .big[data-shown] {
-    animation: insc-rise 0.9s var(--ease) 0.2s backwards;
-  }
-
-  /* Its pool spreads in under it as the paper reaches it (never a shadow without its bottle). */
-  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .stageContact,
-  .root[data-unrolled]:not([data-swap]) .panel[data-shown] .stage:not([data-moved]) .stagePool {
-    animation: insc-fade 0.5s var(--ease) 0.2s backwards;
+    :is(.shelf .pool, .shelf .contact, .shelfGround) {
+    animation: insc-fade 0.9s var(--ease) backwards;
+    animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
   /* A swap: the new panel fades in whole over the old one, and what is written on it settles into
      place as it comes (rising only; it never fades on its own, so the scroll is never blank). The
-     fade is front-loaded (the site's expo-out, as on the product pages): the new writing is most of
-     the way in within a few frames, so the two never stand over each other as a double exposure. */
+     fade is front-loaded (the site's expo-out, as on the product pages) and short (0.3s; round 11:
+     the two rows stand their parts in different places, and over 0.45s the bottles still showed
+     through the Science pictures 170ms in): the new writing is most of the way in within a few
+     frames, so the two never stand over each other as a double exposure. */
   .root[data-swap] .panel[data-shown] {
-    animation: insc-fade 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  .root[data-unrolled][data-swap] .panel[data-shown] :is(.nameText, .nameFocus, .more) {
-    animation: insc-rise 0.7s var(--ease) backwards;
-    animation-delay: calc(var(--i, 0) * 40ms);
+    animation: insc-fade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .root[data-unrolled][data-swap]
     .panel[data-shown]
-    .stage:not([data-moved])
-    :is(.big, .plate)[data-shown] {
+    :is(.panelTitle, .bottle, .plate, .itemName, .itemLine, .more) {
     animation: insc-rise 0.7s var(--ease) backwards;
+    animation-delay: calc(var(--i, 0) * 40ms);
   }
 }
 

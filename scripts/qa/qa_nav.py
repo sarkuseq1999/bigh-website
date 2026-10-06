@@ -1,6 +1,6 @@
 """QA for the menu bar, "Inscription" (Mo's pick, October 5, 2026), on the homepage.
 
-usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|settle|showroom|science|phone|tablet|lang|r10]
+usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|settle|rows|phone|tablet|lang|r10]
        base defaults to http://localhost:3014
 
 On the real GPU (ANGLE/D3D11):
@@ -21,30 +21,28 @@ On the real GPU (ANGLE/D3D11):
     text link of the page are each put behind the bar's words and on its brush rule, and the band
     from the bar's top to just under the rule's ink must not change by more than 6 levels (round 1:
     at 93% paper the page ghosted behind the words and the rule struck through lines under it).
-  - the Products showroom (round 4) at 1536x900, 1280x800, 1920x1080@2x, 1101x800 and 1366x657:
-    the five names (28px+) visible, inside the window, on one left edge and evenly spaced (2px),
-    every one a 48px+ link to its own page, its focus line (17px+) under it on the same edge; the
-    bottle beside them 280px+ tall, its picture at least its size on screen (crisp), 40px+ clear of
-    the names; the scroll's foot above the window's foot. NuriCell shown first (its name
-    underlined); Discover goes to the shown product, Explore to the products. Tab steps through
-    the five names in order, each showing its own bottle and Discover link, with a visible ring;
-    resting the pointer on a name shows its bottle, passing over another on the way to Discover
-    keeps it, and Discover goes to its page; on a touch laptop the first tap on a name opens its
-    page. Filmed at real speed down the names: the bottle's place never empty, one line at a time.
-  - the Science showroom (round 5), the second page of the same book, at 1536x900, 1280x800,
-    1920x1080@2x, 1101x800 and 1366x657: the four names (28px+) visible, inside the window, on one
-    left edge and evenly spaced, each a 48px+ link with its caption (17px+) under it; the names on
-    Products' left edge and lines, the picture in the bottle's stand, the two links on Products'
-    line (1px); Dr. Liu's print 75%+ of the stand's height and crisp; the scroll's foot above the
-    window's foot. One weight (1536, 1101, 1920@2x, measured in the pixels): the three paintings'
-    ink within 25% of their mean, the print as tall as any painting and 75%+ of the bottle, every
-    picture crisp. Our scientists shown first; every name goes to its part, Explore to the science.
-    Enter opens it and Tab steps through the four in order, each showing its own picture and link,
-    with a visible ring; resting the pointer shows a part's picture, passing over another on the
-    way to its link keeps it, and the link goes to its part; on a touch laptop the first tap opens
-    its part. Filmed at real speed down the names: the picture's place never empty, one line at a
-    time, no painting's paper as a light box; swapping back in from Products on a painting, no
-    light box behind it.
+  - the two rows (round 11, Mo's pick: everything at once). At 1536x900, 1280x800, 1920x1080@2x,
+    1101x800 and 1366x657: Products shows all five at once in one row, side by side (each picture,
+    name and line seen), inside the window and above the scroll's torn foot, every name and line in
+    its own column; the names on one line and every line starting on one line (1px), each name
+    centred under its picture (2px), names 21px+, lines 17px+; each bottle on its own pale pool
+    (multiplied, 45-65%) and all on one painted ground line (the bar's stroke: 1-8px of ink in
+    every gap between bottles, under half the old 16px rod), each bottle crisp (its picture at least its size on screen)
+    and 170px+ tall; the scroll's foot above the window's foot. Science the same with its four
+    parts, on one page with Products (1px: the title, the pictures' row's top and height, the
+    names' line, the captions on the focus lines' line, the link under the row); Dr. Liu's print
+    75%+ of its room and every picture crisp; one weight (1536, 1101, 1920@2x, in the pixels): the
+    three paintings' ink within 25% of their mean, the print as tall as any painting and 75%+ of a
+    bottle. Every part one link to its own page (48px+), the link under the row centred and going
+    to the products or the science. Keyboard: Enter opens each, Tab steps through its parts in
+    order (each ringed, its name lined, its bottle lifted 6px with the others standing, or its
+    picture forward with the others eased back to 60-85%), then the link under the row. Pointer:
+    resting on a part does the same and lines only its name; a click opens its page; on a touch
+    laptop the first tap opens its page. Filmed at real speed along each row: one name lined on
+    every frame, a bottle lifting at most its 6px and never fading, no Science picture past 60% and
+    no painting's paper as a light box; swapping back in from Products, no light box. Vietnamese,
+    Japanese and Korean at 1101 and 1536: both rows whole, inside the window, long names wrapping in
+    their own column (two lines at most), names on one line and lines starting on one line.
   - reduced motion: the scroll is down at once.
   - the painted stroke (round 6) at 1536x900: the homepage marks no page (no aria-current, no
     data-current, no stroke "here" in the bar). The stroke follows the reader: none over the
@@ -88,15 +86,17 @@ On the real GPU (ANGLE/D3D11):
     제품, 製品; 소개 as the current page): about three characters long, centred, past both ends,
     its ink never past the chevron's middle.
   - filmed at real speed (round 2; every frame the compositor draws, plus the bar's state on every
-    frame the page draws): Science opening on a painting (the cell: rested on, closed and opened
-    again at once; it opens on Dr. Liu's print, which is never multiplied), from the tall bar and
-    from the scrolled bar, and Products opening show no light box behind a painting or a pool
-    (only pictures drawn at the end are measured): no sample of a multiplied
-    picture is more than 4 levels lighter than the paper beside it, on any frame (two frames
-    running) once the scroll has reached it (the showroom's pool, whose edge is masked, is read
-    with the bottles hidden at the points where its own painting is paper, averaged, against the
-    paper either side of the bottle, and must not be more than 1 level over it: multiplied it
-    reads -2 to -7 levels, an isolated blend about +3). Moving from one drop-down to the other (both ways):
+    frame the page draws): Science opening (its three paintings; Dr. Liu's print is never
+    multiplied) and Products opening (its five pools), from the tall bar and from the scrolled
+    bar, show no light box behind a painting or a pool (only pictures drawn at the end are
+    measured; a painting against the paper under it, the same place with the paintings lifted, so
+    the paper's own grain never reads as light; a pool against the paper in the gaps between the
+    bottles): no sample of a multiplied picture is more than 4 levels lighter than that paper, on
+    any frame (two frames
+    running) once the scroll has reached it (a bottle's pool, whose edge is masked, is read with
+    the bottles and the ground line hidden at the points where its own painting is paper, averaged,
+    against the paper in the gaps between the bottles, and must not be more than 1 level over it:
+    multiplied it reads -2 to -7 levels, an isolated blend about +3). Moving from one drop-down to the other (both ways):
     the scroll's ink never drops below 60% of the lighter drop-down's, one drop-down is always drawn
     whole, only one word is ever underlined and no chevron is ever turned sideways; pointing on to
     About keeps one line. The tablet menu opens, and the phone menu's Products unfolds, with no
@@ -402,11 +402,6 @@ PICTURES = """(sel) => {
   }).filter(p => p.kind !== 'contact');
 }"""
 
-# Round 4: the paper beside a showroom's stand, left and right of it, `off` px out (28 beside a
-# bottle; 90 beside a Science picture, whose paintings run a little past the stand on their paper).
-BESIDE = """([sel, off]) => { const s = document.querySelector(sel + ' [class*="stageStand"]').getBoundingClientRect();
-  return [s.left - off, s.right + off]; }"""
-
 # Paper beside the pictures: the middle of each gap between neighbouring items on one row.
 GAPS = """(sel) => { const items = [...document.querySelectorAll(sel)].map(li => li.getBoundingClientRect())
   .filter(r => r.width > 0); const out = [];
@@ -482,7 +477,7 @@ def samples(pic):
     the bottle's foot, white in the picture (so exactly the paper under multiply)."""
     x, y, w, h = pic["x"], pic["y"], pic["w"], pic["h"]
     if pic["kind"] == "pool" and pic.get("masked"):
-        # The showroom's pool fades out through an elliptical mask from 72% of its radius, so its
+        # A bottle's pool fades out through an elliptical mask from 72% of its radius, so its
         # corners show nothing. It is read instead at the points inside the ellipse where its own
         # painting is paper (the bottle is hidden while it is filmed), and light_boxes averages
         # them: multiplied, they sit a little under the page's paper (the painting's paper is 2%
@@ -510,14 +505,19 @@ def samples(pic):
     ]
 
 
-def light_boxes(film, pics, gaps, reveal, width, lo, hi):
+def light_boxes(film, pics, gaps, reveal, width, lo, hi, under=None):
     """Under multiply nothing in a picture can be lighter than the paper it lies on; an isolated blend
     shows the picture's white paper as a light box. For each picture, frame by frame from lo to hi ms:
     its lightest sample minus the paper beside it at the same height, counting only what the scroll
     (or fold) has already let down, with a margin. A value counts when two frames running show it.
+    With `under` (a picture of the same view with the pictures lifted off the paper), each sample is
+    read against the paper under it instead, the same fibre in the same place: the paper's own grain
+    (a few levels between one place and another) then never reads as light, and a light box (about
+    +12 levels for these paintings, measured) stands out from nothing.
     Returns {picture: (worst levels, frames measured)}."""
     series = {p["name"]: [] for p in pics}
     boxes = {p["name"]: samples(p) for p in pics}
+    base = None if under is None else (luma(under), under.width / width)
     for t, tw, img in film.frames():
         if not lo - 40 <= t <= hi:
             continue
@@ -527,6 +527,9 @@ def light_boxes(film, pics, gaps, reveal, width, lo, hi):
             found = []
             for box in boxes[pic["name"]]:
                 if box[3] > edge - 10 or box[0] < 0 or box[2] > width:
+                    continue
+                if base is not None:
+                    found.append(box_mean(a, box, k) - box_mean(base[0], box, base[1]))
                     continue
                 cy = (box[1] + box[3]) / 2
                 refs = [(g - 3, cy - 4, g + 3, cy + 4) for g in gaps if 0 < g < width]
@@ -541,6 +544,17 @@ def light_boxes(film, pics, gaps, reveal, width, lo, hi):
         held = [min(u, v) for (tu, u), (_, v) in zip(s, s[1:]) if u is not None and v is not None and tu >= lo]
         out[name] = (round(max(held), 1) if held else None, sum(1 for t, v in s if v is not None and t >= lo))
     return out
+
+
+def paper_under(page, sel):
+    """The view as it is, with a drop-down's paintings lifted off the paper (hidden): the paper under
+    each of them, for light_boxes(under=...)."""
+    tag = page.add_style_tag(content=f"{sel} img[data-plate] {{ visibility: hidden !important; }}")
+    page.wait_for_timeout(120)
+    shot = Image.open(BytesIO(page.screenshot())).convert("RGB")
+    tag.evaluate("el => el.remove()")
+    page.wait_for_timeout(120)
+    return shot
 
 
 def no_light_box(name, found, frames=6):
@@ -589,30 +603,13 @@ def drop_down_motion(browser):
         for panel in ("science", "products"):
             box = page.locator(f'[data-nav-trigger="{panel}"]').bounding_box()
             hide = None
-            if panel == "science":
-                # Science opens on Dr. Liu's print (a real photograph, never multiplied). To film a
-                # painting settling in with the scroll: rest on Cellular health, close, and open
-                # again at once (it keeps the cell for 0.42s after closing). A pointer click at the
-                # button: a locator click would scroll the page, and scrolling closes the scroll.
-                page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
-                page.wait_for_timeout(1200)
-                cell = page.locator('[data-nav-panel="science"] [class*="nameText"]', has_text="Cellular health").bounding_box()
-                page.mouse.move(cell["x"] + 30, cell["y"] + cell["height"] / 2, steps=4)
-                page.wait_for_timeout(900)
             if panel == "products":
-                # The pool is measured where the bottle would cover it: the bottles are hidden.
+                # The pools are measured where the bottles stand over them, and the ground line runs
+                # through them: both are hidden while they are filmed.
                 hide = page.add_style_tag(
-                    content='[data-nav-panel="products"] [class*="__big"] { visibility: hidden !important; }'
+                    content='[data-nav-panel="products"] :is([class*="__bottle"], [class*="__shelfGround"]) { visibility: hidden !important; }'
                 )
-            def act(panel=panel, box=box):
-                if panel == "science":
-                    # Closed and opened again at once (inside the film, so never later than the
-                    # 0.42s the cell is kept); the film's clock starts at the click.
-                    page.keyboard.press("Escape")
-                    page.wait_for_timeout(60)
-                page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
-
-            film.shoot(act, 1500)
+            film.shoot(lambda box=box: page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1500)
             sel = f'[data-nav-panel="{panel}"]'
             top, height = page.evaluate(
                 f"(() => {{ const r = document.querySelector('{sel}').getBoundingClientRect(); return [r.top, r.height]; }})()"
@@ -621,21 +618,24 @@ def drop_down_motion(browser):
             found = light_boxes(
                 film,
                 pics,
-                page.evaluate(BESIDE, [sel, 90 if panel == "science" else 28]),
+                page.evaluate(GAPS, f"{sel} li"),
                 lambda e: top + e["r"] * height - deckle,
                 1536,
                 250,
                 1500,
+                under=paper_under(page, sel) if panel == "science" else None,
             )
+            files = sorted(pic["file"].rsplit("/", 1)[-1] for pic in pics)
             if panel == "science":
-                name = f"{tag}: Science opens on a painting (the cell) with no light box behind it (filmed at real speed)"
-                shown = [pic["file"].rsplit("/", 1)[-1] for pic in pics]
-                if shown == ["mito.webp"]:
-                    no_light_box(name, found)
-                else:
-                    check(name, False, f"the cell was not the picture shown: {shown}")
+                name = f"{tag}: Science opens with no light box behind its three paintings (filmed at real speed)"
+                want = sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"])
             else:
-                no_light_box(f"{tag}: Products opens with no light box round the showroom bottle's pool (filmed at real speed)", found)
+                name = f"{tag}: Products opens with no light box round the five bottles' pools (filmed at real speed)"
+                want = ["pool.webp"] * 5
+            if files == want:
+                no_light_box(name, found)
+            else:
+                check(name, False, f"pictures measured: {files}")
             if hide:
                 hide.evaluate("el => el.remove()")
                 page.wait_for_timeout(100)
@@ -703,310 +703,65 @@ def switches(page, film):
     )
 
 
-# ---------------------------------------------------------------- round 4: the Products showroom
+# ---------------------------------------------------------------- round 11: the two rows
 
 SLUGS = ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
 NAMES = ["NuriCell", "Green Bee Propolis", "Advanced OPC Formula", "Turmerific", "Nature Calm"]
-
-SHOWROOM = r"""() => {
-  const p = document.querySelector('[data-nav-panel="products"]');
-  const box = el => { const r = el.getBoundingClientRect();
-    return { l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height }; };
-  const names = [...p.querySelectorAll('a[class*="nameLink"]')].map(a => {
-    const n = a.querySelector('[class*="nameText"]'), f = a.querySelector('[class*="nameFocus"]');
-    return { href: a.getAttribute('href'), name: n.textContent.trim(), focus: f.textContent.trim(),
-      size: parseFloat(getComputedStyle(n).fontSize), fsize: parseFloat(getComputedStyle(f).fontSize),
-      n: box(n), f: box(f), a: box(a), shown: a.hasAttribute('data-shown'),
-      visible: n.checkVisibility({ opacityProperty: true, visibilityProperty: true }) };
-  });
-  const big = p.querySelector('[class*="__big"][data-shown]');
-  const w = /[?&]w=(\d+)/.exec(big.currentSrc);
-  const paper = document.querySelector('header [class*="__paper"]').getBoundingClientRect();
-  return { names, stand: box(p.querySelector('[class*="stageStand"]')),
-    big: { src: decodeURIComponent(big.currentSrc), w: w ? +w[1] : 0, css: big.getBoundingClientRect().width },
-    links: [...p.querySelectorAll('a[class*="more"]')].map(a => ({ text: a.textContent.trim(), href: a.getAttribute('href') })),
-    paperBottom: paper.bottom, vh: innerHeight, vw: innerWidth, dpr: devicePixelRatio };
-}"""
-
-
-def open_products(page):
-    """Reach for the bar (the pictures load), then open Products with a click and rest the pointer
-    on empty paper inside the scroll."""
-    w = page.viewport_size["width"]
-    page.mouse.move(w * 0.7, 40)
-    page.wait_for_timeout(300)
-    page.wait_for_function(
-        "[...document.querySelectorAll('[data-nav-panel] img')].every(i => i.complete && i.naturalWidth > 0)",
-        timeout=30000,
-    )
-    page.mouse.move(w / 2, page.viewport_size["height"] - 6)
-    page.wait_for_timeout(600)
-    page.locator('[data-nav-trigger="products"]').click()
-    page.wait_for_timeout(200)
-    bar = page.evaluate("document.querySelector('#site-navigation').getBoundingClientRect().bottom")
-    page.mouse.move(12, bar + 30, steps=4)
-    page.wait_for_timeout(1500)
-
-
-def shown_product(page):
-    info = page.evaluate(SHOWROOM)
-    return info, next((s for s in SLUGS if f"/products/{s}." in info["big"]["src"]), None)
-
-
-def showroom_layout(browser):
-    """Round 4: at each desktop size the five names stand large on one left edge, evenly spaced,
-    each with its focus line under it, every one a link to its own page; the bottle stands large
-    and crisp beside them, clear of the names; the scroll ends above the window's foot."""
-    for w, h, dsf in ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1366, 657, 1)):
-        tag = f"showroom {w}x{h}" + (f"@{dsf}x" if dsf > 1 else "")
-        page = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=dsf)
-        watch(page)
-        page.goto(URL, wait_until="networkidle")
-        page.wait_for_timeout(2000)
-        open_products(page)
-        page.screenshot(path=str(OUT / f"showroom-{w}x{h}.png"))
-        info, slug = shown_product(page)
-        names = info["names"]
-        lefts = [n["n"]["l"] for n in names]
-        steps = [round(b["n"]["t"] - a["n"]["t"], 1) for a, b in zip(names, names[1:])]
-        check(
-            f"{tag}: the five names, large (28px+), visible, inside the window, on one left edge, evenly spaced",
-            [n["name"] for n in names] == NAMES
-            and all(n["size"] >= 28 and n["visible"] and n["n"]["l"] >= 0 and n["n"]["r"] <= info["vw"] for n in names)
-            and max(lefts) - min(lefts) <= 1
-            and max(steps) - min(steps) <= 2
-            and all(n["a"]["h"] >= 48 for n in names),
-            f"sizes {[n['size'] for n in names]}; lefts {sorted(set(round(x) for x in lefts))}; steps {steps}",
-        )
-        check(
-            f"{tag}: each focus line (17px+) under its own name, on its left edge",
-            all(
-                n["fsize"] >= 17 and abs(n["f"]["l"] - n["n"]["l"]) <= 1 and 0 <= n["f"]["t"] - n["n"]["b"] <= 14
-                for n in names
-            ),
-            [(n["focus"][:18], n["fsize"], round(n["f"]["t"] - n["n"]["b"])) for n in names],
-        )
-        need = info["big"]["css"] * info["dpr"]
-        gap = info["stand"]["l"] - max(n["n"]["r"] for n in names)
-        check(
-            f"{tag}: the bottle stands large (280px+) and crisp (its picture at least its size on screen), clear of the names",
-            info["stand"]["h"] >= 279.5 and info["big"]["w"] >= need * 0.98 and gap >= 40,
-            f"stand {info['stand']['h']:.0f}px; picture {info['big']['w']}w for {need:.0f}px; gap {gap:.0f}px",
-        )
-        check(
-            f"{tag}: the scroll ends above the window's foot",
-            info["paperBottom"] <= info["vh"],
-            f"scroll foot {info['paperBottom']:.0f}, window {info['vh']}",
-        )
-        if (w, h) == (1536, 900):
-            hrefs = [n["href"] for n in names]
-            check(
-                "showroom: every name is a link to its own product page",
-                all(href.endswith(f"/products/{s}") for href, s in zip(hrefs, SLUGS)),
-                hrefs,
-            )
-            check(
-                "showroom: NuriCell shown first, its name underlined, Discover goes to it, Explore to the products",
-                slug == "nuricell"
-                and [n["shown"] for n in names] == [True, False, False, False, False]
-                and any(
-                    link["text"].startswith("Discover NuriCell") and link["href"].endswith("/products/nuricell")
-                    for link in info["links"]
-                )
-                and any(
-                    link["text"].startswith("Explore our products") and link["href"].endswith("/#products")
-                    for link in info["links"]
-                ),
-                info["links"],
-            )
-        page.close()
-
-
-def showroom_reach(browser):
-    """Round 4: every product is reachable directly. By keyboard: Tab from the open Products steps
-    through the five names in order, each showing its own bottle and Discover link. By pointer:
-    resting on a name shows its bottle; passing over another name on the way to Discover does not
-    change it; Discover goes to the shown product. On a touch laptop: the first tap on a name opens
-    its page (no preview-only tap)."""
-    page = browser.new_page(viewport={"width": 1536, "height": 900})
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2000)
-    open_products(page)
-    page.locator('[data-nav-trigger="products"]').focus()
-    seen = []
-    for _ in range(5):
-        page.keyboard.press("Tab")
-        page.wait_for_timeout(120)
-        info, slug = shown_product(page)
-        discover = next((link["text"] for link in info["links"] if link["text"].startswith("Discover")), "")
-        seen.append((focused(page)[:24], slug, discover))
-    page.screenshot(path=str(OUT / "showroom-keyboard-naturecalm.png"))
-    page.keyboard.press("Tab")
-    after = focused(page)
-    check(
-        "showroom: Tab reaches every product's name in order, each showing its own bottle and Discover link",
-        all(
-            f.startswith(n) and slug == s and d.startswith(f"Discover {n}")
-            for (f, slug, d), n, s in zip(seen, NAMES, SLUGS)
-        )
-        and "Explore our products" in after,
-        f"{seen}; then {after!r}",
-    )
-    page.keyboard.press("Shift+Tab")
-    r = page.evaluate(FOCUS_RING)  # on the name or on a box laid round it (round 10)
-    ring = f"{r['style']} {r.get('width', 0)}px"
-    check(
-        "showroom: a visible ring on a name under the keyboard's focus",
-        "Nature Calm" in focused(page) and not ring.endswith(" 0px") and "none" not in ring,
-        f"{focused(page)!r}: {ring}",
-    )
-    page.keyboard.press("Escape")
-    page.wait_for_timeout(400)
-
-    open_products(page)
-    links = page.locator('[data-nav-panel="products"] a[class*="nameLink"]')
-    t = links.nth(3).locator('[class*="nameText"]').bounding_box()
-    page.mouse.move(t["x"] + 20, t["y"] + t["height"] / 2, steps=6)
-    page.wait_for_timeout(800)
-    info, slug = shown_product(page)
-    check("showroom: resting on a name shows its bottle", slug == "turmerific", slug)
-    nc = links.nth(4).locator('[class*="nameText"]').bounding_box()
-    disc = page.locator('[data-nav-panel="products"] a[class*="more"]', has_text="Discover").bounding_box()
-    page.mouse.move(nc["x"] + 20, nc["y"] + nc["height"] / 2, steps=2)
-    page.mouse.move(disc["x"] + 30, disc["y"] + disc["height"] / 2, steps=3)
-    page.wait_for_timeout(700)
-    info, slug = shown_product(page)
-    check("showroom: passing over another name on the way to Discover keeps the bottle", slug == "turmerific", slug)
-    page.mouse.click(disc["x"] + 30, disc["y"] + disc["height"] / 2)
-    page.wait_for_url("**/products/turmerific**", timeout=30000)
-    check("showroom: Discover goes to the shown product's page", "/products/turmerific" in page.url, page.url)
-    page.close()
-
-    ctx = browser.new_context(viewport={"width": 1536, "height": 900}, has_touch=True)
-    page = ctx.new_page()
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2000)
-    page.locator('[data-nav-trigger="products"]').tap()
-    page.wait_for_timeout(1200)
-    page.locator('[data-nav-panel="products"] a[class*="nameLink"]', has_text="Green Bee Propolis").tap()
-    try:
-        page.wait_for_url("**/products/green-bee-propolis**", timeout=30000)
-    except Exception:
-        pass
-    check(
-        "showroom: on a touch laptop the first tap on a name opens its page",
-        "/products/green-bee-propolis" in page.url,
-        page.url,
-    )
-    ctx.close()
-
-
-# Every frame: which names carry their line (scale over 4%).
-NAME_LINES = """() => { const names = [...document.querySelectorAll('[data-nav-panel="products"] [class*="nameText"]')];
-  window.__log = []; window.__logging = true;
-  const tick = () => { window.__log.push({ t: performance.timeOrigin + performance.now(),
-      lines: names.filter(n => (parseFloat(getComputedStyle(n, '::after').scale) || 0) > 0.04).map(n => n.textContent.trim()) });
-    if (window.__logging) requestAnimationFrame(tick); };
-  requestAnimationFrame(tick); }"""
-
-
-def showroom_motion(browser):
-    """Round 4, filmed at real speed: moving down the names from NuriCell to Nature Calm (resting on
-    each), the bottle's place is never empty (its ink never under 60% of the lightest bottle's at
-    rest) and only one name carries its line on every frame."""
-    page = browser.new_page(viewport={"width": 1536, "height": 900})
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2500)
-    open_products(page)
-    stand = page.locator('[data-nav-panel="products"] [class*="stageStand"]').bounding_box()
-    crop = (round(stand["x"]), round(stand["y"]), round(stand["x"] + stand["width"]), round(stand["y"] + stand["height"]))
-    beside = (crop[0] - 60, crop[1], crop[0] - 20, crop[3])
-    links = page.locator('[data-nav-panel="products"] a[class*="nameLink"]')
-    spots = []
-    for i in range(5):
-        b = links.nth(i).locator('[class*="nameText"]').bounding_box()
-        spots.append((b["x"] + 20, b["y"] + b["height"] / 2))
-
-    def ink(img):
-        a = luma(img.crop(crop))
-        paper = float(np.median(luma(img.crop(beside))))
-        return float(np.clip(paper - a - 6, 0, None).mean())
-
-    rest = []
-    for x, y in spots:
-        page.mouse.move(x, y, steps=4)
-        page.wait_for_timeout(1000)
-        rest.append(ink(Image.open(BytesIO(page.screenshot()))))
-    page.mouse.move(*spots[0], steps=4)
-    page.wait_for_timeout(1000)
-    film = Film(page)
-    page.evaluate(NAME_LINES)
-    film.raw = []
-    film.cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
-    page.wait_for_timeout(150)
-    for x, y in spots[1:]:
-        page.mouse.move(x, y, steps=8)
-        page.wait_for_timeout(450)
-    page.wait_for_timeout(700)
-    film.cdp.send("Page.stopScreencast")
-    page.evaluate("window.__logging = false")
-    log = page.evaluate("window.__log")
-    shares = [round(ink(img) / min(rest), 2) for _, _, img in film.frames(0)]
-    two = [e["lines"] for e in log if len(e["lines"]) > 1]
-    check(
-        "showroom: moving down the names, the bottle's place is never empty (filmed: its ink never under 60% of the lightest bottle's)",
-        len(shares) >= 20 and min(shares) >= 0.6,
-        f"least {min(shares, default=0)} over {len(shares)} frames; at rest {[round(r, 1) for r in rest]}",
-    )
-    check(
-        "showroom: only one name underlined on every frame (filmed)",
-        len(log) >= 60 and not two and log[-1]["lines"] == ["Nature Calm"],
-        f"{len(log)} frames; two at once {two[:3]}; last {log[-1]['lines'] if log else None}",
-    )
-    page.close()
-
-
-# ---------------------------------------------------------------- round 5: the Science showroom
-
 PARTS = ["Our scientists", "Cellular health", "Research library", "Ask BiGH Science"]
 PART_HREFS = ["/science#scientists", "/science#health", "/science#research", "/science#ask"]
-PART_LINKS = ["Meet our scientists", "Explore cellular health", "Explore the research", "Discover Ask BiGH Science"]
 PLATES = ["print", "cell", "reading", "inkstone"]
 PAINTED = {"mito": "cell", "reading": "reading", "inkstone": "inkstone"}
+ROW_SIZES = ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1366, 657, 1))
 
-SCIENCE = r"""() => {
+# A drop-down's row as drawn: its title, each part (its link, picture room, picture, name and line:
+# their boxes, the lines their words are set on, their sizes, whether the name is lined, how far a
+# bottle is lifted, a Science picture's opacity and scale, how sharp its picture is), the pools,
+# the ground line, the link under the row and the scroll's foot.
+ROW = r"""(id) => {
+  const p = document.querySelector(`[data-nav-panel="${id}"]`);
   const box = el => { const r = el.getBoundingClientRect();
     return { l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height }; };
-  const room = id => {
-    const p = document.querySelector(`[data-nav-panel="${id}"]`);
-    const names = [...p.querySelectorAll('a[class*="nameLink"]')].map(a => {
-      const n = a.querySelector('[class*="nameText"]'), f = a.querySelector('[class*="nameFocus"]');
-      return { href: a.getAttribute('href'), name: n.textContent.trim(), line: f.textContent.trim(),
-        size: parseFloat(getComputedStyle(n).fontSize), fsize: parseFloat(getComputedStyle(f).fontSize),
-        n: box(n), f: box(f), a: box(a), shown: a.hasAttribute('data-shown'),
-        visible: n.checkVisibility({ opacityProperty: true, visibilityProperty: true }) };
-    });
-    const links = [...p.querySelectorAll('a[class*="more"]')].map(a => ({ text: a.textContent.trim(),
-      href: a.getAttribute('href'), ...box(a) }));
-    return { names, links, stand: box(p.querySelector('[class*="stageStand"]')) };
-  };
-  const p = document.querySelector('[data-nav-panel="science"]');
-  const plate = p.querySelector('[data-plate][data-shown]');
-  const img = plate.tagName === 'IMG' ? plate : plate.querySelector('img');
-  const w = /[?&]w=(\d+)/.exec(img.currentSrc);
+  const lines = el => { const g = document.createRange(); g.selectNodeContents(el);
+    const rects = [...g.getClientRects()].filter(x => x.width > 1 && x.height > 1);
+    return { first: rects.length ? rects[0].top : null, last: rects.length ? Math.max(...rects.map(x => x.top)) : null,
+      count: new Set(rects.map(x => Math.round(x.top))).size,
+      l: Math.min(...rects.map(x => x.left)), r: Math.max(...rects.map(x => x.right)), b: Math.max(...rects.map(x => x.bottom)) }; };
+  const seen = el => el.checkVisibility({ opacityProperty: true, visibilityProperty: true });
+  const items = [...p.querySelectorAll('[data-nav-item]')].map(a => {
+    const n = a.querySelector('[data-nav-item-name]'), f = a.querySelector('[data-nav-item-line]');
+    const room = a.querySelector('[class*="__stand"], [class*="__room"]');
+    const img = a.querySelector('img[class*="__bottle"], img[data-plate], [data-plate] img');
+    const plate = a.querySelector('[data-plate]');
+    const bottle = a.querySelector('img[class*="__bottle"]');
+    const w = /[?&]w=(\d+)/.exec(img.currentSrc);
+    const t = bottle ? getComputedStyle(bottle).translate : 'none';
+    return { href: a.getAttribute('href'), name: n.textContent.trim(), line: f.textContent.trim(),
+      size: parseFloat(getComputedStyle(n).fontSize), fsize: parseFloat(getComputedStyle(f).fontSize),
+      a: box(a), n: box(n), f: box(f), room: box(room), nl: lines(n), fl: lines(f),
+      img: { w: w ? +w[1] : 0, css: img.getBoundingClientRect().width, h: img.getBoundingClientRect().height,
+        loaded: img.complete && img.naturalWidth > 0, o: bottle ? +getComputedStyle(bottle).opacity : 1 },
+      plate: plate ? { kind: plate.dataset.plate, ...box(plate), o: +getComputedStyle(plate).opacity,
+        scale: getComputedStyle(plate).scale } : null,
+      lift: t === 'none' ? 0 : parseFloat(t.split(' ')[1] || '0'),
+      lined: parseFloat(getComputedStyle(n.firstElementChild).backgroundSize) || 0,
+      visible: seen(n) && seen(f) && seen(img) };
+  });
+  const ground = p.querySelector('[class*="__shelfGround"]');
   const paper = document.querySelector('header [class*="__paper"]').getBoundingClientRect();
-  return { science: room('science'), products: room('products'),
-    plate: { kind: plate.dataset.plate, ...box(plate), w: w ? +w[1] : 0, css: img.getBoundingClientRect().width },
-    paperBottom: paper.bottom, vh: innerHeight, vw: innerWidth, dpr: devicePixelRatio };
+  return { items, title: box(p.querySelector('h2')),
+    pools: [...p.querySelectorAll('img[class*="__pool"]')].map(i => ({ o: +getComputedStyle(i).opacity,
+      mask: getComputedStyle(i).maskImage, blend: getComputedStyle(i).mixBlendMode })),
+    contacts: p.querySelectorAll('img[class*="__contact"]').length,
+    ground: ground ? { mask: getComputedStyle(ground).maskImage, ...box(ground) } : null,
+    links: [...p.querySelectorAll('a[class*="more"]')].map(a => ({ text: a.textContent.trim(), href: a.getAttribute('href'), ...box(a) })),
+    paperBottom: paper.bottom, deckle: parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle')),
+    vh: innerHeight, vw: innerWidth, dpr: devicePixelRatio };
 }"""
 
 
-def open_science(page):
-    """Reach for the bar (the pictures load), then open Science with a click and rest the pointer
-    on empty paper inside the scroll."""
+def open_panel(page, panel):
+    """Reach for the bar (the pictures load), then open a drop-down with a click and rest the
+    pointer on empty paper inside the scroll."""
     w = page.viewport_size["width"]
     page.mouse.move(w * 0.7, 40)
     page.wait_for_timeout(300)
@@ -1016,7 +771,7 @@ def open_science(page):
     )
     page.mouse.move(w / 2, page.viewport_size["height"] - 6)
     page.wait_for_timeout(600)
-    page.locator('[data-nav-trigger="science"]').click()
+    page.locator(f'[data-nav-trigger="{panel}"]').click()
     page.wait_for_timeout(200)
     bar = page.evaluate("document.querySelector('#site-navigation').getBoundingClientRect().bottom")
     page.mouse.move(12, bar + 30, steps=4)
@@ -1024,331 +779,428 @@ def open_science(page):
 
 
 def rest_on(page, panel, i, ms=1000):
-    b = page.locator(f'[data-nav-panel="{panel}"] a[class*="nameLink"]').nth(i).locator('[class*="nameText"]').bounding_box()
-    page.mouse.move(b["x"] + 30, b["y"] + b["height"] / 2, steps=4)
+    """Rest the pointer on a part of a row, on its picture."""
+    b = page.locator(f'[data-nav-panel="{panel}"] [data-nav-item]').nth(i).bounding_box()
+    page.mouse.move(b["x"] + b["width"] / 2, b["y"] + b["height"] * 0.35, steps=4)
     page.wait_for_timeout(ms)
     return b
+
+
+def one_row(tag, what, info, want, english=True):
+    """All of a row's parts at once, side by side in one row, inside the window and above the
+    scroll's torn foot; the names on one line and every line starting on one line, each centred under
+    its picture; names 21px+, lines 17px+; every name and line inside its own column."""
+    items = info["items"]
+    tops = [i["room"]["t"] for i in items]
+    order = all(a["a"]["r"] <= b["a"]["l"] + 0.5 for a, b in zip(items, items[1:]))
+    foot = info["paperBottom"] - info["deckle"]
+    inside = all(
+        i["a"]["l"] >= 0 and i["a"]["r"] <= info["vw"] and i["room"]["t"] >= 0 and i["fl"]["b"] <= min(foot, info["vh"])
+        for i in items
+    )
+    own = all(
+        i["nl"]["l"] >= i["a"]["l"] - 0.5 and i["nl"]["r"] <= i["a"]["r"] + 0.5
+        and i["fl"]["l"] >= i["a"]["l"] - 0.5 and i["fl"]["r"] <= i["a"]["r"] + 0.5
+        for i in items
+    )
+    check(
+        f"{tag}: {what}: all {len(want)} at once in one row (picture, name and line each seen), side by side, "
+        "inside the window and above the scroll's torn foot, every name and line inside its own column",
+        [i["name"] for i in items] == want and all(i["visible"] for i in items) and max(tops) - min(tops) <= 1
+        and order and inside and own,
+        f"rooms' tops {sorted(set(round(t) for t in tops))}; columns {[(round(i['a']['l']), round(i['a']['r'])) for i in items]}; "
+        f"lowest line {max(i['fl']['b'] for i in items):.0f}, torn foot {foot:.0f}, window {info['vh']}",
+    )
+    # A name stands at the foot of the names' row: the names share their last line (one line in
+    # English), and every line starts on one line.
+    firsts = [i["nl"]["last"] for i in items]
+    starts = [i["fl"]["first"] for i in items]
+    centred = [abs((i["nl"]["l"] + i["nl"]["r"]) / 2 - (i["room"]["l"] + i["room"]["r"]) / 2) for i in items]
+    check(
+        f"{tag}: {what}: shared baselines (the names on one line, every line starting on one line, 1px), each name "
+        f"centred under its picture (2px) and its line right under it (8px or less); names 21px+, lines 17px+"
+        + ("" if english else ", names in two lines or fewer"),
+        max(firsts) - min(firsts) <= 1
+        and max(starts) - min(starts) <= 1
+        and max(centred) <= 2
+        and all(i["n"]["t"] >= i["room"]["b"] - 1 and 0 <= i["f"]["t"] - i["n"]["b"] <= 8 for i in items)
+        and all(i["size"] >= 21 and i["fsize"] >= 17 for i in items)
+        and all(i["nl"]["count"] <= (1 if english else 2) for i in items),
+        f"names at {sorted(set(round(x, 1) for x in firsts))}, lines at {sorted(set(round(x, 1) for x in starts))}; "
+        f"off centre {max(centred):.1f}px; name lines {[i['nl']['count'] for i in items]}; sizes {[(i['size'], i['fsize']) for i in items][:1]}",
+    )
+
+
+def ground_ink(page, info):
+    """The ground line's ink across its thickness, in the pixels, in each gap between two bottles:
+    the rows at least 25 levels darker than the paper above and below it (a painted line: a few
+    pixels; the old squashed stroke was a 16px grey rod)."""
+    img = luma(Image.open(BytesIO(page.screenshot())))
+    k = img.shape[1] / info["vw"]
+    g = info["ground"]
+    mid = (g["t"] + g["b"]) / 2
+    out = []
+    for a, b in zip(info["items"], info["items"][1:]):
+        x = (a["room"]["r"] + b["room"]["l"]) / 2
+        cols = img[round((mid - 16) * k) : round((mid + 16) * k), round((x - 4) * k) : round((x + 4) * k)]
+        paper = float(np.median(np.concatenate([cols[: round(5 * k)], cols[-round(5 * k) :]])))
+        out.append(round(float(np.median((cols < paper - 25).sum(axis=0))) / k, 1))
+    return out
 
 
 def weigh(img, stand):
     """The ink of the picture standing in `stand` (a screenshot): its height (rows 30+ levels darker
     than the paper beside the stand) and its mass (darkness summed over the stand, widened 15% each
-    side for the paintings that run past it; the link under it is left out)."""
+    side for the paintings that run past it; the name under it is left out)."""
     a = luma(img)
     k = img.width / stand["vw"]
     x0, x1 = (stand["l"] - 0.15 * stand["w"]) * k, (stand["r"] + 0.15 * stand["w"]) * k
     y0, y1 = (stand["t"] - 0.04 * stand["h"]) * k, stand["b"] * k
-    paper = float(np.median(a[round(y0) : round(y1), round(x0 - 60 * k) : round(x0 - 20 * k)]))
+    # The paper: the band just above the picture's room, across it (in a row, beside a picture is
+    # its neighbour, or the window's edge).
+    paper = float(np.median(a[round(y0 - 10 * k) : round(y0 - 2 * k), round(x0) : round(x1)]))
     dark = np.clip(paper - a[round(y0) : round(y1), round(x0) : round(x1)], 0, None)
     rows = np.where((dark > 30).sum(axis=1) > 2)[0]
     return {"h": round(float(rows.max() - rows.min()) / k) if len(rows) else 0, "mass": float(dark.sum()) / (k * k * 1e3)}
 
 
-def science_layout(browser):
-    """Round 5: Science is the second page of the same book as Products. At each desktop size the
-    four names stand large on one left edge, evenly spaced, each with its caption under it, every
-    one a link to its part; they start on the products' left edge and lines; the picture stands in
-    the bottle's stand, large and crisp; the link under the names and the link under the picture
-    are on Products' line; the scroll ends above the window's foot. The four pictures are of one
-    weight: the three paintings' ink within 25% of their mean, Dr. Liu's print at least as tall as
-    every painting (no longer the smallest) and at least three quarters of the bottle's height."""
-    for w, h, dsf in ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1366, 657, 1)):
-        tag = f"science {w}x{h}" + (f"@{dsf}x" if dsf > 1 else "")
+def row_layout(browser):
+    """Round 11: each drop-down is one row, everything at once. At each desktop size: Products shows
+    the five side by side, each bottle on its own pale pool, all on one painted ground line, crisp;
+    Science its four parts the same way, the pictures at one weight; the two share one page (the
+    title, the pictures' row, the names' line and the link under them); every part one link; the
+    scroll ends above the window's foot."""
+    for w, h, dsf in ROW_SIZES:
+        tag = f"rows {w}x{h}" + (f"@{dsf}x" if dsf > 1 else "")
         page = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=dsf)
         watch(page)
         page.goto(URL, wait_until="networkidle")
         page.wait_for_timeout(2000)
-        open_science(page)
-        page.screenshot(path=str(OUT / f"science-{w}x{h}.png"))
-        info = page.evaluate(SCIENCE)
-        sci, pro = info["science"], info["products"]
-        names = sci["names"]
-        lefts = [n["n"]["l"] for n in names]
-        steps = [round(b["n"]["t"] - a["n"]["t"], 1) for a, b in zip(names, names[1:])]
+        open_panel(page, "products")
+        page.screenshot(path=str(OUT / f"rows-products-{w}x{h}.png"))
+        pro = page.evaluate(ROW, "products")
+        one_row(tag, "Products", pro, NAMES)
+        thick = ground_ink(page, pro)
+        items = pro["items"]
         check(
-            f"{tag}: the four names, large (28px+), visible, inside the window, on one left edge, evenly spaced",
-            [n["name"] for n in names] == PARTS
-            and all(n["size"] >= 28 and n["visible"] and n["n"]["l"] >= 0 and n["n"]["r"] <= info["vw"] for n in names)
-            and max(lefts) - min(lefts) <= 1
-            and max(steps) - min(steps) <= 2
-            and all(n["a"]["h"] >= 48 for n in names),
-            f"sizes {[n['size'] for n in names]}; lefts {sorted(set(round(x) for x in lefts))}; steps {steps}",
-        )
-        check(
-            f"{tag}: each caption (17px+) under its own name, on its left edge",
-            all(
-                n["fsize"] >= 17 and abs(n["f"]["l"] - n["n"]["l"]) <= 1 and 0 <= n["f"]["t"] - n["n"]["b"] <= 14
-                for n in names
-            ),
-            [(n["line"][:18], n["fsize"], round(n["f"]["t"] - n["n"]["b"])) for n in names],
-        )
-        same = lambda u, v: abs(u - v) <= 1  # noqa: E731
-        sline = max(link["b"] for link in sci["links"]) - min(link["b"] for link in sci["links"])
-        check(
-            f"{tag}: one page with Products: the names on its edge and lines, the picture in the bottle's stand, the links on its line (1px)",
-            all(same(a["n"]["l"], b["n"]["l"]) and same(a["n"]["t"], b["n"]["t"]) for a, b in zip(names, pro["names"]))
-            and all(same(sci["stand"][k], pro["stand"][k]) for k in ("l", "t", "w", "h"))
-            and sline <= 1
-            and all(same(a["b"], pro["links"][0]["b"]) for a in sci["links"]),
-            f"names {[(round(n['n']['l']), round(n['n']['t'])) for n in names]} vs "
-            f"{[(round(n['n']['l']), round(n['n']['t'])) for n in pro['names'][:4]]}; stand "
-            f"{[round(sci['stand'][k]) for k in ('l', 't', 'w', 'h')]} vs {[round(pro['stand'][k]) for k in ('l', 't', 'w', 'h')]}; "
-            f"links {[round(x['b']) for x in sci['links']]} vs {[round(x['b']) for x in pro['links']]}",
-        )
-        need = info["plate"]["css"] * info["dpr"]
-        check(
-            f"{tag}: the picture stands large (the print 75%+ of the stand's height) and crisp (its picture at least its size on screen)",
-            info["plate"]["kind"] == "print"
-            and info["plate"]["h"] >= 0.75 * sci["stand"]["h"]
-            and info["plate"]["w"] >= need * 0.98,
-            f"{info['plate']['kind']} {info['plate']['h']:.0f}px in a {sci['stand']['h']:.0f}px stand; picture {info['plate']['w']}w for {need:.0f}px",
+            f"{tag}: Products: each bottle on its own pale pool (multiplied, 45-65%), all on one painted ground line "
+            "(the bar's stroke: 1-8px of ink in every gap, under half the old 16px rod), each crisp (its picture at least "
+            "its size on screen) and 170px+ tall",
+            len(pro["pools"]) == 5
+            and all(0.45 <= x["o"] <= 0.65 and x["blend"] == "multiply" and "radial-gradient" in x["mask"] for x in pro["pools"])
+            and pro["contacts"] == 5
+            and pro["ground"] and "rule-whole.webp" in pro["ground"]["mask"]
+            and all(1 <= t <= 8 for t in thick)
+            and all(i["img"]["w"] >= i["img"]["css"] * pro["dpr"] * 0.98 and i["img"]["h"] >= 170 for i in items),
+            f"pools {[round(x['o'], 2) for x in pro['pools']]}; ground ink {thick}px; "
+            f"bottles {[(i['img']['w'], round(i['img']['css'] * pro['dpr'])) for i in items]}, {items[0]['img']['h']:.0f}px tall",
         )
         check(
             f"{tag}: the scroll ends above the window's foot",
-            info["paperBottom"] <= info["vh"],
-            f"scroll foot {info['paperBottom']:.0f}, window {info['vh']}",
+            pro["paperBottom"] <= pro["vh"],
+            f"scroll foot {pro['paperBottom']:.0f}, window {pro['vh']}",
         )
+        if (w, h) == (1536, 900):
+            more = pro["links"][0]
+            check(
+                "rows: every product is one link to its own page; Explore our products under the row, centred, to the products",
+                [i["href"] for i in items] == [f"/products/{s}" for s in SLUGS]
+                and all(i["a"]["h"] >= 48 and i["a"]["w"] >= 48 for i in items)
+                and len(pro["links"]) == 1
+                and more["text"].startswith("Explore our products") and more["href"].endswith("/#products")
+                and more["t"] >= max(i["a"]["b"] for i in items)
+                and abs((more["l"] + more["r"]) / 2 - w / 2) <= 2,
+                f"{[i['href'] for i in items]}; {[(x['text'], x['href']) for x in pro['links']]}",
+            )
+        bottle = None
         if (w, h) in ((1536, 900), (1101, 800), (1920, 1080)):
-            stand = dict(sci["stand"], vw=info["vw"])
-            weights, crisp = [], []
-            for i in range(4):
-                rest_on(page, "science", i)
-                weights.append(weigh(Image.open(BytesIO(page.screenshot())).convert("RGB"), stand))
-                plate = page.evaluate(SCIENCE)["plate"]
-                crisp.append((plate["kind"], plate["w"], round(plate["css"] * info["dpr"])))
-            page.screenshot(path=str(OUT / f"science-{w}x{h}-inkstone.png"))
+            shot = Image.open(BytesIO(page.screenshot())).convert("RGB")
+            bottle = max(weigh(shot, dict(i["room"], vw=w))["h"] for i in items)
+        page.keyboard.press("Escape")
+        page.mouse.move(w / 2, h - 6)
+        page.wait_for_timeout(900)
+
+        open_panel(page, "science")
+        page.screenshot(path=str(OUT / f"rows-science-{w}x{h}.png"))
+        sci = page.evaluate(ROW, "science")
+        pro = page.evaluate(ROW, "products")
+        one_row(tag, "Science", sci, PARTS)
+        same = lambda u, v: abs(u - v) <= 1  # noqa: E731
+        s, p = sci["items"], pro["items"]
+        check(
+            f"{tag}: one page with Products (1px): the title, the pictures' row (top and height), the names' line, "
+            "the captions on the focus lines' line, the link under the row on its line",
+            same(sci["title"]["t"], pro["title"]["t"])
+            and all(same(a["room"]["t"], p[0]["room"]["t"]) and same(a["room"]["h"], p[0]["room"]["h"]) for a in s)
+            and same(s[0]["nl"]["last"], p[0]["nl"]["last"])
+            and same(s[0]["fl"]["first"], p[0]["fl"]["first"])
+            and same(sci["links"][0]["b"], pro["links"][0]["b"]),
+            f"titles {sci['title']['t']:.0f}/{pro['title']['t']:.0f}; rooms {s[0]['room']['t']:.0f}+{s[0]['room']['h']:.0f} vs "
+            f"{p[0]['room']['t']:.0f}+{p[0]['room']['h']:.0f}; names {s[0]['nl']['last']:.0f}/{p[0]['nl']['last']:.0f}; "
+            f"lines {s[0]['fl']['first']:.0f}/{p[0]['fl']['first']:.0f}; links {sci['links'][0]['b']:.0f}/{pro['links'][0]['b']:.0f}",
+        )
+        crisp = [(i["plate"]["kind"], i["img"]["w"], round(i["img"]["css"] * sci["dpr"])) for i in s]
+        check(
+            f"{tag}: Science: Dr. Liu's print 75%+ of its room's height, every picture crisp (its picture at least its size on screen)",
+            [i["plate"]["kind"] for i in s] == PLATES
+            and s[0]["plate"]["h"] >= 0.75 * s[0]["room"]["h"]
+            and all(have >= need * 0.98 for _, have, need in crisp),
+            f"print {s[0]['plate']['h']:.0f}px in a {s[0]['room']['h']:.0f}px room; {crisp}",
+        )
+        if bottle is not None:
+            shot = Image.open(BytesIO(page.screenshot())).convert("RGB")
+            weights = [weigh(shot, dict(i["room"], vw=w)) for i in s]
             paintings = [x["mass"] for x in weights[1:]]
             mean = sum(paintings) / 3
-            open_products(page)
-            bottle = weigh(Image.open(BytesIO(page.screenshot())).convert("RGB"), stand)
             check(
-                f"{tag}: the four pictures of one weight (paintings' ink within 25% of their mean; the print as tall as any painting and 75%+ of the bottle)",
+                f"{tag}: the four Science pictures of one weight (paintings' ink within 25% of their mean; the print as tall as any painting and 75%+ of a bottle)",
                 all(abs(m / mean - 1) <= 0.25 for m in paintings)
                 and all(weights[0]["h"] >= x["h"] for x in weights[1:])
-                and weights[0]["h"] >= 0.75 * bottle["h"],
+                and weights[0]["h"] >= 0.75 * bottle,
                 f"ink {[round(m / mean, 2) for m in paintings]} of the paintings' mean; heights "
-                f"{dict(zip(PLATES, [x['h'] for x in weights]))}, bottle {bottle['h']}",
-            )
-            check(
-                f"{tag}: every Science picture crisp (its picture at least its size on screen)",
-                all(have >= need * 0.98 for _, have, need in crisp),
-                crisp,
+                f"{dict(zip(PLATES, [x['h'] for x in weights]))}, bottle {bottle}",
             )
         if (w, h) == (1536, 900):
+            more = sci["links"][0]
             check(
-                "science: every name is a link to its own part of the Science page",
-                [n["href"] for n in names] == PART_HREFS,
-                [n["href"] for n in names],
-            )
-            check(
-                "science: Our scientists shown first (its name underlined); its link meets the scientists; Explore goes to the science",
-                [n["shown"] for n in names] == [True, False, False, False]
-                and any(
-                    link["text"].startswith("Meet our scientists") and link["href"] == "/science#scientists"
-                    for link in sci["links"]
-                )
-                and any(link["text"].startswith("Explore the science") and link["href"] == "/science" for link in sci["links"]),
-                [(x["text"], x["href"]) for x in sci["links"]],
+                "rows: every Science part is one link to its own part of the Science page; Explore the science under the row, centred",
+                [i["href"] for i in s] == PART_HREFS
+                and all(i["a"]["h"] >= 48 and i["a"]["w"] >= 48 for i in s)
+                and len(sci["links"]) == 1
+                and more["text"].startswith("Explore the science") and more["href"] == "/science"
+                and more["t"] >= max(i["a"]["b"] for i in s)
+                and abs((more["l"] + more["r"]) / 2 - w / 2) <= 2,
+                f"{[i['href'] for i in s]}; {[(x['text'], x['href']) for x in sci['links']]}",
             )
         page.close()
 
 
-def shown_part(page):
-    info = page.evaluate(SCIENCE)
-    link = next((x["text"] for x in info["science"]["links"] if not x["text"].startswith("Explore the science")), "")
-    return info["plate"]["kind"], link
-
-
-def science_reach(browser):
-    """Round 5: every part is reachable directly. By keyboard: Enter opens Science, Tab steps
-    through the four names in order, each showing its own picture and link, then Explore; a
-    visible ring. By pointer: resting on a name shows its picture; passing over another name on
-    the way to the picture's link keeps it; that link goes to its part. On a touch laptop: the
-    first tap on a name opens its part."""
-    page = browser.new_page(viewport={"width": 1536, "height": 900})
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2000)
-    page.mouse.move(760, 600)
-    page.locator('[data-nav-trigger="science"]').focus()
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(900)
-    seen = []
-    for _ in range(4):
+def row_reach(browser):
+    """Round 11: every part is reachable directly. By keyboard: Enter opens a drop-down, Tab steps
+    through its parts in order (each ringed, its name lined; a bottle lifted, a Science picture
+    brought forward while the others ease back a little), then the link under the row. By pointer:
+    resting on a part does the same, and a click opens its page. On a touch laptop: the first tap on
+    a part opens its page."""
+    for panel, want, more in (("products", NAMES, "Explore our products"), ("science", PARTS, "Explore the science")):
+        page = browser.new_page(viewport={"width": 1536, "height": 900})
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2000)
+        warm(page)
+        page.mouse.move(768, 896)
+        page.locator(f'[data-nav-trigger="{panel}"]').focus()
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(1300)
+        bad = []
+        for i, name in enumerate(want):
+            page.keyboard.press("Tab")
+            page.wait_for_timeout(900)
+            info = page.evaluate(ROW, panel)
+            ring = page.evaluate(FOCUS_RING)
+            lined = [x["name"] for x in info["items"] if x["lined"] > 50]
+            why = []
+            if not focused(page).startswith(name):
+                why.append(f"focus on {focused(page)[:20]!r}")
+            if not ring or ring["style"] == "none":
+                why.append("no ring")
+            if lined != [name]:
+                why.append(f"lined {lined}")
+            if panel == "products":
+                lifts = [round(x["lift"], 1) for x in info["items"]]
+                if not (-6.5 <= lifts[i] <= -5.5 and all(abs(v) < 0.5 for j, v in enumerate(lifts) if j != i)):
+                    why.append(f"lifts {lifts}")
+            else:
+                plates = [(round(x["plate"]["o"], 2), x["plate"]["scale"]) for x in info["items"]]
+                if not (plates[i][0] == 1 and plates[i][1] == "1.04"
+                        and all(0.6 <= o <= 0.85 and sc in ("none", "1") for j, (o, sc) in enumerate(plates) if j != i)):
+                    why.append(f"pictures {plates}")
+            if why:
+                bad.append(f"{name}: {', '.join(why)}")
+            if i == len(want) - 1:
+                page.screenshot(path=str(OUT / f"rows-keyboard-{panel}.png"))
         page.keyboard.press("Tab")
-        page.wait_for_timeout(150)
-        kind, link = shown_part(page)
-        seen.append((focused(page)[:24], kind, link))
-    page.keyboard.press("Tab")
-    after = focused(page)
-    check(
-        "science: Enter opens it and Tab reaches every part's name in order, each showing its own picture and link",
-        all(f.startswith(n) and k == pl and lk.startswith(t) for (f, k, lk), n, pl, t in zip(seen, PARTS, PLATES, PART_LINKS))
-        and "Explore the science" in after,
-        f"{seen}; then {after!r}",
-    )
-    page.keyboard.press("Shift+Tab")
-    r = page.evaluate(FOCUS_RING)  # on the name or on a box laid round it (round 10)
-    ring = f"{r['style']} {r.get('width', 0)}px"
-    check(
-        "science: a visible ring on a name under the keyboard's focus",
-        "Ask BiGH Science" in focused(page) and not ring.endswith(" 0px") and "none" not in ring,
-        f"{focused(page)!r}: {ring}",
-    )
-    page.keyboard.press("Escape")
-    page.wait_for_timeout(500)
+        after = focused(page)
+        check(
+            f"rows: {panel.capitalize()}: Enter opens it and Tab steps through its {len(want)} parts in order, each ringed and its name lined"
+            + (" and its bottle lifted 6px (the others down)" if panel == "products" else ", its picture forward and the others eased back a little (60-85%)")
+            + f", then {more}",
+            not bad and more in after,
+            ("; ".join(bad) or "all") + f"; then {after!r}",
+        )
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(500)
 
-    open_science(page)
-    rest_on(page, "science", 2, 800)
-    kind, _ = shown_part(page)
-    check("science: resting on a name shows its picture", kind == "reading", kind)
-    nxt = page.locator('[data-nav-panel="science"] a[class*="nameLink"]').nth(3).locator('[class*="nameText"]').bounding_box()
-    link = page.locator('[data-nav-panel="science"] a[class*="more"]', has_text="Explore the research").bounding_box()
-    page.mouse.move(nxt["x"] + 30, nxt["y"] + nxt["height"] / 2, steps=2)
-    page.mouse.move(link["x"] + 30, link["y"] + link["height"] / 2, steps=3)
-    page.wait_for_timeout(700)
-    kind, text = shown_part(page)
-    check(
-        "science: passing over another name on the way to the picture's link keeps the picture",
-        kind == "reading" and text.startswith("Explore the research"),
-        (kind, text),
-    )
-    page.mouse.click(link["x"] + 30, link["y"] + link["height"] / 2)
-    page.wait_for_url("**/science#research", timeout=30000)
-    check("science: the picture's link goes to its part", page.url.endswith("/science#research"), page.url)
-    page.close()
+        open_panel(page, panel)
+        at = 3 if panel == "products" else 2
+        rest_on(page, panel, at)
+        info = page.evaluate(ROW, panel)
+        lined = [x["name"] for x in info["items"] if x["lined"] > 50]
+        if panel == "products":
+            lifts = [round(x["lift"], 1) for x in info["items"]]
+            ok = -6.5 <= lifts[at] <= -5.5 and all(abs(v) < 0.5 for j, v in enumerate(lifts) if j != at)
+            detail = f"lifts {lifts}"
+            what = "lifts its bottle a little (6px), the others standing"
+        else:
+            plates = [(round(x["plate"]["o"], 2), x["plate"]["scale"]) for x in info["items"]]
+            ok = plates[at] == (1, "1.04") and all(0.6 <= o <= 0.85 for j, (o, _) in enumerate(plates) if j != at)
+            detail = f"pictures {plates}"
+            what = "brings its picture gently forward, the others easing back a little (60-85%)"
+        page.screenshot(path=str(OUT / f"rows-point-{panel}.png"))
+        check(
+            f"rows: {panel.capitalize()}: resting the pointer on {want[at]} {what} and lines only its name",
+            ok and lined == [want[at]],
+            f"{detail}; lined {lined}",
+        )
+        target = info["items"][at]["href"]
+        b = info["items"][at]["a"]
+        page.mouse.click(b["l"] + b["w"] / 2, b["t"] + b["h"] * 0.35)
+        page.wait_for_url(f"**{target}", timeout=30000)
+        check(f"rows: {panel.capitalize()}: a click on {want[at]} opens its page", page.url.endswith(target), page.url)
+        page.close()
 
-    ctx = browser.new_context(viewport={"width": 1536, "height": 900}, has_touch=True)
-    page = ctx.new_page()
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2000)
-    page.locator('[data-nav-trigger="science"]').tap()
-    page.wait_for_timeout(1200)
-    page.locator('[data-nav-panel="science"] a[class*="nameLink"]', has_text="Ask BiGH Science").tap()
-    try:
-        page.wait_for_url("**/science#ask", timeout=30000)
-    except Exception:
-        pass
-    check("science: on a touch laptop the first tap on a name opens its part", page.url.endswith("/science#ask"), page.url)
-    ctx.close()
+        ctx = browser.new_context(viewport={"width": 1536, "height": 900}, has_touch=True)
+        page = ctx.new_page()
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2000)
+        page.locator(f'[data-nav-trigger="{panel}"]').tap()
+        page.wait_for_timeout(1200)
+        target = "/products/green-bee-propolis" if panel == "products" else "/science#ask"
+        page.locator(f'[data-nav-panel="{panel}"] [data-nav-item]', has_text=want[1 if panel == "products" else 3]).tap()
+        try:
+            page.wait_for_url(f"**{target}", timeout=30000)
+        except Exception:
+            pass
+        check(f"rows: {panel.capitalize()}: on a touch laptop the first tap on a part opens its page", page.url.endswith(target), page.url)
+        ctx.close()
 
 
-# Every frame: which Science names carry their line, and each picture's opacity.
-SCIENCE_LOG = """() => { const p = document.querySelector('[data-nav-panel="science"]');
-  const names = [...p.querySelectorAll('[class*="nameText"]')], plates = [...p.querySelectorAll('[data-plate]')];
+# Every frame: which names of a row are lined (their line over 4% drawn), how far each bottle is
+# lifted and how see-through it is, and each Science picture's opacity.
+ROW_LOG = """(id) => { const p = document.querySelector(`[data-nav-panel="${id}"]`);
+  const items = [...p.querySelectorAll('[data-nav-item]')];
   window.__log = []; window.__logging = true;
   const tick = () => { window.__log.push({ t: performance.timeOrigin + performance.now(),
-      lines: names.filter(n => (parseFloat(getComputedStyle(n, '::after').scale) || 0) > 0.04).map(n => n.textContent.trim()),
-      o: Object.fromEntries(plates.map(x => [x.dataset.plate, +getComputedStyle(x).opacity])) });
+      lines: items.filter(a => (parseFloat(getComputedStyle(a.querySelector('[data-nav-item-name] > span')).backgroundSize) || 0) > 4)
+        .map(a => a.querySelector('[data-nav-item-name]').textContent.trim()),
+      lifts: items.map(a => { const b = a.querySelector('img[class*="__bottle"]'); if (!b) return 0;
+        const t = getComputedStyle(b).translate; return t === 'none' ? 0 : parseFloat(t.split(' ')[1] || '0'); }),
+      bottles: items.map(a => { const b = a.querySelector('img[class*="__bottle"]'); return b ? +getComputedStyle(b).opacity : 1; }),
+      o: Object.fromEntries([...p.querySelectorAll('[data-plate]')].map(x => [x.dataset.plate, +getComputedStyle(x).opacity])) });
     if (window.__logging) requestAnimationFrame(tick); };
   requestAnimationFrame(tick); }"""
 
 
-def science_motion(browser):
-    """Round 5, filmed at real speed. Moving down the four names (resting on each): the picture's
-    place is never empty (its ink never under 60% of the lightest picture's at rest), only one name
-    carries its line on every frame, and no painting shows its paper as a light box on any frame
-    (frames while the print is drawn are left out: its mat is meant to be lighter than the paper).
-    Then over to Products and back: Science swaps in on its painting with no light box behind it."""
+def row_motion(browser):
+    """Round 11, filmed at real speed: the pointer moves along each row, resting on each part. One
+    name lined on every frame; a bottle lifts at most its 6px and never fades; a Science picture
+    never eases back past 60% and no painting shows its paper as a light box. Then over to Products
+    and back: Science swaps in with no light box behind its paintings."""
     page = browser.new_page(viewport={"width": 1536, "height": 900})
     watch(page)
     page.goto(URL, wait_until="networkidle")
     page.wait_for_timeout(2500)
-    open_science(page)
-    sel = '[data-nav-panel="science"]'
-    stand = page.locator(f"{sel} [class*='stageStand']").bounding_box()
-    crop = (round(stand["x"] - 50), round(stand["y"]), round(stand["x"] + stand["width"] + 50), round(stand["y"] + stand["height"]))
-    beside = (crop[0] - 50, crop[1], crop[0] - 20, crop[3])
-
-    def ink(img):
-        a = luma(img.crop(crop))
-        paper = float(np.median(luma(img.crop(beside))))
-        return float(np.clip(paper - a - 6, 0, None).mean())
-
-    rest = []
-    for i in range(4):
-        rest_on(page, "science", i)
-        rest.append(ink(Image.open(BytesIO(page.screenshot()))))
-    rest_on(page, "science", 0)
-    pics = {}
-    for i in range(1, 4):
-        rest_on(page, "science", i, 700)
-        for pic in page.evaluate(PICTURES, sel):
-            pics[pic["name"].split("#")[0] + pic["file"]] = pic
-    rest_on(page, "science", 0)
-    gaps = page.evaluate(BESIDE, [sel, 90])
     film = Film(page)
-    page.evaluate(SCIENCE_LOG)
-    film.raw = []
-    film.cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
-    page.wait_for_timeout(150)
-    for i in range(1, 4):
-        rest_on(page, "science", i, 450)
-    page.wait_for_timeout(700)
-    film.cdp.send("Page.stopScreencast")
-    page.evaluate("window.__logging = false")
-    film.log = page.evaluate("window.__log")
-    film.t0 = film.log[0]["t"]
-    shares = [round(ink(img) / min(rest), 2) for _, _, img in film.frames()]
-    check(
-        "science: moving down the names, the picture's place is never empty (filmed: its ink never under 60% of the lightest picture's)",
-        len(shares) >= 20 and min(shares) >= 0.6,
-        f"least {min(shares, default=0)} over {len(shares)} frames; at rest {[round(r, 1) for r in rest]}",
-    )
-    two = [e["lines"] for e in film.log if len(e["lines"]) > 1]
-    check(
-        "science: only one name underlined on every frame (filmed)",
-        len(film.log) >= 60 and not two and film.log[-1]["lines"] == ["Ask BiGH Science"],
-        f"{len(film.log)} frames; two at once {two[:3]}; last {film.log[-1]['lines'] if film.log else None}",
-    )
-    # The light-box test frame by frame, only on frames where the print is not drawn.
-    worst, counted = {}, {}
-    for t, tw, img in film.frames():
-        state = film.state(tw - 20)
-        if state["o"].get("print", 0) > 0.02:
-            continue
-        a, k = luma(img), img.width / 1536
-        for pic in pics.values():
-            kind = next((v for k, v in PAINTED.items() if k in pic["file"]), None)
-            if not kind or state["o"].get(kind, 0) < 0.05:
-                continue
-            vals = []
-            for box in samples(pic):
-                cy = (box[1] + box[3]) / 2
-                refs = [(g - 3, cy - 4, g + 3, cy + 4) for g in gaps]
-                vals.append(box_mean(a, box, k) - sum(box_mean(a, r, k) for r in refs) / len(refs))
-            worst[kind] = max(worst.get(kind, -99), max(vals))
-            counted[kind] = counted.get(kind, 0) + 1
-    check(
-        "science: no painting shows its paper as a light box while the pictures change (filmed: never 4+ levels over the paper)",
-        set(worst) == {"cell", "reading", "inkstone"} and all(v <= 4 for v in worst.values()) and min(counted.values()) >= 6,
-        {k: f"{v:+.1f} levels over {counted[k]} frames" for k, v in worst.items()},
-    )
+    for panel, want in (("products", NAMES), ("science", PARTS)):
+        open_panel(page, panel)
+        sel = f'[data-nav-panel="{panel}"]'
+        rest_on(page, panel, 0)
+        # The paintings where they are drawn at rest (Dr. Liu's print pointed, the three eased back
+        # at their own size): pointed, a painting grows from its middle, over these samples.
+        pics = {pic["file"]: pic for pic in page.evaluate(PICTURES, sel)} if panel == "science" else {}
+        gaps = page.evaluate(GAPS, f"{sel} li")
+        page.evaluate(ROW_LOG, panel)
+        film.raw = []
+        film.cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
+        page.wait_for_timeout(150)
+        for i in range(1, len(want)):
+            rest_on(page, panel, i, 450)
+        page.wait_for_timeout(700)
+        film.cdp.send("Page.stopScreencast")
+        page.evaluate("window.__logging = false")
+        film.log = page.evaluate("window.__log")
+        film.t0 = film.log[0]["t"]
+        two = [e["lines"] for e in film.log if len(e["lines"]) > 1]
+        if panel == "products":
+            high = min(min(e["lifts"]) for e in film.log)
+            faded = min(min(e["bottles"]) for e in film.log)
+            check(
+                "rows: pointing along the five products (filmed): one name lined on every frame, ending on Nature Calm; "
+                "a bottle lifts at most its 6px and none ever fades",
+                len(film.log) >= 60 and not two and film.log[-1]["lines"] == ["Nature Calm"] and high >= -6.5 and faded == 1,
+                f"{len(film.log)} frames; two at once {two[:3]}; last {film.log[-1]['lines']}; highest lift {high:.1f}px; least bottle {faded}",
+            )
+        else:
+            least = min(min(e["o"].values()) for e in film.log)
+            check(
+                "rows: pointing along the four Science parts (filmed): one name lined on every frame, ending on Ask BiGH Science; "
+                "no picture ever eases back past 60% (never a ghost)",
+                len(film.log) >= 60 and not two and film.log[-1]["lines"] == ["Ask BiGH Science"] and least >= 0.6,
+                f"{len(film.log)} frames; two at once {two[:3]}; last {film.log[-1]['lines']}; least picture {least:.2f}",
+            )
+            found = light_boxes(film, list(pics.values()), gaps, lambda e: 10000, 1536, 0, 5000, under=paper_under(page, sel))
+            names = sorted(p["file"].rsplit("/", 1)[-1] for p in pics.values())
+            name = "rows: no Science painting shows its paper as a light box while the row is pointed along (filmed: never 4+ levels over the paper)"
+            if names == sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"]):
+                no_light_box(name, found)
+            else:
+                check(name, False, f"pictures {names}")
+        page.keyboard.press("Escape")
+        page.mouse.move(768, 896)
+        page.wait_for_timeout(900)
 
-    # Over to Products and back: Science swaps in on the inkstone. The bottle stands where the
-    # inkstone stands (one page layout), so during the dissolve its white label shows through the
-    # new panel for a few frames, lighter than the paper: that is the bottle leaving, not a light
-    # box. The bottles are hidden while the painting is measured (as for the showroom's pool).
-    for arrive in ("products", "science"):
-        box = page.locator(f'[data-nav-trigger="{arrive}"]').bounding_box()
-        if arrive == "products":
-            page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4)
-            page.wait_for_timeout(1200)
-            continue
-        hide = page.add_style_tag(content='[data-nav-panel="products"] [class*="__big"] { visibility: hidden !important; }')
-        film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4), 1300)
-        hide.evaluate("el => el.remove()")
-    page.screenshot(path=str(OUT / "science-swapped-back.png"))
-    shown = [pic for pic in page.evaluate(PICTURES, sel)]
+    # Over to Products and back: Science swaps in over Products. Products' pictures (bottles, pools,
+    # the ground) stand elsewhere on the page, so during the dissolve they show through the new panel
+    # for a few frames: that is Products leaving, not a light box; they are hidden while the paintings
+    # are measured.
+    open_panel(page, "science")
+    sel = '[data-nav-panel="science"]'
+    gaps = page.evaluate(GAPS, f"{sel} li")
+    box = page.locator('[data-nav-trigger="products"]').bounding_box()
+    page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4)
+    page.wait_for_timeout(1300)
+    hide = page.add_style_tag(
+        content='[data-nav-panel="products"] :is(img, [class*="__shelfGround"]) { visibility: hidden !important; }'
+    )
+    box = page.locator('[data-nav-trigger="science"]').bounding_box()
+    film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4), 1300)
+    hide.evaluate("el => el.remove()")
+    page.screenshot(path=str(OUT / "rows-science-swapped-back.png"))
+    shown = page.evaluate(PICTURES, sel)
     flip = next((e["t"] for e in film.log if e["open"] == "science"), None)
-    name = "science: swapping back in from Products on its painting (the inkstone), no light box behind it (filmed)"
-    if flip is None or [p["file"].rsplit("/", 1)[-1] for p in shown] != ["inkstone-v2.webp"]:
-        check(name, False, f"flip {flip}; shown {[p['file'] for p in shown]}")
+    name = "rows: swapping back in from Products, no light box behind Science's paintings (filmed)"
+    names = sorted(p["file"].rsplit("/", 1)[-1] for p in shown)
+    if flip is None or names != sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"]):
+        check(name, False, f"flip {flip}; shown {names}")
     else:
-        found = light_boxes(film, shown, gaps, lambda e: 10000, 1536, round(flip - film.t0), round(flip - film.t0) + 900)
+        found = light_boxes(
+            film, shown, gaps, lambda e: 10000, 1536, round(flip - film.t0), round(flip - film.t0) + 900,
+            under=paper_under(page, sel),
+        )
         no_light_box(name, found)
     page.close()
+
+
+def row_languages(browser):
+    """Round 11: in Vietnamese, Japanese and Korean, at the narrowest desktop and at 1536: both rows
+    whole, side by side and inside the window, long names wrapping cleanly in their own column (two
+    lines at most, nothing running into a neighbour), the names on one line and the lines starting
+    on one line, all above the scroll's foot."""
+    for loc in ("vn", "jp", "kr"):
+        for w, h in ((1101, 800), (1536, 900)):
+            page = browser.new_page(viewport={"width": w, "height": h})
+            watch(page)
+            page.goto(f"{BASE}/{loc}", wait_until="networkidle")
+            page.wait_for_timeout(2000)
+            for panel, count in (("products", 5), ("science", 4)):
+                open_panel(page, panel)
+                page.screenshot(path=str(OUT / f"rows-{loc}{w}-{panel}.png"))
+                info = page.evaluate(ROW, panel)
+                one_row(f"rows {loc} {w}x{h}", panel.capitalize(), info, [i["name"] for i in info["items"]][:count] if len(info["items"]) == count else [], english=False)
+                page.keyboard.press("Escape")
+                page.mouse.move(w / 2, h - 6)
+                page.wait_for_timeout(900)
+            page.close()
 
 
 def desktop(browser):
@@ -2737,7 +2589,7 @@ def nothing_small(page, tag):
 
 
 # The ring the keyboard's focus draws: on the control itself, on a box laid round it (its ::before
-# or ::after: the mark's, the bar's words', the showroom's names'), or round a language picker's
+# or ::after: the mark's, the bar's words', a row's parts'), or round a language picker's
 # whole label (its globe, the language and the arrow).
 FOCUS_RING = """() => {
   const el = document.activeElement; if (!el || el === document.body) return null;
@@ -3076,14 +2928,11 @@ with sync_playwright() as p:
         drop_down_motion(browser)
     if ONLY in (None, "desk", "settle"):
         settle_checks(browser, p)
-    if ONLY in (None, "desk", "showroom"):
-        showroom_layout(browser)
-        showroom_reach(browser)
-        showroom_motion(browser)
-    if ONLY in (None, "desk", "science"):
-        science_layout(browser)
-        science_reach(browser)
-        science_motion(browser)
+    if ONLY in (None, "desk", "rows"):
+        row_layout(browser)
+        row_reach(browser)
+        row_motion(browser)
+        row_languages(browser)
     if ONLY in (None, "phone"):
         phone(browser)
         phone_rows(browser)

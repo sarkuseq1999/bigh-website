@@ -37,13 +37,16 @@ import styles from "./nav-inscription.module.css";
 // instead of a hairline, laid by the same scroll. Scrolling back up undoes it.
 // Products and Science let down a sheet of rice paper from under the bar, the way a hanging scroll
 // unrolls: revealed top to bottom, its leading edge torn rice paper, over a faint ink wash on the
-// page. What is on it is centred under the bar. Both are showrooms, two pages of one book: the
-// names large at the left, each a link, and the picture of the one pointed at (or reached by
-// keyboard) standing large at the right, in the same place on both (round 4: the five products and
-// their bottles; round 5: the Science page's four parts, Dr. Liu's print and three ink paintings
-// set at one weight). Moving from one drop-down to the other keeps the scroll down and changes only
-// what is written on it. On a narrow window: "Menu", the mark, the
-// language; the menu is a full-height scroll let down the same way (round 7): its four words
+// page. What is on it is centred under the bar. Both are one row, two pages of one book (round 11,
+// Mo's pick: everything at once is calmer than a list that changes a picture): a title, then every
+// one of them side by side, its picture, its name and its line under it, each one link, and the
+// link to all of them under the row. Products: the five real bottles, each on its own pale pool,
+// standing on one painted ground line (round 4's row). Science: the Science page's four parts, Dr.
+// Liu's print and three ink paintings set at one weight (round 5). The two rows share one geometry
+// (the title's room, the pictures' row, the names' line and the link under them), so moving from
+// one drop-down to the other keeps the scroll down and changes only what is written on it. On a
+// narrow window: "Menu", the mark, the language; the menu is a full-height scroll let down the
+// same way (round 7): its four words
 // centred, Products and Science unfolding as rows (each picture with its name and line; on a
 // tablet side by side), and at its foot the page's own finale, the crane at rest on its brush
 // ground, with Log in and Sign up under it.
@@ -131,14 +134,6 @@ export function NavInscription({
     }
   }
 
-  // Both drop-downs are showrooms (rounds 4 and 5), two pages of one book: the names large at the
-  // left, and the picture of the one pointed at (or reached by keyboard) standing large at the
-  // right; the first shown first.
-  const products = useShowroom(panel !== null);
-  const science = useShowroom(panel !== null);
-  const product = navProducts[products.pick];
-  const part = navScience[science.pick];
-
   // The narrow window's menu: one of its two parts (Products, Science) is unfolded at a time.
   // On a tablet held upright (700px wide and 900px tall or more) it opens with Products unfolded:
   // the five stand in one row and fill the room under the words. It always opens at its top.
@@ -182,24 +177,20 @@ export function NavInscription({
   }
 
   // The scroll is as long as the taller of the two drop-downs, so it never changes length when
-  // you move from one to the other. And the two showrooms share one page layout: their names
-  // columns are as wide, and their rows as tall, as the larger of the two, so the names start on
-  // the same edge and line, the pictures stand in the same place, and the links under them share
-  // a line. Measured from what is written (each name, link and stand at its own size), never from
-  // the stretched columns, so it follows the window both ways.
+  // you move from one to the other. And the two rows share one page: their titles' room is as tall
+  // as the taller title (the pictures' row starts on one line, so the names do too), and the link
+  // under each row stands at the scroll's foot, on one line. Measured from what is written (each
+  // title, row and link at its own size), never from the stretched page, so it follows the window
+  // both ways.
   const productsInner = useRef<HTMLDivElement>(null);
   const scienceInner = useRef<HTMLDivElement>(null);
-  const [layout, setLayout] = useState({ panel: 0, row: 0, names: 0 });
+  const [layout, setLayout] = useState({ panel: 0, title: 0 });
   useEffect(() => {
     const inners = [productsInner.current, scienceInner.current].filter(
       (node): node is HTMLDivElement => Boolean(node),
     );
-    const columns = inners.flatMap((inner) => [
-      ...inner.querySelectorAll<HTMLElement>("[data-showroom]"),
-    ]);
-    const pieces = columns.flatMap((column) => [
-      ...column.querySelectorAll<HTMLElement>(":scope > *, :scope li > a"),
-    ]);
+    const titles = inners.flatMap((inner) => [...inner.querySelectorAll<HTMLElement>("h2")]);
+    const pieces = inners.flatMap((inner) => [...inner.children]);
     const outer = (node: Element) => {
       const style = getComputedStyle(node);
       return (
@@ -209,27 +200,31 @@ export function NavInscription({
       );
     };
     const measure = () => {
-      const row = Math.max(
-        0,
-        ...columns.map((column) => [...column.children].reduce((sum, c) => sum + outer(c), 0)),
+      const title = Math.ceil(
+        Math.max(0, ...titles.map((node) => node.getBoundingClientRect().height)),
       );
-      const names = Math.max(
-        0,
-        ...columns
-          .filter((column) => column.dataset.showroom === "names")
-          .flatMap((column) => [...column.querySelectorAll<HTMLElement>(":scope > a, li > a")])
-          .map((link) => Math.ceil(link.getBoundingClientRect().width)),
+      // Each page's own length: its padding and what is written on it (the title's room is the
+      // shared one, which is the same on both).
+      const panel = Math.ceil(
+        Math.max(
+          0,
+          ...inners.map((inner) => {
+            const style = getComputedStyle(inner);
+            const rest = [...inner.children].slice(1);
+            return (
+              parseFloat(style.paddingTop) +
+              parseFloat(style.paddingBottom) +
+              title +
+              rest.reduce((sum, node) => sum + outer(node), 0)
+            );
+          }),
+        ),
       );
-      const panel = Math.max(0, ...inners.map((node) => node.offsetHeight));
-      setLayout((now) =>
-        now.panel === Math.ceil(panel) && now.row === Math.ceil(row) && now.names === names
-          ? now
-          : { panel: Math.ceil(panel), row: Math.ceil(row), names },
-      );
+      setLayout((now) => (now.panel === panel && now.title === title ? now : { panel, title }));
     };
     measure();
     const observer = new ResizeObserver(measure);
-    [...inners, ...pieces].forEach((node) => observer.observe(node));
+    [...titles, ...pieces].forEach((node) => observer.observe(node));
     document.fonts?.ready.then(measure);
     return () => observer.disconnect();
   }, []);
@@ -273,8 +268,7 @@ export function NavInscription({
       style={
         {
           "--insc-panel-h": `${layout.panel}px`,
-          "--insc-row-h": `${layout.row}px`,
-          "--insc-names-w": `${layout.names}px`,
+          "--insc-title-h": `${layout.title}px`,
           "--insc-from": `${solidAfter}px`,
           "--insc-to": `${settledBy}px`,
         } as CSSProperties
@@ -338,53 +332,24 @@ export function NavInscription({
               data-shown={shown === "products" ? "" : undefined}
             >
               <div ref={productsInner} className={styles.panelInner}>
-                <Showroom
-                  room={products}
+                <Row
+                  id="products"
+                  title={copy(navProductsIntro.headline)}
                   items={navProducts.map((item) => ({
                     href: item.href,
                     name: copy(item.name),
                     line: <Phrases text={copy(item.focus)} />,
+                    picture: (
+                      <Bottle
+                        src={item.bottle.src}
+                        sizes="(min-width: 1692px) 212px, (min-width: 1385px) 12.6vw, 174px"
+                        loading={loading}
+                      />
+                    ),
                   }))}
                   more={{ href: navProductsIntro.allLink, text: copy(navProductsIntro.title) }}
-                  link={{
-                    href: product.href,
-                    text: copy("Discover {name}", { name: copy(product.name) }),
-                  }}
                   onGo={() => closePanel()}
-                >
-                  <Image
-                    key={`pool-${products.pick}`}
-                    className={styles.stagePool}
-                    src="/images/home-v2/ink/pool.webp"
-                    alt=""
-                    width={900}
-                    height={482}
-                    sizes="240px"
-                    loading={loading}
-                  />
-                  <Image
-                    className={styles.stageContact}
-                    src="/images/home-v2/ink/pool-foot.webp"
-                    alt=""
-                    width={600}
-                    height={170}
-                    sizes="200px"
-                    loading={loading}
-                  />
-                  {navProducts.map((item, i) => (
-                    <Image
-                      key={item.slug}
-                      className={styles.big}
-                      data-shown={products.pick === i ? "" : undefined}
-                      src={item.bottle.src}
-                      alt=""
-                      width={1230}
-                      height={1278}
-                      sizes="(min-width: 1652px) 366px, (min-width: 1218px) 22.2vw, 270px"
-                      loading={loading}
-                    />
-                  ))}
-                </Showroom>
+                />
               </div>
             </div>
             <button
@@ -407,51 +372,45 @@ export function NavInscription({
               data-shown={shown === "science" ? "" : undefined}
             >
               <div ref={scienceInner} className={styles.panelInner}>
-                <Showroom
-                  room={science}
+                <Row
+                  id="science"
+                  title={copy(navScienceIntro.title)}
                   items={navScience.map((item) => ({
                     href: item.href,
                     name: copy(item.label),
                     line: <Phrases text={caption(item.caption)} />,
+                    picture: (
+                      <span className={styles.room}>
+                        {item.image.plate === "print" ? (
+                          <span className={styles.plate} data-plate="print">
+                            <Image
+                              className={styles.photo}
+                              src={item.image.src}
+                              alt=""
+                              width={item.image.width}
+                              height={item.image.height}
+                              sizes="(min-width: 1692px) 118px, (min-width: 1385px) 7vw, 96px"
+                              loading={loading}
+                            />
+                          </span>
+                        ) : (
+                          <Image
+                            className={styles.plate}
+                            data-plate={item.image.plate}
+                            src={item.image.src}
+                            alt=""
+                            width={item.image.width}
+                            height={item.image.height}
+                            sizes="(min-width: 1692px) 272px, (min-width: 1385px) 16vw, 222px"
+                            loading={loading}
+                          />
+                        )}
+                      </span>
+                    ),
                   }))}
                   more={{ href: navScienceIntro.href, text: copy(navScienceIntro.link) }}
-                  link={{ href: part.href, text: copy(part.link) }}
                   onGo={() => closePanel()}
-                >
-                  {navScience.map((item, i) =>
-                    item.image.plate === "print" ? (
-                      <span
-                        key={item.href}
-                        className={styles.plate}
-                        data-plate="print"
-                        data-shown={science.pick === i ? "" : undefined}
-                      >
-                        <Image
-                          className={styles.photo}
-                          src={item.image.src}
-                          alt=""
-                          width={item.image.width}
-                          height={item.image.height}
-                          sizes="(min-width: 1652px) 192px, (min-width: 1218px) 11.6vw, 140px"
-                          loading={loading}
-                        />
-                      </span>
-                    ) : (
-                      <Image
-                        key={item.href}
-                        className={styles.plate}
-                        data-plate={item.image.plate}
-                        data-shown={science.pick === i ? "" : undefined}
-                        src={item.image.src}
-                        alt=""
-                        width={item.image.width}
-                        height={item.image.height}
-                        sizes="(min-width: 1652px) 470px, (min-width: 1218px) 28.4vw, 350px"
-                        loading={loading}
-                      />
-                    ),
-                  )}
-                </Showroom>
+                />
               </div>
             </div>
           </div>
@@ -716,93 +675,55 @@ function useReading(follow: NavFollow | undefined) {
   return reading;
 }
 
-/** Which of a showroom's names is shown: the one a pointer rests on (about a tenth of a second,
- *  so passing over other names on the way across to the link under the picture changes nothing)
- *  or the keyboard reaches. `moved` is set once the visitor has changed it, so from then on the
- *  picture only cross-fades (it settled in with the scroll). Once the scroll has rolled back up
- *  it is the first again for the next time. */
-function useShowroom(open: boolean) {
-  const [state, setState] = useState({ pick: 0, moved: false });
-  const timer = useRef<number | undefined>(undefined);
-  const show = (i: number) => setState((now) => (now.pick === i ? now : { pick: i, moved: true }));
-  const pointAt = (i: number) => {
-    window.clearTimeout(timer.current);
-    timer.current = window.setTimeout(() => show(i), 110);
-  };
-  const pointAway = () => window.clearTimeout(timer.current);
-  useEffect(() => {
-    if (open) return;
-    window.clearTimeout(timer.current);
-    const reset = window.setTimeout(() => setState({ pick: 0, moved: false }), 420);
-    return () => window.clearTimeout(reset);
-  }, [open]);
-  return { ...state, show, pointAt, pointAway };
-}
-
-/** One drop-down as a showroom: the names large at the left, each a link with its line under it,
- *  and the link to all of them; at the right the shown one's picture (the children, stacked) with
- *  its own link under it, on the same line. */
-function Showroom({
-  room,
+/** One drop-down's page: its title in a room as tall as the taller of the two titles, then the
+ *  row (each one link: its picture, its name and its line under it, the names on one line and the
+ *  lines starting on one line), and the link to all of them at the scroll's foot. Products' row
+ *  stands on one painted ground line. */
+function Row({
+  id,
+  title,
   items,
   more,
-  link,
   onGo,
-  children,
 }: {
-  room: ReturnType<typeof useShowroom>;
-  items: { href: string; name: string; line: ReactNode }[];
+  id: NavPanelId;
+  title: string;
+  items: { href: string; name: string; line: ReactNode; picture: ReactNode }[];
   more: { href: string; text: string };
-  link: { href: string; text: string };
   onGo: () => void;
-  children: ReactNode;
 }) {
   return (
-    <div className={styles.showroom}>
-      <div className={styles.names} data-showroom="names">
-        <ul className={styles.nameList}>
+    <>
+      <div className={styles.panelHead}>
+        <h2 className={styles.panelTitle}>{title}</h2>
+      </div>
+      <div
+        className={styles.shelf}
+        data-row={id}
+        style={{ "--count": items.length } as CSSProperties}
+      >
+        {id === "products" && <span className={styles.shelfGround} aria-hidden="true" />}
+        <ul className={styles.shelfRow}>
           {items.map((item, i) => (
             <li key={item.href} style={{ "--i": i } as CSSProperties}>
-              <Link
-                href={item.href}
-                className={styles.nameLink}
-                data-shown={room.pick === i ? "" : undefined}
-                onPointerEnter={(event) => {
-                  if (event.pointerType === "mouse") room.pointAt(i);
-                }}
-                onPointerLeave={room.pointAway}
-                onFocus={(event) => {
-                  if (event.currentTarget.matches(":focus-visible")) room.show(i);
-                }}
-                onClick={onGo}
-              >
-                <span className={styles.nameText}>{item.name}</span>
-                <span className={styles.nameFocus}>{item.line}</span>
+              <Link href={item.href} className={styles.item} data-nav-item="" onClick={onGo}>
+                {item.picture}
+                <span className={styles.itemName} data-nav-item-name="">
+                  <span>{item.name}</span>
+                </span>
+                <span className={styles.itemLine} data-nav-item-line="">
+                  {item.line}
+                </span>
               </Link>
             </li>
           ))}
         </ul>
-        <Link href={more.href} className={styles.more} onClick={onGo}>
-          {more.text}
-          <ArrowRight size={18} aria-hidden="true" />
-        </Link>
       </div>
-      <div className={styles.stage} data-showroom="stage" data-moved={room.moved ? "" : undefined}>
-        <Link
-          href={link.href}
-          className={styles.stageStand}
-          tabIndex={-1}
-          aria-hidden="true"
-          onClick={onGo}
-        >
-          {children}
-        </Link>
-        <Link href={link.href} className={styles.more} onClick={onGo}>
-          {link.text}
-          <ArrowRight size={18} aria-hidden="true" />
-        </Link>
-      </div>
-    </div>
+      <Link href={more.href} className={styles.more} onClick={onGo}>
+        {more.text}
+        <ArrowRight size={18} aria-hidden="true" />
+      </Link>
+    </>
   );
 }
 
