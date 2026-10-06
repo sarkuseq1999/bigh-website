@@ -24,7 +24,8 @@ import styles from "./nav-inscription.module.css";
 // middle, large, with two links on each side of it (Products, Science | About, Support) set as one
 // balanced line; the language at the far left, Log in and Sign up at the far right. Over the
 // opening painting the bar is clear; once the page moves on it settles a little smaller on rice
-// paper, and its edge is a long, fine, dry brush line instead of a hairline.
+// paper, and its edge is a real painted brush line instead of a hairline, laid by the reader's
+// scroll.
 // Products and Science let down a sheet of rice paper from under the bar, the way a hanging scroll
 // unrolls: revealed top to bottom, its leading edge torn rice paper, over a faint ink wash on the
 // page. Everything on it is centred, like the bar. Moving from one to the other keeps the scroll
@@ -135,6 +136,7 @@ export function NavInscription({
       data-size={solid ? "small" : "tall"}
       data-ground={ground}
       data-tone={clear ? tone : "light"}
+      data-overlay={overlay ? "" : undefined}
       data-unrolled={panel ? "" : undefined}
       data-swap={swap ? "" : undefined}
       data-menu={menuOpen ? "" : undefined}

@@ -12,6 +12,11 @@ On the real GPU (ANGLE/D3D11):
     Enter opens, Tab steps into the panel, Escape closes and hands focus back; the Tab order
     follows the line; a visible ring on the keyboard's focus; Support opens its sheet; scrolled,
     the bar settles small with its painted rule; a product link goes to its page.
+  - the rule (round 3): the painted stroke (rule-whole.webp), drawn whole once the page has moved
+    on, across the page's column and centred on the mark (2px), its ink over at least 92% of it,
+    its body 2-4.5px at 1536 (measured in the pixels) and 16px or more under the mark; laid by the
+    scroll from its loaded end (part way at 160px and not moving on its own a second later, whole
+    by 320px); with reduced motion, there whole.
   - scrolled (desktop, phone, tablet 768): the bar is solid paper. A headline, a paragraph and a
     text link of the page are each put behind the bar's words and on its brush rule, and the band
     from the bar's top to just under the rule's ink must not change by more than 6 levels (round 1:
@@ -108,6 +113,115 @@ def scroll_to(page, y):
     page.evaluate(f"window.scrollTo(0, {y})")
     page.mouse.wheel(0, 1)
     page.wait_for_timeout(1400)
+
+
+# Round 3: the rule is one real painted stroke (a mask cut from a painting), laid by the scroll.
+RULE = """() => { const h = document.querySelector('header'); const rule = h.querySelector('[class*="__rule"]');
+  const s = getComputedStyle(rule); const r = rule.getBoundingClientRect();
+  const m = h.querySelector('[data-nav-logo]').getBoundingClientRect();
+  const nav = h.querySelector('#site-navigation'); const col = nav.getBoundingClientRect();
+  const pad = parseFloat(getComputedStyle(nav).paddingLeft);
+  return { draw: parseFloat(s.getPropertyValue('--insc-draw')), opacity: +s.opacity, mask: getComputedStyle(rule, '::before').maskImage,
+    left: r.left, right: r.right, top: r.top, bottom: r.bottom, mid: (r.left + r.right) / 2,
+    markMid: (m.left + m.right) / 2, markBottom: m.bottom, colLeft: col.left + pad, colRight: col.right - pad,
+    barBottom: col.bottom }; }"""
+
+
+def rule_ink(page, info):
+    """Where the rule's ink is, from the pixels: each column's darkest level against the paper just
+    above the rule, and the stroke's body (rows at least half as dark, in its loaded first half).
+    Only 7px each side of the rule's middle is read: above that are the bar's words (the Sign up
+    pill's foot), and from 8px under the bar the page fades in."""
+    middle = (info["top"] + info["bottom"]) / 2
+    top = round(middle) - 7
+    bottom = min(round(middle) + 8, round(info["barBottom"]) + 8)
+    band = {"x": 0, "y": top, "width": page.viewport_size["width"], "height": bottom - top}
+    a = np.asarray(Image.open(BytesIO(page.screenshot(clip=band))).convert("L"), dtype=np.float32)
+    paper = float(np.median(a[:3]))
+    depth = paper - a.min(axis=0)
+    inked = np.where(depth > 40)[0]
+    x0, x1 = round(info["left"]), round(info["right"])
+    body = a[:, x0 + round((x1 - x0) * 0.08) : x0 + round((x1 - x0) * 0.5)]
+    half = paper - (paper - body.min(axis=0)) / 2
+    return {
+        "from": int(inked.min()) if len(inked) else -1,
+        "to": int(inked.max()) if len(inked) else -1,
+        "thick": float(np.median((body < half[None, :]).sum(axis=0))),
+    }
+
+
+def rule_checks(browser):
+    """Round 3: the scrolled bar's edge is a real brush stroke (not the drawn bar of before), light,
+    across the page's column and centred on the mark, laid by the reader's scroll (not on a timer);
+    with reduced motion it is there whole."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    page.mouse.move(768, 896)
+    scroll_to(page, 1400)
+    info = page.evaluate(RULE)
+    ink = rule_ink(page, info)
+    page.screenshot(
+        path=str(OUT / "desk-rule.png"),
+        clip={"x": 0, "y": 0, "width": 1536, "height": round(info["bottom"]) + 16},
+    )
+    check(
+        "desk: the rule is the painted stroke, drawn whole once the page has moved on",
+        "rule-whole.webp" in info["mask"] and info["draw"] == 1 and info["opacity"] >= 0.6,
+        f"draw {info['draw']}, opacity {info['opacity']}",
+    )
+    span = info["right"] - info["left"]
+    check(
+        "desk: the rule runs across the page's column, centred on the mark (2px), its ink over 92% of it",
+        abs(info["left"] - info["colLeft"]) <= 2
+        and abs(info["right"] - info["colRight"]) <= 2
+        and abs(info["mid"] - info["markMid"]) <= 2
+        and ink["from"] - info["left"] <= 12
+        and ink["to"] - ink["from"] >= 0.92 * span,
+        f"rule {info['left']:.0f}-{info['right']:.0f}, column {info['colLeft']:.0f}-{info['colRight']:.0f}, "
+        f"mark centre {info['markMid']:.1f}, ink {ink['from']}-{ink['to']}",
+    )
+    middle = (info["top"] + info["bottom"]) / 2
+    check(
+        "desk: the rule is light (body 2-4.5px at 1536) and 16px or more under the mark",
+        2 <= ink["thick"] <= 4.5 and middle - info["markBottom"] >= 16,
+        f"body {ink['thick']:.1f} px; rule middle {middle:.1f}, mark foot {info['markBottom']:.1f}",
+    )
+    # Laid by the scroll: part way at 160px and the same a second later (no timer), its ink
+    # reaching only part of the column from the left; whole by 320px.
+    scroll_to(page, 160)
+    first = page.evaluate(RULE)
+    page.wait_for_timeout(1000)
+    later = page.evaluate(RULE)
+    part = rule_ink(page, later)
+    page.screenshot(path=str(OUT / "desk-rule-160.png"), clip={"x": 0, "y": 0, "width": 1536, "height": 110})
+    scroll_to(page, 320)
+    whole = page.evaluate(RULE)
+    check(
+        "desk: the scroll lays the rule from its loaded end (part way at 160px and still a second later, whole by 320px)",
+        0.2 <= first["draw"] <= 0.7
+        and abs(later["draw"] - first["draw"]) < 0.01
+        and whole["draw"] == 1
+        and part["from"] - later["left"] <= 12
+        and part["to"] < later["left"] + 0.75 * (later["right"] - later["left"]),
+        f"at 160px: {first['draw']:.2f}, a second later {later['draw']:.2f}, ink {part['from']}-{part['to']}; "
+        f"at 320px: {whole['draw']}",
+    )
+    page.close()
+
+    page = browser.new_page(viewport={"width": 1536, "height": 900}, reduced_motion="reduce")
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    scroll_to(page, 160)
+    info = page.evaluate(RULE)
+    check(
+        "reduced motion: the rule is there whole",
+        info["draw"] == 1 and info["opacity"] >= 0.6,
+        f"draw {info['draw']}, opacity {info['opacity']}",
+    )
+    page.close()
 
 
 def solid_bar(page, tag):
@@ -583,7 +697,7 @@ def desktop(browser):
     page.screenshot(path=str(OUT / "desk-scrolled.png"))
     info = page.evaluate(
         """() => { const h = document.querySelector('header');
-        const bar = h.querySelector('nav'); const rule = h.querySelector('[class*=rule]');
+        const bar = h.querySelector('nav'); const rule = h.querySelector('[class*="__rule"]');
         return { size: h.dataset.size, bar: Math.round(bar.getBoundingClientRect().height),
           rule: getComputedStyle(rule).opacity } }"""
     )
@@ -803,6 +917,7 @@ with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
         desktop(browser)
+        rule_checks(browser)
         drop_down_motion(browser)
     if ONLY in (None, "phone"):
         phone(browser)

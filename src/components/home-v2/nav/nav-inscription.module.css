@@ -111,33 +111,94 @@
     opacity 0.25s var(--ease);
 }
 
-/* The bar's edge is ink, not a hairline: one long, fine, dry brush line across the page's column,
-   laid from left to right as the bar settles. */
+/* The bar's edge is ink, not a hairline: one real painted line across the page's column
+   (inscription/rule-whole.webp, cut by reference/nav/make_rule_stroke.py from a GPT Image 2.5
+   painting). It touches down on the left with a fine tip, runs thin with a faint waver, and over its
+   last third the bristles part into flying-white strands that run dry before the right end. Kept at
+   the painting's own proportions (body about 3px at 1536), never thinner than a hair on a phone;
+   its middle sits on the bar's foot, on solid paper. */
+@property --insc-draw {
+  syntax: "<number>";
+  inherits: false;
+  initial-value: 1;
+}
+
 .rule {
+  /* How much of the stroke is laid (0 none, 1 whole), from its loaded end; and the soft leading
+     edge of the ink as it goes down. */
+  --insc-draw: 1;
+  --insc-lead: 36px;
   position: absolute;
   z-index: -1;
-  top: calc(var(--h) - 10px);
+  top: calc(var(--h) - 1px);
   left: 50%;
   width: min(var(--wide, 1300px), 100% - 2 * var(--gutter));
-  height: 20px;
-  translate: -50% 0;
-  background: var(--ink);
-  mask: url("/images/home-v2/nav/inscription/rule.webp") 0 0 / 100% 100% no-repeat;
+  min-height: 10px;
+  aspect-ratio: 2433 / 30;
+  translate: -50% -50%;
+  /* How far it is laid: a soft-edged mask that grows from the left. (On its own element, not as a
+     second mask layer: WebKit, Safari's engine, drew an intersected pair of layers wrongly.) */
+  mask: linear-gradient(90deg, #000 calc(100% - var(--insc-lead)), transparent) 0 0 /
+    calc(var(--insc-draw) * (100% + var(--insc-lead))) 100% no-repeat;
   opacity: 0;
-  clip-path: inset(0 100% 0 0);
+  pointer-events: none;
   transition:
     top 0.6s var(--ease),
-    opacity 0.3s var(--ease),
-    clip-path 0s linear 0.3s;
+    opacity 0.3s var(--ease);
+}
+
+/* The stroke itself: ink through the painting's alpha. */
+.rule::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
 }
 
 .root[data-ground="solid"] .rule {
-  opacity: 0.78;
-  clip-path: inset(0 0 0 0);
-  transition:
-    top 0.6s var(--ease),
-    opacity 0.3s var(--ease),
-    clip-path 1.1s var(--ease) 0.12s;
+  opacity: 0.75;
+}
+
+/* Over the opening, the reader's scroll lays the stroke (not a timed sweep): from its loaded end,
+   between 60px and 280px down the page (the bar settles at 48px), and back as the reader returns.
+   A page that opens on paper, and reduced motion: there whole. */
+@keyframes insc-draw {
+  from {
+    --insc-draw: 0;
+  }
+
+  to {
+    --insc-draw: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-overlay] .rule {
+      animation: insc-draw linear both;
+      animation-timeline: scroll(root);
+      animation-range: 60px 280px;
+    }
+  }
+}
+
+/* Without scroll-driven animation: laid as the bar settles (1.4s), lifted once it has faded. */
+@supports not (animation-timeline: scroll()) {
+  .root:not([data-ground="solid"]) .rule {
+    --insc-draw: 0;
+    transition:
+      top 0.6s var(--ease),
+      opacity 0.3s var(--ease),
+      --insc-draw 0s linear 0.3s;
+  }
+
+  .root[data-ground="solid"] .rule {
+    transition:
+      top 0.6s var(--ease),
+      opacity 0.3s var(--ease),
+      --insc-draw 1.4s var(--ease) 0.12s;
+  }
 }
 
 /* ---------------------------------------------------------------- the bar */

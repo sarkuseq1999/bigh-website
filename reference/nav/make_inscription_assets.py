@@ -1,5 +1,5 @@
 # Menu bar "Inscription" (October 5, 2026). Made public/images/home-v2/nav/inscription/deckle.png (the torn edge). Its rule.webp
-was later replaced by make_rule.py.
+was later replaced by make_rule_stroke.py (round 3, a painted stroke).
 """Assets for menu bar option C, "Inscription" (October 5, 2026).
 
 1. deckle.png  - a horizontally tileable torn rice-paper edge, used as a mask strip at the bottom
