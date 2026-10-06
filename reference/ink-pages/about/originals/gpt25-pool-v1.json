@@ -1,0 +1,11 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Traditional East Asian ink painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no other objects, no text, no signature, no red seal, no stamp. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side.\n\nOne soft pool of pale grey watercolor ink, as if a wet brush loaded with thinned sumi ink was laid down and the wash spread out on its own: roughly oval, a little taller than wide, irregular feathered edges with small blooms, slightly darker towards its lower left, pale and quiet. Nothing else. The pool about 70% of the picture's height, centred.",
+  "settings": {
+    "aspect_ratio": "16:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [],
+  "made": "20261006-145130"
+}

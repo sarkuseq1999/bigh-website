@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Traditional East Asian ink painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no other objects, no text, no signature, no red seal, no stamp. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side.\n\nOne capital letter G, written once, large, by hand with a loaded calligraphy brush in sumi ink, in the same calm, steady hand as the G of the reference picture: an open round bowl and a short firm bar, one confident movement per stroke, natural swelling and thinning, softly irregular edges, a light hint of dry-brush texture only at some stroke ends. Easy to read; no splatter, no drips, no flicks. Centred, the letter about 70% of the picture's height.",
+  "settings": {
+    "aspect_ratio": "16:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-ink/reference/ink-pages/about/refs/ref-word.png"
+  ],
+  "made": "20261006-144955"
+}
