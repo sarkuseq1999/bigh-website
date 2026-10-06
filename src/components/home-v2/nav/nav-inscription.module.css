@@ -30,6 +30,9 @@
   --lift: 0.02;
   /* One spacing for the whole line: between the links and on each side of the mark. */
   --gap: clamp(26px, 2.6vw, 44px);
+  /* The bar's side margins: the page's column, unless a language needs the outer groups to stand
+     a little further out (see "Long languages" below). */
+  --pad: var(--gutter);
   /* The torn edge at the foot of the scroll (the mask strip's height). */
   --deckle: 56px;
   /* Let down, slowing as it reaches its length; rolled back up briskly. */
@@ -132,7 +135,9 @@
   z-index: -1;
   top: calc(var(--h) - 1px);
   left: 50%;
-  width: min(var(--wide, 1300px), 100% - 2 * var(--gutter));
+  /* As wide as the bar's line: where the outer groups stand further out, the rule runs out with
+     them. */
+  width: min(var(--wide, 1300px) + 2 * (var(--gutter) - var(--pad)), 100% - 2 * var(--pad));
   min-height: 10px;
   aspect-ratio: 2433 / 30;
   translate: -50% -50%;
@@ -212,7 +217,7 @@
   max-width: calc(var(--wide, 1300px) + 2 * var(--gutter));
   height: var(--h);
   margin: 0 auto;
-  padding: 0 var(--gutter);
+  padding: 0 var(--pad);
   font-size: clamp(18px, 1.302vw, 20px);
   font-weight: 450;
   line-height: 1.2;
@@ -334,8 +339,13 @@
   --insc-ink-lead: 14px;
   position: absolute;
   top: calc(100% + 7px);
-  left: 0;
-  right: -2%;
+  /* Under its word, a hair longer than it; under a short word (two Chinese, Japanese or Korean
+     characters: 产品, 製品, 제품, 소개) never shorter than about three characters, so it still
+     reads as a stroke, not a dab (round 8). There it runs a little past both ends of the word: a
+     third of the extra length before it, the rest after it, so its loaded body sits centred under
+     the word and only the dry tail runs on toward the chevron (under it, never through it). */
+  left: calc(min(0px, (100% - 2.8em) * 0.3) - 1px);
+  width: max(100% + 2px, 2.8em);
   height: clamp(6px, 0.36em, 8px);
   translate: 0 -50%;
   mask: linear-gradient(90deg, #000 calc(100% - var(--insc-ink-lead)), transparent) 0 0 /
@@ -565,31 +575,77 @@
   white-space: nowrap;
 }
 
-/* Japanese and Vietnamese set About, Log in and Sign up long. Just above the menu's breakpoint
-   (1101-1400px) the line keeps its two-and-two around the centred mark by drawing in: a smaller
-   mark and closer spacing that grow back to the usual ones as the window widens, a slimmer
-   Sign up, and side margins that narrow toward 28px under about 1220px. */
-@media (min-width: 1101px) and (max-width: 1400px) {
+/* Long languages (round 8). The bar is three groups: the language, the inscription (two links,
+   the mark, two links) and the account. The space between a group and the inscription is what
+   tells them apart, so it must always be clearly wider than the spacing between the links (about
+   twice it, never under one and a half times). The mark stays centred and the words never shrink
+   under 18px, so where a language sets its words long the bar finds the room around them:
+   - Every language, just above the menu's breakpoint (1101-1185px): the language and the account
+     stand a little further out toward the window's edges, so the groups keep their air there.
+   - Japanese and Vietnamese set About, Log in and Sign up long (Japanese 私たちについて,
+     ログイン, 新規登録). The outer groups stand further out (side margins from 32px at 1101px
+     back to the page's column, Japanese always 32px beyond it), the spacing is a tenth closer
+     (from 22px at 1101px), the mark steps down a little just above the breakpoint (104px at
+     1101px, the usual 116px from 1201px), and below 1400px Sign up's outline is slimmer.
+   - Japanese below 1340px: Sign up is written like Log in (no outline), which frees the room the
+     outline took; the pair still reads as one group by its spacing (closer than the links). */
+@media (min-width: 1101px) {
+  .root {
+    --pad: min(var(--gutter), 62px + (100vw - 1101px) * 0.35);
+  }
+
   .root:is(:lang(ja), :lang(vi)) {
-    --gap: calc(20px + (100vw - 1101px) * 0.045);
-    --mark-tall: calc(100px + (100vw - 1101px) * 0.1);
-    --mark-small: calc(94px + (100vw - 1101px) * 0.03);
+    --gap: min(0.9 * clamp(26px, 2.6vw, 44px), 22px + (100vw - 1101px) * 0.04);
+    --mark-tall: min(clamp(116px, 9.4vw, 150px), 104px + (100vw - 1101px) * 0.12);
+    --mark-small: min(clamp(94px, 6.8vw, 108px), 94px + (100vw - 1101px) * 0.03);
+    --pad: min(var(--gutter), 32px + (100vw - 1101px) * 0.25);
   }
 
-  .root:is(:lang(ja), :lang(vi)) .bar {
-    padding-inline: min(var(--gutter), calc(28px + (100vw - 1101px) * 0.5));
+  .root:lang(ja) {
+    --pad: min(var(--gutter) - 32px, 32px + (100vw - 1101px) * 0.25);
   }
+}
 
-  .root:is(:lang(ja), :lang(vi)) :is(.left, .right) {
-    gap: 20px;
-  }
-
+@media (min-width: 1101px) and (max-width: 1399px) {
   .root:is(:lang(ja), :lang(vi)) .account > div {
     gap: 16px;
   }
 
   .root:is(:lang(ja), :lang(vi)) .account button {
     padding: 0 16px;
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1339px) {
+  .root:lang(ja) .account > div {
+    gap: 18px;
+  }
+
+  .root:lang(ja) .account button {
+    position: relative;
+    padding: 0 2px;
+    border: 0;
+    border-radius: 0;
+  }
+
+  /* Its line, as Log in's, once it leads somewhere. */
+  .root:lang(ja) .account button::after {
+    content: "";
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    bottom: 6px;
+    height: 2px;
+    border-radius: 2px;
+    background: currentColor;
+    scale: 0 1;
+    transition: scale 0.5s var(--ease);
+  }
+}
+
+@media (min-width: 1101px) and (max-width: 1339px) and (hover: hover) {
+  .root:lang(ja) .account button:enabled:hover::after {
+    scale: 1 1;
   }
 }
 
@@ -941,6 +997,14 @@ img.plate {
   display: block;
   width: auto;
   height: 100%;
+}
+
+/* A focus line or caption keeps its phrases whole where they fit: a narrow line breaks between
+   them first (round 8: on a phone, Japanese 確かな科学を。/ その向こうにいる人。, not
+   その向こうに / いる人。; Vietnamese "Sức khỏe tế bào &" / "năng lượng tinh thần", not
+   "… & năng" / "lượng …"). */
+.phrase {
+  display: inline-block;
 }
 
 /* Japanese and Chinese lines break between phrases, not inside them. */

@@ -78,8 +78,15 @@ On the real GPU (ANGLE/D3D11):
     On the upright tablet the crane eases (never pops) as Science replaces Products and folds
     away. Filmed at real speed on a phone: Science unfolding and the menu opening show no light
     box round the paintings or the crane.
-  - Vietnamese and Japanese at 1101 and 1280 px: the bar's three groups stay apart and inside the
-    window.
+  - the bar's three groups in every language (round 8): English, Simplified Chinese, Korean,
+    Vietnamese and Japanese at 1101, 1160, 1220, 1280, 1366, 1440, 1536 and 1920px, over the opening
+    and scrolled: the gap before the account group (and after the language) at least 1.5 times the
+    spacing between the links; the inscription symmetric about the centred mark (one spacing, its
+    sides within 1.35 times; the rest is the words' own length); 12px+ between neighbours, 16px+
+    from the window's edge; no word wrapping, none under 18px. Then every 20px from 1101 to 1920 in
+    both states, and with the window's own scrollbar showing. The stroke under a short word (产品,
+    제품, 製品; 소개 as the current page): about three characters long, centred, past both ends,
+    its ink never past the chevron's middle.
   - filmed at real speed (round 2; every frame the compositor draws, plus the bar's state on every
     frame the page draws): Science opening on a painting (the cell: rested on, closed and opened
     again at once; it opens on Dr. Liu's print, which is never multiplied), from the tall bar and
@@ -1937,34 +1944,228 @@ def tablet(browser):
     page.close()
 
 
-def languages(browser):
-    for locale in ("vn", "jp"):
-        for width in (1101, 1280):
+# Round 8: the bar's three groups (the language | the inscription: two links, the mark, two links |
+# the account) in every language. Every bar item's box, each word's font size and the lines it is
+# set on.
+GROUPS = """() => {
+  const nav = document.querySelector('#site-navigation');
+  const R = el => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, w: r.width }; };
+  const lang = nav.firstElementChild.firstElementChild.querySelector('label');
+  const right = nav.lastElementChild; const [about, support] = [...right.firstElementChild.children];
+  const acct = right.lastElementChild;
+  const items = { lang, prod: nav.querySelector('[data-nav-trigger="products"]'),
+    sci: nav.querySelector('[data-nav-trigger="science"]'), mark: nav.querySelector('[data-nav-logo]'),
+    about, support, login: acct.querySelector('a'), signup: acct.querySelector('button') };
+  const text = { lang: lang.querySelector('select'), prod: items.prod.firstElementChild,
+    sci: items.sci.firstElementChild, about: about.firstElementChild, support: support.firstElementChild,
+    login: items.login, signup: items.signup };
+  const lines = el => { if (el.tagName === 'SELECT') return el.getBoundingClientRect().height < 60 ? 1 : 2;
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); const tops = new Set(); let n;
+    while ((n = walk.nextNode())) { if (!n.textContent.trim()) continue; const rg = document.createRange();
+      rg.selectNodeContents(n);
+      [...rg.getClientRects()].filter(r => r.width > 1).forEach(r => tops.add(Math.round(r.top / 6))); }
+    return tops.size; };
+  const map = f => Object.fromEntries(Object.entries(text).map(([k, e]) => [k, f(e)]));
+  return { cw: document.documentElement.clientWidth,
+    box: Object.fromEntries(Object.entries(items).map(([k, e]) => [k, R(e)])),
+    lines: map(lines), size: map(e => parseFloat(getComputedStyle(e).fontSize)),
+    pill: parseFloat(getComputedStyle(items.signup).borderTopWidth) > 0 };
+}"""
+
+ORDER = ["lang", "prod", "sci", "mark", "about", "support", "login", "signup"]
+
+
+def groups(g):
+    """The bar's spacing from GROUPS: the gaps between neighbours, the two group gaps against the
+    spacing between the links, the inscription's symmetry about the mark, and what is wrong."""
+    b, cw = g["box"], g["cw"]
+    gap = {f"{a}>{c}": b[c]["l"] - b[a]["r"] for a, c in zip(ORDER, ORDER[1:])}
+    link = max(gap["prod>sci"], gap["about>support"])
+    mid = (b["mark"]["l"] + b["mark"]["r"]) / 2
+    reach = (mid - b["prod"]["l"], b["support"]["r"] - mid)
+    return {
+        "ratio": min(gap["support>login"], gap["lang>prod"]) / link,
+        "account": round(gap["support>login"]),
+        "language": round(gap["lang>prod"]),
+        "link": round(link, 1),
+        # One spacing for the inscription and the mark at the window's centre: its two sides differ
+        # only by their own words' lengths.
+        "symmetric": abs(mid - cw / 2) <= 1
+        and abs(gap["sci>mark"] - gap["mark>about"]) <= 1
+        and abs(gap["prod>sci"] - gap["about>support"]) <= 1
+        and abs(gap["sci>mark"] - gap["prod>sci"]) <= 1,
+        "reach": round(max(reach) / min(reach), 2),
+        "tightest": round(min(gap.values())),
+        "inside": b["lang"]["l"] >= 16 and b["signup"]["r"] <= cw - 16,
+        "edges": (round(b["lang"]["l"]), round(cw - b["signup"]["r"])),
+        "wrapped": [k for k, v in g["lines"].items() if v != 1],
+        "small": [k for k, v in g["size"].items() if v < 18],
+    }
+
+
+LANG_WIDTHS = (1101, 1160, 1220, 1280, 1366, 1440, 1536, 1920)
+
+
+def languages(browser, playwright):
+    """Round 8: in every language, at 1101-1920px, over the opening (tall) and scrolled (small), the
+    bar reads as three groups: the gap before the account group (and, mirrored, after the language)
+    at least 1.5 times the spacing between the links; the inscription symmetric about the centred
+    mark (one spacing; its two sides differ only by their words, never more than 1.35 times);
+    nothing overlapping (12px+ between neighbours) or within 16px of the window's edge; no word
+    wrapping; no word under 18px. Then every 20px from 1101 to 1920 in both states, and with the
+    window's own scrollbar showing (as on Windows), the same group gaps and fit."""
+    for locale in ("en", "cns", "kr", "vn", "jp"):
+        url = f"{BASE}/" if locale == "en" else f"{BASE}/{locale}"
+        found = {}
+        for width in LANG_WIDTHS:
             page = browser.new_page(viewport={"width": width, "height": 800})
             watch(page)
-            page.goto(f"{BASE}/{locale}", wait_until="networkidle")
-            page.wait_for_timeout(2200)
-            page.screenshot(path=str(OUT / f"{locale}-{width}.png"), clip={"x": 0, "y": 0, "width": width, "height": 120})
-            fit = page.evaluate(
-                """() => {
-              const nav = document.querySelector('#site-navigation');
-              const box = el => el.getBoundingClientRect();
-              const left = box(nav.firstElementChild), mark = box(nav.querySelector('[data-nav-logo]'));
-              const right = box(nav.lastElementChild);
-              const shown = [...nav.querySelectorAll('a, button, select')].filter(el => {
-                const r = box(el); return r.width > 0 && !el.closest('[data-nav-panel], [data-nav-sheet]');
-              });
-              const out = shown.filter(el => { const r = box(el); return r.left < 0 || r.right > innerWidth; })
-                .map(el => el.innerText.trim());
-              return { gapLeft: Math.round(mark.left - left.right), gapRight: Math.round(right.left - mark.right), out };
-            }"""
-            )
-            check(
-                f"{locale} {width}: the bar's three groups stay apart and inside the window",
-                fit["gapLeft"] >= 16 and fit["gapRight"] >= 16 and not fit["out"],
-                fit,
-            )
+            page.goto(url, wait_until="networkidle")
+            page.wait_for_timeout(1500)
+            page.mouse.move(width / 2, 796)
+            for state in ("tall", "small"):
+                if state == "small":
+                    page.evaluate("window.scrollTo(0, 700)")
+                    page.mouse.wheel(0, 1)
+                    page.wait_for_timeout(1300)
+                found[(width, state)] = groups(page.evaluate(GROUPS))
+                page.screenshot(
+                    path=str(OUT / f"lang-{locale}-{width}-{state}.png"),
+                    clip={"x": 0, "y": 0, "width": width, "height": 130 if state == "tall" else 110},
+                )
             page.close()
+
+        def worst(key, low=True):
+            pick = (min if low else max)(found.items(), key=lambda kv: kv[1][key])
+            return f"{pick[0][0]} {pick[0][1]}: {round(pick[1][key], 2)}"
+
+        every = list(found.values())
+        check(
+            f"{locale}: the gap before the account group and after the language at least 1.5x the "
+            "spacing between the links (1101-1920, tall and small)",
+            all(f["ratio"] >= 1.5 for f in every),
+            "lowest ratio "
+            + worst("ratio")
+            + "; tall account/language/link: "
+            + ", ".join(
+                f"{w} {f['account']}/{f['language']}/{f['link']}" for (w, s), f in found.items() if s == "tall"
+            ),
+        )
+        check(
+            f"{locale}: the inscription is symmetric about the centred mark, its sides within 1.35x",
+            all(f["symmetric"] and f["reach"] <= 1.35 for f in every),
+            "widest reach "
+            + worst("reach", low=False)
+            + "; not symmetric: "
+            + str([k for k, f in found.items() if not f["symmetric"]]),
+        )
+        check(
+            f"{locale}: nothing overlaps (12px+ between neighbours) or comes within 16px of the edge",
+            all(f["tightest"] >= 12 and f["inside"] for f in every),
+            "tightest gap "
+            + worst("tightest")
+            + "; outside: "
+            + str([(k, f["edges"]) for k, f in found.items() if not f["inside"]]),
+        )
+        check(
+            f"{locale}: no word in the bar wraps, none under 18px",
+            all(not f["wrapped"] and not f["small"] for f in every),
+            [(k, f["wrapped"], f["small"]) for k, f in found.items() if f["wrapped"] or f["small"]],
+        )
+
+        # Every 20px, both states; then with the window's scrollbar showing (tall).
+        def sweep(page, label, states):
+            bad, low = [], (9.0, None)
+            for state in states:
+                if state == "small":
+                    page.evaluate("window.scrollTo(0, 700)")
+                    page.mouse.wheel(0, 1)
+                    page.wait_for_timeout(1300)
+                for width in range(1101, 1921, 20):
+                    page.set_viewport_size({"width": width, "height": 800})
+                    page.wait_for_timeout(90)
+                    f = groups(page.evaluate(GROUPS))
+                    low = min(low, (round(f["ratio"], 2), f"{width} {state}"))
+                    if (
+                        f["ratio"] < 1.5
+                        or f["tightest"] < 12
+                        or not f["inside"]
+                        or f["wrapped"]
+                        or not f["symmetric"]
+                    ):
+                        bad.append((width, state, round(f["ratio"], 2), f["tightest"], f["edges"], f["wrapped"]))
+            check(
+                f"{locale}: every 20px from 1101 to 1920 ({label}): three groups, symmetric, inside, unwrapped",
+                not bad,
+                f"lowest ratio {low}; {bad[:4]}",
+            )
+
+        page = browser.new_page(viewport={"width": 1101, "height": 800})
+        watch(page)
+        page.goto(url, wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.mouse.move(500, 796)
+        sweep(page, "tall and small", ("tall", "small"))
+        page.close()
+        bars = playwright.chromium.launch(args=["--use-angle=d3d11"], ignore_default_args=["--hide-scrollbars"])
+        page = bars.new_page(viewport={"width": 1101, "height": 800})
+        watch(page)
+        page.goto(url, wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.mouse.move(500, 796)
+        sweep(page, "the window's scrollbar showing", ("tall",))
+        bars.close()
+
+    STROKE_BOX = """w => { const link = [...document.querySelectorAll('#site-navigation [data-nav-ink]')]
+      .map(i => i.closest('a, button')).find(l => l.innerText.trim() === w);
+      return Math.round(link.querySelector('[data-nav-ink]').getBoundingClientRect().width); }"""
+
+    # The painted stroke under a short word (round 8): two Chinese, Japanese or Korean characters
+    # (产品, 제품, 製品, 소개) carry a stroke about three characters long, centred under the word,
+    # a little past both its ends, its ink never past the chevron's middle: a stroke, not a dab.
+    for locale, word, about in (("cns", "产品", "关于我们"), ("kr", "제품", "소개"), ("jp", "製品", "私たちについて")):
+        page = browser.new_page(viewport={"width": 1536, "height": 900})
+        watch(page)
+        page.goto(f"{BASE}/{locale}", wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.mouse.move(768, 896)
+        put(page, "products")
+        px = stroke_pixels(page, word)
+        size = page.evaluate(
+            "parseFloat(getComputedStyle(document.querySelector('#site-navigation')).fontSize)"
+        )
+        page.screenshot(
+            path=str(OUT / f"stroke-{locale}-products.png"),
+            clip={"x": round(px["left"]) - 40, "y": 0, "width": round(px["right"] - px["left"]) + 110, "height": 110},
+        )
+        box = page.evaluate(STROKE_BOX, word)
+        check(
+            f"stroke ({locale}): under {word} about three characters long (2.6em+), its dark ink (2.2em+) "
+            "centred under the word (3px), starting before it, ending before the chevron's middle",
+            px["ink"]
+            and box >= 2.6 * size
+            and px["to"] - px["from"] >= 2.2 * size
+            and abs((px["from"] + px["to"]) / 2 - (px["left"] + px["right"]) / 2) <= 3
+            and px["from"] < px["left"]
+            and px["to"] <= px["chevron"] + 7,
+            {k: (round(v, 1) if isinstance(v, float) else v) for k, v in px.items()} | {"em": size, "box": box},
+        )
+        if locale == "kr":
+            put(page, "top", 0, 900)
+            page.evaluate("document.querySelector('#site-navigation a[href$=\"/about\"]').dataset.ink = 'here'")
+            page.wait_for_timeout(1700)
+            px = stroke_pixels(page, about)
+            box = page.evaluate(STROKE_BOX, about)
+            check(
+                f"stroke ({locale}): under {about} (as the current page) about three characters long, "
+                "its dark ink centred under the word (3px)",
+                px["ink"]
+                and box >= 2.6 * size
+                and px["to"] - px["from"] >= 2.2 * size
+                and abs((px["from"] + px["to"]) / 2 - (px["left"] + px["right"]) / 2) <= 3,
+                {k: (round(v, 1) if isinstance(v, float) else v) for k, v in px.items()} | {"box": box},
+            )
+        page.close()
 
 # Round 6: the painted stroke under a word. Each ink of the bar's three words (Products, Science,
 # About): which state its link gives it, and how much ink it shows.
@@ -2200,7 +2401,7 @@ with sync_playwright() as p:
         tablet(browser)
         tablet_rows(browser)
     if ONLY in (None, "lang"):
-        languages(browser)
+        languages(browser, p)
     browser.close()
 
 check("no page errors or console errors", not errors, errors[:5])

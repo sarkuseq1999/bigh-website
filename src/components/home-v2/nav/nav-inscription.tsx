@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { ArrowRight, ChevronDown, X } from "lucide-react";
 import { useLocale } from "next-intl";
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
@@ -292,7 +292,7 @@ export function NavInscription({
                   items={navProducts.map((item) => ({
                     href: item.href,
                     name: copy(item.name),
-                    line: copy(item.focus),
+                    line: <Phrases text={copy(item.focus)} />,
                   }))}
                   more={{ href: navProductsIntro.allLink, text: copy(navProductsIntro.title) }}
                   link={{
@@ -361,7 +361,7 @@ export function NavInscription({
                   items={navScience.map((item) => ({
                     href: item.href,
                     name: copy(item.label),
-                    line: caption(item.caption),
+                    line: <Phrases text={caption(item.caption)} />,
                   }))}
                   more={{ href: navScienceIntro.href, text: copy(navScienceIntro.link) }}
                   link={{ href: part.href, text: copy(part.link) }}
@@ -469,7 +469,9 @@ export function NavInscription({
                       />
                     </span>
                     <span className={styles.sheetRowName}>{copy(product.name)}</span>
-                    <span className={styles.sheetRowLine}>{copy(product.focus)}</span>
+                    <span className={styles.sheetRowLine}>
+                      <Phrases text={copy(product.focus)} />
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -526,7 +528,9 @@ export function NavInscription({
                       )}
                     </span>
                     <span className={styles.sheetRowName}>{copy(item.label)}</span>
-                    <span className={styles.sheetRowLine}>{caption(item.caption)}</span>
+                    <span className={styles.sheetRowLine}>
+                      <Phrases text={caption(item.caption)} />
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -659,7 +663,7 @@ function Showroom({
   children,
 }: {
   room: ReturnType<typeof useShowroom>;
-  items: { href: string; name: string; line: string }[];
+  items: { href: string; name: string; line: ReactNode }[];
   more: { href: string; text: string };
   link: { href: string; text: string };
   onGo: () => void;
@@ -712,6 +716,22 @@ function Showroom({
       </div>
     </div>
   );
+}
+
+/** A line of words set in phrases (sentences, clauses after a comma, the halves either side of
+ *  "&"), each kept whole where it fits: a narrow line breaks between them before it breaks inside
+ *  one (round 8: Japanese 確かな科学を。/ その向こうにいる人。, Vietnamese "Khoa học vững vàng." /
+ *  "Những con người thật.", "Sức khỏe tế bào &" / "năng lượng tinh thần"). A phrase longer than
+ *  the line still wraps inside itself. */
+function Phrases({ text }: { text: string }) {
+  const pieces = [...text.matchAll(/(.+?(?:[.。!?！？,、，;；&]+|$))(\s*)/gu)];
+  if (pieces.length < 2) return text;
+  return pieces.map(([, phrase, space], i) => (
+    <Fragment key={i}>
+      <span className={styles.phrase}>{phrase}</span>
+      {space && " "}
+    </Fragment>
+  ));
 }
 
 /** A link's words with its arrow kept on the last word's line, so the arrow never stands alone on
