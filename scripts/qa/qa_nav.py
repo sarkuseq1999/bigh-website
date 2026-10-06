@@ -1,6 +1,6 @@
 """QA for the menu bar, "Inscription" (Mo's pick, October 5, 2026), on the homepage.
 
-usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|settle|showroom|science|phone|tablet|lang]
+usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|settle|showroom|science|phone|tablet|lang|r10]
        base defaults to http://localhost:3014
 
 On the real GPU (ANGLE/D3D11):
@@ -113,6 +113,21 @@ On the real GPU (ANGLE/D3D11):
     their letters read): contrast with the words' ink 7:1 or more, the ground's levels spread 40
     or less. Reduced motion: two states, never between. Firefox (no scroll-driven animation, so
     the script's fallback): the same sweep and checks.
+  - nothing dead, nothing small (round 10). At 1536x900 and 1101x800 (over the opening, scrolled,
+    Products and Science open), on phones 390x844 and 360x640 and the tablet 834x1112 (the bar, the
+    menu, each fold, its foot), and in Chinese, Korean, Vietnamese and Japanese (1101 over the
+    opening, scrolled and both drop-downs; the phone menu's folds and foot): every visible text 15px
+    or larger and 7:1 or more on the paper, every control's target 48px or more both ways (a short
+    word's and the mark's reach past their box). Sign up, with no link yet, promises nothing: not a
+    Tab stop, the default cursor, the same pixels when pointed at and pressed (bar and menu). The
+    wash under an open scroll is 26-32% (round 9). Focus rings, stepping through every control
+    from the keyboard (the bar over the opening and scrolled, both drop-downs, the phone, short
+    phone and tablet menu with both folds): 2px of ink, whole on all four sides in the pixels,
+    inside the window (the menu keeps the focused line above its foot), 4px or more clear of the
+    mark's leaf and letters, round the language picker's globe, never across the brush marks
+    between the menu's lines, and in the settled bar clear of its rule. On a short phone the word
+    pressed in the menu stays in the window while the folds move. The language picker is as wide
+    as the language it shows, its arrow beside the word, in Chrome and in Firefox.
   - no page errors or console errors anywhere.
 Pictures land in scripts/qa/out/nav/.
 """
@@ -839,9 +854,8 @@ def showroom_reach(browser):
         f"{seen}; then {after!r}",
     )
     page.keyboard.press("Shift+Tab")
-    ring = page.evaluate(
-        "(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle + ' ' + s.outlineWidth; })()"
-    )
+    r = page.evaluate(FOCUS_RING)  # on the name or on a box laid round it (round 10)
+    ring = f"{r['style']} {r.get('width', 0)}px"
     check(
         "showroom: a visible ring on a name under the keyboard's focus",
         "Nature Calm" in focused(page) and not ring.endswith(" 0px") and "none" not in ring,
@@ -1174,9 +1188,8 @@ def science_reach(browser):
         f"{seen}; then {after!r}",
     )
     page.keyboard.press("Shift+Tab")
-    ring = page.evaluate(
-        "(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle + ' ' + s.outlineWidth; })()"
-    )
+    r = page.evaluate(FOCUS_RING)  # on the name or on a box laid round it (round 10)
+    ring = f"{r['style']} {r.get('width', 0)}px"
     check(
         "science: a visible ring on a name under the keyboard's focus",
         "Ask BiGH Science" in focused(page) and not ring.endswith(" 0px") and "none" not in ring,
@@ -1458,10 +1471,9 @@ def desktop(browser):
         page.keyboard.press("Tab")
         order.append(focused(page))
         if "Products" in order[-1]:
-            ring = page.evaluate(
-                "(() => { const s = getComputedStyle(document.activeElement); "
-                "return s.outlineStyle + ' ' + s.outlineWidth; })()"
-            )
+            # (Drawn on the control or on a box laid round it: see FOCUS_RING, round 10.)
+            r = page.evaluate(FOCUS_RING)
+            ring = f"{r['style']} {r.get('width', 0)}px"
     check(
         "desk: the Tab order follows the line",
         order[1].startswith("Choose language")
@@ -1622,7 +1634,7 @@ def finale_checks(tag, m, at_once):
     check(f"{tag}: the crane stands whole at the foot, Log in and Sign up under it" + (" (no scrolling)" if at_once else " (scrolled to the end)"),
           ok and (not at_once or m["scrollTop"] == 0),
           {"crane": [round(c["top"]), round(c["bottom"]), round(c["h"])], "H": m["H"], "foot": [round(f["top"]) for f in foot.values()],
-           "scrollTop": m["scrollTop"]})
+           "scrollTop": m["scrollTop"], "opacity": round(m["craneOpacity"], 3)})
 
 
 # The crane on every frame the page draws while a part folds open or shut: where its top is, its
@@ -1669,7 +1681,8 @@ def phone_rows(browser):
         page.goto(BASE + ("/" if loc == "en" else f"/{loc}"), wait_until="networkidle")
         page.wait_for_timeout(1500)
         page.locator("[data-nav-menu-button]").click()
-        page.wait_for_timeout(1400)
+        # The crane settles last (from 0.64s, for 0.9s): measured once it has.
+        page.wait_for_timeout(1900)
         m = page.evaluate(MENU)
         if h >= 780:
             finale_checks(f"{tag} menu", m, at_once=True)
@@ -2665,6 +2678,395 @@ def settle_checks(browser, playwright):
     firefox.close()
 
 
+# ---------------------------------------------------------------- round 10: nothing dead, nothing small
+
+# Everything the bar shows a visitor in its present state: visible text (each run of words, its
+# size and its contrast with the paper: its colour and its opacity through every ancestor, over the
+# paper), and every control a pointer or the keyboard can reach (its hit box).
+SHOWN = """() => {
+  const header = document.querySelector('header');
+  const paper = [248, 243, 234];
+  const lin = c => { c /= 255; return c <= 0.03928 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4; };
+  const lum = ([r, g, b]) => 0.2126 * lin(r) + 0.7152 * lin(g) + 0.0722 * lin(b);
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+  const seen = el => el.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !el.closest('[inert]');
+  const onScreen = b => b.width > 1 && b.height > 1 && b.bottom > 0 && b.top < innerHeight && b.right > 0 && b.left < innerWidth;
+  const alpha = el => { let a = 1; for (let n = el; n && n !== document.documentElement; n = n.parentElement) a *= +getComputedStyle(n).opacity; return a; };
+  const texts = [];
+  const walker = document.createTreeWalker(header, NodeFilter.SHOW_TEXT);
+  while (walker.nextNode()) {
+    const t = walker.currentNode; const words = t.textContent.trim(); const el = t.parentElement;
+    if (!words || !seen(el) || el.closest('option, [role=status]')) continue;
+    const r = document.createRange(); r.selectNodeContents(t);
+    if (!onScreen(r.getBoundingClientRect())) continue;
+    const s = getComputedStyle(el); const m = s.color.match(/[\\d.]+/g).map(Number);
+    const k = (m.length > 3 ? m[3] : 1) * alpha(el);
+    const shown = m.slice(0, 3).map((v, i) => v * k + paper[i] * (1 - k));
+    texts.push({ text: words.slice(0, 24), size: parseFloat(s.fontSize), ratio: +ratio(shown, paper).toFixed(1) });
+  }
+  // A control's hit box: its own, and what its ::before reaches over where that is laid round it
+  // (the mark's, a little round its picture; a short word's, out to 48px).
+  const hit = el => { const b = el.getBoundingClientRect(); const box = { l: b.left, t: b.top, r: b.right, b: b.bottom };
+    const p = getComputedStyle(el, '::before');
+    if (p.content !== 'none' && p.position === 'absolute') {
+      box.l = Math.min(box.l, b.left + parseFloat(p.left)); box.t = Math.min(box.t, b.top + parseFloat(p.top));
+      box.r = Math.max(box.r, b.right - parseFloat(p.right)); box.b = Math.max(box.b, b.bottom - parseFloat(p.bottom)); }
+    return { w: +(box.r - box.l).toFixed(1), h: +(box.b - box.t).toFixed(1) }; };
+  const controls = [...header.querySelectorAll('a[href], button, select')]
+    .filter(el => seen(el) && el.tabIndex >= 0 && onScreen(el.getBoundingClientRect()))
+    .map(el => ({ text: (el.getAttribute('aria-label') || el.innerText || '').trim().slice(0, 24), ...hit(el) }));
+  return { texts, controls };
+}"""
+
+
+def nothing_small(page, tag):
+    """Every visible text in the bar, its drop-downs and its menu 15px or larger and 7:1 or more
+    against the paper; every control 48px or more both ways."""
+    m = page.evaluate(SHOWN)
+    small = [(t["text"], t["size"]) for t in m["texts"] if t["size"] < 15]
+    faint = [(t["text"], t["ratio"]) for t in m["texts"] if t["ratio"] < 7]
+    short = [(c["text"], c["w"], c["h"]) for c in m["controls"] if c["w"] < 47.5 or c["h"] < 47.5]
+    check(
+        f"{tag}: nothing small or faint (text 15px+, 7:1+ on the paper; every control 48px+ both ways)",
+        m["texts"] and m["controls"] and not small and not faint and not short,
+        f"{len(m['texts'])} texts from {min(t['size'] for t in m['texts']):.0f}px, lowest "
+        f"{min(t['ratio'] for t in m['texts'])}:1; {len(m['controls'])} controls"
+        + (f"; small {small[:3]}" if small else "") + (f"; faint {faint[:3]}" if faint else "")
+        + (f"; short {short[:4]}" if short else ""),
+    )
+
+
+# The ring the keyboard's focus draws: on the control itself, on a box laid round it (its ::before
+# or ::after: the mark's, the bar's words', the showroom's names'), or round a language picker's
+# whole label (its globe, the language and the arrow).
+FOCUS_RING = """() => {
+  const el = document.activeElement; if (!el || el === document.body) return null;
+  const box = (n, pseudo) => { const b = n.getBoundingClientRect(); const r = { l: b.left, t: b.top, r: b.right, b: b.bottom };
+    if (pseudo) { const p = getComputedStyle(n, pseudo); r.l += parseFloat(p.left); r.t += parseFloat(p.top);
+      r.r -= parseFloat(p.right); r.b -= parseFloat(p.bottom); } return r; };
+  const ringOf = (n, pseudo) => { const s = getComputedStyle(n, pseudo);
+    return s.outlineStyle !== 'none' && parseFloat(s.outlineWidth) > 0 ? s : null; };
+  let host = null, s = null, pseudo = null;
+  const label = el.closest('label');
+  for (const [n, p] of [[el, null], [el, '::before'], [el, '::after'], [label, null], [label, '::after']]) {
+    if (n && (s = ringOf(n, p))) { host = n; pseudo = p; break; } }
+  const name = (el.getAttribute('aria-label') || el.innerText || el.tagName).trim().replace(/\\s+/g, ' ').slice(0, 28);
+  if (!host) return { name, style: 'none' };
+  const b = box(host, pseudo); const off = parseFloat(s.outlineOffset) || 0, w = parseFloat(s.outlineWidth);
+  const ring = { l: b.l - off - w, t: b.t - off - w, r: b.r + off + w, b: b.b + off + w };
+  const out = { name, style: s.outlineStyle, width: w, color: s.outlineColor, radius: parseFloat(s.borderTopLeftRadius) || 0, ...ring };
+  const logo = el.matches('[data-nav-logo]') && el.querySelector('span');
+  if (logo) { const p = logo.getBoundingClientRect(); out.clear = Math.min(p.left - ring.l, p.top - ring.t, ring.r - p.right, ring.b - p.bottom) - w; }
+  // Clear of the brush marks between the menu's lines, and of the settled bar's painted rule.
+  const meets = r => r.width > 0 && r.right > ring.l && r.left < ring.r && r.bottom > ring.t && r.top < ring.b;
+  out.dab = [...document.querySelectorAll('[class*="__dab"]')].some(d => meets(d.getBoundingClientRect()));
+  const header = document.querySelector('header'); const rule = header.querySelector('[class*="__rule"]');
+  if (header.dataset.size === 'small' && +getComputedStyle(rule).opacity > 0.5 && el.closest('#site-navigation')) {
+    const r = rule.getBoundingClientRect(); out.rule = (r.top + r.bottom) / 2 - 2 - ring.b; }
+  const globe = host.tagName === 'LABEL' && host.querySelector('svg');
+  if (globe && globe.getBoundingClientRect().width > 0 && getComputedStyle(globe).display !== 'none') {
+    const g = globe.getBoundingClientRect(); out.globe = g.left >= ring.l + w && g.right <= ring.r - w; }
+  return out;
+}"""
+
+
+def ring_sides(page, ring):
+    """Each side of the ring, from the pixels: the share of points along its middle (corners left
+    out) where the darkest pixel across the band is ink (luma 110 or less)."""
+    img = luma(Image.open(BytesIO(page.screenshot())))
+    k = img.shape[1] / page.viewport_size["width"]
+    w, pad = ring["width"], ring["radius"] + ring["width"] + 3
+
+    def darkest(x, y, dx, dy):
+        vals = []
+        for d in (-1.5, -0.5, 0.5, 1.5):
+            xi, yi = int(round((x + dx * d) * k)), int(round((y + dy * d) * k))
+            if 0 <= xi < img.shape[1] and 0 <= yi < img.shape[0]:
+                vals.append(img[yi, xi])
+        return min(vals) if vals else 255
+
+    sides = {}
+    for side in ("top", "bottom", "left", "right"):
+        if side in ("top", "bottom"):
+            y = ring["t"] + w / 2 if side == "top" else ring["b"] - w / 2
+            vals = [darkest(x, y, 0, 1) for x in np.linspace(ring["l"] + pad, ring["r"] - pad, 24)]
+        else:
+            x = ring["l"] + w / 2 if side == "left" else ring["r"] - w / 2
+            vals = [darkest(x, y, 1, 0) for y in np.linspace(ring["t"] + pad, ring["b"] - pad, 12)]
+        sides[side] = round(sum(v <= 110 for v in vals) / len(vals), 2)
+    return sides
+
+
+def ring_ok(page, tag, rings):
+    """The ring on the focused control: 2px of ink, whole on all four sides in the pixels (never
+    clipped by the bar, a fold or a mask), inside the window; round the mark with air between it and
+    the leaf and the letters; round a picker with its globe inside it; never across the brush marks
+    between the menu's lines, and in the settled bar clear of its painted rule."""
+    ring = page.evaluate(FOCUS_RING)
+    if not ring:
+        return None
+    bad = ""
+    if ring["style"] == "none":
+        bad = "no ring"
+    else:
+        sides = ring_sides(page, ring)
+        W, H = page.viewport_size["width"], page.viewport_size["height"]
+        if abs(ring["width"] - 2) > 0.01 or ring["color"] != "rgb(12, 11, 10)":
+            bad = f"{ring['width']}px {ring['color']}"
+        elif not (ring["l"] >= 0 and ring["t"] >= 0 and ring["r"] <= W and ring["b"] <= H):
+            bad = f"outside the window ({ring['l']:.0f},{ring['t']:.0f})-({ring['r']:.0f},{ring['b']:.0f})"
+        elif min(sides.values()) < 0.9:
+            bad = f"not whole {sides}"
+        elif ring.get("clear") is not None and ring["clear"] < 4:
+            bad = f"{ring['clear']:.1f}px from the mark"
+        elif ring.get("globe") is False:
+            bad = "the globe outside it"
+        elif ring.get("dab"):
+            bad = "across a brush mark between the lines"
+        elif ring.get("rule") is not None and ring["rule"] < 2:
+            bad = f"on the rule ({ring['rule']:.1f}px)"
+    rings.append((f"{tag} {ring['name']}", bad))
+    return ring
+
+
+def tab_rings(page, tag, rings, stops, until=None):
+    """Tab on through the header, checking each stop's ring; stop on leaving the header or at
+    `until` (a name)."""
+    names = []
+    for _ in range(stops):
+        page.keyboard.press("Tab")
+        page.wait_for_timeout(420)
+        if not page.evaluate("!!document.activeElement?.closest('header')"):
+            if names:
+                break
+            continue
+        name = page.evaluate("(document.activeElement.getAttribute('aria-label') || document.activeElement.innerText || '').trim()")
+        if name.startswith(("Products", "Science")) and page.evaluate(
+            "document.activeElement.hasAttribute('data-nav-sheet-toggle') && document.activeElement.getAttribute('aria-expanded') === 'false'"
+        ):
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(1000)
+        ring = ring_ok(page, tag, rings)
+        names.append(ring["name"] if ring else "?")
+        if until and until in name:
+            break
+    return names
+
+
+def sign_up(page, tag, scope):
+    """Sign up has no link yet (Mo has not given it): until it has, it is a placeholder that promises
+    nothing. Not a Tab stop, the default cursor, and pointing at it or pressing on it changes nothing
+    on the screen. Once it leads somewhere (a link, or an enabled button), this holds it to nothing
+    more than being one."""
+    loc = page.locator(f"{scope} button", has_text="Sign up").first
+    info = loc.evaluate("b => ({ disabled: b.disabled, tab: b.tabIndex, cursor: getComputedStyle(b).cursor })")
+    if not info["disabled"]:
+        check(f"{tag}: Sign up leads somewhere", True, "enabled")
+        return
+    box = loc.bounding_box()
+    clip = {"x": box["x"] - 6, "y": box["y"] - 6, "width": box["width"] + 12, "height": box["height"] + 12}
+    page.mouse.move(page.viewport_size["width"] / 2, page.viewport_size["height"] - 4)
+    page.wait_for_timeout(600)
+    rest = Image.open(BytesIO(page.screenshot(clip=clip))).convert("RGB")
+    page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+    page.wait_for_timeout(700)
+    pointed = Image.open(BytesIO(page.screenshot(clip=clip))).convert("RGB")
+    page.mouse.down()
+    page.wait_for_timeout(250)
+    pressed = Image.open(BytesIO(page.screenshot(clip=clip))).convert("RGB")
+    page.mouse.up()
+    page.mouse.move(page.viewport_size["width"] / 2, page.viewport_size["height"] - 4)
+    changed = max(max(hi for _, hi in ImageChops.difference(rest, im).getextrema()) for im in (pointed, pressed))
+    check(
+        f"{tag}: Sign up (no link yet) promises nothing: not a Tab stop, the default cursor, unchanged when pointed at or pressed",
+        info["cursor"] == "default" and changed <= 8,
+        f"disabled, cursor {info['cursor']}, most any pixel changed {changed} levels",
+    )
+
+
+# The language picker's room against its words: how much wider the select is than the language it
+# shows (with its own padding, which holds the arrow).
+PICKER = """() => [...document.querySelectorAll('header select')].filter(s => s.checkVisibility()).map(s => {
+  const st = getComputedStyle(s); const probe = document.createElement('span');
+  probe.textContent = s.selectedOptions[0].textContent;
+  probe.style.cssText = `position:absolute;visibility:hidden;white-space:pre;font:${st.font}`;
+  document.body.append(probe); const words = probe.getBoundingClientRect().width; probe.remove();
+  const room = parseFloat(st.paddingLeft) + parseFloat(st.paddingRight) + parseFloat(st.borderLeftWidth) + parseFloat(st.borderRightWidth);
+  return { text: s.selectedOptions[0].textContent, spare: +(s.getBoundingClientRect().width - words - room).toFixed(1) }; })"""
+
+
+def round10(browser, playwright):
+    """Round 10: every control says what it does, nothing is small, every focus ring is whole."""
+    rings: list[tuple[str, str]] = []
+
+    # The language picker is as wide as the language it shows, so its arrow stands beside the word:
+    # in Chrome by the stylesheet (field-sizing), in Firefox (no field-sizing: the picker was as wide
+    # as "Tiếng Việt", "English" a long gap from its arrow) by the script.
+    spare = []
+    for name, engine in (("Chrome", None), ("Firefox", playwright.firefox)):
+        b = browser if engine is None else engine.launch()
+        for loc, w, h in (("", 1536, 900), ("vn", 1101, 800), ("cns", 1280, 800), ("", 390, 844)):
+            page = b.new_page(viewport={"width": w, "height": h})
+            page.goto(f"{BASE}/{loc}", wait_until="networkidle")
+            page.wait_for_timeout(1500)
+            spare += [(name, loc or "en", w, x["text"], x["spare"]) for x in page.evaluate(PICKER)]
+            page.close()
+        if engine is not None:
+            b.close()
+    check(
+        "the language picker is as wide as the language it shows, its arrow beside the word (Chrome and Firefox)",
+        len(spare) >= 8 and all(-1 <= x[-1] <= 6 for x in spare),
+        "; ".join(f"{n} {loc} {w}: {t} {sp:+}px" for n, loc, w, t, sp in spare),
+    )
+
+    for w, h in ((1536, 900), (1101, 800)):
+        tag = f"r10 {w}x{h}"
+        page = browser.new_page(viewport={"width": w, "height": h})
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2500)
+        warm(page)
+        nothing_small(page, f"{tag} over the opening")
+        sign_up(page, tag, "#site-navigation [class*=\"__account\"]")
+        tab_rings(page, f"{tag} top:", rings, 10)
+        page.evaluate("document.activeElement?.blur()")
+        scroll_to(page, 1400)
+        nothing_small(page, f"{tag} scrolled")
+        page.evaluate("document.querySelector('[class*=skip]')?.focus()")
+        tab_rings(page, f"{tag} scrolled:", rings, 10)
+        scroll_to(page, 0)
+        page.mouse.move(w / 2, h - 4)
+        for panel, last in (("products", "Science"), ("science", "BiGH home")):
+            page.locator(f'[data-nav-trigger="{panel}"]').focus()
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(1300)
+            nothing_small(page, f"{tag} {panel.capitalize()}")
+            if panel == "products":
+                wash = page.evaluate(
+                    """() => { const w = document.querySelector('[class*="__wash"]'); const s = getComputedStyle(w);
+                    return { a: +(s.backgroundColor.match(/[\\d.]+/g)[3] ?? 1), o: +s.opacity }; }"""
+                )
+                check(
+                    f"{tag}: the wash under the open scroll is 26-32% (a headline under its torn edge recedes; round 9)",
+                    0.26 <= wash["a"] * wash["o"] <= 0.32,
+                    wash,
+                )
+            tab_rings(page, f"{tag} {panel}:", rings, 10, until=last)
+            page.keyboard.press("Escape")
+            page.wait_for_timeout(600)
+        page.close()
+
+    for w, h, mobile in ((390, 844, True), (360, 640, True), (834, 1112, False)):
+        tag = f"r10 {w}x{h} menu"
+        page = browser.new_page(viewport={"width": w, "height": h}, is_mobile=mobile, has_touch=mobile, device_scale_factor=2)
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2000)
+        nothing_small(page, f"r10 {w}x{h} bar")
+        tab_rings(page, f"r10 {w}x{h} bar:", rings, 4)
+        page.locator("[data-nav-menu-button]").focus()
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(1400)
+        nothing_small(page, f"{tag} open")
+        for part in ("products", "science"):
+            unfold(page, part)
+            nothing_small(page, f"{tag} {part.capitalize()}")
+        sheet_end(page)
+        sign_up(page, tag, "[data-nav-sheet] [class*=\"__sheetFoot\"]")
+        page.locator("[data-nav-menu-button]").focus()
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(500)
+        page.locator("[data-nav-menu-button]").focus()
+        page.keyboard.press("Enter")
+        page.wait_for_timeout(1400)
+        # Every stop of the menu, from the keyboard, unfolding each part on the way: whole, and in
+        # the window (the menu runs on under the window's foot; it keeps the focus above it).
+        tab_rings(page, f"{tag}:", rings, 40, until="Log in")
+        page.close()
+
+    # A short phone, scrolled down through Products to Science at the window's foot: pressing it
+    # folds Products away above it. The menu's own scroll used to carry Science up and out of the
+    # window (focus left on a word above it, the visitor in the middle of its rows); the word pressed
+    # stays in the window, under the bar, on every frame and at the end.
+    page = browser.new_page(viewport={"width": 360, "height": 640}, is_mobile=True, has_touch=True, device_scale_factor=2)
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1300)
+    unfold(page, "products")
+    results_at = []
+    for foot in (24, 120):
+        page.evaluate(
+            """(foot) => { const s = document.querySelector('[data-nav-sheet]');
+            const sci = document.querySelector('[data-nav-sheet-toggle="science"]');
+            s.scrollTop += sci.getBoundingClientRect().bottom - (innerHeight - foot); }""",
+            foot,
+        )
+        page.wait_for_timeout(400)
+        page.evaluate(
+            """() => { window.__w = []; window.__go = true;
+            const sci = document.querySelector('[data-nav-sheet-toggle="science"]');
+            const bar = document.querySelector('#site-navigation');
+            const tick = () => { const r = sci.getBoundingClientRect();
+              window.__w.push({ top: r.top, bottom: r.bottom, bar: bar.getBoundingClientRect().bottom });
+              if (window.__go) requestAnimationFrame(tick); }; requestAnimationFrame(tick); }"""
+        )
+        page.locator('[data-nav-sheet-toggle="science"]').click()
+        page.wait_for_timeout(1100)
+        page.evaluate("window.__go = false")
+        log = page.evaluate("window.__w")
+        out = [round(e["top"]) for e in log if e["top"] < e["bar"] - 1 or e["bottom"] > 640]
+        results_at.append((foot, len(log), round(log[-1]["top"]), out[:4]))
+        # Fold Products open again for the next look.
+        unfold(page, "products")
+    page.close()
+    check(
+        "short phone 360x640: the word pressed in the menu stays in the window while the folds move (Science pressed at the foot)",
+        all(n >= 30 and not out for _, n, _, out in results_at),
+        "; ".join(f"Science {foot}px over the foot: {n} frames, ends at {end}px" + (f", out at {out}" if out else "") for foot, n, end, out in results_at),
+    )
+
+    # Every language: the bar over the opening and scrolled, both drop-downs at the narrowest
+    # desktop, and the menu (its folds and its foot) on a phone. Two-character words (帮助, 登录,
+    # 소개) are about 40px wide; their targets reach out to 48px.
+    for loc in ("cns", "kr", "vn", "jp"):
+        page = browser.new_page(viewport={"width": 1101, "height": 800})
+        watch(page)
+        page.goto(f"{BASE}/{loc}", wait_until="networkidle")
+        page.wait_for_timeout(2500)
+        warm(page)
+        nothing_small(page, f"r10 {loc} 1101x800 over the opening")
+        for panel in ("products", "science"):
+            page.locator(f'[data-nav-trigger="{panel}"]').click()
+            page.wait_for_timeout(1300)
+            nothing_small(page, f"r10 {loc} 1101x800 {panel.capitalize()}")
+        page.keyboard.press("Escape")
+        scroll_to(page, 1400)
+        nothing_small(page, f"r10 {loc} 1101x800 scrolled")
+        page.close()
+        page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
+        watch(page)
+        page.goto(f"{BASE}/{loc}", wait_until="networkidle")
+        page.wait_for_timeout(2000)
+        page.locator("[data-nav-menu-button]").click()
+        page.wait_for_timeout(1400)
+        for part in ("products", "science"):
+            unfold(page, part)
+            nothing_small(page, f"r10 {loc} 390x844 menu {part.capitalize()}")
+        sheet_end(page)
+        nothing_small(page, f"r10 {loc} 390x844 menu foot")
+        page.close()
+
+    bad = [f"{name}: {why}" for name, why in rings if why]
+    check(
+        "focus rings: every control of the bar, both drop-downs and the menu (phone, short phone, tablet) "
+        "shows a whole 2px ink ring, inside the window, clear of the mark, the rule and the brush marks, round the picker's globe",
+        len(rings) >= 80 and not bad,
+        f"{len(rings)} stops; " + ("; ".join(bad[:6]) if bad else "all whole"),
+    )
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
@@ -2691,6 +3093,8 @@ with sync_playwright() as p:
         tablet_rows(browser)
     if ONLY in (None, "lang"):
         languages(browser, p)
+    if ONLY in (None, "r10"):
+        round10(browser, p)
     browser.close()
 
 check("no page errors or console errors", not errors, errors[:5])

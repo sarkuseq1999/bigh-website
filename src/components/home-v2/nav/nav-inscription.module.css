@@ -501,6 +501,25 @@
     top 0.6s var(--ease);
 }
 
+/* Round 10. The mark's picture runs edge to edge (its leaf touches the top, its letters the foot),
+   so a ring on the link itself sat on the leaf. The mark's target reaches a little round the
+   picture (48px or more tall in the small bar and on a phone, where the picture is 44-51px), and
+   the keyboard's ring is drawn on that, with air round the leaf and the letters. */
+.root .bar a.mark[href]::before {
+  content: "";
+  position: absolute;
+  inset: -5px -12px;
+  border-radius: 10px;
+}
+
+.root .bar a.mark[href]:focus-visible {
+  outline: none;
+}
+
+.root .bar a.mark[href]:focus-visible::before {
+  outline: 2px solid currentColor;
+}
+
 .root .link {
   position: relative;
   display: inline-flex;
@@ -514,6 +533,15 @@
   font: inherit;
   white-space: nowrap;
   cursor: pointer;
+}
+
+/* A word as short as two Chinese, Japanese or Korean characters (帮助, 关于, 登录) is about 40px
+   wide: its target reaches out to 48px, evenly either side, without moving a word (round 10). */
+.root .link::before,
+.root :is(.account, .sheetFoot) a::before {
+  content: "";
+  position: absolute;
+  inset: 0 min(0px, (100% - 48px) / 2);
 }
 
 /* With a mouse, an ink underline draws out from the middle of the word you point at (the open
@@ -753,6 +781,34 @@
   outline-offset: 4px;
 }
 
+/* The keyboard's ring in the bar (round 10): 2px of ink round the words, about 44px tall and centred
+   on them (round the 48px targets it ran down onto the settled bar's brush rule), with 8px of air
+   at their sides. Drawn on a box laid round the control. The language picker's goes round all of
+   it, its globe, the language and its arrow (on the select alone it left the globe outside). */
+.root
+  :is(
+    .link,
+    .menuButton,
+    .account a,
+    .sheetFoot a,
+    .language select,
+    .account select
+  ):focus-visible {
+  outline: none;
+}
+
+.root .link:focus-visible::after,
+.root .menuButton:focus-visible::after,
+.root :is(.account, .sheetFoot) a:focus-visible::before,
+.root :is(.language, .account) label:has(select:focus-visible)::after {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.6em - 8px) -6px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
+  pointer-events: none;
+}
+
 @supports (appearance: base-select) {
   .root :is(.language, .account) select,
   .root :is(.language, .account) select::picker(select) {
@@ -807,6 +863,7 @@
 }
 
 .root .menuButton {
+  position: relative;
   display: none;
   align-items: center;
   gap: 8px;
@@ -1014,8 +1071,23 @@
   display: grid;
   justify-items: start;
   justify-self: start;
+  position: relative;
   padding: clamp(3px, 0.5vh, 5px) 0 clamp(4px, 0.65vh, 6px);
   color: var(--ink);
+}
+
+/* Its focus ring keeps to its own line (round 10): 4px out, it ran within 2px of the next name. */
+.root .nameList a.nameLink[href]:focus-visible {
+  outline: none;
+}
+
+.root .nameList a.nameLink[href]:focus-visible::before {
+  content: "";
+  position: absolute;
+  inset: -1px -10px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
+  pointer-events: none;
 }
 
 .nameText {
@@ -1436,6 +1508,9 @@ img.plate {
     height: calc(100dvh - var(--h) + var(--below));
     overflow-y: auto;
     overscroll-behavior: contain;
+    /* The menu runs on under the window's foot (--below): stepping through it from the keyboard
+       keeps the focused line, and its ring, above the foot (round 10). */
+    scroll-padding-block: 16px calc(var(--below) + 24px);
     background-color: var(--paper);
     background-image: var(--paper-fibre);
     background-size: 800px 800px;
@@ -1526,6 +1601,24 @@ img.plate {
 .root .sheetLink .chevron {
   width: 0.7em;
   height: 0.7em;
+}
+
+/* Its focus ring hugs the word (round 10): drawn round the line's whole room (64-108px tall) it
+   ran across the brush marks between the lines. */
+.root .sheetLink {
+  position: relative;
+}
+
+.root .sheetLink:focus-visible {
+  outline: none;
+}
+
+.root .sheetLink:focus-visible::before {
+  content: "";
+  position: absolute;
+  inset: calc(50% - 0.55em - 10px) -4px;
+  border-radius: 6px;
+  outline: 2px solid currentColor;
 }
 
 .root .sheetLink:is(:lang(ko), :lang(ja), :lang(zh)) {
@@ -1634,9 +1727,23 @@ img.plate {
   text-align: start;
 }
 
+/* Its focus ring is drawn on the row's own edge, top and foot, with 8px of air at its sides
+   (round 10: 2px out, the first row's ring ran past the fold's top and was cut off). */
+.root .sheetRows a.sheetRow[href] {
+  position: relative;
+}
+
 .root .sheetRows a.sheetRow[href]:focus-visible {
+  outline: none;
+}
+
+.root .sheetRows a.sheetRow[href]:focus-visible::before {
+  content: "";
+  position: absolute;
+  inset: 0 -8px;
+  border-radius: 6px;
   outline: 2px solid currentColor;
-  outline-offset: 2px;
+  pointer-events: none;
 }
 
 .sheetThumb {

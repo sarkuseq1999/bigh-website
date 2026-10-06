@@ -3,7 +3,15 @@
 import Image from "next/image";
 import { ArrowRight, ChevronDown, X } from "lucide-react";
 import { useLocale } from "next-intl";
-import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  Fragment,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
@@ -45,6 +53,10 @@ import styles from "./nav-inscription.module.css";
 // a real painted stroke), laid from the left as the page opens; pointing at a word draws only a
 // fine line. On the homepage, which has no link of its own, the stroke follows the reader: while a
 // part of the page that belongs to Products or Science is being read, that word carries it.
+// Nothing dead, nothing small (round 10): every control's target is 48px or more both ways, every
+// keyboard ring is 2px of ink, whole and clear of what is round it (the stylesheet), the menu keeps
+// the word pressed in place while its folds move, and Sign up, until Mo gives its link, is a
+// placeholder that promises nothing (disabled: no hover, the default cursor, not a Tab stop).
 
 /** The menu opens with Products unfolded on a tablet held upright (room for the five in a row and
  *  every word under them); on a phone or a short window it opens with the four words. */
@@ -89,6 +101,7 @@ export function NavInscription({
   const nav = useNav({ overlay, solidAfter, settledBy: settle ? settledBy : undefined });
   const { header, solid, panel, closePanel, menuOpen, setMenuOpen, menuButton } = nav;
   const cjk = locale === "jp" || locale === "cns" || locale === "hken";
+  useFittedPicker(header, locale);
 
   // The painted stroke: under the current page's word ("here"), or on the homepage under the word
   // whose part of the page is being read ("reading"). A page with a link of its own never follows
@@ -133,11 +146,35 @@ export function NavInscription({
   // A part the visitor unfolds (not the one a tablet opens with): its rows are there as the fold
   // reaches them, rising into place, instead of settling in with the menu.
   const [byHand, setByHand] = useState(false);
-  const unfold = (id: NavPanelId) => {
+  const sheet = useRef<HTMLDivElement>(null);
+  // The word the visitor pressed stays where it is while the parts fold (round 10). Scrolled down
+  // through Products on a short phone, pressing Science folds Products away above it, and the
+  // menu's own scrolling would carry Science up out of the window, leaving the visitor in the middle
+  // of its rows. So for as long as the folds move, the menu scrolls with them, on every change of
+  // their size before it is drawn (a ResizeObserver), so the word never moves.
+  const held = useRef<{ word: HTMLElement; at: number; until: number } | null>(null);
+  useEffect(() => {
+    const scroller = sheet.current;
+    if (!scroller) return;
+    const keep = () => {
+      const hold = held.current;
+      if (!hold) return;
+      if (performance.now() > hold.until) {
+        held.current = null;
+        return;
+      }
+      const drift = hold.word.getBoundingClientRect().top - hold.at;
+      if (Math.abs(drift) >= 0.5) scroller.scrollTop += drift;
+    };
+    const observer = new ResizeObserver(keep);
+    scroller.querySelectorAll("[data-sheet-fold]").forEach((fold) => observer.observe(fold));
+    return () => observer.disconnect();
+  }, []);
+  const unfold = (id: NavPanelId, word: HTMLElement) => {
     setByHand(true);
     setFold(fold === id ? null : id);
+    held.current = { word, at: word.getBoundingClientRect().top, until: performance.now() + 900 };
   };
-  const sheet = useRef<HTMLDivElement>(null);
   const [wasOpen, setWasOpen] = useState(menuOpen);
   if (menuOpen !== wasOpen) {
     setWasOpen(menuOpen);
@@ -465,7 +502,7 @@ export function NavInscription({
             here={current === "products"}
             open={fold === "products"}
             byHand={byHand}
-            onToggle={() => unfold("products")}
+            onToggle={(word) => unfold("products", word)}
           >
             <ul className={styles.sheetRows} data-sheet-rows="products">
               {navProducts.map((product, i) => (
@@ -505,7 +542,7 @@ export function NavInscription({
             here={current === "science"}
             open={fold === "science"}
             byHand={byHand}
-            onToggle={() => unfold("science")}
+            onToggle={(word) => unfold("science", word)}
           >
             <ul className={styles.sheetRows} data-sheet-rows="science">
               {navScience.map((item, i) => (
@@ -593,6 +630,43 @@ export function NavInscription({
       </div>
     </header>
   );
+}
+
+/** The language picker as wide as the language it shows, so its arrow sits beside the word. The
+ *  stylesheet does this with `field-sizing: content`; where that is missing (Firefox) a picker is as
+ *  wide as its longest language ("Tiếng Việt"), and "English" stood a long gap away from its arrow
+ *  (round 10). There it is sized from the shown language's own words. A picker that shows only its
+ *  globe (Vietnamese on a small phone: its words are clear) keeps the stylesheet's width. */
+function useFittedPicker(header: RefObject<HTMLElement | null>, locale: string) {
+  useEffect(() => {
+    const node = header.current;
+    if (!node || CSS.supports("field-sizing", "content")) return;
+    const fit = () => {
+      node.querySelectorAll<HTMLSelectElement>("select").forEach((select) => {
+        select.style.removeProperty("width");
+        const style = getComputedStyle(select);
+        if (style.color === "rgba(0, 0, 0, 0)" || style.color === "transparent") return;
+        const probe = document.createElement("span");
+        probe.textContent = select.selectedOptions[0]?.textContent ?? "";
+        probe.style.cssText = `position:absolute;visibility:hidden;white-space:pre;font:${style.font};letter-spacing:${style.letterSpacing}`;
+        document.body.append(probe);
+        const words = probe.getBoundingClientRect().width;
+        probe.remove();
+        const sides = [
+          "paddingLeft",
+          "paddingRight",
+          "borderLeftWidth",
+          "borderRightWidth",
+        ] as const;
+        const extra = sides.reduce((sum, side) => sum + parseFloat(style[side]), 0);
+        select.style.width = `${Math.ceil(words + extra + 2)}px`;
+      });
+    };
+    fit();
+    document.fonts?.ready.then(fit);
+    window.addEventListener("resize", fit);
+    return () => window.removeEventListener("resize", fit);
+  }, [header, locale]);
 }
 
 /** The painted stroke under a word (shown by its link's `data-ink`: "here" for the current page,
@@ -824,7 +898,7 @@ function SheetPart({
   here: boolean;
   open: boolean;
   byHand: boolean;
-  onToggle: () => void;
+  onToggle: (word: HTMLButtonElement) => void;
   children: ReactNode;
 }) {
   return (
@@ -840,12 +914,12 @@ function SheetPart({
         aria-controls={`nav-sheet-${id}`}
         data-nav-sheet-toggle={id}
         data-current={here ? "" : undefined}
-        onClick={onToggle}
+        onClick={(event) => onToggle(event.currentTarget)}
       >
         {label}
         <ChevronDown className={styles.chevron} size={24} strokeWidth={1.75} aria-hidden="true" />
       </button>
-      <div id={`nav-sheet-${id}`} className={styles.sheetFold} inert={!open}>
+      <div id={`nav-sheet-${id}`} className={styles.sheetFold} inert={!open} data-sheet-fold="">
         <div className={styles.sheetFoldInner}>{children}</div>
       </div>
     </div>
