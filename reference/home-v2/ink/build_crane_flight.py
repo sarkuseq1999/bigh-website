@@ -48,6 +48,10 @@ wings raised, and on the down-stroke their wings went thinner than v3's (thinnes
 first pose's solid ink; v3 keeps 52%), and v6 painted the crown red. gold_crown() is kept for a
 take that does. The page adds its own slow float (opening.module.css), out of step with the beat.
 
+v4-twice (October 5, Mo: "I want this bird to fly like 2 times, then stop"): v4, played twice and
+then at rest for good. The picture's loop count is 2 (not forever), and the first pose is added
+again as its last frame, so when the second beat ends the picture stops on the still's own pose.
+
 Output: public/images/home-v2/ink/crane-flight-<version>.webp (900 px) and
 crane-flight-<version>-600.webp (phones).
 
@@ -132,6 +136,11 @@ TAKES = {
     # ride: (lift as a share of the frame's height, pitch in degrees, frames the pitch lags)
     "v4": {"source": "crane-fly-v3.mp4", "work": "crane-flight-v3", "same_as_first": (),
            "retouch": retouch_v3, "quality": 74, "loop": True, "pace": 40, "ride": (0.014, 0.8, 2)},
+    # Mo (October 5): "fly like 2 times, then stop". v4's beat, played twice, then at rest in the
+    # still's pose (the picture's loop count is 2; its last frame is the first pose again).
+    "v4-twice": {"source": "crane-fly-v3.mp4", "work": "crane-flight-v3", "same_as_first": (),
+                 "retouch": retouch_v3, "quality": 74, "loop": True, "pace": 40,
+                 "ride": (0.014, 0.8, 2), "plays": 2},
     # The best of the October 5 takes, built the same way for comparison (not shipped: its wings
     # thin out on the down-stroke to 36% of the first pose's solid ink, and 12 frames a second).
     # Frames 1, 2, 31 to 33 and 59 are the raised pose again (Kling's pauses), so they are dropped.
@@ -222,11 +231,17 @@ def animate(take, images, width, name, quality):
         stamps = [round(k * pace) for k in range(len(beat) + 2)]
         steps = [b - a for a, b in zip(stamps, stamps[1:])]
         plan = [(0, steps[0], 82, 100)] + [(i, ms, quality, 70) for i, ms in zip(beat, steps[1:])]
+        if take.get("plays"):
+            # v4-twice: the beat plays a set number of times, then the picture stops on its last
+            # frame for good; that frame is the first pose again (the still's), so the bird comes
+            # to rest exactly as the still painting, with nothing jumping.
+            plan.append((0, round(pace), 82, 100))
     else:
         # Glide (the first frame), the beat, then the first frame again for the long glide.
         plan = [(0, LEAD_MS, 82, 100)] + [(i, FRAME_MS, quality, 70) for i in beat] + [(0, HOLD_MS, 82, 100)]
     ready = {i: sized(images[i], width) for i in {0, *beat}}
-    encoder = _webp.WebPAnimEncoder(ready[0].size, 0, 0, False, 3, 5, False, False)
+    loops = take.get("plays", 0)  # 0: forever
+    encoder = _webp.WebPAnimEncoder(ready[0].size, 0, loops, False, 3, 5, False, False)
     at = 0
     for i, ms, q, alpha_q in plan:
         encoder.add(ready[i].getim(), at, False, q, alpha_q, 4)  # method 6 hangs for minutes
