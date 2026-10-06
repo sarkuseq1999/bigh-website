@@ -7,6 +7,7 @@ import { BrushLine } from "./brush";
 import { SiteFooter, SiteHeader, type Current } from "./chrome";
 import { ClosingCrane } from "./closing-crane";
 import { useBloom, useInkFill, useMotionOk } from "./motion";
+import type { NavFollow } from "./nav/nav-inscription";
 import type { Layout, Waypoint } from "./route-kit";
 import styles from "./ink.module.css";
 
@@ -19,6 +20,7 @@ import styles from "./ink.module.css";
 export function InkPage({
   current,
   route,
+  follow,
   children,
 }: {
   current: Current;
@@ -27,6 +29,12 @@ export function InkPage({
    * the brush layer is rebuilt whenever the route's identity changes.
    */
   route: (layout: Layout) => Waypoint[];
+  /**
+   * The homepage only: its parts that belong to the menu bar's drop-downs (section ids), so the
+   * word whose part is being read carries the painted stroke. Pass a stable (module-level) object.
+   * Pages with a link of their own leave it out (their word carries the stroke).
+   */
+  follow?: NavFollow;
   /** The page's sections; given whether motion is allowed. */
   children: (motion: boolean) => ReactNode;
 }) {
@@ -52,7 +60,7 @@ export function InkPage({
       >
         {copy("Skip to content")}
       </a>
-      <SiteHeader current={current} overlay solidAfter={48} />
+      <SiteHeader current={current} follow={follow} overlay solidAfter={48} settledBy={240} />
       <main ref={main} id="main" tabIndex={-1}>
         {children(motion)}
       </main>
