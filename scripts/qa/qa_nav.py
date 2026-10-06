@@ -1,6 +1,6 @@
 """QA for the menu bar, "Inscription" (Mo's pick, October 5, 2026), on the homepage.
 
-usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|phone|tablet|lang]
+usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|showroom|phone|tablet|lang]
        base defaults to http://localhost:3014
 
 On the real GPU (ANGLE/D3D11):
@@ -21,6 +21,16 @@ On the real GPU (ANGLE/D3D11):
     text link of the page are each put behind the bar's words and on its brush rule, and the band
     from the bar's top to just under the rule's ink must not change by more than 6 levels (round 1:
     at 93% paper the page ghosted behind the words and the rule struck through lines under it).
+  - the Products showroom (round 4) at 1536x900, 1280x800, 1920x1080@2x, 1101x800 and 1366x657:
+    the five names (28px+) visible, inside the window, on one left edge and evenly spaced (2px),
+    every one a 48px+ link to its own page, its focus line (17px+) under it on the same edge; the
+    bottle beside them 280px+ tall, its picture at least its size on screen (crisp), 40px+ clear of
+    the names; the scroll's foot above the window's foot. NuriCell shown first (its name
+    underlined); Discover goes to the shown product, Explore to the products. Tab steps through
+    the five names in order, each showing its own bottle and Discover link, with a visible ring;
+    resting the pointer on a name shows its bottle, passing over another on the way to Discover
+    keeps it, and Discover goes to its page; on a touch laptop the first tap on a name opens its
+    page. Filmed at real speed down the names: the bottle's place never empty, one line at a time.
   - reduced motion: the scroll is down at once.
   - phone 390x844: the menu opens and locks the page, the button says Close, Escape closes it and
     hands focus back, the Close button closes it, Products and Science fold open one at a time,
@@ -32,7 +42,10 @@ On the real GPU (ANGLE/D3D11):
     frame the page draws): Science opening (from the tall bar and from the scrolled bar) and
     Products opening show no light box behind a painting or a pool: no sample of a multiplied
     picture is more than 4 levels lighter than the paper beside it, on any frame (two frames
-    running) once the scroll has reached it. Moving from one drop-down to the other (both ways):
+    running) once the scroll has reached it (the showroom's pool, whose edge is masked, is read
+    with the bottles hidden at the points where its own painting is paper, averaged, against the
+    paper either side of the bottle, and must not be more than 1 level over it: multiplied it
+    reads -2 to -7 levels, an isolated blend about +3). Moving from one drop-down to the other (both ways):
     the scroll's ink never drops below 60% of the lighter drop-down's, one drop-down is always drawn
     whole, only one word is ever underlined and no chevron is ever turned sideways; pointing on to
     About keeps one line. The tablet menu opens, and the phone menu's Products unfolds, with no
@@ -299,10 +312,16 @@ PICTURES = """(sel) => {
     const s = getComputedStyle(img);
     return s.mixBlendMode === 'multiply' && s.display !== 'none' && img.getBoundingClientRect().width > 4;
   }).map((img, i) => {
-    const kind = /pool/.test(img.className) ? 'pool' : /contact/.test(img.className) ? 'contact' : 'painting';
-    return { name: (img.dataset.painting || kind) + '#' + i, kind, ...drawn(img) };
+    const kind = /pool/i.test(img.className) ? 'pool' : /contact/i.test(img.className) ? 'contact' : 'painting';
+    const masked = getComputedStyle(img).maskImage !== 'none';
+    const file = new URL(img.currentSrc || img.src, location.href).searchParams.get('url') || '';
+    return { name: (img.dataset.painting || kind) + (masked ? '(mean)' : '') + '#' + i, kind, masked, file, ...drawn(img) };
   }).filter(p => p.kind !== 'contact');
 }"""
+
+# Round 4: the paper beside the Products showroom's bottle, left and right of its picture.
+BESIDE = """(sel) => { const s = document.querySelector(sel + ' [class*="stageStand"]').getBoundingClientRect();
+  return [s.left - 28, s.right + 28]; }"""
 
 # Paper beside the pictures: the middle of each gap between neighbouring items on one row.
 GAPS = """(sel) => { const items = [...document.querySelectorAll(sel)].map(li => li.getBoundingClientRect())
@@ -378,6 +397,22 @@ def samples(pic):
     """Boxes inside a picture. A painting: a grid over it. A pool: its picture's upper corners beside
     the bottle's foot, white in the picture (so exactly the paper under multiply)."""
     x, y, w, h = pic["x"], pic["y"], pic["w"], pic["h"]
+    if pic["kind"] == "pool" and pic.get("masked"):
+        # The showroom's pool fades out through an elliptical mask from 72% of its radius, so its
+        # corners show nothing. It is read instead at the points inside the ellipse where its own
+        # painting is paper (the bottle is hidden while it is filmed), and light_boxes averages
+        # them: multiplied, they sit a little under the page's paper (the painting's paper is 2%
+        # off white, about -7 levels); an isolated blend shows them over it (about +3).
+        pool = np.asarray(
+            Image.open(Path(__file__).parents[2] / "public" / pic["file"].lstrip("/"))
+            .convert("L")
+            .resize((max(1, round(w)), max(1, round(h)))),
+            dtype=np.float32,
+        )
+        yy, xx = np.mgrid[0 : pool.shape[0], 0 : pool.shape[1]]
+        inside = ((xx / pool.shape[1] - 0.5) / 0.5) ** 2 + ((yy / pool.shape[0] - 0.5) / 0.5) ** 2 <= 0.66**2
+        points = np.argwhere(inside & (pool >= 249))
+        return [(x + px - 1, y + py - 1, x + px + 2, y + py + 2) for py, px in points[:: max(1, len(points) // 60)]]
     if pic["kind"] == "pool":
         return [
             (bx, y + h * fy, bx + 4, y + h * fy + 4)
@@ -398,21 +433,24 @@ def light_boxes(film, pics, gaps, reveal, width, lo, hi):
     (or fold) has already let down, with a margin. A value counts when two frames running show it.
     Returns {picture: (worst levels, frames measured)}."""
     series = {p["name"]: [] for p in pics}
+    boxes = {p["name"]: samples(p) for p in pics}
     for t, tw, img in film.frames():
         if not lo - 40 <= t <= hi:
             continue
         a, k = luma(img), img.width / width
         edge = reveal(film.state(tw - 60))
         for pic in pics:
-            best = None
-            for box in samples(pic):
+            found = []
+            for box in boxes[pic["name"]]:
                 if box[3] > edge - 10 or box[0] < 0 or box[2] > width:
                     continue
                 cy = (box[1] + box[3]) / 2
                 refs = [(g - 3, cy - 4, g + 3, cy + 4) for g in gaps if 0 < g < width]
                 if refs:
-                    d = box_mean(a, box, k) - sum(box_mean(a, r, k) for r in refs) / len(refs)
-                    best = d if best is None else max(best, d)
+                    found.append(box_mean(a, box, k) - sum(box_mean(a, r, k) for r in refs) / len(refs))
+            best = None
+            if found:
+                best = sum(found) / len(found) if pic.get("masked") else max(found)
             series[pic["name"]].append((t, best))
     out = {}
     for name, s in series.items():
@@ -422,9 +460,11 @@ def light_boxes(film, pics, gaps, reveal, width, lo, hi):
 
 
 def no_light_box(name, found, frames=6):
+    # A masked pool is averaged: multiplied it reads -2 to -7 levels, an isolated blend about +3.
+    limit = {k: 1 if "(mean)" in k else 4 for k in found}
     check(
         name,
-        found and all(v is not None and v <= 4 and n >= frames for v, n in found.values()),
+        found and all(v is not None and v <= limit[k] and n >= frames for k, (v, n) in found.items()),
         {k: f"{v:+} levels over {n} frames" if v is not None else "not measured" for k, (v, n) in found.items()},
     )
 
@@ -464,6 +504,12 @@ def drop_down_motion(browser):
         deckle = page.evaluate("parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle'))")
         for panel in ("science", "products"):
             box = page.locator(f'[data-nav-trigger="{panel}"]').bounding_box()
+            hide = None
+            if panel == "products":
+                # The pool is measured where the bottle would cover it: the bottles are hidden.
+                hide = page.add_style_tag(
+                    content='[data-nav-panel="products"] [class*="__big"] { visibility: hidden !important; }'
+                )
             film.shoot(lambda: page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1500)
             sel = f'[data-nav-panel="{panel}"]'
             top, height = page.evaluate(
@@ -472,14 +518,17 @@ def drop_down_motion(browser):
             found = light_boxes(
                 film,
                 page.evaluate(PICTURES, sel),
-                page.evaluate(GAPS, f"{sel} li"),
+                page.evaluate(GAPS, f"{sel} li") if panel == "science" else page.evaluate(BESIDE, sel),
                 lambda e: top + e["r"] * height - deckle,
                 1536,
                 250,
                 1500,
             )
-            what = "behind its paintings" if panel == "science" else "around the bottles' pools"
+            what = "behind its paintings" if panel == "science" else "round the showroom bottle's pool"
             no_light_box(f"{tag}: {panel.capitalize()} opens with no light box {what} (filmed at real speed)", found)
+            if hide:
+                hide.evaluate("el => el.remove()")
+                page.wait_for_timeout(100)
             page.screenshot(path=str(OUT / f"{tag.replace(' ', '-')}-{panel}-filmed.png"))
             if panel == "science":
                 page.keyboard.press("Escape")
@@ -493,7 +542,7 @@ def drop_down_motion(browser):
 def switches(page, film):
     """Products is down. Point across to Science and back, then on to About, filming each move."""
     band = page.evaluate(
-        """() => { const top = document.querySelector('[data-nav-panel] h2').getBoundingClientRect().top;
+        """() => { const top = document.querySelector('[data-nav-panel]').getBoundingClientRect().top + 12;
         const foot = Math.max(...[...document.querySelectorAll('[data-nav-panel] a[class*=more]')]
           .map(a => a.getBoundingClientRect().bottom));
         return [120, Math.round(top - 6), 1416, Math.round(foot + 6)]; }"""
@@ -542,6 +591,273 @@ def switches(page, film):
         not two and not is_open(page, "products") and film.log[-1]["lines"] == ["About"],
         f"{len(film.log)} frames; two lines {two[:3]}; last {film.log[-1]['lines']}",
     )
+
+
+# ---------------------------------------------------------------- round 4: the Products showroom
+
+SLUGS = ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
+NAMES = ["NuriCell", "Green Bee Propolis", "Advanced OPC Formula", "Turmerific", "Nature Calm"]
+
+SHOWROOM = r"""() => {
+  const p = document.querySelector('[data-nav-panel="products"]');
+  const box = el => { const r = el.getBoundingClientRect();
+    return { l: r.left, r: r.right, t: r.top, b: r.bottom, w: r.width, h: r.height }; };
+  const names = [...p.querySelectorAll('a[class*="nameLink"]')].map(a => {
+    const n = a.querySelector('[class*="nameText"]'), f = a.querySelector('[class*="nameFocus"]');
+    return { href: a.getAttribute('href'), name: n.textContent.trim(), focus: f.textContent.trim(),
+      size: parseFloat(getComputedStyle(n).fontSize), fsize: parseFloat(getComputedStyle(f).fontSize),
+      n: box(n), f: box(f), a: box(a), shown: a.hasAttribute('data-shown'),
+      visible: n.checkVisibility({ opacityProperty: true, visibilityProperty: true }) };
+  });
+  const big = p.querySelector('[class*="__big"][data-shown]');
+  const w = /[?&]w=(\d+)/.exec(big.currentSrc);
+  const paper = document.querySelector('header [class*="__paper"]').getBoundingClientRect();
+  return { names, stand: box(p.querySelector('[class*="stageStand"]')),
+    big: { src: decodeURIComponent(big.currentSrc), w: w ? +w[1] : 0, css: big.getBoundingClientRect().width },
+    links: [...p.querySelectorAll('a[class*="more"]')].map(a => ({ text: a.textContent.trim(), href: a.getAttribute('href') })),
+    paperBottom: paper.bottom, vh: innerHeight, vw: innerWidth, dpr: devicePixelRatio };
+}"""
+
+
+def open_products(page):
+    """Reach for the bar (the pictures load), then open Products with a click and rest the pointer
+    on empty paper inside the scroll."""
+    w = page.viewport_size["width"]
+    page.mouse.move(w * 0.7, 40)
+    page.wait_for_timeout(300)
+    page.wait_for_function(
+        "[...document.querySelectorAll('[data-nav-panel] img')].every(i => i.complete && i.naturalWidth > 0)",
+        timeout=30000,
+    )
+    page.mouse.move(w / 2, page.viewport_size["height"] - 6)
+    page.wait_for_timeout(600)
+    page.locator('[data-nav-trigger="products"]').click()
+    page.wait_for_timeout(200)
+    bar = page.evaluate("document.querySelector('#site-navigation').getBoundingClientRect().bottom")
+    page.mouse.move(12, bar + 30, steps=4)
+    page.wait_for_timeout(1500)
+
+
+def shown_product(page):
+    info = page.evaluate(SHOWROOM)
+    return info, next((s for s in SLUGS if f"/products/{s}." in info["big"]["src"]), None)
+
+
+def showroom_layout(browser):
+    """Round 4: at each desktop size the five names stand large on one left edge, evenly spaced,
+    each with its focus line under it, every one a link to its own page; the bottle stands large
+    and crisp beside them, clear of the names; the scroll ends above the window's foot."""
+    for w, h, dsf in ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1366, 657, 1)):
+        tag = f"showroom {w}x{h}" + (f"@{dsf}x" if dsf > 1 else "")
+        page = browser.new_page(viewport={"width": w, "height": h}, device_scale_factor=dsf)
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(2000)
+        open_products(page)
+        page.screenshot(path=str(OUT / f"showroom-{w}x{h}.png"))
+        info, slug = shown_product(page)
+        names = info["names"]
+        lefts = [n["n"]["l"] for n in names]
+        steps = [round(b["n"]["t"] - a["n"]["t"], 1) for a, b in zip(names, names[1:])]
+        check(
+            f"{tag}: the five names, large (28px+), visible, inside the window, on one left edge, evenly spaced",
+            [n["name"] for n in names] == NAMES
+            and all(n["size"] >= 28 and n["visible"] and n["n"]["l"] >= 0 and n["n"]["r"] <= info["vw"] for n in names)
+            and max(lefts) - min(lefts) <= 1
+            and max(steps) - min(steps) <= 2
+            and all(n["a"]["h"] >= 48 for n in names),
+            f"sizes {[n['size'] for n in names]}; lefts {sorted(set(round(x) for x in lefts))}; steps {steps}",
+        )
+        check(
+            f"{tag}: each focus line (17px+) under its own name, on its left edge",
+            all(
+                n["fsize"] >= 17 and abs(n["f"]["l"] - n["n"]["l"]) <= 1 and 0 <= n["f"]["t"] - n["n"]["b"] <= 14
+                for n in names
+            ),
+            [(n["focus"][:18], n["fsize"], round(n["f"]["t"] - n["n"]["b"])) for n in names],
+        )
+        need = info["big"]["css"] * info["dpr"]
+        gap = info["stand"]["l"] - max(n["n"]["r"] for n in names)
+        check(
+            f"{tag}: the bottle stands large (280px+) and crisp (its picture at least its size on screen), clear of the names",
+            info["stand"]["h"] >= 279.5 and info["big"]["w"] >= need * 0.98 and gap >= 40,
+            f"stand {info['stand']['h']:.0f}px; picture {info['big']['w']}w for {need:.0f}px; gap {gap:.0f}px",
+        )
+        check(
+            f"{tag}: the scroll ends above the window's foot",
+            info["paperBottom"] <= info["vh"],
+            f"scroll foot {info['paperBottom']:.0f}, window {info['vh']}",
+        )
+        if (w, h) == (1536, 900):
+            hrefs = [n["href"] for n in names]
+            check(
+                "showroom: every name is a link to its own product page",
+                all(href.endswith(f"/products/{s}") for href, s in zip(hrefs, SLUGS)),
+                hrefs,
+            )
+            check(
+                "showroom: NuriCell shown first, its name underlined, Discover goes to it, Explore to the products",
+                slug == "nuricell"
+                and [n["shown"] for n in names] == [True, False, False, False, False]
+                and any(
+                    link["text"].startswith("Discover NuriCell") and link["href"].endswith("/products/nuricell")
+                    for link in info["links"]
+                )
+                and any(
+                    link["text"].startswith("Explore our products") and link["href"].endswith("/#products")
+                    for link in info["links"]
+                ),
+                info["links"],
+            )
+        page.close()
+
+
+def showroom_reach(browser):
+    """Round 4: every product is reachable directly. By keyboard: Tab from the open Products steps
+    through the five names in order, each showing its own bottle and Discover link. By pointer:
+    resting on a name shows its bottle; passing over another name on the way to Discover does not
+    change it; Discover goes to the shown product. On a touch laptop: the first tap on a name opens
+    its page (no preview-only tap)."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    open_products(page)
+    page.locator('[data-nav-trigger="products"]').focus()
+    seen = []
+    for _ in range(5):
+        page.keyboard.press("Tab")
+        page.wait_for_timeout(120)
+        info, slug = shown_product(page)
+        discover = next((link["text"] for link in info["links"] if link["text"].startswith("Discover")), "")
+        seen.append((focused(page)[:24], slug, discover))
+    page.screenshot(path=str(OUT / "showroom-keyboard-naturecalm.png"))
+    page.keyboard.press("Tab")
+    after = focused(page)
+    check(
+        "showroom: Tab reaches every product's name in order, each showing its own bottle and Discover link",
+        all(
+            f.startswith(n) and slug == s and d.startswith(f"Discover {n}")
+            for (f, slug, d), n, s in zip(seen, NAMES, SLUGS)
+        )
+        and "Explore our products" in after,
+        f"{seen}; then {after!r}",
+    )
+    page.keyboard.press("Shift+Tab")
+    ring = page.evaluate(
+        "(() => { const s = getComputedStyle(document.activeElement); return s.outlineStyle + ' ' + s.outlineWidth; })()"
+    )
+    check(
+        "showroom: a visible ring on a name under the keyboard's focus",
+        "Nature Calm" in focused(page) and not ring.endswith(" 0px") and "none" not in ring,
+        f"{focused(page)!r}: {ring}",
+    )
+    page.keyboard.press("Escape")
+    page.wait_for_timeout(400)
+
+    open_products(page)
+    links = page.locator('[data-nav-panel="products"] a[class*="nameLink"]')
+    t = links.nth(3).locator('[class*="nameText"]').bounding_box()
+    page.mouse.move(t["x"] + 20, t["y"] + t["height"] / 2, steps=6)
+    page.wait_for_timeout(800)
+    info, slug = shown_product(page)
+    check("showroom: resting on a name shows its bottle", slug == "turmerific", slug)
+    nc = links.nth(4).locator('[class*="nameText"]').bounding_box()
+    disc = page.locator('[data-nav-panel="products"] a[class*="more"]', has_text="Discover").bounding_box()
+    page.mouse.move(nc["x"] + 20, nc["y"] + nc["height"] / 2, steps=2)
+    page.mouse.move(disc["x"] + 30, disc["y"] + disc["height"] / 2, steps=3)
+    page.wait_for_timeout(700)
+    info, slug = shown_product(page)
+    check("showroom: passing over another name on the way to Discover keeps the bottle", slug == "turmerific", slug)
+    page.mouse.click(disc["x"] + 30, disc["y"] + disc["height"] / 2)
+    page.wait_for_url("**/products/turmerific**", timeout=30000)
+    check("showroom: Discover goes to the shown product's page", "/products/turmerific" in page.url, page.url)
+    page.close()
+
+    ctx = browser.new_context(viewport={"width": 1536, "height": 900}, has_touch=True)
+    page = ctx.new_page()
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    page.locator('[data-nav-trigger="products"]').tap()
+    page.wait_for_timeout(1200)
+    page.locator('[data-nav-panel="products"] a[class*="nameLink"]', has_text="Green Bee Propolis").tap()
+    try:
+        page.wait_for_url("**/products/green-bee-propolis**", timeout=30000)
+    except Exception:
+        pass
+    check(
+        "showroom: on a touch laptop the first tap on a name opens its page",
+        "/products/green-bee-propolis" in page.url,
+        page.url,
+    )
+    ctx.close()
+
+
+# Every frame: which names carry their line (scale over 4%).
+NAME_LINES = """() => { const names = [...document.querySelectorAll('[data-nav-panel="products"] [class*="nameText"]')];
+  window.__log = []; window.__logging = true;
+  const tick = () => { window.__log.push({ t: performance.timeOrigin + performance.now(),
+      lines: names.filter(n => (parseFloat(getComputedStyle(n, '::after').scale) || 0) > 0.04).map(n => n.textContent.trim()) });
+    if (window.__logging) requestAnimationFrame(tick); };
+  requestAnimationFrame(tick); }"""
+
+
+def showroom_motion(browser):
+    """Round 4, filmed at real speed: moving down the names from NuriCell to Nature Calm (resting on
+    each), the bottle's place is never empty (its ink never under 60% of the lightest bottle's at
+    rest) and only one name carries its line on every frame."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2500)
+    open_products(page)
+    stand = page.locator('[data-nav-panel="products"] [class*="stageStand"]').bounding_box()
+    crop = (round(stand["x"]), round(stand["y"]), round(stand["x"] + stand["width"]), round(stand["y"] + stand["height"]))
+    beside = (crop[0] - 60, crop[1], crop[0] - 20, crop[3])
+    links = page.locator('[data-nav-panel="products"] a[class*="nameLink"]')
+    spots = []
+    for i in range(5):
+        b = links.nth(i).locator('[class*="nameText"]').bounding_box()
+        spots.append((b["x"] + 20, b["y"] + b["height"] / 2))
+
+    def ink(img):
+        a = luma(img.crop(crop))
+        paper = float(np.median(luma(img.crop(beside))))
+        return float(np.clip(paper - a - 6, 0, None).mean())
+
+    rest = []
+    for x, y in spots:
+        page.mouse.move(x, y, steps=4)
+        page.wait_for_timeout(1000)
+        rest.append(ink(Image.open(BytesIO(page.screenshot()))))
+    page.mouse.move(*spots[0], steps=4)
+    page.wait_for_timeout(1000)
+    film = Film(page)
+    page.evaluate(NAME_LINES)
+    film.raw = []
+    film.cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
+    page.wait_for_timeout(150)
+    for x, y in spots[1:]:
+        page.mouse.move(x, y, steps=8)
+        page.wait_for_timeout(450)
+    page.wait_for_timeout(700)
+    film.cdp.send("Page.stopScreencast")
+    page.evaluate("window.__logging = false")
+    log = page.evaluate("window.__log")
+    shares = [round(ink(img) / min(rest), 2) for _, _, img in film.frames(0)]
+    two = [e["lines"] for e in log if len(e["lines"]) > 1]
+    check(
+        "showroom: moving down the names, the bottle's place is never empty (filmed: its ink never under 60% of the lightest bottle's)",
+        len(shares) >= 20 and min(shares) >= 0.6,
+        f"least {min(shares, default=0)} over {len(shares)} frames; at rest {[round(r, 1) for r in rest]}",
+    )
+    check(
+        "showroom: only one name underlined on every frame (filmed)",
+        len(log) >= 60 and not two and log[-1]["lines"] == ["Nature Calm"],
+        f"{len(log)} frames; two at once {two[:3]}; last {log[-1]['lines'] if log else None}",
+    )
+    page.close()
 
 
 def desktop(browser):
@@ -919,6 +1235,10 @@ with sync_playwright() as p:
         desktop(browser)
         rule_checks(browser)
         drop_down_motion(browser)
+    if ONLY in (None, "desk", "showroom"):
+        showroom_layout(browser)
+        showroom_reach(browser)
+        showroom_motion(browser)
     if ONLY in (None, "phone"):
         phone(browser)
     if ONLY in (None, "tablet"):
