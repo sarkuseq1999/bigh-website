@@ -1760,9 +1760,16 @@ ACTIVE = "(document.activeElement.getAttribute('aria-label') || document.activeE
 
 
 def ring(page):
-    """Is the focused control's ring the page's ink ring (2 px, solid, sumi ink)?"""
+    """Is the focused control's ring the page's ink ring (2 px, solid, sumi ink)? The menu bar
+    (round 10, October 6) draws its rings on a box around the word, so the ring may sit on the
+    control's ::before or ::after, or on the language's label."""
     return page.evaluate(
-        f"(() => {{ const s = getComputedStyle(document.activeElement); return s.outlineStyle === 'solid' && parseFloat(s.outlineWidth) >= 2 && s.outlineColor === '{INK}'; }})()"
+        f"""(() => {{
+          const ok = s => s.outlineStyle === 'solid' && parseFloat(s.outlineWidth) >= 2 && s.outlineColor === '{INK}';
+          const e = document.activeElement;
+          return [e, e.closest('label')].filter(Boolean).some(h =>
+            ok(getComputedStyle(h)) || ok(getComputedStyle(h, '::before')) || ok(getComputedStyle(h, '::after')));
+        }})()"""
     )
 
 
