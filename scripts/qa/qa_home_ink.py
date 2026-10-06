@@ -1003,15 +1003,16 @@ def run(browser, look, mobile):
     check(f"{tag}: one h1", page.locator("h1").count() == 1)
 
     # Header links (the menu bar "Inscription", October 5, 2026; scripts/qa/qa_nav.py checks how it
-    # behaves): Products and Science open their drop-downs, no "Home" (the mark goes home).
+    # behaves): Products and Science open their drop-downs, no "Home" (the mark goes home). Each
+    # drop-down reaches every page: the five product pages, the Science page's four parts.
     nav = page.evaluate(
         """(() => { const n = document.querySelector('#site-navigation');
           return { triggers: [...n.querySelectorAll('[data-nav-trigger]')].map(b => b.dataset.navTrigger),
             about: n.querySelector('a[href$="/about"]')?.getAttribute('href') || '',
             support: [...n.querySelectorAll('button')].some(b => b.textContent.trim() === 'Support'),
             home: [...n.querySelectorAll('a')].some(a => a.textContent.trim() === 'Home'),
-            products: n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]').length,
-            science: n.querySelectorAll('[data-nav-panel=science] a[href*="/science#"]').length }; })()"""
+            products: new Set([...n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]')].map(a => a.getAttribute('href'))).size,
+            science: new Set([...n.querySelectorAll('[data-nav-panel=science] a[href*="/science#"]')].map(a => a.getAttribute('href'))).size }; })()"""
     )
     check(
         f"{tag}: header links",
