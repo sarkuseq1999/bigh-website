@@ -3,8 +3,8 @@
 // stays true without an exact start year; never name its earlier Asian brand), products are made
 // in California by a GMP-certified maker, the 45-day refund is current policy, and Ask BiGH Science
 // stays on the page before the service exists. BiGH was incorporated in California on 05/11/2016.
-// Earlier rounds are in the history (2db8f07, 57a1494) and in the backup zip named in
-// docs/about-page.md. Mo picked look B "Glass" with opening 3 and Switzer on Sept 28, 2026.
+// The page is the Ink & Gold About (October 5, 2026). The earlier Glass page (Mo picked look B
+// with opening 3 and Switzer on Sept 28, 2026) is in the backup zip named in docs/about-page.md.
 
 export const about = {
   hero: {
@@ -77,10 +77,4 @@ export const drafts = {
   languages: "English, Chinese, Korean, Vietnamese and Japanese",
   // Shown on every AI-made picture, as on the Science page.
   illustration: "Illustration",
-} as const;
-
-// The approved glass mitochondrion render and its depth map (homepage, GPT Image 2.5, Sept 2026).
-export const media = {
-  mitochondrion: "/images/science/glass-cell.webp",
-  mitochondrionDepth: "/images/science/glass-cell-depth.png",
 } as const;
