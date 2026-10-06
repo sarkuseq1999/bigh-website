@@ -30,9 +30,17 @@ in the first window, and the pause's inkstone small; every station on one line a
 1536; each promise rule lands at least 5px thick; Japanese strict line breaks stay in the page's
 words, not the header and footer.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish]
+Finish review round (October 5, 2026): the sweep out of the cell is a curve (not a chord) and loaded;
+the margin's stroke is loaded and thickens and thins; the light band crosses the cell's leaf rather
+than resting on it; the cell at the comp's scale, near the title, low, in the first screen, no letter
+over it; the name's other letters an ink-wash grey (3:1 on paper, 3.5:1 against the initials); an
+opening stroke under 900px that touches no words; the tablet cell 55-62% wide, off the right edge,
+both gold folds in view; 100px of paper or less under the promise heading.
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2]
 """
 
+import math
 import os
 import re
 import sys
@@ -412,6 +420,212 @@ def finish(browser):
         context.close()
 
 
+# The finish review's round (October 5, 2026, Task 9 fix round 1).
+
+# The brush layer's ink over a page rectangle (CSS pixels, one sample per pixel): rows of 0/1
+# (alpha over `level`: 90 by default, 40 to count the paler ink of a dry-brush passage). The tiles
+# holding the rectangle must be in the window.
+INK_GRID_JS = r"""([x0, y0, x1, y1, level]) => {
+  const host = document.querySelector('[data-lifts]'); const hb = host.getBoundingClientRect();
+  const W = Math.max(1, Math.round(x1 - x0)), H = Math.max(1, Math.round(y1 - y0));
+  const grid = Array.from({ length: H }, () => new Array(W).fill(0));
+  const top = hb.top + scrollY;
+  for (const c of host.querySelectorAll('canvas')) {
+    if (c.width < 2) continue;  // a tile far from the window holds no pixels
+    const t = parseFloat(c.style.top), h = parseFloat(c.style.height), sx = c.width / c.clientWidth;
+    const ya = Math.max(y0 - top, t), yb = Math.min(y1 - top, t + h);
+    if (yb <= ya) continue;
+    const d = c.getContext('2d').getImageData(Math.round((x0 - hb.left) * sx), Math.round((ya - t) * sx), Math.max(1, Math.round(W * sx)), Math.max(1, Math.round((yb - ya) * sx)));
+    for (let r = 0; r < Math.round(yb - ya); r++) {
+      const gy = Math.round(ya + top - y0) + r; if (gy < 0 || gy >= H) continue;
+      const sy = Math.min(d.height - 1, Math.round(r * sx));
+      for (let q = 0; q < W; q++) { const i = (sy * d.width + Math.min(d.width - 1, Math.round(q * sx))) * 4 + 3; if (d.data[i] > level) grid[gy][q] = 1; }
+    }
+  }
+  return grid.map(row => row.join('')).join('\n');
+}"""
+
+
+def ink_grid(page, x0, y0, x1, y1, level=90):
+    return [[ch == "1" for ch in row] for row in page.evaluate(INK_GRID_JS, [x0, y0, x1, y1, level]).split("\n")]
+
+
+def box(page, sel):
+    return page.evaluate(
+        """(sel) => { const e = document.querySelector(sel); if (!e) return null; const b = e.getBoundingClientRect();
+             return {left: b.left, right: b.right, top: b.top + scrollY, bottom: b.bottom + scrollY, width: b.width, height: b.height}; }""",
+        sel,
+    )
+
+
+def luminance(rgb):
+    def ch(v):
+        v = v / 255
+        return v / 12.92 if v <= 0.03928 else ((v + 0.055) / 1.055) ** 2.4
+
+    r, g, b = rgb
+    return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b)
+
+
+def contrast(a, b):
+    la, lb = sorted([luminance(a), luminance(b)], reverse=True)
+    return (la + 0.05) / (lb + 0.05)
+
+
+def rgb_of(css):
+    return tuple(float(v) for v in re.findall(r"[\d.]+", css)[:3])
+
+
+# Glyph rectangles (page coordinates) of every text node under the matched elements.
+GLYPHS_JS = """(sel) => { const out = [];
+  for (const el of document.querySelectorAll(sel)) {
+    const walk = document.createTreeWalker(el, NodeFilter.SHOW_TEXT); let n;
+    while ((n = walk.nextNode())) { if (!n.textContent.trim()) continue; const r = document.createRange(); r.selectNodeContents(n);
+      for (const x of r.getClientRects()) if (x.width > 0) out.push([x.left, x.top + scrollY, x.right, x.bottom + scrollY]); } }
+  return out; }"""
+
+
+def longest_run(values):
+    best = run = 0
+    for v in values:
+        run = run + 1 if v else 0
+        best = max(best, run)
+    return best
+
+
+def round2(browser):
+    """The finish review's items (Task 9 fix round 1)."""
+    # 1. The brush is a brush, not a wire (1440, whole line drawn). The sweep from where it leaves
+    # the painting to the first station's bend is a curve, not a straight chord: along its run its
+    # direction turns 20 degrees or more (it was one straight diagonal, then a knee). It is loaded
+    # (4.2px or more somewhere, never under 2px). The stroke down the margin is loaded (4.2px or
+    # more at its fullest, about 4.5 at the 1536 comp) and thickens and thins (its fullest 1.8 times
+    # its thinnest or more).
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    cell = box(page, '[data-brush="about-cell"] img')
+    st = box(page, '[data-brush="st-purpose"]')
+    st2 = box(page, '[data-brush="st-roots"]')
+    page.evaluate(f"window.scrollTo(0, {max(0, cell['bottom'] - 450)})")
+    page.wait_for_timeout(500)
+    x0, x1 = st["right"] + 110, cell["left"] + cell["width"] * 0.14
+    y0, y1 = cell["top"] + cell["height"] * 0.6, st["top"] + st["height"] / 2
+    grid = ink_grid(page, x0, y0, x1, y1, 40)
+    cols = []
+    for q in range(0, len(grid[0]), 6):
+        column = [grid[r][q] for r in range(len(grid))]
+        rows = [r for r, v in enumerate(column) if v]
+        if rows:
+            # The stroke's width in this column: its envelope, dry-brush streaks inside it included.
+            cols.append((x0 + q, y0 + (rows[0] + rows[-1]) / 2, rows[-1] - rows[0] + 1))
+    angles = [math.degrees(math.atan2(b[1] - a[1], b[0] - a[0])) for a, b in zip(cols, cols[4:])]
+    turn = round(max(angles) - min(angles), 1) if angles else None
+    thick = [c[2] for c in cols]
+    check("1440 the sweep is a curve (its direction turns 20 degrees or more)", turn is not None and turn >= 20, [turn, len(cols)])
+    check("1440 the sweep is loaded (4.2px or more), never a hairline (2px or more)", bool(thick) and max(thick) >= 4.2 and min(thick) >= 2, thick)
+    page.evaluate(f"window.scrollTo(0, {st['top'] - 300})")
+    page.wait_for_timeout(500)
+    widths = []
+    for k in range(1, 10):
+        y = st["top"] + st["height"] / 2 + (st2["top"] - st["top"]) * k / 10
+        widths.append(longest_run(ink_grid(page, st["right"] - 10, y, st["right"] + 120, y + 1)[0]))
+    check("1440 the margin's stroke is loaded (4.2px or more at its fullest)", bool(widths) and max(widths) >= 4.2, widths)
+    check("1440 the margin's stroke thickens and thins (fullest 1.8x its thinnest)", bool(widths) and min(widths) > 0 and max(widths) / min(widths) >= 1.8, widths)
+    context.close()
+
+    # 2. The light on the cell's leaf crosses it and leaves it (as on the opening's sun), not parked
+    # on it: the cell rests in the first screen, where a scroll-driven pass held the pale band over
+    # the leaf (gold saturation 114 against 148 without it, October 5). Sampled for 10 s.
+    context, page, response, errors, failed = open_page(browser, 1440, 900)
+    page.wait_for_timeout(8000)
+    on, samples = 0, 25
+    for _ in range(samples):
+        pos = page.evaluate(
+            "parseFloat(getComputedStyle(document.querySelector('[data-brush=\"about-cell\"] [data-charge]').previousElementSibling).backgroundPositionX)"
+        )
+        on += 1 if 20 < pos < 80 else 0
+        page.wait_for_timeout(400)
+    check("1440 the light band is on the leaf at most 40% of the time", on / samples <= 0.4, f"{on}/{samples}")
+    context.close()
+
+    # 3. The cell at the comp's scale, low and near the title (1536, 1440, 1280): 46% of the window
+    # wide or more, its box within 4.5% of the window from the title's last letter, all of it in the
+    # first screen, reaching under the opening's words (6% of the window or more), no letter over it.
+    for width, height in [(1536, 1000), (1440, 900), (1280, 720)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        cell = box(page, '[data-brush="about-cell"] img')
+        glyphs = page.evaluate(GLYPHS_JS, f"{OPENING} h1, {OPENING} p")
+        title_right = max(g[2] for g in page.evaluate(GLYPHS_JS, f"{OPENING} h1"))
+        lead_bottom = max(g[3] for g in glyphs)
+        hit = [g for g in glyphs if not (cell["right"] <= g[0] or cell["left"] >= g[2] or cell["bottom"] <= g[1] or cell["top"] >= g[3])]
+        tag = f"{width}x{height}"
+        info = {"w": round(cell["width"]), "left": round(cell["left"]), "title_right": round(title_right), "bottom": round(cell["bottom"]), "lead_bottom": round(lead_bottom)}
+        check(f"{tag} the cell is 46% of the window or more", cell["width"] >= 0.46 * width, info)
+        check(f"{tag} the cell stands near the title", cell["left"] - title_right <= 0.045 * width, info)
+        check(f"{tag} the whole cell in the first screen", cell["bottom"] <= height, info)
+        check(f"{tag} the cell reaches under the words", cell["bottom"] - lead_bottom >= 0.06 * width, info)
+        check(f"{tag} no letter of the opening over the cell", not hit, hit[:2])
+        context.close()
+
+    # 4. The name: the letters after B, i, G and H in an ink-wash grey that still reads (3:1 or more
+    # on the paper, large text) and stands clearly apart from the initials (3.5:1 or more).
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    colors = page.evaluate(
+        """() => { const word = document.querySelector('h1 > span > span');
+             return { initial: getComputedStyle(word.firstElementChild).color, rest: getComputedStyle(word.lastElementChild).color }; }"""
+    )
+    on_paper = round(contrast(rgb_of(colors["rest"]), (0xF8, 0xF3, 0xEA)), 2)
+    apart = round(contrast(rgb_of(colors["rest"]), rgb_of(colors["initial"])), 2)
+    check("the name's other letters read on the paper (3:1 or more)", on_paper >= 3.0, [colors, on_paper])
+    check("the name's other letters stand apart from the initials (3.5:1 or more)", apart >= 3.5, [colors, apart])
+    context.close()
+
+    # 5. Under 900px the opening keeps its own stroke: ink under the cell's foot in the opening, and
+    # none of it on the opening's words or the first station.
+    for width, height in [(390, 844), (768, 1024)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        cell, opening = box(page, '[data-brush="about-cell"] img'), box(page, OPENING)
+        y0 = cell["top"] + cell["height"] * 0.75
+        y1 = min(opening["bottom"] + 60, height - 1)
+        grid = ink_grid(page, 0, y0, width, y1)
+        ink = sum(sum(r) for r in grid)
+        glyphs = page.evaluate(GLYPHS_JS, f'{OPENING} h1, {OPENING} p, [data-brush="st-purpose"], #purpose-title')
+        touched = 0
+        for g in glyphs:
+            for r in range(max(0, int(g[1] - y0)), min(len(grid), int(g[3] - y0) + 1)):
+                touched += sum(grid[r][max(0, int(g[0])):min(width, int(g[2]) + 1)])
+        check(f"{width}x{height} the opening's own stroke leaves the cell", ink >= 300, ink)
+        check(f"{width}x{height} the opening's stroke touches no words", touched == 0, touched)
+        context.close()
+
+    # 6. A tablet held upright: the cell runs 55-62% of the window wide and off its right edge, both
+    # gold folds in view (the leaf spans 44-65% of the picture's width).
+    for width, height in [(768, 1024), (834, 1112), (721, 1000)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        cell = box(page, '[data-brush="about-cell"] img')
+        gold_right = cell["left"] + cell["width"] * 0.648
+        info = {"w": round(cell["width"]), "left": round(cell["left"]), "right": round(cell["right"]), "gold_right": round(gold_right)}
+        check(f"{width}x{height} tablet: the cell runs 55-62% of the window", 0.55 * width <= cell["width"] <= 0.62 * width, info)
+        check(f"{width}x{height} tablet: the cell runs off the right edge", cell["right"] > width, info)
+        check(f"{width}x{height} tablet: both gold folds in view", gold_right <= width - 8, info)
+        context.close()
+
+    # 7. "What you can count on.": 100px of paper or less under the heading's last line before the
+    # next ink in its column (the Rhythm Rule's measure inside a part); it stood beside the list with about 215px
+    # of empty paper under it at 1440.
+    for width, height in [(1440, 900), (1536, 1000), (1280, 720)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        under = page.evaluate(
+            """() => { const r = document.createRange(); r.selectNodeContents(document.querySelector('#promise-title'));
+                 const lines = [...r.getClientRects()].filter(x => x.width > 0);
+                 const h = { left: Math.min(...lines.map(x => x.left)), right: Math.max(...lines.map(x => x.right)), bottom: Math.max(...lines.map(x => x.bottom)) };
+                 const below = [...document.querySelectorAll('main li, main p, main h2, main figure')]
+                   .map(e => e.getBoundingClientRect()).filter(b => b.top >= h.bottom - 1 && b.left < h.right && b.right > h.left);
+                 return Math.round(Math.min(...below.map(b => b.top)) - h.bottom); }"""
+        )
+        check(f"{width}x{height} paper under the promise heading 100px or less", 0 <= under <= 100, under)
+        context.close()
+
+
 def line_and_focus(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     layout = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout")
@@ -517,7 +731,7 @@ def languages_layout(browser):
 
 
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, line_and_focus, languages, languages_layout]
+GROUPS = [desktop_and_phone, openings, finish, round2, line_and_focus, languages, languages_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

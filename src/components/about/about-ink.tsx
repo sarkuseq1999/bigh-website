@@ -71,7 +71,10 @@ function Opening() {
               priority
               data-bloom="waiting"
             />
-            <span className={base.gold} style={{ ["--gold" as string]: `url(${gold.mito})` }} />
+            <span
+              className={`${base.gold} ${styles.leaf}`}
+              style={{ ["--gold" as string]: `url(${gold.mito})` }}
+            />
             <span
               className={styles.charge}
               data-charge=""
