@@ -15,7 +15,11 @@ station's leader. Review focus: /about#promise lands below the header; Skip to c
 at the words; with pictures blocked every heading and paragraph is visible.
 Reduced motion: every painting shown, the gold leaf fully up, the whole line drawn.
 Other languages (kr, jp, cns, vn): 200, no console errors, the h1 stays English, no English
-source sentence left visible.
+source sentence left visible; in Vietnamese the brush line still meets every station after the
+late font arrives. Every language (and English) at 1440x900, 1024x768, 768x1024, 390x844 and
+360x780: no word crosses the page's side margins; in Korean, Japanese, Chinese and Vietnamese no
+line holds one character and none starts with closing punctuation (or, in Japanese, a small kana).
+Resizing from 1440 to 820 wide redraws the brush line for one column.
 
 Pictures: scripts/qa/out/about-ink/<size>-NN.png (viewport shots while scrolling).
 
@@ -121,6 +125,95 @@ def shots(page, tag, height):
         y += height
         i += 1
 
+# Line breaks and margins, read from the page itself (every line of every text block, by the
+# position of each character). A line with one letter, or a line that starts with closing
+# punctuation (and, in Japanese, a small kana or "ー"), is a bad break.
+BREAKS_JS = r"""(lang) => {
+  const closing = new Set([...'。、，．，,.;:!?！？：；）)」』】〕》〉”’…%']);
+  const small = new Set([...'ぁぃぅぇぉっゃゅょゎゕゖァィゥェォッャュョヮヵヶー々']);
+  const letter = /[\p{L}\p{N}]/u;
+  const out = [];
+  const els = [...document.querySelectorAll('main h2, main h3, main p, main dt')]
+    .filter(e => e.offsetParent && !e.closest('[class*=greetings]'));
+  for (const el of els) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const chars = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      const t = n.textContent;
+      for (let i = 0; i < t.length; i++) {
+        if (/\s/.test(t[i])) continue;
+        const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1);
+        const rects = r.getClientRects(); if (!rects.length) continue;
+        chars.push({ c: t[i], mid: (rects[0].top + rects[0].bottom) / 2 });
+      }
+    }
+    if (!chars.length) continue;
+    const lines = []; let cur = [chars[0]];
+    for (let i = 1; i < chars.length; i++) {
+      if (Math.abs(chars[i].mid - cur[cur.length - 1].mid) > 9) { lines.push(cur); cur = [chars[i]]; } else cur.push(chars[i]);
+    }
+    lines.push(cur);
+    if (lines.length < 2) continue;
+    const text = el.textContent.trim().slice(0, 24);
+    lines.forEach((line, k) => {
+      const s = line.map(x => x.c).join('');
+      if (k > 0 && (closing.has(line[0].c) || (lang === 'jp' && small.has(line[0].c)))) out.push(['line starts with ' + line[0].c, text, s.slice(0, 16)]);
+      if (line.filter(x => letter.test(x.c)).length <= 1) out.push(['one character on a line', text, s.slice(0, 16)]);
+    });
+  }
+  return out;
+}"""
+
+# Every word of the page stays inside its column: none crosses the page's side margins (a phrase
+# too wide for its column once did, in Japanese on a phone).
+MARGINS_JS = r"""() => {
+  const out = [];
+  for (const el of document.querySelectorAll('main h1, main h2, main h3, main p, main dt, main dd, main a, main button')) {
+    if (!el.offsetParent || el.closest('figure')) continue;
+    const wrap = el.closest('[class*=wrap]'); if (!wrap) continue;
+    const wb = wrap.getBoundingClientRect(); const cs = getComputedStyle(wrap);
+    const left = wb.left + parseFloat(cs.paddingLeft), right = wb.right - parseFloat(cs.paddingRight);
+    const range = document.createRange(); range.selectNodeContents(el);
+    for (const r of range.getClientRects()) {
+      if (r.width && (r.right > right + 1 || r.left < left - 1)) { out.push([el.textContent.trim().slice(0, 18), Math.round(r.left), Math.round(r.right), Math.round(left), Math.round(right)]); break; }
+    }
+  }
+  return out;
+}"""
+
+
+def stations_met(page):
+    """Whether the brush line's ink passes each station's leader (some ink within 28px right of the
+    label). The brush layer keeps only the tiles near the window drawn (and a tall page, such as the
+    Vietnamese one, has stations several windows down), so each station is brought into the window
+    before its row is read. Needs the whole line drawn (reduced motion)."""
+    count = page.evaluate("document.querySelectorAll('[data-station]').length")
+    met = []
+    for i in range(count):
+        page.evaluate(
+            f"""() => {{ const s = document.querySelectorAll('[data-station]')[{i}];
+                 window.scrollTo(0, s.getBoundingClientRect().top + window.scrollY - innerHeight / 2); }}"""
+        )
+        page.wait_for_timeout(500)
+        met.append(
+            page.evaluate(
+                f"""() => {{ const s = document.querySelectorAll('[data-station]')[{i}];
+                     const box = s.getBoundingClientRect(); const host = document.querySelector('[data-lifts]');
+                     const hb = host.getBoundingClientRect(); const y = box.top + box.height / 2 - hb.top;
+                     for (const c of host.querySelectorAll('canvas')) {{
+                       const t = parseFloat(c.style.top), h = parseFloat(c.style.height);
+                       if (y < t || y > t + h || c.width < 400) continue;
+                       const sx = c.width / c.clientWidth;
+                       const d = c.getContext('2d').getImageData(Math.round((box.right - hb.left) * sx), Math.round((y - t) * sx), Math.round(28 * sx), 1).data;
+                       for (let i = 3; i < d.length; i += 4) if (d[i] > 40) return true; }}
+                     return false; }}"""
+            )
+        )
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(400)
+    return met
+
 
 def desktop_and_phone(browser):
     for width, height in [(1440, 900), (390, 844)]:
@@ -192,6 +285,11 @@ def desktop_and_phone(browser):
         check(f"{tag} no failed requests", not failed, failed[:3])
         page.evaluate("window.scrollTo(0, 0)")
         shots(page, tag, height)
+        if width == 1440:
+            page.set_viewport_size({"width": 820, "height": 900})
+            page.wait_for_timeout(1200)
+            layout = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout")
+            check("resize to 820: the line redraws for one column", layout == "column", layout)
         context.close()
 
 
@@ -216,19 +314,9 @@ def line_and_focus(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     layout = page.evaluate("document.querySelector('[data-lifts]')?.dataset.layout")
     check("1440 brush draws the page layout", layout == "page", layout)
-    # Each station's leader ends at the line: some ink within 14px right of the label's leader.
-    meets = page.evaluate(
-        """() => [...document.querySelectorAll('[data-station]')].map(s => {
-             const box = s.getBoundingClientRect(); const x = box.right + window.scrollX; const y = box.top + box.height / 2 + window.scrollY;
-             const host = document.querySelector('[data-lifts]'); const top = host.getBoundingClientRect().top + window.scrollY;
-             for (const c of host.querySelectorAll('canvas')) {
-               const t = parseFloat(c.style.top); const h = parseFloat(c.style.height); if (y - top < t || y - top > t + h) continue;
-               const ctx = c.getContext('2d'); const sx = c.width / c.clientWidth;
-               const data = ctx.getImageData(Math.round((x - host.getBoundingClientRect().left - window.scrollX) * sx), Math.round((y - top - t) * sx), Math.round(28 * sx), 1).data;
-               for (let i = 3; i < data.length; i += 4) if (data[i] > 40) return true;
-             } return false; })"""
-    )
-    check("1440 line meets every station", meets and all(meets), meets)
+    # Each station's leader ends at the line: some ink within 28px right of the label's leader.
+    meets = stations_met(page)
+    check("1440 line meets every station", len(meets) == 4 and all(meets), meets)
     bloom = page.evaluate("[...document.querySelectorAll('[data-bloom]')].every(e => e.dataset.bloom === 'done')")
     check("reduced motion: every painting shown", bloom)
     charge = page.evaluate("getComputedStyle(document.querySelector('[data-charge]')).opacity")
@@ -280,7 +368,7 @@ def line_and_focus(browser):
 def languages(browser):
     english = [line for line in LOCKED if len(line) > 24]
     for lang in ["kr", "jp", "cns", "vn"]:
-        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about")
+        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about", reduced=True)
         check(f"{lang} answers 200", response.status == 200, response.status)
         h1 = page.evaluate("document.querySelector('h1').getAttribute('aria-label')")
         check(f"{lang} h1 stays English", h1 == "Be in Good Health.", h1)
@@ -288,8 +376,30 @@ def languages(browser):
         left = [line for line in english if line in text]
         check(f"{lang} no English sentence left", not left, left[:3])
         check(f"{lang} no console errors or warnings", not errors, errors[:3])
+        if lang == "vn":
+            # The longest labels, after the late Vietnamese font: the line must still meet every leader.
+            page.evaluate("document.fonts.ready.then(() => true)")
+            page.wait_for_timeout(1500)
+            meets = stations_met(page)
+            check("vn line meets every station after the font arrives", len(meets) == 4 and all(meets), meets)
         page.screenshot(path=os.path.join(OUT, f"{lang}-opening.png"))
         context.close()
+
+
+def languages_layout(browser):
+    """Each language at desktop, tablet and phone sizes: no word crosses the side margins, and
+    in Korean, Japanese, Chinese and Vietnamese no bad line break."""
+    for lang in ["en", "kr", "jp", "cns", "vn"]:
+        for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+            tag = f"{lang} {width}x{height}"
+            path = "/about" if lang == "en" else f"/{lang}/about"
+            context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
+            over = page.evaluate(MARGINS_JS)
+            check(f"{tag} words inside the margins", not over, over[:3])
+            if lang != "en":
+                bad = page.evaluate(BREAKS_JS, lang)
+                check(f"{tag} no bad line break", not bad, bad[:3])
+            context.close()
 
 
 with sync_playwright() as p:
@@ -298,6 +408,7 @@ with sync_playwright() as p:
     openings(browser)
     line_and_focus(browser)
     languages(browser)
+    languages_layout(browser)
     browser.close()
 
 passed = sum(ok for _, ok in results)

@@ -418,10 +418,15 @@
     gap: 22px;
   }
 
-  :global([data-page="about"]) p.station,
-  :global([data-page="about"]) .content {
+  :global([data-page="about"]) p.station {
     grid-column: 1;
     justify-self: start;
+  }
+
+  /* The words fill the column: left to size itself to its content (justify-self: start), a part
+     whose unbreakable phrase is wider than the column (Japanese, by phrase) grew past the margin. */
+  :global([data-page="about"]) .content {
+    grid-column: 1;
   }
 
   :global([data-page="about"]) .part {
@@ -470,5 +475,66 @@
     padding: 0;
     border: 0;
     text-align: right;
+  }
+}
+
+/* The narrowest phones (360px): the third figure's label ("NuriCell's formula, unchanged") has
+   room for two lines, not three. */
+@media (max-width: 400px) {
+  :global([data-page="about"]) .figure {
+    font-size: 44px;
+  }
+
+  :global([data-page="about"]) .unit {
+    font-size: 22px;
+  }
+}
+
+/* ---- Other languages (October 5, 2026; DESIGN.md, The CJK Room Rule) ------------------------
+   The kit gives Korean, Japanese and Chinese headlines their line-height 1.22 and -0.01em
+   tracking, keeps Korean words whole and breaks Japanese by phrase (ink.module.css). The h1 is
+   English in every language (lang="en"), so none of this touches it. What the page adds: */
+
+/* Japanese never starts a line with a small kana or "ー" (a line of "っています。"), and a phrase
+   wider than its column breaks rather than crossing the margin. */
+:global([data-page="about"]):lang(ja) {
+  line-break: strict;
+  overflow-wrap: anywhere;
+}
+
+/* The short lines break between phrases, not inside a word (auto-phrase: Chrome and Edge; other
+   browsers keep the normal breaks). Sentences break between characters, as Japanese is set: a
+   long phrase forced to break inside left "す。" alone on the promise's last line at 900px. */
+:global([data-page="about"]) :is(.kicker, .lead, .station, .figures dt, .promises h3):lang(ja) {
+  word-break: auto-phrase;
+}
+
+/* Chinese: headings, labels and the promises break at their punctuation (the translations put a
+   comma where a line may end), and anywhere only when a phrase is longer than the line. */
+:global([data-page="about"])
+  :is(.statement, .heading, .kicker, .station, .figures dt, .promises h3, .promises p):lang(zh) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* Vietnamese labels are the longest: "Nền tảng khoa học của chúng tôi" would take three lines in
+   the stations' English-sized column, so the column is wider (the page's line moves with it). */
+@media (min-width: 900px) {
+  :global([data-page="about"]) .partGrid:lang(vi) {
+    grid-template-columns: minmax(212px, 1.9fr) clamp(48px, 5vw, 88px) minmax(0, 8.1fr);
+  }
+}
+
+/* On a phone the longest phrase of a Japanese heading ("主力フォーミュラは、") and of the Chinese
+   statement ("是看不见的那一部分：") fits the column (330px at 390, 300 at 360) at this size, so
+   neither breaks inside a word or crosses the margin. */
+@media (max-width: 720px) {
+  :global([data-page="about"]) :is(h2.heading:lang(ja), h2.statement:lang(zh)) {
+    font-size: clamp(26px, 8.2vw, 32px);
+  }
+
+  /* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines. */
+  :global([data-page="about"]) .actions .pill:lang(vi) {
+    text-wrap: balance;
   }
 }
