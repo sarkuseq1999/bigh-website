@@ -10,8 +10,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     promise, beside the crane at rest, after one short rule over each of the three standards);
     the opening crane beats its wings (the animated painting takes the still's place) and stays a
     painting through the beat (its thinnest frame keeps at least 45% of the first pose's solid black
-    ink: round 8; the old take fell to 38%) and flies without a pause (October 5: no frame of the
-    loop is held longer than 300 ms; the old loop held the wings up for seconds); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    ink: round 8; the old take fell to 38%), its wingbeats run without a pause (October 5: no frame
+    held longer than 300 ms; the old loop held the wings up for seconds), and it beats twice and
+    then rests on the still's pose (Mo, October 5: loop count 2, the last frame the first); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
     words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
@@ -166,7 +167,8 @@ def check(name, ok, detail=""):
 def ink_through_beat(page, src):
     """The wingbeat picture's solid black ink (dark areas at least 7 px across, so its thin lines
     are left out; 5 px in the phones' small picture) in its thinnest frame, as a share of the first
-    pose's (the still's), its frame count, and its longest frame in milliseconds."""
+    pose's (the still's), its frame count, its longest frame in milliseconds, its loop count (0 =
+    forever) and how far its last frame is from its first (mean difference, premultiplied, 0-255)."""
     import io
 
     import numpy as np
@@ -176,13 +178,17 @@ def ink_through_beat(page, src):
     k = 7 if picture.width >= 900 else 5
     solid = []
     longest = 0
+    first = last = None
     for frame in ImageSequence.Iterator(picture):
         a = np.asarray(frame.convert("RGBA")).astype(np.float32)
         longest = max(longest, int(frame.info.get("duration") or 0))  # known once the frame is loaded
+        last = np.concatenate([a[..., :3] * a[..., 3:] / 255, a[..., 3:]], axis=-1)
+        first = last if first is None else first
         lum = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
         dark = Image.fromarray((((lum < 80) & (a[..., 3] > 128)) * 255).astype(np.uint8))
         solid.append(int((np.asarray(dark.filter(ImageFilter.MinFilter(k)).filter(ImageFilter.MaxFilter(k))) > 0).sum()))
-    return min(solid) / max(solid[0], 1), len(solid), longest
+    rest = float(np.abs(last - first).mean())
+    return min(solid) / max(solid[0], 1), len(solid), longest, int(picture.info.get("loop", 0)), rest
 
 
 def scroll_to(page, y, wait=700):
@@ -1042,18 +1048,27 @@ def run(browser, look, mobile):
     check(f"{tag}: the crane beats its wings", flying and wing and wing[0] and wing[1] > 0 and wing[2] == "1", str(wing))
     # Round 8: the wingbeat stays a painting (the old take turned into an outline drawing mid-beat).
     src = page.evaluate("document.querySelector('#top img[src*=crane-flight]')?.currentSrc || ''")
-    thinnest, frames, longest = ink_through_beat(page, src) if src else (0, 0, 0)
+    thinnest, frames, longest, loops, rest = ink_through_beat(page, src) if src else (0, 0, 0, -1, 99)
     check(
         f"{tag}: the wingbeat keeps its black ink through the beat",
         frames > 30 and thinnest >= 0.45,
         f"thinnest frame {thinnest:.0%} of the first pose's solid ink, {frames} frames, {src[-28:]}",
     )
-    # October 5 (Mo): the crane flies on without a pause. The old loop held the wings-up pose for
-    # 1.4 s and 4.2 s around each beat, which read as fake; no frame may now stay longer than 300 ms.
+    # October 5 (Mo): the wings beat without a pause. The old loop held the wings-up pose for 1.4 s
+    # and 4.2 s around each beat, which read as fake; no frame may stay longer than 300 ms. Changed
+    # ON PURPOSE the same day (Mo: "fly like 2 times, then stop"): the beats still run without a
+    # pause, and the rest after them is the picture stopping (its loop count), not a held frame.
     check(
-        f"{tag}: the crane flies without a pause (no frame of the loop held over 300 ms)",
+        f"{tag}: the crane's wingbeats run without a pause (no frame held over 300 ms)",
         frames > 30 and 0 < longest <= 300,
         f"longest frame {longest} ms",
+    )
+    # Mo (October 5): two beats, then the crane rests for good in the still painting's pose. The
+    # picture plays twice (loop count 2) and its last frame, where it stops, is its first pose.
+    check(
+        f"{tag}: the crane beats twice, then rests on the still's pose (loop count 2, last frame = first)",
+        loops == 2 and rest <= 0.8,
+        f"loop count {loops}, last frame differs from the first by {rest:.2f} (0-255)",
     )
     boxes = page.evaluate(
         """[...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
