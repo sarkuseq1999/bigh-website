@@ -13,8 +13,9 @@ import {
 // page's left margin, past the four stations (each label sits left of the line, its leader
 // pointing at it), reloading beside each. Then it touches down four times, one short rule over
 // each promise, travels to the footer and lays the stroke the crane at rest stands on.
-// Under 900px the line would run through the words: the opening keeps its own short stroke out of
-// the cell, then only the four rules and the footer's stroke.
+// Under 900px the line would run through the words: on a tablet held upright the opening's stroke
+// runs from the cell's foot to the first station's leader; then (and on a phone) only the four rules
+// and the footer's stroke.
 //
 // The opening has no approved stroke of its own to keep (the homepage's crane stroke is), so the
 // About opening carries no "opening" anchor and the whole line is painted as the page's brush
@@ -37,9 +38,8 @@ const promises: Waypoint[] = [0, 1, 2, 3].flatMap((i) => promiseRule(`promise-${
 /** Between two stations the hand leans a little (`by` pixels from the leaders' line, at `fy` of
  *  the height of a part's words, `level`), as the mockup's line wavers, never nearer than 26px to
  *  the words. The leans alternate, so the line passes each leader mid-swing, not in a corner. The
- *  brush carries more ink here than where it lands (`load`), so a stroke stays full through its
- *  middle and runs dry only toward the next station. */
-const lean = (st: string, level: string, fy: number, by: number, load = 1.5): Waypoint => ({
+ *  brush carries the most ink here (`load`), so a stroke swells through its middle. */
+const lean = (st: string, level: string, fy: number, by: number, load = 1.9): Waypoint => ({
   at: `st-${st}`,
   fx: 1,
   fy,
@@ -49,6 +49,18 @@ const lean = (st: string, level: string, fy: number, by: number, load = 1.5): Wa
   clear: [level, -26],
   load,
 });
+
+/** The brush arrives at a station still loaded and rises off the paper for a hair at the leader's
+ *  tip (ink 0.015: about half a pixel, never a gap) before it reloads there. A stroke that ends by
+ *  lifting keeps its ink to the end (the kit's STROKE_LIFT, as the closing stroke does), so the
+ *  line holds real ink down the margin instead of running into a long dry pen line. */
+const arrive = (id: string, load = 1.6): Waypoint[] => [
+  { ...station(id, "left"), dy: -12, load },
+  { ...station(id, "left"), ink: 0.015, load },
+];
+
+/** The station's reload: a new stroke lands, loaded, beside the leader. */
+const land = (id: string, load = 1.3): Waypoint => fresh(station(id, "left"), load);
 
 /** A point on the cell's painting (fractions of its picture), with the brush's load there. */
 const cell = (fx: number, fy: number, load: number, ink = 1): Waypoint => ({
@@ -62,17 +74,18 @@ const cell = (fx: number, fy: number, load: number, ink = 1): Waypoint => ({
 const leaving: Waypoint[] = [
   cell(0.27, 0.8, 0.45, 0.5),
   fresh(cell(0.235, 0.86, 1.3), 1.3),
-  cell(0.195, 0.95, 1.5),
-  cell(0.115, 1.047, 1.8),
+  cell(0.195, 0.95, 1.6),
+  cell(0.115, 1.047, 1.9),
 ];
 
 // Two columns: out of the cell the sweep falls, then runs left over the open paper in a long, slow
 // sag (its middle halfway between the station and the cell, never nearer the station than 150px)
 // and turns down in one broad bend (fixed pixels from the station, so the bend keeps its size at
-// every width) to meet the first leader as the vertical; the brush presses into the turn and the
-// ink runs dry before it reloads there. Down the margin it lands loaded beside each station (about
-// 4.5px at the comp), stays full through the middle, wavers a little (a calm lean beside Dr. Liu's
-// print) and runs dry toward the next reload; past the last station it sweeps left as it lifts.
+// every width) to meet the first leader as the vertical, pressing into the turn. Down the margin
+// it lands beside each station, swells through the middle, wavers a little (a calm lean beside
+// Dr. Liu's print), and arrives at the next station still holding ink; past the last station it
+// sweeps left as it lifts. Every load stays within the homepage's brush (its strokes run to 1.9,
+// its closing stroke to 2.2).
 const page: Waypoint[] = [
   ...leaving,
   {
@@ -84,44 +97,43 @@ const page: Waypoint[] = [
     dy: -104,
     clear: ["st-purpose", 150],
     w: 3,
-    load: 2.2,
+    load: 1.9,
   },
-  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 2.4 },
-  { ...on("st-purpose", 1, 0.5, 3.4, 1, 22, -46), load: 2.2 },
-  fresh(station("purpose", "left"), 1.25),
+  { ...on("st-purpose", 1, 0.5, 3.6, 1, 72, -92), load: 1.9 },
+  { ...on("st-purpose", 1, 0.5, 3.4, 1, 22, -46), load: 1.9 },
+  ...arrive("purpose", 1.9),
+  land("purpose"),
   lean("purpose", "purpose-body", 0.5, -8),
-  fresh(station("roots", "left"), 1.25),
+  ...arrive("roots"),
+  land("roots"),
   lean("roots", "roots", 0.55, 18),
-  fresh(station("experience", "left"), 1.25),
+  ...arrive("experience"),
+  land("experience"),
   lean("experience", "figures", 0.5, -8),
-  fresh(station("promise", "left"), 1.25),
+  ...arrive("promise"),
+  land("promise"),
   // The tail stays short (about 130px), so the promises' rules, which come after it, draw while
   // the reader reaches them.
-  { ...on("st-promise", 1, 0.5, 3, 1, 9, 56), load: 1.3 },
-  { ...on("st-promise", 1, 0.5, 2.4, 0.7, -6, 98), load: 1.1 },
+  { ...on("st-promise", 1, 0.5, 3, 1, 9, 56), load: 1.5 },
+  { ...on("st-promise", 1, 0.5, 2.4, 0.7, -6, 98), load: 1.2 },
   { ...lift("st-promise", 1, 0.5), dx: -38, dy: 130 },
 ];
 
-// One column (721-899px, the cell beside the words): the opening keeps its own short stroke, the
-// comp's first arc out of the cell's foot, turning left under the painting and lifting before the
-// words (it stays right of the lead and above the first station).
+// One column (721-899px, the cell beside the words): the page's line arrives at its first station.
+// Out of the cell's foot it falls, sweeps left under the opening's words and comes down into the
+// tip of the "Our purpose" leader (the leader's free end, at the left of the label), where it lifts:
+// it ends where the station hangs, never in open paper.
 const column: Waypoint[] = [
   ...leaving,
-  cell(-0.12, 1.12, 1.4),
-  { ...cell(-0.2, 1.16, 1.2), w: 0, ink: 0 },
+  cell(-0.12, 1.12, 1.8),
+  { ...on("st-purpose", 0, 0.5, 3, 1, 70, -50), load: 1.6 },
+  { ...on("st-purpose", 0, 0.5, 3, 1, 22, -14), load: 1.3 },
+  { ...lift("st-purpose", 0, 0.5) },
 ];
 
-// A phone (the cell over the words): the same first arc, shorter, lifting in the margin above the
-// opening's words.
-const phone: Waypoint[] = [
-  cell(0.27, 0.8, 0.45, 0.5),
-  fresh(cell(0.235, 0.86, 1.6), 1.6),
-  cell(0.2, 0.93, 1.6),
-  cell(0.15, 0.985, 1.4),
-  { ...cell(0.1, 1.02, 1.2), w: 0, ink: 0 },
-];
-
+// A phone (the cell over the words) has no stroke out of the cell: a short one read as a tail on
+// the painting. The line starts at the promises' rules.
 export function aboutRoute(layout: Layout): Waypoint[] {
-  const opening = layout === "page" ? page : layout === "column" ? column : phone;
+  const opening = layout === "page" ? page : layout === "column" ? column : [];
   return [...opening, ...promises, ...footerEnding];
 }

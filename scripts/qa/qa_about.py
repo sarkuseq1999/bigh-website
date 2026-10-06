@@ -33,11 +33,16 @@ words, not the header and footer.
 Finish review round (October 5, 2026): the sweep out of the cell is a curve (not a chord) and loaded;
 the margin's stroke is loaded and thickens and thins; the light band crosses the cell's leaf rather
 than resting on it; the cell at the comp's scale, near the title, low, in the first screen, no letter
-over it; the name's other letters an ink-wash grey (3:1 on paper, 3.5:1 against the initials); an
-opening stroke under 900px that touches no words; the tablet cell 55-62% wide, off the right edge,
-both gold folds in view; 100px of paper or less under the promise heading.
+over it; the name's other letters an ink-wash grey (3:1 on paper, 3.5:1 against the initials); the
+tablet cell 55-62% wide, off the right edge, both gold folds in view.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2]
+Second review round (October 5, 2026): the brush holds 3px or more of real ink (alpha over 140)
+on the sweep's run and down the margin between reloads; on a phone no brush ink within 12px of the
+painting; on a tablet the stroke out of the cell ends at the tip of the first station's leader and
+touches no words; the promise heading beside the list, level with its first rule, the list's right
+edge on the figures'.
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish,round2,round3]
 """
 
 import math
@@ -498,9 +503,11 @@ def round2(browser):
     # 1. The brush is a brush, not a wire (1440, whole line drawn). The sweep from where it leaves
     # the painting to the first station's bend is a curve, not a straight chord: along its run its
     # direction turns 20 degrees or more (it was one straight diagonal, then a knee). It is loaded
-    # (4.2px or more somewhere, never under 2px). The stroke down the margin is loaded (4.2px or
-    # more at its fullest, about 4.5 at the 1536 comp) and thickens and thins (its fullest 1.8 times
-    # its thinnest or more).
+    # (4.2px or more at its fullest). The stroke down the margin is loaded (4.2px or more at its
+    # fullest, about 4.5 at the 1536 comp) and thickens and thins: it narrows to a point (2px or less)
+    # at the roots leader, where the brush rises and lands again, and swells to 5px or more between
+    # the stations. (Round 3 keeps the run itself at 3px of real ink or more, round3 item 1, so the
+    # thinning now lives at the leaders, not in long dry stretches.)
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     cell = box(page, '[data-brush="about-cell"] img')
     st = box(page, '[data-brush="st-purpose"]')
@@ -521,7 +528,7 @@ def round2(browser):
     turn = round(max(angles) - min(angles), 1) if angles else None
     thick = [c[2] for c in cols]
     check("1440 the sweep is a curve (its direction turns 20 degrees or more)", turn is not None and turn >= 20, [turn, len(cols)])
-    check("1440 the sweep is loaded (4.2px or more), never a hairline (2px or more)", bool(thick) and max(thick) >= 4.2 and min(thick) >= 2, thick)
+    check("1440 the sweep is loaded (4.2px or more at its fullest)", bool(thick) and max(thick) >= 4.2, thick)
     page.evaluate(f"window.scrollTo(0, {st['top'] - 300})")
     page.wait_for_timeout(500)
     widths = []
@@ -529,7 +536,9 @@ def round2(browser):
         y = st["top"] + st["height"] / 2 + (st2["top"] - st["top"]) * k / 10
         widths.append(longest_run(ink_grid(page, st["right"] - 10, y, st["right"] + 120, y + 1)[0]))
     check("1440 the margin's stroke is loaded (4.2px or more at its fullest)", bool(widths) and max(widths) >= 4.2, widths)
-    check("1440 the margin's stroke thickens and thins (fullest 1.8x its thinnest)", bool(widths) and min(widths) > 0 and max(widths) / min(widths) >= 1.8, widths)
+    cy = st2["top"] + st2["height"] / 2
+    pinch = min(longest_run(ink_grid(page, st2["right"] - 10, cy + d, st2["right"] + 120, cy + d + 1)[0]) for d in range(-3, 4))
+    check("1440 the margin's stroke thickens and thins (2px or less at the leader, 5px or more between)", bool(widths) and pinch <= 2 and max(widths) >= 5, [pinch, widths])
     context.close()
 
     # 2. The light on the cell's leaf crosses it and leaves it (as on the opening's sun), not parked
@@ -579,23 +588,7 @@ def round2(browser):
     check("the name's other letters stand apart from the initials (3.5:1 or more)", apart >= 3.5, [colors, apart])
     context.close()
 
-    # 5. Under 900px the opening keeps its own stroke: ink under the cell's foot in the opening, and
-    # none of it on the opening's words or the first station.
-    for width, height in [(390, 844), (768, 1024)]:
-        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        cell, opening = box(page, '[data-brush="about-cell"] img'), box(page, OPENING)
-        y0 = cell["top"] + cell["height"] * 0.75
-        y1 = min(opening["bottom"] + 60, height - 1)
-        grid = ink_grid(page, 0, y0, width, y1)
-        ink = sum(sum(r) for r in grid)
-        glyphs = page.evaluate(GLYPHS_JS, f'{OPENING} h1, {OPENING} p, [data-brush="st-purpose"], #purpose-title')
-        touched = 0
-        for g in glyphs:
-            for r in range(max(0, int(g[1] - y0)), min(len(grid), int(g[3] - y0) + 1)):
-                touched += sum(grid[r][max(0, int(g[0])):min(width, int(g[2]) + 1)])
-        check(f"{width}x{height} the opening's own stroke leaves the cell", ink >= 300, ink)
-        check(f"{width}x{height} the opening's stroke touches no words", touched == 0, touched)
-        context.close()
+    # 5. (Superseded in round 3: the stroke below 900px, see round3 item 2.)
 
     # 6. A tablet held upright: the cell runs 55-62% of the window wide and off its right edge, both
     # gold folds in view (the leaf spans 44-65% of the picture's width).
@@ -609,20 +602,130 @@ def round2(browser):
         check(f"{width}x{height} tablet: both gold folds in view", gold_right <= width - 8, info)
         context.close()
 
-    # 7. "What you can count on.": 100px of paper or less under the heading's last line before the
-    # next ink in its column (the Rhythm Rule's measure inside a part); it stood beside the list with about 215px
-    # of empty paper under it at 1440.
-    for width, height in [(1440, 900), (1536, 1000), (1280, 720)]:
+    # 7. (Superseded in round 3: the comp's side-by-side promise layout, see round3 item 3.)
+
+
+def core_weights(browser, width, height):
+    """The brush's real ink (alpha over 140, dry-brush paper inside it not counted), measured across
+    the stroke: on the sweep out of the cell (columns over its long run, corrected for the run's
+    slope) and down the margin between each pair of stations (rows), leaving out 40px either side of
+    each reload, where the brush lands and presses in."""
+    context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+    cell = box(page, '[data-brush="about-cell"] img')
+    sts = [box(page, f'[data-brush="st-{i}"]') for i in ("purpose", "roots", "experience", "promise")]
+    st = sts[0]
+    page.evaluate(f"window.scrollTo(0, {max(0, cell['bottom'] - 450)})")
+    page.wait_for_timeout(500)
+    x0, x1 = st["right"] + 110, cell["left"] + cell["width"] * 0.14
+    y0, y1 = cell["top"] + cell["height"] * 0.6, st["top"] + st["height"] / 2
+    grid = ink_grid(page, x0, y0, x1, y1, 140)
+    cols = []
+    for q in range(0, len(grid[0]), 3):
+        rows = [r for r in range(len(grid)) if grid[r][q]]
+        cols.append((x0 + q, y0 + (rows[0] + rows[-1]) / 2 if rows else None, len(rows)))
+    sweep = []
+    for k, (x, y, n) in enumerate(cols):
+        a, b = cols[max(0, k - 3)], cols[min(len(cols) - 1, k + 3)]
+        if y is None or a[1] is None or b[1] is None:
+            sweep.append(n)
+            continue
+        slope = math.atan2(b[1] - a[1], b[0] - a[0])
+        sweep.append(round(n * abs(math.cos(slope)), 1))
+    margin = []
+    for a, b in zip(sts, sts[1:]):
+        top, bottom = a["top"] + a["height"] / 2 + 40, b["top"] + b["height"] / 2 - 40
+        page.evaluate(f"window.scrollTo(0, {top - 200})")
+        page.wait_for_timeout(500)
+        rows = ink_grid(page, st["right"] - 10, top, st["right"] + 140, min(bottom, top + 680), 140)
+        margin += [sum(r) for r in rows[::3]]
+        if bottom > top + 680:
+            page.evaluate(f"window.scrollTo(0, {top + 480})")
+            page.wait_for_timeout(500)
+            rows = ink_grid(page, st["right"] - 10, top + 680, st["right"] + 140, bottom, 140)
+            margin += [sum(r) for r in rows[::3]]
+    context.close()
+    return sweep, margin
+
+
+def round3(browser):
+    """The finish review's second round (Task 9 fix round 2)."""
+    # 1. The brush holds real ink: 3px or more of it across the stroke everywhere on the sweep's run
+    # and down the margin (except 40px either side of a reload), within the homepage's brush (its
+    # loads stay at or under the closing stroke's). On 0290159 long stretches were a 1-2px pen line.
+    for width, height in [(1536, 1000), (1440, 900)]:
+        sweep, margin = core_weights(browser, width, height)
+        thin_s = sum(1 for v in sweep if v < 3)
+        thin_m = sum(1 for v in margin if v < 3)
+        check(f"{width}x{height} the sweep holds 3px of real ink along its run", bool(sweep) and thin_s == 0, f"{thin_s}/{len(sweep)} under 3px, min {min(sweep) if sweep else None}")
+        check(f"{width}x{height} the margin's stroke holds 3px of real ink between reloads", bool(margin) and thin_m == 0, f"{thin_m}/{len(margin)} under 3px, min {min(margin) if margin else None}")
+
+    # 2. Nothing grows out of the cell. On a phone no brush ink lies within 12px of the painting's own
+    # ink (a stroke out of its corner read as a tail). On a tablet held upright the stroke out of the
+    # cell runs on to the first station and ends at the tip of its leader (within 16px), as the page's
+    # line arriving at its first station, never stopping in open paper.
+    for width, height in [(390, 844), (360, 780)]:
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        under = page.evaluate(
+        cell = box(page, '[data-brush="about-cell"] img')
+        painting = page.evaluate(
+            """() => { const img = document.querySelector('[data-brush="about-cell"] img'); const b = img.getBoundingClientRect();
+                 const c = document.createElement('canvas'); c.width = Math.round(b.width); c.height = Math.round(b.height);
+                 const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, c.width, c.height); x.drawImage(img, 0, 0, c.width, c.height);
+                 const d = x.getImageData(0, 0, c.width, c.height).data; let s = '';
+                 for (let i = 0; i < d.length; i += 4) s += (0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2]) < 225 ? '1' : '0';
+                 return { w: c.width, h: c.height, s }; }"""
+        )
+        pw, ph = painting["w"], painting["h"]
+        ink_pts = [(i % pw, i // pw) for i, ch in enumerate(painting["s"]) if ch == "1"]
+        gx0, gy0 = max(0, cell["left"] - 12), cell["top"] - 12
+        gx1, gy1 = min(width, cell["right"] + 12), cell["bottom"] + 12
+        brush = ink_grid(page, gx0, gy0, gx1, gy1, 40)
+        near = set()
+        for (px, py) in ink_pts[::2]:
+            near.add((int((cell["left"] + px - gx0) // 12), int((cell["top"] + py - gy0) // 12)))
+        close = 0
+        for r, row in enumerate(brush):
+            for c, v in enumerate(row):
+                if v and any((c // 12 + dx, r // 12 + dy) in near for dx in (-1, 0, 1) for dy in (-1, 0, 1)):
+                    close += 1
+        check(f"{width}x{height} no brush ink within 12px of the painting", bool(ink_pts) and close == 0, close)
+        context.close()
+    for width, height in [(768, 1024), (834, 1112), (721, 1000)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        cell, st = box(page, '[data-brush="about-cell"] img'), box(page, '[data-brush="st-purpose"]')
+        y0, y1 = cell["top"] + cell["height"] * 0.75, st["bottom"] + 12
+        grid = ink_grid(page, 0, y0, width, y1, 40)
+        pts = [(c, r) for r, row in enumerate(grid) for c, v in enumerate(row) if v]
+        tip = (st["left"], st["top"] + st["height"] / 2 - y0)
+        end = min(pts, key=lambda p: p[0]) if pts else None
+        gap = round(math.hypot(end[0] - tip[0], end[1] - tip[1]), 1) if end else None
+        check(f"{width}x{height} the stroke out of the cell ends at the first station's leader (16px)", gap is not None and gap <= 16 and len(pts) >= 300, [gap, end, tip, len(pts)])
+        glyphs = page.evaluate(GLYPHS_JS, f'{OPENING} h1, {OPENING} p, [data-brush="st-purpose"], #purpose-title')
+        touched = 0
+        for g in glyphs:
+            for r in range(max(0, int(g[1] - y0)), min(len(grid), int(g[3] - y0) + 1)):
+                touched += sum(grid[r][max(0, int(g[0])):min(width, int(g[2]) + 1)])
+        check(f"{width}x{height} the stroke touches no words", touched == 0, touched)
+        context.close()
+
+    # 3. The comp's promise layout: "What you can count on." beside the two-by-two list (the page's one
+    # heading-beside-list moment), its top level with the first rule (12px), the list's right edge on
+    # the figures' right edge above it (8px).
+    for width, height in [(1536, 1000), (1440, 900), (1280, 720)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        lay = page.evaluate(
             """() => { const r = document.createRange(); r.selectNodeContents(document.querySelector('#promise-title'));
                  const lines = [...r.getClientRects()].filter(x => x.width > 0);
-                 const h = { left: Math.min(...lines.map(x => x.left)), right: Math.max(...lines.map(x => x.right)), bottom: Math.max(...lines.map(x => x.bottom)) };
-                 const below = [...document.querySelectorAll('main li, main p, main h2, main figure')]
-                   .map(e => e.getBoundingClientRect()).filter(b => b.top >= h.bottom - 1 && b.left < h.right && b.right > h.left);
-                 return Math.round(Math.min(...below.map(b => b.top)) - h.bottom); }"""
+                 const list = document.querySelector('[data-brush="promise-0"]').parentElement.getBoundingClientRect();
+                 const first = document.querySelector('[data-brush="promise-0"]').getBoundingClientRect();
+                 const figures = document.querySelector('[data-brush="figures"]').getBoundingClientRect();
+                 return { headRight: Math.round(Math.max(...lines.map(x => x.right))), headTop: Math.round(Math.min(...lines.map(x => x.top))),
+                          listLeft: Math.round(list.left), listRight: Math.round(list.right), ruleTop: Math.round(first.top),
+                          figuresRight: Math.round(figures.right) }; }"""
         )
-        check(f"{width}x{height} paper under the promise heading 100px or less", 0 <= under <= 100, under)
+        tag = f"{width}x{height}"
+        check(f"{tag} the promise heading stands beside the list", lay["headRight"] <= lay["listLeft"], lay)
+        check(f"{tag} the heading's top level with the first rule (12px)", abs(lay["headTop"] - lay["ruleTop"]) <= 12, lay)
+        check(f"{tag} the list's right edge on the figures' right edge (8px)", abs(lay["listRight"] - lay["figuresRight"]) <= 8, lay)
         context.close()
 
 
@@ -731,7 +834,7 @@ def languages_layout(browser):
 
 
 # --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, openings, finish, round2, line_and_focus, languages, languages_layout]
+GROUPS = [desktop_and_phone, openings, finish, round2, round3, line_and_focus, languages, languages_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

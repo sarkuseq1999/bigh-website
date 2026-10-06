@@ -348,20 +348,19 @@
   line-height: 1;
 }
 
-/* The promises stand under their heading, as the figures stand under theirs: beside it they left
-   about 215px of empty paper under the heading at 1440 (the Rhythm Rule keeps 70-100px inside a
-   part). Two to a row, each at a reading measure. */
+/* As in the comp, "What you can count on." stands beside its two-by-two list, level with the first
+   row: the page's one heading-beside-list moment (the paper under the short heading, beside the
+   taller list, is the comp's breathing room). The list ends on the figures' right edge above it. */
 :global([data-page="about"]) .promise {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
-  gap: clamp(44px, 4vw, 60px);
+  grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+  gap: clamp(28px, 4vw, 72px);
 }
 
 :global([data-page="about"]) .promises {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  max-width: 820px;
-  gap: clamp(32px, 3vw, 48px) clamp(28px, 4vw, 72px);
+  gap: clamp(32px, 3vw, 48px) clamp(28px, 3vw, 56px);
   margin: 0;
   padding: 0;
   list-style: none;
@@ -433,12 +432,18 @@
   margin-top: clamp(28px, 2.6vw, 40px);
 }
 
-/* Under 1200px the print and the words would crowd one another: the print stands over them. */
+/* Under 1200px the two would crowd one another: the print stands over the words, and the
+   promises' heading over the promises. */
 @media (min-width: 900px) and (max-width: 1199px) {
   :global([data-page="about"]) .roots {
     grid-template-columns: minmax(0, 1fr);
     gap: clamp(64px, 7vw, 80px);
     padding-top: 56px;
+  }
+
+  :global([data-page="about"]) .promise {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
   }
 }
 
@@ -497,10 +502,11 @@
 }
 
 /* A tablet held upright (721-899px) keeps the desktop's composition rather than a phone's: the
-   words at the left with the title large, the cell beside them, a little wider than the title,
-   running to the window's right edge (only its own paper margin past it, as on a phone), its
-   caption inside the window. The opening stays compact, so the purpose starts in the same window.
-   The pause's inkstone stays the small painting (DESIGN.md, The Three Sizes Rule). */
+   words at the left, the title as wide as its column allows (60-76px), the cell beside them at 58%
+   of the window and off its right edge (both gold folds in view), its caption under it. The
+   opening stays compact, so the purpose starts in the same window, and the opening's stroke runs
+   from the cell's foot to the purpose's leader (about-route.ts). The pause's inkstone stays the
+   small painting (DESIGN.md, The Three Sizes Rule). */
 @media (min-width: 721px) and (max-width: 899px) {
   :global([data-page="about"]) .openingGrid {
     --title: clamp(60px, 8.6vw, 76px);
