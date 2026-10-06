@@ -55,7 +55,7 @@ export function LookInk() {
       >
         {copy("Skip to content")}
       </a>
-      <HomeHeader overlay solidAfter={48} follow={FOLLOW} />
+      <HomeHeader overlay solidAfter={48} settledBy={240} follow={FOLLOW} />
       <main ref={main} id="main" tabIndex={-1}>
         <OpeningCrane motion={motion} />
         <Cellular />

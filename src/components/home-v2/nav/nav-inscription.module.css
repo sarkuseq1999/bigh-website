@@ -17,6 +17,46 @@
   initial-value: 0;
 }
 
+/* How far the title has settled with the scroll (round 9; 0 over the opening, 1 settled): the bar's
+   geometry (g), the paper under its words (q), the mist at its foot (m) and the painted rule (d).
+   See "The title settles with the scroll" below. */
+@property --insc-g {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-q {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-m {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+@property --insc-d {
+  syntax: "<number>";
+  inherits: true;
+  initial-value: 0;
+}
+
+/* The mark's two sizes in pixels, for the script that measures their ratio. */
+@property --insc-mark-tall {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
+@property --insc-mark-small {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .root {
   /* The bar over the opening, and the bar once the page has moved on. */
   --tall: clamp(88px, 6.6vw, 104px);
@@ -27,7 +67,24 @@
   --mark: var(--mark-tall);
   /* How far the mark stands above the bar's middle (a share of its width); the words follow it,
      so they stay level with its letters. The small bar lifts it a little more, clear of the rule. */
-  --lift: 0.02;
+  --lift-tall: 0.02;
+  --lift-small: 0.045;
+  --lift: var(--lift-tall);
+  --insc-mark-tall: var(--mark-tall);
+  --insc-mark-small: var(--mark-small);
+  /* While the title settles the bar keeps its tall layout and draws its way to the small one:
+     how far the bar's foot rises (dh), how far the links beside the mark move in toward it (dx),
+     and how far the mark's middle (dym) and the words (dyw) rise, all from the two layouts. */
+  --insc-dh: calc(var(--tall) - var(--small));
+  --insc-dx: calc((var(--mark-tall) - var(--mark-small)) / 2);
+  --insc-dym: calc(
+    (var(--small) - var(--tall)) / 2 + var(--lift-tall) * var(--mark-tall) - var(--lift-small) *
+      var(--mark-small)
+  );
+  --insc-dyw: calc(
+    (var(--small) - var(--tall)) / 2 + (0.0875 - var(--lift-small)) * var(--mark-small) -
+      (0.0875 - var(--lift-tall)) * var(--mark-tall)
+  );
   /* One spacing for the whole line: between the links and on each side of the mark. */
   --gap: clamp(26px, 2.6vw, 44px);
   /* The bar's side margins: the page's column, unless a language needs the outer groups to stand
@@ -56,7 +113,7 @@
 .root[data-size="small"] {
   --h: var(--small);
   --mark: var(--mark-small);
-  --lift: 0.045;
+  --lift: var(--lift-small);
 }
 
 .root[data-unrolled] {
@@ -178,9 +235,10 @@
   }
 }
 
+/* (Where the title settles with the scroll, the rule is laid with it: see below.) */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
-    .root[data-overlay] .rule {
+    .root[data-overlay]:not([data-settle]) .rule {
       animation: insc-draw linear both;
       animation-timeline: scroll(root);
       animation-range: 60px 280px;
@@ -190,7 +248,7 @@
 
 /* Without scroll-driven animation: laid as the bar settles (1.4s), lifted once it has faded. */
 @supports not (animation-timeline: scroll()) {
-  .root:not([data-ground="solid"]) .rule {
+  .root:not([data-settle], [data-ground="solid"]) .rule {
     --insc-draw: 0;
     transition:
       top 0.6s var(--ease),
@@ -198,12 +256,201 @@
       --insc-draw 0s linear 0.3s;
   }
 
-  .root[data-ground="solid"] .rule {
+  .root:not([data-settle])[data-ground="solid"] .rule {
     transition:
       top 0.6s var(--ease),
       opacity 0.3s var(--ease),
       --insc-draw 1.4s var(--ease) 0.12s;
   }
+}
+
+/* ---------------------------------------------------------------- the title settles with the scroll */
+
+/* Round 9. Over the opening the bar is the painting's title: tall, clear, the mark large. As the
+   reader scrolls on it settles into the bar of the page, tied to the reader's hand instead of a
+   timed change at a threshold: between 48px and 240px down the page (--insc-from, --insc-to) the
+   mark shrinks to its small size and rises, the words rise with its letters and the links beside
+   it close in, the bar's foot rises to the small bar's, rice paper comes in under the words, and
+   the painted rule is laid from its loaded end. Scrolling back up undoes it exactly.
+
+   - The paper comes in first (90% within the settle's first 15px, whole by half way): the
+     painting reaches the words from about 60px down on a phone and 80px on a desktop (the crane's
+     wing tips, the sun's rim), and by then the words stand on paper, so they read as on the
+     settled bar (17:1 against the ground under their letters all the way, measured).
+   - Mist: while the rule is being laid, the painting does not meet a cut paper edge. It sinks
+     into mist, a second sheet of the same paper whose foot falls away softly over 56-84px under
+     the bar (the opening's own mist), which thins away as the rule is laid; once the bar has
+     landed the rule is its edge (round 1's clean edge).
+   - It is drawn, not laid out: the bar keeps its tall layout until the settle is complete, and
+     the mark scales and moves, the words and links move, and the paper, the mist, the rule and
+     anything hung from the bar's foot (the drop-downs' scroll, the menu) rise with it, all as
+     transforms and opacity. At the end the bar takes the small layout in the same frame, the
+     same picture, so the change is never seen. The mark's scale is the ratio of its two sizes,
+     measured by the script (--insc-k).
+   - Where the browser runs scroll-driven animation (Chrome, Edge, Safari 26), the four values
+     follow the page's scroll in the stylesheet; elsewhere (Firefox) the script writes the same
+     values on each frame the page moves (use-nav.ts, settleValues; keep the two in step).
+   - Reduced motion: two states, the title over the opening and the bar on paper (past 48px). */
+@keyframes insc-g {
+  from {
+    --insc-g: 0;
+  }
+
+  to {
+    --insc-g: 1;
+  }
+}
+
+@keyframes insc-q {
+  0% {
+    --insc-q: 0;
+  }
+
+  8% {
+    --insc-q: 0.9;
+  }
+
+  25% {
+    --insc-q: 0.97;
+  }
+
+  50%,
+  100% {
+    --insc-q: 1;
+  }
+}
+
+@keyframes insc-m {
+  0% {
+    --insc-m: 0;
+  }
+
+  8% {
+    --insc-m: 0.9;
+  }
+
+  40% {
+    --insc-m: 0.85;
+  }
+
+  100% {
+    --insc-m: 0;
+  }
+}
+
+@keyframes insc-d {
+  from {
+    --insc-d: 0;
+  }
+
+  to {
+    --insc-d: 1;
+  }
+}
+
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .root[data-settle] {
+      animation:
+        insc-g cubic-bezier(0.45, 0, 0.3, 1) both,
+        insc-q linear both,
+        insc-m linear both,
+        insc-d linear both;
+      /* (Said again: the build writes a list of animations out with 0s durations.) */
+      animation-duration: auto;
+      animation-timeline: scroll(root);
+      animation-range:
+        var(--insc-from) var(--insc-to),
+        var(--insc-from) var(--insc-to),
+        var(--insc-from) var(--insc-to),
+        calc(var(--insc-from) + (var(--insc-to) - var(--insc-from)) / 12) var(--insc-to);
+    }
+  }
+}
+
+/* The settle changes the bar's layout only where it ends, at once (no timed change of sizes). */
+.root[data-settle] :is(.ground, .mist, .rule),
+.root[data-settle] .bar,
+.root[data-settle] :is(.left, .right),
+.root[data-settle] .bar a.mark[href] {
+  transition: none;
+}
+
+.root[data-settle][data-ground="paper"] .ground {
+  transition: opacity 0.25s var(--ease);
+}
+
+.root[data-settle][data-size="tall"] .bar a.mark[href] {
+  translate: 0 calc(var(--insc-dym) * var(--insc-g));
+  scale: calc(1 - (1 - var(--insc-k, 0.72)) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] :is(.language, .menuButton, .account) {
+  translate: 0 calc(var(--insc-dyw) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] .left .link {
+  translate: calc(var(--insc-dx) * var(--insc-g)) calc(var(--insc-dyw) * var(--insc-g));
+}
+
+.root[data-settle][data-size="tall"] .right .link {
+  translate: calc(-1 * var(--insc-dx) * var(--insc-g)) calc(var(--insc-dyw) * var(--insc-g));
+}
+
+/* The sheets rise in whole pixels: where a drop-down is opened part way through the settle, the
+   bar's paper and the scroll's meet edge to edge, and at a fraction of a pixel the wash under them
+   showed through the seam as a grey hairline. */
+.root[data-settle][data-size="tall"] :is(.ground, .mist, .paper, .panel, .sheet) {
+  translate: 0 round(calc(-1 * var(--insc-dh) * var(--insc-g)), 1px);
+}
+
+.root[data-settle][data-size="tall"] .rule {
+  --insc-draw: var(--insc-d);
+  translate: -50% calc(-50% - var(--insc-dh) * var(--insc-g));
+}
+
+/* The paper under the words: the settled bar's sheet (it runs on past the rule, then fades), its
+   fibre placed where the settled bar's will be. */
+.root[data-ground="settling"] .ground {
+  height: calc(var(--h) + 22px);
+  background-position: 0 var(--insc-dh);
+  opacity: var(--insc-q);
+  mask-image: linear-gradient(#000 calc(100% - 14px), transparent);
+}
+
+.root[data-ground="settling"] .rule {
+  opacity: calc(0.75 * var(--insc-q));
+}
+
+/* The mist: a second sheet of the same paper, as solid as the bar's under the words, whose foot
+   falls away softly over a long way instead of ending at the rule (an eased fall, so it has no
+   edge of its own). Laid over the bar's sheet, fibre on fibre in the same place, it adds nothing
+   where both are whole; at the foot, the more mist, the softer the edge the painting meets. */
+.mist {
+  --fall: clamp(56px, 5vw, 84px);
+  position: absolute;
+  z-index: -2;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: calc(var(--h) + 8px + var(--fall));
+  background-color: var(--paper);
+  background-image: var(--paper-fibre);
+  background-size: 800px 800px;
+  background-position: 0 var(--insc-dh);
+  mask-image: linear-gradient(
+    #000 calc(100% - var(--fall)),
+    rgb(0 0 0 / 0.74) calc(100% - 0.75 * var(--fall)),
+    rgb(0 0 0 / 0.42) calc(100% - 0.5 * var(--fall)),
+    rgb(0 0 0 / 0.15) calc(100% - 0.25 * var(--fall)),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+
+.root[data-ground="settling"] .mist {
+  opacity: var(--insc-m);
 }
 
 /* ---------------------------------------------------------------- the bar */
@@ -675,12 +922,14 @@
   pointer-events: none;
 }
 
-/* A faint wash of thinned ink over the page under the scroll. */
+/* A faint wash of thinned ink over the page under the scroll: enough (round 9: 28%, from 22%) that
+   a headline the scroll's torn edge falls across recedes behind it; at a third it turned the page
+   grey. */
 .wash {
   position: fixed;
   z-index: -3;
   inset: 0;
-  background: rgb(96 91 83 / 0.22);
+  background: rgb(96 91 83 / 0.28);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s var(--ease);
@@ -1063,18 +1312,28 @@ img.plate {
 
   /* The showroom's picture settles with its names; once the visitor points at another it only
      cross-fades. (The picture itself moves and fades, never its stand: that would isolate the
-     paintings' multiply.) */
+     paintings' multiply.) A painting fades in as ink does. The bottle, a photograph, does not:
+     half see-through it read as a pale ghost of a bottle for half a second (round 9), so it is
+     simply there as the unrolling paper reaches it, crisp as the names, and only rises into place
+     with them. */
   .root[data-unrolled]:not([data-swap])
     .panel[data-shown]
     .stage:not([data-moved])
-    :is(.big, .plate)[data-shown] {
+    .plate[data-shown] {
     animation: insc-settle 0.9s var(--ease) 0.2s backwards;
   }
 
-  /* Its pool arrives with it (never a shadow without its bottle). */
+  .root[data-unrolled]:not([data-swap])
+    .panel[data-shown]
+    .stage:not([data-moved])
+    .big[data-shown] {
+    animation: insc-rise 0.9s var(--ease) 0.2s backwards;
+  }
+
+  /* Its pool spreads in under it as the paper reaches it (never a shadow without its bottle). */
   .root[data-unrolled]:not([data-swap]) .panel[data-shown] .stageContact,
   .root[data-unrolled]:not([data-swap]) .panel[data-shown] .stage:not([data-moved]) .stagePool {
-    animation: insc-fade 0.9s var(--ease) 0.2s backwards;
+    animation: insc-fade 0.5s var(--ease) 0.2s backwards;
   }
 
   /* A swap: the new panel fades in whole over the old one, and what is written on it settles into
@@ -1133,8 +1392,8 @@ img.plate {
     --below: 52px;
   }
 
-  .root[data-size="small"] {
-    --lift: 0.03;
+  .root {
+    --lift-small: 0.03;
   }
 
   .root .bar {

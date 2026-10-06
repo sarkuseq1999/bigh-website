@@ -23,9 +23,10 @@ import styles from "./nav-inscription.module.css";
 // centred above the painting; this bar does the same over the crane. The BiGH mark stands in the
 // middle, large, with two links on each side of it (Products, Science | About, Support) set as one
 // balanced line; the language at the far left, Log in and Sign up at the far right. Over the
-// opening painting the bar is clear; once the page moves on it settles a little smaller on rice
-// paper, and its edge is a real painted brush line instead of a hairline, laid by the reader's
-// scroll.
+// opening painting the bar is clear; as the page moves on it settles with the reader's scroll
+// (round 9: between `solidAfter` and `settledBy`, 48-240px on the homepage) a little smaller onto
+// rice paper, the painting sinking into mist under it, and its edge is a real painted brush line
+// instead of a hairline, laid by the same scroll. Scrolling back up undoes it.
 // Products and Science let down a sheet of rice paper from under the bar, the way a hanging scroll
 // unrolls: revealed top to bottom, its leading edge torn rice paper, over a faint ink wash on the
 // page. What is on it is centred under the bar. Both are showrooms, two pages of one book: the
@@ -65,8 +66,10 @@ export type NavInscriptionProps = {
   overlay?: boolean;
   /** Ink over the opening: "light" = dark ink on a pale opening, "dark" = white ink on a dark one. */
   tone?: "light" | "dark";
-  /** Scroll distance (px) after which the bar settles on paper. */
+  /** Scroll distance (px) at which the title starts to settle onto paper. */
   solidAfter?: number;
+  /** Scroll distance (px) by which it has settled (the bar small and solid, its rule laid). */
+  settledBy?: number;
 };
 
 export function NavInscription({
@@ -75,12 +78,16 @@ export function NavInscription({
   overlay = false,
   tone = "light",
   solidAfter = 80,
+  settledBy = solidAfter + 192,
 }: NavInscriptionProps) {
   const copy = useCopy();
   const locale = useLocale();
   const dialogs = useHomeDialogs();
-  const nav = useNav({ overlay, solidAfter });
-  const { solid, panel, closePanel, menuOpen, setMenuOpen, menuButton } = nav;
+  // The title settles with the scroll (round 9) over a pale opening; over a dark one the words
+  // turn from white to ink, so there the bar keeps its two states.
+  const settle = overlay && tone === "light";
+  const nav = useNav({ overlay, solidAfter, settledBy: settle ? settledBy : undefined });
+  const { header, solid, panel, closePanel, menuOpen, setMenuOpen, menuButton } = nav;
   const cjk = locale === "jp" || locale === "cns" || locale === "hken";
 
   // The painted stroke: under the current page's word ("here"), or on the homepage under the word
@@ -198,8 +205,10 @@ export function NavInscription({
     return parts.map((piece) => copy(piece.trim())).join(cjk ? "" : " ");
   };
 
+  // Over the opening the ground is clear; with a settle it is "settling": the scroll lays the paper
+  // in under the words (clear at the very top, and with reduced motion until the bar is solid).
   const clear = overlay && !solid && !panel && !menuOpen;
-  const ground = panel || menuOpen ? "paper" : clear ? "clear" : "solid";
+  const ground = panel || menuOpen ? "paper" : clear ? (settle ? "settling" : "clear") : "solid";
 
   const openSupport = () => {
     if (menuOpen) {
@@ -214,11 +223,13 @@ export function NavInscription({
 
   return (
     <header
+      ref={header}
       className={styles.root}
       data-size={solid ? "small" : "tall"}
       data-ground={ground}
       data-tone={clear ? tone : "light"}
       data-overlay={overlay ? "" : undefined}
+      data-settle={settle ? "" : undefined}
       data-unrolled={panel ? "" : undefined}
       data-swap={swap ? "" : undefined}
       data-menu={menuOpen ? "" : undefined}
@@ -227,12 +238,15 @@ export function NavInscription({
           "--insc-panel-h": `${layout.panel}px`,
           "--insc-row-h": `${layout.row}px`,
           "--insc-names-w": `${layout.names}px`,
+          "--insc-from": `${solidAfter}px`,
+          "--insc-to": `${settledBy}px`,
         } as CSSProperties
       }
       onBlur={nav.onHeaderBlur}
       onFocus={reach}
     >
       <span className={styles.ground} aria-hidden="true" />
+      <span className={styles.mist} aria-hidden="true" />
       <span className={styles.rule} aria-hidden="true" />
 
       <nav

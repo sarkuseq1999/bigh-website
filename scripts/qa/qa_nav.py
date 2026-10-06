@@ -1,6 +1,6 @@
 """QA for the menu bar, "Inscription" (Mo's pick, October 5, 2026), on the homepage.
 
-usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|showroom|science|phone|tablet|lang]
+usage: python -X utf8 scripts/qa/qa_nav.py [base] [--only=desk|settle|showroom|science|phone|tablet|lang]
        base defaults to http://localhost:3014
 
 On the real GPU (ANGLE/D3D11):
@@ -101,6 +101,18 @@ On the real GPU (ANGLE/D3D11):
     whole, only one word is ever underlined and no chevron is ever turned sideways; pointing on to
     About keeps one line. The tablet menu opens, and the phone menu's Products unfolds, with no
     light box round the pools and the chevron turning over, never sideways.
+  - the title settles with the scroll (round 9), at 1536x900, every 6px from 0 to 300 down and
+    back up: the mark only shrinks and the paper and the rule only grow going down, between its two
+    sizes at a dozen depths or more inside 48-240px (a gesture, not a step); tall and clear to
+    48px; from 240px small, solid paper, the rule laid; nothing moves where the bar takes its small
+    layout (239 -> 240px); scrolling back up gives the same bar at every depth. Filmed through a
+    wheel scroll to 400px and back (the page's smooth scrolling): the mark follows the scroll both
+    ways on every frame, no frame over 25ms (a couple allowed). Reloaded 150px and 600px down: the
+    bar right on every look while the page loads and after. Behind every word of the bar, every
+    8px of the settle, at 1536, 1280, 1920 and on a 390 phone (the words hidden, the ground under
+    their letters read): contrast with the words' ink 7:1 or more, the ground's levels spread 40
+    or less. Reduced motion: two states, never between. Firefox (no scroll-driven animation, so
+    the script's fallback): the same sweep and checks.
   - no page errors or console errors anywhere.
 Pictures land in scripts/qa/out/nav/.
 """
@@ -2378,6 +2390,281 @@ def reading_stroke(browser):
     page.close()
 
 
+# ---------------------------------------------------------------- round 9: the title settles with the scroll
+
+# The bar's state: the settle's values on the header, the mark's and two links' boxes as drawn (with
+# their transforms), the paper's opacity and the rule's draw.
+SETTLE = """() => { const h = document.querySelector('header'); const s = getComputedStyle(h);
+  const box = el => { const r = el.getBoundingClientRect(); return [r.left, r.top, r.width]; };
+  const ground = h.querySelector('[class*="__ground"]'); const rule = h.querySelector('[class*="__rule"]');
+  return { y: scrollY, size: h.dataset.size, g: +s.getPropertyValue('--insc-g') || 0,
+    mark: box(h.querySelector('[data-nav-logo]')), products: box(h.querySelector('[data-nav-trigger="products"]') || h.querySelector('[data-nav-menu-button]')),
+    about: box(h.querySelector('#site-navigation a[href$="/about"]') || h.querySelector('[class*="account"] label') || h.querySelector('[data-nav-logo]')),
+    paper: +getComputedStyle(ground).opacity, draw: parseFloat(getComputedStyle(rule).getPropertyValue('--insc-draw')),
+    ruleOpacity: +getComputedStyle(rule).opacity }; }"""
+
+# The bar's words, each as the box round its letters, and their ink.
+BAR_WORDS = r"""() => {
+  const nav = document.querySelector('#site-navigation');
+  const els = [...nav.querySelectorAll('[class*="__word"], [data-nav-menu-button] span, [class*="account"] a, [class*="account"] button, [class*="language"] select, [class*="account"] select')];
+  const out = [];
+  for (const el of els) {
+    const s = getComputedStyle(el); if (s.display === 'none' || s.visibility === 'hidden' || !el.checkVisibility()) continue;
+    const r = document.createRange(); r.selectNodeContents(el);
+    const rects = [...r.getClientRects()].filter(x => x.width > 4 && x.height > 4);
+    const b = rects.length ? rects.reduce((a, c) => ({ left: Math.min(a.left, c.left), top: Math.min(a.top, c.top),
+      right: Math.max(a.right, c.right), bottom: Math.max(a.bottom, c.bottom) })) : el.getBoundingClientRect();
+    if (b.right - b.left < 4 || b.right <= 0 || b.left >= innerWidth) continue;
+    out.push({ text: (el.innerText || '').trim().split('\n')[0].slice(0, 12), left: b.left, top: b.top, right: b.right, bottom: b.bottom, color: s.color });
+  }
+  return out; }"""
+HIDE_WORDS = """#site-navigation :is([class*="__link"], [class*="account"], [class*="language"], [data-nav-menu-button], [data-nav-logo]) { visibility: hidden !important; }"""
+
+
+def relative_luminance(rgb):
+    c = np.asarray(rgb, dtype=np.float64) / 255.0
+    c = np.where(c <= 0.03928, c / 12.92, ((c + 0.055) / 1.055) ** 2.4)
+    return 0.2126 * c[..., 0] + 0.7152 * c[..., 1] + 0.0722 * c[..., 2]
+
+
+def word_grounds(page, width):
+    """What stands behind each of the bar's words (the words hidden): the contrast of the words' ink
+    with the darker tenth of the ground under the letters, and how busy that ground is (the spread
+    of its levels, p90 - p10, in 0-255)."""
+    words = page.evaluate(BAR_WORDS)
+    tag = page.add_style_tag(content=HIDE_WORDS)
+    page.wait_for_timeout(60)
+    shot = np.asarray(Image.open(BytesIO(page.screenshot(clip={"x": 0, "y": 0, "width": width, "height": 130}))).convert("RGB"))
+    tag.evaluate("el => el.remove()")
+    k = shot.shape[1] / width
+    out = []
+    for w in words:
+        x0, y0, x1, y1 = (int(round(v * k)) for v in (w["left"], w["top"], w["right"], w["bottom"]))
+        ground = shot[max(0, y0) : y1, max(0, x0) : x1].reshape(-1, 3)
+        if not len(ground):
+            continue
+        lum = relative_luminance(ground)
+        ink = relative_luminance([float(v) for v in w["color"][w["color"].index("(") + 1 : -1].replace(",", " ").split()[:3]])
+        levels = np.asarray(Image.fromarray(ground.reshape(1, -1, 3).astype(np.uint8)).convert("L"), dtype=np.float32)
+        out.append({
+            "text": w["text"],
+            "ratio": float((np.percentile(lum, 10) + 0.05) / (ink + 0.05)),
+            "spread": float(np.percentile(levels, 90) - np.percentile(levels, 10)),
+        })
+    return out
+
+
+def sweep(page, depths, wait=160):
+    states = []
+    for y in depths:
+        page.evaluate(f"window.scrollTo(0, {y})")
+        page.wait_for_timeout(wait)
+        states.append(page.evaluate(SETTLE))
+    return states
+
+
+def settle_follows(tag, down, up, small_w, tall_w):
+    """Checks shared by every engine: the settle follows the scroll one way down and is undone the
+    same way up, is a gesture (not a snap), is complete by 240px and changes layout unseen."""
+    ws = [s["mark"][2] for s in down]
+    papers = [s["paper"] for s in down]
+    draws = [s["draw"] for s in down]
+    mono = (
+        all(b <= a + 0.3 for a, b in zip(ws, ws[1:]))
+        and all(b >= a - 0.005 for a, b in zip(papers, papers[1:]))
+        and all(b >= a - 0.005 for a, b in zip(draws, draws[1:]))
+    )
+    between = [s["y"] for s in down if small_w + 2 < s["mark"][2] < tall_w - 2]
+    check(
+        f"{tag}: the title settles with the scroll, one way (mark only shrinks, paper and rule only grow going down), over the scroll not at a step",
+        mono and len(between) >= 12 and min(between) >= 48 and max(between) <= 240,
+        f"mark {[round(w, 1) for w in ws[::4]]}; paper {[round(q, 2) for q in papers[::4]]}; between sizes at {len(between)} depths ({min(between, default=None)}-{max(between, default=None)}px)",
+    )
+    top = [s for s in down if s["y"] <= 48]
+    done = [s for s in down if s["y"] >= 240]
+    check(
+        f"{tag}: over the opening the title stands tall and clear; from 240px the bar is settled (small, solid paper, rule laid)",
+        all(abs(s["mark"][2] - tall_w) < 0.6 and s["paper"] < 0.01 for s in top)
+        and all(s["size"] == "small" and abs(s["mark"][2] - small_w) < 0.6 and s["paper"] > 0.999 and s["draw"] == 1 and s["ruleOpacity"] > 0.6 for s in done),
+        f"at 0: {top[0]['mark'][2]:.1f}px, paper {top[0]['paper']}; at {done[0]['y']}: {done[0]['size']}, {done[0]['mark'][2]:.1f}px, paper {done[0]['paper']}, rule {done[0]['draw']}",
+    )
+    by = {s["y"]: s for s in down}
+    a, b = by.get(239), by.get(240)
+    seam = a and b and all(abs(x - y) < 0.6 for k in ("mark", "products", "about") for x, y in zip(a[k], b[k]))
+    check(
+        f"{tag}: where the bar takes its small layout (239 -> 240px) nothing moves",
+        bool(seam),
+        f"239: {a and [round(v, 1) for v in a['mark']]} ({a and a['size']}); 240: {b and [round(v, 1) for v in b['mark']]} ({b and b['size']})",
+    )
+    ups = {s["y"]: s for s in up}
+    worst = max(
+        max(abs(x - y) for k in ("mark", "products", "about") for x, y in zip(s[k], ups[s["y"]][k])) + 40 * abs(s["paper"] - ups[s["y"]]["paper"])
+        for s in down if s["y"] in ups
+    )
+    check(f"{tag}: scrolling back up undoes it exactly (the same bar at every depth)", worst < 0.6, f"largest difference {worst:.2f}")
+
+
+def settle_checks(browser, playwright):
+    """Round 9: the title settles with the scroll. Over the first 48-240px the mark shrinks, the bar
+    and its words settle, the paper comes in under the words and the rule is laid, with the
+    reader's hand; scrolling back up undoes it; it is right as the page loads part way down; the
+    words stay legible over the painting all the way; with reduced motion there are two states;
+    in Firefox (no scroll-driven animation) the script does the same."""
+    depths = list(range(0, 301, 6)) + [239, 240, 241]
+    depths = sorted(set(depths))
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2500)
+    page.mouse.move(768, 896)
+    tall_w, small_w = page.evaluate(
+        """() => { const s = getComputedStyle(document.querySelector('header'));
+        return [parseFloat(s.getPropertyValue('--insc-mark-tall')), parseFloat(s.getPropertyValue('--insc-mark-small'))]; }"""
+    )
+    down = sweep(page, depths)
+    page.evaluate("window.scrollTo(0, 420)")
+    page.wait_for_timeout(300)
+    up = sweep(page, depths[::-1])
+    settle_follows("settle (Chrome)", down, up, small_w, tall_w)
+
+    # Every frame the page draws while it is scrolled from 0 to 400px and back by the wheel, through
+    # the page's own smooth scrolling: the mark only shrinks going down and only grows coming back
+    # up, and no frame runs long (a 60 fps page draws one every 16.7ms).
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(800)
+    page.evaluate(
+        """() => { window.__f = []; window.__on = true; const m = document.querySelector('[data-nav-logo]');
+        const tick = t => { window.__f.push([t, scrollY, m.getBoundingClientRect().width]); if (window.__on) requestAnimationFrame(tick); };
+        requestAnimationFrame(tick); }"""
+    )
+    for direction in (1, -1):
+        for _ in range(10):
+            page.mouse.wheel(0, 40 * direction)
+            page.wait_for_timeout(90)
+        page.wait_for_timeout(900)
+    log = page.evaluate("(() => { window.__on = false; return window.__f; })()")
+    turn = max(range(len(log)), key=lambda i: log[i][1])
+    shrink = all(b[2] <= a[2] + 0.3 for a, b in zip(log[:turn], log[1 : turn + 1]))
+    grow = all(b[2] >= a[2] - 0.3 for a, b in zip(log[turn:], log[turn + 1 :]))
+    gaps = [b[0] - a[0] for a, b in zip(log, log[1:])]
+    long = [round(g) for g in gaps if g > 25]
+    check(
+        "settle: filmed frame by frame through a wheel scroll down and back, it follows the scroll both ways, and no frame runs long",
+        shrink and grow and log[turn][1] >= 380 and len(log) > 100 and len(long) <= max(2, len(log) // 50),
+        f"{len(log)} frames, deepest {log[turn][1]:.0f}px, median {sorted(gaps)[len(gaps) // 2]:.1f}ms, over 25ms: {long[:6]}",
+    )
+
+    # Reloaded part way through the settle, and past it: every frame drawn while the page reloads
+    # shows the bar as it was (the band of the mark and the words, above the words' painted stroke,
+    # which comes and goes with the part being read), and once loaded it is the same bar. (The
+    # smooth scrolling's own glide ends first.)
+    page.wait_for_timeout(1500)
+    for at in (150, 600):
+        page.evaluate(f"window.scrollTo(0, {at})")
+        page.wait_for_timeout(900)
+        before = page.evaluate(SETTLE)
+        if before["y"] != at:
+            check(f"settle: reloaded {at}px down, the bar is right on every frame as the page loads", False, f"could not scroll to {at}: {before['y']}")
+            continue
+        band = round(page.evaluate("document.querySelector('[data-nav-trigger=\"products\"] [class*=\"__word\"]').getBoundingClientRect().bottom")) + 2
+        clip = {"x": 0, "y": 0, "width": 1536, "height": band}
+        reference = luma(Image.open(BytesIO(page.screenshot(clip=clip))))
+        cdp = page.context.new_cdp_session(page)
+        raw = []
+
+        def frame(ev, raw=raw, cdp=cdp):
+            raw.append(ev["data"])
+            try:
+                cdp.send("Page.screencastFrameAck", {"sessionId": ev["sessionId"]})
+            except Exception:
+                pass
+
+        cdp.on("Page.screencastFrame", frame)
+        cdp.send("Page.startScreencast", {"format": "png", "everyNthFrame": 1})
+        page.wait_for_timeout(150)
+        page.reload(wait_until="load")
+        page.wait_for_timeout(1600)
+        try:
+            cdp.send("Page.stopScreencast")
+        except Exception:
+            pass
+        shots = [Image.open(BytesIO(base64.b64decode(data))).convert("RGB") for data in raw]
+        diffs = [float(np.abs(luma(im.crop((0, 0, 1536, band))) - reference).mean()) for im in shots]
+        after = page.evaluate(SETTLE)
+        same = abs(after["mark"][2] - before["mark"][2]) < 0.6 and abs(after["paper"] - before["paper"]) < 0.02 and after["y"] == at
+        check(
+            f"settle: reloaded {at}px down, the bar is right on every frame as the page loads",
+            len(diffs) >= 10 and max(diffs) <= 2.5 and same,
+            f"{len(diffs)} frames, most any frame differs: {max(diffs, default=-1):.2f} levels (mean); after: {after['mark'][2]:.1f}px, paper {after['paper']} at {after['y']}px",
+        )
+    page.close()
+
+    # The words stay legible: behind every word, at every 8px of the settle, at three desktop sizes
+    # and on a phone, the ground under the letters keeps a contrast of 7:1 or more with the words'
+    # ink (WCAG's highest level) and is never busy (its levels spread 40 or less in 255: the
+    # painting never shows through as shapes behind the letters).
+    sizes = [
+        ("1536", dict(viewport={"width": 1536, "height": 900})),
+        ("1280", dict(viewport={"width": 1280, "height": 800})),
+        ("1920", dict(viewport={"width": 1920, "height": 1080})),
+        ("phone", dict(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)),
+    ]
+    for tag, opts in sizes:
+        page = browser.new_page(**opts)
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(3000)
+        if not opts.get("has_touch"):
+            page.mouse.move(opts["viewport"]["width"] / 2, opts["viewport"]["height"] - 4)
+        worst = []
+        for y in range(0, 265, 8):
+            page.evaluate(f"window.scrollTo(0, {y})")
+            page.wait_for_timeout(200)
+            worst += [dict(w, y=y) for w in word_grounds(page, opts["viewport"]["width"])]
+        low = min(worst, key=lambda w: w["ratio"])
+        busy = max(worst, key=lambda w: w["spread"])
+        check(
+            f"settle ({tag}): the bar's words stay legible over the painting all the way (7:1 or more, a quiet ground)",
+            low["ratio"] >= 7 and busy["spread"] <= 40 and len(worst) >= 2 * 34,
+            f"lowest {low['ratio']:.1f}:1 ({low['text']!r} at {low['y']}px); busiest ground {busy['spread']:.0f} ({busy['text']!r} at {busy['y']}px)",
+        )
+        page.close()
+
+    # Reduced motion: two states, never between.
+    page = browser.new_page(viewport={"width": 1536, "height": 900}, reduced_motion="reduce")
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    states = sweep(page, list(range(0, 301, 6)), wait=120)
+    tall = [s["y"] for s in states if abs(s["mark"][2] - tall_w) < 0.6 and s["paper"] < 0.01]
+    small = [s["y"] for s in states if abs(s["mark"][2] - small_w) < 0.6 and s["paper"] > 0.999 and s["size"] == "small"]
+    check(
+        "reduced motion: the bar has two states (the title over the opening, the bar on paper past 48px), never between",
+        len(tall) + len(small) == len(states) and tall and small and max(tall) < min(small) and max(tall) <= 48,
+        f"tall to {max(tall, default=None)}px, small from {min(small, default=None)}px, {len(states) - len(tall) - len(small)} between",
+    )
+    page.close()
+
+    # Firefox has no scroll-driven animation: the script writes the same settle.
+    try:
+        firefox = playwright.firefox.launch()
+    except Exception as error:  # noqa: BLE001
+        check("settle (Firefox): the script's fallback", False, f"Firefox would not start: {error}"[:200])
+        return
+    page = firefox.new_page(viewport={"width": 1536, "height": 900})
+    page.on("pageerror", lambda e: errors.append(f"firefox {e}"[:300]))
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(3000)
+    page.mouse.move(768, 896)
+    native = page.evaluate("CSS.supports('animation-timeline: scroll()')")
+    down = sweep(page, depths, wait=200)
+    page.evaluate("window.scrollTo(0, 420)")
+    page.wait_for_timeout(300)
+    up = sweep(page, depths[::-1], wait=200)
+    settle_follows(f"settle (Firefox, {'native' if native else 'the script'})", down, up, small_w, tall_w)
+    firefox.close()
+
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
@@ -2385,6 +2672,8 @@ with sync_playwright() as p:
         rule_checks(browser)
         reading_stroke(browser)
         drop_down_motion(browser)
+    if ONLY in (None, "desk", "settle"):
+        settle_checks(browser, p)
     if ONLY in (None, "desk", "showroom"):
         showroom_layout(browser)
         showroom_reach(browser)
