@@ -24,7 +24,13 @@ Resizing from 1440 to 820 wide redraws the brush line for one column.
 
 Pictures: scripts/qa/out/about-ink/<size>-NN.png (viewport shots while scrolling).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url]
+Finish pass (October 5, 2026): the title on two lines at every opening size; a tablet held upright
+(721-899 px) keeps the cell beside a large title (and wider than its line), the next block's heading
+in the first window, and the pause's inkstone small; every station on one line at 1440 and
+1536; each promise rule lands at least 5px thick; Japanese strict line breaks stay in the page's
+words, not the header and footer.
+
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=openings,finish]
 """
 
 import os
@@ -184,6 +190,15 @@ MARGINS_JS = r"""() => {
 }"""
 
 
+# The opening section (its words: the kicker, the title and the lead) and whether the cell sits in
+# the first screen and clear of every one of them (boxes, not ink: no word ever over the painting).
+OPENING = 'section[aria-labelledby="about-title"]'
+CELL_JS = """() => { const c = document.querySelector('[data-brush="about-cell"] img').getBoundingClientRect();
+  const words = [...document.querySelectorAll('OPENING h1, OPENING p')].map(e => e.getBoundingClientRect());
+  const hit = words.some(w => !(c.right <= w.left || c.left >= w.right || c.bottom <= w.top || c.top >= w.bottom));
+  return { top: Math.round(c.top), inFirst: c.top < innerHeight, hit }; }""".replace("OPENING", OPENING)
+
+
 def stations_met(page):
     """Whether the brush line's ink passes each station's leader (some ink within 28px right of the
     label). The brush layer keeps only the tiles near the window drawn (and a tall page, such as the
@@ -256,12 +271,7 @@ def desktop_and_phone(browser):
         check(f"{tag} targets at least 48px", not targets, targets)
         stations = page.evaluate("[...document.querySelectorAll('[data-station]')].map(s => s.textContent.trim())")
         check(f"{tag} four stations", stations == STATIONS, stations)
-        cell = page.evaluate(
-            """() => { const c = document.querySelector('[data-brush="about-cell"] img').getBoundingClientRect();
-                 const words = [...document.querySelectorAll('[data-brush="opening"] h1, [data-brush="opening"] p')].map(e => e.getBoundingClientRect());
-                 const hit = words.some(w => !(c.right <= w.left || c.left >= w.right || c.bottom <= w.top || c.top >= w.bottom));
-                 return { top: c.top, inFirst: c.top < innerHeight, hit }; }"""
-        )
+        cell = page.evaluate(CELL_JS)
         check(f"{tag} cell in the first screen", cell["inFirst"], cell)
         check(f"{tag} cell clear of the words", not cell["hit"], cell)
         # Sheets: Support from the header (menu on a phone), Ask from the pause.
@@ -294,20 +304,111 @@ def desktop_and_phone(browser):
         context.close()
 
 
+# The title's lines: "Be in Good" over "Health." at every size (a word of the first line that has no
+# room wraps alone, which reads as a broken title). Read from the word boxes once it has opened.
+TITLE_LINES_JS = """() => {
+  const tops = new Set([...document.querySelectorAll('h1 > span > span')].map(w => Math.round(w.getBoundingClientRect().top)));
+  return tops.size;
+}"""
+
+
 def openings(browser):
-    for width, height in [(1280, 720), (1536, 1000), (1024, 768), (900, 1100), (768, 1024), (360, 780)]:
+    for width, height in [(1280, 720), (1536, 1000), (1024, 768), (900, 1100), (768, 1024), (834, 1112), (721, 1000), (360, 780)]:
         tag = f"{width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height)
-        cell = page.evaluate(
-            """() => { const c = document.querySelector('[data-brush="about-cell"] img').getBoundingClientRect();
-                 const words = [...document.querySelectorAll('[data-brush="opening"] h1, [data-brush="opening"] p')].map(e => e.getBoundingClientRect());
-                 return { inFirst: c.top < innerHeight, hit: words.some(w => !(c.right <= w.left || c.left >= w.right || c.bottom <= w.top || c.top >= w.bottom)) }; }"""
-        )
+        cell = page.evaluate(CELL_JS)
         check(f"{tag} cell in the first screen", cell["inFirst"], cell)
         check(f"{tag} cell clear of the words", not cell["hit"], cell)
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag} no sideways scrolling", sideways <= 0, sideways)
+        page.wait_for_timeout(1600)
+        lines = page.evaluate(TITLE_LINES_JS)
+        check(f"{tag} title on two lines", lines == 2, lines)
+        if 721 <= width <= 899:
+            # A tablet held upright (721-899 px): the opening keeps the desktop's composition, words
+            # beside the cell, the title large and the cell larger, and stays compact, so the next
+            # block starts in the same window (DESIGN.md, Layout: the opening is never much taller
+            # than the comp at its width). Before October 5 it stacked a full-width cell over a
+            # small title with the right half of the window empty.
+            tablet = page.evaluate(
+                f"""() => {{ const c = document.querySelector('[data-brush="about-cell"] img').getBoundingClientRect();
+                     const h = document.querySelector('{OPENING} h1'); const t = h.getBoundingClientRect();
+                     const s = document.querySelector('#purpose-title').getBoundingClientRect();
+                     const walk = document.createTreeWalker(h, NodeFilter.SHOW_TEXT); const rights = []; let n;
+                     while ((n = walk.nextNode())) {{ if (!n.textContent.trim()) continue; const r = document.createRange(); r.selectNodeContents(n);
+                       for (const x of r.getClientRects()) if (x.width > 0) rights.push(x.right); }}
+                     const line = Math.max(...rights) - t.left;
+                     return {{ font: parseFloat(getComputedStyle(h).fontSize), beside: c.top < t.bottom && c.bottom > t.top && c.left >= t.right - 1,
+                              cell: Math.round(c.width), line: Math.round(line), next: Math.round(s.top), vh: innerHeight }}; }}"""
+            )
+            check(f"{tag} tablet: title at least 60px", tablet["font"] >= 60, tablet)
+            check(f"{tag} tablet: the cell beside the words", tablet["beside"], tablet)
+            check(f"{tag} tablet: the painting leads (the cell wider than the title's line)", tablet["cell"] >= tablet["line"] * 1.1, tablet)
+            check(f"{tag} tablet: the next block's heading in the first window", tablet["next"] < tablet["vh"] * 0.8, tablet)
         page.screenshot(path=os.path.join(OUT, f"opening-{tag}.png"))
+        context.close()
+
+
+# The longest vertical run of the brush layer's ink (alpha over 90) in one page column between two
+# page rows, in CSS pixels; the tile holding those rows must be in the window.
+INK_RUN_JS = r"""([x, y0, y1]) => {
+  const host = document.querySelector('[data-lifts]'); const hb = host.getBoundingClientRect();
+  let best = 0;
+  for (const c of host.querySelectorAll('canvas')) {
+    if (c.width < 400) continue;
+    const t = parseFloat(c.style.top), h = parseFloat(c.style.height), sx = c.width / c.clientWidth;
+    const ya = Math.max(y0 - (hb.top + scrollY), t), yb = Math.min(y1 - (hb.top + scrollY), t + h);
+    if (yb <= ya) continue;
+    const d = c.getContext('2d').getImageData(Math.round((x - hb.left) * sx), Math.round((ya - t) * sx), 1, Math.round((yb - ya) * sx)).data;
+    let run = 0;
+    for (let i = 3; i < d.length; i += 4) { if (d[i] > 90) { run++; best = Math.max(best, run / sx); } else run = 0; }
+  }
+  return best;
+}"""
+
+
+def finish(browser):
+    """The finish pass (October 5, 2026, Task 9): what the review at full size asked for."""
+    # Each station label keeps one line where the page has room (1200 px and wider): "Our
+    # scientific roots" broke after "scientific" at 1440.
+    for width, height in [(1440, 900), (1536, 1000)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        tall = page.evaluate(
+            """[...document.querySelectorAll('[data-station]')].map(s => [s.textContent.trim(), Math.round(s.getBoundingClientRect().height)])
+                 .filter(([, h]) => h > 17 * 1.3 * 1.5)"""
+        )
+        check(f"{width}x{height} every station on one line", not tall, tall)
+        context.close()
+    # The promises' rules are brush strokes a reader sees as strokes (the mockup's short loaded
+    # rules), not hairlines: each lands at least 5px thick at 1440. Read from the brush layer.
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    weights = []
+    for i in range(4):
+        page.evaluate(f"document.querySelector('[data-brush=\"promise-{i}\"]').scrollIntoView({{block: 'center'}})")
+        page.wait_for_timeout(500)
+        box = page.evaluate(
+            f"(() => {{ const b = document.querySelector('[data-brush=\"promise-{i}\"]').getBoundingClientRect(); return [b.left, b.top + scrollY, b.width]; }})()"
+        )
+        runs = [page.evaluate(INK_RUN_JS, [box[0] + box[2] * f, box[1] - 14, box[1] + 14]) for f in (0.04, 0.08, 0.12, 0.16, 0.2, 0.3)]
+        weights.append(round(max(runs), 1))
+    check("1440 each promise rule lands at least 5px thick", all(w >= 5 for w in weights), weights)
+    context.close()
+    # Japanese line breaking (strict, and anywhere for a phrase too wide) belongs to the page's
+    # words, not to the shared header and footer.
+    context, page, response, errors, failed = open_page(browser, 1440, 900, path="/jp/about", reduced=True)
+    breaks = page.evaluate(
+        """() => ({ main: getComputedStyle(document.querySelector('main')).lineBreak,
+                    header: getComputedStyle(document.querySelector('header')).lineBreak,
+                    footer: getComputedStyle(document.querySelector('footer')).lineBreak })"""
+    )
+    check("jp strict line breaks in the page's words only", breaks == {"main": "strict", "header": "auto", "footer": "auto"}, breaks)
+    context.close()
+    # The pause's inkstone is the small painting of the Three Sizes on a tablet too (at most 400px,
+    # under half the window), not 70vw as on a phone.
+    for width, height in [(768, 1024), (834, 1112)]:
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        stone = page.evaluate("Math.round(document.querySelector('#closing figure').getBoundingClientRect().width)")
+        check(f"{width}x{height} the pause's inkstone stays small", stone <= min(400, width / 2), stone)
         context.close()
 
 
@@ -415,13 +516,15 @@ def languages_layout(browser):
             context.close()
 
 
+# --only=openings,finish runs just those groups (while working on one thing); the full run is the gate.
+GROUPS = [desktop_and_phone, openings, finish, line_and_focus, languages, languages_layout]
+ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
+
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
-    desktop_and_phone(browser)
-    openings(browser)
-    line_and_focus(browser)
-    languages(browser)
-    languages_layout(browser)
+    for group in GROUPS:
+        if ONLY is None or group.__name__ in ONLY:
+            group(browser)
     browser.close()
 
 passed = sum(ok for _, ok in results)

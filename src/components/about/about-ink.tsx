@@ -43,10 +43,12 @@ function Station({ id, label }: { id: string; label: string }) {
   );
 }
 
+// The opening carries no "opening" brush anchor: About has no approved opening stroke to keep, so
+// the brush paints its whole line as the page's line (about-route.ts).
 function Opening() {
   const copy = useCopy();
   return (
-    <section className={styles.opening} data-brush="opening" aria-labelledby="about-title">
+    <section className={styles.opening} aria-labelledby="about-title">
       <div className={`${base.wrap} ${styles.openingGrid}`}>
         <div className={styles.openingWords}>
           <p className={styles.kicker}>{copy(about.hero.label)}</p>
@@ -95,7 +97,9 @@ function Purpose() {
               <span key={line}>{copy(line)}</span>
             ))}
           </h2>
-          <p className={styles.body}>{copy(about.purpose.mission)}</p>
+          <p className={styles.body} data-brush="purpose-body">
+            {copy(about.purpose.mission)}
+          </p>
         </div>
       </div>
     </section>
@@ -108,7 +112,7 @@ function Roots() {
     <section id="roots" className={styles.part} aria-labelledby="roots-title">
       <div className={`${base.wrap} ${styles.partGrid}`}>
         <Station id="roots" label={copy(about.roots.label)} />
-        <div className={`${styles.content} ${styles.roots}`}>
+        <div className={`${styles.content} ${styles.roots}`} data-brush="roots">
           <figure className={styles.print}>
             <Image
               className={`${base.ink} ${styles.halo}`}
@@ -155,7 +159,7 @@ function Experience() {
           <h2 id="experience-title" className={`${base.display} ${styles.heading}`}>
             {copy(about.experience.title)}
           </h2>
-          <dl className={styles.figures}>
+          <dl className={styles.figures} data-brush="figures">
             <div>
               <dt>{copy(about.roots.stat.label)}</dt>
               <dd>

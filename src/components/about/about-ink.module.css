@@ -123,6 +123,14 @@
   align-items: start;
 }
 
+/* From 1200px the stations' column holds the longest English label on one line ("Our scientific
+   roots", about 186px with its leader); narrower, it may take two. */
+@media (min-width: 1200px) {
+  :global([data-page="about"]) .partGrid {
+    grid-template-columns: minmax(196px, 1.5fr) clamp(48px, 5vw, 88px) minmax(0, 8.5fr);
+  }
+}
+
 /* Qualified by its element so the margin outranks the kit's .look .station (margin: 0) whatever
    order the built stylesheets load in. */
 :global([data-page="about"]) p.station {
@@ -301,15 +309,15 @@
 :global([data-page="about"]) .promises {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(40px, 4vw, 64px) clamp(28px, 3vw, 56px);
+  gap: clamp(32px, 3vw, 48px) clamp(28px, 3vw, 56px);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 
-/* Each promise sits under a short rule the brush paints (the route's rule over promise-N). */
+/* Each promise sits under a short loaded rule the brush paints (about-route.ts, promiseRule). */
 :global([data-page="about"]) .promises li {
-  padding-top: 22px;
+  padding-top: 24px;
 }
 
 :global([data-page="about"]) .promises h3 {
@@ -442,6 +450,42 @@
   }
 }
 
+/* A tablet held upright (721-899px) keeps the desktop's composition rather than a phone's: the
+   words at the left with the title large, the cell beside them, a little wider than the title,
+   running to the window's right edge (only its own paper margin past it, as on a phone), its
+   caption inside the window. The opening stays compact, so the purpose starts in the same window.
+   The pause's inkstone stays the small painting (DESIGN.md, The Three Sizes Rule). */
+@media (min-width: 721px) and (max-width: 899px) {
+  :global([data-page="about"]) .openingGrid {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+    gap: 12px;
+  }
+
+  :global([data-page="about"]) .title {
+    font-size: clamp(60px, 8.6vw, 76px);
+  }
+
+  :global([data-page="about"]) .cell {
+    --off: 2.5vw;
+    order: 0;
+    margin-right: calc(-1 * var(--gutter) - var(--off));
+  }
+
+  /* Under the painting's right end, clear of its wash. */
+  :global([data-page="about"]) .cell figcaption {
+    right: calc(var(--gutter) + var(--off));
+    bottom: -1.4em;
+  }
+
+  :global([data-page="about"]) .opening {
+    padding-bottom: 8px;
+  }
+
+  :global([data-page="about"]) .inkstone {
+    width: min(46vw, 400px);
+  }
+}
+
 @media (max-width: 720px) {
   /* A phone opens on the painting: the cell runs a little past both edges of the screen (its
      own paper margin is clear), its caption kept inside the window. */
@@ -496,8 +540,9 @@
    English in every language (lang="en"), so none of this touches it. What the page adds: */
 
 /* Japanese never starts a line with a small kana or "ー" (a line of "っています。"), and a phrase
-   wider than its column breaks rather than crossing the margin. */
-:global([data-page="about"]):lang(ja) {
+   wider than its column breaks rather than crossing the margin. The page's words only: the shared
+   header and footer keep their own breaks. */
+:global([data-page="about"]) main:lang(ja) {
   line-break: strict;
   overflow-wrap: anywhere;
 }
