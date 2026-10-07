@@ -106,7 +106,8 @@ meaning in the reader's language. Section ids stay (`purpose`, `roots`, `experie
 `closing`) so deep links keep working.
 
 **Signature moment: the name writes itself.** On arrival the four letters of BiGH are painted in
-left to right through a dry-brush wipe (a mask with a ragged bristle edge), within one breath
+left to right through a soft ink front (a mask with one wide feathered edge that wanders gently;
+a bristle edge was tried and read as stripes on screen), within one breath
 (2.4s, the shared ease); then the i's gold dot comes up. The watercolor band spreads out from the
 middle as the name finishes. Each chapter letter writes itself the same way when it reaches the
 reading line; the tree's rings draw outward from the heart and the gold ring lights last; the
