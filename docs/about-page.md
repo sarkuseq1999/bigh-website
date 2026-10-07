@@ -1,4 +1,7 @@
-# About page: handoff (Ink & Gold, October 5, 2026)
+# About page: handoff ("The name, on a folded letter", October 6, 2026)
+
+Branch `ink-pages`, worktree `C:\Users\mcbig\Documents\codes\bigh-ink`. Nothing is pushed: ask Mo
+before every push or demo-alias change.
 
 ## Current page: "The name, on a folded letter" (October 6, 2026)
 
@@ -9,6 +12,16 @@ fold (Be: purpose; in: scientific roots, Dr. Liu on a pool of wash; Good: experi
 rings, one ring gold for 2016, and the promises under four watercolor dots; Health: Ask BiGH
 Science under the big H).
 
+- Design: the approved mockup `reference/ink-pages/mockups/about-d.png`, `DESIGN.md`, and the
+  About section of `docs/superpowers/specs/2026-10-05-ink-pages-design.md`.
+- Layout: on two columns (900px and wider) Dr. Liu's print stands beside the "in", its foot level
+  with "Meet our scientists", on the pool laid on its side (a wash has no up or down). From 1200px
+  the G stands with the rings beside it and the three figures sit in one row with a hairline
+  between them; under 1200px the rings stand under the G and the figures stack. The middle fold
+  starts under the header (where the opening's words start) and fades in, so it never runs
+  through the logo. The closing word is set from its H, so the fold passes through clear paper
+  between the H and "ealth". Phones stack every part in one column and keep the horizontal folds
+  only.
 - Motion: the name is written left to right through a soft ink front (one wide feathered edge
   that wanders gently; a bristle edge was tried and read as stripes on screen), in one breath
   (2.4s, the shared ease). The band spreads from the middle as the name finishes, the gold dot
@@ -16,39 +29,28 @@ Science under the big H).
   the same way as it reaches the reading line. Reduced motion: complete and still from the first
   paint.
 - Code: `src/components/about/about-ink.tsx`, `chapter-word.tsx`, `about-letter.module.css`,
-  `letter-art.ts` (generated).
+  `letter-art.ts` (generated), on the shared ink kit in `src/components/ink/` (`InkPage` with no
+  brush route, the site header and footer, the Support and Ask BiGH Science sheets). Still in use
+  from earlier rounds: `about-content.ts` (the words), `acronym.tsx` (the h1 unfold),
+  `greetings.tsx`, `count-up.tsx`. The site header is the menu bar Mo picked on October 5,
+  "Inscription" (`src/components/ink/nav/`): on /about it starts clear over the opening, marks
+  About as the current page and settles on the page's aged paper once scrolled.
 - Paintings: `reference/ink-pages/about/` (prompts, originals, `build_about.py`, `check_art.py`),
-  spend in `reference/ink-pages/spend.md`. Shipped in `public/images/about-ink/`.
-- Checks: `scripts/qa/qa_about.py` (dev and `next start`): 280/280 on the built site, October 6.
-  The homepage gate: `scripts/qa/home_snapshot.py compare <url> <tag> baseline-main997-prod`
-  (built) or `baseline-main997` (dev), plus `scripts/qa/qa_home_ink.py`.
-- Draft translation: the rings' description (`reference/ink-pages/about/translations.cjs`), for a
-  native check before launch.
+  spend in `reference/ink-pages/spend.md`. Shipped in `public/images/about-ink/`. Dr. Liu's photo
+  is the real one, `public/images/jiankang-liu.jpg`.
+- Draft translation: one new key on this branch, m587, the rings' description ("Tree rings in ink.
+  A gold ring marks 2016, ..."), added by `reference/ink-pages/about/translations.cjs` in Korean,
+  Japanese, Chinese and Vietnamese. It needs Mo's native check before launch. One open question in
+  the Vietnamese: it says "Vân gỗ" (wood grain), where "vòng tuổi" (tree rings) may be the right
+  words.
 - Replaced: the first ink About (October 5, commits up to c30a489, a copy of the homepage's look
-  with the brush line), and before it the Glass page. The notes below that mention
-  `about-ink.module.css`, `about-route.ts` or the brush line are from that page.
-
-Branch `ink-pages`, worktree `C:\Users\mcbig\Documents\codes\bigh-ink`. Nothing is pushed: ask Mo
-before every push or demo-alias change.
-
-## Replaced October 6: the first ink About
-
-`/about` renders `AboutInk` (`src/components/about/about-ink.tsx`, `about-ink.module.css`,
-`about-route.ts`) on the shared ink kit in `src/components/ink/` (`InkPage`, the brush line, the
-site header and footer, the Support and Ask BiGH Science sheets, `route-kit.ts`). The site header is
-the menu bar Mo picked on October 5, "Inscription" (`src/components/ink/nav/`, from main; on
-/about it starts clear over the opening and marks About as the current page). Design: the
-approved mockup `reference/ink-pages/mockups/about.jpg` and `DESIGN.md`. The paintings are the
-homepage's (`src/components/home-v2/look-ink/assets`), and Dr. Liu's photo is
-`public/images/jiankang-liu.jpg`.
-
-Pieces of the About folder still in use: `about-content.ts` (the words), `acronym.tsx` (the h1
-unfold), `greetings.tsx`, `count-up.tsx`.
+  with the brush line, `about-ink.module.css` and `about-route.ts`, now deleted), and before it
+  the Glass page.
 
 ## Retired: the Glass page
 
 Mo picked look B "Glass" (opening 3, Switzer) on September 28, 2026. It was retired on October 5,
-2026, when the Ink & Gold About replaced it. Deleted: `about-page.tsx`, `look-glass.tsx`,
+2026, when the first ink About replaced it. Deleted: `about-page.tsx`, `look-glass.tsx`,
 `look-glass-scene.ts`, `site-chrome.tsx` and their CSS, plus the `media` export in
 `about-content.ts`. Backup of the whole `src/components/about` folder as it was before:
 `C:\Users\mcbig\Documents\codes\bigh-archive\about-glass-2026-10-05.zip`. An older backup
@@ -65,38 +67,54 @@ Locked words: `about` in `about-content.ts` (use verbatim; Mo, September 25, 202
 about 23 years (show "20+"); never name CellGen or say Asia knew it first; GMP-certified maker in
 California (confirm the certificate); 45-day refund is current; BiGH was incorporated 05/11/2016.
 The h1 stays English "Be in Good Health." with `lang="en"` in every language (`TITLE_ALWAYS_ENGLISH`
-in `acronym.tsx`).
+in `acronym.tsx`). The chapter words (Be, in, Good, Health) stay English in every language and are
+hidden from screen readers; each part's heading carries the meaning.
 
 ## Languages
 
-Korean, Japanese, Simplified Chinese and Vietnamese: 67 strings, of which 37 reuse existing keys
-(header, footer, the two sheets) and 30 are the About keys m545 to m574 from September 28.
-`hken.json` stays `{}`, and `/hken/about` redirects to `/cns/about`.
+Korean, Japanese, Simplified Chinese and Vietnamese. The page uses the About keys m545 to m574
+(September 28), the shared header, footer and sheet keys, and m587 (the rings' description, new on
+this branch). The tab title uses the shared "About" key. `hken.json` stays `{}`, and `/hken/about`
+redirects to `/cns/about`.
 
-Draft translations, not native-reviewed: the 30 About keys (m545 to m574) and the tab title.
-New keys on this branch: none (the Ink page reuses the same ones; the m600 range is unused).
+Draft translations, not native-reviewed: the About keys m545 to m574 and m587 (see the Vietnamese
+question above).
 
 Vietnamese uses Be Vietnam Pro site-wide (see `docs/header-and-languages.md`, "Vietnamese type").
-Line breaks are scoped to this page in `about-ink.module.css`: Japanese breaks between phrases
-(`auto-phrase`, Chrome and Edge only) with `line-break: strict`; Chinese keeps phrases whole
-(`keep-all`), so put a comma where a line may end; the Vietnamese closing pills balance their
-lines on phones.
+Line breaks are scoped to this page in `about-letter.module.css`: Korean headings keep words whole;
+Japanese breaks between phrases (`auto-phrase`, Chrome and Edge only) with `line-break: strict`;
+Chinese keeps phrases whole (`keep-all`), so put a comma where a line may end; Japanese and Chinese
+headings get a size that keeps their longest phrase on one line on phones and at 900-959px; the
+Vietnamese closing pills balance their lines on phones.
 
 ## Check
 
 `python -X utf8 scripts/qa/qa_about.py http://localhost:3025` (dev) or `http://localhost:3026`
-(built site, `next start`): 129 checks on October 5, 2026 (dev). It covers the h1, the locked
-words, every painting multiplying onto the paper, the brush line meeting each station, text,
-navigation and target sizes, no sideways scrolling at eight sizes (1536 down to 360 wide), the
-Support and Ask sheets,
-the review anchors, reduced motion, and each language (200, no console errors, English h1, no
-English source sentence left, no lone characters, no word crossing the margins). Screenshots go to
-`scripts/qa/out/about-ink/`. Also run `scripts/qa/qa_home_ink.py` and
-`scripts/qa/home_snapshot.py compare <url> <tag> baseline-prod`: the homepage must not change.
+(built site, `next start`; the built site orders CSS differently, so run both). Groups:
+`desktop_and_phone`, `letter_layout`, `fold_header`, `motion`, `focus`, `deep_links`, `languages`,
+`languages_layout`, `nav_locales`, `boundary`, `first_screen` (`--only=` runs some). It covers the
+h1 and the locked words, every painting multiplying onto the paper, the folds and the parts' sides,
+the arrangement of in and Good, the middle fold clear of the header and of the closing word, text,
+navigation and target sizes, no sideways scrolling, the Support and Ask sheets, the motion (the
+written name, the band's bloom, the soft ink front) and reduced motion, deep links, and every
+language's words and line breaks: 316 checks, all passing on the built site on October 6, 2026.
+Screenshots go to `scripts/qa/out/about-letter/`.
+
+The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and
+`scripts/qa/home_snapshot.py compare <url> <new-tag> baseline-main997-prod` (built site) or
+`baseline-main997` (dev), and `scripts/qa/home_snapshot.py nav <url> -` (the menu bar on / and
+/about).
 
 ## Traps
 
 - `var(--font-sans)` is EMPTY (Tailwind `@theme inline` never emits it): use `--sans` or
   `--font-dm-sans`.
 - Scope component CSS under the page's root class: `homepage.module.css` resets `.site p`,
-  `.site button`, `.site h2` at specificity 0,1,1.
+  `.site button`, `.site h2` at specificity 0,1,1, and the kit uses `.look ...` (0,2,0). Every
+  About rule is scoped under `.letterPage`.
+- Multiply: a painting multiplies onto the page root's paper only if nothing between it and the
+  root makes a stacking context (no z-index on a positioned ancestor, no isolation, opacity,
+  transform, filter or will-change on the sheet, a part, a grid or a figure). A transform on the
+  painting itself is fine (the pool is turned with `rotate`).
+- Replacing a picture under the same file name: delete `.next/cache/images` and
+  `.next/dev/cache/images` before building, or the old optimized picture is served.

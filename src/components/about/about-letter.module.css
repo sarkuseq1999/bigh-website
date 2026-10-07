@@ -68,14 +68,15 @@
 
 /* A fold is a soft shadow beside a thin highlight. z-index -1 puts it under the words and the
    paintings but over the root's paper (the root is the stacking context; nothing between it and
-   the fold makes another). The middle fold fades out over its last 240px, above the footer, the
-   way a crease flattens towards the paper's edge. */
+   the fold makes another). The middle fold starts where the opening's words do, under the header
+   (clear over the opening, it showed the fold through its logo), fades in over 80px, and fades
+   out over its last 240px, above the footer, the way a crease flattens towards the paper's edge. */
 @media (min-width: 900px) {
   .letterPage .sheet::before {
     content: "";
     position: absolute;
     z-index: -1;
-    top: 0;
+    top: calc(88px + clamp(24px, 3.4vw, 64px));
     bottom: 0;
     left: calc(50% - 8px);
     width: 16px;
@@ -87,8 +88,20 @@
       var(--crease-light) 56%,
       transparent
     );
-    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 240px), transparent);
-    mask-image: linear-gradient(180deg, #000 calc(100% - 240px), transparent);
+    -webkit-mask-image: linear-gradient(
+      180deg,
+      transparent,
+      #000 80px,
+      #000 calc(100% - 240px),
+      transparent
+    );
+    mask-image: linear-gradient(
+      180deg,
+      transparent,
+      #000 80px,
+      #000 calc(100% - 240px),
+      transparent
+    );
   }
 }
 
@@ -230,8 +243,9 @@
     "words art";
 }
 
-/* The words start level with the "in" at the top of the part, the portrait under the letter (as
-   in the mockup); centred against both rows they left a wide band of bare paper above them. */
+/* The words start level with the "in" at the top of the part; centred they left a wide band of
+   bare paper above them. On two columns the "in" and the print stand side by side (below,
+   "On two columns, in opens out"), which replaces these areas. */
 .letterPage [data-part="roots"] .areaWords {
   align-self: start;
 }
@@ -313,12 +327,12 @@
 
 /* ---- Dr. Liu: his real photograph on its paper mat, resting on a pool of grey wash ----------- */
 
-/* The pool is taller than it is wide (968 x 1407) and its wash fills its box, so it reaches past
-   the print, above and below, by --reach (the mount is 1.25 x its photo's width plus the 12px
-   mat). Below, the print's margin keeps the wash 16px clear of the next part's fold. Across, the
-   print sits in the middle of the right column (--col wide), so a pool wider than the column
-   plus the fold gap, less 48px, would reach the middle fold (at 900-1000px wide): it is capped
-   there, 24px clear of the fold's edge, with 16px more for a window's scrollbar (100vw counts it). */
+/* One column (and the base for two): the pool stands upright, taller than it is wide
+   (968 x 1407), and its wash fills its box, so it reaches past the print, above and below, by
+   --reach (the mount is 1.25 x its photo's width plus the 12px mat); the print's margins keep the
+   wash 16px clear of the words and of the next part's fold. --col and the cap on --pool-w are the
+   right column's width for a print centred in it; on two columns the pool is laid on its side
+   instead (below, "On two columns, in opens out"). */
 .letterPage .print {
   --mat: clamp(200px, 15vw, 248px);
   --col: calc(
@@ -538,6 +552,120 @@
 @media (min-width: 900px) and (max-width: 1199px) {
   .letterPage .promises {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The closing word is centred, so the middle fold fell where the H's crossbar ends and "ealth"
+   begins: the stroke stopped on the crease. The word is set from the H instead: its ink ends half
+   a gap left of the fold and "ealth" starts half a gap right of it (the H's own box runs 1.4% of
+   the letter past its ink), so the crease passes through clear paper in any language's type. The
+   gap is the least that keeps both clear of the crease's 16px, so the word still reads as one. */
+@media (min-width: 900px) {
+  .letterPage .closing .chapter {
+    --gap: calc(var(--letter) * 0.05 + 10px);
+    justify-self: start;
+    margin-left: calc(50% - var(--letter) * 0.9358 - var(--gap) / 2);
+  }
+
+  .letterPage .closing .rest {
+    margin-left: calc(var(--gap) - var(--letter) * 0.0142);
+  }
+}
+
+/* On two columns, in opens out side by side, as in the mockup: the "in" at the top of the right
+   half and Dr. Liu's print beside it, its foot level with the words' foot ("Meet our scientists"),
+   resting on the pool laid on its side: a wash has no up or down, and turned it is wide and low
+   (968 x 1407 turned: 1.45 times as wide as it is tall). The print's figure fills the rest of the
+   half; the pool spans it and runs a little into the margin (--span), and the photo mount, centred
+   on the pool, is at most --span / 2.3 wide so the wash shows all round it. (Under the "in", the
+   print made the part twice as tall as its words and left the lower left bare.) */
+@media (min-width: 900px) {
+  .letterPage [data-part="roots"] .grid {
+    grid-template-columns:
+      calc((100% - var(--fold-gap)) / 2) var(--fold-gap) max-content 12px
+      minmax(0, 1fr);
+    grid-template-areas: "words . letter . art";
+    column-gap: 0;
+  }
+
+  .letterPage [data-part="roots"] .areaLetter {
+    align-self: start;
+  }
+
+  .letterPage [data-part="roots"] .print {
+    --span: calc(100% + min(var(--gutter) - 16px, 72px));
+    --mw: min(var(--mat), calc(var(--span) / 2.3));
+    justify-self: stretch;
+    align-self: end;
+    width: auto;
+    margin: 0;
+  }
+
+  .letterPage [data-part="roots"] .pool {
+    left: calc(var(--span) / 2);
+    width: calc(var(--span) / 1.4535);
+    rotate: -90deg;
+  }
+
+  .letterPage [data-part="roots"] .mount {
+    width: var(--mw);
+    margin-left: calc((var(--span) - var(--mw)) / 2);
+  }
+}
+
+/* From 1200px, Good opens out too: the G with the rings beside it, the three figures in one row.
+   The rings may reach into the fold gap's left half but stop 26px short of the middle. */
+@media (min-width: 1200px) {
+  .letterPage .experience {
+    grid-template-columns:
+      max-content 16px minmax(0, 1fr) var(--fold-gap)
+      calc((100% - var(--fold-gap)) / 2);
+    grid-template-areas: "letter . art . words";
+    column-gap: 0;
+  }
+
+  .letterPage .experience .areaLetter {
+    align-self: center;
+  }
+
+  .letterPage .experience .rings {
+    justify-self: start;
+    width: min(260px, calc(100% + var(--fold-gap) / 2 - 26px));
+  }
+
+  /* Three even columns, each at least as wide as its numeral ("20+ years" keeps one line); the
+     last column ends at the words' edge. */
+  .letterPage .figures {
+    grid-template-columns: repeat(3, minmax(min-content, 1fr));
+    gap: 0;
+  }
+
+  .letterPage .figures > div {
+    padding-inline: clamp(14px, 1.5vw, 24px);
+    border-left: 1px solid var(--line);
+  }
+
+  .letterPage .figures > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .letterPage .figures > div:last-child {
+    padding-right: 0;
+  }
+
+  .letterPage .figures dt {
+    margin-top: 10px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .letterPage .figure {
+    font-size: clamp(44px, 3.9vw, 60px);
+  }
+
+  .letterPage .unit {
+    font-size: clamp(22px, 1.9vw, 30px);
   }
 }
 

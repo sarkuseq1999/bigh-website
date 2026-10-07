@@ -9,18 +9,25 @@ menu), has no Home link, and its Products drop-down holds the five products and 
 products."; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the four chapter
 words B, i, G, H, hidden from screen readers, in English, their paintings loaded; the written name
 loads eagerly and is preloaded; the Support and Ask sheets open, close and hand focus back.
-letter_layout (1440x900, 1280x800, 1024x768, 768x1024, 390x844): the middle fold from 900px up
-(centred within 2px), none below; four folds across; on two columns Be's letter left and words
-right, in's words left and letter and portrait right, Good's letter and rings left and words right,
-each 24px or more clear of the middle fold; the promise heading centred; four promises in one row
-from 1200px, two by two below that, one column on one column; promise headings side by side stand
+letter_layout (1440x900, 1280x800, 1200x800, 1024x768, 768x1024, 390x844): the middle fold from
+900px up (centred within 2px), none below; four folds across; on two columns Be's letter left and
+words right, in's words left and letter and portrait right, Good's letter and rings left and words
+right, each 24px or more clear of the middle fold; the promise heading centred; four promises in one
+row from 1200px, two by two below that, one column on one column; promise headings side by side stand
 level; the closing centred; the closing H
 24px or more above its heading; no words over a painting; Dr. Liu's photo in the middle of its pool;
 the rings carry "Illustration"; hello in five languages centred under its promise (8px). On two
 columns Dr. Liu's pool 16px or more clear of the middle fold, and the roots' words start level with
-the "in" (24px). At 1440x900, no seam where the settled bar meets the page's darker sides (a step
+the "in" (24px); the closing H's ink and its "ealth" stay outside the middle fold's 16px on both
+sides. As in the mockup, on two columns Dr. Liu's print stands beside the "in", its bottom level
+with "Meet our scientists" (48px), and the part is no taller than its words need (the words fill
+70% or more of its height); from 1200px the rings stand beside the G, and the three figures stand
+in one row, each on one line. At 1440x900, no seam where the settled bar meets the page's darker sides (a step
 of 4 levels or less). On one column each part's chapter word stands over its label, over its
 heading.
+fold_header (1024x768, 1440x900, 1536x864, at the top of the page): the middle fold starts under the
+header's box and draws nothing inside it (with the header hidden, the paper down the page's middle
+inside the header's box matches the paper beside it, 2 levels or less).
 motion: reduced motion is complete and still (no waiting letters, every bloom done, the dots up, no
 running animation, nothing logged, the wipe never fetched), and before the page's scripts run the
 server-marked band is already crisp and shown; with motion the name is written (its animation, one
@@ -49,7 +56,7 @@ screen; from 900px the band starts in it too.
 
 Pictures: scripts/qa/out/about-letter/<size>-NN.png (viewport shots while scrolling).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,fold_header,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
 """
 
 import io
@@ -366,8 +373,33 @@ def desktop_and_phone(browser):
         context.close()
 
 
+# The closing word against the middle fold: where the H's ink ends (column 1053 of the painting's
+# 1069, letter-art.ts) and where "ealth" begins, each side's distance from the fold's centre line.
+CLOSING_FOLD_JS = """() => { const mid = document.documentElement.clientWidth / 2;
+  const chapter = document.querySelector('#closing [data-chapter]');
+  const h = chapter.querySelector('img').getBoundingClientRect(); const ink = h.left + h.width * 1053 / 1069;
+  const rest = chapter.lastElementChild; const range = document.createRange(); range.selectNodeContents(rest);
+  const e = [...range.getClientRects()].filter(r => r.width > 1)[0];
+  return { left: +(mid - ink).toFixed(1), right: +(e.left - mid).toFixed(1), ink: Math.round(ink), e: Math.round(e.left), mid }; }"""
+
+# The mockup's arrangement of in (two columns) and Good (from 1200px): the print beside the "in"
+# and level with the button at the foot of the words; the rings beside the G; the figures in one
+# row, each on one line (its numeral and unit inside its own column).
+SPREAD_JS = """() => { const r = (sel) => document.querySelector(sel).getBoundingClientRect();
+  const roots = r('#roots'), words = r('#roots [data-label]').top, button = r('#roots a[href]'), inWord = r('#roots [data-chapter]'), mount = r('[data-mount]');
+  const g = r('#experience [data-chapter]'), rings = r('#experience [data-rings] img');
+  const figs = [...document.querySelectorAll('#experience dl > div')].map(d => { const b = d.getBoundingClientRect();
+    const range = document.createRange(); range.selectNodeContents(d.querySelector('dd')); const t = range.getBoundingClientRect();
+    return { top: Math.round(b.top), fits: t.right <= b.right + 0.5 && t.left >= b.left - 0.5 }; });
+  const pad = parseFloat(getComputedStyle(document.getElementById('roots')).paddingTop) + parseFloat(getComputedStyle(document.getElementById('roots')).paddingBottom);
+  return { beside: Math.round(mount.left - inWord.right), level: Math.round(mount.bottom - button.bottom),
+           fill: +((button.bottom - words) / (roots.height - pad)).toFixed(2),
+           ringsBeside: Math.round(rings.left - g.right), ringsOverlap: rings.top < g.bottom && rings.bottom > g.top,
+           rows: new Set(figs.map(f => f.top)).size, fit: figs.every(f => f.fits) }; }"""
+
+
 def letter_layout(browser):
-    for width, height in [(1440, 900), (1280, 800), (1024, 768), (768, 1024), (390, 844)]:
+    for width, height in [(1440, 900), (1280, 800), (1200, 800), (1024, 768), (768, 1024), (390, 844)]:
         tag = f"{width}x{height}"
         two = width >= 900
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
@@ -431,6 +463,26 @@ def letter_layout(browser):
                 "Math.round(document.querySelector('#roots [data-label]').getBoundingClientRect().top - document.querySelector('#roots [data-chapter]').getBoundingClientRect().top)"
             )
             check(f"{tag} roots: the words start level with the in (24px)", abs(level) <= 24, level)
+            closing = page.evaluate(CLOSING_FOLD_JS)
+            check(
+                f"{tag} the closing H's ink and its ealth stay outside the middle fold (8px from its centre)",
+                closing["left"] >= 8 and closing["right"] >= 8,
+                closing,
+            )
+        if two:
+            spread = page.evaluate(SPREAD_JS)
+            check(
+                f"{tag} in: Dr. Liu's print beside the in, level with the button (48px)",
+                spread["beside"] >= 8 and abs(spread["level"]) <= 48,
+                spread,
+            )
+            check(f"{tag} in: the words fill the part (70% or more of its height)", spread["fill"] >= 0.7, spread)
+        if width >= 1200:
+            check(
+                f"{tag} Good: the rings beside the G, the three figures in one row, each on one line",
+                spread["ringsBeside"] >= 8 and spread["ringsOverlap"] and spread["rows"] == 1 and spread["fit"],
+                spread,
+            )
         if width == 1440:
             step = bar_edge_step(page)
             check(f"{tag} no seam where the settled bar meets the page's sides (step 4 or less)", step["step"] <= 4, step)
@@ -477,6 +529,44 @@ def boundary(browser):
             check("900 no words cross the middle fold", not crossing, crossing[:3])
             reach = page.evaluate(POOL_FOLD_JS)
             check("900 Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
+        context.close()
+
+
+def fold_header(browser):
+    """At the top of the page the header is clear over the opening, so a fold that started at the
+    sheet's top ran behind it, through the logo. Read the fold's own top against the header's box,
+    then hide the header and compare the paper down the page's middle (the fold's 16px) inside the
+    header's box with the paper 40-60px to each side (column averages, so the paper's fibre is not
+    read as a fold)."""
+    for width, height in [(1024, 768), (1440, 900), (1536, 864)]:
+        tag = f"{width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        page.evaluate("window.scrollTo(0, 0)")
+        page.wait_for_timeout(300)
+        geo = page.evaluate(
+            """() => { const sheet = document.querySelector('[data-sheet]'); const v = getComputedStyle(sheet, '::before');
+                 return { top: Math.round(sheet.getBoundingClientRect().top + parseFloat(v.top)),
+                          header: Math.round(document.querySelector('header').getBoundingClientRect().bottom),
+                          mid: Math.round(document.documentElement.clientWidth / 2) }; }"""
+        )
+        check(f"{tag} the middle fold starts under the header's box", geo["top"] >= geo["header"], geo)
+        page.add_style_tag(content="header { visibility: hidden !important; }")
+        page.wait_for_timeout(300)
+        img = Image.open(io.BytesIO(page.screenshot())).convert("L")
+        px = img.load()
+        bottom, mid = geo["header"], geo["mid"]
+
+        def column(x):
+            return sum(px[x, y] for y in range(0, bottom)) / bottom
+
+        beside = [column(x) for x in list(range(mid - 60, mid - 40)) + list(range(mid + 40, mid + 60))]
+        paper = sum(beside) / len(beside)
+        worst = max(abs(column(x) - paper) for x in range(mid - 8, mid + 8))
+        check(
+            f"{tag} nothing of the middle fold inside the header's box (2 levels or less)",
+            worst <= 2,
+            {"worst": round(worst, 1), "header_bottom": bottom},
+        )
         context.close()
 
 
@@ -1063,7 +1153,7 @@ def nav_locales(browser):
 
 
 # --only=letter_layout,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, letter_layout, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
+GROUPS = [desktop_and_phone, letter_layout, fold_header, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:
