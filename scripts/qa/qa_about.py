@@ -31,6 +31,14 @@ mask is preloaded for motion visitors only (and fetched once). With JavaScript o
 visible and the band is crisp and shown.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
+deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
+#promise land the part's first content 0-64px under the header, nothing of it under the bar, its
+heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors, the h1 and the
+chapter words stay English, no English source sentence left visible. languages_layout (every language
+at 1440x900, 1024x768, 768x1024, 390x844, 360x780): no word crosses the side margins; in Korean,
+Japanese, Chinese and Vietnamese no bad line break; from 900px no words cross the middle fold;
+Vietnamese at 390: the closing pills balance their two lines. nav_locales: from /vn/about and
+/kr/about the bar and the narrow menu stay in the language.
 boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
 words cross it and Dr. Liu's pool stays 16px or more clear of it.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the written name and the title in the first
@@ -38,7 +46,7 @@ screen; from 900px the band starts in it too.
 
 Pictures: scripts/qa/out/about-letter/<size>-NN.png (viewport shots while scrolling).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,motion,focus,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
 """
 
 import io
@@ -732,8 +740,243 @@ def motion(browser):
     context.close()
 
 
+def settle(page, still=300, limit=5000):
+    """Wait for a smooth scroll to end: scrollY unchanged for `still` ms (at most `limit` ms)."""
+    last, held, waited = None, 0, 0
+    while held < still and waited < limit:
+        page.wait_for_timeout(50)
+        waited += 50
+        y = page.evaluate("window.scrollY")
+        held = held + 50 if y == last else 0
+        last = y
+    return last
+
+
+# Where a deep link lands: the part's first content (its chapter word or its label, whichever is
+# higher) 0-64px under the header's bottom (measured at run time), and its heading fully in the
+# window below the bar.
+LANDING_JS = """(id) => {
+  const s = document.getElementById(id);
+  const tops = [...s.querySelectorAll('[data-chapter], [data-label]')].filter(e => e.offsetParent).map(e => e.getBoundingClientRect().top);
+  const head = document.getElementById(id + '-title').getBoundingClientRect();
+  const bar = document.querySelector('header').getBoundingClientRect();
+  return { scrollY: Math.round(window.scrollY), bar: Math.round(bar.bottom), first: Math.round(Math.min(...tops)),
+           headTop: Math.round(head.top), headBottom: Math.round(head.bottom), win: window.innerHeight };
+}"""
+
+
+def deep_links(browser):
+    # Each size is one browser context: a first visit warms the fonts into the cache (a cold dev
+    # font can reflow the page after the browser has aimed its scroll), then every deep link is a
+    # fresh load.
+    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+        context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
+        warm = context.new_page()
+        warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
+        warm.evaluate("document.fonts.ready.then(() => true)")
+        warm.close()
+        for anchor in ["purpose", "roots", "experience", "promise"]:
+            page = context.new_page()
+            page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
+            page.evaluate("document.fonts.ready.then(() => true)")
+            settle(page)
+            at = page.evaluate(LANDING_JS, anchor)
+            gap = at["first"] - at["bar"]
+            check(
+                f"{width}x{height} /about#{anchor}: lands 0-64px under the header ({gap}px), heading in the window",
+                at["scrollY"] > 0 and 0 <= gap <= 64 and at["headTop"] >= at["bar"] and at["headBottom"] <= at["win"],
+                at,
+            )
+            page.close()
+        context.close()
+
+
+def languages(browser):
+    english = [line for line in LOCKED if len(line) > 24]
+    for lang in ["kr", "jp", "cns", "vn"]:
+        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about", reduced=True)
+        check(f"{lang} answers 200", response.status == 200, response.status)
+        h1 = page.evaluate("document.querySelector('h1').getAttribute('aria-label')")
+        check(f"{lang} h1 stays English", h1 == "Be in Good Health.", h1)
+        chapters = page.evaluate("[...document.querySelectorAll('[data-chapter]')].map(c => [c.dataset.chapter, c.lang, c.textContent.trim()])")
+        check(
+            f"{lang} the chapter words stay English",
+            chapters == [["B", "en", "e"], ["i", "en", "n"], ["G", "en", "ood"], ["H", "en", "ealth"]],
+            chapters,
+        )
+        text = page.evaluate("document.querySelector('main').innerText")
+        left = [line for line in english if line in text]
+        check(f"{lang} no English sentence left", not left, left[:3])
+        alt = page.evaluate("document.querySelector('[data-rings] img').alt")
+        check(f"{lang} the rings' description is translated", alt and not alt.startswith("Tree rings"), alt)
+        check(f"{lang} no console errors or warnings", not errors, errors[:3])
+        page.screenshot(path=os.path.join(OUT, f"{lang}-opening.png"))
+        context.close()
+
+
+# Line breaks and margins, read from the page itself (every line of every text block, by the
+# position of each character). A line with one letter, or a line that starts with closing
+# punctuation (and, in Japanese, a small kana or "ー"), is a bad break.
+BREAKS_JS = r"""(lang) => {
+  const closing = new Set([...'。、，．，,.;:!?！？：；）)」』】〕》〉”’…%']);
+  const small = new Set([...'ぁぃぅぇぉっゃゅょゎゕゖァィゥェォッャュョヮヵヶー々']);
+  const letter = /[\p{L}\p{N}]/u;
+  const out = [];
+  const els = [...document.querySelectorAll('main h2, main h3, main p, main dt')]
+    .filter(e => e.offsetParent && !e.closest('[class*=greetings]'));
+  for (const el of els) {
+    const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    const chars = [];
+    let n;
+    while ((n = walker.nextNode())) {
+      const t = n.textContent;
+      for (let i = 0; i < t.length; i++) {
+        if (/\s/.test(t[i])) continue;
+        const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1);
+        const rects = r.getClientRects(); if (!rects.length) continue;
+        chars.push({ c: t[i], mid: (rects[0].top + rects[0].bottom) / 2 });
+      }
+    }
+    if (!chars.length) continue;
+    const lines = []; let cur = [chars[0]];
+    for (let i = 1; i < chars.length; i++) {
+      if (Math.abs(chars[i].mid - cur[cur.length - 1].mid) > 9) { lines.push(cur); cur = [chars[i]]; } else cur.push(chars[i]);
+    }
+    lines.push(cur);
+    if (lines.length < 2) continue;
+    const text = el.textContent.trim().slice(0, 24);
+    lines.forEach((line, k) => {
+      const s = line.map(x => x.c).join('');
+      if (k > 0 && (closing.has(line[0].c) || (lang === 'jp' && small.has(line[0].c)))) out.push(['line starts with ' + line[0].c, text, s.slice(0, 16)]);
+      if (line.filter(x => letter.test(x.c)).length <= 1) out.push(['one character on a line', text, s.slice(0, 16)]);
+    });
+  }
+  return out;
+}"""
+
+# Every word of the page stays inside its column: none crosses the page's side margins (a phrase
+# too wide for its column once did, in Japanese on a phone).
+MARGINS_JS = r"""() => {
+  const out = [];
+  for (const el of document.querySelectorAll('main h1, main h2, main h3, main p, main dt, main dd, main a, main button')) {
+    if (!el.offsetParent || el.closest('figure')) continue;
+    const wrap = el.closest('[class*=wrap]'); if (!wrap) continue;
+    const wb = wrap.getBoundingClientRect(); const cs = getComputedStyle(wrap);
+    const left = wb.left + parseFloat(cs.paddingLeft), right = wb.right - parseFloat(cs.paddingRight);
+    const range = document.createRange(); range.selectNodeContents(el);
+    for (const r of range.getClientRects()) {
+      if (r.width && (r.right > right + 1 || r.left < left - 1)) { out.push([el.textContent.trim().slice(0, 18), Math.round(r.left), Math.round(r.right), Math.round(left), Math.round(right)]); break; }
+    }
+  }
+  return out;
+}"""
+
+
+def languages_layout(browser):
+    """Each language at desktop, tablet and phone sizes: no word crosses the side margins, and
+    in Korean, Japanese, Chinese and Vietnamese no bad line break."""
+    for lang in ["en", "kr", "jp", "cns", "vn"]:
+        for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+            tag = f"{lang} {width}x{height}"
+            path = "/about" if lang == "en" else f"/{lang}/about"
+            context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
+            over = page.evaluate(MARGINS_JS)
+            check(f"{tag} words inside the margins", not over, over[:3])
+            if width >= 900:
+                crossing = page.evaluate(CREASE_JS)
+                check(f"{tag} no words cross the middle fold", not crossing, crossing[:3])
+            if lang != "en":
+                bad = page.evaluate(BREAKS_JS, lang)
+                check(f"{tag} no bad line break", not bad, bad[:3])
+            if lang == "vn" and width == 390:
+                # "Khám phá sản phẩm của chúng tôi" takes two lines on a phone; they must be even
+                # (an earlier selector matched nothing and left 239px over 91px).
+                pills = page.evaluate(
+                    """[...document.querySelectorAll('main [class*=actions] a, main [class*=actions] button')].map(e => {
+                         const r = document.createRange(); r.selectNodeContents(e);
+                         const widths = {}; for (const x of r.getClientRects()) if (x.width > 4) widths[Math.round(x.top)] = (widths[Math.round(x.top)] || 0) + x.width;
+                         return { wrap: getComputedStyle(e).textWrap, widths: Object.values(widths).map(Math.round) }; })"""
+                )
+                check(f"{tag} closing pills balance their lines (computed text-wrap)", len(pills) == 2 and all(p["wrap"] == "balance" for p in pills), pills)
+                two = [p["widths"] for p in pills if len(p["widths"]) == 2]
+                check(f"{tag} the pill's two lines are even", bool(two) and all(min(w) / max(w) >= 0.6 for w in two), pills)
+            context.close()
+
+
+# The menu bar keeps the visitor's language off the homepage: from /<locale>/about every link of
+# the bar and of the narrow window's menu stays in that locale, and following them (a click, as a
+# visitor would) lands on the localized page.
+NAV_LINKS_JS = """() => {
+  const n = document.querySelector('#site-navigation');
+  const sheet = document.querySelector('[data-nav-sheet]');
+  const own = (root) => [...root.querySelectorAll('a')].map(a => a.getAttribute('href')).filter(h => h.startsWith('/'));
+  return { bar: own(n), menu: own(sheet), mark: n.querySelector('[data-nav-logo]').getAttribute('href'),
+           current: [...n.querySelectorAll('[aria-current=page]')].map(a => a.getAttribute('href')),
+           menuCurrent: [...sheet.querySelectorAll('[aria-current=page]')].map(a => a.getAttribute('href')) };
+}"""
+
+
+def nav_locales(browser):
+    for locale in ["vn", "kr"]:
+        tag = f"{locale} nav"
+        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{locale}/about")
+        links = page.evaluate(NAV_LINKS_JS)
+        own = [h for h in links["bar"] + links["menu"] if h != links["mark"]]
+        stray = [h for h in own if not h.startswith(f"/{locale}/") and not h.startswith(f"/{locale}#")]
+        check(f"{tag}: every bar and menu link stays in the language", own and not stray and links["mark"] == f"/{locale}", [links["mark"], stray])
+        check(
+            f"{tag}: About is the current page",
+            links["current"] == [f"/{locale}/about"] and links["menuCurrent"] == [f"/{locale}/about"],
+            links,
+        )
+        # Clicks: the first product, "Explore our products.", a Science part, and the mark.
+        for trigger, pick, want in [
+            ("products", "first", f"/{locale}/products/nuricell"),
+            ("products", "last", f"/{locale}#products"),
+            ("science", "nth1", f"/{locale}/science#health"),
+        ]:
+            page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
+            page.click(f'[data-nav-trigger="{trigger}"]')
+            page.wait_for_timeout(1200)
+            items = page.locator(f'[data-nav-panel="{trigger}"] a')
+            item = items.first if pick == "first" else items.last if pick == "last" else items.nth(1)
+            item.click()
+            page.wait_for_url(f"**{want}", timeout=30000)
+            if want.endswith("#products"):
+                # The language's homepage, scrolled to its products section.
+                settle(page)
+                home = page.evaluate(
+                    """() => { const r = document.getElementById('products')?.getBoundingClientRect();
+                               return { url: location.pathname + location.hash, lang: document.documentElement.lang,
+                                        inView: !!r && r.top < innerHeight && r.bottom > 0, top: r ? Math.round(r.top) : null }; }"""
+                )
+                check(
+                    f"{tag}: Explore our products. goes to the {locale} homepage's products section",
+                    home["url"].replace("/#", "#") == want and home["inView"] and home["lang"] != "en",
+                    home,
+                )
+            else:
+                check(f"{tag}: {trigger} link lands on {want}", page.url.endswith(want), page.url)
+        page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
+        page.click("[data-nav-logo]")
+        page.wait_for_url(f"**/{locale}", timeout=30000)
+        check(f"{tag}: the mark goes to the language's homepage", page.url.rstrip("/").endswith(f"/{locale}"), page.url)
+        check(f"{tag}: no console errors or warnings", not errors, errors[:3])
+        context.close()
+    # The phone menu, once: a product from the menu's Products part.
+    context, page, response, errors, failed = open_page(browser, 390, 844, path="/vn/about")
+    page.click("[data-nav-menu-button]")
+    page.wait_for_timeout(1000)
+    page.click('[data-nav-sheet-toggle="products"]')
+    page.wait_for_timeout(1000)
+    page.locator("[data-nav-sheet] a[href*='/products/']").first.click()
+    page.wait_for_url("**/vn/products/nuricell", timeout=30000)
+    check("vn nav: the phone menu's product link lands on /vn/products/nuricell", page.url.endswith("/vn/products/nuricell"), page.url)
+    context.close()
+
+
 # --only=letter_layout,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, letter_layout, motion, focus, boundary, first_screen]
+GROUPS = [desktop_and_phone, letter_layout, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

@@ -126,8 +126,13 @@
   text-align: center;
 }
 
+/* One column as wide as the content box. The grid's auto track used to grow to the written name
+   (86vw, wider than the content box under 400px), and a long translated lead then filled that
+   wider track and crossed the margins by 5px (Vietnamese at 360). The name stays 86vw and sits
+   centred, overflowing the track a hair on each side, as a painting may. */
 .letterPage .openingWords {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   justify-items: center;
 }
 
@@ -598,6 +603,46 @@
 
 .letterPage :is(h2, h3):lang(ja) {
   word-break: auto-phrase;
+}
+
+/* Japanese never starts a line with a small kana or "ー" (the promise "GMP 認証を取得した製造元が
+   つくっています。" left "っています。" alone on a line at 360px), and Chinese never starts one with
+   a colon. The page's words only: the shared header and footer keep their own breaks. */
+.letterPage main:is(:lang(ja), :lang(zh)) {
+  line-break: strict;
+}
+
+/* Chinese: headings, figure labels and the promises' words break at their punctuation (the
+   translations put a comma where a line may end), not inside a word ("配 / 方", "那一部 / 分"), and
+   anywhere only when a phrase is longer than the line. */
+.letterPage :is(h2, h3, dt, .promises p):lang(zh) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* On a phone the longest phrase of a Japanese or Chinese heading ("主力フォーミュラは、",
+   "是看不见的那一部分：", ten characters) has to fit the column (330px at 390, 304px at 360), or the
+   heading breaks inside it ("は、" alone starting a line). 8.2vw is the largest size that fits;
+   from 440px up the heading is 36px, as everywhere else. */
+.letterPage h2.heading:is(:lang(ja), :lang(zh)) {
+  font-size: clamp(min(36px, 8.2vw), 3.2vw, 50px);
+}
+
+/* The same phrase against the narrowest two-column words column (345px at 900px, 0.38px more for
+   each pixel of window): 3.8vw fits it from 900px, and from 960px 36px does. */
+@media (min-width: 900px) and (max-width: 959px) {
+  .letterPage h2.heading:is(:lang(ja), :lang(zh)) {
+    font-size: min(36px, 3.8vw);
+  }
+}
+
+/* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines, not a long
+   line over one short word. The pills carry the kit's .pill (a different module's class), so they
+   are reached by their elements. */
+@media (max-width: 720px) {
+  .letterPage .actions :is(a, button):lang(vi) {
+    text-wrap: balance;
+  }
 }
 
 /* ---- Motion: the name writes itself (one breath, the shared ease) ---------------------------
