@@ -603,7 +603,7 @@
 /* ---- Motion: the name writes itself (one breath, the shared ease) ---------------------------
    The letters are written through the brush wipe (wipe-v1.png: opaque, a dry brush's ragged edge,
    clear; at 300% wide, moving it from 100% to 0% writes left to right). The opening's name is pure
-   CSS, so it never waits on a script; its gold dot comes up once the name is written. A chapter
+   CSS, so it never waits on a script; its gold dot comes up as the name is visibly done. A chapter
    letter is written as it reaches the reading line (useArrival in chapter-word.tsx). Reduced
    motion: no mask, no animation, everything there. */
 @media (prefers-reduced-motion: no-preference) {
@@ -614,7 +614,7 @@
   }
 
   .letterPage .word .dot {
-    animation: leaf-up 1.2s var(--ease) calc(0.35s + var(--breath)) both;
+    animation: leaf-up 1.2s var(--ease) calc(0.35s + var(--breath) * 0.6) both;
   }
 
   .letterPage .chapter[data-arrive="waiting"] .paint,
@@ -652,9 +652,11 @@
     scale: 0.6;
   }
 
-  /* The band spreads from the middle as the name finishes. */
+  /* The band spreads from the middle as the name finishes. The name is visibly done about 1.4s in
+     (its shared ease puts most of the stroke in the first half); the delay runs from the moment
+     the page's script marks the band, 0.4-0.5s in on a warm load. */
   .letterPage .band {
-    --bloom-delay: 1500;
+    --bloom-delay: 900;
   }
 
   /* A painting waiting to bloom is hidden until its bloom is under way. The kit hides it with a
@@ -675,6 +677,15 @@
     .letterPage [data-bloom="waiting"] {
       opacity: 1;
     }
+  }
+}
+
+/* Reduced motion is complete from the first paint, and so is a page whose script never runs: the
+   band the server marks "waiting" is shown crisp, not in the kit's blur(5px) of a bloom that will
+   not come. :global([data-look]) puts it above the kit's .look rule whatever order they load in. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]).letterPage [data-bloom="waiting"] {
+    filter: none;
   }
 }
 

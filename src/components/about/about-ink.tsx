@@ -14,7 +14,7 @@ import { Acronym } from "./acronym";
 import { ChapterWord } from "./chapter-word";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
-import { band, dots, pool, rings, word } from "./letter-art";
+import { band, dots, pool, rings, wipe, word } from "./letter-art";
 import styles from "./about-letter.module.css";
 
 // The About page, "The name, on a folded letter" (Mo approved design D on October 6, 2026; mockup
@@ -35,6 +35,18 @@ function Opening() {
   const copy = useCopy();
   return (
     <section className={styles.opening} aria-labelledby="about-title">
+      {/* The wipe mask is found only from the stylesheet, so on a slow link the name stayed blank
+          until it arrived and then showed whole. Preloaded for motion visitors only: reduced
+          motion never uses it, and Chrome logs a preload that goes unused. A CSS mask is fetched
+          in CORS mode, so the preload must say so (crossOrigin), or Chrome fetches the mask twice
+          and warns that the preload went unused. React hoists it to the head. */}
+      <link
+        rel="preload"
+        as="image"
+        href={wipe}
+        crossOrigin="anonymous"
+        media="(prefers-reduced-motion: no-preference)"
+      />
       <div className={`${base.wrap} ${styles.openingWords}`}>
         <span className={styles.word} data-word="" aria-hidden="true">
           <Image
@@ -63,7 +75,7 @@ function Opening() {
           />
         </span>
         <p className={styles.kicker}>{copy(about.hero.label)}</p>
-        <Acronym className={styles.title} delay={2700} />
+        <Acronym className={styles.title} delay={2000} />
         <p className={styles.lead}>
           {sentences(copy(about.hero.lead)).map((sentence) => (
             <span key={sentence}>{sentence}</span>

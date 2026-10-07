@@ -21,9 +21,13 @@ the "in" (24px). At 1440x900, no seam where the settled bar meets the page's dar
 of 4 levels or less). On one column each part's chapter word stands over its label, over its
 heading.
 motion: reduced motion is complete and still (no waiting letters, every bloom done, the dots up, no
-running animation); with motion the name is written (its animation, one breath) and its gold dot
-comes up after it; a chapter letter waits out of view, is written as it comes in and ends unmasked;
-the band blooms. With JavaScript off the written name is visible.
+running animation, nothing logged, the wipe never fetched), and before the page's scripts run the
+server-marked band is already crisp and shown; with motion the name is written (its animation, one
+breath) and its gold dot is delayed until the name is visibly done (1.7s or more) and comes up
+after it; the band waits invisible, nothing of it shows before its bloom (no pop, then vanish), and
+then it blooms; a chapter letter waits out of view, is written as it comes in and ends unmasked;
+the wipe mask is preloaded for motion visitors only (and fetched once). With JavaScript off the written name is
+visible and the band is crisp and shown.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
@@ -41,7 +45,7 @@ import os
 import re
 import sys
 
-from PIL import Image
+from PIL import Image, ImageChops
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
@@ -469,9 +473,40 @@ def first_screen(browser):
         context.close()
 
 
+def wait_until(page, expression, timeout=10000):
+    """True once the page's expression holds; False when it never does (the checks then report it)."""
+    try:
+        page.wait_for_function(expression, timeout=timeout)
+        return True
+    except PlaywrightTimeoutError:
+        return False
+
+
+BAND_BOX_JS = """() => { const r = document.querySelector('[data-band]').getBoundingClientRect();
+  const top = Math.max(r.top, 0), bottom = Math.min(r.bottom, innerHeight);
+  return { x: 0, y: top, width: innerWidth, height: bottom - top }; }"""
+
+
+def band_ink(page):
+    """How many pixels of the band's box differ when the band is hidden: 0 when nothing of it shows."""
+    box = page.evaluate(BAND_BOX_JS)
+    shown = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+    page.evaluate("document.querySelector('[data-band]').style.visibility = 'hidden'")
+    hidden = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+    return sum(ImageChops.difference(shown, hidden).histogram()[9:])
+
+
 def motion(browser):
-    # Reduced motion: complete and still.
-    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    # Reduced motion: complete and still, from the first paint to the last.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+    page = context.new_page()
+    errors, wipe_requests = [], []
+    page.on("console", lambda m: errors.append(m.text) if m.type in ("error", "warning") and counted(m) else None)
+    page.on("pageerror", lambda e: errors.append(str(e)))
+    page.on("request", lambda r: wipe_requests.append(r.url) if "wipe-v1" in r.url else None)
+    page.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
+    page.evaluate("document.fonts.ready.then(() => true)")
+    page.wait_for_timeout(1200)
     scroll_through(page)
     still = page.evaluate(
         """() => ({ waiting: document.querySelectorAll('[data-arrive]').length,
@@ -487,28 +522,92 @@ def motion(browser):
     check("reduced motion: the gold dots are up", still["dots"] and all(float(o) == 1 for o in still["dots"]), still)
     check("reduced motion: the name is still and nothing is masked", still["word"] == "none" and not still["masks"], still)
     check("reduced motion: nothing moves", still["running"] == 0, still)
+    check("reduced motion: nothing logged (no preload left unused)", not errors, errors[:3])
+    check("reduced motion: the wipe mask is never fetched", not wipe_requests, wipe_requests[:2])
+    context.close()
+
+    # Reduced motion is complete from the first paint: before any script runs (the scripts are
+    # blocked here, so the server-marked band stays "waiting"), the band is crisp and shown, not
+    # the kit's blur(5px). The band is the one painting the server marks.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+    page = context.new_page()
+    page.route("**/*.js", lambda route: route.abort())
+    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+    first_paint = page.evaluate(
+        """() => { const b = document.querySelector('[data-band]'), s = getComputedStyle(b);
+             return { bloom: b.dataset.bloom, filter: s.filter, opacity: s.opacity }; }"""
+    )
+    check(
+        "reduced motion: before any script the band is crisp and shown",
+        first_paint["bloom"] == "waiting" and first_paint["filter"] == "none" and first_paint["opacity"] == "1",
+        first_paint,
+    )
+    context.close()
+
+    # The wipe mask is found only from the stylesheet, so the page preloads it, for motion
+    # visitors only (a reduced-motion visit never uses it and would log an unused preload).
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    html = context.request.get(f"{BASE}/about").text()
+    context.close()
+    link = re.search(r"<link\b[^>]*wipe-v1\.png[^>]*>", html)
+    tag = link.group(0) if link else ""
+    check(
+        "motion: the wipe mask is preloaded, for motion visitors only",
+        'rel="preload"' in tag
+        and 'as="image"' in tag
+        and 'crossorigin="anonymous"' in tag
+        and 'media="(prefers-reduced-motion: no-preference)"' in tag,
+        tag or "no <link> for wipe-v1.png in the page",
+    )
+    check("motion: the preload sits in the head", bool(tag) and tag in html.split("</head>")[0], tag or "none")
+
+    # The bloom hold: the band waits invisible, and nothing of it shows before its bloom starts.
+    # (Chrome drops a mask layer of no size, so the kit alone leaves a waiting painting whole and
+    # blurred; the band then hung there, vanished in one frame and spread out again.)
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    waiting = page.evaluate(
+        """() => { const b = document.querySelector('[data-band]'); return [b.dataset.bloom, getComputedStyle(b).opacity]; }"""
+    )
+    check("motion: the band waits invisible", waiting[1] == "0", waiting)
+    reached = wait_until(page, "document.querySelector('[data-band]').dataset.bloom === 'in'")
+    held = page.evaluate("getComputedStyle(document.querySelector('[data-band]')).opacity")
+    changed = band_ink(page)
+    still_holding = page.evaluate(
+        "document.getAnimations().some(a => (a.animationName || '').includes('bloom-hold'))"
+    )
+    check("motion: the band is invisible through its hold", reached and held == "0", [reached, held])
+    check(
+        "motion: nothing of the band shows before its bloom (no pop, then vanish)",
+        still_holding and changed <= 20,
+        {"changed_pixels": changed, "hold_still_running": still_holding},
+    )
     context.close()
 
     # With motion: the name is written in one breath, then its gold dot comes up.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
+    mask_requests = []
+    page.on("request", lambda r: mask_requests.append(r.url) if "wipe-v1" in r.url else None)
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    # The page's stylesheet first (the dot's delay is 2.75s, so this still reads it waiting). If the
+    # The page's stylesheet first (the dot's delay is 1.8s, so this still reads it waiting). If the
     # name has no animation the wait runs out and the checks below report it, instead of a traceback.
-    try:
-        page.wait_for_function(
-            "getComputedStyle(document.querySelector('[data-word] img')).animationName !== 'none'", timeout=5000
-        )
-    except PlaywrightTimeoutError:
-        pass
+    wait_until(page, "getComputedStyle(document.querySelector('[data-word] img')).animationName !== 'none'", 5000)
     early = page.evaluate(
         """() => { const i = getComputedStyle(document.querySelector('[data-word] img'));
+             const d = getComputedStyle(document.querySelector('[data-word] [data-dot]'));
              return { name: i.animationName, duration: i.animationDuration,
-                      dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity }; }"""
+                      dot: d.opacity, dotDelay: parseFloat(d.animationDelay) }; }"""
     )
     check("motion: the name is written (its animation, one breath)", "write" in early["name"] and early["duration"] == "2.4s", early)
-    check("motion: the gold dot waits for the name", float(early["dot"]) < 0.5, early)
-    page.wait_for_timeout(6000)
+    check("motion: the gold dot waits for the name", float(early["dot"]) < 0.5 and early["dotDelay"] >= 1.7, early)
+    # The page's own clock decides when it is done (the band 3.4s plus its delay after it starts,
+    # the dot at its delay plus 1.2s), not a fixed wait.
+    wait_until(page, "document.querySelector('[data-band]').dataset.bloom === 'done'")
+    wait_until(
+        page, "parseFloat(getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity) === 1"
+    )
     late = page.evaluate(
         """() => ({ mask: getComputedStyle(document.querySelector('[data-word] img')).maskPosition,
              dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity,
@@ -517,6 +616,11 @@ def motion(browser):
     check("motion: the name ends whole", late["mask"].startswith("0%"), late)
     check("motion: then its gold dot is up", float(late["dot"]) == 1, late)
     check("motion: the band has bloomed", late["band"] == "done", late)
+    check(
+        "motion: the wipe mask is fetched once (the preload is the one the stylesheet uses)",
+        len(mask_requests) == 1,
+        mask_requests,
+    )
 
     # A chapter letter out of the window waits, is written as it comes in, and ends unmasked.
     state = lambda: page.evaluate(
@@ -544,8 +648,17 @@ def motion(browser):
     page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
     page.wait_for_timeout(4500)
     shot = Image.open(io.BytesIO(page.screenshot(clip={"x": 360, "y": 110, "width": 720, "height": 330}))).convert("L")
-    dark = sum(1 for v in shot.getdata() if v < 90) / (shot.width * shot.height)
+    dark = sum(shot.histogram()[:90]) / (shot.width * shot.height)
     check("JavaScript off: the written name is visible", dark >= 0.02, round(dark, 4))
+    band = page.evaluate(
+        """() => { const b = document.querySelector('[data-band]'), s = getComputedStyle(b);
+             return { bloom: b.dataset.bloom, filter: s.filter, opacity: s.opacity }; }"""
+    )
+    check(
+        "JavaScript off: the band is crisp and shown",
+        band["bloom"] == "waiting" and band["filter"] == "none" and band["opacity"] == "1",
+        band,
+    )
     context.close()
 
 
