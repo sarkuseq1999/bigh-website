@@ -1,9 +1,37 @@
 # About page: handoff (Ink & Gold, October 5, 2026)
 
+## Current page: "The name, on a folded letter" (October 6, 2026)
+
+Mo's design D, a blend of three concepts: one sheet of slightly aged paper folded like a letter
+(CSS folds, no brush line), BiGH written by hand (the opening's name writes itself in one breath,
+its gold dot lands after), a brushed letter opening each part on alternating sides of the middle
+fold (Be: purpose; in: scientific roots, Dr. Liu on a pool of wash; Good: experience with tree
+rings, one ring gold for 2016, and the promises under four watercolor dots; Health: Ask BiGH
+Science under the big H).
+
+- Motion: the name is written left to right through a soft ink front (one wide feathered edge
+  that wanders gently; a bristle edge was tried and read as stripes on screen), in one breath
+  (2.4s, the shared ease). The band spreads from the middle as the name finishes, the gold dot
+  comes up at about 1.8s and the title unfolds at about 2.0s. Each chapter letter writes itself
+  the same way as it reaches the reading line. Reduced motion: complete and still from the first
+  paint.
+- Code: `src/components/about/about-ink.tsx`, `chapter-word.tsx`, `about-letter.module.css`,
+  `letter-art.ts` (generated).
+- Paintings: `reference/ink-pages/about/` (prompts, originals, `build_about.py`, `check_art.py`),
+  spend in `reference/ink-pages/spend.md`. Shipped in `public/images/about-ink/`.
+- Checks: `scripts/qa/qa_about.py` (dev and `next start`): 280/280 on the built site, October 6.
+  The homepage gate: `scripts/qa/home_snapshot.py compare <url> <tag> baseline-main997-prod`
+  (built) or `baseline-main997` (dev), plus `scripts/qa/qa_home_ink.py`.
+- Draft translation: the rings' description (`reference/ink-pages/about/translations.cjs`), for a
+  native check before launch.
+- Replaced: the first ink About (October 5, commits up to c30a489, a copy of the homepage's look
+  with the brush line), and before it the Glass page. The notes below that mention
+  `about-ink.module.css`, `about-route.ts` or the brush line are from that page.
+
 Branch `ink-pages`, worktree `C:\Users\mcbig\Documents\codes\bigh-ink`. Nothing is pushed: ask Mo
 before every push or demo-alias change.
 
-## What is on the page
+## Replaced October 6: the first ink About
 
 `/about` renders `AboutInk` (`src/components/about/about-ink.tsx`, `about-ink.module.css`,
 `about-route.ts`) on the shared ink kit in `src/components/ink/` (`InkPage`, the brush line, the

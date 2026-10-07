@@ -457,10 +457,14 @@
   list-style: none;
 }
 
+/* Square boxes: the four dot pictures are not all the same shape (360x362 to 338x348), and their
+   own heights put two headings in the row 1.7px lower than the others. */
 .letterPage .promiseDot {
   display: block;
   width: clamp(64px, 5.6vw, 92px);
   height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
   margin: 0 auto 18px;
 }
 
@@ -646,8 +650,8 @@
 }
 
 /* ---- Motion: the name writes itself (one breath, the shared ease) ---------------------------
-   The letters are written through the brush wipe (wipe-v1.png: opaque, a dry brush's ragged edge,
-   clear; at 300% wide, moving it from 100% to 0% writes left to right). The opening's name is pure
+   The letters are written through the brush wipe (wipe-v1.png: opaque, a soft ink front, clear;
+   at 300% wide, moving it from 100% to 0% writes left to right). The opening's name is pure
    CSS, so it never waits on a script; its gold dot comes up as the name is visibly done. A chapter
    letter is written as it reaches the reading line (useArrival in chapter-word.tsx). Reduced
    motion: no mask, no animation, everything there. */

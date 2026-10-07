@@ -13,7 +13,8 @@ letter_layout (1440x900, 1280x800, 1024x768, 768x1024, 390x844): the middle fold
 (centred within 2px), none below; four folds across; on two columns Be's letter left and words
 right, in's words left and letter and portrait right, Good's letter and rings left and words right,
 each 24px or more clear of the middle fold; the promise heading centred; four promises in one row
-from 1200px, two by two below that, one column on one column; the closing centred; the closing H
+from 1200px, two by two below that, one column on one column; promise headings side by side stand
+level; the closing centred; the closing H
 24px or more above its heading; no words over a painting; Dr. Liu's photo in the middle of its pool;
 the rings carry "Illustration"; hello in five languages centred under its promise (8px). On two
 columns Dr. Liu's pool 16px or more clear of the middle fold, and the roots' words start level with
@@ -397,6 +398,16 @@ def letter_layout(browser):
         rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
         want = 1 if width >= 1200 else 2 if two else 4
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
+        # Promises side by side: their headings stand level (the dots' pictures are not all the
+        # same shape; at their own heights two headings in the row sat 1.7px lower).
+        level_rows = page.evaluate(
+            """() => { const rows = {};
+                 for (const li of document.querySelectorAll('[data-promise]')) {
+                   const top = Math.round(li.getBoundingClientRect().top);
+                   (rows[top] = rows[top] || []).push(li.querySelector('h3').getBoundingClientRect().top); }
+                 return Object.values(rows).map(t => +(Math.max(...t) - Math.min(...t)).toFixed(1)); }"""
+        )
+        check(f"{tag} the promise headings side by side stand level (0.5px)", max(level_rows) <= 0.5, level_rows)
         gap = page.evaluate(
             "document.querySelector('#closing-title').getBoundingClientRect().top - document.querySelector('#closing [data-chapter] img').getBoundingClientRect().bottom"
         )
