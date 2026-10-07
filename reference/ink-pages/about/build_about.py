@@ -4,8 +4,9 @@ Originals: reference/ink-pages/about/originals/gpt25-<take>.png (GPT Image 2.5 o
 in prompts/, spend in reference/ink-pages/spend.md). Output: public/images/about-ink/*.webp (lossless
 plates in plates/), the brush wipe mask wipe-<V>.png, and src/components/about/letter-art.ts (sizes
 and the gold dots' places), which the page imports. The treatments are the homepage's
-(reference/home-v2/ink/build_assets.py): the paper divided out so a painting multiplies onto the
-page's own paper, gold leaf cut out with its torn edge, and the gold-leaf light mask.
+(reference/home-v2/ink/build_assets.py): the paper divided out (and its white point lifted, so
+no box shows) so a painting multiplies onto the page's own paper, gold leaf cut out with its torn
+edge, and the gold-leaf light mask.
 
 usage: python -X utf8 reference/ink-pages/about/build_about.py
 """
@@ -61,6 +62,21 @@ def divided(img):
     )
     paper = np.median(frame, axis=0)
     return Image.fromarray(np.clip(arr / paper * 255.0, 0, 255).astype(np.uint8))
+
+
+# Dividing maps the paper's median to white, but the fibres under it stay: bare paper averages
+# about 252 (its darkest 1% at 233-239), so each picture's box multiplied onto the page about 1%
+# darker than the paper around it, a faint rectangle (Task 3 review, October 6, 2026). The white
+# point is lifted: from WHITE up is white, ink at KNEE or darker is unchanged, a straight ramp
+# between. 220/245 leaves every ink picture's outer 3px strip at 254.7 or whiter (check_art.py).
+KNEE, WHITE = 220.0, 245.0
+
+
+def levelled(img):
+    """A divided picture with its paper lifted to pure white (KNEE, WHITE)."""
+    arr = np.asarray(img).astype(np.float32)
+    out = np.where(arr <= KNEE, arr, KNEE + (arr - KNEE) * (255.0 - KNEE) / (WHITE - KNEE))
+    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8))
 
 
 def ink_mask(arr, level, sigma=12):
@@ -128,7 +144,8 @@ def painting(key, name, width, with_dot=False, pad=0.04):
     x0, y0, x1, y1 = ink_box(np.asarray(flat), pad=pad)
     if with_dot:
         x0, y0, x1, y1 = min(x0, dbox[0]), min(y0, dbox[1]), max(x1, dbox[2]), max(y1, dbox[3])
-    crop = flat.crop((x0, y0, x1, y1))
+    # Levelled after the crop, so the crop (found on the divided picture) stays where it was.
+    crop = levelled(flat.crop((x0, y0, x1, y1)))
     art = art_of(crop, f"{name}-{V}", width)
     if with_dot:
         ba.save(dot, f"{name}-dot-{V}", None, 88)
@@ -171,7 +188,7 @@ def dots_sheet():
         x, y, w, h = (int(v) for v in st[i, :4])
         m = int(max(w, h) * 0.18)
         crop = flat.crop((max(0, x - m), max(0, y - m), min(arr.shape[1], x + w + m), min(arr.shape[0], y + h + m)))
-        out.append(art_of(feathered(crop), f"dot-{k}-{V}", 360))
+        out.append(art_of(feathered(levelled(crop)), f"dot-{k}-{V}", 360))
     return out
 
 

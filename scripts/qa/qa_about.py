@@ -15,12 +15,15 @@ right, in's words left and letter and portrait right, Good's letter and rings le
 each 24px or more clear of the middle fold; the promise heading centred; four promises in one row
 from 1200px, two by two below that, one column on one column; the closing centred; the closing H
 24px or more above its heading; no words over a painting; Dr. Liu's photo in the middle of its pool;
-the rings carry "Illustration". On one column each part's chapter word stands over its label, over
-its heading.
+the rings carry "Illustration"; hello in five languages centred under its promise (8px). On two
+columns Dr. Liu's pool 16px or more clear of the middle fold, and the roots' words start level with
+the "in" (24px). At 1440x900, no seam where the settled bar meets the page's darker sides (a step
+of 4 levels or less). On one column each part's chapter word stands over its label, over its
+heading.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
-words cross it.
+words cross it and Dr. Liu's pool stays 16px or more clear of it.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the written name and the title in the first
 screen; from 900px the band starts in it too.
 
@@ -29,10 +32,12 @@ Pictures: scripts/qa/out/about-letter/<size>-NN.png (viewport shots while scroll
 Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,focus,boundary,first_screen]
 """
 
+import io
 import os
 import re
 import sys
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
@@ -197,6 +202,46 @@ CREASE_JS = """() => {
 }"""
 
 
+# Hello in five languages (the fourth promise): the visible words' box, centred on its promise.
+GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')[3];
+  const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')].map(w => w.getBoundingClientRect()).filter(r => r.width > 0);
+  const l = Math.min(...words.map(r => r.left)), r = Math.max(...words.map(r => r.right)), b = li.getBoundingClientRect();
+  return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), lines: new Set(words.map(r => Math.round(r.top))).size }; }"""
+
+# Dr. Liu's pool against the middle fold's right edge (the sheet's ::before).
+POOL_FOLD_JS = """() => { const sheet = document.querySelector('[data-sheet]'); const v = getComputedStyle(sheet, '::before');
+  const edge = sheet.getBoundingClientRect().left + parseFloat(v.left) + parseFloat(v.width);
+  const pool = document.querySelector('[data-pool]').getBoundingClientRect();
+  return { clear: Math.round(pool.left - edge), pool: Math.round(pool.left), fold: Math.round(edge) }; }"""
+
+
+def bar_edge_step(page):
+    """The settled bar's paper against the page's just under it, at both edges of the window:
+    luminance 4px above and 4px below the header box's bottom. Read with the bar's bottom 120px
+    inside the purpose part, where both edges of the window are bare paper (600px down, the band's
+    wash runs under the bar's edge at 1440 and reads as a 5-level step that is the painting, not the
+    paper). Each reading averages a 5x3 patch, so the paper's own fibre (single pixels vary by about
+    3 levels) is not read as a step."""
+    page.evaluate(
+        """window.scrollTo(0, Math.round(document.getElementById('purpose').getBoundingClientRect().top + scrollY + 120
+             - document.querySelector('header').getBoundingClientRect().bottom))"""
+    )
+    page.wait_for_timeout(1200)
+    bottom = round(page.evaluate("document.querySelector('header').getBoundingClientRect().bottom"))
+    width = page.evaluate("innerWidth")
+    img = Image.open(io.BytesIO(page.screenshot())).convert("RGB")
+    px = img.load()
+
+    def lum(x, y):
+        cells = [px[x + dx, y + dy] for dx in range(-2, 3) for dy in range(-1, 2)]
+        return sum(0.2126 * r + 0.7152 * g + 0.0722 * b for r, g, b in cells) / len(cells)
+
+    steps = [round(abs(lum(x, bottom - 4) - lum(x, bottom + 4)), 1) for x in (5, width - 6)]
+    page.evaluate("window.scrollTo(0, 0)")
+    page.wait_for_timeout(300)
+    return {"step": max(steps), "left_right": steps, "bar_bottom": bottom}
+
+
 def desktop_and_phone(browser):
     for width, height in [(1440, 900), (390, 844)]:
         tag = f"{width}x{height}"
@@ -346,6 +391,18 @@ def letter_layout(browser):
         check(f"{tag} Dr. Liu's photo in the middle of its pool", abs(liu["dx"]) <= 0.15 and abs(liu["dy"]) <= 0.15, liu)
         caption = page.evaluate("document.querySelector('[data-rings] figcaption')?.textContent.trim()")
         check(f"{tag} the rings carry Illustration", caption == "Illustration", caption)
+        greet = page.evaluate(GREETINGS_JS)
+        check(f"{tag} hello in five languages centred under its promise (8px)", abs(greet["off"]) <= 8, greet)
+        if two:
+            reach = page.evaluate(POOL_FOLD_JS)
+            check(f"{tag} Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
+            level = page.evaluate(
+                "Math.round(document.querySelector('#roots [data-label]').getBoundingClientRect().top - document.querySelector('#roots [data-chapter]').getBoundingClientRect().top)"
+            )
+            check(f"{tag} roots: the words start level with the in (24px)", abs(level) <= 24, level)
+        if width == 1440:
+            step = bar_edge_step(page)
+            check(f"{tag} no seam where the settled bar meets the page's sides (step 4 or less)", step["step"] <= 4, step)
         if not two:
             order = page.evaluate(
                 """() => ['purpose', 'roots', 'experience'].map(id => { const s = document.getElementById(id);
@@ -387,6 +444,8 @@ def boundary(browser):
         if width == 900:
             crossing = page.evaluate(CREASE_JS)
             check("900 no words cross the middle fold", not crossing, crossing[:3])
+            reach = page.evaluate(POOL_FOLD_JS)
+            check("900 Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
         context.close()
 
 

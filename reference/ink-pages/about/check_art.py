@@ -48,6 +48,18 @@ for name in ["word", "letter-b", "letter-i", "letter-g", "letter-h", "band", "po
         corners = [a[:8, :8], a[:8, -8:], a[-8:, :8], a[-8:, -8:]]
         check(f"{name}: paper divided out (corners white)", min(c.mean() for c in corners) >= 248, [round(c.mean()) for c in corners])
 
+# No box on the page: a picture's paper must be white right up to its edge, or the box multiplies
+# onto the page a shade darker than the paper around it (Task 3 review: the outer strips averaged
+# about 252). Every ink picture, not the gold cut-outs.
+INK = ["word", "letter-b", "letter-i", "letter-g", "letter-h", "band", "pool", "rings", "dot-1", "dot-2", "dot-3", "dot-4"]
+for name in INK:
+    p = REPO / f"public/images/about-ink/{name}-v1.webp"
+    if p.exists():
+        a = np.asarray(Image.open(p).convert("L")).astype(float)
+        strip = np.concatenate([a[:3].ravel(), a[-3:].ravel(), a[:, :3].ravel(), a[:, -3:].ravel()])
+        mean, dark = strip.mean(), (strip < 235).mean()
+        check(f"{name}: white to its edge (outer 3px mean 254.5+, under 1% below 235)", mean >= 254.5 and dark < 0.01, [round(float(mean), 2), f"{dark:.2%}"])
+
 for name in ["word-dot", "letter-i-dot"]:
     p = REPO / f"public/images/about-ink/{name}-v1.webp"
     if p.exists():

@@ -9,10 +9,9 @@
    or filter on the sheet, a part, a grid or a figure). */
 
 /* The paper, aged a little for this page: the shared tile multiplied warmer (build_about.py TINT),
-   with the sheet's age over it (darker towards both sides, a few faint spots). The age lies on the
-   root, the footer's paper too: on the sheet alone it stopped in a hard line above the footer.
-   The header's paper reads --paper and --paper-fibre from here, so the bar settles on the same
-   sheet. */
+   with a few faint spots of age on it. The spots lie on the root, the footer's paper too: on the
+   sheet alone they stopped in a hard line above the footer. The header's paper reads --paper and
+   --paper-fibre from here, so the bar settles on the same sheet. */
 :global([data-look="ink"]).letterPage {
   --paper: #efe4ce;
   --paper-fibre: url("/images/about-ink/paper-aged-v1.webp");
@@ -21,26 +20,40 @@
   --fold-gap: clamp(64px, 8vw, 150px);
   --part-half: clamp(56px, 6vw, 112px);
   --letter: clamp(128px, 15vw, 250px);
+  --age-edge: linear-gradient(
+    90deg,
+    rgb(120 88 46 / 0.08),
+    transparent 9%,
+    transparent 91%,
+    rgb(120 88 46 / 0.08)
+  );
   background-image:
     radial-gradient(circle at 7% 18%, rgb(150 112 62 / 0.07), transparent 120px),
     radial-gradient(circle at 93% 41%, rgb(150 112 62 / 0.05), transparent 160px),
     radial-gradient(circle at 12% 67%, rgb(150 112 62 / 0.05), transparent 90px),
     radial-gradient(circle at 88% 86%, rgb(150 112 62 / 0.06), transparent 140px),
-    linear-gradient(
-      90deg,
-      rgb(120 88 46 / 0.08),
-      transparent 9%,
-      transparent 91%,
-      rgb(120 88 46 / 0.08)
-    ),
     url("/images/about-ink/paper-aged-v1.webp");
   background-size:
     auto,
     auto,
     auto,
     auto,
-    auto,
     800px 800px;
+}
+
+/* The sheet's age at its sides (darker towards both edges) lies over everything, the settled bar
+   too: drawn on the root's paper, it stopped at the bar's edge, whose own paper then read as a
+   lighter strip (about 10 levels at the window's edges). It changes only across the page, so
+   fixed to the window it looks the same as on the page. Over the bar (z-index 40), under "Skip to
+   content" (60); it takes no clicks. A sibling over the paintings, never their ancestor, so they
+   still multiply onto the root's paper. */
+.letterPage::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  pointer-events: none;
+  background: var(--age-edge);
 }
 
 /* html + body: one element more than the kit's body rule, so it wins in any stylesheet order. */
@@ -212,6 +225,12 @@
     "words art";
 }
 
+/* The words start level with the "in" at the top of the part, the portrait under the letter (as
+   in the mockup); centred against both rows they left a wide band of bare paper above them. */
+.letterPage [data-part="roots"] .areaWords {
+  align-self: start;
+}
+
 .letterPage [data-part="roots"] .areaLetter {
   justify-self: start;
   align-self: end;
@@ -291,10 +310,16 @@
 
 /* The pool is taller than it is wide (968 x 1407) and its wash fills its box, so it reaches past
    the print, above and below, by --reach (the mount is 1.25 x its photo's width plus the 12px
-   mat). Below, the print's margin keeps the wash 16px clear of the next part's fold. */
+   mat). Below, the print's margin keeps the wash 16px clear of the next part's fold. Across, the
+   print sits in the middle of the right column (--col wide), so a pool wider than the column
+   plus the fold gap, less 48px, would reach the middle fold (at 900-1000px wide): it is capped
+   there, 24px clear of the fold's edge, with 16px more for a window's scrollbar (100vw counts it). */
 .letterPage .print {
   --mat: clamp(200px, 15vw, 248px);
-  --pool-w: calc(var(--mat) * 2.1);
+  --col: calc(
+    (min(100vw, var(--wide) + 2 * var(--gutter)) - 2 * var(--gutter) - var(--fold-gap)) / 2
+  );
+  --pool-w: min(calc(var(--mat) * 2.1), calc(var(--col) + var(--fold-gap) - 64px));
   --reach: calc((var(--pool-w) * 1.4535 - var(--mat) * 1.25 + 6px) / 2);
   position: relative;
   justify-self: center;
@@ -448,8 +473,27 @@
   line-height: 1.5;
 }
 
+/* Hello in five languages, centred under its promise. A block, so the line it sits on is the
+   promise's own width and the centred text centres it. */
 .letterPage .greetings {
+  display: block;
   margin-top: 14px;
+}
+
+/* With reduced motion all five stand side by side (greetings.tsx; its stage is the one
+   aria-hidden child). As a left-aligned row they started at the promise's left edge and wrapped
+   one word alone onto a second line. Here each is a centred inline block and the lines are
+   balanced: one line where all five fit, else three over two. Other pages keep their row. */
+@media (prefers-reduced-motion: reduce) {
+  .letterPage .greetings > [aria-hidden="true"] {
+    display: block;
+    text-wrap: balance;
+  }
+
+  .letterPage .greetings > [aria-hidden="true"] > span {
+    display: inline-block;
+    margin-inline: 0.3em;
+  }
 }
 
 /* ---- Health: the closing, centred across the fold ------------------------------------------- */
@@ -492,19 +536,18 @@
   :global([data-look="ink"]).letterPage {
     --letter: clamp(104px, 28vw, 160px);
     --part-half: clamp(48px, 9vw, 72px);
+    --age-edge: linear-gradient(
+      90deg,
+      rgb(120 88 46 / 0.07),
+      transparent 6%,
+      transparent 94%,
+      rgb(120 88 46 / 0.07)
+    );
     background-image:
       radial-gradient(circle at 6% 20%, rgb(150 112 62 / 0.06), transparent 80px),
       radial-gradient(circle at 94% 58%, rgb(150 112 62 / 0.05), transparent 100px),
-      linear-gradient(
-        90deg,
-        rgb(120 88 46 / 0.07),
-        transparent 6%,
-        transparent 94%,
-        rgb(120 88 46 / 0.07)
-      ),
       url("/images/about-ink/paper-aged-v1.webp");
     background-size:
-      auto,
       auto,
       auto,
       800px 800px;
