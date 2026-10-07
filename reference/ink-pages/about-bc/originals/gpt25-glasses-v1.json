@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Traditional ink painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no other objects, no text, no signature, no red seal, no stamp. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side. Match the brushwork and mood of the reference picture.\n\nA pair of round reading glasses resting on an open notebook, a few soft grey strokes suggesting handwriting (nothing legible), a small touch of real gold leaf on the glasses' hinge. Centred, about 70% of the picture's width.",
+  "settings": {
+    "aspect_ratio": "16:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-ink/reference/ink-pages/about-bc/refs/ref-glasses.png"
+  ],
+  "made": "20261007-131924"
+}

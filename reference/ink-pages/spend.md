@@ -22,3 +22,29 @@ Mockup round before this plan: 13 jobs in `bigh-about2` (about $0.65).
 | dots-v1 | Four watercolor dots | yes | Four separate dots, clearly deep, dark, mid, pale. |
 
 10 jobs of the 30 cap, about $0.50 (at most $0.70 before refunds). 9 first takes + 1 retake.
+
+## About B and C, built side by side (October 7, 2026)
+
+Ledger: `C:/Users/mcbig/AppData/Local/HiggsfieldAPI/bigh-about-bc/` (this plan caps it at 30 jobs).
+Mockup rounds before this plan: 7 jobs in `bigh-about2` (about $0.35).
+
+| Job | Picture | Kept | Note |
+| --- | ------- | ---- | ---- |
+| book-v1 | Open book, gold-leaf ribbon (ref: ref-book.png) | yes | Reads at a glance; fanned pages, hinted lines of text (nothing legible), soft splash washes like the mockup; one torn-leaf gold ribbon over the gutter and past the edge; plain paper, no red. |
+| seedling-v1 | Oak seedling, roots, gold-leaf acorn (ref: ref-seedling.png) | yes | Lobed oak leaves in grey wash, acorn on the stem as in the mockup, dotted soil line, fine roots; the gold acorn is crackled leaf among the roots; calm, plain paper. |
+| desk-v1 | Desk: brush on rest, microscope, books (ref: ref-desk.png) | yes | Microscope entirely ink and grey wash, no brass or gold (gold pixels 0.003% after division); brush on its rest, three old books, soft splash washes; plain paper. Mottled wash on the metal is a little busy but matches the mockup. |
+| sequoia-v1 | Giant sequoia trunk, sapling, misty trees, gold touch (ref: ref-sequoia.png) | no | Majestic and calm, gold leaf on the trunk, sapling beside it; but the trunk and crown wash run off the top edge (212 columns under 235 in row 0 after division): the crop would cut the tree and fail the white-edge check. |
+| sequoia-v2 | Retake: + whole tree inside, crown fading out well below the top edge | no | Superseded by v3: its gold mask covered 0.04% of the picture (check floor 0.1%). Whole tree inside with paper above; trunk rises into a misty crown (reads as rising, not a stump, at full size); small torn gold leaf on the trunk; sapling and misty redwoods behind; calm. |
+| palms-v1 | Two fan palms, gold sun, rolling hills (ref: ref-vignettes.png) | yes | One picture only (not the strip's four); two slender fan palms, crackled gold-leaf sun low beside them, low rolling hills touched with gold; no beach; quiet. |
+| bee-v1 | Leafy branch, one bee (ref: ref-vignettes.png) | yes | Delicate grey-wash branch, one bee in flight; calm, plain paper. The bee has soft ochre stripes (paint, not leaf) as in the approved mockup; no gold leaf. |
+| moon-v1 | Gold-leaf crescent, grey cloud (ref: ref-vignettes.png) | yes | Crackled gold-leaf crescent over a soft grey cloud wash; calm, centred, plain paper. |
+| letter-v1 | Letter in an envelope, fountain pen (ref: ref-vignettes.png) | no | Reads well and calm, but adds gold the prompt never asked for (a gold-leaf wax seal on the envelope, gold bands on the pen) and leafy sprigs around it (no other objects). |
+| letter-v2 | Retake: + no gold or colour, no seal, no plants | yes | Open envelope, letter half out, fountain pen across it, all grey ink (gold pixels 0.0); no seal, no plants; calm, plain paper. |
+| lamp-v1 | Desk lamp, open journal, gold-leaf light, sprig (ref: ref-lamp.png) | yes | Close to the mockup: lamp bending over the journal, its light a pale pool of crackled gold leaf on the pages, sprig beside it, soft splash washes; calm, plain paper. |
+| enso-v1 | Enso, gold touch at the start (ref: ref-enso.png) | no | Calm, real brushwork, but not one readable stroke: wet black on both sides of the gold (left and bottom) and dry over the top, its two ends overlapping at 3 o'clock instead of an open gap, so the page's clockwise sweep from the gold would paint it backwards; the gold (a crumpled leaf shape) sits on the black ink, where lifting it would smudge. |
+| enso-v2 | Retake: + one clockwise pass from a wet head at 11 o'clock, gold on bare paper beside it, a clear gap | yes | One confident stroke, open (a clear gap at 12 o'clock between the dry tail and the wet head), small torn gold-leaf fleck on the paper at the head. The model still brushed it counter-clockwise (head at 12, down the left, dry up the right), so build_bc.py ships it mirrored left to right: the page's clockwise sweep from the gold then follows the brush, wet to dry. Gold ends up at 1 o'clock, not 11 as in the mockup. |
+| hills-v1 | Band of low California hills, gold glow on one hilltop (ref: ref-hills.png) | yes | Low, rounded, layered hills in pale grey wash, both ends feathering out, a faint gold-leaf glow along the right hilltop; no peaks, trees or buildings; reads as rolling hills, not the homepage's mountains. |
+| glasses-v1 | Round reading glasses on an open notebook, gold hinge (ref: ref-glasses.png) | yes | Close to the mockup: round frames resting on the notebook, pseudo-cursive grey strokes (nothing legible at full size), a small gold-leaf band at the hinge; calm, plain paper. |
+| sequoia-v3 | Retake 2: + the gold a clearly visible torn patch about a fifth of the trunk's width | yes | Whole tree inside, misty crown, good bark; the leaf barely grew: its outline is 0.092% of the picture, so its gold mask (0.06%) still fails check_bc.py's 0.1% floor. Kept as the best take; no retakes left for it. |
+
+16 jobs of the 30 cap, about $0.80 (at most $1.12 before refunds). 12 first takes + 4 retakes (sequoia x2, letter, enso). Style references cropped from the approved mockups as the plan says, then the page text ("What you can count on.", "Our p", "What our work is for.") and a stray seedling leaf were inpainted out of ref-vignettes, ref-sequoia and ref-hills so no take would copy them.
