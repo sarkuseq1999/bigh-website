@@ -35,9 +35,11 @@ deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #ro
 #promise land the part's first content 0-64px under the header, nothing of it under the bar, its
 heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors, the h1 and the
 chapter words stay English, no English source sentence left visible. languages_layout (every language
-at 1440x900, 1024x768, 768x1024, 390x844, 360x780): no word crosses the side margins; in Korean,
-Japanese, Chinese and Vietnamese no bad line break; from 900px no words cross the middle fold;
-Vietnamese at 390: the closing pills balance their two lines. nav_locales: from /vn/about and
+at 1440x900, 1024x768, 768x1024, 390x844, 360x780; Japanese and Chinese also at 900x900): no word
+crosses the side margins; in Korean, Japanese, Chinese and Vietnamese no bad line break; from 900px
+no words cross the middle fold; in Japanese and Chinese, at 390, 360 and 900px, no heading phrase
+(up to 12 characters) is split across lines; Vietnamese at 390: the closing pills balance their two
+lines. nav_locales: from /vn/about and
 /kr/about the bar and the narrow menu stay in the language.
 boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
 words cross it and Dr. Liu's pool stays 16px or more clear of it.
@@ -872,11 +874,78 @@ MARGINS_JS = r"""() => {
 }"""
 
 
+# No heading phrase is broken across lines (Japanese and Chinese, on a phone and at 900px, where the
+# words column is narrowest). What a heading keeps whole is a phrase: in Chinese the words between
+# two punctuation marks (word-break: keep-all; the translations put a comma where a line may end),
+# in Japanese the browser's own phrases (word-break: auto-phrase), which it breaks inside only when
+# a phrase is wider than the line. The page's rules size the headings so that a phrase of up to
+# about 12 characters fits its column; without them a heading breaks inside one ("主力フォーミュラ /
+# は、", "核心配 / 方，", "那一部 / 分").
+#   Chinese: the real lines are read against the phrases of a 1px-wide copy of the heading (each
+#   line of it is one phrase); no phrase of 12 characters or fewer may stand on two lines.
+#   Japanese: punctuation is no phrase boundary ("目に見えないひとつ。" is rightly broken after
+#   "目に"), and a 1px copy breaks inside every phrase, so the copy is set as wide as its longest
+#   phrase (width: min-content) and that width must fit the words column (when it is 12em or less).
+PHRASES_JS = r"""(lang) => {
+  const readChars = (root) => {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const out = []; let n;
+    while ((n = walker.nextNode())) {
+      const t = n.textContent;
+      for (let i = 0; i < t.length; i++) {
+        if (/\s/.test(t[i])) continue;
+        const r = document.createRange(); r.setStart(n, i); r.setEnd(n, i + 1);
+        const rects = r.getClientRects(); if (!rects.length) continue;
+        out.push({ c: t[i], mid: (rects[0].top + rects[0].bottom) / 2 });
+      }
+    }
+    return out;
+  };
+  const split = []; let examined = 0;
+  for (const h of document.querySelectorAll('main h2[id$="-title"]')) {
+    if (!h.offsetParent) continue;
+    const name = h.textContent.trim().slice(0, 12);
+    const probe = h.cloneNode(true);
+    probe.removeAttribute('id');
+    probe.style.cssText = 'position:absolute;left:0;top:0;max-width:none;margin:0;visibility:hidden;overflow-wrap:normal;line-break:strict;text-wrap:wrap;word-break:'
+      + (lang === 'jp' ? 'auto-phrase;width:min-content' : 'keep-all;width:1px');
+    h.after(probe);
+    if (lang === 'jp') {
+      const longest = probe.getBoundingClientRect().width;
+      probe.remove();
+      const box = h.parentElement, cs = getComputedStyle(box);
+      const column = box.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+      if (longest / parseFloat(getComputedStyle(h).fontSize) > 12) continue;
+      examined++;
+      if (longest > column + 0.5) split.push([name, 'longest phrase ' + Math.round(longest) + 'px, column ' + Math.round(column) + 'px']);
+      continue;
+    }
+    const real = readChars(h), cut = readChars(probe);
+    probe.remove();
+    if (cut.length !== real.length) { split.push([name, 'phrases not read']); continue; }
+    let start = 0;
+    for (let i = 1; i <= cut.length; i++) {
+      if (i < cut.length && Math.abs(cut[i].mid - cut[i - 1].mid) <= 9) continue;
+      const phrase = real.slice(start, i); start = i;
+      if (phrase.length > 12) continue;
+      examined++;
+      const mids = phrase.map(x => x.mid);
+      if (Math.max(...mids) - Math.min(...mids) > 9) split.push([phrase.map(x => x.c).join(''), 'split over lines', name]);
+    }
+  }
+  return { split, examined };
+}"""
+
+
 def languages_layout(browser):
     """Each language at desktop, tablet and phone sizes: no word crosses the side margins, and
-    in Korean, Japanese, Chinese and Vietnamese no bad line break."""
+    in Korean, Japanese, Chinese and Vietnamese no bad line break. Japanese and Chinese also at
+    900x900, and on a phone and at 900px no heading phrase is split across lines."""
     for lang in ["en", "kr", "jp", "cns", "vn"]:
-        for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+        sizes = [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]
+        if lang in ("jp", "cns"):
+            sizes.append((900, 900))
+        for width, height in sizes:
             tag = f"{lang} {width}x{height}"
             path = "/about" if lang == "en" else f"/{lang}/about"
             context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
@@ -888,6 +957,13 @@ def languages_layout(browser):
             if lang != "en":
                 bad = page.evaluate(BREAKS_JS, lang)
                 check(f"{tag} no bad line break", not bad, bad[:3])
+            if lang in ("jp", "cns") and width in (390, 360, 900):
+                phrases = page.evaluate(PHRASES_JS, lang)
+                check(
+                    f"{tag} no heading phrase is broken across lines ({phrases['examined']} read)",
+                    phrases["examined"] > 0 and not phrases["split"],
+                    phrases,
+                )
             if lang == "vn" and width == 390:
                 # "Khám phá sản phẩm của chúng tôi" takes two lines on a phone; they must be even
                 # (an earlier selector matched nothing and left 239px over 91px).
