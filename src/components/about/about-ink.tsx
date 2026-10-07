@@ -146,7 +146,13 @@ function Roots() {
             {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
           </Link>
         </div>
-        <figure className={`${styles.print} ${styles.areaArt}`} data-print="">
+        {/* --pool-ratio: the pool picture's height over its width, from letter-art.ts, for the
+            print's CSS (the pool stands upright on one column, lies on its side on two). */}
+        <figure
+          className={`${styles.print} ${styles.areaArt}`}
+          data-print=""
+          style={{ "--pool-ratio": pool.height / pool.width } as CSSProperties}
+        >
           <Image
             className={`${base.ink} ${styles.pool}`}
             src={pool.src}

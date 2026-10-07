@@ -237,22 +237,13 @@
   justify-self: center;
 }
 
-.letterPage [data-part="roots"] .grid {
-  grid-template-areas:
-    "words letter"
-    "words art";
-}
+/* in's grid has no areas of its own here: one column (below) stacks the letter, the words and the
+   print, and from 900px "On two columns, in opens out" lays them in a row. */
 
 /* The words start level with the "in" at the top of the part; centred they left a wide band of
-   bare paper above them. On two columns the "in" and the print stand side by side (below,
-   "On two columns, in opens out"), which replaces these areas. */
+   bare paper above them. */
 .letterPage [data-part="roots"] .areaWords {
   align-self: start;
-}
-
-.letterPage [data-part="roots"] .areaLetter {
-  justify-self: start;
-  align-self: end;
 }
 
 .letterPage .experience {
@@ -327,19 +318,17 @@
 
 /* ---- Dr. Liu: his real photograph on its paper mat, resting on a pool of grey wash ----------- */
 
-/* One column (and the base for two): the pool stands upright, taller than it is wide
-   (968 x 1407), and its wash fills its box, so it reaches past the print, above and below, by
-   --reach (the mount is 1.25 x its photo's width plus the 12px mat); the print's margins keep the
-   wash 16px clear of the words and of the next part's fold. --col and the cap on --pool-w are the
-   right column's width for a print centred in it; on two columns the pool is laid on its side
-   instead (below, "On two columns, in opens out"). */
+/* One column (under 900px): the pool stands upright, taller than it is wide (--pool-ratio, its
+   picture's height over its width, which about-ink.tsx sets on the figure from letter-art.ts, so a
+   regenerated pool needs no number changed here), and its wash fills its box, so it reaches past
+   the print, above and below, by --reach (the mount is 1.25 x its photo's width plus the 12px
+   mat). The print's margins keep the wash 16px clear of the words and of the next part's fold, and
+   --pool-w stays 12px inside a phone's screen. From 900px the pool is laid on its side instead
+   (below, "On two columns, in opens out") and none of --pool-w and --reach is used. */
 .letterPage .print {
   --mat: clamp(200px, 15vw, 248px);
-  --col: calc(
-    (min(100vw, var(--wide) + 2 * var(--gutter)) - 2 * var(--gutter) - var(--fold-gap)) / 2
-  );
-  --pool-w: min(calc(var(--mat) * 2.1), calc(var(--col) + var(--fold-gap) - 64px));
-  --reach: calc((var(--pool-w) * 1.4535 - var(--mat) * 1.25 + 6px) / 2);
+  --pool-w: min(calc(var(--mat) * 2.1), calc(100vw - 24px));
+  --reach: calc((var(--pool-w) * var(--pool-ratio) - var(--mat) * 1.25 + 6px) / 2);
   position: relative;
   justify-self: center;
   width: var(--mat);
@@ -549,9 +538,17 @@
 
 /* ---- Narrower two-column windows, then one column ------------------------------------------- */
 
-@media (min-width: 900px) and (max-width: 1199px) {
+/* The promises stand two by two from 600px (a tablet held upright is not a stretched phone) and
+   one per row only on a phone. */
+@media (min-width: 600px) and (max-width: 1199px) {
   .letterPage .promises {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .letterPage .promises {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
 
@@ -567,10 +564,11 @@
 
 /* Across the fold the word is placed from its H, not centred by its width: the crossbar's tip
    (0.937 of the letter from the H's left edge) then ends 0.062 of the letter right of the middle
-   fold in every language, crossing the crease and stopping clear of it, and the crease runs
-   through the "e". In English that is the centred word, within a pixel; Vietnamese sets "ealth"
-   in Be Vietnam Pro, a little wider, so its word sits a few pixels right of centre (centred by
-   width, its tip stopped on the crease). */
+   fold in every language, crossing the crease and stopping clear of it, and the crease grazes the
+   "e"'s left edge (English, measured at 1440, 1024 and 900px: within a pixel of it). In English
+   that is the centred word, within a pixel; Vietnamese sets "ealth" in Be Vietnam Pro, a little
+   wider, so its word sits a few pixels right of centre (centred by width, its tip stopped on the
+   crease). */
 @media (min-width: 900px) {
   .letterPage .closing .chapter {
     justify-self: start;
@@ -609,7 +607,7 @@
 
   .letterPage [data-part="roots"] .pool {
     left: calc(var(--span) / 2);
-    width: calc(var(--span) / 1.4535);
+    width: calc(var(--span) / var(--pool-ratio));
     rotate: -90deg;
   }
 
@@ -619,8 +617,8 @@
   }
 }
 
-/* From 1200px, Good opens out too: the G with the rings beside it, the three figures in one row.
-   The rings may reach into the fold gap's left half but stop 26px short of the middle. */
+/* From 1200px, Good opens out too: the G with the rings beside it (its figures stand in one row
+   below). The rings may reach into the fold gap's left half but stop 26px short of the middle. */
 @media (min-width: 1200px) {
   .letterPage .experience {
     grid-template-columns:
@@ -638,9 +636,13 @@
     justify-self: start;
     width: min(260px, calc(100% + var(--fold-gap) / 2 - 26px));
   }
+}
 
-  /* Three even columns, each at least as wide as its numeral ("20+ years" keeps one line); the
-     last column ends at the words' edge. */
+/* The three figures in one row, from 1200px and on a tablet held upright (600 to 899px, where the
+   one column is wide enough for three: stacked on full-width hairlines they made a long sparse
+   column of the phone's). Three even columns, each at least as wide as its numeral ("20+ years"
+   keeps one line); the last column ends at the words' edge. */
+@media (min-width: 1200px), (min-width: 600px) and (max-width: 899px) {
   .letterPage .figures {
     grid-template-columns: repeat(3, minmax(min-content, 1fr));
     gap: 0;
@@ -718,14 +720,9 @@
   }
 
   /* One column: the words stand over the print, so its top margin keeps the wash 16px clear of
-     them too, and the pool stays inside a phone's screen (12px from each side). */
+     them too. */
   .letterPage .print {
-    --pool-w: min(calc(var(--mat) * 2.1), calc(100vw - 24px));
     margin-top: max(calc(var(--mat) * 0.25), calc(var(--reach) - var(--row-gap) + 16px));
-  }
-
-  .letterPage .promises {
-    grid-template-columns: minmax(0, 1fr);
   }
 
   .letterPage .chapter[data-size="closing"] {
@@ -786,14 +783,17 @@
 /* ---- Motion: the name writes itself (one breath, the shared ease) ---------------------------
    The letters are written through the brush wipe (wipe-v1.png: opaque, a soft ink front, clear;
    at 300% wide, moving it from 100% to 0% writes left to right). The opening's name is pure
-   CSS, so it never waits on a script; its gold dot comes up as the name is visibly done. A chapter
-   letter is written as it reaches the reading line (useArrival in chapter-word.tsx). Reduced
-   motion: no mask, no animation, everything there. */
+   CSS, so it never waits on a script; its gold dot comes up as the name is visibly done. The mask
+   lives in the keyframes and the animation fills only backwards: the name is hidden through its
+   0.35s delay and written through the mask, and after that breath it carries no mask at all, so
+   it stands whole whatever happens to the wipe picture (a blocked or failed request would
+   otherwise hold a permanent mask over it, and hide it for good). There is no jump at the end:
+   the wipe's left 36% is fully opaque, and the last frame shows only the leftmost third of it. A
+   chapter letter is written as it reaches the reading line (useArrival in chapter-word.tsx).
+   Reduced motion: no mask, no animation, everything there. */
 @media (prefers-reduced-motion: no-preference) {
   .letterPage .word .paint {
-    -webkit-mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
-    mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
-    animation: write var(--breath) var(--ease) 0.35s both;
+    animation: write var(--breath) var(--ease) 0.35s backwards;
   }
 
   .letterPage .word .dot {
@@ -878,15 +878,17 @@
   }
 }
 
+/* Both frames name the whole mask, so its picture is the same at either end (an image changes in
+   one step at the half, never gradually) and only its position moves. */
 @keyframes write {
   from {
-    -webkit-mask-position: 100% 0;
-    mask-position: 100% 0;
+    -webkit-mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
+    mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
   }
 
   to {
-    -webkit-mask-position: 0 0;
-    mask-position: 0 0;
+    -webkit-mask: url("/images/about-ink/wipe-v1.png") 0 0 / 300% 100% no-repeat;
+    mask: url("/images/about-ink/wipe-v1.png") 0 0 / 300% 100% no-repeat;
   }
 }
 

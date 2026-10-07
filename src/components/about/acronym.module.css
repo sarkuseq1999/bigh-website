@@ -54,7 +54,10 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
+/* Open from the first paint with reduced motion, and with no script: the unfold is a script's
+   (acronym.tsx sets data-open), so a page whose script never runs kept "BiGH" in its title, under
+   the written name, instead of the sentence it stands for. This module is About's alone. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
   .word,
   .rest,
   .initial {

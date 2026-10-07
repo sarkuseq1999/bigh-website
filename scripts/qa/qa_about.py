@@ -4,17 +4,20 @@ mockup reference/ink-pages/mockups/about-d.png; spec docs/superpowers/specs/2026
 desktop_and_phone (1440x900, 390x844): answers 200; no console errors or warnings (except the built
 site's link-prefetch CSS note, PREFETCH_CSS); no failed requests; one h1, English "Be in Good
 Health." with lang="en"; every locked line on the page; no canvas and no brush layer; every painting
-multiplies onto the paper; the page wears the aged paper; the menu bar marks About (bar and narrow
+multiplies onto the paper (and no ancestor between a painting and the page root makes a stacking
+context: z-index, opacity, transform, filter, isolation, will-change, blend mode, contain);
+the page wears the aged paper; the menu bar marks About (bar and narrow
 menu), has no Home link, and its Products drop-down holds the five products and "Explore our
 products."; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the four chapter
 words B, i, G, H, hidden from screen readers, in English, their paintings loaded; the written name
 loads eagerly and is preloaded; the Support and Ask sheets open, close and hand focus back.
-letter_layout (1440x900, 1280x800, 1200x800, 1024x768, 768x1024, 390x844): the middle fold from
-900px up (centred within 2px), none below; four folds across; on two columns Be's letter left and
-words right, in's words left and letter and portrait right, Good's letter and rings left and words
-right, each 24px or more clear of the middle fold; the promise heading centred; four promises in one
-row from 1200px, two by two below that, one column on one column; promise headings side by side
-stand level; the closing centred; the closing H 24px or more above its heading; no words over a
+letter_layout (1440x900, 1280x800, 1200x800, 1024x768, 768x1024, 600x900, 390x844): the middle fold
+from 900px up (centred within 2px), none below; four folds across; on two columns Be's letter left
+and words right, in's words left and letter and portrait right, Good's letter and rings left and
+words right, each 24px or more clear of the middle fold; the promise heading centred; four promises
+in one row from 1200px, two by two from 600px to 1199px, one per row on a phone (under 600px); on a
+tablet held upright (600-899px) the three figures stand in one row, each on one line; promise
+headings side by side stand level; the closing centred; the closing H 24px or more above its heading; no words over a
 painting; Dr. Liu's photo in the middle of its pool; the rings carry "Illustration"; hello in five
 languages centred under its promise (8px). On two columns Dr. Liu's pool 16px or more clear of the
 middle fold, and the roots' words start level with the "in" (24px); the closing H's crossbar tip
@@ -36,22 +39,26 @@ breath) and its gold dot is delayed until the name is visibly done (1.7s or more
 after it; the band waits invisible, nothing of it shows before its bloom (no pop, then vanish), and
 then it blooms; a chapter letter waits out of view, is written as it comes in and ends unmasked;
 the wipe front over the H's stem is a soft ink front (no regular banding down the stem); the wipe
-mask is preloaded for motion visitors only (and fetched once). With JavaScript off the written name is
-visible and the band is crisp and shown.
+mask is preloaded for motion visitors only (and fetched once); once written the name carries no mask at
+all, and with the wipe picture blocked it still appears (60% or more of a normal load's ink). With
+JavaScript off the written name is visible, the band is crisp and shown, and the title reads
+"Be in Good Health." (its four tails open and shown).
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
-#promise land the part's first content 0-64px under the header, nothing of it under the bar, its
-heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors, the h1 and the
-chapter words stay English, no English source sentence left visible. languages_layout (every language
-at 1440x900, 1024x768, 768x1024, 390x844, 360x780; Japanese and Chinese also at 900x900): no word
+#promise, #closing land the part's first content 0-64px under the header, nothing of it under the
+bar, its heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors, the h1 and
+the chapter words stay English, no English source sentence left visible. languages_layout (every
+language at 1440x900, 1024x768, 768x1024, 600x900, 390x844, 360x780; Japanese and Chinese also at
+900x900; at 600-899px the three figures in one row, each on one line): no word
 crosses the side margins; in Korean, Japanese, Chinese and Vietnamese no bad line break; from 900px
 no words cross the middle fold and the closing H's crossbar tip ends 8px or more from it; in Japanese and Chinese, at 390, 360 and 900px, no heading phrase
 (up to 12 characters) is split across lines; Vietnamese at 390: the closing pills balance their two
 lines. nav_locales: from /vn/about and
 /kr/about the bar and the narrow menu stay in the language.
-boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
-words cross it and Dr. Liu's pool stays 16px or more clear of it.
+boundary (899x900, 900x900, 599x900, 600x900): no sideways scrolling; the middle fold shows at 900
+only; at 900 no words cross it and Dr. Liu's pool stays 16px or more clear of it; at 600 the
+promises stand two by two and the figures in one row, at 599 four rows and three.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the written name and the title in the first
 screen; from 900px the band starts in it too.
 
@@ -108,6 +115,11 @@ LOCKED = [
     "Ask BiGH Science",
     "Explore our products",
 ]
+
+
+# The narrowest window that is a tablet, not a phone: from here to 899px the page is one column
+# with its figures in one row and its promises two by two.
+TABLET = 600
 
 
 def check(name, ok, detail=""):
@@ -237,6 +249,47 @@ GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')
   const l = Math.min(...words.map(r => r.left)), r = Math.max(...words.map(r => r.right)), b = li.getBoundingClientRect();
   return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), lines: new Set(words.map(r => Math.round(r.top))).size }; }"""
 
+# Multiply: a painting blends with the page root's paper only if no element between it and the root
+# makes a stacking context. For each painting (the dots and Dr. Liu's mount multiply nothing) walk
+# its ancestors up to, but not including, the root and report what each one makes: a z-index on a
+# positioned (or flex/grid item) element, a fixed or sticky position, opacity under 1, a transform
+# (including translate, rotate and scale), a filter, a backdrop-filter, a perspective, a clip-path,
+# a mask, isolation, a blend mode other than normal, contain: paint (or layout, strict, content),
+# content-visibility, a container type, or a will-change that names one of them.
+STACKING_JS = """() => {
+  const root = document.querySelector('[data-look="ink"]');
+  const none = (v) => !v || v === 'none' || v === 'auto' || v === 'normal';
+  const makes = (el) => {
+    const s = getComputedStyle(el), parent = el.parentElement, why = [];
+    const item = parent && /flex|grid/.test(getComputedStyle(parent).display);
+    if (s.zIndex !== 'auto' && (s.position !== 'static' || item)) why.push('z-index ' + s.zIndex);
+    if (s.position === 'fixed' || s.position === 'sticky') why.push('position ' + s.position);
+    if (parseFloat(s.opacity) < 1) why.push('opacity ' + s.opacity);
+    for (const [name, value] of [['transform', s.transform], ['translate', s.translate], ['rotate', s.rotate],
+        ['scale', s.scale], ['filter', s.filter], ['backdrop-filter', s.backdropFilter], ['perspective', s.perspective],
+        ['clip-path', s.clipPath], ['mask', s.maskImage]])
+      if (!none(value)) why.push(name + ' ' + value);
+    if (s.isolation === 'isolate') why.push('isolation');
+    if (s.mixBlendMode !== 'normal') why.push('mix-blend-mode ' + s.mixBlendMode);
+    if (/paint|layout|strict|content/.test(s.contain)) why.push('contain ' + s.contain);
+    if (s.contentVisibility !== 'visible') why.push('content-visibility ' + s.contentVisibility);
+    if (s.containerType !== 'normal') why.push('container-type ' + s.containerType);
+    if (/opacity|transform|translate|rotate|scale|filter|perspective|clip-path|mask|mix-blend|isolation|backdrop/.test(s.willChange))
+      why.push('will-change ' + s.willChange);
+    return why;
+  };
+  const found = [];
+  const paintings = [...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]'));
+  for (const img of paintings) {
+    for (let el = img.parentElement; el && el !== root; el = el.parentElement) {
+      const why = makes(el);
+      if (why.length) found.push([(img.getAttribute('src') || '').slice(-26), el.tagName.toLowerCase() + '.' + String(el.className).split(' ')[0], why.join(', ')]);
+    }
+    if (!root.contains(img)) found.push([(img.getAttribute('src') || '').slice(-26), 'outside the page root', '']);
+  }
+  return { paintings: paintings.length, found };
+}"""
+
 # Dr. Liu's pool against the middle fold's right edge (the sheet's ::before).
 POOL_FOLD_JS = """() => { const sheet = document.querySelector('[data-sheet]'); const v = getComputedStyle(sheet, '::before');
   const edge = sheet.getBoundingClientRect().left + parseFloat(v.left) + parseFloat(v.width);
@@ -289,6 +342,12 @@ def desktop_and_phone(browser):
             "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]')).map(i => getComputedStyle(i).mixBlendMode)"
         )
         check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
+        stacking = page.evaluate(STACKING_JS)
+        check(
+            f"{tag} no stacking context between a painting and the page root ({stacking['paintings']} paintings)",
+            stacking["paintings"] > 0 and not stacking["found"],
+            stacking["found"][:4],
+        )
         paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
         check(f"{tag} the aged paper", "paper-aged" in paper, paper)
         chapters = page.evaluate(
@@ -413,7 +472,7 @@ SPREAD_JS = """() => { const r = (sel) => document.querySelector(sel).getBoundin
 
 
 def letter_layout(browser):
-    for width, height in [(1440, 900), (1280, 800), (1200, 800), (1024, 768), (768, 1024), (390, 844)]:
+    for width, height in [(1440, 900), (1280, 800), (1200, 800), (1024, 768), (768, 1024), (600, 900), (390, 844)]:
         tag = f"{width}x{height}"
         two = width >= 900
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
@@ -442,7 +501,9 @@ def letter_layout(browser):
             centred,
         )
         rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
-        want = 1 if width >= 1200 else 2 if two else 4
+        # Four across from 1200px, two by two from 600px (a tablet held upright is no stretched
+        # phone), one per row only on a phone.
+        want = 1 if width >= 1200 else 2 if width >= TABLET else 4
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
         # Promises side by side: their headings stand level (the dots' pictures are not all the
         # same shape; at their own heights two headings in the row sat 1.7px lower).
@@ -489,8 +550,9 @@ def letter_layout(browser):
                 abs(closing["tipFromFold"]) >= 8,
                 closing,
             )
-        if two:
+        if two or width >= TABLET:
             spread = page.evaluate(SPREAD_JS)
+        if two:
             check(
                 f"{tag} in: Dr. Liu's print beside the in, level with the button (48px)",
                 spread["beside"] >= 8 and abs(spread["level"]) <= 48,
@@ -501,6 +563,14 @@ def letter_layout(browser):
             check(
                 f"{tag} Good: the rings beside the G, the three figures in one row, each on one line",
                 spread["ringsBeside"] >= 8 and spread["ringsOverlap"] and spread["rows"] == 1 and spread["fit"],
+                spread,
+            )
+        if TABLET <= width < 900:
+            # A tablet held upright: the figures stand in one row, each on one line, as from 1200px
+            # (stacked on full-width hairlines they made the phone column a long sparse one).
+            check(
+                f"{tag} Good: the three figures in one row, each on one line",
+                spread["rows"] == 1 and spread["fit"],
                 spread,
             )
         if width == 1440:
@@ -549,6 +619,20 @@ def boundary(browser):
             check("900 no words cross the middle fold", not crossing, crossing[:3])
             reach = page.evaluate(POOL_FOLD_JS)
             check("900 Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
+        context.close()
+    # The tablet's edge: at 600px the promises stand two by two and the figures in one row; at
+    # 599px it is the phone's column (promises one per row, figures stacked).
+    for width in (599, 600):
+        context, page, response, errors, failed = open_page(browser, width, 900, reduced=True)
+        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{width} no sideways scrolling", sideways <= 0, sideways)
+        rows = page.evaluate(
+            "new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size"
+        )
+        figures = page.evaluate(SPREAD_JS)["rows"]
+        tablet = width >= TABLET
+        check(f"{width} the promises in {2 if tablet else 4} row(s)", rows == (2 if tablet else 4), rows)
+        check(f"{width} the figures in {1 if tablet else 3} row(s)", figures == (1 if tablet else 3), figures)
         context.close()
 
 
@@ -638,13 +722,19 @@ def front_banding(page):
     moment the stem column whose front is half through is read from the top of the stem to its
     foot, and the times its alpha swings between under 0.35 and over 0.65 are counted. A soft front
     changes slowly down a stem (0 to 2 swings); venetian blinds change every few pixels (a dozen)."""
+    # The name's animation ends 2.75s after it starts and leaves nothing behind (no forwards fill:
+    # the name must not depend on its mask once it is written), so the page is caught while it
+    # runs and paused at once. False when there is none to catch (the check then reports it).
+    caught = page.evaluate(
+        """() => { const a = document.getAnimations().find(x => (x.animationName || '').includes('write'));
+             if (!a) return false; a.pause(); window.__write = a; return true; }"""
+    )
+    if not caught:
+        return []
+    wait_until(page, "document.querySelector('[data-word] img').complete")
     box = page.evaluate(
         """() => { const r = document.querySelector('[data-word] img').getBoundingClientRect();
              return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }; }"""
-    )
-    page.evaluate(
-        """() => { const a = document.getAnimations().find(x => (x.animationName || '').includes('write'));
-             a.pause(); window.__write = a; }"""
     )
 
     def grab(ms):
@@ -775,8 +865,8 @@ def motion(browser):
     # middle of its stroke and read the front down the H's stem.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
-    page.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
-    page.evaluate("document.fonts.ready.then(() => true)")
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    wait_until(page, "document.getAnimations().some(a => (a.animationName || '').includes('write'))", 5000)
     readings = front_banding(page)
     check("motion: the wipe front crosses the H's stem", bool(readings), readings)
     check(
@@ -811,10 +901,13 @@ def motion(browser):
     )
     late = page.evaluate(
         """() => ({ mask: getComputedStyle(document.querySelector('[data-word] img')).maskPosition,
+             maskImage: getComputedStyle(document.querySelector('[data-word] img')).maskImage,
              dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity,
              band: document.querySelector('[data-band]').dataset.bloom })"""
     )
-    check("motion: the name ends whole", late["mask"].startswith("0%"), late)
+    # Once written the name carries no mask at all (it must not depend on the wipe picture for good):
+    # no mask image, and the position, where read, is the written end (0%).
+    check("motion: the name ends whole (no mask left on it)", late["maskImage"] == "none" and late["mask"].startswith("0%"), late)
     check("motion: then its gold dot is up", float(late["dot"]) == 1, late)
     check("motion: the band has bloomed", late["band"] == "done", late)
     check(
@@ -860,7 +953,46 @@ def motion(browser):
         band["bloom"] == "waiting" and band["filter"] == "none" and band["opacity"] == "1",
         band,
     )
+    # The title reads "Be in Good Health.", not three times "BiGH" in the first screen: its tails
+    # (the unfold is a script's) stand open and shown.
+    tails = page.evaluate(
+        """() => [...document.querySelectorAll('h1 [class*=rest]')].map(t => {
+             const s = getComputedStyle(t);
+             return { text: t.textContent.trim(), opacity: s.opacity, width: Math.round(t.getBoundingClientRect().width) }; })"""
+    )
+    check(
+        "JavaScript off: the title reads the full sentence (all four tails open and shown)",
+        [t["text"] for t in tails] == ["e", "n", "ood", "ealth."]
+        and all(t["opacity"] == "1" and t["width"] > 4 for t in tails),
+        tails,
+    )
     context.close()
+
+    # The wipe picture blocked (a slow or failing request): the name is written through it, so it may
+    # be late, but once its breath is over it stands whole whatever happened to the mask. Read from
+    # pixels against a normal load: the name's box holds at least 60% of the ink.
+    def name_ink(block):
+        context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+        page = context.new_page()
+        if block:
+            page.route("**/wipe-v1.png", lambda route: route.abort())
+        page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+        page.wait_for_timeout(3800)
+        box = page.evaluate(
+            """() => { const r = document.querySelector('[data-word] img').getBoundingClientRect();
+                 return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }; }"""
+        )
+        shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+        dark = sum(shot.histogram()[:90]) / (shot.width * shot.height)
+        context.close()
+        return dark
+
+    normal, blocked = name_ink(False), name_ink(True)
+    check(
+        "motion: with the wipe picture blocked the name still appears once written (60% or more of a normal load's ink)",
+        normal >= 0.02 and blocked >= 0.6 * normal,
+        {"normal": round(normal, 4), "blocked": round(blocked, 4)},
+    )
 
 
 def settle(page, still=300, limit=5000):
@@ -898,7 +1030,7 @@ def deep_links(browser):
         warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
         warm.evaluate("document.fonts.ready.then(() => true)")
         warm.close()
-        for anchor in ["purpose", "roots", "experience", "promise"]:
+        for anchor in ["purpose", "roots", "experience", "promise", "closing"]:
             page = context.new_page()
             page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
             page.evaluate("document.fonts.ready.then(() => true)")
@@ -1063,7 +1195,7 @@ def languages_layout(browser):
     in Korean, Japanese, Chinese and Vietnamese no bad line break. Japanese and Chinese also at
     900x900, and on a phone and at 900px no heading phrase is split across lines."""
     for lang in ["en", "kr", "jp", "cns", "vn"]:
-        sizes = [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]
+        sizes = [(1440, 900), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
         if lang in ("jp", "cns"):
             sizes.append((900, 900))
         for width, height in sizes:
@@ -1072,6 +1204,11 @@ def languages_layout(browser):
             context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
             over = page.evaluate(MARGINS_JS)
             check(f"{tag} words inside the margins", not over, over[:3])
+            if TABLET <= width < 900:
+                # The tablet's three figures in one row: each translated label and numeral keeps
+                # inside its own column.
+                figures = page.evaluate(SPREAD_JS)
+                check(f"{tag} the three figures in one row, each on one line", figures["rows"] == 1 and figures["fit"], figures)
             if width >= 900:
                 crossing = page.evaluate(CREASE_JS)
                 check(f"{tag} no words cross the middle fold", not crossing, crossing[:3])

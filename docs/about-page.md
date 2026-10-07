@@ -17,13 +17,20 @@ Science under the big H).
 - Layout: on two columns (900px and wider) Dr. Liu's print stands beside the "in", its foot level
   with "Meet our scientists", on the pool laid on its side (a wash has no up or down). From 1200px
   the G stands with the rings beside it and the three figures sit in one row with a hairline
-  between them; under 1200px the rings stand under the G and the figures stack. The middle fold
-  starts under the header (where the opening's words start) and fades in, so it never runs
+  between them; from 900 to 1199px the rings stand under the G and the figures stack. The middle
+  fold starts under the header (where the opening's words start) and fades in, so it never runs
   through the logo. "Health" is set tight like the other chapter words ("ealth" tucked under the
   H's crossbar tip) and, across the fold, placed from its H, so the crossbar crosses the crease
-  and ends clear of it in every language and the crease runs through the "e". The H's stem and
-  tip columns behind those numbers are in `about-letter.module.css`; measure them again if the H
-  is regenerated. Phones stack every part in one column and keep the horizontal folds only.
+  and ends clear of it in every language and the crease grazes the left edge of the "e". The H's
+  stem and tip columns behind those numbers are in `about-letter.module.css`; measure them again
+  if the H is regenerated. Dr. Liu's pool is not measured by hand: its height over its width
+  (`--pool-ratio`) is passed to the CSS from `letter-art.ts` in `about-ink.tsx`.
+- Tablets held upright (600 to 899px) are one column like phones, but the three figures stand in
+  one row and the four promises two by two (stacked, they made a 5,900px page at 768px; now about
+  5,400px). Under 600px the figures stack and the promises stand one per row. Under 900px there is
+  no middle fold, only the folds across. Open point: on a tablet the Be, in and Good parts are
+  still one left-aligned column with the right third bare; two columns from 600px would be a
+  redesign, left for Mo's call.
 - Motion: the name is written left to right through a soft ink front (one wide feathered edge
   that wanders gently; a bristle edge was tried and read as stripes on screen), in one breath
   (2.4s, the shared ease). The band spreads from the middle as the name finishes, the gold dot
@@ -95,12 +102,15 @@ Vietnamese closing pills balance their lines on phones.
 (built site, `next start`; the built site orders CSS differently, so run both). Groups:
 `desktop_and_phone`, `letter_layout`, `fold_header`, `motion`, `focus`, `deep_links`, `languages`,
 `languages_layout`, `nav_locales`, `boundary`, `first_screen` (`--only=` runs some). It covers the
-h1 and the locked words, every painting multiplying onto the paper, the folds and the parts' sides,
+h1 and the locked words, every painting multiplying onto the paper (with no stacking context
+between it and the page root), the folds and the parts' sides,
 the arrangement of in and Good, the middle fold clear of the header, "Health" set tight with the
 H's crossbar tip off the fold (read from the H's picture), text, navigation and target sizes, no
 sideways scrolling, the Support and Ask sheets, the motion (the written name, the band's bloom,
-the soft ink front) and reduced motion, deep links, and every language's words and line breaks:
-334 checks, all passing on the built site on October 6, 2026.
+the soft ink front, the name standing whole once written even with the wipe picture blocked, the
+title reading "Be in Good Health." with JavaScript off) and reduced motion, deep links (every part,
+the closing too), the tablet band (600 to 899px), and every language's words and line breaks:
+382 checks, all passing on the built site on October 6, 2026.
 Screenshots go to `scripts/qa/out/about-letter/`.
 
 The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and
