@@ -14,21 +14,30 @@ words column reaches past its right edge; on one column each picture comes first
 (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under each
 picture, "Illustrations" under the promise row; no words over a painting; four promises in one row
 from 1200px, two by two from 600px, one column below; Dr. Liu's photo in his words, beside his
-paragraph on a tablet's column and from 1200px, above it elsewhere. In Vietnamese at 1080, 1100 and
-1140px (where the longest pill label, "Gặp các nhà khoa học", once ran past it) nothing in a words
-column reaches past its right edge.
+paragraph on a tablet's column and from 1200px, above it elsewhere. In Vietnamese at 1080, 1100,
+1140, 1200 and 1210px (where the longest pill label, "Gặp các nhà khoa học", once ran past it, and
+the tightest widths beside the photo) nothing in a words column reaches past its right edge.
 motion: reduced motion complete and still; with motion every painting is server-marked waiting (none
 paints whole, then vanishes), the opening's painting blooms on arrival and a lower painting waits
 out of view, then blooms; a waiting painting is hidden; with JavaScript off every painting shows.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
+deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
+#promise, #closing land the part's first content 0-64px under the header, its heading in the window.
+languages (kr, jp, cns, vn): 200, no console errors, the h1 English, no English source sentence
+left, the paintings' descriptions translated.
+languages_layout (every language at 1440x900, 1024x768, 768x1024, 600x900, 390x844, 360x780; jp and
+cns also 900x900): no word crosses the side margins; no words over a painting; in kr, jp, cns, vn no
+bad line break; jp and cns heading phrases whole on a phone and at 900; Vietnamese at 390: the
+closing pills balance their lines.
+nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
 in the first screen.
 
 Pictures: scripts/qa/out/about-album/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
 """
 
 import io
@@ -441,7 +450,7 @@ def roots_beside(width):
 
 
 # Nothing in a words column reaches past its right edge: each element's box, and the glyphs of the
-# text it holds (a pill that cannot wrap ran 18px past the column from 960 to about 1010px when Dr.
+# text it holds (a pill that cannot wrap ran 17px past the column from 960 to about 1010px when Dr.
 # Liu's photo stood beside the paragraph there).
 WORDS_FIT_JS = """() => {
   const out = [];
@@ -622,8 +631,9 @@ def rhythm(browser):
         context.close()
     # The pill labels differ by language: the Vietnamese "Gặp các nhà khoa học" is the longest, and
     # beside Dr. Liu's photo it ran 22px past the words column at 1080px, 5px at 1140px (English
-    # fitted from 1080px).
-    for width in (1080, 1100, 1140):
+    # fitted from 1080px). 1200 and 1210px are the tightest widths beside the photo (the photo
+    # stands beside the paragraph from 1200px): about 3px of headroom with a classic scrollbar.
+    for width in (1080, 1100, 1140, 1200, 1210):
         context, page, response, errors, failed = open_page(browser, width, 800, path="/vn/about", reduced=True)
         over = page.evaluate(WORDS_FIT_JS)
         check(f"vn {width}x800 nothing in a words column past its right edge", not over, over[:4])
@@ -698,8 +708,99 @@ def first_screen(browser):
         context.close()
 
 
+LANDING_JS = """(id) => {
+  const s = document.getElementById(id);
+  const tops = [...s.querySelectorAll('[data-picture], [data-label], h2')].filter(e => e.offsetParent).map(e => e.getBoundingClientRect().top);
+  const head = document.getElementById(id + '-title').getBoundingClientRect();
+  const bar = document.querySelector('header').getBoundingClientRect();
+  return { scrollY: Math.round(window.scrollY), bar: Math.round(bar.bottom), first: Math.round(Math.min(...tops)),
+           headTop: Math.round(head.top), headBottom: Math.round(head.bottom), win: window.innerHeight };
+}"""
+
+
+def deep_links(browser):
+    # One browser context per size: a first visit warms the fonts into the cache, then every deep
+    # link is a fresh load.
+    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+        context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
+        warm = context.new_page()
+        warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
+        warm.evaluate("document.fonts.ready.then(() => true)")
+        warm.close()
+        for anchor in ["purpose", "roots", "experience", "promise", "closing"]:
+            page = context.new_page()
+            page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
+            page.evaluate("document.fonts.ready.then(() => true)")
+            settle(page)
+            at = page.evaluate(LANDING_JS, anchor)
+            gap = at["first"] - at["bar"]
+            check(
+                f"{width}x{height} /about#{anchor}: lands 0-64px under the header ({gap}px), heading in the window",
+                at["scrollY"] > 0 and 0 <= gap <= 64 and at["headTop"] >= at["bar"] and at["headBottom"] <= at["win"],
+                at,
+            )
+            page.close()
+        context.close()
+
+
+def languages(browser):
+    english = [line for line in LOCKED if len(line) > 24]
+    for lang in ["kr", "jp", "cns", "vn"]:
+        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about", reduced=True)
+        check(f"{lang} answers 200", response.status == 200, response.status)
+        h1 = page.evaluate("[document.querySelector('h1').textContent.trim(), document.querySelector('h1').lang]")
+        check(f"{lang} the h1 stays English", h1 == ["Be in Good Health.", "en"], h1)
+        text = page.evaluate("document.querySelector('main').innerText")
+        left = [line for line in english if line in text]
+        check(f"{lang} no English sentence left", not left, left[:3])
+        alts = page.evaluate("[...document.querySelectorAll('[data-picture] img')].map(i => i.alt).filter(a => a)")
+        check(f"{lang} the paintings' descriptions translated", alts and not any(" painted in ink" in a or a.startswith("An ") or a.startswith("A ") for a in alts), alts)
+        check(f"{lang} no console errors or warnings", not errors, errors[:3])
+        page.screenshot(path=os.path.join(OUT, f"{lang}-opening.png"))
+        context.close()
+
+
+def languages_layout(browser):
+    """Each language at desktop, tablet and phone sizes: no word crosses the side margins, no
+    words over a painting, and in Korean, Japanese, Chinese and Vietnamese no bad line break.
+    Japanese and Chinese also at 900x900, and on a phone and at 900px no heading phrase is split."""
+    for lang in ["en", "kr", "jp", "cns", "vn"]:
+        sizes = [(1440, 900), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
+        if lang in ("jp", "cns"):
+            sizes.append((900, 900))
+        for width, height in sizes:
+            tag = f"{lang} {width}x{height}"
+            path = "/about" if lang == "en" else f"/{lang}/about"
+            context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
+            over = page.evaluate(MARGINS_JS)
+            check(f"{tag} words inside the margins", not over, over[:3])
+            hits = page.evaluate(OVERLAP_JS)
+            check(f"{tag} no words over a painting", not hits, hits[:3])
+            if lang != "en":
+                bad = page.evaluate(BREAKS_JS, lang)
+                check(f"{tag} no bad line break", not bad, bad[:3])
+            if lang in ("jp", "cns") and width in (390, 360, 900):
+                phrases = page.evaluate(PHRASES_JS, lang)
+                check(
+                    f"{tag} no heading phrase is broken across lines ({phrases['examined']} read)",
+                    phrases["examined"] > 0 and not phrases["split"],
+                    phrases,
+                )
+            if lang == "vn" and width == 390:
+                pills = page.evaluate(
+                    """[...document.querySelectorAll('main [class*=actions] a, main [class*=actions] button')].map(e => {
+                         const r = document.createRange(); r.selectNodeContents(e);
+                         const widths = {}; for (const x of r.getClientRects()) if (x.width > 4) widths[Math.round(x.top)] = (widths[Math.round(x.top)] || 0) + x.width;
+                         return { wrap: getComputedStyle(e).textWrap, widths: Object.values(widths).map(Math.round) }; })"""
+                )
+                check(f"{tag} closing pills balance their lines (computed text-wrap)", len(pills) == 2 and all(p["wrap"] == "balance" for p in pills), pills)
+                two = [p["widths"] for p in pills if len(p["widths"]) == 2]
+                check(f"{tag} the pill's two lines are even", not two or all(min(w) / max(w) >= 0.6 for w in two), pills)
+            context.close()
+
+
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, boundary, first_screen]
+GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:
