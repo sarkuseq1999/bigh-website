@@ -69,12 +69,13 @@
 }
 
 /* Dr. Liu's photo stands over his paragraph where the words column is too narrow for both side by
-   side: on a phone (under 600px: a column of eight short lines, the pill folded in two) and on the
-   narrowest two columns (960 to 1079px: beside the photo the paragraph was about 240px, and the
-   "Meet our scientists" pill, about 256px, ran 18px past the column). From 1080px the paragraph is
-   274px or more, a window's scrollbar included; on a tablet's 640px column (600 to 959px) the
-   photo stands beside it, as in the mockup. */
-@media (max-width: 599px), (min-width: 960px) and (max-width: 1079px) {
+   side: on a phone (under 600px: a column of eight short lines, the pill folded in two) and on two
+   columns under 1200px. There, beside the photo, the paragraph was too narrow for the pill, which
+   cannot wrap: "Meet our scientists" ran 17px past the column at 960px, and the Vietnamese "Gặp
+   các nhà khoa học" 22px at 1080px and 5px at 1140px. From 1200px (where the figures stand in a
+   row too) and on a tablet's one column (600 to 959px: up to 640px wide, 508px at 600) the photo
+   stands beside the paragraph, as in the mockup. */
+@media (max-width: 599px), (min-width: 960px) and (max-width: 1199px) {
   .album .rootsBody {
     grid-template-columns: minmax(0, 1fr);
   }

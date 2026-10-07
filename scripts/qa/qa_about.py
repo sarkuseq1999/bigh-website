@@ -14,7 +14,9 @@ words column reaches past its right edge; on one column each picture comes first
 (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under each
 picture, "Illustrations" under the promise row; no words over a painting; four promises in one row
 from 1200px, two by two from 600px, one column below; Dr. Liu's photo in his words, beside his
-paragraph on a tablet's column and from 1080px, above it elsewhere.
+paragraph on a tablet's column and from 1200px, above it elsewhere. In Vietnamese at 1080, 1100 and
+1140px (where the longest pill label, "Gặp các nhà khoa học", once ran past it) nothing in a words
+column reaches past its right edge.
 motion: reduced motion complete and still; with motion every painting is server-marked waiting (none
 paints whole, then vanishes), the opening's painting blooms on arrival and a lower painting waits
 out of view, then blooms; a waiting painting is hidden; with JavaScript off every painting shows.
@@ -433,9 +435,9 @@ TWO_COLUMNS = 960
 
 
 def roots_beside(width):
-    """Where Dr. Liu's photo stands beside his paragraph (album.module.css): on a tablet's 640px
-    column (600 to 959px) and from 1080px. Elsewhere it stands above it."""
-    return 600 <= width < TWO_COLUMNS or width >= 1080
+    """Where Dr. Liu's photo stands beside his paragraph (album.module.css): on a tablet's column
+    (600 to 959px) and from 1200px. Elsewhere it stands above it."""
+    return 600 <= width < TWO_COLUMNS or width >= 1200
 
 
 # Nothing in a words column reaches past its right edge: each element's box, and the glyphs of the
@@ -617,6 +619,14 @@ def rhythm(browser):
             mount,
         )
         page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
+        context.close()
+    # The pill labels differ by language: the Vietnamese "Gặp các nhà khoa học" is the longest, and
+    # beside Dr. Liu's photo it ran 22px past the words column at 1080px, 5px at 1140px (English
+    # fitted from 1080px).
+    for width in (1080, 1100, 1140):
+        context, page, response, errors, failed = open_page(browser, width, 800, path="/vn/about", reduced=True)
+        over = page.evaluate(WORDS_FIT_JS)
+        check(f"vn {width}x800 nothing in a words column past its right edge", not over, over[:4])
         context.close()
 
 
