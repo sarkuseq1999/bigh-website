@@ -204,39 +204,29 @@ def paper_aged():
 
 def wipe(width=1024, height=256, seed=11):
     """The brush wipe the letters are written through: opaque on the left 36%, transparent on the
-    right 36%, and between them the front of a wet brush laying ink down. The front is soft (ink
-    soaks in: a letter is thin and grey as the brush reaches it, then dark), its place changes
-    from row to row in bunches (the brush's swell, then bristles of three sizes), a few bristles
-    run ahead of it on a longer, thinner tail, and fibres of grain along the stroke striate it
-    faintly. Earlier takes cut each row clean: 1px apart it read as a barcode on a vertical stem,
-    as gaps with hard edges it read as venetian blinds, and a soft front striped by 1px grain
-    still read as scan-lines at 1:1. So the noise is correlated over several rows (streaks 3-8px
-    on the written name, never hairlines) and the grain is faint. The mask is stretched to each
-    letter (the name is about 680px wide, 285 high, a chapter letter a third of that), so it is
-    only 1024 x 256. Every front and tail stays inside 0.385 to 0.625, so the opaque and clear
-    ends meet the ramp without a step. At mask-size 300% 100%, moving it from 100% to 0% writes
-    left to right."""
+    right 36%, and between them a soft ink front, as ink soaks into paper. One wide feathered ramp
+    (10% of the mask's width, tens of pixels on a letter), whose place wanders only slowly down the
+    height (a gentle wave of two or three bumps), with a faint blotchiness inside the ramp: 2D
+    noise in large soft blobs, with no row or column to it. Nothing runs ahead of the front.
+    Earlier takes drew the front from bristles and grain, row by row: 1px rows read as a barcode on
+    a vertical stem, hard gaps as venetian blinds, and soft 3-8px streaks at an even pitch still
+    as a horizontal glitch (qa_about.py reads the swings of the alpha down the H's stem). The mask
+    is stretched to each letter (the name is about 680px wide, 285 high, a chapter letter about
+    150 square), so it is only 1024 x 256, and the blobs' sigmas (18 by 26) look round on the name.
+    The front and its feather stay inside 0.43 to 0.57, so the opaque and clear ends meet the ramp
+    without a step. At mask-size 300% 100%, moving it from 100% to 0% writes left to right."""
     rng = np.random.default_rng(seed)
     xs = (np.arange(width, dtype=np.float32) / width)[None, :]
     rows = np.arange(height, dtype=np.float32) / height
-
-    def run(sigma):
-        """Noise down the rows, correlated over about `sigma` rows, unit spread."""
-        n = cv2.GaussianBlur(rng.standard_normal((height, 1)).astype(np.float32), (0, 0), sigma)
-        return (n / n.std()).ravel()
-
-    swell = 0.018 * np.sin(2 * np.pi * (rows * 1.3 + rng.uniform())) + 0.008 * np.sin(
-        2 * np.pi * (rows * 3.1 + rng.uniform())
+    wave = 0.009 * np.sin(2 * np.pi * (rows * 1.1 + rng.uniform())) + 0.004 * np.sin(
+        2 * np.pi * (rows * 2.3 + rng.uniform())
     )
-    bristles = 0.010 * run(3.0) + 0.014 * run(8) + 0.010 * run(22)
-    ahead = 0.04 * np.maximum(run(2.5) - 1.0, 0)
-    edge = np.clip(0.5 + swell + bristles + ahead, 0.455, 0.555)
-    ramp = 0.10 + 0.04 * (edge - 0.455) / 0.1
-    s = np.clip((edge[:, None] - xs) / ramp[:, None] + 0.5, 0, 1)
+    edge = 0.5 + wave
+    s = np.clip((edge[:, None] - xs) / 0.10 + 0.5, 0, 1)
     s = s * s * (3 - 2 * s)
-    grain = cv2.GaussianBlur(rng.standard_normal((height, width)).astype(np.float32), (0, 0), sigmaX=16, sigmaY=2.2)
-    grain /= grain.std()
-    alpha = np.clip(s + 0.14 * grain * 4 * s * (1 - s), 0, 1)
+    blots = cv2.GaussianBlur(rng.standard_normal((height, width)).astype(np.float32), (0, 0), sigmaX=18, sigmaY=26)
+    blots /= blots.std()
+    alpha = np.clip(s + 0.10 * blots * 4 * s * (1 - s), 0, 1)
     alpha[:, : int(width * 0.36)] = 1
     alpha[:, int(width * 0.64) :] = 0
     a = Image.fromarray((alpha * 255).astype(np.uint8), "L")

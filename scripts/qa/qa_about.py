@@ -26,7 +26,8 @@ server-marked band is already crisp and shown; with motion the name is written (
 breath) and its gold dot is delayed until the name is visibly done (1.7s or more) and comes up
 after it; the band waits invisible, nothing of it shows before its bloom (no pop, then vanish), and
 then it blooms; a chapter letter waits out of view, is written as it comes in and ends unmasked;
-the wipe mask is preloaded for motion visitors only (and fetched once). With JavaScript off the written name is
+the wipe front over the H's stem is a soft ink front (no regular banding down the stem); the wipe
+mask is preloaded for motion visitors only (and fetched once). With JavaScript off the written name is
 visible and the band is crisp and shown.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
@@ -496,6 +497,60 @@ def band_ink(page):
     return sum(ImageChops.difference(shown, hidden).histogram()[9:])
 
 
+WRITE_TIMES = (900, 1000, 1100, 1200, 1300, 1400)
+
+
+def front_banding(page):
+    """Seek the written name through the middle of its stroke and read the front over the H's right
+    stem. For each pixel, alpha = how much of the ink has come through = (paper - frame) / (paper -
+    ink): a multiplied painting is linear in it, so the painting's own texture drops out. At each
+    moment the stem column whose front is half through is read from the top of the stem to its
+    foot, and the times its alpha swings between under 0.35 and over 0.65 are counted. A soft front
+    changes slowly down a stem (0 to 2 swings); venetian blinds change every few pixels (a dozen)."""
+    box = page.evaluate(
+        """() => { const r = document.querySelector('[data-word] img').getBoundingClientRect();
+             return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }; }"""
+    )
+    page.evaluate(
+        """() => { const a = document.getAnimations().find(x => (x.animationName || '').includes('write'));
+             a.pause(); window.__write = a; }"""
+    )
+
+    def grab(ms):
+        page.evaluate(f"window.__write.currentTime = {ms}")
+        page.wait_for_timeout(150)
+        return Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+
+    paper, ink = grab(0), grab(3000)
+    w, h = paper.size
+    p_px, i_px = paper.load(), ink.load()
+    # The H's right stem: of the right-hand columns, the ones with the most ink.
+    counts = {x: sum(1 for y in range(h) if p_px[x, y] - i_px[x, y] > 60) for x in range(int(w * 0.84), w)}
+    top = max(counts.values())
+    stem = [x for x, c in counts.items() if c >= 0.6 * top]
+    readings = []
+    for ms in WRITE_TIMES:
+        frame = grab(ms).load()
+        best = None
+        for x in stem:
+            rows = [y for y in range(h) if p_px[x, y] - i_px[x, y] > 60]
+            alphas = [min(max((p_px[x, y] - frame[x, y]) / (p_px[x, y] - i_px[x, y]), 0), 1) for y in rows]
+            mean = sum(alphas) / len(alphas)
+            if best is None or abs(mean - 0.5) < abs(best[1] - 0.5):
+                best = (x, mean, alphas)
+        x, mean, alphas = best
+        if abs(mean - 0.5) > 0.12:
+            continue
+        state, swings = None, 0
+        for a in alphas:
+            now = "low" if a < 0.35 else "high" if a > 0.65 else state
+            if state is not None and now != state:
+                swings += 1
+            state = now
+        readings.append({"ms": ms, "column": x, "mean_alpha": round(mean, 2), "swings": swings})
+    return readings
+
+
 def motion(browser):
     # Reduced motion: complete and still, from the first paint to the last.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
@@ -582,6 +637,21 @@ def motion(browser):
         "motion: nothing of the band shows before its bloom (no pop, then vanish)",
         still_holding and changed <= 20,
         {"changed_pixels": changed, "hold_still_running": still_holding},
+    )
+    context.close()
+
+    # The wipe front over a stem is a soft ink front, not venetian blinds: seek the name to the
+    # middle of its stroke and read the front down the H's stem.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
+    page.evaluate("document.fonts.ready.then(() => true)")
+    readings = front_banding(page)
+    check("motion: the wipe front crosses the H's stem", bool(readings), readings)
+    check(
+        "motion: no regular banding on the front over the H stem (3 light/dark swings or fewer)",
+        bool(readings) and max(r["swings"] for r in readings) <= 3,
+        readings,
     )
     context.close()
 
