@@ -53,7 +53,76 @@ Pieces:
 - **Sheets**: the homepage's dialog sheet (paper sheet on an ink wash) for anything a page opens.
 - **Motion hooks**: `useMotionOk`, `useArrival`, `useInkFill`, settle.
 
-## About (stage 1), redesigned October 6: "The name, on a folded letter"
+## About (stage 1), October 7: B "The album" and C "The circle", built side by side
+
+D (below) was built and shown on a preview on October 7; Mo: "I don't think this design looks
+good." Her reasons, which bind every page from now on: the CSS folds read as tiles on a wall, not
+paper; the big painted BiGH under the logo, with "Be in Good Health." under it, said the name three
+times (busy); and the parts were uneven (Be had nothing beside it, "in" a photo, Good a log, Health
+nothing), so the page did not read smoothly. She asked for B and C to be built as real pages, each
+on its own preview, and shaped both through new mockups (approved "yes build both", October 7):
+`reference/ink-pages/mockups/about-b.png` and `about-c.png`. D stays on the pushed branch
+`ink-pages` (27e71b7) for reference; nothing of D's look carries over except what is named here.
+
+**Shared by B and C**
+
+- The shared theme only: the kit's rice paper (plain: no folds, no ageing), ink, one gold leaf,
+  Switzer, the menu bar, the footer with the crane at rest. No brush line.
+- The name once: the logo, then the title "Be in Good Health." set plainly in ink at display size
+  (no painted BiGH, no unfolding acronym, which shows "BiGH" first). The h1 stays English with
+  `lang="en"`; the lead under it is translated.
+- One rhythm for every part: one picture on one side, its words on the other, the sides swapping
+  each part, the same paper between parts, the pictures about the same size. The promises are the
+  one centred row; the closing ends the rhythm with its own picture. Phones: one column, each part
+  picture first, then its words.
+- Words: every line of `about-content.ts` stays, the four section labels included.
+- Dr. Liu's real photo on its paper mat (the photo mount shadow). Honesty tag "Illustration" under
+  each painting that pictures something (DESIGN.md); the washes and dots carry none.
+- Section ids stay (`purpose`, `roots`, `experience`, `promise`, `closing`) and deep links land each
+  part under the header.
+- California, not zen (Mo, October 7): California subjects in the ink style; no bamboo, pines or tea.
+
+**B, "The album"** (an old painting album: each part a spread)
+
+| Part                       | Side                                             | Picture                                                                                                                                                                                    |
+| -------------------------- | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Opening                    | words left, picture right                        | an old open book with a gold-leaf ribbon bookmark                                                                                                                                          |
+| Our purpose                | picture left                                     | an oak seedling growing from an acorn, roots below a soil line, one gold-leaf acorn among the roots (the part you can't see)                                                               |
+| Our scientific roots       | words left (with Dr. Liu's photo), picture right | a scientist's desk: a brush on its rest, a microscope in ink only (no gold), a stack of books                                                                                              |
+| Our experience             | picture left                                     | an ancient giant sequoia rising from mist beside a young sequoia, a touch of gold leaf on the old trunk (trees that live thousands of years: older than BiGH)                              |
+| Our promise                | centred row                                      | four small vignettes over the promises: two California fan palms before golden hills with a small gold sun; a branch with a bee; a gold crescent moon; a folded letter with a fountain pen |
+| Curious about the science? | words left, picture right                        | a desk lamp casting a soft pool of gold light onto an open journal                                                                                                                         |
+
+Signature moment: the album opens. Each painting blooms into the paper as its spread arrives (the
+kit's ink bloom), its gold leaf catching the light once it has bloomed.
+
+**C, "The circle"** (airy ink washes around one brushed circle)
+
+| Part                       | Side                      | Picture                                                                                                                                                                                                                                                                                  |
+| -------------------------- | ------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Opening                    | centred                   | one large circle brushed in a single stroke (an enso: a whole, complete life), open where the stroke lifts, a touch of gold leaf where the brush began; under the words, soft rolling California coastal hills in grey wash, feathering to both edges, a faint gold light on one hilltop |
+| Our purpose                | picture left              | B's oak seedling with its gold acorn                                                                                                                                                                                                                                                     |
+| Our scientific roots       | words left, picture right | Dr. Liu's photo on its mat resting on a wide, low pool of grey wash                                                                                                                                                                                                                      |
+| Our experience             | picture left              | B's giant sequoia                                                                                                                                                                                                                                                                        |
+| Our promise                | centred row               | four small round ink dots, deep black to pale grey                                                                                                                                                                                                                                       |
+| Curious about the science? | words left, picture right | reading glasses resting on an open notebook, a touch of gold leaf on the hinge                                                                                                                                                                                                           |
+
+The circle appears once, at the top. Signature moment: the circle paints itself on arrival, one
+stroke around in one breath (a mask sweeping around the circle from where the brush began), then
+its gold leaf comes up; the hills spread from the middle as the stroke closes. The other paintings
+bloom as they arrive.
+
+**Paintings and spend.** New: B's book, seedling, desk, sequoia, four vignettes and lamp (nine);
+C's circle, hills and glasses (three); C reuses B's seedling and sequoia, D's pool and D's four dots.
+Twelve new paintings, about 30 jobs with retakes, about $1.50, inside Mo's remaining budget.
+Mockup pictures are never edited from a version with Dr. Liu's photo in it (an edit redraws his
+face); his real photo is placed in code.
+
+**Delivery.** One branch per page, both from `ink-pages`: `about-b` and `about-c`, each replacing
+D's About. Built and checked on dev and `next start` (the homepage gate included), then shown to Mo
+on two previews; pushing each branch needs her yes.
+
+## About (stage 1), redesigned October 6: "The name, on a folded letter" (built, then rejected October 7)
 
 The first ink About (built October 5 from `about.jpg`, commits up to c30a489) is replaced. Mo,
 October 6: it was "a copycat" of the homepage. Pages share the theme (paper, ink, one gold leaf,
