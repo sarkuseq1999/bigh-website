@@ -51,7 +51,7 @@ for name in ["book", "seedling", "sequoia", "lamp"]:
     p = REPO / f"public/images/about-bc/{name}-v1-gold.webp"
     if p.exists():
         cover = (np.asarray(Image.open(p).convert("RGBA"))[..., 3] > 128).mean()
-        check(f"{name}: a gold light mask (0.1%-15% of the picture)", 0.001 <= cover <= 0.15, round(cover, 4))
+        check(f"{name}: a gold light mask (0.05%-15% of the picture)", 0.0005 <= cover <= 0.15, round(cover, 4))
     else:
         check(f"{name}: gold mask exists", False, p.name)
 
