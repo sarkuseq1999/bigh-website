@@ -1,0 +1,558 @@
+/* About, "The name, on a folded letter" (Mo approved design D on October 6, 2026; mockup
+   reference/ink-pages/mockups/about-d.png). One sheet of slightly aged rice paper, folded like a
+   letter and opened again: the folds divide the page (no brush line here). BiGH is written by hand
+   at the top; each brushed letter opens one part, the parts alternating sides of the middle fold.
+   Every rule is scoped under .letterPage (the page root, InkPage className), so it outranks the
+   kit's .look rules and the homepage resets whatever order the built stylesheets load in.
+   Multiply: the paintings blend with the root's paper, so nothing between them and the root may
+   make a stacking context (no z-index on a positioned ancestor, no isolation, opacity, transform
+   or filter on the sheet, a part, a grid or a figure). */
+
+/* The paper, aged a little for this page: the shared tile multiplied warmer (build_about.py TINT),
+   with the sheet's age over it (darker towards both sides, a few faint spots). The age lies on the
+   root, the footer's paper too: on the sheet alone it stopped in a hard line above the footer.
+   The header's paper reads --paper and --paper-fibre from here, so the bar settles on the same
+   sheet. */
+:global([data-look="ink"]).letterPage {
+  --paper: #efe4ce;
+  --paper-fibre: url("/images/about-ink/paper-aged-v1.webp");
+  --crease-shade: rgb(92 70 40 / 0.11);
+  --crease-light: rgb(255 252 244 / 0.6);
+  --fold-gap: clamp(64px, 8vw, 150px);
+  --part-half: clamp(56px, 6vw, 112px);
+  --letter: clamp(128px, 15vw, 250px);
+  background-image:
+    radial-gradient(circle at 7% 18%, rgb(150 112 62 / 0.07), transparent 120px),
+    radial-gradient(circle at 93% 41%, rgb(150 112 62 / 0.05), transparent 160px),
+    radial-gradient(circle at 12% 67%, rgb(150 112 62 / 0.05), transparent 90px),
+    radial-gradient(circle at 88% 86%, rgb(150 112 62 / 0.06), transparent 140px),
+    linear-gradient(
+      90deg,
+      rgb(120 88 46 / 0.08),
+      transparent 9%,
+      transparent 91%,
+      rgb(120 88 46 / 0.08)
+    ),
+    url("/images/about-ink/paper-aged-v1.webp");
+  background-size:
+    auto,
+    auto,
+    auto,
+    auto,
+    auto,
+    800px 800px;
+}
+
+/* html + body: one element more than the kit's body rule, so it wins in any stylesheet order. */
+:global(html body):has(.letterPage) {
+  background: #efe4ce;
+}
+
+/* The sheet holds the parts and draws the middle fold. */
+.letterPage .sheet {
+  position: relative;
+}
+
+/* A fold is a soft shadow beside a thin highlight. z-index -1 puts it under the words and the
+   paintings but over the root's paper (the root is the stacking context; nothing between it and
+   the fold makes another). The middle fold fades out over its last 240px, above the footer, the
+   way a crease flattens towards the paper's edge. */
+@media (min-width: 900px) {
+  .letterPage .sheet::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    bottom: 0;
+    left: calc(50% - 8px);
+    width: 16px;
+    pointer-events: none;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--crease-shade) 44%,
+      var(--crease-light) 56%,
+      transparent
+    );
+    -webkit-mask-image: linear-gradient(180deg, #000 calc(100% - 240px), transparent);
+    mask-image: linear-gradient(180deg, #000 calc(100% - 240px), transparent);
+  }
+}
+
+.letterPage .part {
+  position: relative;
+  padding-block: var(--part-half);
+  /* Deep links (/about#purpose): the part's first content lands 108px from the window's top, just
+     under the settled bar; the document keeps 150px of scroll-padding-top (globals.css). */
+  scroll-margin-top: calc(108px - 150px - var(--part-half));
+}
+
+.letterPage .part::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    transparent,
+    var(--crease-shade) 44%,
+    var(--crease-light) 56%,
+    transparent
+  );
+}
+
+/* ---- The opening: the written name, the title, the band ------------------------------------- */
+
+/* The header floats over the opening (clear there), so the opening starts 88px down. */
+.letterPage .opening {
+  padding: calc(88px + clamp(24px, 3.4vw, 64px)) 0 var(--part-half);
+  text-align: center;
+}
+
+.letterPage .openingWords {
+  display: grid;
+  justify-items: center;
+}
+
+.letterPage .word {
+  position: relative;
+  display: block;
+  width: clamp(280px, 50vw, 780px);
+  margin: 0 0 clamp(14px, 1.6vw, 28px);
+}
+
+.letterPage .paint {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.letterPage .dot {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+.letterPage .kicker {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-size: 19px;
+  font-weight: 450;
+}
+
+/* The acronym: the four initials in sumi ink, the rest of each word ink-wash grey (3.4:1 on the
+   aged paper, large text). */
+.letterPage .title {
+  --acronym-accent: var(--ink);
+  margin: 0;
+  color: #7f7a72;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(min(40px, 10.26vw), 4.2vw, 68px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.letterPage .lead {
+  margin: clamp(14px, 1.4vw, 22px) 0 0;
+  color: var(--muted);
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+.letterPage .lead span {
+  display: block;
+}
+
+.letterPage .band {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: clamp(4px, 1vw, 16px);
+}
+
+/* ---- The parts: two sides of the middle fold ------------------------------------------------ */
+
+.letterPage .grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  --row-gap: clamp(28px, 3vw, 48px);
+  column-gap: var(--fold-gap);
+  row-gap: var(--row-gap);
+  align-items: center;
+}
+
+.letterPage .areaLetter {
+  grid-area: letter;
+}
+
+.letterPage .areaWords {
+  grid-area: words;
+}
+
+.letterPage .areaArt {
+  grid-area: art;
+}
+
+.letterPage [data-part="purpose"] .grid {
+  grid-template-areas: "letter words";
+}
+
+.letterPage [data-part="purpose"] .areaLetter {
+  justify-self: center;
+}
+
+.letterPage [data-part="roots"] .grid {
+  grid-template-areas:
+    "words letter"
+    "words art";
+}
+
+.letterPage [data-part="roots"] .areaLetter {
+  justify-self: start;
+  align-self: end;
+}
+
+.letterPage .experience {
+  grid-template-areas:
+    "letter words"
+    "art words";
+}
+
+.letterPage .experience .areaLetter {
+  justify-self: start;
+  align-self: end;
+}
+
+/* The chapter word: the painted initial, then the rest of the word in the page's type, standing on
+   the initial's baseline (the paintings' ink ends about 8% above their box's bottom). */
+.letterPage .chapter {
+  display: inline-flex;
+  align-items: flex-end;
+  line-height: 1;
+}
+
+.letterPage .initial {
+  position: relative;
+  display: block;
+  height: var(--letter);
+}
+
+.letterPage .initial .paint {
+  width: auto;
+  height: 100%;
+}
+
+.letterPage .rest {
+  margin: 0 0 calc(var(--letter) * 0.1) calc(var(--letter) * -0.02);
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: calc(var(--letter) * 0.42);
+  letter-spacing: -0.03em;
+}
+
+.letterPage .chapter[data-size="closing"] {
+  --letter: clamp(170px, 19vw, 320px);
+}
+
+/* p.label: the kit's .look .label (margin 0) has the same weight as a plain .letterPage .label. */
+.letterPage p.label {
+  margin: 0 0 14px;
+}
+
+/* The parts' headings sit a step under the opening's title, as in the mockup. Qualified by its
+   element so it outranks the kit's .look .display. */
+.letterPage h2.heading {
+  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  line-height: 1.08;
+}
+
+.letterPage h2.heading > span {
+  display: block;
+}
+
+.letterPage .body {
+  max-width: 30em;
+  margin: clamp(18px, 1.8vw, 28px) 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.letterPage .more {
+  margin-top: clamp(24px, 2.4vw, 36px);
+}
+
+/* ---- Dr. Liu: his real photograph on its paper mat, resting on a pool of grey wash ----------- */
+
+/* The pool is taller than it is wide (968 x 1407) and its wash fills its box, so it reaches past
+   the print, above and below, by --reach (the mount is 1.25 x its photo's width plus the 12px
+   mat). Below, the print's margin keeps the wash 16px clear of the next part's fold. */
+.letterPage .print {
+  --mat: clamp(200px, 15vw, 248px);
+  --pool-w: calc(var(--mat) * 2.1);
+  --reach: calc((var(--pool-w) * 1.4535 - var(--mat) * 1.25 + 6px) / 2);
+  position: relative;
+  justify-self: center;
+  width: var(--mat);
+  margin: calc(var(--mat) * 0.25) 0
+    max(calc(var(--mat) * 0.25), calc(var(--reach) - var(--part-half) + 16px));
+}
+
+.letterPage .pool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: var(--pool-w);
+  max-width: none;
+  height: auto;
+  translate: -50% -50%;
+  pointer-events: none;
+}
+
+/* The photo mount: the page's only shadow. */
+.letterPage .mount {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #fbf9f4;
+  box-shadow:
+    0 22px 44px -22px rgb(12 11 10 / 0.42),
+    0 3px 8px rgb(12 11 10 / 0.1);
+}
+
+.letterPage .mount img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 26%;
+}
+
+/* ---- Good: the rings and the figures --------------------------------------------------------- */
+
+.letterPage .rings {
+  justify-self: center;
+  width: clamp(220px, 21vw, 340px);
+  margin: 0;
+}
+
+.letterPage .ringsBody {
+  position: relative;
+  display: block;
+}
+
+.letterPage .ringsBody img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.letterPage .rings figcaption {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.letterPage .figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(18px, 1.8vw, 28px);
+  margin: clamp(28px, 3vw, 48px) 0 0;
+}
+
+/* Each figure stands on its hairline, its words under it. */
+.letterPage .figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+.letterPage .figures dt {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+.letterPage .figures dd {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.letterPage .figure {
+  font-size: clamp(48px, 4.6vw, 76px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.letterPage .unit {
+  font-size: clamp(26px, 2.4vw, 38px);
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* ---- Our promise: across both sides, four promises under four watercolor dots --------------- */
+
+.letterPage .promise {
+  margin-top: clamp(72px, 7vw, 130px);
+  text-align: center;
+  scroll-margin-top: calc(108px - 150px);
+}
+
+.letterPage .experience {
+  scroll-margin-top: calc(108px - 150px);
+}
+
+.letterPage .promise h2.heading {
+  margin-inline: auto;
+}
+
+.letterPage .promises {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(32px, 3vw, 48px) clamp(24px, 2.4vw, 40px);
+  margin: clamp(36px, 3.4vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.letterPage .promiseDot {
+  display: block;
+  width: clamp(64px, 5.6vw, 92px);
+  height: auto;
+  margin: 0 auto 18px;
+}
+
+.letterPage .promises h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.letterPage .promises p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.letterPage .greetings {
+  margin-top: 14px;
+}
+
+/* ---- Health: the closing, centred across the fold ------------------------------------------- */
+
+.letterPage .closing {
+  padding-bottom: clamp(40px, 4vw, 64px);
+}
+
+.letterPage .pause {
+  display: grid;
+  justify-items: center;
+  text-align: center;
+}
+
+.letterPage .pause .chapter {
+  margin-bottom: clamp(28px, 3vw, 48px);
+}
+
+.letterPage .pause .body {
+  margin-inline: auto;
+}
+
+.letterPage .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+
+/* ---- Narrower two-column windows, then one column ------------------------------------------- */
+
+@media (min-width: 900px) and (max-width: 1199px) {
+  .letterPage .promises {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 899px) {
+  :global([data-look="ink"]).letterPage {
+    --letter: clamp(104px, 28vw, 160px);
+    --part-half: clamp(48px, 9vw, 72px);
+    background-image:
+      radial-gradient(circle at 6% 20%, rgb(150 112 62 / 0.06), transparent 80px),
+      radial-gradient(circle at 94% 58%, rgb(150 112 62 / 0.05), transparent 100px),
+      linear-gradient(
+        90deg,
+        rgb(120 88 46 / 0.07),
+        transparent 6%,
+        transparent 94%,
+        rgb(120 88 46 / 0.07)
+      ),
+      url("/images/about-ink/paper-aged-v1.webp");
+    background-size:
+      auto,
+      auto,
+      auto,
+      800px 800px;
+  }
+
+  .letterPage .word {
+    width: 86vw;
+  }
+
+  .letterPage .grid,
+  .letterPage [data-part="purpose"] .grid,
+  .letterPage [data-part="roots"] .grid,
+  .letterPage .experience {
+    --row-gap: clamp(20px, 5vw, 32px);
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "letter"
+      "words"
+      "art";
+    row-gap: var(--row-gap);
+  }
+
+  .letterPage .grid .areaLetter {
+    justify-self: start;
+  }
+
+  /* One column: the words stand over the print, so its top margin keeps the wash 16px clear of
+     them too, and the pool stays inside a phone's screen (12px from each side). */
+  .letterPage .print {
+    --pool-w: min(calc(var(--mat) * 2.1), calc(100vw - 24px));
+    margin-top: max(calc(var(--mat) * 0.25), calc(var(--reach) - var(--row-gap) + 16px));
+  }
+
+  .letterPage .promises {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .letterPage .chapter[data-size="closing"] {
+    --letter: clamp(140px, 40vw, 220px);
+  }
+}
+
+/* ---- Other languages (DESIGN.md, The CJK Room Rule) ----------------------------------------- */
+
+.letterPage :is(h2, h3):lang(ko) {
+  word-break: keep-all;
+}
+
+.letterPage :is(h2, h3):lang(ja) {
+  word-break: auto-phrase;
+}

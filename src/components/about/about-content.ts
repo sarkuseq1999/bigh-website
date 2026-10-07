@@ -3,7 +3,8 @@
 // stays true without an exact start year; never name its earlier Asian brand), products are made
 // in California by a GMP-certified maker, the 45-day refund is current policy, and Ask BiGH Science
 // stays on the page before the service exists. BiGH was incorporated in California on 05/11/2016.
-// The page is the Ink & Gold About (October 5, 2026). The earlier Glass page (Mo picked look B
+// The page is "The name, on a folded letter" (Mo's design D, October 6, 2026). Before it: the first
+// ink About (October 5, commits up to c30a489) and the Glass page (Mo picked look B
 // with opening 3 and Switzer on Sept 28, 2026) is in the backup zip named in docs/about-page.md.
 
 export const about = {

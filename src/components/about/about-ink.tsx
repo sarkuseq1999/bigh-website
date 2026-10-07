@@ -1,89 +1,87 @@
 "use client";
 
 import Image from "next/image";
+import type { CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
-import { gold, halo, inkstone, liu, mito } from "@/components/home-v2/look-ink/assets";
+import { liu } from "@/components/home-v2/look-ink/assets";
 import { useSiteDialogs } from "@/components/ink/dialogs";
 import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, drafts, routes } from "./about-content";
-import { aboutRoute } from "./about-route";
 import { Acronym } from "./acronym";
+import { ChapterWord } from "./chapter-word";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
-import styles from "./about-ink.module.css";
+import { band, dots, pool, rings, word } from "./letter-art";
+import styles from "./about-letter.module.css";
 
-// The About page in the Ink & Gold look (October 5, 2026; Mo approved the mockup
-// reference/ink-pages/mockups/about.jpg; the words are the locked ones in about-content.ts).
-// "Be in Good Health." beside the ink cell (the homepage's painting), whose gold leaf comes up as
-// the page opens; then four parts down the brush line (purpose, scientific roots, experience,
-// promise) and the page's one centred pause, Ask BiGH Science, under the inkstone.
+// The About page, "The name, on a folded letter" (Mo approved design D on October 6, 2026; mockup
+// reference/ink-pages/mockups/about-d.png; spec docs/superpowers/specs/2026-10-05-ink-pages-design.md).
+// One sheet of slightly aged paper, folded like a letter and opened again: BiGH written by hand at
+// the top, then one brushed letter opening each part (Be, in, Good, Health), the parts alternating
+// sides of the middle fold. The words are the locked ones in about-content.ts. No brush line here:
+// the folds divide the page (the brush line is the homepage's signature).
 
-const CELL_ALT = "A mitochondrion, painted in ink, with two gold folds where energy is made";
+export const RINGS_ALT =
+  "Tree rings in ink. A gold ring marks 2016, when BiGH began; the rings inside it are the years the formula is older.";
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
 }
 
-// A station waits for the brush from the first paint (the purpose's stands in the first screen
-// on a large window, where it would otherwise show, fade out as the line starts, and come back).
-function Station({ id, label }: { id: string; label: string }) {
-  return (
-    <p
-      className={`${base.station} ${styles.station}`}
-      data-station=""
-      data-side="left"
-      data-brush={`st-${id}`}
-      data-reached="false"
-    >
-      {label}
-    </p>
-  );
-}
-
-// The opening carries no "opening" brush anchor: About has no approved opening stroke to keep, so
-// the brush paints its whole line as the page's line (about-route.ts).
 function Opening() {
   const copy = useCopy();
   return (
     <section className={styles.opening} aria-labelledby="about-title">
-      <div className={`${base.wrap} ${styles.openingGrid}`}>
-        <div className={styles.openingWords}>
-          <p className={styles.kicker}>{copy(about.hero.label)}</p>
-          <Acronym className={styles.title} />
-          <p className={styles.lead}>
-            {sentences(copy(about.hero.lead)).map((sentence) => (
-              <span key={sentence}>{sentence}</span>
-            ))}
-          </p>
-        </div>
-        <figure className={styles.cell} data-brush="about-cell">
-          <span className={styles.cellBody}>
-            <Image
-              className={base.ink}
-              src={mito.glow.src}
-              alt={copy(CELL_ALT)}
-              width={mito.glow.width}
-              height={mito.glow.height}
-              sizes="(max-width: 899px) 100vw, 52vw"
-              priority
-              data-bloom="waiting"
-            />
-            <span
-              className={`${base.gold} ${styles.leaf}`}
-              style={{ ["--gold" as string]: `url(${gold.mito})` }}
-            />
-            <span
-              className={styles.charge}
-              data-charge=""
-              style={{ ["--gold" as string]: `url(${gold.mito})` }}
-            />
-          </span>
-          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
-        </figure>
+      <div className={`${base.wrap} ${styles.openingWords}`}>
+        <span className={styles.word} data-word="" aria-hidden="true">
+          <Image
+            className={`${base.ink} ${styles.paint}`}
+            src={word.src}
+            alt=""
+            width={word.width}
+            height={word.height}
+            sizes="(max-width: 899px) 86vw, min(50vw, 780px)"
+            priority
+          />
+          <Image
+            className={styles.dot}
+            src={word.dot.src}
+            alt=""
+            width={word.dot.width}
+            height={word.dot.height}
+            sizes="64px"
+            priority
+            data-dot=""
+            style={{
+              left: `${word.dot.left * 100}%`,
+              top: `${word.dot.top * 100}%`,
+              width: `${word.dot.size * 100}%`,
+            }}
+          />
+        </span>
+        <p className={styles.kicker}>{copy(about.hero.label)}</p>
+        <Acronym className={styles.title} />
+        <p className={styles.lead}>
+          {sentences(copy(about.hero.lead)).map((sentence) => (
+            <span key={sentence}>{sentence}</span>
+          ))}
+        </p>
       </div>
+      {/* From 900px the band starts in the first screen and is its largest painting (LCP). */}
+      <Image
+        className={`${base.ink} ${styles.band}`}
+        src={band.src}
+        alt=""
+        width={band.width}
+        height={band.height}
+        sizes="100vw"
+        loading="eager"
+        data-band=""
+        data-bloom="waiting"
+      />
     </section>
   );
 }
@@ -91,18 +89,24 @@ function Opening() {
 function Purpose() {
   const copy = useCopy();
   return (
-    <section id="purpose" className={styles.part} aria-labelledby="purpose-title">
-      <div className={`${base.wrap} ${styles.partGrid}`}>
-        <Station id="purpose" label={copy(about.purpose.label)} />
-        <div className={styles.content}>
-          <h2 id="purpose-title" className={`${base.display} ${styles.statement}`}>
+    <section
+      id="purpose"
+      className={styles.part}
+      data-part="purpose"
+      aria-labelledby="purpose-title"
+    >
+      <div className={`${base.wrap} ${styles.grid}`}>
+        <ChapterWord initial="B" rest="e" className={styles.areaLetter} />
+        <div className={styles.areaWords}>
+          <p className={`${base.label} ${styles.label}`} data-label="">
+            {copy(about.purpose.label)}
+          </p>
+          <h2 id="purpose-title" className={`${base.display} ${styles.heading}`}>
             {about.purpose.lines.map((line) => (
               <span key={line}>{copy(line)}</span>
             ))}
           </h2>
-          <p className={styles.body} data-brush="purpose-body">
-            {copy(about.purpose.mission)}
-          </p>
+          <p className={styles.body}>{copy(about.purpose.mission)}</p>
         </div>
       </div>
     </section>
@@ -112,57 +116,69 @@ function Purpose() {
 function Roots() {
   const copy = useCopy();
   return (
-    <section id="roots" className={styles.part} aria-labelledby="roots-title">
-      <div className={`${base.wrap} ${styles.partGrid}`}>
-        <Station id="roots" label={copy(about.roots.label)} />
-        <div className={`${styles.content} ${styles.roots}`} data-brush="roots">
-          <figure className={styles.print}>
-            <Image
-              className={`${base.ink} ${styles.halo}`}
-              src={halo.src}
-              alt=""
-              width={halo.width}
-              height={halo.height}
-              sizes="560px"
-              data-bloom=""
-            />
-            <span className={styles.mount}>
-              <Image
-                src={liu.src}
-                alt={copy(about.roots.photo.alt)}
-                width={liu.width}
-                height={liu.height}
-                sizes="(max-width: 899px) 220px, 300px"
-              />
-            </span>
-          </figure>
-          <div className={styles.rootsWords}>
-            <h2 id="roots-title" className={`${base.display} ${styles.heading}`}>
-              {copy(about.roots.title)}
-            </h2>
-            <p className={styles.body}>{copy(about.roots.text)}</p>
-            <Link href={routes.scientists} className={`${base.pill} ${base.pillGhost}`}>
-              {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
-            </Link>
-          </div>
+    <section id="roots" className={styles.part} data-part="roots" aria-labelledby="roots-title">
+      <div className={`${base.wrap} ${styles.grid}`}>
+        <ChapterWord initial="i" rest="n" className={styles.areaLetter} />
+        <div className={styles.areaWords}>
+          <p className={`${base.label} ${styles.label}`} data-label="">
+            {copy(about.roots.label)}
+          </p>
+          <h2 id="roots-title" className={`${base.display} ${styles.heading}`}>
+            {copy(about.roots.title)}
+          </h2>
+          <p className={styles.body}>{copy(about.roots.text)}</p>
+          <Link
+            href={routes.scientists}
+            className={`${base.pill} ${base.pillGhost} ${styles.more}`}
+          >
+            {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
+          </Link>
         </div>
+        <figure className={`${styles.print} ${styles.areaArt}`} data-print="">
+          <Image
+            className={`${base.ink} ${styles.pool}`}
+            src={pool.src}
+            alt=""
+            width={pool.width}
+            height={pool.height}
+            sizes="(max-width: 899px) 90vw, 560px"
+            data-pool=""
+            data-bloom=""
+          />
+          <span className={styles.mount} data-mount="">
+            <Image
+              src={liu.src}
+              alt={copy(about.roots.photo.alt)}
+              width={liu.width}
+              height={liu.height}
+              sizes="(max-width: 899px) 220px, 260px"
+            />
+          </span>
+        </figure>
       </div>
     </section>
   );
 }
 
-function Experience() {
+function Good() {
   const copy = useCopy();
   const years = copy(about.experience.stats[1].unit);
   return (
-    <section id="experience" className={styles.part} aria-labelledby="experience-title">
-      <div className={`${base.wrap} ${styles.partGrid}`}>
-        <Station id="experience" label={copy(about.experience.label)} />
-        <div className={styles.content}>
+    <div className={styles.part} data-part="good">
+      <section
+        id="experience"
+        className={`${base.wrap} ${styles.grid} ${styles.experience}`}
+        aria-labelledby="experience-title"
+      >
+        <ChapterWord initial="G" rest="ood" className={styles.areaLetter} />
+        <div className={styles.areaWords}>
+          <p className={`${base.label} ${styles.label}`} data-label="">
+            {copy(about.experience.label)}
+          </p>
           <h2 id="experience-title" className={`${base.display} ${styles.heading}`}>
             {copy(about.experience.title)}
           </h2>
-          <dl className={styles.figures} data-brush="figures">
+          <dl className={styles.figures}>
             <div>
               <dt>{copy(about.roots.stat.label)}</dt>
               <dd>
@@ -184,33 +200,54 @@ function Experience() {
             </div>
           </dl>
         </div>
-      </div>
-    </section>
-  );
-}
-
-function Promises() {
-  const copy = useCopy();
-  return (
-    <section id="promise" className={styles.part} aria-labelledby="promise-title">
-      <div className={`${base.wrap} ${styles.partGrid}`}>
-        <Station id="promise" label={copy(about.promise.label)} />
-        <div className={`${styles.content} ${styles.promise}`}>
-          <h2 id="promise-title" className={`${base.display} ${styles.heading}`}>
-            {copy(about.promise.title)}
-          </h2>
-          <ul className={styles.promises}>
-            {about.promise.items.map((item, i) => (
-              <li key={item.title} data-brush={`promise-${i}`}>
-                <h3>{copy(item.title)}</h3>
-                <p>{copy(item.text)}</p>
-                {i === 3 && <Greetings className={styles.greetings} />}
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
+        <figure className={`${styles.rings} ${styles.areaArt}`} data-rings="">
+          <span className={styles.ringsBody}>
+            <Image
+              className={base.ink}
+              src={rings.src}
+              alt={copy(RINGS_ALT)}
+              width={rings.width}
+              height={rings.height}
+              sizes="(max-width: 899px) 70vw, 340px"
+              data-bloom=""
+            />
+            <span className={base.gold} style={{ ["--gold" as string]: `url(${rings.gold})` }} />
+          </span>
+          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+        </figure>
+      </section>
+      <section
+        id="promise"
+        className={`${base.wrap} ${styles.promise}`}
+        aria-labelledby="promise-title"
+      >
+        <p className={`${base.label} ${styles.label}`} data-label="">
+          {copy(about.promise.label)}
+        </p>
+        <h2 id="promise-title" className={`${base.display} ${styles.heading}`}>
+          {copy(about.promise.title)}
+        </h2>
+        <ul className={styles.promises}>
+          {about.promise.items.map((item, i) => (
+            <li key={item.title} data-promise="">
+              <Image
+                className={`${base.ink} ${styles.promiseDot}`}
+                src={dots[i].src}
+                alt=""
+                width={dots[i].width}
+                height={dots[i].height}
+                sizes="92px"
+                data-bloom=""
+                style={{ "--bloom-delay": i * 260 } as CSSProperties}
+              />
+              <h3>{copy(item.title)}</h3>
+              <p>{copy(item.text)}</p>
+              {i === 3 && <Greetings className={styles.greetings} />}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </div>
   );
 }
 
@@ -218,20 +255,14 @@ function Closing() {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   return (
-    <section id="closing" className={styles.closing} aria-labelledby="closing-title">
+    <section
+      id="closing"
+      className={`${styles.part} ${styles.closing}`}
+      data-part="closing"
+      aria-labelledby="closing-title"
+    >
       <div className={`${base.wrap} ${styles.pause}`}>
-        <figure className={styles.inkstone}>
-          <Image
-            className={base.ink}
-            src={inkstone.src}
-            alt=""
-            width={inkstone.width}
-            height={inkstone.height}
-            sizes="(max-width: 720px) 70vw, min(26vw, 400px)"
-            data-bloom=""
-          />
-          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
-        </figure>
+        <ChapterWord initial="H" rest="ealth" size="closing" />
         <h2 id="closing-title" className={`${base.display} ${styles.heading}`}>
           {copy(about.closing.title)}
         </h2>
@@ -251,16 +282,15 @@ function Closing() {
 
 export function AboutInk() {
   return (
-    <InkPage current="about" route={aboutRoute}>
+    <InkPage current="about" className={styles.letterPage}>
       {() => (
-        <>
+        <div className={styles.sheet} data-sheet="">
           <Opening />
           <Purpose />
           <Roots />
-          <Experience />
-          <Promises />
+          <Good />
           <Closing />
-        </>
+        </div>
       )}
     </InkPage>
   );
