@@ -555,20 +555,26 @@
   }
 }
 
-/* The closing word is centred, so the middle fold fell where the H's crossbar ends and "ealth"
-   begins: the stroke stopped on the crease. The word is set from the H instead: its ink ends half
-   a gap left of the fold and "ealth" starts half a gap right of it (the H's own box runs 1.4% of
-   the letter past its ink), so the crease passes through clear paper in any language's type. The
-   gap is the least that keeps both clear of the crease's 16px, so the word still reads as one. */
+/* "Health" is set tight, like the other chapter words: "ealth" tucks in under the tip of the H's
+   crossbar, its "e" about 0.11 of the letter's height after the H's right stem (as in the mockup).
+   The H's crossbar runs well past its stem, so the shared -0.02 left a wide gap ("H ealth"). The
+   numbers come from the painting letter-h-v1: its right stem ends at column ~855 of 1069 and the
+   crossbar's tip at 1053; a regenerated H needs them measured again (qa_about.py reads both from
+   the picture itself). */
+.letterPage .closing .rest {
+  margin-left: calc(var(--letter) * -0.09);
+}
+
+/* Across the fold the word is placed from its H, not centred by its width: the crossbar's tip
+   (0.937 of the letter from the H's left edge) then ends 0.062 of the letter right of the middle
+   fold in every language, crossing the crease and stopping clear of it, and the crease runs
+   through the "e". In English that is the centred word, within a pixel; Vietnamese sets "ealth"
+   in Be Vietnam Pro, a little wider, so its word sits a few pixels right of centre (centred by
+   width, its tip stopped on the crease). */
 @media (min-width: 900px) {
   .letterPage .closing .chapter {
-    --gap: calc(var(--letter) * 0.05 + 10px);
     justify-self: start;
-    margin-left: calc(50% - var(--letter) * 0.9358 - var(--gap) / 2);
-  }
-
-  .letterPage .closing .rest {
-    margin-left: calc(var(--gap) - var(--letter) * 0.0142);
+    margin-left: calc(50% - var(--letter) * 0.875);
   }
 }
 

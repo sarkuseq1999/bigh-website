@@ -19,9 +19,11 @@ Science under the big H).
   the G stands with the rings beside it and the three figures sit in one row with a hairline
   between them; under 1200px the rings stand under the G and the figures stack. The middle fold
   starts under the header (where the opening's words start) and fades in, so it never runs
-  through the logo. The closing word is set from its H, so the fold passes through clear paper
-  between the H and "ealth". Phones stack every part in one column and keep the horizontal folds
-  only.
+  through the logo. "Health" is set tight like the other chapter words ("ealth" tucked under the
+  H's crossbar tip) and, across the fold, placed from its H, so the crossbar crosses the crease
+  and ends clear of it in every language and the crease runs through the "e". The H's stem and
+  tip columns behind those numbers are in `about-letter.module.css`; measure them again if the H
+  is regenerated. Phones stack every part in one column and keep the horizontal folds only.
 - Motion: the name is written left to right through a soft ink front (one wide feathered edge
   that wanders gently; a bristle edge was tried and read as stripes on screen), in one breath
   (2.4s, the shared ease). The band spreads from the middle as the name finishes, the gold dot
@@ -94,10 +96,11 @@ Vietnamese closing pills balance their lines on phones.
 `desktop_and_phone`, `letter_layout`, `fold_header`, `motion`, `focus`, `deep_links`, `languages`,
 `languages_layout`, `nav_locales`, `boundary`, `first_screen` (`--only=` runs some). It covers the
 h1 and the locked words, every painting multiplying onto the paper, the folds and the parts' sides,
-the arrangement of in and Good, the middle fold clear of the header and of the closing word, text,
-navigation and target sizes, no sideways scrolling, the Support and Ask sheets, the motion (the
-written name, the band's bloom, the soft ink front) and reduced motion, deep links, and every
-language's words and line breaks: 316 checks, all passing on the built site on October 6, 2026.
+the arrangement of in and Good, the middle fold clear of the header, "Health" set tight with the
+H's crossbar tip off the fold (read from the H's picture), text, navigation and target sizes, no
+sideways scrolling, the Support and Ask sheets, the motion (the written name, the band's bloom,
+the soft ink front) and reduced motion, deep links, and every language's words and line breaks:
+334 checks, all passing on the built site on October 6, 2026.
 Screenshots go to `scripts/qa/out/about-letter/`.
 
 The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and

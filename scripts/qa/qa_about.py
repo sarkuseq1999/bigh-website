@@ -13,17 +13,18 @@ letter_layout (1440x900, 1280x800, 1200x800, 1024x768, 768x1024, 390x844): the m
 900px up (centred within 2px), none below; four folds across; on two columns Be's letter left and
 words right, in's words left and letter and portrait right, Good's letter and rings left and words
 right, each 24px or more clear of the middle fold; the promise heading centred; four promises in one
-row from 1200px, two by two below that, one column on one column; promise headings side by side stand
-level; the closing centred; the closing H
-24px or more above its heading; no words over a painting; Dr. Liu's photo in the middle of its pool;
-the rings carry "Illustration"; hello in five languages centred under its promise (8px). On two
-columns Dr. Liu's pool 16px or more clear of the middle fold, and the roots' words start level with
-the "in" (24px); the closing H's ink and its "ealth" stay outside the middle fold's 16px on both
-sides. As in the mockup, on two columns Dr. Liu's print stands beside the "in", its bottom level
-with "Meet our scientists" (48px), and the part is no taller than its words need (the words fill
-70% or more of its height); from 1200px the rings stand beside the G, and the three figures stand
-in one row, each on one line. At 1440x900, no seam where the settled bar meets the page's darker sides (a step
-of 4 levels or less). On one column each part's chapter word stands over its label, over its
+row from 1200px, two by two below that, one column on one column; promise headings side by side
+stand level; the closing centred; the closing H 24px or more above its heading; no words over a
+painting; Dr. Liu's photo in the middle of its pool; the rings carry "Illustration"; hello in five
+languages centred under its promise (8px). On two columns Dr. Liu's pool 16px or more clear of the
+middle fold, and the roots' words start level with the "in" (24px); the closing H's crossbar tip
+ends 8px or more from the middle fold. "Health" is set tight at every size: its "e" starts 0.15 of
+the H's height or less after the H's right stem, under the crossbar's tip (both read from the H's
+picture). As in the mockup, on two columns Dr. Liu's print stands beside the "in", its bottom level
+with "Meet our scientists" (48px), and the part is no taller than its words need (the words fill 70%
+or more of its height); from 1200px the rings stand beside the G, and the three figures stand in one
+row, each on one line. At 1440x900, no seam where the settled bar meets the page's darker sides (a
+step of 4 levels or less). On one column each part's chapter word stands over its label, over its
 heading.
 fold_header (1024x768, 1440x900, 1536x864, at the top of the page): the middle fold starts under the
 header's box and draws nothing inside it (with the header hidden, the paper down the page's middle
@@ -45,7 +46,7 @@ heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors
 chapter words stay English, no English source sentence left visible. languages_layout (every language
 at 1440x900, 1024x768, 768x1024, 390x844, 360x780; Japanese and Chinese also at 900x900): no word
 crosses the side margins; in Korean, Japanese, Chinese and Vietnamese no bad line break; from 900px
-no words cross the middle fold; in Japanese and Chinese, at 390, 360 and 900px, no heading phrase
+no words cross the middle fold and the closing H's crossbar tip ends 8px or more from it; in Japanese and Chinese, at 390, 360 and 900px, no heading phrase
 (up to 12 characters) is split across lines; Vietnamese at 390: the closing pills balance their two
 lines. nav_locales: from /vn/about and
 /kr/about the bar and the narrow menu stay in the language.
@@ -373,14 +374,27 @@ def desktop_and_phone(browser):
         context.close()
 
 
-# The closing word against the middle fold: where the H's ink ends (column 1053 of the painting's
-# 1069, letter-art.ts) and where "ealth" begins, each side's distance from the fold's centre line.
-CLOSING_FOLD_JS = """() => { const mid = document.documentElement.clientWidth / 2;
+# The closing word, read from the H's own picture (so a regenerated H is measured again): where its
+# crossbar's tip ends (the rightmost ink) and where its right stem ends (the rightmost column inked
+# in 3% or more of the rows below the crossbar, 60-95% down, so stray fibres do not count), against
+# where the "e" of "ealth" starts (its glyph's ink, not its text box) and the middle fold's centre.
+CLOSING_WORD_JS = """async () => { const mid = document.documentElement.clientWidth / 2;
   const chapter = document.querySelector('#closing [data-chapter]');
-  const h = chapter.querySelector('img').getBoundingClientRect(); const ink = h.left + h.width * 1053 / 1069;
-  const rest = chapter.lastElementChild; const range = document.createRange(); range.selectNodeContents(rest);
-  const e = [...range.getClientRects()].filter(r => r.width > 1)[0];
-  return { left: +(mid - ink).toFixed(1), right: +(e.left - mid).toFixed(1), ink: Math.round(ink), e: Math.round(e.left), mid }; }"""
+  const img = chapter.querySelector('img'); const box = img.getBoundingClientRect();
+  const pic = new Image(); pic.src = img.currentSrc || img.src; await pic.decode();
+  const w = pic.naturalWidth, h = pic.naturalHeight; const c = document.createElement('canvas'); c.width = w; c.height = h;
+  const g = c.getContext('2d'); g.drawImage(pic, 0, 0); const d = g.getImageData(0, 0, w, h).data;
+  const dark = (x, y) => { const i = (y * w + x) * 4; return 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2] < 200; };
+  let tip = 0; for (let x = w - 1; x >= 0 && !tip; x--) for (let y = 0; y < h; y++) if (dark(x, y)) { tip = x + 1; break; }
+  const y0 = Math.round(h * 0.6), y1 = Math.round(h * 0.95); let stem = 0;
+  for (let x = w - 1; x >= 0 && !stem; x--) { let n = 0; for (let y = y0; y < y1; y++) if (dark(x, y)) n++; if (n >= (y1 - y0) * 0.03) stem = x + 1; }
+  const rest = chapter.lastElementChild; const range = document.createRange(); range.setStart(rest.firstChild, 0); range.setEnd(rest.firstChild, 1);
+  const e = range.getBoundingClientRect(); const cs = getComputedStyle(rest);
+  const m = c.getContext('2d'); m.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const eInk = e.left - m.measureText('e').actualBoundingBoxLeft;
+  const tipX = box.left + box.width * tip / w, stemX = box.left + box.width * stem / w;
+  return { tipFromFold: +(tipX - mid).toFixed(1), gap: +(eInk - stemX).toFixed(1), height: +box.height.toFixed(1),
+           gapShare: +((eInk - stemX) / box.height).toFixed(3), tipOverE: +(tipX - eInk).toFixed(1),
+           columns: [stem, tip, w], stemX: Math.round(stemX), eInk: Math.round(eInk), tipX: Math.round(tipX), mid }; }"""
 
 # The mockup's arrangement of in (two columns) and Good (from 1200px): the print beside the "in"
 # and level with the button at the foot of the words; the rings beside the G; the figures in one
@@ -463,10 +477,16 @@ def letter_layout(browser):
                 "Math.round(document.querySelector('#roots [data-label]').getBoundingClientRect().top - document.querySelector('#roots [data-chapter]').getBoundingClientRect().top)"
             )
             check(f"{tag} roots: the words start level with the in (24px)", abs(level) <= 24, level)
-            closing = page.evaluate(CLOSING_FOLD_JS)
+        closing = page.evaluate(CLOSING_WORD_JS)
+        check(
+            f"{tag} Health is set tight: the e 0.15 of the H's height or less after its stem, under the crossbar",
+            0 < closing["gapShare"] <= 0.15 and closing["tipOverE"] > 0,
+            closing,
+        )
+        if two:
             check(
-                f"{tag} the closing H's ink and its ealth stay outside the middle fold (8px from its centre)",
-                closing["left"] >= 8 and closing["right"] >= 8,
+                f"{tag} the H's crossbar tip does not end on the middle fold (8px or more from it)",
+                abs(closing["tipFromFold"]) >= 8,
                 closing,
             )
         if two:
@@ -1055,6 +1075,14 @@ def languages_layout(browser):
             if width >= 900:
                 crossing = page.evaluate(CREASE_JS)
                 check(f"{tag} no words cross the middle fold", not crossing, crossing[:3])
+                # "ealth" is set in each language's type (Be Vietnam Pro in Vietnamese), so a word
+                # centred by its width put the H's crossbar tip on the crease in Vietnamese.
+                closing = page.evaluate(CLOSING_WORD_JS)
+                check(
+                    f"{tag} the H's crossbar tip does not end on the middle fold (8px or more from it)",
+                    abs(closing["tipFromFold"]) >= 8,
+                    closing,
+                )
             if lang != "en":
                 bad = page.evaluate(BREAKS_JS, lang)
                 check(f"{tag} no bad line break", not bad, bad[:3])
