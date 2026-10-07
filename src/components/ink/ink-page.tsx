@@ -20,8 +20,8 @@ import styles from "./ink.module.css";
 export function InkPage({
   current,
   route,
-  className = "",
   follow,
+  className = "",
   children,
 }: {
   current: Current;
@@ -31,14 +31,14 @@ export function InkPage({
    * without a brush line (About's folded letter: its folds divide the page).
    */
   route?: (layout: Layout) => Waypoint[];
-  /** A class for the page's root, for a page that dresses the shared paper (About ages it). */
-  className?: string;
   /**
    * The homepage only: its parts that belong to the menu bar's drop-downs (section ids), so the
    * word whose part is being read carries the painted stroke. Pass a stable (module-level) object.
    * Pages with a link of their own leave it out (their word carries the stroke).
    */
   follow?: NavFollow;
+  /** A class for the page's root, for a page that dresses the shared paper (About ages it). */
+  className?: string;
   /** The page's sections; given whether motion is allowed. */
   children: (motion: boolean) => ReactNode;
 }) {
