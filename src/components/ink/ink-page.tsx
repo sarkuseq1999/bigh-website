@@ -13,22 +13,26 @@ import styles from "./ink.module.css";
 
 // Any page in the Ink & Gold look (October 5, 2026): rice paper, the site header (clear over the
 // opening, paper once scrolled), the page's sections, the footer that closes on the crane at
-// rest, and the page's own brush line drawing itself down the page. Paintings marked
+// rest, and, where the page has one, its own brush line drawing itself down the page. Paintings marked
 // [data-bloom] bloom as they enter; outlined pills fill like ink in water. Reduced motion: a
 // complete still page with the whole line. Keyboard: the first Tab shows "Skip to content".
 // Render it inside <SiteDialogs> (and <ProductPagesProvider> where products link to pages).
 export function InkPage({
   current,
   route,
+  className = "",
   follow,
   children,
 }: {
   current: Current;
   /**
    * The page's brush route for each layout. Pass a stable reference (a module-level function):
-   * the brush layer is rebuilt whenever the route's identity changes.
+   * the brush layer is rebuilt whenever the route's identity changes. Leave it out for a page
+   * without a brush line (About's folded letter: its folds divide the page).
    */
-  route: (layout: Layout) => Waypoint[];
+  route?: (layout: Layout) => Waypoint[];
+  /** A class for the page's root, for a page that dresses the shared paper (About ages it). */
+  className?: string;
   /**
    * The homepage only: its parts that belong to the menu bar's drop-downs (section ids), so the
    * word whose part is being read carries the painted stroke. Pass a stable (module-level) object.
@@ -47,7 +51,12 @@ export function InkPage({
   useInkFill(root);
 
   return (
-    <div ref={root} className={styles.look} data-look="ink" data-page={current}>
+    <div
+      ref={root}
+      className={className ? `${styles.look} ${className}` : styles.look}
+      data-look="ink"
+      data-page={current}
+    >
       <a
         href="#main"
         className={styles.skip}
@@ -65,7 +74,7 @@ export function InkPage({
         {children(motion)}
       </main>
       <SiteFooter closing={<ClosingCrane />} />
-      <BrushLine motion={motion} route={route} />
+      {route ? <BrushLine motion={motion} route={route} /> : null}
     </div>
   );
 }
