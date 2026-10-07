@@ -9,23 +9,31 @@ import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { about, drafts, routes } from "./about-content";
-import { Acronym } from "./acronym";
-import { ChapterWord } from "./chapter-word";
+import { about, routes } from "./about-content";
+import { book, desk, lamp, seedling, sequoia, vignettes } from "./about-art";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
-import { band, dots, pool, rings, wipe, word } from "./letter-art";
-import styles from "./about-letter.module.css";
+import { Painting, Spread } from "./spread";
+import page from "./about-page.module.css";
+import styles from "./album.module.css";
 
-// The About page, "The name, on a folded letter" (Mo approved design D on October 6, 2026; mockup
-// reference/ink-pages/mockups/about-d.png; spec docs/superpowers/specs/2026-10-05-ink-pages-design.md).
-// One sheet of slightly aged paper, folded like a letter and opened again: BiGH written by hand at
-// the top, then one brushed letter opening each part (Be, in, Good, Health), the parts alternating
-// sides of the middle fold. The words are the locked ones in about-content.ts. No brush line here:
-// the folds divide the page (the brush line is the homepage's signature).
+// About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png; spec
+// docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). An old
+// painting album: every part a spread, one painting beside its words, the sides swapping. The name
+// once (the logo, then the title). California, not zen. The words are the locked ones in
+// about-content.ts.
 
-export const RINGS_ALT =
-  "Tree rings in ink. A gold ring marks 2016, when BiGH began; the rings inside it are the years the formula is older.";
+export const ALT = {
+  book: "An old open book, painted in ink, with a gold ribbon bookmark",
+  seedling:
+    "An oak seedling growing from an acorn, painted in ink; a gold acorn lies among its roots",
+  desk: "A scientist's desk in ink: a brush on its rest, a microscope and a stack of books",
+  sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
+  lamp: "A desk lamp casting gold light onto an open journal, painted in ink",
+} as const;
+
+const PROMISE_ART = [vignettes.palms, vignettes.bee, vignettes.moon, vignettes.letter];
+const HALF = "(max-width: 719px) 90vw, 46vw";
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
@@ -34,66 +42,29 @@ function sentences(text: string) {
 function Opening() {
   const copy = useCopy();
   return (
-    <section className={styles.opening} aria-labelledby="about-title">
-      {/* The wipe mask is found only from the stylesheet, so on a slow link the name stayed blank
-          until it arrived and then showed whole. Preloaded for motion visitors only: reduced
-          motion never uses it, and Chrome logs a preload that goes unused. A CSS mask is fetched
-          in CORS mode, so the preload must say so (crossOrigin), or Chrome fetches the mask twice
-          and warns that the preload went unused. React hoists it to the head. */}
-      <link
-        rel="preload"
-        as="image"
-        href={wipe}
-        crossOrigin="anonymous"
-        media="(prefers-reduced-motion: no-preference)"
-      />
-      <div className={`${base.wrap} ${styles.openingWords}`}>
-        <span className={styles.word} data-word="" aria-hidden="true">
-          <Image
-            className={`${base.ink} ${styles.paint}`}
-            src={word.src}
-            alt=""
-            width={word.width}
-            height={word.height}
-            sizes="(max-width: 899px) 86vw, min(50vw, 780px)"
-            priority
-          />
-          <Image
-            className={styles.dot}
-            src={word.dot.src}
-            alt=""
-            width={word.dot.width}
-            height={word.dot.height}
-            sizes="64px"
-            priority
-            data-dot=""
-            style={{
-              left: `${word.dot.left * 100}%`,
-              top: `${word.dot.top * 100}%`,
-              width: `${word.dot.size * 100}%`,
-            }}
-          />
-        </span>
-        <p className={styles.kicker}>{copy(about.hero.label)}</p>
-        <Acronym className={styles.title} delay={2000} />
-        <p className={styles.lead}>
-          {sentences(copy(about.hero.lead)).map((sentence) => (
-            <span key={sentence}>{sentence}</span>
-          ))}
-        </p>
+    <section className={page.opening} data-part="opening" aria-labelledby="about-title">
+      <div className={`${base.wrap} ${page.spread}`} data-side="right">
+        <Painting
+          art={book}
+          alt={ALT.book}
+          sizes={HALF}
+          gold={book.gold}
+          caption
+          priority
+          waiting
+        />
+        <div className={page.words} data-words="">
+          <p className={page.kicker}>{copy(about.hero.label)}</p>
+          <h1 id="about-title" lang="en" className={page.title}>
+            {about.hero.title}
+          </h1>
+          <p className={page.lead}>
+            {sentences(copy(about.hero.lead)).map((sentence) => (
+              <span key={sentence}>{sentence}</span>
+            ))}
+          </p>
+        </div>
       </div>
-      {/* From 900px the band starts in the first screen and is its largest painting (LCP). */}
-      <Image
-        className={`${base.ink} ${styles.band}`}
-        src={band.src}
-        alt=""
-        width={band.width}
-        height={band.height}
-        sizes="100vw"
-        loading="eager"
-        data-band=""
-        data-bloom="waiting"
-      />
     </section>
   );
 }
@@ -101,171 +72,156 @@ function Opening() {
 function Purpose() {
   const copy = useCopy();
   return (
-    <section
+    <Spread
       id="purpose"
-      className={styles.part}
-      data-part="purpose"
-      aria-labelledby="purpose-title"
+      part="purpose"
+      side="left"
+      labelledBy="purpose-title"
+      picture={
+        <Painting
+          art={seedling}
+          alt={ALT.seedling}
+          sizes={HALF}
+          gold={seedling.gold}
+          caption
+          eager
+        />
+      }
     >
-      <div className={`${base.wrap} ${styles.grid}`}>
-        <ChapterWord initial="B" rest="e" className={styles.areaLetter} />
-        <div className={styles.areaWords}>
-          <p className={`${base.label} ${styles.label}`} data-label="">
-            {copy(about.purpose.label)}
-          </p>
-          <h2 id="purpose-title" className={`${base.display} ${styles.heading}`}>
-            {about.purpose.lines.map((line) => (
-              <span key={line}>{copy(line)}</span>
-            ))}
-          </h2>
-          <p className={styles.body}>{copy(about.purpose.mission)}</p>
-        </div>
-      </div>
-    </section>
+      <p className={`${base.label} ${page.label}`} data-label="">
+        {copy(about.purpose.label)}
+      </p>
+      <h2 id="purpose-title" className={`${base.display} ${page.heading}`}>
+        {about.purpose.lines.map((line) => (
+          <span key={line}>{copy(line)}</span>
+        ))}
+      </h2>
+      <p className={page.body}>{copy(about.purpose.mission)}</p>
+    </Spread>
   );
 }
 
 function Roots() {
   const copy = useCopy();
   return (
-    <section id="roots" className={styles.part} data-part="roots" aria-labelledby="roots-title">
-      <div className={`${base.wrap} ${styles.grid}`}>
-        <ChapterWord initial="i" rest="n" className={styles.areaLetter} />
-        <div className={styles.areaWords}>
-          <p className={`${base.label} ${styles.label}`} data-label="">
-            {copy(about.roots.label)}
-          </p>
-          <h2 id="roots-title" className={`${base.display} ${styles.heading}`}>
-            {copy(about.roots.title)}
-          </h2>
-          <p className={styles.body}>{copy(about.roots.text)}</p>
-          <Link
-            href={routes.scientists}
-            className={`${base.pill} ${base.pillGhost} ${styles.more}`}
-          >
+    <Spread
+      id="roots"
+      part="roots"
+      side="right"
+      labelledBy="roots-title"
+      picture={<Painting art={desk} alt={ALT.desk} sizes={HALF} caption />}
+    >
+      <p className={`${base.label} ${page.label}`} data-label="">
+        {copy(about.roots.label)}
+      </p>
+      <h2 id="roots-title" className={`${base.display} ${page.heading}`}>
+        {copy(about.roots.title)}
+      </h2>
+      <div className={styles.rootsBody}>
+        <span className={page.mount} data-mount="">
+          <Image
+            src={liu.src}
+            alt={copy(about.roots.photo.alt)}
+            width={liu.width}
+            height={liu.height}
+            sizes="168px"
+          />
+        </span>
+        <div>
+          <p className={page.body}>{copy(about.roots.text)}</p>
+          <Link href={routes.scientists} className={`${base.pill} ${base.pillGhost} ${page.more}`}>
             {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
           </Link>
         </div>
-        {/* --pool-ratio: the pool picture's height over its width, from letter-art.ts, for the
-            print's CSS (the pool stands upright on one column, lies on its side on two). */}
-        <figure
-          className={`${styles.print} ${styles.areaArt}`}
-          data-print=""
-          style={{ "--pool-ratio": pool.height / pool.width } as CSSProperties}
-        >
-          <Image
-            className={`${base.ink} ${styles.pool}`}
-            src={pool.src}
-            alt=""
-            width={pool.width}
-            height={pool.height}
-            sizes="(max-width: 899px) 90vw, 560px"
-            data-pool=""
-            data-bloom=""
-          />
-          <span className={styles.mount} data-mount="">
-            <Image
-              src={liu.src}
-              alt={copy(about.roots.photo.alt)}
-              width={liu.width}
-              height={liu.height}
-              sizes="(max-width: 899px) 220px, 260px"
-            />
-          </span>
-        </figure>
       </div>
-    </section>
+    </Spread>
   );
 }
 
-function Good() {
+function Experience() {
   const copy = useCopy();
   const years = copy(about.experience.stats[1].unit);
   return (
-    <div className={styles.part} data-part="good">
-      <section
-        id="experience"
-        className={`${base.wrap} ${styles.grid} ${styles.experience}`}
-        aria-labelledby="experience-title"
-      >
-        <ChapterWord initial="G" rest="ood" className={styles.areaLetter} />
-        <div className={styles.areaWords}>
-          <p className={`${base.label} ${styles.label}`} data-label="">
-            {copy(about.experience.label)}
-          </p>
-          <h2 id="experience-title" className={`${base.display} ${styles.heading}`}>
-            {copy(about.experience.title)}
-          </h2>
-          <dl className={styles.figures}>
-            <div>
-              <dt>{copy(about.roots.stat.label)}</dt>
-              <dd>
-                <CountUp to={280} suffix="+" className={styles.figure} />
-              </dd>
-            </div>
-            <div>
-              <dt>{copy(about.experience.stats[0].label)}</dt>
-              <dd>
-                <span className={styles.figure}>{about.experience.stats[0].value}</span>
-              </dd>
-            </div>
-            <div>
-              <dt>{copy(about.experience.stats[1].label)}</dt>
-              <dd>
-                <CountUp to={20} suffix="+" className={styles.figure} />
-                <span className={styles.unit}> {years}</span>
-              </dd>
-            </div>
-          </dl>
+    <Spread
+      id="experience"
+      part="experience"
+      side="left"
+      labelledBy="experience-title"
+      picture={
+        <Painting art={sequoia} alt={ALT.sequoia} sizes={HALF} gold={sequoia.gold} caption />
+      }
+    >
+      <p className={`${base.label} ${page.label}`} data-label="">
+        {copy(about.experience.label)}
+      </p>
+      <h2 id="experience-title" className={`${base.display} ${page.heading}`}>
+        {copy(about.experience.title)}
+      </h2>
+      <dl className={page.figures}>
+        <div>
+          <dt>{copy(about.roots.stat.label)}</dt>
+          <dd>
+            <CountUp to={280} suffix="+" className={page.figure} />
+          </dd>
         </div>
-        <figure className={`${styles.rings} ${styles.areaArt}`} data-rings="">
-          <span className={styles.ringsBody}>
-            <Image
-              className={base.ink}
-              src={rings.src}
-              alt={copy(RINGS_ALT)}
-              width={rings.width}
-              height={rings.height}
-              sizes="(max-width: 899px) 70vw, 340px"
-              data-bloom=""
-            />
-            <span className={base.gold} style={{ ["--gold" as string]: `url(${rings.gold})` }} />
-          </span>
-          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
-        </figure>
-      </section>
-      <section
-        id="promise"
-        className={`${base.wrap} ${styles.promise}`}
-        aria-labelledby="promise-title"
-      >
-        <p className={`${base.label} ${styles.label}`} data-label="">
+        <div>
+          <dt>{copy(about.experience.stats[0].label)}</dt>
+          <dd>
+            <span className={page.figure}>{about.experience.stats[0].value}</span>
+          </dd>
+        </div>
+        <div>
+          <dt>{copy(about.experience.stats[1].label)}</dt>
+          <dd>
+            <CountUp to={20} suffix="+" className={page.figure} />
+            <span className={page.unit}> {years}</span>
+          </dd>
+        </div>
+      </dl>
+    </Spread>
+  );
+}
+
+function Promises() {
+  const copy = useCopy();
+  return (
+    <section
+      id="promise"
+      className={`${page.part} ${page.promise}`}
+      data-part="promise"
+      aria-labelledby="promise-title"
+    >
+      <div className={base.wrap}>
+        <p className={`${base.label} ${page.label}`} data-label="">
           {copy(about.promise.label)}
         </p>
-        <h2 id="promise-title" className={`${base.display} ${styles.heading}`}>
+        <h2 id="promise-title" className={`${base.display} ${page.heading}`}>
           {copy(about.promise.title)}
         </h2>
-        <ul className={styles.promises}>
+        <ul className={page.promises}>
           {about.promise.items.map((item, i) => (
             <li key={item.title} data-promise="">
               <Image
-                className={`${base.ink} ${styles.promiseDot}`}
-                src={dots[i].src}
+                className={`${base.ink} ${styles.vignette}`}
+                src={PROMISE_ART[i].src}
                 alt=""
-                width={dots[i].width}
-                height={dots[i].height}
-                sizes="92px"
+                width={PROMISE_ART[i].width}
+                height={PROMISE_ART[i].height}
+                sizes="208px"
                 data-bloom=""
-                style={{ "--bloom-delay": i * 260 } as CSSProperties}
+                style={{ "--bloom-delay": i * 220 } as CSSProperties}
               />
               <h3>{copy(item.title)}</h3>
               <p>{copy(item.text)}</p>
-              {i === 3 && <Greetings className={styles.greetings} />}
+              {i === 3 && <Greetings className={page.greetings} />}
             </li>
           ))}
         </ul>
-      </section>
-    </div>
+        <p className={`${base.caption} ${styles.rowCaption}`} data-row-caption="">
+          {copy("Illustrations")}
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -273,40 +229,39 @@ function Closing() {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   return (
-    <section
+    <Spread
       id="closing"
-      className={`${styles.part} ${styles.closing}`}
-      data-part="closing"
-      aria-labelledby="closing-title"
+      part="closing"
+      side="right"
+      labelledBy="closing-title"
+      picture={<Painting art={lamp} alt={ALT.lamp} sizes={HALF} gold={lamp.gold} caption />}
     >
-      <div className={`${base.wrap} ${styles.pause}`}>
-        <ChapterWord initial="H" rest="ealth" size="closing" />
-        <h2 id="closing-title" className={`${base.display} ${styles.heading}`}>
-          {copy(about.closing.title)}
-        </h2>
-        <p className={styles.body}>{copy(about.closing.text)}</p>
-        <div className={styles.actions}>
-          <button type="button" className={base.pill} onClick={dialogs.openAsk}>
-            {copy(about.closing.primary)}
-          </button>
-          <Link href={routes.products} className={`${base.pill} ${base.pillGhost}`}>
-            {copy(about.closing.secondary)}
-          </Link>
-        </div>
+      <h2 id="closing-title" className={`${base.display} ${page.heading}`}>
+        {copy(about.closing.title)}
+      </h2>
+      <p className={page.body}>{copy(about.closing.text)}</p>
+      <div className={page.actions}>
+        <button type="button" className={base.pill} onClick={dialogs.openAsk}>
+          {copy(about.closing.primary)}
+        </button>
+        <Link href={routes.products} className={`${base.pill} ${base.pillGhost}`}>
+          {copy(about.closing.secondary)}
+        </Link>
       </div>
-    </section>
+    </Spread>
   );
 }
 
 export function AboutInk() {
   return (
-    <InkPage current="about" className={styles.letterPage}>
+    <InkPage current="about" className={`${page.aboutPage} ${styles.album}`}>
       {() => (
-        <div className={styles.sheet} data-sheet="">
+        <div data-about="album">
           <Opening />
           <Purpose />
           <Roots />
-          <Good />
+          <Experience />
+          <Promises />
           <Closing />
         </div>
       )}

@@ -1,0 +1,103 @@
+"use client";
+
+import Image from "next/image";
+import type { CSSProperties, ReactNode } from "react";
+import base from "@/components/ink/ink.module.css";
+import { useCopy } from "@/i18n/use-copy";
+import { drafts } from "./about-content";
+import type { Art } from "./about-art";
+import page from "./about-page.module.css";
+
+// The About page's one rhythm (Mo, October 7, 2026: every part paired the same way): one picture,
+// its words beside it, the sides swapping part by part. `side` is where the picture stands from
+// 720px; on one column the picture always comes first. Paintings multiply onto the page's paper
+// and bloom in as they arrive (the kit's useBloom); an opening painting is marked "waiting" by the
+// server so it blooms on arrival instead of flashing.
+
+export function Painting({
+  art,
+  alt,
+  sizes,
+  caption = false,
+  gold,
+  delay = 0,
+  priority = false,
+  eager = false,
+  waiting = false,
+  className = "",
+}: {
+  art: Art;
+  /** The painting's description (English source; translated through the catalogs), or "" when it only decorates. */
+  alt: string;
+  sizes: string;
+  /** "Illustration" under a painting that pictures something (DESIGN.md honesty tags). */
+  caption?: boolean;
+  /** The painting's gold-leaf light mask (about-art.ts), for the kit's glint. */
+  gold?: string;
+  /** Milliseconds its bloom waits (the kit's --bloom-delay). */
+  delay?: number;
+  /** The first screen's painting: eager and preloaded. */
+  priority?: boolean;
+  /** A painting that reaches into the first screen on some windows: loaded at once, not preloaded
+      (lazy, it was the window's largest painting while the opening's still waited to bloom). */
+  eager?: boolean;
+  /** Marked "waiting" by the server (an opening painting). */
+  waiting?: boolean;
+  className?: string;
+}) {
+  const copy = useCopy();
+  return (
+    <figure className={`${page.painting} ${className}`} data-picture="">
+      <span className={page.paintingBody}>
+        <Image
+          className={base.ink}
+          src={art.src}
+          alt={alt ? copy(alt) : ""}
+          width={art.width}
+          height={art.height}
+          sizes={sizes}
+          priority={priority}
+          loading={eager && !priority ? "eager" : undefined}
+          data-bloom={waiting ? "waiting" : ""}
+          style={delay ? ({ "--bloom-delay": delay } as CSSProperties) : undefined}
+        />
+        {gold ? (
+          <span className={base.gold} style={{ ["--gold" as string]: `url(${gold})` }} />
+        ) : null}
+      </span>
+      {caption ? (
+        <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+      ) : null}
+    </figure>
+  );
+}
+
+export function Spread({
+  id,
+  part,
+  side,
+  labelledBy,
+  picture,
+  children,
+}: {
+  id: string;
+  /** The part's name, for its hooks and its page's styles. */
+  part: string;
+  /** Where the picture stands from 720px. */
+  side: "left" | "right";
+  labelledBy: string;
+  /** A Painting, or a figure marked data-picture. */
+  picture: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <section id={id} className={page.part} data-part={part} aria-labelledby={labelledBy}>
+      <div className={`${base.wrap} ${page.spread}`} data-side={side}>
+        {picture}
+        <div className={page.words} data-words="">
+          {children}
+        </div>
+      </div>
+    </section>
+  );
+}

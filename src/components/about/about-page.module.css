@@ -1,0 +1,408 @@
+/* About, shared by B "The album" and C "The circle" (Mo, October 7, 2026; spec
+   docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). One
+   rhythm for every part: one picture on one side, its words on the other, the sides swapping part
+   by part (from 720px; one column below, picture first). The kit's plain rice paper, no folds.
+   Every rule is scoped under .aboutPage (the page root, InkPage className), so it outranks the
+   kit's .look rules and the homepage resets in any stylesheet order. Multiply: nothing between a
+   painting and the page root may make a stacking context (no z-index on a positioned ancestor, no
+   isolation, opacity, transform, filter or mask on a part, a spread, a figure or a wrapper). */
+
+/* --part-half: half the space between two parts (a part's padding above and below). As in the
+   mockup, one part follows the next closely, an album's spreads, not slides. */
+.aboutPage {
+  --part-half: clamp(32px, 3.2vw, 60px);
+  --gap: clamp(40px, 6vw, 112px);
+}
+
+/* The header floats over the opening (clear there), so the opening starts 88px down. */
+.aboutPage .opening {
+  padding: calc(88px + clamp(24px, 3.4vw, 64px)) 0 var(--part-half);
+}
+
+.aboutPage p.kicker {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 19px;
+  font-weight: 450;
+}
+
+/* The name once: the title in plain ink at display size (no painted name, no unfolding acronym,
+   which showed "BiGH" before the sentence). */
+.aboutPage h1.title {
+  margin: 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  /* One line beside the book from 1024px, as in the mockup (two at 84px read as a poster). */
+  font-size: clamp(min(44px, 11vw), 4.6vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.aboutPage p.lead {
+  margin: clamp(16px, 1.6vw, 24px) 0 0;
+  color: var(--muted);
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+.aboutPage .lead span {
+  display: block;
+}
+
+.aboutPage .part {
+  padding-block: var(--part-half);
+  /* Deep links (/about#purpose): the part's first content lands 108px from the window's top, just
+     under the settled bar; the document keeps 150px of scroll-padding-top (globals.css). */
+  scroll-margin-top: calc(108px - 150px - var(--part-half));
+}
+
+/* One picture with its words. */
+.aboutPage .spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(24px, 5vw, 40px);
+  align-items: center;
+}
+
+@media (min-width: 720px) {
+  .aboutPage .spread {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+
+  .aboutPage .spread[data-side="right"] > [data-picture] {
+    order: 2;
+  }
+}
+
+/* Each page sets --picture per part (its painting's width), so the pictures read about the same size. */
+.aboutPage .painting {
+  justify-self: center;
+  width: min(100%, var(--picture, 520px));
+  margin: 0;
+}
+
+.aboutPage .paintingBody {
+  position: relative;
+  display: block;
+}
+
+.aboutPage .paintingBody img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.aboutPage .painting figcaption {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.aboutPage .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: clamp(28px, 2.6vw, 40px);
+}
+
+/* p.label: the kit's .look .label (margin 0) has the same weight as a plain .aboutPage .label. */
+.aboutPage p.label {
+  margin: 0 0 14px;
+}
+
+/* The parts' headings sit a step under the opening's title, as in the mockup. Qualified by its
+   element so it outranks the kit's .look .display. */
+.aboutPage h2.heading {
+  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  line-height: 1.08;
+}
+
+.aboutPage h2.heading > span {
+  display: block;
+}
+
+.aboutPage .body {
+  max-width: 30em;
+  margin: clamp(18px, 1.8vw, 28px) 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.aboutPage .more {
+  margin-top: clamp(24px, 2.4vw, 36px);
+}
+
+/* The photo mount: the page's only shadow. */
+.aboutPage .mount {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 12px;
+  background: #fbf9f4;
+  box-shadow:
+    0 22px 44px -22px rgb(12 11 10 / 0.42),
+    0 3px 8px rgb(12 11 10 / 0.1);
+}
+
+.aboutPage .mount img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: 50% 26%;
+}
+
+.aboutPage .figures {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(18px, 1.8vw, 28px);
+  margin: clamp(28px, 3vw, 48px) 0 0;
+}
+
+/* Each figure stands on its hairline, its words under it. */
+.aboutPage .figures > div {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+.aboutPage .figures dt {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.4;
+}
+
+.aboutPage .figures dd {
+  margin: 0;
+  white-space: nowrap;
+}
+
+.aboutPage .figure {
+  font-size: clamp(48px, 4.6vw, 76px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.aboutPage .unit {
+  font-size: clamp(26px, 2.4vw, 38px);
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* The three figures in one row, from 1200px and on a tablet held upright (600 to 719px, where the
+   one column is wide enough for three: stacked on full-width hairlines they made a long sparse
+   column of the phone's). Three even columns, each at least as wide as its numeral ("20+ years"
+   keeps one line); the last column ends at the words' edge. */
+@media (min-width: 1200px), (min-width: 600px) and (max-width: 719px) {
+  .aboutPage .figures {
+    grid-template-columns: repeat(3, minmax(min-content, 1fr));
+    gap: 0;
+  }
+
+  .aboutPage .figures > div {
+    padding-inline: clamp(14px, 1.5vw, 24px);
+    border-left: 1px solid var(--line);
+  }
+
+  .aboutPage .figures > div:first-child {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .aboutPage .figures > div:last-child {
+    padding-right: 0;
+  }
+
+  .aboutPage .figures dt {
+    margin-top: 10px;
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  /* Under 56px at every width: the name once (nothing but the title is set that large). */
+  .aboutPage .figure {
+    font-size: clamp(44px, 3.9vw, 54px);
+  }
+
+  .aboutPage .unit {
+    font-size: clamp(22px, 1.9vw, 30px);
+  }
+}
+
+.aboutPage .promise {
+  text-align: center;
+}
+
+.aboutPage .promise h2.heading {
+  margin-inline: auto;
+}
+
+.aboutPage .promises {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(32px, 3vw, 48px) clamp(24px, 2.4vw, 40px);
+  margin: clamp(36px, 3.4vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Square boxes: the four dot pictures are not all the same shape (360x362 to 338x348), and their
+   own heights put two headings in the row 1.7px lower than the others. */
+.aboutPage .promiseDot {
+  display: block;
+  width: clamp(64px, 5.6vw, 92px);
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  margin: 0 auto 18px;
+}
+
+.aboutPage .promises h3 {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+
+.aboutPage .promises p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+/* Hello in five languages, centred under its promise. A block, so the line it sits on is the
+   promise's own width and the centred text centres it. */
+.aboutPage .greetings {
+  display: block;
+  margin-top: 14px;
+}
+
+/* With reduced motion all five stand side by side (greetings.tsx; its stage is the one
+   aria-hidden child). As a left-aligned row they started at the promise's left edge and wrapped
+   one word alone onto a second line. Here each is a centred inline block and the lines are
+   balanced: one line where all five fit, else three over two. Other pages keep their row. */
+@media (prefers-reduced-motion: reduce) {
+  .aboutPage .greetings > [aria-hidden="true"] {
+    display: block;
+    text-wrap: balance;
+  }
+
+  .aboutPage .greetings > [aria-hidden="true"] > span {
+    display: inline-block;
+    margin-inline: 0.3em;
+  }
+}
+
+/* The promises stand two by two from 600px (a tablet held upright is not a stretched phone) and
+   one per row only on a phone. */
+@media (min-width: 600px) and (max-width: 1199px) {
+  .aboutPage .promises {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .aboutPage .promises {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* ---- Other languages (DESIGN.md, The CJK Room Rule) ----------------------------------------- */
+
+.aboutPage :is(h2, h3):lang(ko) {
+  word-break: keep-all;
+}
+
+.aboutPage :is(h2, h3):lang(ja) {
+  word-break: auto-phrase;
+}
+
+/* Japanese never starts a line with a small kana or "ー" (the promise "GMP 認証を取得した製造元が
+   つくっています。" left "っています。" alone on a line at 360px), and Chinese never starts one with
+   a colon. The page's words only: the shared header and footer keep their own breaks. */
+.aboutPage main:is(:lang(ja), :lang(zh)) {
+  line-break: strict;
+}
+
+/* Chinese: headings, figure labels and the promises' words break at their punctuation (the
+   translations put a comma where a line may end), not inside a word ("配 / 方", "那一部 / 分"), and
+   anywhere only when a phrase is longer than the line. */
+.aboutPage :is(h2, h3, dt, .promises p):lang(zh) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+/* On a phone the longest phrase of a Japanese or Chinese heading ("主力フォーミュラは、",
+   "是看不见的那一部分：", ten characters) has to fit the column (330px at 390, 304px at 360), or the
+   heading breaks inside it ("は、" alone starting a line). 8.2vw is the largest size that fits;
+   from 440px up the heading is 36px, as everywhere else. */
+.aboutPage h2.heading:is(:lang(ja), :lang(zh)) {
+  font-size: clamp(min(36px, 8.2vw), 3.2vw, 50px);
+}
+
+/* The same phrase against the narrowest two-column words column (about 283px at 720px, 377px at
+   959px): 3.8vw fits it from 720px, and from 960px 36px does. */
+@media (min-width: 720px) and (max-width: 959px) {
+  .aboutPage h2.heading:is(:lang(ja), :lang(zh)) {
+    font-size: min(36px, 3.8vw);
+  }
+}
+
+/* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines, not a long
+   line over one short word. The pills carry the kit's .pill (a different module's class), so they
+   are reached by their elements. */
+@media (max-width: 720px) {
+  .aboutPage .actions :is(a, button):lang(vi) {
+    text-wrap: balance;
+  }
+}
+
+/* ---- Motion: the paintings bloom in (the kit's useBloom) ---------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* A painting waiting to bloom is hidden until its bloom is under way. The kit hides it with a
+     0%-sized blot, but Chrome drops a mask layer of no size, so a waiting painting showed whole
+     and blurred: D's band hung there for its 1.5s delay, then collapsed to a speck in one frame
+     and spread out again (its promise dots did the same for their 260-780ms). The hold lasts the
+     painting's own delay and 60ms more, so its first visible frame already has a blot. */
+  .aboutPage [data-bloom="waiting"] {
+    opacity: 0;
+  }
+
+  .aboutPage [data-bloom="in"] {
+    animation: bloom-hold calc(var(--bloom-delay, 0) * 1ms + 60ms) steps(1, jump-end);
+  }
+
+  /* No script: nothing ever blooms, so leave the paintings as they are. */
+  @media (scripting: none) {
+    .aboutPage [data-bloom="waiting"] {
+      opacity: 1;
+    }
+  }
+}
+
+/* Reduced motion is complete from the first paint, and so is a page whose script never runs: the
+   painting the server marks "waiting" is shown crisp, not in the kit's blur(5px) of a bloom that
+   will not come. :global([data-look]) puts it above the kit's .look rule whatever order they load
+   in. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]).aboutPage [data-bloom="waiting"] {
+    filter: none;
+  }
+}
+
+@keyframes bloom-hold {
+  from {
+    opacity: 0;
+  }
+}

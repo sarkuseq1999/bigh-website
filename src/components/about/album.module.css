@@ -1,0 +1,93 @@
+/* About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png): an
+   old painting album, each part a spread, the same rhythm throughout. Shared rules live in
+   about-page.module.css; these are the album's own, scoped under .album (the page root carries both
+   classes). */
+
+/* The pictures read about the same size (Mo, October 7: the parts were uneven). Each painting's
+   width is a height times its shape (width over height, from about-art.ts), so a wide painting and
+   a tall one stand about as tall; the shared rule caps every width at its column (--picture is read
+   in .aboutPage .painting's width, where a percentage is of the column). --h is the plain height:
+   330px, or 0.6 of a narrow column. The book fills its column up to 600px (it is wide: 2.41 to 1),
+   the seedling and the sequoia stand a little taller than the desk and the lamp, as in the mockup.
+   [data-picture] marks the painting's figure (its .painting class is another module's). */
+.album {
+  --h: min(330px, 60%);
+}
+
+.album [data-part="opening"] [data-picture] {
+  --picture: 600px;
+}
+
+.album [data-part="purpose"] [data-picture] {
+  --picture: calc(var(--h) * 1.3 * 0.827);
+}
+
+.album [data-part="roots"] [data-picture] {
+  --picture: calc(var(--h) * 1.739);
+}
+
+.album [data-part="experience"] [data-picture] {
+  --picture: calc(var(--h) * 1.35 * 0.998);
+}
+
+.album [data-part="closing"] [data-picture] {
+  --picture: calc(var(--h) * 0.95 * 1.515);
+}
+
+/* Dr. Liu's photo beside his paragraph, inside the words (as in the mockup). */
+.album .rootsBody {
+  display: grid;
+  grid-template-columns: clamp(120px, 11vw, 168px) minmax(0, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  align-items: start;
+  margin-top: clamp(18px, 1.8vw, 28px);
+}
+
+.album .rootsBody p {
+  margin-top: 0;
+}
+
+/* The promise pictures: vignettes over each promise (about 200px on a desktop, as in the mockup),
+   one caption under the row. One box for all four, as tall as the tallest (the bee, 480 x 490),
+   each painting standing on its foot: their own heights (366 to 490) set the four headings of the
+   row at four different levels. */
+.album .vignette {
+  display: block;
+  width: clamp(120px, 14vw, 208px);
+  height: auto;
+  aspect-ratio: 480 / 490;
+  object-fit: contain;
+  object-position: 50% 100%;
+  margin: 0 auto 16px;
+}
+
+/* p.rowCaption: the kit's .look .caption (margin 0) has the same weight as a plain .album
+   .rowCaption, so the element keeps this rule ahead in any stylesheet order. */
+.album p.rowCaption {
+  margin-top: 18px;
+  text-align: right;
+}
+
+/* Under 960px the words column is too narrow for the photo beside the paragraph (a column of
+   eight short lines, and the pill folded in two on a phone): the photo stands over it. */
+@media (max-width: 959px) {
+  .album .rootsBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .album .rootsBody > [data-mount] {
+    width: 140px;
+  }
+}
+
+/* One column (picture first): the same heights by shape, from a plain height of 300px or 0.7 of
+   the column, so no painting fills a phone's screen; the book at most 420px wide. */
+@media (max-width: 719px) {
+  .album {
+    --h: min(300px, 70%);
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    --picture: 420px;
+  }
+}

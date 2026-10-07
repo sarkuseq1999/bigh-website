@@ -1,70 +1,30 @@
-"""QA for the About page, "The name, on a folded letter" (Mo approved design D on October 6, 2026;
-mockup reference/ink-pages/mockups/about-d.png; spec docs/superpowers/specs/2026-10-05-ink-pages-design.md).
+"""QA for About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png;
+spec docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7").
 
-desktop_and_phone (1440x900, 390x844): answers 200; no console errors or warnings (except the built
-site's link-prefetch CSS note, PREFETCH_CSS); no failed requests; one h1, English "Be in Good
-Health." with lang="en"; every locked line on the page; no canvas and no brush layer; every painting
-multiplies onto the paper (and no ancestor between a painting and the page root makes a stacking
-context: z-index, opacity, transform, filter, isolation, will-change, blend mode, contain);
-the page wears the aged paper; the menu bar marks About (bar and narrow
-menu), has no Home link, and its Products drop-down holds the five products and "Explore our
-products."; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the four chapter
-words B, i, G, H, hidden from screen readers, in English, their paintings loaded; the written name
-loads eagerly and is preloaded; the Support and Ask sheets open, close and hand focus back.
-letter_layout (1440x900, 1280x800, 1200x800, 1024x768, 768x1024, 600x900, 390x844): the middle fold
-from 900px up (centred within 2px), none below; four folds across; on two columns Be's letter left
-and words right, in's words left and letter and portrait right, Good's letter and rings left and
-words right, each 24px or more clear of the middle fold; the promise heading centred; four promises
-in one row from 1200px, two by two from 600px to 1199px, one per row on a phone (under 600px); on a
-tablet held upright (600-899px) the three figures stand in one row, each on one line; promise
-headings side by side stand level; the closing centred; the closing H 24px or more above its heading; no words over a
-painting; Dr. Liu's photo in the middle of its pool; the rings carry "Illustration"; hello in five
-languages centred under its promise (8px). On two columns Dr. Liu's pool 16px or more clear of the
-middle fold, and the roots' words start level with the "in" (24px); the closing H's crossbar tip
-ends 8px or more from the middle fold. "Health" is set tight at every size: its "e" starts 0.15 of
-the H's height or less after the H's right stem, under the crossbar's tip (both read from the H's
-picture). As in the mockup, on two columns Dr. Liu's print stands beside the "in", its bottom level
-with "Meet our scientists" (48px), and the part is no taller than its words need (the words fill 70%
-or more of its height); from 1200px the rings stand beside the G, and the three figures stand in one
-row, each on one line. At 1440x900, no seam where the settled bar meets the page's darker sides (a
-step of 4 levels or less). On one column each part's chapter word stands over its label, over its
-heading.
-fold_header (1024x768, 1440x900, 1536x864, at the top of the page): the middle fold starts under the
-header's box and draws nothing inside it (with the header hidden, the paper down the page's middle
-inside the header's box matches the paper beside it, 2 levels or less).
-motion: reduced motion is complete and still (no waiting letters, every bloom done, the dots up, no
-running animation, nothing logged, the wipe never fetched), and before the page's scripts run the
-server-marked band is already crisp and shown; with motion the name is written (its animation, one
-breath) and its gold dot is delayed until the name is visibly done (1.7s or more) and comes up
-after it; the band waits invisible, nothing of it shows before its bloom (no pop, then vanish), and
-then it blooms; a chapter letter waits out of view, is written as it comes in and ends unmasked;
-the wipe front over the H's stem is a soft ink front (no regular banding down the stem); the wipe
-mask is preloaded for motion visitors only (and fetched once); once written the name carries no mask at
-all, and with the wipe picture blocked it still appears (60% or more of a normal load's ink). With
-JavaScript off the written name is visible, the band is crisp and shown, and the title reads
-"Be in Good Health." (its four tails open and shown).
+desktop_and_phone (1440x900, 390x844): 200; no console errors or warnings (but PREFETCH_CSS); no
+failed requests; one h1, English "Be in Good Health." with lang="en"; every locked line; no canvas,
+no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
+and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
+15px+, navigation 18px+, targets 48px+; the opening's painting loads eagerly; the Support and Ask
+sheets open, close and hand focus back.
+rhythm (1440x900, 1280x800, 1024x768, 768x1024, 390x844): every spread part has one picture and its
+words; on two columns the pictures stand opening right, purpose left, roots right, experience left,
+closing right, and are about the same size; on one column each picture comes first; the name once
+(nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under each
+picture, "Illustrations" under the promise row; no words over a painting; four promises in one row
+from 1200px, two by two from 600px, one column below; Dr. Liu's photo beside his words.
+motion: reduced motion complete and still; with motion the opening's painting blooms on arrival and
+a lower painting waits out of view, then blooms; a waiting painting is hidden; with JavaScript off
+every painting shows.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
-deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
-#promise, #closing land the part's first content 0-64px under the header, nothing of it under the
-bar, its heading fully in the window. languages (kr, jp, cns, vn): 200, no console errors, the h1 and
-the chapter words stay English, no English source sentence left visible. languages_layout (every
-language at 1440x900, 1024x768, 768x1024, 600x900, 390x844, 360x780; Japanese and Chinese also at
-900x900; at 600-899px the three figures in one row, each on one line): no word
-crosses the side margins; in Korean, Japanese, Chinese and Vietnamese no bad line break; from 900px
-no words cross the middle fold and the closing H's crossbar tip ends 8px or more from it; in Japanese and Chinese, at 390, 360 and 900px, no heading phrase
-(up to 12 characters) is split across lines; Vietnamese at 390: the closing pills balance their two
-lines. nav_locales: from /vn/about and
-/kr/about the bar and the narrow menu stay in the language.
-boundary (899x900, 900x900, 599x900, 600x900): no sideways scrolling; the middle fold shows at 900
-only; at 900 no words cross it and Dr. Liu's pool stays 16px or more clear of it; at 600 the
-promises stand two by two and the figures in one row, at 599 four rows and three.
-first_screen (1280x720, 1440x900, 1536x864, 390x844): the written name and the title in the first
-screen; from 900px the band starts in it too.
+boundary (719x900, 720x900): no sideways scrolling; one column at 719 (picture first), two at 720.
+first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
+in the first screen.
 
-Pictures: scripts/qa/out/about-letter/<size>-NN.png (viewport shots while scrolling).
+Pictures: scripts/qa/out/about-album/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,fold_header,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,boundary,first_screen]
 """
 
 import io
@@ -72,14 +32,14 @@ import os
 import re
 import sys
 
-from PIL import Image, ImageChops
+from PIL import Image
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3025"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-letter")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-album")
 os.makedirs(OUT, exist_ok=True)
 results = []
 
@@ -115,11 +75,6 @@ LOCKED = [
     "Ask BiGH Science",
     "Explore our products",
 ]
-
-
-# The narrowest window that is a tablet, not a phone: from here to 899px the page is one column
-# with its figures in one row and its promises two by two.
-TABLET = 600
 
 
 def check(name, ok, detail=""):
@@ -185,69 +140,12 @@ def scroll_through(page, step=450, pause=250):
     page.wait_for_timeout(400)
 
 
-# The folds: the middle one is the sheet's ::before (from 900px), each part's fold across is its
-# own ::before. The page's middle is the document's (scrollbar excluded).
-FOLDS_JS = """() => {
-  const sheet = document.querySelector('[data-sheet]');
-  const v = getComputedStyle(sheet, '::before');
-  const sb = sheet.getBoundingClientRect();
-  const shown = v.content !== 'none' && v.display !== 'none';
-  return { middle: shown, centre: shown ? sb.left + parseFloat(v.left) + parseFloat(v.width) / 2 : null,
-           mid: document.documentElement.clientWidth / 2,
-           across: [...document.querySelectorAll('[data-part]')].filter(p => getComputedStyle(p, '::before').content !== 'none').length };
-}"""
-
-# Each side's horizontal extent: the union of the matched boxes.
-SIDES_JS = """() => {
-  const side = (sel) => { const b = [...document.querySelectorAll(sel)].filter(e => e.offsetParent).map(e => e.getBoundingClientRect());
-    return b.length ? { left: Math.min(...b.map(x => x.left)), right: Math.max(...b.map(x => x.right)) } : null; };
-  return { mid: document.documentElement.clientWidth / 2,
-    purposeLetter: side('#purpose [data-chapter]'), purposeWords: side('#purpose [data-label], #purpose h2, #purpose p'),
-    rootsWords: side('#roots [data-label], #roots h2, #roots p, #roots a'), rootsLetter: side('#roots [data-chapter]'), rootsPrint: side('#roots [data-mount]'),
-    goodLetter: side('#experience [data-chapter]'), goodRings: side('#experience [data-rings] img'), goodWords: side('#experience [data-label], #experience h2, #experience dl') };
-}"""
-
-# Words over paintings: glyph rectangles of the page's words (not the chapter words' own letters)
-# against the boxes of the paintings that are not meant to sit under words (the pool is: Dr. Liu's
-# print rests on it).
-OVERLAP_JS = """() => {
-  const words = [...document.querySelectorAll('main h1, main h2, main h3, main p, main dt, main dd, main a, main button, main figcaption')]
-    .filter(e => e.offsetParent && !e.closest('[data-chapter], [data-word]'));
-  const art = [...document.querySelectorAll('[data-chapter] img, [data-word] img, [data-rings] img, [data-band], [data-promise] img')].filter(e => e.offsetParent);
-  const hits = [];
-  for (const w of words) {
-    const range = document.createRange(); range.selectNodeContents(w);
-    const rects = [...range.getClientRects()].filter(r => r.width > 1);
-    for (const a of art) {
-      const b = a.getBoundingClientRect();
-      if (rects.some(r => r.left < b.right - 2 && r.right > b.left + 2 && r.top < b.bottom - 2 && r.bottom > b.top + 2))
-        hits.push([w.textContent.trim().slice(0, 24), (a.getAttribute('src') || a.tagName).slice(-32)]);
-    }
-  }
-  return hits;
-}"""
-
-# Words crossing the middle fold, in the two-sided parts (from 900px): glyph rectangles that come
-# within 24px of the page's middle.
-CREASE_JS = """() => {
-  const mid = document.documentElement.clientWidth / 2;
-  const out = [];
-  for (const el of document.querySelectorAll('#purpose [data-label], #purpose h2, #purpose p, #roots [data-label], #roots h2, #roots p, #roots a, #experience [data-label], #experience h2, #experience dt, #experience dd')) {
-    if (!el.offsetParent) continue;
-    const range = document.createRange(); range.selectNodeContents(el);
-    for (const r of range.getClientRects()) {
-      if (r.width > 1 && r.left < mid + 24 && r.right > mid - 24) { out.push([el.textContent.trim().slice(0, 20), Math.round(r.left), Math.round(r.right), Math.round(mid)]); break; }
-    }
-  }
-  return out;
-}"""
-
-
 # Hello in five languages (the fourth promise): the visible words' box, centred on its promise.
 GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')[3];
   const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')].map(w => w.getBoundingClientRect()).filter(r => r.width > 0);
   const l = Math.min(...words.map(r => r.left)), r = Math.max(...words.map(r => r.right)), b = li.getBoundingClientRect();
   return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), lines: new Set(words.map(r => Math.round(r.top))).size }; }"""
+
 
 # Multiply: a painting blends with the page root's paper only if no element between it and the root
 # makes a stacking context. For each painting (the dots and Dr. Liu's mount multiply nothing) walk
@@ -290,302 +188,6 @@ STACKING_JS = """() => {
   return { paintings: paintings.length, found };
 }"""
 
-# Dr. Liu's pool against the middle fold's right edge (the sheet's ::before).
-POOL_FOLD_JS = """() => { const sheet = document.querySelector('[data-sheet]'); const v = getComputedStyle(sheet, '::before');
-  const edge = sheet.getBoundingClientRect().left + parseFloat(v.left) + parseFloat(v.width);
-  const pool = document.querySelector('[data-pool]').getBoundingClientRect();
-  return { clear: Math.round(pool.left - edge), pool: Math.round(pool.left), fold: Math.round(edge) }; }"""
-
-
-def bar_edge_step(page):
-    """The settled bar's paper against the page's just under it, at both edges of the window:
-    luminance 4px above and 4px below the header box's bottom. Read with the bar's bottom 120px
-    inside the purpose part, where both edges of the window are bare paper (600px down, the band's
-    wash runs under the bar's edge at 1440 and reads as a 5-level step that is the painting, not the
-    paper). Each reading averages a 5x3 patch, so the paper's own fibre (single pixels vary by about
-    3 levels) is not read as a step."""
-    page.evaluate(
-        """window.scrollTo(0, Math.round(document.getElementById('purpose').getBoundingClientRect().top + scrollY + 120
-             - document.querySelector('header').getBoundingClientRect().bottom))"""
-    )
-    page.wait_for_timeout(1200)
-    bottom = round(page.evaluate("document.querySelector('header').getBoundingClientRect().bottom"))
-    width = page.evaluate("innerWidth")
-    img = Image.open(io.BytesIO(page.screenshot())).convert("RGB")
-    px = img.load()
-
-    def lum(x, y):
-        cells = [px[x + dx, y + dy] for dx in range(-2, 3) for dy in range(-1, 2)]
-        return sum(0.2126 * r + 0.7152 * g + 0.0722 * b for r, g, b in cells) / len(cells)
-
-    steps = [round(abs(lum(x, bottom - 4) - lum(x, bottom + 4)), 1) for x in (5, width - 6)]
-    page.evaluate("window.scrollTo(0, 0)")
-    page.wait_for_timeout(300)
-    return {"step": max(steps), "left_right": steps, "bar_bottom": bottom}
-
-
-def desktop_and_phone(browser):
-    for width, height in [(1440, 900), (390, 844)]:
-        tag = f"{width}x{height}"
-        context, page, response, errors, failed = open_page(browser, width, height)
-        check(f"{tag} answers 200", response.status == 200, response.status)
-        text = page.evaluate("document.body.innerText")
-        missing = [line for line in LOCKED if line not in text]
-        check(f"{tag} every locked line", not missing, missing)
-        h1 = page.evaluate(
-            "[...document.querySelectorAll('h1')].map(h => [h.getAttribute('aria-label') || h.textContent.trim(), h.lang])"
-        )
-        check(f"{tag} one English h1", h1 == [["Be in Good Health.", "en"]], h1)
-        check(f"{tag} no canvas in the page", page.evaluate("document.querySelectorAll('main canvas').length") == 0)
-        check(f"{tag} no brush layer", page.evaluate("!document.querySelector('[data-lifts]')"))
-        blends = page.evaluate(
-            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]')).map(i => getComputedStyle(i).mixBlendMode)"
-        )
-        check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
-        stacking = page.evaluate(STACKING_JS)
-        check(
-            f"{tag} no stacking context between a painting and the page root ({stacking['paintings']} paintings)",
-            stacking["paintings"] > 0 and not stacking["found"],
-            stacking["found"][:4],
-        )
-        paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
-        check(f"{tag} the aged paper", "paper-aged" in paper, paper)
-        chapters = page.evaluate(
-            "[...document.querySelectorAll('[data-chapter]')].map(c => [c.dataset.chapter, c.getAttribute('aria-hidden'), c.lang])"
-        )
-        check(
-            f"{tag} four chapter words, hidden from screen readers, in English",
-            chapters == [["B", "true", "en"], ["i", "true", "en"], ["G", "true", "en"], ["H", "true", "en"]],
-            chapters,
-        )
-        eager = page.evaluate(
-            """(() => { const i = document.querySelector('[data-word] img');
-                 const preload = [...document.querySelectorAll('link[rel=preload][as=image]')]
-                   .some(l => ((l.getAttribute('imagesrcset') || '') + (l.getAttribute('href') || '')).includes('word-v'));
-                 return { loading: i.getAttribute('loading'), preload }; })()"""
-        )
-        check(f"{tag} the written name loads eagerly and is preloaded", eager["loading"] != "lazy" and eager["preload"], eager)
-        nav = page.evaluate(
-            """() => { const n = document.querySelector('#site-navigation');
-                 const sheet = document.querySelector('[data-nav-sheet]');
-                 const panel = document.querySelector('[data-nav-panel="products"]');
-                 const trigger = document.querySelector('[data-nav-trigger="products"]');
-                 return { current: [...n.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()),
-                          menuCurrent: [...sheet.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()),
-                          home: [...document.querySelectorAll('header a')].filter(a => a.textContent.trim() === 'Home').length,
-                          mark: n.querySelector('[data-nav-logo]')?.getAttribute('href') ?? null,
-                          productsControls: trigger?.getAttribute('aria-controls') === panel?.id,
-                          productPages: [...panel.querySelectorAll('a[href*="/products/"]')].length,
-                          productsAll: [...panel.querySelectorAll('a')].map(a => a.getAttribute('href')).filter(h => h.endsWith('/#products')) }; }"""
-        )
-        check(f"{tag} header marks About", nav["current"] == ["About"] and nav["menuCurrent"] == ["About"], nav)
-        check(f"{tag} no Home link; the mark goes home", nav["home"] == 0 and nav["mark"] == "/", nav)
-        check(
-            f"{tag} Products opens the five products and Explore goes home",
-            nav["productsControls"] and nav["productPages"] == 5 and len(nav["productsAll"]) == 1,
-            nav,
-        )
-        if width >= 1101:
-            words = page.evaluate(
-                "[...document.querySelectorAll('#site-navigation [data-nav-trigger], #site-navigation a[href$=\"/about\"], #site-navigation button')].filter(e => e.offsetParent && ['Products', 'Science', 'About', 'Support'].includes(e.textContent.trim())).map(e => [e.textContent.trim(), parseFloat(getComputedStyle(e).fontSize)])"
-            )
-            check(f"{tag} navigation at least 18px", len(words) == 4 and all(s >= 18 for _, s in words), words)
-        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
-        check(f"{tag} no sideways scrolling", sideways <= 0, sideways)
-        small = page.evaluate(
-            """[...document.querySelectorAll('main *')].filter(e => e.childNodes.length && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && e.offsetParent)
-                 .map(e => [e.textContent.trim().slice(0, 30), parseFloat(getComputedStyle(e).fontSize)]).filter(([, s]) => s < 15)"""
-        )
-        check(f"{tag} text at least 15px", not small, small[:5])
-        targets = page.evaluate(
-            """[...document.querySelectorAll('main a, main button')].filter(e => e.offsetParent)
-                 .map(e => [e.textContent.trim().slice(0, 30), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)"""
-        )
-        check(f"{tag} targets at least 48px", not targets, targets)
-        if width < 1101:
-            page.click("[data-nav-menu-button]")
-            page.wait_for_timeout(900)
-            page.click("[data-nav-sheet] button:has-text('Support')")
-        else:
-            page.click("#site-navigation button:has-text('Support')")
-        page.wait_for_timeout(900)
-        check(f"{tag} Support sheet opens", page.evaluate("!!document.querySelector('dialog[open]')"))
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(600)
-        ask = page.locator("main button:has-text('Ask BiGH Science')")
-        ask.scroll_into_view_if_needed()
-        ask.click()
-        page.wait_for_timeout(900)
-        sheet = page.evaluate("document.querySelector('dialog[open]')?.innerText ?? ''")
-        check(f"{tag} Ask sheet opens", "Ask BiGH Science" in sheet, sheet[:80])
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(600)
-        back = page.evaluate("document.activeElement?.textContent?.trim()")
-        check(f"{tag} focus returns to Ask", back == "Ask BiGH Science", back)
-        page.evaluate("window.scrollTo(0, 0)")
-        shots(page, tag, height)
-        loaded = page.evaluate(
-            "[...document.querySelectorAll('[data-chapter] img, [data-word] img')].map(i => i.complete && i.naturalWidth > 0)"
-        )
-        check(f"{tag} every letter's painting loaded", loaded and all(loaded), loaded)
-        check(f"{tag} no console errors or warnings", not errors, errors[:3])
-        check(f"{tag} no failed requests", not failed, failed[:3])
-        context.close()
-
-
-# The closing word, read from the H's own picture (so a regenerated H is measured again): where its
-# crossbar's tip ends (the rightmost ink) and where its right stem ends (the rightmost column inked
-# in 3% or more of the rows below the crossbar, 60-95% down, so stray fibres do not count), against
-# where the "e" of "ealth" starts (its glyph's ink, not its text box) and the middle fold's centre.
-CLOSING_WORD_JS = """async () => { const mid = document.documentElement.clientWidth / 2;
-  const chapter = document.querySelector('#closing [data-chapter]');
-  const img = chapter.querySelector('img'); const box = img.getBoundingClientRect();
-  const pic = new Image(); pic.src = img.currentSrc || img.src; await pic.decode();
-  const w = pic.naturalWidth, h = pic.naturalHeight; const c = document.createElement('canvas'); c.width = w; c.height = h;
-  const g = c.getContext('2d'); g.drawImage(pic, 0, 0); const d = g.getImageData(0, 0, w, h).data;
-  const dark = (x, y) => { const i = (y * w + x) * 4; return 0.2126 * d[i] + 0.7152 * d[i + 1] + 0.0722 * d[i + 2] < 200; };
-  let tip = 0; for (let x = w - 1; x >= 0 && !tip; x--) for (let y = 0; y < h; y++) if (dark(x, y)) { tip = x + 1; break; }
-  const y0 = Math.round(h * 0.6), y1 = Math.round(h * 0.95); let stem = 0;
-  for (let x = w - 1; x >= 0 && !stem; x--) { let n = 0; for (let y = y0; y < y1; y++) if (dark(x, y)) n++; if (n >= (y1 - y0) * 0.03) stem = x + 1; }
-  const rest = chapter.lastElementChild; const range = document.createRange(); range.setStart(rest.firstChild, 0); range.setEnd(rest.firstChild, 1);
-  const e = range.getBoundingClientRect(); const cs = getComputedStyle(rest);
-  const m = c.getContext('2d'); m.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`; const eInk = e.left - m.measureText('e').actualBoundingBoxLeft;
-  const tipX = box.left + box.width * tip / w, stemX = box.left + box.width * stem / w;
-  return { tipFromFold: +(tipX - mid).toFixed(1), gap: +(eInk - stemX).toFixed(1), height: +box.height.toFixed(1),
-           gapShare: +((eInk - stemX) / box.height).toFixed(3), tipOverE: +(tipX - eInk).toFixed(1),
-           columns: [stem, tip, w], stemX: Math.round(stemX), eInk: Math.round(eInk), tipX: Math.round(tipX), mid }; }"""
-
-# The mockup's arrangement of in (two columns) and Good (from 1200px): the print beside the "in"
-# and level with the button at the foot of the words; the rings beside the G; the figures in one
-# row, each on one line (its numeral and unit inside its own column).
-SPREAD_JS = """() => { const r = (sel) => document.querySelector(sel).getBoundingClientRect();
-  const roots = r('#roots'), words = r('#roots [data-label]').top, button = r('#roots a[href]'), inWord = r('#roots [data-chapter]'), mount = r('[data-mount]');
-  const g = r('#experience [data-chapter]'), rings = r('#experience [data-rings] img');
-  const figs = [...document.querySelectorAll('#experience dl > div')].map(d => { const b = d.getBoundingClientRect();
-    const range = document.createRange(); range.selectNodeContents(d.querySelector('dd')); const t = range.getBoundingClientRect();
-    return { top: Math.round(b.top), fits: t.right <= b.right + 0.5 && t.left >= b.left - 0.5 }; });
-  const pad = parseFloat(getComputedStyle(document.getElementById('roots')).paddingTop) + parseFloat(getComputedStyle(document.getElementById('roots')).paddingBottom);
-  return { beside: Math.round(mount.left - inWord.right), level: Math.round(mount.bottom - button.bottom),
-           fill: +((button.bottom - words) / (roots.height - pad)).toFixed(2),
-           ringsBeside: Math.round(rings.left - g.right), ringsOverlap: rings.top < g.bottom && rings.bottom > g.top,
-           rows: new Set(figs.map(f => f.top)).size, fit: figs.every(f => f.fits) }; }"""
-
-
-def letter_layout(browser):
-    for width, height in [(1440, 900), (1280, 800), (1200, 800), (1024, 768), (768, 1024), (600, 900), (390, 844)]:
-        tag = f"{width}x{height}"
-        two = width >= 900
-        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        folds = page.evaluate(FOLDS_JS)
-        if two:
-            check(f"{tag} the middle fold, centred", folds["middle"] and abs(folds["centre"] - folds["mid"]) <= 2, folds)
-        else:
-            check(f"{tag} no middle fold on one column", not folds["middle"], folds)
-        check(f"{tag} four folds across", folds["across"] == 4, folds)
-        if two:
-            s = page.evaluate(SIDES_JS)
-            m = s["mid"]
-            left_ok = lambda b: b is not None and b["right"] <= m - 24
-            right_ok = lambda b: b is not None and b["left"] >= m + 24
-            check(f"{tag} Be: letter left, words right", left_ok(s["purposeLetter"]) and right_ok(s["purposeWords"]), s)
-            check(f"{tag} in: words left, letter and portrait right", left_ok(s["rootsWords"]) and right_ok(s["rootsLetter"]) and right_ok(s["rootsPrint"]), s)
-            check(f"{tag} Good: letter and rings left, words right", left_ok(s["goodLetter"]) and left_ok(s["goodRings"]) and right_ok(s["goodWords"]), s)
-        centred = page.evaluate(
-            """() => { const mid = document.documentElement.clientWidth / 2;
-                 const c = (sel) => { const b = document.querySelector(sel).getBoundingClientRect(); return Math.round(b.left + b.width / 2 - mid); };
-                 return { promise: c('#promise-title'), closing: c('#closing-title'), closingWord: c('#closing [data-chapter]') }; }"""
-        )
-        check(
-            f"{tag} the promise heading and the closing are centred",
-            abs(centred["promise"]) <= 4 and abs(centred["closing"]) <= 4 and abs(centred["closingWord"]) <= 32,
-            centred,
-        )
-        rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
-        # Four across from 1200px, two by two from 600px (a tablet held upright is no stretched
-        # phone), one per row only on a phone.
-        want = 1 if width >= 1200 else 2 if width >= TABLET else 4
-        check(f"{tag} the promises in {want} row(s)", rows == want, rows)
-        # Promises side by side: their headings stand level (the dots' pictures are not all the
-        # same shape; at their own heights two headings in the row sat 1.7px lower).
-        level_rows = page.evaluate(
-            """() => { const rows = {};
-                 for (const li of document.querySelectorAll('[data-promise]')) {
-                   const top = Math.round(li.getBoundingClientRect().top);
-                   (rows[top] = rows[top] || []).push(li.querySelector('h3').getBoundingClientRect().top); }
-                 return Object.values(rows).map(t => +(Math.max(...t) - Math.min(...t)).toFixed(1)); }"""
-        )
-        check(f"{tag} the promise headings side by side stand level (0.5px)", max(level_rows) <= 0.5, level_rows)
-        gap = page.evaluate(
-            "document.querySelector('#closing-title').getBoundingClientRect().top - document.querySelector('#closing [data-chapter] img').getBoundingClientRect().bottom"
-        )
-        check(f"{tag} clear paper under the closing H (24px or more)", gap >= 24, round(gap))
-        hits = page.evaluate(OVERLAP_JS)
-        check(f"{tag} no words over a painting", not hits, hits[:4])
-        liu = page.evaluate(
-            """() => { const p = document.querySelector('[data-pool]').getBoundingClientRect();
-                 const f = document.querySelector('[data-mount] img').getBoundingClientRect();
-                 return { dx: (f.left + f.width / 2 - p.left - p.width / 2) / p.width, dy: (f.top + f.height / 2 - p.top - p.height / 2) / p.height }; }"""
-        )
-        check(f"{tag} Dr. Liu's photo in the middle of its pool", abs(liu["dx"]) <= 0.15 and abs(liu["dy"]) <= 0.15, liu)
-        caption = page.evaluate("document.querySelector('[data-rings] figcaption')?.textContent.trim()")
-        check(f"{tag} the rings carry Illustration", caption == "Illustration", caption)
-        greet = page.evaluate(GREETINGS_JS)
-        check(f"{tag} hello in five languages centred under its promise (8px)", abs(greet["off"]) <= 8, greet)
-        if two:
-            reach = page.evaluate(POOL_FOLD_JS)
-            check(f"{tag} Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
-            level = page.evaluate(
-                "Math.round(document.querySelector('#roots [data-label]').getBoundingClientRect().top - document.querySelector('#roots [data-chapter]').getBoundingClientRect().top)"
-            )
-            check(f"{tag} roots: the words start level with the in (24px)", abs(level) <= 24, level)
-        closing = page.evaluate(CLOSING_WORD_JS)
-        check(
-            f"{tag} Health is set tight: the e 0.15 of the H's height or less after its stem, under the crossbar",
-            0 < closing["gapShare"] <= 0.15 and closing["tipOverE"] > 0,
-            closing,
-        )
-        if two:
-            check(
-                f"{tag} the H's crossbar tip does not end on the middle fold (8px or more from it)",
-                abs(closing["tipFromFold"]) >= 8,
-                closing,
-            )
-        if two or width >= TABLET:
-            spread = page.evaluate(SPREAD_JS)
-        if two:
-            check(
-                f"{tag} in: Dr. Liu's print beside the in, level with the button (48px)",
-                spread["beside"] >= 8 and abs(spread["level"]) <= 48,
-                spread,
-            )
-            check(f"{tag} in: the words fill the part (70% or more of its height)", spread["fill"] >= 0.7, spread)
-        if width >= 1200:
-            check(
-                f"{tag} Good: the rings beside the G, the three figures in one row, each on one line",
-                spread["ringsBeside"] >= 8 and spread["ringsOverlap"] and spread["rows"] == 1 and spread["fit"],
-                spread,
-            )
-        if TABLET <= width < 900:
-            # A tablet held upright: the figures stand in one row, each on one line, as from 1200px
-            # (stacked on full-width hairlines they made the phone column a long sparse one).
-            check(
-                f"{tag} Good: the three figures in one row, each on one line",
-                spread["rows"] == 1 and spread["fit"],
-                spread,
-            )
-        if width == 1440:
-            step = bar_edge_step(page)
-            check(f"{tag} no seam where the settled bar meets the page's sides (step 4 or less)", step["step"] <= 4, step)
-        if not two:
-            order = page.evaluate(
-                """() => ['purpose', 'roots', 'experience'].map(id => { const s = document.getElementById(id);
-                     const t = (sel) => s.querySelector(sel).getBoundingClientRect().top;
-                     return [id, t('[data-chapter]') < t('[data-label]') && t('[data-label]') < t('h2')]; })"""
-            )
-            check(f"{tag} one column: chapter word, then label, then heading", all(ok for _, ok in order), order)
-        page.screenshot(path=os.path.join(OUT, f"layout-{tag}.png"), full_page=False)
-        context.close()
-
 
 def focus(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900)
@@ -607,88 +209,6 @@ def focus(browser):
     context.close()
 
 
-def boundary(browser):
-    for width in (899, 900):
-        context, page, response, errors, failed = open_page(browser, width, 900, reduced=True)
-        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
-        check(f"{width} no sideways scrolling", sideways <= 0, sideways)
-        folds = page.evaluate(FOLDS_JS)
-        check(f"{width} the middle fold {'shows' if width == 900 else 'is gone'}", folds["middle"] == (width == 900), folds)
-        if width == 900:
-            crossing = page.evaluate(CREASE_JS)
-            check("900 no words cross the middle fold", not crossing, crossing[:3])
-            reach = page.evaluate(POOL_FOLD_JS)
-            check("900 Dr. Liu's pool 16px or more clear of the middle fold", reach["clear"] >= 16, reach)
-        context.close()
-    # The tablet's edge: at 600px the promises stand two by two and the figures in one row; at
-    # 599px it is the phone's column (promises one per row, figures stacked).
-    for width in (599, 600):
-        context, page, response, errors, failed = open_page(browser, width, 900, reduced=True)
-        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
-        check(f"{width} no sideways scrolling", sideways <= 0, sideways)
-        rows = page.evaluate(
-            "new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size"
-        )
-        figures = page.evaluate(SPREAD_JS)["rows"]
-        tablet = width >= TABLET
-        check(f"{width} the promises in {2 if tablet else 4} row(s)", rows == (2 if tablet else 4), rows)
-        check(f"{width} the figures in {1 if tablet else 3} row(s)", figures == (1 if tablet else 3), figures)
-        context.close()
-
-
-def fold_header(browser):
-    """At the top of the page the header is clear over the opening, so a fold that started at the
-    sheet's top ran behind it, through the logo. Read the fold's own top against the header's box,
-    then hide the header and compare the paper down the page's middle (the fold's 16px) inside the
-    header's box with the paper 40-60px to each side (column averages, so the paper's fibre is not
-    read as a fold)."""
-    for width, height in [(1024, 768), (1440, 900), (1536, 864)]:
-        tag = f"{width}x{height}"
-        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        page.evaluate("window.scrollTo(0, 0)")
-        page.wait_for_timeout(300)
-        geo = page.evaluate(
-            """() => { const sheet = document.querySelector('[data-sheet]'); const v = getComputedStyle(sheet, '::before');
-                 return { top: Math.round(sheet.getBoundingClientRect().top + parseFloat(v.top)),
-                          header: Math.round(document.querySelector('header').getBoundingClientRect().bottom),
-                          mid: Math.round(document.documentElement.clientWidth / 2) }; }"""
-        )
-        check(f"{tag} the middle fold starts under the header's box", geo["top"] >= geo["header"], geo)
-        page.add_style_tag(content="header { visibility: hidden !important; }")
-        page.wait_for_timeout(300)
-        img = Image.open(io.BytesIO(page.screenshot())).convert("L")
-        px = img.load()
-        bottom, mid = geo["header"], geo["mid"]
-
-        def column(x):
-            return sum(px[x, y] for y in range(0, bottom)) / bottom
-
-        beside = [column(x) for x in list(range(mid - 60, mid - 40)) + list(range(mid + 40, mid + 60))]
-        paper = sum(beside) / len(beside)
-        worst = max(abs(column(x) - paper) for x in range(mid - 8, mid + 8))
-        check(
-            f"{tag} nothing of the middle fold inside the header's box (2 levels or less)",
-            worst <= 2,
-            {"worst": round(worst, 1), "header_bottom": bottom},
-        )
-        context.close()
-
-
-def first_screen(browser):
-    for width, height in [(1280, 720), (1440, 900), (1536, 864), (390, 844)]:
-        tag = f"{width}x{height}"
-        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        geo = page.evaluate(
-            """() => ({ word: document.querySelector('[data-word] img').getBoundingClientRect().bottom,
-                        title: document.querySelector('h1').getBoundingClientRect().bottom,
-                        band: document.querySelector('[data-band]').getBoundingClientRect().top, win: innerHeight })"""
-        )
-        check(f"{tag} the written name and the title in the first screen", geo["word"] <= geo["win"] and geo["title"] <= geo["win"], geo)
-        if width >= 900:
-            check(f"{tag} the band starts in the first screen", geo["band"] < geo["win"], geo)
-        context.close()
-
-
 def wait_until(page, expression, timeout=10000):
     """True once the page's expression holds; False when it never does (the checks then report it)."""
     try:
@@ -696,303 +216,6 @@ def wait_until(page, expression, timeout=10000):
         return True
     except PlaywrightTimeoutError:
         return False
-
-
-BAND_BOX_JS = """() => { const r = document.querySelector('[data-band]').getBoundingClientRect();
-  const top = Math.max(r.top, 0), bottom = Math.min(r.bottom, innerHeight);
-  return { x: 0, y: top, width: innerWidth, height: bottom - top }; }"""
-
-
-def band_ink(page):
-    """How many pixels of the band's box differ when the band is hidden: 0 when nothing of it shows."""
-    box = page.evaluate(BAND_BOX_JS)
-    shown = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-    page.evaluate("document.querySelector('[data-band]').style.visibility = 'hidden'")
-    hidden = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-    return sum(ImageChops.difference(shown, hidden).histogram()[9:])
-
-
-WRITE_TIMES = (900, 1000, 1100, 1200, 1300, 1400)
-
-
-def front_banding(page):
-    """Seek the written name through the middle of its stroke and read the front over the H's right
-    stem. For each pixel, alpha = how much of the ink has come through = (paper - frame) / (paper -
-    ink): a multiplied painting is linear in it, so the painting's own texture drops out. At each
-    moment the stem column whose front is half through is read from the top of the stem to its
-    foot, and the times its alpha swings between under 0.35 and over 0.65 are counted. A soft front
-    changes slowly down a stem (0 to 2 swings); venetian blinds change every few pixels (a dozen)."""
-    # The name's animation ends 2.75s after it starts and leaves nothing behind (no forwards fill:
-    # the name must not depend on its mask once it is written), so the page is caught while it
-    # runs and paused at once. False when there is none to catch (the check then reports it).
-    caught = page.evaluate(
-        """() => { const a = document.getAnimations().find(x => (x.animationName || '').includes('write'));
-             if (!a) return false; a.pause(); window.__write = a; return true; }"""
-    )
-    if not caught:
-        return []
-    wait_until(page, "document.querySelector('[data-word] img').complete")
-    box = page.evaluate(
-        """() => { const r = document.querySelector('[data-word] img').getBoundingClientRect();
-             return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }; }"""
-    )
-
-    def grab(ms):
-        page.evaluate(f"window.__write.currentTime = {ms}")
-        page.wait_for_timeout(150)
-        return Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-
-    paper, ink = grab(0), grab(3000)
-    w, h = paper.size
-    p_px, i_px = paper.load(), ink.load()
-    # The H's right stem: of the right-hand columns, the ones with the most ink.
-    counts = {x: sum(1 for y in range(h) if p_px[x, y] - i_px[x, y] > 60) for x in range(int(w * 0.84), w)}
-    top = max(counts.values())
-    stem = [x for x, c in counts.items() if c >= 0.6 * top]
-    readings = []
-    for ms in WRITE_TIMES:
-        frame = grab(ms).load()
-        best = None
-        for x in stem:
-            rows = [y for y in range(h) if p_px[x, y] - i_px[x, y] > 60]
-            alphas = [min(max((p_px[x, y] - frame[x, y]) / (p_px[x, y] - i_px[x, y]), 0), 1) for y in rows]
-            mean = sum(alphas) / len(alphas)
-            if best is None or abs(mean - 0.5) < abs(best[1] - 0.5):
-                best = (x, mean, alphas)
-        x, mean, alphas = best
-        if abs(mean - 0.5) > 0.12:
-            continue
-        state, swings = None, 0
-        for a in alphas:
-            now = "low" if a < 0.35 else "high" if a > 0.65 else state
-            if state is not None and now != state:
-                swings += 1
-            state = now
-        readings.append({"ms": ms, "column": x, "mean_alpha": round(mean, 2), "swings": swings})
-    return readings
-
-
-def motion(browser):
-    # Reduced motion: complete and still, from the first paint to the last.
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
-    page = context.new_page()
-    errors, wipe_requests = [], []
-    page.on("console", lambda m: errors.append(m.text) if m.type in ("error", "warning") and counted(m) else None)
-    page.on("pageerror", lambda e: errors.append(str(e)))
-    page.on("request", lambda r: wipe_requests.append(r.url) if "wipe-v1" in r.url else None)
-    page.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
-    page.evaluate("document.fonts.ready.then(() => true)")
-    page.wait_for_timeout(1200)
-    scroll_through(page)
-    still = page.evaluate(
-        """() => ({ waiting: document.querySelectorAll('[data-arrive]').length,
-             blooms: [...document.querySelectorAll('[data-bloom]')].filter(e => e.dataset.bloom !== 'done').length,
-             dots: [...document.querySelectorAll('[data-dot]')].map(d => getComputedStyle(d).opacity),
-             word: getComputedStyle(document.querySelector('[data-word] img')).animationName,
-             masks: [...document.querySelectorAll('[data-chapter] img, [data-word] img')].map(i => getComputedStyle(i).maskImage).filter(m => m !== 'none'),
-             running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
-               return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length })"""
-    )
-    check("reduced motion: no letter waits", still["waiting"] == 0, still)
-    check("reduced motion: every bloom done", still["blooms"] == 0, still)
-    check("reduced motion: the gold dots are up", still["dots"] and all(float(o) == 1 for o in still["dots"]), still)
-    check("reduced motion: the name is still and nothing is masked", still["word"] == "none" and not still["masks"], still)
-    check("reduced motion: nothing moves", still["running"] == 0, still)
-    check("reduced motion: nothing logged (no preload left unused)", not errors, errors[:3])
-    check("reduced motion: the wipe mask is never fetched", not wipe_requests, wipe_requests[:2])
-    context.close()
-
-    # Reduced motion is complete from the first paint: before any script runs (the scripts are
-    # blocked here, so the server-marked band stays "waiting"), the band is crisp and shown, not
-    # the kit's blur(5px). The band is the one painting the server marks.
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
-    page = context.new_page()
-    page.route("**/*.js", lambda route: route.abort())
-    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-    first_paint = page.evaluate(
-        """() => { const b = document.querySelector('[data-band]'), s = getComputedStyle(b);
-             return { bloom: b.dataset.bloom, filter: s.filter, opacity: s.opacity }; }"""
-    )
-    check(
-        "reduced motion: before any script the band is crisp and shown",
-        first_paint["bloom"] == "waiting" and first_paint["filter"] == "none" and first_paint["opacity"] == "1",
-        first_paint,
-    )
-    context.close()
-
-    # The wipe mask is found only from the stylesheet, so the page preloads it, for motion
-    # visitors only (a reduced-motion visit never uses it and would log an unused preload).
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    html = context.request.get(f"{BASE}/about").text()
-    context.close()
-    link = re.search(r"<link\b[^>]*wipe-v1\.png[^>]*>", html)
-    tag = link.group(0) if link else ""
-    check(
-        "motion: the wipe mask is preloaded, for motion visitors only",
-        'rel="preload"' in tag
-        and 'as="image"' in tag
-        and 'crossorigin="anonymous"' in tag
-        and 'media="(prefers-reduced-motion: no-preference)"' in tag,
-        tag or "no <link> for wipe-v1.png in the page",
-    )
-    check("motion: the preload sits in the head", bool(tag) and tag in html.split("</head>")[0], tag or "none")
-
-    # The bloom hold: the band waits invisible, and nothing of it shows before its bloom starts.
-    # (Chrome drops a mask layer of no size, so the kit alone leaves a waiting painting whole and
-    # blurred; the band then hung there, vanished in one frame and spread out again.)
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    page = context.new_page()
-    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    waiting = page.evaluate(
-        """() => { const b = document.querySelector('[data-band]'); return [b.dataset.bloom, getComputedStyle(b).opacity]; }"""
-    )
-    check("motion: the band waits invisible", waiting[1] == "0", waiting)
-    reached = wait_until(page, "document.querySelector('[data-band]').dataset.bloom === 'in'")
-    held = page.evaluate("getComputedStyle(document.querySelector('[data-band]')).opacity")
-    changed = band_ink(page)
-    still_holding = page.evaluate(
-        "document.getAnimations().some(a => (a.animationName || '').includes('bloom-hold'))"
-    )
-    check("motion: the band is invisible through its hold", reached and held == "0", [reached, held])
-    check(
-        "motion: nothing of the band shows before its bloom (no pop, then vanish)",
-        still_holding and changed <= 20,
-        {"changed_pixels": changed, "hold_still_running": still_holding},
-    )
-    context.close()
-
-    # The wipe front over a stem is a soft ink front, not venetian blinds: seek the name to the
-    # middle of its stroke and read the front down the H's stem.
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    page = context.new_page()
-    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    wait_until(page, "document.getAnimations().some(a => (a.animationName || '').includes('write'))", 5000)
-    readings = front_banding(page)
-    check("motion: the wipe front crosses the H's stem", bool(readings), readings)
-    check(
-        "motion: no regular banding on the front over the H stem (3 light/dark swings or fewer)",
-        bool(readings) and max(r["swings"] for r in readings) <= 3,
-        readings,
-    )
-    context.close()
-
-    # With motion: the name is written in one breath, then its gold dot comes up.
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    page = context.new_page()
-    mask_requests = []
-    page.on("request", lambda r: mask_requests.append(r.url) if "wipe-v1" in r.url else None)
-    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    # The page's stylesheet first (the dot's delay is 1.8s, so this still reads it waiting). If the
-    # name has no animation the wait runs out and the checks below report it, instead of a traceback.
-    wait_until(page, "getComputedStyle(document.querySelector('[data-word] img')).animationName !== 'none'", 5000)
-    early = page.evaluate(
-        """() => { const i = getComputedStyle(document.querySelector('[data-word] img'));
-             const d = getComputedStyle(document.querySelector('[data-word] [data-dot]'));
-             return { name: i.animationName, duration: i.animationDuration,
-                      dot: d.opacity, dotDelay: parseFloat(d.animationDelay) }; }"""
-    )
-    check("motion: the name is written (its animation, one breath)", "write" in early["name"] and early["duration"] == "2.4s", early)
-    check("motion: the gold dot waits for the name", float(early["dot"]) < 0.5 and early["dotDelay"] >= 1.7, early)
-    # The page's own clock decides when it is done (the band 3.4s plus its delay after it starts,
-    # the dot at its delay plus 1.2s), not a fixed wait.
-    wait_until(page, "document.querySelector('[data-band]').dataset.bloom === 'done'")
-    wait_until(
-        page, "parseFloat(getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity) === 1"
-    )
-    late = page.evaluate(
-        """() => ({ mask: getComputedStyle(document.querySelector('[data-word] img')).maskPosition,
-             maskImage: getComputedStyle(document.querySelector('[data-word] img')).maskImage,
-             dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity,
-             band: document.querySelector('[data-band]').dataset.bloom })"""
-    )
-    # Once written the name carries no mask at all (it must not depend on the wipe picture for good):
-    # no mask image, and the position, where read, is the written end (0%).
-    check("motion: the name ends whole (no mask left on it)", late["maskImage"] == "none" and late["mask"].startswith("0%"), late)
-    check("motion: then its gold dot is up", float(late["dot"]) == 1, late)
-    check("motion: the band has bloomed", late["band"] == "done", late)
-    check(
-        "motion: the wipe mask is fetched once (the preload is the one the stylesheet uses)",
-        len(mask_requests) == 1,
-        mask_requests,
-    )
-
-    # A chapter letter out of the window waits, is written as it comes in, and ends unmasked.
-    state = lambda: page.evaluate(
-        """() => { const c = document.querySelector('[data-chapter="G"]');
-             return [c.dataset.arrive ?? null, getComputedStyle(c.querySelector('img')).maskImage]; }"""
-    )
-    first = state()
-    check("motion: the G waits out of the window", first[0] == "waiting", first)
-    page.evaluate(
-        """() => { const c = document.querySelector('[data-chapter="G"]');
-             window.scrollTo(0, c.getBoundingClientRect().top + window.scrollY - innerHeight / 2); }"""
-    )
-    page.wait_for_timeout(700)
-    second = state()
-    check("motion: the G is being written as it comes in", second[0] == "in" and second[1] != "none", second)
-    page.wait_for_timeout(3200)
-    third = state()
-    check("motion: the G ends written and unmasked", third[0] == "done" and third[1] == "none", third)
-    context.close()
-
-    # JavaScript off: the written name still appears (its animation is CSS only). Read from pixels:
-    # the word's band of the first screen holds ink.
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
-    page = context.new_page()
-    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-    page.wait_for_timeout(4500)
-    shot = Image.open(io.BytesIO(page.screenshot(clip={"x": 360, "y": 110, "width": 720, "height": 330}))).convert("L")
-    dark = sum(shot.histogram()[:90]) / (shot.width * shot.height)
-    check("JavaScript off: the written name is visible", dark >= 0.02, round(dark, 4))
-    band = page.evaluate(
-        """() => { const b = document.querySelector('[data-band]'), s = getComputedStyle(b);
-             return { bloom: b.dataset.bloom, filter: s.filter, opacity: s.opacity }; }"""
-    )
-    check(
-        "JavaScript off: the band is crisp and shown",
-        band["bloom"] == "waiting" and band["filter"] == "none" and band["opacity"] == "1",
-        band,
-    )
-    # The title reads "Be in Good Health.", not three times "BiGH" in the first screen: its tails
-    # (the unfold is a script's) stand open and shown.
-    tails = page.evaluate(
-        """() => [...document.querySelectorAll('h1 [class*=rest]')].map(t => {
-             const s = getComputedStyle(t);
-             return { text: t.textContent.trim(), opacity: s.opacity, width: Math.round(t.getBoundingClientRect().width) }; })"""
-    )
-    check(
-        "JavaScript off: the title reads the full sentence (all four tails open and shown)",
-        [t["text"] for t in tails] == ["e", "n", "ood", "ealth."]
-        and all(t["opacity"] == "1" and t["width"] > 4 for t in tails),
-        tails,
-    )
-    context.close()
-
-    # The wipe picture blocked (a slow or failing request): the name is written through it, so it may
-    # be late, but once its breath is over it stands whole whatever happened to the mask. Read from
-    # pixels against a normal load: the name's box holds at least 60% of the ink.
-    def name_ink(block):
-        context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-        page = context.new_page()
-        if block:
-            page.route("**/wipe-v1.png", lambda route: route.abort())
-        page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-        page.wait_for_timeout(3800)
-        box = page.evaluate(
-            """() => { const r = document.querySelector('[data-word] img').getBoundingClientRect();
-                 return { x: Math.round(r.left), y: Math.round(r.top), width: Math.round(r.width), height: Math.round(r.height) }; }"""
-        )
-        shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-        dark = sum(shot.histogram()[:90]) / (shot.width * shot.height)
-        context.close()
-        return dark
-
-    normal, blocked = name_ink(False), name_ink(True)
-    check(
-        "motion: with the wipe picture blocked the name still appears once written (60% or more of a normal load's ink)",
-        normal >= 0.02 and blocked >= 0.6 * normal,
-        {"normal": round(normal, 4), "blocked": round(blocked, 4)},
-    )
 
 
 def settle(page, still=300, limit=5000):
@@ -1005,68 +228,6 @@ def settle(page, still=300, limit=5000):
         held = held + 50 if y == last else 0
         last = y
     return last
-
-
-# Where a deep link lands: the part's first content (its chapter word or its label, whichever is
-# higher) 0-64px under the header's bottom (measured at run time), and its heading fully in the
-# window below the bar.
-LANDING_JS = """(id) => {
-  const s = document.getElementById(id);
-  const tops = [...s.querySelectorAll('[data-chapter], [data-label]')].filter(e => e.offsetParent).map(e => e.getBoundingClientRect().top);
-  const head = document.getElementById(id + '-title').getBoundingClientRect();
-  const bar = document.querySelector('header').getBoundingClientRect();
-  return { scrollY: Math.round(window.scrollY), bar: Math.round(bar.bottom), first: Math.round(Math.min(...tops)),
-           headTop: Math.round(head.top), headBottom: Math.round(head.bottom), win: window.innerHeight };
-}"""
-
-
-def deep_links(browser):
-    # Each size is one browser context: a first visit warms the fonts into the cache (a cold dev
-    # font can reflow the page after the browser has aimed its scroll), then every deep link is a
-    # fresh load.
-    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
-        context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
-        warm = context.new_page()
-        warm.goto(f"{BASE}/about", wait_until="networkidle", timeout=120000)
-        warm.evaluate("document.fonts.ready.then(() => true)")
-        warm.close()
-        for anchor in ["purpose", "roots", "experience", "promise", "closing"]:
-            page = context.new_page()
-            page.goto(f"{BASE}/about#{anchor}", wait_until="networkidle", timeout=120000)
-            page.evaluate("document.fonts.ready.then(() => true)")
-            settle(page)
-            at = page.evaluate(LANDING_JS, anchor)
-            gap = at["first"] - at["bar"]
-            check(
-                f"{width}x{height} /about#{anchor}: lands 0-64px under the header ({gap}px), heading in the window",
-                at["scrollY"] > 0 and 0 <= gap <= 64 and at["headTop"] >= at["bar"] and at["headBottom"] <= at["win"],
-                at,
-            )
-            page.close()
-        context.close()
-
-
-def languages(browser):
-    english = [line for line in LOCKED if len(line) > 24]
-    for lang in ["kr", "jp", "cns", "vn"]:
-        context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about", reduced=True)
-        check(f"{lang} answers 200", response.status == 200, response.status)
-        h1 = page.evaluate("document.querySelector('h1').getAttribute('aria-label')")
-        check(f"{lang} h1 stays English", h1 == "Be in Good Health.", h1)
-        chapters = page.evaluate("[...document.querySelectorAll('[data-chapter]')].map(c => [c.dataset.chapter, c.lang, c.textContent.trim()])")
-        check(
-            f"{lang} the chapter words stay English",
-            chapters == [["B", "en", "e"], ["i", "en", "n"], ["G", "en", "ood"], ["H", "en", "ealth"]],
-            chapters,
-        )
-        text = page.evaluate("document.querySelector('main').innerText")
-        left = [line for line in english if line in text]
-        check(f"{lang} no English sentence left", not left, left[:3])
-        alt = page.evaluate("document.querySelector('[data-rings] img').alt")
-        check(f"{lang} the rings' description is translated", alt and not alt.startswith("Tree rings"), alt)
-        check(f"{lang} no console errors or warnings", not errors, errors[:3])
-        page.screenshot(path=os.path.join(OUT, f"{lang}-opening.png"))
-        context.close()
 
 
 # Line breaks and margins, read from the page itself (every line of every text block, by the
@@ -1108,6 +269,7 @@ BREAKS_JS = r"""(lang) => {
   }
   return out;
 }"""
+
 
 # Every word of the page stays inside its column: none crosses the page's side margins (a phrase
 # too wide for its column once did, in Japanese on a phone).
@@ -1190,61 +352,6 @@ PHRASES_JS = r"""(lang) => {
 }"""
 
 
-def languages_layout(browser):
-    """Each language at desktop, tablet and phone sizes: no word crosses the side margins, and
-    in Korean, Japanese, Chinese and Vietnamese no bad line break. Japanese and Chinese also at
-    900x900, and on a phone and at 900px no heading phrase is split across lines."""
-    for lang in ["en", "kr", "jp", "cns", "vn"]:
-        sizes = [(1440, 900), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
-        if lang in ("jp", "cns"):
-            sizes.append((900, 900))
-        for width, height in sizes:
-            tag = f"{lang} {width}x{height}"
-            path = "/about" if lang == "en" else f"/{lang}/about"
-            context, page, response, errors, failed = open_page(browser, width, height, path=path, reduced=True)
-            over = page.evaluate(MARGINS_JS)
-            check(f"{tag} words inside the margins", not over, over[:3])
-            if TABLET <= width < 900:
-                # The tablet's three figures in one row: each translated label and numeral keeps
-                # inside its own column.
-                figures = page.evaluate(SPREAD_JS)
-                check(f"{tag} the three figures in one row, each on one line", figures["rows"] == 1 and figures["fit"], figures)
-            if width >= 900:
-                crossing = page.evaluate(CREASE_JS)
-                check(f"{tag} no words cross the middle fold", not crossing, crossing[:3])
-                # "ealth" is set in each language's type (Be Vietnam Pro in Vietnamese), so a word
-                # centred by its width put the H's crossbar tip on the crease in Vietnamese.
-                closing = page.evaluate(CLOSING_WORD_JS)
-                check(
-                    f"{tag} the H's crossbar tip does not end on the middle fold (8px or more from it)",
-                    abs(closing["tipFromFold"]) >= 8,
-                    closing,
-                )
-            if lang != "en":
-                bad = page.evaluate(BREAKS_JS, lang)
-                check(f"{tag} no bad line break", not bad, bad[:3])
-            if lang in ("jp", "cns") and width in (390, 360, 900):
-                phrases = page.evaluate(PHRASES_JS, lang)
-                check(
-                    f"{tag} no heading phrase is broken across lines ({phrases['examined']} read)",
-                    phrases["examined"] > 0 and not phrases["split"],
-                    phrases,
-                )
-            if lang == "vn" and width == 390:
-                # "Khám phá sản phẩm của chúng tôi" takes two lines on a phone; they must be even
-                # (an earlier selector matched nothing and left 239px over 91px).
-                pills = page.evaluate(
-                    """[...document.querySelectorAll('main [class*=actions] a, main [class*=actions] button')].map(e => {
-                         const r = document.createRange(); r.selectNodeContents(e);
-                         const widths = {}; for (const x of r.getClientRects()) if (x.width > 4) widths[Math.round(x.top)] = (widths[Math.round(x.top)] || 0) + x.width;
-                         return { wrap: getComputedStyle(e).textWrap, widths: Object.values(widths).map(Math.round) }; })"""
-                )
-                check(f"{tag} closing pills balance their lines (computed text-wrap)", len(pills) == 2 and all(p["wrap"] == "balance" for p in pills), pills)
-                two = [p["widths"] for p in pills if len(p["widths"]) == 2]
-                check(f"{tag} the pill's two lines are even", bool(two) and all(min(w) / max(w) >= 0.6 for w in two), pills)
-            context.close()
-
-
 # The menu bar keeps the visitor's language off the homepage: from /<locale>/about every link of
 # the bar and of the narrow window's menu stays in that locale, and following them (a click, as a
 # visitor would) lands on the localized page.
@@ -1317,8 +424,230 @@ def nav_locales(browser):
     context.close()
 
 
-# --only=letter_layout,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, letter_layout, fold_header, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
+DESIGN = "album"
+# Each spread part and the side its picture stands on from 720px (the promise is the centred row).
+SIDES = {"opening": "right", "purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
+TWO_COLUMNS = 720
+
+RHYTHM_JS = """(sides) => {
+  const out = {};
+  for (const part of Object.keys(sides)) {
+    const p = document.querySelector(`[data-part="${part}"]`);
+    if (!p) { out[part] = null; continue; }
+    const pics = [...p.querySelectorAll('[data-picture]')], words = [...p.querySelectorAll('[data-words]')];
+    const pb = pics[0]?.querySelector('img')?.getBoundingClientRect(), wb = words[0]?.getBoundingClientRect();
+    out[part] = { pictures: pics.length, words: words.length,
+      side: pb && wb ? ((pb.left + pb.width / 2) < (wb.left + wb.width / 2) ? 'left' : 'right') : null,
+      first: pb && wb ? (pb.top < wb.top ? 'picture' : 'words') : null,
+      height: pb ? Math.round(pb.height) : 0, captions: [...p.querySelectorAll('[data-picture] figcaption')].map(c => c.textContent.trim()) };
+  }
+  return out;
+}"""
+
+# Words over paintings: glyph rectangles of the page's words against the boxes of its paintings
+# (Dr. Liu's photo is not a painting; the promise pictures are).
+OVERLAP_JS = """() => {
+  const words = [...document.querySelectorAll('main h1, main h2, main h3, main p, main dt, main dd, main a, main button, main figcaption')]
+    .filter(e => e.offsetParent && !e.closest('[data-picture]'));
+  const art = [...document.querySelectorAll('[data-picture] img, [data-promise] img, [data-picture-band]')].filter(e => e.offsetParent && !e.closest('[data-mount]'));
+  const hits = [];
+  for (const w of words) {
+    const range = document.createRange(); range.selectNodeContents(w);
+    const rects = [...range.getClientRects()].filter(r => r.width > 1);
+    for (const a of art) {
+      const b = a.getBoundingClientRect();
+      if (rects.some(r => r.left < b.right - 2 && r.right > b.left + 2 && r.top < b.bottom - 2 && r.bottom > b.top + 2))
+        hits.push([w.textContent.trim().slice(0, 24), (a.getAttribute('src') || a.tagName).slice(-32)]);
+    }
+  }
+  return hits;
+}"""
+
+# The name once: nothing in the page but the h1 is set at 56px or larger, and no picture is a
+# painted name.
+NAME_ONCE_JS = """() => ({
+  big: [...document.querySelectorAll('main *')].filter(e => e.offsetParent && e.tagName !== 'H1' && !e.closest('h1')
+      && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && parseFloat(getComputedStyle(e).fontSize) >= 56)
+    .map(e => [e.textContent.trim().slice(0, 20), getComputedStyle(e).fontSize]),
+  painted: [...document.querySelectorAll('main img')].map(i => i.getAttribute('src') || '').filter(s => /word-v[0-9]|letter-[bigh]-v[0-9]/.test(s)) })"""
+
+
+def desktop_and_phone(browser):
+    for width, height in [(1440, 900), (390, 844)]:
+        tag = f"{width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height)
+        check(f"{tag} answers 200", response.status == 200, response.status)
+        check(f"{tag} the {DESIGN} page", page.evaluate(f"!!document.querySelector('[data-about=\"{DESIGN}\"]')"))
+        text = page.evaluate("document.body.innerText")
+        missing = [line for line in LOCKED if line not in text]
+        check(f"{tag} every locked line", not missing, missing)
+        h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => [h.textContent.trim(), h.lang])")
+        check(f"{tag} one English h1", h1 == [["Be in Good Health.", "en"]], h1)
+        check(f"{tag} no canvas and no brush layer", page.evaluate("!document.querySelector('main canvas') && !document.querySelector('[data-lifts]')"))
+        folds = page.evaluate(
+            "[...document.querySelectorAll('[data-part]')].filter(p => getComputedStyle(p, '::before').content !== 'none').length + document.querySelectorAll('[data-sheet]').length"
+        )
+        check(f"{tag} no folds", folds == 0, folds)
+        paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
+        check(f"{tag} the kit's plain rice paper", "paper.webp" in paper and "aged" not in paper, paper)
+        blends = page.evaluate(
+            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]')).map(i => getComputedStyle(i).mixBlendMode)"
+        )
+        check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
+        stacking = page.evaluate(STACKING_JS)
+        check(f"{tag} nothing between a painting and the page root makes a stacking context", stacking["paintings"] > 0 and not stacking["found"], stacking["found"][:4])
+        nav = page.evaluate(
+            """() => { const n = document.querySelector('#site-navigation'); const sheet = document.querySelector('[data-nav-sheet]');
+                 return { current: [...n.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()),
+                          menuCurrent: [...sheet.querySelectorAll('[aria-current="page"]')].map(a => a.textContent.trim()) }; }"""
+        )
+        check(f"{tag} the menu bar marks About", nav["current"] == ["About"] and nav["menuCurrent"] == ["About"], nav)
+        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{tag} no sideways scrolling", sideways <= 0, sideways)
+        small = page.evaluate(
+            """[...document.querySelectorAll('main *')].filter(e => e.childNodes.length && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && e.offsetParent)
+                 .map(e => [e.textContent.trim().slice(0, 30), parseFloat(getComputedStyle(e).fontSize)]).filter(([, s]) => s < 15)"""
+        )
+        check(f"{tag} text at least 15px", not small, small[:5])
+        targets = page.evaluate(
+            """[...document.querySelectorAll('main a, main button')].filter(e => e.offsetParent)
+                 .map(e => [e.textContent.trim().slice(0, 30), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)"""
+        )
+        check(f"{tag} targets at least 48px", not targets, targets)
+        eager = page.evaluate("(() => { const i = document.querySelector('[data-part=\"opening\"] img'); return i ? i.getAttribute('loading') : 'missing'; })()")
+        check(f"{tag} the opening's painting loads eagerly", eager != "lazy" and eager != "missing", eager)
+        if width < 1101:
+            page.click("[data-nav-menu-button]")
+            page.wait_for_timeout(900)
+            page.click("[data-nav-sheet] button:has-text('Support')")
+        else:
+            page.click("#site-navigation button:has-text('Support')")
+        page.wait_for_timeout(900)
+        check(f"{tag} Support sheet opens", page.evaluate("!!document.querySelector('dialog[open]')"))
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(600)
+        ask = page.locator("main button:has-text('Ask BiGH Science')")
+        ask.scroll_into_view_if_needed()
+        ask.click()
+        page.wait_for_timeout(900)
+        check(f"{tag} Ask sheet opens", "Ask BiGH Science" in page.evaluate("document.querySelector('dialog[open]')?.innerText ?? ''"))
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(600)
+        check(f"{tag} focus returns to Ask", page.evaluate("document.activeElement?.textContent?.trim()") == "Ask BiGH Science")
+        page.evaluate("window.scrollTo(0, 0)")
+        shots(page, tag, height)
+        loaded = page.evaluate("[...document.querySelectorAll('main img')].map(i => i.complete && i.naturalWidth > 0)")
+        check(f"{tag} every picture loaded", loaded and all(loaded), loaded)
+        check(f"{tag} no console errors or warnings", not errors, errors[:3])
+        check(f"{tag} no failed requests", not failed, failed[:3])
+        context.close()
+
+
+def rhythm(browser):
+    for width, height in [(1440, 900), (1280, 800), (1024, 768), (768, 1024), (390, 844)]:
+        tag = f"{width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        r = page.evaluate(RHYTHM_JS, SIDES)
+        pairs = {p: v and (v["pictures"], v["words"]) for p, v in r.items()}
+        check(f"{tag} every spread part: one picture and its words", all(v == (1, 1) for v in pairs.values()), pairs)
+        if width >= TWO_COLUMNS:
+            sides = {p: v and v["side"] for p, v in r.items()}
+            check(f"{tag} pictures on alternating sides", sides == SIDES, sides)
+            heights = sorted(v["height"] for v in r.values() if v)
+            median = heights[len(heights) // 2]
+            check(f"{tag} the pictures about the same size (0.55-1.6 of the median)", all(0.55 <= h / median <= 1.6 for h in heights), heights)
+        else:
+            firsts = {p: v and v["first"] for p, v in r.items()}
+            check(f"{tag} one column: each picture first", all(f == "picture" for f in firsts.values()), firsts)
+        once = page.evaluate(NAME_ONCE_JS)
+        check(f"{tag} the name once", not once["big"] and not once["painted"], once)
+        captions = {p: v and v["captions"] for p, v in r.items()}
+        check(f"{tag} Illustration under each picture", all(c == ["Illustration"] for c in captions.values()), captions)
+        row_caption = page.evaluate("document.querySelector('[data-part=\"promise\"] [data-row-caption]')?.textContent.trim() ?? null")
+        check(f"{tag} Illustrations under the promise row", row_caption == "Illustrations", row_caption)
+        hits = page.evaluate(OVERLAP_JS)
+        check(f"{tag} no words over a painting", not hits, hits[:4])
+        rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
+        want = 1 if width >= 1200 else 2 if width >= 600 else 4
+        check(f"{tag} the promises in {want} row(s)", rows == want, rows)
+        mount = page.evaluate(
+            """() => { const m = document.querySelector('#roots [data-mount]'), w = document.querySelector('#roots [data-words]');
+                 if (!m || !w) return null; const a = m.getBoundingClientRect(), b = w.getBoundingClientRect();
+                 return a.left >= b.left - 1 && a.right <= b.right + 1 && a.top >= b.top - 1 && a.bottom <= b.bottom + 1; }"""
+        )
+        check(f"{tag} Dr. Liu's photo beside his words", mount is True, mount)
+        page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
+        context.close()
+
+
+def motion(browser):
+    # Reduced motion: complete and still.
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    scroll_through(page)
+    still = page.evaluate(
+        """() => ({ blooms: [...document.querySelectorAll('[data-bloom]')].filter(e => e.dataset.bloom !== 'done').length,
+             hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < 1).length,
+             running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
+               return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length })"""
+    )
+    check("reduced motion: every painting shown, still", still["blooms"] == 0 and still["hidden"] == 0 and still["running"] == 0, still)
+    context.close()
+
+    # With motion: the opening's painting blooms on arrival; a lower painting waits, then blooms.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    first = page.evaluate("document.querySelector('[data-part=\"opening\"] img').dataset.bloom ?? null")
+    check("motion: the opening's painting starts waiting (server-marked)", first == "waiting", first)
+    check("motion: the opening's painting blooms", wait_until(page, "document.querySelector('[data-part=\"opening\"] img').dataset.bloom === 'done'"))
+    low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
+    state = page.evaluate(f"[{low}.dataset.bloom ?? null, getComputedStyle({low}).opacity]")
+    check("motion: a lower painting waits out of view, hidden", state[0] == "waiting" and float(state[1]) == 0, state)
+    page.evaluate(f"(() => {{ const i = {low}; window.scrollTo(0, i.getBoundingClientRect().top + window.scrollY - innerHeight / 2); }})()")
+    check("motion: then it blooms", wait_until(page, f"{low}.dataset.bloom === 'done'"))
+    context.close()
+
+    # JavaScript off: every painting shows (nothing waits for a bloom that will not come).
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+    page.wait_for_timeout(1500)
+    box = page.locator('[data-part="opening"] img').bounding_box()
+    shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+    ink = sum(shot.histogram()[:180]) / (shot.width * shot.height)
+    check("JavaScript off: the opening's painting is visible", ink >= 0.02, round(ink, 4))
+    context.close()
+
+
+def boundary(browser):
+    for width in (719, 720):
+        context, page, response, errors, failed = open_page(browser, width, 900, reduced=True)
+        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{width} no sideways scrolling", sideways <= 0, sideways)
+        r = page.evaluate(RHYTHM_JS, SIDES)
+        if width == 719:
+            firsts = {p: v and v["first"] for p, v in r.items()}
+            check("719 one column: each picture first", all(f == "picture" for f in firsts.values()), firsts)
+        else:
+            sides = {p: v and v["side"] for p, v in r.items()}
+            check("720 two columns: pictures on alternating sides", sides == SIDES, sides)
+        context.close()
+
+
+def first_screen(browser):
+    for width, height in [(1280, 720), (1440, 900), (1536, 864), (390, 844)]:
+        tag = f"{width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        geo = page.evaluate(
+            """() => ({ title: document.querySelector('h1').getBoundingClientRect().bottom,
+                        picture: document.querySelector('[data-part="opening"] img').getBoundingClientRect().top, win: innerHeight })"""
+        )
+        check(f"{tag} the title and the top of the opening's picture in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
+        context.close()
+
+
+# --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
+GROUPS = [desktop_and_phone, rhythm, motion, focus, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

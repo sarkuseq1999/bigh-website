@@ -3,10 +3,10 @@
 // stays true without an exact start year; never name its earlier Asian brand), products are made
 // in California by a GMP-certified maker, the 45-day refund is current policy, and Ask BiGH Science
 // stays on the page before the service exists. BiGH was incorporated in California on 05/11/2016.
-// The page is "The name, on a folded letter" (Mo's design D, October 6, 2026). Before it: the first
-// ink About (October 5), which is in git history (commits up to c30a489), and the Glass page (Mo
-// picked look B with opening 3 and Switzer on Sept 28, 2026), which is in the backup zip named in
-// docs/about-page.md.
+// The page is About B, "The album" (October 7, 2026), with C "The circle" built beside it on its own
+// branch. Before them: D (the folded letter, branch ink-pages), the first ink About (git history, up
+// to c30a489) and the Glass page (Mo picked look B with opening 3 and Switzer on Sept 28, 2026),
+// which is in the backup zip named in docs/about-page.md.
 
 export const about = {
   hero: {
