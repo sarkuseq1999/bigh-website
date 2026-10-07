@@ -1,7 +1,8 @@
 /* About, shared by B "The album" and C "The circle" (Mo, October 7, 2026; spec
    docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). One
    rhythm for every part: one picture on one side, its words on the other, the sides swapping part
-   by part (from 720px; one column below, picture first). The kit's plain rice paper, no folds.
+   by part (from 960px; one column below, picture first, centred and about 640px wide from 600px).
+   The kit's plain rice paper, no folds.
    Every rule is scoped under .aboutPage (the page root, InkPage className), so it outranks the
    kit's .look rules and the homepage resets in any stylesheet order. Multiply: nothing between a
    painting and the page root may make a stacking context (no z-index on a positioned ancestor, no
@@ -26,8 +27,8 @@
   font-weight: 450;
 }
 
-/* The name once: the title in plain ink at display size (no painted name, no unfolding acronym,
-   which showed "BiGH" before the sentence). */
+/* The name once: the title in plain ink at display size (no painted name, and no initials that
+   unfold, which showed "BiGH" before the sentence). */
 .aboutPage h1.title {
   margin: 0;
   font-family: var(--display-font);
@@ -57,7 +58,9 @@
   scroll-margin-top: calc(108px - 150px - var(--part-half));
 }
 
-/* One picture with its words. */
+/* One picture with its words. Under 960px a two-column words column is too narrow (at 768px the
+   words ran three times as tall as their painting), so the part is one column there: the picture
+   first, then its words. */
 .aboutPage .spread {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -65,7 +68,19 @@
   align-items: center;
 }
 
-@media (min-width: 720px) {
+.aboutPage .words {
+  min-width: 0;
+}
+
+/* A tablet's one column is centred and about 640px wide: the words keep a reading measure and the
+   picture stands centred over them, not a phone's column stretched across the window. */
+@media (min-width: 600px) and (max-width: 959px) {
+  .aboutPage .spread {
+    max-width: calc(640px + 2 * var(--gutter));
+  }
+}
+
+@media (min-width: 960px) {
   .aboutPage .spread {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     column-gap: var(--gap);
@@ -185,7 +200,8 @@
 }
 
 .aboutPage .figure {
-  font-size: clamp(48px, 4.6vw, 76px);
+  /* Under 56px at every width: the name once (nothing but the title is set that large). */
+  font-size: clamp(48px, 4.6vw, 54px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -198,11 +214,11 @@
   line-height: 1;
 }
 
-/* The three figures in one row, from 1200px and on a tablet held upright (600 to 719px, where the
-   one column is wide enough for three: stacked on full-width hairlines they made a long sparse
-   column of the phone's). Three even columns, each at least as wide as its numeral ("20+ years"
-   keeps one line); the last column ends at the words' edge. */
-@media (min-width: 1200px), (min-width: 600px) and (max-width: 719px) {
+/* The three figures in one row, from 1200px and on a tablet (600 to 959px, where the one column
+   is wide enough for three: stacked on full-width hairlines they made a long sparse column of the
+   phone's). Three even columns, each at least as wide as its numeral ("20+ years" keeps one line);
+   the last column ends at the words' edge. */
+@media (min-width: 1200px), (min-width: 600px) and (max-width: 959px) {
   .aboutPage .figures {
     grid-template-columns: repeat(3, minmax(min-content, 1fr));
     gap: 0;
@@ -350,13 +366,9 @@
   font-size: clamp(min(36px, 8.2vw), 3.2vw, 50px);
 }
 
-/* The same phrase against the narrowest two-column words column (about 283px at 720px, 377px at
-   959px): 3.8vw fits it from 720px, and from 960px 36px does. */
-@media (min-width: 720px) and (max-width: 959px) {
-  .aboutPage h2.heading:is(:lang(ja), :lang(zh)) {
-    font-size: min(36px, 3.8vw);
-  }
-}
+/* Two columns start at 960px, where the words column is 377px: the longest phrase at 36px fits it
+   there and wider (measured in Japanese and Chinese at 960, 1000 and 1100px), and a tablet's one
+   column is 640px, so no narrower size is needed between a phone and a desktop. */
 
 /* "Khám phá sản phẩm của chúng tôi" cannot keep one line on a phone: two even lines, not a long
    line over one short word. The pills carry the kit's .pill (a different module's class), so they

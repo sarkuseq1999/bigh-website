@@ -7,18 +7,20 @@ no brush layer, no folds, no aged paper; every painting multiplies and nothing b
 and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
 15px+, navigation 18px+, targets 48px+; the opening's painting loads eagerly; the Support and Ask
 sheets open, close and hand focus back.
-rhythm (1440x900, 1280x800, 1024x768, 768x1024, 390x844): every spread part has one picture and its
-words; on two columns the pictures stand opening right, purpose left, roots right, experience left,
-closing right, and are about the same size; on one column each picture comes first; the name once
+rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
+one picture and its words; on two columns (from 960px) the pictures stand opening right, purpose
+left, roots right, experience left, closing right, and are about the same size, and nothing in a
+words column reaches past its right edge; on one column each picture comes first; the name once
 (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under each
 picture, "Illustrations" under the promise row; no words over a painting; four promises in one row
-from 1200px, two by two from 600px, one column below; Dr. Liu's photo beside his words.
-motion: reduced motion complete and still; with motion the opening's painting blooms on arrival and
-a lower painting waits out of view, then blooms; a waiting painting is hidden; with JavaScript off
-every painting shows.
+from 1200px, two by two from 600px, one column below; Dr. Liu's photo in his words, beside his
+paragraph on a tablet's column and from 1080px, above it elsewhere.
+motion: reduced motion complete and still; with motion every painting is server-marked waiting (none
+paints whole, then vanishes), the opening's painting blooms on arrival and a lower painting waits
+out of view, then blooms; a waiting painting is hidden; with JavaScript off every painting shows.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
-boundary (719x900, 720x900): no sideways scrolling; one column at 719 (picture first), two at 720.
+boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
 in the first screen.
 
@@ -425,9 +427,37 @@ def nav_locales(browser):
 
 
 DESIGN = "album"
-# Each spread part and the side its picture stands on from 720px (the promise is the centred row).
+# Each spread part and the side its picture stands on from 960px (the promise is the centred row).
 SIDES = {"opening": "right", "purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
-TWO_COLUMNS = 720
+TWO_COLUMNS = 960
+
+
+def roots_beside(width):
+    """Where Dr. Liu's photo stands beside his paragraph (album.module.css): on a tablet's 640px
+    column (600 to 959px) and from 1080px. Elsewhere it stands above it."""
+    return 600 <= width < TWO_COLUMNS or width >= 1080
+
+
+# Nothing in a words column reaches past its right edge: each element's box, and the glyphs of the
+# text it holds (a pill that cannot wrap ran 18px past the column from 960 to about 1010px when Dr.
+# Liu's photo stood beside the paragraph there).
+WORDS_FIT_JS = """() => {
+  const out = [];
+  for (const w of document.querySelectorAll('[data-words]')) {
+    const edge = w.getBoundingClientRect().right;
+    for (const e of w.querySelectorAll('*')) {
+      const b = e.getBoundingClientRect();
+      if (!b.width) continue;
+      let right = b.right;
+      if ([...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) {
+        const r = document.createRange(); r.selectNodeContents(e);
+        for (const x of r.getClientRects()) if (x.width > 0) right = Math.max(right, x.right);
+      }
+      if (right > edge + 1) out.push([e.tagName.toLowerCase() + ' ' + (e.textContent || '').trim().slice(0, 20), Math.round(right - edge)]);
+    }
+  }
+  return out;
+}"""
 
 RHYTHM_JS = """(sides) => {
   const out = {};
@@ -544,7 +574,7 @@ def desktop_and_phone(browser):
 
 
 def rhythm(browser):
-    for width, height in [(1440, 900), (1280, 800), (1024, 768), (768, 1024), (390, 844)]:
+    for width, height in [(1440, 900), (1280, 800), (1080, 800), (1024, 768), (960, 800), (768, 1024), (390, 844)]:
         tag = f"{width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
         r = page.evaluate(RHYTHM_JS, SIDES)
@@ -556,6 +586,8 @@ def rhythm(browser):
             heights = sorted(v["height"] for v in r.values() if v)
             median = heights[len(heights) // 2]
             check(f"{tag} the pictures about the same size (0.55-1.6 of the median)", all(0.55 <= h / median <= 1.6 for h in heights), heights)
+            over = page.evaluate(WORDS_FIT_JS)
+            check(f"{tag} nothing in a words column past its right edge", not over, over[:4])
         else:
             firsts = {p: v and v["first"] for p, v in r.items()}
             check(f"{tag} one column: each picture first", all(f == "picture" for f in firsts.values()), firsts)
@@ -572,10 +604,18 @@ def rhythm(browser):
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
         mount = page.evaluate(
             """() => { const m = document.querySelector('#roots [data-mount]'), w = document.querySelector('#roots [data-words]');
-                 if (!m || !w) return null; const a = m.getBoundingClientRect(), b = w.getBoundingClientRect();
-                 return a.left >= b.left - 1 && a.right <= b.right + 1 && a.top >= b.top - 1 && a.bottom <= b.bottom + 1; }"""
+                 const t = document.querySelector('#roots [data-words] p:not([data-label])');
+                 if (!m || !w || !t) return null; const a = m.getBoundingClientRect(), b = w.getBoundingClientRect(), c = t.getBoundingClientRect();
+                 return { inside: a.left >= b.left - 1 && a.right <= b.right + 1 && a.top >= b.top - 1 && a.bottom <= b.bottom + 1,
+                          beside: a.right <= c.left + 1, above: a.bottom <= c.top + 1 }; }"""
         )
-        check(f"{tag} Dr. Liu's photo beside his words", mount is True, mount)
+        beside = roots_beside(width)
+        check(f"{tag} Dr. Liu's photo in his words", bool(mount) and mount["inside"], mount)
+        check(
+            f"{tag} Dr. Liu's photo {'beside' if beside else 'above'} his paragraph",
+            bool(mount) and (mount["beside"] if beside else mount["above"]),
+            mount,
+        )
         page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
         context.close()
 
@@ -597,6 +637,8 @@ def motion(browser):
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    marks = page.evaluate("[...document.querySelectorAll('[data-picture] img, [data-promise] img')].map(i => i.dataset.bloom ?? null)")
+    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
     first = page.evaluate("document.querySelector('[data-part=\"opening\"] img').dataset.bloom ?? null")
     check("motion: the opening's painting starts waiting (server-marked)", first == "waiting", first)
     check("motion: the opening's painting blooms", wait_until(page, "document.querySelector('[data-part=\"opening\"] img').dataset.bloom === 'done'"))
@@ -620,17 +662,17 @@ def motion(browser):
 
 
 def boundary(browser):
-    for width in (719, 720):
+    for width in (959, 960):
         context, page, response, errors, failed = open_page(browser, width, 900, reduced=True)
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{width} no sideways scrolling", sideways <= 0, sideways)
         r = page.evaluate(RHYTHM_JS, SIDES)
-        if width == 719:
+        if width == 959:
             firsts = {p: v and v["first"] for p, v in r.items()}
-            check("719 one column: each picture first", all(f == "picture" for f in firsts.values()), firsts)
+            check("959 one column: each picture first", all(f == "picture" for f in firsts.values()), firsts)
         else:
             sides = {p: v and v["side"] for p, v in r.items()}
-            check("720 two columns: pictures on alternating sides", sides == SIDES, sides)
+            check("960 two columns: pictures on alternating sides", sides == SIDES, sides)
         context.close()
 
 

@@ -33,7 +33,7 @@ export const ALT = {
 } as const;
 
 const PROMISE_ART = [vignettes.palms, vignettes.bee, vignettes.moon, vignettes.letter];
-const HALF = "(max-width: 719px) 90vw, 46vw";
+const HALF = "(max-width: 959px) 90vw, 46vw";
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
@@ -208,7 +208,7 @@ function Promises() {
                 width={PROMISE_ART[i].width}
                 height={PROMISE_ART[i].height}
                 sizes="208px"
-                data-bloom=""
+                data-bloom="waiting"
                 style={{ "--bloom-delay": i * 220 } as CSSProperties}
               />
               <h3>{copy(item.title)}</h3>

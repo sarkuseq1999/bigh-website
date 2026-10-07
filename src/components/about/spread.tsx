@@ -10,9 +10,10 @@ import page from "./about-page.module.css";
 
 // The About page's one rhythm (Mo, October 7, 2026: every part paired the same way): one picture,
 // its words beside it, the sides swapping part by part. `side` is where the picture stands from
-// 720px; on one column the picture always comes first. Paintings multiply onto the page's paper
-// and bloom in as they arrive (the kit's useBloom); an opening painting is marked "waiting" by the
-// server so it blooms on arrival instead of flashing.
+// 960px; on one column the picture always comes first. Paintings multiply onto the page's paper
+// and bloom in as they arrive (the kit's useBloom). Every painting is marked "waiting" by the
+// server: one marked later showed whole for a moment, vanished when the script marked it, then
+// bloomed (the purpose painting at 1440x900). With no script the page's stylesheet shows them.
 
 export function Painting({
   art,
@@ -23,7 +24,7 @@ export function Painting({
   delay = 0,
   priority = false,
   eager = false,
-  waiting = false,
+  waiting = true,
   className = "",
 }: {
   art: Art;
@@ -41,7 +42,7 @@ export function Painting({
   /** A painting that reaches into the first screen on some windows: loaded at once, not preloaded
       (lazy, it was the window's largest painting while the opening's still waited to bloom). */
   eager?: boolean;
-  /** Marked "waiting" by the server (an opening painting). */
+  /** Marked "waiting" by the server, so it never paints whole before its bloom (default true). */
   waiting?: boolean;
   className?: string;
 }) {
@@ -83,7 +84,7 @@ export function Spread({
   id: string;
   /** The part's name, for its hooks and its page's styles. */
   part: string;
-  /** Where the picture stands from 720px. */
+  /** Where the picture stands from 960px. */
   side: "left" | "right";
   labelledBy: string;
   /** A Painting, or a figure marked data-picture. */

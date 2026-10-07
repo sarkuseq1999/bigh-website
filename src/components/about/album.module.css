@@ -68,9 +68,13 @@
   text-align: right;
 }
 
-/* Under 960px the words column is too narrow for the photo beside the paragraph (a column of
-   eight short lines, and the pill folded in two on a phone): the photo stands over it. */
-@media (max-width: 959px) {
+/* Dr. Liu's photo stands over his paragraph where the words column is too narrow for both side by
+   side: on a phone (under 600px: a column of eight short lines, the pill folded in two) and on the
+   narrowest two columns (960 to 1079px: beside the photo the paragraph was about 240px, and the
+   "Meet our scientists" pill, about 256px, ran 18px past the column). From 1080px the paragraph is
+   274px or more, a window's scrollbar included; on a tablet's 640px column (600 to 959px) the
+   photo stands beside it, as in the mockup. */
+@media (max-width: 599px), (min-width: 960px) and (max-width: 1079px) {
   .album .rootsBody {
     grid-template-columns: minmax(0, 1fr);
   }
@@ -80,9 +84,9 @@
   }
 }
 
-/* One column (picture first): the same heights by shape, from a plain height of 300px or 0.7 of
-   the column, so no painting fills a phone's screen; the book at most 420px wide. */
-@media (max-width: 719px) {
+/* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
+   or 0.7 of the column, so no painting fills a phone's screen; the book at most 420px wide. */
+@media (max-width: 959px) {
   .album {
     --h: min(300px, 70%);
   }
