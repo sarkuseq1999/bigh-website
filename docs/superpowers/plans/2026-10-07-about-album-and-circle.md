@@ -482,7 +482,7 @@ NAME_ONCE_JS = """() => ({
   big: [...document.querySelectorAll('main *')].filter(e => e.offsetParent && e.tagName !== 'H1' && !e.closest('h1')
       && [...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && parseFloat(getComputedStyle(e).fontSize) >= 56)
     .map(e => [e.textContent.trim().slice(0, 20), getComputedStyle(e).fontSize]),
-  painted: [...document.querySelectorAll('main img')].map(i => i.getAttribute('src') || '').filter(s => /word-v\d|letter-[bigh]-v\d/.test(s)) })"""
+  painted: [...document.querySelectorAll('main img')].map(i => i.getAttribute('src') || '').filter(s => /word-v[0-9]|letter-[bigh]-v[0-9]/.test(s)) })"""
 
 
 def desktop_and_phone(browser):
