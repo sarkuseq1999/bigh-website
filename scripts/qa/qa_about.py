@@ -1,25 +1,26 @@
-"""QA for About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png;
+"""QA for About C, "The circle" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png;
 spec docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7").
 
 desktop_and_phone (1440x900, 390x844): 200; no console errors or warnings (but PREFETCH_CSS); no
 failed requests; one h1, English "Be in Good Health." with lang="en"; every locked line; no canvas,
 no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
 and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
-15px+, navigation 18px+, targets 48px+; the opening's painting loads eagerly; the Support and Ask
+15px+, navigation 18px+, targets 48px+; the opening's circle loads eagerly; the Support and Ask
 sheets open, close and hand focus back.
 rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
-one picture and its words; on two columns (from 960px) the pictures stand opening right, purpose
-left, roots right, experience left, closing right, and are about the same size, and nothing in a
-words column reaches past its right edge; on one column each picture comes first; the name once
-(nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under each
-picture, "Illustrations" under the promise row; no words over a painting; four promises in one row
-from 1200px, two by two from 600px, one column below; Dr. Liu's photo in his words, beside his
-paragraph on a tablet's column and from 1200px, above it elsewhere. In Vietnamese at 1080, 1100,
-1140, 1200 and 1210px (where the longest pill label, "Gặp các nhà khoa học", once ran past it, and
-the tightest widths beside the photo) nothing in a words column reaches past its right edge.
-motion: reduced motion complete and still; with motion every painting is server-marked waiting (none
-paints whole, then vanishes), the opening's painting blooms on arrival and a lower painting waits
-out of view, then blooms; a waiting painting is hidden; with JavaScript off every painting shows.
+one picture and its words; on two columns (from 960px) the pictures stand purpose left, roots
+right, experience left, closing right (the opening is centred), and are about the same size, and
+nothing in a words column reaches past its right edge; on one column each picture comes first; the
+name once (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under
+the purpose, experience and closing paintings, none under Dr. Liu's photo or the promise dots; no
+words over a painting; four promises in one row from 1200px, two by two from 600px, one column
+below; Dr. Liu's photo in the middle of its pool; the circle appears once. In Vietnamese at 360,
+600, 960, 1080 and 1200px (the longest pill label, "Gặp các nhà khoa học", once ran past its
+column) nothing in a words column reaches past its right edge.
+motion: reduced motion complete and still (the circle whole, its gold up, every painting shown);
+every painting is server-marked waiting (none paints whole, then vanishes); with motion the circle
+paints itself around in one breath from where the brush began, then its gold comes up, and the
+hills bloom; a lower painting waits, then blooms; with JavaScript off the circle shows whole.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -32,10 +33,10 @@ bad line break; jp and cns heading phrases whole on a phone and at 900; Vietname
 closing pills balance their lines.
 nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
-first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
+first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's circle
 in the first screen.
 
-Pictures: scripts/qa/out/about-album/<size>-NN.png.
+Pictures: scripts/qa/out/about-circle/<size>-NN.png.
 
 Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
 """
@@ -52,7 +53,7 @@ from playwright.sync_api import sync_playwright
 sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3025"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-album")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-circle")
 os.makedirs(OUT, exist_ok=True)
 results = []
 
@@ -437,21 +438,16 @@ def nav_locales(browser):
     context.close()
 
 
-DESIGN = "album"
-# Each spread part and the side its picture stands on from 960px (the promise is the centred row).
-SIDES = {"opening": "right", "purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
+DESIGN = "circle"
+# Each spread part and the side its picture stands on from 960px (the opening's circle and the
+# promise row are centred).
+SIDES = {"purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
 TWO_COLUMNS = 960
 
 
-def roots_beside(width):
-    """Where Dr. Liu's photo stands beside his paragraph (album.module.css): on a tablet's column
-    (600 to 959px) and from 1200px. Elsewhere it stands above it."""
-    return 600 <= width < TWO_COLUMNS or width >= 1200
-
-
 # Nothing in a words column reaches past its right edge: each element's box, and the glyphs of the
-# text it holds (a pill that cannot wrap ran 17px past the column from 960 to about 1010px when Dr.
-# Liu's photo stood beside the paragraph there).
+# text it holds (in the album a pill that cannot wrap ran 17px past the column from 960 to about
+# 1010px, where Dr. Liu's photo stood beside the paragraph).
 WORDS_FIT_JS = """() => {
   const out = [];
   for (const w of document.querySelectorAll('[data-words]')) {
@@ -555,8 +551,8 @@ def desktop_and_phone(browser):
                  .map(e => [e.textContent.trim().slice(0, 30), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)"""
         )
         check(f"{tag} targets at least 48px", not targets, targets)
-        eager = page.evaluate("(() => { const i = document.querySelector('[data-part=\"opening\"] img'); return i ? i.getAttribute('loading') : 'missing'; })()")
-        check(f"{tag} the opening's painting loads eagerly", eager != "lazy" and eager != "missing", eager)
+        eager = page.evaluate("(() => { const i = document.querySelector('[data-enso] img'); return i ? i.getAttribute('loading') : 'missing'; })()")
+        check(f"{tag} the opening's circle loads eagerly", eager != "lazy" and eager != "missing", eager)
         if width < 1101:
             page.click("[data-nav-menu-button]")
             page.wait_for_timeout(900)
@@ -605,35 +601,31 @@ def rhythm(browser):
         once = page.evaluate(NAME_ONCE_JS)
         check(f"{tag} the name once", not once["big"] and not once["painted"], once)
         captions = {p: v and v["captions"] for p, v in r.items()}
-        check(f"{tag} Illustration under each picture", all(c == ["Illustration"] for c in captions.values()), captions)
+        want_captions = {"purpose": ["Illustration"], "roots": [], "experience": ["Illustration"], "closing": ["Illustration"]}
+        check(f"{tag} Illustration under each painting that pictures something", captions == want_captions, captions)
         row_caption = page.evaluate("document.querySelector('[data-part=\"promise\"] [data-row-caption]')?.textContent.trim() ?? null")
-        check(f"{tag} Illustrations under the promise row", row_caption == "Illustrations", row_caption)
+        check(f"{tag} no caption under the promise dots", row_caption is None, row_caption)
         hits = page.evaluate(OVERLAP_JS)
         check(f"{tag} no words over a painting", not hits, hits[:4])
         rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
         want = 1 if width >= 1200 else 2 if width >= 600 else 4
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
-        mount = page.evaluate(
-            """() => { const m = document.querySelector('#roots [data-mount]'), w = document.querySelector('#roots [data-words]');
-                 const t = document.querySelector('#roots [data-words] p:not([data-label])');
-                 if (!m || !w || !t) return null; const a = m.getBoundingClientRect(), b = w.getBoundingClientRect(), c = t.getBoundingClientRect();
-                 return { inside: a.left >= b.left - 1 && a.right <= b.right + 1 && a.top >= b.top - 1 && a.bottom <= b.bottom + 1,
-                          beside: a.right <= c.left + 1, above: a.bottom <= c.top + 1 }; }"""
+        liu = page.evaluate(
+            """() => { const p = document.querySelector('[data-pool]'), f = document.querySelector('[data-mount] img');
+                 if (!p || !f) return null; const a = p.getBoundingClientRect(), b = f.getBoundingClientRect();
+                 return { dx: (b.left + b.width / 2 - a.left - a.width / 2) / a.width, dy: (b.top + b.height / 2 - a.top - a.height / 2) / a.height }; }"""
         )
-        beside = roots_beside(width)
-        check(f"{tag} Dr. Liu's photo in his words", bool(mount) and mount["inside"], mount)
-        check(
-            f"{tag} Dr. Liu's photo {'beside' if beside else 'above'} his paragraph",
-            bool(mount) and (mount["beside"] if beside else mount["above"]),
-            mount,
-        )
+        check(f"{tag} Dr. Liu's photo in the middle of its pool", liu is not None and abs(liu["dx"]) <= 0.15 and abs(liu["dy"]) <= 0.15, liu)
+        # The stroke only: "enso" alone also matches its gold start, enso-dot-v1.webp.
+        once_circle = page.evaluate("document.querySelectorAll('main img[src*=\"enso-v\"]').length")
+        check(f"{tag} the circle appears once", once_circle == 1, once_circle)
         page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
         context.close()
-    # The pill labels differ by language: the Vietnamese "Gặp các nhà khoa học" is the longest, and
-    # beside Dr. Liu's photo it ran 22px past the words column at 1080px, 5px at 1140px (English
-    # fitted from 1080px). 1200 and 1210px are the tightest widths beside the photo (the photo
-    # stands beside the paragraph from 1200px): about 3px of headroom with a classic scrollbar.
-    for width in (1080, 1100, 1140, 1200, 1210):
+    # The pill labels differ by language: the Vietnamese "Gặp các nhà khoa học" is the longest (in
+    # the album, beside Dr. Liu's photo, it ran 22px past the words column at 1080px). Here the
+    # words column holds no photo; the pill must fit it on a phone, on a tablet's column, at the
+    # narrowest two columns (960px) and wider.
+    for width in (360, 600, 960, 1080, 1200):
         context, page, response, errors, failed = open_page(browser, width, 800, path="/vn/about", reduced=True)
         over = page.evaluate(WORDS_FIT_JS)
         check(f"vn {width}x800 nothing in a words column past its right edge", not over, over[:4])
@@ -645,23 +637,42 @@ def motion(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     scroll_through(page)
     still = page.evaluate(
-        """() => ({ blooms: [...document.querySelectorAll('[data-bloom]')].filter(e => e.dataset.bloom !== 'done').length,
-             hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < 1).length,
-             running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
-               return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length })"""
+        """() => { const e = document.querySelector('[data-enso] img'), d = document.querySelector('[data-enso] [data-dot]');
+             return { blooms: [...document.querySelectorAll('[data-bloom]')].filter(x => x.dataset.bloom !== 'done').length,
+                      hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < 1).length,
+                      draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage, dot: getComputedStyle(d).opacity,
+                      running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
+                        return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""
     )
-    check("reduced motion: every painting shown, still", still["blooms"] == 0 and still["hidden"] == 0 and still["running"] == 0, still)
+    check("reduced motion: the circle whole, its gold up, every painting shown, still",
+          still["blooms"] == 0 and still["hidden"] == 0 and still["draw"] == "none" and still["mask"] == "none"
+          and float(still["dot"]) == 1 and still["running"] == 0, still)
     context.close()
 
-    # With motion: the opening's painting blooms on arrival; a lower painting waits, then blooms.
+    # With motion: the circle paints itself in one breath, then its gold; the hills bloom.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
+    # the server sends, before any script could mark one: in the page's main, the hills, the
+    # seedling, the pool, the sequoia, the four promise dots and the glasses (the circle draws
+    # itself instead; the shared closing crane after main is the kit's own).
+    html = context.request.get(f"{BASE}/about").text()
+    main = html[html.index("<main"):html.index("</main>")]
+    marks = re.findall(r'<img[^>]*?\sdata-bloom="([^"]*)"', main)
+    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    marks = page.evaluate("[...document.querySelectorAll('[data-picture] img, [data-promise] img')].map(i => i.dataset.bloom ?? null)")
-    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
-    first = page.evaluate("document.querySelector('[data-part=\"opening\"] img').dataset.bloom ?? null")
-    check("motion: the opening's painting starts waiting (server-marked)", first == "waiting", first)
-    check("motion: the opening's painting blooms", wait_until(page, "document.querySelector('[data-part=\"opening\"] img').dataset.bloom === 'done'"))
+    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
+    early = page.evaluate(
+        """() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
+             return { name: e.animationName, duration: e.animationDuration, start: e.getPropertyValue('--start').trim(),
+                      dot: getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity,
+                      delay: parseFloat(getComputedStyle(document.querySelector('[data-enso] [data-dot]')).animationDelay) }; }"""
+    )
+    check("motion: the circle paints itself (its animation, one breath, from where the brush began)",
+          "draw" in early["name"] and early["duration"] == "2.4s" and early["start"].endswith("deg"), early)
+    check("motion: its gold waits for the stroke", float(early["dot"]) < 0.5 and early["delay"] >= 2.4, early)
+    check("motion: then the gold is up", wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'"))
+    check("motion: the hills bloom", wait_until(page, "document.querySelector('[data-picture-band]').dataset.bloom === 'done'"))
     low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
     state = page.evaluate(f"[{low}.dataset.bloom ?? null, getComputedStyle({low}).opacity]")
     check("motion: a lower painting waits out of view, hidden", state[0] == "waiting" and float(state[1]) == 0, state)
@@ -669,16 +680,33 @@ def motion(browser):
     check("motion: then it blooms", wait_until(page, f"{low}.dataset.bloom === 'done'"))
     context.close()
 
-    # JavaScript off: every painting shows (nothing waits for a bloom that will not come).
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
-    page = context.new_page()
-    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-    page.wait_for_timeout(1500)
-    box = page.locator('[data-part="opening"] img').bounding_box()
-    shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-    ink = sum(shot.histogram()[:180]) / (shot.width * shot.height)
-    check("JavaScript off: the opening's painting is visible", ink >= 0.02, round(ink, 4))
-    context.close()
+    # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
+    # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of
+    # it must also hold as much ink as the still circle's (reduced motion: no mask at all). The
+    # sweep ends in the top half: the top-left quarter held 0.38 of its ink at 1.5s, the top-right
+    # 0.94 at 2.2s (the few degrees before the wet head come last); whole, both match exactly.
+    def circle_shot(reduced):
+        context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False,
+                                      reduced_motion="reduce" if reduced else "no-preference")
+        page = context.new_page()
+        page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+        page.wait_for_timeout(1500 if reduced else 4000)
+        box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
+        shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
+        context.close()
+        return shot
+
+    def quarters(shot):
+        w, h = shot.size
+        boxes = [(w // 2, 0, w, h // 2), (w // 2, h // 2, w, h), (0, h // 2, w // 2, h), (0, 0, w // 2, h // 2)]
+        return [round(sum(shot.crop(b).histogram()[:200]) / ((b[2] - b[0]) * (b[3] - b[1])), 4) for b in boxes]
+
+    shot = circle_shot(False)
+    ink = sum(shot.histogram()[:120]) / (shot.width * shot.height)
+    check("JavaScript off: the circle is visible", ink >= 0.04, round(ink, 4))
+    drawn, still = quarters(shot), quarters(circle_shot(True))
+    check("JavaScript off: the circle shows whole (each quarter as inked as the still circle)",
+          all(d >= 0.97 * s for d, s in zip(drawn, still)), {"drawn": drawn, "still": still})
 
 
 def boundary(browser):
@@ -702,9 +730,9 @@ def first_screen(browser):
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
         geo = page.evaluate(
             """() => ({ title: document.querySelector('h1').getBoundingClientRect().bottom,
-                        picture: document.querySelector('[data-part="opening"] img').getBoundingClientRect().top, win: innerHeight })"""
+                        picture: document.querySelector('[data-enso] img').getBoundingClientRect().top, win: innerHeight })"""
         )
-        check(f"{tag} the title and the top of the opening's picture in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
+        check(f"{tag} the title and the top of the opening's circle in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
         context.close()
 
 

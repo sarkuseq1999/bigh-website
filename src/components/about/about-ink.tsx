@@ -10,30 +10,30 @@ import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, routes } from "./about-content";
-import { book, desk, lamp, seedling, sequoia, vignettes } from "./about-art";
+import { dots, enso, glasses, hills, pool, seedling, sequoia } from "./about-art";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { Painting, Spread } from "./spread";
 import page from "./about-page.module.css";
-import styles from "./album.module.css";
+import styles from "./circle.module.css";
 
-// About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png; spec
-// docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). An old
-// painting album: every part a spread, one painting beside its words, the sides swapping. The name
-// once (the logo, then the title). California, not zen. The words are the locked ones in
-// about-content.ts.
+// About C, "The circle" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png; spec
+// docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). One circle
+// brushed in a single stroke (a whole, complete life) opens the page, once only; then the same
+// rhythm as the album: one picture beside its words, the sides swapping. California, not zen. The
+// name once (the logo, then the title). The words are the locked ones in about-content.ts.
 
 export const ALT = {
-  book: "An old open book, painted in ink, with a gold ribbon bookmark",
   seedling:
     "An oak seedling growing from an acorn, painted in ink; a gold acorn lies among its roots",
-  desk: "A scientist's desk in ink: a brush on its rest, a microscope and a stack of books",
   sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
-  lamp: "A desk lamp casting gold light onto an open journal, painted in ink",
+  glasses: "Reading glasses resting on an open notebook, painted in ink",
 } as const;
 
-const PROMISE_ART = [vignettes.palms, vignettes.bee, vignettes.moon, vignettes.letter];
 const HALF = "(max-width: 959px) 90vw, 46vw";
+// The brush's wet head lies about 26 degrees before its gold leaf (about-art.ts enso.startDeg), so
+// the circle's sweep starts there and the blackest part of the stroke is drawn first.
+const SWEEP_FROM = `${(enso.startDeg - 26).toFixed(1)}deg`;
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
@@ -42,29 +42,62 @@ function sentences(text: string) {
 function Opening() {
   const copy = useCopy();
   return (
-    <section className={page.opening} data-part="opening" aria-labelledby="about-title">
-      <div className={`${base.wrap} ${page.spread}`} data-side="right">
-        <Painting
-          art={book}
-          alt={ALT.book}
-          sizes={HALF}
-          gold={book.gold}
-          caption
-          priority
-          waiting
-        />
-        <div className={page.words} data-words="">
-          <p className={page.kicker}>{copy(about.hero.label)}</p>
-          <h1 id="about-title" lang="en" className={page.title}>
-            {about.hero.title}
-          </h1>
-          <p className={page.lead}>
-            {sentences(copy(about.hero.lead)).map((sentence) => (
-              <span key={sentence}>{sentence}</span>
-            ))}
-          </p>
-        </div>
+    <section
+      className={`${page.opening} ${styles.opening}`}
+      data-part="opening"
+      aria-labelledby="about-title"
+    >
+      <div className={`${base.wrap} ${styles.openingWords}`}>
+        <span className={styles.enso} data-enso="" aria-hidden="true">
+          <Image
+            className={`${base.ink} ${styles.paint}`}
+            src={enso.src}
+            alt=""
+            width={enso.width}
+            height={enso.height}
+            sizes="(max-width: 833px) 200px, (max-width: 1499px) 24vw, 360px"
+            priority
+            style={{ "--start": SWEEP_FROM } as CSSProperties}
+          />
+          <Image
+            className={styles.dot}
+            src={enso.dot.src}
+            alt=""
+            width={enso.dot.width}
+            height={enso.dot.height}
+            sizes="56px"
+            priority
+            data-dot=""
+            style={{
+              left: `${enso.dot.left * 100}%`,
+              top: `${enso.dot.top * 100}%`,
+              width: `${enso.dot.size * 100}%`,
+            }}
+          />
+        </span>
+        <p className={page.kicker}>{copy(about.hero.label)}</p>
+        <h1 id="about-title" lang="en" className={page.title}>
+          {about.hero.title}
+        </h1>
+        <p className={page.lead}>
+          {sentences(copy(about.hero.lead)).map((sentence) => (
+            <span key={sentence}>{sentence}</span>
+          ))}
+        </p>
       </div>
+      {/* Loaded at once, not preloaded: the hills reach into the first screen, and lazy they were
+          the window's largest painting with reduced motion (Next's LCP warning, 1440x900). */}
+      <Image
+        className={`${base.ink} ${styles.hills}`}
+        src={hills.src}
+        alt=""
+        width={hills.width}
+        height={hills.height}
+        sizes="100vw"
+        loading="eager"
+        data-bloom="waiting"
+        data-picture-band=""
+      />
     </section>
   );
 }
@@ -109,7 +142,29 @@ function Roots() {
       part="roots"
       side="right"
       labelledBy="roots-title"
-      picture={<Painting art={desk} alt={ALT.desk} sizes={HALF} caption />}
+      picture={
+        <figure className={styles.print} data-picture="">
+          <Image
+            className={`${base.ink} ${styles.pool}`}
+            src={pool.src}
+            alt=""
+            width={pool.width}
+            height={pool.height}
+            sizes="(max-width: 599px) 260px, 372px"
+            data-pool=""
+            data-bloom="waiting"
+          />
+          <span className={page.mount} data-mount="">
+            <Image
+              src={liu.src}
+              alt={copy(about.roots.photo.alt)}
+              width={liu.width}
+              height={liu.height}
+              sizes="240px"
+            />
+          </span>
+        </figure>
+      }
     >
       <p className={`${base.label} ${page.label}`} data-label="">
         {copy(about.roots.label)}
@@ -117,23 +172,10 @@ function Roots() {
       <h2 id="roots-title" className={`${base.display} ${page.heading}`}>
         {copy(about.roots.title)}
       </h2>
-      <div className={styles.rootsBody}>
-        <span className={page.mount} data-mount="">
-          <Image
-            src={liu.src}
-            alt={copy(about.roots.photo.alt)}
-            width={liu.width}
-            height={liu.height}
-            sizes="168px"
-          />
-        </span>
-        <div>
-          <p className={page.body}>{copy(about.roots.text)}</p>
-          <Link href={routes.scientists} className={`${base.pill} ${base.pillGhost} ${page.more}`}>
-            {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
-          </Link>
-        </div>
-      </div>
+      <p className={page.body}>{copy(about.roots.text)}</p>
+      <Link href={routes.scientists} className={`${base.pill} ${base.pillGhost} ${page.more}`}>
+        {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
+      </Link>
     </Spread>
   );
 }
@@ -202,14 +244,14 @@ function Promises() {
           {about.promise.items.map((item, i) => (
             <li key={item.title} data-promise="">
               <Image
-                className={`${base.ink} ${styles.vignette}`}
-                src={PROMISE_ART[i].src}
+                className={`${base.ink} ${page.promiseDot}`}
+                src={dots[i].src}
                 alt=""
-                width={PROMISE_ART[i].width}
-                height={PROMISE_ART[i].height}
-                sizes="208px"
+                width={dots[i].width}
+                height={dots[i].height}
+                sizes="132px"
                 data-bloom="waiting"
-                style={{ "--bloom-delay": i * 220 } as CSSProperties}
+                style={{ "--bloom-delay": i * 260 } as CSSProperties}
               />
               <h3>{copy(item.title)}</h3>
               <p>{copy(item.text)}</p>
@@ -217,9 +259,6 @@ function Promises() {
             </li>
           ))}
         </ul>
-        <p className={`${base.caption} ${styles.rowCaption}`} data-row-caption="">
-          {copy("Illustrations")}
-        </p>
       </div>
     </section>
   );
@@ -234,7 +273,7 @@ function Closing() {
       part="closing"
       side="right"
       labelledBy="closing-title"
-      picture={<Painting art={lamp} alt={ALT.lamp} sizes={HALF} gold={lamp.gold} caption />}
+      picture={<Painting art={glasses} alt={ALT.glasses} sizes={HALF} caption />}
     >
       <h2 id="closing-title" className={`${base.display} ${page.heading}`}>
         {copy(about.closing.title)}
@@ -254,9 +293,9 @@ function Closing() {
 
 export function AboutInk() {
   return (
-    <InkPage current="about" className={`${page.aboutPage} ${styles.album}`}>
+    <InkPage current="about" className={`${page.aboutPage} ${styles.circle}`}>
       {() => (
-        <div data-about="album">
+        <div data-about="circle">
           <Opening />
           <Purpose />
           <Roots />

@@ -1,0 +1,177 @@
+/* About C, "The circle" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png): one
+   circle brushed in a single stroke (a whole, complete life) opens the page, once only; then the
+   same rhythm as every About page. Shared rules live in about-page.module.css; these are the
+   circle's own, scoped under .circle (the page root carries both classes). */
+
+.circle .opening {
+  text-align: center;
+}
+
+.circle .openingWords {
+  display: grid;
+  justify-items: center;
+}
+
+.circle .enso {
+  position: relative;
+  width: clamp(200px, 24vw, 360px);
+  margin: 0 0 clamp(16px, 2vw, 28px);
+}
+
+.circle .enso img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.circle .dot {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+.circle .hills {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: clamp(8px, 1.4vw, 24px);
+}
+
+/* The pictures read about the same size: each painting's width is a height times its shape (width
+   over height, from about-art.ts), so the tall seedling, the square sequoia and the wide glasses
+   stand about as tall as one another; the shared rule caps every width at its column (--picture is
+   read in .aboutPage .painting's width, where a percentage is of the column). --h is the plain
+   height: 330px, or 0.6 of a narrow column. [data-picture] marks the painting's figure (its
+   .painting class is another module's). */
+.circle {
+  --h: min(330px, 60%);
+}
+
+.circle [data-part="purpose"] [data-picture] {
+  --picture: calc(var(--h) * 1.2 * 0.827);
+}
+
+.circle [data-part="experience"] [data-picture] {
+  --picture: calc(var(--h) * 1.35 * 0.998);
+}
+
+.circle [data-part="closing"] [data-picture] {
+  --picture: calc(var(--h) * 0.72 * 1.977);
+}
+
+/* Dr. Liu's photo on its mat, resting on a wide, low pool of grey wash (D's pool, laid on its
+   side: a wash has no up or down). The figure is the pool's box as it lies (1407 x 968, at most
+   540px wide, never wider than its column), so the page keeps room for the whole wash and nothing
+   overflows; the pool is turned a quarter round inside it, the photo centred on it. */
+.circle .print {
+  --pool: min(100%, 540px);
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  width: var(--pool);
+  aspect-ratio: 1407 / 968;
+  margin: 0;
+}
+
+/* Before it is turned the pool is as wide as the figure is tall, and as tall as it is wide. */
+.circle .pool {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(100% * 968 / 1407);
+  max-width: none;
+  height: auto;
+  translate: -50% -50%;
+  rotate: 90deg;
+  pointer-events: none;
+}
+
+/* [data-mount]: the mount's .mount class is another module's (it sets the mount's full width). */
+.circle .print > [data-mount] {
+  width: 44%;
+}
+
+/* The promise dots carry the row as the mockup's do: at the shared size (about 80px, the ink about
+   52px of it) they read as specks beside their words. [data-promise] img: the dots' .promiseDot
+   class is another module's. */
+.circle [data-promise] img {
+  width: clamp(84px, 8.4vw, 132px);
+}
+
+/* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
+   or 0.7 of the column, so no painting fills a phone's screen. */
+@media (max-width: 959px) {
+  .circle {
+    --h: min(300px, 70%);
+  }
+}
+
+/* On a phone the pool reaches into the side margins (to 8px from the window's edges), so the
+   photo on it is not a thumbnail. */
+@media (max-width: 599px) {
+  .circle .print {
+    --pool: calc(100% + 2 * var(--gutter) - 16px);
+    margin-inline: calc(8px - var(--gutter));
+  }
+}
+
+/* ---- The circle paints itself: one stroke around in one breath, from where the brush began --
+   A conic mask sweeps clockwise from --start (about-ink.tsx: enso.startDeg less 26 degrees, where
+   the stroke's wet head begins), its leading edge soft over 12 degrees (over 6 it read as a wipe).
+   It starts that feather's width back, so nothing shows while it waits its 0.3s (from 0deg a
+   sliver of the head stood there alone). It is pure CSS, so it never waits on a script; once the
+   sweep ends the mask is whole (--sweep's initial value is 360deg), so the circle never depends on
+   the animation finishing. The gold start comes up after. Reduced motion: no mask, no animation. */
+@property --sweep {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 360deg;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .circle .enso .paint {
+    -webkit-mask-image: conic-gradient(
+      from var(--start),
+      #000 var(--sweep),
+      transparent calc(var(--sweep) + 12deg)
+    );
+    mask-image: conic-gradient(
+      from var(--start),
+      #000 var(--sweep),
+      transparent calc(var(--sweep) + 12deg)
+    );
+    animation: draw var(--breath) var(--ease) 0.3s backwards;
+  }
+
+  .circle .enso .dot {
+    animation: leaf-up 1.2s var(--ease) calc(0.3s + var(--breath)) backwards;
+  }
+
+  /* The hills spread from the middle as the stroke closes. */
+  .circle .hills {
+    --bloom-delay: 1400;
+  }
+}
+
+@keyframes draw {
+  from {
+    --sweep: -12deg;
+  }
+
+  to {
+    --sweep: 360deg;
+  }
+}
+
+@keyframes leaf-up {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
