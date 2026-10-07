@@ -63,7 +63,7 @@ function Opening() {
           />
         </span>
         <p className={styles.kicker}>{copy(about.hero.label)}</p>
-        <Acronym className={styles.title} />
+        <Acronym className={styles.title} delay={2700} />
         <p className={styles.lead}>
           {sentences(copy(about.hero.lead)).map((sentence) => (
             <span key={sentence}>{sentence}</span>

@@ -20,6 +20,10 @@ columns Dr. Liu's pool 16px or more clear of the middle fold, and the roots' wor
 the "in" (24px). At 1440x900, no seam where the settled bar meets the page's darker sides (a step
 of 4 levels or less). On one column each part's chapter word stands over its label, over its
 heading.
+motion: reduced motion is complete and still (no waiting letters, every bloom done, the dots up, no
+running animation); with motion the name is written (its animation, one breath) and its gold dot
+comes up after it; a chapter letter waits out of view, is written as it comes in and ends unmasked;
+the band blooms. With JavaScript off the written name is visible.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 boundary (899x900, 900x900): no sideways scrolling; the middle fold shows at 900 only; at 900 no
@@ -29,7 +33,7 @@ screen; from 900px the band starts in it too.
 
 Pictures: scripts/qa/out/about-letter/<size>-NN.png (viewport shots while scrolling).
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,focus,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,letter_layout,motion,focus,boundary,first_screen]
 """
 
 import io
@@ -38,6 +42,7 @@ import re
 import sys
 
 from PIL import Image
+from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
@@ -464,8 +469,88 @@ def first_screen(browser):
         context.close()
 
 
+def motion(browser):
+    # Reduced motion: complete and still.
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    scroll_through(page)
+    still = page.evaluate(
+        """() => ({ waiting: document.querySelectorAll('[data-arrive]').length,
+             blooms: [...document.querySelectorAll('[data-bloom]')].filter(e => e.dataset.bloom !== 'done').length,
+             dots: [...document.querySelectorAll('[data-dot]')].map(d => getComputedStyle(d).opacity),
+             word: getComputedStyle(document.querySelector('[data-word] img')).animationName,
+             masks: [...document.querySelectorAll('[data-chapter] img, [data-word] img')].map(i => getComputedStyle(i).maskImage).filter(m => m !== 'none'),
+             running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
+               return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length })"""
+    )
+    check("reduced motion: no letter waits", still["waiting"] == 0, still)
+    check("reduced motion: every bloom done", still["blooms"] == 0, still)
+    check("reduced motion: the gold dots are up", still["dots"] and all(float(o) == 1 for o in still["dots"]), still)
+    check("reduced motion: the name is still and nothing is masked", still["word"] == "none" and not still["masks"], still)
+    check("reduced motion: nothing moves", still["running"] == 0, still)
+    context.close()
+
+    # With motion: the name is written in one breath, then its gold dot comes up.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    # The page's stylesheet first (the dot's delay is 2.75s, so this still reads it waiting). If the
+    # name has no animation the wait runs out and the checks below report it, instead of a traceback.
+    try:
+        page.wait_for_function(
+            "getComputedStyle(document.querySelector('[data-word] img')).animationName !== 'none'", timeout=5000
+        )
+    except PlaywrightTimeoutError:
+        pass
+    early = page.evaluate(
+        """() => { const i = getComputedStyle(document.querySelector('[data-word] img'));
+             return { name: i.animationName, duration: i.animationDuration,
+                      dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity }; }"""
+    )
+    check("motion: the name is written (its animation, one breath)", "write" in early["name"] and early["duration"] == "2.4s", early)
+    check("motion: the gold dot waits for the name", float(early["dot"]) < 0.5, early)
+    page.wait_for_timeout(6000)
+    late = page.evaluate(
+        """() => ({ mask: getComputedStyle(document.querySelector('[data-word] img')).maskPosition,
+             dot: getComputedStyle(document.querySelector('[data-word] [data-dot]')).opacity,
+             band: document.querySelector('[data-band]').dataset.bloom })"""
+    )
+    check("motion: the name ends whole", late["mask"].startswith("0%"), late)
+    check("motion: then its gold dot is up", float(late["dot"]) == 1, late)
+    check("motion: the band has bloomed", late["band"] == "done", late)
+
+    # A chapter letter out of the window waits, is written as it comes in, and ends unmasked.
+    state = lambda: page.evaluate(
+        """() => { const c = document.querySelector('[data-chapter="G"]');
+             return [c.dataset.arrive ?? null, getComputedStyle(c.querySelector('img')).maskImage]; }"""
+    )
+    first = state()
+    check("motion: the G waits out of the window", first[0] == "waiting", first)
+    page.evaluate(
+        """() => { const c = document.querySelector('[data-chapter="G"]');
+             window.scrollTo(0, c.getBoundingClientRect().top + window.scrollY - innerHeight / 2); }"""
+    )
+    page.wait_for_timeout(700)
+    second = state()
+    check("motion: the G is being written as it comes in", second[0] == "in" and second[1] != "none", second)
+    page.wait_for_timeout(3200)
+    third = state()
+    check("motion: the G ends written and unmasked", third[0] == "done" and third[1] == "none", third)
+    context.close()
+
+    # JavaScript off: the written name still appears (its animation is CSS only). Read from pixels:
+    # the word's band of the first screen holds ink.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+    page.wait_for_timeout(4500)
+    shot = Image.open(io.BytesIO(page.screenshot(clip={"x": 360, "y": 110, "width": 720, "height": 330}))).convert("L")
+    dark = sum(1 for v in shot.getdata() if v < 90) / (shot.width * shot.height)
+    check("JavaScript off: the written name is visible", dark >= 0.02, round(dark, 4))
+    context.close()
+
+
 # --only=letter_layout,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, letter_layout, focus, boundary, first_screen]
+GROUPS = [desktop_and_phone, letter_layout, motion, focus, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

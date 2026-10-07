@@ -1,14 +1,19 @@
 "use client";
 
+import { useRef } from "react";
 import Image from "next/image";
 import base from "@/components/ink/ink.module.css";
+import { useArrival, useMotionOk } from "@/components/ink/motion";
 import { letters } from "./letter-art";
 import styles from "./about-letter.module.css";
 
 // A part's chapter word (October 6, 2026): its initial painted with the brush, the rest of the word
 // in the page's type ("B" + "e"). Together they spell the brand's name, like the logo, so the word
 // stays English in every language and is hidden from screen readers: the part's heading carries
-// the meaning in the reader's language.
+// the meaning in the reader's language. As it reaches the reading line its initial is written
+// through the brush wipe, left to right, in one breath; the rest of the word follows and the i's
+// gold-leaf dot comes up last. Already in the window when the page opens, or with reduced motion:
+// there, complete.
 export function ChapterWord({
   initial,
   rest,
@@ -21,10 +26,14 @@ export function ChapterWord({
   size?: "chapter" | "closing";
   className?: string;
 }) {
+  const motion = useMotionOk();
+  const root = useRef<HTMLSpanElement>(null);
+  useArrival(root, motion, 0.6, 2400);
   const art = letters[initial];
   const dot = "dot" in art ? art.dot : null;
   return (
     <span
+      ref={root}
       className={`${styles.chapter} ${className}`}
       data-chapter={initial}
       data-size={size}

@@ -599,3 +599,111 @@
 .letterPage :is(h2, h3):lang(ja) {
   word-break: auto-phrase;
 }
+
+/* ---- Motion: the name writes itself (one breath, the shared ease) ---------------------------
+   The letters are written through the brush wipe (wipe-v1.png: opaque, a dry brush's ragged edge,
+   clear; at 300% wide, moving it from 100% to 0% writes left to right). The opening's name is pure
+   CSS, so it never waits on a script; its gold dot comes up once the name is written. A chapter
+   letter is written as it reaches the reading line (useArrival in chapter-word.tsx). Reduced
+   motion: no mask, no animation, everything there. */
+@media (prefers-reduced-motion: no-preference) {
+  .letterPage .word .paint {
+    -webkit-mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
+    mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
+    animation: write var(--breath) var(--ease) 0.35s both;
+  }
+
+  .letterPage .word .dot {
+    animation: leaf-up 1.2s var(--ease) calc(0.35s + var(--breath)) both;
+  }
+
+  .letterPage .chapter[data-arrive="waiting"] .paint,
+  .letterPage .chapter[data-arrive="in"] .paint {
+    -webkit-mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
+    mask: url("/images/about-ink/wipe-v1.png") 100% 0 / 300% 100% no-repeat;
+  }
+
+  .letterPage .chapter[data-arrive="in"] .paint {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+    transition:
+      -webkit-mask-position var(--breath) var(--ease),
+      mask-position var(--breath) var(--ease);
+  }
+
+  .letterPage .chapter .rest,
+  .letterPage .chapter .dot {
+    transition:
+      opacity 1.2s var(--ease),
+      scale 1.2s var(--ease);
+  }
+
+  .letterPage .chapter[data-arrive="waiting"] .rest {
+    opacity: 0;
+  }
+
+  .letterPage .chapter[data-arrive="in"] .rest {
+    transition-delay: calc(var(--breath) * 0.55);
+  }
+
+  .letterPage .chapter[data-arrive="waiting"] .dot,
+  .letterPage .chapter[data-arrive="in"] .dot {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  /* The band spreads from the middle as the name finishes. */
+  .letterPage .band {
+    --bloom-delay: 1500;
+  }
+
+  /* A painting waiting to bloom is hidden until its bloom is under way. The kit hides it with a
+     0%-sized blot, but Chrome drops a mask layer of no size, so a waiting painting showed whole
+     and blurred: the band hung there for its 1.5s delay, then collapsed to a speck in one frame
+     and spread out again (the promise dots did the same for their 260-780ms). The hold lasts the
+     painting's own delay and 60ms more, so its first visible frame already has a blot. */
+  .letterPage [data-bloom="waiting"] {
+    opacity: 0;
+  }
+
+  .letterPage [data-bloom="in"] {
+    animation: bloom-hold calc(var(--bloom-delay, 0) * 1ms + 60ms) steps(1, jump-end);
+  }
+
+  /* No script: nothing ever blooms, so leave the paintings as they are. */
+  @media (scripting: none) {
+    .letterPage [data-bloom="waiting"] {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes bloom-hold {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes write {
+  from {
+    -webkit-mask-position: 100% 0;
+    mask-position: 100% 0;
+  }
+
+  to {
+    -webkit-mask-position: 0 0;
+    mask-position: 0 0;
+  }
+}
+
+@keyframes leaf-up {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}

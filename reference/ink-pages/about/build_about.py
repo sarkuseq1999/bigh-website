@@ -202,16 +202,37 @@ def paper_aged():
     return f"{URL}/paper-aged-{V}.webp"
 
 
-def wipe(width=1536, height=256, seed=11):
+def wipe(width=2048, height=512, seed=11):
     """The brush wipe the letters are written through: opaque on the left 36%, transparent on the
-    right 36%, and between them a dry brush's ragged edge (each row ends at its own place, a few
-    bristles run ahead). At mask-size 300% 100%, moving it from 100% to 0% writes left to right."""
+    right 36%, and between them the front of a wet brush laying ink down. The front is soft (ink
+    soaks in: a letter is thin and grey as the brush reaches it, then dark), its place changes
+    from row to row in bunches (the brush's swell, then bristles of three sizes), a few bristles
+    run ahead of it on a longer, thinner tail, and fibres of grain along the stroke striate it
+    faintly. Two earlier takes cut each row clean: 1px apart it read as a barcode on a vertical
+    stem, and as gaps with hard edges it read as venetian blinds. Every front and tail stays
+    inside 0.385 to 0.625, so the opaque and clear ends meet the ramp without a step. At
+    mask-size 300% 100%, moving it from 100% to 0% writes left to right."""
     rng = np.random.default_rng(seed)
-    xs = np.arange(width, dtype=np.float32) / width
+    xs = (np.arange(width, dtype=np.float32) / width)[None, :]
     rows = np.arange(height, dtype=np.float32) / height
-    wobble = sum(np.sin(rows * np.pi * f + rng.uniform(0, 6.28)) / f for f in (2, 5, 11, 23))
-    edge = 0.5 + 0.035 * wobble + rng.random(height).astype(np.float32) ** 6 * 0.06
-    alpha = np.clip((edge[:, None] - xs[None, :]) / 0.03 + 0.5, 0, 1)
+
+    def run(sigma):
+        """Noise down the rows, correlated over about `sigma` rows, unit spread."""
+        n = cv2.GaussianBlur(rng.standard_normal((height, 1)).astype(np.float32), (0, 0), sigma)
+        return (n / n.std()).ravel()
+
+    swell = 0.018 * np.sin(2 * np.pi * (rows * 1.3 + rng.uniform())) + 0.008 * np.sin(
+        2 * np.pi * (rows * 3.1 + rng.uniform())
+    )
+    bristles = 0.010 * run(2.0) + 0.014 * run(7) + 0.010 * run(20)
+    ahead = 0.045 * np.maximum(run(1.1) - 1.1, 0)
+    edge = np.clip(0.5 + swell + bristles + ahead, 0.455, 0.555)
+    ramp = 0.10 + 0.04 * (edge - 0.455) / 0.1
+    s = np.clip((edge[:, None] - xs) / ramp[:, None] + 0.5, 0, 1)
+    s = s * s * (3 - 2 * s)
+    grain = cv2.GaussianBlur(rng.standard_normal((height, width)).astype(np.float32), (0, 0), sigmaX=30, sigmaY=0.9)
+    grain /= grain.std()
+    alpha = np.clip(s + 0.2 * grain * 4 * s * (1 - s), 0, 1)
     alpha[:, : int(width * 0.36)] = 1
     alpha[:, int(width * 0.64) :] = 0
     a = Image.fromarray((alpha * 255).astype(np.uint8), "L")
