@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { ArrowRight } from "lucide-react";
 import { liu } from "@/components/home-v2/look-ink/assets";
 import { useSiteDialogs } from "@/components/ink/dialogs";
@@ -55,6 +55,20 @@ function sentences(text: string) {
 
 function Opening() {
   const copy = useCopy();
+  // The circle waits for its picture (circle.module.css): its stroke and gold hold until the
+  // stroke's picture is in. Before hydration the page's inline script lets them go (about/page.tsx);
+  // this is the hydrated key: [data-stroke="ready"] once the picture is in (Next's onLoad, which
+  // also reports a picture in before hydration, and a check on mount), or after 6s.
+  const stroke = useRef<HTMLImageElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (stroke.current?.complete) {
+      setReady(true);
+      return;
+    }
+    const timer = window.setTimeout(() => setReady(true), 6000);
+    return () => window.clearTimeout(timer);
+  }, []);
   return (
     <section
       className={`${page.opening} ${styles.opening}`}
@@ -62,8 +76,15 @@ function Opening() {
       aria-labelledby="about-title"
     >
       <div className={`${base.wrap} ${styles.openingWords}`}>
-        <span className={styles.enso} data-enso="" aria-hidden="true">
+        <span
+          className={styles.enso}
+          data-enso=""
+          data-stroke={ready ? "ready" : undefined}
+          aria-hidden="true"
+        >
           <Image
+            ref={stroke}
+            onLoad={() => setReady(true)}
             className={`${base.ink} ${styles.paint}`}
             src={enso.src}
             alt=""
@@ -78,8 +99,8 @@ function Opening() {
               server render writes a preload link for every img that is not lazy unless its
               fetchPriority is low). Preloaded, the 2KB leaf won the race on a slow link and rose
               alone on bare paper at about 3s, then the circle snapped in. This orders the
-              requests, the circle first; it cannot tie the two (CSS cannot wait for a picture),
-              so on a link too slow to bring the circle in 2.7s the leaf can still rise first. */}
+              requests, the circle first; the hold above ties the two: the gold rises a breath
+              after the stroke's picture is in, however late it comes. */}
           <Image
             className={styles.dot}
             src={enso.dot.src}

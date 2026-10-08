@@ -239,6 +239,23 @@
   }
 }
 
+/* The circle waits for its picture. CSS starts the sweep when the page is styled, not when the
+   stroke's picture is in: on a slow link the gold rose alone on bare paper (about 3s), then the
+   whole circle snapped in, or it showed part drawn. With script on, the stroke's and the gold's
+   animations hold, paused before their delays (their backwards fill keeps the stroke masked and
+   the gold at 0), until the picture is in; both are let go together, so the gold still follows
+   the stroke. Two keys let them go, neither touching a node React rendered before it hydrates:
+   the page's inline script (about/page.tsx) adopts a sheet that sets them running, and once
+   hydrated the Opening marks [data-stroke="ready"] (about-ink.tsx); both also let go after 6s,
+   the script on an error too. With script off, or in a browser that does not know `scripting`,
+   nothing holds: the circle draws as before. Attribute selectors: the module's class names are
+   hashed. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .circle [data-enso]:not([data-stroke="ready"]) img {
+    animation-play-state: paused;
+  }
+}
+
 @keyframes draw {
   from {
     --sweep: -12deg;

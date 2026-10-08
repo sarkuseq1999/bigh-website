@@ -23,8 +23,11 @@ every painting is server-marked waiting (none paints whole, then vanishes); with
 paints itself around in one breath from where the brush began (stopped in the frame its clock
 reaches 1.1s it is part drawn: the first two quarters whole, the one reached last under half of
 its ink; then it ends whole), then its gold comes up, and the hills bloom; a lower painting waits,
-then blooms; with JavaScript off the circle shows whole, and every other painting (the hills, the
-seedling, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
+then blooms; on a slow link (the stroke's picture held 3s) the circle waits for its picture: 2.5s in
+nothing shows, the stroke starts only once the picture is in and draws around, and the gold comes up
+a breath after it; with JavaScript off the circle shows whole, and every other painting (the hills,
+the seedling, the pool, the sequoia, the four promise dots and the glasses) as inked as it does
+still.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -814,6 +817,23 @@ def rhythm(browser):
         context.close()
 
 
+# The circle, every animation frame for 10s from navigation: [ms since navigation, the stroke's
+# sweep in degrees (-12 before it begins, 360 once whole), its gold's opacity, the stroke's picture
+# in]. Installed before the page's own scripts; it only reads.
+ENSO_LOG = """(() => {
+  const log = (window.__enso = []);
+  const tick = () => {
+    const wrap = document.querySelector('[data-enso]');
+    if (wrap) {
+      const stroke = wrap.querySelector('img:not([data-dot])'), dot = wrap.querySelector('[data-dot]');
+      log.push([Math.round(performance.now()), parseFloat(getComputedStyle(stroke).getPropertyValue('--sweep')),
+                parseFloat(getComputedStyle(dot).opacity), stroke.complete && stroke.naturalWidth > 0]);
+    }
+    if (performance.now() < 10000) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+})();"""
+
 # The page's paintings but the circle: the hills, the seedling, the pool under Dr. Liu's photo (not
 # the photo), the sequoia, the four promise dots and the glasses.
 PAINTINGS = "[data-picture-band], [data-picture] img:not([data-mount] img), [data-promise] img"
@@ -957,6 +977,40 @@ def motion(browser):
     check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
           all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})
     context.close()
+
+    # A slow link: the stroke's picture arrives late (its requests, enso-v1, held until 3s after
+    # navigation; the gold's, enso-dot-v1, are not). The circle waits for its picture: 2.5s in
+    # nothing shows (the gold hidden, the sweep not begun); the stroke starts only once the
+    # picture is in and draws around, and the gold comes up a breath after that (its 0.3s and the
+    # stroke's 2.4s), never with the picture or before it. Every frame is logged from navigation.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    context.add_init_script(ENSO_LOG)
+    page = context.new_page()
+    held = []
+    page.route(re.compile(r"enso-v\d"), lambda route: held.append(route))
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    wait_until(page, "performance.now() >= 3000", 15000)
+    for route in held:
+        route.continue_()
+    wait_until(page, "performance.now() >= 9500", 15000)
+    log = page.evaluate("window.__enso || []")
+    context.close()
+    at = [f for f in log if f[0] <= 2500]
+    early = at[-1] if at else None
+    check("slow stroke: 2.5s in, nothing shows (the gold hidden, the sweep not begun)",
+          early is not None and not early[3] and early[2] == 0 and early[1] <= 0, {"held": len(held), "frame": early})
+    arrived = next((f[0] for f in log if f[3]), None)
+    began = next((f[0] for f in log if -11 < f[1] < 359.9), None)
+    drawing = [f for f in log if arrived is not None and f[0] >= arrived and 20 < f[1] < 340]
+    check("slow stroke: the stroke starts only once its picture is in, then draws around",
+          arrived is not None and began is not None and began >= arrived and len(drawing) >= 10,
+          {"arrived_ms": arrived, "began_ms": began, "frames_drawing": len(drawing)})
+    risen = next((f[0] for f in log if f[2] > 0.01), None)
+    closed = next((f[0] for f in log if f[1] >= 359.9 and f[0] >= (began or 0)), None)
+    check("slow stroke: the gold comes up after the stroke (a breath after the picture), then is up",
+          arrived is not None and risen is not None and closed is not None and risen >= arrived + 2400
+          and closed <= risen and bool(log) and log[-1][2] == 1,
+          {"arrived_ms": arrived, "closed_ms": closed, "gold_rises_ms": risen, "last": log[-1] if log else None})
 
     # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
     # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of

@@ -25,17 +25,32 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   55px smudge. From 1200px the seedling tucks in close under the hills, as in the mockup (the
   opening keeps no padding under them and the purpose part's top padding lies over their foot).
   The circle's stroke is preloaded at high priority; its gold leaf loads at once at low priority,
-  with no preload, so the circle is asked for first (that only orders the requests; CSS cannot tie
-  the two, so on a link too slow to bring the circle in 2.7s the leaf can still rise first).
-- The circle paints itself, in pure CSS (no script, so it never waits on one): a conic-gradient
-  mask sweeps clockwise around the picture in one breath (`--breath` 2.4s, `--ease`, after 0.3s),
-  starting 26 degrees before the gold (where the brush's wet head begins, so the blackest part is
-  drawn first), its leading edge soft over 12 degrees, from 12 degrees back so nothing shows during
-  the delay. The registered property `--sweep` has 360deg as its initial value, so once the sweep
+  with no preload, so the circle is asked for first (that only orders the requests; the hold below
+  ties the two).
+- The circle paints itself, in CSS: a conic-gradient mask sweeps clockwise around the picture in
+  one breath (`--breath` 2.4s, `--ease`, after 0.3s), starting 26 degrees before the gold (where
+  the brush's wet head begins, so the blackest part is drawn first), its leading edge soft over 12
+  degrees, from 12 degrees back so nothing shows during the delay. The registered property `--sweep` has 360deg as its initial value, so once the sweep
   ends the mask is whole and the circle never depends on the animation finishing. The gold comes up
   after the stroke (0.3s plus one breath), and the hills spread from the middle as it closes
   (`--bloom-delay` 1400). Reduced motion: no mask, no animation, everything shown at once. With
   JavaScript off the circle is whole too.
+- The circle waits for its picture (October 8, 2026). CSS started the sweep when the page was
+  styled, not when the stroke's picture was in, so on a slow link the gold rose alone on bare paper
+  (about 3s) and then the circle snapped in, or showed part drawn. Now, with script on
+  (`@media (scripting: enabled)`), the stroke's and the gold's animations are paused before their
+  delays (their backwards fill keeps the stroke masked and the gold at 0) until the stroke's
+  picture is in, then both are let go together, so the gold still follows the stroke by 0.3s plus
+  one breath. Two keys, neither touching a node React rendered before it hydrates: an inline script
+  after the page's HTML (`src/app/[locale]/about/page.tsx`) adopts a constructed sheet that sets
+  `[data-enso] img` running; once hydrated the Opening sets `data-stroke="ready"` on the circle
+  (Next's `onLoad` plus a check on mount). Both also let go after 6s, the script on an error too
+  (a picture already failed when the Opening mounts counts as in). The script is rendered through
+  `before-hydration.tsx` (server HTML only), so a client-side navigation to /about neither builds a
+  dead script nor logs React's "Encountered a script tag" warning; the hydrated key covers that
+  case. With script off, or in a browser that does not know `scripting`,
+  nothing is paused (as before). On a link slower than 6s the timer lets go before the picture: the
+  circle then shows part drawn when it lands, and past about 8.7s the gold could rise first again.
 - The rhythm is the album's (Mo's rule: one picture on one side, its words on the other, the sides
   swapping part by part from 960px; 600 to 959px is one centred column about 640px wide, picture
   first; a phone is one column, picture first), on the shared `spread.tsx` and
@@ -101,7 +116,10 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   hills after the final fixes to `about-circle-built2/`). On the built site the homepage gate also
   passed (`home_snapshot.py compare` against `baseline-main997-prod`: 48 of 48 shots, at most
   0.008% of pixels differing, last run after the final fixes; before them also `qa_home_ink.py`,
-  282/282, and `home_snapshot.py nav`, ok).
+  282/282, and `home_snapshot.py nav`, ok). October 8 (the circle waits for its picture): `motion`
+  adds three slow-link checks (the stroke's picture held 3s: 2.5s in nothing shows; the stroke
+  starts only once its picture is in; the gold rises a breath after it), red on the old code;
+  341 checks, all passing on the dev server (not yet run on the built site).
 
 ## Replaced: "The name, on a folded letter" (D, October 6, 2026)
 
@@ -234,3 +252,9 @@ The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and
   its mask and filter on the painting itself, which is fine.
 - Replacing a picture under the same file name: delete `.next/cache/images` and
   `.next/dev/cache/images` before building, or the old optimized picture is served.
+- An inline `<script>` placed straight in the page's tree runs on a first load, but after a
+  client-side navigation React builds it without running it and, in development, logs
+  "Encountered a script tag while rendering React component". Render a before-hydration script
+  through `src/components/about/before-hydration.tsx` (server HTML only), and keep a hydrated key
+  for pages reached by navigation. `next/script`'s `beforeInteractive` belongs in the root layout
+  only and does not promise to run before hydration.
