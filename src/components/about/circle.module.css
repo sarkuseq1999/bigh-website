@@ -246,8 +246,9 @@
    the gold at 0), until the picture is in; both are let go together, so the gold still follows
    the stroke. Two keys let them go, neither touching a node React rendered before it hydrates:
    the page's inline script (about/page.tsx) adopts a sheet that sets them running, and once
-   hydrated the Opening marks [data-stroke="ready"] (about-ink.tsx); both also let go after 6s,
-   the script on an error too. With script off, or in a browser that does not know `scripting`,
+   hydrated the Opening marks [data-stroke="ready"] (about-ink.tsx). No timer, and a failed
+   picture never lets them go (the gold must not rise alone). With script off, or in a browser
+   that does not know `scripting`,
    nothing holds: the circle draws as before. Attribute selectors: the module's class names are
    hashed. */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {

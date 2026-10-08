@@ -58,16 +58,13 @@ function Opening() {
   // The circle waits for its picture (circle.module.css): its stroke and gold hold until the
   // stroke's picture is in. Before hydration the page's inline script lets them go (about/page.tsx);
   // this is the hydrated key: [data-stroke="ready"] once the picture is in (Next's onLoad, which
-  // also reports a picture in before hydration, and a check on mount), or after 6s.
+  // also reports a picture in before hydration, and a check on mount). No timer, and a failed
+  // picture never lets them go: the gold must not rise alone on bare paper.
   const stroke = useRef<HTMLImageElement>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
-    if (stroke.current?.complete) {
-      setReady(true);
-      return;
-    }
-    const timer = window.setTimeout(() => setReady(true), 6000);
-    return () => window.clearTimeout(timer);
+    const img = stroke.current;
+    if (img?.complete && img.naturalWidth) setReady(true);
   }, []);
   return (
     <section
@@ -84,7 +81,10 @@ function Opening() {
         >
           <Image
             ref={stroke}
-            onLoad={() => setReady(true)}
+            // Next calls onLoad for any img already complete when it hydrates, a broken one too.
+            onLoad={(event) => {
+              if (event.currentTarget.naturalWidth) setReady(true);
+            }}
             className={`${base.ink} ${styles.paint}`}
             src={enso.src}
             alt=""

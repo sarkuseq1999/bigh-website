@@ -44,13 +44,13 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   one breath. Two keys, neither touching a node React rendered before it hydrates: an inline script
   after the page's HTML (`src/app/[locale]/about/page.tsx`) adopts a constructed sheet that sets
   `[data-enso] img` running; once hydrated the Opening sets `data-stroke="ready"` on the circle
-  (Next's `onLoad` plus a check on mount). Both also let go after 6s, the script on an error too
-  (a picture already failed when the Opening mounts counts as in). The script is rendered through
+  (Next's `onLoad` plus a check on mount). Neither has a timer, and a failed picture never lets
+  them go: the circle waits for its picture however late it comes, and the gold never rises alone
+  on bare paper (if the picture never arrives, neither shows). The script is rendered through
   `before-hydration.tsx` (server HTML only), so a client-side navigation to /about neither builds a
   dead script nor logs React's "Encountered a script tag" warning; the hydrated key covers that
   case. With script off, or in a browser that does not know `scripting`,
-  nothing is paused (as before). On a link slower than 6s the timer lets go before the picture: the
-  circle then shows part drawn when it lands, and past about 8.7s the gold could rise first again.
+  nothing is paused (as before).
 - The rhythm is the album's (Mo's rule: one picture on one side, its words on the other, the sides
   swapping part by part from 960px; 600 to 959px is one centred column about 640px wide, picture
   first; a phone is one column, picture first), on the shared `spread.tsx` and

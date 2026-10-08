@@ -1012,6 +1012,22 @@ def motion(browser):
           and closed <= risen and bool(log) and log[-1][2] == 1,
           {"arrived_ms": arrived, "closed_ms": closed, "gold_rises_ms": risen, "last": log[-1] if log else None})
 
+    # A failed stroke picture: nothing lets the circle go (no timer; Next's onLoad fires for a broken
+    # img that is complete when it hydrates, so the Opening checks naturalWidth), so the gold never
+    # rises alone on bare paper. 6s in, the gold is still hidden and the stroke still holds.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.route(re.compile(r"enso-v\d"), lambda route: route.abort())
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    wait_until(page, "performance.now() >= 6000", 15000)
+    failed = page.evaluate(
+        """() => { const s = document.querySelector('[data-enso] img:not([data-dot])'), d = document.querySelector('[data-enso] [data-dot]');
+             return { picture: s.naturalWidth, play: getComputedStyle(s).animationPlayState, gold: getComputedStyle(d).opacity }; }"""
+    )
+    context.close()
+    check("failed stroke picture: 6s in, the gold never rises alone (still hidden, the stroke held)",
+          failed["picture"] == 0 and failed["play"] == "paused" and float(failed["gold"]) == 0, failed)
+
     # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
     # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of
     # it must also hold as much ink as the still circle's. The sweep ends in the top half: the
