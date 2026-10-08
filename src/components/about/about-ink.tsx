@@ -30,11 +30,12 @@ export const ALT = {
   glasses: "Reading glasses resting on an open notebook, painted in ink",
 } as const;
 
-// What each painting asks the server for follows the width it is drawn at (circle.module.css: a
-// plain height times the painting's shape, at most 0.6 of its column, 0.7 under 960px, 0.8 for the
-// sequoia and the glasses from 960 to 1279px; measured in css px at 360 to 2560px). Up to 505px the
-// column is 0.846 of the window; from 506 to 959px the height caps at 300px; from 960px the column
-// is 0.394 of the window up to 1395px, where the height caps at 330px (300px for the sequoia and
+// What each painting asks the server for follows the width it is drawn at (circle.module.css: its
+// height a multiple of one plain height, --h, and its width that height times its shape; --h is
+// 330px or 0.6 of the column's width, whichever is less, 300px or 0.7 of it under 960px, and 300px
+// for the sequoia and the glasses from 960 to 1279px; measured in css px at 360 to 2560px). Up to
+// 505px the column is 0.846 of the window; from 506 to 959px --h caps at 300px; from 960px the
+// column is 0.394 of the window up to 1395px, where --h caps at 330px (300px for the sequoia and
 // the glasses from 960 to 1279px, so they fill the column up to 1025px and 1083px). A shared
 // half-window figure asked for 1.5 to 2.3 times too many pixels at 1440px (662px for paintings
 // drawn at 327 to 470px).
@@ -69,9 +70,16 @@ function Opening() {
             width={enso.width}
             height={enso.height}
             sizes="(max-width: 833px) 200px, (max-width: 1499px) 24vw, 360px"
-            priority
+            preload
+            fetchPriority="high"
             style={{ "--start": SWEEP_FROM } as CSSProperties}
           />
+          {/* The gold start loads at once but is not preloaded, and asks for low priority (React's
+              server render writes a preload link for every img that is not lazy unless its
+              fetchPriority is low). Preloaded, the 2KB leaf won the race on a slow link and rose
+              alone on bare paper at about 3s, then the circle snapped in. This orders the
+              requests, the circle first; it cannot tie the two (CSS cannot wait for a picture),
+              so on a link too slow to bring the circle in 2.7s the leaf can still rise first. */}
           <Image
             className={styles.dot}
             src={enso.dot.src}
@@ -79,12 +87,13 @@ function Opening() {
             width={enso.dot.width}
             height={enso.dot.height}
             sizes="56px"
-            priority
+            loading="eager"
+            fetchPriority="low"
             data-dot=""
             style={{
-              left: `${enso.dot.left * 100}%`,
-              top: `${enso.dot.top * 100}%`,
-              width: `${enso.dot.size * 100}%`,
+              left: `${(enso.dot.left * 100).toFixed(2)}%`,
+              top: `${(enso.dot.top * 100).toFixed(2)}%`,
+              width: `${(enso.dot.size * 100).toFixed(2)}%`,
             }}
           />
         </span>
@@ -98,15 +107,18 @@ function Opening() {
           ))}
         </p>
       </div>
-      {/* Loaded at once, not preloaded: the hills reach into the first screen, and lazy they were
-          the window's largest painting with reduced motion (Next's LCP warning, 1440x900). */}
+      {/* Loaded at once (loading="eager"): the hills reach into the first screen, and lazy they
+          were the window's largest painting with reduced motion (Next's LCP warning, 1440x900).
+          Next adds no preload for them; React's server render writes one, as for every img that
+          is not lazy, without the circle's high priority. On a phone they run 1.8 times the
+          window's width (circle.module.css). */}
       <Image
         className={`${base.ink} ${styles.hills}`}
         src={hills.src}
         alt=""
         width={hills.width}
         height={hills.height}
-        sizes="100vw"
+        sizes="(max-width: 599px) 180vw, 100vw"
         loading="eager"
         data-bloom="waiting"
         data-picture-band=""

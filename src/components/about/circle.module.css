@@ -37,12 +37,50 @@
   margin-top: clamp(8px, 1.4vw, 24px);
 }
 
-/* The pictures read about the same size: each painting's width is a height times its shape (width
-   over height, from about-art.ts), so the tall seedling, the square sequoia and the wide glasses
-   stand about as tall as one another; the shared rule caps every width at its column (--picture is
-   read in .aboutPage .painting's width, where a percentage is of the column). --h is the plain
-   height: 330px, or 0.6 of a narrow column. [data-picture] marks the painting's figure (its
-   .painting class is another module's). */
+/* On a desktop the seedling tucks in close under the hills, as in the mockup (at 1440px 132px of
+   bare paper stood between the hills' last wash and the seedling's top leaves; now about 40px).
+   The opening keeps no padding under the hills, and the purpose part's top padding lies over the
+   hills' foot, so its first content starts where the hills' picture ends (the picture's last 26px
+   at 1440px are feathered to bare paper): the seedling there, and in Vietnamese and Japanese,
+   whose words stand taller than the seedling, the words too, clear of the wash. The purpose
+   part's own box and padding are as before, so /about#purpose lands as before. From 1200px
+   only: at 960 to 1199px the English words too start near the top of their row (18px under the
+   seedling's top at 960px), so pulled up they would crowd the hills in every language.
+   section.opening outranks the shared .aboutPage .opening padding in any stylesheet order. */
+@media (min-width: 1200px) {
+  .circle section.opening {
+    padding-bottom: 0;
+  }
+
+  .circle .hills {
+    margin-bottom: calc(-1 * var(--part-half));
+  }
+}
+
+/* On a phone the hills at the window's width were a 55px strip that read as a smudge. They run 1.8
+   times the window's width instead (about 100px tall at 390px), clipped by the opening at both
+   edges, so they spread past them; the strip shown keeps the gold hilltop (the picture's 0.30 to
+   0.86 of its width). overflow-x: clip makes no stacking context (the hills still multiply onto
+   the paper) and no scrolling box. */
+@media (max-width: 599px) {
+  .circle section.opening {
+    overflow-x: clip;
+  }
+
+  .circle .hills {
+    width: 180%;
+    max-width: none;
+    margin-left: -54%;
+  }
+}
+
+/* The pictures read about the same size: each painting's height is a multiple of one plain height,
+   --h (the seedling 1.2, the sequoia 1.35, the wide glasses 0.72, so the tall and square ones stand
+   taller than the wide one: at 1440px 396px, 446px and 238px), and its width that height times its
+   shape (width over height, from about-art.ts). The shared rule caps every width at its column
+   (--picture is read in .aboutPage .painting's width, where a percentage is of the column, so --h's
+   60% is 0.6 of the column's width). --h is 330px, or 0.6 of the column's width when that is less.
+   [data-picture] marks the painting's figure (its .painting class is another module's). */
 .circle {
   --h: min(330px, 60%);
 }
@@ -100,13 +138,14 @@
 }
 
 /* Two narrow columns (960 to 1279px): the experience's three stacked figures and the closing's
-   stacked pills stand taller than a painting at 0.6 of the column (at 960px the sequoia stood 305px
-   tall and the glasses 163px, beside those words). These two take 0.8 of the column, up to the
-   same 300px plain height as one column, which meets the 0.6 rule's own size at 1280px (no jump). */
+   stacked pills stand taller than a painting from a plain height of 0.6 of the column (at 960px
+   the sequoia stood 305px tall and the glasses 163px, beside those words). These two take the
+   one-column plain height, 300px (the sequoia and the glasses then fill their column up to 1025px
+   and 1083px), which meets the 0.6 rule's own size at 1280px (no jump). */
 @media (min-width: 960px) and (max-width: 1279px) {
   .circle [data-part="experience"],
   .circle [data-part="closing"] {
-    --h: min(300px, 80%);
+    --h: 300px;
   }
 }
 

@@ -20,7 +20,13 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   gold sits where the brush began, at 1 o'clock (the picture ships mirrored, so the page's clockwise
   sweep follows the brush from its wet head to its dry tail; the mockup has the gold at 11).
   Under the opening's words a band of low California hills in grey wash feathers out to both edges,
-  with a faint gold glow on one hilltop.
+  with a faint gold glow on one hilltop. On a phone the band runs 1.8 times the window's width,
+  clipped at both edges (the strip shown keeps the gold hilltop), so it reads as a band, not a
+  55px smudge. From 1200px the seedling tucks in close under the hills, as in the mockup (the
+  opening keeps no padding under them and the purpose part's top padding lies over their foot).
+  The circle's stroke is preloaded at high priority; its gold leaf loads at once at low priority,
+  with no preload, so the circle is asked for first (that only orders the requests; CSS cannot tie
+  the two, so on a link too slow to bring the circle in 2.7s the leaf can still rise first).
 - The circle paints itself, in pure CSS (no script, so it never waits on one): a conic-gradient
   mask sweeps clockwise around the picture in one breath (`--breath` 2.4s, `--ease`, after 0.3s),
   starting 26 degrees before the gold (where the brush's wet head begins, so the blackest part is
@@ -47,10 +53,12 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
     of gold leaf on the hinge.
   - "Illustration" under the seedling, the sequoia and the glasses; none under the photo or the
     dots.
-- Sizes: each painting's width is a height times its shape (`circle.module.css`, `--h`: 330px, or
-  0.6 of its column; 300px or 0.7 of it under 960px), capped by its column. From 960 to 1279px the
-  sequoia and the glasses take a plain height of 300px or 0.8 of their column (at 960 to 1100px the
-  words beside them, stacked figures and pills, stand taller than a painting at 0.6). Each
+- Sizes: each painting's height is a multiple of one plain height, `--h` (`circle.module.css`: the
+  seedling 1.2, the sequoia 1.35, the glasses 0.72), and its width that height times its shape,
+  capped by its column. `--h` is 330px or 0.6 of the column's width, whichever is less (300px or
+  0.7 of it under 960px). From 960 to 1279px the sequoia and the glasses take a plain height of
+  300px (at 960 to 1100px the words beside them, stacked figures and pills, stand taller than a
+  painting from 0.6 of the column). Each
   painting's `sizes` attribute (`SEEDLING`, `SEQUOIA`, `GLASSES` in `about-ink.tsx`) follows the
   width it is drawn at (within 3%, measured at 21 window widths from 360 to 1920px); if the CSS
   widths change, change those too.
@@ -84,12 +92,16 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   once, text, navigation and target sizes, no sideways scrolling, the Support and Ask sheets,
   reduced motion complete and still, the circle drawing itself (stopped in the frame its clock
   reaches 1.1s it must be part drawn, the last quarter under half its ink, then whole; with
-  JavaScript off every quarter as inked as the still circle), the bloom, deep links at five sizes,
-  and every language's words and line breaks: 298 checks, all passing on the dev server and on
-  the built site on October 7, 2026. Screenshots go to `scripts/qa/out/about-circle/` (the built
-  site's, read by hand, to `scripts/qa/out/about-circle-built/`). On the built site the homepage
-  gate also passed (`home_snapshot.py compare` against `baseline-main997-prod`: 48 of 48 shots,
-  0.000% differing; `qa_home_ink.py`: 282/282; `home_snapshot.py nav`: ok).
+  JavaScript off every quarter as inked as the still circle, and every other painting as inked as
+  it is still), the bloom, deep links at five sizes, and every language's words and line breaks
+  (Japanese and Chinese heading phrases on phones and at 960px, the narrowest two-column words
+  column): 299 checks, all passing on the dev server and on the built site on October 7, 2026
+  (after the final fix round). Screenshots go to `scripts/qa/out/about-circle/` (the built site's,
+  read by hand, to `scripts/qa/out/about-circle-built/`, and the opening and the seam under the
+  hills after the final fixes to `about-circle-built2/`). On the built site the homepage gate also
+  passed (`home_snapshot.py compare` against `baseline-main997-prod`: 48 of 48 shots, at most
+  0.008% of pixels differing, last run after the final fixes; before them also `qa_home_ink.py`,
+  282/282, and `home_snapshot.py nav`, ok).
 
 ## Replaced: "The name, on a folded letter" (D, October 6, 2026)
 
