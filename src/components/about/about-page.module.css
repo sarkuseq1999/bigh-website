@@ -376,11 +376,15 @@
   }
 }
 
-/* The narrowest phones (360px): at 16px the greetings' first line ran 7px past the words column
-   beside the album's 88px vignette and fell to three lines. */
+/* The narrowest phones (360px): at 16px the greetings fell to three lines beside the album's 88px
+   vignette. At 15px, with a full-width stop's empty half trimmed, they keep to two. */
 @media (max-width: 374px) {
   .aboutPage .promises .greetings {
     font-size: 15px;
+  }
+
+  .aboutPage .greetings [lang]:is(:lang(zh), :lang(ja)) {
+    margin-right: -0.2em;
   }
 }
 
