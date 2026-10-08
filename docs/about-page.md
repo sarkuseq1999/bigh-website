@@ -1,77 +1,99 @@
-# About page: handoff (B, "The album", October 7, 2026)
+# About page: handoff (C, "The circle", October 7, 2026)
 
-Worktree `C:\Users\mcbig\Documents\codes\bigh-ink`. B "The album" is on branch `about-b`, C "The
-circle" is built beside it on branch `about-c` (from `about-b`), and D, the folded letter Mo
-rejected on October 7, stays on `ink-pages`. Nothing is pushed: ask Mo before every push or
-demo-alias change.
+Worktree `C:\Users\mcbig\Documents\codes\bigh-ink`. C "The circle" is on branch `about-c`. B "The
+album" is on branch `about-b` (`about-c` was cut from it, so everything B shares is here too), and
+D, the folded letter Mo rejected on October 7, stays on `ink-pages`. Nothing is pushed: ask Mo
+before every push or demo-alias change.
 
-## Current page: B, "The album" (October 7, 2026)
+## Current page: C, "The circle" (October 7, 2026)
 
 Mo rejected D on October 7 ("I don't think this design looks good": the CSS folds read as tiles on a
 wall, the name was said three times, the parts were uneven) and asked for B and C as real pages,
 shaped through mockups (`reference/ink-pages/mockups/about-b.png`, `about-c.png`). The spec is the
 section "About (stage 1), October 7" in `docs/superpowers/specs/2026-10-05-ink-pages-design.md`;
-her rules for both pages are there too.
+her rules for both pages are there too. B "The album" (an old painting album, each part a spread)
+is on branch `about-b`; its notes are in that branch's copy of this file, and its own CSS is
+`album.module.css`, which this branch no longer has.
 
-- The album: an old painting album, each part a spread. One painting on one side, its words on the
-  other, the sides swapping part by part (from 960px; 600 to 959px is one centred column about
-  640px wide, picture first; a phone is one column, picture first). The rhythm is the same for
-  every part, the paper is the kit's plain rice paper (no folds, no ageing), the name is said once
-  (the logo, then the title "Be in Good Health." in plain ink; no painted BiGH, no unfolding
-  acronym). The promises are the one centred row; the closing has its own picture. Dr. Liu's real
-  photo (`public/images/jiankang-liu.jpg`) stands in his words on its paper mount, beside the
-  paragraph from 1200px and on a tablet's column, above it elsewhere.
-- The paintings (GPT Image 2.5, California subjects in the ink style, no bamboo, pines or tea;
-  "Illustration" under each, "Illustrations" under the row of four):
-  - Opening, picture on the right: an old open book with a gold ribbon bookmark (the story of the
-    name).
-  - Our purpose, picture left: an oak seedling growing from an acorn, one gold acorn among its
-    roots (the part of a full life you can't see: your cells).
-  - Our scientific roots, picture right: a scientist's desk, a brush on its rest, a microscope in
-    ink only, a stack of books.
-  - Our experience, picture left: an ancient giant sequoia rising from mist beside a young one, a
-    touch of gold on the old trunk (trees older than BiGH, as the formula is).
-  - Our promise: four small vignettes over the promises: California fan palms before golden hills
-    (Made in California), a branch with a bee (Know where it comes from), a gold crescent moon
-    (45 days to decide), a folded letter with a pen (Answers in your language).
-  - Curious about the science?, picture right: a desk lamp casting gold light onto an open journal.
-- Pictures stand about the same size: each painting's width is a height times its shape
-  (`album.module.css`, `--h`), capped by its column. Paintings are server-marked
-  `data-bloom="waiting"` (hidden until they bloom in as their spread arrives, with the gold leaf
-  catching the light after); reduced motion shows them at once, JavaScript off shows them too.
+- The circle: one large ink circle (an ensō: a whole, complete life), brushed in a single stroke
+  and open where the stroke lifts, stands once, at the top, over the title. A small torn leaf of
+  gold sits where the brush began, at 1 o'clock (the picture ships mirrored, so the page's clockwise
+  sweep follows the brush from its wet head to its dry tail; the mockup has the gold at 11).
+  Under the opening's words a band of low California hills in grey wash feathers out to both edges,
+  with a faint gold glow on one hilltop.
+- The circle paints itself, in pure CSS (no script, so it never waits on one): a conic-gradient
+  mask sweeps clockwise around the picture in one breath (`--breath` 2.4s, `--ease`, after 0.3s),
+  starting 26 degrees before the gold (where the brush's wet head begins, so the blackest part is
+  drawn first), its leading edge soft over 12 degrees, from 12 degrees back so nothing shows during
+  the delay. The registered property `--sweep` has 360deg as its initial value, so once the sweep
+  ends the mask is whole and the circle never depends on the animation finishing. The gold comes up
+  after the stroke (0.3s plus one breath), and the hills spread from the middle as it closes
+  (`--bloom-delay` 1400). Reduced motion: no mask, no animation, everything shown at once. With
+  JavaScript off the circle is whole too.
+- The rhythm is the album's (Mo's rule: one picture on one side, its words on the other, the sides
+  swapping part by part from 960px; 600 to 959px is one centred column about 640px wide, picture
+  first; a phone is one column, picture first), on the shared `spread.tsx` and
+  `about-page.module.css`. The paper is the kit's plain rice paper (no folds, no ageing), and the
+  name is said once (the logo, then the title "Be in Good Health." in plain ink).
+  - Our purpose, picture left: B's oak seedling with its gold acorn.
+  - Our scientific roots, picture right: Dr. Liu's real photo (`public/images/jiankang-liu.jpg`) on
+    its paper mount, resting on a wide, low pool of grey wash (D's pool, turned a quarter round
+    inside a box of its own shape so the page keeps room for the whole wash; on a phone the pool
+    reaches to 8px from the window's edges so the photo is not a thumbnail).
+  - Our experience, picture left: B's giant sequoia (a touch of gold on the old trunk).
+  - Our promise: the one centred row of four small round ink dots (D's, deep black to pale grey),
+    bigger than the shared size (84 to 132px).
+  - Curious about the science?, picture right: round reading glasses on an open notebook, a touch
+    of gold leaf on the hinge.
+  - "Illustration" under the seedling, the sequoia and the glasses; none under the photo or the
+    dots.
+- Sizes: each painting's width is a height times its shape (`circle.module.css`, `--h`: 330px, or
+  0.6 of its column; 300px or 0.7 of it under 960px), capped by its column. From 960 to 1279px the
+  sequoia and the glasses take a plain height of 300px or 0.8 of their column (at 960 to 1100px the
+  words beside them, stacked figures and pills, stand taller than a painting at 0.6). Each
+  painting's `sizes` attribute (`SEEDLING`, `SEQUOIA`, `GLASSES` in `about-ink.tsx`) follows the
+  width it is drawn at (within 3%, measured at 21 window widths from 360 to 1920px); if the CSS
+  widths change, change those too.
+- Paintings that bloom in as they arrive are server-marked `data-bloom="waiting"` (the circle draws
+  itself instead; the gold leaf catches the light after). Reduced motion shows them at once.
 - Deep links `/about#purpose`, `#roots`, `#experience`, `#promise`, `#closing` land each part's
-  first content 0 to 64px under the header (13px at 1440x900, 32px on the smaller windows). The
-  shared rule is the `scroll-margin-top` on `.part` in `about-page.module.css`.
-- Files: `src/components/about/about-ink.tsx` (the page: its `ALT` holds the five painting
-  descriptions), `spread.tsx` (`Painting` and `Spread`), `about-page.module.css` (rules shared with
-  C, all under `.aboutPage`), `album.module.css` (B's own, under `.album`), `about-art.ts`
+  first content 0 to 64px under the header. The shared rule is the `scroll-margin-top` on `.part`
+  in `about-page.module.css`.
+- Files: `src/components/about/about-ink.tsx` (the page: `data-about="circle"`; its `ALT` holds the
+  three painting descriptions), `circle.module.css` (C's own: the opening, the circle's mask, the
+  hills, the pool and the per-part sizes, all under `.circle`), `spread.tsx` (`Painting` and
+  `Spread`), `about-page.module.css` (rules shared with B, all under `.aboutPage`), `about-art.ts`
   (generated by `reference/ink-pages/about-bc/build_bc.py` from the originals in
-  `reference/ink-pages/about-bc/`; pictures in `public/images/about-bc/`), and `about-content.ts`
-  (the locked words), `greetings.tsx`, `count-up.tsx`. Spend for the paintings is in
-  `reference/ink-pages/spend.md`.
+  `reference/ink-pages/about-bc/`; pictures in `public/images/about-bc/`), `about-content.ts` (the
+  locked words), `greetings.tsx`, `count-up.tsx`. `about-art.ts` still exports B's book, desk, lamp
+  and four vignettes (the file is generated and shared by both branches; C does not use them).
+  Spend for the paintings is in `reference/ink-pages/spend.md` (the "About B and C" section).
 - Draft translations (Korean, Japanese, Simplified Chinese, Vietnamese; for a native check before
-  launch): the five painting descriptions, keys m588 to m592, added by
-  `reference/ink-pages/about-bc/translations-b.cjs`. The four vignettes of the promise row have no
-  description (decorative, `alt=""`).
+  launch): the glasses' description, key m593, added by
+  `reference/ink-pages/about-bc/translations-c.cjs` (the seedling and sequoia descriptions, m589
+  and m591, are B's, from `translations-b.cjs`; B's book, desk and lamp descriptions, m588, m590
+  and m592, stay in the catalogs and nothing on C uses them). The photo's description is Dr. Liu's
+  name in each language (in Korean and Japanese it stays "Dr. Jiankang Liu"). The opening's
+  circle, the hills and the dots have no description (decorative, `alt=""`).
 - Checks: `python -X utf8 scripts/qa/qa_about.py http://localhost:3025` (dev) or
   `http://localhost:3026` (built site; the built site orders CSS differently, so run both).
   Groups: `desktop_and_phone`, `rhythm`, `motion`, `focus`, `deep_links`, `languages`,
-  `languages_layout`, `nav_locales`, `boundary`, `first_screen` (`--only=` runs some).
-  It covers the h1 and the locked words, every painting multiplying onto the paper (with no
-  stacking context between it and the page root), the rhythm and the sides, the name once,
-  text, navigation and target sizes, no sideways scrolling, the Support and Ask sheets, the
-  bloom and reduced motion, deep links at five sizes, and every language's words and line
-  breaks: 293 checks, all passing on the dev server and on the built site on October 7, 2026.
-  Screenshots go to `scripts/qa/out/about-album/`. On the built site the homepage gate also
-  passed (`home_snapshot.py compare` against `baseline-main997-prod`: 48 of 48 shots, 0.000%
-  differing; `qa_home_ink.py`: 282/282; `home_snapshot.py nav`: ok).
-- C "The circle" is built beside this page on branch `about-c`, from this branch: the same
-  shared rules and paintings (it reuses the seedling and the sequoia), its own layout and its own
-  signature moment. D stays on `ink-pages` for reference only.
+  `languages_layout`, `nav_locales`, `boundary`, `first_screen` (`--only=` runs some). It covers the
+  h1 and the locked words, every painting multiplying onto the paper (with no stacking context
+  between it and the page root), the rhythm and the sides, the circle appearing once, the name
+  once, text, navigation and target sizes, no sideways scrolling, the Support and Ask sheets,
+  reduced motion complete and still, the circle drawing itself (stopped in the frame its clock
+  reaches 1.1s it must be part drawn, the last quarter under half its ink, then whole; with
+  JavaScript off every quarter as inked as the still circle), the bloom, deep links at five sizes,
+  and every language's words and line breaks: 298 checks, all passing on the dev server and on
+  the built site on October 7, 2026. Screenshots go to `scripts/qa/out/about-circle/` (the built
+  site's, read by hand, to `scripts/qa/out/about-circle-built/`). On the built site the homepage
+  gate also passed (`home_snapshot.py compare` against `baseline-main997-prod`: 48 of 48 shots,
+  0.000% differing; `qa_home_ink.py`: 282/282; `home_snapshot.py nav`: ok).
 
 ## Replaced: "The name, on a folded letter" (D, October 6, 2026)
 
-Replaced by B on October 7 (Mo rejected it; see above). The notes below are D's, kept for
+Replaced by B and C on October 7 (Mo rejected it; see above). The notes below are D's, kept for
 reference: its files (`chapter-word.tsx`, `about-letter.module.css`, `letter-art.ts`,
 `acronym.tsx`, `acronym.module.css` and its own `about-ink.tsx`) live on branch `ink-pages` only,
 and its checks (`letter_layout`, `fold_header`, the 382) are no longer in `qa_about.py` on this
@@ -111,9 +133,9 @@ Science under the big H).
   paint.
 - Code: `src/components/about/about-ink.tsx`, `chapter-word.tsx`, `about-letter.module.css`,
   `letter-art.ts` (generated), on the shared ink kit in `src/components/ink/` (`InkPage` with no
-  brush route, the site header and footer, the Support and Ask BiGH Science sheets). Still in use
-  from earlier rounds: `about-content.ts` (the words), `acronym.tsx` (the h1 unfold),
-  `greetings.tsx`, `count-up.tsx`. The site header is the menu bar Mo picked on October 5,
+  brush route, the site header and footer, the Support and Ask BiGH Science sheets). D's own
+  `acronym.tsx` (the h1 unfold) is on `ink-pages` only; `about-content.ts` (the words),
+  `greetings.tsx` and `count-up.tsx` are still in use on both new pages. The site header is the menu bar Mo picked on October 5,
   "Inscription" (`src/components/ink/nav/`): on /about it starts clear over the opening, marks
   About as the current page and settles on the page's aged paper once scrolled.
 - Paintings: `reference/ink-pages/about/` (prompts, originals, `build_about.py`, `check_art.py`),
@@ -155,12 +177,14 @@ experience, Our promise) stay.
 
 Korean, Japanese, Simplified Chinese and Vietnamese. The page uses the About keys m545 to m574
 (September 28), "Illustration" (m574) and "Illustrations" (m582), the shared header, footer and
-sheet keys, and m588 to m592 (the five painting descriptions, new with B). The tab title uses the
+sheet keys, and the painting descriptions: m588 to m592 (B's five, new with B; C uses m589, the
+seedling, and m591, the sequoia) and m593 (the glasses, new with C). The tab title uses the
 shared "About" key. `hken.json` stays `{}`, and `/hken/about` redirects to `/cns/about`.
 
-Draft translations, not native-reviewed: the About keys m545 to m574 and m588 to m592. (m587, D's
-tree rings, is still in the catalogs; nothing on B uses it. The Vietnamese for it says "Vân gỗ"
-where "vòng tuổi" may be the right words, if D ever comes back.)
+Draft translations, not native-reviewed: the About keys m545 to m574 and m588 to m593. (m587, D's
+tree rings, is still in the catalogs; nothing on B or C uses it. The Vietnamese for it says "Vân gỗ"
+where "vòng tuổi" may be the right words, if D ever comes back. m588, m590 and m592, B's book,
+desk and lamp, are unused on C.)
 
 Vietnamese uses Be Vietnam Pro site-wide (see `docs/header-and-languages.md`, "Vietnamese type").
 Line breaks are scoped to this page in `about-page.module.css` ("Other languages"): Korean headings keep words whole;
@@ -173,11 +197,12 @@ Vietnamese closing pills balance their lines on phones.
 
 `python -X utf8 scripts/qa/qa_about.py http://localhost:3025` (dev) or `http://localhost:3026`
 (built site, `next start`; the built site orders CSS differently, so run both). Groups and counts
-are in the B section above; the file's docstring lists what each checks (the h1 and the locked
+are in the C section above; the file's docstring lists what each checks (the h1 and the locked
 words, every painting multiplying onto the paper with no stacking context between it and the page
-root, the rhythm and the sides, the name once, text, navigation and target sizes, no sideways
-scrolling, the Support and Ask sheets, the bloom and reduced motion, deep links, and every
-language's words and line breaks). Screenshots go to `scripts/qa/out/about-album/`.
+root, the rhythm and the sides, the circle once, the name once, text, navigation and target sizes,
+no sideways scrolling, the Support and Ask sheets, the circle drawing itself and reduced motion,
+the bloom, deep links, and every language's words and line breaks). Screenshots go to
+`scripts/qa/out/about-circle/`.
 
 The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and
 `scripts/qa/home_snapshot.py compare <url> <new-tag> baseline-main997-prod` (built site) or
@@ -190,7 +215,7 @@ The homepage must not change: also run `scripts/qa/qa_home_ink.py <url>` and
   `--font-dm-sans`.
 - Scope component CSS under the page's root class: `homepage.module.css` resets `.site p`,
   `.site button`, `.site h2` at specificity 0,1,1, and the kit uses `.look ...` (0,2,0). Every
-  About rule is scoped under `.aboutPage` (shared with C) or `.album` (B's own).
+  About rule is scoped under `.aboutPage` (shared with B) or `.circle` (C's own).
 - Multiply: a painting multiplies onto the page root's paper only if nothing between it and the
   root makes a stacking context (no z-index on a positioned ancestor, no isolation, opacity,
   transform, filter or will-change on a part, a spread, a figure or a wrapper). The kit's bloom puts

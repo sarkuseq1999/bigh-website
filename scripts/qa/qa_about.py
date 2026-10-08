@@ -19,8 +19,10 @@ below; Dr. Liu's photo in the middle of its pool; the circle appears once. In Vi
 column) nothing in a words column reaches past its right edge.
 motion: reduced motion complete and still (the circle whole, its gold up, every painting shown);
 every painting is server-marked waiting (none paints whole, then vanishes); with motion the circle
-paints itself around in one breath from where the brush began, then its gold comes up, and the
-hills bloom; a lower painting waits, then blooms; with JavaScript off the circle shows whole.
+paints itself around in one breath from where the brush began (stopped in the frame its clock
+reaches 1.1s it is part drawn: the first two quarters whole, the one reached last under half of
+its ink; then it ends whole), then its gold comes up, and the hills bloom; a lower painting waits,
+then blooms; with JavaScript off the circle shows whole.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -680,11 +682,9 @@ def motion(browser):
     check("motion: then it blooms", wait_until(page, f"{low}.dataset.bloom === 'done'"))
     context.close()
 
-    # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
-    # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of
-    # it must also hold as much ink as the still circle's (reduced motion: no mask at all). The
-    # sweep ends in the top half: the top-left quarter held 0.38 of its ink at 1.5s, the top-right
-    # 0.94 at 2.2s (the few degrees before the wet head come last); whole, both match exactly.
+    # The circle's ink, by quarter in the order the stroke draws them (clockwise from the top
+    # right: top right, bottom right, bottom left, top left): the share of each quarter's pixels
+    # that is dark. The still circle (reduced motion: no mask at all, its gold up) is the whole one.
     def circle_shot(reduced):
         context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False,
                                       reduced_motion="reduce" if reduced else "no-preference")
@@ -701,12 +701,60 @@ def motion(browser):
         boxes = [(w // 2, 0, w, h // 2), (w // 2, h // 2, w, h), (0, h // 2, w // 2, h), (0, 0, w // 2, h // 2)]
         return [round(sum(shot.crop(b).histogram()[:200]) / ((b[2] - b[0]) * (b[3] - b[1])), 4) for b in boxes]
 
+    still_circle = quarters(circle_shot(True))
+
+    # The stroke really progresses (a mask that never sweeps would pass "its animation runs" with
+    # the circle whole from the first frame, or blank to the end). The animation runs in real time;
+    # the page stops it (and the gold's) in the frame its clock first reaches 1.1s, which counts
+    # its 0.3s delay (1.1s in, about 255 degrees are drawn), so the shot is the same on a slow
+    # machine. Then the circle must be partly drawn in order: the first two quarters whole, the
+    # one the stroke reaches last (top left) under half. Then it runs on and ends whole.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
+    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
+    stopped = page.evaluate(
+        """() => new Promise((resolve) => {
+             const wrap = document.querySelector('[data-enso]');
+             const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
+             if (!draw) return resolve(null);
+             const began = performance.now();
+             const tick = () => {
+               if (Number(draw.currentTime) >= 1100) {
+                 wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
+                 return resolve(Math.round(Number(draw.currentTime)));
+               }
+               if (performance.now() - began > 8000) return resolve(null);
+               requestAnimationFrame(tick);
+             };
+             tick();
+           })"""
+    )
+    box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
+    midway = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
+    check("motion: the stroke is part drawn 1.1s in (first quarters whole, the last under half)",
+          stopped is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
+          and midway[3] <= 0.5 * still_circle[3],
+          {"clock_ms": stopped, "midway": midway, "still": still_circle})
+    page.evaluate("document.querySelector('[data-enso]').getAnimations({ subtree: true }).forEach((a) => a.play())")
+    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'")
+    page.wait_for_timeout(400)
+    end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
+    check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
+          all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})
+    context.close()
+
+    # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
+    # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of
+    # it must also hold as much ink as the still circle's. The sweep ends in the top half: the
+    # top-left quarter held 0.38 of its ink at 1.5s, the top-right 0.94 at 2.2s (the few degrees
+    # before the wet head come last); whole, both match exactly.
     shot = circle_shot(False)
     ink = sum(shot.histogram()[:120]) / (shot.width * shot.height)
     check("JavaScript off: the circle is visible", ink >= 0.04, round(ink, 4))
-    drawn, still = quarters(shot), quarters(circle_shot(True))
+    drawn = quarters(shot)
     check("JavaScript off: the circle shows whole (each quarter as inked as the still circle)",
-          all(d >= 0.97 * s for d, s in zip(drawn, still)), {"drawn": drawn, "still": still})
+          all(d >= 0.97 * s for d, s in zip(drawn, still_circle)), {"drawn": drawn, "still": still_circle})
 
 
 def boundary(browser):

@@ -99,6 +99,17 @@
   width: clamp(84px, 8.4vw, 132px);
 }
 
+/* Two narrow columns (960 to 1279px): the experience's three stacked figures and the closing's
+   stacked pills stand taller than a painting at 0.6 of the column (at 960px the sequoia stood 305px
+   tall and the glasses 163px, beside those words). These two take 0.8 of the column, up to the
+   same 300px plain height as one column, which meets the 0.6 rule's own size at 1280px (no jump). */
+@media (min-width: 960px) and (max-width: 1279px) {
+  .circle [data-part="experience"],
+  .circle [data-part="closing"] {
+    --h: min(300px, 80%);
+  }
+}
+
 /* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
    or 0.7 of the column, so no painting fills a phone's screen. */
 @media (max-width: 959px) {

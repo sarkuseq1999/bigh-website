@@ -30,7 +30,20 @@ export const ALT = {
   glasses: "Reading glasses resting on an open notebook, painted in ink",
 } as const;
 
-const HALF = "(max-width: 959px) 90vw, 46vw";
+// What each painting asks the server for follows the width it is drawn at (circle.module.css: a
+// plain height times the painting's shape, at most 0.6 of its column, 0.7 under 960px, 0.8 for the
+// sequoia and the glasses from 960 to 1279px; measured in css px at 360 to 2560px). Up to 505px the
+// column is 0.846 of the window; from 506 to 959px the height caps at 300px; from 960px the column
+// is 0.394 of the window up to 1395px, where the height caps at 330px (300px for the sequoia and
+// the glasses from 960 to 1279px, so they fill the column up to 1025px and 1083px). A shared
+// half-window figure asked for 1.5 to 2.3 times too many pixels at 1440px (662px for paintings
+// drawn at 327 to 470px).
+const SEEDLING =
+  "(max-width: 505px) 59vw, (max-width: 959px) 298px, (max-width: 1395px) 24vw, 328px";
+const SEQUOIA =
+  "(max-width: 505px) 80vw, (max-width: 959px) 405px, (max-width: 1025px) 40vw, (max-width: 1279px) 405px, (max-width: 1395px) 32vw, 445px";
+const GLASSES =
+  "(max-width: 505px) 85vw, (max-width: 959px) 427px, (max-width: 1083px) 40vw, (max-width: 1279px) 427px, (max-width: 1395px) 34vw, 470px";
 // The brush's wet head lies about 26 degrees before its gold leaf (about-art.ts enso.startDeg), so
 // the circle's sweep starts there and the blackest part of the stroke is drawn first.
 const SWEEP_FROM = `${(enso.startDeg - 26).toFixed(1)}deg`;
@@ -114,7 +127,7 @@ function Purpose() {
         <Painting
           art={seedling}
           alt={ALT.seedling}
-          sizes={HALF}
+          sizes={SEEDLING}
           gold={seedling.gold}
           caption
           eager
@@ -190,7 +203,7 @@ function Experience() {
       side="left"
       labelledBy="experience-title"
       picture={
-        <Painting art={sequoia} alt={ALT.sequoia} sizes={HALF} gold={sequoia.gold} caption />
+        <Painting art={sequoia} alt={ALT.sequoia} sizes={SEQUOIA} gold={sequoia.gold} caption />
       }
     >
       <p className={`${base.label} ${page.label}`} data-label="">
@@ -273,7 +286,7 @@ function Closing() {
       part="closing"
       side="right"
       labelledBy="closing-title"
-      picture={<Painting art={glasses} alt={ALT.glasses} sizes={HALF} caption />}
+      picture={<Painting art={glasses} alt={ALT.glasses} sizes={GLASSES} caption />}
     >
       <h2 id="closing-title" className={`${base.display} ${page.heading}`}>
         {copy(about.closing.title)}
