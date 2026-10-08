@@ -40,11 +40,13 @@ once, the own language last and darkest.
 closing_pills (1440x900, 1024x768, 768x1024, 390x844): 4px above each closing pill's bottom edge the
 element is the pill; the footer starts at or under the closing part's end.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
-first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
-in the first screen. On two columns the opening is a composed first screen: the book large and
-centred on the words, both centred between the header and the purpose's painting, which peeks in
-at the foot by 100-160px with the purpose's heading still under the fold; on a phone the opening
-is 70-85% of the window, the book 0.9 of its width, the purpose's painting in the first screen.
+first_screen (1280x720, 1440x900, 1536x864, 1024x768, 960x800, 768x1024, 390x844): the title and
+the top of the opening's picture in the first screen. On two columns the opening is a composed
+first screen: the book large and centred on the words, both centred between the header and the
+purpose's painting, which peeks in at the foot by 100-160px (40-100px and the book half the window
+at 960-1199px) with the purpose's heading still under the fold; on a tablet's column the book is
+the column's width and the purpose's painting peeks in by 100-160px; on a phone the opening is
+70-85% of the window, the book 0.9 of its width, the purpose's painting in the first screen.
 
 Pictures: scripts/qa/out/about-album/<size>-NN.png.
 
@@ -903,7 +905,7 @@ def boundary(browser):
 
 
 def first_screen(browser):
-    for width, height in [(1280, 720), (1440, 900), (1536, 864), (390, 844)]:
+    for width, height in [(1280, 720), (1440, 900), (1536, 864), (1024, 768), (960, 800), (768, 1024), (390, 844)]:
         tag = f"{width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
         geo = page.evaluate(
@@ -929,7 +931,24 @@ def first_screen(browser):
                           between: Math.round((top + bottom) / 2 - (h.bottom + p.top) / 2), peek: Math.round(innerHeight - p.top),
                           heading: Math.round(t.top), purpose: Math.round(p.top), end: Math.round(o.bottom), win: innerHeight, width: innerWidth }; }"""
         )
-        if width >= TWO_COLUMNS:
+        if TWO_COLUMNS <= width < 1200:
+            # The narrowest two columns: the purpose's words start close under the seedling, so it
+            # peeks in less (40-100px); the book takes half the window (it was 470px of 1024).
+            check(
+                f"{tag} the opening is a composed first screen (the book half the window, centred on the words, both centred over the purpose's painting, which peeks in by 40-100px, its heading under the fold)",
+                op["book"] >= 0.5 * op["width"] and abs(op["centres"]) <= 4 and abs(op["between"]) <= 16
+                and 40 <= op["peek"] <= 100 and op["heading"] >= op["win"] - 4 and op["end"] <= op["purpose"],
+                op,
+            )
+        elif 600 <= width < TWO_COLUMNS:
+            # A tablet's one column: the book over the words, as wide as the column, the purpose's
+            # painting peeking in at the foot of the first screen, as on a desktop.
+            check(
+                f"{tag} the opening is a first screen (the book the column's width, the purpose's painting peeking in by 100-160px)",
+                op["book"] >= 0.8 * op["width"] and 100 <= op["peek"] <= 160 and op["end"] <= op["purpose"],
+                op,
+            )
+        elif width >= 1200:
             check(
                 f"{tag} the opening is a composed first screen (the book large, centred on the words, both centred over the purpose's painting, which peeks in by 100-160px, its heading under the fold)",
                 op["book"] >= 0.44 * op["width"] and abs(op["centres"]) <= 4 and abs(op["between"]) <= 16

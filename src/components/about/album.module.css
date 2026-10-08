@@ -42,15 +42,6 @@
   padding: calc(88px + var(--part-half)) 0 0;
 }
 
-/* On the narrowest two columns the purpose's words start close under the seedling's top (its
-   heading 78px under it at 1024px, 125px at 1440px): a shallower peek keeps the heading under the
-   fold. */
-@media (min-width: 960px) and (max-width: 1199px) {
-  .album section[data-part="opening"] {
-    --peek: 72px;
-  }
-}
-
 @media (min-width: 960px) {
   .album [data-part="opening"] > [data-side] {
     grid-template-columns: auto minmax(0, 1fr);
@@ -65,6 +56,30 @@
     position: absolute;
     top: 100%;
     right: 0;
+  }
+}
+
+/* On the narrowest two columns (960 to 1199px) the purpose's words start close under the seedling's
+   top (its heading 78px under it at 1024px, 125px at 1440px): a shallower peek keeps the heading
+   under the fold. There the book was small (470px at 1024x768, 210px of paper round it): the gap
+   narrows and the book reaches half the page's margin into it, its caption kept at the words'
+   right edge (540px at 1024px). */
+@media (min-width: 960px) and (max-width: 1199px) {
+  .album section[data-part="opening"] {
+    --peek: 72px;
+  }
+
+  .album [data-part="opening"] > [data-side] {
+    column-gap: 24px;
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    justify-self: start;
+    width: calc(100% + var(--gutter) / 2);
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    right: calc(var(--gutter) / 2);
   }
 }
 
@@ -138,7 +153,9 @@
 /* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
    or 0.7 of the column, so no painting fills a phone's screen. The opening: the book over the
    words, as wide as a tablet's column (640px; 420px and centred before, its edges on neither side
-   of the words), with calm room between them; the opening 76% of the window tall. */
+   of the words), with calm room between them. On a tablet the opening ends where the purpose's
+   painting peeks in by --peek, as on a desktop (the purpose's words come after its painting there,
+   so nothing of them shows); on a phone it is 76% of the window tall. */
 @media (max-width: 959px) {
   .album {
     --h: min(300px, 70%);
@@ -146,11 +163,6 @@
 
   .album [data-part="opening"] [data-picture] {
     --picture: 640px;
-  }
-
-  .album section[data-part="opening"] {
-    min-height: min(76vh, 760px);
-    min-height: min(76svh, 760px);
   }
 
   .album [data-part="opening"] > [data-side] {
@@ -167,6 +179,11 @@
 @media (max-width: 599px) {
   .album {
     --row-picture: 88px;
+  }
+
+  .album section[data-part="opening"] {
+    min-height: min(76vh, 760px);
+    min-height: min(76svh, 760px);
   }
 
   .album li[data-promise] > img.vignette {
