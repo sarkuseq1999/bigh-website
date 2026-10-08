@@ -44,15 +44,7 @@ function Opening() {
   return (
     <section className={page.opening} data-part="opening" aria-labelledby="about-title">
       <div className={`${base.wrap} ${page.spread}`} data-side="right">
-        <Painting
-          art={book}
-          alt={ALT.book}
-          sizes={HALF}
-          gold={book.gold}
-          caption
-          priority
-          waiting
-        />
+        <Painting art={book} alt={ALT.book} sizes={HALF} gold={book.gold} caption preload waiting />
         <div className={page.words} data-words="">
           <p className={page.kicker}>{copy(about.hero.label)}</p>
           <h1 id="about-title" lang="en" className={page.title}>

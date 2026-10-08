@@ -22,7 +22,7 @@ export function Painting({
   caption = false,
   gold,
   delay = 0,
-  priority = false,
+  preload = false,
   eager = false,
   waiting = true,
   className = "",
@@ -37,10 +37,14 @@ export function Painting({
   gold?: string;
   /** Milliseconds its bloom waits (the kit's --bloom-delay). */
   delay?: number;
-  /** The first screen's painting: eager and preloaded. */
-  priority?: boolean;
-  /** A painting that reaches into the first screen on some windows: loaded at once, not preloaded
-      (lazy, it was the window's largest painting while the opening's still waited to bloom). */
+  /** The first screen's main painting: Next's preload (a `<link rel="preload">` in the head),
+      and fetchPriority="high" on that link and on the img. */
+  preload?: boolean;
+  /** A painting that reaches into the first screen on some windows: loading="eager", so it loads
+      at once (lazy, it was the window's largest painting while the opening's still waited to
+      bloom). Next adds no preload for it, but React's server render writes a
+      `<link rel="preload" as="image">` for every img that is not lazy, this one included, without
+      the high fetch priority the `preload` painting asks for. */
   eager?: boolean;
   /** Marked "waiting" by the server, so it never paints whole before its bloom (default true). */
   waiting?: boolean;
@@ -57,8 +61,9 @@ export function Painting({
           width={art.width}
           height={art.height}
           sizes={sizes}
-          priority={priority}
-          loading={eager && !priority ? "eager" : undefined}
+          preload={preload}
+          fetchPriority={preload ? "high" : undefined}
+          loading={eager && !preload ? "eager" : undefined}
           data-bloom={waiting ? "waiting" : ""}
           style={delay ? ({ "--bloom-delay": delay } as CSSProperties) : undefined}
         />
