@@ -201,13 +201,26 @@
   }
 }
 
-/* ---- The circle paints itself: one stroke around in one breath, from where the brush began --
+/* ---- The circle paints itself: one stroke around, slowly, from where the brush began ---------
    A conic mask sweeps clockwise from --start (about-ink.tsx: enso.startDeg less 26 degrees, where
    the stroke's wet head begins), its leading edge soft over 12 degrees (over 6 it read as a wipe).
-   It starts that feather's width back, so nothing shows while it waits its 0.3s (from 0deg a
+   It starts that feather's width back, so nothing shows while it waits its delay (from 0deg a
    sliver of the head stood there alone). It is pure CSS, so it never waits on a script; once the
    sweep ends the mask is whole (--sweep's initial value is 360deg), so the circle never depends on
-   the animation finishing. The gold start comes up after. Reduced motion: no mask, no animation. */
+   the animation finishing. The gold start comes up after. Reduced motion: no mask, no animation.
+   The stroke's timing is its own (Mo, October 8: slower and easier to see, "like someone really
+   painting it"). In the kit's breath (2.4s after 0.3s, on the kit's ease, which draws most of the
+   circle in its first 40%) it flashed round. Now it waits a moment once the page appears
+   (--stroke-delay), takes 4 seconds (--stroke-time), and its ease is a brush's: a gentle press
+   from the wet head, a steady pace round the dark of the stroke, and a slow lift through the dry
+   tail as it closes (--stroke-ease). The kit's --breath and --ease are left as they are: the rest
+   of the site uses them. */
+.circle .enso {
+  --stroke-delay: 0.6s;
+  --stroke-time: 4s;
+  --stroke-ease: cubic-bezier(0.35, 0, 0.45, 1);
+}
+
 @property --sweep {
   syntax: "<angle>";
   inherits: false;
@@ -226,16 +239,18 @@
       #000 var(--sweep),
       transparent calc(var(--sweep) + 12deg)
     );
-    animation: draw var(--breath) var(--ease) 0.3s backwards;
+    animation: draw var(--stroke-time) var(--stroke-ease) var(--stroke-delay) backwards;
   }
 
   .circle .enso .dot {
-    animation: leaf-up 1.2s var(--ease) calc(0.3s + var(--breath)) backwards;
+    animation: leaf-up 1.2s var(--ease) calc(var(--stroke-delay) + var(--stroke-time)) backwards;
   }
 
-  /* The hills spread from the middle as the stroke closes. */
+  /* The hills spread from the middle as the stroke nears its close. Their delay is milliseconds
+     from when the page wakes (the kit's useBloom reads it as a number, so it cannot be worked out
+     from the stroke's): change it with the stroke's timing. */
   .circle .hills {
-    --bloom-delay: 1400;
+    --bloom-delay: 3000;
   }
 }
 

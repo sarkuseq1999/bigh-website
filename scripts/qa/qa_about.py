@@ -20,14 +20,17 @@ below; Dr. Liu's photo in the middle of its pool; the circle appears once. In Vi
 column) nothing in a words column reaches past its right edge.
 motion: reduced motion complete and still (the circle whole, its gold up, every painting shown);
 every painting is server-marked waiting (none paints whole, then vanishes); with motion the circle
-paints itself around in one breath from where the brush began (stopped in the frame its clock
-reaches 1.1s it is part drawn: the first two quarters whole, the one reached last under half of
-its ink; then it ends whole), then its gold comes up, and the hills bloom; a lower painting waits,
-then blooms; on a slow link (the stroke's picture held 3s) the circle waits for its picture: 2.5s in
-nothing shows, the stroke starts only once the picture is in and draws around, and the gold comes up
-a breath after it; with JavaScript off the circle shows whole, and every other painting (the hills,
-the seedling, the pool, the sequoia, the four promise dots and the glasses) as inked as it does
-still.
+paints itself around slowly from where the brush began (its stroke takes 4s, after a moment of
+0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun: the quarter it starts
+in under half of its ink, the other three bare; stopped at 2.9s it is about three quarters round:
+the first two quarters whole, the third mostly drawn, the one reached last under half of its ink;
+then it ends whole), then its gold comes up (its delay at least the stroke's delay and duration),
+and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
+3s) the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the
+picture is in and draws around, and the gold comes up the stroke's delay and duration after it;
+with no stroke picture, 9s in the gold has not risen alone; with JavaScript off the circle shows
+whole once the stroke and the gold have finished, and every other painting (the hills, the
+seedling, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -817,7 +820,7 @@ def rhythm(browser):
         context.close()
 
 
-# The circle, every animation frame for 10s from navigation: [ms since navigation, the stroke's
+# The circle, every animation frame for 14s from navigation: [ms since navigation, the stroke's
 # sweep in degrees (-12 before it begins, 360 once whole), its gold's opacity, the stroke's picture
 # in]. Installed before the page's own scripts; it only reads.
 ENSO_LOG = """(() => {
@@ -829,7 +832,7 @@ ENSO_LOG = """(() => {
       log.push([Math.round(performance.now()), parseFloat(getComputedStyle(stroke).getPropertyValue('--sweep')),
                 parseFloat(getComputedStyle(dot).opacity), stroke.complete && stroke.naturalWidth > 0]);
     }
-    if (performance.now() < 10000) requestAnimationFrame(tick);
+    if (performance.now() < 14000) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 })();"""
@@ -885,7 +888,8 @@ def motion(browser):
           and float(still["dot"]) == 1 and still["running"] == 0, still)
     context.close()
 
-    # With motion: the circle paints itself in one breath, then its gold; the hills bloom.
+    # With motion: the circle paints itself slowly (Mo, October 8: "start a moment after the page
+    # appears, and take about 4 seconds"), then its gold; the hills bloom.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
     # the server sends, before any script could mark one: in the page's main, the hills, the
@@ -901,12 +905,15 @@ def motion(browser):
     early = page.evaluate(
         """() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
              return { name: e.animationName, duration: e.animationDuration, start: e.getPropertyValue('--start').trim(),
+                      wait: parseFloat(e.animationDelay), time: parseFloat(e.animationDuration),
                       dot: getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity,
                       delay: parseFloat(getComputedStyle(document.querySelector('[data-enso] [data-dot]')).animationDelay) }; }"""
     )
-    check("motion: the circle paints itself (its animation, one breath, from where the brush began)",
-          "draw" in early["name"] and early["duration"] == "2.4s" and early["start"].endswith("deg"), early)
-    check("motion: its gold waits for the stroke", float(early["dot"]) < 0.5 and early["delay"] >= 2.4, early)
+    check("motion: the circle paints itself slowly (its animation, 4s, after a moment of 0.4 to 1s, from where the brush began)",
+          "draw" in early["name"] and early["duration"] == "4s" and 0.4 <= early["wait"] <= 1
+          and early["start"].endswith("deg"), early)
+    check("motion: its gold waits for the stroke (its delay at least the stroke's delay and duration)",
+          float(early["dot"]) < 0.5 and early["delay"] >= early["wait"] + early["time"] - 0.001, early)
     check("motion: then the gold is up", wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'"))
     check("motion: the hills bloom", wait_until(page, "document.querySelector('[data-picture-band]').dataset.bloom === 'done'"))
     low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
@@ -924,7 +931,9 @@ def motion(browser):
                                       reduced_motion="reduce" if reduced else "no-preference")
         page = context.new_page()
         page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-        page.wait_for_timeout(1500 if reduced else 4000)
+        # Still: at once. With motion (script off, so nothing holds): once the stroke and the gold
+        # have finished, 0.6s + 4s + 1.2s from when the page is styled, with a margin.
+        page.wait_for_timeout(1500 if reduced else 7000)
         box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
         shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
         context.close()
@@ -937,40 +946,58 @@ def motion(browser):
 
     still_circle = quarters(circle_shot(True))
 
-    # The stroke really progresses (a mask that never sweeps would pass "its animation runs" with
-    # the circle whole from the first frame, or blank to the end). The animation runs in real time;
-    # the page stops it (and the gold's) in the frame its clock first reaches 1.1s, which counts
-    # its 0.3s delay (1.1s in, about 255 degrees are drawn), so the shot is the same on a slow
-    # machine. Then the circle must be partly drawn in order: the first two quarters whole, the
-    # one the stroke reaches last (top left) under half. Then it runs on and ends whole.
+    # The stroke really progresses, at a brush's pace (a mask that never sweeps would pass "its
+    # animation runs" with the circle whole from the first frame, or blank to the end; one that
+    # flashes round would be whole early). The animation runs in real time; the page stops it (and
+    # the gold's) in the frame its clock first reaches a set time, which counts its 0.6s delay, so
+    # each shot is the same on a slow machine, then lets it run on. At 1.1s (half a second into
+    # the stroke, about 5 degrees drawn) it has barely begun, a gentle press: the quarter it starts
+    # in (top right) under half of its ink, the other three bare. At 2.9s (about 265 degrees, three
+    # quarters round) the circle is partly drawn in order: the first two quarters whole, the third
+    # (bottom left) mostly drawn, the one the stroke reaches last (top left) under half. Then it
+    # runs on and ends whole. (The kit's breath, 2.4s on its front-loaded ease, drew about 255
+    # degrees by 1.1s and was whole by 2.9s.)
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
-    stopped = page.evaluate(
-        """() => new Promise((resolve) => {
-             const wrap = document.querySelector('[data-enso]');
-             const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
-             if (!draw) return resolve(null);
-             const began = performance.now();
-             const tick = () => {
-               if (Number(draw.currentTime) >= 1100) {
-                 wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
-                 return resolve(Math.round(Number(draw.currentTime)));
-               }
-               if (performance.now() - began > 8000) return resolve(null);
-               requestAnimationFrame(tick);
-             };
-             tick();
-           })"""
-    )
     box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
-    midway = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
-    check("motion: the stroke is part drawn 1.1s in (first quarters whole, the last under half)",
-          stopped is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
-          and midway[3] <= 0.5 * still_circle[3],
-          {"clock_ms": stopped, "midway": midway, "still": still_circle})
-    page.evaluate("document.querySelector('[data-enso]').getAnimations({ subtree: true }).forEach((a) => a.play())")
+
+    def stop_at(ms):
+        """Stop the circle's animations in the frame the stroke's clock first reaches `ms`, and
+        shoot it: [the clock where it stopped, the quarters' ink]."""
+        stopped = page.evaluate(
+            """(ms) => new Promise((resolve) => {
+                 const wrap = document.querySelector('[data-enso]');
+                 const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
+                 if (!draw) return resolve(null);
+                 const began = performance.now();
+                 const tick = () => {
+                   if (Number(draw.currentTime) >= ms) {
+                     wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
+                     return resolve(Math.round(Number(draw.currentTime)));
+                   }
+                   if (performance.now() - began > 12000) return resolve(null);
+                   requestAnimationFrame(tick);
+                 };
+                 tick();
+               })""",
+            ms,
+        )
+        shot = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
+        page.evaluate("document.querySelector('[data-enso]').getAnimations({ subtree: true }).forEach((a) => a.play())")
+        return stopped, shot
+
+    clock, begun = stop_at(1100)
+    check("motion: the stroke starts gently (1.1s in it has barely begun: its first quarter under half, the rest bare)",
+          clock is not None and begun[0] <= 0.5 * still_circle[0]
+          and all(b <= 0.1 * s for b, s in zip(begun[1:], still_circle[1:])),
+          {"clock_ms": clock, "begun": begun, "still": still_circle})
+    clock, midway = stop_at(2900)
+    check("motion: the stroke is three quarters round 2.9s in (first quarters whole, the third mostly, the last under half)",
+          clock is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
+          and midway[2] >= 0.5 * still_circle[2] and midway[3] <= 0.5 * still_circle[3],
+          {"clock_ms": clock, "midway": midway, "still": still_circle})
     wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'")
     page.wait_for_timeout(400)
     end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
@@ -981,8 +1008,10 @@ def motion(browser):
     # A slow link: the stroke's picture arrives late (its requests, enso-v1, held until 3s after
     # navigation; the gold's, enso-dot-v1, are not). The circle waits for its picture: 2.5s in
     # nothing shows (the gold hidden, the sweep not begun); the stroke starts only once the
-    # picture is in and draws around, and the gold comes up a breath after that (its 0.3s and the
-    # stroke's 2.4s), never with the picture or before it. Every frame is logged from navigation.
+    # picture is in and draws around, and the gold comes up at least the stroke's delay and duration
+    # after that (0.6s and 4s, read from the page; less one frame, 17ms, for where the log samples),
+    # never with the picture or before it. Every frame is logged from navigation, to 14s (the gold
+    # is up about 3s + 0.6s + 4s + its 1.2s in).
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     context.add_init_script(ENSO_LOG)
     page = context.new_page()
@@ -992,8 +1021,12 @@ def motion(browser):
     wait_until(page, "performance.now() >= 3000", 15000)
     for route in held:
         route.continue_()
-    wait_until(page, "performance.now() >= 9500", 15000)
+    wait_until(page, "performance.now() >= 13500", 20000)
     log = page.evaluate("window.__enso || []")
+    stroke_ms = page.evaluate(
+        """(() => { const e = getComputedStyle(document.querySelector('[data-enso] img:not([data-dot])'));
+             return Math.round((parseFloat(e.animationDelay) + parseFloat(e.animationDuration)) * 1000); })()"""
+    )
     context.close()
     at = [f for f in log if f[0] <= 2500]
     early = at[-1] if at else None
@@ -1007,32 +1040,36 @@ def motion(browser):
           {"arrived_ms": arrived, "began_ms": began, "frames_drawing": len(drawing)})
     risen = next((f[0] for f in log if f[2] > 0.01), None)
     closed = next((f[0] for f in log if f[1] >= 359.9 and f[0] >= (began or 0)), None)
-    check("slow stroke: the gold comes up after the stroke (a breath after the picture), then is up",
-          arrived is not None and risen is not None and closed is not None and risen >= arrived + 2400
-          and closed <= risen and bool(log) and log[-1][2] == 1,
-          {"arrived_ms": arrived, "closed_ms": closed, "gold_rises_ms": risen, "last": log[-1] if log else None})
+    check("slow stroke: the gold comes up after the stroke (its delay and duration after the picture), then is up",
+          arrived is not None and risen is not None and closed is not None and stroke_ms >= 4000
+          and risen >= arrived + stroke_ms - 17 and closed <= risen and bool(log) and log[-1][2] == 1,
+          {"arrived_ms": arrived, "stroke_ms": stroke_ms, "closed_ms": closed, "gold_rises_ms": risen,
+           "last": log[-1] if log else None})
 
     # A failed stroke picture: nothing lets the circle go (no timer; Next's onLoad fires for a broken
     # img that is complete when it hydrates, so the Opening checks naturalWidth), so the gold never
-    # rises alone on bare paper. 6s in, the gold is still hidden and the stroke still holds.
+    # rises alone on bare paper. 9s in (unheld, the gold would be up 0.6s + 4s + its 1.2s after the
+    # page is styled), the gold is still hidden and the stroke still holds.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
     page.route(re.compile(r"enso-v\d"), lambda route: route.abort())
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    wait_until(page, "performance.now() >= 6000", 15000)
+    wait_until(page, "performance.now() >= 9000", 20000)
     failed = page.evaluate(
         """() => { const s = document.querySelector('[data-enso] img:not([data-dot])'), d = document.querySelector('[data-enso] [data-dot]');
              return { picture: s.naturalWidth, play: getComputedStyle(s).animationPlayState, gold: getComputedStyle(d).opacity }; }"""
     )
     context.close()
-    check("failed stroke picture: 6s in, the gold never rises alone (still hidden, the stroke held)",
+    check("failed stroke picture: 9s in, the gold never rises alone (still hidden, the stroke held)",
           failed["picture"] == 0 and failed["play"] == "paused" and float(failed["gold"]) == 0, failed)
 
-    # JavaScript off: the circle shows whole (its stroke is pure CSS). Visible is not whole: half
-    # drawn, the circle's ink already passes the visible floor (0.097 at 600ms). So each quarter of
-    # it must also hold as much ink as the still circle's. The sweep ends in the top half: the
-    # top-left quarter held 0.38 of its ink at 1.5s, the top-right 0.94 at 2.2s (the few degrees
-    # before the wet head come last); whole, both match exactly.
+    # JavaScript off: the circle shows whole (its stroke is pure CSS) once the stroke and the gold
+    # have finished (circle_shot waits 7s from load: the stroke's 0.6s and 4s, the gold's 1.2s,
+    # 5.8s from when the page is styled, before load). Visible is not whole: half drawn (2s after
+    # load), the circle's ink already passes the visible floor (0.076). So each quarter of it must
+    # also hold as much ink as the still circle's. The top-left quarter, drawn last, held 0.23 of
+    # its ink at 3.2s and 0.63 at 3.6s; the top-right holds the gold leaf, and held 0.94 of its ink
+    # until the gold rose (0.97 at 5s); whole, with the gold up, all four match exactly.
     shot = circle_shot(False)
     ink = sum(shot.histogram()[:120]) / (shot.width * shot.height)
     check("JavaScript off: the circle is visible", ink >= 0.04, round(ink, 4))

@@ -27,21 +27,38 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   The circle's stroke is preloaded at high priority; its gold leaf loads at once at low priority,
   with no preload, so the circle is asked for first (that only orders the requests; the hold below
   ties the two).
-- The circle paints itself, in CSS: a conic-gradient mask sweeps clockwise around the picture in
-  one breath (`--breath` 2.4s, `--ease`, after 0.3s), starting 26 degrees before the gold (where
-  the brush's wet head begins, so the blackest part is drawn first), its leading edge soft over 12
-  degrees, from 12 degrees back so nothing shows during the delay. The registered property `--sweep` has 360deg as its initial value, so once the sweep
-  ends the mask is whole and the circle never depends on the animation finishing. The gold comes up
-  after the stroke (0.3s plus one breath), and the hills spread from the middle as it closes
-  (`--bloom-delay` 1400). Reduced motion: no mask, no animation, everything shown at once. With
-  JavaScript off the circle is whole too.
+- The circle paints itself, in CSS: a conic-gradient mask sweeps clockwise around the picture,
+  starting 26 degrees before the gold (where the brush's wet head begins, so the blackest part is
+  drawn first), its leading edge soft over 12 degrees, from 12 degrees back so nothing shows during
+  the delay. The registered property `--sweep` has 360deg as its initial value, so once the sweep
+  ends the mask is whole and the circle never depends on the animation finishing. Reduced motion:
+  no mask, no animation, everything shown at once. With JavaScript off the circle is whole too.
+- The stroke's timing (October 8, 2026). Mo watched it and asked for it slower and easier to see:
+  "start a moment after the page appears, and take about 4 seconds, like someone really painting
+  it." It played in the kit's breath (`--breath` 2.4s after 0.3s, on the kit's `--ease`, which
+  draws most of the circle in its first 40%), so it flashed round. It now has its own timing,
+  custom properties on `.circle .enso` in `circle.module.css` (the kit's `--breath` and `--ease`
+  are untouched; the rest of the site uses them): `--stroke-delay` 0.6s, `--stroke-time` 4s,
+  `--stroke-ease` `cubic-bezier(0.35, 0, 0.45, 1)`, a brush's ease: a gentle press from the wet
+  head (half a second in, about 5 degrees are drawn), a steady pace round the dark of the stroke
+  (between 120 and 170 degrees a second from 1.5s to 3s after the page appears), and a slow lift
+  through the dry tail as it closes. `cubic-bezier(0.42, 0, 0.3, 1)` was tried first; it peaked at
+  about 215 degrees a second in the middle, so the dark of the stroke still rushed. Measured on
+  the dev server at 1440x900: bare paper for about a second (the picture is in at about 0.15s, then
+  the delay and the press), about 250 degrees round at 3s, closed at about 4.7s. The gold rises
+  after the stroke closes (`leaf-up` 1.2s, delayed by `--stroke-delay` plus `--stroke-time`, so up
+  at about 5.9s). The hills spread from the middle as the stroke nears its close: `--bloom-delay`
+  3000 (it was 1400). It counts from when the page wakes (the kit's `useBloom` reads it as a
+  number, so it cannot be worked out from the stroke's timing: change it with them); the hills
+  start at about 3.4s, when the stroke is in its dry tail (about 315 degrees), and are mostly
+  spread by the time it closes.
 - The circle waits for its picture (October 8, 2026). CSS started the sweep when the page was
   styled, not when the stroke's picture was in, so on a slow link the gold rose alone on bare paper
   (about 3s) and then the circle snapped in, or showed part drawn. Now, with script on
   (`@media (scripting: enabled)`), the stroke's and the gold's animations are paused before their
   delays (their backwards fill keeps the stroke masked and the gold at 0) until the stroke's
-  picture is in, then both are let go together, so the gold still follows the stroke by 0.3s plus
-  one breath. Two keys, neither touching a node React rendered before it hydrates: an inline script
+  picture is in, then both are let go together, so the gold still follows the stroke by the stroke's
+  delay and duration. Two keys, neither touching a node React rendered before it hydrates: an inline script
   after the page's HTML (`src/app/[locale]/about/page.tsx`) adopts a constructed sheet that sets
   `[data-enso] img` running; once hydrated the Opening sets `data-stroke="ready"` on the circle
   (Next's `onLoad` plus a check on mount). Neither has a timer, and a failed picture never lets
@@ -105,8 +122,9 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   h1 and the locked words, every painting multiplying onto the paper (with no stacking context
   between it and the page root), the rhythm and the sides, the circle appearing once, the name
   once, text, navigation and target sizes, no sideways scrolling, the Support and Ask sheets,
-  reduced motion complete and still, the circle drawing itself (stopped in the frame its clock
-  reaches 1.1s it must be part drawn, the last quarter under half its ink, then whole; with
+  reduced motion complete and still, the circle drawing itself slowly (its stroke 4s after a moment
+  of 0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun, at 2.9s it is
+  about three quarters round with the last quarter under half its ink, then whole; with
   JavaScript off every quarter as inked as the still circle, and every other painting as inked as
   it is still), the bloom, deep links at five sizes, and every language's words and line breaks
   (Japanese and Chinese heading phrases on phones and at 960px, the narrowest two-column words
@@ -119,7 +137,15 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   282/282, and `home_snapshot.py nav`, ok). October 8 (the circle waits for its picture): `motion`
   adds three slow-link checks (the stroke's picture held 3s: 2.5s in nothing shows; the stroke
   starts only once its picture is in; the gold rises a breath after it), red on the old code;
-  341 checks, all passing on the dev server (not yet run on the built site).
+  341 checks, all passing on the dev server (not yet run on the built site). October 8 (the
+  stroke's timing): `motion` now checks the stroke's 4s and its delay of 0.4 to 1s (it checked
+  2.4s), adds a gentle-start shot (stopped at 1.1s, the stroke has barely begun: its first quarter
+  under half its ink, the rest bare) and re-pins the three-quarter shot from 1.1s to 2.9s (the
+  third quarter now must be mostly drawn too); the gold's checks read the stroke's delay and
+  duration from the page (they asserted 2.4s); the slow-link log runs to 14s, the no-picture check
+  waits 9s (was 6s, so an unheld gold would be up by then) and the JavaScript-off shot 7s (was 4s:
+  the stroke and the gold must have finished). The four changed timing checks fail on the old
+  timing. 343 checks, all passing on the dev server (not yet run on the built site).
 
 ## Replaced: "The name, on a folded letter" (D, October 6, 2026)
 
