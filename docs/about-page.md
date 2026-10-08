@@ -22,7 +22,9 @@ is on branch `about-b`; its notes are in that branch's copy of this file, and it
   Under the opening's words a band of low California hills in grey wash feathers out to both edges,
   with a faint gold glow on one hilltop. On a phone the band runs 1.8 times the window's width,
   clipped at both edges (the strip shown keeps the gold hilltop), so it reads as a band, not a
-  55px smudge. From 1200px the seedling tucks in close under the hills, as in the mockup (the
+  55px smudge. On a phone the opening also fills the first screen (words centred, the hills on the
+  screen's foot), so the seedling below no longer blooms before the brush starts and the circle is
+  the first thing to move. From 1200px the seedling tucks in close under the hills, as in the mockup (the
   opening keeps no padding under them and the purpose part's top padding lies over their foot).
   The circle's stroke is preloaded at high priority; its gold leaf loads at once at low priority,
   with no preload, so the circle is asked for first (that only orders the requests; the hold below

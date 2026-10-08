@@ -61,10 +61,23 @@
    times the window's width instead (about 100px tall at 390px), clipped by the opening at both
    edges, so they spread past them; the strip shown keeps the gold hilltop (the picture's 0.30 to
    0.86 of its width). overflow-x: clip makes no stacking context (the hills still multiply onto
-   the paper) and no scrolling box. */
+   the paper) and no scrolling box.
+   The opening also fills the phone's first screen (its words centred, the hills on the screen's
+   foot), so nothing below it shows on load: with the seedling peeking under the hills, it bloomed
+   at about 0.8s, before the brush began, and the first thing to move was at the bottom, not the
+   circle. The purpose part's own box is unchanged, so /about#purpose lands as before. */
 @media (max-width: 599px) {
   .circle section.opening {
     overflow-x: clip;
+    display: flex;
+    flex-direction: column;
+    min-height: 100svh;
+    padding-bottom: 0;
+  }
+
+  .circle .openingWords {
+    flex: 1 0 auto;
+    align-content: center;
   }
 
   .circle .hills {
