@@ -711,6 +711,16 @@ def rhythm(browser):
                  return { dx: (b.left + b.width / 2 - a.left - a.width / 2) / a.width, dy: (b.top + b.height / 2 - a.top - a.height / 2) / a.height }; }"""
         )
         check(f"{tag} Dr. Liu's photo in the middle of its pool", liu is not None and abs(liu["dx"]) <= 0.15 and abs(liu["dy"]) <= 0.15, liu)
+        # The pool is a light, wide, low wash the photo rests on (it was a dark round blob about as
+        # tall as the photo): at least 1.8 times as wide as it is tall and 2.4 times the photo's
+        # width, at least as tall as the photo, at 0.6 to 0.75 of its ink.
+        wash = page.evaluate(
+            """() => { const p = document.querySelector('[data-pool]'), m = document.querySelector('[data-mount]');
+                 const a = p.getBoundingClientRect(), b = m.getBoundingClientRect();
+                 return { shape: +(a.width / a.height).toFixed(2), wide: +(a.width / b.width).toFixed(2), tall: +(a.height / b.height).toFixed(2),
+                          opacity: parseFloat(getComputedStyle(p).opacity) }; }"""
+        )
+        check(f"{tag} Dr. Liu's pool light, wide and low", wash["shape"] >= 1.8 and wash["wide"] >= 2.4 and wash["tall"] >= 1 and 0.6 <= wash["opacity"] <= 0.75, wash)
         # The stroke only: "enso" alone also matches its gold start, enso-dot-v1.webp.
         once_circle = page.evaluate("document.querySelectorAll('main img[src*=\"enso-v\"]').length")
         check(f"{tag} the circle appears once", once_circle == 1, once_circle)
@@ -759,13 +769,16 @@ def inks(page):
 
 
 def motion(browser):
-    # Reduced motion: complete and still.
+    # Reduced motion: complete and still. Every picture at its full strength: opacity 1, but the
+    # pool under Dr. Liu's photo, which lies at 0.7 by design (a light wash; circle.module.css), so
+    # it must be at least that.
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     scroll_through(page)
     still = page.evaluate(
         """() => { const e = document.querySelector('[data-enso] img'), d = document.querySelector('[data-enso] [data-dot]');
              return { blooms: [...document.querySelectorAll('[data-bloom]')].filter(x => x.dataset.bloom !== 'done').length,
-                      hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < 1).length,
+                      hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < (i.matches('[data-pool]') ? 0.7 : 1)).length,
+                      pool: getComputedStyle(document.querySelector('[data-pool]')).opacity,
                       draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage, dot: getComputedStyle(d).opacity,
                       running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
                         return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""

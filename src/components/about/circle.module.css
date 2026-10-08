@@ -125,9 +125,36 @@
   pointer-events: none;
 }
 
-/* [data-mount]: the mount's .mount class is another module's (it sets the mount's full width). */
+/* The pool lies light, wide and low under the photo, as in the mockup (it stood as a large, dark,
+   round blob about as tall as the photo): 0.7 of its ink, stretched 1.2 times along the page and
+   0.9 times down it (a wash has no shape to keep; scale works before the quarter turn, so its
+   second value is the page's width). Stretched, it reaches 10% past its figure at each side: into
+   the column gap and the page's margin on two columns, never under the words; on one column the
+   figure is narrowed so it stays inside the window. The opacity is the pool's own (on a wrapper it
+   would break the multiply), and only once it stops waiting, so its bloom still starts hidden;
+   with no script it never stops waiting, so it is set there too. */
+.circle .pool {
+  scale: 0.9 1.2;
+}
+
+.circle .pool:not([data-bloom="waiting"]) {
+  opacity: 0.7;
+}
+
+@media (scripting: none) {
+  .circle img.pool[data-bloom] {
+    opacity: 0.7;
+  }
+}
+
+/* The photo rests on the wash (40% of the figure, 44% before: the wash shows round it), its mat's
+   shadow soft and low, not a print pasted on. [data-mount]: the mount's .mount class is another
+   module's (it sets the mount's full width and the page's one shadow). */
 .circle .print > [data-mount] {
-  width: 44%;
+  width: 40%;
+  box-shadow:
+    0 18px 30px -20px rgb(12 11 10 / 0.3),
+    0 1px 3px rgb(12 11 10 / 0.07);
 }
 
 /* The promise dots carry the row as the mockup's do: at the shared size (about 80px, the ink about
@@ -157,12 +184,18 @@
   }
 }
 
-/* On a phone the pool reaches into the side margins (to 8px from the window's edges), so the
-   photo on it is not a thumbnail. */
-@media (max-width: 599px) {
+/* On one column the stretched pool keeps 8px from the window's edges: its figure is at most the
+   window less 16px, over 1.2 (at 390px the pool is 374px wide, the figure 312px). On a phone the
+   photo takes 48% of the figure, so it is not a thumbnail (150px at 390). */
+@media (max-width: 959px) {
   .circle .print {
-    --pool: calc(100% + 2 * var(--gutter) - 16px);
-    margin-inline: calc(8px - var(--gutter));
+    --pool: min(100%, 540px, calc((100% + 2 * var(--gutter) - 16px) / 1.2));
+  }
+}
+
+@media (max-width: 599px) {
+  .circle .print > [data-mount] {
+    width: 48%;
   }
 }
 
