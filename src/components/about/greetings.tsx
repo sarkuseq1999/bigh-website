@@ -7,9 +7,10 @@ import { drafts } from "./about-content";
 import styles from "./greetings.module.css";
 
 // "Answers in your language", shown: hello in the site's five languages. When it scrolls into
-// view it plays through them once (under five seconds, so it needs no pause button) and settles
-// on the visitor's own language. With reduced motion all five sit side by side. Screen readers
-// hear the language list instead.
+// view it plays through them once, one word at a time (each fades out before the next comes in;
+// five changes a second apart, the last word in at 4.75s: under five seconds, so it needs no
+// pause button) and settles on the visitor's own language. With reduced motion all five sit side
+// by side. Screen readers hear the language list instead.
 const LOCALE_TO_LANG: Record<string, string> = {
   en: "en",
   cns: "zh-Hans",

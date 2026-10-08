@@ -296,8 +296,9 @@
   line-height: 1.5;
 }
 
-/* Hello in five languages, centred under its promise. A block, so the line it sits on is the
-   promise's own width and the centred text centres it. */
+/* Hello in five languages, centred under its promise (on a phone, under its words at their left
+   edge). A block, so the line it sits on is the promise's own width and the centred text centres
+   it. */
 .aboutPage .greetings {
   display: block;
   margin-top: 14px;
@@ -327,9 +328,78 @@
   }
 }
 
+/* On a phone each promise is one calm row, a list and not four posters (stacked and centred, the
+   four filled two and a half screens): its picture at the left, 64px, its title and words beside
+   it, left-aligned, the rows evenly spaced. The picture spans the row's lines (the title, the
+   words, and under the fourth promise the greetings); the last line takes any height the picture
+   adds, so the words keep their own spacing. The part's label and heading start at the list's left
+   edge, as every other part's do on a phone. [data-promise] > img outranks each page's own picture
+   size (.album .vignette, .circle [data-promise] img). */
 @media (max-width: 599px) {
+  .aboutPage .promise {
+    text-align: left;
+  }
+
+  .aboutPage .promise h2.heading {
+    margin-inline: 0;
+  }
+
   .aboutPage .promises {
     grid-template-columns: minmax(0, 1fr);
+    row-gap: 32px;
+  }
+
+  .aboutPage .promises > [data-promise] {
+    display: grid;
+    grid-template-columns: var(--row-picture, 64px) minmax(0, 1fr);
+    grid-template-rows: auto auto 1fr;
+    column-gap: 20px;
+    align-items: start;
+  }
+
+  .aboutPage .promises > [data-promise] > img {
+    grid-row: 1 / span 3;
+    width: 100%;
+    margin: 0;
+    object-position: 50% 50%;
+  }
+
+  .aboutPage .promises > [data-promise] > :not(img) {
+    grid-column: 2;
+  }
+
+  /* A list's second line: a step under the title, so each row reads as one item. The greetings
+     match it (with reduced motion all five then keep to two lines beside a 72px picture). */
+  .aboutPage .promises p,
+  .aboutPage .promises .greetings {
+    font-size: 17px;
+  }
+
+  .aboutPage .promises p {
+    margin-top: 4px;
+  }
+
+  /* With reduced motion the five greetings start at the words' edge, one gap between them. */
+  @media (prefers-reduced-motion: reduce) {
+    .aboutPage .greetings > [aria-hidden="true"] > span {
+      margin-inline: 0 0.6em;
+    }
+  }
+}
+
+/* The page's last part leads into the footer's finale ("Stay sharp. Live fully."), which opens on
+   72 to 112px of its own paper: the closing's padding under it as well left 250px of bare paper at
+   1440px between the closing's painting and the finale. The closing keeps no padding below, and on
+   two columns its last margin also takes back up to 40px of the finale's paper (always less than
+   the finale's own 72px, so nothing of the footer comes near the closing's words). The footer is
+   the kit's, unchanged; section qualifies the rule over .aboutPage .part. */
+.aboutPage section[data-part="closing"] {
+  padding-bottom: 0;
+}
+
+@media (min-width: 960px) {
+  .aboutPage section[data-part="closing"] {
+    margin-bottom: calc(-1 * clamp(16px, 2.4vw, 40px));
   }
 }
 
