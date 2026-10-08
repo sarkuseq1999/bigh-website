@@ -38,7 +38,9 @@ word at a time, never two visible in the same frame, each wholly in once, ending
 own language, in under five seconds.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
-in the first screen.
+in the first screen; the opening a first screen (70-85% of the window tall, the book large and, on
+two columns, centred on the words), the purpose part's picture starting under it in the first
+screen.
 
 Pictures: scripts/qa/out/about-album/<size>-NN.png.
 
@@ -835,6 +837,28 @@ def first_screen(browser):
                         picture: document.querySelector('[data-part="opening"] img').getBoundingClientRect().top, win: innerHeight })"""
         )
         check(f"{tag} the title and the top of the opening's picture in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
+        # The opening is a first screen (it ended at 400px of 900, the book small and high, half the
+        # screen the next part): 70 to 85% of the window tall (or its 880px cap), the book as wide
+        # as 0.44 of the window on two columns (0.9 on a phone), the book and the words centred on
+        # each other on two columns, and the purpose part's picture starting in the first screen,
+        # after the opening.
+        op = page.evaluate(
+            """() => { const o = document.querySelector('[data-part="opening"]').getBoundingClientRect();
+                 const b = document.querySelector('[data-part="opening"] [data-picture] img').getBoundingClientRect();
+                 const w = document.querySelector('[data-part="opening"] [data-words]').getBoundingClientRect();
+                 const p = document.querySelector('#purpose [data-picture]').getBoundingClientRect();
+                 return { height: Math.round(o.height), book: Math.round(b.width), centres: Math.round((b.top + b.bottom - w.top - w.bottom) / 2),
+                          purpose: Math.round(p.top), end: Math.round(o.bottom), win: innerHeight, width: innerWidth }; }"""
+        )
+        two = width >= TWO_COLUMNS
+        check(
+            f"{tag} the opening is a first screen (70-85% of the window, the book large{', centred on the words' if two else ''}, the purpose next)",
+            (0.7 <= op["height"] / op["win"] <= 0.85 or op["height"] == 880)
+            and op["book"] >= (0.44 if two else 0.9) * op["width"]
+            and (not two or abs(op["centres"]) <= 4)
+            and op["end"] <= op["purpose"] < op["win"],
+            op,
+        )
         context.close()
 
 

@@ -7,15 +7,50 @@
    width is a height times its shape (width over height, from about-art.ts), so a wide painting and
    a tall one stand about as tall; the shared rule caps every width at its column (--picture is read
    in .aboutPage .painting's width, where a percentage is of the column). --h is the plain height:
-   330px, or 0.6 of a narrow column. The book fills its column up to 600px (it is wide: 2.41 to 1),
-   the seedling and the sequoia stand a little taller than the desk and the lamp, as in the mockup.
-   [data-picture] marks the painting's figure (its .painting class is another module's). */
+   330px, or 0.6 of a narrow column. The book fills its column up to 760px (it is wide: 2.41 to 1;
+   the opening, below), the seedling and the sequoia stand a little taller than the desk and the
+   lamp, as in the mockup. [data-picture] marks the painting's figure (its .painting class is
+   another module's). */
 .album {
   --h: min(330px, 60%);
 }
 
 .album [data-part="opening"] [data-picture] {
-  --picture: 600px;
+  --picture: 760px;
+}
+
+/* The opening is a first screen, not the start of a list (it ended at 400px of a 1440x900 window,
+   the book small and high under the header, half the screen already the purpose): 80% of the
+   window's height (at most 880px), its book and its words centred in the space under the floating
+   header, so the purpose part starts near the fold. On two columns the words take the title's
+   one line and the book the rest (643px at 1440px, 566px before), and the book's caption hangs
+   under it without counting in its height, so the book itself, not book and caption, is centred
+   against the words. The plain h1 stays the one large name (no painted letters).
+   section[data-part] outranks the shared .aboutPage .opening padding; > [data-side] the shared
+   two-column grid (.aboutPage .spread, another module's class). */
+.album section[data-part="opening"] {
+  display: grid;
+  align-content: center;
+  min-height: min(80vh, 880px);
+  min-height: min(80svh, 880px);
+  padding: 88px 0 clamp(16px, 2vw, 32px);
+}
+
+@media (min-width: 960px) {
+  .album [data-part="opening"] > [data-side] {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(32px, 3vw, 56px);
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    position: relative;
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    position: absolute;
+    top: 100%;
+    right: 0;
+  }
 }
 
 .album [data-part="purpose"] [data-picture] {
@@ -86,13 +121,43 @@
 }
 
 /* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
-   or 0.7 of the column, so no painting fills a phone's screen; the book at most 420px wide. */
+   or 0.7 of the column, so no painting fills a phone's screen. The opening: the book over the
+   words, as wide as a tablet's column (640px; 420px and centred before, its edges on neither side
+   of the words), with calm room between them; the opening 76% of the window tall. */
 @media (max-width: 959px) {
   .album {
     --h: min(300px, 70%);
   }
 
   .album [data-part="opening"] [data-picture] {
-    --picture: 420px;
+    --picture: 640px;
+  }
+
+  .album section[data-part="opening"] {
+    min-height: min(76vh, 760px);
+    min-height: min(76svh, 760px);
+  }
+
+  .album [data-part="opening"] > [data-side] {
+    row-gap: clamp(32px, 6vw, 48px);
+  }
+}
+
+/* On a phone the book reaches into the side margins (to 12px from the window's edges: 366px wide
+   at 390, 330px before), its caption kept at the words' right edge. The promises are rows there
+   (about-page.module.css); the vignettes, light washes with paper round them, take the row's
+   largest picture, 72px (the dots' 64px left the palms a faint smudge). */
+@media (max-width: 599px) {
+  .album {
+    --row-picture: 72px;
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    width: calc(100% + 2 * var(--gutter) - 24px);
+    margin-inline: calc(12px - var(--gutter));
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    margin-right: calc(var(--gutter) - 12px);
   }
 }
