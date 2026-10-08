@@ -1,0 +1,204 @@
+/* About B, "The album" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-b.png): an
+   old painting album, each part a spread, the same rhythm throughout. Shared rules live in
+   about-page.module.css; these are the album's own, scoped under .album (the page root carries both
+   classes). */
+
+/* The pictures read about the same size (Mo, October 7: the parts were uneven). Each painting's
+   width is a height times its shape (width over height, from about-art.ts), so a wide painting and
+   a tall one stand about as tall; the shared rule caps every width at its column (--picture is read
+   in .aboutPage .painting's width, where a percentage is of the column). --h is the plain height:
+   330px, or 0.6 of a narrow column. The book fills its column up to 760px (it is wide: 2.41 to 1;
+   the opening, below), the seedling and the sequoia stand a little taller than the desk and the
+   lamp, as in the mockup. [data-picture] marks the painting's figure (its .painting class is
+   another module's). */
+.album {
+  --h: min(330px, 60%);
+}
+
+.album [data-part="opening"] [data-picture] {
+  --picture: 760px;
+}
+
+/* The opening is a first screen, not the start of a list (it ended at 400px of a 1440x900 window,
+   the book small and high under the header, half the screen already the purpose). It ends so that
+   the purpose's painting peeks in at the foot of the first screen by --peek (the seedling's top
+   leaves, about 110px of ink at 1440x900 and 1536x864), an invitation to scroll, with the
+   purpose's heading still under the fold (a deeper peek cut it in half). Its book and words are
+   centred between the floating header and that painting: the opening's top padding is the
+   header's 88px and the same half-gap that stands over the purpose's painting, and it has none
+   below (centred under the header alone, the book sat high, 225px of bare paper under it at
+   1440x900). At most 900px tall (a tall window shows more of the purpose). On two columns the
+   words take the title's one line and the book the rest (643px at 1440px, 566px before), and the
+   book's caption hangs under it without counting in its height, so the book itself, not book and
+   caption, is centred against the words. The plain h1 stays the one large name (no painted
+   letters). section[data-part] outranks the shared .aboutPage .opening padding; > [data-side] the
+   shared two-column grid (.aboutPage .spread, another module's class). */
+.album section[data-part="opening"] {
+  --peek: 124px;
+  display: grid;
+  align-content: center;
+  min-height: min(calc(100vh - var(--part-half) - var(--peek)), 900px);
+  min-height: min(calc(100svh - var(--part-half) - var(--peek)), 900px);
+  padding: calc(88px + var(--part-half)) 0 0;
+}
+
+@media (min-width: 960px) {
+  .album [data-part="opening"] > [data-side] {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: clamp(32px, 3vw, 56px);
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    position: relative;
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    position: absolute;
+    top: 100%;
+    right: 0;
+  }
+}
+
+/* On the narrowest two columns (960 to 1199px) the purpose's words start close under the seedling's
+   top (its heading 78px under it at 1024px, 125px at 1440px): a shallower peek keeps the heading
+   under the fold. There the book was small (470px at 1024x768, 210px of paper round it): the gap
+   narrows and the book reaches half the page's margin into it, its caption kept at the words'
+   right edge (540px at 1024px). */
+@media (min-width: 960px) and (max-width: 1199px) {
+  .album section[data-part="opening"] {
+    --peek: 72px;
+  }
+
+  .album [data-part="opening"] > [data-side] {
+    column-gap: 24px;
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    justify-self: start;
+    width: calc(100% + var(--gutter) / 2);
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    right: calc(var(--gutter) / 2);
+  }
+}
+
+.album [data-part="purpose"] [data-picture] {
+  --picture: calc(var(--h) * 1.3 * 0.827);
+}
+
+.album [data-part="roots"] [data-picture] {
+  --picture: calc(var(--h) * 1.739);
+}
+
+.album [data-part="experience"] [data-picture] {
+  --picture: calc(var(--h) * 1.35 * 0.998);
+}
+
+.album [data-part="closing"] [data-picture] {
+  --picture: calc(var(--h) * 0.95 * 1.515);
+}
+
+/* Dr. Liu's photo beside his paragraph, inside the words (as in the mockup). */
+.album .rootsBody {
+  display: grid;
+  grid-template-columns: clamp(120px, 11vw, 168px) minmax(0, 1fr);
+  gap: clamp(18px, 2vw, 28px);
+  align-items: start;
+  margin-top: clamp(18px, 1.8vw, 28px);
+}
+
+.album .rootsBody p {
+  margin-top: 0;
+}
+
+/* The promise pictures: vignettes over each promise (about 200px on a desktop, as in the mockup),
+   one caption under the row. One box for all four, as tall as the tallest (the bee, 480 x 490),
+   each painting standing on its foot: their own heights (366 to 490) set the four headings of the
+   row at four different levels. */
+.album .vignette {
+  display: block;
+  width: clamp(120px, 14vw, 208px);
+  height: auto;
+  aspect-ratio: 480 / 490;
+  object-fit: contain;
+  object-position: 50% 100%;
+  margin: 0 auto 16px;
+}
+
+/* p.rowCaption: the kit's .look .caption (margin 0) has the same weight as a plain .album
+   .rowCaption, so the element keeps this rule ahead in any stylesheet order. */
+.album p.rowCaption {
+  margin-top: 18px;
+  text-align: right;
+}
+
+/* Dr. Liu's photo stands over his paragraph where the words column is too narrow for both side by
+   side: on a phone (under 600px: a column of eight short lines, the pill folded in two) and on two
+   columns under 1200px. There, beside the photo, the paragraph was too narrow for the pill, which
+   cannot wrap: "Meet our scientists" ran 17px past the column at 960px, and the Vietnamese "Gặp
+   các nhà khoa học" 22px at 1080px and 5px at 1140px. From 1200px (where the figures stand in a
+   row too) and on a tablet's one column (600 to 959px: up to 640px wide, 508px at 600) the photo
+   stands beside the paragraph, as in the mockup. */
+@media (max-width: 599px), (min-width: 960px) and (max-width: 1199px) {
+  .album .rootsBody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .album .rootsBody > [data-mount] {
+    width: 140px;
+  }
+}
+
+/* One column (under 960px, picture first): the same heights by shape, from a plain height of 300px
+   or 0.7 of the column, so no painting fills a phone's screen. The opening: the book over the
+   words, as wide as a tablet's column (640px; 420px and centred before, its edges on neither side
+   of the words), with calm room between them. On a tablet the opening ends where the purpose's
+   painting peeks in by --peek, as on a desktop (the purpose's words come after its painting there,
+   so nothing of them shows); on a phone it is 76% of the window tall. */
+@media (max-width: 959px) {
+  .album {
+    --h: min(300px, 70%);
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    --picture: 640px;
+  }
+
+  .album [data-part="opening"] > [data-side] {
+    row-gap: clamp(32px, 6vw, 48px);
+  }
+}
+
+/* On a phone the book reaches into the side margins (to 12px from the window's edges: 366px wide
+   at 390, 330px before), its caption kept at the words' right edge. The promises are rows there
+   (about-page.module.css). The vignettes are light washes with paper round them: at 72px the palms
+   and the moon read faint and small, so they take 88px, each in a box of its own shape (not the
+   row's shared square), its top on the top of the title's first line. li and img outrank the
+   shared row picture rule (.aboutPage .promises > [data-promise] > img). */
+@media (max-width: 599px) {
+  .album {
+    --row-picture: 88px;
+  }
+
+  .album section[data-part="opening"] {
+    min-height: min(76vh, 760px);
+    min-height: min(76svh, 760px);
+  }
+
+  .album li[data-promise] > img.vignette {
+    aspect-ratio: auto;
+    height: auto;
+    margin-top: 2px;
+    object-position: 50% 0;
+  }
+
+  .album [data-part="opening"] [data-picture] {
+    width: calc(100% + 2 * var(--gutter) - 24px);
+    margin-inline: calc(12px - var(--gutter));
+  }
+
+  .album [data-part="opening"] [data-picture] figcaption {
+    margin-right: calc(var(--gutter) - 12px);
+  }
+}
