@@ -33,13 +33,16 @@ cns also 960x900): no word crosses the side margins; no words over a painting; i
 bad line break; jp and cns heading phrases whole on a phone and at 960 (the narrowest two-column
 words column, 377px); Vietnamese at 390: the closing pills balance their lines.
 nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
+greetings (1440x900, 390x844, and /kr/about at 390x844): with motion the five greetings play one
+word at a time, never two visible in the same frame, each wholly in once, ending on the visitor's
+own language, in under five seconds.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
 in the first screen.
 
 Pictures: scripts/qa/out/about-album/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,boundary,first_screen]
 """
 
 import io
@@ -157,11 +160,77 @@ def scroll_through(page, step=450, pause=250):
     page.wait_for_timeout(400)
 
 
-# Hello in five languages (the fourth promise): the visible words' box, centred on its promise.
+# Hello in five languages (the fourth promise), read still (reduced motion: all five shown): the
+# words' box against its promise (off: its centre's offset from the promise's centre; start: its
+# left edge's offset from the promise's title), its lines, and whether it stands under the
+# promise's words.
 GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')[3];
   const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')].map(w => w.getBoundingClientRect()).filter(r => r.width > 0);
   const l = Math.min(...words.map(r => r.left)), r = Math.max(...words.map(r => r.right)), b = li.getBoundingClientRect();
-  return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), lines: new Set(words.map(r => Math.round(r.top))).size }; }"""
+  const h = li.querySelector('h3').getBoundingClientRect(), p = li.querySelector('p').getBoundingClientRect();
+  return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), start: Math.round(l - h.left),
+           lines: new Set(words.map(r => Math.round(r.top))).size, under: Math.min(...words.map(r => r.top)) >= p.bottom - 1 }; }"""
+
+# The greetings play (motion): every animation frame for 7s from scrolling the fourth promise into
+# view, the opacity of each of the five words. most: the most words visible (over 0.02) in any one
+# frame, and that frame; full: the words that were wholly in (0.99) at some frame; final: the words
+# in at the end; began and settled: the first and last frames in which anything changed.
+GREETINGS_PLAY_JS = """() => new Promise((resolve) => {
+  const li = document.querySelectorAll('[data-promise]')[3];
+  const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')];
+  const t0 = performance.now(), full = new Set();
+  let most = 0, at = null, prev = null, began = null, settled = null, ops = [];
+  const tick = () => {
+    const t = Math.round(performance.now() - t0);
+    ops = words.map(w => parseFloat(getComputedStyle(w).opacity));
+    const shown = ops.filter(o => o > 0.02).length;
+    if (shown > most) { most = shown; at = { t, ops: ops.map(o => +o.toFixed(2)) }; }
+    ops.forEach((o, i) => { if (o >= 0.99) full.add(words[i].lang); });
+    const key = ops.map(o => o.toFixed(3)).join(',');
+    if (prev !== null && key !== prev) { if (began === null) began = t; settled = t; }
+    prev = key;
+    if (t < 7000) requestAnimationFrame(tick);
+    else resolve({ most, at, full: [...full], final: words.filter((w, i) => ops[i] >= 0.99).map(w => w.lang), began, settled });
+  };
+  window.scrollTo(0, li.getBoundingClientRect().top + scrollY - innerHeight / 2);
+  requestAnimationFrame(tick);
+})"""
+
+# On a phone each promise is a row: its picture at the left, its title and words beside it,
+# left-aligned. For each promise: the picture's width, its right edge against the title's left
+# edge, its top against the title's top, the title's and the words' left edges and alignment; the
+# gaps between rows; and the part's heading's left edge against the list's.
+PROMISE_ROWS_JS = """() => {
+  const items = [...document.querySelectorAll('[data-promise]')];
+  const rows = items.map(li => { const i = li.querySelector('img').getBoundingClientRect(), h = li.querySelector('h3'), p = li.querySelector('p');
+    const hb = h.getBoundingClientRect(), pb = p.getBoundingClientRect();
+    return { pic: Math.round(i.width), beside: i.right <= hb.left + 1, top: Math.round(i.top - hb.top),
+             aligned: Math.abs(hb.left - pb.left) <= 1, align: getComputedStyle(h).textAlign + '/' + getComputedStyle(p).textAlign }; });
+  const gaps = items.slice(1).map((li, k) => Math.round(li.getBoundingClientRect().top - items[k].getBoundingClientRect().bottom));
+  const head = document.getElementById('promise-title').getBoundingClientRect();
+  return { rows, gaps, head: Math.round(head.left - items[0].getBoundingClientRect().left) };
+}"""
+
+
+def greetings(browser):
+    """The greetings under the fourth promise play once with motion, one word at a time: in no frame
+    are two words visible at once (the crossfade set "Xin chào" over "안녕하세요"), every word is
+    wholly in at some point, the play ends on the visitor's own language and lasts under five
+    seconds (so it needs no pause button). At a desktop and a phone size, in English and Korean."""
+    for width, height, path, own in [(1440, 900, "/about", "en"), (390, 844, "/about", "en"), (390, 844, "/kr/about", "ko")]:
+        tag = f"{path} {width}x{height}"
+        context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
+        page = context.new_page()
+        page.goto(f"{BASE}{path}", wait_until="networkidle", timeout=120000)
+        page.evaluate("document.fonts.ready.then(() => true)")
+        page.wait_for_timeout(600)
+        play = page.evaluate(GREETINGS_PLAY_JS)
+        check(f"{tag} greetings: never two words visible at once", play["most"] == 1, play)
+        check(f"{tag} greetings: all five words shown, each wholly in", len(play["full"]) == 5, play["full"])
+        check(f"{tag} greetings: it ends on the visitor's own language", play["final"] == [own], play["final"])
+        span = None if play["began"] is None else play["settled"] - play["began"]
+        check(f"{tag} greetings: the play lasts under five seconds ({span}ms)", span is not None and 3000 <= span < 5000, play)
+        context.close()
 
 
 # Multiply: a painting blends with the page root's paper only if no element between it and the root
@@ -617,6 +686,26 @@ def rhythm(browser):
         rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
         want = 1 if width >= 1200 else 2 if width >= 600 else 4
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
+        hello = page.evaluate(GREETINGS_JS)
+        if width >= 600:
+            check(f"{tag} Hello in five languages centred under the fourth promise", abs(hello["off"]) <= 2 and hello["under"] and hello["lines"] <= 2, hello)
+        else:
+            # A phone's promises are a list of rows (they were centred posters, two and a half
+            # screens of them): this replaces nothing; the rows themselves are new.
+            check(f"{tag} Hello in five languages under the fourth promise's words, at their left edge", abs(hello["start"]) <= 1 and hello["under"] and hello["lines"] <= 2, hello)
+            lst = page.evaluate(PROMISE_ROWS_JS)
+            check(
+                f"{tag} each promise a row: its picture (56-72px) at the left, beside its title, at the row's top",
+                all(56 <= r["pic"] <= 72 and r["beside"] and abs(r["top"]) <= 4 for r in lst["rows"]),
+                lst["rows"],
+            )
+            check(
+                f"{tag} the promises' titles and words left-aligned, one edge",
+                all(r["aligned"] and r["align"] in ("left/left", "start/start") for r in lst["rows"]),
+                lst["rows"],
+            )
+            check(f"{tag} the promise rows evenly spaced", len(lst["gaps"]) == 3 and max(lst["gaps"]) - min(lst["gaps"]) <= 1, lst["gaps"])
+            check(f"{tag} the promise heading at the list's left edge", abs(lst["head"]) <= 1, lst["head"])
         mount = page.evaluate(
             """() => { const m = document.querySelector('#roots [data-mount]'), w = document.querySelector('#roots [data-words]');
                  const t = document.querySelector('#roots [data-words] p:not([data-label])');
@@ -842,7 +931,7 @@ def languages_layout(browser):
 
 
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, boundary, first_screen]
+GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:
