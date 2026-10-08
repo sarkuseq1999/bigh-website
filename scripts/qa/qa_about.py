@@ -2,7 +2,8 @@
 spec docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7").
 
 desktop_and_phone (1440x900, 390x844): 200; no console errors or warnings (but PREFETCH_CSS); no
-failed requests; one h1, English "Be in Good Health." with lang="en"; every locked line; no canvas,
+failed requests; one h1, English "Be in Good Health." with lang="en"; every locked line in the
+page's main (the footer's "About BiGH" does not stand in for the opening's label); no canvas,
 no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
 and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
 15px+, navigation 18px+, targets 48px+; the opening's painting loads eagerly; the Support and Ask
@@ -17,9 +18,10 @@ from 1200px, two by two from 600px, one column below; Dr. Liu's photo in his wor
 paragraph on a tablet's column and from 1200px, above it elsewhere. In Vietnamese at 1080, 1100,
 1140, 1200 and 1210px (where the longest pill label, "Gặp các nhà khoa học", once ran past it, and
 the tightest widths beside the photo) nothing in a words column reaches past its right edge.
-motion: reduced motion complete and still; with motion every painting is server-marked waiting (none
-paints whole, then vanishes), the opening's painting blooms on arrival and a lower painting waits
-out of view, then blooms; a waiting painting is hidden; with JavaScript off every painting shows.
+motion: reduced motion complete and still; every painting is server-marked waiting in the HTML the
+server sends (none paints whole, then vanishes); with motion the opening's painting blooms on
+arrival and a lower painting waits out of view, hidden, then blooms; with JavaScript off every
+painting, the four promise pictures included, shows as inked as it does still.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -27,9 +29,9 @@ deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #ro
 languages (kr, jp, cns, vn): 200, no console errors, the h1 English, no English source sentence
 left, the paintings' descriptions translated.
 languages_layout (every language at 1440x900, 1024x768, 768x1024, 600x900, 390x844, 360x780; jp and
-cns also 900x900): no word crosses the side margins; no words over a painting; in kr, jp, cns, vn no
-bad line break; jp and cns heading phrases whole on a phone and at 900; Vietnamese at 390: the
-closing pills balance their lines.
+cns also 960x900): no word crosses the side margins; no words over a painting; in kr, jp, cns, vn no
+bad line break; jp and cns heading phrases whole on a phone and at 960 (the narrowest two-column
+words column, 377px); Vietnamese at 390: the closing pills balance their lines.
 nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's picture
@@ -56,8 +58,10 @@ OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-alb
 os.makedirs(OUT, exist_ok=True)
 results = []
 
-# The locked words (src/components/about/about-content.ts), as they appear on the page.
+# The locked words (src/components/about/about-content.ts), as they appear on the page. They are
+# read from the page's main: the footer also says "About BiGH".
 LOCKED = [
+    "About BiGH",
     "What our name stands for.",
     "What our work is for.",
     "Our purpose",
@@ -302,8 +306,8 @@ MARGINS_JS = r"""() => {
 }"""
 
 
-# No heading phrase is broken across lines (Japanese and Chinese, on a phone and at 900px, where the
-# words column is narrowest). What a heading keeps whole is a phrase: in Chinese the words between
+# No heading phrase is broken across lines (Japanese and Chinese, on a phone and at 960px, where the
+# words column is narrowest: two columns start there, 377px of words; at 900px one column is 640px). What a heading keeps whole is a phrase: in Chinese the words between
 # two punctuation marks (word-break: keep-all; the translations put a comma where a line may end),
 # in Japanese the browser's own phrases (word-break: auto-phrase), which it breaks inside only when
 # a phrase is wider than the line. The page's rules size the headings so that a phrase of up to
@@ -519,7 +523,7 @@ def desktop_and_phone(browser):
         context, page, response, errors, failed = open_page(browser, width, height)
         check(f"{tag} answers 200", response.status == 200, response.status)
         check(f"{tag} the {DESIGN} page", page.evaluate(f"!!document.querySelector('[data-about=\"{DESIGN}\"]')"))
-        text = page.evaluate("document.body.innerText")
+        text = page.evaluate("document.querySelector('main').innerText")
         missing = [line for line in LOCKED if line not in text]
         check(f"{tag} every locked line", not missing, missing)
         h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => [h.textContent.trim(), h.lang])")
@@ -640,6 +644,24 @@ def rhythm(browser):
         context.close()
 
 
+# The page's paintings: the five spreads' and the four promise pictures (not Dr. Liu's photo).
+PAINTINGS = "[data-picture] img, [data-promise] img"
+
+
+def inks(page):
+    """Each painting's ink, in page order: the share of its pixels darker than 180."""
+    out = []
+    pictures = page.locator(PAINTINGS)
+    for i in range(pictures.count()):
+        picture = pictures.nth(i)
+        picture.scroll_into_view_if_needed()
+        page.wait_for_timeout(400)
+        shot = Image.open(io.BytesIO(picture.screenshot())).convert("L")
+        name = (picture.get_attribute("src") or "").split("%2F")[-1].split(".webp")[0]
+        out.append((name, round(sum(shot.histogram()[:180]) / (shot.width * shot.height), 4)))
+    return out
+
+
 def motion(browser):
     # Reduced motion: complete and still.
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
@@ -655,12 +677,20 @@ def motion(browser):
 
     # With motion: the opening's painting blooms on arrival; a lower painting waits, then blooms.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
+    # the server sends, before any script could mark one (read from the page, even at
+    # DOMContentLoaded, the script may already have marked a painting below the fold itself): in
+    # the page's main, the book, the seedling, the desk, the sequoia, the four promise pictures and
+    # the lamp (the shared closing crane after main is the kit's own).
+    html = context.request.get(f"{BASE}/about").text()
+    main = html[html.index("<main"):html.index("</main>")]
+    marks = re.findall(r'<img[^>]*?\sdata-bloom="([^"]*)"', main)
+    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
+    opening = re.search(r'<img[^>]*?\sdata-bloom="([^"]*)"', main[main.index('data-part="opening"'):])
+    first = opening.group(1) if opening else None
+    check("motion: the opening's painting starts waiting (server-marked)", first == "waiting", first)
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    marks = page.evaluate("[...document.querySelectorAll('[data-picture] img, [data-promise] img')].map(i => i.dataset.bloom ?? null)")
-    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
-    first = page.evaluate("document.querySelector('[data-part=\"opening\"] img').dataset.bloom ?? null")
-    check("motion: the opening's painting starts waiting (server-marked)", first == "waiting", first)
     check("motion: the opening's painting blooms", wait_until(page, "document.querySelector('[data-part=\"opening\"] img').dataset.bloom === 'done'"))
     low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
     state = page.evaluate(f"[{low}.dataset.bloom ?? null, getComputedStyle({low}).opacity]")
@@ -669,16 +699,27 @@ def motion(browser):
     check("motion: then it blooms", wait_until(page, f"{low}.dataset.bloom === 'done'"))
     context.close()
 
-    # JavaScript off: every painting shows (nothing waits for a bloom that will not come).
+    # JavaScript off: every painting shows (nothing waits for a bloom that will not come), the four
+    # promise pictures included. Each one's ink (the share of its pixels darker than 180) is read
+    # on the page with script off and on the still page (reduced motion, read to the end, every
+    # bloom done); with script off each holds at least 0.9 of its still ink. A painting left
+    # hidden holds none, one stuck in its blot only part of it.
+    context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
+    scroll_through(page)
+    still = inks(page)
+    context.close()
     context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
     page.wait_for_timeout(1500)
-    box = page.locator('[data-part="opening"] img').bounding_box()
-    shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-    ink = sum(shot.histogram()[:180]) / (shot.width * shot.height)
-    check("JavaScript off: the opening's painting is visible", ink >= 0.02, round(ink, 4))
+    off = inks(page)
     context.close()
+    faint = [(name, ink, s) for (name, ink), (_, s) in zip(off, still) if ink < 0.9 * s]
+    check(
+        "JavaScript off: every painting shows (each as inked as it is still)",
+        len(off) == 9 and len(still) == 9 and all(s >= 0.01 for _, s in still) and not faint,
+        {"faint": faint, "off": off, "still": still},
+    )
 
 
 def boundary(browser):
@@ -763,11 +804,12 @@ def languages(browser):
 def languages_layout(browser):
     """Each language at desktop, tablet and phone sizes: no word crosses the side margins, no
     words over a painting, and in Korean, Japanese, Chinese and Vietnamese no bad line break.
-    Japanese and Chinese also at 900x900, and on a phone and at 900px no heading phrase is split."""
+    Japanese and Chinese also at 960x900 (two columns start at 960px, the narrowest words column),
+    and on a phone and at 960px no heading phrase is split."""
     for lang in ["en", "kr", "jp", "cns", "vn"]:
         sizes = [(1440, 900), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
         if lang in ("jp", "cns"):
-            sizes.append((900, 900))
+            sizes.append((960, 900))
         for width, height in sizes:
             tag = f"{lang} {width}x{height}"
             path = "/about" if lang == "en" else f"/{lang}/about"
@@ -779,7 +821,7 @@ def languages_layout(browser):
             if lang != "en":
                 bad = page.evaluate(BREAKS_JS, lang)
                 check(f"{tag} no bad line break", not bad, bad[:3])
-            if lang in ("jp", "cns") and width in (390, 360, 900):
+            if lang in ("jp", "cns") and width in (390, 360, 960):
                 phrases = page.evaluate(PHRASES_JS, lang)
                 check(
                     f"{tag} no heading phrase is broken across lines ({phrases['examined']} read)",
