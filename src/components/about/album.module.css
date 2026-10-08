@@ -20,20 +20,35 @@
 }
 
 /* The opening is a first screen, not the start of a list (it ended at 400px of a 1440x900 window,
-   the book small and high under the header, half the screen already the purpose): 80% of the
-   window's height (at most 880px), its book and its words centred in the space under the floating
-   header, so the purpose part starts near the fold. On two columns the words take the title's
-   one line and the book the rest (643px at 1440px, 566px before), and the book's caption hangs
-   under it without counting in its height, so the book itself, not book and caption, is centred
-   against the words. The plain h1 stays the one large name (no painted letters).
-   section[data-part] outranks the shared .aboutPage .opening padding; > [data-side] the shared
-   two-column grid (.aboutPage .spread, another module's class). */
+   the book small and high under the header, half the screen already the purpose). It ends so that
+   the purpose's painting peeks in at the foot of the first screen by --peek (the seedling's top
+   leaves, about 110px of ink at 1440x900 and 1536x864), an invitation to scroll, with the
+   purpose's heading still under the fold (a deeper peek cut it in half). Its book and words are
+   centred between the floating header and that painting: the opening's top padding is the
+   header's 88px and the same half-gap that stands over the purpose's painting, and it has none
+   below (centred under the header alone, the book sat high, 225px of bare paper under it at
+   1440x900). At most 900px tall (a tall window shows more of the purpose). On two columns the
+   words take the title's one line and the book the rest (643px at 1440px, 566px before), and the
+   book's caption hangs under it without counting in its height, so the book itself, not book and
+   caption, is centred against the words. The plain h1 stays the one large name (no painted
+   letters). section[data-part] outranks the shared .aboutPage .opening padding; > [data-side] the
+   shared two-column grid (.aboutPage .spread, another module's class). */
 .album section[data-part="opening"] {
+  --peek: 124px;
   display: grid;
   align-content: center;
-  min-height: min(80vh, 880px);
-  min-height: min(80svh, 880px);
-  padding: 88px 0 clamp(16px, 2vw, 32px);
+  min-height: min(calc(100vh - var(--part-half) - var(--peek)), 900px);
+  min-height: min(calc(100svh - var(--part-half) - var(--peek)), 900px);
+  padding: calc(88px + var(--part-half)) 0 0;
+}
+
+/* On the narrowest two columns the purpose's words start close under the seedling's top (its
+   heading 78px under it at 1024px, 125px at 1440px): a shallower peek keeps the heading under the
+   fold. */
+@media (min-width: 960px) and (max-width: 1199px) {
+  .album section[data-part="opening"] {
+    --peek: 72px;
+  }
 }
 
 @media (min-width: 960px) {
@@ -145,11 +160,20 @@
 
 /* On a phone the book reaches into the side margins (to 12px from the window's edges: 366px wide
    at 390, 330px before), its caption kept at the words' right edge. The promises are rows there
-   (about-page.module.css); the vignettes, light washes with paper round them, take the row's
-   largest picture, 72px (the dots' 64px left the palms a faint smudge). */
+   (about-page.module.css). The vignettes are light washes with paper round them: at 72px the palms
+   and the moon read faint and small, so they take 88px, each in a box of its own shape (not the
+   row's shared square), its top on the top of the title's first line. li and img outrank the
+   shared row picture rule (.aboutPage .promises > [data-promise] > img). */
 @media (max-width: 599px) {
   .album {
-    --row-picture: 72px;
+    --row-picture: 88px;
+  }
+
+  .album li[data-promise] > img.vignette {
+    aspect-ratio: auto;
+    height: auto;
+    margin-top: 2px;
+    object-position: 50% 0;
   }
 
   .album [data-part="opening"] [data-picture] {
