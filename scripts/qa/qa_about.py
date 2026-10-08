@@ -752,9 +752,13 @@ def rhythm(browser):
             """() => { const p = document.querySelector('[data-pool]'), m = document.querySelector('[data-mount]');
                  const a = p.getBoundingClientRect(), b = m.getBoundingClientRect();
                  return { shape: +(a.width / a.height).toFixed(2), wide: +(a.width / b.width).toFixed(2), tall: +(a.height / b.height).toFixed(2),
-                          opacity: parseFloat(getComputedStyle(p).opacity) }; }"""
+                          opacity: parseFloat(getComputedStyle(p).opacity), mat: Math.round(b.width) }; }"""
         )
         check(f"{tag} Dr. Liu's pool light, wide and low", wash["shape"] >= 1.8 and wash["wide"] >= 2.4 and wash["tall"] >= 1 and 0.6 <= wash["opacity"] <= 0.75, wash)
+        if width >= 1200:
+            # On a desktop the photo stands about 200px wide on its wash, as in the mockup (its mat
+            # was 240px and stood large).
+            check(f"{tag} Dr. Liu's photo about 200px wide on its wash (190-210)", 190 <= wash["mat"] <= 210, wash)
         # The stroke only: "enso" alone also matches its gold start, enso-dot-v1.webp.
         once_circle = page.evaluate("document.querySelectorAll('main img[src*=\"enso-v\"]').length")
         check(f"{tag} the circle appears once", once_circle == 1, once_circle)

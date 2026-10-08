@@ -99,10 +99,12 @@
 
 /* Dr. Liu's photo on its mat, resting on a wide, low pool of grey wash (D's pool, laid on its
    side: a wash has no up or down). The figure is the pool's box as it lies (1407 x 968, at most
-   540px wide, never wider than its column), so the page keeps room for the whole wash and nothing
-   overflows; the pool is turned a quarter round inside it, the photo centred on it. */
+   500px wide, never wider than its column), so the page keeps room for the whole wash and nothing
+   overflows; the pool is turned a quarter round inside it, the photo centred on it. At 500px the
+   photo's mat is 200px wide, as in the mockup (540px gave a 216px mat that stood large on its
+   wash; the pool shrinks with it, so the two keep their proportions). */
 .circle .print {
-  --pool: min(100%, 540px);
+  --pool: min(100%, 500px);
   position: relative;
   display: grid;
   place-items: center;
@@ -189,7 +191,7 @@
    photo takes 48% of the figure, so it is not a thumbnail (150px at 390). */
 @media (max-width: 959px) {
   .circle .print {
-    --pool: min(100%, 540px, calc((100% + 2 * var(--gutter) - 16px) / 1.2));
+    --pool: min(100%, 500px, calc((100% + 2 * var(--gutter) - 16px) / 1.2));
   }
 }
 
