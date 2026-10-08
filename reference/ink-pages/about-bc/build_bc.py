@@ -14,6 +14,7 @@ usage: python -X utf8 reference/ink-pages/about-bc/build_bc.py
 import json
 import math
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -153,11 +154,14 @@ def enso():
 
 
 def copied(name):
-    """One of D's pictures, copied in as it shipped."""
-    src = REPO / "public/images/about-ink" / f"{name}-v1.webp"
-    OUT.mkdir(parents=True, exist_ok=True)
-    shutil.copyfile(src, OUT / f"{name}-v1.webp")
-    with Image.open(src) as im:
+    """One of D's pictures, as it shipped. It was copied in from D's folder
+    (public/images/about-ink), which left the repo when these pages took their own: the copy here
+    is now the source, and D's folder is read only if the copy is missing."""
+    dst = OUT / f"{name}-v1.webp"
+    if not dst.exists():
+        OUT.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(REPO / "public/images/about-ink" / f"{name}-v1.webp", dst)
+    with Image.open(dst) as im:
         return {"src": f"{URL}/{name}-v1.webp", "width": im.width, "height": im.height}
 
 
@@ -175,6 +179,10 @@ def write_ts(entries):
     ]
     body = [f"export const {name} = {json.dumps(value, indent=2)} as const;\n" for name, value in entries]
     TS.write_text("\n".join(head) + "\n".join(body), encoding="utf-8", newline="\n")
+    # In the repo's own format (format:check reads it), so a run that changes nothing leaves the
+    # committed file as it is: Prettier from the repo's node_modules.
+    prettier = REPO / "node_modules/prettier/bin/prettier.cjs"
+    subprocess.run(["node", str(prettier), "--write", str(TS)], cwd=REPO, check=True, capture_output=True)
     print(TS.relative_to(REPO))
 
 
