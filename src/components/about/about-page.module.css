@@ -296,28 +296,15 @@
   line-height: 1.5;
 }
 
-/* Hello in five languages, centred under its promise (on a phone, under its words at their left
-   edge). A block, so the line it sits on is the promise's own width and the centred text centres
-   it. */
+/* Hello in five languages (greetings.tsx), centred under its promise (on a phone, under its words
+   at their left edge): one line, balanced over two where the promise is narrow, at 17px, a step
+   under the promise's words. A block, so the line it sits on is the promise's own width and the
+   centred text centres it. */
 .aboutPage .greetings {
   display: block;
   margin-top: 14px;
-}
-
-/* With reduced motion all five stand side by side (greetings.tsx; its stage is the one
-   aria-hidden child). As a left-aligned row they started at the promise's left edge and wrapped
-   one word alone onto a second line. Here each is a centred inline block and the lines are
-   balanced: one line where all five fit, else three over two. Other pages keep their row. */
-@media (prefers-reduced-motion: reduce) {
-  .aboutPage .greetings > [aria-hidden="true"] {
-    display: block;
-    text-wrap: balance;
-  }
-
-  .aboutPage .greetings > [aria-hidden="true"] > span {
-    display: inline-block;
-    margin-inline: 0.3em;
-  }
+  font-size: 17px;
+  line-height: 1.5;
 }
 
 /* The promises stand two by two from 600px (a tablet held upright is not a stretched phone) and
@@ -368,22 +355,32 @@
     grid-column: 2;
   }
 
-  /* A list's second line: a step under the title, so each row reads as one item. The greetings
-     match it (with reduced motion all five then keep to two lines beside a 72px picture). */
-  .aboutPage .promises p,
-  .aboutPage .promises .greetings {
+  /* A list's second line: a step under the title, so each row reads as one item. */
+  .aboutPage .promises p {
+    margin-top: 4px;
     font-size: 17px;
   }
 
-  .aboutPage .promises p {
-    margin-top: 4px;
+  /* The five greetings start at the words' edge, one even gap between them (a full-width stop's
+     empty half is its gap), at 16px so they keep to two lines beside the row's picture. */
+  .aboutPage .promises .greetings {
+    font-size: 16px;
   }
 
-  /* With reduced motion the five greetings start at the words' edge, one gap between them. */
-  @media (prefers-reduced-motion: reduce) {
-    .aboutPage .greetings > [aria-hidden="true"] > span {
-      margin-inline: 0 0.6em;
-    }
+  .aboutPage .greetings [lang] {
+    margin-inline: 0 0.25em;
+  }
+
+  .aboutPage .greetings [lang]:is(:lang(zh), :lang(ja)) {
+    margin-right: 0;
+  }
+}
+
+/* The narrowest phones (360px): at 16px the greetings' first line ran 7px past the words column
+   beside the album's 88px vignette and fell to three lines. */
+@media (max-width: 374px) {
+  .aboutPage .promises .greetings {
+    font-size: 15px;
   }
 }
 

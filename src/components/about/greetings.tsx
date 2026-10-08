@@ -1,17 +1,20 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useRef, type CSSProperties } from "react";
+import { useArrival, useMotionOk } from "@/components/ink/motion";
 import { useCopy } from "@/i18n/use-copy";
 import { drafts } from "./about-content";
 import styles from "./greetings.module.css";
 
-// "Answers in your language", shown: hello in the site's five languages. When it scrolls into
-// view it plays through them once, one word at a time, slowly enough to read: each word stays
-// wholly in for 1.4s, fades out (0.35s), a short beat, and the next fades in (0.35s); never two at
-// once. It ends on the visitor's own language and rests there (the play lasts about nine seconds
-// from the moment it is seen). With reduced motion all five sit side by side, still; with no
-// script the visitor's own word stands alone. Screen readers hear the language list instead.
+// "Answers in your language", shown: hello in the site's five languages, all together on one calm
+// line (balanced over two where it is narrow), the visitor's own language last and in the darker
+// ink. When it first comes into view the words arrive one by one (greetings.module.css: 180ms
+// apart, a soft fade and a few pixels of rise; over in about 1.4s) and nothing moves after that (a
+// word cycle that ran nine seconds would have needed a pause control). The kit's useArrival keeps
+// the finished line as the default: with reduced motion, with no script, or when the line is
+// already in view as the page opens, all five simply stand there. Screen readers hear the language
+// list instead.
 const LOCALE_TO_LANG: Record<string, string> = {
   en: "en",
   cns: "zh-Hans",
@@ -20,15 +23,13 @@ const LOCALE_TO_LANG: Record<string, string> = {
   vn: "vi",
   jp: "ja",
 };
-// Out 0.35s, a beat of 0.15s, in 0.35s (greetings.module.css): a word is wholly in 850ms after
-// it is called; then it holds.
-const IN_MS = 850;
-const HOLD_MS = 1400;
-const STEP_MS = IN_MS + HOLD_MS;
+// When the arrival is over: the last word's delay (4 x 180ms) and its rise (0.7s), and a little.
+const ARRIVAL_MS = 1600;
 
 export function Greetings({ className = "" }: { className?: string }) {
   const copy = useCopy();
   const locale = useLocale();
+  const motion = useMotionOk();
   const own = Math.max(
     0,
     drafts.greetings.findIndex((greeting) => greeting.lang === (LOCALE_TO_LANG[locale] ?? "en")),
@@ -36,54 +37,30 @@ export function Greetings({ className = "" }: { className?: string }) {
   // The rest first, the visitor's own language last.
   const order = [...drafts.greetings.keys()].filter((i) => i !== own).concat(own);
   const root = useRef<HTMLSpanElement>(null);
-  const [step, setStep] = useState(order.length - 1);
+  useArrival(root, motion, 0.8, ARRIVAL_MS);
 
-  useEffect(() => {
-    const element = root.current;
-    if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // Before it is seen, the first of the other words takes the stage (unseen, off screen), so the
-    // play opens on a word already in, not on the visitor's own word leaving as they arrive.
-    const first = window.setTimeout(() => setStep(0), 0);
-    const ready = performance.now() + IN_MS;
-    let timer = 0;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        let next = 0;
-        const advance = () => {
-          next += 1;
-          setStep(next);
-          if (next < order.length - 1) timer = window.setTimeout(advance, STEP_MS);
-        };
-        // The first word holds its full 1.4s from the moment it is wholly in (or is seen).
-        timer = window.setTimeout(advance, Math.max(0, ready - performance.now()) + HOLD_MS);
-      },
-      { threshold: 0.8 },
-    );
-    observer.observe(element);
-    return () => {
-      observer.disconnect();
-      window.clearTimeout(first);
-      window.clearTimeout(timer);
-    };
-  }, [order.length]);
-
-  const shown = order[step];
   return (
     <span ref={root} className={`${styles.greetings} ${className}`}>
       <span className={styles.sr}>{copy(drafts.languages)}</span>
-      <span className={styles.stage} aria-hidden="true">
-        {drafts.greetings.map((greeting, i) => (
-          <span
-            key={greeting.lang}
-            lang={greeting.lang}
-            className={styles.word}
-            data-state={i === shown ? "in" : "out"}
-          >
-            {greeting.text}
-          </span>
-        ))}
+      <span className={styles.line} aria-hidden="true">
+        {order.map((index, step) => {
+          const greeting = drafts.greetings[index];
+          // A space between the words: where the line may break (between bare inline blocks the
+          // balanced wrap left "Hello." alone on a line in Vietnamese).
+          return (
+            <Fragment key={greeting.lang}>
+              {step > 0 ? " " : null}
+              <span
+                lang={greeting.lang}
+                className={styles.word}
+                data-own={index === own ? "" : undefined}
+                style={{ "--step": step } as CSSProperties}
+              >
+                {greeting.text}
+              </span>
+            </Fragment>
+          );
+        })}
       </span>
     </span>
   );

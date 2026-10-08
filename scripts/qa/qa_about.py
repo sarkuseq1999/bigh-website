@@ -36,9 +36,10 @@ cns also 960x900): no word crosses the side margins; no words over a painting; i
 bad line break; jp and cns heading phrases whole on a phone and at 960 (the narrowest two-column
 words column, 377px); Vietnamese at 390: the closing pills balance their lines.
 nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
-greetings (1440x900, 390x844, and /kr/about at 390x844): with motion the five greetings play one
-word at a time, never two visible in the same frame, each wholly in for at least 1s, ending on the
-visitor's own language and resting there.
+greetings (1440x900, 390x844, and /kr/about at 390x844): the five greetings on one line, the own
+language last; with motion they wait out of view, then arrive one by one (100-300ms apart), done
+within 2.5s, then still, all five in, none overlapping; reduced motion and no script: all five at
+once, the own language last and darkest.
 closing_pills (1440x900, 1024x768, 768x1024, 390x844): 4px above each closing pill's bottom edge the
 element is the pill; the footer starts at or under the closing part's end.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
@@ -165,39 +166,55 @@ def scroll_through(page, step=450, pause=250):
     page.wait_for_timeout(400)
 
 
-# Hello in five languages (the fourth promise), read still (reduced motion: all five shown): the
-# words' box against its promise (off: its centre's offset from the promise's centre; start: its
-# left edge's offset from the promise's title), its lines, and whether it stands under the
-# promise's words.
+# Hello in five languages (the fourth promise), read still (reduced motion): the words' box
+# against its promise (off: its centre's offset from the promise's centre; start: its left edge's
+# offset from the promise's title), its lines (words more than 8px apart in height; fonts set a
+# word's box a pixel higher or lower), whether it stands under the promise's words, whether the
+# visitor's own language is the last word and the darkest, and whether all five are visible.
 GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')[3];
-  const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')].map(w => w.getBoundingClientRect()).filter(r => r.width > 0);
+  const els = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')];
+  const words = els.map(w => w.getBoundingClientRect()).filter(r => r.width > 0);
   const l = Math.min(...words.map(r => r.left)), r = Math.max(...words.map(r => r.right)), b = li.getBoundingClientRect();
   const h = li.querySelector('h3').getBoundingClientRect(), p = li.querySelector('p').getBoundingClientRect();
+  const ts = words.map(r => r.top).sort((x, y) => x - y);
+  const lum = (c) => { const [R, G, B] = c.match(/[0-9.]+/g).map(Number); return 0.2126 * R + 0.7152 * G + 0.0722 * B; };
+  const own = els.findIndex(w => w.hasAttribute('data-own'));
+  const lums = els.map(w => lum(getComputedStyle(w).color));
   return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), start: Math.round(l - h.left),
-           lines: new Set(words.map(r => Math.round(r.top))).size, under: Math.min(...words.map(r => r.top)) >= p.bottom - 1 }; }"""
+           lines: 1 + ts.slice(1).filter((t, i) => t - ts[i] > 8).length, under: Math.min(...words.map(r => r.top)) >= p.bottom - 1,
+           ownLast: own === els.length - 1, ownDarkest: lums.every((v, i) => i === own || v > lums[own] + 20),
+           shown: els.length === 5 && els.every(w => parseFloat(getComputedStyle(w).opacity) === 1) }; }"""
 
-# The greetings play (motion): every animation frame for 13s from scrolling the fourth promise
-# into view, the opacity of each of the five words. most: the most words visible (over 0.02) in any
-# one frame, and that frame; held: for each word, its longest unbroken time wholly in (0.99) in ms;
-# final: the words in at the end; began and settled: the first and last frames in which anything
-# changed; end: the sampling's length.
+# The greetings' arrival (motion): every animation frame for 6s from scrolling the fourth promise
+# into view, each word's opacity and rise (the transform's y). hidden: all five hidden before the
+# scroll (the line waits out of view); starts: when each word began to show (opacity over 0.02),
+# in page order; done: when the last word was wholly in and at rest (opacity 0.99, rise under
+# 0.5px); settled: the last frame in which anything changed; overlaps: pairs of words whose boxes
+# meet at the end; final: the words wholly in at the end; ownLast: the visitor's own language if it
+# is the last word.
 GREETINGS_PLAY_JS = """() => new Promise((resolve) => {
   const li = document.querySelectorAll('[data-promise]')[3];
   const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')];
-  const t0 = performance.now(), held = {}, since = {};
-  let most = 0, at = null, prev = null, began = null, settled = null, ops = [], t = 0;
+  const ty = (w) => { const m = getComputedStyle(w).transform; return m === 'none' ? 0 : parseFloat(m.split(',')[5]); };
+  const read = () => words.map(w => [parseFloat(getComputedStyle(w).opacity), ty(w)]);
+  const hidden = read().every(([o]) => o < 0.02);
+  const t0 = performance.now(), starts = words.map(() => null);
+  let prev = null, settled = null, done = null, now = [];
   const tick = () => {
-    t = Math.round(performance.now() - t0);
-    ops = words.map(w => parseFloat(getComputedStyle(w).opacity));
-    const shown = ops.filter(o => o > 0.02).length;
-    if (shown > most) { most = shown; at = { t, ops: ops.map(o => +o.toFixed(2)) }; }
-    ops.forEach((o, i) => { const k = words[i].lang;
-      if (o >= 0.99) { if (since[k] === undefined) since[k] = t; held[k] = Math.max(held[k] || 0, t - since[k]); } else delete since[k]; });
-    const key = ops.map(o => o.toFixed(3)).join(',');
-    if (prev !== null && key !== prev) { if (began === null) began = t; settled = t; }
+    const t = Math.round(performance.now() - t0);
+    now = read();
+    now.forEach(([o], i) => { if (o > 0.02 && starts[i] === null) starts[i] = t; });
+    if (done === null && now.every(([o, y]) => o >= 0.99 && Math.abs(y) < 0.5)) done = t;
+    const key = now.map(([o, y]) => o.toFixed(3) + '/' + y.toFixed(2)).join(',');
+    if (prev !== null && key !== prev) settled = t;
     prev = key;
-    if (t < 13000) requestAnimationFrame(tick);
-    else resolve({ most, at, held, final: words.filter((w, i) => ops[i] >= 0.99).map(w => w.lang), began, settled, end: t });
+    if (t < 6000) requestAnimationFrame(tick);
+    else {
+      const rs = words.map(w => w.getBoundingClientRect()), overlaps = [];
+      rs.forEach((a, i) => rs.forEach((b, j) => { if (j > i && a.left < b.right - 1 && b.left < a.right - 1 && a.top < b.bottom - 1 && b.top < a.bottom - 1) overlaps.push([words[i].lang, words[j].lang]); }));
+      resolve({ hidden, starts, done, settled, overlaps, final: words.filter((w, i) => now[i][0] >= 0.99).map(w => w.lang),
+                ownLast: words[words.length - 1].hasAttribute('data-own') ? words[words.length - 1].lang : null, end: t });
+    }
   };
   window.scrollTo(0, li.getBoundingClientRect().top + scrollY - innerHeight / 2);
   requestAnimationFrame(tick);
@@ -220,11 +237,13 @@ PROMISE_ROWS_JS = """() => {
 
 
 def greetings(browser):
-    """The greetings under the fourth promise play once with motion, one word at a time and slowly
-    enough to read: in no frame are two words visible at once (the crossfade set "Xin chào" over
-    "안녕하세요"), every word is wholly in for at least 1s unbroken (a word held 0.3s was too brisk
-    to read), and the play ends on the visitor's own language and rests there (nothing changes in
-    its last 2s of sampling). At a desktop and a phone size, in English and Korean."""
+    """The greetings under the fourth promise: all five on one calm line (two where narrow), the
+    visitor's own language last. With motion, when the line first comes into view, the words arrive
+    one by one (each starting 100-300ms after the one before), the whole arrival done within 2.5s,
+    and then nothing moves; at the end all five are wholly in and no two overlap. With reduced
+    motion and with no script all five are there at once, still, the own language last and darkest.
+    (The line replaced a word cycle that ran nine seconds, too long without a pause control.) At a
+    desktop and a phone size, in English and Korean."""
     for width, height, path, own in [(1440, 900, "/about", "en"), (390, 844, "/about", "en"), (390, 844, "/kr/about", "ko")]:
         tag = f"{path} {width}x{height}"
         context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
@@ -233,15 +252,35 @@ def greetings(browser):
         page.evaluate("document.fonts.ready.then(() => true)")
         page.wait_for_timeout(600)
         play = page.evaluate(GREETINGS_PLAY_JS)
-        check(f"{tag} greetings: never two words visible at once", play["most"] == 1, play)
-        held = play["held"]
-        check(f"{tag} greetings: each of the five words wholly in for at least 1s", len(held) == 5 and min(held.values()) >= 1000, held)
-        check(f"{tag} greetings: it ends on the visitor's own language", play["final"] == [own], play["final"])
+        starts = play["starts"]
+        steps = [b - a for a, b in zip(starts, starts[1:])] if None not in starts else None
         check(
-            f"{tag} greetings: the play ends and rests (last change at {play['settled']}ms of {play['end']}ms)",
-            play["settled"] is not None and play["settled"] <= play["end"] - 2000,
+            f"{tag} greetings: hidden while out of view, then arrive one by one",
+            play["hidden"] and steps is not None and all(100 <= d <= 300 for d in steps),
             play,
         )
+        # The arrival lasts from the first word showing to the last change of any word (its rise
+        # eases out a little after it is wholly in); after that, nothing changes to the end.
+        span = None if None in (play["done"], play["settled"], starts[0]) else play["settled"] - starts[0]
+        check(
+            f"{tag} greetings: the arrival done within 2.5s ({span}ms), then nothing moves",
+            span is not None and span <= 2500,
+            play,
+        )
+        check(
+            f"{tag} greetings: at the end all five wholly in, none overlapping, the own language last",
+            len(play["final"]) == 5 and not play["overlaps"] and play["ownLast"] == own,
+            play,
+        )
+        context.close()
+    for label, options in [("reduced motion", {"reduced_motion": "reduce"}), ("JavaScript off", {"java_script_enabled": False})]:
+        context = browser.new_context(viewport={"width": 1440, "height": 900}, **options)
+        page = context.new_page()
+        page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+        page.evaluate("window.scrollTo(0, document.querySelectorAll('[data-promise]')[3].getBoundingClientRect().top + scrollY - innerHeight / 2)")
+        page.wait_for_timeout(150)
+        hello = page.evaluate(GREETINGS_JS)
+        check(f"{label}: all five greetings there at once, the own language last and darkest", hello["shown"] and hello["ownLast"] and hello["ownDarkest"], hello)
         context.close()
 
 
@@ -721,11 +760,11 @@ def rhythm(browser):
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
         hello = page.evaluate(GREETINGS_JS)
         if width >= 600:
-            check(f"{tag} Hello in five languages centred under the fourth promise", abs(hello["off"]) <= 2 and hello["under"] and hello["lines"] <= 2, hello)
+            check(f"{tag} Hello in five languages centred under the fourth promise, the own language last and darkest", abs(hello["off"]) <= 2 and hello["under"] and hello["lines"] <= 2 and hello["ownLast"] and hello["ownDarkest"], hello)
         else:
             # A phone's promises are a list of rows (they were centred posters, two and a half
             # screens of them): this replaces nothing; the rows themselves are new.
-            check(f"{tag} Hello in five languages under the fourth promise's words, at their left edge", abs(hello["start"]) <= 1 and hello["under"] and hello["lines"] <= 2, hello)
+            check(f"{tag} Hello in five languages under the fourth promise's words, at their left edge, in two lines at most, the own language last and darkest", abs(hello["start"]) <= 1 and hello["under"] and hello["lines"] <= 2 and hello["ownLast"] and hello["ownDarkest"], hello)
             lst = page.evaluate(PROMISE_ROWS_JS)
             check(
                 f"{tag} each promise a row: its picture (56-72px) at the left, beside its title, at the row's top",
