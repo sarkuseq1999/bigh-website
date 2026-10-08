@@ -17,24 +17,25 @@
 }
 
 /* One word at a time, never two (a crossfade set "Xin chào" over "안녕하세요" for a moment: a glitch
-   in motion, broken in any still). The word leaving fades where it stands, at once (0.22s); the
-   word arriving waits until it has gone and a short beat more (0.3s), then rises in (0.4s). A
-   word's transition is the one of the state it goes to: .word's for arriving, "out"'s for leaving.
-   Hidden, the leaving word drops back to its start below the line, unseen. The last word is in
-   0.75s after the last change (greetings.tsx: the whole play under five seconds). */
+   in motion, broken in any still), and slowly enough to read. The word leaving fades out where it
+   stands (0.35s, soft at both ends); the word arriving waits until it has gone and a short beat
+   more (0.5s in all), then fades in as it rises a little (0.35s). It is wholly in 0.85s after it
+   is called, then holds 1.4s (greetings.tsx). A word's transition is the one of the state it goes
+   to: .word's for arriving, "out"'s for leaving. Hidden, the leaving word drops back to its start
+   below the line, unseen. */
 .word {
   grid-area: 1 / 1;
   transition:
-    opacity 0.4s ease-out 0.3s,
-    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.3s;
+    opacity 0.35s ease-out 0.5s,
+    transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) 0.5s;
 }
 
 .word[data-state="out"] {
   opacity: 0;
   transform: translateY(0.25em);
   transition:
-    opacity 0.22s ease-in,
-    transform 0s linear 0.22s;
+    opacity 0.35s ease-in-out,
+    transform 0s linear 0.35s;
 }
 
 @media (prefers-reduced-motion: reduce) {
