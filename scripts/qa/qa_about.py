@@ -37,15 +37,17 @@ bad line break; jp and cns heading phrases whole on a phone and at 960 (the narr
 words column, 377px); Vietnamese at 390: the closing pills balance their lines.
 nav_locales: from /vn/about and /kr/about the bar and menu stay in the language.
 greetings (1440x900, 390x844, and /kr/about at 390x844): with motion the five greetings play one
-word at a time, never two visible in the same frame, each wholly in once, ending on the visitor's
-own language, in under five seconds.
+word at a time, never two visible in the same frame, each wholly in for at least 1s, ending on the
+visitor's own language and resting there.
+closing_pills (1440x900, 1024x768, 768x1024, 390x844): 4px above each closing pill's bottom edge the
+element is the pill; the footer starts at or under the closing part's end.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
 first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's circle
 in the first screen.
 
 Pictures: scripts/qa/out/about-circle/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen]
 """
 
 import io
@@ -174,26 +176,28 @@ GREETINGS_JS = """() => { const li = document.querySelectorAll('[data-promise]')
   return { off: Math.round((l + r) / 2 - (b.left + b.width / 2)), start: Math.round(l - h.left),
            lines: new Set(words.map(r => Math.round(r.top))).size, under: Math.min(...words.map(r => r.top)) >= p.bottom - 1 }; }"""
 
-# The greetings play (motion): every animation frame for 7s from scrolling the fourth promise into
-# view, the opacity of each of the five words. most: the most words visible (over 0.02) in any one
-# frame, and that frame; full: the words that were wholly in (0.99) at some frame; final: the words
-# in at the end; began and settled: the first and last frames in which anything changed.
+# The greetings play (motion): every animation frame for 13s from scrolling the fourth promise
+# into view, the opacity of each of the five words. most: the most words visible (over 0.02) in any
+# one frame, and that frame; held: for each word, its longest unbroken time wholly in (0.99) in ms;
+# final: the words in at the end; began and settled: the first and last frames in which anything
+# changed; end: the sampling's length.
 GREETINGS_PLAY_JS = """() => new Promise((resolve) => {
   const li = document.querySelectorAll('[data-promise]')[3];
   const words = [...li.querySelectorAll('[aria-hidden="true"] > [lang]')];
-  const t0 = performance.now(), full = new Set();
-  let most = 0, at = null, prev = null, began = null, settled = null, ops = [];
+  const t0 = performance.now(), held = {}, since = {};
+  let most = 0, at = null, prev = null, began = null, settled = null, ops = [], t = 0;
   const tick = () => {
-    const t = Math.round(performance.now() - t0);
+    t = Math.round(performance.now() - t0);
     ops = words.map(w => parseFloat(getComputedStyle(w).opacity));
     const shown = ops.filter(o => o > 0.02).length;
     if (shown > most) { most = shown; at = { t, ops: ops.map(o => +o.toFixed(2)) }; }
-    ops.forEach((o, i) => { if (o >= 0.99) full.add(words[i].lang); });
+    ops.forEach((o, i) => { const k = words[i].lang;
+      if (o >= 0.99) { if (since[k] === undefined) since[k] = t; held[k] = Math.max(held[k] || 0, t - since[k]); } else delete since[k]; });
     const key = ops.map(o => o.toFixed(3)).join(',');
     if (prev !== null && key !== prev) { if (began === null) began = t; settled = t; }
     prev = key;
-    if (t < 7000) requestAnimationFrame(tick);
-    else resolve({ most, at, full: [...full], final: words.filter((w, i) => ops[i] >= 0.99).map(w => w.lang), began, settled });
+    if (t < 13000) requestAnimationFrame(tick);
+    else resolve({ most, at, held, final: words.filter((w, i) => ops[i] >= 0.99).map(w => w.lang), began, settled, end: t });
   };
   window.scrollTo(0, li.getBoundingClientRect().top + scrollY - innerHeight / 2);
   requestAnimationFrame(tick);
@@ -216,10 +220,11 @@ PROMISE_ROWS_JS = """() => {
 
 
 def greetings(browser):
-    """The greetings under the fourth promise play once with motion, one word at a time: in no frame
-    are two words visible at once (the crossfade set "Xin chào" over "안녕하세요"), every word is
-    wholly in at some point, the play ends on the visitor's own language and lasts under five
-    seconds (so it needs no pause button). At a desktop and a phone size, in English and Korean."""
+    """The greetings under the fourth promise play once with motion, one word at a time and slowly
+    enough to read: in no frame are two words visible at once (the crossfade set "Xin chào" over
+    "안녕하세요"), every word is wholly in for at least 1s unbroken (a word held 0.3s was too brisk
+    to read), and the play ends on the visitor's own language and rests there (nothing changes in
+    its last 2s of sampling). At a desktop and a phone size, in English and Korean."""
     for width, height, path, own in [(1440, 900, "/about", "en"), (390, 844, "/about", "en"), (390, 844, "/kr/about", "ko")]:
         tag = f"{path} {width}x{height}"
         context = browser.new_context(viewport={"width": width, "height": height}, reduced_motion="no-preference")
@@ -229,10 +234,39 @@ def greetings(browser):
         page.wait_for_timeout(600)
         play = page.evaluate(GREETINGS_PLAY_JS)
         check(f"{tag} greetings: never two words visible at once", play["most"] == 1, play)
-        check(f"{tag} greetings: all five words shown, each wholly in", len(play["full"]) == 5, play["full"])
+        held = play["held"]
+        check(f"{tag} greetings: each of the five words wholly in for at least 1s", len(held) == 5 and min(held.values()) >= 1000, held)
         check(f"{tag} greetings: it ends on the visitor's own language", play["final"] == [own], play["final"])
-        span = None if play["began"] is None else play["settled"] - play["began"]
-        check(f"{tag} greetings: the play lasts under five seconds ({span}ms)", span is not None and 3000 <= span < 5000, play)
+        check(
+            f"{tag} greetings: the play ends and rests (last change at {play['settled']}ms of {play['end']}ms)",
+            play["settled"] is not None and play["settled"] <= play["end"] - 2000,
+            play,
+        )
+        context.close()
+
+
+# The closing's pills are wholly the page's: at a point 4px above each pill's bottom edge, in the
+# middle, the element there is the pill (or inside it), not the footer's band (a negative margin
+# once pulled the footer's empty padding over their lower 16-25px). The footer starts at or under
+# the closing part's end.
+PILLS_JS = """() => {
+  const part = document.querySelector('[data-part="closing"]');
+  const pills = [...part.querySelectorAll('[data-words] a, [data-words] button')];
+  const out = pills.map(p => { p.scrollIntoView({ block: 'center', behavior: 'instant' }); const r = p.getBoundingClientRect();
+    const hit = document.elementFromPoint(r.left + r.width / 2, r.bottom - 4);
+    return { pill: p.textContent.trim().slice(0, 24), hit: hit ? hit.tagName.toLowerCase() + (hit.closest('footer') ? ' in footer' : '') : null, own: !!hit && p.contains(hit) }; });
+  const footer = document.querySelector('footer').getBoundingClientRect().top, end = part.getBoundingClientRect().bottom;
+  return { pills: out, under: Math.round(footer - end) };
+}"""
+
+
+def closing_pills(browser):
+    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844)]:
+        tag = f"{width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        r = page.evaluate(PILLS_JS)
+        check(f"{tag} closing pills: the point 4px above each pill's bottom is the pill", len(r["pills"]) == 2 and all(p["own"] for p in r["pills"]), r)
+        check(f"{tag} the footer starts at or under the closing part's end (nothing overlaps)", r["under"] >= 0, r)
         context.close()
 
 
@@ -1036,7 +1070,7 @@ def languages_layout(browser):
 
 
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, boundary, first_screen]
+GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

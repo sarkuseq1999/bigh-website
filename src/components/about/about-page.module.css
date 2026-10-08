@@ -389,18 +389,12 @@
 
 /* The page's last part leads into the footer's finale ("Stay sharp. Live fully."), which opens on
    72 to 112px of its own paper: the closing's padding under it as well left 250px of bare paper at
-   1440px between the closing's painting and the finale. The closing keeps no padding below, and on
-   two columns its last margin also takes back up to 40px of the finale's paper (always less than
-   the finale's own 72px, so nothing of the footer comes near the closing's words). The footer is
-   the kit's, unchanged; section qualifies the rule over .aboutPage .part. */
+   1440px between the closing's painting and the finale. The closing keeps no padding below (about
+   205px at 1440px now); nothing overlaps (a negative margin pulled the footer's empty band over the
+   closing's pills). The footer is the kit's, unchanged; section qualifies the rule over
+   .aboutPage .part. */
 .aboutPage section[data-part="closing"] {
   padding-bottom: 0;
-}
-
-@media (min-width: 960px) {
-  .aboutPage section[data-part="closing"] {
-    margin-bottom: calc(-1 * clamp(16px, 2.4vw, 40px));
-  }
 }
 
 /* ---- Other languages (DESIGN.md, The CJK Room Rule) ----------------------------------------- */

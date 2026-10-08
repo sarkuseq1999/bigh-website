@@ -7,10 +7,11 @@ import { drafts } from "./about-content";
 import styles from "./greetings.module.css";
 
 // "Answers in your language", shown: hello in the site's five languages. When it scrolls into
-// view it plays through them once, one word at a time (each fades out before the next comes in;
-// five changes a second apart, the last word in at 4.75s: under five seconds, so it needs no
-// pause button) and settles on the visitor's own language. With reduced motion all five sit side
-// by side. Screen readers hear the language list instead.
+// view it plays through them once, one word at a time, slowly enough to read: each word stays
+// wholly in for 1.4s, fades out (0.35s), a short beat, and the next fades in (0.35s); never two at
+// once. It ends on the visitor's own language and rests there (the play lasts about nine seconds
+// from the moment it is seen). With reduced motion all five sit side by side, still; with no
+// script the visitor's own word stands alone. Screen readers hear the language list instead.
 const LOCALE_TO_LANG: Record<string, string> = {
   en: "en",
   cns: "zh-Hans",
@@ -19,7 +20,11 @@ const LOCALE_TO_LANG: Record<string, string> = {
   vn: "vi",
   jp: "ja",
 };
-const STEP_MS = 1000;
+// Out 0.35s, a beat of 0.15s, in 0.35s (greetings.module.css): a word is wholly in 850ms after
+// it is called; then it holds.
+const IN_MS = 850;
+const HOLD_MS = 1400;
+const STEP_MS = IN_MS + HOLD_MS;
 
 export function Greetings({ className = "" }: { className?: string }) {
   const copy = useCopy();
@@ -36,25 +41,31 @@ export function Greetings({ className = "" }: { className?: string }) {
   useEffect(() => {
     const element = root.current;
     if (!element || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // Before it is seen, the first of the other words takes the stage (unseen, off screen), so the
+    // play opens on a word already in, not on the visitor's own word leaving as they arrive.
+    const first = window.setTimeout(() => setStep(0), 0);
+    const ready = performance.now() + IN_MS;
     let timer = 0;
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;
         observer.disconnect();
         let next = 0;
-        setStep(0);
-        timer = window.setInterval(() => {
+        const advance = () => {
           next += 1;
           setStep(next);
-          if (next >= order.length - 1) window.clearInterval(timer);
-        }, STEP_MS);
+          if (next < order.length - 1) timer = window.setTimeout(advance, STEP_MS);
+        };
+        // The first word holds its full 1.4s from the moment it is wholly in (or is seen).
+        timer = window.setTimeout(advance, Math.max(0, ready - performance.now()) + HOLD_MS);
       },
       { threshold: 0.8 },
     );
     observer.observe(element);
     return () => {
       observer.disconnect();
-      window.clearInterval(timer);
+      window.clearTimeout(first);
+      window.clearTimeout(timer);
     };
   }, [order.length]);
 
