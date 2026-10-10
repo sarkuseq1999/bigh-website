@@ -11,12 +11,13 @@
   --chapter-half: clamp(48px, 5.5vw, 96px);
   --picture-width: 520px;
   /* The opening's scale, from the approved mockup (reference/ink-pages/mockups/nuricell-ink/): the
-     name's size, and the bottle's column 1.73 times it. "Nuri", the column and "Cell" together
+     name's size, and the bottle's column 1.66 times it. "Nuri", the column and "Cell" together
      take 5.1 name-sizes: with the wrap's width (100vw less two gutters, 1300px at most) that is
      16.4vw, and 250px at most; the window's height lets it shrink (30svh) so the name, bottle and
-     the first words keep their place on a short screen. */
+     the first words keep their place on a short screen. (The column was 1.73 names wide for the
+     500 weight; the comp's heavier name is wider, and 1.66 keeps "Nuri" inside the wrap.) */
   --name: min(16.4vw, 30svh, 250px);
-  --stand: calc(var(--name) * 1.73);
+  --stand: calc(var(--name) * 1.66);
   /* The product's Add to cart button (add-to-cart.module.css) reads the old template's --cream
      and --cobalt, which this page does not define: its label came out black on its black pill and
      its focus ring vanished. Here the label is paper and the ring ink, like the kit's pills. */
@@ -48,14 +49,16 @@
 }
 
 /* The name parts round the bottle: three columns, the bottle two and a third times as tall as
-   the letters' height. */
+   the letters' height. Heavier than the headings, as in the comp (Switzer is loaded as a variable
+   face, 100 to 900, so 650 is drawn, not faked; on a Vietnamese page, Be Vietnam Pro's 550 picks
+   its loaded 600, its headings being 400). */
 .page h1.name {
   display: grid;
   grid-template-columns: minmax(0, 1fr) var(--stand) minmax(0, 1fr);
   align-items: end;
   margin: 0;
   font-family: var(--display-font);
-  font-weight: var(--display-weight);
+  font-weight: calc(var(--display-weight) + 150);
   font-size: var(--name);
   line-height: 0.86;
   letter-spacing: -0.045em;
