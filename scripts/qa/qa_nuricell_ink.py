@@ -12,6 +12,8 @@ Sections (all, or --only=a,b):
   nojs        with JavaScript off every painting shows and the lantern is lit
   words       every word in nuricell.ts on the page; each chapter its own painting; the four
               "More from BiGH" links
+  after       the questions, More from BiGH and the notes on one left edge; the four cards four across
+              from 960px, two by two below, their rows lined up
   sticky      with every study open a sticky painting stays inside its chapter
   sum         the painted sum matches the serving, a caption under each number; set in type
               (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
@@ -204,14 +206,33 @@ def multiply(browser):
             check(f"multiply {w} {name}: no stacking context above it", not found, "; ".join(found))
             inside, outside, diff = corner_diff(page, el, shot_name)
             check(f"multiply {w} {name}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
-        # The small pools under "More from BiGH": each multiplies, with no stacking context above it
-        # (the links change colour on hover, never transform or fade).
+        # The small pools under "More from BiGH": each multiplies, with no stacking context above it.
         pools = page.locator("#more a > span:first-child > img:first-child")
         check(f"multiply {w} more: four pools", pools.count() == 4, str(pools.count()))
         for i in range(pools.count()):
             blend = pools.nth(i).evaluate("e => getComputedStyle(e).mixBlendMode")
             found = pools.nth(i).evaluate(STACKING)
             check(f"multiply {w} more {i + 1}: the pool multiplies, no stacking context above it", blend == "multiply" and not found, f"{blend}; " + "; ".join(found))
+        # The shared pool and its contact shadow (the opening's two, and the four small pools) are
+        # not quite white at their edges: each carries a radial mask on itself, or a faint rectangle
+        # shows on the paper.
+        masked = page.evaluate(
+            """() => [...document.querySelectorAll('[data-chapter="overview"] h1 span[aria-hidden] img:not(:last-child), #more a > span:first-child > img:first-child')]
+                 .map((e) => { const s = getComputedStyle(e);
+                   return { where: e.closest('#more') ? 'more' : 'opening', mask: s.maskImage || s.webkitMaskImage || 'none' }; })"""
+        )
+        unmasked = [m["where"] for m in masked if "radial-gradient" not in m["mask"]]
+        check(f"multiply {w} masks: the opening's pool and contact shadow and the four More pools", len(masked) == 6 and not unmasked, f"{len(masked)} found; unmasked: {unmasked}")
+        # Hovering a link changes only its colour: a transform, opacity or filter on it would cut the
+        # pool out of the paper's blend.
+        bring(page, "#more", 160)
+        link = page.locator("#more a").first
+        link.hover()
+        page.wait_for_timeout(700)
+        state = link.evaluate("e => { const s = getComputedStyle(e); return [s.transform, s.opacity, s.filter]; }")
+        found = pools.first.evaluate(STACKING)
+        blend = pools.first.evaluate("e => getComputedStyle(e).mixBlendMode")
+        check(f"multiply {w} more: hovering a link leaves its pool multiplying", state == ["none", "1", "none"] and blend == "multiply" and not found, f"{state}; {blend}; " + "; ".join(found))
         ctx.close()
 
 
@@ -400,11 +421,23 @@ def people_painting(page):
     check("people: the painting is in colour", share > 0.03, f"{share:.1%} of its pixels clearly coloured (paper alone about 0)")
 
 
+def reachable_text(page):
+    """Every word a visitor can read: innerText, which leaves out whatever is not rendered
+    (display:none, hidden), after pressing "Show all" and opening every question and study, each
+    one click away (a closed <details> is not rendered either, so its answer would otherwise be
+    missed; a string hidden for good still is)."""
+    page.evaluate(
+        """() => { document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click();
+                  document.querySelectorAll('main details').forEach((d) => { d.open = true; }); }"""
+    )
+    page.wait_for_timeout(300)
+    return re.sub(r"\s+", " ", page.locator("main").inner_text())
+
+
 def words(browser, chapters=tuple(CHAPTERS)):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
-    text = re.sub(r"\s+", " ", page.locator("main").text_content())
-    missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in text]
-    print(f"words: {len(missing)} strings not on the page: {missing[:6]}")
+    # The page at rest, as rendered: the per-chapter words below are visible without a click.
+    text = re.sub(r"\s+", " ", page.locator("main").inner_text())
     for chapter in chapters:
         if chapter in EXPECT:
             n = page.locator(f'[data-chapter="{chapter}"] img[src*="{EXPECT[chapter]}"]').count()
@@ -426,11 +459,58 @@ def words(browser, chapters=tuple(CHAPTERS)):
     for chapter in chapters:
         for s in built.get(chapter, []):
             check(f"words {chapter}: “{s}”", s in text)
+    everything = reachable_text(page)
+    missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in everything]
     check("words: every string of nuricell.ts on the page", not missing, f"{len(missing)} missing: {missing[:5]}")
     for slug in OTHERS:
         check(f"words: More from BiGH links {slug}", page.locator(f'#more a[href$="/products/{slug}"]').count() == 1)
     ctx.close()
     return missing
+
+
+# The after-buy sections' left edges and the More cards' rows.
+AFTER_GEOMETRY = """() => {
+  const left = (e) => e.getBoundingClientRect().left;
+  const tops = (selector) => [...document.querySelectorAll('#more li ' + selector)].map((e) => Math.round(e.getBoundingClientRect().top));
+  const list = document.querySelector('#questions ul').getBoundingClientRect();
+  return {
+    questions: left(document.querySelector('#questions h2')),
+    more: left(document.querySelector('#more h2')),
+    notes: left(document.querySelector('[data-notes] p')),
+    list: list.left, listWidth: list.width,
+    cards: [...document.querySelectorAll('#more li')].map((e) => Math.round(e.getBoundingClientRect().top)),
+    stands: tops('a > span:nth-of-type(1)'), names: tops('a > span:nth-of-type(2)'), focus: tops('a > span:nth-of-type(3)'),
+    scrollW: document.documentElement.scrollWidth, innerW: innerWidth,
+  };
+}"""
+
+
+def after(browser):
+    """After Buy: the questions' heading, the More heading and the notes start on one left edge (the
+    wrap's); the list of questions is capped at 820px; the four cards are four across from 960px and
+    two by two below, and in each row the bottles, the names and the focus lines line up even when a
+    name wraps."""
+    for w, h in [(1440, 900), (1024, 768), (964, 768), (960, 768), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        g = page.evaluate(AFTER_GEOMETRY)
+        edges = [g["questions"], g["more"], g["notes"], g["list"]]
+        check(f"after {w}: one left edge (questions, more, notes, the list)", max(edges) - min(edges) <= 1, str([round(e, 1) for e in edges]))
+        check(f"after {w}: the list of questions is at most 820px", g["listWidth"] <= 820.5, f"{g['listWidth']:.0f}px")
+        per_row = 4 if w >= 960 else 2
+        rows = [g["cards"][i : i + per_row] for i in range(0, len(g["cards"]), per_row)]
+        check(f"after {w}: {per_row} cards a row", len(g["cards"]) == 4 and all(len(set(r)) == 1 for r in rows), str(g["cards"]))
+        for name in ("stands", "names", "focus"):
+            aligned = all(len(set(g[name][i : i + per_row])) == 1 for i in range(0, 4, per_row))
+            check(f"after {w}: each row's {name} line up", aligned, str(g[name]))
+        check(f"after {w}: no sideways scroll", g["scrollW"] <= g["innerW"], f"{g['scrollW']} vs {g['innerW']}")
+        if w in (1440, 390):
+            page.evaluate("() => { const e = document.querySelector('#questions'); window.scrollBy(0, e.getBoundingClientRect().top - 90); }")
+            page.wait_for_timeout(300)
+            page.screenshot(path=str(OUT / f"after-{w}-questions.png"))
+            page.evaluate("() => { const e = document.querySelector('#more'); window.scrollBy(0, e.getBoundingClientRect().top - 90); }")
+            page.wait_for_timeout(300)
+            page.screenshot(path=str(OUT / f"after-{w}-more.png"))
+        ctx.close()
 
 
 SUM_CAPTIONS = ["capsules a day", "days", "capsules in each bottle"]
@@ -574,6 +654,7 @@ SECTIONS = {
     "lantern": lantern,
     "nojs": nojs,
     "words": words,
+    "after": after,
     "sticky": sticky,
     "sum": sum_check,
     "buy": buy_check,

@@ -21,7 +21,7 @@ export function After({ product }: { product: InkProduct }) {
     <>
       {product.faq.length > 0 ? (
         <section id="questions" className={styles.after} aria-labelledby="questions-title">
-          <div className={`${base.wrap} ${styles.afterWrap}`}>
+          <div className={base.wrap}>
             <h2 id="questions-title" className={`${base.display} ${styles.heading}`}>
               {copy("Questions")}
             </h2>
@@ -87,7 +87,7 @@ export function After({ product }: { product: InkProduct }) {
           </div>
         </section>
       ) : null}
-      <div className={`${base.wrap} ${styles.notes}`}>
+      <div className={`${base.wrap} ${styles.notes}`} data-notes="">
         <p>{copy(product.caution)}</p>
         <p>{copy(product.notes.fda)}</p>
       </div>
