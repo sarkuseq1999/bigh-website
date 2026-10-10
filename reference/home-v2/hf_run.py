@@ -45,16 +45,18 @@ STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/Higgsfi
 # Round 6 (October 4, evening): Mo gave $10 for ten more rounds on the English homepage. Quoted
 # jobs (Kling) may use up to $7.20 here; GPT Image 2.5 (hf_unquoted.py, ledger-r6-gpt.jsonl) is
 # capped at 40 jobs (about $2 to $2.80), so the two together stay under $10.
-LEDGER = STATE / "ledger-r6.jsonl"
+# Round 7 (October 9): Mo picked the painted crane (A) and approved up to three Kling takes to
+# remake its wingbeat (option 1: at most $1.68, quoted $0.56 a take). Only ledger-r7.jsonl counts.
+LEDGER = STATE / "ledger-r7.jsonl"
 LOCK = STATE / "submit.lock"
-ROUND_BUDGET = Decimal("7.20")
+ROUND_BUDGET = Decimal("1.68")
 LOOK_BUDGET = {
-    "iris": Decimal("6.00"),
-    "everyday": Decimal("6.50"),
-    "botanical": Decimal("6.00"),
-    "ink": Decimal("7.20"),  # round 6 (Oct 4): the crane homepage's ten rounds
+    "iris": Decimal("0"),
+    "everyday": Decimal("0"),
+    "botanical": Decimal("0"),
+    "ink": Decimal("1.68"),  # round 7 (Oct 9): the painted crane's wingbeat, three takes at most
 }
-JOB_CAP = {"image": Decimal("0.25"), "video": Decimal("0.80")}
+JOB_CAP = {"image": Decimal("0.25"), "video": Decimal("0.60")}
 LOOKS = set(LOOK_BUDGET)
 
 

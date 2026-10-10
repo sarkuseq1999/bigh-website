@@ -144,6 +144,18 @@ TAKES = {
     # The best of the October 5 takes, built the same way for comparison (not shipped: its wings
     # thin out on the down-stroke to 36% of the first pose's solid ink, and 12 frames a second).
     # Frames 1, 2, 31 to 33 and 59 are the raised pose again (Kling's pauses), so they are dropped.
+    # The painted crane (October 9, Mo picked sample A: crane-paint-a), its wingbeat from a new
+    # Kling take of that painting (originals/crane-fly-a*.json). Played and paced like v4-twice;
+    # its paper's beige is levelled to the first crane's white, as the still is (build_assets.py).
+    "a1-twice": {"source": "crane-fly-a1.mp4", "work": "crane-flight-a1", "same_as_first": (),
+                 "retouch": None, "quality": 74, "loop": True, "pace": 40,
+                 "ride": (0.014, 0.8, 2), "plays": 2, "whiten": True},
+    # crane-fly-a2: in c045 the far wing's tip folds into a small closed loop as it turns edge-on,
+    # a tiny second head for one frame. Trimming it (as in v3) left a chopped wing, so the frame
+    # is dropped: c044 runs into c046 (80 ms instead of 40, unseen in the beat).
+    "a2-twice": {"source": "crane-fly-a2.mp4", "work": "crane-flight-a2", "same_as_first": (),
+                 "drop": (45,), "retouch": None, "quality": 74, "loop": True, "pace": 40,
+                 "ride": (0.014, 0.8, 2), "plays": 2, "whiten": True},
     "v8-trial": {"source": "crane-fly-v8.mp4", "work": "crane-flight-v8", "same_as_first": (),
                  "drop": (1, 2, 31, 32, 33, 59), "retouch": None, "quality": 74, "loop": True,
                  "ride": (0.014, 0.8, 2)},
@@ -206,6 +218,25 @@ def ride(take, images, order):
                              translate=(0, -lift * height * rise[k]))
         images[i] = np.asarray(frame.convert("RGBA")).copy()
     return images
+
+
+# The first flying crane's white (build_assets.py CRANE_WHITE): a painted take's bare paper is
+# brought to it, so every frame matches the still crane-painted.webp.
+CRANE_WHITE = np.array([249.0, 244.0, 233.0])
+
+
+def whiten(take, images):
+    """Levels on every cut frame: the take's own paper colour (the top of its first raw frame)
+    -> CRANE_WHITE per channel, black stays black."""
+    raw = sorted((HERE / "work" / take["work"] / "raw").glob("f*.png"))[0]
+    first = np.asarray(Image.open(raw).convert("RGB")).astype(np.float32)
+    paper = np.median(first[: first.shape[0] // 16].reshape(-1, 3), axis=0)
+    out = []
+    for image in images:
+        arr = image.astype(np.float32)
+        arr[..., :3] = np.clip(arr[..., :3] / paper * CRANE_WHITE, 0, 255)
+        out.append(arr.astype(np.uint8))
+    return out
 
 
 def sized(image, width):
@@ -271,6 +302,8 @@ if __name__ == "__main__":
     cuts = cut_all(take, chosen, only)
     if "--frames-only" not in sys.argv and only is None:
         images = [np.asarray(Image.open(c).convert("RGBA")).copy() for c in cuts]
+        if take.get("whiten"):
+            images = whiten(take, images)
         fixed = take["retouch"](images) if take["retouch"] else images
         if take.get("ride"):
             fixed = ride(take, fixed, [0, *played(take, fixed)])

@@ -1,0 +1,10 @@
+{
+  "model": "kling-video/v3.0/pro/image-to-video",
+  "prompt": "This sumi-e ink painting of a red-crowned crane comes to life and flies in place on plain rice paper. The crane makes one slow, full wingbeat that takes the whole clip, starting at once: the raised wings sweep down below the body, the far wing passing behind the head and neck, then they rise back up to the raised pose of the first image. The painting stays the same hand-painted ink painting on every frame. Even at the bottom of the down-stroke, when the wings are seen from below, they are painted exactly like the wings in the first image: the black flight feathers are wet, ragged sumi strokes with dry-brush split tips, and keep their size; the white feathers are bare paper softly shaded with grey ink wash that bleeds into the paper; the wing edges are fine broken brush lines that swell and thin. Never a thick, even black outline, never a flat white cut-out shape, never cartoon or line art. The black neck, the small gold crown and the long beak stay unchanged. The body, neck, head and trailing legs stay almost still, and the crane keeps exactly its size and place in the frame. Plain empty rice paper, evenly lit, unchanged. Locked-off camera, no zoom, no pan, no new objects, no text, nothing else changes. Nothing red anywhere.",
+  "usd": "0.560",
+  "made": "20261009-214705",
+  "files": [
+    "crane-fly-a2.mp4"
+  ],
+  "from_image": "reference/home-v2/ink/originals/gpt25-crane-paint-a.png"
+}
