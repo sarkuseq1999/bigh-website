@@ -5,8 +5,8 @@ import { shadow } from "@/components/home-v2/look-ink/assets";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { getSummary, productSlugs } from "../catalog";
 import type { InkProduct, ProductSummary } from "../product-types";
+import { summaries } from "../products/summaries";
 import styles from "./product-ink.module.css";
 
 // After Buy, full width on paper: the questions on hairlines with round toggles, the other bottles
@@ -14,8 +14,10 @@ import styles from "./product-ink.module.css";
 // footer.
 export function After({ product }: { product: InkProduct }) {
   const copy = useCopy();
+  // Every related product has a page (summaries, not the catalog: the catalog would bring every
+  // product's whole page into this page's script).
   const related = product.related
-    .map((slug) => getSummary(slug))
+    .map((slug) => summaries.find((summary) => summary.slug === slug))
     .filter((summary): summary is ProductSummary => Boolean(summary));
   return (
     <>
@@ -52,14 +54,7 @@ export function After({ product }: { product: InkProduct }) {
             <ul className={styles.more}>
               {related.map((summary) => (
                 <li key={summary.slug}>
-                  <Link
-                    href={
-                      productSlugs.includes(summary.slug)
-                        ? `/products/${summary.slug}`
-                        : "/#products"
-                    }
-                    className={styles.moreLink}
-                  >
+                  <Link href={`/products/${summary.slug}`} className={styles.moreLink}>
                     <span className={styles.moreStand} aria-hidden="true">
                       <Image
                         className={`${base.ink} ${styles.morePool}`}

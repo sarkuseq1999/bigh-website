@@ -6,54 +6,16 @@ import { useEffect, useId, useRef, useState, type CSSProperties } from "react";
 import { useCopy } from "@/i18n/use-copy";
 import type { ProductPage } from "./product-types";
 import { anchorId, useArrivals, type Chapter } from "./template-chapters-kit";
+import { monthPlan, titleFor } from "./template-chapters-model";
 import shared from "./template-chapters.module.css";
 import styles from "./template-chapters-daily.module.css";
 
 /** Tall enough to pin the month while it fills: the same test as the CSS. */
 const PINNED = "(min-height: 600px)";
-/** The most days drawn. A longer bottle still counts to its full number. */
-const MAX_DAYS = 120;
 /** Capsules drawn in a day, one each; more than this show as one capsule with a count. */
 const MAX_GLYPHS = 6;
 /** The share of the pinned scroll the month takes to fill; the rest is the full month, resting. */
 const FILL = 0.84;
-
-/** A whole number from the data, or 0 when it is missing, zero, negative or not a number. */
-function whole(value: unknown) {
-  const number = Math.floor(Number(value));
-  return Number.isFinite(number) && number > 0 ? number : 0;
-}
-
-/** The serving as the calendar needs it, safe for any values (2 a day for 60 days, missing ones). */
-export function monthPlan(serving: Partial<ProductPage["serving"]> | undefined) {
-  const perDay = whole(serving?.capsules);
-  const perBottle = whole(serving?.perBottle);
-  const days = whole(serving?.days) || (perDay && perBottle ? Math.floor(perBottle / perDay) : 0);
-  const total = perBottle || perDay * days;
-  const drawn = Math.min(days, MAX_DAYS);
-  // About 6 across and 5 down for a month on wide screens, 5 across and 6 down on phones.
-  const wide = Math.min(12, Math.max(4, Math.round(Math.sqrt(drawn * 1.3))));
-  const narrow = Math.min(8, Math.max(4, Math.round(Math.sqrt(drawn * 0.8))));
-  return {
-    perDay,
-    days,
-    total,
-    drawn,
-    wide,
-    narrow,
-    wideRows: Math.max(1, Math.ceil(drawn / wide)),
-    narrowRows: Math.max(1, Math.ceil(drawn / narrow)),
-  };
-}
-
-/** The title, in months when the bottle lasts about a month or two or three. */
-export function titleFor(days: number) {
-  if (days >= 28 && days <= 31) return "One bottle, one month.";
-  if (days >= 56 && days <= 62) return "One bottle, two months.";
-  if (days >= 84 && days <= 93) return "One bottle, three months.";
-  if (days === 1) return "One bottle, one day.";
-  return "One bottle, {days} days.";
-}
 
 // Chapter 6, how to take it: one bottle drawn as a month you can read at a glance (Timeline's
 // "familiar comparison", made tangible). A day for every day the bottle lasts, each with that

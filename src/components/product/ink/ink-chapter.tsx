@@ -5,7 +5,7 @@ import type { CSSProperties, ReactNode, Ref } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkArt } from "../product-types";
-import { anchorId, type ChapterId } from "../template-chapters-kit";
+import { anchorId, type ChapterId } from "../template-chapters-model";
 import styles from "./product-ink.module.css";
 
 /** The honesty tags (DESIGN.md): "Illustration" (catalog m574) and Dr. Liu's "Portrait painting". */

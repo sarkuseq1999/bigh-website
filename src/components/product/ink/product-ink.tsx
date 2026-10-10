@@ -1,5 +1,7 @@
 "use client";
 
+import { ProductPagesProvider } from "@/components/home/product-action";
+import { SiteDialogs } from "@/components/ink/dialogs";
 import { InkPage } from "@/components/ink/ink-page";
 import type { InkProduct } from "../product-types";
 import { After } from "./after";
@@ -34,5 +36,23 @@ export function ProductInkPage({ product }: { product: InkProduct }) {
         </div>
       )}
     </InkPage>
+  );
+}
+
+/** The ink page as the product route renders it: the shared header's sheets and the product links
+ *  need the same providers as About (`pages`: product name → its page, read on the server). */
+export function ProductInkRoute({
+  product,
+  pages,
+}: {
+  product: InkProduct;
+  pages: Record<string, string>;
+}) {
+  return (
+    <ProductPagesProvider pages={pages}>
+      <SiteDialogs>
+        <ProductInkPage product={product} />
+      </SiteDialogs>
+    </ProductPagesProvider>
   );
 }

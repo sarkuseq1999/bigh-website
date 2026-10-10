@@ -5,7 +5,7 @@ import { Fragment, useSyncExternalStore } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
-import { monthPlan, titleFor } from "../template-chapters-daily";
+import { monthPlan, titleFor } from "../template-chapters-model";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 

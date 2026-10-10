@@ -1,11 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
-import { ProductPagesProvider } from "@/components/home/product-action";
-import { SiteDialogs } from "@/components/ink/dialogs";
 import { getProduct, productPageLinks, productSlugs } from "@/components/product/catalog";
-import { ProductInkPage } from "@/components/product/ink/product-ink";
-import { ProductPageView } from "@/components/product/product-page";
+import { ProductTemplate } from "@/components/product/product-template";
 import { redirect } from "@/i18n/navigation";
 
 type Params = Promise<{ locale: string; slug: string }>;
@@ -32,16 +29,7 @@ export default async function ProductRoute({ params }: { params: Params }) {
   const product = getProduct(slug);
   if (!product) notFound();
 
-  if (product.ink) {
-    // The ink page (October 9, 2026): the shared header's sheets and the product links need the
-    // same providers as About.
-    return (
-      <ProductPagesProvider pages={productPageLinks()}>
-        <SiteDialogs>
-          <ProductInkPage product={{ ...product, ink: product.ink }} />
-        </SiteDialogs>
-      </ProductPagesProvider>
-    );
-  }
-  return <ProductPageView product={product} />;
+  // One template per page, each in its own chunks (product-template.tsx). The ink page's header
+  // sheets and product links need the product pages, as About's do.
+  return <ProductTemplate product={product} pages={product.ink ? productPageLinks() : undefined} />;
 }

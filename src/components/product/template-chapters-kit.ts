@@ -3,59 +3,19 @@
 import gsap from "gsap";
 import { SplitText } from "gsap/SplitText";
 import { useEffect, type RefObject } from "react";
-import type { ProductStudy } from "./product-types";
 
-// Shared pieces for Template 2, "Chapters": the chapter model and the calm arrivals every chapter uses.
+// Shared pieces for Template 2, "Chapters": the chapter model (pure, in template-chapters-model.ts,
+// re-exported here) and the calm arrivals every chapter uses.
 
-export type ChapterId = "overview" | "why" | "inside" | "research" | "people" | "daily" | "buy";
-/** "night": a dark photo chapter that paints itself; the page stays paper, the index turns light. */
-export type Tone = "paper" | "tint" | "night";
-export type Chapter = { id: ChapterId; name: string; tone: Tone; number: number };
-
-/** The chapter's element id, also its #anchor, so the index works before scripts load. */
-export function anchorId(id: ChapterId) {
-  return `chapter-${id}`;
-}
-
-/** Where the giant name parts for the bottle: at the word break nearest the middle ("Nuri|Cell",
- *  "Green Bee|Propolis"), or in the middle of a single word. (Here, not in the hero, so the ink
- *  page's opening can use it without loading the hero's 3D code.) */
-export function splitName(name: string): [string, string] {
-  const middle = name.length / 2;
-  const breaks = [...name.matchAll(/ |(?<=[a-z])(?=[A-Z])/g)].map((match) => match.index);
-  if (breaks.length === 0) {
-    const half = Math.ceil(middle);
-    return [name.slice(0, half), name.slice(half)];
-  }
-  const at = breaks.reduce((best, cut) =>
-    Math.abs(cut - middle) < Math.abs(best - middle) ? cut : best,
-  );
-  return [name.slice(0, at).trim(), name.slice(at).trim()];
-}
-
-/** Small counts as words, for headings ("Inside every capsule, four ingredients."). */
-export const WORDS: readonly string[] = [
-  "",
-  "one",
-  "two",
-  "three",
-  "four",
-  "five",
-  "six",
-  "seven",
-  "eight",
-  "nine",
-  "ten",
-];
-
-/** Oldest first. Studies from the same year keep the order the product's data gives them. */
-export function byYear(studies: ProductStudy[]) {
-  const year = (study: ProductStudy) => Number.parseInt(study.year, 10) || 0;
-  return studies
-    .map((study, index) => ({ study, index }))
-    .sort((a, b) => year(a.study) - year(b.study) || a.index - b.index)
-    .map(({ study }) => study);
-}
+export {
+  anchorId,
+  byYear,
+  splitName,
+  WORDS,
+  type Chapter,
+  type ChapterId,
+  type Tone,
+} from "./template-chapters-model";
 
 /** SplitText line and word classes; their "-mask" wrappers get room for descenders in the CSS. */
 export const lineClass = "tc-line";
