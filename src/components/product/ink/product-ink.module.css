@@ -713,6 +713,10 @@
   line-height: 1.3;
   letter-spacing: normal;
   text-wrap: balance;
+  /* Japanese and Chinese may break between any two characters, which splits カプセル / 胶囊 across
+     two lines; keep-all keeps each word whole and the catalog's zero-width space is the one place
+     a caption may wrap. */
+  word-break: keep-all;
 }
 
 .page .sum figcaption {
@@ -731,6 +735,7 @@
   color: var(--muted);
   text-align: center;
   text-wrap: balance;
+  word-break: keep-all;
 }
 
 .page .sum + p.text {

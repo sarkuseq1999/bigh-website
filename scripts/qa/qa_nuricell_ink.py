@@ -652,6 +652,55 @@ NEW = ["Portrait painting", "capsules a day", "capsules in each bottle"]
 # words too, but each also sits inside English sentences the template leaves untranslated (the notes
 # say "Ingredient research…"), so they are read from their own elements.
 NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
+# The five paintings' descriptions as the page passes them (nuricell.ts), by chapter.
+ALTS = {
+    "why": "A paper lantern whose light comes on, painted in ink and gold leaf",
+    "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
+    "research": "Seven books as stepping stones across a calm stream, painted in ink",
+    "people": "A portrait painting of Dr. Jiankang Liu in ink and colour",
+    "daily": "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink",
+}
+PLACEHOLDER = re.compile(r"\{[^{}]*\}")
+
+# Each sum caption's lines: whole, and the word capsule (カプセル / 胶囊) alone, as the lines of its
+# glyph rects (a word split across two lines has rects at two heights); inside the sum's figure.
+SUM_CAPTION_LINES = """() => {
+  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
+  const lines = (node, a, b) => {
+    const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b);
+    const tops = [...r.getClientRects()].filter((x) => x.width > 0).map((x) => x.top).sort((p, q) => p - q);
+    return tops.reduce((n, t, i) => (i === 0 || t - tops[i - 1] > 4 ? n + 1 : n), 0);
+  };
+  return [...document.querySelectorAll('[data-sum] [data-sum-label]')].map((el) => {
+    const node = el.firstChild;
+    const text = node.data;
+    const word = ['カプセル', '胶囊'].find((w) => text.includes(w)) ?? null;
+    const box = el.getBoundingClientRect();
+    return { text, word, lines: lines(node, 0, text.length),
+             wordLines: word ? lines(node, text.indexOf(word), text.indexOf(word) + word.length) : 0,
+             inside: box.left >= figure.left - 1 && box.right <= figure.right + 1,
+             wide: document.documentElement.scrollWidth > window.innerWidth };
+  });
+}"""
+
+
+def sum_captions_whole(browser, locale, w, h):
+    """jp and cns break anywhere between characters, which split カプセル and 胶囊 across two lines
+    (1日のカ / プセル数): the captions keep their words whole and stay inside the figure."""
+    ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/nuricell", reduced=True)
+    bring(page, "[data-sum]", 200)
+    page.wait_for_timeout(300)
+    caps = page.evaluate(SUM_CAPTION_LINES)
+    tag = f"languages {locale} {w}"
+    having = [c for c in caps if c["word"]]
+    check(f"{tag}: three sum captions", len(caps) == 3, str([c["text"] for c in caps]))
+    check(
+        f"{tag}: no caption breaks inside its capsule word",
+        len(having) == 2 and all(c["wordLines"] == 1 for c in having),
+        str([(c["text"], c["wordLines"]) for c in caps]),
+    )
+    check(f"{tag}: the captions stay inside the sum, no sideways scroll", all(c["inside"] and not c["wide"] for c in caps), str([(c["text"], c["inside"], c["wide"]) for c in caps]))
+    ctx.close()
 
 
 def languages(browser):
@@ -661,17 +710,38 @@ def languages(browser):
         check(f"languages {locale}: no console errors", not errors, "; ".join(errors[:2]))
         # The chapters' words, not the whole <main>: the questions under them are the template's
         # untranslated English ("…a 30-day supply at 3 capsules a day.") and are out of this task.
-        text = " ".join(page.locator("[data-chapter]").evaluate_all("els => els.map(e => e.textContent)"))
+        chapters = lambda: " ".join(page.locator("[data-chapter]").evaluate_all("els => els.map(e => e.textContent)"))
+        text = chapters()
         left = [s for s in NEW if s in text]
         check(f"languages {locale}: new strings translated", not left, ", ".join(left))
-        alt = page.locator("[data-lantern] img").first.get_attribute("alt")
-        check(f"languages {locale}: painting descriptions translated", alt and "lantern" not in alt, alt)
+        alts = {
+            chapter: page.locator(f'[data-chapter="{chapter}"] figure[data-picture] img').first.get_attribute("alt")
+            for chapter in ALTS
+        }
+        untranslated = [c for c, a in alts.items() if not a or a == ALTS[c]]
+        check(f"languages {locale}: all five painting descriptions translated", not untranslated, ", ".join(untranslated) or alts["why"])
         headers = page.locator('[data-chapter="inside"] thead th').evaluate_all("els => els.map(e => e.textContent.trim())")
         check(f"languages {locale}: ingredient table headers translated", len(headers) == 3 and not set(headers) & set(NEW_TABLE_HEADERS), str(headers))
+        captions = [c.strip() for c in page.locator("[data-sum] [data-sum-label]").all_inner_texts()]
+        check(f"languages {locale}: the three sum captions (days too) translated", len(captions) == 3 and not set(captions) & set(SUM_CAPTIONS), str(captions))
         label = page.locator('[data-chapter="research"] [data-words] > p').first.text_content().strip()
-        toggle = page.locator('[data-chapter="research"] button[aria-expanded]').text_content()
-        check(f"languages {locale}: the research label and 'Show all' translated", label != "The research" and "Show all" not in toggle, f"{label} / {toggle}")
+        button = page.locator('[data-chapter="research"] button[aria-expanded]')
+        shown = button.text_content()
+        check(f"languages {locale}: the research label and 'Show all' translated", label != "The research" and "Show all" not in shown, f"{label} / {shown}")
+        check(f"languages {locale}: no raw {{placeholder}} in a chapter", not PLACEHOLDER.search(text), str(PLACEHOLDER.findall(text)[:3]))
+        button.click()
+        page.wait_for_timeout(300)
+        fewer = button.text_content()
+        check(
+            f"languages {locale}: 'Show fewer studies' translated",
+            button.get_attribute("aria-expanded") == "true" and fewer != shown and "Show fewer" not in fewer and "studies" not in fewer,
+            f"{shown} -> {fewer}",
+        )
+        check(f"languages {locale}: no raw {{placeholder}} with every study shown", not PLACEHOLDER.search(chapters()), str(PLACEHOLDER.findall(chapters())[:3]))
         ctx.close()
+    for locale in ["jp", "cns"]:
+        for w, h in [(1440, 900), (390, 844)]:
+            sum_captions_whole(browser, locale, w, h)
 
 
 SECTIONS = {
