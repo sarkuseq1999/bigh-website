@@ -6,7 +6,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "../add-to-cart";
 import type { InkProduct } from "../product-types";
-import { InkChapter, keepHyphens, titleId } from "./ink-chapter";
+import { InkChapter, keepTogether, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 const EYEBROW_ID = `${titleId("buy")}-eyebrow`;
@@ -67,7 +67,7 @@ export function Buy({ product }: { product: InkProduct }) {
         </div>
         <div>
           <dt>{copy("In each bottle")}</dt>
-          <dd>{keepHyphens(copy(product.serving.supply))}</dd>
+          <dd>{keepTogether(copy(product.serving.supply))}</dd>
         </div>
       </dl>
       <AddToCart wide />

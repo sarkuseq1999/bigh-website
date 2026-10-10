@@ -24,13 +24,26 @@
   --cobalt: var(--ink);
 }
 
-/* 1. The opening: the header floats over it, so it starts 88px down. */
+/* 1. The opening: the header floats over it, so it starts 88px down. Its vertical spaces are kept
+   tight so that, at 1440x900, the name, the bottle and all the words (headline, purpose,
+   highlights, Add to cart, supply) are in the first window, as in the comp. */
 .page .opening {
-  padding: calc(88px + clamp(20px, 3vw, 56px)) 0 var(--chapter-half);
+  padding: calc(88px + clamp(12px, 1.7vw, 32px)) 0 var(--chapter-half);
+}
+
+/* The small line over a heading (the eyebrow, each chapter's label): as in the comps, muted ink
+   in a regular weight and a size between the words and the heading, so it reads as the heading's
+   lead-in, not a stray sentence. */
+.page p.eyebrow,
+.page p.label {
+  color: var(--muted);
+  font-size: clamp(18px, 1.6vw, 24px);
+  font-weight: 400;
+  line-height: 1.3;
 }
 
 .page p.eyebrow {
-  margin: 0 0 clamp(8px, 1.4vw, 20px);
+  margin: 0 0 clamp(8px, 0.9vw, 14px);
   text-align: center;
 }
 
@@ -110,16 +123,17 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   column-gap: var(--gap);
   /* The pool hangs below the bottle's box (0.168 of the column's width, plus the 0.06em the
-     column sinks under the letters): the words start 24px below its picture, at every width. */
-  margin-top: calc(var(--stand) * 0.168 + var(--name) * 0.06 + 24px);
+     column sinks under the letters): the words start 8px below its picture, whose last 20px or so
+     its mask has already faded to nothing. */
+  margin-top: calc(var(--stand) * 0.168 + var(--name) * 0.06 + 8px);
 }
 
 .page p.headline {
-  margin: 0 0 16px;
+  margin: 0 0 12px;
   font-family: var(--display-font);
   font-weight: var(--display-weight);
-  font-size: clamp(30px, 2.8vw, 42px);
-  line-height: 1.12;
+  font-size: clamp(34px, 3.9vw, 60px);
+  line-height: 1.06;
   letter-spacing: -0.022em;
 }
 
@@ -151,6 +165,7 @@
    small bold label, and as large as the mockups' pill. */
 .page .openingBuy button,
 .page [data-chapter="buy"] button {
+  min-width: 240px;
   min-height: 60px;
   padding-inline: 44px;
   border-radius: 99px;
@@ -258,6 +273,11 @@
     margin-top: calc(min(64vw, 320px) * 0.31 + 24px);
   }
 
+  /* The lantern follows the supply line closely (the comp's phone), not after a blank screen. */
+  .page .opening {
+    padding-bottom: 8px;
+  }
+
   .page .openingBuy {
     justify-items: stretch;
   }
@@ -266,10 +286,24 @@
   .page p.headline {
     font-size: clamp(30px, 9vw, 40px);
   }
+}
 
-  /* The full width of the column, as in the phone mockup. */
+/* On a phone the opening's Add to cart spans the column, as in the phone mockup; from 600px it
+   keeps its own width (a full-width black bar on a tablet was heavy), and the Buy chapter's, full
+   width beside the bottle from 960px, is held to 420px in one column. */
+@media (max-width: 599px) {
   .page .openingBuy button {
     width: 100%;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .page .openingBuy {
+    justify-items: start;
+  }
+
+  .page [data-chapter="buy"] button {
+    max-width: 420px;
   }
 }
 
@@ -295,9 +329,12 @@
   min-width: 0;
 }
 
+/* From 960px the words take a little more of the width than the painting (5 : 6, as in the comps),
+   so the headings at the homepage's scale keep each sentence on one line ("A big part of your
+   health." is 10.1 of its font sizes wide: 569px at 1440, where the words now have 617px). */
 @media (min-width: 960px) {
   .page .spread {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
     column-gap: var(--gap);
   }
 }
@@ -307,11 +344,11 @@
    painting (the lantern, about 1 : 1.9) is narrower: at most --picture-height tall (--aspect is
    its width over its height, set on the figure), but never narrower than 220px (a short landscape
    window), and never wider than its column. Beside its words, all of it and its caption fit in the
-   window under the menu bar; over them (one column), half the window, so the chapter's heading
-   comes into view with it, as in the phone mockup. The pictures' `sizes` (ink-chapter.tsx's
-   pictureSizes) follow the same sums. */
+   window under the menu bar; over them (one column), 46% of the window, so with the painting under
+   the menu bar the chapter's label and heading are in view too, as in the phone mockup. The
+   pictures' `sizes` (ink-chapter.tsx's pictureSizes) follow the same sums. */
 .page {
-  --picture-height: 50svh;
+  --picture-height: 46svh;
 }
 
 .page figure.figure {
@@ -357,13 +394,25 @@
   margin: 0 0 14px;
 }
 
-/* On a phone the size follows the window (8.2vw): "A big part of your health.", the longest
-   sentence the headings set as a line of its own, still fits one line from 320px to 959px. */
+/* The homepage's heading scale (the kit's .display, 3.9vw: 56px at 1440), but on a phone the size
+   follows the window (8.2vw): "A big part of your health.", the longest sentence the headings set
+   as a line of its own, still fits one line from 320px to 959px. */
 .page h2.heading {
   margin: 0 0 clamp(16px, 1.6vw, 24px);
-  font-size: clamp(min(36px, 8.2vw), 3.2vw, 50px);
-  line-height: 1.08;
+  font-size: clamp(min(40px, 8.2vw), 3.9vw, 62px);
+  line-height: 1.06;
   text-wrap: balance;
+}
+
+/* One step larger, toward the comps: Dr. Liu's name and the Buy chapter's "NuriCell" (76px at
+   1440; on a phone 12.4vw keeps "Dr. Jiankang Liu" on one line from 320px). Both are Latin names
+   on every page, so they keep Switzer's tight tracking where the kit loosens Korean, Japanese and
+   Chinese headings (-0.01em made the name 16px too wide at 390: "Dr. Jiankang" / "Liu"). */
+.page [data-chapter="people"] h2.heading,
+.page h2.buyName {
+  font-size: clamp(min(48px, 12.4vw), 5.3vw, 80px);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
 }
 
 .page .words p.text + p.text {
@@ -424,7 +473,7 @@
 
 .page .figureNumber {
   font-family: var(--display-font);
-  font-size: clamp(56px, 6vw, 92px);
+  font-size: clamp(64px, 7.2vw, 112px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -831,8 +880,16 @@
 
 .page h2.buyName {
   margin: 0;
-  font-size: clamp(48px, 5vw, 80px);
-  line-height: 1;
+}
+
+/* Beside its words (from 960px) the buy figure is the chapter's tallest part, and it carries its
+   own paper: about 7% of its height above the bottle's cap and 9% under the stroke. The chapter's
+   padding gives that back, so the joins to "How to take it" and to the questions keep the same
+   paper as every other join (158px at 1440), not 200px or more. */
+@media (min-width: 960px) {
+  .page [data-chapter="buy"] {
+    padding-block: calc(var(--chapter-half) * 0.5) calc(var(--chapter-half) * 0.4);
+  }
 }
 
 .page p.focus {
@@ -937,10 +994,13 @@
   }
 }
 
+/* The space under a card is the list item's, outside the link: the link's box (its focus ring,
+   its tap area) ends with its words. */
 .page .more li {
   display: grid;
   grid-row: span 3;
   grid-template-rows: subgrid;
+  margin-bottom: 32px;
 }
 
 .page a.moreLink {
@@ -998,14 +1058,8 @@
   text-decoration-color: var(--ink);
 }
 
-/* The space under a card is the list item's, outside the link: the link's box (its focus ring,
-   its tap area) ends with its words. */
 .page .moreLink .meta {
   margin: 6px 0 0;
-}
-
-.page .more li {
-  margin-bottom: 32px;
 }
 
 .page .notes {

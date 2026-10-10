@@ -16,7 +16,7 @@ const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px"
 
 /**
  * The width a painting is drawn at, for its pictures' `sizes`. A tall one (the lantern, Dr. Liu)
- * is held by the window's height, not its column (product-ink.module.css: half the window over
+ * is held by the window's height, not its column (product-ink.module.css: 46% of the window over
  * its words, the window less 220px beside them, times its width over its height), so asking for
  * 520px would fetch a picture two or three times too wide. Plain calc() with vh, which every
  * browser reads in `sizes` (the CSS's 220px floor matters only on a short landscape window). A
@@ -27,16 +27,18 @@ export function pictureSizes(art: { width: number; height: number }) {
   const aspect = art.width / art.height;
   if (aspect >= 0.8) return PICTURE_SIZES;
   const a = aspect.toFixed(3);
-  return `(max-width: 959px) calc(50vh * ${a}), calc((100vh - 220px) * ${a})`;
+  return `(max-width: 959px) calc(46vh * ${a}), calc((100vh - 220px) * ${a})`;
 }
 
 /**
- * Keeps each hyphenated word ("30-day") on one line: a narrow column otherwise breaks it after
- * its hyphen ("30-" / "day supply"). The text itself is unchanged.
+ * Keeps a short line's pieces together where a narrow column would split them: each hyphenated
+ * word ("30-day", not "30-" / "day supply") and a "·" separator with the item after it (not
+ * "90 vegetarian capsules ·" / "30-day supply"; the line may still break before the dot). The
+ * words are unchanged: the space after the dot becomes a no-break space.
  */
-export function keepHyphens(text: string): ReactNode {
-  const parts = text.split(/(\S*\w-\w\S*)/u);
-  if (parts.length === 1) return text;
+export function keepTogether(text: string): ReactNode {
+  const parts = text.replace(/ · /gu, " ·\u00a0").split(/(\S*\w-\w\S*)/u);
+  if (parts.length === 1) return parts[0];
   return parts.map((part, i) =>
     i % 2 === 1 ? (
       <span key={i} className={styles.nowrap}>

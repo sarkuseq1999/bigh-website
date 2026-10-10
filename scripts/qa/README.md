@@ -47,7 +47,12 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
   the lantern's light coming on (no lighter flash; lit with reduced motion and without script),
   every word of nuricell.ts, sticky paintings inside their chapters, the painted sum and its
   captions, nine sizes, deep links, and the new strings in kr/jp/cns/vn. Pictures in
-  `out/nuricell-ink/`.
+  `out/nuricell-ink/`. On a built site (`next start` or the demo) the dev-only `?ink-sum` fixtures
+  are skipped (the page shows the painted sum for each). Known dev-only false positive: `next dev`
+  may log "Image with src /images/products/nuricell.png was detected as the Largest Contentful
+  Paint"; its check keeps one entry per picture URL and the last `<Image>` wins, and the menu bar's
+  thumbnails and the Buy chapter's bottle (both lazy) share the opening bottle's URL. The opening
+  bottle itself is eager with high priority; production builds do not run that check.
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the

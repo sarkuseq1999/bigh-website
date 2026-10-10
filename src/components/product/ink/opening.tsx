@@ -7,7 +7,7 @@ import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "../add-to-cart";
 import type { ProductPage } from "../product-types";
 import { anchorId, splitName } from "../template-chapters-kit";
-import { keepHyphens } from "./ink-chapter";
+import { keepTogether } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 // Chapter 1: the giant name parts round the real bottle, which stands in the kit's ink pool (the
@@ -86,7 +86,7 @@ export function Opening({ product }: { product: ProductPage }) {
               ))}
             </ul>
             <AddToCart />
-            <p className={base.caption}>{keepHyphens(copy(product.serving.supply))}</p>
+            <p className={base.caption}>{keepTogether(copy(product.serving.supply))}</p>
           </div>
         </div>
       </div>
