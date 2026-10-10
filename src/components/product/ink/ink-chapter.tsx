@@ -18,6 +18,12 @@ export function titleId(id: ChapterId) {
   return `${anchorId(id)}-title`;
 }
 
+/** A heading's sentences, one line each (DESIGN's Set Lines Rule), split after . ! ? and the CJK
+ *  stops, as About's opening does (about-ink.tsx). */
+export function sentences(text: string) {
+  return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
+}
+
 /**
  * One painting as its own blend group: the figure multiplies onto the page's paper and its pictures
  * draw normally inside it, so the figure may be sticky, and a lit layer may cross-fade over an

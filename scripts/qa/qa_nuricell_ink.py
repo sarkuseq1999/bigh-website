@@ -173,6 +173,71 @@ def lantern_state(page):
     )
 
 
+BLOOMING = "() => ['in', 'done'].includes(document.querySelector('[data-lantern] img:not([data-lit])').dataset.bloom)"
+LIT_STATE = """() => { const f = document.querySelector('[data-lantern]'); const lit = f.querySelector('[data-lit]');
+                       return { light: f.dataset.light, complete: lit.complete && lit.naturalWidth > 0,
+                                lit: Number(getComputedStyle(lit).opacity) }; }"""
+
+
+def lantern_waits_for_its_picture(browser):
+    """The light never starts before the lit picture is in: its request is held for 5s (past
+    LIGHT_AFTER and the decode wait), then let go. (Not opened(): a held picture never lets the
+    page reach networkidle or load.)"""
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = ctx.new_page()
+    held = []
+    page.route("**/*", lambda route: held.append(route) if "lantern-lit-v1.webp" in route.request.url else route.continue_())
+    page.goto(BASE + PATH, wait_until="domcontentloaded")
+    # Hydrated: React has attached itself to the lantern's figure.
+    page.wait_for_function("() => { const f = document.querySelector('[data-lantern]'); return f && Object.keys(f).some(k => k.startsWith('__react')); }", timeout=60000)
+    page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
+    # Note the lit picture's state at the moment the light turns on.
+    page.evaluate(
+        """() => { const f = document.querySelector('[data-lantern]'); const lit = f.querySelector('[data-lit]');
+                   new MutationObserver(() => { if (f.dataset.light === 'on' && !window.__litAtOn)
+                     window.__litAtOn = { complete: lit.complete && lit.naturalWidth > 0 }; })
+                   .observe(f, { attributes: true, attributeFilter: ['data-light'] }); }"""
+    )
+    bring(page, "[data-lantern]", 160)
+    page.wait_for_function(BLOOMING)
+    states = []
+    for _ in range(20):
+        page.wait_for_timeout(250)
+        states.append(page.evaluate(LIT_STATE))
+    waiting = all(s["light"] == "off" and not s["complete"] for s in states)
+    check("lantern: its picture held 5s, the light stays off", held and waiting, f"{len(held)} held; last {states[-1]}")
+    for route in held:
+        route.continue_()
+    page.wait_for_function("() => document.querySelector('[data-lantern]').dataset.light === 'on'", timeout=15000)
+    at_on = page.evaluate("() => window.__litAtOn")
+    check("lantern: let go, it comes on with its picture in", at_on and at_on["complete"], str(at_on))
+    ctx.close()
+
+
+def lantern_waits_until_half_seen(browser):
+    """A slow scroller: with 30% of the lantern in the window it blooms, but its light waits until
+    at least half of it is in."""
+    ctx, page, _, _ = opened(browser, 1440, 900)
+    page.evaluate(
+        """() => { const f = document.querySelector('[data-lantern]'); const b = f.getBoundingClientRect();
+                   window.scrollBy(0, b.top - (innerHeight - b.height * 0.3)); }"""
+    )
+    page.wait_for_timeout(4500)
+    part = page.evaluate(
+        """() => { const f = document.querySelector('[data-lantern]'); const b = f.getBoundingClientRect();
+                   return { light: f.dataset.light, bloom: f.querySelector('img').dataset.bloom,
+                            seen: Math.round((innerHeight - b.top) / b.height * 100) / 100 }; }"""
+    )
+    check("lantern: 30% in the window, it blooms but stays unlit", part["bloom"] in ("in", "done") and part["light"] == "off", str(part))
+    bring(page, "[data-lantern]", 160)
+    page.wait_for_timeout(1200)
+    soon = page.evaluate(LIT_STATE)
+    page.wait_for_timeout(4000)
+    later = page.evaluate(LIT_STATE)
+    check("lantern: brought in, the light comes on a breath later", soon["light"] == "off" and later["light"] == "on", f"{soon} -> {later}")
+    ctx.close()
+
+
 def lantern(browser):
     ctx, page, _, _ = opened(browser, 1440, 900)
     first = lantern_state(page)
@@ -185,16 +250,17 @@ def lantern(browser):
     )
     check("lantern: one blend group (figure multiplies, its layers normal)", blends[0] == "multiply" and all(b == "normal" for b in blends[1:]), str(blends))
     bring(page, "[data-lantern]", 160)
+    page.wait_for_function(BLOOMING)
     page.wait_for_timeout(500)
     early = lantern_state(page)
     check("lantern: still off as it starts to bloom", early["bloom"] in ("in", "done") and early["lit"] < 0.05, str(early))
-    # The unlit picture is taken before the light starts (why.tsx's LIGHT_AFTER, 1.8s after the
-    # bloom starts): the lantern well grown in, still unlit.
-    page.wait_for_timeout(1000)
+    # The unlit picture is taken 1.1s after the bloom starts, well before the light (why.tsx's
+    # LIGHT_AFTER, 1.8s): the lantern well grown in, still unlit.
+    page.wait_for_timeout(600)
     shot = lantern_state(page)
     check("lantern: unlit when photographed", shot["light"] == "off" and shot["lit"] < 0.05, str(shot))
     page.screenshot(path=str(OUT / "lantern-unlit-1440.png"))
-    page.wait_for_timeout(5700)
+    page.wait_for_timeout(6100)
     last = lantern_state(page)
     check("lantern: the light comes on", last["light"] == "on" and last["lit"] > 0.95, str(last))
     page.screenshot(path=str(OUT / "lantern-lit-1440.png"))
@@ -216,6 +282,8 @@ def lantern(browser):
     still = lantern_state(page)
     check("lantern: reduced motion, lit from the start", still["light"] == "on" and still["lit"] > 0.95, str(still))
     ctx.close()
+    lantern_waits_for_its_picture(browser)
+    lantern_waits_until_half_seen(browser)
 
 
 def nojs(browser):

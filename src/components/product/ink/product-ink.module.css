@@ -269,12 +269,13 @@
 }
 
 /* The painting: its own blend group. From 960px it stays put while long words scroll beside it,
-   inside its own grid cell (so it leaves with its chapter). A tall painting (the lantern, about
-   1 : 1.9) is narrower, so all of it and its caption fit in the window under the menu bar
-   (--aspect is its width over its height, set on the figure). */
+   inside its own grid cell (so it leaves with its chapter), pinned from the cell's top. A tall
+   painting (the lantern, about 1 : 1.9) is narrower, so all of it and its caption fit in the
+   window under the menu bar (--aspect is its width over its height, set on the figure), but never
+   narrower than 220px (a short landscape window), and never wider than its column. */
 .page figure.figure {
   justify-self: center;
-  width: min(100%, var(--picture-width), calc((100svh - 220px) * var(--aspect, 1)));
+  width: min(100%, var(--picture-width), max(calc((100svh - 220px) * var(--aspect, 1)), 220px));
   margin: 0;
   mix-blend-mode: multiply;
 }
@@ -283,6 +284,7 @@
   .page figure.figure {
     position: sticky;
     top: 120px;
+    align-self: start;
   }
 }
 
@@ -413,6 +415,10 @@
 
   :global([data-look="ink"]).page [data-light] [data-bloom] ~ img.lit {
     opacity: 1;
+    transition: none;
+  }
+
+  :global([data-look="ink"]).page .litGold {
     transition: none;
   }
 }
