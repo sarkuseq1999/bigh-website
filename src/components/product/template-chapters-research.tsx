@@ -13,8 +13,8 @@ import {
   type FocusEvent,
 } from "react";
 import { useCopy } from "@/i18n/use-copy";
-import type { ProductPage, ProductStudy } from "./product-types";
-import { anchorId, useArrivals, type Chapter } from "./template-chapters-kit";
+import type { ProductPage } from "./product-types";
+import { anchorId, byYear, useArrivals, type Chapter } from "./template-chapters-kit";
 import shared from "./template-chapters.module.css";
 import styles from "./template-chapters-research.module.css";
 
@@ -26,15 +26,6 @@ const LIST = "not all and (min-width: 901px) and (min-height: 700px)";
 const REST_IN = 0.06;
 const REST_OUT = 0.12;
 const MOVE = 1 - REST_IN - REST_OUT;
-
-/** Oldest first. Studies from the same year keep the order the product's data gives them. */
-export function byYear(studies: ProductStudy[]) {
-  const year = (study: ProductStudy) => Number.parseInt(study.year, 10) || 0;
-  return studies
-    .map((study, index) => ({ study, index }))
-    .sort((a, b) => year(a.study) - year(b.study) || a.index - b.index)
-    .map(({ study }) => study);
-}
 
 /** How many years the gold line has reached, from how far along it is (0 to 1). */
 function reached(share: number, count: number) {

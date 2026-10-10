@@ -2,8 +2,10 @@
 
 import { InkPage } from "@/components/ink/ink-page";
 import type { InkProduct } from "../product-types";
+import { Inside } from "./inside";
 import { Opening } from "./opening";
 import styles from "./product-ink.module.css";
+import { Research } from "./research";
 import { Why } from "./why";
 
 // The product page in Ink & Gold (NuriCell first, October 9, 2026; spec
@@ -18,6 +20,8 @@ export function ProductInkPage({ product }: { product: InkProduct }) {
         <div data-product-ink={product.slug}>
           <Opening product={product} />
           <Why product={product} motion={motion} />
+          <Inside product={product} />
+          {product.studies.length > 0 ? <Research product={product} /> : null}
         </div>
       )}
     </InkPage>

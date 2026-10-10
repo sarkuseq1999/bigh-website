@@ -422,3 +422,185 @@
     transition: none;
   }
 }
+
+/* 3. What's inside. */
+.page table.ingredients {
+  width: 100%;
+  margin-top: clamp(16px, 2vw, 24px);
+  border-collapse: collapse;
+  caption-side: bottom;
+}
+
+.page .ingredients tr {
+  border-top: 1px solid var(--hair);
+}
+
+.page .ingredients td,
+.page .ingredients th {
+  padding: 16px 0;
+  vertical-align: top;
+  text-align: left;
+  font-weight: inherit;
+}
+
+.page td.amount {
+  width: 9.5ch;
+  padding-right: 20px;
+  font-family: var(--display-font);
+  font-size: clamp(40px, 3.6vw, 56px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.page .unit {
+  font-size: 0.42em;
+  letter-spacing: 0;
+}
+
+.page .ingredient {
+  display: block;
+  font-size: 20px;
+  font-weight: 500;
+}
+
+.page .role,
+.page .form {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.page caption.tableNote {
+  padding-top: 12px;
+  text-align: left;
+}
+
+.page .synergy {
+  margin-top: clamp(32px, 4vw, 56px);
+}
+
+.page h3.subheading {
+  margin: 0 0 8px;
+  font-size: clamp(24px, 2vw, 30px);
+  font-weight: 500;
+  letter-spacing: -0.015em;
+}
+
+.page ul.pairs {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page .pairs li {
+  padding: 16px 0;
+  border-top: 1px solid var(--hair);
+}
+
+.page p.pairOf {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.page h4.pairTitle {
+  margin: 4px 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.page p.pairLine {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.page p.note {
+  margin-top: 12px;
+}
+
+/* Phones: the amount takes only the room its digits need (9.5ch of 40px type leaves the names a
+   110px column), so the names and what they do keep a readable one. */
+@media (max-width: 599px) {
+  .page td.amount {
+    width: 1%;
+    padding-right: 16px;
+  }
+}
+
+/* 4. The research: studies on hairlines with round toggles (the homepage's research list). */
+.page ul.studies {
+  display: grid;
+  margin: clamp(16px, 2vw, 24px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page .studies li {
+  border-top: 1px solid var(--hair);
+}
+
+.page summary.summary {
+  display: grid;
+  grid-template-columns: 4.5ch minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 16px;
+  min-height: 56px;
+  padding: 12px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.page summary.summary::-webkit-details-marker {
+  display: none;
+}
+
+.page .year {
+  font-size: 22px;
+  font-weight: 300;
+  font-variant-numeric: tabular-nums;
+}
+
+.page .studyTitle {
+  display: block;
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.page .meta {
+  display: block;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.page .toggle {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--hair);
+  border-radius: 50%;
+  font-size: 22px;
+  transition: rotate 0.6s var(--ease);
+}
+
+.page details[open] .toggle {
+  rotate: 45deg;
+}
+
+.page .open {
+  display: grid;
+  justify-items: start;
+  gap: 8px;
+  padding: 0 0 20px calc(4.5ch + 16px);
+}
+
+.page button.showAll {
+  margin-top: 20px;
+}

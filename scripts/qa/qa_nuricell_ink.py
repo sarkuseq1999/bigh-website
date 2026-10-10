@@ -300,7 +300,85 @@ def nojs(browser):
     ctx.close()
 
 
-SECTIONS = {"shell": shell, "others": others, "multiply": multiply, "lantern": lantern, "nojs": nojs}
+def nuricell_strings():
+    """Every word of nuricell.ts the page must show: its string literals, less picture alts and
+    pictures, keys, units and colours."""
+    source = (REPO / "src/components/product/products/nuricell.ts").read_text(encoding="utf-8")
+    keep = []
+    for line in source.splitlines():
+        if re.search(r"\b(alt|src|accent|key|from|to|unit|signature)\s*:", line) or line.strip().startswith("//"):
+            continue
+        for text in re.findall(r'"((?:[^"\\]|\\.)*)"', line):
+            if len(text) < 4 or text.startswith(("/", "#", "../", "./")) or re.fullmatch(r"[a-z0-9-]+/?", text):
+                continue
+            keep.append(text)
+    return keep
+
+
+EXPECT = {
+    "why": "lantern-unlit",
+    "inside": "capsule",
+    "research": "books",
+    "people": "liu",
+    "daily": "breakfast",
+    "buy": "stroke",
+}
+
+
+def words(browser, chapters=("overview", "why", "inside", "research")):
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    text = re.sub(r"\s+", " ", page.locator("main").text_content())
+    # Words of chapters not built yet are left for the task that builds them.
+    missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in text]
+    print(f"words: {len(missing)} strings not on the page yet: {missing[:6]}")
+    for chapter in chapters:
+        if chapter in EXPECT:
+            n = page.locator(f'[data-chapter="{chapter}"] img[src*="{EXPECT[chapter]}"]').count()
+            check(f"words {chapter}: its own painting", n >= 1)
+    built = {
+        "inside": ["Inside every capsule, four ingredients.", "Acetyl-L-carnitine", "Creatine", "Alpha-lipoic acid",
+                   "Choline", "Why these four work together", "Fuel in, energy out", "Energy on hand",
+                   "Two halves of a messenger"],
+        "research": ["The research on the ingredients", "Show all 7 studies"],
+    }
+    for chapter in chapters:
+        for s in built.get(chapter, []):
+            check(f"words {chapter}: “{s}”", s in text)
+    ctx.close()
+    return missing
+
+
+def sticky(browser):
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    page.locator('[data-chapter="research"] button[aria-expanded]').click()
+    for summary in page.locator('[data-chapter="research"] summary').all():
+        summary.click()
+    for chapter in ("inside", "research"):
+        bring(page, f'[data-chapter="{chapter}"]', 0)
+        tall = page.evaluate(f"() => document.querySelector('[data-chapter=\"{chapter}\"]').getBoundingClientRect().height")
+        worst = 0.0
+        for step in range(0, int(tall) + 900, 120):
+            r = page.evaluate(
+                f"""() => {{ const c = document.querySelector('[data-chapter="{chapter}"]');
+                    const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
+                    const s = c.getBoundingClientRect(); return [f.top - s.top, s.bottom - f.bottom]; }}"""
+            )
+            worst = min(worst, r[0], r[1])
+            page.mouse.wheel(0, 120)
+            page.wait_for_timeout(30)
+        check(f"sticky {chapter}: the painting stays inside its chapter", worst >= -1, f"worst {worst:.1f}px")
+    ctx.close()
+
+
+SECTIONS = {
+    "shell": shell,
+    "others": others,
+    "multiply": multiply,
+    "lantern": lantern,
+    "nojs": nojs,
+    "words": words,
+    "sticky": sticky,
+}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

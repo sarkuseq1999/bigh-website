@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useReducedMotion } from "@/components/home/use-reduced-motion";
 import { useCopy } from "@/i18n/use-copy";
 import type { ProductPage } from "../product-types";
+import { WORDS } from "../template-chapters-kit";
 import { cutawayScript, type CutawayScene } from "./capsule-cutaway-scene";
 import styles from "./capsule-cutaway.module.css";
 
@@ -13,8 +14,6 @@ import styles from "./capsule-cutaway.module.css";
 // dark stage, its fill shown as one layer per ingredient in proportion to the serving, and each
 // layer is met on its own with its amount set large. Draft lines; the approved ones are the
 // product's own (credit, serving).
-
-const WORDS = ["", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
 
 /** Layer colours only tell the ingredients apart. ALA really is pale yellow; the rest are white. */
 const COLOURS: Record<string, string> = {
