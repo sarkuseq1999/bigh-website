@@ -8,8 +8,10 @@ src/components/product/ink/nuricell-art.ts. About's treatments (reference/ink-pa
 build_about.py): the paper divided out and lifted to white so each painting multiplies onto the
 page's paper with no box, the outer edge feathered, gold leaf kept as a light mask for the kit's
 glint. The lantern's unlit take is registered onto its lit take and both share one crop, so the
-light comes on in place; the lit take then gets its light from within (core_light). The painted sum is laid
-out again with even gaps.
+light comes on in place; the unlit body is dimmed to dusk (dusk), so the light reads as it comes on.
+The core-lit takes of Task 9 rounds 1-2 (the light laid on lit-v2 in code) were superseded by the
+painted lit-v3; they and the other unshipped lantern files live in spares/. Only shipped pictures
+are written to public/. The painted sum is laid out again with even gaps.
 
 usage: python -X utf8 reference/ink-pages/nuricell/build_nuricell.py
 """
@@ -35,8 +37,8 @@ TS = REPO / "src/components/product/ink/nuricell-art.ts"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
 # The take of each painting that ships (the original's name after "gpt25-"). The lantern's v2 takes
-# were chosen in Task 1 (v1 is kept only as a spare); its lit take since Task 9 round 3 is lit-v3,
-# painted as an edit of unlit-v2 (pale paper, a warm core, light under the rims, gold flecks).
+# were chosen in Task 1 (v1 is kept only as a spare original); its lit take since Task 9 round 3 is
+# lit-v3, painted as an edit of unlit-v2 (pale paper, a warm core, light under the rims, gold flecks).
 TAKES = {
     "lantern-lit": "lantern-lit-v3",
     "lantern-unlit": "lantern-unlit-v2",
@@ -95,27 +97,50 @@ def lantern_body(unlit):
     return mask, (left, top, right, bottom)
 
 
-LUM = np.array([0.299, 0.587, 0.114], np.float32)
-
-# Rounds 1-2 relit the lit-v2 take in code (core_light); round 3 painted the light instead (lit-v3),
-# which reads better. True rebuilds lantern-lit-core-v2 (with TAKES["lantern-lit"] = "lantern-lit-v2").
-CORE_LIGHT = False
-
-# The light inside the lantern, from its core out (core_light): pale cream, golden, a warm amber,
-# then a warm sienna at the body's sides (never grey: grey under the take's yellow read olive).
-# Darker sides made a brown lantern; paler creams a white patch (variants beside the comp, Task 9).
-LIGHT = ((0, (255, 249, 232)), (0.38, (254, 236, 186)), (0.72, (244, 200, 124)), (1.08, (180, 138, 90)))
-# The core's oval: its half-width and half-height as shares of the body's, and its centre (a
-# little above the middle).
-CORE = (0.82, 0.95, -0.12)
+# The unlit lantern at dusk (Ruling 32, final review): its paper body was near-white, so on the
+# page's cream paper the light coming on read too gently. The body's paper is scaled by DUSK (its
+# brush texture scaled, not flattened), toward the side tone of Mo's comp (2-why-lantern.jpg: about
+# 200-215 on the page), still neutral grey. Strokes darker than STROKES[0] (ribs, cracks) keep their
+# value, with a smooth step up to STROKES[1]; the rims, cap, base and cord lie outside the body.
+# Variants 0.86 / 0.89 / 0.92 were judged on the page's paper beside lit-v3 and the comp.
+DUSK = 0.89
+STROKES = (140, 205)
+# How far inside the lantern's ink the dimming mask stops before its blur (sigma 8): 3 sigma.
+INSET = 24
 
 
-def ramp(d, stops):
-    """Colour along d from (position, rgb) stops, linear between them."""
-    out = np.zeros(d.shape + (3,), np.float32)
-    for i in range(3):
-        out[..., i] = np.interp(d, [p for p, _ in stops], [c[i] for _, c in stops])
-    return out
+def dusk_mask(unlit):
+    """lantern_body's mask for dimming: the same body between the rims, eroded INSET px in every
+    direction from the lantern's own ink before its blur, so the blur never greys the paper beside
+    it. The ink's row by row extent, not lantern_body's blurred one: the brush-ragged sides have
+    notches of bare paper that the blurred extent fills (round-1 measurement: up to 0.79 of the
+    mask on paper 1px past the ink). The erosion runs over the rims too (not from the rim line), so
+    the body is dimmed right up to the cap and the base; a 3px soft step at the rim line keeps the
+    rims' own light streaks as they are."""
+    a = np.asarray(unlit).astype(np.float32)
+    h, w = a.shape[:2]
+    _, (_, top, _, bottom) = lantern_body(unlit)
+    ink = cv2.morphologyEx((a.min(axis=2) < 236).astype(np.uint8), cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    rows = np.zeros((h, w), np.float32)
+    for y in range(max(0, top - 2 * INSET), min(h, bottom + 2 * INSET + 1)):
+        xs = np.flatnonzero(ink[y])
+        if len(xs):
+            rows[y, xs[0] : xs[-1] + 1] = 1
+    disc = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * INSET + 1, 2 * INSET + 1))
+    mask = cv2.GaussianBlur(cv2.erode(rows, disc), (0, 0), 8)
+    between = np.zeros((h, 1), np.float32)
+    between[top : bottom + 1] = 1
+    return mask * cv2.GaussianBlur(between, (0, 0), 3)
+
+
+def dusk(unlit):
+    """The unlit take with its paper body dimmed (DUSK), as it ships."""
+    a = np.asarray(unlit).astype(np.float32)
+    mask = dusk_mask(unlit)
+    value = a @ np.array([0.299, 0.587, 0.114], np.float32)
+    w = np.clip((value - STROKES[0]) / (STROKES[1] - STROKES[0]), 0, 1)
+    scale = 1 - (1 - DUSK) * w * w * (3 - 2 * w) * mask
+    return Image.fromarray(np.clip(np.rint(a * scale[..., None]), 0, 255).astype(np.uint8))
 
 
 def gold_flecks(a, mask, dx, dy, n=16, sat_from=0.55, min_area=40, max_aspect=None):
@@ -141,36 +166,6 @@ def gold_flecks(a, mask, dx, dy, n=16, sat_from=0.55, min_area=40, max_aspect=No
         if len(chosen) >= n:
             break
     return np.isin(lab, chosen).astype(np.float32)
-
-
-def core_light(lit, unlit):
-    """Lit from within by gold leaf (Mo's comp, 2-why-lantern.jpg; Task 9 rounds 1-2). The take is
-    gold rim to rim, so its light read as a gold object. The body (between its rims, from the unlit
-    layer) is relit: a light field from a soft oval core a little above the middle (LIGHT: pale
-    cream, golden, amber, then warm umber sides) times the take's own brush texture (its luminance
-    over a blur of it), so the ribs, cracks and strokes stay; a thin warm band of light on the paper
-    just under the cap and just above the base (the black lacquer stays black); and a few gold-leaf
-    flecks from the take's most saturated spots. Outside the body (cap, base, cord, outer halo) the
-    take is untouched. The figure multiplies, so the light reads by contrast, not by brightness.
-    Returns the picture and its flecks (for the gold mask)."""
-    a = np.asarray(lit).astype(np.float32)
-    mask, (l, t, r, b) = lantern_body(unlit)
-    h, w = mask.shape
-    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    dx, dy = (xx - (l + r) / 2) / ((r - l) / 2), (yy - (t + b) / 2) / ((b - t) / 2)
-    lum = a @ LUM
-    texture = np.clip(lum / np.maximum(cv2.GaussianBlur(lum, (0, 0), 22), 1), 0.15, 1.35) ** 0.9
-    light = ramp(np.sqrt((dx / CORE[0]) ** 2 + ((dy - CORE[2]) / CORE[1]) ** 2), LIGHT)
-    rims = np.exp(-(((yy - t) / ((b - t) * 0.03)) ** 2)) + np.exp(-(((yy - b) / ((b - t) * 0.03)) ** 2))
-    rims = cv2.GaussianBlur((np.clip(rims, 0, 1) * (np.abs(dx) < 0.95)).astype(np.float32), (0, 0), 3)[..., None]
-    light = light * (1 - 0.75 * rims) + np.array((252, 214, 140), np.float32) * 0.75 * rims
-    body = light * texture[..., None]
-    flecks = gold_flecks(a, mask, dx, dy)
-    f = cv2.GaussianBlur(flecks, (0, 0), 0.8)[..., None]
-    body = body * (1 - f) + np.array((198, 150, 52), np.float32) * np.clip(texture, 0.7, 1.2)[..., None] * f
-    m = mask[..., None]
-    out = a * (1 - m) + body * m
-    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8)), flecks
 
 
 def fleck_mask(flecks, name, width=1000):
@@ -207,20 +202,8 @@ def lantern():
     box = (min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
     unlit = unlit.crop(box)
     # Each picture under a name of its own (a replaced picture needs a new filename: browsers and the
-    # image optimizer cache by URL). Every earlier file is kept: lantern-lit-v1 (the lit-v2 take),
-    # lantern-lit-core-v1 and -core-v2 (rounds 1 and 2: core_light on lit-v2) and lantern-unlit-v1
-    # (unlit-v2 registered onto lit-v2).
-    if CORE_LIGHT:
-        # Rounds 1-2 (TAKES["lantern-lit"] = "lantern-lit-v2"): the light laid on the levelled
-        # picture (its paper already white), so it is feathered and saved as is.
-        name = "lantern-lit-core-v2"
-        lit_img, flecks = core_light(bd.levelled(lit.crop(box)), bd.levelled(unlit))
-        lit_art = bd.art_of(bd.feathered(lit_img, EDGE), name, 1100)
-        fleck_mask(flecks, name)
-        lit_art["gold"] = f"{URL}/{name}-gold.webp"
-        return finish(unlit, "lantern-unlit", 1100), lit_art
-    # The painted lit take (lit-v3), as it is. Its gold mask is its leaf flecks alone: its warm
-    # glow is light, not leaf, and the kit's glint passes over leaf only.
+    # image optimizer cache by URL). The painted lit take (lit-v3), as it is. Its gold mask is its
+    # leaf flecks alone: its warm glow is light, not leaf, and the kit's glint passes over leaf only.
     name = f"lantern-lit-{TAKES['lantern-lit'].rsplit('-', 1)[-1]}"
     lit_art = bd.art_of(bd.feathered(bd.levelled(lit.crop(box)), EDGE), name, 1100)
     a = np.asarray(bd.levelled(lit.crop(box))).astype(np.float32)
@@ -232,8 +215,9 @@ def lantern():
     flecks = gold_flecks(a, mask, dx, dy, n=20, sat_from=0.46, min_area=25, max_aspect=2.5)
     fleck_mask(cv2.dilate(flecks, np.ones((3, 3), np.uint8)), name)
     lit_art["gold"] = f"{URL}/{name}-gold.webp"
-    # The unlit take, registered onto this lit take, is cropped by their shared box: a new file too.
-    unlit_art = bd.art_of(bd.feathered(bd.levelled(unlit), EDGE), f"lantern-unlit-{TAKES['lantern-lit'].rsplit('-', 1)[-1]}", 1100)
+    # The unlit take, registered onto this lit take and cropped by their shared box, its body dimmed
+    # to dusk (v3 was the same crop, undimmed).
+    unlit_art = bd.art_of(bd.feathered(dusk(bd.levelled(unlit)), EDGE), "lantern-unlit-v4", 1100)
     return unlit_art, lit_art
 
 

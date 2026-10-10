@@ -4,7 +4,7 @@
 // gold leaf as a light mask (`gold`). sum.centres: its three numbers, as fractions of its width.
 export const nuricellArt = {
   lanternUnlit: {
-    src: "/images/products/nuricell/ink/lantern-unlit-v3.webp",
+    src: "/images/products/nuricell/ink/lantern-unlit-v4.webp",
     width: 1100,
     height: 2154,
   },
