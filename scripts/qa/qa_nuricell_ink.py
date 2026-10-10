@@ -647,6 +647,33 @@ def sticky(browser):
         ctx.close()
 
 
+NEW = ["Portrait painting", "capsules a day", "capsules in each bottle"]
+# The ingredient table's hidden header and the research chapter's label and "Show all" button are new
+# words too, but each also sits inside English sentences the template leaves untranslated (the notes
+# say "Ingredient research…"), so they are read from their own elements.
+NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
+
+
+def languages(browser):
+    for locale in ["kr", "jp", "cns", "vn"]:
+        ctx, page, response, errors = opened(browser, 1440, 900, f"/{locale}/products/nuricell", reduced=True)
+        check(f"languages {locale}: 200", response is not None and response.status == 200)
+        check(f"languages {locale}: no console errors", not errors, "; ".join(errors[:2]))
+        # The chapters' words, not the whole <main>: the questions under them are the template's
+        # untranslated English ("…a 30-day supply at 3 capsules a day.") and are out of this task.
+        text = " ".join(page.locator("[data-chapter]").evaluate_all("els => els.map(e => e.textContent)"))
+        left = [s for s in NEW if s in text]
+        check(f"languages {locale}: new strings translated", not left, ", ".join(left))
+        alt = page.locator("[data-lantern] img").first.get_attribute("alt")
+        check(f"languages {locale}: painting descriptions translated", alt and "lantern" not in alt, alt)
+        headers = page.locator('[data-chapter="inside"] thead th').evaluate_all("els => els.map(e => e.textContent.trim())")
+        check(f"languages {locale}: ingredient table headers translated", len(headers) == 3 and not set(headers) & set(NEW_TABLE_HEADERS), str(headers))
+        label = page.locator('[data-chapter="research"] [data-words] > p').first.text_content().strip()
+        toggle = page.locator('[data-chapter="research"] button[aria-expanded]').text_content()
+        check(f"languages {locale}: the research label and 'Show all' translated", label != "The research" and "Show all" not in toggle, f"{label} / {toggle}")
+        ctx.close()
+
+
 SECTIONS = {
     "shell": shell,
     "others": others,
@@ -658,6 +685,7 @@ SECTIONS = {
     "sticky": sticky,
     "sum": sum_check,
     "buy": buy_check,
+    "languages": languages,
 }
 
 if __name__ == "__main__":
