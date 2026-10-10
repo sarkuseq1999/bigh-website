@@ -5,6 +5,8 @@ docs/superpowers/plans/2026-10-09-nuricell-ink.md).
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Products, one h1 (the name), the real bottle,
               no canvas, no console errors (1440x900, 390x844)
+  opening     no line over the name and no pool under the bottle (Mo, October 10); the bottle's middle
+              on the letters' middle from 960px (1920 to 960 wide)
   others      the other four product pages keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
@@ -30,6 +32,7 @@ Pictures: scripts/qa/out/nuricell-ink/.
 usage: python -X utf8 scripts/qa/qa_nuricell_ink.py [base-url] [--only=shell,others,...]
 """
 
+import io
 import re
 import sys
 from pathlib import Path
@@ -252,16 +255,14 @@ def multiply(browser):
             blend = pools.nth(i).evaluate("e => getComputedStyle(e).mixBlendMode")
             found = pools.nth(i).evaluate(STACKING)
             check(f"multiply {w} more {i + 1}: the pool multiplies, no stacking context above it", blend == "multiply" and not found, f"{blend}; " + "; ".join(found))
-        # The shared pool and its contact shadow (the opening's two, and the four small pools) are
-        # not quite white at their edges: each carries a radial mask on itself, or a faint rectangle
-        # shows on the paper.
+        # The shared pool painting (the four small pools under More from BiGH) is not quite white
+        # at its edges: each carries a radial mask on itself, or a faint rectangle shows on the paper.
         masked = page.evaluate(
-            """() => [...document.querySelectorAll('[data-chapter="overview"] h1 span[aria-hidden] img:not(:last-child), #more a > span:first-child > img:first-child')]
-                 .map((e) => { const s = getComputedStyle(e);
-                   return { where: e.closest('#more') ? 'more' : 'opening', mask: s.maskImage || s.webkitMaskImage || 'none' }; })"""
+            """() => [...document.querySelectorAll('#more a > span:first-child > img:first-child')]
+                 .map((e) => { const s = getComputedStyle(e); return s.maskImage || s.webkitMaskImage || 'none'; })"""
         )
-        unmasked = [m["where"] for m in masked if "radial-gradient" not in m["mask"]]
-        check(f"multiply {w} masks: the opening's pool and contact shadow and the four More pools", len(masked) == 6 and not unmasked, f"{len(masked)} found; unmasked: {unmasked}")
+        unmasked = [i + 1 for i, m in enumerate(masked) if "radial-gradient" not in m]
+        check(f"multiply {w} masks: the four More pools", len(masked) == 4 and not unmasked, f"{len(masked)} found; unmasked: {unmasked}")
         # Hovering a link changes only its colour: a transform, opacity or filter on it would cut the
         # pool out of the paper's blend.
         bring(page, "#more", 160)
@@ -828,6 +829,43 @@ WHY_LINES = """() => [...document.getElementById('chapter-why-title').children].
 })"""
 
 
+# The bottle's visible part of its picture (the alpha box of nuricell.png, 1230x1278): its top and
+# bottom as fractions of the picture's height.
+BOTTLE_TOP, BOTTLE_BOTTOM = 0.038, 0.971
+
+
+def opening_check(browser):
+    """Mo, October 10: no "Our flagship formula" over the name, no ink pool under the bottle, and
+    the bottle's middle on the letters' middle (it sat high, on their baseline)."""
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    eyebrow = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=overview]').innerText)")
+    kept = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=buy]').innerText)")
+    check("opening: no line over the name (the Buy chapter keeps 'Our flagship formula')", not eyebrow and kept, f"opening {eyebrow}, buy {kept}")
+    pictures = page.evaluate("() => [...document.querySelectorAll('[data-chapter=overview] img')].map((e) => e.getAttribute('src'))")
+    check("opening: the bottle alone, no pool or contact shadow under it", len(pictures) == 1 and "nuricell" in pictures[0], str(pictures))
+    ctx.close()
+    for w, h in [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        boxes = page.evaluate(
+            """() => ['h1 [class*=first]', 'h1 [class*=second]', 'h1 img'].map((s) => {
+                 const b = document.querySelector('[data-chapter=overview] ' + s).getBoundingClientRect();
+                 return [b.left, b.top, b.right, b.bottom]; })"""
+        )
+        # The letters' ink, top to bottom: the darkest pixels in "Nuri"'s box (40px of air above and below).
+        x0, y0, x1, y1 = boxes[0]
+        clip = {"x": x0, "y": max(y0 - 40, 0), "width": x1 - x0, "height": y1 - y0 + 80}
+        shot = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("L").point(lambda v: 255 if v < 70 else 0)
+        ink = shot.getbbox()
+        letters = (clip["y"] + ink[1] + clip["y"] + ink[3]) / 2 if ink else None
+        _, bt, _, bb = boxes[2]
+        bottle = bt + (bb - bt) * (BOTTLE_TOP + BOTTLE_BOTTOM) / 2
+        across = abs((boxes[2][0] + boxes[2][2]) / 2 - (boxes[0][2] + boxes[1][0]) / 2)
+        ok = letters is not None and abs(bottle - letters) <= 6 and across <= 6
+        check(f"opening {w}x{h}: the bottle's middle on the letters' middle, and midway between the halves", ok,
+              f"letters {letters}, bottle {bottle:.0f}, off across {across:.0f}")
+        ctx.close()
+
+
 def polish(browser):
     """Task 9's polish, pinned: the supply line's dot never starts or ends a line, "30-day" whole; More's links end with their
     words; the lantern fetches about the width it is drawn at; one line per sentence in the Why
@@ -992,6 +1030,7 @@ SECTIONS = {
     "layout": layout,
     "deep_links": deep_links,
     "polish": polish,
+    "opening": opening_check,
     "languages": languages,
 }
 
