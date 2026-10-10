@@ -9,10 +9,10 @@ export const nuricellArt = {
     height: 2091,
   },
   lanternLit: {
-    src: "/images/products/nuricell/ink/lantern-lit-v1.webp",
+    src: "/images/products/nuricell/ink/lantern-lit-core-v1.webp",
     width: 1100,
     height: 2091,
-    gold: "/images/products/nuricell/ink/lantern-lit-v1-gold.webp",
+    gold: "/images/products/nuricell/ink/lantern-lit-core-v1-gold.webp",
   },
   capsule: {
     src: "/images/products/nuricell/ink/capsule-v1.webp",

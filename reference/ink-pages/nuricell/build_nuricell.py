@@ -8,7 +8,8 @@ src/components/product/ink/nuricell-art.ts. About's treatments (reference/ink-pa
 build_about.py): the paper divided out and lifted to white so each painting multiplies onto the
 page's paper with no box, the outer edge feathered, gold leaf kept as a light mask for the kit's
 glint. The lantern's unlit take is registered onto its lit take and both share one crop, so the
-light comes on in place. The painted sum is laid out again with even gaps.
+light comes on in place; the lit take then gets its core light (core_light). The painted sum is laid
+out again with even gaps.
 
 usage: python -X utf8 reference/ink-pages/nuricell/build_nuricell.py
 """
@@ -72,6 +73,53 @@ def gilded(key, width, sat_from=0.3, pad=0.04):
     return art
 
 
+def lantern_body(unlit):
+    """The lantern's paper body between its rims, from the unlit layer: a soft mask kept inside the
+    body's own sides (the blur must not grey the haze next to it) and the body's box."""
+    u = np.asarray(unlit).astype(np.float32)
+    h, w = u.shape[:2]
+    soft = cv2.GaussianBlur(u.min(axis=2), (0, 0), 6)
+    dark = (u.min(axis=2) < 90).sum(axis=1)
+    ext = [(y, *np.where(soft[y] < 244)[0][[0, -1]]) for y in range(h) if (soft[y] < 244).any()]
+    span = np.median([r - l for _, l, r in ext])
+    rims = [y for y in range(h) if dark[y] > 0.25 * span]
+    top = max((y for y in rims if y < h // 2), default=0) + 1
+    bottom = min((y for y in rims if y > h // 2), default=h) - 1
+    rows = [(y, l, r) for y, l, r in ext if top <= y <= bottom]
+    mask = np.zeros((h, w), np.float32)
+    for y, l, r in rows:
+        mask[y, l : r + 1] = 1
+    mask = cv2.GaussianBlur(cv2.erode(mask, np.ones((1, 25), np.uint8)), (0, 0), 8)
+    left, right = float(np.median([l for _, l, _ in rows])), float(np.median([r for _, _, r in rows]))
+    return mask, (left, top, right, bottom)
+
+
+def core_light(lit, unlit):
+    """Lit from within (Mo's comp, 2-why-lantern.jpg; Ruling 25, Task 9): the take is gold rim to
+    rim, so the light read as a gold lantern, not a light inside one. Its body's sides and ends go
+    deeper and greyer (toward a warm grey of the paper's own value, so its brush texture stays),
+    and its centre takes a pale warm core where the flame is; the ribs, rims, cord and the outer
+    haze are kept. The figure multiplies, so nothing can be brighter than the paper: the light
+    reads by the contrast between the core and the smoky sides."""
+    a = np.asarray(lit).astype(np.float32)
+    mask, (l, t, r, b) = lantern_body(unlit)
+    h, w = mask.shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    dx, dy = (xx - (l + r) / 2) / ((r - l) / 2), (yy - (t + b) / 2) / ((b - t) / 2)
+    lum = a @ np.array([0.299, 0.587, 0.114], np.float32)
+    stroke = np.clip((165 - lum) / 70, 0, 1)  # ribs and brush marks keep their ink
+    edge = np.clip((np.sqrt(dx**2 + (dy * 0.85) ** 2) - 0.36) / 0.64, 0, 1) ** 1.1 * mask
+    # Blended toward the grey, not its per-channel minimum: the minimum keeps the gold's low blue,
+    # and the sides read olive.
+    grey = (lum * 0.66)[..., None] * np.array([1.0, 0.92, 0.80], np.float32)
+    out = a * (1 - 0.9 * edge[..., None]) + grey * 0.9 * edge[..., None]
+    core = 0.85 * np.exp(-((dx / 0.42) ** 2 + (dy / 0.55) ** 2)) * mask * (1 - stroke)
+    # A warm amber core (paler creams, tried beside the comp, read as a white patch).
+    cream = np.array([255, 232, 160], np.float32)
+    out = np.where(out < cream, out + (cream - out) * core[..., None], out)
+    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8))
+
+
 def lantern():
     """The unlit take (an edit of the lit one) registered onto the lit take, both cut by one box."""
     lit = bd.divided(bd.load(TAKES["lantern-lit"]))
@@ -90,10 +138,13 @@ def lantern():
     print(f"lantern: unlit registered by ({warp[0, 2]:.1f}, {warp[1, 2]:.1f}) px")
     a, b = bd.ink_box(np.asarray(lit), pad=0.06), bd.ink_box(np.asarray(unlit), pad=0.06)
     box = (min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
-    lit_art = finish(lit.crop(box), "lantern-lit", 1100)
-    ba.gold_mask(f"lantern-lit-{V}", sat_from=0.25)
-    lit_art["gold"] = f"{URL}/lantern-lit-{V}-gold.webp"
-    return finish(unlit.crop(box), "lantern-unlit", 1100), lit_art
+    unlit = unlit.crop(box)
+    # A new name for the lit picture with its core light (a replaced picture needs a new filename:
+    # browsers and the image optimizer cache by URL); lantern-lit-v1 is the plain take, kept.
+    lit_art = finish(core_light(lit.crop(box), unlit), "lantern-lit-core", 1100)
+    ba.gold_mask(f"lantern-lit-core-{V}", sat_from=0.25)
+    lit_art["gold"] = f"{URL}/lantern-lit-core-{V}-gold.webp"
+    return finish(unlit, "lantern-unlit", 1100), lit_art
 
 
 def brushed_sum():

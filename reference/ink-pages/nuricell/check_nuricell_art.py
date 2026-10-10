@@ -57,6 +57,18 @@ check("lantern: lit and unlit in register", overlap > 0.35, f"edge overlap {over
 warm = lambda a: float(((a[..., 0] - a[..., 2]) > 40).mean())
 check("lantern: the unlit one has no gold", warm(unlit) < 0.002, f"{warm(unlit):.3%}")
 check("lantern: the lit one glows", warm(lit) > 0.03, f"{warm(lit):.2%}")
+# Lit from within (its core light): across the middle of the body, the centre is clearly lighter
+# than the body's smoky sides: 91 levels with the core light, 49 for the plain take (gold rim to
+# rim), which this check fails.
+H = lit.shape[0]
+band_lit, band_unlit = lit[int(H * 0.4) : int(H * 0.6)], unlit[int(H * 0.4) : int(H * 0.6)]
+cols = np.where((band_unlit.min(axis=2) < 236).mean(axis=0) > 0.5)[0]
+x0, x1 = cols.min(), cols.max()
+span = x1 - x0
+lum = lambda a: (a @ np.array([0.299, 0.587, 0.114], np.float32)).mean()
+centre = lum(band_lit[:, x0 + int(span * 0.4) : x0 + int(span * 0.6)])
+sides = (lum(band_lit[:, x0 + int(span * 0.04) : x0 + int(span * 0.16)]) + lum(band_lit[:, x1 - int(span * 0.16) : x1 - int(span * 0.04)])) / 2
+check("lantern: lit from within (centre lighter than the sides)", centre > sides + 70, f"centre {centre:.0f}, sides {sides:.0f}")
 
 liu = pixels(art["liu"]["src"])
 hi, lo = liu.max(axis=2), liu.min(axis=2)

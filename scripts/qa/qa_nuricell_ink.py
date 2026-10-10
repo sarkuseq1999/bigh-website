@@ -272,7 +272,9 @@ def lantern_waits_for_its_picture(browser):
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
     page = ctx.new_page()
     held = []
-    page.route("**/*", lambda route: held.append(route) if "lantern-lit-v1.webp" in route.request.url else route.continue_())
+    # The lit picture itself (lantern-lit-core-v1.webp, or a later name), not its gold mask.
+    lit_picture = re.compile(r"lantern-lit-(?:core-)?v\d+\.webp")
+    page.route("**/*", lambda route: held.append(route) if lit_picture.search(route.request.url) else route.continue_())
     page.goto(BASE + PATH, wait_until="domcontentloaded")
     # Hydrated: React has attached itself to the lantern's figure.
     page.wait_for_function("() => { const f = document.querySelector('[data-lantern]'); return f && Object.keys(f).some(k => k.startsWith('__react')); }", timeout=60000)
