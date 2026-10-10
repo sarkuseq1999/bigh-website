@@ -11,7 +11,9 @@ Sections (all, or --only=a,b):
   nojs        with JavaScript off every painting shows and the lantern is lit
   words       every word in nuricell.ts on the page; each chapter its own painting
   sticky      with every study open a sticky painting stays inside its chapter
-  sum         the painted sum matches the serving, a caption under each number
+  sum         the painted sum matches the serving, a caption under each number; set in type
+              (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
+  buy         Add to cart: the kit's hover, a pill on focus
   layout      sizes 1536 to 360: no sideways scroll, the painting left of its words from 960px and above
               them below, text 15px+, targets 44px+, words readable with pictures blocked
   deep_links  /en/products/nuricell#chapter-<id> lands its heading under the menu bar
@@ -71,6 +73,31 @@ def bring(page, selector, top=140):
         "([s, t]) => { const e = document.querySelector(s); window.scrollBy(0, e.getBoundingClientRect().top - t); }",
         [selector, top],
     )
+
+
+def corner_diff(page, el, shot_name):
+    """Brings the picture's element in view and compares its top-left corner, just inside, with the
+    paper just outside it: a painting that multiplies onto the paper shows no box."""
+    page.evaluate("(e) => window.scrollBy(0, e.getBoundingClientRect().top - 160)", el.element_handle())
+    page.wait_for_timeout(300)
+    box = el.bounding_box()
+    shot = OUT / shot_name
+    page.screenshot(path=str(shot))
+    img = Image.open(shot).convert("RGB")
+    x, y = int(box["x"]) + 3, int(box["y"]) + 3
+    inside = img.getpixel((x, y))
+    outside = img.getpixel((max(0, int(box["x"]) - 12), y))
+    return inside, outside, max(abs(a - b) for a, b in zip(inside, outside))
+
+
+def saturated_share(png):
+    """The share of a picture's pixels that are clearly coloured (saturation over 0.2, not near
+    black). The paper is about 0.06; a black-and-white painting has next to none."""
+    import io
+
+    hsv = Image.open(io.BytesIO(png)).convert("RGB").convert("HSV").tobytes()
+    sat, val = hsv[1::3], hsv[2::3]
+    return sum(1 for s_, v_ in zip(sat, val) if s_ / 255 > 0.2 and v_ / 255 > 0.25) / len(sat)
 
 
 def shell(browser):
@@ -162,6 +189,19 @@ def multiply(browser):
             outside = img.getpixel((max(0, int(box["x"]) - 12), y))
             diff = max(abs(a - b) for a, b in zip(inside, outside))
             check(f"multiply {w} {chapter}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
+        # The buy chapter's stroke (its figure holds the bottle's photo, so it is not a blend group:
+        # the stroke multiplies on its own) and the painted sum.
+        for name, selector, shot_name in [
+            ("buy stroke", '[data-chapter="buy"] img[src*="stroke"]', f"multiply-{w}-buy-stroke.png"),
+            ("sum", '[data-sum] img[src*="sum-"]', f"multiply-{w}-sum.png"),
+        ]:
+            el = page.locator(selector).first
+            blend = el.evaluate("e => getComputedStyle(e).mixBlendMode")
+            check(f"multiply {w} {name}: it multiplies", blend == "multiply", blend)
+            found = el.evaluate(STACKING)
+            check(f"multiply {w} {name}: no stacking context above it", not found, "; ".join(found))
+            inside, outside, diff = corner_diff(page, el, shot_name)
+            check(f"multiply {w} {name}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
         ctx.close()
 
 
@@ -328,10 +368,26 @@ EXPECT = {
     "why": "lantern-unlit",
     "inside": "capsule",
     "research": "books",
-    "people": "liu",
+    "people": "liu-v1",
     "daily": "breakfast",
     "buy": "stroke",
 }
+
+
+def people_painting(page):
+    """Dr. Liu's chapter shows his painting, not his photograph, and in colour (never black and
+    white: in Asia that signals a person has died)."""
+    selector = '[data-chapter="people"] figure[data-picture] img'
+    src = page.locator(selector).first.get_attribute("src") or ""
+    check("people: Dr. Liu's painting, not his photograph", "liu-v1" in src and "jiankang-liu" not in src, src)
+    bring(page, selector, 160)
+    page.wait_for_timeout(400)
+    box = page.locator(selector).first.bounding_box()
+    vh = page.viewport_size["height"]
+    top = max(box["y"], 0)
+    png = page.screenshot(clip={"x": box["x"], "y": top, "width": box["width"], "height": min(box["height"], vh - top)})
+    share = saturated_share(png)
+    check("people: the painting is in colour", share > 0.03, f"{share:.1%} of its pixels clearly coloured (paper alone about 0)")
 
 
 def words(browser, chapters=tuple(CHAPTERS)):
@@ -344,6 +400,8 @@ def words(browser, chapters=tuple(CHAPTERS)):
         if chapter in EXPECT:
             n = page.locator(f'[data-chapter="{chapter}"] img[src*="{EXPECT[chapter]}"]').count()
             check(f"words {chapter}: its own painting", n >= 1)
+        if chapter == "people":
+            people_painting(page)
     built = {
         # The title is one span per sentence: a space between them keeps the text one sentence.
         "why": ["Tiny power plants. A big part of your health."],
@@ -363,6 +421,57 @@ def words(browser, chapters=tuple(CHAPTERS)):
     return missing
 
 
+SUM_CAPTIONS = ["capsules a day", "days", "capsules in each bottle"]
+
+# Each caption's centre against its numeral's box, the caption below it, and nothing outside the sum.
+SUM_TYPE_GEOMETRY = """() => {
+  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
+  return [...document.querySelectorAll('[data-sum] [data-sum-type] > span')]
+    .filter((cell) => cell.querySelector('[data-sum-numeral]')).map((cell) => {
+      const n = cell.querySelector('[data-sum-numeral]').getBoundingClientRect();
+      const c = cell.querySelector('[data-sum-label]').getBoundingClientRect();
+      return { offset: c.left + c.width / 2 - (n.left + n.width / 2), half: n.width / 2, below: c.top - n.bottom,
+               inside: c.left >= figure.left - 1 && c.right <= figure.right + 1 && n.left >= figure.left - 1 && n.right <= figure.right + 1,
+               text: cell.querySelector('[data-sum-numeral]').textContent };
+    });
+}"""
+
+
+def sum_type(browser):
+    """The sum set in type (the dev-only ?ink-sum=type and ?ink-sum=odd fixtures; a painting whose
+    numbers are not the serving's gets this): a caption directly under its own numeral, the x and =
+    only when the numbers make that sum."""
+    for fixture, numerals, operators in [("type", ["3", "30", "90"], True), ("odd", ["3", "30", "91"], False)]:
+        for w, h in [(1440, 900), (390, 844)]:
+            tag = f"sum type ({fixture}) {w}"
+            ctx, page, _, errors = opened(browser, w, h, f"{PATH}?ink-sum={fixture}", reduced=True)
+            try:
+                page.wait_for_selector('[data-sum-kind="type"]', timeout=15000)
+            except Exception:
+                pass
+            kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
+            check(f"{tag}: the type branch shows, no painting", kind == "type" and page.locator("[data-sum] img").count() == 0, str(kind))
+            check(f"{tag}: no centres claimed", page.locator("[data-sum]").get_attribute("data-centres") is None)
+            bring(page, "[data-sum]", 200)
+            page.wait_for_timeout(300)
+            cells = page.evaluate(SUM_TYPE_GEOMETRY)
+            check(f"{tag}: three numerals {numerals}", [c["text"] for c in cells] == numerals, str([c["text"] for c in cells]))
+            shown = page.locator("[data-sum] [data-sum-type]").inner_text()
+            check(
+                f"{tag}: the × and = {'shown' if operators else 'left out'}",
+                ("×" in shown and "=" in shown) if operators else ("×" not in shown and "=" not in shown),
+                repr(shown),
+            )
+            captions = page.locator("[data-sum] [data-sum-label]")
+            check(f"{tag}: the visible captions are the three words", captions.all_inner_texts() == SUM_CAPTIONS and all(c.is_visible() for c in captions.all()), str(captions.all_inner_texts()))
+            within = all(abs(c["offset"]) <= c["half"] for c in cells)
+            check(f"{tag}: each caption's centre within its numeral", len(cells) == 3 and within, ", ".join(f"{c['offset']:.1f}/{c['half']:.1f}" for c in cells))
+            check(f"{tag}: each caption under its numeral, all inside the figure", len(cells) == 3 and all(c["below"] >= -1 and c["inside"] for c in cells), str([(round(c["below"]), c["inside"]) for c in cells]))
+            check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+            page.screenshot(path=str(OUT / f"sum-type-{fixture}-{w}.png"))
+            ctx.close()
+
+
 def sum_check(browser):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     painted = page.locator('[data-sum] img[src*="sum-"]')
@@ -378,6 +487,39 @@ def sum_check(browser):
     check("sum: three captions", len(labels) == 3, str(labels))
     near = all(abs(l["centre"] - c) < 0.06 for l, c in zip(labels, art))
     check("sum: each caption under its number", near, f"{[round(l['centre'], 3) for l in labels]} vs {art}")
+    # What is on screen, not the hidden sentence (which also holds "capsules a day").
+    captions = page.locator("[data-sum] [data-sum-label]")
+    check(
+        "sum: the visible captions are the three words",
+        captions.all_inner_texts() == SUM_CAPTIONS and all(c.is_visible() for c in captions.all()),
+        str(captions.all_inner_texts()),
+    )
+    kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
+    check("sum: painted by default", kind == "painted", str(kind))
+    ctx.close()
+    sum_type(browser)
+
+
+def buy_check(browser):
+    """The buy chapter's Add to cart is a pill with the kit's hover (the old template's blue would
+    clash), and a pill-shaped focus ring (the kit's focus rule alone rounds it to 6px)."""
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    button = page.locator('[data-chapter="buy"] button')
+    check("buy: one Add to cart", button.count() == 1 and button.inner_text() == "Add to cart")
+    bring(page, '[data-chapter="buy"] button', 400)
+    state = """() => { const b = document.querySelector('[data-chapter="buy"] button'); const s = getComputedStyle(b);
+                       return { bg: s.backgroundColor, radius: s.borderRadius, outline: s.outlineStyle, focus: b.matches(':focus-visible') }; }"""
+    rest = page.evaluate(state)
+    button.hover()
+    page.wait_for_timeout(600)
+    hover = page.evaluate(state)
+    check("buy: Add to cart hover is the kit's, not the old blue", hover["bg"] == "rgb(58, 56, 51)", f"{rest['bg']} -> {hover['bg']}")
+    page.mouse.move(5, 5)
+    page.keyboard.press("Shift")
+    button.focus()
+    page.wait_for_timeout(600)
+    focus = page.evaluate(state)
+    check("buy: the focus ring follows a pill (99px radius)", focus["focus"] and focus["radius"] == "99px" and focus["outline"] == "solid", str(focus))
     ctx.close()
 
 
@@ -422,6 +564,7 @@ SECTIONS = {
     "words": words,
     "sticky": sticky,
     "sum": sum_check,
+    "buy": buy_check,
 }
 
 if __name__ == "__main__":

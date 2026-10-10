@@ -671,12 +671,41 @@
   height: auto;
 }
 
-.page p.sumType {
-  margin: 0;
+/* The sum set in type: three cells, each a numeral with its caption directly under it (so a caption
+   can never sit under the wrong number), the operators between when the numbers make that sum. */
+.page .sumType {
+  display: flex;
+  align-items: flex-start;
   font-family: var(--display-font);
   font-size: clamp(48px, 5vw, 80px);
   font-weight: 300;
+  line-height: 1;
   letter-spacing: -0.03em;
+}
+
+.page .sumCell {
+  display: grid;
+  flex: 1 1 0;
+  justify-items: center;
+  gap: 10px;
+  min-width: 0;
+  text-align: center;
+}
+
+.page .sumOperator {
+  flex: none;
+  padding-inline: 0.18em;
+  color: var(--muted);
+}
+
+.page .sumCaption {
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: clamp(15px, 1.25vw, 18px);
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: normal;
+  text-wrap: balance;
 }
 
 .page .sum figcaption {
