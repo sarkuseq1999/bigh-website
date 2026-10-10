@@ -8,7 +8,7 @@ src/components/product/ink/nuricell-art.ts. About's treatments (reference/ink-pa
 build_about.py): the paper divided out and lifted to white so each painting multiplies onto the
 page's paper with no box, the outer edge feathered, gold leaf kept as a light mask for the kit's
 glint. The lantern's unlit take is registered onto its lit take and both share one crop, so the
-light comes on in place; the lit take then gets its core light (core_light). The painted sum is laid
+light comes on in place; the lit take then gets its light from within (core_light). The painted sum is laid
 out again with even gaps.
 
 usage: python -X utf8 reference/ink-pages/nuricell/build_nuricell.py
@@ -94,30 +94,88 @@ def lantern_body(unlit):
     return mask, (left, top, right, bottom)
 
 
+LUM = np.array([0.299, 0.587, 0.114], np.float32)
+
+# The light inside the lantern, from its core out (core_light): pale cream, golden, a warm amber,
+# then a warm sienna at the body's sides (never grey: grey under the take's yellow read olive).
+# Darker sides made a brown lantern; paler creams a white patch (variants beside the comp, Task 9).
+LIGHT = ((0, (255, 249, 232)), (0.38, (254, 236, 186)), (0.72, (244, 200, 124)), (1.08, (180, 138, 90)))
+# The core's oval: its half-width and half-height as shares of the body's, and its centre (a
+# little above the middle).
+CORE = (0.82, 0.95, -0.12)
+
+
+def ramp(d, stops):
+    """Colour along d from (position, rgb) stops, linear between them."""
+    out = np.zeros(d.shape + (3,), np.float32)
+    for i in range(3):
+        out[..., i] = np.interp(d, [p for p, _ in stops], [c[i] for _, c in stops])
+    return out
+
+
+def gold_flecks(a, mask, dx, dy, n=16):
+    """The lit take's most saturated gold-leaf spots in the body's middle ring, at most n of them,
+    70px or more apart: a 0/1 map (the flecks the kit's glint will catch)."""
+    hi, lo = a.max(axis=2), a.min(axis=2)
+    sat = (hi - lo) / np.maximum(hi, 1)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    hue = np.where((r >= g) & (g > b), 60 * (g - b) / np.maximum(hi - lo, 1), 0)
+    gold = (sat > 0.55) & (hue > 26) & (hue < 56) & (hi > 150)
+    ring = (np.abs(dy) < 0.55) & (np.abs(dx) < 0.8) & (mask > 0.9)
+    found = cv2.morphologyEx((gold & ring).astype(np.uint8), cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
+    k, lab, st, centres = cv2.connectedComponentsWithStats(found, 8)
+    spots = sorted((i for i in range(1, k) if 40 <= st[i, cv2.CC_STAT_AREA] <= 2500), key=lambda i: -st[i, cv2.CC_STAT_AREA])
+    chosen = []
+    for i in spots:
+        if all(np.hypot(*(centres[i] - centres[j])) > 70 for j in chosen):
+            chosen.append(i)
+        if len(chosen) >= n:
+            break
+    return np.isin(lab, chosen).astype(np.float32)
+
+
 def core_light(lit, unlit):
-    """Lit from within (Mo's comp, 2-why-lantern.jpg; Ruling 25, Task 9): the take is gold rim to
-    rim, so the light read as a gold lantern, not a light inside one. Its body's sides and ends go
-    deeper and greyer (toward a warm grey of the paper's own value, so its brush texture stays),
-    and its centre takes a pale warm core where the flame is; the ribs, rims, cord and the outer
-    haze are kept. The figure multiplies, so nothing can be brighter than the paper: the light
-    reads by the contrast between the core and the smoky sides."""
+    """Lit from within by gold leaf (Mo's comp, 2-why-lantern.jpg; Task 9 rounds 1-2). The take is
+    gold rim to rim, so its light read as a gold object. The body (between its rims, from the unlit
+    layer) is relit: a light field from a soft oval core a little above the middle (LIGHT: pale
+    cream, golden, amber, then warm umber sides) times the take's own brush texture (its luminance
+    over a blur of it), so the ribs, cracks and strokes stay; a thin warm band of light on the paper
+    just under the cap and just above the base (the black lacquer stays black); and a few gold-leaf
+    flecks from the take's most saturated spots. Outside the body (cap, base, cord, outer halo) the
+    take is untouched. The figure multiplies, so the light reads by contrast, not by brightness.
+    Returns the picture and its flecks (for the gold mask)."""
     a = np.asarray(lit).astype(np.float32)
     mask, (l, t, r, b) = lantern_body(unlit)
     h, w = mask.shape
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
     dx, dy = (xx - (l + r) / 2) / ((r - l) / 2), (yy - (t + b) / 2) / ((b - t) / 2)
-    lum = a @ np.array([0.299, 0.587, 0.114], np.float32)
-    stroke = np.clip((165 - lum) / 70, 0, 1)  # ribs and brush marks keep their ink
-    edge = np.clip((np.sqrt(dx**2 + (dy * 0.85) ** 2) - 0.36) / 0.64, 0, 1) ** 1.1 * mask
-    # Blended toward the grey, not its per-channel minimum: the minimum keeps the gold's low blue,
-    # and the sides read olive.
-    grey = (lum * 0.66)[..., None] * np.array([1.0, 0.92, 0.80], np.float32)
-    out = a * (1 - 0.9 * edge[..., None]) + grey * 0.9 * edge[..., None]
-    core = 0.85 * np.exp(-((dx / 0.42) ** 2 + (dy / 0.55) ** 2)) * mask * (1 - stroke)
-    # A warm amber core (paler creams, tried beside the comp, read as a white patch).
-    cream = np.array([255, 232, 160], np.float32)
-    out = np.where(out < cream, out + (cream - out) * core[..., None], out)
-    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8))
+    lum = a @ LUM
+    texture = np.clip(lum / np.maximum(cv2.GaussianBlur(lum, (0, 0), 22), 1), 0.15, 1.35) ** 0.9
+    light = ramp(np.sqrt((dx / CORE[0]) ** 2 + ((dy - CORE[2]) / CORE[1]) ** 2), LIGHT)
+    rims = np.exp(-(((yy - t) / ((b - t) * 0.03)) ** 2)) + np.exp(-(((yy - b) / ((b - t) * 0.03)) ** 2))
+    rims = cv2.GaussianBlur((np.clip(rims, 0, 1) * (np.abs(dx) < 0.95)).astype(np.float32), (0, 0), 3)[..., None]
+    light = light * (1 - 0.75 * rims) + np.array((252, 214, 140), np.float32) * 0.75 * rims
+    body = light * texture[..., None]
+    flecks = gold_flecks(a, mask, dx, dy)
+    f = cv2.GaussianBlur(flecks, (0, 0), 0.8)[..., None]
+    body = body * (1 - f) + np.array((198, 150, 52), np.float32) * np.clip(texture, 0.7, 1.2)[..., None] * f
+    m = mask[..., None]
+    out = a * (1 - m) + body * m
+    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8)), flecks
+
+
+def fleck_mask(flecks, name, width=1000):
+    """The gold mask for the flecks alone (ba.gold_mask would take the whole warm body for leaf)."""
+    from PIL import ImageFilter
+
+    h, w = flecks.shape
+    alpha = Image.fromarray((np.clip(flecks, 0, 1) * 255).astype(np.uint8), "L")
+    alpha = alpha.resize((width, round(h * width / w)), Image.LANCZOS).filter(ImageFilter.GaussianBlur(1.2))
+    white = Image.new("L", alpha.size, 255)
+    path = OUT / f"{name}-gold.webp"
+    Image.merge("RGBA", (white, white, white, alpha)).save(path, "WEBP", quality=80, method=6)
+    cover = float((np.asarray(alpha) > 128).mean())
+    print(f"{path.relative_to(REPO)}  {alpha.width}x{alpha.height}  gold {cover:.2%} (flecks only)")
 
 
 def lantern():
@@ -139,11 +197,15 @@ def lantern():
     a, b = bd.ink_box(np.asarray(lit), pad=0.06), bd.ink_box(np.asarray(unlit), pad=0.06)
     box = (min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
     unlit = unlit.crop(box)
-    # A new name for the lit picture with its core light (a replaced picture needs a new filename:
-    # browsers and the image optimizer cache by URL); lantern-lit-v1 is the plain take, kept.
-    lit_art = finish(core_light(lit.crop(box), unlit), "lantern-lit-core", 1100)
-    ba.gold_mask(f"lantern-lit-core-{V}", sat_from=0.25)
-    lit_art["gold"] = f"{URL}/lantern-lit-core-{V}-gold.webp"
+    # The lit picture with its core light, under a name of its own (a replaced picture needs a new
+    # filename: browsers and the image optimizer cache by URL). Kept as files: lantern-lit-v1 (the
+    # plain take) and lantern-lit-core-v1 (round 1's core light). The light is laid on the levelled
+    # picture (its paper already white), so it is feathered and saved as is, not levelled again.
+    name = "lantern-lit-core-v2"
+    lit_img, flecks = core_light(bd.levelled(lit.crop(box)), bd.levelled(unlit))
+    lit_art = bd.art_of(bd.feathered(lit_img, EDGE), name, 1100)
+    fleck_mask(flecks, name)
+    lit_art["gold"] = f"{URL}/{name}-gold.webp"
     return finish(unlit, "lantern-unlit", 1100), lit_art
 
 
