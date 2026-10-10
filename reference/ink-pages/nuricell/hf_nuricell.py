@@ -21,13 +21,9 @@ import hf_api  # noqa: E402
 
 MODEL = "marketing-studio/image/flare"
 REPO = Path(__file__).resolve().parents[3]
-STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/HiggsfieldAPI/bigh-home"))
+STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/HiggsfieldAPI/bigh-nuricell-mock"))
 LOCK = STATE / "submit.lock"
-# Round 5 (October 3): Mo gave $15 for the crane homepage's second polish round; this round's
-# GPT Image 2.5 jobs are counted on their own (round 4's 19 jobs stay in ledger-r4-gpt.jsonl).
 LEDGER = STATE / "ledger-nuricell-mock.jsonl"
-# Menu bar, ten improvement rounds (October 5): Mo gave another $5; GPT Image 2.5 jobs capped at 40
-# (about $2, $2.80 if no refund). The options round used 1 job in ledger-nav-gpt.jsonl.
 MAX_JOBS = 70  # NuriCell ink mockups, Mo 10/9: up to $5 (70 jobs = $4.90 at $0.07 billed, the worst case)
 
 
