@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds, no water, no landscape. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side. The subject fills most of the picture (about 85% of its height and width): bold, generous, never small in the middle of empty paper.\n\nOnly two things, painted large and close: a soft-boiled egg in a simple egg cup, its top opened, its yolk real gold leaf; and beside it, slightly in front, a small shallow dish holding exactly three white vegetarian capsules, clearly visible. Seen from the side at table height, a soft shadow under each. Nothing else: no plate, no fruit, no glass, no cup. Light, clean washes with white paper showing through. The yolk is the only gold.",
+  "settings": {
+    "aspect_ratio": "1:1",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-nuricell-ink/reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261009-120324"
+}
