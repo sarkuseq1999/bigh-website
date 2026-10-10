@@ -3,6 +3,29 @@
 
 export type Picture = { src: string; width: number; height: number; alt: string };
 
+/** A painting from a page's build script: its paper divided out to white, so it multiplies onto the
+ *  page's own paper; `gold` is its gold-leaf light mask, for the kit's glint. */
+export type InkArt = { src: string; width: number; height: number; gold?: string };
+export type InkPainting = InkArt & { alt: string };
+
+/**
+ * The product's paintings for its ink page (NuriCell, October 9, 2026; spec
+ * docs/superpowers/specs/2026-10-09-nuricell-ink-design.md). A product with `ink` gets the ink page
+ * (one painting per chapter, beside its words); the others keep the Chapters template.
+ */
+export type ProductInk = {
+  /** Why it matters: one painting unlit and lit, in register (its light comes on). */
+  why: { unlit: InkArt; lit: InkArt; alt: string };
+  inside: InkPainting;
+  research: InkPainting;
+  /** How to take it: a picture of when, and the serving as a painted sum (its numbers and their centres). */
+  daily: {
+    picture: InkPainting;
+    sum: InkArt & { numbers: readonly number[]; centres: readonly number[] };
+  };
+  buy: { stroke: InkArt };
+};
+
 export type ProductIngredient = {
   key: string;
   /** Everyday name used in headings. */
@@ -37,6 +60,8 @@ export type ProductPerson = {
   title: string;
   /** Only people who have agreed to a photograph have one; everyone else is text only. */
   photo?: Picture;
+  /** A painting of the person, for the ink page (Dr. Liu, October 9, 2026: Mo's call). */
+  painting?: InkPainting;
   lines: string[];
 };
 
@@ -47,7 +72,9 @@ export type ProductSummary = {
   headline: string;
   bottle: Picture;
   tint: string;
-  ink: string;
+  /** The product's deep colour for small details. (Named inkColor, not ink: `ink` on a ProductPage
+   *  holds the ink page's paintings, October 9, 2026.) */
+  inkColor: string;
 };
 
 /** A big number that counts up on its own screen, with one plain line that says it in words. */
@@ -119,6 +146,8 @@ export type ProductPage = ProductSummary & {
    */
   synergy?: ProductSynergy;
   related: string[];
+  /** The product's paintings: with them the product gets the ink page. */
+  ink?: ProductInk;
 };
 
 export type ProductSynergyLink = {
@@ -131,3 +160,5 @@ export type ProductSynergyLink = {
 };
 
 export type ProductSynergy = { title: string; note: string; links: ProductSynergyLink[] };
+
+export type InkProduct = ProductPage & { ink: ProductInk };

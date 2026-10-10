@@ -1,3 +1,4 @@
+import { nuricellArt } from "../ink/nuricell-art";
 import type { ProductPage } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -102,6 +103,10 @@ const nuricell: ProductPage = {
         height: 768,
         alt: "Portrait of Dr. Jiankang Liu",
       },
+      painting: {
+        ...nuricellArt.liu,
+        alt: "A portrait painting of Dr. Jiankang Liu in ink and colour",
+      },
       lines: [
         "Dr. Liu is an internationally recognized scientist in mitochondrial biology and aging. His research explores the connections between cellular energy, nutrition, and how we age.",
         "As BiGH’s Chief Scientific Advisor, he brings decades of scientific experience to our purpose: helping people stay sharp, stay active, and live fully.",
@@ -177,6 +182,30 @@ const nuricell: ProductPage = {
     ],
   },
   related: ["green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"],
+  // The ink page (Mo, October 9, 2026; spec docs/superpowers/specs/2026-10-09-nuricell-ink-design.md).
+  ink: {
+    why: {
+      unlit: nuricellArt.lanternUnlit,
+      lit: nuricellArt.lanternLit,
+      alt: "A paper lantern whose light comes on, painted in ink and gold leaf",
+    },
+    inside: {
+      ...nuricellArt.capsule,
+      alt: "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
+    },
+    research: {
+      ...nuricellArt.books,
+      alt: "Seven books as stepping stones across a calm stream, painted in ink",
+    },
+    daily: {
+      picture: {
+        ...nuricellArt.breakfast,
+        alt: "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink",
+      },
+      sum: nuricellArt.sum,
+    },
+    buy: { stroke: nuricellArt.stroke },
+  },
 };
 
 export default nuricell;

@@ -91,7 +91,7 @@ export function BuyChapter({
                   }
                   className={styles.card}
                   style={
-                    { "--card-tint": summary.tint, "--card-ink": summary.ink } as CSSProperties
+                    { "--card-tint": summary.tint, "--card-ink": summary.inkColor } as CSSProperties
                   }
                 >
                   <span className={styles.cardPlate}>

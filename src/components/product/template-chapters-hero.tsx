@@ -31,7 +31,7 @@ type Props = {
 
 /** Where the giant name parts for the bottle: at the word break nearest the middle ("Nuri|Cell",
  *  "Green Bee|Propolis"), or in the middle of a single word. */
-function splitName(name: string): [string, string] {
+export function splitName(name: string): [string, string] {
   const middle = name.length / 2;
   const breaks = [...name.matchAll(/ |(?<=[a-z])(?=[A-Z])/g)].map((match) => match.index);
   if (breaks.length === 0) {

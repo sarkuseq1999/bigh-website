@@ -19,7 +19,7 @@ export function ProductPageView({ product }: { product: ProductPage }) {
   // Each product lends the template its own colours.
   const colours = {
     "--tint": product.tint,
-    "--product-ink": product.ink,
+    "--product-ink": product.inkColor,
     "--accent": product.accent,
   } as CSSProperties;
 

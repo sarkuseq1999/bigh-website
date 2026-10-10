@@ -15,7 +15,7 @@ export const summaries: ProductSummary[] = [
       alt: "NuriCell bottle",
     },
     tint: "#edf5fc",
-    ink: "#24578e",
+    inkColor: "#24578e",
   },
   {
     slug: "green-bee-propolis",
@@ -29,7 +29,7 @@ export const summaries: ProductSummary[] = [
       alt: "Green Bee Propolis bottle",
     },
     tint: "#f2f5e9",
-    ink: "#58682e",
+    inkColor: "#58682e",
   },
   {
     slug: "advanced-opc",
@@ -43,7 +43,7 @@ export const summaries: ProductSummary[] = [
       alt: "Advanced OPC Formula bottle",
     },
     tint: "#fcf0f1",
-    ink: "#964758",
+    inkColor: "#964758",
   },
   {
     slug: "turmerific",
@@ -57,7 +57,7 @@ export const summaries: ProductSummary[] = [
       alt: "Turmerific bottle",
     },
     tint: "#fff4e5",
-    ink: "#956123",
+    inkColor: "#956123",
   },
   {
     slug: "nature-calm",
@@ -71,6 +71,6 @@ export const summaries: ProductSummary[] = [
       alt: "Nature Calm bottle",
     },
     tint: "#eef6ed",
-    ink: "#487249",
+    inkColor: "#487249",
   },
 ];

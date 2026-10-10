@@ -1,0 +1,206 @@
+/* NuriCell's ink page (spec docs/superpowers/specs/2026-10-09-nuricell-ink-design.md). Every rule
+   is scoped under .page (InkPage's root class), so it outranks the kit's .look rules and the
+   homepage resets in any stylesheet order (the built site orders CSS differently from dev).
+   Multiply: a chapter's figure is its painting's blend group (mix-blend-mode on the figure, its
+   pictures drawn normally inside it); nothing between a figure and the page root may make a
+   stacking context (no transform, opacity, filter, mask, isolation or z-index on a positioned
+   chapter, spread or wrapper). */
+
+.page {
+  --gap: clamp(40px, 6vw, 112px);
+  --chapter-half: clamp(48px, 5.5vw, 96px);
+  --picture-width: 520px;
+  /* The product's Add to cart button (add-to-cart.module.css) reads the old template's --cream
+     and --cobalt, which this page does not define: its label came out black on its black pill and
+     its focus ring vanished. Here the label is paper and the ring ink, like the kit's pills. */
+  --cream: var(--paper);
+  --cobalt: var(--ink);
+}
+
+/* 1. The opening: the header floats over it, so it starts 88px down. */
+.page .opening {
+  padding: calc(88px + clamp(20px, 3vw, 56px)) 0 var(--chapter-half);
+}
+
+.page p.eyebrow {
+  margin: 0 0 clamp(8px, 1.4vw, 20px);
+  text-align: center;
+}
+
+/* The name parts round the bottle: three columns, the bottle a little taller than the letters. */
+.page h1.name {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(180px, 22vw, 360px) minmax(0, 1fr);
+  align-items: end;
+  margin: 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(64px, 12.4vw, 220px);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+}
+
+.page .first {
+  justify-self: end;
+}
+
+.page .second {
+  justify-self: start;
+}
+
+.page .stand {
+  position: relative;
+  display: block;
+  aspect-ratio: 1230 / 1278;
+  align-self: end;
+  margin-bottom: -0.06em;
+}
+
+.page .pool {
+  position: absolute;
+  left: 52%;
+  top: 79%;
+  width: 92%;
+  height: auto;
+  aspect-ratio: 1 / 0.42;
+  object-fit: fill;
+  translate: -50% 0;
+  opacity: 0.92;
+}
+
+.page .contact {
+  position: absolute;
+  left: 50%;
+  top: 92.6%;
+  width: 56%;
+  height: auto;
+  aspect-ratio: 1 / 0.12;
+  object-fit: fill;
+  translate: -50% 0;
+}
+
+.page .bottle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.page .openingWords {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  column-gap: var(--gap);
+  margin-top: clamp(28px, 4vw, 64px);
+}
+
+.page p.headline {
+  margin: 0 0 16px;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(30px, 2.8vw, 42px);
+  line-height: 1.12;
+  letter-spacing: -0.022em;
+}
+
+.page .headline span {
+  display: block;
+}
+
+.page p.text {
+  margin: 0;
+  max-width: 30em;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.page .openingBuy {
+  display: grid;
+  justify-items: start;
+  gap: 16px;
+}
+
+/* Its hover is the kit's pill hover, not the old template's blue. */
+.page .openingBuy button:hover {
+  background: #3a3833;
+}
+
+.page ul.highlights {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 19px;
+  font-weight: 450;
+}
+
+.page .highlights li::before {
+  content: "— ";
+  color: var(--muted);
+}
+
+/* The opening arrives like ink settling (the homepage's words): the bottle rises 10px onto its
+   pool, then the words settle, 0.14s apart. Only the bottle and the word blocks move: neither
+   holds a painting, so the pools still multiply onto the paper. Reduced motion: there at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .page img.bottle {
+    animation: rise calc(var(--breath) * 0.75) var(--ease) both;
+  }
+
+  .page .openingWords > * {
+    animation: settle calc(var(--breath) * 0.75) var(--ease) 0.2s both;
+  }
+
+  .page .openingWords > :nth-child(2) {
+    animation-delay: 0.34s;
+  }
+}
+
+@keyframes rise {
+  from {
+    translate: 0 10px;
+    opacity: 0.6;
+  }
+}
+
+@keyframes settle {
+  from {
+    translate: 0 0.24em;
+    filter: blur(8px);
+    opacity: 0;
+  }
+}
+
+/* Phones: the name over the bottle, then the words in one column. */
+@media (max-width: 959px) {
+  .page h1.name {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    font-size: clamp(64px, 26vw, 150px);
+  }
+
+  .page .first,
+  .page .second {
+    justify-self: center;
+  }
+
+  .page .stand {
+    order: 3;
+    width: min(64vw, 320px);
+    margin: 12px 0 0;
+  }
+
+  /* The pool reaches below the bottle's box by 17% of its width: the words start below it, not
+     under its fringe. */
+  .page .openingWords {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 24px;
+    margin-top: calc(min(64vw, 320px) * 0.17 + 20px);
+  }
+
+  .page .openingBuy {
+    justify-items: stretch;
+  }
+}
