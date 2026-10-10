@@ -158,8 +158,10 @@
   font-weight: 450;
 }
 
-/* The dash is a mark, not a word: its alternative text is empty, so it is not read aloud. */
+/* The dash is a mark, not a word: its alternative text is empty, so it is not read aloud. The
+   first declaration is for browsers without CSS alt text, which drop the second. */
 .page .highlights li::before {
+  content: "— ";
   content: "— " / "";
   color: var(--muted);
 }
@@ -220,6 +222,7 @@
      under its picture. */
   .page .pool {
     width: 125%;
+    max-width: none; /* the global img rule would hold it to the column's 100% */
   }
 
   .page .openingWords {
