@@ -47,7 +47,7 @@ export function monthPlan(serving: Partial<ProductPage["serving"]> | undefined) 
 }
 
 /** The title, in months when the bottle lasts about a month or two or three. */
-function titleFor(days: number) {
+export function titleFor(days: number) {
   if (days >= 28 && days <= 31) return "One bottle, one month.";
   if (days >= 56 && days <= 62) return "One bottle, two months.";
   if (days >= 84 && days <= 93) return "One bottle, three months.";

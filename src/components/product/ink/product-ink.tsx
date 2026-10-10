@@ -2,8 +2,11 @@
 
 import { InkPage } from "@/components/ink/ink-page";
 import type { InkProduct } from "../product-types";
+import { Buy } from "./buy";
+import { Daily } from "./daily";
 import { Inside } from "./inside";
 import { Opening } from "./opening";
+import { People } from "./people";
 import styles from "./product-ink.module.css";
 import { Research } from "./research";
 import { Why } from "./why";
@@ -22,6 +25,9 @@ export function ProductInkPage({ product }: { product: InkProduct }) {
           <Why product={product} motion={motion} />
           <Inside product={product} />
           {product.studies.length > 0 ? <Research product={product} /> : null}
+          {product.people.length > 0 ? <People product={product} /> : null}
+          <Daily product={product} />
+          <Buy product={product} />
         </div>
       )}
     </InkPage>

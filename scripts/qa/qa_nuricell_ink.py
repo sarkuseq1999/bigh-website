@@ -334,10 +334,10 @@ EXPECT = {
 }
 
 
-def words(browser, chapters=("overview", "why", "inside", "research")):
+def words(browser, chapters=tuple(CHAPTERS)):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     text = re.sub(r"\s+", " ", page.locator("main").text_content())
-    # Words of chapters not built yet are left for the task that builds them.
+    # Words of the sections not built yet (Questions, the caution, the FDA line) are listed, not failed.
     missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in text]
     print(f"words: {len(missing)} strings not on the page yet: {missing[:6]}")
     for chapter in chapters:
@@ -345,16 +345,40 @@ def words(browser, chapters=("overview", "why", "inside", "research")):
             n = page.locator(f'[data-chapter="{chapter}"] img[src*="{EXPECT[chapter]}"]').count()
             check(f"words {chapter}: its own painting", n >= 1)
     built = {
+        # The title is one span per sentence: a space between them keeps the text one sentence.
+        "why": ["Tiny power plants. A big part of your health."],
         "inside": ["Inside every capsule, four ingredients.", "Acetyl-L-carnitine", "Creatine", "Alpha-lipoic acid",
                    "Choline", "Why these four work together", "Fuel in, energy out", "Energy on hand",
                    "Two halves of a messenger"],
         "research": ["The research on the ingredients", "Show all 7 studies"],
+        "people": ["The people behind the formula", "Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "Portrait painting"],
+        "daily": ["How to take it", "One bottle, one month.", "Take 3 capsules once a day, with or after a meal.",
+                  "capsules a day", "days", "capsules in each bottle"],
+        "buy": ["In each bottle", "Formulated by Dr. Jiankang Liu.", "Add to cart"],
     }
     for chapter in chapters:
         for s in built.get(chapter, []):
             check(f"words {chapter}: “{s}”", s in text)
     ctx.close()
     return missing
+
+
+def sum_check(browser):
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    painted = page.locator('[data-sum] img[src*="sum-"]')
+    check("sum: painted for NuriCell's 3 × 30 = 90", painted.count() == 1)
+    said = page.locator("[data-sum] [data-sum-text]").text_content()
+    check("sum: said in words for screen readers", "3" in said and "30" in said and "90" in said, said)
+    labels = page.evaluate(
+        """() => { const img = document.querySelector('[data-sum] img').getBoundingClientRect();
+                   return [...document.querySelectorAll('[data-sum] [data-sum-label]')].map(l => {
+                     const r = l.getBoundingClientRect(); return { centre: (r.left + r.width / 2 - img.left) / img.width, top: r.top - img.bottom }; }); }"""
+    )
+    art = page.evaluate("() => JSON.parse(document.querySelector('[data-sum]').dataset.centres)")
+    check("sum: three captions", len(labels) == 3, str(labels))
+    near = all(abs(l["centre"] - c) < 0.06 for l, c in zip(labels, art))
+    check("sum: each caption under its number", near, f"{[round(l['centre'], 3) for l in labels]} vs {art}")
+    ctx.close()
 
 
 def sticky(browser):
@@ -397,6 +421,7 @@ SECTIONS = {
     "nojs": nojs,
     "words": words,
     "sticky": sticky,
+    "sum": sum_check,
 }
 
 if __name__ == "__main__":

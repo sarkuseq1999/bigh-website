@@ -91,18 +91,22 @@ export function InkChapter({
   picture,
   children,
   className = "",
+  labelledBy,
 }: {
   id: ChapterId;
   picture: ReactNode;
   children: ReactNode;
   className?: string;
+  /** The ids that name the chapter's region, when its heading alone is not a unique name (the
+   *  buy chapter's heading is the product's name, which the opening's region already has). */
+  labelledBy?: string;
 }) {
   return (
     <section
       id={anchorId(id)}
       className={`${styles.chapter} ${className}`}
       data-chapter={id}
-      aria-labelledby={titleId(id)}
+      aria-labelledby={labelledBy ?? titleId(id)}
     >
       <div className={`${base.wrap} ${styles.spread}`}>
         {picture}

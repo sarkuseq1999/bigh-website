@@ -127,10 +127,15 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
     >
       <p className={`${base.label} ${styles.label}`}>{copy(why.label)}</p>
       {/* One line per sentence (the kit's .display > span is a block): balance alone strands
-          "A" at the end of the first line. */}
+          "A" at the end of the first line. Each sentence is translated on its own (the catalogs
+          have them one by one), and a space between them keeps the text, to a screen reader or a
+          copy, one sentence after the other, not "plants.A big". */}
       <h2 id={titleId("why")} className={`${base.display} ${styles.heading}`}>
-        {sentences(copy(why.title)).map((sentence) => (
-          <span key={sentence}>{sentence}</span>
+        {sentences(why.title).map((sentence, i) => (
+          <span key={sentence}>
+            {i > 0 ? " " : null}
+            {copy(sentence)}
+          </span>
         ))}
       </h2>
       {why.lines.map((line) => (
