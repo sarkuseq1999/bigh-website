@@ -48,3 +48,17 @@ Mockup rounds before this plan: 7 jobs in `bigh-about2` (about $0.35).
 | sequoia-v3 | Retake 2: + the gold a clearly visible torn patch about a fifth of the trunk's width | yes | Whole tree inside, misty crown, good bark; the leaf barely grew: its outline is 0.092% of the picture, so its gold mask (0.06%) still fails check_bc.py's 0.1% floor. Kept as the best take; no retakes left for it. |
 
 16 jobs of the 30 cap, about $0.80 (at most $1.12 before refunds). 12 first takes + 4 retakes (sequoia x2, letter, enso). Style references cropped from the approved mockups as the plan says, then the page text ("What you can count on.", "Our p", "What our work is for.") and a stray seedling leaf were inpainted out of ref-vignettes, ref-sequoia and ref-hills so no take would copy them.
+
+## NuriCell ink page (October 9, 2026)
+
+Ledger: `C:/Users/mcbig/AppData/Local/HiggsfieldAPI/bigh-nuricell-mock/` (cap 70). Mockup rounds 1-11:
+65 jobs (about $3.25, at most $4.55 before refunds), Mo's $5. Kept mockup paintings (finals):
+P7-capsule, P7-stepping-books, P11-liu-face-bold (Dr. Liu, from his real photo; Mo's call, October 9),
+P7-egg-capsules, P7-sum, P5-stroke.
+
+| Job              | Picture                                                 | Kept | Note           |
+| ---------------- | ------------------------------------------------------- | ---- | -------------- |
+| lantern-lit-v1   | Lantern lit by gold leaf (ref: crane-rest-v2 brushwork) | yes  | One tall lantern hanging from an ink cord that reaches the top edge; rims are loose dry-brush ink, ribs fine grey lines, body crackled gold leaf glowing rim to rim with a soft gold haze on the paper; no landscape or other objects, paper on every side. The body is more detailed and symmetrical than the crane (reads as ink-and-gold watercolour, not a few loose strokes), but it is plainly painted, not rendered. |
+| lantern-unlit-v1 | Edit of the lit take: unlit, no gold                    | yes  | Same lantern in the same place (shift 0 px down, 1 px sideways against the lit take), cord, rims, ribs and leaf crackle kept as pale cool-grey wash; zero gold or warm haze left (gold pixels 0.0%); the paper is a hair cooler than the lit take (R 241 vs 245); worth watching in Task 2's crossfade. |
+
+2 jobs, about $0.10 (at most $0.14 before refunds); no retakes. Ledger after: 67 of 70.
