@@ -199,7 +199,8 @@
    a fact that starts a line has its dot cut off with that gap, and its words start on the column's
    edge, so a dot never starts or ends a line. */
 .page .facts {
-  --fact-gap: 1.1em; /* the width of " · " in Switzer */
+  /* A little wider than a typed " · " (0.97em in Switzer, measured at 19px), so the dot has air. */
+  --fact-gap: 1.1em;
   display: block;
   overflow: hidden;
 }
@@ -423,6 +424,13 @@
   text-align: right;
 }
 
+/* The lantern's picture keeps its halo's paper on both sides, so a right-aligned caption floated
+   over empty paper, well right of the lantern: under the lantern, centred (its body is centred in
+   its picture). */
+.page [data-lantern] figcaption.caption {
+  text-align: center;
+}
+
 .page p.label {
   margin: 0 0 14px;
 }
@@ -494,7 +502,8 @@
   opacity: 1;
 }
 
-.page dl.facts {
+/* The Why chapter's figures (2% / 20%), as a list of terms. */
+.page dl.factList {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 24px;
@@ -503,7 +512,7 @@
   border-top: 1px solid var(--hair);
 }
 
-.page .facts dd {
+.page .factList dd {
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 17px;

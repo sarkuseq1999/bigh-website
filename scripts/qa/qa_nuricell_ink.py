@@ -701,18 +701,33 @@ def layout(browser):
                  .map(e => e.textContent.trim().slice(0, 30))"""
         )
         check(f"{tag}: text 15px or larger", not small, "; ".join(small[:3]))
-        tiny = page.evaluate(
-            """() => [...document.querySelectorAll('main button, main summary, main a')]
-                 .filter(e => e.offsetParent).map(e => e.getBoundingClientRect())
-                 .filter(r => r.height < 44).length"""
-        )
-        check(f"{tag}: targets 44px or taller", tiny == 0, f"{tiny} small")
         y, n, total = 0, 0, page.evaluate("() => document.documentElement.scrollHeight")
         while y < total and n < 30:
             page.evaluate(f"window.scrollTo(0, {y})")
             page.wait_for_timeout(150)
             page.screenshot(path=str(OUT / f"layout-{w}-{n:02d}.png"))
             y, n = y + h, n + 1
+        # Every target, including those inside closed questions and studies (each study's "Read the
+        # study" link) and the studies behind "Show all": all opened first (after the screenshots,
+        # which show the page as it arrives).
+        page.evaluate(
+            """() => { document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click();
+                 document.querySelectorAll('main details').forEach((d) => { d.open = true; }); }"""
+        )
+        page.wait_for_timeout(300)
+        targets = page.evaluate(
+            """() => [...document.querySelectorAll('main button, main summary, main a')]
+                 .filter(e => e.offsetParent).map(e => e.getBoundingClientRect().height)"""
+        )
+        tiny = sum(1 for height in targets if height < 44)
+        links, studies = page.evaluate(
+            "() => [[...document.querySelectorAll('[data-study] details a')].filter(e => e.offsetParent).length, document.querySelectorAll('[data-study]').length]"
+        )
+        check(
+            f"{tag}: targets 44px or taller (questions and studies open)",
+            tiny == 0 and studies > 0 and links == studies,
+            f"{tiny} small of {len(targets)}; {links} of {studies} study links measured",
+        )
         ctx.close()
     ctx = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
     page = ctx.new_page()
@@ -768,7 +783,13 @@ SUPPLY_LINES = """() => [document.querySelector('[data-chapter=overview] [class*
       out.shown++;
       const prev = lineTops(facts[i - 1]);
       if (Math.abs(tops[0] - prev[prev.length - 1]) > 3) out.bad.push('dot starts a line: ' + f.textContent);
-      if (Math.abs(tops[0] - Math.round(box.top)) > 3) out.bad.push('dot ends a line: ' + f.textContent);
+      // It never ends one: the dot sits on the line of the words it introduces, straight before
+      // them (their first line box holds the dot's middle, and they start within one gap of it).
+      const r = document.createRange(); r.selectNodeContents(f);
+      const first = [...r.getClientRects()].find((x) => x.width > 1);
+      const dotMid = box.top + parseFloat(dot.top) + parseFloat(dot.height) / 2;
+      if (dot.position !== 'absolute' || !first || dotMid < first.top || dotMid > first.bottom
+          || first.left < dotRight - 0.5 || first.left - dotRight > pad) out.bad.push('dot ends a line: ' + f.textContent);
     } else {
       out.hidden++;
       if (Math.abs(box.left + pad - clip.left) > 1) out.bad.push('wrapped fact off the edge: ' + f.textContent);

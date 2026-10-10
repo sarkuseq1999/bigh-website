@@ -146,7 +146,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
         </p>
       ))}
       {why.facts?.length ? (
-        <dl className={styles.facts}>
+        <dl className={styles.factList}>
           {why.facts.map((fact) => (
             <div key={fact.line}>
               <dt className={styles.figureNumber}>
