@@ -33,6 +33,7 @@ usage: python -X utf8 scripts/qa/qa_nuricell_ink.py [base-url] [--only=shell,oth
 import re
 import sys
 from pathlib import Path
+from urllib.parse import urlparse
 
 from PIL import Image
 from playwright.sync_api import sync_playwright
@@ -57,7 +58,10 @@ def check(name, ok, detail=""):
     print(f"{'PASS' if ok else 'FAIL'} {name}" + (f"  ({detail})" if detail else ""), flush=True)
 
 
-def opened(browser, w, h, path=PATH, reduced=False, js=True):
+def opened(browser, w, h, path=PATH, reduced=False, js=True, chunk_errors=None):
+    """`chunk_errors`, when given, collects the console errors whose own URL is a /_next/static/chunks/
+    file (m.text is only the generic "Failed to load resource") instead of `errors`; the caller
+    decides whether they count."""
     ctx = browser.new_context(
         viewport={"width": w, "height": h},
         reduced_motion="reduce" if reduced else "no-preference",
@@ -65,7 +69,14 @@ def opened(browser, w, h, path=PATH, reduced=False, js=True):
     )
     page = ctx.new_page()
     errors = []
-    page.on("console", lambda m: errors.append(m.text) if m.type == "error" and not PREFETCH_CSS.search(m.text) else None)
+
+    def on_console(m):
+        if m.type != "error" or PREFETCH_CSS.search(m.text):
+            return
+        in_chunks = urlparse(m.location.get("url") or "").path.startswith("/_next/static/chunks/")
+        (chunk_errors if chunk_errors is not None and in_chunks else errors).append(m.text)
+
+    page.on("console", on_console)
     page.on("pageerror", lambda e: errors.append(str(e)))
     response = page.goto(BASE + path, wait_until="networkidle")
     if js:
@@ -157,7 +168,15 @@ def shell(browser):
 
 def others(browser):
     for slug in OTHERS:
-        ctx, page, response, errors = opened(browser, 1440, 900, f"/en/products/{slug}")
+        chunk_errors = []
+        ctx, page, response, errors = opened(browser, 1440, 900, f"/en/products/{slug}", chunk_errors=chunk_errors)
+        # next dev (Turbopack, Next 16.2.6) logs a 404 for one chunk preload on these four pages: the dev
+        # loadable manifest has a wrong chunk hash for a next/dynamic entry with nested dynamic imports
+        # (fixed after 16.2.6). A built site has none, so only the dev server is excused.
+        if chunk_errors and development(response):
+            print(f"NOTE others {slug}: ignored {len(chunk_errors)} /_next/static/chunks/ 404 on the dev server (Turbopack dev bug)")
+        else:
+            errors += chunk_errors
         check(f"others {slug}: 200", response is not None and response.status == 200)
         check(f"others {slug}: today's template", page.locator('[data-look="ink"]').count() == 0 and page.locator("#main-content").count() == 1)
         # Pins the summaries' inkColor: the template's own page root carries --product-ink.

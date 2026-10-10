@@ -52,7 +52,10 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
   may log "Image with src /images/products/nuricell.png was detected as the Largest Contentful
   Paint"; its check keeps one entry per picture URL and the last `<Image>` wins, and the menu bar's
   thumbnails and the Buy chapter's bottle (both lazy) share the opening bottle's URL. The opening
-  bottle itself is eager with high priority; production builds do not run that check.
+  bottle itself is eager with high priority; production builds do not run that check. Also dev-only:
+  the four old-template product pages log a 404 for a chunk preload — a Turbopack dev bug (wrong
+  chunk hash in the dev loadable manifest for next/dynamic entries with nested dynamic imports,
+  fixed after Next 16.2.6); the QA ignores it on dev only (prints a NOTE) and a Next upgrade removes it.
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the
