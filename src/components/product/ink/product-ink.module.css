@@ -136,20 +136,43 @@
   text-wrap: pretty;
 }
 
+/* Its rows keep their own heights (align-content: start): stretched to the taller column beside
+   it, they spread the button and the supply apart. */
 .page .openingBuy {
   display: grid;
+  align-content: start;
   justify-items: start;
   gap: 16px;
 }
 
 /* A pill in any stylesheet order (the kit's focus ring sets a 6px radius at the same weight as
-   the button's own rule), and its hover is the kit's, not the old template's blue. */
-.page .openingBuy button {
+   the button's own rule), and its hover is the kit's, not the old template's blue. Its words in
+   the kit's pill voice (20px, 450, as "Show all" and the menu bar's), not the old template's
+   small bold label, and as large as the mockups' pill. */
+.page .openingBuy button,
+.page [data-chapter="buy"] button {
+  min-height: 60px;
+  padding-inline: 44px;
   border-radius: 99px;
+  font-size: 20px;
+  font-weight: 450;
+  letter-spacing: -0.005em;
 }
 
 .page .openingBuy button:hover {
   background: #3a3833;
+}
+
+/* Add to cart's note ("Checkout isn't connected yet") keeps a line open under the button before
+   anyone presses it; here the line closes until it has words, so the supply and the credit sit
+   under the button as in the mockups. */
+.page .openingBuy [aria-live]:empty,
+.page [data-chapter="buy"] [aria-live]:empty {
+  min-height: 0;
+}
+
+.page .nowrap {
+  white-space: nowrap;
 }
 
 .page ul.highlights {
@@ -238,6 +261,16 @@
   .page .openingBuy {
     justify-items: stretch;
   }
+
+  /* "Stay sharp. Live fully." as large as the phone mockup's, under a name four times its size. */
+  .page p.headline {
+    font-size: clamp(30px, 9vw, 40px);
+  }
+
+  /* The full width of the column, as in the phone mockup. */
+  .page .openingBuy button {
+    width: 100%;
+  }
 }
 
 /* 2-7. Chapters: one painting and its words, the painting left from 960px, first on phones. */
@@ -274,17 +307,32 @@
 
 /* The painting: its own blend group. From 960px it stays put while long words scroll beside it,
    inside its own grid cell (so it leaves with its chapter), pinned from the cell's top. A tall
-   painting (the lantern, about 1 : 1.9) is narrower, so all of it and its caption fit in the
-   window under the menu bar (--aspect is its width over its height, set on the figure), but never
-   narrower than 220px (a short landscape window), and never wider than its column. */
+   painting (the lantern, about 1 : 1.9) is narrower: at most --picture-height tall (--aspect is
+   its width over its height, set on the figure), but never narrower than 220px (a short landscape
+   window), and never wider than its column. Beside its words, all of it and its caption fit in the
+   window under the menu bar; over them (one column), half the window, so the chapter's heading
+   comes into view with it, as in the phone mockup. The pictures' `sizes` (ink-chapter.tsx's
+   pictureSizes) follow the same sums. */
+.page {
+  --picture-height: 50svh;
+}
+
 .page figure.figure {
   justify-self: center;
-  width: min(100%, var(--picture-width), max(calc((100svh - 220px) * var(--aspect, 1)), 220px));
+  width: min(
+    100%,
+    var(--picture-width),
+    max(calc(var(--picture-height) * var(--aspect, 1)), 220px)
+  );
   margin: 0;
   mix-blend-mode: multiply;
 }
 
 @media (min-width: 960px) {
+  .page {
+    --picture-height: calc(100svh - 220px);
+  }
+
   .page figure.figure {
     position: sticky;
     top: 120px;
@@ -312,9 +360,11 @@
   margin: 0 0 14px;
 }
 
+/* On a phone the size follows the window (8.2vw): "A big part of your health.", the longest
+   sentence the headings set as a line of its own, still fits one line from 320px to 959px. */
 .page h2.heading {
   margin: 0 0 clamp(16px, 1.6vw, 24px);
-  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  font-size: clamp(min(36px, 8.2vw), 3.2vw, 50px);
   line-height: 1.08;
   text-wrap: balance;
 }
@@ -827,13 +877,8 @@
   }
 }
 
-/* Add to cart, as the opening's: a pill in any stylesheet order (the kit's focus ring sets a 6px
-   radius at the same weight as the button's own rule), and the kit's hover, not the old
-   template's blue. */
-.page [data-chapter="buy"] button {
-  border-radius: 99px;
-}
-
+/* Add to cart, as the opening's (its pill and words with the opening's): the kit's hover, not the
+   old template's blue. */
 .page [data-chapter="buy"] button:hover {
   background: #3a3833;
 }
@@ -956,8 +1001,14 @@
   text-decoration-color: var(--ink);
 }
 
+/* The space under a card is the list item's, outside the link: the link's box (its focus ring,
+   its tap area) ends with its words. */
 .page .moreLink .meta {
-  margin: 6px 0 32px;
+  margin: 6px 0 0;
+}
+
+.page .more li {
+  margin-bottom: 32px;
 }
 
 .page .notes {

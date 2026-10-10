@@ -12,7 +12,39 @@ import styles from "./product-ink.module.css";
 export const CAPTIONS = { illustration: "Illustration", portrait: "Portrait painting" } as const;
 
 /** Every chapter painting is drawn the same size: its column up to --picture-width (520px). */
-export const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px";
+const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px";
+
+/**
+ * The width a painting is drawn at, for its pictures' `sizes`. A tall one (the lantern, Dr. Liu)
+ * is held by the window's height, not its column (product-ink.module.css: half the window over
+ * its words, the window less 220px beside them, times its width over its height), so asking for
+ * 520px would fetch a picture two or three times too wide. Plain calc() with vh, which every
+ * browser reads in `sizes` (the CSS's 220px floor matters only on a short landscape window).
+ */
+export function pictureSizes(art: { width: number; height: number }) {
+  const aspect = art.width / art.height;
+  if (aspect >= 1) return PICTURE_SIZES;
+  const a = aspect.toFixed(3);
+  return `(max-width: 959px) calc(50vh * ${a}), calc((100vh - 220px) * ${a})`;
+}
+
+/**
+ * Keeps each hyphenated word ("30-day") on one line: a narrow column otherwise breaks it after
+ * its hyphen ("30-" / "day supply"). The text itself is unchanged.
+ */
+export function keepHyphens(text: string): ReactNode {
+  const parts = text.split(/(\S*\w-\w\S*)/u);
+  if (parts.length === 1) return text;
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <span key={i} className={styles.nowrap}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 
 export function titleId(id: ChapterId) {
   return `${anchorId(id)}-title`;
@@ -66,7 +98,7 @@ export function InkFigure({
           alt={copy(alt)}
           width={art.width}
           height={art.height}
-          sizes={PICTURE_SIZES}
+          sizes={pictureSizes(art)}
           loading={eager ? "eager" : undefined}
           data-bloom="waiting"
         />

@@ -7,6 +7,7 @@ import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "../add-to-cart";
 import type { ProductPage } from "../product-types";
 import { anchorId, splitName } from "../template-chapters-kit";
+import { keepHyphens } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 // Chapter 1: the giant name parts round the real bottle, which stands in the kit's ink pool (the
@@ -50,6 +51,10 @@ export function Opening({ product }: { product: ProductPage }) {
               sizes="(max-width: 959px) 44vw, 17vw"
               loading="eager"
             />
+            {/* The largest picture on a phone or tablet (on a wide screen it is the menu bar's
+                paper): loaded at once and first. Next 16's docs prefer loading="eager" with
+                fetchPriority to `preload`, which they advise against when the largest picture
+                changes with the window and alongside fetchPriority. */}
             <Image
               className={styles.bottle}
               src={product.bottle.src}
@@ -57,7 +62,7 @@ export function Opening({ product }: { product: ProductPage }) {
               width={product.bottle.width}
               height={product.bottle.height}
               sizes="(max-width: 959px) 64vw, 29vw"
-              preload
+              loading="eager"
               fetchPriority="high"
             />
           </span>
@@ -81,7 +86,7 @@ export function Opening({ product }: { product: ProductPage }) {
               ))}
             </ul>
             <AddToCart />
-            <p className={base.caption}>{copy(product.serving.supply)}</p>
+            <p className={base.caption}>{keepHyphens(copy(product.serving.supply))}</p>
           </div>
         </div>
       </div>

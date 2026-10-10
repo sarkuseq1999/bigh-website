@@ -79,6 +79,23 @@ def bring(page, selector, top=140):
     )
 
 
+def patch(img, x, y, n=10):
+    """The mean colour of an n x n patch from (x, y): the paper's fibre makes two single pixels 15px
+    apart differ by up to 8 on bare paper, so one pixel each side of an edge can fail with no box."""
+    px = [img.getpixel((min(xx, img.width - 1), min(yy, img.height - 1))) for xx in range(x, x + n) for yy in range(y, y + n)]
+    return tuple(round(sum(c[i] for c in px) / len(px), 1) for i in range(3))
+
+
+def corner_of(img, box):
+    """The picture's top-left corner just inside, against the paper just outside it, as patches: a
+    painting whose paper is not divided out, or that does not multiply, shows its own paper there
+    (a white box: 9 to 23 off the page's paper)."""
+    x, y = int(box["x"]), int(box["y"])
+    inside = patch(img, x + 2, y + 2)
+    outside = patch(img, max(0, x - 14), y + 2)
+    return inside, outside, max(abs(a - b) for a, b in zip(inside, outside))
+
+
 def corner_diff(page, el, shot_name):
     """Brings the picture's element in view and compares its top-left corner, just inside, with the
     paper just outside it: a painting that multiplies onto the paper shows no box."""
@@ -87,11 +104,7 @@ def corner_diff(page, el, shot_name):
     box = el.bounding_box()
     shot = OUT / shot_name
     page.screenshot(path=str(shot))
-    img = Image.open(shot).convert("RGB")
-    x, y = int(box["x"]) + 3, int(box["y"]) + 3
-    inside = img.getpixel((x, y))
-    outside = img.getpixel((max(0, int(box["x"]) - 12), y))
-    return inside, outside, max(abs(a - b) for a, b in zip(inside, outside))
+    return corner_of(Image.open(shot).convert("RGB"), box)
 
 
 def saturated_share(png):
@@ -187,11 +200,7 @@ def multiply(browser):
             box = fig.locator("img").first.bounding_box()
             shot = OUT / f"multiply-{w}-{chapter}.png"
             page.screenshot(path=str(shot))
-            img = Image.open(shot).convert("RGB")
-            x, y = int(box["x"]) + 3, int(box["y"]) + 3
-            inside = img.getpixel((x, y))
-            outside = img.getpixel((max(0, int(box["x"]) - 12), y))
-            diff = max(abs(a - b) for a, b in zip(inside, outside))
+            inside, outside, diff = corner_of(Image.open(shot).convert("RGB"), box)
             check(f"multiply {w} {chapter}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
         # The buy chapter's stroke (its figure holds the bottle's photo, so it is not a blend group:
         # the stroke multiplies on its own) and the painted sum.
@@ -647,6 +656,71 @@ def sticky(browser):
         ctx.close()
 
 
+SIZES = [(1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800), (900, 900), (768, 1024), (390, 844), (360, 780)]
+
+
+def layout(browser):
+    for w, h in SIZES:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        tag = f"layout {w}x{h}"
+        wide = page.evaluate("() => document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{tag}: no sideways scroll", wide <= 0, f"{wide}px")
+        bad = page.evaluate(
+            """(two) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
+                 const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
+                 const t = c.querySelector('[data-words]').getBoundingClientRect();
+                 const ok = two ? f.right <= t.left + 1 : f.bottom <= t.top + 1;
+                 return ok ? null : c.dataset.chapter; }).filter(Boolean)""",
+            w >= 960,
+        )
+        check(f"{tag}: each painting {'left of' if w >= 960 else 'above'} its words", not bad, ", ".join(bad))
+        small = page.evaluate(
+            """() => [...document.querySelectorAll('main p, main li, main dd, main dt, main td, main th, main figcaption')]
+                 .filter(e => e.offsetParent && e.textContent.trim() && parseFloat(getComputedStyle(e).fontSize) < 15)
+                 .map(e => e.textContent.trim().slice(0, 30))"""
+        )
+        check(f"{tag}: text 15px or larger", not small, "; ".join(small[:3]))
+        tiny = page.evaluate(
+            """() => [...document.querySelectorAll('main button, main summary, main a')]
+                 .filter(e => e.offsetParent).map(e => e.getBoundingClientRect())
+                 .filter(r => r.height < 44).length"""
+        )
+        check(f"{tag}: targets 44px or taller", tiny == 0, f"{tiny} small")
+        y, n, total = 0, 0, page.evaluate("() => document.documentElement.scrollHeight")
+        while y < total and n < 30:
+            page.evaluate(f"window.scrollTo(0, {y})")
+            page.wait_for_timeout(150)
+            page.screenshot(path=str(OUT / f"layout-{w}-{n:02d}.png"))
+            y, n = y + h, n + 1
+        ctx.close()
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
+    page = ctx.new_page()
+    page.route(re.compile(r"\.(webp|png|jpg|jpeg|avif)(\?|$)|/_next/image"), lambda route: route.abort())
+    page.goto(BASE + PATH, wait_until="networkidle")
+    # The studies past the first five wait behind "Show all" by design (not for want of a picture):
+    # pressed, every one of them must be readable too.
+    page.evaluate("""() => document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click()""")
+    page.wait_for_timeout(300)
+    hidden = page.evaluate(
+        """() => [...document.querySelectorAll('main h1, main h2, main p')]
+             .filter(e => e.textContent.trim() && (e.offsetParent === null || getComputedStyle(e).visibility === 'hidden' || Number(getComputedStyle(e).opacity) < 0.9))
+             .map(e => e.textContent.trim().slice(0, 30))"""
+    )
+    check("layout: words readable with pictures blocked", not hidden, "; ".join(hidden[:3]))
+    ctx.close()
+
+
+def deep_links(browser):
+    for w, h in [(1440, 900), (1024, 768), (390, 844)]:
+        for chapter in CHAPTERS[1:]:
+            ctx, page, _, _ = opened(browser, w, h, f"{PATH}#chapter-{chapter}", reduced=True)
+            page.wait_for_timeout(400)
+            top = page.evaluate(f"() => document.getElementById('chapter-{chapter}-title').getBoundingClientRect().top")
+            bar = page.evaluate("() => document.querySelector('header').getBoundingClientRect().bottom")
+            check(f"deep link {w} #{chapter}: heading under the bar, in the window", bar <= top <= h - 80, f"top {top:.0f}, bar {bar:.0f}")
+            ctx.close()
+
+
 NEW = ["Portrait painting", "capsules a day", "capsules in each bottle"]
 # The ingredient table's hidden header and the research chapter's label and "Show all" button are new
 # words too, but each also sits inside English sentences the template leaves untranslated (the notes
@@ -755,6 +829,8 @@ SECTIONS = {
     "sticky": sticky,
     "sum": sum_check,
     "buy": buy_check,
+    "layout": layout,
+    "deep_links": deep_links,
     "languages": languages,
 }
 

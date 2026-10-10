@@ -18,6 +18,7 @@ python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=gree
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
 python -X utf8 scripts/qa/qa_turmerific.py http://localhost:3012 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3012 --product=turmerific
+python -X utf8 scripts/qa/qa_nuricell_ink.py http://localhost:3034 --only=layout,deep_links
 ```
 
 `qa_why_chapter.py` and `qa_research_daily.py` check NuriCell unless given `--product=<slug>`; each
@@ -40,6 +41,13 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
 | `qa_turmerific.py`         | Turmerific's own facts: chapters, 3D bottle, both Why pictures, 1,000 mg shown large, six studies, calendar, banned words, sizes     |
 | `record_product_page.py`   | Videos of the product page: `opening.mp4` and `page.mp4` (needs ffmpeg; `--only page` redoes one)                                    |
 | `qa_vn_font.py`            | Vietnamese type: faces drawn (DevTools) on `/vn` pages and other languages; no tone mark touching the next line                      |
+
+- `qa_nuricell_ink.py [base] [--only=...]` — NuriCell's ink page (October 9, 2026): the ink look and
+  menu bar, the other four products on today's template, every painting multiplying with no box,
+  the lantern's light coming on (no lighter flash; lit with reduced motion and without script),
+  every word of nuricell.ts, sticky paintings inside their chapters, the painted sum and its
+  captions, nine sizes, deep links, and the new strings in kr/jp/cns/vn. Pictures in
+  `out/nuricell-ink/`.
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the

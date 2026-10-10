@@ -6,7 +6,7 @@ import { CountUp } from "@/components/about/count-up";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
-import { CAPTIONS, InkChapter, InkFigure, PICTURE_SIZES, sentences, titleId } from "./ink-chapter";
+import { CAPTIONS, InkChapter, InkFigure, pictureSizes, sentences, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 /** How long after the unlit lantern starts to bloom (with half of it in the window) its light
@@ -63,8 +63,10 @@ function useLightComesOn(
       bloomed = img.dataset.bloom === "in" || img.dataset.bloom === "done";
       start();
     });
+    // A batch can hold several changes for the one figure (a fast scroll): the last is the latest.
     const view = new IntersectionObserver(
-      ([entry]) => {
+      (entries) => {
+        const entry = entries[entries.length - 1];
         seen = entry.isIntersecting && entry.intersectionRatio >= 0.49;
         start();
       },
@@ -112,7 +114,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
             alt=""
             width={art.lit.width}
             height={art.lit.height}
-            sizes={PICTURE_SIZES}
+            sizes={pictureSizes(art.lit)}
             loading="eager"
             data-lit=""
           />
