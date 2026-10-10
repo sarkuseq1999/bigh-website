@@ -19,11 +19,13 @@ const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px"
  * is held by the window's height, not its column (product-ink.module.css: half the window over
  * its words, the window less 220px beside them, times its width over its height), so asking for
  * 520px would fetch a picture two or three times too wide. Plain calc() with vh, which every
- * browser reads in `sizes` (the CSS's 220px floor matters only on a short landscape window).
+ * browser reads in `sizes` (the CSS's 220px floor matters only on a short landscape window). A
+ * painting nearly as wide as it is tall (the breakfast, 0.94) is held by its column in most
+ * windows, so it keeps the column's sizes.
  */
 export function pictureSizes(art: { width: number; height: number }) {
   const aspect = art.width / art.height;
-  if (aspect >= 1) return PICTURE_SIZES;
+  if (aspect >= 0.8) return PICTURE_SIZES;
   const a = aspect.toFixed(3);
   return `(max-width: 959px) calc(50vh * ${a}), calc((100vh - 220px) * ${a})`;
 }

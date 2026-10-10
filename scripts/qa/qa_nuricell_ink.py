@@ -70,6 +70,12 @@ def opened(browser, w, h, path=PATH, reduced=False, js=True):
     return ctx, page, response, errors
 
 
+def production(response):
+    """A built site (next start) serves its prerendered pages with a year's s-maxage; the dev server
+    never lets them be cached."""
+    return response is not None and "s-maxage" in (response.headers.get("cache-control") or "")
+
+
 def bring(page, selector, top=140):
     """Scroll the element's top to `top` px under the window's top (scrollBy: the document's 150px
     scroll-padding stops scrollIntoView short)."""
@@ -545,12 +551,18 @@ def sum_type(browser):
     for fixture, numerals, operators in [("type", ["3", "30", "90"], True), ("odd", ["3", "30", "91"], False)]:
         for w, h in [(1440, 900), (390, 844)]:
             tag = f"sum type ({fixture}) {w}"
-            ctx, page, _, errors = opened(browser, w, h, f"{PATH}?ink-sum={fixture}", reduced=True)
+            ctx, page, response, errors = opened(browser, w, h, f"{PATH}?ink-sum={fixture}", reduced=True)
             try:
                 page.wait_for_selector('[data-sum-kind="type"]', timeout=15000)
             except Exception:
                 pass
             kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
+            if kind != "type" and production(response):
+                # The fixtures are development only (daily.tsx): a built site shows the product as given.
+                check("sum type: the built site ignores the dev-only ?ink-sum fixtures (painted sum)", kind == "painted", str(kind))
+                print("NOTE sum type skipped: a production build ignores ?ink-sum (run it against the dev server)")
+                ctx.close()
+                return
             check(f"{tag}: the type branch shows, no painting", kind == "type" and page.locator("[data-sum] img").count() == 0, str(kind))
             check(f"{tag}: no centres claimed", page.locator("[data-sum]").get_attribute("data-centres") is None)
             bring(page, "[data-sum]", 200)

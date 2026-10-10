@@ -288,14 +288,11 @@
   align-items: center;
 }
 
+/* One column (under 960px), the words start on the wrap's left edge like the opening's, the
+   questions' and the menu bar's (a narrower centred column put them 60px in at 900px); their
+   paragraphs keep their own readable widths. */
 .page .words {
   min-width: 0;
-}
-
-@media (min-width: 600px) and (max-width: 959px) {
-  .page .spread {
-    max-width: calc(640px + 2 * var(--gutter));
-  }
 }
 
 @media (min-width: 960px) {
