@@ -16,6 +16,22 @@ export function anchorId(id: ChapterId) {
   return `chapter-${id}`;
 }
 
+/** Where the giant name parts for the bottle: at the word break nearest the middle ("Nuri|Cell",
+ *  "Green Bee|Propolis"), or in the middle of a single word. (Here, not in the hero, so the ink
+ *  page's opening can use it without loading the hero's 3D code.) */
+export function splitName(name: string): [string, string] {
+  const middle = name.length / 2;
+  const breaks = [...name.matchAll(/ |(?<=[a-z])(?=[A-Z])/g)].map((match) => match.index);
+  if (breaks.length === 0) {
+    const half = Math.ceil(middle);
+    return [name.slice(0, half), name.slice(half)];
+  }
+  const at = breaks.reduce((best, cut) =>
+    Math.abs(cut - middle) < Math.abs(best - middle) ? cut : best,
+  );
+  return [name.slice(0, at).trim(), name.slice(at).trim()];
+}
+
 /** SplitText line and word classes; their "-mask" wrappers get room for descenders in the CSS. */
 export const lineClass = "tc-line";
 export const wordClass = "tc-word";

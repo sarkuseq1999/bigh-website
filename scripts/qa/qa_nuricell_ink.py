@@ -80,11 +80,22 @@ def shell(browser):
         check(f"{tag}: 200", response is not None and response.status == 200)
         check(f"{tag}: the ink look", page.locator('[data-look="ink"][data-page="products"]').count() == 1)
         check(f"{tag}: the menu bar marks Products", page.locator('[data-nav-trigger="products"][data-current]').count() >= 1)
-        name = page.locator("h1").all_inner_texts()
-        check(f"{tag}: one h1, the name", len(name) == 1 and re.sub(r"\s", "", name[0]) == "NuriCell", str(name))
+        # The accessible name is the whole word: the two visible halves sit in separate grid cells,
+        # which Chrome would read as "Nuri Cell".
+        check(f"{tag}: one h1", page.locator("h1").count() == 1)
+        check(
+            f"{tag}: the h1's accessible name is NuriCell",
+            page.get_by_role("heading", level=1, name="NuriCell", exact=True).count() == 1,
+        )
+        check(
+            f"{tag}: the opening is a region named NuriCell",
+            page.get_by_role("region", name="NuriCell", exact=True).count() == 1,
+        )
         check(f"{tag}: the real bottle", page.locator('[data-chapter="overview"] img[src*="nuricell.png"]').count() >= 1)
         check(f"{tag}: no canvas", page.locator("canvas").count() == 0)
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+        # After the opening's words have settled (they arrive from a blur), not mid-way.
+        page.wait_for_timeout(2500)
         page.screenshot(path=str(OUT / f"shell-{w}.png"))
         ctx.close()
 
@@ -94,6 +105,12 @@ def others(browser):
         ctx, page, response, errors = opened(browser, 1440, 900, f"/en/products/{slug}")
         check(f"others {slug}: 200", response is not None and response.status == 200)
         check(f"others {slug}: today's template", page.locator('[data-look="ink"]').count() == 0 and page.locator("#main-content").count() == 1)
+        # Pins the summaries' inkColor: the template's own page root carries --product-ink.
+        colour = page.evaluate(
+            "() => { const e = document.querySelector('#main-content')?.closest('[style*=\"--product-ink\"]');"
+            " return e ? getComputedStyle(e).getPropertyValue('--product-ink').trim() : ''; }"
+        )
+        check(f"others {slug}: its --product-ink is a colour", re.fullmatch(r"#[0-9a-fA-F]{3,8}|rgba?\(.*\)", colour), colour or "(empty)")
         check(f"others {slug}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
 

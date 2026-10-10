@@ -6,8 +6,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "../add-to-cart";
 import type { ProductPage } from "../product-types";
-import { splitName } from "../template-chapters-hero";
-import { anchorId } from "../template-chapters-kit";
+import { anchorId, splitName } from "../template-chapters-kit";
 import styles from "./product-ink.module.css";
 
 // Chapter 1: the giant name parts round the real bottle, which stands in the kit's ink pool (the
@@ -25,8 +24,13 @@ export function Opening({ product }: { product: ProductPage }) {
     >
       <div className={base.wrap}>
         <p className={`${base.label} ${styles.eyebrow}`}>{copy(product.eyebrow)}</p>
+        {/* The name as one word for assistive tech: the two visible halves sit in separate grid
+            cells, which Chrome reads as "Nuri Cell". */}
         <h1 id="product-name" className={styles.name}>
-          <span className={styles.first}>{first}</span>
+          <span className={base.visuallyHidden}>{product.name}</span>
+          <span className={styles.first} aria-hidden="true">
+            {first}
+          </span>
           <span className={styles.stand} aria-hidden="true">
             <Image
               className={`${base.ink} ${styles.pool}`}
@@ -34,7 +38,7 @@ export function Opening({ product }: { product: ProductPage }) {
               alt=""
               width={shadow.width}
               height={shadow.height}
-              sizes="(max-width: 959px) 50vw, 300px"
+              sizes="(max-width: 959px) 80vw, 27vw"
               loading="eager"
             />
             <Image
@@ -43,7 +47,7 @@ export function Opening({ product }: { product: ProductPage }) {
               alt=""
               width={contactShadow.width}
               height={contactShadow.height}
-              sizes="(max-width: 959px) 44vw, 260px"
+              sizes="(max-width: 959px) 44vw, 17vw"
               loading="eager"
             />
             <Image
@@ -52,12 +56,14 @@ export function Opening({ product }: { product: ProductPage }) {
               alt=""
               width={product.bottle.width}
               height={product.bottle.height}
-              sizes="(max-width: 959px) 60vw, 440px"
+              sizes="(max-width: 959px) 64vw, 29vw"
               preload
               fetchPriority="high"
             />
           </span>
-          <span className={styles.second}>{second}</span>
+          <span className={styles.second} aria-hidden="true">
+            {second}
+          </span>
         </h1>
         <div className={styles.openingWords}>
           <div>

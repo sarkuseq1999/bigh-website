@@ -11,7 +11,13 @@ import { AddToCart } from "./add-to-cart";
 import type { ProductPage } from "./product-types";
 import type { HeroScene } from "./signature/hero-scene";
 import { bottles } from "./template-object-bottle";
-import { anchorId, wordClass, type Chapter, type ChapterId } from "./template-chapters-kit";
+import {
+  anchorId,
+  splitName,
+  wordClass,
+  type Chapter,
+  type ChapterId,
+} from "./template-chapters-kit";
 import chapterStyles from "./template-chapters.module.css";
 import styles from "./template-chapters-hero.module.css";
 
@@ -28,21 +34,6 @@ type Props = {
   reduced: boolean;
   onJump: (id: ChapterId) => void;
 };
-
-/** Where the giant name parts for the bottle: at the word break nearest the middle ("Nuri|Cell",
- *  "Green Bee|Propolis"), or in the middle of a single word. */
-export function splitName(name: string): [string, string] {
-  const middle = name.length / 2;
-  const breaks = [...name.matchAll(/ |(?<=[a-z])(?=[A-Z])/g)].map((match) => match.index);
-  if (breaks.length === 0) {
-    const half = Math.ceil(middle);
-    return [name.slice(0, half), name.slice(half)];
-  }
-  const at = breaks.reduce((best, cut) =>
-    Math.abs(cut - middle) < Math.abs(best - middle) ? cut : best,
-  );
-  return [name.slice(0, at).trim(), name.slice(at).trim()];
-}
 
 /** Build and run the 3D stage; `ready` turns true once its first real frame is drawn. */
 function useHeroStage(
