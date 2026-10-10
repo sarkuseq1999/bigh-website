@@ -66,7 +66,15 @@
 
 /* The pool and its contact shadow are the shared paintings, whose paper is not quite white at
    their edges (a faint rectangle on the page's paper). Each fades its own outer edge out: the
-   mask sits on the blended picture itself, not on an ancestor, so it still multiplies. */
+   mask sits on the blended picture itself, not on an ancestor, so it still multiplies. The small
+   pools under "More from BiGH" are the same painting and take the same mask. */
+.page .pool,
+.page .contact,
+.page img.morePool {
+  -webkit-mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
+  mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
+}
+
 .page .pool {
   position: absolute;
   left: 52%;
@@ -77,8 +85,6 @@
   object-fit: fill;
   translate: -50% 0;
   opacity: 0.92;
-  -webkit-mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
 }
 
 .page .contact {
@@ -90,8 +96,6 @@
   aspect-ratio: 1 / 0.12;
   object-fit: fill;
   translate: -50% 0;
-  -webkit-mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
-  mask-image: radial-gradient(closest-side, #000 74%, transparent 100%);
 }
 
 .page .bottle {
@@ -824,4 +828,127 @@
 
 .page [data-chapter="buy"] button:hover {
   background: #3a3833;
+}
+
+/* After Buy: questions, more from BiGH, notes. */
+.page .after {
+  padding-block: var(--chapter-half);
+}
+
+.page .afterWrap {
+  max-width: calc(820px + 2 * var(--gutter));
+}
+
+.page ul.faq {
+  display: grid;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page .faq li {
+  border-top: 1px solid var(--hair);
+}
+
+.page .faq li:last-child {
+  border-bottom: 1px solid var(--hair);
+}
+
+.page summary.faqSummary {
+  grid-template-columns: minmax(0, 1fr) 44px;
+}
+
+.page p.answer {
+  margin: 0 0 20px;
+  max-width: 34em;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+/* Two by two on a phone and a tablet (four bottles stacked made a tall column of small pictures),
+   across from 960px. */
+.page ul.more {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 32px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 960px) {
+  .page ul.more {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 32px;
+  }
+}
+
+.page a.moreLink {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-height: 48px;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+}
+
+/* The pool hangs below the bottle's box (0.168 of its width, 24px here): half of that is left as
+   room, since the mask has faded the pool's last quarter. */
+.page .moreStand {
+  position: relative;
+  display: block;
+  width: 140px;
+  aspect-ratio: 1230 / 1278;
+  margin-bottom: 12px;
+}
+
+.page img.morePool {
+  position: absolute;
+  left: 52%;
+  top: 79%;
+  width: 92%;
+  height: auto;
+  aspect-ratio: 1 / 0.42;
+  object-fit: fill;
+  translate: -50% 0;
+  opacity: 0.5;
+}
+
+.page img.moreBottle {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* A link you can see: the name carries the kit's hairline underline, which darkens to ink on hover
+   (colour only: a transform or opacity on the link would cut its pool out of the paper's blend). */
+.page .moreName {
+  font-size: 18px;
+  font-weight: 500;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--hair);
+  transition: text-decoration-color 0.5s var(--ease);
+}
+
+.page a.moreLink:hover .moreName {
+  text-decoration-color: var(--ink);
+}
+
+.page .notes {
+  display: grid;
+  gap: 8px;
+  padding-block: 0 var(--chapter-half);
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.page .notes p {
+  margin: 0;
+  max-width: 60em;
 }

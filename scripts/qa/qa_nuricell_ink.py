@@ -7,9 +7,11 @@ Sections (all, or --only=a,b):
               no canvas, no console errors (1440x900, 390x844)
   others      the other four product pages keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
+              (the four small pools under "More from BiGH" too)
   lantern     unlit blooms, then the light comes on once with no lighter flash; reduced motion: lit
   nojs        with JavaScript off every painting shows and the lantern is lit
-  words       every word in nuricell.ts on the page; each chapter its own painting
+  words       every word in nuricell.ts on the page; each chapter its own painting; the four
+              "More from BiGH" links
   sticky      with every study open a sticky painting stays inside its chapter
   sum         the painted sum matches the serving, a caption under each number; set in type
               (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
@@ -202,6 +204,14 @@ def multiply(browser):
             check(f"multiply {w} {name}: no stacking context above it", not found, "; ".join(found))
             inside, outside, diff = corner_diff(page, el, shot_name)
             check(f"multiply {w} {name}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
+        # The small pools under "More from BiGH": each multiplies, with no stacking context above it
+        # (the links change colour on hover, never transform or fade).
+        pools = page.locator("#more a > span:first-child > img:first-child")
+        check(f"multiply {w} more: four pools", pools.count() == 4, str(pools.count()))
+        for i in range(pools.count()):
+            blend = pools.nth(i).evaluate("e => getComputedStyle(e).mixBlendMode")
+            found = pools.nth(i).evaluate(STACKING)
+            check(f"multiply {w} more {i + 1}: the pool multiplies, no stacking context above it", blend == "multiply" and not found, f"{blend}; " + "; ".join(found))
         ctx.close()
 
 
@@ -393,9 +403,8 @@ def people_painting(page):
 def words(browser, chapters=tuple(CHAPTERS)):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     text = re.sub(r"\s+", " ", page.locator("main").text_content())
-    # Words of the sections not built yet (Questions, the caution, the FDA line) are listed, not failed.
     missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in text]
-    print(f"words: {len(missing)} strings not on the page yet: {missing[:6]}")
+    print(f"words: {len(missing)} strings not on the page: {missing[:6]}")
     for chapter in chapters:
         if chapter in EXPECT:
             n = page.locator(f'[data-chapter="{chapter}"] img[src*="{EXPECT[chapter]}"]').count()
@@ -417,6 +426,9 @@ def words(browser, chapters=tuple(CHAPTERS)):
     for chapter in chapters:
         for s in built.get(chapter, []):
             check(f"words {chapter}: “{s}”", s in text)
+    check("words: every string of nuricell.ts on the page", not missing, f"{len(missing)} missing: {missing[:5]}")
+    for slug in OTHERS:
+        check(f"words: More from BiGH links {slug}", page.locator(f'#more a[href$="/products/{slug}"]').count() == 1)
     ctx.close()
     return missing
 
