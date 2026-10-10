@@ -421,6 +421,10 @@
   :global([data-look="ink"]).page .litGold {
     transition: none;
   }
+
+  :global([data-look="ink"]).page .toggle {
+    transition: none;
+  }
 }
 
 /* 3. What's inside. */
@@ -431,21 +435,29 @@
   caption-side: bottom;
 }
 
-.page .ingredients tr {
+/* The amount's column is as wide as its digits need (the display font makes a fixed ch far too
+   wide), shared by every row (a subgrid), so the names keep the room. Each row: the amount beside
+   the name, what it does under the name. */
+.page .ingredients tbody {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+}
+
+.page .ingredients tbody tr {
+  display: grid;
+  grid-column: 1 / -1;
+  grid-template-columns: subgrid;
   border-top: 1px solid var(--hair);
 }
 
-.page .ingredients td,
-.page .ingredients th {
-  padding: 16px 0;
-  vertical-align: top;
+.page .ingredients tbody td,
+.page .ingredients tbody th {
   text-align: left;
-  font-weight: inherit;
 }
 
 .page td.amount {
-  width: 9.5ch;
-  padding-right: 20px;
+  grid-row: 1 / span 2;
+  padding: 16px clamp(16px, 3vw, 40px) 16px 0;
   font-family: var(--display-font);
   font-size: clamp(40px, 3.6vw, 56px);
   font-weight: 300;
@@ -460,19 +472,28 @@
   letter-spacing: 0;
 }
 
-.page .ingredient {
-  display: block;
+.page th.ingredient {
+  grid-column: 2;
+  padding: 16px 0 0;
   font-size: 20px;
   font-weight: 500;
+}
+
+.page td.about {
+  grid-column: 2;
+  padding: 4px 0 16px;
 }
 
 .page .role,
 .page .form {
   display: block;
-  margin-top: 4px;
   color: var(--muted);
   font-size: 16px;
   line-height: 1.45;
+}
+
+.page .role + .form {
+  margin-top: 4px;
 }
 
 .page caption.tableNote {
@@ -523,15 +544,6 @@
 
 .page p.note {
   margin-top: 12px;
-}
-
-/* Phones: the amount takes only the room its digits need (9.5ch of 40px type leaves the names a
-   110px column), so the names and what they do keep a readable one. */
-@media (max-width: 599px) {
-  .page td.amount {
-    width: 1%;
-    padding-right: 16px;
-  }
 }
 
 /* 4. The research: studies on hairlines with round toggles (the homepage's research list). */
@@ -603,4 +615,18 @@
 
 .page button.showAll {
   margin-top: 20px;
+}
+
+/* The studies past the first few wait behind "Show all" only where scripts run, so with scripting
+   off they are all there and the button, which could do nothing, is gone. */
+@media (scripting: enabled) {
+  .page [data-studies]:not([data-all]) [data-extra] {
+    display: none;
+  }
+}
+
+@media (scripting: none) {
+  .page button.showAll {
+    display: none;
+  }
 }

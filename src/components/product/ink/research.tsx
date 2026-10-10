@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useId, useMemo, useState } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
@@ -17,6 +17,7 @@ const FIRST = 5;
 export function Research({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const [all, setAll] = useState(false);
+  const listId = useId();
   const studies = useMemo(() => byYear(product.studies), [product.studies]);
   return (
     <InkChapter
@@ -28,13 +29,13 @@ export function Research({ product }: { product: InkProduct }) {
         {copy(product.researchTitle ?? "The research on the ingredients")}
       </h2>
       <p className={styles.small}>{copy(product.notes.research)}</p>
-      <ul className={styles.studies}>
+      <ul id={listId} className={styles.studies} data-studies="" data-all={all ? "" : undefined}>
         {studies.map((study, i) => (
-          <li key={study.url} hidden={!all && i >= FIRST} data-study="">
-            <details className={styles.study}>
+          <li key={study.url} data-study="" data-extra={i >= FIRST ? "" : undefined}>
+            <details>
               <summary className={styles.summary}>
                 <span className={styles.year}>{study.year}</span>
-                <span className={styles.what}>
+                <span>
                   <span className={styles.studyTitle}>{copy(study.title)}</span>
                   <span className={styles.meta}>
                     {copy(study.kind)} · {study.journal}
@@ -65,6 +66,7 @@ export function Research({ product }: { product: InkProduct }) {
           type="button"
           className={`${base.pill} ${base.pillGhost} ${styles.showAll}`}
           aria-expanded={all}
+          aria-controls={listId}
           onClick={() => setAll((open) => !open)}
         >
           {copy(all ? "Show fewer studies" : "Show all {count} studies", { count: studies.length })}

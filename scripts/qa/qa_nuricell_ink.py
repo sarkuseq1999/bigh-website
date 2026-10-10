@@ -297,6 +297,15 @@ def nojs(browser):
     check("nojs: every painting shown", shown and not hidden, ", ".join(hidden[:4]))
     lit = page.evaluate("() => Number(getComputedStyle(document.querySelector('[data-lantern] [data-lit]')).opacity)")
     check("nojs: the lantern lit", lit > 0.95, str(lit))
+    # The studies past the first few wait behind "Show all" only where scripts run.
+    listed = page.evaluate(
+        """() => [...document.querySelectorAll('[data-chapter="research"] li[data-study]')].map(l => getComputedStyle(l).display !== 'none')"""
+    )
+    button = page.evaluate(
+        """() => { const b = document.querySelector('[data-chapter="research"] button[aria-expanded]');
+                  return b ? getComputedStyle(b).display : 'none'; }"""
+    )
+    check("nojs: every study listed, no dead Show all button", len(listed) == 7 and all(listed) and button == "none", f"{sum(listed)}/{len(listed)} shown; button {button}")
     ctx.close()
 
 
@@ -349,25 +358,35 @@ def words(browser, chapters=("overview", "why", "inside", "research")):
 
 
 def sticky(browser):
-    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
-    page.locator('[data-chapter="research"] button[aria-expanded]').click()
-    for summary in page.locator('[data-chapter="research"] summary').all():
-        summary.click()
-    for chapter in ("inside", "research"):
-        bring(page, f'[data-chapter="{chapter}"]', 0)
-        tall = page.evaluate(f"() => document.querySelector('[data-chapter=\"{chapter}\"]').getBoundingClientRect().height")
-        worst = 0.0
-        for step in range(0, int(tall) + 900, 120):
-            r = page.evaluate(
-                f"""() => {{ const c = document.querySelector('[data-chapter="{chapter}"]');
-                    const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
-                    const s = c.getBoundingClientRect(); return [f.top - s.top, s.bottom - f.bottom]; }}"""
-            )
-            worst = min(worst, r[0], r[1])
-            page.mouse.wheel(0, 120)
-            page.wait_for_timeout(30)
-        check(f"sticky {chapter}: the painting stays inside its chapter", worst >= -1, f"worst {worst:.1f}px")
-    ctx.close()
+    """With every study open, a sticky painting stays between the top of its spread and the bottom of
+    its words (not just inside the chapter's padding), and it really does pin: it rides down beside
+    the words while they scroll."""
+    for w, h in [(1440, 900), (1024, 768)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        page.locator('[data-chapter="research"] button[aria-expanded]').click()
+        for summary in page.locator('[data-chapter="research"] summary').all():
+            summary.click()
+        for chapter in ("inside", "research"):
+            bring(page, f'[data-chapter="{chapter}"]', 0)
+            tall = page.evaluate(f"() => document.querySelector('[data-chapter=\"{chapter}\"]').getBoundingClientRect().height")
+            worst = 0.0
+            rode = 0.0
+            for step in range(0, int(tall) + h, 120):
+                r = page.evaluate(
+                    f"""() => {{ const c = document.querySelector('[data-chapter="{chapter}"]');
+                        const f = c.querySelector('figure[data-picture]');
+                        const fb = f.getBoundingClientRect();
+                        const spread = f.parentElement.getBoundingClientRect();
+                        const words = c.querySelector('[data-words]').getBoundingClientRect();
+                        return [fb.top - spread.top, words.bottom - fb.bottom]; }}"""
+                )
+                worst = min(worst, r[0], r[1])
+                rode = max(rode, r[0])
+                page.mouse.wheel(0, 120)
+                page.wait_for_timeout(30)
+            check(f"sticky {w}x{h} {chapter}: the painting stays beside its words", worst >= -1, f"worst {worst:.1f}px")
+            check(f"sticky {w}x{h} {chapter}: it pins while the words scroll", rode >= 100, f"rode {rode:.0f}px")
+        ctx.close()
 
 
 SECTIONS = {

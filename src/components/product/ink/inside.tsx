@@ -24,26 +24,44 @@ export function Inside({ product }: { product: InkProduct }) {
           count: copy(WORDS[count] ?? String(count)),
         })}
       </h2>
+      {/* The rows are laid out as a grid (the amount beside the name, what it does under the
+          name), which some browsers treat as the end of the table's meaning, so the table's parts
+          name their own roles. */}
       <table className={styles.ingredients}>
         <caption className={`${base.caption} ${styles.tableNote}`}>
           {copy(product.notes.label)}
         </caption>
-        <tbody>
+        <thead className={base.visuallyHidden} role="rowgroup">
+          <tr role="row">
+            <th scope="col" role="columnheader">
+              {copy("Per serving")}
+            </th>
+            <th scope="col" role="columnheader">
+              {copy("Ingredient")}
+            </th>
+            <th scope="col" role="columnheader">
+              {copy("About it")}
+            </th>
+          </tr>
+        </thead>
+        <tbody role="rowgroup">
           {product.ingredients.map((item) => (
-            <tr key={item.key}>
-              <td className={styles.amount}>
-                {item.amount}
+            <tr key={item.key} role="row">
+              <td className={styles.amount} role="cell">
+                {item.amount.toLocaleString("en-US")}
                 <span className={styles.unit}> {item.unit}</span>
               </td>
-              <th scope="row">
-                <span className={styles.ingredient}>{copy(item.name)}</span>
+              <th scope="row" role="rowheader" className={styles.ingredient}>
+                {copy(item.name)}
+              </th>
+              <td className={styles.about} role="cell">
                 {item.role ? <span className={styles.role}>{copy(item.role)}</span> : null}
                 {item.form !== item.name ? (
                   <span className={styles.form}>
                     {copy("On the label: {form}", { form: copy(item.form) })}
                   </span>
                 ) : null}
-              </th>
+              </td>
             </tr>
           ))}
         </tbody>
