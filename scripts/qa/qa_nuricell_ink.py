@@ -115,7 +115,124 @@ def others(browser):
         ctx.close()
 
 
-SECTIONS = {"shell": shell, "others": others}
+STACKING = """(el) => {
+  // Each element from the figure's parent up to the page root that makes a stacking context.
+  const found = [];
+  for (let e = el.parentElement; e && !e.matches('[data-look="ink"]'); e = e.parentElement) {
+    const s = getComputedStyle(e);
+    const why = [];
+    if (s.transform !== 'none') why.push('transform');
+    if (s.translate !== 'none' || s.scale !== 'none' || s.rotate !== 'none') why.push('translate/scale/rotate');
+    if (Number(s.opacity) < 1) why.push('opacity');
+    if (s.filter !== 'none') why.push('filter');
+    if (s.maskImage && s.maskImage !== 'none') why.push('mask');
+    if (s.isolation === 'isolate') why.push('isolation');
+    if (s.mixBlendMode !== 'normal') why.push('blend');
+    if (s.position !== 'static' && s.zIndex !== 'auto') why.push('z-index');
+    if (['fixed', 'sticky'].includes(s.position)) why.push(s.position);
+    if (s.willChange && s.willChange !== 'auto') why.push('will-change');
+    if (/paint|layout|strict|content/.test(s.contain)) why.push('contain');
+    if (why.length) found.push((e.tagName + '.' + e.className).slice(0, 60) + ': ' + why.join(','));
+  }
+  return found;
+}"""
+
+
+def multiply(browser):
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        figures = page.locator("[data-chapter] figure[data-picture]:not([data-stand])")
+        check(f"multiply {w}: a painting in every chapter but the opening and buy", figures.count() >= 1, str(figures.count()))
+        for i in range(figures.count()):
+            fig = figures.nth(i)
+            chapter = fig.evaluate("f => f.closest('[data-chapter]').dataset.chapter")
+            blend = fig.evaluate("f => getComputedStyle(f).mixBlendMode")
+            check(f"multiply {w} {chapter}: the figure multiplies", blend == "multiply", blend)
+            found = fig.evaluate(STACKING)
+            check(f"multiply {w} {chapter}: no stacking context above it", not found, "; ".join(found))
+            # The picture's top-left corner matches the paper just outside it (no box).
+            bring(page, f'[data-chapter="{chapter}"] figure[data-picture]', 160)
+            page.wait_for_timeout(300)
+            box = fig.locator("img").first.bounding_box()
+            shot = OUT / f"multiply-{w}-{chapter}.png"
+            page.screenshot(path=str(shot))
+            img = Image.open(shot).convert("RGB")
+            x, y = int(box["x"]) + 3, int(box["y"]) + 3
+            inside = img.getpixel((x, y))
+            outside = img.getpixel((max(0, int(box["x"]) - 12), y))
+            diff = max(abs(a - b) for a, b in zip(inside, outside))
+            check(f"multiply {w} {chapter}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
+        ctx.close()
+
+
+def lantern_state(page):
+    return page.evaluate(
+        """() => { const f = document.querySelector('[data-lantern]');
+                   const lit = f.querySelector('[data-lit]'); const unlit = f.querySelector('img:not([data-lit])');
+                   return { light: f.dataset.light, bloom: unlit.dataset.bloom, lit: Number(getComputedStyle(lit).opacity) }; }"""
+    )
+
+
+def lantern(browser):
+    ctx, page, _, _ = opened(browser, 1440, 900)
+    first = lantern_state(page)
+    check("lantern: off before it arrives", first["light"] == "off" and first["lit"] < 0.05, str(first))
+    # No lighter flash by construction: both layers draw normally inside the figure, which alone
+    # multiplies, so the change is a plain cross-fade (two multiplied layers would lighten mid-way).
+    blends = page.evaluate(
+        """() => { const f = document.querySelector('[data-lantern]');
+                   return [getComputedStyle(f).mixBlendMode, ...[...f.querySelectorAll('img')].map(i => getComputedStyle(i).mixBlendMode)]; }"""
+    )
+    check("lantern: one blend group (figure multiplies, its layers normal)", blends[0] == "multiply" and all(b == "normal" for b in blends[1:]), str(blends))
+    bring(page, "[data-lantern]", 160)
+    page.wait_for_timeout(500)
+    early = lantern_state(page)
+    check("lantern: still off as it starts to bloom", early["bloom"] in ("in", "done") and early["lit"] < 0.05, str(early))
+    # The unlit picture is taken before the light starts (why.tsx's LIGHT_AFTER, 1.8s after the
+    # bloom starts): the lantern well grown in, still unlit.
+    page.wait_for_timeout(1000)
+    shot = lantern_state(page)
+    check("lantern: unlit when photographed", shot["light"] == "off" and shot["lit"] < 0.05, str(shot))
+    page.screenshot(path=str(OUT / "lantern-unlit-1440.png"))
+    page.wait_for_timeout(5700)
+    last = lantern_state(page)
+    check("lantern: the light comes on", last["light"] == "on" and last["lit"] > 0.95, str(last))
+    page.screenshot(path=str(OUT / "lantern-lit-1440.png"))
+    before = Image.open(OUT / "lantern-unlit-1440.png").convert("RGB")
+    after = Image.open(OUT / "lantern-lit-1440.png").convert("RGB")
+    box = page.locator("[data-lantern] img").first.bounding_box()
+
+    # Mean warmth (red minus blue) over the painting's middle half: its exact centre is the light's
+    # white-hot core, about as warm unlit as lit, so one pixel there says nothing.
+    def warmth(img):
+        xs = range(int(box["x"] + box["width"] / 4), int(box["x"] + box["width"] * 3 / 4), 3)
+        ys = range(int(box["y"] + box["height"] / 4), int(min(box["y"] + box["height"] * 3 / 4, img.height)), 3)
+        px = [img.getpixel((x, y)) for x in xs for y in ys]
+        return sum(p[0] - p[2] for p in px) / len(px)
+
+    check("lantern: it glows warmer once lit", warmth(after) > warmth(before) + 20, f"{warmth(before):.1f} -> {warmth(after):.1f}")
+    ctx.close()
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    still = lantern_state(page)
+    check("lantern: reduced motion, lit from the start", still["light"] == "on" and still["lit"] > 0.95, str(still))
+    ctx.close()
+
+
+def nojs(browser):
+    ctx, page, _, _ = opened(browser, 1440, 900, js=False)
+    shown = page.evaluate(
+        """() => [...document.querySelectorAll('[data-chapter] figure[data-picture] img')].map(i => {
+             const s = getComputedStyle(i); return { src: i.getAttribute('src'), o: Number(s.opacity), m: s.maskSize || s.webkitMaskSize };
+           })"""
+    )
+    hidden = [s["src"] for s in shown if s["o"] < 0.95 or (s["m"] and s["m"].startswith("0%"))]
+    check("nojs: every painting shown", shown and not hidden, ", ".join(hidden[:4]))
+    lit = page.evaluate("() => Number(getComputedStyle(document.querySelector('[data-lantern] [data-lit]')).opacity)")
+    check("nojs: the lantern lit", lit > 0.95, str(lit))
+    ctx.close()
+
+
+SECTIONS = {"shell": shell, "others": others, "multiply": multiply, "lantern": lantern, "nojs": nojs}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

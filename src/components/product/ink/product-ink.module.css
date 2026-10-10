@@ -235,3 +235,184 @@
     justify-items: stretch;
   }
 }
+
+/* 2-7. Chapters: one painting and its words, the painting left from 960px, first on phones. */
+.page .chapter {
+  padding-block: var(--chapter-half);
+  /* Deep links land the chapter's first content just under the settled bar (globals.css keeps a
+     150px scroll-padding-top). */
+  scroll-margin-top: calc(108px - 150px - var(--chapter-half));
+}
+
+.page .spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(24px, 5vw, 40px);
+  align-items: center;
+}
+
+.page .words {
+  min-width: 0;
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .page .spread {
+    max-width: calc(640px + 2 * var(--gutter));
+  }
+}
+
+@media (min-width: 960px) {
+  .page .spread {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: var(--gap);
+  }
+}
+
+/* The painting: its own blend group. From 960px it stays put while long words scroll beside it,
+   inside its own grid cell (so it leaves with its chapter). A tall painting (the lantern, about
+   1 : 1.9) is narrower, so all of it and its caption fit in the window under the menu bar
+   (--aspect is its width over its height, set on the figure). */
+.page figure.figure {
+  justify-self: center;
+  width: min(100%, var(--picture-width), calc((100svh - 220px) * var(--aspect, 1)));
+  margin: 0;
+  mix-blend-mode: multiply;
+}
+
+@media (min-width: 960px) {
+  .page figure.figure {
+    position: sticky;
+    top: 120px;
+  }
+}
+
+.page .body {
+  position: relative;
+  display: block;
+}
+
+.page img.art {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.page figcaption.caption {
+  margin-top: 8px;
+  text-align: right;
+}
+
+.page p.label {
+  margin: 0 0 14px;
+}
+
+.page h2.heading {
+  margin: 0 0 clamp(16px, 1.6vw, 24px);
+  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.page .words p.text + p.text {
+  margin-top: 12px;
+}
+
+.page p.small {
+  margin: 14px 0 0;
+  max-width: 34em;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* The lantern's light: the lit painting over the unlit one, in the same blend group, so the change
+   is a plain cross-fade with no lighter step. It waits while the unlit one waits to bloom. */
+.page img.lit {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+
+.page [data-light="on"] img.lit {
+  opacity: 1;
+  transition: opacity calc(var(--breath) * 1.25) var(--ease);
+}
+
+.page [data-light] [data-bloom="waiting"] ~ img.lit {
+  opacity: 0;
+  transition: none;
+}
+
+.page .litGold {
+  opacity: 0;
+}
+
+.page [data-light="on"] .litGold {
+  opacity: 1;
+}
+
+.page dl.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  margin: clamp(24px, 3vw, 40px) 0 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--hair);
+}
+
+.page .facts dd {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+.page .figureNumber {
+  font-family: var(--display-font);
+  font-size: clamp(56px, 6vw, 92px);
+  font-weight: 300;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+
+.page p.comparison {
+  margin: clamp(24px, 3vw, 36px) 0 0;
+  font-size: clamp(22px, 1.9vw, 28px);
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.page p.source {
+  margin-top: 16px;
+}
+
+/* No script: nothing ever blooms, so every painting is shown whole and the lantern lit. Reduced
+   motion, too, is complete from the first paint (no blur), and its light is simply on, with no
+   fade. :global([data-look]) puts these above the kit's .look rules whatever order they load in;
+   the light's rules name [data-light] and [data-bloom] too, so they outrank the "waiting" rule
+   above (the server marks the unlit picture waiting). */
+@media (scripting: none) {
+  :global([data-look="ink"]).page [data-bloom="waiting"] {
+    -webkit-mask: none;
+    mask: none;
+    filter: none;
+  }
+
+  :global([data-look="ink"]).page [data-light] [data-bloom] ~ img.lit {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global([data-look="ink"]).page [data-bloom="waiting"] {
+    filter: none;
+  }
+
+  :global([data-look="ink"]).page [data-light] [data-bloom] ~ img.lit {
+    opacity: 1;
+    transition: none;
+  }
+}
