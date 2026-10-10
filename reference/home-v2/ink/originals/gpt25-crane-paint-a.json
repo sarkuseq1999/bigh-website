@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Use the provided image only for the crane's pose, angle, placement and scale. Repaint it by hand as a real sumi-e ink painting on warm rice paper, so it reads as a brush painting, not an illustration: one red-crowned crane in flight, both wings raised high in an upstroke, the long neck stretched forward to the right, beak pointing right, legs trailing straight behind and slightly down. Anatomically correct: exactly two wings, two thin legs with small feet, one head, one long beak. Every line is made with a pointed brush: it swells where the brush presses, thins where it lifts, and breaks in places; never a thin even pen outline, never a closed outline around every feather. The white body and wings are bare paper. The pale grey shading on the wings is wet ink wash that blooms and bleeds softly into the paper fibres, uneven in tone, with visible brush marks and soft hard-edged water rings where a wash dried. The black flight feathers and the black neck are loaded wet strokes, deep black in their middles, with split dry-brush tips where the brush ran out. Feathers suggested by a few strokes rather than each drawn. The small crown patch is a tiny touch of gold leaf, never red. The whole bird inside the frame with clear empty paper margins all round. Plain empty warm rice paper ground, evenly lit, a faint fibre texture. No mountains, no mist, no sun, no text, no seal, no signature, no border. Nothing red anywhere.",
+  "settings": {
+    "aspect_ratio": "3:2",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/home-v2/ink/originals/gpt25-crane-v1.png"
+  ],
+  "made": "20261009-212347"
+}
