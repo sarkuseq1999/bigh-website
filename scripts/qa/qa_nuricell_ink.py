@@ -21,7 +21,7 @@ Sections (all, or --only=a,b):
   layout      sizes 1536 to 360: no sideways scroll, the painting left of its words from 960px and above
               them below, text 15px+, targets 44px+, words readable with pictures blocked
   deep_links  /en/products/nuricell#chapter-<id> lands its heading under the menu bar
-  polish      Task 9's fixes pinned: "30-day" and its dot together, More links end with their
+  polish      Task 9's fixes pinned: the supply line's dot never starts or ends a line, More links end with their
               words, the lantern's fetched width, one line per Why sentence (320-1536), the phone
               lantern with its heading in view, the opening in 1440x900, Add to cart's width
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
@@ -742,15 +742,43 @@ def deep_links(browser):
             ctx.close()
 
 
-# The supply line ("90 vegetarian capsules · 30-day supply"), in the opening and the Buy rows: its
-# "30-day" on one line (one client rect) and the "·" on the same line as "30-day", never ending one.
+# The supply line ("90 vegetarian capsules · 30-day supply"), in the opening and the Buy rows, as
+# laid out (ink-chapter.tsx's keepTogether): each fact's dot is its ::before, in the gap before it,
+# and the row is clipped one gap left of the column. A dot shows only for a fact on the same line
+# as the one before it (it never starts a line), with the fact's words straight after it on that
+# line (it never ends one); a fact that starts a line has its words on the column's edge, its dot
+# in the clipped gap. "30-day" is one client rect. The whole line is there for screen readers.
 SUPPLY_LINES = """() => [document.querySelector('[data-chapter=overview] [class*=openingBuy] > p'),
                     document.querySelector('[data-chapter=buy] dl div:nth-child(2) dd')].map((el) => {
-  const span = [...el.querySelectorAll('span')].find((s) => s.textContent.includes('-'));
-  const text = [...el.childNodes].find((n) => n.nodeType === 3 && n.data.includes('·'));
-  const r = document.createRange(); const i = text.data.indexOf('·'); r.setStart(text, i); r.setEnd(text, i + 1);
-  const dot = r.getBoundingClientRect().top; const day = span.getClientRects()[0].top;
-  return { rects: span.getClientRects().length, together: Math.abs(dot - day) < 4 };
+  const clip = el.querySelector('[data-facts]').parentElement.getBoundingClientRect();
+  const facts = [...el.querySelectorAll('[data-fact]')];
+  const lineTops = (e) => { const r = document.createRange(); r.selectNodeContents(e);
+    return [...r.getClientRects()].filter((x) => x.width > 1).map((x) => Math.round(x.top)); };
+  const out = { facts: facts.length, bad: [], shown: 0, hidden: 0 };
+  if (getComputedStyle(el.querySelector('[data-facts]').parentElement).overflowX === 'visible') out.bad.push('the row is not clipped');
+  facts.forEach((f, i) => {
+    const box = f.getBoundingClientRect(); const pad = parseFloat(getComputedStyle(f).paddingLeft);
+    const tops = lineTops(f);
+    if (i === 0) { if (Math.abs(box.left + pad - clip.left) > 1) out.bad.push('first fact off the edge'); return; }
+    const dot = getComputedStyle(f, '::before');
+    // The dot is centred on its `left` (translate -50%): its right edge, against the clip.
+    const dotRight = box.left + parseFloat(dot.left) + parseFloat(dot.width) / 2;
+    const visible = dotRight > clip.left + 0.5;
+    if (visible) {
+      out.shown++;
+      const prev = lineTops(facts[i - 1]);
+      if (Math.abs(tops[0] - prev[prev.length - 1]) > 3) out.bad.push('dot starts a line: ' + f.textContent);
+      if (Math.abs(tops[0] - Math.round(box.top)) > 3) out.bad.push('dot ends a line: ' + f.textContent);
+    } else {
+      out.hidden++;
+      if (Math.abs(box.left + pad - clip.left) > 1) out.bad.push('wrapped fact off the edge: ' + f.textContent);
+      if (dotRight > clip.left) out.bad.push('wrapped fact dot not clipped');
+    }
+  });
+  const day = [...el.querySelectorAll('[data-fact] span')].find((s) => s.textContent.includes('-'));
+  out.day = day ? day.getClientRects().length : 0;
+  out.read = (el.querySelector(':scope > span:first-child')?.textContent || '').includes('90 vegetarian capsules · 30-day supply');
+  return out;
 })"""
 
 # The Why heading's sentences, each on one line of its own.
@@ -761,15 +789,17 @@ WHY_LINES = """() => [...document.getElementById('chapter-why-title').children].
 
 
 def polish(browser):
-    """Task 9's polish, pinned: "30-day" and its "·" kept together; More's links end with their
+    """Task 9's polish, pinned: the supply line's dot never starts or ends a line, "30-day" whole; More's links end with their
     words; the lantern fetches about the width it is drawn at; one line per sentence in the Why
     heading; the phone's lantern leaves its label and heading in view; the opening's words in the
     first 1440x900 window; Add to cart full width only on a phone."""
-    for w, h in [(320, 700), (360, 780), (390, 844)]:
-        ctx, page, _, _ = opened(browser, w, h, reduced=True)
-        lines = page.evaluate(SUPPLY_LINES)
-        check(f"polish {w}: '30-day' on one line, the '·' with it (opening, buy)", all(l["rects"] == 1 and l["together"] for l in lines), str(lines))
-        ctx.close()
+    for locale in ["en", "jp"]:
+        for w, h in [(320, 700), (360, 780), (390, 844), (768, 1024), (1024, 768), (1440, 900)]:
+            ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/nuricell", reduced=True)
+            lines = page.evaluate(SUPPLY_LINES)
+            ok = all(l["facts"] == 2 and not l["bad"] and l["day"] == 1 and l["read"] for l in lines)
+            check(f"polish {locale} {w}: the supply line, no dot starting or ending a line, '30-day' whole (opening, buy)", ok, str(lines))
+            ctx.close()
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         gaps = page.evaluate("() => [...document.querySelectorAll('#more a')].map((a) => Math.round(a.getBoundingClientRect().bottom - a.querySelector('[class*=meta]').getBoundingClientRect().bottom))")

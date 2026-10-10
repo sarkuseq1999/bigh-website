@@ -30,15 +30,10 @@ export function pictureSizes(art: { width: number; height: number }) {
   return `(max-width: 959px) calc(46vh * ${a}), calc((100vh - 220px) * ${a})`;
 }
 
-/**
- * Keeps a short line's pieces together where a narrow column would split them: each hyphenated
- * word ("30-day", not "30-" / "day supply") and a "·" separator with the item after it (not
- * "90 vegetarian capsules ·" / "30-day supply"; the line may still break before the dot). The
- * words are unchanged: the space after the dot becomes a no-break space.
- */
-export function keepTogether(text: string): ReactNode {
-  const parts = text.replace(/ · /gu, " ·\u00a0").split(/(\S*\w-\w\S*)/u);
-  if (parts.length === 1) return parts[0];
+/** Each hyphenated word ("30-day") on one line: a narrow column would break it after its hyphen. */
+function wholeWords(text: string): ReactNode {
+  const parts = text.split(/(\S*\w-\w\S*)/u);
+  if (parts.length === 1) return text;
   return parts.map((part, i) =>
     i % 2 === 1 ? (
       <span key={i} className={styles.nowrap}>
@@ -47,6 +42,31 @@ export function keepTogether(text: string): ReactNode {
     ) : (
       part
     ),
+  );
+}
+
+/**
+ * A short line of facts joined by " · " ("90 vegetarian capsules · 30-day supply"): on one line
+ * when they fit, otherwise one fact per line with no dot, so a dot never starts or ends a line
+ * (product-ink.module.css, .facts). Read aloud as written, from a visually hidden copy; the laid
+ * out facts are hidden from assistive tech. A line without " · " keeps its hyphenated words whole.
+ */
+export function keepTogether(text: string): ReactNode {
+  const facts = text.split(" · ");
+  if (facts.length === 1) return wholeWords(text);
+  return (
+    <>
+      <span className={base.visuallyHidden}>{text}</span>
+      <span className={styles.facts} aria-hidden="true">
+        <span className={styles.factsRow} data-facts="">
+          {facts.map((fact, i) => (
+            <span key={i} className={styles.fact} data-fact="">
+              {wholeWords(fact)}
+            </span>
+          ))}
+        </span>
+      </span>
+    </>
   );
 }
 

@@ -193,6 +193,36 @@
   white-space: nowrap;
 }
 
+/* A line of facts ("90 vegetarian capsules · 30-day supply", ink-chapter.tsx's keepTogether): one
+   line when they fit, else one fact per line and no dot. Each fact after the first carries its dot
+   in the space before it (--fact-gap). The row starts one gap left of the column, which clips it:
+   a fact that starts a line has its dot cut off with that gap, and its words start on the column's
+   edge, so a dot never starts or ends a line. */
+.page .facts {
+  --fact-gap: 1.1em; /* the width of " · " in Switzer */
+  display: block;
+  overflow: hidden;
+}
+
+.page .factsRow {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-1 * var(--fact-gap));
+}
+
+.page .fact {
+  position: relative;
+  padding-left: var(--fact-gap);
+}
+
+.page .fact + .fact::before {
+  content: "·";
+  content: "·" / "";
+  position: absolute;
+  left: calc(var(--fact-gap) / 2);
+  translate: -50% 0;
+}
+
 .page ul.highlights {
   display: grid;
   gap: 6px;
@@ -408,13 +438,19 @@
 }
 
 /* One step larger, toward the comps: Dr. Liu's name and the Buy chapter's "NuriCell" (76px at
-   1440; on a phone 12.4vw keeps "Dr. Jiankang Liu" on one line from 320px). Both are Latin names
-   on every page, so they keep Switzer's tight tracking where the kit loosens Korean, Japanese and
-   Chinese headings (-0.01em made the name 16px too wide at 390: "Dr. Jiankang" / "Liu"). */
+   1440; on a phone 12.4vw keeps "Dr. Jiankang Liu" on one line from 320px). */
 .page [data-chapter="people"] h2.heading,
-.page h2.buyName {
+.page [data-chapter="buy"] h2.buyName {
   font-size: clamp(min(48px, 12.4vw), 5.3vw, 80px);
   line-height: 1.02;
+}
+
+/* The product's name and Dr. Liu's, where it stays Latin (Korean and Japanese pages; the Chinese
+   page writes it in Chinese, which keeps the kit's CJK tracking), keep Switzer's tight tracking:
+   the kit's -0.01em for Korean, Japanese and Chinese headings (0,3,0) made "Dr. Jiankang Liu" 16px
+   too wide at 390 ("Dr. Jiankang" / "Liu"). These selectors are 0,3,1 and 0,4,1. */
+.page [data-chapter="buy"] h2.buyName,
+.page [data-chapter="people"] h2.heading:not(:lang(zh)) {
   letter-spacing: -0.03em;
 }
 
