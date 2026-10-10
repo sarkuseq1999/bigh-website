@@ -581,6 +581,9 @@
   font-size: 22px;
   font-weight: 300;
   font-variant-numeric: tabular-nums;
+  /* The column is 4.5ch of the 17px row; the 22px year overflows it by a pixel or two into the gap.
+     Korean sets overflow-wrap: anywhere (globals.css), which would break "2002" into "200" over "2". */
+  white-space: nowrap;
 }
 
 .page .studyTitle {
