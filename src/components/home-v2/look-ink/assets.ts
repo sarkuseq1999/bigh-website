@@ -17,8 +17,10 @@ export const bloomMask = `${I}/bloom-mask.png`;
 export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
   /** Misty mountains (ink). Plate: reference/home-v2/ink/plates/landscape.png */
   landscape: { src: `${I}/landscape.webp`, width: 2400, height: 1029 },
-  /** The crane of long life, cut out (BiRefNet). Plate: reference/home-v2/ink/plates/crane.png */
-  crane: { src: `${I}/crane.webp`, width: 1600, height: 1062 },
+  /** The crane of long life, cut out (BiRefNet). October 9: painted again by hand in the same pose
+   *  (Mo: "more like a painting than a picture"; sample A), its whites brought to the first
+   *  crane's. Plate: reference/home-v2/ink/plates/crane-painted.png */
+  crane: { src: `${I}/crane-painted.webp`, width: 1600, height: 1062 },
   /** The gold-leaf sun, its leaf edge kept. Plate: reference/home-v2/ink/plates/sun.png */
   sun: { src: `${I}/sun.webp`, width: 760, height: 743 },
 };
@@ -29,10 +31,11 @@ export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
  *  through the beat. v4 (October 5): no held pose, one wingbeat a breath (2.4 s), and the whole
  *  bird lifts as its wings press down and settles as they rise. v4-twice (Mo, October 5: "fly
  *  like 2 times, then stop"): two beats, then the picture stops for good on the still's pose
- *  (its loop count is 2 and its last frame is the first pose again). */
+ *  (its loop count is 2 and its last frame is the first pose again). a2-twice (October 9): the
+ *  same beat, played the same way, from a new take of the hand-painted crane (crane-paint-a). */
 export const craneFlight = {
-  src: `${I}/crane-flight-v4-twice.webp`,
-  small: `${I}/crane-flight-v4-twice-600.webp`,
+  src: `${I}/crane-flight-a2-twice.webp`,
+  small: `${I}/crane-flight-a2-twice-600.webp`,
 };
 
 /** The crane at rest, standing on the page's last brush stroke (ink). v2: painted again in the

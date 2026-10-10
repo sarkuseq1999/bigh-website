@@ -12,9 +12,11 @@ On the real GPU (ANGLE/D3D11):
     Enter opens, Tab steps into the panel, Escape closes and hands focus back; the Tab order
     follows the line; a visible ring on the keyboard's focus; Support opens its sheet; scrolled,
     the bar settles small with its painted rule; a product link goes to its page.
-  - the rule (round 3): the painted stroke (rule-whole.webp), drawn whole once the page has moved
+  - the rule (round 3): the painted stroke (rule-lifted.webp), drawn whole once the page has moved
     on, across the page's column and centred on the mark (2px), its ink over at least 92% of it,
-    its body 2-4.5px at 1536 (measured in the pixels) and 16px or more under the mark; laid by the
+    its body 2-4.5px at 1536 (measured in the pixels) and 16px or more under the mark; one line to
+    its right end (October 9: the painting's bristles parted there into three strands, which Mo
+    found distracting; in the pixels, under 3% of its right 40% shows two runs of ink); laid by the
     scroll from its loaded end (part way at 160px and not moving on its own a second later, whole
     by 320px); with reduced motion, there whole.
   - scrolled (desktop, phone, tablet 768): the bar is solid paper. A headline, a paragraph and a
@@ -234,10 +236,14 @@ def rule_ink(page, info):
     x0, x1 = round(info["left"]), round(info["right"])
     body = a[:, x0 + round((x1 - x0) * 0.08) : x0 + round((x1 - x0) * 0.5)]
     half = paper - (paper - body.min(axis=0)) / 2
+    # Its right 40%: columns where the ink shows as two or more runs, one over another (strands).
+    tail = (paper - a[:, x0 + round((x1 - x0) * 0.6) : x1]) > 40
+    runs = (tail[1:] & ~tail[:-1]).sum(axis=0) + tail[0]
     return {
         "from": int(inked.min()) if len(inked) else -1,
         "to": int(inked.max()) if len(inked) else -1,
         "thick": float(np.median((body < half[None, :]).sum(axis=0))),
+        "strands": float((runs >= 2).mean()) if runs.size else 1.0,
     }
 
 
@@ -259,7 +265,7 @@ def rule_checks(browser):
     )
     check(
         "desk: the rule is the painted stroke, drawn whole once the page has moved on",
-        "rule-whole.webp" in info["mask"] and info["draw"] == 1 and info["opacity"] >= 0.6,
+        "rule-lifted.webp" in info["mask"] and info["draw"] == 1 and info["opacity"] >= 0.6,
         f"draw {info['draw']}, opacity {info['opacity']}",
     )
     span = info["right"] - info["left"]
@@ -272,6 +278,11 @@ def rule_checks(browser):
         and ink["to"] - ink["from"] >= 0.92 * span,
         f"rule {info['left']:.0f}-{info['right']:.0f}, column {info['colLeft']:.0f}-{info['colRight']:.0f}, "
         f"mark centre {info['markMid']:.1f}, ink {ink['from']}-{ink['to']}",
+    )
+    check(
+        "desk: the rule is one line to its right end (no strands parting: under 3% of its right 40% in two runs)",
+        ink["strands"] < 0.03,
+        f"{ink['strands']:.0%} of the right 40% in two or more runs",
     )
     middle = (info["top"] + info["bottom"]) / 2
     check(
@@ -889,7 +900,7 @@ def row_layout(browser):
             len(pro["pools"]) == 5
             and all(0.45 <= x["o"] <= 0.65 and x["blend"] == "multiply" and "radial-gradient" in x["mask"] for x in pro["pools"])
             and pro["contacts"] == 5
-            and pro["ground"] and "rule-whole.webp" in pro["ground"]["mask"]
+            and pro["ground"] and "rule-lifted.webp" in pro["ground"]["mask"]
             and all(1 <= t <= 8 for t in thick)
             and all(i["img"]["w"] >= i["img"]["css"] * pro["dpr"] * 0.98 and i["img"]["h"] >= 170 for i in items),
             f"pools {[round(x['o'], 2) for x in pro['pools']]}; ground ink {thick}px; "

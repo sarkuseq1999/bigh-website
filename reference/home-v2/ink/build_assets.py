@@ -62,6 +62,20 @@ def cut(img):
     return remove(img, session=new_session("birefnet-general"))
 
 
+# The first flying crane's white feathers (crane.webp, the 90th percentile of its light opaque
+# pixels): a painted crane's bare paper is brought to this, so the bird reads as white on the page.
+CRANE_WHITE = np.array([249.0, 244.0, 233.0])
+
+
+def whiten(cutout, paper):
+    """Levels on a cut-out: its paper colour -> CRANE_WHITE per channel, black stays black. A
+    painting's white feathers are bare paper, which carries the paper's beige; on the page's own
+    lighter paper that read as a dull, dirty bird."""
+    arr = np.asarray(cutout.convert("RGBA")).astype(np.float32)
+    arr[..., :3] = np.clip(arr[..., :3] / paper * CRANE_WHITE, 0, 255)
+    return Image.fromarray(arr.astype(np.uint8), "RGBA")
+
+
 def seamless(img):
     """Cross-fade the tile with itself shifted by half, so it repeats without a seam."""
     arr = np.asarray(img).astype(np.float32)
@@ -194,6 +208,13 @@ def build(name):
         save(ink(load("landscape-v1"), (60, 520, 900, 1100)), "landscape", 2400, 82)
     elif name == "crane":
         save(cut(load("crane-v1")), "crane", 1600, 86)
+    elif name == "crane-painted":
+        # October 9: Mo asked for the flying crane to look more like a painting than a picture and
+        # picked sample A (crane-paint-a: the same pose, brush lines that swell and break, wash that
+        # bleeds into the paper). Cut like the first crane, its whites brought to the first crane's.
+        img = load("crane-paint-a")
+        paper = paper_colour(np.asarray(img).astype(np.float32), (0, 0, img.width, 80))
+        save(whiten(cut(img), paper), "crane-painted", 1600, 86)
     elif name == "sun":
         img = load("sun-v1").crop((106, 45, 1906, 1805))
         save(leaf(img), "sun", 760, 80)
@@ -268,6 +289,6 @@ def build(name):
 
 if __name__ == "__main__":
     everything = ["landscape", "crane", "sun", "paper", "mito", "mito-aged", "mito-radicals",
-                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom", "gold", "crane-rest", "inkstone"]
+                  "halo", "shadow", "purpose", "story-morning", "story-reading", "story-source", "mito-closeup", "bloom", "gold", "crane-rest", "inkstone", "crane-painted"]
     for item in sys.argv[1:] or everything:
         build(item)

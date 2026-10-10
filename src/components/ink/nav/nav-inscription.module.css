@@ -172,11 +172,12 @@
 }
 
 /* The bar's edge is ink, not a hairline: one real painted line across the page's column
-   (inscription/rule-whole.webp, cut by reference/nav/make_rule_stroke.py from a GPT Image 2.5
-   painting). It touches down on the left with a fine tip, runs thin with a faint waver, and over its
-   last third the bristles part into flying-white strands that run dry before the right end. Kept at
-   the painting's own proportions (body about 3px at 1536), never thinner than a hair on a phone;
-   its middle sits on the bar's foot, on solid paper. */
+   (inscription/rule-lifted.webp, cut by reference/nav/make_rule_stroke.py from a GPT Image 2.5
+   painting). It touches down on the left with a fine tip, runs thin with a faint waver, and near
+   its right end the brush lifts: one long tip that runs dry and fades to nothing. (The painting's
+   bristles part there into three strands; Mo found them distracting, October 9, so the stroke is
+   cut before they split.) Its body as thick as the whole painting's was here (about 3px at 1536),
+   never thinner than a hair on a phone; its middle sits on the bar's foot, on solid paper. */
 @property --insc-draw {
   syntax: "<number>";
   inherits: false;
@@ -195,8 +196,10 @@
   /* As wide as the bar's line: where the outer groups stand further out, the rule runs out with
      them. */
   width: min(var(--wide, 1300px) + 2 * (var(--gutter) - var(--pad)), 100% - 2 * var(--pad));
-  min-height: 10px;
-  aspect-ratio: 2433 / 30;
+  /* 3406 / 22: the 1422 x 22 painting drawn out along the line, its body as thick as the whole
+     stroke's was (2433 x 42 at 2433 / 30); and the same floor on a phone (10px of 42 rows). */
+  min-height: 5.2px;
+  aspect-ratio: 3406 / 22;
   translate: -50% -50%;
   /* How far it is laid: a soft-edged mask that grows from the left. (On its own element, not as a
      second mask layer: WebKit, Safari's engine, drew an intersected pair of layers wrongly.) */
@@ -215,7 +218,7 @@
   position: absolute;
   inset: 0;
   background: var(--ink);
-  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
 }
 
 .root[data-ground="solid"] .rule {
@@ -1191,18 +1194,19 @@
   text-wrap: balance;
 }
 
-/* Products: the ground, one real painted line (the bar's own stroke at its own proportions: a fine
-   tip where the brush lands, a thin body, dry strands at its end), the bottles' feet on it. Never
+/* Products: the ground, one real painted line (the bar's own stroke: a fine tip where the brush
+   lands, a thin body, the brush lifting off to nothing at its end), the bottles' feet on it. Its
+   body as thick as the whole painting's at its own proportions (2433 x 42 at 2433 / 42): never
    squashed into a rod. */
 .shelfGround {
   position: absolute;
   left: 50%;
   top: calc(var(--stand) * 0.962);
   width: calc(100% - 40px);
-  aspect-ratio: 2433 / 42;
+  aspect-ratio: 2433 / 22;
   translate: -50% -50%;
   background: var(--ink);
-  mask: url("/images/home-v2/nav/inscription/rule-whole.webp") 0 0 / 100% 100% no-repeat;
+  mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
   opacity: 0.5;
   pointer-events: none;
 }

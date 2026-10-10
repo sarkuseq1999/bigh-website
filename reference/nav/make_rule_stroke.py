@@ -8,9 +8,14 @@ The ink becomes alpha the way the other cut-outs do (each pixel's distance from 
 paper's own speckle removed), so the page's rice paper shows through the stroke's dry streaks.
 
 Outputs:
+  public/images/home-v2/nav/inscription/rule-lifted.webp
+      shipped under the bar (October 9): the same stroke, but the brush lifts before its bristles
+      part. Mo found the three strands at the right end distracting, so the line is cut just
+      before they split and its last stretch is carved into one long tip that runs dry (fine
+      streaks of paper along it) and lifts off to nothing.
   public/images/home-v2/nav/inscription/rule-whole.webp
-      shipped: one long stroke across the page's column, under the mark (the thinnest of the four
-      lines; the bar keeps it about 3px in body at 1536).
+      the stroke whole, strands and all: one long stroke across the page's column (the thinnest
+      of the four lines; the bar kept it about 3px in body at 1536). No longer under the bar.
   reference/nav/alt/rule-half.webp
       the alternative Mo is shown, not shipped: one stroke that lands at its left end and dries out
       to nothing at its right end, laid twice (from the column's left edge toward the mark, and
@@ -103,6 +108,38 @@ def entry(a, cut, tip):
     return a
 
 
+def lift(a, end, tip, dry=0.65):
+    """Lift the brush before its bristles part: cut everything right of `end` and draw the last
+    `tip` columns in to one long tip. Each column's ink is squeezed toward the line's middle (its
+    rows averaged into fewer), so the tip keeps the stroke's own ink however dry its middle is (a
+    lens that kept only the middle rows landed on a dry streak and ended the line short). As it
+    lifts the ink runs dry (streaks of paper along the stroke, more of them toward the tip) and
+    pales a little."""
+    a = a.copy()
+    a[:, end:] = 0
+    c = centre_line(a[:, :end])
+    ys = np.arange(a.shape[0])
+    edges = np.arange(a.shape[0] + 1) - 0.5
+    for i in range(end - tip, end):
+        k = max(((end - i) / tip) ** 0.7, 1e-3)
+        total = np.concatenate([[0.0], np.cumsum(a[:, i])])
+        lo = np.interp(c[i] + (ys - 0.5 - c[i]) / k, edges, total)
+        hi = np.interp(c[i] + (ys + 0.5 - c[i]) / k, edges, total)
+        a[:, i] = (hi - lo) * k
+    x = end - np.arange(a.shape[1])
+    d = np.clip(1 - x / tip, 0, 1) ** 1.4
+    streak = gaussian_filter1d(
+        gaussian_filter1d(np.random.default_rng(7).random(a.shape), 18, axis=1), 0.6, axis=0
+    )
+    # An even spread 0..1 (by rank), so the share of paper follows `d` directly.
+    streak = streak.ravel().argsort().argsort().reshape(a.shape) / streak.size
+    paper = np.clip((0.45 * d[None, :] - streak) / 0.06, 0, 1)
+    a = a * (1 - 0.9 * paper)
+    a *= np.clip(dry + (1 - dry) * x / tip, dry, 1)[None, :]
+    a[:, end:] = 0
+    return a
+
+
 def trim(a, pad=2):
     rows = np.where(a.max(1) > 0.02)[0]
     cols = np.where(a.max(0) > 0.02)[0]
@@ -143,10 +180,19 @@ if PREVIEW and "--all" in sys.argv:
 HALF_LINE, WHOLE_LINE = 2, 0  # the chosen lines (0 = top)
 ALT = REPO / "reference/nav/alt"
 ALT.mkdir(parents=True, exist_ok=True)
-for name, which, where in (("rule-whole.webp", WHOLE_LINE, OUT), ("rule-half.webp", HALF_LINE, ALT)):
+for name, which, where in (
+    ("rule-lifted.webp", WHOLE_LINE, OUT),
+    ("rule-whole.webp", WHOLE_LINE, OUT),
+    ("rule-half.webp", HALF_LINE, ALT),
+):
     y0, y1, x0, x1 = found[which]
     a = alpha_of(grey[y0:y1, x0 : x1 + 1])
-    a = trim(entry(a, cut=62, tip=70))
+    a = entry(a, cut=62, tip=70)
+    if name == "rule-lifted.webp":
+        # The strands part at about column 1640, and from about 1500 the line already runs in two
+        # dry streaks; lift where it is still one.
+        a = lift(a, end=1480, tip=320)
+    a = trim(a)
     img = save_mask(a, where / name)
     print(where / name, img.size)
     if PREVIEW:
