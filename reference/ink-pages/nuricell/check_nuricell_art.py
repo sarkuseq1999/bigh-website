@@ -57,9 +57,11 @@ check("lantern: lit and unlit in register", overlap > 0.35, f"edge overlap {over
 warm = lambda a: float(((a[..., 0] - a[..., 2]) > 40).mean())
 check("lantern: the unlit one has no gold", warm(unlit) < 0.002, f"{warm(unlit):.3%}")
 check("lantern: the lit one glows", warm(lit) > 0.03, f"{warm(lit):.2%}")
-# Lit from within (its core light): across the middle of the body, the centre is clearly lighter
-# than the body's sides: 80 levels for core-v2 (warm sides), 95 for round 1's core-v1 (smoky grey
-# sides), 49 for the plain take (gold rim to rim), which this check fails.
+# Lit from within: across the middle of the body, the centre is clearly lighter than the body's
+# sides. Either by a lot (70+ levels: core-v1 95, core-v2 80), or by 30+ with the sides still pale,
+# unsaturated paper, as in Mo's comp (2-why-lantern.jpg: centre about 237, sides about 200-205,
+# +35; the painted lit-v3: +41, sides 209). The plain lit-v2 take (gold rim to rim: +49, its sides
+# saturated gold, (R-B)/R 0.52) fails both.
 H = lit.shape[0]
 band_lit, band_unlit = lit[int(H * 0.4) : int(H * 0.6)], unlit[int(H * 0.4) : int(H * 0.6)]
 cols = np.where((band_unlit.min(axis=2) < 236).mean(axis=0) > 0.5)[0]
@@ -68,11 +70,22 @@ span = x1 - x0
 lum = lambda a: (a @ np.array([0.299, 0.587, 0.114], np.float32)).mean()
 centre = lum(band_lit[:, x0 + int(span * 0.4) : x0 + int(span * 0.6)])
 sides = (lum(band_lit[:, x0 + int(span * 0.04) : x0 + int(span * 0.16)]) + lum(band_lit[:, x1 - int(span * 0.16) : x1 - int(span * 0.04)])) / 2
-check("lantern: lit from within (centre lighter than the sides)", centre > sides + 70, f"centre {centre:.0f}, sides {sides:.0f}")
+side_rgb = np.concatenate(
+    [band_lit[:, x0 + int(span * 0.04) : x0 + int(span * 0.16)].reshape(-1, 3), band_lit[:, x1 - int(span * 0.16) : x1 - int(span * 0.04)].reshape(-1, 3)]
+).mean(axis=0)
+pale_sides = sides >= 190 and (side_rgb[0] - side_rgb[2]) / side_rgb[0] <= 0.35
+check(
+    "lantern: lit from within (centre lighter than the sides)",
+    centre > sides + 70 or (centre > sides + 30 and pale_sides),
+    f"centre {centre:.0f}, sides {sides:.0f}, pale sides {pale_sides}",
+)
 
-# Warm sides, not olive (round 2): the body's side bands, across its middle, average a warm amber
-# or umber: G/R at most 0.86, B/R at most 0.68, R - B at least 45. Olive is G close to R with a low
-# B: round 1's core-v1 (173, 151, 107: G/R 0.87, B/R 0.62) fails it.
+# Sides not olive (rounds 2-3): the body's side bands, across its middle, average either a warm
+# amber (G/R at most 0.86, B/R at most 0.68, R - B at least 45: core-v2 197/155/98) or pale paper
+# (luminance 190+, (R - B)/R at most 0.35: the painted lit-v3 230/206/169, and Mo's comp's sides,
+# about 233/202/151). Olive is a dull, darker yellow: round 1's core-v1 (173, 151, 107: luminance
+# 154, G/R 0.87) fails both. (The comp's own sides are G/R 0.86-0.87, so hue ratios alone cannot
+# tell olive from the comp.)
 def side_colour(a):
     band = a[int(H * 0.4) : int(H * 0.6)]
     sides = np.concatenate(
@@ -82,7 +95,13 @@ def side_colour(a):
 
 
 r_, g_, b_ = side_colour(lit)
-check("lantern: its sides warm, not olive", g_ / r_ <= 0.86 and b_ / r_ <= 0.68 and r_ - b_ >= 45, f"({r_:.0f}, {g_:.0f}, {b_:.0f}): G/R {g_ / r_:.2f}, B/R {b_ / r_:.2f}, R-B {r_ - b_:.0f}")
+amber = g_ / r_ <= 0.86 and b_ / r_ <= 0.68 and r_ - b_ >= 45
+pale = 0.299 * r_ + 0.587 * g_ + 0.114 * b_ >= 190 and (r_ - b_) / r_ <= 0.35
+check(
+    "lantern: its sides warm amber or pale paper, not olive",
+    amber or pale,
+    f"({r_:.0f}, {g_:.0f}, {b_:.0f}): G/R {g_ / r_:.2f}, B/R {b_ / r_:.2f}, R-B {r_ - b_:.0f}, amber {amber}, pale {pale}",
+)
 # The lit lantern's gold mask covers a few flecks, not the whole warm body.
 flecks = np.asarray(Image.open(REPO / "public" / art["lanternLit"]["gold"].lstrip("/")).split()[-1])
 fleck_share = float((flecks > 128).mean())

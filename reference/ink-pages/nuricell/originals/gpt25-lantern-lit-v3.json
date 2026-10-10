@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Edit the reference picture, an ink painting of an unlit paper lantern on rice paper. Keep everything exactly as it is: the same paper, the same lantern in exactly the same place, size and shape, the same cord, the same black rims, the same loose ribs and the same loose brushwork. Change one thing only: a warm light now burns inside the lantern. The lantern's paper stays pale, its grey brush texture still showing at the sides; a bright warm cream-gold glow in the centre, a little above the middle, fading softly toward the sides and toward the top and bottom; the light shows most between the ribs at the centre; a thin warm glow on the paper just under the top cap and just above the base, while the black lacquer of the cap and base stays black; a few tiny flecks of gold leaf on the paper of the lantern; a soft warm haze of light on the rice paper around the lantern. Painted like a loose sumi-e ink painting with a wash of warm light, never a rendering, never a 3D image. No landscape, no other objects, plain rice paper on every side. No text, no signature, no red seal, no stamp.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/ink-pages/nuricell/originals/gpt25-lantern-unlit-v2.png"
+  ],
+  "made": "20261010-032426"
+}

@@ -35,9 +35,10 @@ TS = REPO / "src/components/product/ink/nuricell-art.ts"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
 # The take of each painting that ships (the original's name after "gpt25-"). The lantern's v2 takes
-# were chosen in Task 1 (v1 is kept only as a spare).
+# were chosen in Task 1 (v1 is kept only as a spare); its lit take since Task 9 round 3 is lit-v3,
+# painted as an edit of unlit-v2 (pale paper, a warm core, light under the rims, gold flecks).
 TAKES = {
-    "lantern-lit": "lantern-lit-v2",
+    "lantern-lit": "lantern-lit-v3",
     "lantern-unlit": "lantern-unlit-v2",
     "capsule": "P7-capsule",
     "books": "P7-stepping-books",
@@ -96,6 +97,10 @@ def lantern_body(unlit):
 
 LUM = np.array([0.299, 0.587, 0.114], np.float32)
 
+# Rounds 1-2 relit the lit-v2 take in code (core_light); round 3 painted the light instead (lit-v3),
+# which reads better. True rebuilds lantern-lit-core-v2 (with TAKES["lantern-lit"] = "lantern-lit-v2").
+CORE_LIGHT = False
+
 # The light inside the lantern, from its core out (core_light): pale cream, golden, a warm amber,
 # then a warm sienna at the body's sides (never grey: grey under the take's yellow read olive).
 # Darker sides made a brown lantern; paler creams a white patch (variants beside the comp, Task 9).
@@ -113,18 +118,22 @@ def ramp(d, stops):
     return out
 
 
-def gold_flecks(a, mask, dx, dy, n=16):
+def gold_flecks(a, mask, dx, dy, n=16, sat_from=0.55, min_area=40, max_aspect=None):
     """The lit take's most saturated gold-leaf spots in the body's middle ring, at most n of them,
-    70px or more apart: a 0/1 map (the flecks the kit's glint will catch)."""
+    70px or more apart: a 0/1 map (the flecks the kit's glint will catch). max_aspect leaves out
+    long thin spots (warm light along a rib, not leaf)."""
     hi, lo = a.max(axis=2), a.min(axis=2)
     sat = (hi - lo) / np.maximum(hi, 1)
     r, g, b = a[..., 0], a[..., 1], a[..., 2]
     hue = np.where((r >= g) & (g > b), 60 * (g - b) / np.maximum(hi - lo, 1), 0)
-    gold = (sat > 0.55) & (hue > 26) & (hue < 56) & (hi > 150)
+    gold = (sat > sat_from) & (hue > 22) & (hue < 56) & (hi > 150)
     ring = (np.abs(dy) < 0.55) & (np.abs(dx) < 0.8) & (mask > 0.9)
     found = cv2.morphologyEx((gold & ring).astype(np.uint8), cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
     k, lab, st, centres = cv2.connectedComponentsWithStats(found, 8)
-    spots = sorted((i for i in range(1, k) if 40 <= st[i, cv2.CC_STAT_AREA] <= 2500), key=lambda i: -st[i, cv2.CC_STAT_AREA])
+    shaped = lambda i: max_aspect is None or max(st[i, 2], st[i, 3]) <= max_aspect * min(st[i, 2], st[i, 3])
+    spots = sorted(
+        (i for i in range(1, k) if min_area <= st[i, cv2.CC_STAT_AREA] <= 2500 and shaped(i)), key=lambda i: -st[i, cv2.CC_STAT_AREA]
+    )
     chosen = []
     for i in spots:
         if all(np.hypot(*(centres[i] - centres[j])) > 70 for j in chosen):
@@ -197,16 +206,35 @@ def lantern():
     a, b = bd.ink_box(np.asarray(lit), pad=0.06), bd.ink_box(np.asarray(unlit), pad=0.06)
     box = (min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
     unlit = unlit.crop(box)
-    # The lit picture with its core light, under a name of its own (a replaced picture needs a new
-    # filename: browsers and the image optimizer cache by URL). Kept as files: lantern-lit-v1 (the
-    # plain take) and lantern-lit-core-v1 (round 1's core light). The light is laid on the levelled
-    # picture (its paper already white), so it is feathered and saved as is, not levelled again.
-    name = "lantern-lit-core-v2"
-    lit_img, flecks = core_light(bd.levelled(lit.crop(box)), bd.levelled(unlit))
-    lit_art = bd.art_of(bd.feathered(lit_img, EDGE), name, 1100)
-    fleck_mask(flecks, name)
+    # Each picture under a name of its own (a replaced picture needs a new filename: browsers and the
+    # image optimizer cache by URL). Every earlier file is kept: lantern-lit-v1 (the lit-v2 take),
+    # lantern-lit-core-v1 and -core-v2 (rounds 1 and 2: core_light on lit-v2) and lantern-unlit-v1
+    # (unlit-v2 registered onto lit-v2).
+    if CORE_LIGHT:
+        # Rounds 1-2 (TAKES["lantern-lit"] = "lantern-lit-v2"): the light laid on the levelled
+        # picture (its paper already white), so it is feathered and saved as is.
+        name = "lantern-lit-core-v2"
+        lit_img, flecks = core_light(bd.levelled(lit.crop(box)), bd.levelled(unlit))
+        lit_art = bd.art_of(bd.feathered(lit_img, EDGE), name, 1100)
+        fleck_mask(flecks, name)
+        lit_art["gold"] = f"{URL}/{name}-gold.webp"
+        return finish(unlit, "lantern-unlit", 1100), lit_art
+    # The painted lit take (lit-v3), as it is. Its gold mask is its leaf flecks alone: its warm
+    # glow is light, not leaf, and the kit's glint passes over leaf only.
+    name = f"lantern-lit-{TAKES['lantern-lit'].rsplit('-', 1)[-1]}"
+    lit_art = bd.art_of(bd.feathered(bd.levelled(lit.crop(box)), EDGE), name, 1100)
+    a = np.asarray(bd.levelled(lit.crop(box))).astype(np.float32)
+    mask, (l, t, r, b) = lantern_body(bd.levelled(unlit))
+    h, w = mask.shape
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    dx, dy = (xx - (l + r) / 2) / ((r - l) / 2), (yy - (t + b) / 2) / ((b - t) / 2)
+    # lit-v3's flecks are tiny and a little paler than lit-v2's leaf; roundish spots only.
+    flecks = gold_flecks(a, mask, dx, dy, n=20, sat_from=0.46, min_area=25, max_aspect=2.5)
+    fleck_mask(cv2.dilate(flecks, np.ones((3, 3), np.uint8)), name)
     lit_art["gold"] = f"{URL}/{name}-gold.webp"
-    return finish(unlit, "lantern-unlit", 1100), lit_art
+    # The unlit take, registered onto this lit take, is cropped by their shared box: a new file too.
+    unlit_art = bd.art_of(bd.feathered(bd.levelled(unlit), EDGE), f"lantern-unlit-{TAKES['lantern-lit'].rsplit('-', 1)[-1]}", 1100)
+    return unlit_art, lit_art
 
 
 def brushed_sum():
