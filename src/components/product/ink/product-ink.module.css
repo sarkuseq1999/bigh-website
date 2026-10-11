@@ -60,6 +60,21 @@
   letter-spacing: -0.045em;
 }
 
+/* The name is the same Latin word on every page: the kit's looser setting for Korean, Japanese and
+   Chinese display lines (ink.module.css, line-height 1.22 and -0.01em, 0,3,0) is for their own
+   scripts, and made "NuriCell" wider and taller there than in English. */
+.page h1.name:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+}
+
+/* Each half stays whole: Korean pages set overflow-wrap: anywhere (globals.css), and "Nuri", a few
+   pixels wider than its column, broke into "Nur" over "i" there. */
+.page .first,
+.page .second {
+  white-space: nowrap;
+}
+
 .page .first {
   justify-self: end;
 }
@@ -238,21 +253,26 @@
   }
 }
 
-/* Phones: the name over the bottle, then the words in one column. */
+/* Phones: the name as one word over the bottle (Mo, October 10: "NuriCell", not "Nuri" over "Cell"),
+   then the words in one column. The halves sit side by side with no gap, the bottle centred under
+   them. The word fills the column, a few pixels inside it: it is 3.36 times its size wide in
+   Switzer and the column 84.6vw (the wrap's gutters); Vietnamese pages set it in Be Vietnam Pro,
+   3.62 times its size. */
 @media (max-width: 959px) {
   .page h1.name {
-    grid-template-columns: minmax(0, 1fr);
-    justify-items: center;
-    font-size: clamp(64px, 26vw, 150px);
+    grid-template-columns: auto auto;
+    justify-content: center;
+    font-size: clamp(56px, 24.5vw, 170px);
   }
 
-  .page .first,
-  .page .second {
-    justify-self: center;
+  .page h1.name:lang(vi) {
+    font-size: clamp(52px, 22.6vw, 158px);
   }
 
   .page .stand {
     order: 3;
+    grid-column: 1 / -1;
+    justify-self: center;
     width: min(64vw, 320px);
     margin: 12px 0 0;
   }

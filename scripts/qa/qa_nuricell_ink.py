@@ -6,7 +6,8 @@ Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Products, one h1 (the name), the real bottle,
               no canvas, no console errors (1440x900, 390x844)
   opening     no line over the name and no pool under the bottle (Mo, October 10); the bottle's middle
-              on the letters' middle from 960px (1920 to 960 wide)
+              on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word on a phone or
+              tablet; each half on one line in every language
   others      the other four product pages keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
@@ -864,6 +865,28 @@ def opening_check(browser):
         check(f"opening {w}x{h}: the bottle's middle on the letters' middle, and midway between the halves", ok,
               f"letters {letters}, bottle {bottle:.0f}, off across {across:.0f}")
         ctx.close()
+    # Each half of the name on one line in every language (Korean's overflow-wrap: anywhere broke
+    # "Nuri" into "Nur" over "i"); on a phone or tablet the two halves are one word on one line,
+    # inside the column, the bottle under it (Mo, October 10).
+    for locale in ["en", "kr", "jp", "cns", "vn"]:
+        for w, h in [(320, 700), (390, 844), (768, 1024), (1440, 900)]:
+            ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/nuricell", reduced=True)
+            name = page.evaluate(
+                """() => { const h = document.querySelector('[data-chapter=overview] h1'); const lh = parseFloat(getComputedStyle(h).lineHeight);
+                     const wrap = h.parentElement, ws = getComputedStyle(wrap), wr = wrap.getBoundingClientRect();
+                     const f = h.querySelector('[class*=first]').getBoundingClientRect(), s = h.querySelector('[class*=second]').getBoundingClientRect(), img = h.querySelector('img').getBoundingClientRect();
+                     return { lines: [Math.round(f.height / lh), Math.round(s.height / lh)], row: Math.abs(f.top - s.top) < 1, gap: s.left - f.right,
+                              inside: f.left >= wr.left + parseFloat(ws.paddingLeft) - 1 && s.right <= wr.right - parseFloat(ws.paddingRight) + 1,
+                              below: img.top >= Math.max(f.bottom, s.bottom) - 1, sideways: document.documentElement.scrollWidth > innerWidth }; }"""
+            )
+            if w < 960:
+                ok = name["lines"] == [1, 1] and name["row"] and abs(name["gap"]) <= 1 and name["inside"] and name["below"] and not name["sideways"]
+                what = "'NuriCell' one word on one line inside the column, the bottle under it"
+            else:
+                ok = name["lines"] == [1, 1] and not name["sideways"]
+                what = "each half of the name on one line"
+            check(f"opening {locale} {w}: {what}", ok, str(name))
+            ctx.close()
 
 
 def polish(browser):
