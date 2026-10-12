@@ -73,6 +73,9 @@ const entries = [
   ["Per serving", "每份含量", "1회 섭취량", "Mỗi khẩu phần", "1回分あたり"],
   ["Ingredient", "成分", "성분", "Thành phần", "成分"],
   ["About it", "说明", "설명", "Giới thiệu", "説明"],
+  // The opening's "One bottle" card (Mo, October 12).
+  ["One bottle", "一瓶", "한 병", "Một lọ", "1本"],
+  ["{count} a day", "每日{count}粒", "하루 {count}캡슐", "{count} viên mỗi ngày", "1日{count}カプセル"],
 ];
 const path = "src/i18n/copy-keys.json";
 const keys = JSON.parse(fs.readFileSync(path, "utf8"));

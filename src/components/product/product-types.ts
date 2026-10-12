@@ -24,6 +24,8 @@ export type ProductInk = {
     sum: InkArt & { numbers: readonly number[]; centres: readonly number[] };
   };
   buy: { stroke: InkArt };
+  /** The opening's "One bottle" card: a small painted picture beside the supply (decorative). */
+  supply?: InkArt;
 };
 
 export type ProductIngredient = {
