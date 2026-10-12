@@ -77,20 +77,20 @@
 }
 
 /* The page's biggest painting after the opening (round 4: huge here, large on the science stage,
-   small beside Ask BiGH Science). It starts in the column gap (80px into it at 1536, its paper
-   corner only) and runs off the right edge of the window, which falls at 78% of its width: past
-   the gold folds, through the cell's far end (the look's root clips it, so nothing scrolls
-   sideways). It stops growing at 1280px, so on a very wide window it stays beside its words. It
-   also runs 8% of its width into the block's padding above and below. The column's width is
-   worked out from the window (6 of the grid's 11 parts), so the label can use it too. */
+   small beside Ask BiGH Science). Mo, October 12: a quarter smaller, so it no longer overwhelms;
+   the whole cell now sits in the window. It starts in the column gap (80px into it at 1536, its
+   paper corner only) and its column's right edge falls at 90% of its width, so the cell's far end
+   reaches just past the column, level with the menu bar's end, inside the window (about 810px
+   wide at 1536, never past 820px). It also runs 8% of its width into the block's padding above
+   and below. The column's width is worked out from the window (6 of the grid's 11 parts), so the
+   label can use it too. */
 @media (min-width: 900px) {
   .cellular .figure {
     --area: calc(
       (min(100vw - 2 * var(--gutter), var(--wide)) - clamp(48px, 7.4vw, 112px)) * 6 / 11
     );
     --reach: min(80px, 5.2vw);
-    --room: max(var(--gutter), (100vw - var(--wide)) / 2);
-    --w: min((var(--area) + var(--reach) + var(--room)) / 0.78, 1280px);
+    --w: min((var(--area) + var(--reach)) / 0.9, 820px);
     width: var(--w);
     margin: calc(-0.08 * var(--w)) 0 calc(-0.08 * var(--w)) calc(-1 * var(--reach));
   }
