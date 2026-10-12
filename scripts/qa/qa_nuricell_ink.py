@@ -502,7 +502,9 @@ def words(browser, chapters=tuple(CHAPTERS)):
     for chapter in chapters:
         for s in built.get(chapter, []):
             check(f"words {chapter}: “{s}”", s in text)
-    everything = reachable_text(page)
+    # The FDA statement (notes.fda) is shown by the shared footer since October 12, 2026, so the
+    # footer's words count too.
+    everything = reachable_text(page) + " " + re.sub(r"\s+", " ", page.locator("footer").last.inner_text())
     missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in everything]
     check("words: every string of nuricell.ts on the page", not missing, f"{len(missing)} missing: {missing[:5]}")
     for slug in OTHERS:

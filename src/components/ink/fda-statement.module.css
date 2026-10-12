@@ -1,0 +1,59 @@
+/* The FDA statement: one bold line (two, balanced, where it cannot fit) between two brush lines
+   the width of the footer's column. The lines are the menu bar's painted stroke
+   (nav/inscription/rule-lifted.webp) used as a mask and filled with the footer's own ink
+   (currentColor), so a dark footer gets light lines. Rules are scoped under .fda (two classes) so
+   the pages' shared `p` rules cannot win on the built site's stylesheet order. */
+.fda {
+  max-width: var(--wide, 1300px);
+}
+
+.fda::before,
+.fda::after {
+  content: "";
+  display: block;
+  height: 5px;
+  background: currentColor;
+  opacity: 0.55;
+  mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
+}
+
+/* The lower line is the stroke turned end to end, so the two do not repeat each other. */
+.fda::after {
+  transform: scaleX(-1);
+}
+
+/* --fda-pad: the room above and below the words (a footer may draw it in where its room is
+   short). 15 px, the site's smallest type; where one line does not fit (under about 1,300 px) the
+   words balance on two. */
+.fda .text {
+  margin: 0;
+  padding: var(--fda-pad, 15px) 0 calc(var(--fda-pad, 15px) - 1px);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.6;
+  text-align: center;
+  text-wrap: balance;
+}
+
+/* The star hangs before the first word, outside the line (hanging punctuation): the words stay
+   centred on their own, and a 1280 px window keeps them to one line. */
+.fda .star {
+  position: absolute;
+  translate: calc(-100% - 6px) 0;
+  color: var(--fda-star, #c49a3a);
+}
+
+/* Phones: the statement runs to four or five lines, which read better from the left edge, like
+   the footer's other lines; the star sits in the line there. */
+@media (max-width: 720px) {
+  .fda .text {
+    text-align: left;
+    text-wrap: pretty;
+  }
+
+  .fda .star {
+    position: static;
+    translate: none;
+    margin-right: 6px;
+  }
+}

@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { footer, products } from "@/components/home-v2/content";
 import { useSiteDialogs } from "./dialogs";
+import { FdaStatement } from "./fda-statement";
 import { NavInscription, type NavCurrent, type NavFollow } from "./nav/nav-inscription";
 import styles from "./chrome.module.css";
 
@@ -157,8 +158,9 @@ export function SiteFooter({
 
   // The finale first: the promise in its own band, large, with the look's closing picture beside
   // it. Under a hairline, the logo, the links and the legal lines are a calmer second tier (on
-  // two columns the copyright line and "Back to top" sit under the logo, level with the last
-  // link; on one column they follow the links).
+  // two columns the preview note, the copyright line and "Back to top" sit under the logo, the
+  // last two level with the last link; on one column they follow the links). The FDA statement,
+  // between its two brush lines, runs under it all (on one column, above the preview note).
   return (
     <footer className={styles.footer}>
       <div className={styles.finale}>
@@ -212,8 +214,9 @@ export function SiteFooter({
             {copy("Back to top")} <ArrowUp size={16} />
           </a>
         </div>
+        <FdaStatement className={styles.footerFda} />
+        <p className={styles.footerNote}>{copy(footer.note)}</p>
       </div>
-      <p className={styles.footerNote}>{copy(footer.note)}</p>
     </footer>
   );
 }
