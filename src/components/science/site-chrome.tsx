@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ArrowUp, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { HeaderUtilities } from "@/components/home/header-utilities";
+import { FdaStatement } from "@/components/ink/fda-statement";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import styles from "./site-chrome.module.css";
@@ -177,6 +178,7 @@ export function ScienceFooter({
           {copy("Back to top")} <ArrowUp size={16} />
         </a>
       </div>
+      <FdaStatement className={styles.footerFda} />
       <p className={styles.footerNote}>
         {copy(
           "Educational content is for general information. Product details and packaging are subject to confirmation. Purchases and question submissions are not available in this preview. Lifestyle imagery is illustrative.",
