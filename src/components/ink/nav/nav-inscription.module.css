@@ -1084,11 +1084,11 @@
 }
 
 /* Round 11 (Mo's pick, over round 4's showroom): each drop-down is one row, everything at once.
-   Products: the five real bottles side by side, each on its own pale pool, standing on one painted
-   ground line (round 4's row). Science: its four parts, each picture at round 5's one weight. Under
-   each picture its name (21px) and its line (17px Ink Grey); each part is one link. The two rows are
-   two pages of one book: the same width, the pictures in rooms of one height on one line, the names
-   on one line. */
+   Products: the five real bottles side by side, each on its own pale pool, no line under the row
+   (Mo, October 12: the painted ground line read as a repeat of the bar's stroke). Science: its
+   four parts, each picture at round 5's one weight. Under each picture its name (21px) and its line
+   (17px Ink Grey); each part is one link. The two rows are two pages of one book: the same width,
+   the pictures in rooms of one height on one line, the names on one line. */
 .shelf {
   /* The pictures' rooms' height (a bottle is about 93% of it). */
   --stand: clamp(180px, 13vw, 220px);
@@ -1192,23 +1192,6 @@
   font-size: 17px;
   line-height: 1.35;
   text-wrap: balance;
-}
-
-/* Products: the ground, one real painted line (the bar's own stroke: a fine tip where the brush
-   lands, a thin body, the brush lifting off to nothing at its end), the bottles' feet on it. Its
-   body as thick as the whole painting's at its own proportions (2433 x 42 at 2433 / 42): never
-   squashed into a rod. */
-.shelfGround {
-  position: absolute;
-  left: 50%;
-  top: calc(var(--stand) * 0.962);
-  width: calc(100% - 40px);
-  aspect-ratio: 2433 / 22;
-  translate: -50% -50%;
-  background: var(--ink);
-  mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 /* Pointing at a product lifts its bottle a little off its pool. */
@@ -1452,16 +1435,13 @@ img.plate {
 
   /* A bottle, a photograph, never fades: half see-through it read as a pale ghost of a bottle
      (round 9). It is there as the unrolling paper reaches it, crisp as the names, and only rises
-     into place with them; its pool and the ground line come in under it (never a shadow without
-     its bottle). */
+     into place with them; its pool comes in under it (never a shadow without its bottle). */
   .root[data-unrolled]:not([data-swap]) .panel[data-shown] .shelf .bottle {
     animation: insc-rise 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
 
-  .root[data-unrolled]:not([data-swap])
-    .panel[data-shown]
-    :is(.shelf .pool, .shelf .contact, .shelfGround) {
+  .root[data-unrolled]:not([data-swap]) .panel[data-shown] :is(.shelf .pool, .shelf .contact) {
     animation: insc-fade 0.9s var(--ease) backwards;
     animation-delay: calc(0.12s + var(--i, 0) * 60ms);
   }
