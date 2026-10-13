@@ -598,5 +598,7 @@
   "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink": "m606",
   "Per serving": "m607",
   "Ingredient": "m608",
-  "About it": "m609"
+  "About it": "m609",
+  "One bottle": "m610",
+  "{count} a day": "m611"
 }

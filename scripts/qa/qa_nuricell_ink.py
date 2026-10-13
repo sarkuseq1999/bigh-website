@@ -37,7 +37,7 @@ import io
 import re
 import sys
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 from PIL import Image
 from playwright.sync_api import sync_playwright
@@ -786,7 +786,7 @@ def deep_links(browser):
 # as the one before it (it never starts a line), with the fact's words straight after it on that
 # line (it never ends one); a fact that starts a line has its words on the column's edge, its dot
 # in the clipped gap. "30-day" is one client rect. The whole line is there for screen readers.
-SUPPLY_LINES = """() => [document.querySelector('[data-chapter=overview] [class*=openingBuy] > p'),
+SUPPLY_LINES = """() => [document.querySelector('[data-chapter=overview] [class*=bottleCardSupply]'),
                     document.querySelector('[data-chapter=buy] dl div:nth-child(2) dd')].map((el) => {
   const clip = el.querySelector('[data-facts]').parentElement.getBoundingClientRect();
   const facts = [...el.querySelectorAll('[data-fact]')];
@@ -844,8 +844,12 @@ def opening_check(browser):
     eyebrow = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=overview]').innerText)")
     kept = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=buy]').innerText)")
     check("opening: no line over the name (the Buy chapter keeps 'Our flagship formula')", not eyebrow and kept, f"opening {eyebrow}, buy {kept}")
-    pictures = page.evaluate("() => [...document.querySelectorAll('[data-chapter=overview] img')].map((e) => e.getAttribute('src'))")
-    check("opening: the bottle alone, no pool or contact shadow under it", len(pictures) == 1 and "nuricell" in pictures[0], str(pictures))
+    name = page.evaluate("() => [...document.querySelectorAll('[data-chapter=overview] h1 img')].map((e) => e.getAttribute('src'))")
+    pools = page.evaluate(
+        "() => [...document.querySelectorAll('[data-chapter=overview] img')].map((e) => decodeURIComponent(e.getAttribute('src'))).filter((s) => /shadow|pool|contact/i.test(s))"
+    )
+    check("opening: the bottle alone in the name, no pool or contact shadow anywhere in the opening",
+          len(name) == 1 and "nuricell.png" in unquote(name[0]) and not pools, f"{name} {pools}")
     ctx.close()
     for w, h in [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
@@ -866,6 +870,38 @@ def opening_check(browser):
         ok = letters is not None and abs(bottle - letters) <= 6 and across <= 6
         check(f"opening {w}x{h}: the bottle's middle on the letters' middle, and midway between the halves", ok,
               f"letters {letters}, bottle {bottle:.0f}, off across {across:.0f}")
+        ctx.close()
+    # The buy box (Mo, October 12, after Timeline's and Seed's): the highlights in equal parts of the
+    # row, each centred, one ink line between them in the middle; the "One bottle" card with the
+    # supply, how many a day and the promise badge on its top edge; a wide Add to cart, the refund
+    # line under it; under "Nuri" (Mo, October 13: "D", the credit and face gone), the purpose with
+    # the same ink line down its left edge as the one between the highlights.
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        box = page.evaluate(
+            """() => { const o = document.querySelector('[data-chapter=overview]');
+                 const lis = [...o.querySelectorAll('ul[class*=highlights] li')]; const ul = o.querySelector('ul[class*=highlights]').getBoundingClientRect();
+                 const halves = lis.map((li) => li.getBoundingClientRect()); const bar = getComputedStyle(lis[1], '::before');
+                 const card = o.querySelector('[class*=bottleCard]'); const badge = o.querySelector('p[class*=promise]').getBoundingClientRect(); const c = card.getBoundingClientRect();
+                 const button = o.querySelector('[class*=openingBuy] button').getBoundingClientRect(); const refund = o.querySelector('p[class*=refund]').getBoundingClientRect();
+                 const text = getComputedStyle(o.querySelector('[class*=openingWords] p[class*=text]'), '::before');
+                 return { parts: halves.map((r) => Math.round(r.width)), centred: lis.every((li) => getComputedStyle(li).textAlign === 'center'),
+                          barMiddle: Math.round(halves[1].left - (ul.left + ul.width / 2)), bar: bar.content !== 'none' && parseFloat(bar.width) > 0, oneBar: getComputedStyle(lis[0], '::before').content === 'none',
+                          card: card.innerText, badgeOnEdge: Math.abs(badge.top + badge.height / 2 - c.top) <= 2, wide: Math.round(button.width) >= Math.round(c.width) - 1,
+                          refundUnder: refund.top >= button.bottom,
+                          line: [text.content !== 'none', parseFloat(text.width), text.backgroundColor, bar.backgroundColor, parseFloat(bar.width)],
+                          credit: !!o.querySelector('[class*=credit]') }; }"""
+        )
+        ok = (len(box["parts"]) == 2 and abs(box["parts"][0] - box["parts"][1]) <= 1 and box["centred"] and abs(box["barMiddle"]) <= 1
+              and box["bar"] and box["oneBar"])
+        check(f"opening {w}: the highlights centred in equal halves, one ink line in the middle", ok, str({k: box[k] for k in ("parts", "centred", "barMiddle", "bar", "oneBar")}))
+        card = box["card"].replace("‑", "-")
+        ok = all(s in card for s in ["One bottle", "90 vegetarian capsules", "30-day supply", "3 a day", "45 days to decide"]) and box["badgeOnEdge"]
+        check(f"opening {w}: the 'One bottle' card (supply, 3 a day, the promise badge on its edge)", ok, " | ".join(box["card"].splitlines()))
+        check(f"opening {w}: a wide Add to cart, the refund line under it", box["wide"] and box["refundUnder"], f"wide {box['wide']}, under {box['refundUnder']}")
+        drawn, width, colour, bar_colour, bar_width = box["line"]
+        ok = drawn and abs(width - bar_width) < 0.1 and colour == bar_colour and not box["credit"]
+        check(f"opening {w}: the purpose carries the highlights' ink line; no credit or face in the opening", ok, str(box["line"]) + f" credit {box['credit']}")
         ctx.close()
     # Each half of the name on one line in every language (Korean's overflow-wrap: anywhere broke
     # "Nuri" into "Nur" over "i"); on a phone or tablet the two halves are one word on one line,
@@ -932,15 +968,19 @@ def polish(browser):
     bottom = page.evaluate("() => Math.round(Math.max(...[...document.querySelectorAll('[data-chapter=overview] [class*=openingWords] :is(p, li, button)')].map((e) => e.getBoundingClientRect().bottom)))")
     check("polish 1440x900: the opening's words all in the first window", bottom <= 900, f"last word's bottom {bottom}")
     ctx.close()
-    # Add to cart spans the column on a phone; from 600px it keeps a pill's width (no black bar).
-    for w, h, full in [(390, 844, True), (768, 1024, False), (900, 900, False)]:
+    # The opening's Add to cart spans its buy block at every width (Mo, October 12), the block a
+    # card's width (460px at most) in one column from 600px, so a tablet gets no black bar; the Buy
+    # chapter's spans the column on a phone and keeps a pill's width (420px at most) from 600px.
+    for w, h in [(390, 844), (768, 1024), (900, 900), (1440, 900)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
-        sizes = page.evaluate(
+        (ob, oc), (bb, bc) = page.evaluate(
             """() => ['[data-chapter=overview] button', '[data-chapter=buy] button'].map((s) => { const b = document.querySelector(s);
                  return [Math.round(b.getBoundingClientRect().width), Math.round(b.closest('[data-words], [class*=openingBuy]').getBoundingClientRect().width)]; })"""
         )
-        ok = all(b >= c - 1 for b, c in sizes) if full else all(b <= 421 for b, _ in sizes)
-        check(f"polish {w}: Add to cart {'spans the column' if full else 'keeps a pill width (420px at most)'}", ok, str(sizes))
+        opening = ob >= oc - 1 and (oc <= 461 if 600 <= w < 960 else True)
+        buy = bb >= bc - 1 if w < 600 else (bb <= 421 if w < 960 else True)
+        check(f"polish {w}: the opening's Add to cart spans its block (a card's width on a tablet); the Buy chapter's as before", opening and buy,
+              f"opening {ob} of {oc}, buy {bb} of {bc}")
         ctx.close()
 
 
