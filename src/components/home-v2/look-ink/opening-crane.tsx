@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
@@ -19,6 +19,30 @@ import styles from "./opening.module.css";
 // wings twice, slowly, its body lifting with each stroke (the same painting, animated), then
 // glides on in the still's pose, while the whole bird rides the air in a slow float of its own
 // (opening.module.css).
+
+// The headline's one gold word (Mo, October 13, 2026: colour for an ink-and-paper page): "cells" in
+// each language, wherever its line puts it (Korean and Japanese on the second line). Only the first
+// match is gilded.
+const GOLD_WORDS = ["cells.", "세포", "細胞", "细胞", "tế bào"];
+
+function gild(lines: string[], className: string): ReactNode[] {
+  let done = false;
+  return lines.map((text) => {
+    if (done) return text;
+    const word = GOLD_WORDS.find((candidate) => text.includes(candidate));
+    if (!word) return text;
+    done = true;
+    const at = text.indexOf(word);
+    return (
+      <>
+        {text.slice(0, at)}
+        <span className={className}>{word}</span>
+        {text.slice(at + word.length)}
+      </>
+    );
+  });
+}
+
 export function OpeningCrane({ motion }: { motion: boolean }) {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
@@ -163,9 +187,12 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
 
       <div className={styles.copy}>
         <h1 id="opening-title" className={styles.title}>
-          {hero.title.map((line, i) => (
-            <span key={line} style={{ ["--i" as string]: i }}>
-              {copy(line)}
+          {gild(
+            hero.title.map((line) => copy(line)),
+            styles.gold,
+          ).map((line, i) => (
+            <span key={hero.title[i]} style={{ ["--i" as string]: i }}>
+              {line}
             </span>
           ))}
         </h1>

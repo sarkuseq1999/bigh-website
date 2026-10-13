@@ -87,6 +87,11 @@
   text-wrap: balance;
 }
 
+/* A step heavier in Ysabeau (as the scientists' heading, scientists.module.css). */
+.science .articleTitle:not(:lang(ko), :lang(ja), :lang(zh)) {
+  font-weight: 550;
+}
+
 .science .facts {
   display: grid;
   gap: 10px;

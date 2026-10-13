@@ -222,6 +222,30 @@
   display: block;
 }
 
+/* The gold word (Mo, October 13, 2026: colour for an ink-and-paper page). Its letters are cut from
+   the sun's own leaf (gold-leaf-word.webp: the middle of sun.webp, its cracks filled with paper),
+   a weight heavier than the rest so more leaf shows, under a thin wash of darker gold so it reads
+   on the paper without dulling to brass (a 0.4 wash did). Where text can't take a picture, it is
+   the gold ink. */
+.title .gold {
+  color: var(--gold-ink);
+  font-weight: 600;
+}
+
+@supports ((-webkit-background-clip: text) or (background-clip: text)) {
+  .title .gold {
+    background-image:
+      linear-gradient(rgba(110, 78, 20, 0.2), rgba(110, 78, 20, 0.2)),
+      url("/images/home-v2/ink/gold-leaf-word.webp");
+    background-position: center;
+    background-size: cover;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+}
+
 .opening .intro {
   max-width: 26em;
   margin: calc(24 * var(--u)) 0 0;
