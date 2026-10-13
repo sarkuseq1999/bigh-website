@@ -11,8 +11,8 @@ import styles from "./cellular.module.css";
 
 // "Tiny power plants." The opening dives from the landscape into the cell: the words at the left
 // with the three numbered lines on hairlines, the ink mitochondrion (its two gold-leaf folds where
-// energy is made) at the right, the page's biggest painting after the opening, running off the
-// edge of the window; the brush line passes between them.
+// energy is made) at the right, the page's biggest painting after the opening, the whole cell in
+// the window; the brush line passes between them.
 export function Cellular() {
   const copy = useCopy();
   const lines = [cellular.opening, cellular.explanation, cellular.closing];
@@ -62,7 +62,7 @@ export function Cellular() {
               )}
               width={mito.glow.width}
               height={mito.glow.height}
-              sizes="(max-width: 899px) 124vw, min(72vw, 1280px)"
+              sizes="(max-width: 899px) 124vw, min(53vw, 820px)"
               data-bloom=""
             />
             <span className={base.gold} style={{ ["--gold" as string]: `url(${gold.mito})` }} />
