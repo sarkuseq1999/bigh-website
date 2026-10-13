@@ -1,0 +1,15 @@
+/* The homepage's titles in Ysabeau (Mo, October 13, 2026: "Font A plus gold", the homepage first;
+   the other pages keep Switzer for now). Its strokes swell and taper like a brush, so the words sit
+   with the paintings. The big titles read --display-font (ink.module.css); the attribute makes this
+   rule outrank the shared .look one in either stylesheet order (the built site loads ink.module.css
+   after the block modules). Menus, paragraphs and pills stay in Switzer. Korean, Japanese and
+   Chinese characters fall through to the system faces, as before. */
+.titles[data-look="ink"] {
+  --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+}
+
+/* Every other heading in the page's words too (the scientists' lead, the quotation, the questions,
+   the three promises): one title face, so no block mixes two. */
+.titles[data-look="ink"] main :is(h1, h2, h3) {
+  font-family: var(--display-font);
+}

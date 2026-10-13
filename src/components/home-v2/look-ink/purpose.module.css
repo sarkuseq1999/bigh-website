@@ -218,6 +218,11 @@
   letter-spacing: -0.01em;
 }
 
+/* A step heavier in Ysabeau (as the scientists' heading, scientists.module.css). */
+.purpose .standardTitle:not(:lang(ko), :lang(ja), :lang(zh)) {
+  font-weight: 600;
+}
+
 /* Vietnamese runs wider; no one-word last line ("nào."). */
 .purpose .standardTitle:lang(vi) {
   text-wrap: balance;
