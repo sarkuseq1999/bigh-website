@@ -41,8 +41,9 @@ import styles from "./nav-inscription.module.css";
 // Mo's pick: everything at once is calmer than a list that changes a picture): a title, then every
 // one of them side by side, its picture, its name and its line under it, each one link, and the
 // link to all of them under the row. Products: the five real bottles, each on its own pale pool,
-// standing on one painted ground line (round 4's row). Science: the Science page's four parts, Dr.
-// Liu's print and three ink paintings set at one weight (round 5). The two rows share one geometry
+// with no line under the row (Mo, October 12: it read as a repeat of the bar's own stroke).
+// Science: the Science page's four parts, Dr. Liu's print and three ink paintings set at one
+// weight (round 5). The two rows share one geometry
 // (the title's room, the pictures' row, the names' line and the link under them), so moving from
 // one drop-down to the other keeps the scroll down and changes only what is written on it. On a
 // narrow window: "Menu", the mark, the language; the menu is a full-height scroll let down the
@@ -677,8 +678,8 @@ function useReading(follow: NavFollow | undefined) {
 
 /** One drop-down's page: its title in a room as tall as the taller of the two titles, then the
  *  row (each one link: its picture, its name and its line under it, the names on one line and the
- *  lines starting on one line), and the link to all of them at the scroll's foot. Products' row
- *  stands on one painted ground line. */
+ *  lines starting on one line), and the link to all of them at the scroll's foot. Each bottle in
+ *  Products' row stands on its own pale pool; no line runs under them (Mo, October 12). */
 function Row({
   id,
   title,
@@ -702,7 +703,6 @@ function Row({
         data-row={id}
         style={{ "--count": items.length } as CSSProperties}
       >
-        {id === "products" && <span className={styles.shelfGround} aria-hidden="true" />}
         <ul className={styles.shelfRow}>
           {items.map((item, i) => (
             <li key={item.href} style={{ "--i": i } as CSSProperties}>

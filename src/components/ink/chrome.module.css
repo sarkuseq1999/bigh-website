@@ -29,8 +29,9 @@
 }
 
 /* The finale: the promise in its own band at the top of the footer, the page's last words, on
-   generous paper above and below. A hairline closes it; the logo, the links and the legal lines
-   follow as a calmer second tier. */
+   generous paper above and below. The logo, the links and the legal lines follow as a calmer
+   second tier, with no hairline between (Mo, October 13, 2026: fewer lines; on the homepage the
+   closing brush stroke divides them, elsewhere the paper does). */
 .finale {
   max-width: var(--wide);
   margin: 0 auto;
@@ -38,20 +39,24 @@
   padding: clamp(72px, 5.8vw, 112px) 0 clamp(64px, 6.4vw, 104px);
 }
 
-/* The second tier: the logo and, level with the last link, the copyright line and "Back to top"
-   at the left; the links at the right. One column: logo, links, then the legal line. */
+/* The second tier: the logo, the preview note and, level with the last link, the copyright line
+   and "Back to top" at the left; the links at the right; under them all, the FDA statement across
+   the whole width, the page's last line (October 12, 2026: the note moved up into the space under
+   the logo so the taller footer still lets the last screen show the crane and the promise). One
+   column: logo, links, the legal line, the FDA statement, then the note. */
 .footerTop {
   display: grid;
   grid-template-columns: 1.1fr 1.4fr;
-  grid-template-rows: auto 1fr;
+  grid-template-rows: auto 1fr auto auto;
   grid-template-areas:
     "brand columns"
-    "legal columns";
+    "note columns"
+    "legal columns"
+    "fda fda";
   gap: 0 48px;
   max-width: var(--wide);
   margin: 0 auto;
-  padding: clamp(40px, 3.6vw, 56px) 0 clamp(36px, 3.4vw, 52px);
-  border-top: 1px solid var(--footer-line, var(--line));
+  padding: clamp(40px, 3.6vw, 56px) 0 0;
 }
 
 .footerBrand {
@@ -164,11 +169,21 @@
   min-height: 44px;
 }
 
-.footerNote {
-  max-width: var(--wide);
-  margin: 0 auto;
+/* The FDA statement (fda-statement.tsx) between its brush lines. */
+.footer .footerFda {
+  grid-area: fda;
+  margin-top: clamp(32px, 2.6vw, 44px);
+}
+
+/* The preview note, just above the copyright line (15 px, the site's smallest type: two classes,
+   so it is not left to the stylesheets' order as the single-class rule was). */
+.footer .footerNote {
+  grid-area: note;
+  align-self: end;
+  max-width: 62ch;
+  margin: 16px 0 10px;
   color: var(--footer-muted, var(--muted));
-  font-size: 14px;
+  font-size: 15px;
 }
 
 /* Short desktop windows (1280 x 800, 1366 x 768): the second tier draws in, so the last screen
@@ -187,11 +202,16 @@
   }
 
   .footerTop {
-    padding: calc(32px - var(--squeeze) * 0.2) 0 calc(28px - var(--squeeze) * 0.3);
+    padding: calc(32px - var(--squeeze) * 0.2) 0 0;
   }
 
   .footerColumns h2 {
     margin-bottom: calc(16px - var(--squeeze) * 0.2);
+  }
+
+  .footer .footerFda {
+    --fda-pad: 10px;
+    margin-top: calc(22px - var(--squeeze) * 0.3);
   }
 }
 
@@ -202,8 +222,20 @@
     grid-template-areas:
       "brand"
       "columns"
-      "legal";
+      "legal"
+      "fda"
+      "note";
     gap: 40px;
+  }
+
+  .footer .footerFda {
+    margin-top: 0;
+  }
+
+  /* Under the statement, closer than the grid's gap. */
+  .footer .footerNote {
+    max-width: none;
+    margin: -20px 0 0;
   }
 
   .footerBottom {

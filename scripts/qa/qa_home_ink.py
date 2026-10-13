@@ -73,7 +73,8 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
     the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
     place); the promise stands large in its own band at the top of the footer (56 px or more on
-    desktop, 44 to 52 on a phone), one sentence to a line, over a hairline and before the links,
+    desktop, 44 to 52 on a phone), one sentence to a line, before the links with no hairline
+    between (Mo, October 13, 2026: the closing brush stroke alone divides them),
     with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
     which blooms only once all of it is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
@@ -602,7 +603,8 @@ STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stori
 
 
 # The finale (round 3): the promise in its own band at the top of the footer, before the link
-# columns and over a hairline; its size, its lines (one sentence to each), the crane's height.
+# columns (no hairline between since October 13, 2026: the closing brush stroke divides them); its
+# size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
   const f = document.querySelector('footer');
   const band = f.querySelector('[data-brush="footer-promise"]');
@@ -1567,10 +1569,10 @@ def run(browser, look, mobile):
     font_ok = 44 <= finale["font"] <= 52 if mobile else finale["font"] >= 56
     crane_ok = 120 <= finale["crane"] <= 150 if mobile else 260 <= finale["crane"] <= 340
     check(
-        f"{tag}: the finale: the promise large in its own band, over a hairline, before the links",
+        f"{tag}: the finale: the promise large in its own band, before the links, no hairline between",
         finale["first"]
         and finale["above"] >= 40
-        and finale["hairline"] == "1px"
+        and finale["hairline"] == "0px"
         and font_ok
         and crane_ok
         and finale["lines"] == [1, 1]
