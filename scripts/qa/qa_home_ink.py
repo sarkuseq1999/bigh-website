@@ -72,9 +72,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the words after; with reduced motion a choice is on the stage at once.
   - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
     the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
-    place); the promise stands large in its own band at the top of the footer (56 px or more on
-    desktop, 44 to 52 on a phone), one sentence to a line, over a hairline and before the links,
-    with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
+    place); the promise stands under the footer's logo, under its hairline (October 12: smaller,
+    no longer in a band of its own; 40 to 60 px on desktop, at the links' left and its last line
+    level with the last link; 32 to 44 on a phone, before the links), one sentence to a line,
+    with the crane at rest beside it (120 to 170 px tall on desktop, 96 to 132 on a phone),
     which blooms only once all of it is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (at least 1.3 times the science stage, which is
@@ -601,19 +602,27 @@ STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stori
     im.src = u.searchParams.get('url') || u.pathname; }))))()"""
 
 
-# The finale (round 3): the promise in its own band at the top of the footer, before the link
-# columns and over a hairline; its size, its lines (one sentence to each), the crane's height.
+# The finale (October 12, Mo): the promise under the footer's logo, under the hairline, at the
+# links' left with its last line level with the last link (on a phone, before the links); its
+# size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
   const f = document.querySelector('footer');
   const band = f.querySelector('[data-brush="footer-promise"]');
   const t = band.querySelector('[data-brush="footer-tagline"]');
   const i = band.querySelector('img');
-  const tier = f.querySelector('h2').closest('div').parentElement.parentElement;
-  const b = band.getBoundingClientRect(), c = tier.getBoundingClientRect();
+  const columns = f.querySelector('h2').closest('div').parentElement;
+  const tier = columns.parentElement;
+  const logo = tier.firstElementChild;
+  const links = [...columns.querySelectorAll('a, button')];
+  const last = links.reduce((a, e) => (e.getBoundingClientRect().bottom > a.getBoundingClientRect().bottom ? e : a));
+  const b = band.getBoundingClientRect(), c = tier.getBoundingClientRect(), l = logo.getBoundingClientRect();
+  const k = columns.getBoundingClientRect(), w = t.getBoundingClientRect();
   const parts = [...t.querySelectorAll(':scope > span')];
   return {
-    first: f.firstElementChild.contains(band), above: Math.round(c.top - b.bottom),
+    inTier: tier.contains(band), underLogo: Math.round(b.top - l.bottom), underHairline: Math.round(b.top - c.top),
     hairline: getComputedStyle(tier).borderTopWidth,
+    besideLinks: Math.round(k.left - b.right), beforeLinks: Math.round(k.top - b.bottom),
+    level: Math.round(w.bottom - last.getBoundingClientRect().bottom),
     font: parseFloat(getComputedStyle(t.closest('p')).fontSize),
     crane: Math.round(i.getBoundingClientRect().height),
     lines: parts.map(s => new Set([...s.getClientRects()].map(r => Math.round(r.top))).size),
@@ -1564,13 +1573,17 @@ def run(browser, look, mobile):
         str(rest),
     )
     finale = page.evaluate(FINALE)
-    font_ok = 44 <= finale["font"] <= 52 if mobile else finale["font"] >= 56
-    crane_ok = 120 <= finale["crane"] <= 150 if mobile else 260 <= finale["crane"] <= 340
+    font_ok = 32 <= finale["font"] <= 44 if mobile else 40 <= finale["font"] <= 60
+    crane_ok = 96 <= finale["crane"] <= 132 if mobile else 120 <= finale["crane"] <= 170
+    # Desktop: at the links' left, its last line level with the last link. Phone: before them.
+    place_ok = finale["beforeLinks"] >= 24 if mobile else finale["besideLinks"] >= 24 and abs(finale["level"]) <= 20
     check(
-        f"{tag}: the finale: the promise large in its own band, over a hairline, before the links",
-        finale["first"]
-        and finale["above"] >= 40
+        f"{tag}: the finale: the promise under the footer's logo and hairline, with the links",
+        finale["inTier"]
+        and finale["underLogo"] >= 8
+        and finale["underHairline"] >= 40
         and finale["hairline"] == "1px"
+        and place_ok
         and font_ok
         and crane_ok
         and finale["lines"] == [1, 1]
@@ -1904,8 +1917,8 @@ def run_opens(browser):
         f"opacity as it opens {settle and settle[0]:.2f}, at rest {settle and settle[1]}",
     )
     preview = page.evaluate(
-        """[[...document.querySelectorAll('footer > div:nth-child(2) > div:nth-child(2) > div:first-child a')].length,
-            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:nth-child(2) > div:nth-child(2) > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
+        """[[...document.querySelectorAll('footer > div:first-child > div:nth-child(3) > div:first-child a')].length,
+            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:first-child > div:nth-child(3) > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
     )
     check(
         f"{tag}: no button opens the product preview (all five products link to their pages)",

@@ -111,7 +111,7 @@ export function SiteFooter({
   useEffect(() => {
     const paragraph = message.current;
     const words = paragraph?.firstElementChild;
-    // The finale's band, whose width decides where the lines break.
+    // The promise's place under the logo, whose width decides where the lines break.
     const column = paragraph?.parentElement?.parentElement;
     if (!paragraph || !words || !column || !hasClosing) return;
     // The words' own line boxes (text only: a sentence that wraps inside its inline block still
@@ -155,25 +155,25 @@ export function SiteFooter({
     };
   }, [hasClosing]);
 
-  // The finale first: the promise in its own band, large, with the look's closing picture beside
-  // it. Under a hairline, the logo, the links and the legal lines are a calmer second tier (on
-  // two columns the copyright line and "Back to top" sit under the logo, level with the last
-  // link; on one column they follow the links).
+  // Under a hairline: the logo with the promise under it, the look's closing picture beside the
+  // words (Mo, October 12, 2026: the promise and the crane sit under the logo, smaller, no longer
+  // in a band of their own), and the links at the right; the copyright line and "Back to top"
+  // run under them all. On one column: the logo, the promise, the links, then the legal line.
   return (
     <footer className={styles.footer}>
-      <div className={styles.finale}>
-        <div className={styles.promise} data-brush="footer-promise">
-          <p ref={message} className={styles.footerMessage}>
-            <span data-brush="footer-tagline">
-              <Sentences text={copy(footer.tagline)} />
-            </span>
-          </p>
-          {closing}
-        </div>
-      </div>
       <div className={styles.footerTop}>
         <div className={styles.footerBrand}>
           <Logo />
+        </div>
+        <div className={styles.finale}>
+          <div className={styles.promise} data-brush="footer-promise">
+            <p ref={message} className={styles.footerMessage}>
+              <span data-brush="footer-tagline">
+                <Sentences text={copy(footer.tagline)} />
+              </span>
+            </p>
+            {closing}
+          </div>
         </div>
         <div className={styles.footerColumns}>
           <div>
