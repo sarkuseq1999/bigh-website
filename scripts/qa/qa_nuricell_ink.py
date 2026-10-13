@@ -872,7 +872,8 @@ def opening_check(browser):
     # The buy box (Mo, October 12, after Timeline's and Seed's): the highlights in equal parts of the
     # row, each centred, one ink line between them in the middle; the "One bottle" card with the
     # supply, how many a day and the promise badge on its top edge; a wide Add to cart, the refund
-    # line under it; under "Nuri", the credit with the formulator's painted face in a round frame.
+    # line under it; under "Nuri" (Mo, October 13: "D", the credit and face gone), the purpose with
+    # the same ink line down its left edge as the one between the highlights.
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         box = page.evaluate(
@@ -881,12 +882,13 @@ def opening_check(browser):
                  const halves = lis.map((li) => li.getBoundingClientRect()); const bar = getComputedStyle(lis[1], '::before');
                  const card = o.querySelector('[class*=bottleCard]'); const badge = o.querySelector('p[class*=promise]').getBoundingClientRect(); const c = card.getBoundingClientRect();
                  const button = o.querySelector('[class*=openingBuy] button').getBoundingClientRect(); const refund = o.querySelector('p[class*=refund]').getBoundingClientRect();
-                 const face = o.querySelector('[class*=creditFace]'); const fr = face && face.getBoundingClientRect();
+                 const text = getComputedStyle(o.querySelector('[class*=openingWords] p[class*=text]'), '::before');
                  return { parts: halves.map((r) => Math.round(r.width)), centred: lis.every((li) => getComputedStyle(li).textAlign === 'center'),
                           barMiddle: Math.round(halves[1].left - (ul.left + ul.width / 2)), bar: bar.content !== 'none' && parseFloat(bar.width) > 0, oneBar: getComputedStyle(lis[0], '::before').content === 'none',
                           card: card.innerText, badgeOnEdge: Math.abs(badge.top + badge.height / 2 - c.top) <= 2, wide: Math.round(button.width) >= Math.round(c.width) - 1,
-                          refundUnder: refund.top >= button.bottom, face: !!fr && Math.abs(fr.width - fr.height) < 1 && getComputedStyle(face).borderRadius === '50%',
-                          credit: o.querySelector('[class*=credit] p')?.innerText || '' }; }"""
+                          refundUnder: refund.top >= button.bottom,
+                          line: [text.content !== 'none', parseFloat(text.width), text.backgroundColor, bar.backgroundColor, parseFloat(bar.width)],
+                          credit: !!o.querySelector('[class*=credit]') }; }"""
         )
         ok = (len(box["parts"]) == 2 and abs(box["parts"][0] - box["parts"][1]) <= 1 and box["centred"] and abs(box["barMiddle"]) <= 1
               and box["bar"] and box["oneBar"])
@@ -895,7 +897,9 @@ def opening_check(browser):
         ok = all(s in card for s in ["One bottle", "90 vegetarian capsules", "30-day supply", "3 a day", "45 days to decide"]) and box["badgeOnEdge"]
         check(f"opening {w}: the 'One bottle' card (supply, 3 a day, the promise badge on its edge)", ok, " | ".join(box["card"].splitlines()))
         check(f"opening {w}: a wide Add to cart, the refund line under it", box["wide"] and box["refundUnder"], f"wide {box['wide']}, under {box['refundUnder']}")
-        check(f"opening {w}: the credit with the painted face in a round frame", box["face"] and "Formulated by Dr. Jiankang Liu." in box["credit"], " | ".join(box["credit"].splitlines()))
+        drawn, width, colour, bar_colour, bar_width = box["line"]
+        ok = drawn and abs(width - bar_width) < 0.1 and colour == bar_colour and not box["credit"]
+        check(f"opening {w}: the purpose carries the highlights' ink line; no credit or face in the opening", ok, str(box["line"]) + f" credit {box['credit']}")
         ctx.close()
     # Each half of the name on one line in every language (Korean's overflow-wrap: anywhere broke
     # "Nuri" into "Nur" over "i"); on a phone or tablet the two halves are one word on one line,

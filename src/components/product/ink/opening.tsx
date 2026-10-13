@@ -30,15 +30,13 @@ const seal = (
 
 // Chapter 1: the giant name parts round the real bottle, centred on the letters, on bare paper (Mo,
 // October 10: no eyebrow over the name, no ink pool under the bottle). Phones stack the name over
-// the bottle. Under it (Mo, October 12, after Timeline's and Seed's buy boxes): the words under
-// "Nuri" with the formulator's credit and painted face; under "Cell", the highlights either side of
-// one ink line, a "One bottle" card with the supply and the About page's promise, a wide Add to
-// cart and the refund line.
+// the bottle. Under it (Mo, October 12-13, after Timeline's and Seed's buy boxes): under "Nuri" the
+// headline and the purpose, which carries the same ink line as the highlights; under "Cell", the
+// highlights either side of one ink line, a "One bottle" card with the supply and the About page's
+// promise, a wide Add to cart and the refund line.
 export function Opening({ product }: { product: ProductPage }) {
   const copy = useCopy();
   const [first, second] = product.nameHalves ?? splitName(product.name);
-  const lead = product.people[0];
-  const face = lead?.painting;
   return (
     <section
       id={anchorId("overview")}
@@ -82,25 +80,6 @@ export function Opening({ product }: { product: ProductPage }) {
               ))}
             </p>
             <p className={styles.text}>{copy(product.purpose)}</p>
-            {product.credit && lead ? (
-              <div className={styles.credit}>
-                {face ? (
-                  <span className={styles.creditFace} aria-hidden="true">
-                    <Image
-                      src={face.src}
-                      alt=""
-                      width={face.width}
-                      height={face.height}
-                      sizes="140px"
-                    />
-                  </span>
-                ) : null}
-                <p>
-                  <span className={styles.creditName}>{copy(product.credit)}</span>
-                  <span className={styles.creditTitle}>{copy(lead.title)}</span>
-                </p>
-              </div>
-            ) : null}
           </div>
           <div className={styles.openingBuy}>
             <ul className={styles.highlights}>
