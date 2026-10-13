@@ -22,7 +22,12 @@ def check(name, ok, detail=""):
 
 
 def pixels(src):
-    return np.asarray(Image.open(REPO / "public" / src.lstrip("/")).convert("RGB")).astype(np.float32)
+    """The picture as it draws on white: a clear-ground picture (the capsule pair) laid on white
+    first, so its rim test reads what the page would show."""
+    img = Image.open(REPO / "public" / src.lstrip("/"))
+    if img.mode in ("RGBA", "LA"):
+        img = Image.alpha_composite(Image.new("RGBA", img.size, (255, 255, 255, 255)), img.convert("RGBA"))
+    return np.asarray(img.convert("RGB")).astype(np.float32)
 
 
 if not TS.exists():

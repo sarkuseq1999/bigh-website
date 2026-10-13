@@ -104,15 +104,26 @@
   height: auto;
 }
 
+/* The words sit on the name's three columns: the headline and the purpose under "Nuri" (and
+   the bottle's column), the buy block under "Cell", its left edge on the "C". */
 .page .openingWords {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  column-gap: var(--gap);
+  grid-template-columns: minmax(0, 1fr) var(--stand) minmax(0, 1fr);
+  align-items: start;
   margin-top: clamp(20px, 2.6vw, 44px);
 }
 
+.page .openingWords > :first-child {
+  grid-column: 1 / 3;
+  padding-right: var(--gap);
+}
+
+.page .openingWords > .openingBuy {
+  grid-column: 3;
+}
+
 .page p.headline {
-  margin: 0 0 12px;
+  margin: 0 0 24px;
   font-family: var(--display-font);
   font-weight: var(--display-weight);
   font-size: clamp(34px, 3.9vw, 60px);
@@ -124,22 +135,162 @@
   display: block;
 }
 
+/* The purpose carries the same thin ink line as the one between the highlights under "Cell" (Mo,
+   October 13: "D"), so the two sides under the name share one mark. */
 .page p.text {
+  position: relative;
   margin: 0;
-  max-width: 30em;
+  max-width: 26em;
+  padding-left: 22px;
   color: var(--muted);
   font-size: 19px;
   line-height: 1.6;
   text-wrap: pretty;
 }
 
-/* Its rows keep their own heights (align-content: start): stretched to the taller column beside
-   it, they spread the button and the supply apart. */
+/* Drawn like the highlights' line (a 1.5px mark, not a border, which a screen rounds to 1px). */
+.page .openingWords p.text::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.3em;
+  bottom: 0.3em;
+  width: 1.5px;
+  background: var(--ink);
+  border-radius: 1px;
+}
+
+/* Under "Cell" (Mo, October 12, after Timeline's and Seed's buy boxes): the highlights, the "One
+   bottle" card, a wide Add to cart and the refund line. Its rows keep their own heights
+   (align-content: start). */
 .page .openingBuy {
   display: grid;
   align-content: start;
-  justify-items: start;
-  gap: 16px;
+  justify-items: stretch;
+}
+
+/* The highlights share the row, each centred in its own part, one ink line between them (Mo:
+   "one vertical bar in the middle ... so they look well balanced"), a hairline under the row. */
+.page ul.highlights {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: center;
+  margin: 0 0 18px;
+  padding: 0 0 14px;
+  list-style: none;
+  border-bottom: 1px solid var(--line);
+  /* One line each from 1280px ("Mitochondrial health" in half of the column under "Cell"). */
+  font-size: clamp(16px, 1.32vw, 19px);
+  font-weight: 450;
+  line-height: 1.3;
+}
+
+.page .highlights li {
+  position: relative;
+  padding-inline: 8px;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.page .highlights li + li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 1.5px;
+  height: 1.4em;
+  translate: 0 -50%;
+  background: var(--ink);
+  border-radius: 1px;
+}
+
+/* "One bottle": the painted capsule, the supply and how many a day, the About page's promise as a
+   badge on its top edge. Not a choice (there is one bottle), so no radio. */
+.page .bottleCard {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 16px;
+  margin: 0 0 12px;
+  padding: 16px 16px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 16px;
+}
+
+.page img.bottleCardPicture {
+  grid-row: 1 / 3;
+  width: 72px;
+  height: auto;
+}
+
+.page p.bottleCardName {
+  margin: 0;
+  font-size: 19px;
+  font-weight: 500;
+}
+
+.page p.bottleCardSupply {
+  grid-column: 2;
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.page p.bottleCardDaily {
+  grid-column: 3;
+  grid-row: 1 / 3;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.page p.promise {
+  position: absolute;
+  top: 0;
+  right: 16px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 4px 11px 4px 8px;
+  border-radius: 99px;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 15px;
+  font-weight: 450;
+  letter-spacing: 0.01em;
+  translate: 0 -50%;
+  white-space: nowrap;
+}
+
+.page p.refund {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  text-align: center;
+}
+
+/* A phone: the card's text in one column, how many a day under the supply, a smaller picture. */
+@media (max-width: 599px) {
+  .page .bottleCard {
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 14px;
+  }
+
+  .page img.bottleCardPicture {
+    grid-row: 1 / 4;
+    width: 60px;
+  }
+
+  .page p.bottleCardDaily {
+    grid-column: 2;
+    grid-row: auto;
+    margin-top: 2px;
+  }
 }
 
 /* A pill in any stylesheet order (the kit's focus ring sets a 6px radius at the same weight as
@@ -204,24 +355,6 @@
   translate: -50% 0;
 }
 
-.page ul.highlights {
-  display: grid;
-  gap: 6px;
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: 19px;
-  font-weight: 450;
-}
-
-/* The dash is a mark, not a word: its alternative text is empty, so it is not read aloud. The
-   first declaration is for browsers without CSS alt text, which drop the second. */
-.page .highlights li::before {
-  content: "— ";
-  content: "— " / "";
-  color: var(--muted);
-}
-
 /* The opening arrives like ink settling (the homepage's words): the bottle rises 10px into place,
    then the words settle, 0.14s apart. Reduced motion: there at once. */
 @media (prefers-reduced-motion: no-preference) {
@@ -279,17 +412,19 @@
 
   .page .openingWords {
     grid-template-columns: minmax(0, 1fr);
-    row-gap: 24px;
+    row-gap: 32px;
     margin-top: 28px;
+  }
+
+  .page .openingWords > :first-child,
+  .page .openingWords > .openingBuy {
+    grid-column: auto;
+    padding-right: 0;
   }
 
   /* The lantern follows the supply line closely (the comp's phone), not after a blank screen. */
   .page .opening {
     padding-bottom: 8px;
-  }
-
-  .page .openingBuy {
-    justify-items: stretch;
   }
 
   /* "Stay sharp. Live fully." as large as the phone mockup's, under a name four times its size. */
@@ -298,18 +433,12 @@
   }
 }
 
-/* On a phone the opening's Add to cart spans the column, as in the phone mockup; from 600px it
-   keeps its own width (a full-width black bar on a tablet was heavy), and the Buy chapter's, full
+/* On a phone the opening's buy block spans the column; from 600px in one column it keeps a card's
+   width (a full-width black bar on a tablet was heavy), and the Buy chapter's Add to cart, full
    width beside the bottle from 960px, is held to 420px in one column. */
-@media (max-width: 599px) {
-  .page .openingBuy button {
-    width: 100%;
-  }
-}
-
 @media (min-width: 600px) and (max-width: 959px) {
   .page .openingBuy {
-    justify-items: start;
+    max-width: 460px;
   }
 
   .page [data-chapter="buy"] button {

@@ -11,6 +11,7 @@ import { Research } from "./research";
 import { Science } from "./science";
 import { Scientists } from "./scientists";
 import { Stories } from "./stories";
+import home from "./home-titles.module.css";
 
 // The parts of the page that belong to the bar's two drop-downs: while one is being read, its word
 // in the bar carries the painted stroke (none over the opening, the scientists, the stories or the
@@ -27,9 +28,10 @@ const FOLLOW: NavFollow = { products: ["products"], science: ["cellular", "scien
 // with the whole brush line.
 // Keyboard: the first Tab shows "Skip to content" (as on the About, Science and product pages),
 // which puts focus at the start of the page's words, past the header's links.
-export function LookInk() {
+// `className` carries the title face's variable (loaded by the route, see page.tsx).
+export function LookInk({ className }: { className: string }) {
   return (
-    <InkPage current="home" route={route} follow={FOLLOW}>
+    <InkPage current="home" route={route} follow={FOLLOW} className={`${home.titles} ${className}`}>
       {(motion) => (
         <>
           <OpeningCrane motion={motion} />

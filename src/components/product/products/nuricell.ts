@@ -205,6 +205,7 @@ const nuricell: ProductPage = {
       sum: nuricellArt.sum,
     },
     buy: { stroke: nuricellArt.stroke },
+    supply: nuricellArt.capsulePair,
   },
 };
 

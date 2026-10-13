@@ -20,6 +20,11 @@ export const nuricellArt = {
     height: 1135,
     gold: "/images/products/nuricell/ink/capsule-v1-gold.webp",
   },
+  capsulePair: {
+    src: "/images/products/nuricell/ink/capsule-pair-v1.webp",
+    width: 320,
+    height: 134,
+  },
   books: {
     src: "/images/products/nuricell/ink/books-v1.webp",
     width: 1100,

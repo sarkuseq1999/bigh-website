@@ -239,6 +239,13 @@
   text-wrap: balance;
 }
 
+/* In the homepage's title face (Ysabeau, October 13, 2026) a step heavier: its strokes are thinner
+   than Switzer's, and at this size 450 read lighter than the paragraph beside it. Korean, Japanese
+   and Chinese keep their system face's weight (one step up would turn it bold). */
+.scientists .heading:not(:lang(ko), :lang(ja), :lang(zh)) {
+  font-weight: 550;
+}
+
 .workMain {
   max-width: 38em;
 }
