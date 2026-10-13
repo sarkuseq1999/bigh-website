@@ -72,10 +72,11 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the words after; with reduced motion a choice is on the stage at once.
   - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
     the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
-    place); the promise stands under the footer's logo, under its hairline (October 12: smaller,
-    no longer in a band of its own; 40 to 60 px on desktop, at the links' left and its last line
-    level with the last link; 32 to 44 on a phone, before the links), one sentence to a line,
-    with the crane at rest beside it (120 to 170 px tall on desktop, 96 to 132 on a phone),
+    place); the promise stands under the footer's logo (October 12: smaller, no longer in a band
+    of its own; 40 to 60 px on desktop, at the links' left and its last line level with the last
+    link; 32 to 44 on a phone, before the links), one sentence to a line, with no hairline over
+    the footer (Mo, October 13, 2026: fewer lines), with the crane at rest beside it (120 to 170
+    px tall on desktop, 96 to 132 on a phone),
     which blooms only once all of it is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (wider than the science stage, which is at
@@ -602,8 +603,9 @@ STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stori
     im.src = u.searchParams.get('url') || u.pathname; }))))()"""
 
 
-# The finale (October 12, Mo): the promise under the footer's logo, under the hairline, at the
-# links' left with its last line level with the last link (on a phone, before the links); its
+# The finale (October 12, Mo): the promise under the footer's logo, at the links' left with its
+# last line level with the last link (on a phone, before the links), and no hairline over the
+# footer (October 13, 2026: fewer lines); its
 # size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
   const f = document.querySelector('footer');
@@ -619,7 +621,7 @@ FINALE = """(() => {
   const k = columns.getBoundingClientRect(), w = t.getBoundingClientRect();
   const parts = [...t.querySelectorAll(':scope > span')];
   return {
-    inTier: tier.contains(band), underLogo: Math.round(b.top - l.bottom), underHairline: Math.round(b.top - c.top),
+    inTier: tier.contains(band), underLogo: Math.round(b.top - l.bottom), underTop: Math.round(b.top - c.top),
     hairline: getComputedStyle(tier).borderTopWidth,
     besideLinks: Math.round(k.left - b.right), beforeLinks: Math.round(k.top - b.bottom),
     level: Math.round(w.bottom - last.getBoundingClientRect().bottom),
@@ -1578,11 +1580,11 @@ def run(browser, look, mobile):
     # Desktop: at the links' left, its last line level with the last link. Phone: before them.
     place_ok = finale["beforeLinks"] >= 24 if mobile else finale["besideLinks"] >= 24 and abs(finale["level"]) <= 20
     check(
-        f"{tag}: the finale: the promise under the footer's logo and hairline, with the links",
+        f"{tag}: the finale: the promise under the footer's logo, with the links, no hairline",
         finale["inTier"]
         and finale["underLogo"] >= 8
-        and finale["underHairline"] >= 40
-        and finale["hairline"] == "1px"
+        and finale["underTop"] >= 40
+        and finale["hairline"] == "0px"
         and place_ok
         and font_ok
         and crane_ok

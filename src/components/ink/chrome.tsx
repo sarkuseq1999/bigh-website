@@ -8,6 +8,7 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { footer, products } from "@/components/home-v2/content";
 import { useSiteDialogs } from "./dialogs";
+import { FdaStatement } from "./fda-statement";
 import { NavInscription, type NavCurrent, type NavFollow } from "./nav/nav-inscription";
 import styles from "./chrome.module.css";
 
@@ -155,10 +156,12 @@ export function SiteFooter({
     };
   }, [hasClosing]);
 
-  // Under a hairline: the logo with the promise under it, the look's closing picture beside the
-  // words (Mo, October 12, 2026: the promise and the crane sit under the logo, smaller, no longer
-  // in a band of their own), and the links at the right; the copyright line and "Back to top"
-  // run under them all. On one column: the logo, the promise, the links, then the legal line.
+  // The logo with the promise under it, the look's closing picture beside the words (Mo, October
+  // 12, 2026: the promise and the crane sit under the logo, smaller, no longer in a band of their
+  // own), and the links at the right; the copyright line and "Back to top" run under them all,
+  // then the FDA statement under its brush line, then the preview note. No hairline over the
+  // footer (October 13, 2026: fewer lines). On one column: the logo, the promise, the links, the
+  // legal line, the statement, the note.
   return (
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
@@ -212,8 +215,9 @@ export function SiteFooter({
             {copy("Back to top")} <ArrowUp size={16} />
           </a>
         </div>
+        <FdaStatement className={styles.footerFda} />
+        <p className={styles.footerNote}>{copy(footer.note)}</p>
       </div>
-      <p className={styles.footerNote}>{copy(footer.note)}</p>
     </footer>
   );
 }

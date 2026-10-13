@@ -23,28 +23,30 @@
 }
 
 .footer {
-  /* Above the hairline: the page's chapter silence. */
-  padding: clamp(32px, 2.6vw, 48px) var(--gutter) 32px;
+  /* Above the logo: the page's chapter silence (no hairline since October 13, 2026). */
+  padding: clamp(48px, 4.4vw, 80px) var(--gutter) 32px;
   background: var(--footer-bg, var(--paper-deep));
   color: var(--footer-ink, var(--ink));
 }
 
-/* Under a hairline: the logo at the left with the promise under it, its last line level with the
-   last link; the links at the right; the copyright line and "Back to top" under them all, clear
-   of the closing brush stroke. One column: logo, promise, links, then the legal line. */
+/* The logo at the left with the promise under it, its last line level with the last link; the
+   links at the right; under them all the copyright line and "Back to top" (clear of the closing
+   brush stroke), the FDA statement under its brush line, across the whole width, and the preview
+   note. No hairline over it (Mo, October 13, 2026: fewer lines; the paper divides it from the
+   page). One column: logo, promise, links, the legal line, the statement, the note. */
 .footerTop {
   display: grid;
   grid-template-columns: 1.1fr 1.4fr;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr auto auto auto;
   grid-template-areas:
     "brand columns"
     "promise columns"
-    "legal legal";
+    "legal legal"
+    "fda fda"
+    "note note";
   gap: 0 48px;
   max-width: var(--wide);
   margin: 0 auto;
-  padding: clamp(40px, 3.6vw, 56px) 0 clamp(28px, 2.4vw, 40px);
-  border-top: 1px solid var(--footer-line, var(--line));
 }
 
 /* The promise under the logo (Mo, October 12, 2026: there, smaller, it and the crane sit with the
@@ -172,11 +174,19 @@
   min-height: 44px;
 }
 
-.footerNote {
-  max-width: var(--wide);
-  margin: 0 auto;
+/* The FDA statement (fda-statement.tsx) under its brush line. */
+.footer .footerFda {
+  grid-area: fda;
+  margin-top: clamp(28px, 2.4vw, 40px);
+}
+
+/* The preview note, the page's last line, under the statement (15 px, the site's smallest type:
+   two classes, so it is not left to the stylesheets' order as the single-class rule was). */
+.footer .footerNote {
+  grid-area: note;
+  margin: 8px 0 0;
   color: var(--footer-muted, var(--muted));
-  font-size: 14px;
+  font-size: 15px;
 }
 
 @media (max-width: 899px) {
@@ -187,7 +197,9 @@
       "brand"
       "promise"
       "columns"
-      "legal";
+      "legal"
+      "fda"
+      "note";
     gap: 40px;
   }
 
@@ -201,6 +213,15 @@
     margin-top: 0;
   }
 
+  .footer .footerFda {
+    margin-top: 0;
+  }
+
+  /* Under the statement, closer than the grid's gap. */
+  .footer .footerNote {
+    margin: -20px 0 0;
+  }
+
   .footerBottom {
     gap: 4px 32px;
   }
@@ -208,7 +229,7 @@
 
 @media (max-width: 720px) {
   .footer {
-    padding-top: 48px;
+    padding-top: 64px;
   }
 
   .footerLogo {

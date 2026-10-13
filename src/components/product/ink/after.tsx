@@ -10,8 +10,8 @@ import { summaries } from "../products/summaries";
 import styles from "./product-ink.module.css";
 
 // After Buy, full width on paper: the questions on hairlines with round toggles, the other bottles
-// small in pale pools (each links to its page), then the caution and FDA notes, before the shared
-// footer.
+// small in pale pools (each links to its page), then the caution, before the shared footer (whose
+// FDA statement closes every page, so the product does not repeat it here).
 export function After({ product }: { product: InkProduct }) {
   const copy = useCopy();
   // Every related product has a page (summaries, not the catalog: the catalog would bring every
@@ -84,7 +84,6 @@ export function After({ product }: { product: InkProduct }) {
       ) : null}
       <div className={`${base.wrap} ${styles.notes}`} data-notes="">
         <p>{copy(product.caution)}</p>
-        <p>{copy(product.notes.fda)}</p>
       </div>
     </>
   );
