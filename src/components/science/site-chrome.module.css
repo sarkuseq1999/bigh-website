@@ -144,8 +144,9 @@
   gap: 48px;
   max-width: var(--wide);
   margin: 0 auto;
-  padding-bottom: 56px;
-  border-bottom: 1px solid var(--line);
+  /* No hairline under the links (Mo, October 13, 2026: fewer lines at the foot of the page; the
+     FDA statement's brush line is the footer's one line). */
+  padding-bottom: 32px;
 }
 
 .footerMessage {

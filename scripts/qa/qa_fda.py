@@ -1,9 +1,10 @@
 """The FDA statement at the foot of every page (Mo's pick, October 12, 2026: "A. Label strip").
 
 On the ink pages (home, About, NuriCell) and the Science page: one statement, in the footer, the
-exact words, bold, 15 px (and the preview note too), between two painted brush lines that really show (pixels, light lines on the
-dark Science footer); one line on a 1280+ window, centred; left-aligned on a phone; no sideways
-scroll. The ink footer: on two columns the preview note sits under the logo, above the copyright
+exact words, bold, 15 px (and the preview note too), under one painted brush line that really
+shows (pixels, a light line on the dark Science footer) and with none below (Mo, October 13, 2026:
+fewer lines; no hairline in the footer either); one line on a 1280+ window, centred; left-aligned
+on a phone; no sideways scroll. The ink footer: on two columns the preview note sits under the logo, above the copyright
 line, and the statement is the footer's last line; on one column the note follows the statement.
 The words appear once per page (NuriCell no longer repeats them above the footer), also on the
 four old-template product pages and in another language. The last screen still shows the whole
@@ -87,7 +88,8 @@ GEOMETRY = """(() => {
     size: s ? parseFloat(s.fontSize) : 0,
     align: s?.textAlign,
     lines,
-    rules: [before, after].map(c => c && { h: parseFloat(c.height), mask: c.maskImage || c.webkitMaskImage, op: parseFloat(c.opacity) }),
+    rules: [before, after].map(c => c && { content: c.content, h: parseFloat(c.height), mask: c.maskImage || c.webkitMaskImage, op: parseFloat(c.opacity) }),
+    hairline: grid ? parseFloat(getComputedStyle(grid).borderTopWidth) + parseFloat(getComputedStyle(grid).borderBottomWidth) : -1,
     noteSize: note ? parseFloat(getComputedStyle(note).fontSize) : 0,
     starBox: r(p?.querySelector('span[aria-hidden]')), first,
     strip: r(strip), footer: r(footer), note: r(note), legal: r(legal), logo: r(logo), grid: r(grid),
@@ -138,15 +140,18 @@ def run_strip(browser):
                 g["weight"] >= 600 and g["size"] >= 15 and g["noteSize"] >= 15,
                 f"{g['weight']}, {g['size']} px, note {g['noteSize']} px",
             )
-            rules_ok = all(r and r["h"] >= 4 and "rule-lifted" in (r["mask"] or "") and r["op"] > 0.3 for r in g["rules"])
+            above, below = g["rules"]
+            rule_ok = above and above["h"] >= 4 and "rule-lifted" in (above["mask"] or "") and above["op"] > 0.3
             x0, y0, x1, y1 = g["strip"]
             top = inked(page, (x0, y0, x1, y0 + 5), (x0 + 40, y0 + 7, x1 - 40, y0 + 9))
-            bottom = inked(page, (x0, y1 - 5, x1, y1), (x0 + 40, y1 - 9, x1 - 40, y1 - 7))
+            # Under the words: paper only (October 13: one line above the statement, none below).
+            bottom = inked(page, (x0, y1 - 5, x1, y1 + 4), (x0 + 40, y1 - 9, x1 - 40, y1 - 7))
             check(
-                f"{tag}: both brush lines painted across the strip (the menu bar's stroke)",
-                rules_ok and top >= 0.6 and bottom >= 0.6,
-                f"painted columns: top {top:.0%}, bottom {bottom:.0%}",
+                f"{tag}: one brush line painted across the strip above the words (the menu bar's stroke), none below",
+                rule_ok and top >= 0.6 and below and below["content"] == "none" and bottom <= 0.05,
+                f"painted columns: above {top:.0%}, below {bottom:.0%}",
             )
+            check(f"{tag}: no hairline in the footer's second tier", g["hairline"] == 0, f"{g['hairline']} px")
             if size[0] >= 1280:
                 check(f"{tag}: one line, centred", g["lines"] == 1 and g["align"] == "center", f"{g['lines']} lines, {g['align']}")
             elif size[0] <= 720:

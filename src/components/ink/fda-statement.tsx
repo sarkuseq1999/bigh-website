@@ -4,9 +4,10 @@ import { useCopy } from "@/i18n/use-copy";
 import styles from "./fda-statement.module.css";
 
 // The FDA statement every page closes on (Mo's pick, October 12, 2026: "A. Label strip"). On a
-// bottle the rule (21 CFR 101.93) asks for it in bold type, set off in a box; here the box is the
-// menu bar's own brush line, drawn above and below in the footer's ink, so the strip reads on the
-// paper footer and on the Science page's dark one alike. The parent footer places it (margins).
+// bottle the rule (21 CFR 101.93) asks for it in bold type, set off in a box; here it is set off by
+// the menu bar's own brush line, drawn above it in the footer's ink (one line only since October 13,
+// so the foot of the page has fewer lines), and reads on the paper footer and on the Science page's
+// dark one alike. The parent footer places it (margins).
 export const FDA_STATEMENT =
   "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.";
 
