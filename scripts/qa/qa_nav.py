@@ -28,8 +28,8 @@ On the real GPU (ANGLE/D3D11):
     name and line seen), inside the window and above the scroll's torn foot, every name and line in
     its own column; the names on one line and every line starting on one line (1px), each name
     centred under its picture (2px), names 21px+, lines 17px+; each bottle on its own pale pool
-    (multiplied, 45-65%) and all on one painted ground line (the bar's stroke: 1-8px of ink in
-    every gap between bottles, under half the old 16px rod), each bottle crisp (its picture at least its size on screen)
+    (multiplied, 45-65%) and no line under the row (Mo, October 12: no ground element, and no ink
+    stroke in the gaps between bottles), each bottle crisp (its picture at least its size on screen)
     and 170px+ tall; the scroll's foot above the window's foot. Science the same with its four
     parts, on one page with Products (1px: the title, the pictures' row's top and height, the
     names' line, the captions on the focus lines' line, the link under the row); Dr. Liu's print
@@ -96,7 +96,7 @@ On the real GPU (ANGLE/D3D11):
     bottles): no sample of a multiplied picture is more than 4 levels lighter than that paper, on
     any frame (two frames
     running) once the scroll has reached it (a bottle's pool, whose edge is masked, is read with
-    the bottles and the ground line hidden at the points where its own painting is paper, averaged,
+    the bottles hidden at the points where its own painting is paper, averaged,
     against the paper in the gaps between the bottles, and must not be more than 1 level over it:
     multiplied it reads -2 to -7 levels, an isolated blend about +3). Moving from one drop-down to the other (both ways):
     the scroll's ink never drops below 60% of the lighter drop-down's, one drop-down is always drawn
@@ -615,10 +615,10 @@ def drop_down_motion(browser):
             box = page.locator(f'[data-nav-trigger="{panel}"]').bounding_box()
             hide = None
             if panel == "products":
-                # The pools are measured where the bottles stand over them, and the ground line runs
-                # through them: both are hidden while they are filmed.
+                # The pools are measured where the bottles stand over them: the bottles are hidden
+                # while they are filmed.
                 hide = page.add_style_tag(
-                    content='[data-nav-panel="products"] :is([class*="__bottle"], [class*="__shelfGround"]) { visibility: hidden !important; }'
+                    content='[data-nav-panel="products"] [class*="__bottle"] { visibility: hidden !important; }'
                 )
             film.shoot(lambda box=box: page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1500)
             sel = f'[data-nav-panel="{panel}"]'
@@ -727,7 +727,7 @@ ROW_SIZES = ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1
 # A drop-down's row as drawn: its title, each part (its link, picture room, picture, name and line:
 # their boxes, the lines their words are set on, their sizes, whether the name is lined, how far a
 # bottle is lifted, a Science picture's opacity and scale, how sharp its picture is), the pools,
-# the ground line, the link under the row and the scroll's foot.
+# any ground line (there should be none), the link under the row and the scroll's foot.
 ROW = r"""(id) => {
   const p = document.querySelector(`[data-nav-panel="${id}"]`);
   const box = el => { const r = el.getBoundingClientRect();
@@ -842,17 +842,16 @@ def one_row(tag, what, info, want, english=True):
     )
 
 
-def ground_ink(page, info):
-    """The ground line's ink across its thickness, in the pixels, in each gap between two bottles:
-    the rows at least 25 levels darker than the paper above and below it (a painted line: a few
-    pixels; the old squashed stroke was a 16px grey rod)."""
+def gap_ink(page, info):
+    """Ink in each gap between two bottles, at the bottles' feet (where the painted ground line ran
+    until October 12), in the pixels: the rows at least 25 levels darker than the paper above and
+    below. With no line under the row, every gap reads 0."""
     img = luma(Image.open(BytesIO(page.screenshot())))
     k = img.shape[1] / info["vw"]
-    g = info["ground"]
-    mid = (g["t"] + g["b"]) / 2
     out = []
     for a, b in zip(info["items"], info["items"][1:]):
         x = (a["room"]["r"] + b["room"]["l"]) / 2
+        mid = a["room"]["t"] + a["room"]["h"] * 0.962
         cols = img[round((mid - 16) * k) : round((mid + 16) * k), round((x - 4) * k) : round((x + 4) * k)]
         paper = float(np.median(np.concatenate([cols[: round(5 * k)], cols[-round(5 * k) :]])))
         out.append(round(float(np.median((cols < paper - 25).sum(axis=0))) / k, 1))
@@ -877,7 +876,7 @@ def weigh(img, stand):
 
 def row_layout(browser):
     """Round 11: each drop-down is one row, everything at once. At each desktop size: Products shows
-    the five side by side, each bottle on its own pale pool, all on one painted ground line, crisp;
+    the five side by side, each bottle on its own pale pool, no line under the row, crisp;
     Science its four parts the same way, the pictures at one weight; the two share one page (the
     title, the pictures' row, the names' line and the link under them); every part one link; the
     scroll ends above the window's foot."""
@@ -891,19 +890,19 @@ def row_layout(browser):
         page.screenshot(path=str(OUT / f"rows-products-{w}x{h}.png"))
         pro = page.evaluate(ROW, "products")
         one_row(tag, "Products", pro, NAMES)
-        thick = ground_ink(page, pro)
+        thick = gap_ink(page, pro)
         items = pro["items"]
         check(
-            f"{tag}: Products: each bottle on its own pale pool (multiplied, 45-65%), all on one painted ground line "
-            "(the bar's stroke: 1-8px of ink in every gap, under half the old 16px rod), each crisp (its picture at least "
-            "its size on screen) and 170px+ tall",
+            f"{tag}: Products: each bottle on its own pale pool (multiplied, 45-65%), no line under the row (no ground "
+            "element, 0px of ink in every gap at the bottles' feet), each crisp (its picture at least its size on screen) "
+            "and 170px+ tall",
             len(pro["pools"]) == 5
             and all(0.45 <= x["o"] <= 0.65 and x["blend"] == "multiply" and "radial-gradient" in x["mask"] for x in pro["pools"])
             and pro["contacts"] == 5
-            and pro["ground"] and "rule-lifted.webp" in pro["ground"]["mask"]
-            and all(1 <= t <= 8 for t in thick)
+            and pro["ground"] is None
+            and all(t == 0 for t in thick)
             and all(i["img"]["w"] >= i["img"]["css"] * pro["dpr"] * 0.98 and i["img"]["h"] >= 170 for i in items),
-            f"pools {[round(x['o'], 2) for x in pro['pools']]}; ground ink {thick}px; "
+            f"pools {[round(x['o'], 2) for x in pro['pools']]}; ground {'none' if pro['ground'] is None else 'PRESENT'}, gap ink {thick}px; "
             f"bottles {[(i['img']['w'], round(i['img']['css'] * pro['dpr'])) for i in items]}, {items[0]['img']['h']:.0f}px tall",
         )
         check(
@@ -1160,8 +1159,8 @@ def row_motion(browser):
         page.mouse.move(768, 896)
         page.wait_for_timeout(900)
 
-    # Over to Products and back: Science swaps in over Products. Products' pictures (bottles, pools,
-    # the ground) stand elsewhere on the page, so during the dissolve they show through the new panel
+    # Over to Products and back: Science swaps in over Products. Products' pictures (bottles and
+    # pools) stand elsewhere on the page, so during the dissolve they show through the new panel
     # for a few frames: that is Products leaving, not a light box; they are hidden while the paintings
     # are measured.
     open_panel(page, "science")
@@ -1171,7 +1170,7 @@ def row_motion(browser):
     page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4)
     page.wait_for_timeout(1300)
     hide = page.add_style_tag(
-        content='[data-nav-panel="products"] :is(img, [class*="__shelfGround"]) { visibility: hidden !important; }'
+        content='[data-nav-panel="products"] img { visibility: hidden !important; }'
     )
     box = page.locator('[data-nav-trigger="science"]').bounding_box()
     film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4), 1300)

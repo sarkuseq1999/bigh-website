@@ -78,9 +78,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
     which blooms only once all of it is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
-    the page's biggest painting after the opening (at least 1.3 times the science stage, which is
-    at least 1.8 times the inkstone), runs off the right edge of the window with its gold folds
-    inside it, keeps clear of its words' column and keeps its label in the window; the story
+    the page's biggest painting after the opening (wider than the science stage, which is at
+    least 1.8 times the inkstone; a quarter smaller since October 12, the whole cell in the
+    window), keeps clear of its words' column and keeps its label in the window; the story
     still life runs off the left edge (about half the window wide), its label in the window, the
     quotation set large (4vw), the names and arrows under it and working; on a phone both run to
     both edges of the screen; with reduced motion (the whole line drawn) the brush line runs down
@@ -1162,13 +1162,13 @@ def run(browser, look, mobile):
         stone = g["inkstone"][2] - g["inkstone"][0]
         check(
             f"{tag}: three painting sizes: the cell, then the science stage, then the inkstone",
-            cw >= 1.3 * sci and sci >= 1.8 * stone,
+            cw >= 1.05 * sci and sci >= 1.8 * stone,
             f"cell {cw:.0f}, science {sci:.0f}, inkstone {stone:.0f} css px",
         )
         check(
-            f"{tag}: the cell runs off the window's right edge, its gold inside it, clear of its words, its label in view",
-            cr >= g["win"] + 0.12 * cw
-            and cl + 0.65 * cw <= g["win"] - 40
+            f"{tag}: the whole cell in the window (Mo, October 12), clear of its words, its label in view",
+            cr <= g["win"]
+            and cw <= 820
             and cl >= g["cellWords"][2]
             and cap[2] <= g["win"] - 20,
             f"cell {cl:.0f} to {cr:.0f} (window {g['win']}), words end {g['cellWords'][2]:.0f}, label ends {cap[2]:.0f}",
