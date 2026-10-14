@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif } from "next/font/google";
+import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif, Zilla_Slab } from "next/font/google";
 
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
@@ -28,6 +28,17 @@ const vietnamese = Be_Vietnam_Pro({
   weight: ["300", "400", "500", "600", "700"],
   style: ["normal", "italic"],
   variable: "--font-be-vietnam-pro",
+  display: "swap",
+  preload: false,
+});
+
+// Zilla Slab, for the words routed into the footer's trail sign only (ink/fda-statement.tsx; Mo,
+// October 13, 2026): a slab serif reads like a carved California park sign. SIL Open Font License.
+// Not preloaded: the sign is the page's last line.
+const sign = Zilla_Slab({
+  subsets: ["latin", "latin-ext"],
+  weight: "600",
+  variable: "--font-sign",
   display: "swap",
   preload: false,
 });
@@ -86,7 +97,7 @@ export default async function LocaleLayout({
   return (
     <html lang={languageTags[locale]} data-scroll-behavior="smooth">
       <body
-        className={`${sans.variable} ${serif.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
+        className={`${sans.variable} ${serif.variable} ${sign.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
       >
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />

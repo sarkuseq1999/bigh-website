@@ -159,8 +159,8 @@ export function SiteFooter({
   // The finale first: the promise in its own band, large, with the look's closing picture beside
   // it. Then the logo, the links and the legal lines are a calmer second tier (on two columns the
   // preview note, the copyright line and "Back to top" sit under the logo, the last two level with
-  // the last link; on one column they follow the links). The FDA statement, under its brush line,
-  // runs under it all (on one column, above the preview note).
+  // the last link; on one column they follow the links). The FDA statement, on its trail sign,
+  // stands under it all (on one column, above the preview note).
   return (
     <footer className={styles.footer}>
       <div className={styles.finale}>

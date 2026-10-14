@@ -203,9 +203,9 @@
   gap: 8px;
 }
 
-/* The FDA statement (ink/fda-statement.tsx) between its brush lines, then the preview note. */
+/* The FDA statement on its trail sign (ink/fda-statement.tsx), then the preview note. */
 .footer .footerFda {
-  margin: 28px auto 0;
+  margin: 32px auto 0;
 }
 
 .footerNote {

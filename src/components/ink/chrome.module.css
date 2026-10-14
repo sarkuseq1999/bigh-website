@@ -169,10 +169,10 @@
   min-height: 44px;
 }
 
-/* The FDA statement (fda-statement.tsx) between its brush lines. */
+/* The FDA statement on its trail sign (fda-statement.tsx), centred under it all. */
 .footer .footerFda {
   grid-area: fda;
-  margin-top: clamp(32px, 2.6vw, 44px);
+  margin-top: clamp(28px, 2.4vw, 40px);
 }
 
 /* The preview note, just above the copyright line (15 px, the site's smallest type: two classes,
@@ -209,9 +209,11 @@
     margin-bottom: calc(16px - var(--squeeze) * 0.2);
   }
 
+  /* The sign draws smaller here, its words at 15 px. */
   .footer .footerFda {
-    --fda-pad: 10px;
-    margin-top: calc(22px - var(--squeeze) * 0.3);
+    --k: 0.34;
+    --sign-size: 15px;
+    margin-top: calc(18px - var(--squeeze) * 0.3);
   }
 }
 
