@@ -8,8 +8,11 @@ gold leaf over the porch, not multiplied; nothing scrolls sideways; text 15px+; 
 Support (Task 5 adds the link; until then the bar's root says data-page="support").
 motion (1440x900): with motion the steam waits while the porch waits, then rises (its --rise grows
 from under 30% to 100%+ within 6s of the porch's bloom; sampled every frame from the page's first
-one, since the rise has begun by the time the page is idle); reduced motion: the steam is whole at
-once.
+one, since the rise has begun by the time the page is idle); the gold never rises alone over bare
+paper: with the porch's request held for 4.5s the steam's --rise stays under 30% the whole time the
+porch's picture is not in (the porch has bloomed by then), and it starts to rise only once the
+picture is in, and a porch whose picture fails never lets it rise; reduced motion: the steam is
+whole at once; no script: the porch and the steam are whole.
 (Later tasks add: rhythm, questions, form, languages, links.)
 
 Pictures: scripts/qa/out/support/<tag>.png.
@@ -119,7 +122,8 @@ RISE_JS = "parseFloat(getComputedStyle(document.querySelector('[data-steam]')).g
 
 # Watches the steam from the first frame the page has one (open_page waits for the network, the
 # fonts and 1.2s, by when the steam has long been rising): one sample per frame,
-# [ms since the page began, the steam's --rise, the porch's data-bloom].
+# [ms since the page began, the steam's --rise, the porch's data-bloom, whether the porch's picture
+# is in (complete, with a width)].
 WATCH_RISE = """
 window.__rise = [];
 const t0 = performance.now();
@@ -127,17 +131,32 @@ const tick = () => {
   const steam = document.querySelector('[data-steam]');
   const porch = document.querySelector('[data-part="opening"] [data-bloom]');
   if (steam) window.__rise.push([performance.now() - t0,
-    parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), porch && porch.dataset.bloom]);
-  if (window.__rise.length < 4000) requestAnimationFrame(tick);
+    parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), porch && porch.dataset.bloom,
+    !!porch && porch.complete && porch.naturalWidth > 0]);
+  if (window.__rise.length < 6000) requestAnimationFrame(tick);
 };
 requestAnimationFrame(tick);
 """
 
 
-def motion(browser):
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+def is_porch(url):
+    """The porch's own picture (not its steam, "porch-steam-v1"), as Next's image route serves it."""
+    return "/_next/image" in url and "porch-v1" in url
+
+
+def watched_page(browser, on_porch=None, **options):
+    """A 1440x900 page that records the steam from its first frame; on_porch(route) handles the
+    porch's picture request (hold it, or fail it)."""
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, **options)
     context.add_init_script(WATCH_RISE)
     page = context.new_page()
+    if on_porch is not None:
+        page.route(is_porch, on_porch)
+    return context, page
+
+
+def motion(browser):
+    context, page = watched_page(browser, reduced_motion="no-preference")
     page.goto(f"{BASE}/support", wait_until="domcontentloaded", timeout=120000)
     page.wait_for_function("window.__rise.some(s => s[2] && s[2] !== 'waiting')", timeout=30000)
     page.wait_for_timeout(6500)
@@ -150,9 +169,58 @@ def motion(browser):
     check("motion: the steam rises after the porch blooms", start[1] < 30 and end >= 100,
           [round(start[1]), round(end)])
     context.close()
+
+    # The gold never rises alone over bare paper (About's circle, Mo): the porch's request is held
+    # for 4.5s. The porch has bloomed by then (the kit opens a painting once its box is on screen,
+    # picture or not), so a rise tied only to the bloom would run in that time.
+    held = []
+    context, page = watched_page(browser, on_porch=lambda route: held.append(route), reduced_motion="no-preference")
+    page.goto(f"{BASE}/support", wait_until="domcontentloaded", timeout=120000)
+    page.wait_for_function("window.__rise.some(s => s[2] && s[2] !== 'waiting')", timeout=30000)
+    page.wait_for_timeout(4500)
+    out = page.evaluate("window.__rise")
+    bare = [s for s in out if not s[3]]
+    check("motion (late porch): the porch has bloomed and its picture is still out (the case is real)",
+          held and any(s[2] != "waiting" for s in bare) and bare[-1][0] - bare[0][0] >= 4000,
+          [len(held), len(bare), round(bare[-1][0] - bare[0][0]) if bare else None])
+    check("motion (late porch): the steam stays down while the porch's picture is out",
+          bare and all(s[1] < 30 for s in bare), max((round(s[1]) for s in bare), default=None))
+    for route in held:
+        route.continue_()
+    page.wait_for_function("window.__rise.some(s => s[3])", timeout=30000)
+    page.wait_for_timeout(6500)
+    after = page.evaluate("window.__rise")
+    rising = next((s for s in after if s[1] >= 30), None)
+    check("motion (late porch): once the picture is in, the steam rises",
+          rising and rising[3] and max(s[1] for s in after) >= 100,
+          [rising and round(rising[0]), rising and rising[3], round(max(s[1] for s in after))])
+    context.close()
+
+    # A porch whose picture fails never lets the gold rise.
+    context, page = watched_page(browser, on_porch=lambda route: route.abort(), reduced_motion="no-preference")
+    page.goto(f"{BASE}/support", wait_until="domcontentloaded", timeout=120000)
+    page.wait_for_function("window.__rise.some(s => s[2] && s[2] !== 'waiting')", timeout=30000)
+    page.wait_for_timeout(5000)
+    failed = page.evaluate("window.__rise")
+    state = page.evaluate("document.querySelector('[data-steam]').dataset.steam")
+    check("motion (failed porch): the steam never rises", all(s[1] < 30 for s in failed) and state == "waiting",
+          [round(max(s[1] for s in failed)), state])
+    context.close()
+
     context, page, *_ = open_page(browser, 1440, 900, reduced=True)
     whole = page.evaluate(RISE_JS)
     check("motion (reduced): the steam is whole at once", whole >= 100, whole)
+    context.close()
+
+    # With no script nothing can mark the porch's picture in or its bloom: both show whole.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
+    page = context.new_page()
+    page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
+    page.wait_for_timeout(800)
+    seen = page.evaluate("""(() => ({
+      rise: parseFloat(getComputedStyle(document.querySelector('[data-steam]')).getPropertyValue('--rise')),
+      porch: getComputedStyle(document.querySelector('[data-part="opening"] img[data-bloom]')).opacity }))()""")
+    check("motion (no script): the porch and its steam are whole", seen["rise"] >= 100 and seen["porch"] == "1", seen)
     context.close()
 
 

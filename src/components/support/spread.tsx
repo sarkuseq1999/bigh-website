@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties, ReactNode } from "react";
+import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
 import base from "@/components/ink/ink.module.css";
 import type { Art, Steam } from "./support-art";
 import page from "./support-page.module.css";
@@ -10,6 +10,12 @@ import page from "./support-page.module.css";
 // painting, its words beside it, the sides taking turns from 960px; on one column the painting
 // comes first. Paintings multiply onto the page's paper and bloom in as they arrive (the kit's
 // useBloom); the server marks them "waiting" so none paints whole first.
+//
+// The gold steam never rises alone over bare paper (as About's circle, Mo): the kit opens a
+// painting's bloom as soon as its box is on screen, picture or not, so the steam is keyed to the
+// pictures too. The server renders it data-steam="waiting"; once the painting's picture and the
+// steam's own are both in, script marks it "ready", and only then, with the bloom open, does the
+// stylesheet let it rise. A picture that fails never marks it.
 
 export function Painting({
   art,
@@ -31,10 +37,25 @@ export function Painting({
   steam?: Steam;
   className?: string;
 }) {
+  // A picture is "in" on its onLoad (Next calls it for a picture already complete when it hydrates,
+  // a broken one too, hence the width) or, on mount, when it is already complete. A failed picture
+  // is never in.
+  const inkImg = useRef<HTMLImageElement>(null);
+  const goldImg = useRef<HTMLImageElement>(null);
+  const [inkIn, setInkIn] = useState(false);
+  const [goldIn, setGoldIn] = useState(false);
+  useEffect(() => {
+    if (inkImg.current?.complete && inkImg.current.naturalWidth) setInkIn(true);
+    if (goldImg.current?.complete && goldImg.current.naturalWidth) setGoldIn(true);
+  }, []);
   return (
     <figure className={`${page.painting} ${className}`} data-picture="">
       <span className={page.paintingBody}>
         <Image
+          ref={inkImg}
+          onLoad={(event) => {
+            if (event.currentTarget.naturalWidth) setInkIn(true);
+          }}
           className={base.ink}
           src={art.src}
           alt={alt}
@@ -48,6 +69,10 @@ export function Painting({
         />
         {steam ? (
           <Image
+            ref={goldImg}
+            onLoad={(event) => {
+              if (event.currentTarget.naturalWidth) setGoldIn(true);
+            }}
             className={page.steam}
             src={steam.src}
             alt=""
@@ -55,7 +80,7 @@ export function Painting({
             height={steam.height}
             sizes="200px"
             loading="eager"
-            data-steam=""
+            data-steam={inkIn && goldIn ? "ready" : "waiting"}
             style={
               {
                 left: `${(steam.left * 100).toFixed(2)}%`,
