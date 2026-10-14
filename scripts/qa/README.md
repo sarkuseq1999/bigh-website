@@ -63,12 +63,14 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
   the four old-template product pages log a 404 for a chunk preload — a Turbopack dev bug (wrong
   chunk hash in the dev loadable manifest for next/dynamic entries with nested dynamic imports,
   fixed after Next 16.2.6); the QA ignores it on dev only (prints a NOTE) and a Next upgrade removes it.
-- `qa_fda.py [base]` — the FDA statement at the foot of every page (October 12, 2026): once per
-  page, the exact words, bold, between two brush lines that really paint (pixels), one line on a
-  1280+ window, left-aligned on a phone; in the ink footer the preview note under the logo and the
-  statement last; the last screen still shows the crane and the promise on short laptop windows
-  (home, About, NuriCell); the old-template product pages and another language too. Pictures in
-  `out/fda/`.
+- `qa_fda.py [base]` — the FDA statement on its painted California trail sign at the foot of every
+  page (October 13, 2026): once per page, the exact words as real text in Zilla Slab (loaded), the
+  sign's picture as the paragraph's border (the phone one on a phone) loading and really painted
+  (pixels, the dark Science footer too), every line inside the sign's face, cream at 4.5:1 or more
+  against the painted face (pixels), two lines on a 1280+ window; in the ink footer the sign under
+  the copyright line and the preview note last; the last screen still shows the crane and the
+  promise at eight laptop sizes; the old-template product pages and another language too.
+  Pictures in `out/fda/`.
 
 Notes: the scripts launch Chromium with SwiftShader flags so WebGL works headless. The site scrolls
 smoothly, so they set `scrollBehavior` to `auto` before measuring. Full-page screenshots break the

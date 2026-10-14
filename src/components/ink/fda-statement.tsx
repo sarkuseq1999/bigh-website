@@ -3,11 +3,11 @@
 import { useCopy } from "@/i18n/use-copy";
 import styles from "./fda-statement.module.css";
 
-// The FDA statement every page closes on (Mo's pick, October 12, 2026: "A. Label strip"). On a
-// bottle the rule (21 CFR 101.93) asks for it in bold type, set off in a box; here it is set off by
-// the menu bar's own brush line, drawn above it in the footer's ink (one line only since October 13,
-// so the foot of the page has fewer lines), and reads on the paper footer and on the Science page's
-// dark one alike. The parent footer places it (margins).
+// The FDA statement every page closes on, routed into a painted California trail sign (Mo's pick,
+// October 13, 2026: "I", after the label strip she found plain). The sign is one picture drawn as
+// the paragraph's border (fda-statement.module.css), so the words stay real text: read aloud,
+// translated, and fitted by the browser. Only the sign's face stretches around them; the posts, the
+// grass and the oak keep their shape. The parent footer places it (margins).
 export const FDA_STATEMENT =
   "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.";
 
@@ -16,10 +16,7 @@ export function FdaStatement({ className }: { className?: string }) {
   return (
     <div className={className ? `${styles.fda} ${className}` : styles.fda} data-fda="">
       <p className={styles.text}>
-        <span className={styles.star} aria-hidden="true">
-          *
-        </span>
-        {copy(FDA_STATEMENT)}
+        <span className={styles.words}>{copy(FDA_STATEMENT)}</span>
       </p>
     </div>
   );
