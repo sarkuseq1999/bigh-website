@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side. The subject fills most of the picture. The picture is a long, low strip: the things named sit in a band across the middle, with plain paper above and below them and soft, misty ends on the left and right. Only the things named below are painted: no landscape, no mountains, no pine trees, no floor, no wall, no people.\n\nOne painting with three small scenes spaced evenly from left to right, each about the same size, with empty paper and soft mist between them: (1) on the left, a small, round, old clay oil lamp with a single flame, the flame painted in real gold leaf with a faint warm glow; (2) in the middle, three smooth river stones balanced on top of one another, the largest at the bottom, painted in soft grey washes; (3) on the right, an old, gnarled plum branch in dark, dry-brush ink, with a few fresh blossoms opening on it, the blossoms left as pale paper with fine grey outlines, never pink or red. The lamp's flame is the only gold.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-science-ink/reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261013-165330"
+}

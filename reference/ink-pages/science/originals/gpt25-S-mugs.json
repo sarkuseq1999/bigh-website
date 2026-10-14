@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Edit the reference painting. Keep everything exactly as it is: the paper, the long low wooden table, its legs, its size, its place and its brushwork, and the soft wisps of steam. Replace only the small teapot and the two small round cups with two simple ceramic coffee mugs with handles, standing a little apart on the table and facing each other, a thin wisp of steam rising from each and curling toward the other. No teapot, nothing else on the table. Sumi ink only, the same loose brushwork, no gold.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/5f382547-0772-41e1-9474-8750b9995200/scratchpad/paint/originals/gpt25-R-tea.png"
+  ],
+  "made": "20261014-123151"
+}

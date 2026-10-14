@@ -1,0 +1,14 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no text, no signature, no red seal, no stamp. This is one panel of a long horizontal handscroll landscape that reads from left to right. The first reference picture shows the brushwork to use; the second reference shows the scroll this panel belongs to: match its horizon height, its ink tones, its scale and its paper exactly, so the panels join into one painting. Paint more loosely than the second reference, the way a master ink painter works: fewer, broader, confident strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, buildings and trees suggested with a few strokes instead of drawn in detail, lots of white paper. It must look like a painting, never a detailed drawing, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds. The horizon sits at the same height across the whole panel, a little below the middle. The left and right ends of the panel (about the outer eighth on each side) are only drifting mist fading into blank paper, with no object touching either edge, so the panel can join the next one in its mist. Plain paper above the landscape. No people, no birds, no text, no seals, no frame, no scroll rollers or mounting. Sumi ink only, from deep black to soft grey washes, no gold anywhere.\n\nFrom left to right: mist; a Japanese castle with dark, layered, upturned roofs on a sloping stone base, standing on a low rocky rise among a few pine trees; below it the shore, and to its right the open ocean begins, loose rolling waves in grey wash running toward the right edge, fading into mist.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-science-ink/reference/home-v2/ink/originals/gpt25-crane-rest-v2.png",
+    "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/5f382547-0772-41e1-9474-8750b9995200/scratchpad/paint/originals/gpt25-A-scroll.png"
+  ],
+  "made": "20261014-123010"
+}
