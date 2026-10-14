@@ -10,6 +10,7 @@ Sections (all, or --only=a,b):
   journey     (Task 3) the scroll pins, travels from Okayama to Today and lets go, the stop in
               view's words and link in the window, Tab only on shown links; real short windows
               (the title goes on under the bar) and a phone held sideways (the still scroll)
+  settled     (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran
   still       (Task 3) reduced motion and no script: nothing pins, every stop readable
   multiply    (Task 3, 4) every painting's blend group sits on the page with no stacking context
   strips      (Task 4) research, health and ask: painting, words, the full list, the explainers
@@ -151,7 +152,8 @@ STATE = """() => {
   // Links Tab can reach: each must be shown and inside the window.
   const reachable = [...s.querySelectorAll('li[data-stop] a')].filter(a => a.tabIndex >= 0)
     .map(a => { const r = a.getBoundingClientRect(); return shown(a) && r.left >= -1 && r.right <= innerWidth + 1 && r.top >= -1 && r.bottom <= innerHeight + 1; });
-  return { now: Number(s.dataset.now), still: s.hasAttribute('data-still'), pinTop: pin.top, pinBottom: pin.bottom,
+  const still = s.hasAttribute('data-still') || getComputedStyle(pinEl).position === 'static';
+  return { now: Number(s.dataset.now), still, pinTop: pin.top, pinBottom: pin.bottom,
            stick: parseFloat(getComputedStyle(pinEl).top), padTop: parseFloat(getComputedStyle(s).paddingTop),
            room: s.querySelector('[data-room]').offsetHeight, overflow: img.width - band.width,
            imgLeft: img.left, imgRight: img.right, bandLeft: band.left, bandRight: band.right,
@@ -255,6 +257,34 @@ def still(browser):
             ctx.close()
 
 
+SETTLED_SIZES = [
+    (1440, 900, "en"), (1440, 900, "vn"), (1366, 657, "en"), (1280, 720, "en"), (1280, 720, "vn"),
+    (390, 664, "en"), (375, 667, "en"), (390, 844, "en"), (390, 844, "vn"),
+]
+
+
+def settled(browser):
+    # The stylesheet alone sets the painting's height (and the page's): nothing below the journey
+    # moves once the script has run (review, October 14: the menu's #research, #health and #ask
+    # links must land under the menu bar).
+    for w, h, lang in SETTLED_SIZES:
+        ctx = browser.new_context(viewport={"width": w, "height": h})
+        page = ctx.new_page()
+        # A first visit warms the cache, so the fonts are there when the page is read before its
+        # script runs (on a cold first visit the lead can re-wrap when Switzer arrives: the fonts'
+        # doing, not the script's).
+        page.goto(BASE + f"/{lang}/science", wait_until="networkidle")
+        read = "[document.querySelector('#liu').offsetTop, document.querySelector('#scientists [data-room]').offsetHeight, document.querySelector('#scientists').style.getPropertyValue('--band-h')]"
+        page.goto(BASE + f"/{lang}/science", wait_until="domcontentloaded")
+        first = page.evaluate(read)
+        page.wait_for_timeout(1500)
+        later = page.evaluate(read)
+        check(f"settled {w}x{h} {lang}: #liu stays put after load", abs(later[0] - first[0]) <= 2, f"{first[0]} -> {later[0]}")
+        check(f"settled {w}x{h} {lang}: the travel room stays put", later[1] == first[1], f"{first[1]} -> {later[1]}")
+        check(f"settled {w}x{h} {lang}: the script sets no painting height", later[2] == "", repr(later[2]))
+        ctx.close()
+
+
 def multiply(browser):
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
@@ -268,7 +298,7 @@ def multiply(browser):
         ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "journey": journey, "still": still, "multiply": multiply}
+SECTIONS = {"shell": shell, "people": people, "journey": journey, "settled": settled, "still": still, "multiply": multiply}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

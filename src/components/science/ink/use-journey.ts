@@ -20,13 +20,16 @@ import { useEffect, useState, type RefObject } from "react";
  * the stop in view's link can be reached with Tab (the others' links get tabindex -1), so the
  * keyboard never lands on a link that cannot be seen.
  *
- * fit(): the pinned box must fit between the menu bar and the window's foot. A short window first
- * lets the title go on under the menu bar (--lift: the box sticks that much higher, so only the
- * painting and its stops stay) and gives the title's room to the painting, up to its largest
- * (--band-max); if the box still does not fit, the painting gives way, down to 180px; if even that
- * does not fit (a phone held sideways), the section is marked data-still and the stylesheet shows
- * the still scroll, as for reduced motion. Returns whether it is the still scroll. Reduced motion:
- * nothing runs; the stylesheet shows the still scroll.
+ * fit() follows the stylesheet's --mode and decides nothing by measuring (journey.module.css: the
+ * stylesheet alone sets the painting's height, so the page's height is the same before and after
+ * this runs). "lift" (a short window): the title goes on under the menu bar once the box sticks
+ * (--lift, the title's height and its gap: the box sticks that much higher; only the sticky top
+ * changes, no height). "still": the still scroll. The last resort, for a box the stylesheet's room
+ * did not cover (a translation that grew): the painting gives way, down to 180px, then the section
+ * is marked data-still; both change the page's height, so the rooms are measured to keep this rare.
+ * It measures against the small viewport height (100svh, through --journey-svh), not innerHeight,
+ * so a phone's toolbars coming and going cannot change the layout. Returns whether it is the still
+ * scroll. Reduced motion: nothing runs; the stylesheet shows the still scroll.
  */
 export function useJourney(
   section: RefObject<HTMLElement | null>,
@@ -84,19 +87,23 @@ export function useJourney(
       root.style.removeProperty("--band-h");
       root.style.removeProperty("--lift");
       delete root.dataset.still;
-      const over = () =>
+      const style = getComputedStyle(root);
+      const mode = style.getPropertyValue("--mode").trim();
+      if (mode === "still") return true;
+      if (mode === "lift") {
+        const gap = parseFloat(getComputedStyle(pin).rowGap) || 0;
+        root.style.setProperty("--lift", `${words.getBoundingClientRect().height + gap}px`);
+      }
+      const small = parseFloat(style.getPropertyValue("--journey-svh")) || innerHeight;
+      const over =
         pin.getBoundingClientRect().height +
         (parseFloat(getComputedStyle(pin).top) || 0) +
         12 -
-        window.innerHeight;
-      if (over() <= 0) return false;
-      const gap = parseFloat(getComputedStyle(pin).rowGap) || 0;
-      root.style.setProperty("--lift", `${words.getBoundingClientRect().height + gap}px`);
-      const most = parseFloat(getComputedStyle(root).getPropertyValue("--band-max")) || 0;
-      const shown = painting.getBoundingClientRect().height;
-      const h = Math.min(Math.max(most, shown), shown - over());
+        small;
+      if (over <= 0) return false;
+      const h = painting.getBoundingClientRect().height - over;
       if (h >= 180) {
-        if (Math.abs(h - shown) > 0.5) root.style.setProperty("--band-h", `${h}px`);
+        root.style.setProperty("--band-h", `${h}px`);
         return false;
       }
       root.style.removeProperty("--lift");

@@ -2,34 +2,102 @@
    the painting and its stops; it is the painting's blend group (multiply), so the painting can move
    inside it (transform) without a white box. The room after it is as tall as the painting's
    overflow (padding % = the containing block's width = the band's width): one pixel scrolled down,
-   one pixel of painting, with the page's full height set before any script runs. It is never less
-   than the band is wide, so on a short window (a small painting) the painting moves more slowly
-   than the page instead of passing in one flick. A sticky box does not stay pinned through its
-   parent's own bottom padding (tested October 14), hence a child.
-   --pin-top: where the settled menu bar's paper ends (its small height + 22px of paper that fades
-   out under its rule; nav-inscription.module.css: 70px to 1100px wide, then 5.3vw from 74px to
-   82px), so the eyebrow is never under the paper. --band-h: the window's height less the pinned
-   box's own words, foot and stops, up to --band-max; useJourney's fit() only acts where the box
-   would not fit (a short window, a long title): the title goes on under the menu bar (--lift),
-   then the painting gives way, then the still scroll (data-still). */
+   one pixel of painting. It is never less than the band is wide, so on a short window (a small
+   painting) the painting moves more slowly than the page instead of passing in one flick. A sticky
+   box does not stay pinned through its parent's own bottom padding (tested October 14), hence a
+   child.
+
+   The stylesheet alone sets the painting's height, and with it the room and the page's height,
+   before any script runs (review, October 14: a height set by the script after load moved every
+   anchor below, #research, #health, #ask). --pin-top: where the settled menu bar's paper ends (its
+   small height + 22px of paper that fades out under its rule; nav-inscription.module.css: 70px to
+   1100px wide, then 5.3vw from 74px to 82px), so the eyebrow is never under the paper. --band-h:
+   the window's height less the room the rest of the pinned box takes, up to --band-max.
+   --mode (read by useJourney, which decides nothing by measuring):
+   - pin: the title stays pinned with the painting; the box takes --words-room besides the painting.
+   - lift (windows 820px tall or less): the title goes on under the menu bar once the box sticks
+     (useJourney sets --lift), so the box takes only --stops-room and the painting has the rest.
+   - still (windows too short even then, a phone held sideways; and reduced motion, no script):
+     the still scroll below.
+   The rooms were measured October 14 (title, stops, foot and gaps, plus 12px to spare) for each
+   language: Vietnamese sets longer, the Korean, Japanese and Chinese titles a little taller, and a
+   phone under 375px sets the title in four lines. Translations that grow (Task 5) need them measured
+   again: useJourney's last resort then shrinks the painting after load, which moves the anchors. */
+@property --journey-svh {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+
 .journey {
   --pin-top: 92px;
   --band-max: 300px;
-  --band-h: clamp(180px, calc(100svh - var(--pin-top) - 474px), var(--band-max));
+  --words-room: 474px;
+  --stops-room: 238px;
+  --room: var(--words-room);
+  --mode: pin;
+  --band-h: clamp(180px, calc(100svh - var(--pin-top) - var(--room)), var(--band-max));
+  --journey-svh: 100svh;
   position: relative;
   padding-top: var(--pin-top);
 }
 
-.room {
-  padding-bottom: max(100%, calc(var(--band-h) * var(--ratio) - 100%));
+.journey:lang(vi) {
+  --words-room: 530px;
+  --stops-room: 240px;
+}
+
+.journey:is(:lang(ko), :lang(ja), :lang(zh)) {
+  --words-room: 490px;
+}
+
+@media (max-width: 374px) {
+  .journey {
+    --words-room: 500px;
+  }
+
+  .journey:is(:lang(ko), :lang(ja), :lang(zh)) {
+    --words-room: 520px;
+  }
 }
 
 @media (min-width: 960px) {
   .journey {
     --pin-top: clamp(96px, calc(5.3vw + 22px), 104px);
     --band-max: 430px;
-    --band-h: clamp(180px, calc(100svh - var(--pin-top) - 434px), var(--band-max));
+    --words-room: 434px;
+    --stops-room: 268px;
   }
+
+  .journey:lang(vi) {
+    --words-room: 468px;
+    --stops-room: 296px;
+  }
+
+  .journey:is(:lang(ko), :lang(ja), :lang(zh)) {
+    --words-room: 438px;
+    --stops-room: 270px;
+  }
+}
+
+/* Short windows: the title goes on under the menu bar and gives its room to the painting. */
+@media (max-height: 820px) {
+  .journey {
+    --room: var(--stops-room);
+    --mode: lift;
+  }
+}
+
+/* Too short even without the title (the box needs about 520px on a phone, 580px from 960px): the
+   still scroll, as for reduced motion (the rules are in that block's media list). */
+@media (max-width: 959px) and (max-height: 519px), (min-width: 960px) and (max-height: 579px) {
+  .journey {
+    --mode: still;
+  }
+}
+
+.room {
+  padding-bottom: max(100%, calc(var(--band-h) * var(--ratio) - 100%));
 }
 
 .pin {
@@ -327,12 +395,16 @@
   }
 }
 
-/* Reduced motion, a page whose script never runs, and a window too short for the pinned box
-   (data-still, set by useJourney): nothing pins or moves. The band scrolls sideways under the
-   visitor's own hand, and all five stops are read in a row (a list on phones). The two blocks
-   below say the same thing (a media query cannot also name an attribute): change both.
-   :global([data-look]) outranks the kit's bloom rules whatever order they load in. */
-@media (prefers-reduced-motion: reduce), (scripting: none) {
+/* Reduced motion, a page whose script never runs, a window too short for the pinned box (the
+   same queries as --mode: still above), and useJourney's last resort (data-still): nothing pins
+   or moves. The band scrolls sideways under the visitor's own hand, and all five stops are read in
+   a row (a list on phones). The two blocks below say the same thing (a media query cannot also
+   name an attribute): change both. :global([data-look]) outranks the kit's bloom rules whatever
+   order they load in. */
+@media (prefers-reduced-motion: reduce),
+  (scripting: none),
+  (max-width: 959px) and (max-height: 519px),
+  (min-width: 960px) and (max-height: 579px) {
   .room,
   .rail,
   .dots,
@@ -476,7 +548,8 @@
 }
 
 @media (max-width: 959px) and (prefers-reduced-motion: reduce),
-  (max-width: 959px) and (scripting: none) {
+  (max-width: 959px) and (scripting: none),
+  (max-width: 959px) and (max-height: 519px) {
   .stops {
     grid-template-columns: 1fr;
   }
