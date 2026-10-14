@@ -26,11 +26,14 @@
      the still scroll below.
    The rooms were measured October 14 after the translations (Task 5), in all five languages at
    280 to 2560px wide: title, stops, foot and gaps, plus useJourney's own 12px, plus about one line
-   to spare (24px from 960px; 26px on phones, where the hint's line is 25px), so one font's metrics
-   cannot trip useJourney's last resort (it shrinks the painting after load, which moves the
-   anchors). Vietnamese sets longer; the Korean, Japanese and Chinese titles a little taller; under
-   360px the hint takes two lines in Vietnamese, Korean and Japanese, and the stops grow. Measure
-   again whenever the title, the hint or the stops' words change. */
+   to spare (24 to 25px from 960px; 24 to 29px on phones, where the hint's line is 25px), so one
+   font's metrics cannot trip useJourney's last resort (it shrinks the painting after load, which
+   moves the anchors). Only the hint and the caption were translated then: the h1, the lead and the
+   five stops were still English in every language, so translating them changes the rooms (run
+   the QA's rooms and settled sections, which fail before the anchors move). Vietnamese sets longer;
+   the Korean, Japanese and Chinese titles a little taller; under 360px the hint takes two lines in
+   Vietnamese, Korean and Japanese, and the stops grow. Measure again whenever the title, the hint
+   or the stops' words change. */
 @property --journey-svh {
   syntax: "<length>";
   inherits: false;

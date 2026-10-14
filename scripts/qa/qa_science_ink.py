@@ -275,6 +275,8 @@ def still(browser):
             ctx.close()
 
 
+# useJourney's LAST_RESORT (use-journey.ts): the first words of the warning its last resort logs.
+LAST_RESORT = "[science-journey:last-resort]"
 PART_TOPS = "['research', 'health', 'ask'].map(id => Math.round(document.getElementById(id).getBoundingClientRect().top + scrollY))"
 SETTLED_SIZES = [
     (1440, 900, "en"), (1440, 900, "vn"), (1366, 657, "en"), (1280, 720, "en"), (1280, 720, "vn"),
@@ -295,7 +297,7 @@ def settled(browser):
         ctx = browser.new_context(viewport={"width": w, "height": h})
         page = ctx.new_page()
         warnings = []
-        page.on("console", lambda m: m.type == "warning" and "handscroll" in m.text and warnings.append(m.text))
+        page.on("console", lambda m: m.type == "warning" and LAST_RESORT in m.text and warnings.append(m.text))
         # A first visit warms the cache, so the fonts are there when the page is read before its
         # script runs (on a cold first visit the lead can re-wrap when Switzer arrives: the fonts'
         # doing, not the script's).

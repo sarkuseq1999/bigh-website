@@ -3,6 +3,12 @@
 import { useEffect, useState, type RefObject } from "react";
 
 /**
+ * The first words of the last resort's console warning. The QA (qa_science_ink.py, settled) looks
+ * for them, so keep them as they are when the words after them change.
+ */
+const LAST_RESORT = "[science-journey:last-resort]";
+
+/**
  * The handscroll's travel (spec, "The handscroll"). The room after the pinned box (journey.module.css)
  * is as tall as the painting's overflow (never less than the band is wide), so the page is already
  * as tall as the travel before any script runs; this hook only reads the scroll position. While the
@@ -27,11 +33,11 @@ import { useEffect, useState, type RefObject } from "react";
  * changes, no height). "still": the still scroll. The last resort, for a box the stylesheet's room
  * did not cover (a translation that grew): the painting gives way, down to 180px, then the section
  * is marked data-still; both change the page's height, so the rooms are measured to keep this rare,
- * and it says so in the console (console.warn) when it acts. It measures against the small
- * viewport height (100svh, through --journey-svh), not innerHeight, so a phone's toolbars coming
- * and going cannot change the layout (innerHeight only in a browser that cannot register the
- * probe). Returns whether it is the still scroll. Reduced motion: nothing runs; the stylesheet
- * shows the still scroll.
+ * and it says so in the console (console.warn, starting with LAST_RESORT) when it acts. It
+ * measures against the small viewport height (100svh, through --journey-svh), not innerHeight, so
+ * a phone's toolbars coming and going cannot change the layout (innerHeight only in a browser that
+ * cannot register the probe). Returns whether it is the still scroll. Reduced motion: nothing
+ * runs; the stylesheet shows the still scroll.
  */
 export function useJourney(
   section: RefObject<HTMLElement | null>,
@@ -113,7 +119,7 @@ export function useJourney(
       if (note !== warned) {
         warned = note;
         console.warn(
-          `Science handscroll: the pinned box is ${over.toFixed(1)}px too tall for this ${innerWidth}x${Math.round(small)} window (small viewport height), so ${h >= 180 ? "the painting shrinks" : "it falls back to the still scroll"} after load and the anchors below move. Measure --words-room / --stops-room again (journey.module.css).`,
+          `${LAST_RESORT} Science handscroll: the pinned box is ${over.toFixed(1)}px too tall for this ${innerWidth}x${Math.round(small)} window (small viewport height), so ${h >= 180 ? "the painting shrinks" : "it falls back to the still scroll"} after load and the anchors below move. Measure --words-room / --stops-room again (journey.module.css).`,
         );
       }
       if (h >= 180) {
