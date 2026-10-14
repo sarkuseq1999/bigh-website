@@ -67,7 +67,7 @@ import styles from "./nav-inscription.module.css";
 const TABLET_TALL = "(min-width: 700px) and (min-height: 900px)";
 
 /** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
-export type NavCurrent = "home" | "products" | "science" | "about";
+export type NavCurrent = "home" | "products" | "science" | "about" | "support";
 
 /** The homepage's parts that belong to each drop-down (the ids of their sections). */
 export type NavFollow = Partial<Record<NavPanelId, readonly string[]>>;

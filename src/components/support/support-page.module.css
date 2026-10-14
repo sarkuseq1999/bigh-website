@@ -1,0 +1,209 @@
+/* Support, "Pull up a chair" (Mo, October 14, 2026; spec
+   docs/superpowers/specs/2026-10-14-support-page-design.md). Every rule is scoped under
+   .supportPage (the page root, InkPage className), so it outranks the kit's .look rules in any
+   stylesheet order. Multiply: nothing between a painting and the page root may make a stacking
+   context (no z-index on a positioned ancestor, no isolation, opacity, transform, filter or mask on
+   a part, a spread, a figure or a wrapper). */
+
+/* Titles in Ysabeau, the homepage's title face; menus, words and pills stay in Switzer. The
+   attribute outranks the kit's .look rule in either order (as home-titles.module.css does). */
+.supportPage[data-look="ink"] {
+  --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+  --part-half: clamp(40px, 4.4vw, 84px);
+  --gap: clamp(40px, 6vw, 112px);
+}
+
+.supportPage[data-look="ink"] main :is(h1, h2, h3) {
+  font-family: var(--display-font);
+  font-variant-numeric: lining-nums;
+}
+
+/* ---- The opening: the porch, the question, how to reach us -------------------------------- */
+
+.supportPage .opening {
+  padding: calc(88px + clamp(8px, 2vw, 40px)) 0 var(--part-half);
+  text-align: center;
+}
+
+/* 720px, not the mockup's 780: at 1440x900 the title and its lead then end above the fold. */
+.supportPage .porch {
+  --picture: 720px;
+  margin-inline: auto;
+}
+
+.supportPage h1.title {
+  margin: clamp(4px, 1vw, 16px) 0 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(min(44px, 11vw), 4.4vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.supportPage p.lead {
+  margin: clamp(12px, 1.2vw, 18px) 0 0;
+  color: var(--muted);
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+/* Three ways to reach us, split by hairlines; stacked on a phone. */
+.supportPage .contact {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  margin: clamp(36px, 3.6vw, 56px) 0 0;
+}
+
+.supportPage .contact > div {
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(24px, 3vw, 52px);
+  border-left: 1px solid var(--line);
+}
+
+.supportPage .contact > div:first-child {
+  border-left: 0;
+}
+
+.supportPage .contact dt {
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+}
+
+/* The three values sit on one centre line, the large number and the plain words alike. */
+.supportPage .contact dd {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin: 6px 0 0;
+  font-size: 21px;
+  font-weight: 450;
+  text-wrap: balance;
+}
+
+.supportPage .contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  white-space: nowrap;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  text-decoration-color: var(--hair);
+}
+
+.supportPage .contact a:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* The number in Switzer (never Ysabeau, whose old-style digits rise and fall), large. */
+.supportPage .contact a.number {
+  font-family: var(--sans);
+  font-size: clamp(28px, 2.3vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Below 900px the number, the email and the hours no longer fit side by side (at 768px the number
+   broke across two lines): they stack, as on the phone. */
+@media (max-width: 899px) {
+  .supportPage .contact {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+  }
+
+  .supportPage .contact > div {
+    padding: 0;
+    border-left: 0;
+  }
+}
+
+/* ---- Paintings ------------------------------------------------------------------------------ */
+
+.supportPage .painting {
+  justify-self: center;
+  width: min(100%, var(--picture, 520px));
+  margin: 0;
+}
+
+.supportPage .paintingBody {
+  position: relative;
+  display: block;
+}
+
+.supportPage .paintingBody img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The gold steam over the cup: gold leaf, not multiplied, placed by support-art.ts. */
+.supportPage .paintingBody img.steam {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+/* ---- Motion: the steam rises from the cup once the porch has bloomed ----------------------- */
+
+@property --rise {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 112%;
+}
+
+.supportPage [data-steam] {
+  -webkit-mask-image: linear-gradient(
+    to top,
+    #000 calc(var(--rise) - 14%),
+    transparent var(--rise)
+  );
+  mask-image: linear-gradient(to top, #000 calc(var(--rise) - 14%), transparent var(--rise));
+}
+
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .supportPage [data-steam] {
+    --rise: 0%;
+  }
+
+  .supportPage :is([data-bloom="in"], [data-bloom="done"]) ~ [data-steam] {
+    animation: steam-rise var(--breath) var(--ease) 1.1s both;
+  }
+}
+
+@keyframes steam-rise {
+  from {
+    --rise: 0%;
+  }
+
+  to {
+    --rise: 112%;
+  }
+}
+
+/* A painting waiting to bloom is hidden until its bloom is under way (About's hold, for the same
+   Chrome bug: a mask layer of no size is dropped, so a waiting painting showed whole). */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage [data-bloom="waiting"] {
+    opacity: 0;
+  }
+
+  @media (scripting: none) {
+    .supportPage [data-bloom="waiting"] {
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]).supportPage [data-bloom="waiting"] {
+    filter: none;
+  }
+}
