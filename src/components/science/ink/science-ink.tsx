@@ -1,6 +1,7 @@
 "use client";
 
 import { InkPage } from "@/components/ink/ink-page";
+import { Ask, Health, Research } from "./explore";
 import { Journey } from "./journey";
 import { Formulas, Liu } from "./people";
 import styles from "./science-ink.module.css";
@@ -15,9 +16,9 @@ export function ScienceInk({ fontClass }: { fontClass: string }) {
           <Journey motion={motion} />
           <Liu />
           <Formulas />
-          <section id="research" />
-          <section id="health" />
-          <section id="ask" />
+          <Research />
+          <Health />
+          <Ask />
         </>
       )}
     </InkPage>

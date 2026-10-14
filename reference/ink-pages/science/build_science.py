@@ -19,8 +19,8 @@ place stands on the joined canvas, read off its contact sheet (Okayama's castle,
 the hills of 2002, Salzburg's fortress, the oaks under the sun).
 
 The strips are cropped to their ink; phones get narrower crops (the scrolls' and the mugs' middle,
-their cut ends faded to paper) and the health strip's three scenes, cut where the ink is thinnest
-near its thirds.
+trimmed to their own ink, their cut ends faded to paper) and the health strip's three scenes, cut
+where the ink is thinnest near its thirds.
 
 usage: python -X utf8 reference/ink-pages/science/build_science.py
 """
@@ -116,10 +116,15 @@ def strip(key, pad=0.04):
 
 
 def middle(img, start, end):
-    """The middle of a strip for phones. The cut runs through the shelf and the table, so its two
+    """The middle of a strip for phones, trimmed to its ink. The cut drops the shelf's and the
+    table's legs, so the rows the strip kept for them would be dead paper under the ink (about 40%
+    of the mugs', 15% of the scrolls': October 14 review): the crop's ink box (bd.ink_box, on the
+    crop itself) sets its top and bottom. The cut runs through the shelf and the table, so its two
     ends dissolve into paper (a smoothstep over PHONE_FADE of the crop's width) instead of ending
     in a straight edge that would show on the page."""
     crop = img.crop((round(img.width * start), 0, round(img.width * end), img.height))
+    _, top, _, bottom = bd.ink_box(np.asarray(crop), pad=0.04)
+    crop = crop.crop((0, top, crop.width, bottom))
     side = round(crop.width * PHONE_FADE)
     arr = faded(np.asarray(crop).astype(np.float32), side, side)
     return Image.fromarray(np.clip(np.rint(arr), 0, 255).astype(np.uint8))

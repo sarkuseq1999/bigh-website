@@ -298,7 +298,50 @@ def multiply(browser):
         ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "journey": journey, "settled": settled, "still": still, "multiply": multiply}
+def strips(browser):
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, errors = opened(browser, w, h)
+        for part in ["research", "health", "ask"]:
+            bring(page, f"#{part}")
+            page.wait_for_timeout(500)
+            check(f"strips {w} {part}: its title", page.locator(f"#{part} h2").count() == 1)
+            pics = page.locator(f"#{part} img")
+            shown = [p for p in pics.all() if p.is_visible()]
+            check(f"strips {w} {part}: a painting shows", len(shown) >= 1, str(len(shown)))
+            for img in shown:
+                ok = img.evaluate("i => i.complete && i.naturalWidth > 0")
+                check(f"strips {w} {part}: {img.get_attribute('alt')[:40]} loaded", ok)
+        if w == 390:
+            scenes = page.locator("#health [data-scene] img")
+            check("strips 390 health: one scene over each article", scenes.count() == 3 and all(s.is_visible() for s in scenes.all()))
+        text = page.locator("#research").inner_text()
+        for title in ["Mitochondrial nutrients and the aging cell", "Dr. Liu on lipoic acid and the aging brain", "Healthy aging has many moving parts"]:
+            check(f"strips {w} research: {title}", title in text)
+        check(f"strips {w} research: the honesty line", "do not establish the effects of a finished BiGH product" in text)
+        rows_before = page.locator("#research details").count()
+        page.get_by_role("button", name=re.compile(r"See all 36 sources")).click()
+        page.wait_for_timeout(500)
+        rows_after = page.locator("#research details").count()
+        check(f"strips {w} research: the full list opens (36)", rows_before == 0 and rows_after == 36, f"{rows_before} → {rows_after}")
+        page.get_by_role("button", name=re.compile(r"Show fewer sources")).click()
+        page.wait_for_timeout(300)
+        check(f"strips {w} research: and closes", page.locator("#research details").count() == 0)
+        buttons = page.locator("#health button")
+        check(f"strips {w} health: three explainers", buttons.count() == 3)
+        buttons.nth(1).click()
+        page.wait_for_timeout(700)
+        check(f"strips {w} health: an explainer sheet opens", page.locator("dialog[open]").count() == 1)
+        page.keyboard.press("Escape")
+        page.wait_for_timeout(400)
+        ask = page.locator("#ask").inner_text()
+        for word in ["Ask BiGH Science", "In development", "not accepting submissions"]:
+            check(f"strips {w} ask: {word}", word in ask)
+        check(f"strips {w} ask: three numbered steps", page.locator("#ask ol > li").count() == 3)
+        check(f"strips {w}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+
+
+SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

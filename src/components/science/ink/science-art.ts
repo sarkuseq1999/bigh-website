@@ -27,7 +27,7 @@ export const scienceArt = {
     phone: {
       src: "/images/science/ink/scrolls-phone-v1.webp",
       width: 1000,
-      height: 434,
+      height: 372,
     },
   },
   health: {
@@ -59,7 +59,7 @@ export const scienceArt = {
     phone: {
       src: "/images/science/ink/mugs-phone-v1.webp",
       width: 1000,
-      height: 392,
+      height: 246,
     },
   },
 } as const;
