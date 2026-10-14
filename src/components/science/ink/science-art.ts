@@ -59,7 +59,7 @@ export const scienceArt = {
     phone: {
       src: "/images/science/ink/mugs-phone-v1.webp",
       width: 1000,
-      height: 246,
+      height: 314,
     },
   },
 } as const;

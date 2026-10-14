@@ -171,12 +171,14 @@
 }
 
 .row {
+  --year: 3.6em;
+  --gap: 16px;
   border-bottom: 1px solid var(--line);
 }
 
-.row {
-  --year: 3.6em;
-  --gap: 16px;
+/* The tag after a row's title. */
+.rowTag {
+  margin-left: 10px;
 }
 
 .row summary {

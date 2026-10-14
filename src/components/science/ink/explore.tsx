@@ -48,7 +48,8 @@ export function Research() {
       <ul className={styles.cols}>
         {KEY.map((item) => (
           <li key={item.url} className={styles.col}>
-            <Meta parts={[copy(item.year), ...copy(item.category).split(" · "), item.journal]} />
+            {/* year · kind · journal: the kind is the first part of the category */}
+            <Meta parts={[copy(item.year), copy(item.category).split(" · ")[0], item.journal]} />
             <h3 className={styles.colTitle}>{copy(item.title)}</h3>
             <p className={styles.text}>{copy(item.text)}</p>
             <div className={styles.links}>
@@ -90,7 +91,7 @@ export function Research() {
                         <span>
                           {copy(item.title)}
                           {research.byLiu.includes(item.url) ? (
-                            <span className={styles.tag} style={{ marginLeft: 10 }}>
+                            <span className={`${styles.tag} ${styles.rowTag}`}>
                               {copy(research.tag)}
                             </span>
                           ) : null}
@@ -147,11 +148,15 @@ export function Health() {
                 <figcaption className={base.caption}>{copy(ink.illustration)}</figcaption>
               </figure>
               <p className={styles.meta}>{copy(door.topic)}</p>
-              <h3 className={styles.colTitle}>{keepDash(copy(door.title))}</h3>
+              <h3 id={`health-title-${index}`} className={styles.colTitle}>
+                {keepDash(copy(door.title))}
+              </h3>
               <p className={styles.text}>{copy(door.preview)}</p>
+              {/* Three buttons with one name: each is described by its own article's title. */}
               <button
                 type="button"
                 className={styles.go}
+                aria-describedby={`health-title-${index}`}
                 onClick={() => dialogs.openArticle(index)}
               >
                 {copy(ink.explainer)} <ArrowRight size={16} aria-hidden="true" />

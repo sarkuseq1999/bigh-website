@@ -20,7 +20,9 @@ the hills of 2002, Salzburg's fortress, the oaks under the sun).
 
 The strips are cropped to their ink; phones get narrower crops (the scrolls' and the mugs' middle,
 trimmed to their own ink, their cut ends faded to paper) and the health strip's three scenes, cut
-where the ink is thinnest near its thirds.
+where the ink is thinnest near its thirds. The mugs' crop (0.27-0.70 of the strip) is the tightest
+that keeps both mugs, handles included, clear of the faded ends, so they are as large as they can
+be on a phone.
 
 usage: python -X utf8 reference/ink-pages/science/build_science.py
 """
@@ -177,6 +179,6 @@ if __name__ == "__main__":
             "scroll": handscroll(),
             "scrolls": {**finish(scrolls, "scrolls", 2400), "phone": finish(middle(scrolls, 0.3, 0.7), "scrolls-phone", 1000)},
             "health": {**finish(health, "health", 2400), "scenes": scenes(health)},
-            "mugs": {**finish(mugs, "mugs", 2400), "phone": finish(middle(mugs, 0.22, 0.78), "mugs-phone", 1000)},
+            "mugs": {**finish(mugs, "mugs", 2400), "phone": finish(middle(mugs, 0.27, 0.70), "mugs-phone", 1000)},
         }
     )

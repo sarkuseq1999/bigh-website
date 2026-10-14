@@ -10,10 +10,13 @@ Sections (all, or --only=a,b):
   journey     (Task 3) the scroll pins, travels from Okayama to Today and lets go, the stop in
               view's words and link in the window, Tab only on shown links; real short windows
               (the title goes on under the bar) and a phone held sideways (the still scroll)
-  settled     (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran
-  still       (Task 3) reduced motion and no script: nothing pins, every stop readable
+  settled     (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran;
+              (Task 4) #research, #health and #ask stand still once their paintings have arrived
+  still       (Task 3) reduced motion and no script: nothing pins, every stop readable;
+              (Task 4) the strips' paintings whole and crisp (no bloom left waiting)
   multiply    (Task 3, 4) every painting's blend group sits on the page with no stacking context
-  strips      (Task 4) research, health and ask: painting, words, the full list, the explainers
+  strips      (Task 4) research, health and ask: the painting in use (phone crop under 960px) and
+              bloomed in, year · kind · journal, the full list, each explainer's own sheet
   languages   (Task 5) kr, jp, cns, vn: 200, no errors, the new strings translated
   layout      (Task 6) sizes 1920 to 360: no sideways scroll, text 15px+, targets 44px+
   deep_links  (Task 6) #scientists, #research, #health, #ask land under the menu bar
@@ -253,10 +256,21 @@ def still(browser):
                 check(f"still {label} {w}: the band is a named region", role == "region", str(role))
             shown = page.evaluate("(() => { const s = getComputedStyle(document.querySelector('[data-painting]')); return [s.filter, s.maskImage]; })()")
             check(f"still {label} {w}: the painting crisp and whole", shown == ["none", "none"], str(shown))
+            # The strips' paintings (the server marks them "waiting"): shown whole and crisp, a wide
+            # one with only its own soft ends (no bloom blot), a phone scene with no mask at all.
+            pictures = [p for p in page.locator(STRIP_PICTURES).all() if p.is_visible()]
+            check(f"still {label} {w}: the strips' paintings show", len(pictures) == (3 if w == 1440 else 5), str(len(pictures)))
+            for img in pictures:
+                name = (img.get_attribute("alt") or "")[:36]
+                filt, mask, opacity, scene = img.evaluate("i => { const s = getComputedStyle(i); return [s.filter, s.maskImage, s.opacity, !!i.closest('[data-scene]')]; }")
+                soft_ends = "none" if scene else "linear-gradient(90deg"
+                ok = filt == "none" and opacity == "1" and (mask == "none" if scene else (mask.startswith(soft_ends) and "url(" not in mask))
+                check(f"still {label} {w}: {name} whole and crisp, only its own soft ends", ok, f"{filt} | {mask[:40]} | {opacity}")
             page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
             ctx.close()
 
 
+PART_TOPS = "['research', 'health', 'ask'].map(id => Math.round(document.getElementById(id).getBoundingClientRect().top + scrollY))"
 SETTLED_SIZES = [
     (1440, 900, "en"), (1440, 900, "vn"), (1366, 657, "en"), (1280, 720, "en"), (1280, 720, "vn"),
     (390, 664, "en"), (375, 667, "en"), (390, 844, "en"), (390, 844, "vn"),
@@ -277,11 +291,26 @@ def settled(browser):
         read = "[document.querySelector('#liu').offsetTop, document.querySelector('#scientists [data-room]').offsetHeight, document.querySelector('#scientists').style.getPropertyValue('--band-h')]"
         page.goto(BASE + f"/{lang}/science", wait_until="domcontentloaded")
         first = page.evaluate(read)
+        first_parts = page.evaluate(PART_TOPS)
         page.wait_for_timeout(1500)
         later = page.evaluate(read)
         check(f"settled {w}x{h} {lang}: #liu stays put after load", abs(later[0] - first[0]) <= 2, f"{first[0]} -> {later[0]}")
         check(f"settled {w}x{h} {lang}: the travel room stays put", later[1] == first[1], f"{first[1]} -> {later[1]}")
         check(f"settled {w}x{h} {lang}: the script sets no painting height", later[2] == "", repr(later[2]))
+        if w in (1440, 390):
+            # The strips' paintings are lazy and the phone's has another ratio than the wide one:
+            # the stylesheet reserves each one's box (strip.module.css), so once every painting has
+            # arrived the three parts stand where they stood before (the menu's links land by them).
+            page.evaluate(f"document.querySelectorAll('{STRIP_PICTURES}').forEach(i => {{ i.loading = 'eager'; }})")
+            page.wait_for_function(
+                "sel => [...document.querySelectorAll(sel)].filter(i => i.offsetParent).every(i => i.complete && i.naturalWidth > 0)",
+                arg=STRIP_PICTURES,
+                timeout=15000,
+            )
+            page.wait_for_timeout(300)
+            arrived = page.evaluate(PART_TOPS)
+            for name, before, after in zip(["#research", "#health", "#ask"], first_parts, arrived):
+                check(f"settled {w}x{h} {lang}: {name} stays put once its paintings have arrived", abs(after - before) <= 2, f"{before} -> {after}")
         ctx.close()
 
 
@@ -298,6 +327,17 @@ def multiply(browser):
         ctx.close()
 
 
+KEY_META = ["2002 · Animal study · PNAS", "2008 · Review · Neurochem Res", "2023 · Review · Cell"]
+EXPLAINER_SHEETS = ["Energy starts small.", "Balance matters.", "Aging is a bigger story."]
+# A painting the visitor was meant to see: the strips' wide paintings and the health scenes.
+STRIP_PICTURES = "#research figure[data-picture] img, #health figure[data-picture] img, #ask figure[data-picture] img, #health [data-scene] img"
+
+
+def tidy(text):
+    """Words as read: the word joiner (U+2060, which keeps a dash off a line's start) is no letter."""
+    return re.sub(r"\s+", " ", text.replace(chr(0x2060), "")).strip()
+
+
 def strips(browser):
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, errors = opened(browser, w, h)
@@ -311,12 +351,39 @@ def strips(browser):
             for img in shown:
                 ok = img.evaluate("i => i.complete && i.naturalWidth > 0")
                 check(f"strips {w} {part}: {img.get_attribute('alt')[:40]} loaded", ok)
+            # is_visible() also counts a painting still waiting to bloom (blurred, or masked to
+            # nothing): bring each into the window and wait until it has bloomed in.
+            for img in shown:
+                img.scroll_into_view_if_needed()
+                page.wait_for_timeout(200)
+            try:
+                page.wait_for_function(
+                    "sel => [...document.querySelectorAll(sel)].filter(i => i.offsetParent).every(i => i.dataset.bloom === 'done')",
+                    arg=f"#{part} img",
+                    timeout=7000,
+                )
+            except Exception:
+                pass
+            for img in shown:
+                state = img.evaluate("i => [i.dataset.bloom, getComputedStyle(i).opacity, getComputedStyle(i).filter]")
+                check(f"strips {w} {part}: {img.get_attribute('alt')[:40]} has bloomed in", state == ["done", "1", "none"], str(state))
+            if part in ("research", "ask"):
+                # Art direction: the phone crop under 960px, the wide painting above.
+                src = shown[0].evaluate("i => decodeURIComponent(i.currentSrc)")
+                check(f"strips {w} {part}: the {'phone crop' if w == 390 else 'wide painting'} is the picture in use", ("-phone-" in src) == (w == 390), src[-60:])
+        scenes = page.locator("#health [data-scene] img")
+        wide = page.locator("#health figure[data-picture]")
         if w == 390:
-            scenes = page.locator("#health [data-scene] img")
             check("strips 390 health: one scene over each article", scenes.count() == 3 and all(s.is_visible() for s in scenes.all()))
+            check("strips 390 health: the wide painting is hidden", wide.count() == 1 and not wide.is_visible())
+        else:
+            check("strips 1440 health: the wide painting stands over the columns", wide.count() == 1 and wide.is_visible())
+            check("strips 1440 health: the phone scenes are hidden", scenes.count() == 3 and not any(s.is_visible() for s in scenes.all()))
         text = page.locator("#research").inner_text()
         for title in ["Mitochondrial nutrients and the aging cell", "Dr. Liu on lipoic acid and the aging brain", "Healthy aging has many moving parts"]:
             check(f"strips {w} research: {title}", title in text)
+        metas = [re.sub(r"\s+", " ", m).strip() for m in page.locator("#research ul > li > p:first-child").all_inner_texts()]
+        check(f"strips {w} research: each study's line is year · kind · journal", metas == KEY_META, str(metas))
         check(f"strips {w} research: the honesty line", "do not establish the effects of a finished BiGH product" in text)
         rows_before = page.locator("#research details").count()
         page.get_by_role("button", name=re.compile(r"See all 36 sources")).click()
@@ -328,11 +395,22 @@ def strips(browser):
         check(f"strips {w} research: and closes", page.locator("#research details").count() == 0)
         buttons = page.locator("#health button")
         check(f"strips {w} health: three explainers", buttons.count() == 3)
-        buttons.nth(1).click()
-        page.wait_for_timeout(700)
-        check(f"strips {w} health: an explainer sheet opens", page.locator("dialog[open]").count() == 1)
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(400)
+        headings = [tidy(t) for t in page.locator("#health li h3").all_inner_texts()]
+        for i in range(3):
+            button = buttons.nth(i)
+            described = button.evaluate("b => { const e = document.getElementById(b.getAttribute('aria-describedby') || ''); return e ? e.textContent : null; }")
+            described = tidy(described or "")
+            check(f"strips {w} health: explainer {i + 1} is described by its article title", described == headings[i] and described != "", described)
+            button.scroll_into_view_if_needed()
+            button.click()
+            page.wait_for_timeout(700)
+            open_sheets = page.locator("dialog[open]")
+            title = open_sheets.locator("h2").first.inner_text() if open_sheets.count() == 1 else ""
+            check(f"strips {w} health: explainer {i + 1} opens its own sheet", open_sheets.count() == 1 and title == EXPLAINER_SHEETS[i], title)
+            page.keyboard.press("Escape")
+            page.wait_for_timeout(400)
+            check(f"strips {w} health: explainer {i + 1} closes on Escape", page.locator("dialog[open]").count() == 0)
+            check(f"strips {w} health: focus returns to explainer {i + 1}'s button", button.evaluate("b => b === document.activeElement"))
         ask = page.locator("#ask").inner_text()
         for word in ["Ask BiGH Science", "In development", "not accepting submissions"]:
             check(f"strips {w} ask: {word}", word in ask)
