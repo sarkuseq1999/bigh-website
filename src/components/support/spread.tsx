@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type CSSProperties, type ReactNode } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+  type SyntheticEvent,
+} from "react";
 import base from "@/components/ink/ink.module.css";
 import type { Art, Steam } from "./support-art";
 import page from "./support-page.module.css";
@@ -16,6 +23,31 @@ import page from "./support-page.module.css";
 // pictures too. The server renders it data-steam="waiting"; once the painting's picture and the
 // steam's own are both in, script marks it "ready", and only then, with the bloom open, does the
 // stylesheet let it rise. A picture that fails never marks it.
+
+/** The gold steam's gate, for the porch and for the thank-you's cup alike. A picture is "in" on its
+ *  onLoad (Next calls it for a picture already complete when it hydrates, a broken one too, hence
+ *  the width) or, on mount, when it is already complete. A failed picture is never in. Spread
+ *  `ink` and `gold` onto the two <Image>s; `steam` is the steam's data-steam ("ready" once both
+ *  are in) and `inkIn` says the painting's own picture is. */
+export function useSteamGate() {
+  const inkImg = useRef<HTMLImageElement>(null);
+  const goldImg = useRef<HTMLImageElement>(null);
+  const [inkIn, setInkIn] = useState(false);
+  const [goldIn, setGoldIn] = useState(false);
+  useEffect(() => {
+    if (inkImg.current?.complete && inkImg.current.naturalWidth) setInkIn(true);
+    if (goldImg.current?.complete && goldImg.current.naturalWidth) setGoldIn(true);
+  }, []);
+  const loaded = (set: (value: boolean) => void) => (event: SyntheticEvent<HTMLImageElement>) => {
+    if (event.currentTarget.naturalWidth) set(true);
+  };
+  return {
+    ink: { ref: inkImg, onLoad: loaded(setInkIn) },
+    gold: { ref: goldImg, onLoad: loaded(setGoldIn) },
+    inkIn,
+    steam: inkIn && goldIn ? "ready" : "waiting",
+  } as const;
+}
 
 export function Painting({
   art,
@@ -37,25 +69,12 @@ export function Painting({
   steam?: Steam;
   className?: string;
 }) {
-  // A picture is "in" on its onLoad (Next calls it for a picture already complete when it hydrates,
-  // a broken one too, hence the width) or, on mount, when it is already complete. A failed picture
-  // is never in.
-  const inkImg = useRef<HTMLImageElement>(null);
-  const goldImg = useRef<HTMLImageElement>(null);
-  const [inkIn, setInkIn] = useState(false);
-  const [goldIn, setGoldIn] = useState(false);
-  useEffect(() => {
-    if (inkImg.current?.complete && inkImg.current.naturalWidth) setInkIn(true);
-    if (goldImg.current?.complete && goldImg.current.naturalWidth) setGoldIn(true);
-  }, []);
+  const gate = useSteamGate();
   return (
     <figure className={`${page.painting} ${className}`} data-picture="">
       <span className={page.paintingBody}>
         <Image
-          ref={inkImg}
-          onLoad={(event) => {
-            if (event.currentTarget.naturalWidth) setInkIn(true);
-          }}
+          {...gate.ink}
           className={base.ink}
           src={art.src}
           alt={alt}
@@ -69,10 +88,7 @@ export function Painting({
         />
         {steam ? (
           <Image
-            ref={goldImg}
-            onLoad={(event) => {
-              if (event.currentTarget.naturalWidth) setGoldIn(true);
-            }}
+            {...gate.gold}
             className={page.steam}
             src={steam.src}
             alt=""
@@ -80,7 +96,7 @@ export function Painting({
             height={steam.height}
             sizes="200px"
             loading="eager"
-            data-steam={inkIn && goldIn ? "ready" : "waiting"}
+            data-steam={gate.steam}
             style={
               {
                 left: `${(steam.left * 100).toFixed(2)}%`,

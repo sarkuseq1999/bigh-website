@@ -18,7 +18,16 @@ painting; from 960px the sides take turns (left, right, left), below it each pai
 on one column; no words past the right margin; nothing scrolls sideways; the parts' words.
 questions (1440x900): four <details>, the first open at rest, opening one closes the others, each
 question a 48px+ target, "Ask BiGH Science" opens its sheet.
-(Later tasks add: form, languages, links.)
+form (1440x900, 390x844, 360x780): the labels and the reaction note; the preview tag beside Send;
+topic chips never one alone on a row; every control 48px+; fields are lines, never boxes; an empty
+Send names the four missing things and focuses the first; a wrong email is caught; a 5 MB photo and
+a PDF are refused, a picture is kept by name and can be removed; Enter sends once: one thank-you, a
+ticket number like BH-1014-7K3Q carrying today's month and day, focus on "Thank you.", the preview
+line, the number holds still, the cup multiplies and no wrapper stops it; "Write another message"
+brings back an empty form focused on the name;
+the thank-you's steam waits for the cup's picture (the cup's request held for 3s: the steam stays
+under 30% while the cup is not in, then rises); reduced motion: the thank-you at once, steam whole.
+(Later tasks add: languages, links.)
 
 Pictures: scripts/qa/out/support/<tag>.png.
 
@@ -28,6 +37,7 @@ Usage: python -X utf8 scripts/qa/qa_support.py [base-url] [--only=opening,motion
 import os
 import re
 import sys
+import tempfile
 
 from playwright.sync_api import sync_playwright
 
@@ -278,7 +288,195 @@ def questions(browser):
     context.close()
 
 
-GROUPS = [opening, motion, rhythm, questions]
+TICKET = re.compile(r"^BH-\d{4}-[A-HJKMNP-Z2-9]{4}$")
+
+
+def fill(page, name="Ana Ruiz", email="ana@example.com", topic="A return", message="The seal on my bottle was broken."):
+    page.fill("#support-name", name)
+    page.fill("#support-email", email)
+    if topic:
+        page.locator("label", has_text=topic).click()
+    page.fill("#support-message", message)
+
+
+def form(browser):
+    for width, height in ((1440, 900), (390, 844), (360, 780)):
+        tag = f"form {width}"
+        context, page, *_ = open_page(browser, width, height)
+        page.locator("#write").scroll_into_view_if_needed()
+        page.wait_for_timeout(600)
+        main = page.inner_text("#write")
+        for words in ["Your name", "Email", "Order number (optional)", "What is it about?", "Your message",
+                      "Add a photo (optional)", "I had a reaction", "In an emergency, call 911."]:
+            check(f"{tag}: says {words!r}", words in main)
+        check(f"{tag}: the preview tag stands beside Send", page.locator("form [data-honesty]").inner_text().strip() == "Preview: messages aren’t sent yet")
+        rows = page.evaluate("""(() => { const tops = {}; document.querySelectorAll('[data-topics] label').forEach(l => { const t = Math.round(l.getBoundingClientRect().top); tops[t] = (tops[t] || 0) + 1; }); return Object.values(tops); })()""")
+        check(f"{tag}: the topic chips never leave one alone on a row", rows == [1, 1, 1, 1, 1] or 1 not in rows, rows)
+        targets = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]), form textarea, form button, [data-topics] label, form label[for=support-photo]')]
+          .map(e => [e.id || e.textContent.trim().slice(0, 20), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)""")
+        check(f"{tag}: every control is 48px or more", not targets, targets)
+        boxes = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]), form textarea')].filter(e => {
+          const s = getComputedStyle(e); return parseFloat(s.borderTopWidth) > 0 || parseFloat(s.borderLeftWidth) > 0; }).map(e => e.id)""")
+        check(f"{tag}: fields are writing lines, never boxes", not boxes, boxes)
+
+        # Send with nothing filled: four plain messages, focus on the first field.
+        page.click("form button[type=submit]")
+        page.wait_for_timeout(300)
+        errs = page.evaluate("[...document.querySelectorAll('form [data-error]')].map(e => e.textContent.trim())")
+        check(f"{tag}: empty Send says what is missing", errs == ["Please add your name.", "Please add an email we can reply to.", "Please choose what it’s about.", "Please write your message."], errs)
+        check(f"{tag}: focus goes to the first missing field", page.evaluate("document.activeElement.id") == "support-name")
+        check(f"{tag}: the missing fields are marked invalid", page.evaluate("document.querySelector('#support-name').getAttribute('aria-invalid')") == "true")
+
+        # A wrong email, then a fix.
+        fill(page, email="ana@")
+        page.click("form button[type=submit]")
+        page.wait_for_timeout(300)
+        errs = page.evaluate("[...document.querySelectorAll('form [data-error]')].map(e => e.textContent.trim())")
+        check(f"{tag}: a wrong email is caught", errs == ["Please add an email we can reply to."], errs)
+
+        # Photos: too big, not a picture, then a good one, removed.
+        with tempfile.TemporaryDirectory() as tmp:
+            big = os.path.join(tmp, "big.jpg")
+            with open(big, "wb") as f:
+                f.write(b"\xff\xd8\xff" + b"0" * (5 * 1024 * 1024))
+            pdf = os.path.join(tmp, "label.pdf")
+            with open(pdf, "wb") as f:
+                f.write(b"%PDF-1.4\n%%EOF\n")
+            small = os.path.join(tmp, "bottle.png")
+            with open(small, "wb") as f:
+                f.write(bytes.fromhex("89504e470d0a1a0a0000000d4948445200000001000000010806000000"
+                                      "1f15c4890000000d49444154789c6360000002000154a24f5d0000000049454e44ae426082"))
+            page.set_input_files("#support-photo", big)
+            page.wait_for_timeout(200)
+            check(f"{tag}: a 5 MB photo is refused", "Photos up to 4 MB, please." in page.inner_text("form"))
+            page.set_input_files("#support-photo", pdf)
+            page.wait_for_timeout(200)
+            check(f"{tag}: a PDF is refused", "Please choose a photo (JPG, PNG or HEIC)." in page.inner_text("form"))
+            page.set_input_files("#support-photo", small)
+            page.wait_for_timeout(200)
+            check(f"{tag}: a picture is kept, by name", "bottle.png" in page.inner_text("form"))
+            page.click("form button:has-text('Remove photo')")
+            page.wait_for_timeout(200)
+            check(f"{tag}: the photo can be removed", "bottle.png" not in page.inner_text("form"))
+
+        # Send twice quickly and Enter in a field: one thank-you, one number.
+        fill(page)
+        page.focus("#support-name")
+        page.keyboard.press("Enter")
+        page.click("form button[type=submit]", timeout=1000) if page.locator("form button[type=submit]").count() else None
+        page.wait_for_timeout(500)
+        panels = page.locator("[data-sent]").count()
+        ticket = page.locator("[data-ticket]").inner_text().strip() if panels else ""
+        check(f"{tag}: one thank-you", panels == 1, panels)
+        check(f"{tag}: a ticket number like BH-1014-7K3Q", TICKET.match(ticket) is not None, ticket)
+        today = page.evaluate("(() => { const d = new Date(); return String(d.getMonth() + 1).padStart(2, '0') + String(d.getDate()).padStart(2, '0'); })()")
+        check(f"{tag}: the ticket carries today's month and day", ticket[3:7] == today, [ticket, today])
+        check(f"{tag}: focus moves to the thank-you", page.evaluate("document.activeElement.id") == "sent-title")
+        sent = page.inner_text("[data-sent]")
+        check(f"{tag}: the thank-you says nothing was sent, and how to reach us",
+              "This is a preview, so nothing was sent." in sent and "800-919-2089" in sent and "support@bighnow.com" in sent, sent)
+        page.wait_for_timeout(1500)
+        check(f"{tag}: the number holds still", page.locator("[data-ticket]").inner_text().strip() == ticket)
+        # The cup multiplies onto the paper, its steam does not, and nothing between the cup and the
+        # page root makes a stacking context (which would stop the multiply).
+        stack = page.evaluate("""(() => {
+          const img = document.querySelector('[data-sent] img:not([data-steam])');
+          const steam = document.querySelector('[data-sent] img[data-steam]');
+          const bad = [];
+          for (let e = img.parentElement; e && !e.hasAttribute('data-look'); e = e.parentElement) {
+            const s = getComputedStyle(e);
+            if (parseFloat(s.opacity) < 1 || s.transform !== 'none' || s.filter !== 'none' || s.isolation === 'isolate'
+                || s.maskImage !== 'none' || s.mixBlendMode !== 'normal' || s.perspective !== 'none' || s.clipPath !== 'none'
+                || (s.zIndex !== 'auto' && s.position !== 'static') || s.translate !== 'none' || s.rotate !== 'none'
+                || s.scale !== 'none' || s.willChange !== 'auto' || s.contain.includes('paint'))
+              bad.push(e.tagName + '.' + String(e.className).slice(0, 30));
+          }
+          return [getComputedStyle(img).mixBlendMode, getComputedStyle(steam).mixBlendMode, bad];
+        })()""")
+        check(f"{tag}: the cup multiplies, its steam does not, and no wrapper stops the multiply",
+              stack[0] == "multiply" and stack[1] == "normal" and not stack[2], stack)
+        page.screenshot(path=os.path.join(OUT, f"sent-{width}.png"))
+
+        # Write another message: an empty form, focus on the name.
+        page.click("[data-sent] button:has-text('Write another message')")
+        page.wait_for_timeout(400)
+        check(f"{tag}: Write another message brings back an empty form",
+              page.locator("form[data-support-form]").count() == 1 and page.input_value("#support-name") == "")
+        check(f"{tag}: focus goes to Your name", page.evaluate("document.activeElement.id") == "support-name")
+        context.close()
+
+    # Reduced motion: the thank-you is there at once, its steam whole.
+    context, page, *_ = open_page(browser, 1440, 900, reduced=True)
+    page.locator("#write").scroll_into_view_if_needed()
+    fill(page)
+    page.click("form button[type=submit]")
+    page.wait_for_timeout(100)
+    rise = page.evaluate("parseFloat(getComputedStyle(document.querySelector('[data-sent] [data-steam]')).getPropertyValue('--rise'))")
+    check("form (reduced): the thank-you at once, its steam whole", page.locator("[data-sent]").count() == 1 and rise >= 100, rise)
+    context.close()
+
+    late_cup(browser)
+
+
+def is_cup(url):
+    """The thank-you's cup picture (not the steam, "porch-steam-v1"), as Next's image route serves it."""
+    return "/_next/image" in url and "cup-v1" in url
+
+
+# One sample per frame once the thank-you has a steam: [ms, the steam's --rise, its data-steam, whether
+# the cup's picture is in (complete, with a width)].
+WATCH_SENT = """
+window.__sent = [];
+const t0 = performance.now();
+const tick = () => {
+  const steam = document.querySelector('[data-sent] [data-steam]');
+  const cup = document.querySelector('[data-sent] img:not([data-steam])');
+  if (steam) window.__sent.push([performance.now() - t0,
+    parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), steam.dataset.steam,
+    !!cup && cup.complete && cup.naturalWidth > 0]);
+  if (window.__sent.length < 6000) requestAnimationFrame(tick);
+};
+requestAnimationFrame(tick);
+"""
+
+
+def late_cup(browser):
+    """The gold never rises alone over bare paper (the porch's rule, here for the thank-you too): the
+    cup's picture loads only after Send, so its request is held for 3s and the steam must stay down
+    until the cup is in."""
+    held = []
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    page = context.new_page()
+    page.route(is_cup, lambda route: held.append(route))
+    page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
+    page.evaluate("document.fonts.ready.then(() => true)")
+    page.wait_for_timeout(1200)
+    page.locator("#write").scroll_into_view_if_needed()
+    fill(page)
+    page.evaluate(WATCH_SENT)
+    page.click("form button[type=submit]")
+    page.wait_for_timeout(3000)
+    out = page.evaluate("window.__sent")
+    bare = [s for s in out if not s[3]]
+    check("form (late cup): the thank-you is up and the cup's picture is still out (the case is real)",
+          held and len(bare) > 10 and bare[-1][0] - bare[0][0] >= 2500,
+          [len(held), len(bare), round(bare[-1][0] - bare[0][0]) if bare else None])
+    check("form (late cup): the steam waits, and stays down while the cup is out",
+          bare and all(s[1] < 30 and s[2] == "waiting" for s in bare),
+          [max((round(s[1]) for s in bare), default=None), sorted({s[2] for s in bare})])
+    for route in held:
+        route.continue_()
+    page.wait_for_function("window.__sent.some(s => s[3])", timeout=30000)
+    page.wait_for_timeout(5000)
+    after = page.evaluate("window.__sent")
+    rising = next((s for s in after if s[1] >= 30), None)
+    check("form (late cup): once the cup is in, the steam rises",
+          rising and rising[3] and max(s[1] for s in after) >= 100,
+          [rising and round(rising[0]), rising and rising[3], round(max(s[1] for s in after))])
+    context.close()
+
+
+GROUPS = [opening, motion, rhythm, questions, form]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 if __name__ == "__main__":

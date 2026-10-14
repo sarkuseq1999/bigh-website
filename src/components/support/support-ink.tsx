@@ -8,6 +8,7 @@ import { useCopy } from "@/i18n/use-copy";
 import { book, mailbox, parcel, porch } from "./support-art";
 import { ALT, support } from "./support-content";
 import { Painting, Spread } from "./spread";
+import { SupportForm } from "./support-form";
 import page from "./support-page.module.css";
 
 // Support, "Pull up a chair" (Mo, October 14, 2026; mockup reference/ink-pages/mockups/support/;
@@ -168,7 +169,9 @@ export function SupportInk({ titleFont }: { titleFont: string }) {
       {() => (
         <div data-support="porch">
           <Opening />
-          <Write />
+          <Write>
+            <SupportForm />
+          </Write>
           <Returns />
           <Questions />
         </div>

@@ -394,3 +394,311 @@
 .supportPage section[data-part="questions"] {
   padding-bottom: 0;
 }
+
+/* ---- The form: writing lines on the paper, never boxes ------------------------------------- */
+
+.supportPage .form {
+  display: grid;
+  gap: 28px;
+  max-width: 640px;
+  margin-top: clamp(28px, 2.8vw, 40px);
+}
+
+.supportPage .field,
+.supportPage .photo {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.supportPage .field > label,
+.supportPage .field > legend {
+  display: block;
+  padding: 0;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+}
+
+/* One hairline under each field, darkening to ink with focus. */
+.supportPage .field input:not([type="radio"]),
+.supportPage .field textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--hair);
+  color: var(--ink);
+  font: inherit;
+  font-size: 20px;
+}
+
+.supportPage .field input:not([type="radio"]):focus,
+.supportPage .field textarea:focus {
+  outline: 0;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+.supportPage .field input[aria-invalid="true"] {
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+/* The message on ruled lines (40px apart), growing as it fills (field-sizing: where a browser has
+   it; elsewhere the four lines scroll). */
+.supportPage .field textarea {
+  min-height: 160px;
+  padding: 0;
+  box-shadow: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--hair) 39px 40px);
+  line-height: 40px;
+  resize: none;
+  field-sizing: content;
+}
+
+.supportPage .field textarea:focus,
+.supportPage .field textarea[aria-invalid="true"] {
+  box-shadow: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--ink) 39px 40px);
+}
+
+/* What it's about: the kit's filter chips (outlined pills, 48px), three and two from 600px; a
+   column of full-width rows on a phone, so none stands alone on a row. */
+.supportPage .topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 560px;
+  margin-top: 12px;
+}
+
+.supportPage .topicChoice {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The radio sits invisibly over its chip, for the keyboard; the pointer goes to the chip (its
+   label), which is the target and draws the state. */
+.supportPage .topicChoice input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.supportPage .topicChoice label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 450;
+  cursor: pointer;
+}
+
+.supportPage .topicChoice label:hover {
+  border-color: var(--ink);
+}
+
+.supportPage .topicChoice input:checked + label {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.supportPage .topicChoice input:focus-visible + label,
+.supportPage .photo input[type="file"]:focus-visible + label {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+@media (max-width: 599px) {
+  .supportPage .topics {
+    flex-direction: column;
+  }
+
+  .supportPage .topicChoice,
+  .supportPage .topicChoice label {
+    width: 100%;
+  }
+}
+
+.supportPage p.error {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.supportPage p.photoName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 18px;
+  margin: 4px 0 0;
+  font-size: 17px;
+}
+
+.supportPage .sendRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+}
+
+/* The honesty tag (DESIGN.md honesty-tag: caption type, Ink Grey, an outlined pill, 30px). */
+.supportPage .honesty {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 450;
+}
+
+.supportPage p.note {
+  max-width: 34em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Reduced motion: the lines and the chips change at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .field input:not([type="radio"]),
+  .supportPage .field textarea {
+    transition:
+      box-shadow 0.4s var(--ease),
+      background 0.4s var(--ease);
+  }
+
+  .supportPage .topicChoice label {
+    transition:
+      background-color 0.4s var(--ease),
+      color 0.4s var(--ease),
+      border-color 0.4s var(--ease);
+  }
+}
+
+/* ---- The moment: the cup, its steam rising again, the ticket number ----------------------- */
+
+.supportPage .sent {
+  display: grid;
+  justify-items: center;
+  max-width: 640px;
+  margin-top: clamp(20px, 2vw, 32px);
+  text-align: center;
+}
+
+/* The cup is painted at 182px wide: never shown larger, so it stays crisp. */
+.supportPage .cup {
+  position: relative;
+  display: block;
+  width: min(182px, 60%);
+}
+
+.supportPage .cup img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.supportPage .cup img.steam {
+  position: absolute;
+  max-width: none;
+}
+
+.supportPage h3.sentTitle {
+  margin: 6px 0 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(32px, 2.8vw, 44px);
+  line-height: 1.1;
+}
+
+.supportPage h3.sentTitle:focus-visible {
+  outline-offset: 6px;
+}
+
+.supportPage p.sentLabel {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+}
+
+/* The number in Switzer (never Ysabeau's old-style digits), large, letter by letter clear. */
+.supportPage p.ticket {
+  margin: 4px 0 0;
+  font-family: var(--sans);
+  font-size: clamp(32px, 2.8vw, 42px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.supportPage .sent p.body {
+  margin-inline: auto;
+}
+
+.supportPage .nowrap {
+  white-space: nowrap;
+}
+
+.supportPage p.previewLine {
+  max-width: 32em;
+  margin: 18px 0 6px;
+  padding: 10px 16px;
+  border: 1px solid var(--hair);
+  border-radius: 22px;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* The cup blooms once its picture is in (opacity and blur on the picture itself, so its multiply
+   is kept: no wrapper makes a stacking context); the steam rises again 0.9s after it, and only
+   once the cup's picture and its own are in (spread.tsx useSteamGate), never alone over bare
+   paper. The general rule above holds it at 0 until then. Reduced motion: no rule, so the cup and
+   the steam are there whole at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .sent .cupInk[data-cup="waiting"] {
+    opacity: 0;
+  }
+
+  .supportPage .sent .cupInk[data-cup="in"] {
+    animation: cup-in var(--breath) var(--ease) both;
+  }
+
+  .supportPage .sent [data-steam="ready"] {
+    animation: steam-rise var(--breath) var(--ease) 0.9s both;
+  }
+
+  .supportPage .sent > :not(.cup) {
+    animation: words-in 0.9s var(--ease) 0.4s both;
+  }
+}
+
+@keyframes cup-in {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+  }
+}
+
+@keyframes words-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
