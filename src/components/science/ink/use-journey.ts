@@ -26,10 +26,12 @@ import { useEffect, useState, type RefObject } from "react";
  * (--lift, the title's height and its gap: the box sticks that much higher; only the sticky top
  * changes, no height). "still": the still scroll. The last resort, for a box the stylesheet's room
  * did not cover (a translation that grew): the painting gives way, down to 180px, then the section
- * is marked data-still; both change the page's height, so the rooms are measured to keep this rare.
- * It measures against the small viewport height (100svh, through --journey-svh), not innerHeight,
- * so a phone's toolbars coming and going cannot change the layout. Returns whether it is the still
- * scroll. Reduced motion: nothing runs; the stylesheet shows the still scroll.
+ * is marked data-still; both change the page's height, so the rooms are measured to keep this rare,
+ * and it says so in the console (console.warn) when it acts. It measures against the small
+ * viewport height (100svh, through --journey-svh), not innerHeight, so a phone's toolbars coming
+ * and going cannot change the layout (innerHeight only in a browser that cannot register the
+ * probe). Returns whether it is the still scroll. Reduced motion: nothing runs; the stylesheet
+ * shows the still scroll.
  */
 export function useJourney(
   section: RefObject<HTMLElement | null>,
@@ -55,6 +57,7 @@ export function useJourney(
     let pending = 0;
     let now = -1;
     let fixed = false;
+    let warned = "";
 
     const reachable = (current: number | null) =>
       links.forEach((link) => {
@@ -94,7 +97,10 @@ export function useJourney(
         const gap = parseFloat(getComputedStyle(pin).rowGap) || 0;
         root.style.setProperty("--lift", `${words.getBoundingClientRect().height + gap}px`);
       }
-      const small = parseFloat(style.getPropertyValue("--journey-svh")) || innerHeight;
+      // The probe is a registered <length>, so it computes to px; a browser without @property
+      // keeps the string "100svh" (which would parse as 100), so only a px value is trusted.
+      const probe = style.getPropertyValue("--journey-svh").trim();
+      const small = probe.endsWith("px") && parseFloat(probe) > 0 ? parseFloat(probe) : innerHeight;
       const over =
         pin.getBoundingClientRect().height +
         (parseFloat(getComputedStyle(pin).top) || 0) +
@@ -102,6 +108,14 @@ export function useJourney(
         small;
       if (over <= 0) return false;
       const h = painting.getBoundingClientRect().height - over;
+      // A room the stylesheet did not measure: say so (once per window size and shortfall).
+      const note = `${innerWidth}x${Math.round(small)}: ${over.toFixed(1)}px`;
+      if (note !== warned) {
+        warned = note;
+        console.warn(
+          `Science handscroll: the pinned box is ${over.toFixed(1)}px too tall for this ${innerWidth}x${Math.round(small)} window (small viewport height), so ${h >= 180 ? "the painting shrinks" : "it falls back to the still scroll"} after load and the anchors below move. Measure --words-room / --stops-room again (journey.module.css).`,
+        );
+      }
       if (h >= 180) {
         root.style.setProperty("--band-h", `${h}px`);
         return false;

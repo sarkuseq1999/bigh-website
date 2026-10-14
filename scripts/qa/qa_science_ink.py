@@ -18,6 +18,8 @@ Sections (all, or --only=a,b):
   strips      (Task 4) research, health and ask: the painting in use (phone crop under 960px) and
               bloomed in, year · kind · journal, the full list, each explainer's own sheet
   languages   (Task 5) kr, jp, cns, vn: 200, no errors, the new strings translated
+  rooms       (Task 5) all five languages, 280 to 1536px wide: the stylesheet's --words-room and
+              --stops-room cover what the pinned box needs besides the painting, with 20px to spare
   layout      (Task 6) sizes 1920 to 360: no sideways scroll, text 15px+, targets 44px+
   deep_links  (Task 6) #scientists, #research, #health, #ask land under the menu bar
 Pictures: scripts/qa/out/science-ink/.
@@ -175,7 +177,10 @@ JOURNEY_SIZES = [
     # Real windows (October 14 review): a laptop with its browser bars, iPhone Safari with its
     # toolbars, a small phone, and a phone held sideways (the still scroll).
     (1366, 657, "en"), (390, 664, "en"), (375, 667, "en"), (844, 390, "en"),
+    # (Task 5) a small old phone: under 360px wide the lifted box needs up to 586px (Vietnamese).
+    (320, 568, "en"),
 ]
+STILL_SIZES = {(844, 390), (320, 568)}
 
 
 def journey(browser):
@@ -185,7 +190,7 @@ def journey(browser):
         page.wait_for_timeout(1200)
         start = page.evaluate(STATE)
         check(f"{tag}: starts at Okayama", start["now"] == 0, str(start["now"]))
-        if (w, h) == (844, 390):
+        if (w, h) in STILL_SIZES:
             # Too short for the pinned box even with the title gone and the painting at its least.
             check(f"{tag}: the still scroll", start["still"])
             pin = page.evaluate("getComputedStyle(document.querySelector('[data-pin]')).position")
@@ -274,6 +279,11 @@ PART_TOPS = "['research', 'health', 'ask'].map(id => Math.round(document.getElem
 SETTLED_SIZES = [
     (1440, 900, "en"), (1440, 900, "vn"), (1366, 657, "en"), (1280, 720, "en"), (1280, 720, "vn"),
     (390, 664, "en"), (375, 667, "en"), (390, 844, "en"), (390, 844, "vn"),
+    # (Task 5) the translated pages, a large phone, and the narrow-phone rooms (under 360px the hint
+    # takes two lines in Vietnamese; at 360px the Japanese hint is near its wrap).
+    (1440, 900, "kr"), (1440, 900, "jp"), (1440, 900, "cns"),
+    (390, 664, "kr"), (390, 664, "jp"), (390, 664, "cns"),
+    (430, 932, "en"), (360, 640, "jp"), (320, 640, "vn"),
 ]
 
 
@@ -284,11 +294,13 @@ def settled(browser):
     for w, h, lang in SETTLED_SIZES:
         ctx = browser.new_context(viewport={"width": w, "height": h})
         page = ctx.new_page()
+        warnings = []
+        page.on("console", lambda m: m.type == "warning" and "handscroll" in m.text and warnings.append(m.text))
         # A first visit warms the cache, so the fonts are there when the page is read before its
         # script runs (on a cold first visit the lead can re-wrap when Switzer arrives: the fonts'
         # doing, not the script's).
         page.goto(BASE + f"/{lang}/science", wait_until="networkidle")
-        read = "[document.querySelector('#liu').offsetTop, document.querySelector('#scientists [data-room]').offsetHeight, document.querySelector('#scientists').style.getPropertyValue('--band-h')]"
+        read = "[document.querySelector('#liu').offsetTop, document.querySelector('#scientists [data-room]').offsetHeight, document.querySelector('#scientists').style.getPropertyValue('--band-h'), document.querySelector('#scientists').hasAttribute('data-still')]"
         page.goto(BASE + f"/{lang}/science", wait_until="domcontentloaded")
         first = page.evaluate(read)
         first_parts = page.evaluate(PART_TOPS)
@@ -297,20 +309,21 @@ def settled(browser):
         check(f"settled {w}x{h} {lang}: #liu stays put after load", abs(later[0] - first[0]) <= 2, f"{first[0]} -> {later[0]}")
         check(f"settled {w}x{h} {lang}: the travel room stays put", later[1] == first[1], f"{first[1]} -> {later[1]}")
         check(f"settled {w}x{h} {lang}: the script sets no painting height", later[2] == "", repr(later[2]))
-        if w in (1440, 390):
-            # The strips' paintings are lazy and the phone's has another ratio than the wide one:
-            # the stylesheet reserves each one's box (strip.module.css), so once every painting has
-            # arrived the three parts stand where they stood before (the menu's links land by them).
-            page.evaluate(f"document.querySelectorAll('{STRIP_PICTURES}').forEach(i => {{ i.loading = 'eager'; }})")
-            page.wait_for_function(
-                "sel => [...document.querySelectorAll(sel)].filter(i => i.offsetParent).every(i => i.complete && i.naturalWidth > 0)",
-                arg=STRIP_PICTURES,
-                timeout=15000,
-            )
-            page.wait_for_timeout(300)
-            arrived = page.evaluate(PART_TOPS)
-            for name, before, after in zip(["#research", "#health", "#ask"], first_parts, arrived):
-                check(f"settled {w}x{h} {lang}: {name} stays put once its paintings have arrived", abs(after - before) <= 2, f"{before} -> {after}")
+        check(f"settled {w}x{h} {lang}: the script does not fall back to the still scroll", not later[3])
+        check(f"settled {w}x{h} {lang}: the last resort stays quiet (no console warning)", not warnings, "; ".join(warnings[:1]))
+        # The strips' paintings are lazy and the phone's has another ratio than the wide one: the
+        # stylesheet reserves each one's box (strip.module.css), so once every painting has arrived
+        # the three parts stand where they stood before (the menu's links land by them).
+        page.evaluate(f"document.querySelectorAll('{STRIP_PICTURES}').forEach(i => {{ i.loading = 'eager'; }})")
+        page.wait_for_function(
+            "sel => [...document.querySelectorAll(sel)].filter(i => i.offsetParent).every(i => i.complete && i.naturalWidth > 0)",
+            arg=STRIP_PICTURES,
+            timeout=15000,
+        )
+        page.wait_for_timeout(300)
+        arrived = page.evaluate(PART_TOPS)
+        for name, before, after in zip(["#research", "#health", "#ask"], first_parts, arrived):
+            check(f"settled {w}x{h} {lang}: {name} stays put once its paintings have arrived", abs(after - before) <= 2, f"{before} -> {after}")
         ctx.close()
 
 
@@ -451,7 +464,35 @@ def languages(browser):
         ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply, "languages": languages}
+# What the pinned box needs besides the painting (useJourney's last resort fires past it): the
+# title, the foot, the stops, the grid's gaps and useJourney's own 12px. Pin mode keeps the title in
+# the box (--words-room, from 960px); lift mode sends it under the menu bar (--stops-room).
+ROOM_NEEDS = """async () => {
+  await document.fonts.ready;
+  const s = document.querySelector('#scientists'); const pin = s.querySelector('[data-pin]');
+  const [words, , foot, track] = [...pin.children].map(c => c.getBoundingClientRect().height);
+  const gap = parseFloat(getComputedStyle(pin).rowGap); const cs = getComputedStyle(s);
+  return { pin: words + foot + track + 3 * gap + 12, lift: foot + track + 2 * gap + 12,
+           wordsRoom: parseFloat(cs.getPropertyValue('--words-room')), stopsRoom: parseFloat(cs.getPropertyValue('--stops-room')) };
+}"""
+ROOM_WIDTHS = [280, 320, 360, 390, 768, 960, 1280, 1536]
+ROOM_SPARE = 20
+
+
+def rooms(browser):
+    # The rooms are measured with about one line to spare (journey.module.css); a string that grows
+    # eats into it, and this fails before the last resort ever moves the anchors.
+    for lang in ["en", "vn", "kr", "jp", "cns"]:
+        for w in ROOM_WIDTHS:
+            ctx, page, _, _ = opened(browser, w, 1400, path=f"/{lang}/science")
+            d = page.evaluate(ROOM_NEEDS)
+            check(f"rooms {lang} {w}: --stops-room {d['stopsRoom']:.0f} covers the lifted box", d["stopsRoom"] - d["lift"] >= ROOM_SPARE, f"needs {d['lift']:.1f}, spare {d['stopsRoom'] - d['lift']:.1f}")
+            if w >= 960:
+                check(f"rooms {lang} {w}: --words-room {d['wordsRoom']:.0f} covers the pinned box", d["wordsRoom"] - d["pin"] >= ROOM_SPARE, f"needs {d['pin']:.1f}, spare {d['wordsRoom'] - d['pin']:.1f}")
+            ctx.close()
+
+
+SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply, "languages": languages, "rooms": rooms}
 
 if __name__ == "__main__":
     with sync_playwright() as p:
