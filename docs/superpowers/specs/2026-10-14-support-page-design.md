@@ -121,8 +121,10 @@ level and gold mask) into `public/images/support/` with a generated `support-art
 
 ## Words and languages
 
-New copy keys start at m612 and go into the English catalog only; every other language shows the
-English words until the translations are made. `/hken` redirects to `/cns` as on every page.
+The page's new words get no copy keys yet: a string without a key shows its English source in every
+language (`useCopy`), so every other language shows the page's words in English (the menu and footer
+stay translated) until the translations are made, from the next free key (m612 on October 14).
+`/hken` redirects to `/cns` as on every page.
 
 ## Checks
 
