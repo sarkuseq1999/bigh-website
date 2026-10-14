@@ -13,7 +13,12 @@ paper: with the porch's request held for 4.5s the steam's --rise stays under 30%
 porch's picture is not in (the porch has bloomed by then), and it starts to rise only once the
 picture is in, and a porch whose picture fails never lets it rise; reduced motion: the steam is
 whole at once; no script: the porch and the steam are whole.
-(Later tasks add: rhythm, questions, form, languages, links.)
+rhythm (1440, 1280, 1024, 960, 768, 390, 360): Write to us, Returns and Questions each have a
+painting; from 960px the sides take turns (left, right, left), below it each painting comes first
+on one column; no words past the right margin; nothing scrolls sideways; the parts' words.
+questions (1440x900): four <details>, the first open at rest, opening one closes the others, each
+question a 48px+ target, "Ask BiGH Science" opens its sheet.
+(Later tasks add: form, languages, links.)
 
 Pictures: scripts/qa/out/support/<tag>.png.
 
@@ -224,7 +229,56 @@ def motion(browser):
     context.close()
 
 
-GROUPS = [opening, motion]
+SIDES_JS = """[...document.querySelectorAll('main [data-part]')].filter(s => s.querySelector('[data-picture]') && s.dataset.part !== 'opening').map(s => {
+  const p = s.querySelector('[data-picture]').getBoundingClientRect(), w = s.querySelector('[data-words]').getBoundingClientRect();
+  return [s.dataset.part, p.left < w.left ? 'left' : p.top < w.top ? 'first' : 'right', Math.round(w.right), Math.round(p.width)]; })"""
+
+
+def rhythm(browser):
+    for width, height in ((1440, 900), (1280, 800), (1024, 768), (960, 800), (768, 1024), (390, 844), (360, 780)):
+        tag = f"rhythm {width}"
+        context, page, *_ = open_page(browser, width, height)
+        scroll_through(page)
+        sides = page.evaluate(SIDES_JS)
+        parts = [s[0] for s in sides]
+        check(f"{tag}: write, returns and questions each have a painting", parts == ["write", "returns", "questions"], parts)
+        if width >= 960:
+            check(f"{tag}: sides take turns (left, right, left)", [s[1] for s in sides] == ["left", "right", "left"], sides)
+        else:
+            check(f"{tag}: one column, each painting first", all(s[1] == "first" for s in sides), sides)
+        over = page.evaluate("""[...document.querySelectorAll('main [data-words] *')].filter(e => e.getBoundingClientRect().right > window.innerWidth - 16 && e.textContent.trim()).map(e => e.textContent.trim().slice(0, 24))""")
+        check(f"{tag}: no words past the right margin", not over, over[:3])
+        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{tag}: nothing scrolls sideways", sideways <= 0, sideways)
+        main = page.inner_text("main")
+        for words in ["45 days to decide.", "Send returns to", "Glendora, CA 91740", "Orders and shipping",
+                      "Common questions.", "A question about health or science?"]:
+            check(f"{tag}: says {words!r}", words in main)
+        page.screenshot(path=os.path.join(OUT, f"rhythm-{width}.png"), full_page=False)
+        context.close()
+
+
+def questions(browser):
+    context, page, *_ = open_page(browser, 1440, 900)
+    faq = page.locator("#questions details")
+    check("questions: four questions", faq.count() == 4, faq.count())
+    check("questions: the first is open at rest", faq.nth(0).get_attribute("open") is not None)
+    faq.nth(2).locator("summary").click()
+    page.wait_for_timeout(300)
+    opened = page.evaluate("[...document.querySelectorAll('#questions details')].map(d => d.open)")
+    check("questions: opening one closes the others", opened == [False, False, True, False], opened)
+    heights = page.evaluate("[...document.querySelectorAll('#questions summary')].map(s => Math.round(s.getBoundingClientRect().height))")
+    check("questions: every question is a 48px+ target", all(h >= 48 for h in heights), heights)
+    ask = page.locator("#questions button", has_text="Ask BiGH Science")
+    ask.scroll_into_view_if_needed()
+    ask.click()
+    page.wait_for_timeout(1200)
+    check("questions: Ask BiGH Science opens its sheet", page.evaluate("!!document.querySelector('dialog[open]')"))
+    page.keyboard.press("Escape")
+    context.close()
+
+
+GROUPS = [opening, motion, rhythm, questions]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 if __name__ == "__main__":
