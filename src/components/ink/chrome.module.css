@@ -1,45 +1,26 @@
-/* Every ink page's footer (the About/Science chrome's shape): the logo with the promise under it
-   and the look's closing picture beside the words, the links, then the legal lines. The menu bar is
+/* Every ink page's footer (the About/Science chrome's shape): the promise with the look's closing
+   picture beside the words, the links, then the legal lines (no logo: the menu bar's mark is on
+   screen). The menu bar is
    nav/nav-inscription (Mo's pick, October 5, 2026). The footer can be tuned with --footer-bg /
    --footer-ink. */
 
-.footerLogo {
-  display: block;
-  width: 136px;
-}
-
-.logoCrop {
-  display: block;
-  width: 100%;
-  /* The mark ends at row 706 of the logo file; the tagline below it is cropped away. */
-  aspect-ratio: 1448 / 710;
-  overflow: hidden;
-}
-
-.logoImage {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .footer {
-  /* Above the logo: the page's chapter silence (no hairline since October 13, 2026). */
+  /* Above it: the page's chapter silence (no hairline since October 13, 2026). */
   padding: clamp(48px, 4.4vw, 80px) var(--gutter) 32px;
   background: var(--footer-bg, var(--paper-deep));
   color: var(--footer-ink, var(--ink));
 }
 
-/* The logo at the left with the promise under it, its last line level with the last link; the
-   links at the right; under them all the copyright line and "Back to top" (clear of the closing
-   brush stroke), the FDA statement under its brush line, across the whole width, and the preview
-   note. No hairline over it (Mo, October 13, 2026: fewer lines; the paper divides it from the
-   page). One column: logo, promise, links, the legal line, the statement, the note. */
+/* The promise at the left, centred on the links' height; the links at the right; under them all
+   the copyright line and "Back to top" (clear of the closing brush stroke), the FDA statement
+   under its brush line, across the whole width, and the preview note. No hairline over it (Mo,
+   October 13, 2026: fewer lines; the paper divides it from the page). One column: promise, links,
+   the legal line, the statement, the note. */
 .footerTop {
   display: grid;
   grid-template-columns: 1.1fr 1.4fr;
-  grid-template-rows: auto 1fr auto auto auto;
+  grid-template-rows: auto auto auto auto;
   grid-template-areas:
-    "brand columns"
     "promise columns"
     "legal legal"
     "fda fda"
@@ -49,16 +30,14 @@
   margin: 0 auto;
 }
 
-/* The promise under the logo (Mo, October 12, 2026: there, smaller, it and the crane sit with the
-   logo instead of in a band of their own over open paper). */
+/* The promise and the crane, centred on the links' height (Mo, October 13, 2026: no logo above
+   them; on October 12 they left their band of open paper, smaller). The crane stands lower than
+   its box (on the closing stroke), so the box is lifted by half that, with a margin: a transform
+   here would make a stacking context and the crane's multiply blend would show its white. */
 .finale {
   grid-area: promise;
-  align-self: end;
-  padding-top: 24px;
-}
-
-.footerBrand {
-  grid-area: brand;
+  align-self: center;
+  margin-bottom: 24px;
 }
 
 /* The promise, one sentence to a line: still the page's last words, at about the size of a
@@ -194,7 +173,6 @@
     grid-template-columns: 1fr;
     grid-template-rows: none;
     grid-template-areas:
-      "brand"
       "promise"
       "columns"
       "legal"
@@ -203,10 +181,9 @@
     gap: 40px;
   }
 
-  /* Under the logo, closer than the grid's gap; the links keep clear of the closing stroke. */
+  /* The links keep clear of the closing stroke. */
   .finale {
-    margin: -16px 0 16px;
-    padding-top: 0;
+    margin-bottom: 16px;
   }
 
   .footerBottom {
@@ -230,10 +207,6 @@
 @media (max-width: 720px) {
   .footer {
     padding-top: 64px;
-  }
-
-  .footerLogo {
-    width: 116px;
   }
 
   .footerMessage {
