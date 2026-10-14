@@ -2,7 +2,14 @@
 
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useRef, useState, type CSSProperties, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  useSyncExternalStore,
+  type CSSProperties,
+  type FormEvent,
+} from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { useSteamGate } from "./spread";
@@ -31,11 +38,33 @@ const FOCUS: Record<FieldName, string> = {
   photo: "support-photo",
 };
 
+// True on the client once it has hydrated, false on the server and for the hydrating render itself
+// (so the two always match), without a state update in an effect.
+const subscribe = () => () => {};
+const useMounted = () =>
+  useSyncExternalStore(
+    subscribe,
+    () => true,
+    () => false,
+  );
+
 export function SupportForm() {
+  const copy = useCopy();
+  const mounted = useMounted();
   const [ticket, setTicket] = useState<string | null>(null);
   // Each "Write another message" is a fresh form (the key), and only that one takes focus: the
   // page's first form never grabs it.
   const [round, setRound] = useState(0);
+  // Without script, or before it has loaded, there is no form: Send would be a GET with the name, the
+  // email and a possible health report in the address (and a page that looks as if it sent). The
+  // page says how to write instead, with real links; the form replaces the line once it is alive.
+  if (!mounted) {
+    return (
+      <p className={`${page.body} ${page.fallback}`} data-fallback="">
+        {reach(copy(support.write.fallback), true)}
+      </p>
+    );
+  }
   if (ticket) {
     return (
       <Thanks
@@ -62,13 +91,25 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
   const [problems, setProblems] = useState<Problems>({});
   const photoInput = useRef<HTMLInputElement>(null);
   const nameInput = useRef<HTMLInputElement>(null);
+  // Spec "The moment": on Send the form fades out (0.3s), then the thank-you comes. `sending` is
+  // a ref, not just state: a second submit in the same task (a double click, requestSubmit twice)
+  // must find it already set. `leaving` holds the ticket while the form fades.
+  const sending = useRef(false);
+  const [leaving, setLeaving] = useState<string | null>(null);
 
   useEffect(() => {
     if (focusName) nameInput.current?.focus();
   }, [focusName]);
 
+  useEffect(() => {
+    if (!leaving) return;
+    const timer = setTimeout(() => onSent(leaving), 300);
+    return () => clearTimeout(timer);
+  }, [leaving, onSent]);
+
   const send = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    if (sending.current) return; // one thank-you, one number
     const found = checkFields({ name, email, topic, message, photo });
     setProblems(found);
     const first = ORDER.find((field) => found[field]);
@@ -76,7 +117,11 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
       document.getElementById(FOCUS[first])?.focus();
       return;
     }
-    onSent(ticketNumber());
+    sending.current = true;
+    const ticket = ticketNumber();
+    // Reduced motion: no fade, the thank-you at once.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) onSent(ticket);
+    else setLeaving(ticket);
   };
 
   const choosePhoto = (file: File | undefined) => {
@@ -110,7 +155,15 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
   const described = (field: FieldName) => (problems[field] ? `support-${field}-error` : undefined);
 
   return (
-    <form className={page.form} onSubmit={send} noValidate data-support-form="">
+    <form
+      className={page.form}
+      method="post"
+      onSubmit={send}
+      noValidate
+      inert={leaving ? true : undefined}
+      data-leaving={leaving ? "" : undefined}
+      data-support-form=""
+    >
       <div className={page.field}>
         <label htmlFor="support-name">{copy(w.name)}</label>
         <input
@@ -236,17 +289,24 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
   );
 }
 
-// A phone number or an address never breaks across two lines: the words around them wrap, they stay.
-function whole(text: string) {
-  return text.split(/(\d{3}-\d{3}-\d{4}|\S+@\S+[a-z])/).map((part, i) =>
-    i % 2 ? (
-      <span key={i} className={page.nowrap}>
+// A phone number or an address in a line of words never breaks across two lines: the words around
+// them wrap, they stay. In a line that invites a message (links) each is also the real link.
+function reach(text: string, links: boolean) {
+  return text.split(/(\d{3}-\d{3}-\d{4}|\S+@\S+[a-z])/).map((part, i) => {
+    if (i % 2 === 0) return part;
+    if (!links)
+      return (
+        <span key={i} className={page.nowrap}>
+          {part}
+        </span>
+      );
+    const href = part.includes("@") ? `mailto:${part}` : `tel:+1${part.replaceAll("-", "")}`;
+    return (
+      <a key={i} className={page.nowrap} href={href}>
         {part}
-      </span>
-    ) : (
-      part
-    ),
-  );
+      </a>
+    );
+  });
 }
 
 // The moment: the cup, its steam rising again, the number. The cup's pictures load only now, so
@@ -276,7 +336,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
           alt=""
           width={cup.width}
           height={cup.height}
-          sizes="182px"
+          sizes="220px"
           loading="eager"
           data-cup={gate.inkIn ? "in" : "waiting"}
         />
@@ -287,7 +347,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
           alt=""
           width={cup.steam.width}
           height={cup.steam.height}
-          sizes="120px"
+          sizes="100px"
           loading="eager"
           data-steam={gate.steam}
           style={
@@ -309,7 +369,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
       <p className={page.body}>{copy(s.reply)}</p>
       {SENDING_LIVE ? null : (
         <p className={page.previewLine} data-honesty="">
-          {whole(copy(s.preview))}
+          {reach(copy(s.preview), false)}
         </p>
       )}
       <button type="button" className={base.textLink} onClick={onAgain}>

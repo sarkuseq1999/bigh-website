@@ -33,6 +33,9 @@ export const support = {
     reaction:
       "Had a reaction to a product? Choose “I had a reaction” and a person reads it first. In an emergency, call 911.",
     preview: "Preview: messages aren’t sent yet",
+    // Shown instead of the form until script has run (and for anyone without it): the form's Send
+    // would otherwise be a GET with the message in the address.
+    fallback: "To write to us, email support@bighnow.com or call 800-919-2089.",
     errors: {
       name: "Please add your name.",
       email: "Please add an email we can reply to.",

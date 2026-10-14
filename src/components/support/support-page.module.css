@@ -574,6 +574,55 @@
   line-height: 1.5;
 }
 
+/* Until script has run (and for anyone without it) the form's place holds one line of words with the
+   email and the phone as real links. */
+.supportPage .fallback a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--hair);
+}
+
+.supportPage .fallback a:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* Windows High Contrast (forced colors) drops shadows, gradients and fills: the fields keep a real
+   bottom border for their line (the message too, whose ruled lines are a gradient), focus shows as
+   an outline, and the chosen chip is told apart by a thicker border in the system highlight. */
+@media (forced-colors: active) {
+  .supportPage .field input:not([type="radio"]),
+  .supportPage .field textarea {
+    border-bottom: 1px solid CanvasText;
+  }
+
+  .supportPage .field input:not([type="radio"]):focus,
+  .supportPage .field textarea:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* A thicker border in the system highlight (not a Highlight fill: the browser's text backplate
+     would paint Canvas under the label's words and hide them). */
+  .supportPage .topicChoice input:checked + label {
+    padding: 0 16px;
+    border: 3px solid Highlight;
+  }
+}
+
+/* Spec "The moment": on Send the form fades out (0.3s), then the thank-you comes (support-form.tsx).
+   Reduced motion: no fade, the thank-you at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .form {
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .supportPage .form[data-leaving] {
+    opacity: 0;
+  }
+}
+
 /* Reduced motion: the lines and the chips change at once. */
 @media (prefers-reduced-motion: no-preference) {
   .supportPage .field input:not([type="radio"]),
@@ -601,11 +650,12 @@
   text-align: center;
 }
 
-/* The cup is painted at 182px wide: never shown larger, so it stays crisp. */
+/* The cup's plate is 550px wide, so at 220px it is crisp on a 2x screen (check_support.py and the QA
+   hold the plate to twice the width shown). */
 .supportPage .cup {
   position: relative;
   display: block;
-  width: min(182px, 60%);
+  width: min(220px, 60%);
 }
 
 .supportPage .cup img {
@@ -655,14 +705,12 @@
   white-space: nowrap;
 }
 
+/* The preview line is plain words (DESIGN.md: nothing is boxed). */
 .supportPage p.previewLine {
   max-width: 32em;
   margin: 18px 0 6px;
-  padding: 10px 16px;
-  border: 1px solid var(--hair);
-  border-radius: 22px;
   color: var(--muted);
-  font-size: 16px;
+  font-size: 17px;
   line-height: 1.5;
 }
 

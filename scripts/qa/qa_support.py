@@ -23,10 +23,16 @@ topic chips never one alone on a row; every control 48px+; fields are lines, nev
 Send names the four missing things and focuses the first; a wrong email is caught; a 5 MB photo and
 a PDF are refused, a picture is kept by name and can be removed; Enter sends once: one thank-you, a
 ticket number like BH-1014-7K3Q carrying today's month and day, focus on "Thank you.", the preview
-line, the number holds still, the cup multiplies and no wrapper stops it; "Write another message"
-brings back an empty form focused on the name;
-the thank-you's steam waits for the cup's picture (the cup's request held for 3s: the steam stays
-under 30% while the cup is not in, then rises); reduced motion: the thank-you at once, steam whole.
+line (plain words, no box), the number holds still, the cup multiplies and no wrapper stops it, the
+cup's plate is twice as wide as it is shown (crisp at 2x); "Write another message" brings back an
+empty form focused on the name; the thank-you's steam waits for both its pictures (the cup's, then the
+steam's request held for 3s: the steam stays under 30% while one is out, then rises); reduced motion:
+the thank-you at once, steam whole.
+form, other cases: a double send (a double click; two requestSubmit() calls in one task; with motion
+and with reduced motion) gives one thank-you and one ticket (the second submit draws no second one),
+and with motion the form is seen fading out first; no script: no form in the page, a line with the
+email and the phone as real links, no query string; forced colors (Windows High Contrast): the fields
+keep a bottom border, focus shows an outline, the chosen chip differs from the rest.
 (Later tasks add: languages, links.)
 
 Pictures: scripts/qa/out/support/<tag>.png.
@@ -38,13 +44,17 @@ import os
 import re
 import sys
 import tempfile
+from urllib.parse import parse_qs, unquote, urlparse
 
+from PIL import Image
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3060"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "support")
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.normpath(os.path.join(HERE, "..", ".."))
+OUT = os.path.join(HERE, "out", "support")
 os.makedirs(OUT, exist_ok=True)
 results = []
 
@@ -359,12 +369,12 @@ def form(browser):
             page.wait_for_timeout(200)
             check(f"{tag}: the photo can be removed", "bottle.png" not in page.inner_text("form"))
 
-        # Send twice quickly and Enter in a field: one thank-you, one number.
+        # Enter in a field sends (the form fades out for 0.3s first): one thank-you, one number. A real
+        # double send is in double_send() below.
         fill(page)
         page.focus("#support-name")
         page.keyboard.press("Enter")
-        page.click("form button[type=submit]", timeout=1000) if page.locator("form button[type=submit]").count() else None
-        page.wait_for_timeout(500)
+        page.wait_for_timeout(900)
         panels = page.locator("[data-sent]").count()
         ticket = page.locator("[data-ticket]").inner_text().strip() if panels else ""
         check(f"{tag}: one thank-you", panels == 1, panels)
@@ -395,6 +405,17 @@ def form(browser):
         })()""")
         check(f"{tag}: the cup multiplies, its steam does not, and no wrapper stops the multiply",
               stack[0] == "multiply" and stack[1] == "normal" and not stack[2], stack)
+        # The preview line is plain words (DESIGN.md: nothing is boxed); the honesty tag beside Send is
+        # the kit's one-line pill and stays.
+        box = page.evaluate("""(() => { const s = getComputedStyle(document.querySelector('[data-sent] [data-honesty]'));
+          return [s.borderTopWidth, s.borderLeftWidth, s.borderTopLeftRadius, s.paddingTop, s.paddingLeft]; })()""")
+        check(f"{tag}: the thank-you's preview line is plain text, not a box", box == ["0px"] * 5, box)
+        # The cup stays crisp on a 2x screen: its plate is at least twice as wide as it is shown.
+        shown = page.evaluate("document.querySelector('[data-sent] img:not([data-steam])').getBoundingClientRect().width")
+        current = page.evaluate("document.querySelector('[data-sent] img:not([data-steam])').currentSrc")
+        plate = Image.open(os.path.join(REPO, "public", unquote(parse_qs(urlparse(current).query)["url"][0]).lstrip("/"))).width
+        check(f"{tag}: the cup's plate ({plate}px) is at least twice its width on the page ({shown:.0f}px)",
+              plate >= 2 * shown, [plate, shown])
         page.screenshot(path=os.path.join(OUT, f"sent-{width}.png"))
 
         # Write another message: an empty form, focus on the name.
@@ -415,39 +436,49 @@ def form(browser):
     check("form (reduced): the thank-you at once, its steam whole", page.locator("[data-sent]").count() == 1 and rise >= 100, rise)
     context.close()
 
-    late_cup(browser)
+    late_picture(browser, "cup")
+    late_picture(browser, "steam")
+    double_send(browser)
+    no_script(browser)
+    forced_colors(browser)
 
 
 def is_cup(url):
-    """The thank-you's cup picture (not the steam, "porch-steam-v1"), as Next's image route serves it."""
-    return "/_next/image" in url and "cup-v1" in url
+    """The thank-you's cup picture, as Next's image route serves it (its steam is "cup-steam-v2")."""
+    return "/_next/image" in url and "cup-v2" in url
+
+
+def is_cup_steam(url):
+    return "/_next/image" in url and "cup-steam-v2" in url
 
 
 # One sample per frame once the thank-you has a steam: [ms, the steam's --rise, its data-steam, whether
-# the cup's picture is in (complete, with a width)].
+# both of its pictures are in (the cup's and the steam's: complete, with a width)].
 WATCH_SENT = """
 window.__sent = [];
 const t0 = performance.now();
+const isIn = (img) => !!img && img.complete && img.naturalWidth > 0;
 const tick = () => {
   const steam = document.querySelector('[data-sent] [data-steam]');
   const cup = document.querySelector('[data-sent] img:not([data-steam])');
   if (steam) window.__sent.push([performance.now() - t0,
     parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), steam.dataset.steam,
-    !!cup && cup.complete && cup.naturalWidth > 0]);
+    isIn(cup) && isIn(steam)]);
   if (window.__sent.length < 6000) requestAnimationFrame(tick);
 };
 requestAnimationFrame(tick);
 """
 
 
-def late_cup(browser):
-    """The gold never rises alone over bare paper (the porch's rule, here for the thank-you too): the
-    cup's picture loads only after Send, so its request is held for 3s and the steam must stay down
-    until the cup is in."""
+def late_picture(browser, which):
+    """The gold never rises alone over bare paper (the porch's rule, here for the thank-you too): both
+    of the thank-you's pictures load only after Send, so one request (the cup's or the steam's) is
+    held for 3s and the steam must stay down until both are in."""
+    tag = f"form (late {which})"
     held = []
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
-    page.route(is_cup, lambda route: held.append(route))
+    page.route(is_cup if which == "cup" else is_cup_steam, lambda route: held.append(route))
     page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
     page.evaluate("document.fonts.ready.then(() => true)")
     page.wait_for_timeout(1200)
@@ -455,13 +486,13 @@ def late_cup(browser):
     fill(page)
     page.evaluate(WATCH_SENT)
     page.click("form button[type=submit]")
-    page.wait_for_timeout(3000)
+    page.wait_for_timeout(3500)
     out = page.evaluate("window.__sent")
     bare = [s for s in out if not s[3]]
-    check("form (late cup): the thank-you is up and the cup's picture is still out (the case is real)",
+    check(f"{tag}: the thank-you is up and the {which}'s picture is still out (the case is real)",
           held and len(bare) > 10 and bare[-1][0] - bare[0][0] >= 2500,
           [len(held), len(bare), round(bare[-1][0] - bare[0][0]) if bare else None])
-    check("form (late cup): the steam waits, and stays down while the cup is out",
+    check(f"{tag}: the steam waits, and stays down while the {which} is out",
           bare and all(s[1] < 30 and s[2] == "waiting" for s in bare),
           [max((round(s[1]) for s in bare), default=None), sorted({s[2] for s in bare})])
     for route in held:
@@ -470,9 +501,98 @@ def late_cup(browser):
     page.wait_for_timeout(5000)
     after = page.evaluate("window.__sent")
     rising = next((s for s in after if s[1] >= 30), None)
-    check("form (late cup): once the cup is in, the steam rises",
+    check(f"{tag}: once both pictures are in, the steam rises",
           rising and rising[3] and max(s[1] for s in after) >= 100,
           [rising and round(rising[0]), rising and rising[3], round(max(s[1] for s in after))])
+    context.close()
+
+
+SENT_JS = "[document.querySelectorAll('[data-sent]').length, [...document.querySelectorAll('[data-ticket]')].map(t => t.textContent.trim())]"
+FORM_NOW_JS = """(() => { const f = document.querySelector('form[data-support-form]');
+  return [!!f, f ? parseFloat(getComputedStyle(f).opacity) : null, document.querySelectorAll('[data-sent]').length]; })()"""
+
+
+def double_send(browser):
+    """Send twice in a row, as a person with a quick finger or a double click does: one thank-you and
+    one number, whether the form fades out first (motion) or goes at once (reduced motion)."""
+    for how in ("a double click", "two requestSubmit() calls in one task"):
+        for reduced in (False, True):
+            tag = f"form (double send, {how}{', reduced' if reduced else ''})"
+            context, page, *_ = open_page(browser, 1440, 900, reduced=reduced)
+            page.locator("#write").scroll_into_view_if_needed()
+            fill(page)
+            # Make the ticket's four signs countable: each call of Math.random is the next sign
+            # (A, B, C, D, E ...). A second submit that makes a second ticket would show as calls 5-8.
+            page.evaluate("(() => { let n = 0; window.__draws = 0; Math.random = () => { window.__draws += 1; return (n++ % 31 + 0.5) / 31; }; })()")
+            if how == "a double click":
+                page.dblclick("form button[type=submit]")
+            else:
+                page.evaluate("(() => { const f = document.querySelector('form[data-support-form]'); f.requestSubmit(); f.requestSubmit(); })()")
+            page.wait_for_timeout(80)
+            if not reduced:
+                # Spec "The moment": the form fades out (0.3s) before the thank-you comes.
+                mid = page.evaluate(FORM_NOW_JS)
+                check(f"{tag}: the form is fading out and no thank-you has come yet", mid[0] and mid[1] < 1 and mid[2] == 0, mid)
+            page.wait_for_timeout(1000)
+            count, tickets = page.evaluate(SENT_JS)
+            check(f"{tag}: one thank-you, one number",
+                  count == 1 and len(tickets) == 1 and TICKET.match(tickets[0]) is not None, [count, tickets])
+            draws = page.evaluate("window.__draws")
+            check(f"{tag}: the second submit made no second ticket (the first one is the one shown)",
+                  draws == 4 and tickets and tickets[0].endswith("-ABCD"), [draws, tickets])
+            if not (reduced and how == "a double click"):
+                # (With reduced motion the form is gone after the first click, so the second click
+                # lands on the thank-you's plain paper and the browser itself moves focus to the page.)
+                check(f"{tag}: focus is on the thank-you", page.evaluate("document.activeElement.id") == "sent-title")
+            page.wait_for_timeout(1500)
+            check(f"{tag}: the number holds still", page.evaluate(SENT_JS) == [count, tickets])
+            context.close()
+
+
+def no_script(browser):
+    """Without script (or before it has loaded) the page has no form to send: Send would be a GET with
+    the message in the address. It says how to write instead, with real links."""
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
+    page = context.new_page()
+    page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
+    page.wait_for_timeout(800)
+    forms = page.locator("main form").count()
+    check("form (no script): no form in the page", forms == 0, forms)
+    line = page.locator("#write [data-fallback]")
+    check("form (no script): the fallback line says how to write to us",
+          line.count() == 1 and line.inner_text().strip() == "To write to us, email support@bighnow.com or call 800-919-2089.",
+          line.count() and line.inner_text())
+    links = line.locator("a").evaluate_all("els => els.map(a => [a.getAttribute('href'), a.textContent.trim()])") if line.count() else []
+    check("form (no script): the email and the phone are real links",
+          links == [["mailto:support@bighnow.com", "support@bighnow.com"], ["tel:+18009192089", "800-919-2089"]], links)
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(300)
+    check("form (no script): no query string ever appears", "?" not in page.url, page.url)
+    context.close()
+
+
+def forced_colors(browser):
+    """Windows High Contrast (forced colors) throws away shadows, gradients and chip fills: the
+    lines, the focus and the chosen chip must still show."""
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, forced_colors="active")
+    page = context.new_page()
+    page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
+    page.evaluate("document.fonts.ready.then(() => true)")
+    page.wait_for_timeout(1200)
+    page.locator("#write").scroll_into_view_if_needed()
+    check("form (forced colors): the page is in forced colors", page.evaluate("matchMedia('(forced-colors: active)').matches"))
+    for field in ("#support-name", "#support-email", "#support-order", "#support-message"):
+        line = page.evaluate(f"(() => {{ const s = getComputedStyle(document.querySelector('{field}')); return [s.borderBottomWidth, s.borderBottomStyle]; }})()")
+        check(f"form (forced colors): {field} keeps its line (a bottom border)", float(line[0][:-2]) > 0 and line[1] != "none", line)
+    for field in ("#support-name", "#support-message"):
+        page.focus(field)
+        ring = page.evaluate(f"(() => {{ const s = getComputedStyle(document.querySelector('{field}')); return [s.outlineWidth, s.outlineStyle]; }})()")
+        check(f"form (forced colors): focus shows on {field} (an outline)", float(ring[0][:-2]) > 0 and ring[1] != "none", ring)
+    page.locator("label", has_text="A return").click()
+    chips = page.evaluate("""[...document.querySelectorAll('[data-topics] label')].map(l => { const s = getComputedStyle(l);
+      return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.color].join(' '); })""")
+    check("form (forced colors): the chosen chip looks different from the others",
+          chips[1] not in [c for i, c in enumerate(chips) if i != 1], chips)
     context.close()
 
 

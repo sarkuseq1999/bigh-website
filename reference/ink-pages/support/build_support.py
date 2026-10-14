@@ -5,8 +5,9 @@ the homepage crane as the brushwork reference; prompts in prompts/, spend in
 reference/ink-pages/spend-support.md). Output: public/images/support/*.webp and
 src/components/support/support-art.ts. The treatments are About's (build_about.py): the paper
 divided out and lifted to pure white, so a painting multiplies onto the page's paper with no box.
-The porch's gold steam is lifted out into its own picture (the page lets it rise), and the cup with
-its steam is cut from the same painting for the thank-you.
+Each gold steam (the porch's, the cup's) is lifted out into its own picture (the page lets it
+rise). The thank-you's cup is its own painting (a-cup-v1, October 14), not a cut of the porch: a
+cut at the porch's pixel size was soft on a 2x screen and its table ended in a straight edge.
 
 usage: python -X utf8 reference/ink-pages/support/build_support.py
 """
@@ -31,13 +32,13 @@ URL = "/images/support"
 TS = REPO / "src/components/support/support-art.ts"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
-TAKES = {"porch": "a-porch-v2", "mailbox": "a-mailbox", "parcel": "a-parcel", "book": "a-book-v2"}
-# The cup, its saucer, the table's top and the steam over it, on the porch original (2048x1360).
-# The mockup round's box (850, 470, 1110, 840) took in the right chair's arm (from x 1062) and cut
-# the table's legs off at a straight edge; this one (measured on a 40 px grid of the original) stops
-# short of both: the table top runs x 865-1045, y 790-830, the cup x 925-990, y 735-790, the legs
-# end near y 975 and are faded out below the top.
-CUP_BOX = (868, 505, 1050, 880)
+TAKES = {"porch": "a-porch-v2", "cup": "a-cup-v1", "mailbox": "a-mailbox", "parcel": "a-parcel", "book": "a-book-v2"}
+# The cup is a new painting (its pictures are named v2: the first cup, a crop of the porch, was
+# cup-v1, and the image optimizer caches by URL).
+CUP_V = "v2"
+# The cup is shown at most this wide on the page (support-page.module.css .cup); its plate must be at
+# least twice that wide to stay crisp on a 2x screen (check_support.py).
+CUP_CSS_WIDTH = 220
 
 bd.ORIG = HERE / "originals"
 bd.URL = URL
@@ -93,10 +94,10 @@ def split_steam(img):
     return Image.fromarray(clean), Image.fromarray(steam, "RGBA"), box
 
 
-def placed(steam_box, crop_box, crop_w, crop_h, steam):
+def placed(steam_box, crop_box, crop_w, crop_h, steam, src):
     """Where the steam stands on a picture cropped at crop_box (fractions, as the page reads them)."""
     return {
-        "src": f"{URL}/porch-steam-{V}.webp",
+        "src": src,
         "width": steam.width,
         "height": steam.height,
         "left": round((steam_box[0] - crop_box[0]) / crop_w, 4),
@@ -105,7 +106,7 @@ def placed(steam_box, crop_box, crop_w, crop_h, steam):
     }
 
 
-def porch_and_cup():
+def porch():
     img = bd.load(TAKES["porch"])
     clean, steam, sbox = split_steam(img)
     ba.save(steam, f"porch-steam-{V}", None, 90)
@@ -114,25 +115,24 @@ def porch_and_cup():
     x0, y0, x1, y1 = bd.ink_box(np.asarray(flat), pad=0.04)
     x0, y0, x1, y1 = min(x0, sbox[0]), min(y0, sbox[1]), max(x1, sbox[2]), max(y1, sbox[3])
     crop = bd.levelled(flat.crop((x0, y0, x1, y1)))  # levelled above also feathers the outer edge
-    porch = bd.art_of(crop, f"porch-{V}", 1640)
-    porch["steam"] = placed(sbox, (x0, y0), crop.width, crop.height, steam)
-    # The cup: the hills and the rail behind it are pale washes, lifted to white; what is darker
-    # (the rail's ends, the chair arms, the table's legs) fades out with an oval around the cup that
-    # reaches up to a little above its rim and only a little below the table's top, so only the cup,
-    # its saucer and the table's top remain, with no straight cut anywhere.
-    cb = (min(CUP_BOX[0], sbox[0]), min(CUP_BOX[1], sbox[1]), max(CUP_BOX[2], sbox[2]), max(CUP_BOX[3], sbox[3]))
-    cup_arr = np.asarray(_levelled(flat.crop(cb))).astype(np.float32)
-    cup_arr = np.where(cup_arr.mean(axis=2, keepdims=True) > 190, 255, cup_arr)
-    h, w = cup_arr.shape[:2]
-    yy, xx = np.mgrid[0:h, 0:w]
-    cy = 797 - cb[1]  # the table top's level in the crop
-    ry = np.where(yy < cy, 95.0, 75.0)
-    d = np.sqrt(((xx - w / 2) / (w / 2)) ** 2 + ((yy - cy) / ry) ** 2)
-    k = np.clip((1.0 - d) / 0.3, 0, 1)[..., None]
-    cup_img = Image.fromarray((255 - (255 - cup_arr) * k).astype(np.uint8))
-    cup = bd.art_of(cup_img, f"cup-{V}", 600)
-    cup["steam"] = placed(sbox, cb, cup_img.width, cup_img.height, steam)
-    return porch, cup
+    art = bd.art_of(crop, f"porch-{V}", 1640)
+    art["steam"] = placed(sbox, (x0, y0), crop.width, crop.height, steam, f"{URL}/porch-steam-{V}.webp")
+    return art
+
+
+def cup():
+    """The thank-you's cup: one painting (cup, saucer and a pale shadow stroke) with its own gold
+    steam, cropped to its ink and its steam. Shipped at CUP_CSS_WIDTH x 2.5 or wider."""
+    img = bd.load(TAKES["cup"])
+    clean, steam, sbox = split_steam(img)
+    ba.save(steam, f"cup-steam-{CUP_V}", None, 90)
+    flat = bd.divided(clean)
+    x0, y0, x1, y1 = bd.ink_box(np.asarray(flat), pad=0.04)
+    x0, y0, x1, y1 = min(x0, sbox[0]), min(y0, sbox[1]), max(x1, sbox[2]), max(y1, sbox[3])
+    crop = bd.levelled(flat.crop((x0, y0, x1, y1)))
+    art = bd.art_of(crop, f"cup-{CUP_V}", round(CUP_CSS_WIDTH * 2.5))
+    art["steam"] = placed(sbox, (x0, y0), crop.width, crop.height, steam, f"{URL}/cup-steam-{CUP_V}.webp")
+    return art
 
 
 def write_ts(entries):
@@ -140,7 +140,8 @@ def write_ts(entries):
         "// Generated by reference/ink-pages/support/build_support.py. Do not edit by hand: change the",
         "// script (or its TAKES) and run it again. The Support page's paintings (October 14, 2026): GPT",
         "// Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's own paper;",
-        "// the porch's gold steam as its own picture (`steam`), placed by fractions of its painting.",
+        "// the porch's and the cup's gold steam as their own pictures (`steam`), placed by fractions of",
+        "// their painting.",
         "",
         "export type Art = { src: string; width: number; height: number };",
         "/** The gold steam, placed by fractions of its painting's width (left, size) and height (top). */",
@@ -157,11 +158,10 @@ def write_ts(entries):
 
 
 if __name__ == "__main__":
-    porch, cup = porch_and_cup()
     write_ts(
         [
-            ("porch", porch),
-            ("cup", cup),
+            ("porch", porch()),
+            ("cup", cup()),
             ("mailbox", bd.painting("mailbox", "mailbox", 1100)),
             ("parcel", bd.painting("parcel", "parcel", 1100)),
             ("book", bd.painting("book", "book", 1100)),
