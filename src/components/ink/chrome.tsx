@@ -200,9 +200,7 @@ export function SiteFooter({
           <div>
             <h2>{copy("Here for you")}</h2>
             <Link href="/about">{copy("About BiGH")}</Link>
-            <button type="button" onClick={dialogs.openSupport}>
-              {copy("Support & FAQs")}
-            </button>
+            <Link href="/support">{copy("Support & FAQs")}</Link>
             <Link href="/science#health">{copy("Health, explained")}</Link>
           </div>
         </div>

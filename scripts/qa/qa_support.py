@@ -5,7 +5,7 @@ opening (1440x900, 390x844): 200; the title "BiGH — Support"; no console error
 PREFETCH_CSS); no failed requests; one h1 "How can we help?"; the lead; the phone number as a tel:
 link in Switzer, the email as a mailto: link, the hours; the porch painting multiplies; its steam is
 gold leaf over the porch, not multiplied; nothing scrolls sideways; text 15px+; the menu bar marks
-Support (Task 5 adds the link; until then the bar's root says data-page="support").
+Support (the bar's link, aria-current="page" and the painted stroke: see links).
 motion (1440x900): with motion the steam waits while the porch waits, then rises (its --rise grows
 from under 30% to 100%+ within 6s of the porch's bloom; sampled every frame from the page's first
 one, since the rise has begun by the time the page is idle); the gold never rises alone over bare
@@ -33,7 +33,11 @@ and with reduced motion) gives one thank-you and one ticket (the second submit d
 and with motion the form is seen fading out first; no script: no form in the page, a line with the
 email and the phone as real links, no query string; forced colors (Windows High Contrast): the fields
 keep a bottom border, focus shows an outline, the chosen chip differs from the rest.
-(Later tasks add: languages, links.)
+links (1440x900, 390x844): the bar's Support (a link, not a button) goes to the top of /support and is marked
+as the current page; no pop-up opens; the footer's Support & FAQs and the Science page's header
+Support go there too; the phone menu's Support goes there and the menu closes behind it.
+languages (390x844): /kr, /jp, /cns, /vn support are 200, the page's words stay English, nothing
+scrolls sideways, no errors; /hken/support goes to /cns/support.
 
 Pictures: scripts/qa/out/support/<tag>.png.
 
@@ -596,7 +600,58 @@ def forced_colors(browser):
     context.close()
 
 
-GROUPS = [opening, motion, rhythm, questions, form]
+def links(browser):
+    # Desktop: from the foot of /about, the bar's Support goes to the top of /support, marked.
+    context, page, *_ = open_page(browser, 1440, 900, path="/about")
+    page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+    page.wait_for_timeout(800)
+    page.locator("#site-navigation a", has_text="Support").click()
+    page.wait_for_url("**/support", timeout=30000)
+    page.wait_for_timeout(1500)
+    check("links: the bar's Support goes to /support", page.url.endswith("/support"), page.url)
+    check("links: it lands at the top", page.evaluate("window.scrollY") < 4, page.evaluate("window.scrollY"))
+    current = page.evaluate("[...document.querySelectorAll('#site-navigation [aria-current=page]')].map(a => a.textContent.trim())")
+    check("links: the bar marks Support as the current page", current == ["Support"], current)
+    check("links: no Support pop-up opened", not page.evaluate("!!document.querySelector('dialog[open]')"))
+    # The footer's Support & FAQs.
+    page.goto(f"{BASE}/", wait_until="networkidle")
+    page.locator("footer a", has_text="Support & FAQs").click()
+    page.wait_for_url("**/support", timeout=30000)
+    check("links: the footer's Support & FAQs goes to /support", page.url.endswith("/support"), page.url)
+    # The Science page's own header.
+    page.goto(f"{BASE}/science", wait_until="networkidle")
+    page.locator("header a", has_text="Support").first.click()
+    page.wait_for_url("**/support", timeout=30000)
+    check("links: the Science page's Support goes to /support", page.url.endswith("/support"), page.url)
+    context.close()
+    # Phone: the menu's Support.
+    context, page, *_ = open_page(browser, 390, 844, path="/")
+    page.click("[data-nav-menu-button]")
+    page.wait_for_timeout(900)
+    page.locator("[data-nav-sheet] a", has_text="Support").click()
+    page.wait_for_url("**/support", timeout=30000)
+    page.wait_for_timeout(900)
+    check("links: the phone menu's Support goes to /support", page.url.endswith("/support"), page.url)
+    check("links: the menu closed behind it", page.evaluate("document.querySelector('[data-nav-menu-button]').getAttribute('aria-expanded')") != "true")
+    context.close()
+
+
+def languages(browser):
+    for lang in ("kr", "jp", "cns", "vn"):
+        tag = f"languages {lang}"
+        context, page, response, errors, _ = open_page(browser, 390, 844, path=f"/{lang}/support")
+        check(f"{tag}: 200", response and response.status == 200, response and response.status)
+        check(f"{tag}: the page's words in English", page.evaluate("document.querySelector('h1').textContent.trim()") == "How can we help?")
+        sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
+        check(f"{tag}: nothing scrolls sideways", sideways <= 0, sideways)
+        check(f"{tag}: no errors", not errors, errors[:3])
+        context.close()
+    context, page, *_ = open_page(browser, 390, 844, path="/hken/support")
+    check("languages: /hken/support goes to /cns/support", page.url.endswith("/cns/support"), page.url)
+    context.close()
+
+
+GROUPS = [opening, motion, rhythm, questions, form, links, languages]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 if __name__ == "__main__":
