@@ -62,8 +62,9 @@ flame. The rest rests in ink.
   others show only their mark and title). The scroll lets go once "Today" and its sun are fully in view.
 - **Phones (under 960px):** the same travel, with a shorter painting band (about 300px tall), the
   five dots in a row, and only the current stop's words under them.
-- **Reduced motion:** nothing pins or travels. The whole scroll is shown at once, scaled to the
-  page's width, with all five stops in a row (desktop) or a list (phones) under it.
+- **Reduced motion:** nothing pins or travels. The painting keeps its height and its band scrolls
+  sideways under the visitor's own hand (scaled to the page's width it would be about 100px tall),
+  with all five stops readable in a row (desktop) or a list (phones) under it.
 - **No script:** the same as reduced motion.
 - The painting has one alt text describing the journey; the stops are an ordered list in the page's
   text, so screen readers get the whole path. Keyboard users scroll past it like any part.
@@ -84,11 +85,11 @@ Kept from the mockups (originals and prompts move from the session scratchpad to
 - The two California swaps, each an edit of its mockup painting: poppies for the plum branch
   (`R-health`), two mugs for the tea set (`R-tea`). One or two jobs each.
 
-About 6 to 10 GPT Image 2.5 jobs, about $0.30 to $0.50, from the $3 Mo gave on October 13 (10 jobs,
-about $0.50, used by the mockups). Ledger `%LOCALAPPDATA%/HiggsfieldAPI/bigh-science-mock` (cap 40).
+Done October 14: 5 GPT Image 2.5 jobs (about $0.25), 15 in all with the mockups (about $0.75 of the
+$3 Mo gave on October 13). Ledger `%LOCALAPPDATA%/HiggsfieldAPI/bigh-science-mock` (cap 40).
 
 A build script (`reference/ink-pages/science/build_science.py`, on the NuriCell pattern) divides the
-paper out, joins the scroll panels, cuts the gold masks (sun, flame), cuts phone crops of the strips
+paper out, joins the scroll panels, cuts phone crops of the strips
 (the three health scenes become three pictures, one over each article; the scroll rack and the tea
 table are cropped to their middle), and writes webp files to `public/images/science/ink/` plus a
 generated data file. Honesty caption "Illustration" under each painting.
@@ -96,8 +97,8 @@ generated data file. Honesty caption "Illustration" under each painting.
 ## Motion
 
 - Signature: the scroll travels (above).
-- Every other painting blooms as it arrives (kit `useBloom`); gold leaf takes the kit's glint once
-  bloomed. Words settle as on the other ink pages.
+- Every other painting blooms as it arrives (kit `useBloom`). No glint on the gold (the sun and the
+  flame are small; YAGNI).
 - No WebGL, no 3D, no scroll-scrubbed film.
 
 ## Code
