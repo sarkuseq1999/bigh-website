@@ -17,10 +17,10 @@ crane, and Mo ruled on October 6 that each page shares the theme only and has it
   generated face. Dr. Iris Wang appears in words only.
 - Titles use the homepage's title face, Ysabeau (live on the homepage since October 13; Mo: the other
   pages follow). Everything else stays Switzer.
-- Pending Mo (asked October 14): two small paintings swapped for California ones, per her October 13
-  rule that BiGH is a California brand (no Asian motifs unless she asks): the plum branch becomes a
-  California poppy, the Asian tea set becomes two simple mugs. The handscroll itself stays: it is his
-  real path, and it ends in California.
+- California, not Asian (Mo's October 13 rule; "1 yes", October 14): the plum branch becomes a
+  California poppy and the Asian tea set becomes two simple mugs. The handscroll itself stays: it is
+  his real path, and it ends in California.
+- Final paintings ("2 yes", October 14): about $0.50 more from the $3 Mo gave on October 13.
 
 ## Shared, and its own
 
@@ -41,8 +41,8 @@ line, no stations, no ensō, no lantern, no reused homepage, About or NuriCell p
 | 2   | Dr. Liu          | His real photo on its paper mount                                                                                                          | role, name, headline, intro, the three numbers (280+, 1994, 2025, each with its source), "Read his story" (the kit's scientist sheet)                                               |
 | 3   | The formulas     | The five real bottles in one row, NuriCell a little larger                                                                                 | "Every BiGH formula was developed by our scientists…", Dr. Iris Wang's line, each bottle's name and credit; each bottle links to its product page                                   |
 | 4   | The research     | **A rack of rolled scrolls**; three lie pulled forward (the three key studies)                                                             | "Curiosity, with references.", the lead, the three key studies (year · kind · journal, title, text, "Read the study", "Dr. Liu's work" tag), "See all 36 sources", the honesty line |
-| 5   | Health explained | **One painting, three scenes**: an oil lamp with a gold-leaf flame, balanced stones, a plum branch in blossom (or a poppy, see above)      | "Make sense of the science.", the lead, the three article titles and previews; each opens the kit's short explainer sheet                                                           |
-| 6   | Ask BiGH Science | **Tea for two** (or two mugs, see above)                                                                                                   | the title, lead and text, the three steps (numbered: a real sequence), "In development", the note                                                                                   |
+| 5   | Health explained | **One painting, three scenes**: an oil lamp with a gold-leaf flame, balanced stones, California poppies                                    | "Make sense of the science.", the lead, the three article titles and previews; each opens the kit's short explainer sheet                                                           |
+| 6   | Ask BiGH Science | **Two mugs** with steam rising, on a low wooden table                                                                                      | the title, lead and text, the three steps (numbered: a real sequence), "In development", the note                                                                                   |
 
 Then the shared footer. Section ids: `scientists` (opening and scroll), `liu`, `formulas`, `research`,
 `health`, `ask`; the menu's and footer's Science links (`/science#scientists`, `#research`, `#health`,
@@ -72,8 +72,7 @@ flame. The rest rests in ink.
 ## Paintings and spend
 
 Kept from the mockups (originals and prompts move from the session scratchpad to
-`reference/ink-pages/science/`): `gpt25-R-scrolls`, `gpt25-R-health` (unless the poppy swap),
-`gpt25-R-tea` (unless the mug swap). New:
+`reference/ink-pages/science/`): `gpt25-R-scrolls`. New:
 
 - **The handscroll, longer and looser.** The mockup painting is one 21:9 picture, only about 1.4
   screens wide at its band height, so it barely travels, and its brushwork is more detailed than the
@@ -82,7 +81,8 @@ Kept from the mockups (originals and prompts move from the session scratchpad to
   sun), each with the mockup scroll and the homepage crane as style references, joined in their mist
   by the build script (a darken blend, so ink stays ink and paper stays paper). About four screens of
   travel at 1440px.
-- The two California swaps if Mo says yes (one or two jobs each).
+- The two California swaps, each an edit of its mockup painting: poppies for the plum branch
+  (`R-health`), two mugs for the tea set (`R-tea`). One or two jobs each.
 
 About 6 to 10 GPT Image 2.5 jobs, about $0.30 to $0.50, from the $3 Mo gave on October 13 (10 jobs,
 about $0.50, used by the mockups). Ledger `%LOCALAPPDATA%/HiggsfieldAPI/bigh-science-mock` (cap 40).
@@ -147,7 +147,6 @@ the branch; main and the demo alias only with her yes. Fetch and merge `origin/m
   plan, and a fourth job repaints a panel if a join shows.
 - A long pinned part on phones: about four screens of scrolling to reach Dr. Liu. If it feels long on
   a real phone, the phone band travels faster (less scroll per screen of painting).
-- Asian motifs against Mo's California rule (above).
 - The real glossy bottles against soft ink (7.5/10 in the mockup, the page's weakest part).
 - The fortress town is Salzburg, where the academy that elected him is based; he did not live there.
   The stop says only "An academy honor".
