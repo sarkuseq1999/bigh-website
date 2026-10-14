@@ -419,7 +419,39 @@ def strips(browser):
         ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply}
+NEW_STRINGS = {
+    "kr": ["계속 스크롤하세요", "연구 보기"],
+    "jp": ["スクロールを続けると", "研究を読む"],
+    "cns": ["继续向下滚动", "阅读研究"],
+    "vn": ["Tiếp tục cuộn", "Đọc nghiên cứu"],
+}
+# How the catalogs already name him (cns.json 刘健康; m198 in jp, kr, vn).
+LIU_NAME = {"kr": "Dr. Jiankang Liu", "jp": "Dr. Jiankang Liu", "cns": "刘健康博士", "vn": "Dr. Jiankang Liu"}
+
+
+def languages(browser):
+    for lang, words in NEW_STRINGS.items():
+        ctx, page, response, errors = opened(browser, 1440, 900, path=f"/{lang}/science")
+        check(f"languages {lang}: 200", response is not None and response.status == 200)
+        text = page.locator("main").inner_text()
+        for word in words:
+            check(f"languages {lang}: {word}", word in text)
+        # The page already had longer lines holding "Read the study" in some languages ("Read the
+        # 2002 study"): the key studies' own links say it, word for word.
+        go = [tidy(t) for t in page.locator("#research ul > li a").all_inner_texts()]
+        check(f"languages {lang}: each key study's link reads {words[1]}", go == [words[1]] * 3, str(go))
+        # The key study's kind is the first " · " part of its translated category (Ruling 9).
+        metas = [tidy(m).split(" · ") for m in page.locator("#research ul > li > p:first-child").all_inner_texts()]
+        check(f"languages {lang}: each key study's line is year · kind · journal", len(metas) == 3 and all(len(m) == 3 and all(m) for m in metas), str(metas))
+        alt = page.locator("[data-painting]").get_attribute("alt") or ""
+        check(f"languages {lang}: the scroll's alt names Dr. Liu as the site does", LIU_NAME[lang] in alt, alt[:40])
+        overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
+        check(f"languages {lang}: no sideways scroll", overflow <= 0, str(overflow))
+        check(f"languages {lang}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+
+
+SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply, "languages": languages}
 
 if __name__ == "__main__":
     with sync_playwright() as p:
