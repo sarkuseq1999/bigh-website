@@ -75,11 +75,15 @@
   line-height: 1.4;
 }
 
-/* Inline flex: the site's reset makes an svg a block, which dropped the arrow under "Source". */
+/* The link starts on its own line under every label, whatever its length (or its translation),
+   with a 48px target (DESIGN.md). Flex keeps the arrow beside the word: the site's reset makes an
+   svg a block, which dropped it under "Source" in an inline-block link. */
 .numbers dd a {
-  display: inline-flex;
+  display: flex;
+  width: fit-content;
   align-items: center;
   gap: 4px;
+  min-height: 48px;
   margin-top: 4px;
   color: var(--ink);
 }
