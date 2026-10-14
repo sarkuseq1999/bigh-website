@@ -1,0 +1,14 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A loose watercolour and ink painting on one plain sheet of warm, light rice paper with fine fibres, seen flat, evenly lit, no frame, no table, no signature, no red seal, no stamp. It must look hand-painted, expressive and artistic, with the confident, loose brushwork of the second reference picture (copy only its brushwork, never its subject: no bird, no crane, no reeds, no water): wet washes bleeding softly into the paper, dry-brush where the brush runs out, simplified forms, lots of white paper. Never a photograph, never a 3D render, never a detailed illustration.\n\nThe subject: the supplement bottle from the first reference picture, painted as a watercolour: an amber-brown glass jar in warm, transparent amber washes with a few white highlights left as bare paper, a white ribbed cap in a few pale grey strokes, and a warm golden-yellow label painted in loose washes with a little real gold leaf. On the label, painted simply and clearly, only the large words GREEN BEE PROPOLIS (spelled exactly like that) and the small BiGH logo with its green leaf above them; no other text, no small print, no numbers. The bottle stands upright in the middle of the lower half, about 45% of the picture's height. Around its foot, a few sprigs of alecrim (slender stems, small narrow needle-like leaves) in loose sage-green and black strokes, and two fallen golden ip\u00ea blossoms in gold leaf. One small honeybee, a few quick strokes, flies near the cap. A soft grey wash shadow under the bottle. Generous empty paper above and on the sides. Nothing else.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/ink-pages/propolis/refs/bottle-on-paper.png",
+    "reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261014-132601"
+}

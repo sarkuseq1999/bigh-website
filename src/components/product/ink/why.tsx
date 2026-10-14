@@ -95,6 +95,10 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
   const lit = useRef<HTMLImageElement>(null);
   const on = useLightComesOn(unlit, lit, motion);
   if (!why) return null;
+  // NuriCell's lantern cross-fades to lit; Green Bee Propolis's gold spreads out from where the
+  // hive's cracks meet (product-ink.module.css, [data-spread]). The same moment and timing.
+  const spread = art.spread;
+  const kind = spread ? { "data-spread": "" } : { "data-lantern": "" };
   return (
     <InkChapter
       id="why"
@@ -104,7 +108,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
           alt={art.alt}
           caption={CAPTIONS.illustration}
           imgRef={unlit}
-          attrs={{ "data-lantern": "", "data-light": on ? "on" : "off" }}
+          attrs={{ ...kind, "data-light": on ? "on" : "off" }}
         >
           {/* Loaded at once, not lazily: the light waits for it (useLightComesOn). */}
           <Image
@@ -117,6 +121,14 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
             sizes={pictureSizes(art.lit)}
             loading="eager"
             data-lit=""
+            style={
+              spread
+                ? ({
+                    ["--spread-x" as string]: `${(spread.x * 100).toFixed(2)}%`,
+                    ["--spread-y" as string]: `${(spread.y * 100).toFixed(2)}%`,
+                  } as CSSProperties)
+                : undefined
+            }
           />
           {art.lit.gold ? (
             <span

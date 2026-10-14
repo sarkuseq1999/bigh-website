@@ -8,7 +8,7 @@ Sections (all, or --only=a,b):
   opening     no line over the name and no pool under the bottle (Mo, October 10); the bottle's middle
               on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word on a phone or
               tablet; each half on one line in every language
-  others      the other four product pages keep today's template
+  others      the products not yet in ink keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
   lantern     unlit blooms, then the light comes on once with no lighter flash; reduced motion: lit
@@ -51,6 +51,9 @@ OUT = REPO / "scripts/qa/out/nuricell-ink"
 OUT.mkdir(parents=True, exist_ok=True)
 PATH = "/en/products/nuricell"
 OTHERS = ["green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
+# The products still on the Chapters template (Green Bee Propolis has its own ink page since
+# October 14, 2026: scripts/qa/qa_propolis_ink.py).
+OLD_TEMPLATE = ["advanced-opc", "turmerific", "nature-calm"]
 CHAPTERS = ["overview", "why", "inside", "research", "people", "daily", "buy"]
 # Next's prefetched-CSS warning is not an error of this page (qa_about.py's PREFETCH_CSS).
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
@@ -171,7 +174,7 @@ def shell(browser):
 
 
 def others(browser):
-    for slug in OTHERS:
+    for slug in OLD_TEMPLATE:
         chunk_errors = []
         ctx, page, response, errors = opened(browser, 1440, 900, f"/en/products/{slug}", chunk_errors=chunk_errors)
         # next dev (Turbopack, Next 16.2.6) logs a 404 for one chunk preload on these four pages: the dev
