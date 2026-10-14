@@ -286,3 +286,28 @@ export const ask = {
   status: "In development",
   note: "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
 };
+
+// The ink page, "the handscroll" (Mo, October 13-14, 2026; spec
+// docs/superpowers/specs/2026-10-14-science-ink-design.md). DRAFT lines.
+export const ink = {
+  // The opening's lead: the film's two lines, as one.
+  lead: ["A life in cell science.", "From Okayama to Berkeley, and from the lab to BiGH."],
+  formulasLabel: "The formulas", // DRAFT
+  source: "Source", // DRAFT
+  scrollHint: "Keep scrolling: the scroll unrolls", // DRAFT
+  scrollStill: "Scroll sideways to see the whole painting", // DRAFT
+  scrollAlt:
+    "A long ink painting of Dr. Liu’s path: Okayama Castle, the ocean, the bell tower at Berkeley, Salzburg, and California hills under a gold sun", // DRAFT
+  readStudy: "Read the study", // DRAFT
+  scrollsAlt: "A shelf of rolled scrolls painted in ink; three lie pulled forward", // DRAFT
+  healthAlt:
+    "Three small ink paintings: an oil lamp with a gold flame, three balanced stones, and California poppies", // DRAFT
+  sceneAlts: [
+    "An oil lamp with a gold flame, painted in ink", // DRAFT
+    "Three balanced stones, painted in ink", // DRAFT
+    "California poppies, painted in ink", // DRAFT
+  ],
+  mugsAlt: "Two mugs on a low wooden table, steam rising, painted in ink", // DRAFT
+  explainer: "Read a quick explainer",
+  illustration: "Illustration",
+};

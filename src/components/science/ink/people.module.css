@@ -1,0 +1,188 @@
+/* Dr. Liu and the formulas (spec, "The page" rows 2 and 3). */
+.liu {
+  padding-top: clamp(96px, 10vw, 150px);
+}
+
+.liuGrid {
+  display: grid;
+  gap: 36px;
+}
+
+@media (min-width: 960px) {
+  .liuGrid {
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 72px;
+    align-items: center;
+  }
+}
+
+/* The one shadow (DESIGN.md): the real photograph on its paper mat. */
+.mount {
+  width: min(300px, 70vw);
+  margin: 0;
+  padding: 14px 14px 16px;
+  background: #fbf9f4;
+  box-shadow:
+    0 1px 2px rgba(28, 27, 25, 0.1),
+    0 10px 28px -12px rgba(28, 27, 25, 0.28);
+}
+
+.mount img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.name {
+  margin: 8px 0 0;
+  font-size: clamp(40px, 3.6vw, 52px);
+  font-weight: 500;
+  line-height: 1.04;
+}
+
+.headline {
+  margin: 14px 0 0;
+  color: var(--ink);
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.intro {
+  margin-top: 10px;
+  max-width: 640px;
+}
+
+.numbers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 190px));
+  gap: 32px;
+  margin: 30px 0 0;
+}
+
+.numbers dt {
+  font-family: var(--display-font);
+  font-size: clamp(44px, 4vw, 60px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+.numbers dd {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* Inline flex: the site's reset makes an svg a block, which dropped the arrow under "Source". */
+.numbers dd a {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 4px;
+  color: var(--ink);
+}
+
+.story {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  margin-top: 22px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  font-size: 19px;
+  cursor: pointer;
+}
+
+.formulas {
+  padding-top: clamp(96px, 10vw, 150px);
+}
+
+.head {
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 960px) {
+  .head {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 72px;
+    align-items: end;
+  }
+}
+
+.title {
+  margin: 12px 0 0;
+  font-size: clamp(32px, 3.4vw, 50px);
+  font-weight: 500;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.bottles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px 20px;
+  margin: 56px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 960px) {
+  .bottles {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    align-items: end;
+  }
+}
+
+.bottles li {
+  text-align: center;
+}
+
+.bottleLink {
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.bottleLink img {
+  display: block;
+  width: auto;
+  height: clamp(150px, 14vw, 200px);
+  margin: 0 auto;
+  transition: transform var(--breath) var(--ease);
+}
+
+.bottles li[data-lead] .bottleLink img {
+  height: clamp(170px, 16.5vw, 240px);
+}
+
+.bottleLink:hover img {
+  transform: translateY(-4px);
+}
+
+.bottleName {
+  display: block;
+  margin-top: 20px;
+  font-family: var(--display-font);
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.15;
+}
+
+.credit {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bottleLink img {
+    transition: none;
+  }
+}

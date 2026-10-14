@@ -12,6 +12,8 @@ as they were when he chose, so any of them can come back.
 | F · Glass (round 2) | `look-glass.*`, `glass-scene.ts`, `qa/qa_science_f.py` | Live three.js glass mitochondrion; frosted glass cards. |
 | Switcher | `look-switcher.*` | The review control that switched looks. |
 
+- film/ — "Scroll film" (Mo's pick, September 28, 2026), live until the ink handscroll replaced it (October 2026); its QA: film/qa_science_film.py.
+
 To bring one back: move its files into `src/components/science/`, add it to the page in `science-page.tsx`,
 and restore its color tokens (see git history of `science-page.module.css` for `.page[data-look=…]`).
 Look C and E use `public/images/science-page/dark-cell.webp`'s original,
