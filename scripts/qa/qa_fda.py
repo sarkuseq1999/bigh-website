@@ -7,14 +7,11 @@ sign's picture drawn as the paragraph's border (fda-sign.webp, or fda-sign-phone
 oak on a phone), loading, and really painted (brown wood in the pixels, on the dark Science footer
 too); every line of the words inside the sign's face; cream letters at 4.5:1 or more against the
 painted face (measured from the pixels); two lines on a 1280+ window, centred; no sideways scroll;
-no hairline in the footer. The ink footer: on two columns the preview note sits under the logo,
-above the copyright line, and the sign is the footer's last thing, centred; on one column the note
-follows the sign. The words appear once per page (NuriCell does not repeat them above the footer),
-also on the four old-template product pages and in another language.
-
-The last screen (the whole crane and promise clear of the menu bar) is printed as a NOTE, not
-counted: Mo put the sign live knowing it cuts them on laptops until the footer-crane redesign
-(October 13, 2026, "2").
+no hairline in the footer. The ink footer (no logo since the footer-crane redesign): the sign
+under the copyright line, centred, and the preview note last, under it, at every width. The last
+screen still shows the whole promise and crane at rest clear of the menu bar at eight laptop sizes
+(home, About, NuriCell). The words appear once per page (NuriCell does not repeat them above the
+footer), also on the four old-template product pages and in another language.
 
 Run: python -X utf8 scripts/qa/qa_fda.py [base-url]   (default http://localhost:3036)
 """
@@ -203,34 +200,29 @@ def run_sign(browser):
             check(f"{tag}: no sideways scroll", g["sideways"] <= 0, f"{g['sideways']} px")
             check(f"{tag}: no hairline in the footer's second tier", g["hairline"] == 0, f"{g['hairline']} px")
             if name in INK:
-                note, legal, sign, logo, foot, grid = g["note"], g["legal"], g["sign"], g["logo"], g["footer"], g["grid"]
-                if size[0] >= 900:
-                    check(
-                        f"{tag}: the preview note under the logo, above the copyright line; the sign last, centred",
-                        note and legal and logo
-                        and note[1] >= logo[3] + 16
-                        and note[3] <= legal[1]
-                        and sign[1] >= legal[3]
-                        and foot[3] - sign[3] <= 48
-                        and abs((sign[0] + sign[2]) / 2 - (grid[0] + grid[2]) / 2) <= 2,
-                        f"logo bottom {logo[3]:.0f}, note {note[1]:.0f}-{note[3]:.0f}, © {legal[1]:.0f}, "
-                        f"sign {sign[1]:.0f}-{sign[3]:.0f}, footer end {foot[3]:.0f}",
-                    )
-                else:
-                    check(
-                        f"{tag}: the preview note follows the sign",
-                        note and 0 <= note[1] - sign[3] <= 40,
-                        f"sign end {sign[3]:.0f}, note {note[1]:.0f}" if note else "no note",
-                    )
+                note, legal, sign, foot, grid = g["note"], g["legal"], g["sign"], g["footer"], g["grid"]
+                check(
+                    f"{tag}: the sign under the copyright line, centred; the preview note last, under it",
+                    note and legal
+                    and sign[1] >= legal[3]
+                    and abs((sign[0] + sign[2]) / 2 - (grid[0] + grid[2]) / 2) <= 2
+                    and 0 <= note[1] - sign[3] <= 40
+                    and foot[3] - note[3] <= 48,
+                    f"© ends {legal[3]:.0f}, sign {sign[1]:.0f}-{sign[3]:.0f}, note {note[1]:.0f}-{note[3]:.0f}, "
+                    f"footer end {foot[3]:.0f}" if note and legal else "no note or legal line",
+                )
             page.screenshot(path=os.path.join(OUT, f"{name}-{size[0]}x{size[1]}.png"))
             check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
             context.close()
 
 
-def note_last_screen(browser):
-    """Printed, not counted (Mo, October 13, 2026: accepted until the footer-crane redesign)."""
+def run_last_screen(browser):
+    """The sign is taller than the strip it replaced: the last screen must still show the whole
+    promise and the whole crane at rest clear of the menu bar (the homepage's rounds 6 and 10),
+    the sign drawing smaller on short windows."""
     for name in INK:
-        for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864), (1366, 657), (1440, 700)):
+        for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864), (1366, 657), (1440, 700), (1920, 1080)):
+            tag = f"{name} last screen {size[0]}x{size[1]}"
             context, page, _, _ = open_page(browser, PAGES[name], size)
             page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
             page.wait_for_timeout(900)
@@ -239,8 +231,11 @@ def note_last_screen(browser):
                    document.querySelector('footer [data-brush=footer-promise] p').getBoundingClientRect().top,
                    document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
             )
-            room = min(crane, promise) - header - 8
-            print(f"NOTE {name} last screen {size[0]}x{size[1]}: room above the crane and promise {room:+.0f} px (accepted 10/13)")
+            check(
+                f"{tag}: the whole crane at rest and the whole promise, clear of the header",
+                crane >= header + 8 and promise >= header + 8,
+                f"crane top {crane:.0f}, promise top {promise:.0f}, header {header:.0f}",
+            )
             context.close()
 
 
@@ -271,7 +266,7 @@ with sync_playwright() as p:
     browser = p.chromium.launch(args=GPU)
     run_sign(browser)
     run_elsewhere(browser)
-    note_last_screen(browser)
+    run_last_screen(browser)
     browser.close()
 
 passed = sum(1 for r in results if r[1])

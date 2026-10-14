@@ -72,10 +72,11 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the words after; with reduced motion a choice is on the stage at once.
   - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
     the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
-    place); the promise stands large in its own band at the top of the footer (56 px or more on
-    desktop, 44 to 52 on a phone), one sentence to a line, before the links with no hairline
-    between (Mo, October 13, 2026: the closing brush stroke alone divides them),
-    with the crane at rest beside it (260 to 340 px tall on desktop, 120 to 150 on a phone),
+    place); the promise opens the footer with no logo (October 12: smaller, no longer in a band
+    of its own; October 13: no logo, the menu bar's mark is on screen; 40 to 60 px on desktop, at
+    the links' left, centred on their height; 32 to 44 on a phone, before the links), one
+    sentence to a line, with no hairline over the footer (Mo, October 13, 2026: fewer lines),
+    with the crane at rest beside it (120 to 170 px tall on desktop, 96 to 132 on a phone),
     which blooms only once all of it is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (wider than the science stage, which is at
@@ -99,8 +100,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the whole line drawn (1536 and 1440) the brush line passes it in the left margin, over none of
     it; on a phone no empty band between the story arrows and the science; at 1280x800, 1440x900,
     1536x1000, 1280x720, 1536x864, 1366x657 and 1440x700 the last screen shows the whole crane at
-    rest and the whole promise, clear of the header (a printed NOTE, not a check, since October
-    13, 2026: the FDA trail sign, accepted by Mo, cuts them until the footer-crane redesign).
+    rest and the whole promise, clear of the header.
   - the science as a scroll story (round 7, October 4): on two columns with motion the block is
     about two windows tall, its painting pinned beside the words; the desktop checks that
     clicked the three tabs are replaced on purpose: scrolling to each topic shows its words
@@ -603,20 +603,29 @@ STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stori
     im.src = u.searchParams.get('url') || u.pathname; }))))()"""
 
 
-# The finale (round 3): the promise in its own band at the top of the footer, before the link
-# columns (no hairline between since October 13, 2026: the closing brush stroke divides them); its
+# The finale (October 12-13, Mo): the promise first in the footer, no logo, at the links' left and
+# centred on their height (on a phone, before the links), and no hairline over the footer
+# (October 13, 2026: fewer lines); its
 # size, its lines (one sentence to each), the crane's height.
 FINALE = """(() => {
   const f = document.querySelector('footer');
   const band = f.querySelector('[data-brush="footer-promise"]');
   const t = band.querySelector('[data-brush="footer-tagline"]');
   const i = band.querySelector('img');
-  const tier = f.querySelector('h2').closest('div').parentElement.parentElement;
+  const columns = f.querySelector('h2').closest('div').parentElement;
+  const tier = columns.parentElement;
+  const logos = f.querySelectorAll('img[alt=BiGH], a[aria-label="BiGH home"]').length;
+  const links = [...columns.querySelectorAll('a, button')];
+  const last = links.reduce((a, e) => (e.getBoundingClientRect().bottom > a.getBoundingClientRect().bottom ? e : a));
   const b = band.getBoundingClientRect(), c = tier.getBoundingClientRect();
+  const k = columns.getBoundingClientRect(), w = t.getBoundingClientRect();
   const parts = [...t.querySelectorAll(':scope > span')];
   return {
-    first: f.firstElementChild.contains(band), above: Math.round(c.top - b.bottom),
+    inTier: tier.contains(band), first: tier.firstElementChild.contains(band), logos, underTop: Math.round(b.top - c.top),
     hairline: getComputedStyle(tier).borderTopWidth,
+    besideLinks: Math.round(k.left - b.right), beforeLinks: Math.round(k.top - b.bottom),
+    level: Math.round(w.bottom - last.getBoundingClientRect().bottom),
+    centre: Math.round((b.top + b.bottom) / 2 - (k.top + k.bottom) / 2),
     font: parseFloat(getComputedStyle(t.closest('p')).fontSize),
     crane: Math.round(i.getBoundingClientRect().height),
     lines: parts.map(s => new Set([...s.getClientRects()].map(r => Math.round(r.top))).size),
@@ -1567,13 +1576,18 @@ def run(browser, look, mobile):
         str(rest),
     )
     finale = page.evaluate(FINALE)
-    font_ok = 44 <= finale["font"] <= 52 if mobile else finale["font"] >= 56
-    crane_ok = 120 <= finale["crane"] <= 150 if mobile else 260 <= finale["crane"] <= 340
+    font_ok = 32 <= finale["font"] <= 44 if mobile else 40 <= finale["font"] <= 60
+    crane_ok = 96 <= finale["crane"] <= 132 if mobile else 120 <= finale["crane"] <= 170
+    # Desktop: at the links' left, centred on their height (the box lifted 12 px for the crane
+    # standing low on its stroke). Phone: before them.
+    place_ok = finale["beforeLinks"] >= 24 if mobile else finale["besideLinks"] >= 24 and abs(finale["centre"] + 12) <= 16
     check(
-        f"{tag}: the finale: the promise large in its own band, before the links, no hairline between",
-        finale["first"]
-        and finale["above"] >= 40
+        f"{tag}: the finale: the promise first in the footer, no logo, beside the links, no hairline",
+        finale["inTier"]
+        and finale["first"]
+        and finale["logos"] == 0
         and finale["hairline"] == "0px"
+        and place_ok
         and font_ok
         and crane_ok
         and finale["lines"] == [1, 1]
@@ -1907,8 +1921,8 @@ def run_opens(browser):
         f"opacity as it opens {settle and settle[0]:.2f}, at rest {settle and settle[1]}",
     )
     preview = page.evaluate(
-        """[[...document.querySelectorAll('footer > div:nth-child(2) > div:nth-child(2) > div:first-child a')].length,
-            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button, footer > div:nth-child(2) > div:nth-child(2) > div:first-child button')].map(e => e.textContent.trim().slice(0, 24))]"""
+        """[[...document.querySelector('footer h2').parentElement.querySelectorAll('a')].length,
+            [...document.querySelectorAll('#top button, #products [data-brush=bottles] button:not([aria-pressed]), #ink-product-panel button, #stories article button, #purpose button'), ...document.querySelector('footer h2').parentElement.querySelectorAll('button')].map(e => e.textContent.trim().slice(0, 24))]"""
     )
     check(
         f"{tag}: no button opens the product preview (all five products link to their pages)",
@@ -2609,11 +2623,8 @@ def run_pause(browser):
     # Round 10: also the shorter windows (1280x720 cut the crane's head by 22 px, 1536x864 by 20).
     # Menu bar round 1 (October 5): the solid bar hid half of "Stay sharp." at 1366x657 (the window
     # of a 1366x768 laptop), so the promise's top must clear the bar too, at 1366x657 and 1440x700.
-    # October 13, 2026: Mo put the FDA trail sign live on this footer knowing it is about 150 px
-    # taller than the strip and cuts the crane and the promise on the last screen at laptop sizes
-    # ("2"; the footer-crane redesign has the room). Until that lands this is a NOTE, measured and
-    # printed but not counted; it becomes a check again with the shorter footer.
-    accepted_cut = True
+    # October 13, 2026: the FDA trail sign is taller than the strip; with the footer-crane layout
+    # (and the sign smaller on short windows) the last screen still holds.
     for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864), (1366, 657), (1440, 700)):
         tag = f"last screen {size[0]}x{size[1]}"
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False, reduced=True)
@@ -2624,12 +2635,11 @@ def run_pause(browser):
                document.querySelector('footer [data-brush=footer-promise] p').getBoundingClientRect().top,
                document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
         )
-        clear = crane >= header + 8 and promise >= header + 8
-        detail = f"crane top {crane:.0f}, promise top {promise:.0f}, header {header:.0f}"
-        if accepted_cut:
-            print(f"NOTE {tag}: crane and promise {'clear of' if clear else 'cut by'} the header (accepted 10/13)  [{detail}]")
-        else:
-            check(f"{tag}: the whole crane at rest and the whole promise, clear of the header", clear, detail)
+        check(
+            f"{tag}: the whole crane at rest and the whole promise, clear of the header",
+            crane >= header + 8 and promise >= header + 8,
+            f"crane top {crane:.0f}, promise top {promise:.0f}, header {header:.0f}",
+        )
         shoot(page, f"last-{size[0]}x{size[1]}")
         context.close()
 

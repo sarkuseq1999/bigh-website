@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { ArrowUp } from "lucide-react";
 import { Fragment, useEffect, useRef, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
@@ -19,25 +18,6 @@ import styles from "./chrome.module.css";
 // light or dark ink by `tone`), it settles on rice paper once the page scrolls. The page's own link
 // carries aria-current. The footer keeps the About and Science pages' shape (large type for older
 // readers, Design Vault #045), so the whole site reads as one.
-
-function Logo() {
-  const copy = useCopy();
-  return (
-    <Link href="/" aria-label={copy("BiGH home")} className={styles.footerLogo}>
-      <span className={styles.logoCrop}>
-        <Image
-          src="/images/brand/bigh-logo-black-green.png"
-          alt={copy("BiGH")}
-          width={1448}
-          height={811}
-          sizes="136px"
-          loading="lazy"
-          className={styles.logoImage}
-        />
-      </span>
-    </Link>
-  );
-}
 
 /** Which page the header is on: its link is marked as the current page. */
 export type Current = NavCurrent;
@@ -112,7 +92,7 @@ export function SiteFooter({
   useEffect(() => {
     const paragraph = message.current;
     const words = paragraph?.firstElementChild;
-    // The finale's band, whose width decides where the lines break.
+    // The promise's place under the logo, whose width decides where the lines break.
     const column = paragraph?.parentElement?.parentElement;
     if (!paragraph || !words || !column || !hasClosing) return;
     // The words' own line boxes (text only: a sentence that wraps inside its inline block still
@@ -156,26 +136,24 @@ export function SiteFooter({
     };
   }, [hasClosing]);
 
-  // The finale first: the promise in its own band, large, with the look's closing picture beside
-  // it. Then the logo, the links and the legal lines are a calmer second tier (on two columns the
-  // preview note, the copyright line and "Back to top" sit under the logo, the last two level with
-  // the last link; on one column they follow the links). The FDA statement, on its trail sign,
-  // stands under it all (on one column, above the preview note).
+  // The promise at the left, centred on the links' height, with the look's closing picture beside
+  // the words (Mo, October 13, 2026: no logo here, the menu bar's mark is always on screen; the
+  // promise and the crane, smaller, stand alone, centred), and the links at the right; the
+  // copyright line and "Back to top" run under them all, then the FDA statement on its trail sign,
+  // then the preview note. No hairline over the footer (October 13, 2026: fewer lines). On
+  // one column: the promise, the links, the legal line, the statement, the note.
   return (
     <footer className={styles.footer}>
-      <div className={styles.finale}>
-        <div className={styles.promise} data-brush="footer-promise">
-          <p ref={message} className={styles.footerMessage}>
-            <span data-brush="footer-tagline">
-              <Sentences text={copy(footer.tagline)} />
-            </span>
-          </p>
-          {closing}
-        </div>
-      </div>
       <div className={styles.footerTop}>
-        <div className={styles.footerBrand}>
-          <Logo />
+        <div className={styles.finale}>
+          <div className={styles.promise} data-brush="footer-promise">
+            <p ref={message} className={styles.footerMessage}>
+              <span data-brush="footer-tagline">
+                <Sentences text={copy(footer.tagline)} />
+              </span>
+            </p>
+            {closing}
+          </div>
         </div>
         <div className={styles.footerColumns}>
           <div>
