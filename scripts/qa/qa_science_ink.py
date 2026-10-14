@@ -7,7 +7,9 @@ Sections (all, or --only=a,b):
               no canvas, no console errors (1440x900, 390x844)
   people      Dr. Liu's real photo on its mount, his name, numbers and sources, "Read his story"
               opens his sheet; the five bottles with their credits, each linking to its page
-  journey     (Task 3) the scroll pins, travels from Okayama to Today and lets go
+  journey     (Task 3) the scroll pins, travels from Okayama to Today and lets go, the stop in
+              view's words and link in the window, Tab only on shown links; real short windows
+              (the title goes on under the bar) and a phone held sideways (the still scroll)
   still       (Task 3) reduced motion and no script: nothing pins, every stop readable
   multiply    (Task 3, 4) every painting's blend group sits on the page with no stacking context
   strips      (Task 4) research, health and ask: painting, words, the full list, the explainers
@@ -138,41 +140,87 @@ STACKING = """el => {
 
 STATE = """() => {
   const s = document.querySelector('#scientists');
+  const pinEl = s.querySelector('[data-pin]');
   const band = s.querySelector('[data-band]').getBoundingClientRect();
-  const img = s.querySelector('[data-painting]').getBoundingClientRect();
-  const pin = s.querySelector('[data-pin]').getBoundingClientRect();
-  return { now: Number(s.dataset.now), pinTop: pin.top, pinBottom: pin.bottom,
+  const imgEl = s.querySelector('[data-painting]');
+  const img = imgEl.getBoundingClientRect();
+  const pin = pinEl.getBoundingClientRect();
+  const box = e => { if (!e) return null; const r = e.getBoundingClientRect(); return [r.left, r.top, r.right, r.bottom]; };
+  const cur = s.querySelector(`li[data-stop="${s.dataset.now}"]`);
+  const shown = e => { for (; e && e !== s; e = e.parentElement) if (Number(getComputedStyle(e).opacity) < 1) return false; return true; };
+  // Links Tab can reach: each must be shown and inside the window.
+  const reachable = [...s.querySelectorAll('li[data-stop] a')].filter(a => a.tabIndex >= 0)
+    .map(a => { const r = a.getBoundingClientRect(); return shown(a) && r.left >= -1 && r.right <= innerWidth + 1 && r.top >= -1 && r.bottom <= innerHeight + 1; });
+  return { now: Number(s.dataset.now), still: s.hasAttribute('data-still'), pinTop: pin.top, pinBottom: pin.bottom,
+           stick: parseFloat(getComputedStyle(pinEl).top), padTop: parseFloat(getComputedStyle(s).paddingTop),
+           room: s.querySelector('[data-room]').offsetHeight, overflow: img.width - band.width,
            imgLeft: img.left, imgRight: img.right, bandLeft: band.left, bandRight: band.right,
-           innerHeight, scrollY, sectionBottom: s.getBoundingClientRect().bottom };
+           text: box(cur && cur.querySelector('p')), textShown: shown(cur && cur.querySelector('p')),
+           link: box(cur && cur.querySelector('a')), reachable,
+           innerHeight, innerWidth, scrollY, sectionBottom: s.getBoundingClientRect().bottom };
 }"""
 
 
+def inside(rect, w, h):
+    return rect is None or (rect[0] >= -1 and rect[2] <= w + 1 and rect[1] >= -1 and rect[3] <= h + 1)
+
+
+JOURNEY_SIZES = [
+    (1440, 900, "en"), (1280, 720, "en"), (1280, 720, "vn"), (390, 844, "en"),
+    # Real windows (October 14 review): a laptop with its browser bars, iPhone Safari with its
+    # toolbars, a small phone, and a phone held sideways (the still scroll).
+    (1366, 657, "en"), (390, 664, "en"), (375, 667, "en"), (844, 390, "en"),
+]
+
+
 def journey(browser):
-    for w, h, lang in [(1440, 900, "en"), (1280, 720, "en"), (1280, 720, "vn"), (390, 844, "en")]:
+    for w, h, lang in JOURNEY_SIZES:
+        tag = f"journey {w}x{h} {lang}"
         ctx, page, _, errors = opened(browser, w, h, path=f"/{lang}/science")
         page.wait_for_timeout(1200)
         start = page.evaluate(STATE)
-        check(f"journey {w}x{h} {lang}: starts at Okayama", start["now"] == 0, str(start["now"]))
-        check(f"journey {w}x{h} {lang}: pin fits the window", start["pinBottom"] <= h + 1, f"{start['pinBottom']:.0f} > {h}")
-        travel = page.evaluate("() => { const s = document.querySelector('#scientists'); return s.offsetHeight - s.querySelector('[data-pin]').offsetHeight; }")
-        check(f"journey {w}x{h} {lang}: room to travel", travel > w, f"{travel}px")
+        check(f"{tag}: starts at Okayama", start["now"] == 0, str(start["now"]))
+        if (w, h) == (844, 390):
+            # Too short for the pinned box even with the title gone and the painting at its least.
+            check(f"{tag}: the still scroll", start["still"])
+            pin = page.evaluate("getComputedStyle(document.querySelector('[data-pin]')).position")
+            check(f"{tag}: nothing pins", pin == "static", pin)
+            check(f"{tag}: no travel room", start["room"] == 0, str(start["room"]))
+            visible = page.evaluate("[...document.querySelectorAll('#scientists li[data-stop] p')].map(p => getComputedStyle(p).opacity === '1' && p.getBoundingClientRect().height > 0)")
+            check(f"{tag}: all five stops readable", visible == [True] * 5, str(visible))
+            band = page.evaluate("(() => { const b = document.querySelector('[data-band]'); return [getComputedStyle(b).overflowX, b.getAttribute('role'), b.tabIndex]; })()")
+            check(f"{tag}: the band scrolls sideways, a region the keyboard reaches", band == ["auto", "region", 0], str(band))
+            check(f"{tag}: every link reachable", page.evaluate("[...document.querySelectorAll('#scientists li a')].every(a => a.tabIndex >= 0)"))
+            page.screenshot(path=str(OUT / f"journey-{w}x{h}-{lang}-still.png"))
+            check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+            ctx.close()
+            continue
+        check(f"{tag}: travels (not the still scroll)", not start["still"])
+        check(f"{tag}: room to travel", start["overflow"] > 0 and start["room"] >= start["overflow"] - 1, f"overflow {start['overflow']:.0f}, room {start['room']}")
+        # The box sticks once it has risen to its sticky top (higher than the menu bar's foot when
+        # the title goes on under the bar); the travel runs over the room from there.
+        begin = max(0, start["padTop"] - start["stick"])
+        room = start["room"]
         seen = []
         for step in range(0, 11):
-            page.evaluate(f"window.scrollTo(0, {travel * step / 10})")
+            page.evaluate(f"window.scrollTo(0, {begin + room * step / 10})")
             page.wait_for_timeout(250)
             st = page.evaluate(STATE)
             seen.append(st["now"])
             if 0 < step < 10:
-                check(f"journey {w}x{h} {lang} {step}/10: pinned", abs(st["pinTop"] - start["pinTop"]) < 2, f"{st['pinTop']:.0f}")
-                check(f"journey {w}x{h} {lang} {step}/10: painting covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
-        check(f"journey {w}x{h} {lang}: stops in order, Okayama to Today", seen == sorted(seen) and seen[0] == 0 and seen[-1] == 4, str(seen))
+                check(f"{tag} {step}/10: pinned", abs(st["pinTop"] - st["stick"]) < 2, f"{st['pinTop']:.0f} vs {st['stick']:.0f}")
+                check(f"{tag} {step}/10: the pinned box fits the window", st["pinBottom"] <= h + 1, f"{st['pinBottom']:.0f} > {h}")
+                check(f"{tag} {step}/10: painting covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
+                check(f"{tag} {step}/10: the stop's sentence and link shown, in the window", st["textShown"] and inside(st["text"], w, h) and inside(st["link"], w, h), f"{st['text']} {st['link']}")
+                check(f"{tag} {step}/10: Tab reaches only shown links", all(st["reachable"]) and len(st["reachable"]) <= 1, str(st["reachable"]))
+        check(f"{tag}: stops in order, Okayama to Today", seen == sorted(seen) and seen[0] == 0 and seen[-1] == 4, str(seen))
         end = page.evaluate(STATE)
-        check(f"journey {w}x{h} {lang}: the painting's end in view at the end", abs(end["imgRight"] - end["bandRight"]) < 3, f"{end['imgRight']:.0f} vs {end['bandRight']:.0f}")
-        page.evaluate(f"window.scrollTo(0, {travel + 400})")
+        check(f"{tag}: the painting's end in view at the end", abs(end["imgRight"] - end["bandRight"]) < 3, f"{end['imgRight']:.0f} vs {end['bandRight']:.0f}")
+        page.evaluate(f"window.scrollTo(0, {begin + room + 400})")
         page.wait_for_timeout(300)
         after = page.evaluate(STATE)
-        check(f"journey {w}x{h} {lang}: lets go after Today", after["pinTop"] < start["pinTop"] - 100, f"{after['pinTop']:.0f}")
-        page.evaluate(f"window.scrollTo(0, {travel * 0.5})")
+        check(f"{tag}: lets go after Today", after["pinTop"] < after["stick"] - 100, f"{after['pinTop']:.0f}")
+        page.evaluate(f"window.scrollTo(0, {begin + room * 0.5})")
         page.wait_for_timeout(300)
         page.screenshot(path=str(OUT / f"journey-{w}x{h}-{lang}-half.png"))
         if w == 1440:
@@ -180,7 +228,7 @@ def journey(browser):
             page.wait_for_timeout(600)
             st = page.evaluate(STATE)
             check("journey resize 1440→1024 half way: painting still covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
-        check(f"journey {w}x{h} {lang}: no console errors", not errors, "; ".join(errors[:3]))
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
 
 
@@ -193,12 +241,16 @@ def still(browser):
             check(f"still {label} {w}: nothing pins", pin == "static", pin)
             room = page.evaluate("document.querySelector('#scientists [data-room]').offsetHeight")
             check(f"still {label} {w}: no travel room", room == 0, str(room))
-            visible = page.evaluate("[...document.querySelectorAll('#scientists li[data-stop] p')].map(p => getComputedStyle(p).visibility === 'visible' && getComputedStyle(p).display !== 'none' && p.getBoundingClientRect().height > 0)")
+            visible = page.evaluate("[...document.querySelectorAll('#scientists li[data-stop] p')].map(p => getComputedStyle(p).visibility === 'visible' && getComputedStyle(p).display !== 'none' && getComputedStyle(p).opacity === '1' && getComputedStyle(p.closest('li')).opacity === '1' && p.getBoundingClientRect().height > 0)")
             check(f"still {label} {w}: all five stops readable", visible == [True] * 5, str(visible))
+            check(f"still {label} {w}: every link reachable", page.evaluate("[...document.querySelectorAll('#scientists li a')].every(a => a.tabIndex >= 0)"))
             band = page.evaluate("getComputedStyle(document.querySelector('[data-band]')).overflowX")
             check(f"still {label} {w}: the band scrolls sideways", band == "auto", band)
-            shown = page.evaluate("getComputedStyle(document.querySelector('[data-painting]')).filter")
-            check(f"still {label} {w}: the painting crisp", shown in ("none",), shown)
+            if label == "reduced motion":
+                role = page.evaluate("document.querySelector('[data-band]').getAttribute('role')")
+                check(f"still {label} {w}: the band is a named region", role == "region", str(role))
+            shown = page.evaluate("(() => { const s = getComputedStyle(document.querySelector('[data-painting]')); return [s.filter, s.maskImage]; })()")
+            check(f"still {label} {w}: the painting crisp and whole", shown == ["none", "none"], str(shown))
             page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
             ctx.close()
 

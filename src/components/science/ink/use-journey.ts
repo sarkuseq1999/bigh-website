@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, type RefObject } from "react";
+import { useEffect, useState, type RefObject } from "react";
 
 /**
  * The handscroll's travel (spec, "The handscroll"). The room after the pinned box (journey.module.css)
@@ -14,32 +14,54 @@ import { useEffect, type RefObject } from "react";
  * data-now (that stop's index). The stop in view is the last whose place has crossed a reading line
  * that moves from the band's middle to 95% of its width as the painting travels: each stop lights
  * once its place is in view (on a phone's narrow band too, where the places are screens apart), the
- * first is current at the start and the last at the end. On a short window it also shrinks the
- * painting (--band-h) until the pinned box fits under the menu bar. Reduced motion: nothing runs;
- * the stylesheet shows the still scroll.
+ * first is current at the start and the last at the end.
+ *
+ * Every stop's words stay in the page for screen readers (the others are only transparent); only
+ * the stop in view's link can be reached with Tab (the others' links get tabindex -1), so the
+ * keyboard never lands on a link that cannot be seen.
+ *
+ * fit(): the pinned box must fit between the menu bar and the window's foot. A short window first
+ * lets the title go on under the menu bar (--lift: the box sticks that much higher, so only the
+ * painting and its stops stay) and gives the title's room to the painting, up to its largest
+ * (--band-max); if the box still does not fit, the painting gives way, down to 180px; if even that
+ * does not fit (a phone held sideways), the section is marked data-still and the stylesheet shows
+ * the still scroll, as for reduced motion. Returns whether it is the still scroll. Reduced motion:
+ * nothing runs; the stylesheet shows the still scroll.
  */
 export function useJourney(
   section: RefObject<HTMLElement | null>,
   motion: boolean,
   at: readonly number[],
 ) {
+  const [still, setStill] = useState(false);
   useEffect(() => {
     const root = section.current;
     const pin = root?.querySelector<HTMLElement>("[data-pin]");
+    const words = pin?.firstElementChild;
     const band = root?.querySelector<HTMLElement>("[data-band]");
     const painting = root?.querySelector<HTMLImageElement>("[data-painting]");
     const room = root?.querySelector<HTMLElement>("[data-room]");
-    if (!root || !pin || !band || !painting || !room || !motion) return;
+    if (!root || !pin || !words || !band || !painting || !room || !motion) return;
+    const links = [...root.querySelectorAll<HTMLAnchorElement>("li[data-stop] a")];
     let travel = 0;
     let overflow = 0;
     let from = 0;
     let width = 0;
     let start = 0;
     let frame = 0;
+    let pending = 0;
     let now = -1;
+    let fixed = false;
 
+    const reachable = (current: number | null) =>
+      links.forEach((link) => {
+        const stop = Number(link.closest<HTMLElement>("[data-stop]")?.dataset.stop);
+        if (current === null || stop === current) link.removeAttribute("tabindex");
+        else link.tabIndex = -1;
+      });
     const update = () => {
       frame = 0;
+      if (fixed) return;
       const p = Math.min(1, Math.max(0, (window.scrollY - start) / Math.max(1, travel)));
       const x = from + p * (overflow - from);
       const read = x + (0.5 + 0.45 * p) * band.clientWidth;
@@ -52,48 +74,80 @@ export function useJourney(
       if (best !== now) {
         now = best;
         root.dataset.now = String(best);
+        reachable(best);
       }
     };
     const schedule = () => {
       if (!frame) frame = requestAnimationFrame(update);
     };
     const fit = () => {
-      // The pinned box must fit between the menu bar and the window's foot: a long title (vn, kr)
-      // or a short window takes the room from the painting, never from the words.
       root.style.removeProperty("--band-h");
-      const pinTop = parseFloat(getComputedStyle(pin).top) || 0;
-      const over = pin.getBoundingClientRect().height + pinTop + 12 - window.innerHeight;
-      if (over > 0) {
-        const h = Math.max(180, painting.getBoundingClientRect().height - over);
-        root.style.setProperty("--band-h", `${h}px`);
+      root.style.removeProperty("--lift");
+      delete root.dataset.still;
+      const over = () =>
+        pin.getBoundingClientRect().height +
+        (parseFloat(getComputedStyle(pin).top) || 0) +
+        12 -
+        window.innerHeight;
+      if (over() <= 0) return false;
+      const gap = parseFloat(getComputedStyle(pin).rowGap) || 0;
+      root.style.setProperty("--lift", `${words.getBoundingClientRect().height + gap}px`);
+      const most = parseFloat(getComputedStyle(root).getPropertyValue("--band-max")) || 0;
+      const shown = painting.getBoundingClientRect().height;
+      const h = Math.min(Math.max(most, shown), shown - over());
+      if (h >= 180) {
+        if (Math.abs(h - shown) > 0.5) root.style.setProperty("--band-h", `${h}px`);
+        return false;
       }
+      root.style.removeProperty("--lift");
+      root.dataset.still = "";
+      return true;
     };
     const measure = () => {
-      fit();
+      pending = 0;
+      fixed = fit();
+      setStill(fixed);
+      if (fixed) {
+        now = -1;
+        reachable(null);
+        return;
+      }
       width = painting.getBoundingClientRect().width;
       overflow = Math.max(0, width - band.clientWidth);
       from = Math.min(overflow, Math.max(0, at[0] * width - band.clientWidth / 2));
       travel = room.offsetHeight;
       root.style.setProperty("--view", `${band.clientWidth}px`);
+      // The sticky top as set (less the lift when the title goes on): the travel starts when the
+      // box sticks, so it runs from 0 to 1 over exactly the room.
       const pinTop = parseFloat(getComputedStyle(pin).top) || 0;
       const padTop = parseFloat(getComputedStyle(root).paddingTop) || 0;
       start = root.getBoundingClientRect().top + window.scrollY + padTop - pinTop;
       update();
     };
-    const resize = new ResizeObserver(() => measure());
+    // One measure per frame, whoever asks: the band or the box changing size (a late font swap
+    // changes the title's height) or the window's height alone (the band may be at its least).
+    const remeasure = () => {
+      if (!pending) pending = requestAnimationFrame(measure);
+    };
+    const resize = new ResizeObserver(remeasure);
     resize.observe(band);
+    resize.observe(pin);
     window.addEventListener("scroll", schedule, { passive: true });
-    window.addEventListener("resize", measure);
+    window.addEventListener("resize", remeasure);
     measure();
     return () => {
       resize.disconnect();
       window.removeEventListener("scroll", schedule);
-      window.removeEventListener("resize", measure);
+      window.removeEventListener("resize", remeasure);
       if (frame) cancelAnimationFrame(frame);
-      root.style.removeProperty("--x");
-      root.style.removeProperty("--walked");
-      root.style.removeProperty("--view");
-      root.style.removeProperty("--band-h");
+      if (pending) cancelAnimationFrame(pending);
+      reachable(null);
+      delete root.dataset.still;
+      for (const name of ["--x", "--walked", "--view", "--band-h", "--lift"]) {
+        root.style.removeProperty(name);
+      }
+      setStill(false);
     };
   }, [section, motion, at]);
+  return still;
 }

@@ -9,10 +9,13 @@
    --pin-top: where the settled menu bar's paper ends (its small height + 22px of paper that fades
    out under its rule; nav-inscription.module.css: 70px to 1100px wide, then 5.3vw from 74px to
    82px), so the eyebrow is never under the paper. --band-h: the window's height less the pinned
-   box's own words, foot and stops; useJourney's fit() is only the safety net for long titles. */
+   box's own words, foot and stops, up to --band-max; useJourney's fit() only acts where the box
+   would not fit (a short window, a long title): the title goes on under the menu bar (--lift),
+   then the painting gives way, then the still scroll (data-still). */
 .journey {
   --pin-top: 92px;
-  --band-h: clamp(180px, calc(100svh - var(--pin-top) - 474px), 300px);
+  --band-max: 300px;
+  --band-h: clamp(180px, calc(100svh - var(--pin-top) - 474px), var(--band-max));
   position: relative;
   padding-top: var(--pin-top);
 }
@@ -24,13 +27,14 @@
 @media (min-width: 960px) {
   .journey {
     --pin-top: clamp(96px, calc(5.3vw + 22px), 104px);
-    --band-h: clamp(180px, calc(100svh - var(--pin-top) - 434px), 430px);
+    --band-max: 430px;
+    --band-h: clamp(180px, calc(100svh - var(--pin-top) - 434px), var(--band-max));
   }
 }
 
 .pin {
   position: sticky;
-  top: var(--pin-top);
+  top: calc(var(--pin-top) - var(--lift, 0px));
   display: grid;
   gap: 22px;
   mix-blend-mode: multiply;
@@ -107,6 +111,7 @@
   width: 230px;
   margin: 0 0 0 calc(var(--pos) - 115px);
   text-align: center;
+  pointer-events: none;
 }
 
 .journey[data-now="0"] [data-stop="0"],
@@ -114,6 +119,7 @@
 .journey[data-now="2"] [data-stop="2"],
 .journey[data-now="3"] [data-stop="3"],
 .journey[data-now="4"] [data-stop="4"] {
+  pointer-events: auto;
   --pos: clamp(
     calc(var(--x, 0px) + var(--view, 100vw) * 0.06 + 115px),
     var(--true),
@@ -139,26 +145,56 @@
   font-weight: 500;
 }
 
+/* The stop's title: plain words in the page's title face (no heading under the h1: the stops are
+   an ordered list), set as the page's small titles are (science-ink.module.css; the kit's CJK and
+   Vietnamese line rules). */
 .stopTitle {
+  display: block;
   margin: 4px 0 0;
   color: var(--muted);
+  font-family: var(--display-font);
   font-size: 22px;
+  font-weight: 400;
   line-height: 1.2;
 }
 
+.stopTitle:not(:lang(ko), :lang(ja), :lang(zh)) {
+  font-weight: 600;
+}
+
+.stopTitle:is(:lang(ko), :lang(ja), :lang(zh)) {
+  line-height: 1.22;
+  letter-spacing: -0.01em;
+}
+
+.stopTitle:lang(ko) {
+  word-break: keep-all;
+}
+
+.stopTitle:lang(ja) {
+  word-break: auto-phrase;
+}
+
+.stopTitle:lang(vi) {
+  line-height: 1.3;
+}
+
+/* The others' sentences are only transparent: screen readers still read all five, and their links
+   are out of the Tab order (useJourney) and out of the pointer's way (pointer-events above). */
 .stopText {
   margin: 6px 0 0;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.45;
-  visibility: hidden;
+  opacity: 0;
 }
 
 .stopText a {
   color: var(--ink);
 }
 
-/* The stop in view: its dot inked, its words in ink, its sentence shown. */
+/* The stop in view: its dot inked, its words in ink, its sentence shown. Its words take the
+   pointer (the others' boxes may lie over its link where two places are close). */
 .journey[data-now="0"] [data-stop="0"],
 .journey[data-now="1"] [data-stop="1"],
 .journey[data-now="2"] [data-stop="2"],
@@ -177,7 +213,7 @@
 .journey[data-now="2"] [data-stop="2"] .stopText,
 .journey[data-now="3"] [data-stop="3"] .stopText,
 .journey[data-now="4"] [data-stop="4"] .stopText {
-  visibility: visible;
+  opacity: 1;
 }
 
 .journey[data-now="0"] [data-stop="0"] .dot,
@@ -252,7 +288,7 @@
     width: auto;
     margin: 0;
     text-align: left;
-    visibility: hidden;
+    opacity: 0;
   }
 
   .stops li .dot {
@@ -264,7 +300,7 @@
   .journey[data-now="2"] [data-stop="2"],
   .journey[data-now="3"] [data-stop="3"],
   .journey[data-now="4"] [data-stop="4"] {
-    visibility: visible;
+    opacity: 1;
   }
 
   .dots {
@@ -291,11 +327,16 @@
   }
 }
 
-/* Reduced motion, and a page whose script never runs: nothing pins or moves. The band scrolls
-   sideways under the visitor's own hand, and all five stops are read in a row (a list on phones).
+/* Reduced motion, a page whose script never runs, and a window too short for the pinned box
+   (data-still, set by useJourney): nothing pins or moves. The band scrolls sideways under the
+   visitor's own hand, and all five stops are read in a row (a list on phones). The two blocks
+   below say the same thing (a media query cannot also name an attribute): change both.
    :global([data-look]) outranks the kit's bloom rules whatever order they load in. */
 @media (prefers-reduced-motion: reduce), (scripting: none) {
-  .room {
+  .room,
+  .rail,
+  .dots,
+  .hint {
     display: none;
   }
 
@@ -317,12 +358,6 @@
     -webkit-mask: none;
     mask: none;
     filter: none;
-  }
-
-  .rail,
-  .dots,
-  .hint {
-    display: none;
   }
 
   .track {
@@ -352,27 +387,103 @@
     width: auto;
   }
 
-  .stops li,
   .journey .stops li {
     grid-area: auto;
     width: auto;
     margin: 0;
-    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 
-  .stops li .stopText {
-    visibility: visible;
+  .journey .stops li .stopText {
+    opacity: 1;
   }
 
-  .stops li .mark,
-  .stops li .stopTitle {
+  .journey .stops li .mark,
+  .journey .stops li .stopTitle {
     color: var(--ink);
   }
+}
+
+.journey[data-still] .room,
+.journey[data-still] .rail,
+.journey[data-still] .dots,
+.journey[data-still] .hint {
+  display: none;
+}
+
+.journey[data-still] .pin {
+  position: static;
+}
+
+.journey[data-still] .band {
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
+
+.journey[data-still] .painting,
+.journey[data-still] .stops {
+  transform: none;
+}
+
+:global([data-look="ink"]) .journey[data-still] .painting[data-bloom] {
+  -webkit-mask: none;
+  mask: none;
+  filter: none;
+}
+
+.journey[data-still] .track {
+  padding: 0 var(--gutter);
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.journey[data-still][data-now] .stops li .dot {
+  width: 15px;
+  height: 15px;
+  margin: 0 auto 14px;
+  border-color: var(--ink);
+  background: var(--ink);
+  translate: none;
+}
+
+.journey[data-still] .foot {
+  justify-content: flex-end;
+}
+
+.journey[data-still] .stops {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 24px;
+  width: auto;
+}
+
+.journey[data-still] .stops li {
+  grid-area: auto;
+  width: auto;
+  margin: 0;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.journey[data-still] .stops li .stopText {
+  opacity: 1;
+}
+
+.journey[data-still] .stops li .mark,
+.journey[data-still] .stops li .stopTitle {
+  color: var(--ink);
 }
 
 @media (max-width: 959px) and (prefers-reduced-motion: reduce),
   (max-width: 959px) and (scripting: none) {
   .stops {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 959px) {
+  .journey[data-still] .stops {
     grid-template-columns: 1fr;
   }
 }

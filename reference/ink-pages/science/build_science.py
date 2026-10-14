@@ -6,13 +6,17 @@ prompts in prompts/). Output: public/images/science/ink/*.webp (lossless plates 
 committed) and src/components/science/ink/science-art.ts.
 
 The handscroll is three 21:9 panels painted to one horizon with mist at their ends. Each panel's
-paper is divided out; its inner ends fade to paper (a smoothstep over FADES px); the panels are
-shifted to one horizon (DY, measured October 14: the sea's top row is 653 at panel 1's right and 696
-at panel 2's left; the hills' top row is 498 at panel 2's right and 503 at panel 3's left) and laid
-side by side, overlapping by OVERLAP px, with a darken blend, so ink stays ink and the mists join.
-The band is then cropped to its ink and levelled to white. STOP_X: where each stop's place stands
-on the joined canvas, read off its contact sheet (Okayama's castle, Berkeley's tower, the hills of
-2002, Salzburg's fortress, the oaks under the sun).
+paper is divided out; the panels are shifted to one horizon (DY, measured October 14: the sea's top
+row is 653 at panel 1's right and 696 at panel 2's left; the hills' top row is 498 at panel 2's
+right and 503 at panel 3's left) and laid side by side, overlapping by OVERLAP px. Join 2 (the
+hills): both inner ends fade to paper (a smoothstep over FADES px) and meet in a darken blend, so
+ink stays ink and the mists join. Join 1 (the open sea) is a crossfade instead (CROSSFADE): both
+panels paint spray and mist at that end (panel 1's last ~300px, panel 2's first ~550px), so two ends
+fading to paper left a blank gap that read as two seas (October 14 review); over a 900px overlap
+panel 1 fades out exactly as panel 2 fades in (weights summing to one), and the sea runs on through
+the spray. The band is then cropped to its ink and levelled to white. STOP_X: where each stop's
+place stands on the joined canvas, read off its contact sheet (Okayama's castle, Berkeley's tower,
+the hills of 2002, Salzburg's fortress, the oaks under the sun).
 
 The strips are cropped to their ink; phones get narrower crops (the scrolls' and the mugs' middle,
 their cut ends faded to paper) and the health strip's three scenes, cut where the ink is thinnest
@@ -48,10 +52,11 @@ TAKES = {
     "health": "S-health-poppy",
     "mugs": "S-mugs",
 }
-OVERLAP = (300, 300)
+OVERLAP = (900, 300)
+CROSSFADE = (True, False)
 DY = (0, -43, -48)
-FADES = ((0, 420), (520, 420), (420, 0))
-STOP_X = {"okayama": 756, "berkeley": 4108, "y2002": 4718, "salzburg": 5600, "today": 7088}
+FADES = ((0, 0), (0, 420), (420, 0))
+STOP_X = {"okayama": 756, "berkeley": 3508, "y2002": 4118, "salzburg": 5000, "today": 6488}
 PHONE_H = 400  # the scroll's phone picture: 300px tall on screen, 1.33x
 EDGE = 0.03
 PHONE_FADE = 0.08  # the phone crops' cut ends (middle()): fade to paper over this share of their width
@@ -83,10 +88,19 @@ def handscroll():
     top = max(0, -min(DY))
     xs = [0, w - OVERLAP[0], 2 * w - OVERLAP[0] - OVERLAP[1]]
     canvas = np.full((h + top + max(0, max(DY)), xs[2] + w, 3), 255.0, np.float32)
-    for arr, x, dy, (fade_l, fade_r) in zip(panels, xs, DY, FADES):
-        y = top + dy
-        region = canvas[y : y + h, x : x + w]
-        canvas[y : y + h, x : x + w] = np.minimum(region, faded(arr, fade_l, fade_r))
+    for i, (arr, x, dy, (fade_l, fade_r)) in enumerate(zip(panels, xs, DY, FADES)):
+        # The panel on a layer as tall as the canvas (paper above and below it), so a crossfade
+        # also fades the rows of the panel before that this one does not cover.
+        layer = np.full((canvas.shape[0], w, 3), 255.0, np.float32)
+        layer[top + dy : top + dy + h] = faded(arr, fade_l, fade_r)
+        region = canvas[:, x : x + w]
+        out = np.minimum(region, layer)
+        if i and CROSSFADE[i - 1]:
+            o = OVERLAP[i - 1]
+            t = np.linspace(0.0, 1.0, o, dtype=np.float32)
+            k = (t * t * (3 - 2 * t))[None, :, None]
+            out[:, :o] = region[:, :o] * (1 - k) + layer[:, :o] * k
+        canvas[:, x : x + w] = out
     joined = Image.fromarray(np.clip(np.rint(canvas), 0, 255).astype(np.uint8))
     x0, y0, x1, y1 = bd.ink_box(np.asarray(joined), pad=0.02)
     band = bd.feathered(bd.levelled(joined.crop((x0, y0, x1, y1))), EDGE)

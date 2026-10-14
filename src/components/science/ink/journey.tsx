@@ -22,12 +22,14 @@ const AT = [
  * The handscroll (Mo, October 13-14, 2026): the title, then Dr. Liu's path as one ink painting
  * that travels sideways while the page scrolls down (Okayama, the ocean, Berkeley, Salzburg,
  * California under a gold sun), its five stops under their places. Phones get a shorter picture
- * (the same painting, 400px tall). Reduced motion and no script: the still scroll.
+ * (the same painting, 400px tall). Reduced motion, no script and a window too short for the pinned
+ * box (useJourney): the still scroll, whose band the visitor scrolls sideways.
  */
 export function Journey({ motion }: { motion: boolean }) {
   const copy = useCopy();
   const section = useRef<HTMLElement>(null);
-  useJourney(section, motion, AT);
+  const short = useJourney(section, motion, AT);
+  const still = !motion || short;
   return (
     <section
       ref={section}
@@ -42,8 +44,9 @@ export function Journey({ motion }: { motion: boolean }) {
         <div
           className={styles.band}
           data-band=""
-          tabIndex={motion ? undefined : 0}
-          aria-label={motion ? undefined : copy(ink.scrollStill)}
+          role={still ? "region" : undefined}
+          tabIndex={still ? 0 : undefined}
+          aria-label={still ? copy(ink.scrollStill) : undefined}
         >
           <picture>
             <source
@@ -88,7 +91,7 @@ export function Journey({ motion }: { motion: boolean }) {
               <li key={stop.mark} data-stop={i} style={{ "--at": AT[i] } as CSSProperties}>
                 <i className={styles.dot} aria-hidden="true" />
                 <span className={styles.mark}>{copy(stop.mark)}</span>
-                <h3 className={styles.stopTitle}>{copy(stop.title)}</h3>
+                <span className={styles.stopTitle}>{copy(stop.title)}</span>
                 <p className={styles.stopText}>
                   {copy(stop.text)}{" "}
                   {stop.url ? (

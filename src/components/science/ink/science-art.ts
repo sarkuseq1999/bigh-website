@@ -5,19 +5,19 @@
 export const scienceArt = {
   scroll: {
     src: "/images/science/ink/scroll-v1.webp",
-    width: 7464,
-    height: 708,
+    width: 6864,
+    height: 705,
     phone: {
       src: "/images/science/ink/scroll-phone-v1.webp",
-      width: 4217,
+      width: 3894,
       height: 400,
     },
     stops: {
-      okayama: 0.1013,
-      berkeley: 0.5504,
-      y2002: 0.6321,
-      salzburg: 0.7503,
-      today: 0.9496,
+      okayama: 0.1101,
+      berkeley: 0.5111,
+      y2002: 0.5999,
+      salzburg: 0.7284,
+      today: 0.9452,
     },
   },
   scrolls: {
