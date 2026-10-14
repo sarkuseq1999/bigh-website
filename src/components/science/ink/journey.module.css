@@ -1,0 +1,378 @@
+/* The handscroll (Mo, October 13-14, 2026; spec "The handscroll"). The pinned box holds the title,
+   the painting and its stops; it is the painting's blend group (multiply), so the painting can move
+   inside it (transform) without a white box. The room after it is as tall as the painting's
+   overflow (padding % = the containing block's width = the band's width): one pixel scrolled down,
+   one pixel of painting, with the page's full height set before any script runs. It is never less
+   than the band is wide, so on a short window (a small painting) the painting moves more slowly
+   than the page instead of passing in one flick. A sticky box does not stay pinned through its
+   parent's own bottom padding (tested October 14), hence a child.
+   --pin-top: where the settled menu bar's paper ends (its small height + 22px of paper that fades
+   out under its rule; nav-inscription.module.css: 70px to 1100px wide, then 5.3vw from 74px to
+   82px), so the eyebrow is never under the paper. --band-h: the window's height less the pinned
+   box's own words, foot and stops; useJourney's fit() is only the safety net for long titles. */
+.journey {
+  --pin-top: 92px;
+  --band-h: clamp(180px, calc(100svh - var(--pin-top) - 474px), 300px);
+  position: relative;
+  padding-top: var(--pin-top);
+}
+
+.room {
+  padding-bottom: max(100%, calc(var(--band-h) * var(--ratio) - 100%));
+}
+
+@media (min-width: 960px) {
+  .journey {
+    --pin-top: clamp(96px, calc(5.3vw + 22px), 104px);
+    --band-h: clamp(180px, calc(100svh - var(--pin-top) - 434px), 430px);
+  }
+}
+
+.pin {
+  position: sticky;
+  top: var(--pin-top);
+  display: grid;
+  gap: 22px;
+  mix-blend-mode: multiply;
+}
+
+/* The painting's window: its two ends fade into the paper, so it unrolls from mist. */
+.band {
+  position: relative;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+}
+
+.painting {
+  display: block;
+  width: auto;
+  max-width: none;
+  height: var(--band-h);
+  transform: translate3d(calc(-1 * var(--x, 0px)), 0, 0);
+}
+
+/* The stops under their places, moving with the painting (from 960px). All five share one grid
+   cell, each moved to its place by its margin, so the track is as tall as the longest stop with
+   its sentence shown: no stop's words are ever cut, and the pinned box keeps one height. Its ends
+   fade into the paper as the painting's do. */
+.track {
+  position: relative;
+  overflow: hidden;
+}
+
+@media (min-width: 960px) {
+  .track {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
+  }
+}
+
+.rail {
+  position: absolute;
+  top: 7px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--hair);
+}
+
+.rail span {
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: var(--walked, 0px);
+  height: 3px;
+  background: var(--ink);
+}
+
+.stops {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: calc(var(--band-h) * var(--ratio));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform: translate3d(calc(-1 * var(--x, 0px)), 0, 0);
+}
+
+/* --true: the stop's place on the painting; --pos: where its words stand (its place, but the stop
+   in view keeps its words out of the track's misty ends while its place is near or past the
+   window's edge; its dot stays under its place). --view: the band's width (useJourney). */
+.stops li {
+  --true: calc(var(--at) * var(--band-h) * var(--ratio));
+  --pos: var(--true);
+  grid-area: 1 / 1;
+  justify-self: start;
+  width: 230px;
+  margin: 0 0 0 calc(var(--pos) - 115px);
+  text-align: center;
+}
+
+.journey[data-now="0"] [data-stop="0"],
+.journey[data-now="1"] [data-stop="1"],
+.journey[data-now="2"] [data-stop="2"],
+.journey[data-now="3"] [data-stop="3"],
+.journey[data-now="4"] [data-stop="4"] {
+  --pos: clamp(
+    calc(var(--x, 0px) + var(--view, 100vw) * 0.06 + 115px),
+    var(--true),
+    calc(var(--x, 0px) + var(--view, 100vw) * 0.94 - 115px)
+  );
+}
+
+.dot {
+  display: block;
+  width: 15px;
+  height: 15px;
+  margin: 0 auto 14px;
+  translate: calc(var(--true) - var(--pos)) 0;
+  border: 1.5px solid var(--muted);
+  border-radius: 50%;
+  background: #fff;
+}
+
+.mark {
+  display: block;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.stopTitle {
+  margin: 4px 0 0;
+  color: var(--muted);
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.stopText {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+  visibility: hidden;
+}
+
+.stopText a {
+  color: var(--ink);
+}
+
+/* The stop in view: its dot inked, its words in ink, its sentence shown. */
+.journey[data-now="0"] [data-stop="0"],
+.journey[data-now="1"] [data-stop="1"],
+.journey[data-now="2"] [data-stop="2"],
+.journey[data-now="3"] [data-stop="3"],
+.journey[data-now="4"] [data-stop="4"] {
+  --stop-ink: var(--ink);
+}
+
+.stops li .mark,
+.stops li .stopTitle {
+  color: var(--stop-ink, var(--muted));
+}
+
+.journey[data-now="0"] [data-stop="0"] .stopText,
+.journey[data-now="1"] [data-stop="1"] .stopText,
+.journey[data-now="2"] [data-stop="2"] .stopText,
+.journey[data-now="3"] [data-stop="3"] .stopText,
+.journey[data-now="4"] [data-stop="4"] .stopText {
+  visibility: visible;
+}
+
+.journey[data-now="0"] [data-stop="0"] .dot,
+.journey[data-now="1"] [data-stop="1"] .dot,
+.journey[data-now="2"] [data-stop="2"] .dot,
+.journey[data-now="3"] [data-stop="3"] .dot,
+.journey[data-now="4"] [data-stop="4"] .dot {
+  width: 19px;
+  height: 19px;
+  margin-top: -2px;
+  margin-bottom: 12px;
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+/* The stops already passed: their dots inked on the inked line (as in the approved mockup). */
+.journey:is([data-now="1"], [data-now="2"], [data-now="3"], [data-now="4"]) [data-stop="0"] .dot,
+.journey:is([data-now="2"], [data-now="3"], [data-now="4"]) [data-stop="1"] .dot,
+.journey:is([data-now="3"], [data-now="4"]) [data-stop="2"] .dot,
+.journey[data-now="4"] [data-stop="3"] .dot {
+  border-color: var(--ink);
+  background: var(--ink);
+}
+
+.dots {
+  display: none;
+}
+
+.foot {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 17px;
+}
+
+/* Phones and tablets: the stops do not travel; five dots show where you are, and the stop in view
+   shows its words under them (the others keep their room, hidden, so the box never changes
+   height). The dots and the caption share a row, the hint has its own. */
+@media (max-width: 959px) {
+  .foot {
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 4px;
+  }
+
+  .hint {
+    order: 3;
+    flex-basis: 100%;
+    font-size: 16px;
+  }
+
+  .track {
+    padding: 0 var(--gutter);
+    overflow: visible;
+  }
+
+  .rail {
+    display: none;
+  }
+
+  .stops {
+    width: auto;
+    transform: none;
+  }
+
+  .stops li {
+    width: auto;
+    margin: 0;
+    text-align: left;
+    visibility: hidden;
+  }
+
+  .stops li .dot {
+    display: none;
+  }
+
+  .journey[data-now="0"] [data-stop="0"],
+  .journey[data-now="1"] [data-stop="1"],
+  .journey[data-now="2"] [data-stop="2"],
+  .journey[data-now="3"] [data-stop="3"],
+  .journey[data-now="4"] [data-stop="4"] {
+    visibility: visible;
+  }
+
+  .dots {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .dots i {
+    width: 12px;
+    height: 12px;
+    border: 1.5px solid var(--muted);
+    border-radius: 50%;
+    background: #fff;
+  }
+
+  .journey[data-now="0"] .dots i:nth-child(1),
+  .journey[data-now="1"] .dots i:nth-child(2),
+  .journey[data-now="2"] .dots i:nth-child(3),
+  .journey[data-now="3"] .dots i:nth-child(4),
+  .journey[data-now="4"] .dots i:nth-child(5) {
+    border-color: var(--ink);
+    background: var(--ink);
+  }
+}
+
+/* Reduced motion, and a page whose script never runs: nothing pins or moves. The band scrolls
+   sideways under the visitor's own hand, and all five stops are read in a row (a list on phones).
+   :global([data-look]) outranks the kit's bloom rules whatever order they load in. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .room {
+    display: none;
+  }
+
+  .pin {
+    position: static;
+  }
+
+  .band {
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .painting,
+  .stops {
+    transform: none;
+  }
+
+  :global([data-look="ink"]) .painting[data-bloom] {
+    -webkit-mask: none;
+    mask: none;
+    filter: none;
+  }
+
+  .rail,
+  .dots,
+  .hint {
+    display: none;
+  }
+
+  .track {
+    padding: 0 var(--gutter);
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  /* No stop is "here" when nothing moves: five like dots, the caption at the painting's right. */
+  .journey[data-now] .stops li .dot {
+    width: 15px;
+    height: 15px;
+    margin: 0 auto 14px;
+    border-color: var(--ink);
+    background: var(--ink);
+    translate: none;
+  }
+
+  .foot {
+    justify-content: flex-end;
+  }
+
+  .stops {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 24px;
+    width: auto;
+  }
+
+  .stops li,
+  .journey .stops li {
+    grid-area: auto;
+    width: auto;
+    margin: 0;
+    visibility: visible;
+  }
+
+  .stops li .stopText {
+    visibility: visible;
+  }
+
+  .stops li .mark,
+  .stops li .stopTitle {
+    color: var(--ink);
+  }
+}
+
+@media (max-width: 959px) and (prefers-reduced-motion: reduce),
+  (max-width: 959px) and (scripting: none) {
+  .stops {
+    grid-template-columns: 1fr;
+  }
+}

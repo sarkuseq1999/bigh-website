@@ -1,7 +1,7 @@
 "use client";
 
 import { InkPage } from "@/components/ink/ink-page";
-import { OpeningWords } from "./opening";
+import { Journey } from "./journey";
 import { Formulas, Liu } from "./people";
 import styles from "./science-ink.module.css";
 
@@ -10,11 +10,9 @@ import styles from "./science-ink.module.css";
 export function ScienceInk({ fontClass }: { fontClass: string }) {
   return (
     <InkPage current="science" className={`${fontClass} ${styles.page}`}>
-      {() => (
+      {(motion) => (
         <>
-          <section id="scientists" aria-labelledby="science-title" style={{ paddingTop: 110 }}>
-            <OpeningWords />
-          </section>
+          <Journey motion={motion} />
           <Liu />
           <Formulas />
           <section id="research" />

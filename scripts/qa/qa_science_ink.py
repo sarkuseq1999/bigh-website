@@ -114,7 +114,109 @@ def people(browser):
     ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people}
+STACKING = """el => {
+  // Each element from the blend group's parent up to the page root that makes a stacking context
+  // (a white box where the paper should show: the footer crane's trap).
+  const found = [];
+  for (let e = el.parentElement; e && !e.matches('[data-look="ink"]'); e = e.parentElement) {
+    const s = getComputedStyle(e);
+    const why = [];
+    if (s.transform !== 'none') why.push('transform');
+    if (Number(s.opacity) < 1) why.push('opacity');
+    if (s.filter !== 'none') why.push('filter');
+    if (s.maskImage && s.maskImage !== 'none') why.push('mask');
+    if (s.isolation === 'isolate') why.push('isolation');
+    if (s.mixBlendMode !== 'normal') why.push('blend');
+    if (s.position !== 'static' && s.zIndex !== 'auto') why.push('z-index');
+    if (['fixed', 'sticky'].includes(s.position)) why.push(s.position);
+    if (s.willChange && s.willChange !== 'auto') why.push('will-change');
+    if (/paint|layout|strict|content/.test(s.contain)) why.push('contain');
+    if (why.length) found.push((e.tagName + '.' + e.className).slice(0, 60) + ': ' + why.join(','));
+  }
+  return found;
+}"""
+
+STATE = """() => {
+  const s = document.querySelector('#scientists');
+  const band = s.querySelector('[data-band]').getBoundingClientRect();
+  const img = s.querySelector('[data-painting]').getBoundingClientRect();
+  const pin = s.querySelector('[data-pin]').getBoundingClientRect();
+  return { now: Number(s.dataset.now), pinTop: pin.top, pinBottom: pin.bottom,
+           imgLeft: img.left, imgRight: img.right, bandLeft: band.left, bandRight: band.right,
+           innerHeight, scrollY, sectionBottom: s.getBoundingClientRect().bottom };
+}"""
+
+
+def journey(browser):
+    for w, h, lang in [(1440, 900, "en"), (1280, 720, "en"), (1280, 720, "vn"), (390, 844, "en")]:
+        ctx, page, _, errors = opened(browser, w, h, path=f"/{lang}/science")
+        page.wait_for_timeout(1200)
+        start = page.evaluate(STATE)
+        check(f"journey {w}x{h} {lang}: starts at Okayama", start["now"] == 0, str(start["now"]))
+        check(f"journey {w}x{h} {lang}: pin fits the window", start["pinBottom"] <= h + 1, f"{start['pinBottom']:.0f} > {h}")
+        travel = page.evaluate("() => { const s = document.querySelector('#scientists'); return s.offsetHeight - s.querySelector('[data-pin]').offsetHeight; }")
+        check(f"journey {w}x{h} {lang}: room to travel", travel > w, f"{travel}px")
+        seen = []
+        for step in range(0, 11):
+            page.evaluate(f"window.scrollTo(0, {travel * step / 10})")
+            page.wait_for_timeout(250)
+            st = page.evaluate(STATE)
+            seen.append(st["now"])
+            if 0 < step < 10:
+                check(f"journey {w}x{h} {lang} {step}/10: pinned", abs(st["pinTop"] - start["pinTop"]) < 2, f"{st['pinTop']:.0f}")
+                check(f"journey {w}x{h} {lang} {step}/10: painting covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
+        check(f"journey {w}x{h} {lang}: stops in order, Okayama to Today", seen == sorted(seen) and seen[0] == 0 and seen[-1] == 4, str(seen))
+        end = page.evaluate(STATE)
+        check(f"journey {w}x{h} {lang}: the painting's end in view at the end", abs(end["imgRight"] - end["bandRight"]) < 3, f"{end['imgRight']:.0f} vs {end['bandRight']:.0f}")
+        page.evaluate(f"window.scrollTo(0, {travel + 400})")
+        page.wait_for_timeout(300)
+        after = page.evaluate(STATE)
+        check(f"journey {w}x{h} {lang}: lets go after Today", after["pinTop"] < start["pinTop"] - 100, f"{after['pinTop']:.0f}")
+        page.evaluate(f"window.scrollTo(0, {travel * 0.5})")
+        page.wait_for_timeout(300)
+        page.screenshot(path=str(OUT / f"journey-{w}x{h}-{lang}-half.png"))
+        if w == 1440:
+            page.set_viewport_size({"width": 1024, "height": 768})
+            page.wait_for_timeout(600)
+            st = page.evaluate(STATE)
+            check("journey resize 1440→1024 half way: painting still covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
+        check(f"journey {w}x{h} {lang}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+
+
+def still(browser):
+    for label, kwargs in [("reduced motion", {"reduced": True}), ("no script", {"js": False})]:
+        for w, h in [(1440, 900), (390, 844)]:
+            ctx, page, _, _ = opened(browser, w, h, **kwargs)
+            page.wait_for_timeout(800)
+            pin = page.evaluate("getComputedStyle(document.querySelector('[data-pin]')).position")
+            check(f"still {label} {w}: nothing pins", pin == "static", pin)
+            room = page.evaluate("document.querySelector('#scientists [data-room]').offsetHeight")
+            check(f"still {label} {w}: no travel room", room == 0, str(room))
+            visible = page.evaluate("[...document.querySelectorAll('#scientists li[data-stop] p')].map(p => getComputedStyle(p).visibility === 'visible' && getComputedStyle(p).display !== 'none' && p.getBoundingClientRect().height > 0)")
+            check(f"still {label} {w}: all five stops readable", visible == [True] * 5, str(visible))
+            band = page.evaluate("getComputedStyle(document.querySelector('[data-band]')).overflowX")
+            check(f"still {label} {w}: the band scrolls sideways", band == "auto", band)
+            shown = page.evaluate("getComputedStyle(document.querySelector('[data-painting]')).filter")
+            check(f"still {label} {w}: the painting crisp", shown in ("none",), shown)
+            page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
+            ctx.close()
+
+
+def multiply(browser):
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        pin = page.locator("[data-pin]")
+        check(f"multiply {w}: the pin is the scroll's blend group", pin.evaluate("e => getComputedStyle(e).mixBlendMode") == "multiply")
+        found = pin.evaluate(STACKING)
+        check(f"multiply {w}: nothing between the pin and the paper", not found, "; ".join(found))
+        for img in page.locator("main figure[data-picture] img, main [data-scene] img").all():
+            found = img.evaluate(STACKING)
+            check(f"multiply {w}: {img.get_attribute('src')[:50]} sits on the paper", not found, "; ".join(found))
+        ctx.close()
+
+
+SECTIONS = {"shell": shell, "people": people, "journey": journey, "still": still, "multiply": multiply}
 
 if __name__ == "__main__":
     with sync_playwright() as p:
