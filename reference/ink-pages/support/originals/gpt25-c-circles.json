@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "An ink-wash painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight on, evenly lit, no shadow, no frame, no table under the paper, no text, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of empty paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Only the things named below are painted. The subject is American and Californian: no Asian objects, no Chinese characters, no pagodas, no bamboo. The painting fades out softly into empty paper on every side, with wide empty margins. Use far fewer strokes than an illustrator would: broad wet washes and a handful of bold, quick calligraphic strokes, like a painter working in two minutes. No fine hatching, no cross-hatching, no thin outline around every shape, no texture on every plank or blade of grass, no small details. Objects are suggested by one or two strokes each and parts are left unfinished, dissolving into the paper.\n\nFour round painted medallions side by side in one straight row across the sheet, evenly spaced, all exactly the same size, with clear empty paper between them. Each medallion is a soft circle of pale grey ink wash whose round edge dissolves into the paper, with no drawn outline. Inside each circle one object is painted in loose ink, centred and at a similar size: (1) far left, an old American desk telephone with a rotary dial and its handset resting on top; (2) a sealed paper envelope with a fountain pen lying across it; (3) a small cardboard parcel tied with twine in a cross; (4) far right, an open hardback book. No gold anywhere.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-support/reference/home-v2/ink/originals/gpt25-crane-paint-a.png"
+  ],
+  "made": "20261014-123918"
+}

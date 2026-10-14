@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Edit the reference picture, an ink-wash painting of a wooden door in a white adobe wall on rice paper. Keep everything exactly as it is: the same paper, the same wall, arch, roof tiles, vine, agave pot and step, in exactly the same place, size and shape, with the same loose brushwork. Change only three things: (1) the door is now fully closed, flush in its doorway; (2) there is no light at all: remove every trace of gold, the doorway and step are plain ink and paper; (3) it is evening: add a soft, pale grey ink wash in the sky above the wall and a thin crescent moon in pale grey ink in the upper corner of the sky. No gold anywhere. No text, no seal, no stamp, no frame.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/52d9c8ad-69f2-4461-bc8d-fdfe7746fe59/scratchpad/support/originals/gpt25-b-door-open.png"
+  ],
+  "made": "20261014-124323"
+}
