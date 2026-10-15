@@ -1,0 +1,71 @@
+/* The colour test's switch (review only, see ink-color.tsx): three choices in a paper pill at the
+   bottom right, clear of the opening's buttons, large enough to tap. */
+.switch {
+  position: fixed;
+  right: max(12px, env(safe-area-inset-right, 0px));
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  z-index: 60;
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid rgba(28, 27, 25, 0.22);
+  border-radius: 999px;
+  background: rgba(248, 243, 234, 0.94);
+  box-shadow: 0 6px 22px rgba(28, 27, 25, 0.14);
+  font-family: var(--font-dm-sans), Arial, sans-serif;
+}
+
+.switch .choice {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0 14px;
+  border-radius: 999px;
+  color: #0c0b0a;
+  font-size: 15px;
+  line-height: 44px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.switch .choice b {
+  font-weight: 600;
+}
+
+.switch .choice span {
+  color: #514e48;
+}
+
+.switch .choice[aria-current="page"] {
+  background: #0c0b0a;
+  color: #f8f3ea;
+}
+
+.switch .choice[aria-current="page"] span {
+  color: rgba(248, 243, 234, 0.75);
+}
+
+.switch .choice:focus-visible {
+  outline: 3px solid #c49a3a;
+  outline-offset: 2px;
+}
+
+/* Phones: the opening's button spans the window's width near its foot, so the switch sits at the
+   top instead, centred under the menu bar, clear of the sun. */
+@media (max-width: 560px) {
+  .switch {
+    top: calc(env(safe-area-inset-top, 0px) + 78px);
+    right: 50%;
+    bottom: auto;
+    translate: 50% 0;
+  }
+
+  .switch .choice {
+    padding: 0 11px;
+  }
+
+  .switch .choice span {
+    display: none;
+  }
+}

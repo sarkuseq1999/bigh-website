@@ -160,6 +160,28 @@
   border-color: #3a3833;
 }
 
+/* The homepage's colour test (ink-color.tsx): the solid pill takes the palette's deep colour,
+   slate blue for the coastal fog and pine green for the green spring (the logo's leaf). */
+.look[data-color="coast"] .pill:not(.pillGhost) {
+  background: #1f3442;
+  border-color: #1f3442;
+}
+
+.look[data-color="coast"] .pill:not(.pillGhost):hover {
+  background: #2f4a5c;
+  border-color: #2f4a5c;
+}
+
+.look[data-color="spring"] .pill:not(.pillGhost) {
+  background: #26402f;
+  border-color: #26402f;
+}
+
+.look[data-color="spring"] .pill:not(.pillGhost):hover {
+  background: #355640;
+  border-color: #355640;
+}
+
 .look .pill svg {
   transition: transform 0.5s var(--ease);
 }

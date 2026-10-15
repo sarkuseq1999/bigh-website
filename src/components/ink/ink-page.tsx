@@ -23,6 +23,7 @@ export function InkPage({
   route,
   follow,
   className = "",
+  color,
   children,
 }: {
   current: Current;
@@ -40,6 +41,8 @@ export function InkPage({
   follow?: NavFollow;
   /** A class for the page's root, for a page that dresses the shared paper (About ages it). */
   className?: string;
+  /** The homepage's colour test (ink-color.tsx): tints the solid pills (ink.module.css). */
+  color?: "coast" | "spring";
   /** The page's sections; given whether motion is allowed. */
   children: (motion: boolean) => ReactNode;
 }) {
@@ -57,6 +60,7 @@ export function InkPage({
       className={className ? `${styles.look} ${className}` : styles.look}
       data-look="ink"
       data-page={current}
+      data-color={color}
     >
       <a
         href="#main"

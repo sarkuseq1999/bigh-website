@@ -3,15 +3,17 @@
 import Image from "next/image";
 import { craneRest } from "@/components/home-v2/look-ink/assets";
 import base from "./ink.module.css";
+import { useTint } from "@/components/home-v2/look-ink/ink-color";
 
 // The page's last painting: the crane that opened the page in flight, now at rest, large beside
 // the footer's promise and facing it, on the closing brush stroke (route-kit.ts `footerEnding`).
 // Its bloom is the page's arrival.
 export function ClosingCrane() {
+  const tint = useTint();
   return (
     <Image
       className={`${base.ink} ${base.rest}`}
-      src={craneRest.src}
+      src={tint(craneRest.src)}
       alt=""
       width={craneRest.width}
       height={craneRest.height}
