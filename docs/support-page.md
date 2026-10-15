@@ -104,7 +104,8 @@ footer keep the locale's; the three words that already had keys ("Your name", "4
 decide.", "Ask BiGH Science") show translated and carry the locale's tag (`useWordsLang` in
 `spread.tsx`). When the translations land, drop the wrapper's `lang="en"`. They come through a
 `reference/ink-pages/support/translations-support.cjs` written like
-`reference/ink-pages/about-bc/translations-c.cjs`, from the next free key: m612 on October 14.
+`reference/ink-pages/about-bc/translations-c.cjs`, from the next free key (m618 on October 15: Green
+Bee Propolis took m612-m617). Read the highest key in `src/i18n/copy-keys.json` first.
 Mo approved the spec, the four answers included, on October 14 ("yes"). The old pop-up's keys
 (m072, m073 and its FAQ) are now used only by the unused `src/components/home/homepage.tsx`.
 
