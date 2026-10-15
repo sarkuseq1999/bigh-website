@@ -4,8 +4,9 @@ docs/superpowers/specs/2026-10-14-support-page-design.md; mockups reference/ink-
 opening (1440x900, 390x844): 200; the title "BiGH — Support"; no console errors or warnings (but
 PREFETCH_CSS); no failed requests; one h1 "How can we help?"; the lead; the phone number as a tel:
 link in Switzer, the email as a mailto: link, the hours; the porch painting multiplies; its steam is
-gold leaf over the porch, not multiplied; nothing scrolls sideways; text 15px+; the menu bar marks
-Support (the bar's link, aria-current="page" and the painted stroke: see links).
+gold leaf over the porch, not multiplied; nothing scrolls sideways; text 15px+; at 1440x900 the first
+screen holds the porch (560px+), the title and the three ways to reach us; the menu bar marks
+Support (the bar's link and aria-current="page": see links).
 motion (1440x900): with motion the steam waits while the porch waits, then rises (its --rise grows
 from under 30% to 100%+ within 6s of the porch's bloom; sampled every frame from the page's first
 one, since the rise has begun by the time the page is idle); the gold never rises alone over bare
@@ -15,9 +16,14 @@ picture is in, and a porch whose picture fails never lets it rise; reduced motio
 whole at once; no script: the porch and the steam are whole.
 rhythm (1440, 1280, 1024, 960, 768, 390, 360): Write to us, Returns and Questions each have a
 painting; from 960px the sides take turns (left, right, left), below it each painting comes first
-on one column; no words past the right margin; nothing scrolls sideways; the parts' words.
-questions (1440x900): four <details>, the first open at rest, opening one closes the others, each
-question a 48px+ target, "Ask BiGH Science" opens its sheet.
+on one column; no words past the right margin; nothing scrolls sideways; the porch, the mailbox,
+the parcel and the book each multiply, inside the page root, with no stacking context between them
+and it (no z-index on a positioned or flex/grid item, isolation, opacity, transform, filter, mask,
+will-change, containment ...); the three spread paintings read about the same size (areas within
+30%); the parts' words.
+questions (1440x900): four <details>, the first open at rest, opening one closes the others, the
+book stays put as answers open and close, each question a 48px+ target, "Ask BiGH Science" opens
+its sheet.
 form (1440x900, 390x844, 360x780): the labels and the reaction note; the preview tag beside Send;
 topic chips never one alone on a row; every control 48px+; fields are lines, never boxes; an empty
 Send names the four missing things and focuses the first; a wrong email is caught; a 5 MB photo and
@@ -35,7 +41,8 @@ email and the phone as real links, no query string; forced colors (Windows High 
 keep a bottom border, focus shows an outline, the chosen chip differs from the rest.
 links (1440x900, 390x844): the bar's Support (a link, not a button) goes to the top of /support and is marked
 as the current page; no pop-up opens; the footer's Support & FAQs and the Science page's header
-Support go there too; the phone menu's Support goes there and the menu closes behind it.
+Support go there too; the phone menu's Support goes there and the menu closes behind it; on
+/support itself, Support chosen from the phone menu (the same address) closes the menu.
 languages (390x844): /kr, /jp, /cns, /vn support are 200, the page's words stay English, nothing
 scrolls sideways, no errors; /hken/support goes to /cns/support.
 
@@ -140,6 +147,14 @@ def opening(browser):
         small = page.evaluate(SMALL_TEXT_JS)
         check(f"{tag}: text 15px or more", not small, small[:3])
         check(f"{tag}: the page says it is Support", page.evaluate("document.querySelector('[data-look]')?.dataset.page") == "support")
+        if width == 1440:
+            # The first screen holds the porch, the title and the three ways to reach us (the phone
+            # number is the page's most needed fact); the porch shrinks for it, never under 560px.
+            first = page.evaluate("""(() => { const p = document.querySelector('[data-part="opening"] img[data-bloom]').getBoundingClientRect();
+              const d = document.querySelector('[data-part="opening"] dl').getBoundingClientRect();
+              return [Math.round(p.width), Math.round(d.bottom), window.innerHeight]; })()""")
+            check(f"{tag}: the first screen holds the porch, the title and how to reach us (porch 560px+)",
+                  first[0] >= 560 and first[1] <= first[2], first)
         page.screenshot(path=os.path.join(OUT, f"opening-{width}.png"))
         scroll_through(page)
         check(f"{tag}: no errors", not errors, errors[:3])
@@ -253,6 +268,44 @@ def motion(browser):
     context.close()
 
 
+# What makes an element a stacking context (MDN, "Stacking context"). One between a painting and the
+# page root ([data-look], whose paper the painting multiplies onto) would stop the multiply there and
+# show the painting's own paper as a box. Stricter than the browser where cheap (any will-change).
+STACKS_JS = """(e) => {
+  const s = getComputedStyle(e), parent = e.parentElement && getComputedStyle(e.parentElement);
+  const flexOrGrid = !!parent && /flex|grid/.test(parent.display);
+  return parseFloat(s.opacity) < 1 || s.transform !== 'none' || s.translate !== 'none' || s.rotate !== 'none'
+    || s.scale !== 'none' || s.filter !== 'none' || (s.backdropFilter || 'none') !== 'none'
+    || s.isolation === 'isolate' || s.maskImage !== 'none' || s.mixBlendMode !== 'normal'
+    || s.perspective !== 'none' || s.clipPath !== 'none' || s.position === 'fixed' || s.position === 'sticky'
+    || (s.zIndex !== 'auto' && (s.position !== 'static' || flexOrGrid)) || s.willChange !== 'auto'
+    || /paint|layout|strict|content/.test(s.contain) || s.containerType !== 'normal'
+    || (s.viewTransitionName || 'none') !== 'none';
+}"""
+
+# The porch and the three spread paintings (not the gold steam, which is leaf, not multiplied): each
+# multiplies, sits inside the page root, and has no stacking context between it and that root.
+PAINTINGS_JS = f"""(() => {{
+  const stacks = {STACKS_JS};
+  return [...document.querySelectorAll('main [data-part] [data-picture] img:not([data-steam])')].map(img => {{
+    const bad = [];
+    for (let e = img.parentElement; e && !e.hasAttribute('data-look'); e = e.parentElement)
+      if (stacks(e)) bad.push(e.tagName.toLowerCase() + '.' + String(e.className).split(' ')[0].slice(0, 24));
+    return [img.closest('[data-part]').dataset.part, getComputedStyle(img).mixBlendMode, bad, !!img.closest('[data-look]')];
+  }});
+}})()"""
+
+
+def paintings_multiply(page, tag):
+    """Every painting multiplies onto the page's paper with nothing between it and the root to stop it."""
+    seen = page.evaluate(PAINTINGS_JS)
+    check(f"{tag}: the porch, mailbox, parcel and book each multiply, inside the page root, with no "
+          "stacking context between them and it",
+          [s[0] for s in seen] == ["opening", "write", "returns", "questions"]
+          and all(s[1] == "multiply" and not s[2] and s[3] for s in seen),
+          [s for s in seen if s[1] != "multiply" or s[2] or not s[3]] or [s[0] for s in seen])
+
+
 SIDES_JS = """[...document.querySelectorAll('main [data-part]')].filter(s => s.querySelector('[data-picture]') && s.dataset.part !== 'opening').map(s => {
   const p = s.querySelector('[data-picture]').getBoundingClientRect(), w = s.querySelector('[data-words]').getBoundingClientRect();
   return [s.dataset.part, p.left < w.left ? 'left' : p.top < w.top ? 'first' : 'right', Math.round(w.right), Math.round(p.width)]; })"""
@@ -274,6 +327,13 @@ def rhythm(browser):
         check(f"{tag}: no words past the right margin", not over, over[:3])
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: nothing scrolls sideways", sideways <= 0, sideways)
+        paintings_multiply(page, tag)
+        # The three read about the same size (spec): their pictures' areas within 30% of each other
+        # (the tall mailbox once had two and a half times the book's area at 960px).
+        areas = page.evaluate("""['#write', '#returns', '#questions'].map(s => {
+          const r = document.querySelector(s + ' [data-picture] img').getBoundingClientRect(); return Math.round(r.width * r.height); })""")
+        check(f"{tag}: the three paintings read about the same size (areas within 30%)",
+              max(areas) <= 1.3 * min(areas), areas)
         main = page.inner_text("main")
         for words in ["45 days to decide.", "Send returns to", "Glendora, CA 91740", "Orders and shipping",
                       "Common questions.", "A question about health or science?"]:
@@ -287,10 +347,17 @@ def questions(browser):
     faq = page.locator("#questions details")
     check("questions: four questions", faq.count() == 4, faq.count())
     check("questions: the first is open at rest", faq.nth(0).get_attribute("open") is not None)
+    book_at = "document.querySelector('#questions [data-picture]').getBoundingClientRect().top + window.scrollY"
+    before = page.evaluate(book_at)
     faq.nth(2).locator("summary").click()
     page.wait_for_timeout(300)
     opened = page.evaluate("[...document.querySelectorAll('#questions details')].map(d => d.open)")
     check("questions: opening one closes the others", opened == [False, False, True, False], opened)
+    moved = [round(page.evaluate(book_at) - before, 1)]
+    faq.nth(0).locator("summary").click()
+    page.wait_for_timeout(300)
+    moved.append(round(page.evaluate(book_at) - before, 1))
+    check("questions: the book stays put as answers open and close", moved == [0, 0], moved)
     heights = page.evaluate("[...document.querySelectorAll('#questions summary')].map(s => Math.round(s.getBoundingClientRect().height))")
     check("questions: every question is a 48px+ target", all(h >= 48 for h in heights), heights)
     ask = page.locator("#questions button", has_text="Ask BiGH Science")
@@ -409,6 +476,12 @@ def form(browser):
         })()""")
         check(f"{tag}: the cup multiplies, its steam does not, and no wrapper stops the multiply",
               stack[0] == "multiply" and stack[1] == "normal" and not stack[2], stack)
+        # The same with the full list of what makes a stacking context (STACKS_JS).
+        cup_bad = page.evaluate(f"""(() => {{ const stacks = {STACKS_JS}; const bad = [];
+          for (let e = document.querySelector('[data-sent] img:not([data-steam])').parentElement; e && !e.hasAttribute('data-look'); e = e.parentElement)
+            if (stacks(e)) bad.push(e.tagName + '.' + String(e.className).slice(0, 30));
+          return bad; }})()""")
+        check(f"{tag}: no stacking context between the cup and the page root", not cup_bad, cup_bad)
         # The preview line is plain words (DESIGN.md: nothing is boxed); the honesty tag beside Send is
         # the kit's one-line pill and stays.
         box = page.evaluate("""(() => { const s = getComputedStyle(document.querySelector('[data-sent] [data-honesty]'));
@@ -633,6 +706,24 @@ def links(browser):
     page.wait_for_timeout(900)
     check("links: the phone menu's Support goes to /support", page.url.endswith("/support"), page.url)
     check("links: the menu closed behind it", page.evaluate("document.querySelector('[data-nav-menu-button]').getAttribute('aria-expanded')") != "true")
+    context.close()
+    menu_on_support(browser)
+
+
+MENU_STATE_JS = "document.querySelector('[data-nav-menu-button]').getAttribute('aria-expanded')"
+
+
+def menu_on_support(browser):
+    """On /support itself, Support chosen from the phone menu leads to the same address: no new page
+    replaces the menu, so the link's own click must close it (or the menu stays over the page)."""
+    context, page, *_ = open_page(browser, 390, 844)
+    page.click("[data-nav-menu-button]")
+    page.wait_for_timeout(900)
+    check("links (on /support): the phone menu is open", page.evaluate(MENU_STATE_JS) == "true", page.evaluate(MENU_STATE_JS))
+    page.locator("[data-nav-sheet] a", has_text="Support").click()
+    page.wait_for_timeout(1200)
+    check("links (on /support): its Support stays on /support", page.url.endswith("/support"), page.url)
+    check("links (on /support): choosing it closes the menu", page.evaluate(MENU_STATE_JS) == "false", page.evaluate(MENU_STATE_JS))
     context.close()
 
 

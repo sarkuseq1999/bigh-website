@@ -11,6 +11,8 @@
   --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
   --part-half: clamp(40px, 4.4vw, 84px);
   --gap: clamp(40px, 6vw, 112px);
+  --heading-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  --faq-gap: clamp(24px, 2.4vw, 36px);
 }
 
 .supportPage[data-look="ink"] main :is(h1, h2, h3) {
@@ -21,13 +23,18 @@
 /* ---- The opening: the porch, the question, how to reach us -------------------------------- */
 
 .supportPage .opening {
-  padding: calc(88px + clamp(8px, 2vw, 40px)) 0 var(--part-half);
+  padding: calc(88px + clamp(8px, min(2vw, 2.4svh), 40px)) 0 var(--part-half);
   text-align: center;
 }
 
-/* 720px, not the mockup's 780: at 1440x900 the title and its lead then end above the fold. */
+/* The first screen holds the porch, the title AND the three ways to reach us (the phone number is
+   the page's most needed fact): the porch shrinks with the window's height to make room, never
+   under 560px nor over 720px (a phone keeps its column's width). 400px is the rest of that screen
+   (the bar, the title, the lead, the contact row and their gaps); 1.18 is the porch's width over
+   its height (1286 x 1090). At 1440x900 it is about 590px wide; at 1536x864 and below it stays at
+   560px, and on a window under about 880px tall the contact row starts at the fold. */
 .supportPage .porch {
-  --picture: 720px;
+  --picture: clamp(560px, calc((100svh - 400px) * 1.18), 720px);
   margin-inline: auto;
 }
 
@@ -53,7 +60,7 @@
   display: grid;
   grid-template-columns: repeat(3, auto);
   justify-content: center;
-  margin: clamp(36px, 3.6vw, 56px) 0 0;
+  margin: clamp(36px, min(3.6vw, 4.5svh), 56px) 0 0;
 }
 
 .supportPage .contact > div {
@@ -129,7 +136,7 @@
 
 .supportPage .painting {
   justify-self: center;
-  width: min(100%, var(--picture, 520px));
+  width: min(var(--share, 100%), var(--picture, 520px));
   margin: 0;
 }
 
@@ -258,13 +265,33 @@
   }
 }
 
+/* The three paintings read about the same size at every width (spec; the pictures' areas within
+   about 15% of each other): each takes a share of its column by its shape, the wide book all of it,
+   the squarer parcel 86%, the tall mailbox 68% (a share of the column, not a fixed width, so the
+   tall mailbox no longer fills a narrow column while the book shrinks beside it). The caps keep the
+   same proportions. */
 .supportPage .mailbox {
-  --picture: 380px;
+  --share: 68%;
+  --picture: 354px;
 }
 
-.supportPage .parcel,
+.supportPage .parcel {
+  --share: 86%;
+  --picture: 447px;
+}
+
 .supportPage .book {
   --picture: 520px;
+}
+
+/* The book stands beside the questions from their first line, and stays put when one of them opens
+   (centred on the words, it moved with every answer's length): the label, the heading and the gap
+   above the first question. */
+@media (min-width: 960px) {
+  .supportPage .book {
+    align-self: start;
+    margin-top: calc(36px + 1.08 * var(--heading-size) + var(--faq-gap));
+  }
 }
 
 .supportPage p.label {
@@ -279,7 +306,7 @@
   margin: 0;
   font-family: var(--display-font);
   font-weight: var(--display-weight);
-  font-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  font-size: var(--heading-size);
   line-height: 1.08;
   letter-spacing: -0.025em;
   text-wrap: balance;
@@ -316,7 +343,7 @@
 
 /* Questions on hairlines; one open at a time (the details share a name). */
 .supportPage .faq {
-  margin-top: clamp(24px, 2.4vw, 36px);
+  margin-top: var(--faq-gap);
   border-top: 1px solid var(--line);
 }
 

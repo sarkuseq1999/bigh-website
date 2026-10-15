@@ -60,10 +60,11 @@ function Opening() {
   );
 }
 
-// What each painting asks the server for follows the width it is drawn at: --picture per part
-// (support-page.module.css), the column's width below that.
-const MAILBOX = "(max-width: 599px) 70vw, (max-width: 959px) 360px, 380px";
-const WIDE = "(max-width: 599px) 86vw, (max-width: 959px) 520px, 520px";
+// What each painting asks the server for follows the width it is drawn at (support-page.module.css):
+// its share of the column (about 85vw on a phone, a third of the window from 960px), up to its cap.
+const MAILBOX = "(max-width: 599px) 58vw, (max-width: 959px) 354px, min(23vw, 354px)";
+const PARCEL = "(max-width: 599px) 73vw, (max-width: 959px) 447px, min(29vw, 447px)";
+const BOOK = "(max-width: 599px) 85vw, (max-width: 959px) 520px, min(34vw, 520px)";
 
 // The mailbox is the one painting that can reach the first screen (a tall phone, a short opening),
 // so it loads eagerly; the other two sit well below it. The form comes in through children.
@@ -106,7 +107,7 @@ function Returns() {
       side="right"
       labelledBy="returns-title"
       picture={
-        <Painting art={parcel} alt={copy(ALT.parcel)} sizes={WIDE} className={page.parcel} />
+        <Painting art={parcel} alt={copy(ALT.parcel)} sizes={PARCEL} className={page.parcel} />
       }
     >
       <p className={page.label}>{copy(r.label)}</p>
@@ -138,7 +139,7 @@ function Questions() {
       part="questions"
       side="left"
       labelledBy="questions-title"
-      picture={<Painting art={book} alt={copy(ALT.book)} sizes={WIDE} className={page.book} />}
+      picture={<Painting art={book} alt={copy(ALT.book)} sizes={BOOK} className={page.book} />}
     >
       <p className={page.label}>{copy(q.label)}</p>
       <h2 id="questions-title" className={page.heading}>
