@@ -28,11 +28,12 @@ function useSumFixture() {
 }
 
 // Chapter 6: when (a light breakfast, three capsules beside it, the yolk the only gold) and how
-// much (the serving as one painted sum, a caption under each number). The painted sum is shown
-// only when its numbers are the serving's (and it has a centre for each); otherwise the sum is set
-// in type, three cells each with its numeral and its caption under it, so a changed label can
-// never show a wrong painting, nor a caption under the wrong number. The "x" and "=" are shown only
-// when the numbers really make that sum.
+// much (the serving as one painted sum, a caption under each number). A product without a sum
+// (Green Bee Propolis: one a day, so "1 × 60 = 60" would say nothing new) shows none. The painted
+// sum is shown only when its numbers are the serving's (and it has a centre for each); otherwise
+// the sum is set in type, three cells each with its numeral and its caption under it, so a changed
+// label can never show a wrong painting, nor a caption under the wrong number. The "x" and "=" are
+// shown only when the numbers really make that sum.
 export function Daily({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const fixture = useSumFixture();
@@ -44,6 +45,7 @@ export function Daily({ product }: { product: InkProduct }) {
   const { picture, sum } = product.ink.daily;
   const numbers = [plan.perDay, plan.days, plan.total];
   const painted =
+    !!sum &&
     fixture !== "type" &&
     fixture !== "odd" &&
     sum.numbers.length === 3 &&
@@ -56,68 +58,70 @@ export function Daily({ product }: { product: InkProduct }) {
       <h2 id={titleId("daily")} className={`${base.display} ${styles.heading}`}>
         {copy(titleFor(plan.days), { days: plan.days })}
       </h2>
-      <figure
-        className={styles.sum}
-        data-sum=""
-        data-sum-kind={painted ? "painted" : "type"}
-        data-centres={painted ? JSON.stringify(sum.centres) : undefined}
-      >
-        <span className={base.visuallyHidden} data-sum-text="">
-          {copy("{perDay} capsules a day for {days} days: {total} capsules in each bottle.", {
-            perDay: plan.perDay,
-            days: plan.days,
-            total: plan.total,
-          })}
-        </span>
-        {painted ? (
-          <>
-            <Image
-              className={`${base.ink} ${styles.sumArt}`}
-              src={sum.src}
-              alt=""
-              width={sum.width}
-              height={sum.height}
-              sizes="(max-width: 959px) 88vw, 560px"
-              data-bloom="waiting"
-              aria-hidden="true"
-            />
-            <figcaption>
-              {LABELS.map((label, i) => (
-                <span
-                  key={label}
-                  className={styles.sumLabel}
-                  data-sum-label=""
-                  aria-hidden="true"
-                  style={{
-                    left: `${(sum.centres[i] * 100).toFixed(2)}%`,
-                    maxWidth: `${(Math.min(0.34, 2 * Math.min(sum.centres[i], 1 - sum.centres[i])) * 100).toFixed(2)}%`,
-                  }}
-                >
-                  {copy(label)}
-                </span>
+      {sum ? (
+        <figure
+          className={styles.sum}
+          data-sum=""
+          data-sum-kind={painted ? "painted" : "type"}
+          data-centres={painted ? JSON.stringify(sum.centres) : undefined}
+        >
+          <span className={base.visuallyHidden} data-sum-text="">
+            {copy("{perDay} capsules a day for {days} days: {total} capsules in each bottle.", {
+              perDay: plan.perDay,
+              days: plan.days,
+              total: plan.total,
+            })}
+          </span>
+          {painted ? (
+            <>
+              <Image
+                className={`${base.ink} ${styles.sumArt}`}
+                src={sum.src}
+                alt=""
+                width={sum.width}
+                height={sum.height}
+                sizes="(max-width: 959px) 88vw, 560px"
+                data-bloom="waiting"
+                aria-hidden="true"
+              />
+              <figcaption>
+                {LABELS.map((label, i) => (
+                  <span
+                    key={label}
+                    className={styles.sumLabel}
+                    data-sum-label=""
+                    aria-hidden="true"
+                    style={{
+                      left: `${(sum.centres[i] * 100).toFixed(2)}%`,
+                      maxWidth: `${(Math.min(0.34, 2 * Math.min(sum.centres[i], 1 - sum.centres[i])) * 100).toFixed(2)}%`,
+                    }}
+                  >
+                    {copy(label)}
+                  </span>
+                ))}
+              </figcaption>
+            </>
+          ) : (
+            <div className={styles.sumType} data-sum-type="" aria-hidden="true">
+              {numbers.map((number, i) => (
+                <Fragment key={LABELS[i]}>
+                  {operators && i > 0 ? (
+                    <span className={styles.sumOperator}>{i === 1 ? "×" : "="}</span>
+                  ) : null}
+                  <span className={styles.sumCell}>
+                    <span className={styles.sumNumeral} data-sum-numeral="">
+                      {number}
+                    </span>
+                    <span className={styles.sumCaption} data-sum-label="">
+                      {copy(LABELS[i])}
+                    </span>
+                  </span>
+                </Fragment>
               ))}
-            </figcaption>
-          </>
-        ) : (
-          <div className={styles.sumType} data-sum-type="" aria-hidden="true">
-            {numbers.map((number, i) => (
-              <Fragment key={LABELS[i]}>
-                {operators && i > 0 ? (
-                  <span className={styles.sumOperator}>{i === 1 ? "×" : "="}</span>
-                ) : null}
-                <span className={styles.sumCell}>
-                  <span className={styles.sumNumeral} data-sum-numeral="">
-                    {number}
-                  </span>
-                  <span className={styles.sumCaption} data-sum-label="">
-                    {copy(LABELS[i])}
-                  </span>
-                </span>
-              </Fragment>
-            ))}
-          </div>
-        )}
-      </figure>
+            </div>
+          )}
+        </figure>
+      ) : null}
       <p className={styles.text}>{copy(product.serving.use)}</p>
     </InkChapter>
   );

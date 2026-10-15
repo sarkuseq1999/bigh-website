@@ -71,3 +71,19 @@ Choice: the v2 pair (`gpt25-lantern-lit-v2.png` and `gpt25-lantern-unlit-v2.png`
 Task 9 round 3 (October 10, the controller's Ruling 31 inside Mo's $5): 1 job, lantern-lit-v3, about $0.05 (at most $0.07
 before refunds). The lantern's lit picture now ships from lit-v3 with unlit-v2 (`lantern-lit-v3`, `lantern-unlit-v3`).
 Lantern total: 5 jobs, about $0.25 (at most $0.35). Ledger after: 70 of 70 (the cap; no further jobs).
+
+## Green Bee Propolis ink page (October 13-14, 2026)
+
+Ledger: `C:/Users/mcbig/AppData/Local/HiggsfieldAPI/bigh-propolis-ink/` (cap 42 jobs), Mo's $3 for the
+mockups and the paintings. Picks and rounds in `reference/ink-pages/propolis/README.md`.
+
+| Round | Jobs | Pictures | Kept |
+| ----- | ---- | -------- | ---- |
+| 1 | 10 | why-hive-gold, why-hive-open, why-alecrim-drops, why-alecrim-bare, inside-resin-capsule, inside-resin-dish, research-specimen, daily-teacup, buy-branch, buy-hive-lid | why-hive-gold, why-hive-open (cracks only), inside-resin-dish, research-specimen |
+| 2 | 5 | buy-poppy-meadow, buy-redwood-round, buy-hive-box, daily-mug, daily-mug-v2 | daily-mug-v2 (the first mug painted a coffee pod) |
+| 3-5 | 7 | buy-ipe, buy-alecrim-bed, buy-serra, buy-ipe-twig, buy-map, buy-ipe-lone, buy-alecrim-green | none |
+| 6 | 3 | buy-still-life, buy-minas-scene, buy-minas-scene-v2 (photo scenes) | none |
+| 7-8 | 4 | buy-painted-bottle, buy-window, buy-wash, buy-painted-empty | buy-painted-empty (round 7 A with its painted bottle taken out) |
+
+29 jobs of the 42 cap, about $1.45 (at most $2.03 before refunds). Check open.higgsfield.ai/billing for
+the real total.

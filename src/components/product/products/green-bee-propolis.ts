@@ -1,3 +1,4 @@
+import { propolisArt } from "../ink/propolis-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -164,6 +165,37 @@ const greenBeePropolis: ProductPage = {
     fda: "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
   },
   related: ["nuricell", "advanced-opc", "turmerific", "nature-calm"],
+  // The ink page (Mo, October 13-14, 2026; paintings and picks in reference/ink-pages/propolis/).
+  // Alt texts are drafts for Mo.
+  ink: {
+    why: {
+      unlit: propolisArt.hiveOpen,
+      lit: propolisArt.hiveGold,
+      spread: propolisArt.hiveSpread,
+      alt: "An old tree where wild bees live, its cracks filling with gold, painted in ink and gold leaf",
+    },
+    inside: {
+      ...propolisArt.resin,
+      alt: "Pieces of raw green propolis in a small dish, one yellow capsule beside it, painted in watercolour",
+    },
+    research: {
+      ...propolisArt.specimen,
+      alt: "A sprig of alecrim pressed on a botanist's specimen sheet, painted in ink",
+    },
+    daily: {
+      picture: {
+        ...propolisArt.mug,
+        alt: "A mug of tea with one gold capsule beside it, painted in ink and watercolour",
+      },
+    },
+    buy: {
+      scene: {
+        ...propolisArt.scene,
+        alt: "Sprigs of alecrim and fallen golden ipê blossoms painted in watercolour, a bee flying above",
+      },
+    },
+    supply: propolisArt.capsule,
+  },
 };
 
 export default greenBeePropolis;

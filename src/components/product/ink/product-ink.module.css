@@ -25,6 +25,20 @@
   --cobalt: var(--ink);
 }
 
+/* A name longer than "NuriCell" (Green Bee Propolis, October 14, 2026): set smaller by the scale
+   opening.tsx computes from the name's measured width, its bottle column wider in name-sizes, so
+   the two halves still fit their equal columns and the bottle keeps its presence. On a Vietnamese
+   page the name is set in Be Vietnam Pro, 7.7% wider than Switzer: its letters are set that much
+   smaller (the columns stay). */
+.page [data-name-fit="long"] {
+  --name: calc(min(16.4vw, 30svh, 250px) * var(--name-scale));
+  --stand: calc(var(--name) * var(--stand-ratio));
+}
+
+.page [data-name-fit="long"] h1.name:lang(vi) {
+  font-size: calc(var(--name) / 1.077);
+}
+
 /* 1. The opening: the header floats over it, so it starts 88px down, and the bottle's cap keeps a
    breath below the menu bar. Its vertical spaces are kept tight so that, at 1440x900, the name, the
    bottle and all the words (headline, purpose, highlights, Add to cart, supply) are in the first
@@ -131,8 +145,11 @@
   letter-spacing: -0.022em;
 }
 
+/* Each line of the headline its own block; a line too long for a phone ("Distinctive green
+   propolis") wraps into even halves, not a word left alone. */
 .page .headline span {
   display: block;
+  text-wrap: balance;
 }
 
 /* The purpose carries the same thin ink line as the one between the highlights under "Cell" (Mo,
@@ -402,6 +419,26 @@
     font-size: clamp(52px, 22.6vw, 158px);
   }
 
+  /* A name longer than "NuriCell" is set to fit the column (--phone-name, from opening.tsx); a
+     two-word one (Green Bee Propolis) on two lines, "Green Bee" over "Propolis", each centred. */
+  .page [data-name-fit="long"] h1.name {
+    font-size: min(var(--phone-name), 170px);
+  }
+
+  .page [data-name-fit="long"] h1.name:lang(vi) {
+    font-size: calc(min(var(--phone-name), 170px) / 1.077);
+  }
+
+  .page [data-spaced] h1.name {
+    grid-template-columns: auto;
+    justify-items: center;
+  }
+
+  .page [data-spaced] .first,
+  .page [data-spaced] .second {
+    justify-self: center;
+  }
+
   .page .stand {
     order: 3;
     grid-column: 1 / -1;
@@ -607,6 +644,40 @@
   opacity: 1;
 }
 
+/* Green Bee Propolis (October 14, 2026): the gold runs into the hive's cracks. The lit painting
+   differs from the unlit one only along the cracks, so revealing it through a circle that widens
+   from where they meet (--spread-x, --spread-y on the picture) reads as gold flowing outward along
+   them, over two breaths. The gold's glint waits until the cracks are filled. */
+@property --spread {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -14%;
+}
+
+.page [data-spread] img.lit {
+  --spread: -14%;
+  opacity: 1;
+  -webkit-mask-image: radial-gradient(
+    circle at var(--spread-x) var(--spread-y),
+    #000 var(--spread),
+    transparent calc(var(--spread) + 14%)
+  );
+  mask-image: radial-gradient(
+    circle at var(--spread-x) var(--spread-y),
+    #000 var(--spread),
+    transparent calc(var(--spread) + 14%)
+  );
+}
+
+.page [data-spread][data-light="on"] img.lit {
+  --spread: 115%;
+  transition: --spread calc(var(--breath) * 2) var(--ease);
+}
+
+.page [data-spread][data-light="on"] .litGold {
+  transition: opacity var(--breath) var(--ease) calc(var(--breath) * 1.6);
+}
+
 /* The Why chapter's figures (2% / 20%), as a list of terms. */
 .page dl.factList {
   display: grid;
@@ -659,6 +730,10 @@
   :global([data-look="ink"]).page [data-light] [data-bloom] ~ img.lit {
     opacity: 1;
   }
+
+  :global([data-look="ink"]).page [data-spread] [data-bloom] ~ img.lit {
+    --spread: 115%;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -669,6 +744,10 @@
   :global([data-look="ink"]).page [data-light] [data-bloom] ~ img.lit {
     opacity: 1;
     transition: none;
+  }
+
+  :global([data-look="ink"]).page [data-spread] [data-bloom] ~ img.lit {
+    --spread: 115%;
   }
 
   :global([data-look="ink"]).page .litGold {
@@ -1029,6 +1108,32 @@
   width: 90%;
   height: auto;
   translate: -50% 0;
+}
+
+/* Green Bee Propolis (October 14, 2026): the real bottle inside a painted scene. The stage takes
+   the painting's shape; the bottle stands where the painting leaves room for it (--bottle-width,
+   --bottle-bottom), with the painting's bottom band, cut to the bottle's shape, laid over its foot.
+   Its caption sits under the stage, as under every painting. */
+.page figure.buyScene {
+  aspect-ratio: auto;
+}
+
+.page .buyScene .sceneStage {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--aspect);
+}
+
+.page .buyScene img.sceneArt {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.page .buyScene img.buyBottle {
+  width: var(--bottle-width);
+  bottom: var(--bottle-bottom);
 }
 
 .page h2.buyName {
