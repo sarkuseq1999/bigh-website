@@ -8,7 +8,8 @@ import { InkChapter, InkFigure, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 // Chapter 3: the capsule open, its four heaps sized by amount, beside the ingredients (amount,
-// name, what it does, the label's form when it differs) and how they work together.
+// name, what it does, the label's form when it differs) and how they work together. A
+// single-ingredient formula (Green Bee Propolis) says so in the singular.
 export function Inside({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const count = product.ingredients.length;
@@ -20,9 +21,11 @@ export function Inside({ product }: { product: InkProduct }) {
     >
       <p className={`${base.label} ${styles.label}`}>{copy("What’s inside")}</p>
       <h2 id={titleId("inside")} className={`${base.display} ${styles.heading}`}>
-        {copy("Inside every capsule, {count} ingredients.", {
-          count: copy(WORDS[count] ?? String(count)),
-        })}
+        {count === 1
+          ? copy("Inside every capsule, one ingredient.")
+          : copy("Inside every capsule, {count} ingredients.", {
+              count: copy(WORDS[count] ?? String(count)),
+            })}
       </h2>
       {/* The rows are laid out as a grid (the amount beside the name, what it does under the
           name), which some browsers treat as the end of the table's meaning, so the table's parts

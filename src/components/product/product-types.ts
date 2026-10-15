@@ -8,22 +8,38 @@ export type Picture = { src: string; width: number; height: number; alt: string 
 export type InkArt = { src: string; width: number; height: number; gold?: string };
 export type InkPainting = InkArt & { alt: string };
 
+/** A painting the real bottle stands inside: where it stands (its width, and its picture's bottom
+ *  above the painting's, as fractions of the painting), and `front`, the painting's lowest band cut
+ *  to the bottle's shape (white elsewhere, the painting's size), laid again in front of the bottle's
+ *  foot, so it stands in the painting, not on top of it. */
+export type InkScene = InkPainting & {
+  bottle: { width: number; bottom: number };
+  front: string;
+};
+
 /**
  * The product's paintings for its ink page (NuriCell, October 9, 2026; spec
  * docs/superpowers/specs/2026-10-09-nuricell-ink-design.md). A product with `ink` gets the ink page
  * (one painting per chapter, beside its words); the others keep the Chapters template.
  */
 export type ProductInk = {
-  /** Why it matters: one painting unlit and lit, in register (its light comes on). */
-  why: { unlit: InkArt; lit: InkArt; alt: string };
+  /**
+   * Why it matters: one painting unlit and lit, in register (its light comes on). With `spread`
+   * (Green Bee Propolis, October 14, 2026), the lit painting is revealed outward from that point
+   * (fractions of the painting) instead of cross-fading in: the gold runs along the hive's cracks.
+   */
+  why: { unlit: InkArt; lit: InkArt; alt: string; spread?: { x: number; y: number } };
   inside: InkPainting;
   research: InkPainting;
-  /** How to take it: a picture of when, and the serving as a painted sum (its numbers and their centres). */
+  /** How to take it: a picture of when, and the serving as a painted sum (its numbers and their
+   *  centres). Without a sum (one capsule a day: "1 × 60 = 60" says nothing new), none is shown. */
   daily: {
     picture: InkPainting;
-    sum: InkArt & { numbers: readonly number[]; centres: readonly number[] };
+    sum?: InkArt & { numbers: readonly number[]; centres: readonly number[] };
   };
-  buy: { stroke: InkArt };
+  /** The buy chapter: the real bottle on one brush stroke (NuriCell), or standing inside a painted
+   *  scene (Green Bee Propolis, October 14, 2026: the bottle photo is never redrawn). */
+  buy: { stroke: InkArt } | { scene: InkScene };
   /** The opening's "One bottle" card: a small painted picture beside the supply (decorative). */
   supply?: InkArt;
 };

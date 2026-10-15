@@ -13,9 +13,7 @@ python -X utf8 scripts/qa/qa_hero_cutaway.py http://localhost:3007 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3007
 python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3007
 python -X utf8 scripts/qa/qa_vn_font.py http://localhost:3007
-python -X utf8 scripts/qa/qa_green_bee_propolis.py http://localhost:3010
-python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3010 --product=green-bee-propolis
-python -X utf8 scripts/qa/qa_research_daily.py http://localhost:3010 --product=green-bee-propolis
+python -X utf8 scripts/qa/qa_propolis_ink.py http://localhost:3046
 python -X utf8 scripts/qa/qa_turmerific.py http://localhost:3012 --gpu
 python -X utf8 scripts/qa/qa_why_chapter.py http://localhost:3012 --product=turmerific
 python -X utf8 scripts/qa/qa_nuricell_ink.py http://localhost:3034 --only=layout,deep_links
@@ -42,6 +40,15 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
 | `record_product_page.py`   | Videos of the product page: `opening.mp4` and `page.mp4` (needs ffmpeg; `--only page` redoes one)                                    |
 | `qa_vn_font.py`            | Vietnamese type: faces drawn (DevTools) on `/vn` pages and other languages; no tone mark touching the next line                      |
 
+- `qa_propolis_ink.py [base] [--only=...]` — Green Bee Propolis's ink page (October 14, 2026), on
+  NuriCell's template: its long name fitted round the bottle (one row from 960px, "Green Bee" over
+  "Propolis" below, en and vn, 1920 to 360), the gold running into the hive's cracks (off, partly
+  filled, filled; filled at once with reduced motion and without script), one ingredient and no
+  painted sum, every painting multiplying with no box, the real bottle photo inside the painted Buy
+  scene with the front band over its foot, nine sizes, deep links, and the new strings in
+  kr/jp/cns/vn. Pictures in `out/propolis-ink/`. It replaces `qa_green_bee_propolis.py` and the
+  `--product=green-bee-propolis` runs of `qa_why_chapter.py` and `qa_research_daily.py`, which
+  check the Chapters template Propolis no longer uses.
 - `qa_nuricell_ink.py [base] [--only=...]` — NuriCell's ink page (October 9, 2026): the ink look and
   menu bar, the other four products on today's template, every painting multiplying with no box,
   the lantern's light coming on (no lighter flash; lit with reduced motion and without script),
