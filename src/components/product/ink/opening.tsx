@@ -50,19 +50,19 @@ const ems = (text: string) => [...text].reduce((sum, c) => sum + (EMS[c] ?? 0.6)
 const NURI = { half: 1.762, stand: 1.66 };
 
 /**
- * How a name of these halves is set: its scale against NuriCell's size (the columns are equal, so
- * the longer half decides), the bottle's column in name-sizes (wider for a long name, so the
- * bottle keeps its presence beside smaller letters: 2.6 for "Green Bee", chosen on the page on
- * October 14 over 1.66, which left a small bottle), and on a phone the size that fits the column
- * (84.6vw, with 3% to spare): the longer half for a two-word name, which stacks its halves, the
- * whole word for one that stays one word. NuriCell's own name needs none of it (null; the small
- * tolerance keeps it so whatever the sum's last digit).
+ * How a name of these halves is set. The bottle stays exactly NuriCell's size (Mo, October 14:
+ * "the bottle bigger, use NuriCell for reference"), and the name shrinks until its longer half fits
+ * the column NuriCell's "Nuri" fills (the columns are equal), with 3% to spare: its scale against
+ * NuriCell's size, and the bottle's column in the smaller name-sizes. On a phone, the size that
+ * fits the column (84.6vw, with 3% to spare): the longer half for a two-word name, which stacks its
+ * halves, the whole word for one that stays one word. NuriCell's own name needs none of it (null;
+ * the small tolerance keeps it so whatever the sum's last digit).
  */
 export function nameFit(first: string, second: string, spaced: boolean) {
   const half = Math.max(ems(first), ems(second));
   if (half <= NURI.half + 0.005) return null;
-  const stand = NURI.stand + (half - NURI.half) * 0.348;
-  const scale = (2 * NURI.half + NURI.stand) / ((2 * half + stand) * 1.03);
+  const scale = NURI.half / (half * 1.03);
+  const stand = NURI.stand / scale;
   const line = spaced ? half : ems(first) + ems(second);
   return { scale, stand, phone: 84.6 / (line * 1.03) };
 }

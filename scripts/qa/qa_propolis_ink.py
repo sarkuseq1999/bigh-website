@@ -15,6 +15,7 @@ Sections (all, or --only=a,b):
   multiply    every painting multiplies onto the paper with no box
   buy         the real bottle (green-bee-propolis.png) stands inside the scene, centred; the front layer
               multiplies over its foot and changes nothing beside it; captioned; Add to cart
+  size        both bottles exactly NuriCell's size (1440, 1024, 390)
   layout      sizes 1536 to 360: no sideways scroll, painting left of its words from 960px and above
               them below, text 15px+
   deep_links  #chapter-<id> lands its heading under the menu bar
@@ -319,6 +320,24 @@ def buy(browser):
         ctx.close()
 
 
+SIZE = """() => { const w = (s) => Math.round(document.querySelector(s)?.getBoundingClientRect().width ?? -1);
+  return [w('[data-chapter=overview] img[class*=bottle]'), w('[data-chapter=buy] img[class*=buyBottle]')]; }"""
+
+
+def bottle_size(browser):
+    """Both bottles exactly NuriCell's size (Mo, October 14: "the bottle bigger, use NuriCell for
+    reference"), at a laptop, a tablet and a phone."""
+    for w, h in [(1440, 900), (1024, 768), (390, 844)]:
+        sizes = {}
+        for slug in ["nuricell", "green-bee-propolis"]:
+            ctx, page, _, _ = opened(browser, w, h, f"/en/products/{slug}", reduced=True)
+            sizes[slug] = page.evaluate(SIZE)
+            ctx.close()
+        a, b = sizes["nuricell"], sizes["green-bee-propolis"]
+        check(f"size {w}x{h}: the opening bottle as big as NuriCell's", abs(a[0] - b[0]) <= 2, f"{b[0]} vs {a[0]}")
+        check(f"size {w}x{h}: the Buy bottle as big as NuriCell's", abs(a[1] - b[1]) <= 2, f"{b[1]} vs {a[1]}")
+
+
 def layout(browser):
     for w, h in SIZES[1:]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
@@ -382,6 +401,7 @@ SECTIONS = {
     "spread": spread,
     "multiply": multiply,
     "buy": buy,
+    "size": bottle_size,
     "layout": layout,
     "deep_links": deep_links,
     "languages": languages,

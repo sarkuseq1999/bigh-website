@@ -40,6 +40,8 @@ URL = "/images/products/green-bee-propolis/ink"
 TS = REPO / "src/components/product/ink/propolis-art.ts"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
+# The Buy scene was cut again after the first preview (October 14: the bigger bottle).
+SCENE_V = "v2"
 TAKES = {
     "hive-gold": "why-hive-gold",
     "hive-open": "why-hive-open",
@@ -210,18 +212,39 @@ def mug():
     return art
 
 
+# The Buy scene, in the take's own pixels (1744 x 2336). Mo, October 14: the bottle as big as
+# NuriCell's (its photo 90% of the picture's width, as on NuriCell's stroke), so the scene is cut
+# from higher up, for room over the cap, and the bee, which the bigger bottle would cover, is moved
+# up and right of the cap. The bottle's glass keeps its foot on the painted ground (GLASS_FOOT,
+# where the painted bottle stood in round 7 A); the bottle photo's glass ends 5.2% above its
+# picture's bottom. The front band keeps its height on the take (282 px, fading over 116 above).
+SCENE_TOP, SCENE_BOTTOM = 0.111, 0.93
+BEE_BOX, BEE_TO = (1070, 628, 1268, 828), (1330, 300)
+GLASS_FOOT = 1945
+BOTTLE_WIDTH = 0.9
+FRONT_BAND, FRONT_FADE = 282, 116
+
+
 def scene():
-    """The Buy scene: the painting without its bottle, from just above the bee to just under the
-    ground wash (the empty paper above the bee and under the ground cut away)."""
-    img = bd.load(TAKES["scene"])
+    """The Buy scene: the painting without its bottle, its bee moved clear of the bottle's cap, from
+    just above the bee to just under the ground wash."""
+    img = bd.levelled(bd.divided(bd.load(TAKES["scene"])))
     w, h = img.size
-    flat = bd.levelled(bd.divided(img)).crop((0, int(h * 0.22), w, int(h * 0.93)))
-    art = bd.art_of(bd.feathered(flat, EDGE), f"scene-{V}", 1100)
-    # Where the painted bottle stood (round 7 A): 32% of the painting wide, its foot on the ground
-    # wash 13.7% above the crop's bottom. The bottle photo's glass is 51.5% of its picture's width
-    # and ends 5.2% above its picture's bottom.
-    art["bottle"] = {"width": 0.62, "bottom": 0.102}
-    art["front"] = scene_front(art, 0.17)
+    a = np.asarray(img).copy()
+    x0, y0, x1, y1 = BEE_BOX
+    bee = a[y0:y1, x0:x1].copy()
+    a[y0:y1, x0:x1] = 255
+    bx, by = BEE_TO
+    a[by : by + (y1 - y0), bx : bx + (x1 - x0)] = np.minimum(a[by : by + (y1 - y0), bx : bx + (x1 - x0)], bee)
+    top, bottom = int(h * SCENE_TOP), int(h * SCENE_BOTTOM)
+    flat = Image.fromarray(a).crop((0, top, w, bottom))
+    art = bd.art_of(bd.feathered(flat, EDGE), f"scene-{SCENE_V}", 1100)
+    bottle = Image.open(BOTTLE)
+    pic_h = BOTTLE_WIDTH * w * bottle.height / bottle.width
+    pic_bottom = GLASS_FOOT + 0.052 * pic_h
+    crop_h = bottom - top
+    art["bottle"] = {"width": BOTTLE_WIDTH, "bottom": round((bottom - pic_bottom) / crop_h, 4)}
+    art["front"] = scene_front(art, FRONT_BAND / crop_h, FRONT_FADE / crop_h)
     return art
 
 
@@ -234,7 +257,7 @@ def scene_front(art, band, fade=0.07):
     nothing else is painted twice (a full band multiplied onto the painting deepened the blossoms
     beside the bottle; review of October 14). White elsewhere, so it multiplies to nothing. Cut for
     the bottle's place in `art["bottle"]` and the bottle photo as it is: run again if either changes."""
-    scene_img = Image.open(OUT / f"scene-{V}.webp").convert("RGB")
+    scene_img = Image.open(OUT / f"scene-{SCENE_V}.webp").convert("RGB")
     w, h = scene_img.size
     bottle = Image.open(BOTTLE).convert("RGBA")
     bw = round(w * art["bottle"]["width"])
@@ -250,10 +273,10 @@ def scene_front(art, band, fade=0.07):
     m = (alpha * rows)[..., None]
     paint = np.asarray(scene_img).astype(np.float32)
     front = Image.fromarray(np.clip(255 - (255 - paint) * m, 0, 255).astype(np.uint8))
-    path = OUT / f"scene-front-{V}.webp"
+    path = OUT / f"scene-front-{SCENE_V}.webp"
     front.save(path, "WEBP", quality=88, method=6)
     print(f"{path.relative_to(REPO)}  {w}x{h}  {path.stat().st_size // 1024} KB")
-    return f"{URL}/scene-front-{V}.webp"
+    return f"{URL}/scene-front-{SCENE_V}.webp"
 
 
 def write_ts(art):

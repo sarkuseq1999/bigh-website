@@ -44,13 +44,13 @@ export const propolisArt = {
     gold: "/images/products/green-bee-propolis/ink/mug-v1-gold.webp",
   },
   scene: {
-    src: "/images/products/green-bee-propolis/ink/scene-v1.webp",
+    src: "/images/products/green-bee-propolis/ink/scene-v2.webp",
     width: 1100,
-    height: 1046,
+    height: 1207,
     bottle: {
-      width: 0.62,
-      bottom: 0.102,
+      width: 0.9,
+      bottom: 0.0744,
     },
-    front: "/images/products/green-bee-propolis/ink/scene-front-v1.webp",
+    front: "/images/products/green-bee-propolis/ink/scene-front-v2.webp",
   },
 } as const;
