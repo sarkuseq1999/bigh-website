@@ -7,7 +7,8 @@ screen after the page has settled (the handscroll is pinned, so a jump can land 
 October 14, 2026 (Science ink, Task 6): brought up to the site as it is. The menu's Science
 links are now "Cellular health" and "Research library"; the ink homepage has no "Meet our
 scientists" hero link (the menu's "Explore the science" leads to the page's top instead) and
-its cell's link reads "Explore cellular health" (to /science#health); the product page's
+its cell's link reads "Explore cellular health" (to /science#health), and its science block has an
+"Explore the science" pill (to /science); the product page's
 "Science" in the menu bar opens the drop-down (its "Explore the science" leads to the page).
 
 Run with the dev server up: python scripts/qa/qa_science_links.py [base-url]
@@ -76,6 +77,16 @@ with sync_playwright() as p:
     page.get_by_role("link", name="Explore the science").first.click()
     y = landed(page, None)
     check("home menu 'Explore the science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
+    ctx.close()
+
+    # Homepage "Explore the science" pill in the page's own science block (not the menu's link).
+    ctx, page = fresh("/")
+    pill = page.locator("main a[href$='/science']").filter(has_text="Explore the science").first
+    pill.scroll_into_view_if_needed()
+    page.wait_for_timeout(800)
+    pill.click()
+    y = landed(page, None)
+    check("home pill 'Explore the science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
     ctx.close()
 
     # Homepage "Explore cellular health" (beside the cell) -> /science#health.

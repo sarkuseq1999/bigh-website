@@ -89,8 +89,11 @@ export function useJourney(
       });
       return wide / 2;
     };
-    // The stops whose words would stand in the track's misty ends (journey.module.css fades them
-    // from 960px); null clears every mark (the still scroll, and on the way out).
+    // The stops whose words would stand in the track's misty ends (journey.module.css fades their
+    // words and dot from 960px); null clears every mark (the still scroll, and on the way out).
+    // The mark is written at every width, but under 960px nothing reads it: there the stops do
+    // not travel (only the stop in view shows, under the five dots), so the stylesheet alone
+    // decides, and a resize across 960px needs no new measure.
     const fade = (marks: boolean[] | null) =>
       items.forEach((item, i) => {
         const value = marks ? marks[i] : false;

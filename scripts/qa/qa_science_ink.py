@@ -229,6 +229,20 @@ STATE = """() => {
 }"""
 
 
+# The stops whose dot shows inside the band while their words do not (opacity as rendered).
+LONE_DOTS = """() => {
+  const s = document.querySelector('#scientists'); const band = s.querySelector('[data-band]').getBoundingClientRect();
+  const shown = e => { for (; e && e !== s; e = e.parentElement) if (Number(getComputedStyle(e).opacity) < 0.5) return false; return true; };
+  return [...s.querySelectorAll('li[data-stop]')].filter(li => {
+    const d = li.querySelector('i').getBoundingClientRect(); const x = (d.left + d.right) / 2;
+    return x > band.left && x < band.right && shown(li.querySelector('i')) && !shown(li.querySelector('span'));
+  }).map(li => li.dataset.stop);
+}"""
+# The last stop's link (it always has one): its underline, its arrow, its size.
+STOP_LINK = """(() => { const a = document.querySelector('#scientists li[data-stop] a'); const s = getComputedStyle(a);
+  return [s.textDecorationLine, !!a.querySelector('svg'), s.fontSize]; })()"""
+
+
 def inside(rect, w, h):
     return rect is None or (rect[0] >= -1 and rect[2] <= w + 1 and rect[1] >= -1 and rect[3] <= h + 1)
 
@@ -303,6 +317,16 @@ def journey(browser):
         check(f"{tag}: the painting's end in view at the end", abs(end["imgRight"] - end["bandRight"]) < 3, f"{end['imgRight']:.0f} vs {end['bandRight']:.0f}")
         if w >= 960:
             check(f"{tag}: at the end, no other stop's words in the misty ends", not end["misty"], str(end["misty"]))
+            # (Task 6 fix round 1, Ruling 15) No lone dot: a dot shown in the window always has its
+            # words (a stop fading in the misty ends fades its dot with them), once the fade has run.
+            for f in (0.25, 0.5, 1.0):
+                page.evaluate(f"window.scrollTo(0, {begin + room * f})")
+                page.wait_for_timeout(900)
+                lone = page.evaluate(LONE_DOTS)
+                check(f"{tag} at {f:.2f}: no dot shown without its words", not lone, str(lone))
+            if (w, lang) == (1440, "en"):
+                look = page.evaluate(STOP_LINK)
+                check(f"{tag}: the stop's link has the page's link style (underline, arrow, 15px)", look == ["underline", True, "15px"], str(look))
         page.evaluate(f"window.scrollTo(0, {begin + room + 400})")
         page.wait_for_timeout(300)
         after = page.evaluate(STATE)
@@ -366,6 +390,20 @@ SETTLED_SIZES = [
 ]
 
 
+# A style that makes the pinned box's title 100px taller (from the parsed page on), and a record of
+# the fonts' status each time the last resort warns.
+FORCED_SHORTFALL = """
+window.__lastResort = [];
+const warn = console.warn;
+console.warn = function (...a) {
+  if (String(a[0]).startsWith('[science-journey:last-resort]')) window.__lastResort.push(document.fonts.status);
+  return warn.apply(this, a);
+};
+const style = document.createElement('style');
+style.textContent = '#scientists [data-pin] > :first-child { padding-bottom: 100px !important; }';
+// In the head once it is parsed (a style put straight on <html> is gone after hydration).
+document.addEventListener('DOMContentLoaded', () => document.head.appendChild(style));
+"""
 COLD_SIZES = [(1440, 900, "kr"), (1440, 900, "vn"), (1280, 720, "kr"), (1536, 864, "jp"), (390, 664, "kr"), (390, 844, "vn")]
 
 
@@ -419,6 +457,18 @@ def settled(browser):
         page.wait_for_timeout(2500)
         check(f"settled cold {w}x{h} {lang}: the last resort stays quiet while the fonts arrive", not warnings, "; ".join(warnings[:1])[:160])
         ctx.close()
+    # (Task 6 fix round 1) The wait must not become "never judges": a genuine shortfall (the title
+    # made 100px taller by an injected style) still shrinks the painting
+    # once the fonts are in, and says so then, never while they load. The cold case bites only on
+    # the built site (next start): dev serves the fonts so that they are in before the first measure.
+    ctx = browser.new_context(viewport={"width": 1440, "height": 900})
+    page = ctx.new_page()
+    page.add_init_script(FORCED_SHORTFALL)
+    page.goto(BASE + "/kr/science", wait_until="domcontentloaded")
+    page.wait_for_timeout(3000)
+    told, band_h = page.evaluate("[window.__lastResort, document.querySelector('#scientists').style.getPropertyValue('--band-h')]")
+    check("settled forced shortfall 1440x900 kr: the last resort still acts once the fonts are in", told and all(t == "loaded" for t in told) and band_h.endswith("px"), f"warned with fonts {told}, --band-h {band_h!r}")
+    ctx.close()
 
 
 def multiply(browser):
@@ -643,13 +693,23 @@ def layout(browser):
         ctx.close()
 
 
+# True once scrollY has stayed the same for 300ms (polled; the state lives on window).
+SCROLL_SETTLED = """() => {
+  const now = performance.now(), y = Math.round(scrollY), s = window.__still || (window.__still = { y, t: now });
+  if (s.y !== y) { s.y = y; s.t = now; }
+  return now - s.t >= 300;
+}"""
+
+
 def deep_links(browser):
     # globals.css sets scroll-padding-top: 150px, so a correct landing puts the part's top at about
     # 150px, under the menu bar (controller's ruling, October 14); its heading must clear the bar.
     for w, h in [(1440, 900), (390, 844)]:
         for part in ["scientists", "research", "health", "ask"]:
             ctx, page, _, _ = opened(browser, w, h, path=f"{PATH}#{part}")
-            page.wait_for_timeout(1500)
+            # The landing as read once the native smooth scroll has finished: scrollY the same for
+            # 300ms (a fixed wait once read one phone landing mid-scroll, at top -2).
+            page.wait_for_function(SCROLL_SETTLED, polling=100, timeout=8000)
             top = page.evaluate(f"document.getElementById('{part}').getBoundingClientRect().top")
             heading = page.evaluate(f"document.querySelector('#{part} h1, #{part} h2').getBoundingClientRect().top")
             bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")

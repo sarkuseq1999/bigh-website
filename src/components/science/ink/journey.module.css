@@ -283,8 +283,26 @@
   opacity: 0;
 }
 
+/* The stop's link in the page's link style (Ruling 15: plain black words in a grey sentence did not
+   read as a link): the hairline underline and the arrow every other outside link has, at the
+   sentence's 15px. The arrow sits on the text's line (the site's reset makes an svg a block). */
 .stopText a {
   color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-decoration-color: var(--hair);
+  text-underline-offset: 5px;
+  transition: text-decoration-color calc(var(--breath) / 5) var(--ease);
+}
+
+.stopText a:hover {
+  text-decoration-color: var(--ink);
+}
+
+.stopText a svg {
+  display: inline-block;
+  margin-left: 3px;
+  vertical-align: -1px;
 }
 
 /* The stop in view: its dot inked, its words in ink, its sentence shown. Its words take the
@@ -302,17 +320,20 @@
   color: var(--stop-ink, var(--muted));
 }
 
-/* From 960px: the other stops' words that would stand in the track's misty ends (useJourney marks
-   them data-out) fade away instead of being cut by the mist at the window's edge ("…trients and
-   the" at the scroll's end). Their dots stay on the line. Opacity only: the page does not move. */
+/* From 960px: the other stops that would stand in the track's misty ends (useJourney marks them
+   data-out) fade away, words and dot together, instead of being cut by the mist at the window's
+   edge ("…trients and the" at the scroll's end) or leaving a lone dot with no words (Ruling 15).
+   Opacity only: the page does not move. */
 @media (min-width: 960px) {
   .stops li .mark,
-  .stops li .stopTitle {
+  .stops li .stopTitle,
+  .stops li .dot {
     transition: opacity calc(var(--breath) / 4) var(--ease);
   }
 
   .stops li[data-out] .mark,
-  .stops li[data-out] .stopTitle {
+  .stops li[data-out] .stopTitle,
+  .stops li[data-out] .dot {
     opacity: 0;
   }
 }

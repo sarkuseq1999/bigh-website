@@ -4,20 +4,20 @@
 // own paper. scroll.stops: where each stop's place stands, as fractions of the scroll's width.
 export const scienceArt = {
   scroll: {
-    src: "/images/science/ink/scroll-v1.webp",
-    width: 6864,
-    height: 705,
+    src: "/images/science/ink/scroll-v2.webp",
+    width: 5756,
+    height: 651,
     phone: {
-      src: "/images/science/ink/scroll-phone-v1.webp",
-      width: 3894,
+      src: "/images/science/ink/scroll-phone-v2.webp",
+      width: 3537,
       height: 400,
     },
     stops: {
-      okayama: 0.1101,
-      berkeley: 0.5111,
-      y2002: 0.5999,
-      salzburg: 0.7284,
-      today: 0.9452,
+      okayama: 0.0862,
+      berkeley: 0.417,
+      y2002: 0.5229,
+      salzburg: 0.6762,
+      today: 0.9347,
     },
   },
   scrolls: {
@@ -31,7 +31,7 @@ export const scienceArt = {
     },
   },
   health: {
-    src: "/images/science/ink/health-v1.webp",
+    src: "/images/science/ink/health-v2.webp",
     width: 2400,
     height: 567,
     scenes: [

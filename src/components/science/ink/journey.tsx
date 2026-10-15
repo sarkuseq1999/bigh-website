@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpRight } from "lucide-react";
 import { useRef, type CSSProperties } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
@@ -97,6 +98,7 @@ export function Journey({ motion }: { motion: boolean }) {
                   {stop.url ? (
                     <a href={stop.url} target="_blank" rel="noreferrer">
                       {copy(stop.link)}
+                      <ArrowUpRight size={14} aria-hidden="true" />
                     </a>
                   ) : null}
                 </p>

@@ -19,7 +19,8 @@ Round 2's D was still "boring, vibe coded" to Mo, so round 3 was a complete rede
 bench and beakers ("nature, with a touch of science"), and a 9/10 bar. He picked opening idea 2,
 "Nature under the lens".
 
-- `/science` always shows it (`look-film.tsx`, `film-scene.ts`, `film-fonts.ts`); the page shell is
+- Retired October 14, 2026, now in `reference/science-page/looks/film/`. Until then `/science` always
+  showed it (`look-film.tsx`, `film-scene.ts`, `film-fonts.ts`); the page shell is
   `science-page.tsx` with the shared header/footer in `site-chrome.*` and Lenis smooth scrolling
   (`smooth-scroll.ts`, the `lenis` package).
 - The film (a pinned WebGL stage scrubbed by scroll): the leaf under a lens (`film/lens-leaf.webp`) → through
