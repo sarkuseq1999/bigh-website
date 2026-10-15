@@ -1,54 +1,72 @@
-/* The FDA statement: one bold line (two, balanced, where it cannot fit) under a brush line the
-   width of the footer's column (Mo, October 13, 2026: one line above it, none below, so the foot
-   of the page has fewer lines). The line is the menu bar's painted stroke
-   (nav/inscription/rule-lifted.webp) used as a mask and filled with the footer's own ink
-   (currentColor), so a dark footer gets a light line. Rules are scoped under .fda (two classes) so
-   the pages' shared `p` rules cannot win on the built site's stylesheet order. */
+/* The FDA statement routed into a painted California trail sign (fda-sign.webp, made by
+   reference/ink-pages/fda-sign/build_sign.py from a GPT Image 2.5 painting; Mo's pick "I",
+   October 13, 2026). The sign is the paragraph's border image, cut nine ways: the corners and
+   edges (the post tops, the plank's ends, the posts, the grass, the hill and its oak) keep their
+   shape at --k CSS px per picture px, and only the middle (the face of the panel between the posts)
+   stretches to hold the words. The words reach a little past the middle into the panel's ends
+   (--reach-l, --reach-r). The picture's paper is transparent and its wood solid, so the sign stands
+   on the paper footers and on the Science page's dark one alike.
+
+   A footer may set --k (the sign's scale) and --sign-size (the words' size) where its room is
+   short. Rules are scoped under .fda (two classes) so the pages' shared `p` rules cannot win on the
+   built site's stylesheet order. */
 .fda {
-  max-width: var(--wide, 1300px);
+  --k: 0.48;
+  /* The words' measure: two balanced lines on a computer. */
+  --words: 680px;
+  display: flex;
+  justify-content: center;
 }
 
-.fda::before {
-  content: "";
-  display: block;
-  height: 5px;
-  background: currentColor;
-  opacity: 0.55;
-  mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
-}
-
-/* --fda-pad: the room above and below the words (a footer may draw it in where its room is
-   short). 15 px, the site's smallest type; where one line does not fit (under about 1,300 px) the
-   words balance on two. */
 .fda .text {
+  --bt: calc(92px * var(--k));
+  --br: calc(491px * var(--k));
+  --bb: calc(225px * var(--k));
+  --bl: calc(277px * var(--k));
+  --reach-l: calc(109px * var(--k));
+  --reach-r: calc(113px * var(--k));
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  width: calc(var(--bl) + var(--br) + var(--words) - var(--reach-l) - var(--reach-r));
+  max-width: 100%;
   margin: 0;
-  padding: var(--fda-pad, 15px) 0 calc(var(--fda-pad, 15px) - 1px);
-  font-size: 15px;
+  padding: 6px 0;
+  border-style: solid;
+  border-width: var(--bt) var(--br) var(--bb) var(--bl);
+  border-image: url("/images/home-v2/ink/fda-sign.webp") 92 491 225 277 fill / var(--bt) var(--br)
+    var(--bb) var(--bl) stretch;
+  /* Cream letters routed into the brown face (about 5:1 against it). */
+  color: #f6e7bd;
+  font-family: var(--font-sign), Rockwell, Georgia, serif;
+  font-size: var(--sign-size, 16px);
   font-weight: 600;
-  line-height: 1.6;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
   text-align: center;
   text-wrap: balance;
+  text-shadow:
+    0 1px 0 rgb(20 14 6 / 0.55),
+    0 -1px 0 rgb(255 240 200 / 0.12);
 }
 
-/* The star hangs before the first word, outside the line (hanging punctuation): the words stay
-   centred on their own, and a 1280 px window keeps them to one line. */
-.fda .star {
-  position: absolute;
-  translate: calc(-100% - 6px) 0;
-  color: var(--fda-star, #c49a3a);
+.fda .words {
+  flex: 1 1 auto;
+  margin: 0 calc(-1 * var(--reach-r)) 0 calc(-1 * var(--reach-l));
 }
 
-/* Phones: the statement runs to four or five lines, which read better from the left edge, like
-   the footer's other lines; the star sits in the line there. */
+/* Phones: the sign without its hill and oak (fda-sign-phone.webp), smaller, the words on as many
+   lines as they need; the face grows taller around them. */
 @media (max-width: 720px) {
-  .fda .text {
-    text-align: left;
-    text-wrap: pretty;
+  .fda {
+    --k: 0.36;
   }
 
-  .fda .star {
-    position: static;
-    translate: none;
-    margin-right: 6px;
+  .fda .text {
+    --br: calc(210px * var(--k));
+    width: 100%;
+    border-image-source: url("/images/home-v2/ink/fda-sign-phone.webp");
+    border-image-slice: 92 210 225 277 fill;
+    font-size: var(--sign-size, 15px);
   }
 }
