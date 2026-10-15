@@ -53,13 +53,13 @@ export const scienceArt = {
     ],
   },
   mugs: {
-    src: "/images/science/ink/mugs-v1.webp",
+    src: "/images/science/ink/mugs-v2.webp",
     width: 2327,
-    height: 511,
+    height: 746,
     phone: {
-      src: "/images/science/ink/mugs-phone-v1.webp",
+      src: "/images/science/ink/mugs-phone-v2.webp",
       width: 1000,
-      height: 314,
+      height: 555,
     },
   },
 } as const;

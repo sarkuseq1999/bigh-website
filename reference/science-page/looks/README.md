@@ -18,3 +18,10 @@ To bring one back: move its files into `src/components/science/`, add it to the 
 and restore its color tokens (see git history of `science-page.module.css` for `.page[data-look=…]`).
 Look C and E use `public/images/science-page/dark-cell.webp`'s original,
 `reference/science-page/originals/sp-dark-cell.png`. Details of each round: `docs/science-page.md`.
+
+To bring the film back (October 14, 2026): move `film/*.ts`, `*.tsx` and `*.module.css` back into
+`src/components/science/` (`science-page.tsx` is its page) and `film/qa_science_film.py` back into
+`scripts/qa/`; point `src/app/[locale]/science/page.tsx` at `SciencePage` again; and restore the
+pictures it used, removed from `public/images/science-page/` in commit 6aa001d (`git checkout 6aa001d~1 --
+public/images/science-page/`; originals in `reference/science-page/originals/` and `.../originals/film/`).
+The looks above also need `science-page.tsx` from `film/`, since the old page now lives there.

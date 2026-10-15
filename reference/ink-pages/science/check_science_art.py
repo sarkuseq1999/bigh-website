@@ -4,7 +4,9 @@
 - each picture's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
 - the scroll is a long band (at least 8 times as wide as tall), its five stops in order inside it;
-- the health scenes are three, each narrower than the strip.
+- the health scenes are three, each narrower than the strip;
+- (Task 6) the mugs' steam is kept: ink above the mugs' rims, on the wide strip and the phone crop
+  (the ink box once cut it off).
 Writes plates/contact.jpg (the scroll with its stops marked, the strips, the scenes) to look at.
 
 usage: python -X utf8 reference/ink-pages/science/check_science_art.py
@@ -56,6 +58,13 @@ check("stops in order inside the band", all(0 < a < b < 1 for a, b in zip(stops,
 for key in ("scrolls", "mugs"):
     picture(data[key])
     picture(data[key]["phone"])
+for name, entry in (("wide", data["mugs"]), ("phone", data["mugs"]["phone"])):
+    gray = np.asarray(Image.open(REPO / "public" / entry["src"].lstrip("/")).convert("L")).astype(np.float32)
+    # The rows above the mugs: the first row where a column-run of dark ink (a mug's body) starts.
+    body = int(np.argmax((gray < 120).mean(axis=1) > 0.02))
+    steam = gray[: max(1, body - 10)]
+    check(f"mugs {name}: the steam above the mugs is kept", body > gray.shape[0] * 0.2 and (steam < 225).sum() > 200,
+          f"mugs start at row {body} of {gray.shape[0]}, {(steam < 225).sum()} ink pixels above them")
 health = picture(data["health"])
 scenes = [picture(s) for s in data["health"]["scenes"]]
 check("three health scenes", len(scenes) == 3)

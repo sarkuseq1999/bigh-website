@@ -1,6 +1,8 @@
 // Words and facts for the Science page (/science). Mo's 9/16 plan: lead with the scientists, then
-// the research, health explained, and Ask BiGH Science. After three rounds Mo chose look B, "Scroll
-// film" (September 28, 2026); the others are in reference/science-page/looks/ and .../looks/round3/.
+// the research, health explained, and Ask BiGH Science. The page is now "the handscroll" in Ink &
+// Gold (Mo, October 13-14, 2026; components in ./ink/). It replaced look B, "Scroll film" (Mo's
+// pick of September 28, now in reference/science-page/looks/film/); the earlier looks are in
+// reference/science-page/looks/ and .../looks/round3/.
 //
 // Approved copy is marked "approved" with its date in BRAND-CHEATSHEET.md. Everything else is a
 // DRAFT line for this build, written from facts in RESEARCH-NOTES.md, and still needs Mo's words
@@ -290,8 +292,12 @@ export const ask = {
 // The ink page, "the handscroll" (Mo, October 13-14, 2026; spec
 // docs/superpowers/specs/2026-10-14-science-ink-design.md). DRAFT lines.
 export const ink = {
-  // The opening's lead: the film's two lines, as one.
-  lead: ["A life in cell science.", "From Okayama to Berkeley, and from the lab to BiGH."],
+  // The opening's lead: the film's two lines, as one (DRAFT in the film as well; neither is in
+  // BRAND-CHEATSHEET.md).
+  lead: [
+    "A life in cell science.", // DRAFT
+    "From Okayama to Berkeley, and from the lab to BiGH.", // DRAFT
+  ],
   formulasLabel: "The formulas", // DRAFT
   source: "Source", // DRAFT
   scrollHint: "Keep scrolling: the scroll unrolls", // DRAFT

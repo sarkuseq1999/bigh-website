@@ -87,11 +87,25 @@
 }
 
 /* Short windows and every window under 960px wide: the title goes on under the menu bar and gives
-   its room to the painting. */
+   its room to the painting. Where the painting is at its largest and paper is still left over (a
+   tall phone, about 220px on a 390x844 iPhone; a tablet), the stuck box stands in the middle of
+   what the menu bar leaves instead of leaving it all under the words (Task 6 review): --settle,
+   half of it, lowers only the sticky top (no height: the page and its anchors stay put; useJourney
+   reads the top as set). The title then stops short of the bar, so it fades once the box sticks
+   (data-stuck, below). */
 @media (max-height: 820px), (max-width: 959px) {
   .journey {
     --room: var(--stops-room);
     --mode: lift;
+    --settle: max(0px, calc((100svh - var(--pin-top) - var(--room) - var(--band-h)) / 2));
+  }
+
+  .pin > :first-child {
+    transition: opacity calc(var(--breath) / 4) var(--ease);
+  }
+
+  .journey[data-stuck] .pin > :first-child {
+    opacity: 0;
   }
 }
 
@@ -110,9 +124,10 @@
   padding-bottom: max(100%, calc(var(--band-h) * var(--ratio) - 100%));
 }
 
+/* The settle waits for the lift (useJourney): before it, nothing lowers the box. */
 .pin {
   position: sticky;
-  top: calc(var(--pin-top) - var(--lift, 0px));
+  top: calc(var(--pin-top) - var(--lift, 0px) + min(var(--settle, 0px), var(--lift, 0px)));
   display: grid;
   gap: 22px;
   mix-blend-mode: multiply;
@@ -178,9 +193,11 @@
   transform: translate3d(calc(-1 * var(--x, 0px)), 0, 0);
 }
 
-/* --true: the stop's place on the painting; --pos: where its words stand (its place, but the stop
-   in view keeps its words out of the track's misty ends while its place is near or past the
-   window's edge; its dot stays under its place). --view: the band's width (useJourney). */
+/* --true: the stop's place on the painting; --pos: where its words and dot stand (its place, but
+   the stop in view keeps its words out of the track's misty ends while its place is near or past
+   the window's edge, and its dot stays over its words, where useJourney inks the line up to: a
+   stop in view always has its inked dot, as in the approved mockup). --view: the band's width
+   (useJourney). */
 .stops li {
   --true: calc(var(--at) * var(--band-h) * var(--ratio));
   --pos: var(--true);
@@ -210,7 +227,6 @@
   width: 15px;
   height: 15px;
   margin: 0 auto 14px;
-  translate: calc(var(--true) - var(--pos)) 0;
   border: 1.5px solid var(--muted);
   border-radius: 50%;
   background: #fff;
@@ -284,6 +300,21 @@
 .stops li .mark,
 .stops li .stopTitle {
   color: var(--stop-ink, var(--muted));
+}
+
+/* From 960px: the other stops' words that would stand in the track's misty ends (useJourney marks
+   them data-out) fade away instead of being cut by the mist at the window's edge ("…trients and
+   the" at the scroll's end). Their dots stay on the line. Opacity only: the page does not move. */
+@media (min-width: 960px) {
+  .stops li .mark,
+  .stops li .stopTitle {
+    transition: opacity calc(var(--breath) / 4) var(--ease);
+  }
+
+  .stops li[data-out] .mark,
+  .stops li[data-out] .stopTitle {
+    opacity: 0;
+  }
 }
 
 .journey[data-now="0"] [data-stop="0"] .stopText,
@@ -456,7 +487,6 @@
     margin: 0 auto 14px;
     border-color: var(--ink);
     background: var(--ink);
-    translate: none;
   }
 
   .foot {
@@ -527,7 +557,6 @@
   margin: 0 auto 14px;
   border-color: var(--ink);
   background: var(--ink);
-  translate: none;
 }
 
 .journey[data-still] .foot {

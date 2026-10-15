@@ -6,17 +6,24 @@ Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Science, one h1, the parts' ids in order,
               no canvas, no console errors (1440x900, 390x844)
   people      Dr. Liu's real photo on its mount, his name, numbers and sources, "Read his story"
-              opens his sheet; the five bottles with their credits, each linking to its page
+              opens his sheet; the five bottles with their credits, each linking to its page;
+              (Task 6) DESIGN.md's mount shadow, the intro's margin, the bottles, names and credits
+              each on one line per row, the sources on one line, the numbers stacked on phones
   journey     (Task 3) the scroll pins, travels from Okayama to Today and lets go, the stop in
               view's words and link in the window, Tab only on shown links; real short windows
-              (the title goes on under the bar) and a phone held sideways (the still scroll)
+              (the title goes on under the bar) and a phone held sideways (the still scroll);
+              (Task 6) from 960px the stop in view's inked dot in the window with the line inked to
+              it and no other stop's words cut by the misty ends; a lifted box in the middle of the
+              window under the bar, its title faded
   settled     (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran;
-              (Task 4) #research, #health and #ask stand still once their paintings have arrived
+              (Task 4) #research, #health and #ask stand still once their paintings have arrived;
+              (Task 6) a cold first visit: the last resort waits while the fonts arrive
   still       (Task 3) reduced motion and no script: nothing pins, every stop readable;
               (Task 4) the strips' paintings whole and crisp (no bloom left waiting)
   multiply    (Task 3, 4) every painting's blend group sits on the page with no stacking context
   strips      (Task 4) research, health and ask: the painting in use (phone crop under 960px) and
-              bloomed in, year · kind · journal, the full list, each explainer's own sheet
+              bloomed in, year · kind · journal, the full list, each explainer's own sheet;
+              (Task 6) from 960px the columns' titles, words and links each start on one line
   languages   (Task 5) kr, jp, cns, vn: 200, no errors, the new strings translated
   rooms       (Task 5) all five languages, 280 to 1536px wide: the stylesheet's --words-room and
               --stops-room cover what the pinned box needs besides the painting, with 20px to spare
@@ -31,7 +38,7 @@ import re
 import sys
 from pathlib import Path
 
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import TimeoutError as PlaywrightTimeout, sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
@@ -92,6 +99,24 @@ def shell(browser):
         ctx.close()
 
 
+MOUNT_SHADOW = "rgba(12, 11, 10, 0.42) 0px 22px 44px -22px, rgba(12, 11, 10, 0.1) 0px 3px 8px 0px"
+# Per row of bottles (bottles whose boxes share some height): their pictures' feet, their names'
+# and credits' tops.
+BOTTLE_ROWS = """() => {
+  const rows = [];
+  const at = e => Math.round(e.getBoundingClientRect()[e.tagName === 'IMG' ? 'bottom' : 'top']);
+  for (const li of document.querySelectorAll('#formulas li')) {
+    const box = li.getBoundingClientRect();
+    let r = rows.find(r => box.top < r.bottom && box.bottom > r.top);
+    if (!r) { r = { top: box.top, bottom: box.bottom, bottles: [], names: [], credits: [] }; rows.push(r); }
+    r.top = Math.min(r.top, box.top); r.bottom = Math.max(r.bottom, box.bottom);
+    r.bottles.push(at(li.querySelector('img'))); r.names.push(at(li.querySelector('a span')));
+    r.credits.push(at(li.querySelector(':scope > p')));
+  }
+  return rows.filter(r => r.bottles.length > 1).map(({ bottles, names, credits }) => ({ bottles, names, credits }));
+}"""
+
+
 def people(browser):
     ctx, page, _, errors = opened(browser, 1440, 900)
     bring(page, "#liu")
@@ -118,8 +143,29 @@ def people(browser):
     words = page.locator("#formulas").inner_text()
     check("people: Dr. Iris Wang in words", "Dr. Iris Wang developed Nature Calm" in words)
     check("people: no photo of Dr. Iris Wang", page.locator('img[alt*="Iris"]').count() == 0)
+    # (Task 6) The same real photo sits the same way on every page: DESIGN.md's one mount shadow.
+    shadow = photo.evaluate("i => getComputedStyle(i.closest('figure')).boxShadow")
+    check("people: the mount's shadow is DESIGN.md's photo mount", shadow == MOUNT_SHADOW, shadow)
+    margin = page.evaluate("getComputedStyle(document.querySelector('#liu h2 ~ p ~ p')).marginTop")
+    check("people: the intro keeps its 10px under the headline", margin == "10px", margin)
     check("people: no console errors", not errors, "; ".join(errors[:3]))
     ctx.close()
+    # (Task 6) Rows that read as rows: the bottles on one ground line, the names and the credits
+    # each starting on one line (per row of bottles), Dr. Liu's three "Source" links on one line,
+    # and on phones his three numbers one under another (three 89px columns wrapped 5-6 lines).
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h)
+        rows = page.evaluate(BOTTLE_ROWS)
+        for i, row in enumerate(rows):
+            for part, edges in row.items():
+                check(f"people {w}: bottle row {i + 1}'s {part} on one line", max(edges) - min(edges) <= 1, str(edges))
+        sources = page.evaluate("[...document.querySelectorAll('#liu dl a')].map(a => Math.round(a.getBoundingClientRect().top))")
+        if w == 1440:
+            check(f"people {w}: the three sources on one line", max(sources) - min(sources) <= 1, str(sources))
+        else:
+            lefts = page.evaluate("[...document.querySelectorAll('#liu dl > div')].map(d => Math.round(d.getBoundingClientRect().left))")
+            check(f"people {w}: the three numbers one under another", len(set(lefts)) == 1 and sources == sorted(sources), f"{lefts} {sources}")
+        ctx.close()
 
 
 STACKING = """el => {
@@ -158,7 +204,22 @@ STATE = """() => {
   const reachable = [...s.querySelectorAll('li[data-stop] a')].filter(a => a.tabIndex >= 0)
     .map(a => { const r = a.getBoundingClientRect(); return shown(a) && r.left >= -1 && r.right <= innerWidth + 1 && r.top >= -1 && r.bottom <= innerHeight + 1; });
   const still = s.hasAttribute('data-still') || getComputedStyle(pinEl).position === 'static';
-  return { now: Number(s.dataset.now), still, pinTop: pin.top, pinBottom: pin.bottom,
+  // (Task 6) The stop in view's dot (over its words) and the inked line's end; the other stops
+  // whose words stand in the track's misty ends without being faded (data-out).
+  const dot = cur && cur.querySelector('i'); const d = dot && dot.getBoundingClientRect();
+  const ink = s.querySelector('div[aria-hidden="true"] > span'); const k = ink && ink.getBoundingClientRect();
+  const words = li => [...li.querySelectorAll('span')].map(e => { const r = document.createRange(); r.selectNodeContents(e); return r.getBoundingClientRect(); });
+  const misty = [...s.querySelectorAll('li[data-stop]')].filter(li => li !== cur && !li.hasAttribute('data-out'))
+    .filter(li => words(li).some(b => b.left < band.left + band.width * 0.06 - 1 || b.right > band.right - band.width * 0.06 + 1))
+    .map(li => li.dataset.stop);
+  const hidden = [...s.querySelectorAll('li[data-stop][data-out]')]
+    .filter(li => words(li).every(b => b.left > band.left + band.width * 0.06 + 1 && b.right < band.right - band.width * 0.06 - 1))
+    .map(li => li.dataset.stop);
+  const cs = getComputedStyle(s);
+  return { now: Number(s.dataset.now), still, pinTop: pin.top, pinBottom: pin.bottom, bandTop: band.top,
+           mode: cs.getPropertyValue('--mode').trim(), barFoot: document.querySelector('header').getBoundingClientRect().bottom,
+           wordsOpacity: Number(getComputedStyle(pinEl.firstElementChild).opacity),
+           dotX: d ? (d.left + d.right) / 2 : null, inkEnd: k ? k.right : null, misty, hidden,
            stick: parseFloat(getComputedStyle(pinEl).top), padTop: parseFloat(getComputedStyle(s).paddingTop),
            room: s.querySelector('[data-room]').offsetHeight, overflow: img.width - band.width,
            imgLeft: img.left, imgRight: img.right, bandLeft: band.left, bandRight: band.right,
@@ -223,9 +284,25 @@ def journey(browser):
                 check(f"{tag} {step}/10: painting covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
                 check(f"{tag} {step}/10: the stop's sentence and link shown, in the window", st["textShown"] and inside(st["text"], w, h) and inside(st["link"], w, h), f"{st['text']} {st['link']}")
                 check(f"{tag} {step}/10: Tab reaches only shown links", all(st["reachable"]) and len(st["reachable"]) <= 1, str(st["reachable"]))
+                if step == 5 and st["mode"] == "lift":
+                    # (Task 6) A lifted box stands in the middle of what the menu bar leaves (a
+                    # tall phone left about 220px of blank paper under the words), and its title,
+                    # stopped short of the bar, has faded.
+                    above, below = st["bandTop"] - st["barFoot"], h - st["pinBottom"]
+                    check(f"{tag} {step}/10: the lifted box in the middle of the window", below - above <= 60, f"paper above the painting {above:.0f}, under the words {below:.0f}")
+                    check(f"{tag} {step}/10: the lifted title has faded", st["wordsOpacity"] == 0, str(st["wordsOpacity"]))
+                if w >= 960:
+                    # (Task 6) The stop in view always shows its inked dot, the line inked up to
+                    # it; no other stop's words are cut by the misty ends.
+                    dot_ok = st["dotX"] is not None and st["bandLeft"] <= st["dotX"] <= st["bandRight"]
+                    check(f"{tag} {step}/10: the stop in view's dot in the window, the line inked to it", dot_ok and abs(st["inkEnd"] - st["dotX"]) < 3, f"dot {st['dotX']}, ink {st['inkEnd']}")
+                    check(f"{tag} {step}/10: no other stop's words in the misty ends", not st["misty"], str(st["misty"]))
+                    check(f"{tag} {step}/10: every stop's words in the clear shown", not st["hidden"], str(st["hidden"]))
         check(f"{tag}: stops in order, Okayama to Today", seen == sorted(seen) and seen[0] == 0 and seen[-1] == 4, str(seen))
         end = page.evaluate(STATE)
         check(f"{tag}: the painting's end in view at the end", abs(end["imgRight"] - end["bandRight"]) < 3, f"{end['imgRight']:.0f} vs {end['bandRight']:.0f}")
+        if w >= 960:
+            check(f"{tag}: at the end, no other stop's words in the misty ends", not end["misty"], str(end["misty"]))
         page.evaluate(f"window.scrollTo(0, {begin + room + 400})")
         page.wait_for_timeout(300)
         after = page.evaluate(STATE)
@@ -289,6 +366,9 @@ SETTLED_SIZES = [
 ]
 
 
+COLD_SIZES = [(1440, 900, "kr"), (1440, 900, "vn"), (1280, 720, "kr"), (1536, 864, "jp"), (390, 664, "kr"), (390, 844, "vn")]
+
+
 def settled(browser):
     # The stylesheet alone sets the painting's height (and the page's): nothing below the journey
     # moves once the script has run (review, October 14: the menu's #research, #health and #ask
@@ -327,6 +407,18 @@ def settled(browser):
         for name, before, after in zip(["#research", "#health", "#ask"], first_parts, arrived):
             check(f"settled {w}x{h} {lang}: {name} stays put once its paintings have arrived", abs(after - before) <= 2, f"{before} -> {after}")
         ctx.close()
+    # (Task 6) A cold first visit, the fonts not yet in: the last resort waits for them (on the
+    # built site the Korean lead took two lines in the fallback face until Switzer arrived, and the
+    # last resort shrank the painting by 3.6px at 1440x900 on every cold visit, moving the anchors).
+    for w, h, lang in COLD_SIZES:
+        ctx = browser.new_context(viewport={"width": w, "height": h})
+        page = ctx.new_page()
+        warnings = []
+        page.on("console", lambda m: m.type == "warning" and LAST_RESORT in m.text and warnings.append(m.text))
+        page.goto(BASE + f"/{lang}/science", wait_until="domcontentloaded")
+        page.wait_for_timeout(2500)
+        check(f"settled cold {w}x{h} {lang}: the last resort stays quiet while the fonts arrive", not warnings, "; ".join(warnings[:1])[:160])
+        ctx.close()
 
 
 def multiply(browser):
@@ -346,6 +438,16 @@ KEY_META = ["2002 · Animal study · PNAS", "2008 · Review · Neurochem Res", "
 EXPLAINER_SHEETS = ["Energy starts small.", "Balance matters.", "Aging is a bigger story."]
 # A painting the visitor was meant to see: the strips' wide paintings and the health scenes.
 STRIP_PICTURES = "#research figure[data-picture] img, #health figure[data-picture] img, #ask figure[data-picture] img, #health [data-scene] img"
+
+
+# The tops of each column's title, words and link (the research's link row, or health's button).
+COLUMN_ROWS = """sel => {
+  const top = e => Math.round(e.getBoundingClientRect().top);
+  const cols = [...document.querySelectorAll(sel)];
+  return { titles: cols.map(c => top(c.querySelector('h3'))),
+           words: cols.map(c => top(c.querySelector('h3 + p'))),
+           links: cols.map(c => top(c.querySelector('a, button'))) };
+}"""
 
 
 def tidy(text):
@@ -377,8 +479,13 @@ def strips(browser):
                     arg=f"#{part} img",
                     timeout=7000,
                 )
-            except Exception:
-                pass
+            except PlaywrightTimeout:
+                # The checks below fail for each painting that has not bloomed; say why here.
+                waiting = page.evaluate(
+                    "sel => [...document.querySelectorAll(sel)].filter(i => i.offsetParent && i.dataset.bloom !== 'done').map(i => `${(i.alt || i.src).slice(0, 30)}: ${i.dataset.bloom}`)",
+                    f"#{part} img",
+                )
+                print(f"NOTE strips {w} {part}: the bloom wait timed out after 7s; still waiting: {'; '.join(waiting)}", flush=True)
             for img in shown:
                 state = img.evaluate("i => [i.dataset.bloom, getComputedStyle(i).opacity, getComputedStyle(i).filter]")
                 check(f"strips {w} {part}: {img.get_attribute('alt')[:40]} has bloomed in", state == ["done", "1", "none"], str(state))
@@ -431,6 +538,16 @@ def strips(browser):
             check(f"strips {w} ask: {word}", word in ask)
         check(f"strips {w} ask: three numbered steps", page.locator("#ask ol > li").count() == 3)
         check(f"strips {w}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+    # (Task 6) From 960px the research and health columns share their rows: the titles, the words
+    # and the links each start on one line (at 1024px the first study's words ran two lines longer
+    # than the second's, and the three "Read the study" links stood at three heights).
+    for w, h in [(1440, 900), (1024, 768)]:
+        ctx, page, _, _ = opened(browser, w, h)
+        for part in ["research", "health"]:
+            rows = page.evaluate(COLUMN_ROWS, f"#{part} ul > li")
+            for name, tops in rows.items():
+                check(f"strips {w} {part}: the {name} start on one line", max(tops) - min(tops) <= 1, str(tops))
         ctx.close()
 
 
@@ -494,7 +611,54 @@ def rooms(browser):
             ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply, "languages": languages, "rooms": rooms}
+SIZES = [(1920, 1080), (1536, 864), (1440, 900), (1280, 720), (1024, 768), (900, 1000), (768, 1024), (390, 844), (360, 740)]
+
+SMALL_TEXT = """() => [...document.querySelectorAll('main *')].filter(e => {
+  if (!e.childNodes.length || ![...e.childNodes].some(n => n.nodeType === 3 && n.textContent.trim())) return false;
+  const s = getComputedStyle(e); const r = e.getBoundingClientRect();
+  return r.width > 0 && r.height > 0 && s.visibility !== 'hidden' && parseFloat(s.fontSize) < 15;
+}).map(e => e.tagName + ' ' + e.textContent.trim().slice(0, 30))"""
+
+SMALL_TARGETS = """() => [...document.querySelectorAll('main a, main button, main summary')].filter(e => {
+  const r = e.getBoundingClientRect(); const s = getComputedStyle(e);
+  return r.width > 0 && s.visibility !== 'hidden' && (r.height < 44 && !e.closest('p, dd'));
+}).map(e => e.tagName + ' ' + e.textContent.trim().slice(0, 30) + ' ' + Math.round(e.getBoundingClientRect().height))"""
+
+
+def layout(browser):
+    for w, h in SIZES:
+        ctx, page, _, errors = opened(browser, w, h)
+        height = page.evaluate("document.documentElement.scrollHeight")
+        for y in range(0, height, h):
+            page.evaluate(f"window.scrollTo(0, {y})")
+            page.wait_for_timeout(120)
+        page.wait_for_timeout(800)
+        overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
+        check(f"layout {w}x{h}: no sideways scroll", overflow <= 0, str(overflow))
+        small = page.evaluate(SMALL_TEXT)
+        check(f"layout {w}x{h}: text 15px or larger", not small, "; ".join(small[:4]))
+        targets = page.evaluate(SMALL_TARGETS)
+        check(f"layout {w}x{h}: targets 44px or larger", not targets, "; ".join(targets[:4]))
+        check(f"layout {w}x{h}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+
+
+def deep_links(browser):
+    # globals.css sets scroll-padding-top: 150px, so a correct landing puts the part's top at about
+    # 150px, under the menu bar (controller's ruling, October 14); its heading must clear the bar.
+    for w, h in [(1440, 900), (390, 844)]:
+        for part in ["scientists", "research", "health", "ask"]:
+            ctx, page, _, _ = opened(browser, w, h, path=f"{PATH}#{part}")
+            page.wait_for_timeout(1500)
+            top = page.evaluate(f"document.getElementById('{part}').getBoundingClientRect().top")
+            heading = page.evaluate(f"document.querySelector('#{part} h1, #{part} h2').getBoundingClientRect().top")
+            bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")
+            check(f"deep_links {w} #{part}: lands at its part", -5 <= top <= 220 or part == "scientists", f"top {top:.0f}")
+            check(f"deep_links {w} #{part}: heading clear of the menu bar", heading >= bar - 1, f"{heading:.0f} vs {bar:.0f}")
+            ctx.close()
+
+
+SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journey, "settled": settled, "still": still, "multiply": multiply, "languages": languages, "rooms": rooms, "layout": layout, "deep_links": deep_links}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

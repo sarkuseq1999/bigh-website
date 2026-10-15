@@ -16,15 +16,16 @@
   }
 }
 
-/* The one shadow (DESIGN.md): the real photograph on its paper mat. */
+/* The one shadow (DESIGN.md, "Photo mount"): the real photograph on its paper mat, the same on
+   the homepage (scientists.module.css) and About (about-page.module.css). */
 .mount {
   width: min(300px, 70vw);
   margin: 0;
   padding: 14px 14px 16px;
   background: #fbf9f4;
   box-shadow:
-    0 1px 2px rgba(28, 27, 25, 0.1),
-    0 10px 28px -12px rgba(28, 27, 25, 0.28);
+    0 22px 44px -22px rgba(12, 11, 10, 0.42),
+    0 3px 8px rgba(12, 11, 10, 0.1);
 }
 
 .mount img {
@@ -47,16 +48,27 @@
   line-height: 1.4;
 }
 
-.intro {
+/* Scoped one step above the kit's .look .body { margin: 0 } (0,2,0), which a single class loses to. */
+.liu p.intro {
   margin-top: 10px;
   max-width: 640px;
 }
 
+/* Three rows shared by the three numbers (subgrid): the numbers, their labels, their "Source"
+   links. Each row is as tall as its tallest cell, so the links stand on one line whatever a
+   label's length (or its translation). */
 .numbers {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 190px));
-  gap: 32px;
+  column-gap: 32px;
   margin: 30px 0 0;
+}
+
+.numbers > div {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
 }
 
 .numbers dt {
@@ -68,11 +80,40 @@
   color: var(--ink);
 }
 
+/* The label (an anonymous grid item) on the second row, the link on the third. */
 .numbers dd {
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  row-gap: 0;
+  align-items: start;
   margin: 10px 0 0;
   color: var(--muted);
   font-size: 15px;
   line-height: 1.4;
+}
+
+/* Phones: three columns of about 90px left the labels five or six lines deep. Each number stands
+   in its own row instead, its label beside it from the number's top. */
+@media (max-width: 559px) {
+  .numbers {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 10px;
+  }
+
+  .numbers > div {
+    grid-row: auto;
+    grid-template-rows: none;
+    grid-template-columns: 112px minmax(0, 1fr);
+    column-gap: 16px;
+    align-items: start;
+  }
+
+  .numbers dd {
+    display: block;
+    grid-row: auto;
+    margin: 2px 0 0;
+  }
 }
 
 /* The link starts on its own line under every label, whatever its length (or its translation),
@@ -127,6 +168,9 @@
   text-wrap: balance;
 }
 
+/* Three rows shared by each row of bottles (subgrid, through the link): the bottles stand on one
+   ground line, the names start on one line and the credits on the next, however many lines a name
+   or a credit takes. */
 .bottles {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -139,22 +183,38 @@
 @media (min-width: 960px) {
   .bottles {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    align-items: end;
   }
 }
 
 .bottles li {
+  display: grid;
+  grid-row: span 3;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   text-align: center;
 }
 
+/* Phones: the fifth bottle stands in the middle of its row, at a column's width. */
+@media (max-width: 959px) {
+  .bottles li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+    justify-self: center;
+    width: calc(50% - 10px);
+  }
+}
+
 .bottleLink {
-  display: block;
+  display: grid;
+  grid-row: span 2;
+  grid-template-rows: subgrid;
+  row-gap: 0;
   color: var(--ink);
   text-decoration: none;
 }
 
 .bottleLink img {
   display: block;
+  align-self: end;
   width: auto;
   height: clamp(150px, 14vw, 200px);
   margin: 0 auto;
@@ -171,6 +231,7 @@
 
 .bottleName {
   display: block;
+  align-self: start;
   margin-top: 20px;
   font-family: var(--display-font);
   font-size: 24px;
@@ -179,6 +240,7 @@
 }
 
 .credit {
+  align-self: start;
   margin: 8px 0 0;
   color: var(--muted);
   font-size: 15px;

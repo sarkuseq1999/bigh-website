@@ -24,6 +24,12 @@ where the ink is thinnest near its thirds. The mugs' crop (0.27-0.70 of the stri
 that keeps both mugs, handles included, clear of the faded ends, so they are as large as they can
 be on a phone.
 
+The mugs' steam (Task 6 review, October 14): its strokes are thin and light, so the ink box (a
+blurred mask) missed them and cut the strip's top at the mugs' rims, and the steam the painting was
+made for was gone. TOPS keeps each named strip's top at that row of the original (the steam starts
+at about row 250), on the wide strip and the phone crop. The mugs' pictures are v2 (MUGS_V): a
+picture whose content changes gets a new name, so no cache serves the old one.
+
 usage: python -X utf8 reference/ink-pages/science/build_science.py
 """
 
@@ -62,6 +68,8 @@ STOP_X = {"okayama": 756, "berkeley": 3508, "y2002": 4118, "salzburg": 5000, "to
 PHONE_H = 400  # the scroll's phone picture: 300px tall on screen, 1.33x
 EDGE = 0.03
 PHONE_FADE = 0.08  # the phone crops' cut ends (middle()): fade to paper over this share of their width
+TOPS = {"mugs": 225}  # a strip's top row on its original, where the ink box misses light strokes
+MUGS_V = "v2"
 
 bd.ORIG = HERE / "originals"
 bd.URL = URL
@@ -114,26 +122,29 @@ def handscroll():
 
 def strip(key, pad=0.04):
     flat = bd.divided(bd.load(TAKES[key]))
-    return bd.levelled(flat.crop(bd.ink_box(np.asarray(flat), pad=pad)))
+    x0, y0, x1, y1 = bd.ink_box(np.asarray(flat), pad=pad)
+    return bd.levelled(flat.crop((x0, min(y0, TOPS.get(key, y0)), x1, y1)))
 
 
-def middle(img, start, end):
+def middle(img, start, end, keep_top=False):
     """The middle of a strip for phones, trimmed to its ink. The cut drops the shelf's and the
     table's legs, so the rows the strip kept for them would be dead paper under the ink (about 40%
     of the mugs', 15% of the scrolls': October 14 review): the crop's ink box (bd.ink_box, on the
     crop itself) sets its top and bottom. The cut runs through the shelf and the table, so its two
     ends dissolve into paper (a smoothstep over PHONE_FADE of the crop's width) instead of ending
-    in a straight edge that would show on the page."""
+    in a straight edge that would show on the page. keep_top keeps the strip's own top (TOPS: light
+    strokes above the ink box, the mugs' steam)."""
     crop = img.crop((round(img.width * start), 0, round(img.width * end), img.height))
     _, top, _, bottom = bd.ink_box(np.asarray(crop), pad=0.04)
+    top = 0 if keep_top else top
     crop = crop.crop((0, top, crop.width, bottom))
     side = round(crop.width * PHONE_FADE)
     arr = faded(np.asarray(crop).astype(np.float32), side, side)
     return Image.fromarray(np.clip(np.rint(arr), 0, 255).astype(np.uint8))
 
 
-def finish(img, name, width):
-    return bd.art_of(bd.feathered(img, EDGE), f"{name}-{V}", width)
+def finish(img, name, width, v=V):
+    return bd.art_of(bd.feathered(img, EDGE), f"{name}-{v}", width)
 
 
 def cut_near(img, frac, span=0.08):
@@ -179,6 +190,9 @@ if __name__ == "__main__":
             "scroll": handscroll(),
             "scrolls": {**finish(scrolls, "scrolls", 2400), "phone": finish(middle(scrolls, 0.3, 0.7), "scrolls-phone", 1000)},
             "health": {**finish(health, "health", 2400), "scenes": scenes(health)},
-            "mugs": {**finish(mugs, "mugs", 2400), "phone": finish(middle(mugs, 0.27, 0.70), "mugs-phone", 1000)},
+            "mugs": {
+                **finish(mugs, "mugs", 2400, MUGS_V),
+                "phone": finish(middle(mugs, 0.27, 0.70, keep_top=True), "mugs-phone", 1000, MUGS_V),
+            },
         }
     )

@@ -2,7 +2,13 @@
 
 The homepage, product page and About page link to the Science page, some to one of its
 sections (/science#health). A section link passes only when that section's heading is on
-screen after the page has settled (the film opening is pinned, so a jump can land short).
+screen after the page has settled (the handscroll is pinned, so a jump can land short).
+
+October 14, 2026 (Science ink, Task 6): brought up to the site as it is. The menu's Science
+links are now "Cellular health" and "Research library"; the ink homepage has no "Meet our
+scientists" hero link (the menu's "Explore the science" leads to the page's top instead) and
+its cell's link reads "Explore cellular health" (to /science#health); the product page's
+"Science" in the menu bar opens the drop-down (its "Explore the science" leads to the page).
 
 Run with the dev server up: python scripts/qa/qa_science_links.py [base-url]
 """
@@ -47,8 +53,8 @@ with sync_playwright() as p:
     # Homepage header: Science menu, each of its four links.
     for label, section in (
         ("Our scientists", "scientists"),
-        ("Cellular health, explained", "health"),
-        ("Explore the research", "research"),
+        ("Cellular health", "health"),
+        ("Research library", "research"),
         ("Ask BiGH Science", "ask"),
     ):
         ctx, page = fresh("/")
@@ -63,21 +69,23 @@ with sync_playwright() as p:
         )
         ctx.close()
 
-    # Homepage hero "Meet our scientists" -> the Science page, at its top.
+    # Homepage menu "Explore the science" -> the Science page, at its top.
     ctx, page = fresh("/")
-    page.get_by_role("link", name="Meet our scientists").first.click()
+    page.get_by_role("button", name="Science", exact=True).first.click()
+    page.wait_for_timeout(500)
+    page.get_by_role("link", name="Explore the science").first.click()
     y = landed(page, None)
-    check("home hero 'Meet our scientists' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
+    check("home menu 'Explore the science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
     ctx.close()
 
-    # Homepage "Explore the science" (under the glass cell).
+    # Homepage "Explore cellular health" (beside the cell) -> /science#health.
     ctx, page = fresh("/")
-    link = page.get_by_role("link", name="Explore the science").first
+    link = page.get_by_role("link", name="Explore cellular health").first
     link.scroll_into_view_if_needed()
     page.wait_for_timeout(800)
     link.click()
-    y = landed(page, None)
-    check("home 'Explore the science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
+    top = landed(page, "health")
+    check("home 'Explore cellular health' -> /science#health", top is not None and -40 <= top <= 300, f"url={page.url} sectionTop={top}")
     ctx.close()
 
     # Homepage footer "Cellular health" -> /science#health.
@@ -89,11 +97,13 @@ with sync_playwright() as p:
     check("home footer 'Cellular health' -> /science#health", top is not None and -40 <= top <= 300, f"url={page.url} sectionTop={top}")
     ctx.close()
 
-    # Product page header "Science".
+    # Product page menu bar "Science" -> its drop-down's "Explore the science" -> /science top.
     ctx, page = fresh("/products/nuricell")
-    page.locator("header").get_by_role("link", name="Science", exact=True).first.click()
+    page.locator("header").get_by_role("button", name="Science", exact=True).first.click()
+    page.wait_for_timeout(500)
+    page.get_by_role("link", name="Explore the science").first.click()
     y = landed(page, None)
-    check("product header 'Science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
+    check("product menu 'Explore the science' -> /science top", page.url.endswith("/science") and y < 5, f"url={page.url} scrollY={y}")
     ctx.close()
 
     # Korean: the menu keeps the visitor's language.

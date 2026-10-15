@@ -19,6 +19,25 @@
   border-top: 1px solid var(--hair);
 }
 
+/* The research and health columns, from 960px: the three share four rows (subgrid), so the small
+   facts, the titles, the words and the links each start on one line however many lines a title
+   or its words take (at 1024px the first study's words run two lines longer than the second's).
+   The health scene's picture is hidden there, so it takes no row. */
+@media (min-width: 960px) {
+  .rows > li {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .rows .go,
+  .rows .links {
+    align-self: start;
+    justify-self: start;
+  }
+}
+
 .meta {
   margin: 0;
   color: var(--muted);

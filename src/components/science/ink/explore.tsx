@@ -45,7 +45,7 @@ export function Research() {
       phone={scienceArt.scrolls.phone}
       alt={ink.scrollsAlt}
     >
-      <ul className={styles.cols}>
+      <ul className={`${styles.cols} ${styles.rows}`}>
         {KEY.map((item) => (
           <li key={item.url} className={styles.col}>
             {/* year · kind · journal: the kind is the first part of the category */}
@@ -130,7 +130,7 @@ export function Health() {
       alt={ink.healthAlt}
       wideOnly
     >
-      <ul className={styles.cols}>
+      <ul className={`${styles.cols} ${styles.rows}`}>
         {health.doors.map((door, index) => {
           const scene = scienceArt.health.scenes[index];
           return (

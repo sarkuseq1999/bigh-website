@@ -1,11 +1,15 @@
-"""GPT Image 2.5 (Higgsfield "Marketing Studio Image 2.5 Flare") jobs for NuriCell's ink page.
+"""GPT Image 2.5 (Higgsfield "Marketing Studio Image 2.5 Flare") jobs for the Science ink page,
+"the handscroll" (spec docs/superpowers/specs/2026-10-14-science-ink-design.md).
 
-Mo gave $5 on October 9, 2026 for the mockups and the lantern (cap 70 jobs, worst case $4.90 at the
-$0.07 billed before refunds). Ledger: %LOCALAPPDATA%/HiggsfieldAPI/bigh-science-mock (set
-HF_RUN_STATE to it). One job at a time; never retried automatically.
+Mo gave $3 on October 13, 2026 for the Science mockups and the final paintings (cap 40 jobs, worst
+case $2.80 at the $0.07 billed before refunds). 15 jobs ran (October 13-14: the mockups, then the
+three handscroll panels, the poppies and the mugs; about $0.75); see README.md beside this file.
+Ledger: %LOCALAPPDATA%/HiggsfieldAPI/bigh-science-mock (the default; HF_RUN_STATE overrides it).
+One job at a time; never retried automatically. Pictures land in originals/ beside this file.
+Started from reference/ink-pages/nuricell/hf_nuricell.py.
 
-usage: HF_RUN_STATE=... python -X utf8 reference/ink-pages/nuricell/hf_nuricell.py <name> <prompt.txt>
-          [--aspect 3:4] [--quality high] [--resolution 2k] [--ref img.png ...]
+usage: python -X utf8 reference/ink-pages/science/hf_science.py <name> <prompt.txt>
+          [--aspect 21:9] [--quality high] [--resolution 2k] [--ref img.png ...]
 """
 
 import argparse
@@ -20,7 +24,7 @@ sys.path.insert(0, str(Path.home() / ".codex/skills/higgsfield-api/scripts"))
 import hf_api  # noqa: E402
 
 MODEL = "marketing-studio/image/flare"
-REPO = Path(r"C:/Users/mcbig/Documents/codes/bigh-science-ink")
+REPO = Path(__file__).resolve().parents[3]  # reference/ink-pages/science/ -> the repository
 STATE = Path(os.environ.get("HF_RUN_STATE", Path.home() / "AppData/Local/HiggsfieldAPI/bigh-science-mock"))
 LOCK = STATE / "submit.lock"
 LEDGER = STATE / "ledger-science-mock.jsonl"
