@@ -4,7 +4,8 @@ docs/superpowers/plans/2026-10-14-science-ink.md).
 
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Science, one h1, the parts' ids in order,
-              no canvas, no console errors (1440x900, 390x844)
+              no canvas, no console errors (1440x900, 390x844); (final review) the shared footer
+              promise and the menu's drop-down title in the same face as on About
   people      Dr. Liu's real photo on its mount, his name, numbers and sources, "Read his story"
               opens his sheet; the five bottles with their credits, each linking to its page;
               (Task 6) DESIGN.md's mount shadow, the intro's margin, the bottles, names and credits
@@ -14,12 +15,17 @@ Sections (all, or --only=a,b):
               (the title goes on under the bar) and a phone held sideways (the still scroll);
               (Task 6) from 960px the stop in view's inked dot in the window with the line inked to
               it and no other stop's words cut by the misty ends; a lifted box in the middle of the
-              window under the bar, its title faded
-  settled     (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran;
+              window under the bar, its title faded; (final review) the painting loaded, the phone
+              picture under 960px, bloomed in from the castle; a travel floor (the painting's
+              overflow at least 0.6 of the band's width at 1366x657, 1440x900, 1920x1080); the
+              other stops' sentences in the accessibility tree; very wide and short-wide windows
+              (3000px wide and more, or 3:1 and wider) get the still scroll
+  settled    (Task 3) #liu has the same offsetTop at DOMContentLoaded and after the script ran;
               (Task 4) #research, #health and #ask stand still once their paintings have arrived;
               (Task 6) a cold first visit: the last resort waits while the fonts arrive
   still       (Task 3) reduced motion and no script: nothing pins, every stop readable;
-              (Task 4) the strips' paintings whole and crisp (no bloom left waiting)
+              (Task 4) the strips' paintings whole and crisp (no bloom left waiting);
+              (final review) print: the still scroll, no travel room
   multiply    (Task 3, 4) every painting's blend group sits on the page with no stacking context
   strips      (Task 4) research, health and ask: the painting in use (phone crop under 960px) and
               bloomed in, year · kind · journal, the full list, each explainer's own sheet;
@@ -29,13 +35,17 @@ Sections (all, or --only=a,b):
               --stops-room cover what the pinned box needs besides the painting, with 20px to spare
   layout      (Task 6) sizes 1920 to 360: no sideways scroll, text 15px+, targets 44px+
   deep_links  (Task 6) #scientists, #research, #health, #ask land under the menu bar
-Pictures: scripts/qa/out/science-ink/.
+Pictures: scripts/qa/out/science-ink/ (webkit/ for --browser=webkit).
 
 usage: python -X utf8 scripts/qa/qa_science_ink.py [base-url] [--only=shell,people,...]
+       [--browser=chromium|webkit|firefox]  (default chromium; journey and settled are the sections
+       meant to run in WebKit too: --browser=webkit --only=journey,settled)
 """
 
+import os
 import re
 import sys
+import threading
 from pathlib import Path
 
 from playwright.sync_api import TimeoutError as PlaywrightTimeout, sync_playwright
@@ -44,8 +54,9 @@ sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3050"
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
+BROWSER = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--browser=")), "chromium")
 REPO = Path(__file__).resolve().parents[2]
-OUT = REPO / "scripts/qa/out/science-ink"
+OUT = REPO / "scripts/qa/out/science-ink" / ("" if BROWSER == "chromium" else BROWSER)
 OUT.mkdir(parents=True, exist_ok=True)
 PATH = "/en/science"
 PARTS = ["scientists", "liu", "formulas", "research", "health", "ask"]
@@ -81,9 +92,23 @@ def bring(page, selector, top=140):
     )
 
 
+# The shared pieces' title face: the footer's promise ("Stay sharp. Live fully.") and the menu
+# bar's Science drop-down title (in the page at every width, shown or not).
+SHARED_FACES = """() => ['[data-brush="footer-promise"] p', '[data-nav-panel="science"] h2']
+  .map(s => { const e = document.querySelector(s); return e ? getComputedStyle(e).fontFamily : null; })"""
+
+
 def shell(browser):
     for w, h in [(1440, 900), (390, 844)]:
+        # (Final review, Ruling 20) The page's Ysabeau is for its own titles only: the menu bar and
+        # the footer are shared and read as on About (and NuriCell), in Switzer.
+        ctx, page, _, _ = opened(browser, w, h, path="/en/about")
+        about = page.evaluate(SHARED_FACES)
+        ctx.close()
         ctx, page, response, errors = opened(browser, w, h)
+        faces = page.evaluate(SHARED_FACES)
+        for name, here, there in zip(["the footer's promise", "the menu's drop-down title"], faces, about):
+            check(f"shell {w}: {name} in the same face as on About", here is not None and here == there and "ysabeau" not in here.lower(), f"{here} | About: {there}")
         check(f"shell {w}: 200", response is not None and response.status == 200)
         check(f"shell {w}: ink look", page.locator('[data-look="ink"][data-page="science"]').count() == 1)
         check(f"shell {w}: Science carries the menu's stroke", page.locator('[data-nav-trigger="science"][data-ink="here"]').count() == 1)
@@ -227,6 +252,8 @@ STATE = """() => {
            link: box(cur && cur.querySelector('a')), reachable,
            innerHeight, innerWidth, scrollY, sectionBottom: s.getBoundingClientRect().bottom };
 }"""
+# A few words of each stop's sentence (science-content.ts pathStops, English).
+STOP_SENTENCES = ["Okayama University in Japan", "Bruce Ames’s laboratory", "Published in PNAS", "European Academy of Sciences and Arts", "guides the science behind our formulas"]
 
 
 # The stops whose dot shows inside the band while their words do not (opacity as rendered).
@@ -254,8 +281,53 @@ JOURNEY_SIZES = [
     (1366, 657, "en"), (390, 664, "en"), (375, 667, "en"), (844, 390, "en"),
     # (Task 5) a small old phone: under 360px wide the lifted box needs up to 586px (Vietnamese).
     (320, 568, "en"),
+    # (Final review, Ruling 21) Common large screens still travel; very wide windows (the painting,
+    # 3802px at its largest, barely wider than the band or narrower: 362px of travel at 3440, none
+    # at 3840) and short-wide ones (the painting narrower than the band at 1920x580-613,
+    # 2560x580-686 and, with the title kept, 2560x821-841) get the still scroll.
+    (1920, 1080, "en"), (2560, 1440, "en"),
+    (3840, 2160, "en"), (3440, 1440, "en"), (3000, 1300, "en"), (1920, 580, "en"), (1920, 613, "en"),
+    (2560, 580, "en"), (2560, 686, "en"), (2560, 830, "en"),
 ]
-STILL_SIZES = {(844, 390), (320, 568)}
+STILL_SIZES = {(844, 390), (320, 568), (3840, 2160), (3440, 1440), (3000, 1300), (1920, 580), (1920, 613), (2560, 580), (2560, 686), (2560, 830)}
+# (Final review, Ruling 19) The travel is accepted at its length (about 1.9 window heights at
+# 1440x900); this floor keeps a future crop or room change from making it barely move.
+TRAVEL_FLOOR = {(1366, 657), (1440, 900), (1920, 1080)}
+TRAVEL_SHARE = 0.6
+# (Final review) The scroll painting itself, and the stops' words in the accessibility tree.
+PAINTING_SIZES = {(1440, 900), (390, 844)}
+PAINTING = """() => { const i = document.querySelector('#scientists [data-painting]');
+  // The bloom's mask position as the cascade sets it while a painting waits (read with the mark
+  // set for a moment: once bloomed the painting has no mask), the painting's width, the castle's
+  // place on it (the first stop's --at).
+  const was = i.dataset.bloom; i.dataset.bloom = 'waiting';
+  const s = getComputedStyle(i); const mask = s.maskPosition || s.webkitMaskPosition; i.dataset.bloom = was;
+  return { natural: i.naturalWidth, src: decodeURIComponent(i.currentSrc), bloom: i.dataset.bloom, mask,
+           width: i.getBoundingClientRect().width,
+           castle: parseFloat(document.querySelector('#scientists li[data-stop="0"]').style.getPropertyValue('--at')) }; }"""
+
+
+def blot_middles(mask, width, sizes=(0.5, 1.0, 2.0)):
+    """Where the bloom's blot has its middle (px from the painting's left) at a few of its sizes
+    (a share of the painting's width): the first layer's x position, `p% + q px`, places the blot's
+    left edge at p% of (width - blot) + q."""
+    x = mask.split(",")[0].strip()
+    x = x[5:x.index(")")] if x.startswith("calc(") else x.split(" ")[0]
+    pct = px = 0.0
+    for sign, value, unit in re.findall(r"([+-]?)\s*(\d+(?:\.\d+)?)(%|px)", x):
+        v = -float(value) if sign == "-" else float(value)
+        if unit == "%":
+            pct += v
+        else:
+            px += v
+    return [pct / 100 * (width - s * width) + px + s * width / 2 for s in sizes]
+# Each stop not in view: its sentence and every box around it up to the section neither
+# display: none nor visibility other than visible (Ruling 3: only transparent).
+OTHERS_IN_TREE = """() => { const s = document.querySelector('#scientists');
+  return [...s.querySelectorAll('li[data-stop]')].filter(li => li.dataset.stop !== s.dataset.now).map(li => {
+    const bad = []; for (let e = li.querySelector('p'); e && e !== s; e = e.parentElement) {
+      const c = getComputedStyle(e); if (c.display === 'none' || c.visibility !== 'visible') bad.push(e.tagName + ' ' + c.display + ' ' + c.visibility); }
+    return li.dataset.stop + (bad.length ? ': ' + bad.join(', ') : ''); }); }"""
 
 
 def journey(browser):
@@ -282,6 +354,24 @@ def journey(browser):
             continue
         check(f"{tag}: travels (not the still scroll)", not start["still"])
         check(f"{tag}: room to travel", start["overflow"] > 0 and start["room"] >= start["overflow"] - 1, f"overflow {start['overflow']:.0f}, room {start['room']}")
+        band_w = start["bandRight"] - start["bandLeft"]
+        if (w, h) in TRAVEL_FLOOR and lang == "en":
+            check(f"{tag}: travel floor, the painting's overflow at least {TRAVEL_SHARE} of the band's width", start["overflow"] >= TRAVEL_SHARE * band_w, f"overflow {start['overflow']:.0f} = {start['overflow'] / band_w:.2f} x band {band_w:.0f}")
+        if (w, h) in PAINTING_SIZES and lang == "en":
+            # The painting arrived, the phone picture under 960px (the wide one from 960px), and it
+            # blooms in from the castle (about 9% across), not from its middle off-screen.
+            try:
+                page.wait_for_function("() => document.querySelector('#scientists [data-painting]').dataset.bloom === 'done'", timeout=9000)
+            except PlaywrightTimeout:
+                pass
+            art = page.evaluate(PAINTING)
+            check(f"{tag}: the scroll painting loaded", art["natural"] > 0, str(art["natural"]))
+            check(f"{tag}: the {'phone' if w < 960 else 'wide'} scroll picture in use", ("scroll-phone" in art["src"]) == (w < 960), art["src"][-48:])
+            check(f"{tag}: the scroll painting has bloomed in", art["bloom"] == "done", str(art["bloom"]))
+            # The blot's middle stays on the castle as it grows (within 2% of the painting's width).
+            middles = blot_middles(art["mask"], art["width"])
+            castle = art["castle"] * art["width"]
+            check(f"{tag}: the scroll painting blooms from the castle", all(abs(m - castle) <= 0.02 * art["width"] for m in middles), f"blot middle {[round(m) for m in middles]} vs castle {castle:.0f} ({art['mask']})")
         # The box sticks once it has risen to its sticky top (higher than the menu bar's foot when
         # the title goes on under the bar); the travel runs over the room from there.
         begin = max(0, start["padTop"] - start["stick"])
@@ -298,6 +388,17 @@ def journey(browser):
                 check(f"{tag} {step}/10: painting covers the band", st["imgLeft"] <= st["bandLeft"] + 1 and st["imgRight"] >= st["bandRight"] - 1)
                 check(f"{tag} {step}/10: the stop's sentence and link shown, in the window", st["textShown"] and inside(st["text"], w, h) and inside(st["link"], w, h), f"{st['text']} {st['link']}")
                 check(f"{tag} {step}/10: Tab reaches only shown links", all(st["reachable"]) and len(st["reachable"]) <= 1, str(st["reachable"]))
+                if step == 5 and (w, h) in PAINTING_SIZES and lang == "en":
+                    # (Final review) Ruling 3's guarantee, checked: the stops not in view are only
+                    # transparent, so the accessibility tree keeps all five sentences, in a list
+                    # (role="list": list-style none drops the list in Safari/VoiceOver).
+                    others = page.evaluate(OTHERS_IN_TREE)
+                    check(f"{tag} {step}/10: the other stops' sentences visible to the accessibility tree", len(others) == 4 and all(":" not in o for o in others), str(others))
+                    tree = page.locator("#scientists ol").aria_snapshot()
+                    missing = [t for t in STOP_SENTENCES if t not in tree]
+                    check(f"{tag} {step}/10: the accessibility tree has the stops' list and all five sentences", tree.lstrip().startswith("- list") and not missing, f"{tree.strip()[:40]!r}, missing {missing}")
+                    role = page.evaluate("document.querySelector('#scientists ol').getAttribute('role')")
+                    check(f"{tag} {step}/10: the stops' list says role=list", role == "list", str(role))
                 if step == 5 and st["mode"] == "lift":
                     # (Task 6) A lifted box stands in the middle of what the menu bar leaves (a
                     # tall phone left about 220px of blank paper under the words), and its title,
@@ -343,6 +444,20 @@ def journey(browser):
         ctx.close()
 
 
+# Where the travel starts and how long its room is (as shoot_science_ink.py).
+TRAVEL = """() => {
+  const s = document.querySelector('#scientists'); const pin = s.querySelector('[data-pin]');
+  const pad = parseFloat(getComputedStyle(s).paddingTop); const stick = parseFloat(getComputedStyle(pin).top);
+  return [Math.max(0, pad - stick), s.querySelector('[data-room]').offsetHeight];
+}"""
+# The handscroll as printed: each part's opacity is its own times its boxes' up to the page.
+PRINTED = """() => { const s = document.querySelector('#scientists'); const pin = s.querySelector('[data-pin]');
+  const op = e => { let o = 1; for (; e && e !== document.body; e = e.parentElement) o *= Number(getComputedStyle(e).opacity); return o; };
+  return { room: s.querySelector('[data-room]').offsetHeight, pin: getComputedStyle(pin).position,
+           transform: getComputedStyle(s.querySelector('[data-painting]')).transform, title: op(pin.firstElementChild),
+           stops: [...s.querySelectorAll('li[data-stop] p')].map(p => op(p) === 1 && p.getBoundingClientRect().height > 0) }; }"""
+
+
 def still(browser):
     for label, kwargs in [("reduced motion", {"reduced": True}), ("no script", {"js": False})]:
         for w, h in [(1440, 900), (390, 844)]:
@@ -374,6 +489,25 @@ def still(browser):
                 check(f"still {label} {w}: {name} whole and crisp, only its own soft ends", ok, f"{filt} | {mask[:40]} | {opacity}")
             page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
             ctx.close()
+    # (Final review) Printed: the still scroll once, not the travel's room (about two pages of
+    # blank paper), even when the visitor prints from the middle of the travel (the painting moved,
+    # a lifted title faded).
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h)
+        page.wait_for_timeout(800)
+        begin, room = page.evaluate(TRAVEL)
+        page.evaluate(f"window.scrollTo(0, {begin + room * 0.5})")
+        page.wait_for_timeout(400)
+        page.emulate_media(media="print")
+        page.wait_for_timeout(1000)
+        d = page.evaluate(PRINTED)
+        check(f"still print {w}: no travel room", d["room"] == 0, str(d["room"]))
+        check(f"still print {w}: nothing pins", d["pin"] == "static", d["pin"])
+        check(f"still print {w}: the painting from its start (not moved)", d["transform"] == "none", d["transform"])
+        check(f"still print {w}: the title shown", d["title"] == 1, str(d["title"]))
+        check(f"still print {w}: all five stops readable", d["stops"] == [True] * 5, str(d["stops"]))
+        page.screenshot(path=str(OUT / f"still-print-{w}.png"))
+        ctx.close()
 
 
 # useJourney's LAST_RESORT (use-journey.ts): the first words of the warning its last resort logs.
@@ -587,6 +721,10 @@ def strips(browser):
         for word in ["Ask BiGH Science", "In development", "not accepting submissions"]:
             check(f"strips {w} ask: {word}", word in ask)
         check(f"strips {w} ask: three numbered steps", page.locator("#ask ol > li").count() == 3)
+        # (Final review) list-style none drops the list's role in Safari/VoiceOver: role="list".
+        steps_role = page.evaluate("document.querySelector('#ask ol').getAttribute('role')")
+        steps_tree = page.locator("#ask ol").aria_snapshot()
+        check(f"strips {w} ask: the steps are a list to screen readers (role=list)", steps_role == "list" and steps_tree.lstrip().startswith("- list"), f"{steps_role} {steps_tree.strip()[:30]!r}")
         check(f"strips {w}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
     # (Task 6) From 960px the research and health columns share their rows: the titles, the words
@@ -722,11 +860,17 @@ SECTIONS = {"shell": shell, "people": people, "strips": strips, "journey": journ
 
 if __name__ == "__main__":
     with sync_playwright() as p:
-        browser = p.chromium.launch()
+        browser = getattr(p, BROWSER).launch()
+        print(f"browser: {BROWSER} {browser.version}", flush=True)
         for name, run in SECTIONS.items():
             if ONLY is None or name in ONLY:
                 run(browser)
+        failed = [r for r in results if not r[1]]
+        print(f"\n{len(results) - len(failed)}/{len(results)} passed", flush=True)
+        # The count is in before the browser closes: one WebKit run (Windows, October 14) never
+        # returned from closing after its last check, so a stuck close ends the run after 60s.
+        watchdog = threading.Timer(60, lambda: os._exit(1 if failed else 0))
+        watchdog.daemon = True
+        watchdog.start()
         browser.close()
-    failed = [r for r in results if not r[1]]
-    print(f"\n{len(results) - len(failed)}/{len(results)} passed")
     sys.exit(1 if failed else 0)

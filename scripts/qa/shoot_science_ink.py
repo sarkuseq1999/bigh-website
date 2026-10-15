@@ -3,6 +3,7 @@ those). Each screen as a visitor scrolls to it: the opening, the scroll at a qua
 end, Dr. Liu, the formulas, each strip (its header and painting, then its words), the footer.
 
 usage: python -X utf8 scripts/qa/shoot_science_ink.py [base-url] [--sizes=1440x900,390x844] [--lang=en]
+       [--screens=footer,opening]  (only those screens, same file names; default all)
 Pictures: scripts/qa/out/science-ink/final/<size>-<nn>-<screen>.png
 """
 
@@ -17,6 +18,7 @@ BASE = ARGS[0] if ARGS else "http://localhost:3050"
 OPTS = dict(a[2:].split("=", 1) for a in sys.argv[1:] if a.startswith("--") and "=" in a)
 SIZES = [tuple(map(int, s.split("x"))) for s in OPTS.get("sizes", "1440x900,1280x720,1024x768,390x844").split(",")]
 LANG = OPTS.get("lang", "en")
+SCREENS = set(OPTS["screens"].split(",")) if "screens" in OPTS else None
 OUT = Path(__file__).resolve().parents[2] / "scripts/qa/out/science-ink/final"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -65,6 +67,8 @@ def shoot(browser, w, h):
         screens.append((f"{part}-words", y))
     screens.append(("footer", page.evaluate("document.documentElement.scrollHeight - innerHeight")))
     for n, (name, y) in enumerate(screens, 1):
+        if SCREENS is not None and name not in SCREENS:
+            continue
         if y is not None:
             settle(page, max(0, y))
         path = OUT / f"{w}x{h}-{n:02d}-{name}{'' if LANG == 'en' else '-' + LANG}.png"

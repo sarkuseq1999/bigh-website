@@ -22,8 +22,9 @@
      re-evaluate max-height as its toolbar comes and goes, and a large phone (about 740 to 830px
      tall) would then switch layouts mid-page; the only height a phone's layout depends on is the
      still threshold.
-   - still (windows too short even then, a phone held sideways; and reduced motion, no script):
-     the still scroll below.
+   - still (windows too short even then, a phone held sideways; windows too wide for the painting
+     to travel, 3000px and wider or 3:1 and wider; and reduced motion, no script, print): the still
+     scroll below.
    The rooms were measured October 14 after the translations (Task 5), in all five languages at
    280 to 2560px wide: title, stops, foot and gaps, plus useJourney's own 12px, plus about one line
    to spare (24 to 25px from 960px; 24 to 29px on phones, where the hint's line is 25px), so one
@@ -111,10 +112,21 @@
 
 /* Too short even without the title (the lifted box with the painting at its least: about 512px on
    a phone, 586px under 360px wide in Vietnamese, 578px from 960px): the still scroll, as for
-   reduced motion (the rules are in that block's media list). */
-@media (max-width: 959px) and (max-height: 519px),
+   reduced motion (the rules are in that block's media list). So do windows too wide for the
+   painting to travel (final review, Ruling 21; measured October 14 in English): at its largest it
+   is 3802px wide (430px tall), so it moved 362px at 3440 wide and not at all at 3840 (from 3000px
+   it moves about a quarter of the band's width at most); and windows 3 or more times as wide as
+   they are tall, where the painting is too low to fill the band (1920x580-613, 2560x580-686, and
+   with the title kept 2560x821-841) or barely wider than it (1920x640, 2560x853: 101px).
+   1920x1080, 2560x1440, 1440x900 and 2560x1080 still travel. And print, where nothing moves (the
+   room would print as pages of blank paper). Every still list in this file names these queries:
+   change them together. */
+@media print,
+  (max-width: 959px) and (max-height: 519px),
   (max-width: 359px) and (max-height: 589px),
-  (min-width: 960px) and (max-height: 579px) {
+  (min-width: 960px) and (max-height: 579px),
+  (min-width: 960px) and (min-aspect-ratio: 3/1),
+  (min-width: 3000px) {
   .journey {
     --mode: still;
   }
@@ -141,7 +153,14 @@
   mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
 }
 
+/* It blooms in from the castle (Okayama, about 9% across), where the travel starts, not from its
+   middle, off-screen to the right (a wipe from the right). The kit grows its ink blot from
+   --bloom-origin, a mask position: a plain "9%" would pin the blot's own 9% column, its transparent
+   edge, to the castle, and the castle would show only once the bloom ends. This keeps the blot's
+   middle on the castle as it grows: 50% puts its middle on the painting's, then the painting's
+   width (band height x ratio) times 0.41 moves it left to 9%. */
 .painting {
+  --bloom-origin: calc(50% - 0.41 * var(--band-h) * var(--ratio)) 50%;
   display: block;
   width: auto;
   max-width: none;
@@ -457,17 +476,20 @@
   }
 }
 
-/* Reduced motion, a page whose script never runs, a window too short for the pinned box (the
-   same queries as --mode: still above), and useJourney's last resort (data-still): nothing pins
-   or moves. The band scrolls sideways under the visitor's own hand, and all five stops are read in
-   a row (a list on phones). The two blocks below say the same thing (a media query cannot also
-   name an attribute): change both. :global([data-look]) outranks the kit's bloom rules whatever
-   order they load in. */
-@media (prefers-reduced-motion: reduce),
+/* Reduced motion, a page whose script never runs, print, a window too short or too wide for the
+   travel (the same queries as --mode: still above), and useJourney's last resort (data-still):
+   nothing pins or moves. The band scrolls sideways under the visitor's own hand, and all five
+   stops are read in a row (a list on phones). The two blocks below say the same thing (a media
+   query cannot also name an attribute): change both. :global([data-look]) outranks the kit's bloom
+   rules whatever order they load in. */
+@media print,
+  (prefers-reduced-motion: reduce),
   (scripting: none),
   (max-width: 959px) and (max-height: 519px),
   (max-width: 359px) and (max-height: 589px),
-  (min-width: 960px) and (max-height: 579px) {
+  (min-width: 960px) and (max-height: 579px),
+  (min-width: 960px) and (min-aspect-ratio: 3/1),
+  (min-width: 3000px) {
   .room,
   .rail,
   .dots,
@@ -477,6 +499,12 @@
 
   .pin {
     position: static;
+  }
+
+  /* A lifted title faded once the box stuck (data-stuck): useJourney clears the mark when the
+     window turns still, but nothing runs while a page prints. */
+  .journey[data-stuck] .pin > :first-child {
+    opacity: 1;
   }
 
   .band {
@@ -608,8 +636,11 @@
   color: var(--ink);
 }
 
+/* The still scroll under 960px: the stops one under another. (The wide still queries, 3:1 and
+   3000px, start at 960px; a window under 960px that wide is already still for its height.) */
 @media (max-width: 959px) and (prefers-reduced-motion: reduce),
   (max-width: 959px) and (scripting: none),
+  print and (max-width: 959px),
   (max-width: 959px) and (max-height: 519px),
   (max-width: 359px) and (max-height: 589px) {
   .stops {

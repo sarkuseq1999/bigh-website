@@ -1,8 +1,10 @@
 /* The Science page in Ink & Gold, "the handscroll" (Mo, October 13-14, 2026; spec
-   docs/superpowers/specs/2026-10-14-science-ink-design.md). Titles in Ysabeau, the homepage's title
-   face; menus, words and pills stay in the kit's Switzer. The attribute outranks the kit's .look
-   rule in either stylesheet order (as home-titles.module.css). */
-.page[data-look="ink"] {
+   docs/superpowers/specs/2026-10-14-science-ink-design.md). The page's own titles in Ysabeau, the
+   homepage's title face; menus, words and pills stay in the kit's Switzer. Set on main, not the
+   page's root: the menu bar (its drop-downs' titles) and the footer (its promise) are shared and
+   read --display-font as on About and NuriCell (final review, Ruling 20). The attribute outranks
+   the kit's .look rule in either stylesheet order (as home-titles.module.css). */
+.page[data-look="ink"] main {
   --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
 }
 

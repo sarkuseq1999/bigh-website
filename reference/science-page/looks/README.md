@@ -25,3 +25,6 @@ To bring the film back (October 14, 2026): move `film/*.ts`, `*.tsx` and `*.modu
 pictures it used, removed from `public/images/science-page/` in commit 6aa001d (`git checkout 6aa001d~1 --
 public/images/science-page/`; originals in `reference/science-page/originals/` and `.../originals/film/`).
 The looks above also need `science-page.tsx` from `film/`, since the old page now lives there.
+The film and the looks also read `liuStory` and `opening.titleLead` / `opening.titleAccent`, removed
+from `src/components/science/science-content.ts` on October 14, 2026 (unused by the ink page): take
+them back from `git show 8cc9238:src/components/science/science-content.ts`.

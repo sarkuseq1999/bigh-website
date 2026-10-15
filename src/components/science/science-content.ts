@@ -17,9 +17,6 @@ export const opening = {
   eyebrow: "Science",
   // Mo's proposed opening (BRAND-CHEATSHEET.md, "Science page — opening priority chosen by Mo").
   title: "Meet the scientists behind BiGH’s key formulas.",
-  // The hero sets it in two lines: plain words, then a gold serif line.
-  titleLead: "Meet the scientists",
-  titleAccent: "behind BiGH’s key formulas.",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
@@ -73,20 +70,6 @@ export const liuNumbers = [
     url: "https://www.uhrs.edu.cn/info/1050/1805.htm",
   },
 ];
-
-// The story panel ("Read his story"). The first two paragraphs are the homepage's own dialog text.
-export const liuStory = {
-  eyebrow: "Meet the scientists",
-  paragraphs: [
-    "Dr. Liu studies mitochondrial function, oxidative stress, and the biology of aging. His scientific background is central to BiGH’s approach to cellular health.",
-    "He earned his doctorate at Okayama University in Japan and completed postdoctoral work in biochemistry and molecular biology at the University of California, Berkeley.",
-    "In 2025, his university announced his election to the European Academy of Sciences and Arts.",
-  ],
-  sources: [
-    { label: "University biography (Chinese)", url: "https://www.uhrs.edu.cn/info/1050/1805.htm" },
-    { label: "Read the 2002 study", url: "https://pubmed.ncbi.nlm.nih.gov/11854529/" },
-  ],
-};
 
 // DRAFT. Words only, never a photograph. Credits confirmed by Mo on September 25, 2026: NuriCell is
 // formulated by Dr. Liu only ("credit goes to Dr. Liu only"); Nature Calm by Dr. Liu and Dr. Iris

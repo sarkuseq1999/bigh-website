@@ -6,8 +6,11 @@ Mo picked idea A, "the handscroll" (October 13), and approved the whole page (Oc
 `docs/superpowers/specs/2026-10-14-science-ink-design.md`; plan:
 `docs/superpowers/plans/2026-10-14-science-ink.md`; mockups: `reference/ink-pages/mockups/science-ink/`.
 Code: `src/components/science/ink/`; paintings: `reference/ink-pages/science/` (build script, originals,
-prompts, spend). QA: `scripts/qa/qa_science_ink.py`; review shots: `scripts/qa/shoot_science_ink.py`
-(viewport shots; full-page shots break the pinned scroll). The film page it replaced is in
+prompts, spend). QA: `scripts/qa/qa_science_ink.py` (`--browser=webkit --only=journey,settled` for
+Safari's engine); review shots: `scripts/qa/shoot_science_ink.py` (viewport shots; full-page shots
+break the pinned scroll; `--screens=` re-shoots only some). The handscroll travels about 1.9 window
+heights at 1440x900 (accepted; a QA floor guards it); windows 3000px wide or wider, or 3 times as
+wide as tall, and print show the still scroll (final review, October 14). The film page it replaced is in
 `reference/science-page/looks/film/`. Open: a native check of the draft translations (m650 upward);
 most older Science lines are still English on the other languages (as before this page).
 

@@ -23,8 +23,9 @@ const AT = [
  * The handscroll (Mo, October 13-14, 2026): the title, then Dr. Liu's path as one ink painting
  * that travels sideways while the page scrolls down (Okayama, the ocean, Berkeley, Salzburg,
  * California under a gold sun), its five stops under their places. Phones get a shorter picture
- * (the same painting, 400px tall). Reduced motion, no script and a window too short for the pinned
- * box (useJourney): the still scroll, whose band the visitor scrolls sideways.
+ * (the same painting, 400px tall). Reduced motion, no script, print and a window too short for the
+ * pinned box or too wide for the painting to travel (journey.module.css, useJourney): the still
+ * scroll, whose band the visitor scrolls sideways.
  */
 export function Journey({ motion }: { motion: boolean }) {
   const copy = useCopy();
@@ -87,7 +88,8 @@ export function Journey({ motion }: { motion: boolean }) {
           <div className={styles.rail} aria-hidden="true">
             <span />
           </div>
-          <ol className={styles.stops}>
+          {/* role="list": list-style none drops the list in Safari/VoiceOver. */}
+          <ol className={styles.stops} role="list">
             {pathStops.map((stop, i) => (
               <li key={stop.mark} data-stop={i} style={{ "--at": AT[i] } as CSSProperties}>
                 <i className={styles.dot} aria-hidden="true" />

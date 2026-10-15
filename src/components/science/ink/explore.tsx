@@ -182,7 +182,8 @@ export function Ask() {
       phone={scienceArt.mugs.phone}
       alt={ink.mugsAlt}
     >
-      <ol className={styles.cols}>
+      {/* role="list": list-style none drops the list in Safari/VoiceOver. */}
+      <ol className={styles.cols} role="list">
         {ask.steps.map((step, index) => (
           <li key={step} className={styles.col}>
             <span className={styles.number}>{index + 1}</span>
