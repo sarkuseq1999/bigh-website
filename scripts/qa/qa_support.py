@@ -444,6 +444,20 @@ def questions(browser):
     check("questions: Ask BiGH Science opens its sheet", page.evaluate("!!document.querySelector('dialog[open]')"))
     page.keyboard.press("Escape")
     context.close()
+    # The page's last words stand clear of the footer, which (since October 13) opens straight onto
+    # its link columns: with too little paper between them the Ask BiGH Science pill sat over the
+    # Products column and read as the footer's (the homepage keeps about 120px there).
+    for width, height in ((1440, 900), (390, 844)):
+        context, page, *_ = open_page(browser, width, height)
+        page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
+        page.wait_for_timeout(600)
+        gap = page.evaluate("""(() => {
+          const footer = document.querySelector('footer');
+          const first = Math.min(...[...footer.querySelectorAll('h2, p, a, img, span')].map(e => e.getBoundingClientRect())
+            .filter(r => r.width && r.height).map(r => r.top));
+          return Math.round(first - document.querySelector('#questions button').getBoundingClientRect().bottom); })()""")
+        check(f"questions {width}: the last words stand clear of the footer (100px+ of paper)", gap >= 100, gap)
+        context.close()
 
 
 TICKET = re.compile(r"^BH-\d{4}-[A-HJKMNP-Z2-9]{4}$")

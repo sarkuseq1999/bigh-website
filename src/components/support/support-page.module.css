@@ -425,10 +425,9 @@
   font-weight: 450;
 }
 
-/* The page's last part leads into the footer's finale, which opens on its own paper. */
-.supportPage section[data-part="questions"] {
-  padding-bottom: 0;
-}
+/* The page's last part keeps its bottom half-gap, like every part: since October 13 the footer
+   opens straight onto its link columns (no band of its own), and without it the Ask BiGH Science
+   pill sat over the Products column and read as the footer's. */
 
 /* ---- The form: writing lines on the paper, never boxes ------------------------------------- */
 
