@@ -31,8 +31,9 @@
    the page's most needed fact): the porch shrinks with the window's height to make room, never
    under 560px nor over 720px (a phone keeps its column's width). 400px is the rest of that screen
    (the bar, the title, the lead, the contact row and their gaps); 1.18 is the porch's width over
-   its height (1286 x 1090). At 1440x900 it is about 590px wide; at 1536x864 and below it stays at
-   560px, and on a window under about 880px tall the contact row starts at the fold. */
+   its height (1286 x 1090). At 1440x900 it is about 590px wide; on a window under about 875px tall
+   it stays at 560px, and under about 835px tall (measured at 1440 wide; 820px at 1280, 850px at
+   1536) the contact row runs past the fold. */
 .supportPage .porch {
   --picture: clamp(560px, calc((100svh - 400px) * 1.18), 720px);
   margin-inline: auto;
@@ -175,11 +176,18 @@
   mask-image: linear-gradient(to top, #000 calc(var(--rise) - 14%), transparent var(--rise));
 }
 
-/* The gold never rises alone over bare paper (About's circle, Mo). The kit opens a painting's
+/* The gold never shows alone over bare paper (About's circle, Mo). The kit opens a painting's
    bloom as soon as its box is on screen, picture or not, so the rise waits for two things: the
    bloom, and spread.tsx marking the steam data-steam="ready" (the porch's picture and the steam's
    own are in; a failed picture never marks it). Until then the steam stays at 0 (fully masked).
-   Reduced motion: no rule here, so it is whole at once. No script (nothing can mark it): whole. */
+   Reduced motion has no rise, so a waiting steam is hidden outright and is there whole once it is
+   ready (the thank-you's cup the same). No script (nothing can mark it): whole. */
+@media (prefers-reduced-motion: reduce) and (scripting: enabled) {
+  .supportPage [data-steam="waiting"] {
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .supportPage [data-steam] {
     --rise: 0%;
@@ -476,12 +484,14 @@
 }
 
 /* The message on ruled lines (40px apart), growing as it fills (field-sizing: where a browser has
-   it; elsewhere the four lines scroll). */
+   it; elsewhere the four lines scroll, and the lines scroll with the words: background-attachment
+   local, set after each background shorthand). */
 .supportPage .field textarea {
   min-height: 160px;
   padding: 0;
   box-shadow: none;
   background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--hair) 39px 40px);
+  background-attachment: local;
   line-height: 40px;
   resize: none;
   field-sizing: content;
@@ -491,6 +501,7 @@
 .supportPage .field textarea[aria-invalid="true"] {
   box-shadow: none;
   background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--ink) 39px 40px);
+  background-attachment: local;
 }
 
 /* What it's about: the kit's filter chips (outlined pills, 48px), three and two from 600px; a
@@ -602,8 +613,9 @@
 }
 
 /* Until script has run (and for anyone without it) the form's place holds one line of words with the
-   email and the phone as real links. */
-.supportPage .fallback a {
+   email and the phone as real links; the thank-you's preview line has the same links. */
+.supportPage .fallback a,
+.supportPage .previewLine a {
   color: var(--ink);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -611,7 +623,8 @@
   text-decoration-color: var(--hair);
 }
 
-.supportPage .fallback a:hover {
+.supportPage .fallback a:hover,
+.supportPage .previewLine a:hover {
   text-decoration-color: var(--ink);
 }
 
@@ -635,6 +648,14 @@
   .supportPage .topicChoice input:checked + label {
     padding: 0 16px;
     border: 3px solid Highlight;
+  }
+
+  /* The questions' plus and minus are two strokes drawn as backgrounds, which forced colors would
+     turn into the page's own colour: they keep the system's text colour. */
+  .supportPage .toggle::before,
+  .supportPage .toggle::after {
+    forced-color-adjust: none;
+    background: CanvasText;
   }
 }
 
@@ -732,10 +753,11 @@
   white-space: nowrap;
 }
 
-/* The preview line is plain words (DESIGN.md: nothing is boxed). */
+/* The preview line is plain words (DESIGN.md: nothing is boxed), straight under "Thank you." while
+   nothing is sent; the ticket number follows it. */
 .supportPage p.previewLine {
   max-width: 32em;
-  margin: 18px 0 6px;
+  margin: 10px 0 8px;
   color: var(--muted);
   font-size: 17px;
   line-height: 1.5;

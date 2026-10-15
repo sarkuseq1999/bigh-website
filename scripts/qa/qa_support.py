@@ -5,46 +5,58 @@ opening (1440x900, 390x844): 200; the title "BiGH — Support"; no console error
 PREFETCH_CSS); no failed requests; one h1 "How can we help?"; the lead; the phone number as a tel:
 link in Switzer, the email as a mailto: link, the hours; the porch painting multiplies; its steam is
 gold leaf over the porch, not multiplied; nothing scrolls sideways; text 15px+; at 1440x900 the first
-screen holds the porch (560px+), the title and the three ways to reach us; the menu bar marks
-Support (the bar's link and aria-current="page": see links).
+screen holds the porch (560px+), the title and the three ways to reach us; the porch alone is
+preloaded, the steam and the mailbox load eagerly at low priority (no preload for them); the menu
+bar marks Support (the bar's link and aria-current="page": see links).
 motion (1440x900): with motion the steam waits while the porch waits, then rises (its --rise grows
 from under 30% to 100%+ within 6s of the porch's bloom; sampled every frame from the page's first
 one, since the rise has begun by the time the page is idle); the gold never rises alone over bare
 paper: with the porch's request held for 4.5s the steam's --rise stays under 30% the whole time the
 porch's picture is not in (the porch has bloomed by then), and it starts to rise only once the
 picture is in, and a porch whose picture fails never lets it rise; reduced motion: the steam is
-whole at once; no script: the porch and the steam are whole.
+whole at once, but with the porch's request held it is not shown at all (hidden, its own picture
+in) until the porch is in, then whole, and a failed porch never lets it show; no script: the porch
+and the steam are whole.
 rhythm (1440, 1280, 1024, 960, 768, 390, 360): Write to us, Returns and Questions each have a
 painting; from 960px the sides take turns (left, right, left), below it each painting comes first
 on one column; no words past the right margin; nothing scrolls sideways; the porch, the mailbox,
 the parcel and the book each multiply, inside the page root, with no stacking context between them
 and it (no z-index on a positioned or flex/grid item, isolation, opacity, transform, filter, mask,
 will-change, containment ...); the three spread paintings read about the same size (areas within
-30%); the parts' words.
+20%); the parts' words.
 questions (1440x900): four <details>, the first open at rest, opening one closes the others, the
 book stays put as answers open and close, each question a 48px+ target, "Ask BiGH Science" opens
 its sheet.
-form (1440x900, 390x844, 360x780): the labels and the reaction note; the preview tag beside Send;
-topic chips never one alone on a row; every control 48px+; fields are lines, never boxes; an empty
-Send names the four missing things and focuses the first; a wrong email is caught; a 5 MB photo and
-a PDF are refused, a picture is kept by name and can be removed; Enter sends once: one thank-you, a
-ticket number like BH-1014-7K3Q carrying today's month and day, focus on "Thank you.", the preview
-line (plain words, no box), the number holds still, the cup multiplies and no wrapper stops it, the
-cup's plate is twice as wide as it is shown (crisp at 2x); "Write another message" brings back an
-empty form focused on the name; the thank-you's steam waits for both its pictures (the cup's, then the
-steam's request held for 3s: the steam stays under 30% while one is out, then rises); reduced motion:
-the thank-you at once, steam whole.
-form, other cases: a double send (a double click; two requestSubmit() calls in one task; with motion
-and with reduced motion) gives one thank-you and one ticket (the second submit draws no second one),
-and with motion the form is seen fading out first; no script: no form in the page, a line with the
-email and the phone as real links, no query string; forced colors (Windows High Contrast): the fields
-keep a bottom border, focus shows an outline, the chosen chip differs from the rest.
+form (1440x900, 390x844, 360x780): the labels and the reaction note; the preview tag beside Send; the
+lead promises a reply time but no ticket by email (nothing is sent yet); topic chips never one alone
+on a row; every control 48px+; fields are lines, never boxes; the message's ruled lines scroll with
+its words (background-attachment local); an empty Send names the four missing things and focuses
+the first; a wrong email is caught; a 5 MB photo and a PDF are refused, a picture is kept by name
+and can be removed (by keyboard too, focus then on the photo control); Enter sends once: one
+thank-you, a ticket number like BH-1014-7K3Q carrying today's month and day, focus on "Thank you.",
+the preview line (plain words, no box) straight under "Thank you." and before the number, in the
+window, its phone and email real links, no promise of a reply by email; the number holds still, the
+cup multiplies and no wrapper stops it, the cup's plate is twice as wide as it is shown (crisp at
+2x); "Write another message" brings back an empty form focused on the name; the thank-you's steam
+waits for both its pictures (the cup's, then the steam's request held for 3s: the steam stays under
+30% while one is out, then rises; with reduced motion and the cup held it is not shown at all, then
+whole); reduced motion: the thank-you at once, steam whole.
+form, other cases: errors (1440x900): name, email, the topic and the message are aria-required; on a
+failed Send, at the moment focus lands, the field is already aria-invalid and described by its
+message (name, email, the topic's radiogroup, the message in turn); a double send (a double click;
+two requestSubmit() calls in one task; with motion and with reduced motion) gives one thank-you and
+one ticket (the second submit draws no second one), and with motion the form is seen fading out
+first; no script: no form in the page, a line with the email and the phone as real links, no field
+to write into; forced colors (Windows High Contrast): the fields keep a bottom border, focus shows
+an outline, the chosen chip differs from the rest, the questions' plus and minus still show.
 links (1440x900, 390x844): the bar's Support (a link, not a button) goes to the top of /support and is marked
 as the current page; no pop-up opens; the footer's Support & FAQs and the Science page's header
 Support go there too; the phone menu's Support goes there and the menu closes behind it; on
 /support itself, Support chosen from the phone menu (the same address) closes the menu.
-languages (390x844): /kr, /jp, /cns, /vn support are 200, the page's words stay English, nothing
-scrolls sideways, no errors; /hken/support goes to /cns/support.
+languages (390x844): /kr, /jp, /cns, /vn support are 200, the page's words stay English and are
+marked lang="en" while the document, the menu and the footer keep the locale's language (and the
+few words that already have a translation are marked in it), nothing scrolls sideways, no errors;
+/hken/support goes to /cns/support.
 
 Pictures: scripts/qa/out/support/<tag>.png.
 
@@ -147,6 +159,20 @@ def opening(browser):
         small = page.evaluate(SMALL_TEXT_JS)
         check(f"{tag}: text 15px or more", not small, small[:3])
         check(f"{tag}: the page says it is Support", page.evaluate("document.querySelector('[data-look]')?.dataset.page") == "support")
+        # The porch is the one painting preloaded at high priority. The gold steam and the mailbox load
+        # at once but ask for low priority, so the server writes no preload for them: a preloaded 8 KB
+        # leaf won the race and showed over bare paper (About documents the same, about-ink.tsx).
+        loads = page.evaluate("""(() => ({
+          preloads: [...document.querySelectorAll('link[rel=preload][as=image]')].map(l => {
+            const set = l.getAttribute('imagesrcset') || l.getAttribute('href') || '';
+            return decodeURIComponent((set.match(/url=([^&\\s]+)/) || [, set])[1]).split('/').pop(); }),
+          imgs: ['[data-part="opening"] img[data-bloom]', '[data-part="opening"] img[data-steam]', '#write [data-picture] img']
+            .map(s => { const i = document.querySelector(s); return [i.getAttribute('loading'), i.getAttribute('fetchpriority')]; }) }))()""")
+        check(f"{tag}: the porch alone is preloaded (high); the steam and the mailbox load eagerly at low priority",
+              any("porch-v1" in p for p in loads["preloads"])
+              and not any("steam" in p or "mailbox" in p for p in loads["preloads"])
+              and loads["imgs"][0][1] == "high" and loads["imgs"][1] == ["eager", "low"] and loads["imgs"][2] == ["eager", "low"],
+              loads)
         if width == 1440:
             # The first screen holds the porch, the title and the three ways to reach us (the phone
             # number is the page's most needed fact); the porch shrinks for it, never under 560px.
@@ -164,21 +190,30 @@ def opening(browser):
 
 RISE_JS = "parseFloat(getComputedStyle(document.querySelector('[data-steam]')).getPropertyValue('--rise'))"
 
+# Whether the gold steam can be seen at all: not hidden, not transparent, and its mask (--rise) not
+# closed. With motion a waiting steam is masked (--rise 0); with reduced motion there is no rise, so
+# a waiting steam must be hidden outright.
+SHOWN_JS = """(s) => { const c = getComputedStyle(s);
+  return c.visibility !== 'hidden' && c.display !== 'none' && parseFloat(c.opacity) > 0
+    && parseFloat(c.getPropertyValue('--rise')) > 0; }"""
+
 # Watches the steam from the first frame the page has one (open_page waits for the network, the
 # fonts and 1.2s, by when the steam has long been rising): one sample per frame,
 # [ms since the page began, the steam's --rise, the porch's data-bloom, whether the porch's picture
-# is in (complete, with a width)].
-WATCH_RISE = """
+# is in (complete, with a width), whether the steam can be seen (SHOWN_JS), whether the steam's own
+# picture is in].
+WATCH_RISE = f"""
 window.__rise = [];
 const t0 = performance.now();
-const tick = () => {
+const shown = {SHOWN_JS};
+const tick = () => {{
   const steam = document.querySelector('[data-steam]');
   const porch = document.querySelector('[data-part="opening"] [data-bloom]');
   if (steam) window.__rise.push([performance.now() - t0,
     parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), porch && porch.dataset.bloom,
-    !!porch && porch.complete && porch.naturalWidth > 0]);
+    !!porch && porch.complete && porch.naturalWidth > 0, shown(steam), steam.complete && steam.naturalWidth > 0]);
   if (window.__rise.length < 6000) requestAnimationFrame(tick);
-};
+}};
 requestAnimationFrame(tick);
 """
 
@@ -252,9 +287,10 @@ def motion(browser):
     context.close()
 
     context, page, *_ = open_page(browser, 1440, 900, reduced=True)
-    whole = page.evaluate(RISE_JS)
-    check("motion (reduced): the steam is whole at once", whole >= 100, whole)
+    whole = page.evaluate(f"(() => {{ const s = document.querySelector('[data-steam]'); return [{RISE_JS}, ({SHOWN_JS})(s), s.dataset.steam]; }})()")
+    check("motion (reduced): the steam is whole at once", whole[0] >= 100 and whole[1] and whole[2] == "ready", whole)
     context.close()
+    reduced_porch(browser)
 
     # With no script nothing can mark the porch's picture in or its bloom: both show whole.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False)
@@ -265,6 +301,47 @@ def motion(browser):
       rise: parseFloat(getComputedStyle(document.querySelector('[data-steam]')).getPropertyValue('--rise')),
       porch: getComputedStyle(document.querySelector('[data-part="opening"] img[data-bloom]')).opacity }))()""")
     check("motion (no script): the porch and its steam are whole", seen["rise"] >= 100 and seen["porch"] == "1", seen)
+    context.close()
+
+
+HYDRATED = "form[data-support-form]"  # the form renders only once script has run
+
+
+def reduced_porch(browser):
+    """Reduced motion has no rise, but the gold still never shows alone over bare paper: with the
+    porch's request held (the steam's own picture in), the steam is not shown; once the porch is in
+    it is there whole at once; a porch whose picture fails never lets it show."""
+    held = []
+    context, page = watched_page(browser, on_porch=lambda route: held.append(route), reduced_motion="reduce")
+    page.goto(f"{BASE}/support", wait_until="domcontentloaded", timeout=120000)
+    page.wait_for_selector(HYDRATED, timeout=60000)
+    page.wait_for_timeout(4000)
+    out = page.evaluate("window.__rise")
+    bare = [s for s in out if not s[3]]
+    check("motion (reduced, late porch): the steam's picture is in and the porch's is still out (the case is real)",
+          held and any(s[5] for s in bare) and bare[-1][0] - bare[0][0] >= 3500,
+          [len(held), any(s[5] for s in bare), round(bare[-1][0] - bare[0][0]) if bare else None])
+    check("motion (reduced, late porch): the steam is not shown while the porch's picture is out",
+          bare and not any(s[4] for s in bare), [s for s in bare if s[4]][:2])
+    for route in held:
+        route.continue_()
+    page.wait_for_function("window.__rise.some(s => s[3])", timeout=30000)
+    page.wait_for_timeout(800)
+    last = page.evaluate(f"(() => {{ const s = document.querySelector('[data-steam]'); return [{RISE_JS}, ({SHOWN_JS})(s), s.dataset.steam]; }})()")
+    check("motion (reduced, late porch): once the porch is in, the steam is there whole (no rise)",
+          last[0] >= 100 and last[1] and last[2] == "ready", last)
+    context.close()
+
+    context, page = watched_page(browser, on_porch=lambda route: route.abort(), reduced_motion="reduce")
+    page.goto(f"{BASE}/support", wait_until="domcontentloaded", timeout=120000)
+    page.wait_for_selector(HYDRATED, timeout=60000)
+    page.wait_for_timeout(4000)
+    out = page.evaluate("window.__rise")
+    state = page.evaluate("document.querySelector('[data-steam]').dataset.steam")
+    check("motion (reduced, failed porch): the steam's picture is in (the case is real)", any(s[5] for s in out),
+          len(out))
+    check("motion (reduced, failed porch): the steam is never shown", out and not any(s[4] for s in out) and state == "waiting",
+          [sum(1 for s in out if s[4]), state])
     context.close()
 
 
@@ -328,12 +405,12 @@ def rhythm(browser):
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: nothing scrolls sideways", sideways <= 0, sideways)
         paintings_multiply(page, tag)
-        # The three read about the same size (spec): their pictures' areas within 30% of each other
-        # (the tall mailbox once had two and a half times the book's area at 960px).
+        # The three read about the same size (spec): their pictures' areas within 20% of each other
+        # (the tall mailbox once had two and a half times the book's area at 960px; 13% measured).
         areas = page.evaluate("""['#write', '#returns', '#questions'].map(s => {
           const r = document.querySelector(s + ' [data-picture] img').getBoundingClientRect(); return Math.round(r.width * r.height); })""")
-        check(f"{tag}: the three paintings read about the same size (areas within 30%)",
-              max(areas) <= 1.3 * min(areas), areas)
+        check(f"{tag}: the three paintings read about the same size (areas within 20%)",
+              max(areas) <= 1.2 * min(areas), areas)
         main = page.inner_text("main")
         for words in ["45 days to decide.", "Send returns to", "Glendora, CA 91740", "Orders and shipping",
                       "Common questions.", "A question about health or science?"]:
@@ -391,6 +468,12 @@ def form(browser):
                       "Add a photo (optional)", "I had a reaction", "In an emergency, call 911."]:
             check(f"{tag}: says {words!r}", words in main)
         check(f"{tag}: the preview tag stands beside Send", page.locator("form [data-honesty]").inner_text().strip() == "Preview: messages aren’t sent yet")
+        # While nothing is sent the lead promises nothing the preview cannot keep (Ruling 16): the
+        # reply time is true of the phone and the email, the ticket by email is not.
+        check(f"{tag}: the lead says when we reply, and no ticket by email (nothing is sent yet)",
+              "We reply within 1–2 business days." in main and "ticket number comes by email" not in main, main[:200])
+        check(f"{tag}: the message is on ruled lines that scroll with its words (background-attachment local)",
+              page.evaluate("getComputedStyle(document.querySelector('#support-message')).backgroundAttachment") == "local")
         rows = page.evaluate("""(() => { const tops = {}; document.querySelectorAll('[data-topics] label').forEach(l => { const t = Math.round(l.getBoundingClientRect().top); tops[t] = (tops[t] || 0) + 1; }); return Object.values(tops); })()""")
         check(f"{tag}: the topic chips never leave one alone on a row", rows == [1, 1, 1, 1, 1] or 1 not in rows, rows)
         targets = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]), form textarea, form button, [data-topics] label, form label[for=support-photo]')]
@@ -439,6 +522,16 @@ def form(browser):
             page.click("form button:has-text('Remove photo')")
             page.wait_for_timeout(200)
             check(f"{tag}: the photo can be removed", "bottle.png" not in page.inner_text("form"))
+            # With the keyboard: Remove photo goes away with the photo, so focus goes to the photo's
+            # own control (its label shows the ring), never lost to the page.
+            page.set_input_files("#support-photo", small)
+            page.wait_for_timeout(200)
+            page.focus("form button:has-text('Remove photo')")
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(200)
+            check(f"{tag}: after Remove photo (keyboard), focus is on the photo control",
+                  "bottle.png" not in page.inner_text("form") and page.evaluate("document.activeElement.id") == "support-photo",
+                  page.evaluate("document.activeElement.tagName + '#' + document.activeElement.id"))
 
         # Enter in a field sends (the form fades out for 0.3s first): one thank-you, one number. A real
         # double send is in double_send() below.
@@ -456,6 +549,23 @@ def form(browser):
         sent = page.inner_text("[data-sent]")
         check(f"{tag}: the thank-you says nothing was sent, and how to reach us",
               "This is a preview, so nothing was sent." in sent and "800-919-2089" in sent and "support@bighnow.com" in sent, sent)
+        # Ruling 16: no promise of a reply to a message that went nowhere; the preview line comes
+        # straight under "Thank you." (before the number), in the window, its phone and email real links.
+        check(f"{tag}: the thank-you promises no reply by email (nothing was sent)", "reply by email" not in sent, sent)
+        preview = page.evaluate("""(() => { const sent = document.querySelector('[data-sent]');
+          const line = sent.querySelector('[data-honesty]'), title = sent.querySelector('h3'), ticket = sent.querySelector('[data-ticket]');
+          return { next: title.nextElementSibling === line,
+            beforeTicket: !!(line.compareDocumentPosition(ticket) & Node.DOCUMENT_POSITION_FOLLOWING),
+            links: [...line.querySelectorAll('a')].map(a => [a.getAttribute('href'), a.textContent.trim()]),
+            top: Math.round(line.getBoundingClientRect().top), bottom: Math.round(line.getBoundingClientRect().bottom),
+            window: window.innerHeight }; })()""")
+        check(f"{tag}: the preview line comes straight under 'Thank you.', before the ticket number",
+              preview["next"] and preview["beforeTicket"], preview)
+        check(f"{tag}: the preview line's phone and email are real links",
+              preview["links"] == [["tel:+18009192089", "800-919-2089"], ["mailto:support@bighnow.com", "support@bighnow.com"]],
+              preview["links"])
+        check(f"{tag}: the preview line is in the window, not at its foot",
+              preview["top"] >= 0 and preview["bottom"] <= preview["window"] - 120, preview)
         page.wait_for_timeout(1500)
         check(f"{tag}: the number holds still", page.locator("[data-ticket]").inner_text().strip() == ticket)
         # The cup multiplies onto the paper, its steam does not, and nothing between the cup and the
@@ -515,6 +625,8 @@ def form(browser):
 
     late_picture(browser, "cup")
     late_picture(browser, "steam")
+    late_picture(browser, "cup", reduced=True)
+    focus_on_error(browser)
     double_send(browser)
     no_script(browser)
     forced_colors(browser)
@@ -530,30 +642,34 @@ def is_cup_steam(url):
 
 
 # One sample per frame once the thank-you has a steam: [ms, the steam's --rise, its data-steam, whether
-# both of its pictures are in (the cup's and the steam's: complete, with a width)].
-WATCH_SENT = """
+# both of its pictures are in (the cup's and the steam's: complete, with a width), whether the steam
+# can be seen (SHOWN_JS), whether the steam's own picture is in].
+WATCH_SENT = f"""
 window.__sent = [];
 const t0 = performance.now();
 const isIn = (img) => !!img && img.complete && img.naturalWidth > 0;
-const tick = () => {
+const shown = {SHOWN_JS};
+const tick = () => {{
   const steam = document.querySelector('[data-sent] [data-steam]');
   const cup = document.querySelector('[data-sent] img:not([data-steam])');
   if (steam) window.__sent.push([performance.now() - t0,
     parseFloat(getComputedStyle(steam).getPropertyValue('--rise')), steam.dataset.steam,
-    isIn(cup) && isIn(steam)]);
+    isIn(cup) && isIn(steam), shown(steam), isIn(steam)]);
   if (window.__sent.length < 6000) requestAnimationFrame(tick);
-};
+}};
 requestAnimationFrame(tick);
 """
 
 
-def late_picture(browser, which):
+def late_picture(browser, which, reduced=False):
     """The gold never rises alone over bare paper (the porch's rule, here for the thank-you too): both
     of the thank-you's pictures load only after Send, so one request (the cup's or the steam's) is
-    held for 3s and the steam must stay down until both are in."""
-    tag = f"form (late {which})"
+    held for 3s and the steam must stay down until both are in. With reduced motion (no rise) it must
+    not be shown at all until both are in, then be there whole."""
+    tag = f"form (late {which}{', reduced' if reduced else ''})"
     held = []
-    context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
+    context = browser.new_context(viewport={"width": 1440, "height": 900},
+                                  reduced_motion="reduce" if reduced else "no-preference")
     page = context.new_page()
     page.route(is_cup if which == "cup" else is_cup_steam, lambda route: held.append(route))
     page.goto(f"{BASE}/support", wait_until="networkidle", timeout=120000)
@@ -569,19 +685,77 @@ def late_picture(browser, which):
     check(f"{tag}: the thank-you is up and the {which}'s picture is still out (the case is real)",
           held and len(bare) > 10 and bare[-1][0] - bare[0][0] >= 2500,
           [len(held), len(bare), round(bare[-1][0] - bare[0][0]) if bare else None])
-    check(f"{tag}: the steam waits, and stays down while the {which} is out",
-          bare and all(s[1] < 30 and s[2] == "waiting" for s in bare),
-          [max((round(s[1]) for s in bare), default=None), sorted({s[2] for s in bare})])
+    if reduced:
+        if which == "cup":
+            check(f"{tag}: the steam's own picture is in while the cup's is out (the case is real)",
+                  any(s[5] for s in bare), len(bare))
+        check(f"{tag}: the steam waits, and is not shown while the {which} is out",
+              bare and all(s[2] == "waiting" and not s[4] for s in bare),
+              [sum(1 for s in bare if s[4]), sorted({s[2] for s in bare})])
+    else:
+        check(f"{tag}: the steam waits, and stays down while the {which} is out",
+              bare and all(s[1] < 30 and s[2] == "waiting" and not s[4] for s in bare),
+              [max((round(s[1]) for s in bare), default=None), sorted({s[2] for s in bare})])
     for route in held:
         route.continue_()
     page.wait_for_function("window.__sent.some(s => s[3])", timeout=30000)
-    page.wait_for_timeout(5000)
+    page.wait_for_timeout(1000 if reduced else 5000)
     after = page.evaluate("window.__sent")
-    rising = next((s for s in after if s[1] >= 30), None)
-    check(f"{tag}: once both pictures are in, the steam rises",
-          rising and rising[3] and max(s[1] for s in after) >= 100,
-          [rising and round(rising[0]), rising and rising[3], round(max(s[1] for s in after))])
+    if reduced:
+        last = after[-1]
+        check(f"{tag}: once both pictures are in, the steam is there whole (no rise)",
+              last[3] and last[4] and last[1] >= 100 and last[2] == "ready", last)
+    else:
+        rising = next((s for s in after if s[1] >= 30), None)
+        check(f"{tag}: once both pictures are in, the steam rises",
+              rising and rising[3] and max(s[1] for s in after) >= 100,
+              [rising and round(rising[0]), rising and rising[3], round(max(s[1] for s in after))])
     context.close()
+
+
+# At the moment focus lands (focusin), what a screen reader reads with the field: its aria-invalid and
+# the text of what its aria-describedby points at (for a chip, its radiogroup's).
+WATCH_FOCUS = """
+window.__focus = [];
+document.addEventListener('focusin', (event) => {
+  const field = event.target, owner = field.type === 'radio' ? field.closest('[role=radiogroup]') : field;
+  const ids = (owner.getAttribute('aria-describedby') || '').split(' ').filter(Boolean);
+  window.__focus.push([field.id, owner.getAttribute('aria-invalid'),
+    ids.map((id) => document.getElementById(id)?.textContent.trim() ?? null)]);
+});
+"""
+
+
+def focus_on_error(browser):
+    """A failed Send moves focus to the first field with a problem; at the moment focus lands, that
+    field must already be marked invalid and described by its message (a screen reader reads them
+    then, and never again). Each case is a fresh form with only that field wrong, so no message is
+    already on the page from an earlier Send."""
+    context, page, *_ = open_page(browser, 1440, 900)
+    required = page.evaluate("""[...document.querySelectorAll('#support-name, #support-email, #support-message, [data-support-form] [role=radiogroup], #support-order')]
+      .map(e => [e.id || e.getAttribute('role'), e.getAttribute('aria-required')])""")
+    check("form (errors): name, email, the topic and the message are marked required; the order number is not",
+          required == [["support-name", "true"], ["support-email", "true"], ["support-order", None],
+                       ["radiogroup", "true"], ["support-message", "true"]], required)
+    context.close()
+    cases = [
+        ("support-name", "Please add your name.", {"name": ""}),
+        ("support-email", "Please add an email we can reply to.", {"email": "ana@"}),
+        ("support-topic-0", "Please choose what it’s about.", {"topic": None}),
+        ("support-message", "Please write your message.", {"message": ""}),
+    ]
+    for field, words, wrong in cases:
+        context, page, *_ = open_page(browser, 1440, 900)
+        page.locator("#write").scroll_into_view_if_needed()
+        fill(page, **wrong)
+        page.evaluate(WATCH_FOCUS)
+        page.click("form button[type=submit]")
+        page.wait_for_timeout(300)
+        seen = page.evaluate("window.__focus")
+        landed = next((s for s in seen if s[0] == field), None)
+        check(f"form (errors): as focus lands on {field}, it is already invalid and described by {words!r}",
+              landed is not None and landed[1] == "true" and landed[2] == [words], seen)
+        context.close()
 
 
 SENT_JS = "[document.querySelectorAll('[data-sent]').length, [...document.querySelectorAll('[data-ticket]')].map(t => t.textContent.trim())]"
@@ -642,9 +816,8 @@ def no_script(browser):
     links = line.locator("a").evaluate_all("els => els.map(a => [a.getAttribute('href'), a.textContent.trim()])") if line.count() else []
     check("form (no script): the email and the phone are real links",
           links == [["mailto:support@bighnow.com", "support@bighnow.com"], ["tel:+18009192089", "800-919-2089"]], links)
-    page.keyboard.press("Enter")
-    page.wait_for_timeout(300)
-    check("form (no script): no query string ever appears", "?" not in page.url, page.url)
+    fields = page.locator("main input, main textarea, main select").count()
+    check("form (no script): no field to write into (nothing that would go nowhere)", fields == 0, fields)
     context.close()
 
 
@@ -670,6 +843,20 @@ def forced_colors(browser):
       return [s.borderTopWidth, s.borderTopColor, s.backgroundColor, s.color].join(' '); })""")
     check("form (forced colors): the chosen chip looks different from the others",
           chips[1] not in [c for i, c in enumerate(chips) if i != 1], chips)
+    # The questions' plus and minus are two strokes drawn as backgrounds, which forced colors turns
+    # into the page's own colour: each toggle must still show its strokes (dark and light pixels).
+    toggles = page.locator("#questions summary [aria-hidden]")
+    toggles.first.scroll_into_view_if_needed()
+    page.wait_for_timeout(300)
+    spreads = []
+    for i in range(toggles.count()):
+        shot = os.path.join(OUT, f"forced-toggle-{i}.png")
+        toggles.nth(i).screenshot(path=shot)
+        grey = Image.open(shot).convert("L")
+        low, high = grey.getextrema()
+        spreads.append(high - low)
+    check("form (forced colors): every question's plus or minus still shows (its strokes)",
+          len(spreads) == 4 and all(s >= 100 for s in spreads), spreads)
     context.close()
 
 
@@ -733,6 +920,23 @@ def languages(browser):
         context, page, response, errors, _ = open_page(browser, 390, 844, path=f"/{lang}/support")
         check(f"{tag}: 200", response and response.status == 200, response and response.status)
         check(f"{tag}: the page's words in English", page.evaluate("document.querySelector('h1').textContent.trim()") == "How can we help?")
+        # The document is in the locale's language, the page's untranslated words are marked English
+        # (so a screen reader reads them in English); the shared menu and footer, and the few words
+        # that already have a translation, stay in the locale's language.
+        langs = page.evaluate("""(() => { const lang = (e) => e ? e.closest('[lang]')?.getAttribute('lang') : 'missing';
+          const ask = [...document.querySelectorAll('#questions button')].pop();
+          return { html: document.documentElement.lang,
+            english: ['h1', '#write-title', '#support-message', 'label[for=support-email]', '#questions-title', '[data-part="opening"] img[data-bloom]']
+              .map(s => lang(document.querySelector(s))),
+            locale: [lang(document.querySelector('#site-navigation')), lang(document.querySelector('footer'))],
+            translated: [['label[for=support-name]', 'Your name'], ['#returns-title', '45 days to decide.']]
+              .map(([s, en]) => { const e = document.querySelector(s); return [e.textContent.trim() === en, lang(e)]; })
+              .concat([[ask.textContent.trim() === 'Ask BiGH Science', lang(ask)]]) }; })()""")
+        check(f"{tag}: the page's English words are marked lang=en; the menu and the footer keep the locale's",
+              langs["html"] not in ("", "en") and all(l == "en" for l in langs["english"])
+              and all(l == langs["html"] for l in langs["locale"]), langs)
+        check(f"{tag}: a word that has a translation is marked in the locale's language (English only if it shows English)",
+              all(l == ("en" if english else langs["html"]) for english, l in langs["translated"]), langs["translated"])
         sideways = page.evaluate("document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: nothing scrolls sideways", sideways <= 0, sideways)
         check(f"{tag}: no errors", not errors, errors[:3])

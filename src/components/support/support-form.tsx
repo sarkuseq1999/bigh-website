@@ -10,9 +10,10 @@ import {
   type CSSProperties,
   type FormEvent,
 } from "react";
+import { flushSync } from "react-dom";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
-import { useSteamGate } from "./spread";
+import { useSteamGate, useWordsLang } from "./spread";
 import { cup } from "./support-art";
 import { SENDING_LIVE, support } from "./support-content";
 import {
@@ -81,6 +82,7 @@ export function SupportForm() {
 
 function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: string) => void }) {
   const copy = useCopy();
+  const lang = useWordsLang();
   const w = support.write;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -111,7 +113,9 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
     event.preventDefault();
     if (sending.current) return; // one thank-you, one number
     const found = checkFields({ name, email, topic, message, photo });
-    setProblems(found);
+    // The messages must be on the page before focus moves: a screen reader reads a field's
+    // aria-invalid and its description once, as focus lands (set later, they are never heard).
+    flushSync(() => setProblems(found));
     const first = ORDER.find((field) => found[field]);
     if (first) {
       document.getElementById(FOCUS[first])?.focus();
@@ -141,9 +145,14 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
   const touched = (field: FieldName) =>
     setProblems((p) => (p[field] ? { ...p, [field]: undefined } : p));
 
+  // "Remove photo" goes away with the photo, so focus goes to the photo's own control (its label
+  // shows the ring), never lost to the page.
   const removePhoto = () => {
     setPhoto(null);
-    if (photoInput.current) photoInput.current.value = "";
+    if (photoInput.current) {
+      photoInput.current.value = "";
+      photoInput.current.focus();
+    }
   };
 
   const error = (field: FieldName) =>
@@ -165,12 +174,15 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
       data-support-form=""
     >
       <div className={page.field}>
-        <label htmlFor="support-name">{copy(w.name)}</label>
+        <label htmlFor="support-name" lang={lang(w.name)}>
+          {copy(w.name)}
+        </label>
         <input
           ref={nameInput}
           id="support-name"
           name="name"
           autoComplete="name"
+          aria-required="true"
           value={name}
           onChange={(e) => {
             setName(e.target.value);
@@ -189,6 +201,7 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
           type="email"
           autoComplete="email"
           inputMode="email"
+          aria-required="true"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
@@ -211,6 +224,7 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
       <fieldset
         className={page.field}
         role="radiogroup"
+        aria-required="true"
         aria-invalid={problems.topic ? true : undefined}
         aria-describedby={described("topic")}
       >
@@ -241,6 +255,7 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
           id="support-message"
           name="message"
           rows={4}
+          aria-required="true"
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
@@ -349,6 +364,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
           height={cup.steam.height}
           sizes="100px"
           loading="eager"
+          fetchPriority="low"
           data-steam={gate.steam}
           style={
             {
@@ -362,16 +378,18 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
       <h3 id="sent-title" ref={title} tabIndex={-1} className={page.sentTitle}>
         {copy(s.title)}
       </h3>
+      {/* While nothing is sent (Ruling 16): first, straight under "Thank you.", that nothing was
+          sent and how to reach us today, with real links; no reply is promised. */}
+      {SENDING_LIVE ? null : (
+        <p className={page.previewLine} data-honesty="">
+          {reach(copy(s.preview), true)}
+        </p>
+      )}
       <p className={page.sentLabel}>{copy(s.ticket)}</p>
       <p className={page.ticket} data-ticket="">
         {ticket}
       </p>
-      <p className={page.body}>{copy(s.reply)}</p>
-      {SENDING_LIVE ? null : (
-        <p className={page.previewLine} data-honesty="">
-          {reach(copy(s.preview), false)}
-        </p>
-      )}
+      {SENDING_LIVE ? <p className={page.body}>{copy(s.reply)}</p> : null}
       <button type="button" className={base.textLink} onClick={onAgain}>
         {copy(s.again)}
       </button>

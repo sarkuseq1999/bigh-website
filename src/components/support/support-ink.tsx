@@ -6,8 +6,8 @@ import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { book, mailbox, parcel, porch } from "./support-art";
-import { ALT, support } from "./support-content";
-import { Painting, Spread } from "./spread";
+import { ALT, SENDING_LIVE, support } from "./support-content";
+import { Painting, Spread, useWordsLang } from "./spread";
 import { SupportForm } from "./support-form";
 import page from "./support-page.module.css";
 
@@ -67,7 +67,8 @@ const PARCEL = "(max-width: 599px) 73vw, (max-width: 959px) 447px, min(29vw, 447
 const BOOK = "(max-width: 599px) 85vw, (max-width: 959px) 520px, min(34vw, 520px)";
 
 // The mailbox is the one painting that can reach the first screen (a tall phone, a short opening),
-// so it loads eagerly; the other two sit well below it. The form comes in through children.
+// so it loads eagerly, at low priority behind the porch (no preload of its own); the other two sit
+// well below it. The form comes in through children.
 function Write({ children }: { children?: ReactNode }) {
   const copy = useCopy();
   const w = support.write;
@@ -91,7 +92,7 @@ function Write({ children }: { children?: ReactNode }) {
       <h2 id="write-title" className={page.heading}>
         {copy(w.title)}
       </h2>
-      <p className={page.body}>{copy(w.lead)}</p>
+      <p className={page.body}>{copy(SENDING_LIVE ? w.lead : w.previewLead)}</p>
       {children}
     </Spread>
   );
@@ -99,6 +100,7 @@ function Write({ children }: { children?: ReactNode }) {
 
 function Returns() {
   const copy = useCopy();
+  const lang = useWordsLang();
   const r = support.returns;
   return (
     <Spread
@@ -111,7 +113,7 @@ function Returns() {
       }
     >
       <p className={page.label}>{copy(r.label)}</p>
-      <h2 id="returns-title" className={page.heading}>
+      <h2 id="returns-title" lang={lang(r.title)} className={page.heading}>
         {copy(r.title)}
       </h2>
       <p className={page.body}>{copy(r.lead)}</p>
@@ -132,6 +134,7 @@ function Returns() {
 function Questions() {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
+  const lang = useWordsLang();
   const q = support.questions;
   return (
     <Spread
@@ -157,18 +160,26 @@ function Questions() {
         ))}
       </div>
       <p className={page.more}>{copy(q.more)}</p>
-      <button type="button" className={`${base.pill} ${base.pillGhost}`} onClick={dialogs.openAsk}>
+      <button
+        type="button"
+        lang={lang(q.ask)}
+        className={`${base.pill} ${base.pillGhost}`}
+        onClick={dialogs.openAsk}
+      >
         {copy(q.ask)}
       </button>
     </Spread>
   );
 }
 
+// The page's own words have no translations yet, so its content is marked English (a screen reader
+// then reads it in English on /kr and the rest); the shared menu and footer, outside it, keep the
+// locale's language, and so do the few words that are translated (useWordsLang).
 export function SupportInk({ titleFont }: { titleFont: string }) {
   return (
     <InkPage current="support" className={`${page.supportPage} ${titleFont}`}>
       {() => (
-        <div data-support="porch">
+        <div data-support="porch" lang="en">
           <Opening />
           <Write>
             <SupportForm />

@@ -2,11 +2,14 @@
 // docs/superpowers/specs/2026-10-14-support-page-design.md). The contact and return details are the
 // 2016 ones, which Mo confirmed are still true on October 13. English only for now: none of these
 // has a copy key, so every language shows them in English (useCopy returns the source when a
-// string has no key). The four answers are drafts Mo approved with the spec on October 14.
+// string has no key). Mo approved the spec, the four answers included, on October 14 ("yes").
 
 /** Real sending (the email service, Resend through Vercel, and bighnow.com's DNS records at
- *  GoDaddy) comes later (Mo, October 14). Until then the form sends nothing and says so; set this
- *  to true when it does, and both preview lines go. */
+ *  GoDaddy) comes later (Mo, October 14). Until then the form sends nothing and says so: the
+ *  preview tag beside Send and the thank-you's preview line, and the page promises nothing a
+ *  preview cannot keep (no ticket by email, no reply to a message that went nowhere). Set this to
+ *  true when it does send, and the spec's words come back: the lead's ticket line, the thank-you's
+ *  "We'll reply by email", both preview lines gone. */
 export const SENDING_LIVE = false;
 
 export const support = {
@@ -21,6 +24,9 @@ export const support = {
     label: "Write to us",
     title: "Send us a message.",
     lead: "We reply within 1–2 business days. Your ticket number comes by email.",
+    // While SENDING_LIVE is false: the reply time is true of the phone and the email, the ticket by
+    // email is not (Ruling 16).
+    previewLead: "We reply within 1–2 business days.",
     name: "Your name",
     email: "Email",
     order: "Order number (optional)",
@@ -48,7 +54,9 @@ export const support = {
   sent: {
     title: "Thank you.",
     ticket: "Your ticket number",
+    // Only once SENDING_LIVE: nothing was sent in the preview, so no reply is promised.
     reply: "We’ll reply by email within 1–2 business days.",
+    // Straight under "Thank you." while SENDING_LIVE is false, its phone and email real links.
     preview:
       "This is a preview, so nothing was sent. To reach us today, call 800-919-2089 or email support@bighnow.com.",
     again: "Write another message",
