@@ -1,0 +1,800 @@
+/* Support, "Pull up a chair" (Mo, October 14, 2026; spec
+   docs/superpowers/specs/2026-10-14-support-page-design.md). Every rule is scoped under
+   .supportPage (the page root, InkPage className), so it outranks the kit's .look rules in any
+   stylesheet order. Multiply: nothing between a painting and the page root may make a stacking
+   context (no z-index on a positioned ancestor, no isolation, opacity, transform, filter or mask on
+   a part, a spread, a figure or a wrapper). */
+
+/* Titles in Ysabeau, the homepage's title face; menus, words and pills stay in Switzer. The
+   attribute outranks the kit's .look rule in either order (as home-titles.module.css does). */
+.supportPage[data-look="ink"] {
+  --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+  --part-half: clamp(40px, 4.4vw, 84px);
+  --gap: clamp(40px, 6vw, 112px);
+  --heading-size: clamp(min(36px, 9.2vw), 3.2vw, 50px);
+  --faq-gap: clamp(24px, 2.4vw, 36px);
+}
+
+.supportPage[data-look="ink"] main :is(h1, h2, h3) {
+  font-family: var(--display-font);
+  font-variant-numeric: lining-nums;
+}
+
+/* ---- The opening: the porch, the question, how to reach us -------------------------------- */
+
+.supportPage .opening {
+  padding: calc(88px + clamp(8px, min(2vw, 2.4svh), 40px)) 0 var(--part-half);
+  text-align: center;
+}
+
+/* The first screen holds the porch, the title AND the three ways to reach us (the phone number is
+   the page's most needed fact): the porch shrinks with the window's height to make room, never
+   under 560px nor over 720px (a phone keeps its column's width). 400px is the rest of that screen
+   (the bar, the title, the lead, the contact row and their gaps); 1.18 is the porch's width over
+   its height (1286 x 1090). At 1440x900 it is about 590px wide; on a window under about 875px tall
+   it stays at 560px, and under about 835px tall (measured at 1440 wide; 820px at 1280, 850px at
+   1536) the contact row runs past the fold. */
+.supportPage .porch {
+  --picture: clamp(560px, calc((100svh - 400px) * 1.18), 720px);
+  margin-inline: auto;
+}
+
+.supportPage h1.title {
+  margin: clamp(4px, 1vw, 16px) 0 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(min(44px, 11vw), 4.4vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.supportPage p.lead {
+  margin: clamp(12px, 1.2vw, 18px) 0 0;
+  color: var(--muted);
+  font-size: clamp(19px, 1.5vw, 23px);
+  line-height: 1.45;
+}
+
+/* Three ways to reach us, split by hairlines; stacked on a phone. */
+.supportPage .contact {
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  justify-content: center;
+  margin: clamp(36px, min(3.6vw, 4.5svh), 56px) 0 0;
+}
+
+.supportPage .contact > div {
+  display: flex;
+  flex-direction: column;
+  padding: 0 clamp(24px, 3vw, 52px);
+  border-left: 1px solid var(--line);
+}
+
+.supportPage .contact > div:first-child {
+  border-left: 0;
+}
+
+.supportPage .contact dt {
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+}
+
+/* The three values sit on one centre line, the large number and the plain words alike. */
+.supportPage .contact dd {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  margin: 6px 0 0;
+  font-size: 21px;
+  font-weight: 450;
+  text-wrap: balance;
+}
+
+.supportPage .contact a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  white-space: nowrap;
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  text-decoration-color: var(--hair);
+}
+
+.supportPage .contact a:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* The number in Switzer (never Ysabeau, whose old-style digits rise and fall), large. */
+.supportPage .contact a.number {
+  font-family: var(--sans);
+  font-size: clamp(28px, 2.3vw, 36px);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+/* Below 900px the number, the email and the hours no longer fit side by side (at 768px the number
+   broke across two lines): they stack, as on the phone. */
+@media (max-width: 899px) {
+  .supportPage .contact {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 22px;
+  }
+
+  .supportPage .contact > div {
+    padding: 0;
+    border-left: 0;
+  }
+}
+
+/* ---- Paintings ------------------------------------------------------------------------------ */
+
+.supportPage .painting {
+  justify-self: center;
+  width: min(var(--share, 100%), var(--picture, 520px));
+  margin: 0;
+}
+
+.supportPage .paintingBody {
+  position: relative;
+  display: block;
+}
+
+.supportPage .paintingBody img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* The gold steam over the cup: gold leaf, not multiplied, placed by support-art.ts. */
+.supportPage .paintingBody img.steam {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+/* ---- Motion: the steam rises from the cup once the porch has bloomed and its picture is in --- */
+
+@property --rise {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 112%;
+}
+
+.supportPage [data-steam] {
+  -webkit-mask-image: linear-gradient(
+    to top,
+    #000 calc(var(--rise) - 14%),
+    transparent var(--rise)
+  );
+  mask-image: linear-gradient(to top, #000 calc(var(--rise) - 14%), transparent var(--rise));
+}
+
+/* The gold never shows alone over bare paper (About's circle, Mo). The kit opens a painting's
+   bloom as soon as its box is on screen, picture or not, so the rise waits for two things: the
+   bloom, and spread.tsx marking the steam data-steam="ready" (the porch's picture and the steam's
+   own are in; a failed picture never marks it). Until then the steam stays at 0 (fully masked).
+   Reduced motion has no rise, so a waiting steam is hidden outright and is there whole once it is
+   ready (the thank-you's cup the same). No script (nothing can mark it): whole. */
+@media (prefers-reduced-motion: reduce) and (scripting: enabled) {
+  .supportPage [data-steam="waiting"] {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage [data-steam] {
+    --rise: 0%;
+  }
+
+  .supportPage :is([data-bloom="in"], [data-bloom="done"]) ~ [data-steam="ready"] {
+    animation: steam-rise var(--breath) var(--ease) 1.1s both;
+  }
+
+  @media (scripting: none) {
+    .supportPage [data-steam] {
+      --rise: 112%;
+    }
+  }
+}
+
+@keyframes steam-rise {
+  from {
+    --rise: 0%;
+  }
+
+  to {
+    --rise: 112%;
+  }
+}
+
+/* A painting waiting to bloom is hidden until its bloom is under way (About's hold, for the same
+   Chrome bug: a mask layer of no size is dropped, so a waiting painting showed whole). */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage [data-bloom="waiting"] {
+    opacity: 0;
+  }
+
+  @media (scripting: none) {
+    .supportPage [data-bloom="waiting"] {
+      opacity: 1;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]).supportPage [data-bloom="waiting"] {
+    filter: none;
+  }
+}
+
+/* ---- The parts: one painting, its words beside it, sides taking turns -------------------- */
+
+.supportPage .part {
+  padding-block: var(--part-half);
+  scroll-margin-top: calc(108px - 150px - var(--part-half));
+}
+
+.supportPage .spread {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  row-gap: clamp(24px, 5vw, 40px);
+  align-items: center;
+}
+
+.supportPage .words {
+  min-width: 0;
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .supportPage .spread {
+    max-width: calc(640px + 2 * var(--gutter));
+  }
+}
+
+@media (min-width: 960px) {
+  .supportPage .spread {
+    grid-template-columns: 5fr 7fr;
+    column-gap: var(--gap);
+  }
+
+  .supportPage .spread[data-side="right"] {
+    grid-template-columns: 7fr 5fr;
+  }
+
+  .supportPage .spread[data-side="right"] > [data-picture] {
+    order: 2;
+  }
+}
+
+/* The three paintings read about the same size at every width (spec; the pictures' areas within
+   about 15% of each other): each takes a share of its column by its shape, the wide book all of it,
+   the squarer parcel 86%, the tall mailbox 68% (a share of the column, not a fixed width, so the
+   tall mailbox no longer fills a narrow column while the book shrinks beside it). The caps keep the
+   same proportions. */
+.supportPage .mailbox {
+  --share: 68%;
+  --picture: 354px;
+}
+
+.supportPage .parcel {
+  --share: 86%;
+  --picture: 447px;
+}
+
+.supportPage .book {
+  --picture: 520px;
+}
+
+/* The book stands beside the questions from their first line, and stays put when one of them opens
+   (centred on the words, it moved with every answer's length): the label, the heading and the gap
+   above the first question. */
+@media (min-width: 960px) {
+  .supportPage .book {
+    align-self: start;
+    margin-top: calc(36px + 1.08 * var(--heading-size) + var(--faq-gap));
+  }
+}
+
+.supportPage p.label {
+  margin: 0 0 14px;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+  line-height: 1.3;
+}
+
+.supportPage h2.heading {
+  margin: 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: var(--heading-size);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.supportPage p.body {
+  max-width: 32em;
+  margin: clamp(14px, 1.4vw, 20px) 0 0;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.supportPage p.address {
+  margin: 26px 0 0;
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+.supportPage .address > span {
+  display: block;
+}
+
+.supportPage .address > span:first-child {
+  color: var(--muted);
+}
+
+.supportPage hr.rule {
+  max-width: 32em;
+  margin: 40px 0 34px;
+  border: 0;
+  border-top: 1px solid var(--line);
+}
+
+/* Questions on hairlines; one open at a time (the details share a name). */
+.supportPage .faq {
+  margin-top: var(--faq-gap);
+  border-top: 1px solid var(--line);
+}
+
+.supportPage .faq details {
+  border-bottom: 1px solid var(--line);
+}
+
+.supportPage .faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  min-height: 64px;
+  padding: 12px 0;
+  font-size: 21px;
+  font-weight: 450;
+  line-height: 1.35;
+  list-style: none;
+  cursor: pointer;
+}
+
+.supportPage .faq summary::-webkit-details-marker {
+  display: none;
+}
+
+/* A plus that becomes a minus: two 1.5px ink strokes, the upright one folding away. */
+.supportPage .toggle {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+}
+
+.supportPage .toggle::before,
+.supportPage .toggle::after {
+  content: "";
+  position: absolute;
+  inset: 8.25px 0 auto;
+  height: 1.5px;
+  background: var(--ink);
+}
+
+.supportPage .toggle::after {
+  rotate: 90deg;
+}
+
+.supportPage details[open] .toggle::after {
+  rotate: 0deg;
+}
+
+/* Reduced motion: the plus and the minus change at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .toggle::before,
+  .supportPage .toggle::after {
+    transition: rotate 0.5s var(--ease);
+  }
+}
+
+.supportPage p.answer {
+  max-width: 32em;
+  margin: 0;
+  padding: 0 0 22px;
+  color: var(--muted);
+  font-size: 19px;
+  line-height: 1.6;
+}
+
+.supportPage p.more {
+  margin: clamp(32px, 3vw, 44px) 0 16px;
+  font-size: 21px;
+  font-weight: 450;
+}
+
+/* The page's last part keeps its bottom half-gap, like every part: since October 13 the footer
+   opens straight onto its link columns (no band of its own), and without it the Ask BiGH Science
+   pill sat over the Products column and read as the footer's. */
+
+/* ---- The form: writing lines on the paper, never boxes ------------------------------------- */
+
+.supportPage .form {
+  display: grid;
+  gap: 28px;
+  max-width: 640px;
+  margin-top: clamp(28px, 2.8vw, 40px);
+}
+
+.supportPage .field,
+.supportPage .photo {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.supportPage .field > label,
+.supportPage .field > legend {
+  display: block;
+  padding: 0;
+  color: var(--muted);
+  font-size: 17px;
+  font-weight: 450;
+}
+
+/* One hairline under each field, darkening to ink with focus. */
+.supportPage .field input:not([type="radio"]),
+.supportPage .field textarea {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  margin: 0;
+  padding: 8px 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: inset 0 -1px 0 var(--hair);
+  color: var(--ink);
+  font: inherit;
+  font-size: 20px;
+}
+
+.supportPage .field input:not([type="radio"]):focus,
+.supportPage .field textarea:focus {
+  outline: 0;
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+.supportPage .field input[aria-invalid="true"] {
+  box-shadow: inset 0 -2px 0 var(--ink);
+}
+
+/* The message on ruled lines (40px apart), growing as it fills (field-sizing: where a browser has
+   it; elsewhere the four lines scroll, and the lines scroll with the words: background-attachment
+   local, set after each background shorthand). */
+.supportPage .field textarea {
+  min-height: 160px;
+  padding: 0;
+  box-shadow: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--hair) 39px 40px);
+  background-attachment: local;
+  line-height: 40px;
+  resize: none;
+  field-sizing: content;
+}
+
+.supportPage .field textarea:focus,
+.supportPage .field textarea[aria-invalid="true"] {
+  box-shadow: none;
+  background: repeating-linear-gradient(to bottom, transparent 0 39px, var(--ink) 39px 40px);
+  background-attachment: local;
+}
+
+/* What it's about: the kit's filter chips (outlined pills, 48px), three and two from 600px; a
+   column of full-width rows on a phone, so none stands alone on a row. */
+.supportPage .topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 560px;
+  margin-top: 12px;
+}
+
+.supportPage .topicChoice {
+  position: relative;
+  display: inline-flex;
+}
+
+/* The radio sits invisibly over its chip, for the keyboard; the pointer goes to the chip (its
+   label), which is the target and draws the state. */
+.supportPage .topicChoice input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  margin: 0;
+  pointer-events: none;
+}
+
+.supportPage .topicChoice label {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  font-size: 18px;
+  font-weight: 450;
+  cursor: pointer;
+}
+
+.supportPage .topicChoice label:hover {
+  border-color: var(--ink);
+}
+
+.supportPage .topicChoice input:checked + label {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--paper);
+}
+
+.supportPage .topicChoice input:focus-visible + label,
+.supportPage .photo input[type="file"]:focus-visible + label {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+}
+
+@media (max-width: 599px) {
+  .supportPage .topics {
+    flex-direction: column;
+  }
+
+  .supportPage .topicChoice,
+  .supportPage .topicChoice label {
+    width: 100%;
+  }
+}
+
+.supportPage p.error {
+  margin: 8px 0 0;
+  color: var(--ink);
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.supportPage p.photoName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 18px;
+  margin: 4px 0 0;
+  font-size: 17px;
+}
+
+.supportPage .sendRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+}
+
+/* The honesty tag (DESIGN.md honesty-tag: caption type, Ink Grey, an outlined pill, 30px). */
+.supportPage .honesty {
+  display: inline-flex;
+  align-items: center;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid var(--hair);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 450;
+}
+
+.supportPage p.note {
+  max-width: 34em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Until script has run (and for anyone without it) the form's place holds one line of words with the
+   email and the phone as real links; the thank-you's preview line has the same links. */
+.supportPage .fallback a,
+.supportPage .previewLine a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 6px;
+  text-decoration-color: var(--hair);
+}
+
+.supportPage .fallback a:hover,
+.supportPage .previewLine a:hover {
+  text-decoration-color: var(--ink);
+}
+
+/* Windows High Contrast (forced colors) drops shadows, gradients and fills: the fields keep a real
+   bottom border for their line (the message too, whose ruled lines are a gradient), focus shows as
+   an outline, and the chosen chip is told apart by a thicker border in the system highlight. */
+@media (forced-colors: active) {
+  .supportPage .field input:not([type="radio"]),
+  .supportPage .field textarea {
+    border-bottom: 1px solid CanvasText;
+  }
+
+  .supportPage .field input:not([type="radio"]):focus,
+  .supportPage .field textarea:focus {
+    outline: 2px solid Highlight;
+    outline-offset: 2px;
+  }
+
+  /* A thicker border in the system highlight (not a Highlight fill: the browser's text backplate
+     would paint Canvas under the label's words and hide them). */
+  .supportPage .topicChoice input:checked + label {
+    padding: 0 16px;
+    border: 3px solid Highlight;
+  }
+
+  /* The questions' plus and minus are two strokes drawn as backgrounds, which forced colors would
+     turn into the page's own colour: they keep the system's text colour. */
+  .supportPage .toggle::before,
+  .supportPage .toggle::after {
+    forced-color-adjust: none;
+    background: CanvasText;
+  }
+}
+
+/* Spec "The moment": on Send the form fades out (0.3s), then the thank-you comes (support-form.tsx).
+   Reduced motion: no fade, the thank-you at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .form {
+    transition: opacity 0.3s var(--ease);
+  }
+
+  .supportPage .form[data-leaving] {
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: the lines and the chips change at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .field input:not([type="radio"]),
+  .supportPage .field textarea {
+    transition:
+      box-shadow 0.4s var(--ease),
+      background 0.4s var(--ease);
+  }
+
+  .supportPage .topicChoice label {
+    transition:
+      background-color 0.4s var(--ease),
+      color 0.4s var(--ease),
+      border-color 0.4s var(--ease);
+  }
+}
+
+/* ---- The moment: the cup, its steam rising again, the ticket number ----------------------- */
+
+.supportPage .sent {
+  display: grid;
+  justify-items: center;
+  max-width: 640px;
+  margin-top: clamp(20px, 2vw, 32px);
+  text-align: center;
+}
+
+/* The cup's plate is 550px wide, so at 220px it is crisp on a 2x screen (check_support.py and the QA
+   hold the plate to twice the width shown). */
+.supportPage .cup {
+  position: relative;
+  display: block;
+  width: min(220px, 60%);
+}
+
+.supportPage .cup img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.supportPage .cup img.steam {
+  position: absolute;
+  max-width: none;
+}
+
+.supportPage h3.sentTitle {
+  margin: 6px 0 0;
+  font-family: var(--display-font);
+  font-weight: var(--display-weight);
+  font-size: clamp(32px, 2.8vw, 44px);
+  line-height: 1.1;
+}
+
+.supportPage h3.sentTitle:focus-visible {
+  outline-offset: 6px;
+}
+
+.supportPage p.sentLabel {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 19px;
+}
+
+/* The number in Switzer (never Ysabeau's old-style digits), large, letter by letter clear. */
+.supportPage p.ticket {
+  margin: 4px 0 0;
+  font-family: var(--sans);
+  font-size: clamp(32px, 2.8vw, 42px);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  font-variant-numeric: lining-nums tabular-nums;
+}
+
+.supportPage .sent p.body {
+  margin-inline: auto;
+}
+
+.supportPage .nowrap {
+  white-space: nowrap;
+}
+
+/* The preview line is plain words (DESIGN.md: nothing is boxed), straight under "Thank you." while
+   nothing is sent; the ticket number follows it. */
+.supportPage p.previewLine {
+  max-width: 32em;
+  margin: 10px 0 8px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+/* The cup blooms once its picture is in (opacity and blur on the picture itself, so its multiply
+   is kept: no wrapper makes a stacking context); the steam rises again 0.9s after it, and only
+   once the cup's picture and its own are in (spread.tsx useSteamGate), never alone over bare
+   paper. The general rule above holds it at 0 until then. Reduced motion: no rule, so the cup and
+   the steam are there whole at once. */
+@media (prefers-reduced-motion: no-preference) {
+  .supportPage .sent .cupInk[data-cup="waiting"] {
+    opacity: 0;
+  }
+
+  .supportPage .sent .cupInk[data-cup="in"] {
+    animation: cup-in var(--breath) var(--ease) both;
+  }
+
+  .supportPage .sent [data-steam="ready"] {
+    animation: steam-rise var(--breath) var(--ease) 0.9s both;
+  }
+
+  .supportPage .sent > :not(.cup) {
+    animation: words-in 0.9s var(--ease) 0.4s both;
+  }
+}
+
+@keyframes cup-in {
+  from {
+    opacity: 0;
+    filter: blur(5px);
+  }
+}
+
+@keyframes words-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}

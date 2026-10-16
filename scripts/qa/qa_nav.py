@@ -10,7 +10,7 @@ On the real GPU (ANGLE/D3D11):
     cross into it, Science swaps in without rolling the scroll up again, leaving closes it and it
     rolls back up, its pictures loaded (they wait until the pointer reaches the bar); a click toggles; a click on the wash closes it (and doesn't scroll the page);
     Enter opens, Tab steps into the panel, Escape closes and hands focus back; the Tab order
-    follows the line; a visible ring on the keyboard's focus; Support opens its sheet; scrolled,
+    follows the line; a visible ring on the keyboard's focus; Support goes to its page; scrolled,
     the bar settles small with its painted rule; a product link goes to its page.
   - the rule (round 3): the painted stroke (rule-lifted.webp), drawn whole once the page has moved
     on, across the page's column and centred on the mark (2px), its ink over at least 92% of it,
@@ -59,7 +59,7 @@ On the real GPU (ANGLE/D3D11):
     the page (the page's 150px scroll padding made a plain focus() jump it about 480px up).
   - phone 390x844: the menu opens and locks the page, the button says Close, Escape closes it and
     hands focus back, the Close button closes it, Products and Science fold open one at a time,
-    Support opens its sheet, a product link goes to its page.
+    Support goes to its page, a product link goes to its page.
   - tablet 834x1112: the menu opens with Products unfolded.
   - the menu's rows and finale (round 7). Phones 390x844, 360x780, 430x932 and 360x640, and
     Vietnamese and Japanese at 390x844 (and Vietnamese at 360x780): Products unfolds as five rows
@@ -1353,11 +1353,11 @@ def desktop(browser):
         ring,
     )
 
-    page.locator("#site-navigation").get_by_role("button", name="Support").click()
+    page.locator("#site-navigation a", has_text="Support").click()
+    page.wait_for_url("**/support", timeout=30000)
+    check("desk: Support goes to its page", page.url.endswith("/support"), page.url)
+    page.go_back()
     page.wait_for_timeout(1200)
-    check("desk: Support opens its sheet", page.evaluate("!!document.querySelector('dialog[open]')"))
-    page.keyboard.press("Escape")
-    page.wait_for_timeout(600)
 
     page.evaluate("window.scrollTo(0, 1400)")
     page.mouse.wheel(0, 1)
@@ -1721,11 +1721,11 @@ def phone(browser):
         and page.locator('[data-nav-sheet-toggle="products"]').get_attribute("aria-expanded")
         == "false",
     )
-    page.locator("[data-nav-sheet] button", has_text="Support").click()
-    page.wait_for_timeout(1200)
-    check("phone: Support opens its sheet", page.evaluate("!!document.querySelector('dialog[open]')"))
-    page.keyboard.press("Escape")
-    page.wait_for_timeout(700)
+    page.locator("[data-nav-sheet] a", has_text="Support").click()
+    page.wait_for_url("**/support", timeout=30000)
+    check("phone: Support goes to its page", page.url.endswith("/support"), page.url)
+    page.go_back()
+    page.wait_for_timeout(900)
     btn.click()
     page.wait_for_timeout(900)
     page.locator('[data-nav-sheet-toggle="products"]').click()
@@ -2054,8 +2054,8 @@ def languages(browser, playwright):
             )
         page.close()
 
-# Round 6: the painted stroke under a word. Each ink of the bar's three words (Products, Science,
-# About): which state its link gives it, and how much ink it shows.
+# Round 6: the painted stroke under a word. Each ink of the bar's four words (Products, Science,
+# About, Support): which state its link gives it, and how much ink it shows.
 INKS = """() => [...document.querySelectorAll('#site-navigation [data-nav-ink]')].map(i => {
   const link = i.closest('a, button'); const s = getComputedStyle(i); const r = i.getBoundingClientRect();
   return { word: link.innerText.trim(), state: link.dataset.ink || '', opacity: +s.opacity,
@@ -2132,8 +2132,8 @@ def reading_stroke(browser):
     )
     inks = page.evaluate(INKS)
     check(
-        "stroke: one ink under each of Products, Science and About; none shown over the opening",
-        [i["word"] for i in inks] == ["Products", "Science", "About"] and not inked(inks),
+        "stroke: one ink under each of Products, Science, About and Support; none shown over the opening",
+        [i["word"] for i in inks] == ["Products", "Science", "About", "Support"] and not inked(inks),
         inks,
     )
 

@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "An ink-wash painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight on, evenly lit, no shadow, no frame, no table under the paper, no text, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of empty paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Only the things named below are painted. The subject is American and Californian: no Asian objects, no Chinese characters, no pagodas, no bamboo. The painting fades out softly into empty paper on every side, with wide empty margins. Use far fewer strokes than an illustrator would: broad wet washes and a handful of bold, quick calligraphic strokes, like a painter working in two minutes. No fine hatching, no cross-hatching, no thin outline around every shape, no texture on every plank or blade of grass, no small details. Objects are suggested by one or two strokes each and parts are left unfinished, dissolving into the paper.\n\nA single coffee cup on its saucer, seen from the side at a slight angle, painted in a few bold, loose strokes of black and grey ink, the same simple cup as on the porch. From the cup rises a thin, soft wisp of steam that curls upward in a gentle S, painted in real gold leaf: the steam is the only gold in the painting. Nothing else: no table, no spoon, no background, no hills; the saucer's shadow is one pale stroke. The cup sits in the lower middle of the sheet, with tall empty paper above it for the steam.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:/Users/mcbig/Documents/codes/bigh-support/reference/ink-pages/support/originals/gpt25-a-porch-v2.png"
+  ],
+  "made": "20261014-145305"
+}

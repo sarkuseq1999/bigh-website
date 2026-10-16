@@ -43,13 +43,7 @@ function Logo({ light, footer = false }: { light: boolean; footer?: boolean }) {
 // headings in ordinary dark sections still get a solid translucent bar.
 // darkPage: the look's own paper is dark, so the open phone menu (painted in --paper/--ink) needs
 // the white logo too.
-export function ScienceHeader({
-  onSupport,
-  darkPage = false,
-}: {
-  onSupport: () => void;
-  darkPage?: boolean;
-}) {
+export function ScienceHeader({ darkPage = false }: { darkPage?: boolean }) {
   const copy = useCopy();
   const header = useRef<HTMLElement>(null);
   const [zoneTone, setZoneTone] = useState<string | undefined>(undefined);
@@ -107,15 +101,9 @@ export function ScienceHeader({
           <Link href="/#about" onClick={close}>
             {copy("About")}
           </Link>
-          <button
-            type="button"
-            onClick={() => {
-              close();
-              onSupport();
-            }}
-          >
+          <Link href="/support" onClick={close}>
             {copy("Support")}
-          </button>
+          </Link>
           <div className={styles.utilities}>
             <HeaderUtilities />
           </div>
@@ -137,13 +125,7 @@ export function ScienceHeader({
 
 // The footer takes its colors from the look's tokens (--paper-deep, --ink, --muted, --line); a dark
 // look passes tone="dark" so the white logo is used and the header turns dark over it.
-export function ScienceFooter({
-  onSupport,
-  tone = "light",
-}: {
-  onSupport: () => void;
-  tone?: "light" | "dark";
-}) {
+export function ScienceFooter({ tone = "light" }: { tone?: "light" | "dark" }) {
   const copy = useCopy();
   return (
     <footer className={styles.footer} data-tone={tone}>
@@ -164,9 +146,7 @@ export function ScienceFooter({
             <h2>{copy("Here for you")}</h2>
             <Link href="/#products">{copy("Products")}</Link>
             <Link href="/#about">{copy("About BiGH")}</Link>
-            <button type="button" onClick={onSupport}>
-              {copy("Support & FAQs")}
-            </button>
+            <Link href="/support">{copy("Support & FAQs")}</Link>
           </div>
         </div>
       </div>

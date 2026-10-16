@@ -15,7 +15,6 @@ import {
 import { HeaderUtilities } from "@/components/home/header-utilities";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { useSiteDialogs } from "../dialogs";
 import {
   navProducts,
   navProductsIntro,
@@ -67,7 +66,7 @@ import styles from "./nav-inscription.module.css";
 const TABLET_TALL = "(min-width: 700px) and (min-height: 900px)";
 
 /** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
-export type NavCurrent = "home" | "products" | "science" | "about";
+export type NavCurrent = "home" | "products" | "science" | "about" | "support";
 
 /** The homepage's parts that belong to each drop-down (the ids of their sections). */
 export type NavFollow = Partial<Record<NavPanelId, readonly string[]>>;
@@ -98,7 +97,6 @@ export function NavInscription({
 }: NavInscriptionProps) {
   const copy = useCopy();
   const locale = useLocale();
-  const dialogs = useSiteDialogs();
   // The title settles with the scroll (round 9) over a pale opening; over a dark one the words
   // turn from white to ink, so there the bar keeps its two states.
   const settle = overlay && tone === "light";
@@ -242,17 +240,6 @@ export function NavInscription({
   // in under the words (clear at the very top, and with reduced motion until the bar is solid).
   const clear = overlay && !solid && !panel && !menuOpen;
   const ground = panel || menuOpen ? "paper" : clear ? (settle ? "settling" : "clear") : "solid";
-
-  const openSupport = () => {
-    if (menuOpen) {
-      // From the menu, focus goes to its button first: the sheet hands focus back to where it
-      // was when it closes, and this link is gone by then.
-      menuButton.current?.focus({ preventScroll: true });
-      setMenuOpen(false);
-    }
-    closePanel();
-    dialogs.openSupport();
-  };
 
   return (
     <header
@@ -432,9 +419,17 @@ export function NavInscription({
                 <Ink />
               </span>
             </Link>
-            <button type="button" className={styles.link} onClick={openSupport}>
-              <span className={styles.word}>{copy("Support")}</span>
-            </button>
+            <Link
+              href="/support"
+              className={styles.link}
+              aria-current={current === "support" ? "page" : undefined}
+              data-ink={inked("support")}
+            >
+              <span className={styles.word}>
+                {copy("Support")}
+                <Ink />
+              </span>
+            </Link>
           </div>
           <div className={styles.account}>
             <HeaderUtilities />
@@ -564,9 +559,14 @@ export function NavInscription({
             {copy("About")}
           </Link>
           <span className={styles.dab} aria-hidden="true" />
-          <button type="button" className={styles.sheetLink} onClick={openSupport}>
+          <Link
+            href="/support"
+            className={styles.sheetLink}
+            aria-current={current === "support" ? "page" : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
             {copy("Support")}
-          </button>
+          </Link>
           {/* The menu ends where the page ends: the crane at rest on its brush ground (the footer's
               finale in miniature), with Log in and Sign up under it. */}
           <div className={styles.sheetFinale} aria-hidden="true">
