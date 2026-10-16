@@ -7,15 +7,23 @@ the curtain into Dr. Liu. Then the path strip (pinned sideways on wide screens),
 without WebGL. Screenshots (named key screens plus one screen at a time) go to
 scripts/qa/out/science-film/.
 
+ARCHIVED (October 14, 2026): the ink handscroll replaced the film, so this checks the film only
+once it is brought back (reference/science-page/looks/README.md). It still writes its pictures to
+the repository's scripts/qa/out/science-film/ from here.
+
 python -X utf8 scripts/qa/qa_science_film.py [http://localhost:3008]
 """
 import os
 import sys
+from pathlib import Path
+
 from playwright.sync_api import sync_playwright
 
 BASE = sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3008"
 URL = f"{BASE}/science"
-SHOTS = os.path.join(os.path.dirname(__file__), "out", "science-film")
+# The repository root, from scripts/qa/ (its home) or reference/science-page/looks/film/ (archived).
+REPO = next(p for p in Path(__file__).resolve().parents if (p / "package.json").exists())
+SHOTS = str(REPO / "scripts/qa/out/science-film")
 os.makedirs(SHOTS, exist_ok=True)
 GPU = ["--use-gl=angle", "--use-angle=d3d11", "--enable-gpu", "--ignore-gpu-blocklist"]
 passed = failed = 0

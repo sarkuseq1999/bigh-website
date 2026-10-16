@@ -1,0 +1,44 @@
+/* The Science page in Ink & Gold, "the handscroll" (Mo, October 13-14, 2026; spec
+   docs/superpowers/specs/2026-10-14-science-ink-design.md). The page's own titles in Ysabeau, the
+   homepage's title face; menus, words and pills stay in the kit's Switzer. Set on main, not the
+   page's root: the menu bar (its drop-downs' titles) and the footer (its promise) are shared and
+   read --display-font as on About and NuriCell (final review, Ruling 20). The attribute outranks
+   the kit's .look rule in either stylesheet order (as home-titles.module.css). */
+.page[data-look="ink"] main {
+  --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+}
+
+.page[data-look="ink"] main :is(h1, h2, h3) {
+  font-family: var(--display-font);
+}
+
+/* Small titles one step heavier in Latin scripts: Ysabeau's thin strokes read lighter than the
+   words beside them (as on the homepage). */
+.page[data-look="ink"] main h3:not(:lang(ko), :lang(ja), :lang(zh)) {
+  font-weight: 600;
+}
+
+.opening {
+  text-align: center;
+}
+
+.opening h1 {
+  margin: 10px auto 0;
+  max-width: 22ch;
+  font-size: clamp(34px, 3.9vw, 58px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+  text-wrap: balance;
+}
+
+@media (min-width: 960px) {
+  .opening h1 {
+    max-width: none;
+  }
+}
+
+.opening p:last-child {
+  margin: 12px auto 0;
+  max-width: 62ch;
+}

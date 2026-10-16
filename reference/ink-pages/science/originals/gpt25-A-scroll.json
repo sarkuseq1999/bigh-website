@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Only the things named below are painted.\n\nA long horizontal handscroll landscape read from left to right: one continuous painting in which drifting mist and empty paper join each place to the next, the way a classical handscroll travels through scenery. The horizon stays at about the same height across the whole picture, so it reads as one journey. From left to right: (1) a Japanese castle with dark, layered, upturned roofs on a sloping stone base, among a few pine trees; (2) a wide stretch of open ocean painted as loose rolling waves of grey wash, with one tiny ship far away; (3) a tall, slender university bell tower with a pointed spire, rising among tall eucalyptus trees on soft rolling hills; (4) a European fortress with long pale walls on top of a steep hill, above a small old town with church domes beside a river; (5) soft rolling California hills with two or three broad old oak trees, and a low round sun painted in real gold leaf in the sky above them. Each place is painted at a similar size and spaced evenly, with mist between them. The gold-leaf sun at the far right is the only gold in the painting; everything else is ink. No people, no text, no seals, no frame, no scroll rollers or mounting.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261013-163040"
+}

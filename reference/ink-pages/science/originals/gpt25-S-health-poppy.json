@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "Edit the reference painting. Keep everything exactly as it is: the paper, the oil lamp with its gold-leaf flame on the left, the three balanced stones in the middle, their size, their places and their brushwork. Replace only the plum branch on the right with a small clump of California poppies at the same size and place: three cup-shaped flowers on slender, slightly curving stems with fine feathery leaves at their base, one flower fully open, one half open, one still a closed bud. Painted in sumi ink only, in the same loose brushwork: the petals are pale paper with soft grey outlines and a light grey wash, never orange, never yellow, never gold. The lamp's flame stays the only gold.",
+  "settings": {
+    "aspect_ratio": "21:9",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/ink-pages/science/originals/gpt25-R-health.png"
+  ],
+  "made": "20261014-123126"
+}

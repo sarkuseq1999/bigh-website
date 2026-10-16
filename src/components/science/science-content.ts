@@ -1,6 +1,8 @@
 // Words and facts for the Science page (/science). Mo's 9/16 plan: lead with the scientists, then
-// the research, health explained, and Ask BiGH Science. After three rounds Mo chose look B, "Scroll
-// film" (September 28, 2026); the others are in reference/science-page/looks/ and .../looks/round3/.
+// the research, health explained, and Ask BiGH Science. The page is now "the handscroll" in Ink &
+// Gold (Mo, October 13-14, 2026; components in ./ink/). It replaced look B, "Scroll film" (Mo's
+// pick of September 28, now in reference/science-page/looks/film/); the earlier looks are in
+// reference/science-page/looks/ and .../looks/round3/.
 //
 // Approved copy is marked "approved" with its date in BRAND-CHEATSHEET.md. Everything else is a
 // DRAFT line for this build, written from facts in RESEARCH-NOTES.md, and still needs Mo's words
@@ -15,9 +17,6 @@ export const opening = {
   eyebrow: "Science",
   // Mo's proposed opening (BRAND-CHEATSHEET.md, "Science page — opening priority chosen by Mo").
   title: "Meet the scientists behind BiGH’s key formulas.",
-  // The hero sets it in two lines: plain words, then a gold serif line.
-  titleLead: "Meet the scientists",
-  titleAccent: "behind BiGH’s key formulas.",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
@@ -71,20 +70,6 @@ export const liuNumbers = [
     url: "https://www.uhrs.edu.cn/info/1050/1805.htm",
   },
 ];
-
-// The story panel ("Read his story"). The first two paragraphs are the homepage's own dialog text.
-export const liuStory = {
-  eyebrow: "Meet the scientists",
-  paragraphs: [
-    "Dr. Liu studies mitochondrial function, oxidative stress, and the biology of aging. His scientific background is central to BiGH’s approach to cellular health.",
-    "He earned his doctorate at Okayama University in Japan and completed postdoctoral work in biochemistry and molecular biology at the University of California, Berkeley.",
-    "In 2025, his university announced his election to the European Academy of Sciences and Arts.",
-  ],
-  sources: [
-    { label: "University biography (Chinese)", url: "https://www.uhrs.edu.cn/info/1050/1805.htm" },
-    { label: "Read the 2002 study", url: "https://pubmed.ncbi.nlm.nih.gov/11854529/" },
-  ],
-};
 
 // DRAFT. Words only, never a photograph. Credits confirmed by Mo on September 25, 2026: NuriCell is
 // formulated by Dr. Liu only ("credit goes to Dr. Liu only"); Nature Calm by Dr. Liu and Dr. Iris
@@ -285,4 +270,33 @@ export const ask = {
   ],
   status: "In development",
   note: "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
+};
+
+// The ink page, "the handscroll" (Mo, October 13-14, 2026; spec
+// docs/superpowers/specs/2026-10-14-science-ink-design.md). DRAFT lines.
+export const ink = {
+  // The opening's lead: the film's two lines, as one (DRAFT in the film as well; neither is in
+  // BRAND-CHEATSHEET.md).
+  lead: [
+    "A life in cell science.", // DRAFT
+    "From Okayama to Berkeley, and from the lab to BiGH.", // DRAFT
+  ],
+  formulasLabel: "The formulas", // DRAFT
+  source: "Source", // DRAFT
+  scrollHint: "Keep scrolling: the scroll unrolls", // DRAFT
+  scrollStill: "Scroll sideways to see the whole painting", // DRAFT
+  scrollAlt:
+    "A long ink painting of Dr. Liu’s path: Okayama Castle, the ocean, the bell tower at Berkeley, Salzburg, and California hills under a gold sun", // DRAFT
+  readStudy: "Read the study", // DRAFT
+  scrollsAlt: "A shelf of rolled scrolls painted in ink; three lie pulled forward", // DRAFT
+  healthAlt:
+    "Three small ink paintings: an oil lamp with a gold flame, three balanced stones, and California poppies", // DRAFT
+  sceneAlts: [
+    "An oil lamp with a gold flame, painted in ink", // DRAFT
+    "Three balanced stones, painted in ink", // DRAFT
+    "California poppies, painted in ink", // DRAFT
+  ],
+  mugsAlt: "Two mugs on a low wooden table, steam rising, painted in ink", // DRAFT
+  explainer: "Read a quick explainer",
+  illustration: "Illustration",
 };

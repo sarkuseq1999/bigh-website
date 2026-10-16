@@ -1,0 +1,80 @@
+/* One part below Dr. Liu (spec, "The page"): the header row (title left, lead right), one wide
+   painting with soft ends, then the part's words. The kit's .look rules (margin, size) sit at
+   (0,2,0), so the figure's caption is scoped under .strip. */
+.strip {
+  padding-top: clamp(96px, 10vw, 150px);
+}
+
+.head {
+  display: grid;
+  gap: 18px;
+}
+
+@media (min-width: 960px) {
+  .head {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    gap: 72px;
+    align-items: end;
+  }
+}
+
+.title {
+  margin: 12px 0 0;
+  font-size: clamp(32px, 3.4vw, 50px);
+  font-weight: 500;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+
+.figure {
+  position: relative;
+  margin: 40px 0 0;
+}
+
+/* The painting's own soft ends (--edge, which the kit's bloom lays its blot over). Its box is
+   reserved from the ratio the stylesheet knows (the figure's --ar-wide / --ar-narrow, set from
+   the pictures' sizes): the phone picture has another ratio than the wide one, and a box that
+   changed shape when the phone picture arrived would move every part below it. */
+.art {
+  --edge: linear-gradient(90deg, transparent 0, #000 5%, #000 95%, transparent 100%);
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ar-wide);
+  -webkit-mask-image: var(--edge);
+  mask-image: var(--edge);
+}
+
+@media (max-width: 959px) {
+  .art {
+    aspect-ratio: var(--ar-narrow, var(--ar-wide));
+  }
+}
+
+.strip .figure figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* A strip with phone scenes instead (health): the wide painting from 960px only. */
+.figure[data-wide-only] {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .figure[data-wide-only] {
+    display: block;
+  }
+}
+
+/* Reduced motion is complete from the first paint, and so is a page whose script never runs: the
+   painting the server marks "waiting" is shown whole and crisp, with only its own soft ends,
+   not hidden by a bloom that will not come. :global([data-look]) outranks the kit's bloom rules
+   whatever order the stylesheets load in. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]) .art[data-bloom="waiting"] {
+    -webkit-mask: var(--edge);
+    mask: var(--edge);
+    filter: none;
+  }
+}
