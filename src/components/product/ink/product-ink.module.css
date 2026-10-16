@@ -42,8 +42,11 @@
 /* A lockup (Green Bee Propolis, Mo, October 16, 2026): the left word as large as its column allows,
    reaching --tuck into the bottle photo's empty margin (never its glass), and the right lines stacked
    smaller (--stack-ratio of it), one word a line, each centred on the longest (Mo, October 16: "Bee"
-   centred over "Propolis"), reaching as far the other way. Both are centred on the bottle's middle,
-   like NuriCell's halves. */
+   centred over "Propolis"), reaching as far the other way. "Green" and "Propolis" share one baseline
+   (Mo picked "one line", October 16), and the name, from the top of "Bee" to that line, is centred on
+   the bottle's middle: from 960px "Green" moves down 0.286 of its size and the stack 0.07 of its own,
+   measured on the page for a stack at 0.72 and these line heights (re-measure if either changes;
+   qa_propolis_ink checks the two baselines meet). */
 .page [data-name-lockup] .first {
   margin-right: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
 }
@@ -55,6 +58,16 @@
   margin-left: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
   font-size: calc(var(--stack-ratio) * 1em);
   line-height: 0.94;
+}
+
+@media (min-width: 960px) {
+  .page [data-name-lockup] .first {
+    translate: 0 0.286em;
+  }
+
+  .page [data-name-lockup] .second {
+    translate: 0 0.07em;
+  }
 }
 
 .page .stackLine {
@@ -466,6 +479,12 @@
   .page [data-name-lockup] .first,
   .page [data-name-lockup] .second {
     margin: 0;
+  }
+
+  /* "Green" down onto "Propolis"'s baseline (0.236 of its size, measured with the desktop shifts);
+     the stack stays, so the gap over the bottle is unchanged. */
+  .page [data-name-lockup] .first {
+    translate: 0 0.236em;
   }
 
   .page [data-spaced] .first,
