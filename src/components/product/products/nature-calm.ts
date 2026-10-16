@@ -1,3 +1,5 @@
+import { natureCalmArt } from "../ink/nature-calm-art";
+import { nuricellArt } from "../ink/nuricell-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -265,6 +267,12 @@ const natureCalm: ProductPage = {
         height: 768,
         alt: "Portrait of Dr. Jiankang Liu",
       },
+      // The ink page shows NuriCell's painting of him (Mo, October 16, 2026: reuse it; nothing new
+      // is generated from his face).
+      painting: {
+        ...nuricellArt.liu,
+        alt: "A portrait painting of Dr. Jiankang Liu in ink and colour",
+      },
       lines: [
         "Dr. Liu is an internationally recognized scientist in mitochondrial biology and aging. His research explores the connections between cellular energy, nutrition, and how we age.",
         "As BiGH’s Chief Scientific Advisor, he brings decades of scientific experience to our purpose: helping people stay sharp, stay active, and live fully.",
@@ -314,6 +322,37 @@ const natureCalm: ProductPage = {
     fda: "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
   },
   related: ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific"],
+  // The ink page (Mo, October 16, 2026; picks in reference/ink-pages/nature-calm/README.md). Why:
+  // the lake, ruffled then still, the light gathering (the lantern's cross-fade). No painted sum
+  // (3 × 30 = 90 is NuriCell's). Buy: the real bottle standing between lavender rows.
+  ink: {
+    why: {
+      unlit: natureCalmArt.lakeRuffled,
+      lit: natureCalmArt.lakeStill,
+      alt: "A still lake at dusk, its gold reflection scattered by wind and then gathered into one line as the water stills, painted in ink and gold leaf",
+    },
+    inside: {
+      ...natureCalmArt.cone,
+      alt: "A long sugar pine cone with many scales and three small beads of gold resin, painted in ink",
+    },
+    research: {
+      ...natureCalmArt.stars,
+      alt: "The seven stars of the Big Dipper in gold leaf over one dark ridge, painted in ink",
+    },
+    daily: {
+      picture: {
+        ...natureCalmArt.moon,
+        alt: "A glass of water and three capsules, the moon's phases above them with the full moon in gold leaf, painted in ink",
+      },
+    },
+    buy: {
+      scene: {
+        ...natureCalmArt.lavender,
+        alt: "Rows of lavender in a California field, painted in watercolour",
+      },
+    },
+    supply: natureCalmArt.capsules,
+  },
 };
 
 export default natureCalm;
