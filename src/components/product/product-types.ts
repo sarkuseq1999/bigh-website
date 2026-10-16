@@ -135,6 +135,12 @@ export type ProductPage = ProductSummary & {
    * Turmerific: "Turm | erific" sets two halves of nearly equal width (Mo, October 2, 2026).
    */
   nameHalves?: [string, string];
+  /**
+   * The ink page's opening name as a lockup: one word large on the bottle's left, the rest stacked
+   * smaller on its right, one word a line. Green Bee Propolis: "Green" | "Bee" over "Propolis" (Mo,
+   * October 16, 2026, after NuriCell's "Nuri | Cell").
+   */
+  nameLockup?: { left: string; right: readonly string[] };
   purpose: string;
   highlights: string[];
   credit?: string;

@@ -39,6 +39,26 @@
   font-size: calc(var(--name) / 1.077);
 }
 
+/* A lockup (Green Bee Propolis, Mo, October 16, 2026): the left word as large as its column allows,
+   reaching --tuck into the bottle photo's empty margin (never its glass), and the right lines stacked
+   smaller (--stack-ratio of it), one word a line, reaching as far the other way. Both are centred on
+   the bottle's middle, like NuriCell's halves. */
+.page [data-name-lockup] .first {
+  margin-right: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
+}
+
+.page [data-name-lockup] .second {
+  display: flex;
+  flex-direction: column;
+  margin-left: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
+  font-size: calc(var(--stack-ratio) * 1em);
+  line-height: 0.94;
+}
+
+.page .stackLine {
+  display: block;
+}
+
 /* 1. The opening: the header floats over it, so it starts 88px down, and the bottle's cap keeps a
    breath below the menu bar. Its vertical spaces are kept tight so that, at 1440x900, the name, the
    bottle and all the words (headline, purpose, highlights, Add to cart, supply) are in the first
@@ -432,6 +452,18 @@
   .page [data-spaced] h1.name {
     grid-template-columns: auto;
     justify-items: center;
+  }
+
+  /* A lockup keeps its shape: the left word and its stack side by side, centred over the bottle,
+     0.14 of the word apart (LOCKUP.phoneGap in opening.tsx). */
+  .page [data-name-lockup] h1.name {
+    column-gap: 0.14em;
+    align-items: center;
+  }
+
+  .page [data-name-lockup] .first,
+  .page [data-name-lockup] .second {
+    margin: 0;
   }
 
   .page [data-spaced] .first,

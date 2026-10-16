@@ -42,6 +42,8 @@ TS = REPO / "src/components/product/ink/propolis-art.ts"
 V = "v1"
 # The Buy scene was cut again after the first preview (October 14: the bigger bottle).
 SCENE_V = "v2"
+# The card's capsule went pale after going live (October 16).
+CAPSULE_V = "v2"
 TAKES = {
     "hive-gold": "why-hive-gold",
     "hive-open": "why-hive-open",
@@ -176,13 +178,14 @@ def resin():
     art = bd.art_of(img, f"resin-{V}", 1100)
     ba.gold_mask(f"resin-{V}")
     art["gold"] = f"{URL}/resin-{V}-gold.webp"
-    return art, img, m[..., 0]
+    return art, flat, m[..., 0]
 
 
 def supply(resin_img, mask):
-    """The opening's "One bottle" card: the yellow capsule alone, ink on a clear ground (as
-    NuriCell's capsule pair: over the paper it draws as a multiplied painting would, with no box
-    inside the words' settle animation)."""
+    """The opening's "One bottle" card: the capsule alone, as painted (pale, the colour of
+    NuriCell's capsule halves: Mo, October 16, 2026, over the yellow it is in the Inside painting),
+    ink on a clear ground (as NuriCell's capsule pair: over the paper it draws as a multiplied
+    painting would, with no box inside the words' settle animation)."""
     ys, xs = np.nonzero(mask > 0.02)
     pad = 10
     box = (xs.min() - pad, ys.min() - pad, xs.max() + pad, ys.max() + pad)
@@ -197,10 +200,10 @@ def supply(resin_img, mask):
     colour = np.where(alpha[..., None] > 0, 255 - (255 - rgb) * 255 / np.maximum(alpha[..., None], 1), 255)
     rgba = np.dstack([np.clip(colour, 0, 255), alpha]).astype(np.uint8)
     OUT.mkdir(parents=True, exist_ok=True)
-    path = OUT / f"capsule-{V}.webp"
+    path = OUT / f"capsule-{CAPSULE_V}.webp"
     Image.fromarray(rgba, "RGBA").save(path, "WEBP", quality=90, method=6)
     print(f"{path.relative_to(REPO)}  {img.width}x{img.height}")
-    return {"src": f"{URL}/capsule-{V}.webp", "width": img.width, "height": img.height}
+    return {"src": f"{URL}/capsule-{CAPSULE_V}.webp", "width": img.width, "height": img.height}
 
 
 def mug():

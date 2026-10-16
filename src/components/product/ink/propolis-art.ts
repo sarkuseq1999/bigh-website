@@ -28,7 +28,7 @@ export const propolisArt = {
     gold: "/images/products/green-bee-propolis/ink/resin-v1-gold.webp",
   },
   capsule: {
-    src: "/images/products/green-bee-propolis/ink/capsule-v1.webp",
+    src: "/images/products/green-bee-propolis/ink/capsule-v2.webp",
     width: 150,
     height: 113,
   },

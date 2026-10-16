@@ -6,8 +6,9 @@ cracks, one ingredient, no painted sum, the real bottle inside a painted scene.
 Sections (all, or --only=a,b):
   shell       200 in the ink look, one h1 (Green Bee Propolis), the real bottle, no canvas, no console
               errors (1440x900, 390x844)
-  name        1920 to 360: both halves inside the wrap and clear of the bottle, on one row from 960px,
-              "Green Bee" over "Propolis" below; vi too
+  name        1920 to 360: the lockup (Mo, October 16): "Green" large, "Bee" over "Propolis" smaller,
+              inside the wrap, on one middle; beside the bottle and clear of its glass from 960px,
+              side by side over it below; vi too. The One bottle card's capsule pale, like NuriCell's
   chapters    overview, why, inside, research, daily, buy (no people, no sum); each its own painting;
               "Inside every capsule, one ingredient."; 200 mg; every study; the questions
   spread      the gold waits, then fills the cracks from their middle; reduced motion and no script:
@@ -94,6 +95,9 @@ def shell(browser):
         )
         check(f"{tag}: the real bottle in the opening", page.locator('[data-chapter="overview"] img[src*="green-bee-propolis.png"]').count() >= 1)
         check(f"{tag}: no canvas", page.locator("canvas").count() == 0)
+        card = page.locator('[data-chapter="overview"] img[class*=bottleCardPicture]')
+        src = card.get_attribute("src") or ""
+        check(f"{tag}: the One bottle card's capsule is the pale one (Mo, October 16)", "capsule-v2" in src, src[:90])
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         page.wait_for_timeout(2500)
         page.screenshot(path=str(OUT / f"shell-{w}.png"))
@@ -111,7 +115,9 @@ NAME_BOXES = """() => {
   // The bottle's glass: the photo has a wide transparent margin (its visible part is 51.5% of its
   // width, centred).
   const b = box(bottle), mid = (b.l + b.r) / 2, half = (b.r - b.l) * 0.515 / 2;
-  return { inner, first: box(first), second: box(second), glass: { l: mid - half, r: mid + half, t: b.t, b: b.b } };
+  const sized = (el) => ({ ...box(el), size: parseFloat(getComputedStyle(el).fontSize) });
+  const lines = [...second.querySelectorAll('[class*=stackLine]')].map((el) => ({ text: el.textContent, ...box(el) }));
+  return { inner, first: sized(first), second: sized(second), lines, glass: { l: mid - half, r: mid + half, t: b.t, b: b.b } };
 }"""
 
 
@@ -128,15 +134,20 @@ def name(browser):
             lo, hi = m["inner"]
             inside = m["first"]["l"] >= lo - 1 and m["second"]["r"] <= hi + 1 and m["first"]["r"] <= hi + 1 and m["second"]["l"] >= lo - 1
             check(f"{tag}: both halves inside the wrap", inside, f"wrap {lo:.0f}-{hi:.0f}, first {m['first']['l']:.0f}-{m['first']['r']:.0f}, second {m['second']['l']:.0f}-{m['second']['r']:.0f}")
+            g, k = m["first"], m["second"]
+            lines = m["lines"]
+            stacked = len(lines) == 2 and lines[0]["text"] == "Bee" and lines[1]["text"] == "Propolis" and lines[1]["t"] >= lines[0]["b"] - 6
+            check(f"{tag}: Bee over Propolis, one word a line", stacked, str(lines))
+            check(f"{tag}: Green larger than the stack", g["size"] > 1.4 * k["size"], f"{g['size']:.0f} vs {k['size']:.0f}px")
+            middle = abs((g["t"] + g["b"]) / 2 - (k["t"] + k["b"]) / 2) <= 3
             if w >= 960:
-                row = abs(m["first"]["t"] - m["second"]["t"]) < 2
-                clear = m["first"]["r"] <= m["glass"]["l"] + 1 and m["second"]["l"] >= m["glass"]["r"] - 1
-                check(f"{tag}: one row, clear of the bottle's glass", row and clear,
-                      f"first ends {m['first']['r']:.0f}, glass {m['glass']['l']:.0f}-{m['glass']['r']:.0f}, second starts {m['second']['l']:.0f}")
+                clear = g["r"] <= m["glass"]["l"] + 1 and k["l"] >= m["glass"]["r"] - 1
+                check(f"{tag}: Green left, the stack right, both clear of the glass, one middle", clear and middle,
+                      f"Green ends {g['r']:.0f}, glass {m['glass']['l']:.0f}-{m['glass']['r']:.0f}, stack starts {k['l']:.0f}")
             else:
-                stacked = m["second"]["t"] >= m["first"]["b"] - 2 and m["glass"]["t"] >= m["second"]["b"] - 30
-                check(f"{tag}: Green Bee over Propolis over the bottle", stacked,
-                      f"first {m['first']['t']:.0f}-{m['first']['b']:.0f}, second {m['second']['t']:.0f}-{m['second']['b']:.0f}, bottle top {m['glass']['t']:.0f}")
+                over = max(g["b"], k["b"]) <= m["glass"]["t"] + 30 and g["r"] <= k["l"] + 1
+                check(f"{tag}: Green beside the stack, over the bottle, one middle", over and middle,
+                      f"Green {g['l']:.0f}-{g['r']:.0f}, stack {k['l']:.0f}-{k['r']:.0f}, bottle top {m['glass']['t']:.0f}")
             if locale == "en" and w in (1440, 1024, 390):
                 page.screenshot(path=str(OUT / f"name-{w}.png"))
             ctx.close()

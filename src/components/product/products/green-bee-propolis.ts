@@ -60,6 +60,8 @@ const moreStudies: ProductStudy[] = [
 const greenBeePropolis: ProductPage = {
   ...propolisSummary,
   eyebrow: "Made by bees",
+  // The opening's name as a lockup (Mo, October 16, 2026): "Green" | "Bee" over "Propolis".
+  nameLockup: { left: "Green", right: ["Bee", "Propolis"] },
   // The full approved headline (Mo, September 29: "2B", over a shorter two-line draft).
   headlineLines: ["Distinctive green propolis", "from Minas Gerais, Brazil."],
   purpose:

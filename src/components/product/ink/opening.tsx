@@ -67,6 +67,27 @@ export function nameFit(first: string, second: string, spaced: boolean) {
   return { scale, stand, phone: 84.6 / (line * 1.03) };
 }
 
+/** The lockup's right lines against its left word, and how far each side may reach into the bottle
+ *  photo's empty margins (in NuriCell name-sizes; the glass starts 0.4 in), and the gap between
+ *  the left word and the stack on a phone (in left-word sizes). Chosen on the page (October 16). */
+const LOCKUP = { right: 0.62, tuck: 0.2, phoneGap: 0.14 };
+
+/**
+ * How a lockup is set (Mo, October 16, 2026: "Green" large on the bottle's left, "Bee" over
+ * "Propolis" on its right): the bottle stays NuriCell's size; the left word as large as its column
+ * allows, reaching LOCKUP.tuck into the photo's empty margin beside the glass, with 3% to spare;
+ * the stacked lines LOCKUP.right of it, smaller still if the longest would not fit its column. On a
+ * phone, the word and the stack side by side over the bottle, as large as the column allows.
+ */
+export function lockupFit(left: string, right: readonly string[]) {
+  const room = NURI.half + LOCKUP.tuck;
+  const scale = room / (ems(left) * 1.03);
+  const widest = Math.max(...right.map(ems));
+  const ratio = Math.min(LOCKUP.right, room / (widest * scale * 1.03));
+  const phone = 84.6 / ((ems(left) + LOCKUP.phoneGap + widest * ratio) * 1.03);
+  return { scale, stand: NURI.stand / scale, ratio, tuck: LOCKUP.tuck, phone };
+}
+
 // Chapter 1: the giant name parts round the real bottle, centred on the letters, on bare paper (Mo,
 // October 10: no eyebrow over the name, no ink pool under the bottle). Phones stack the name over
 // the bottle. Under it (Mo, October 12-13, after Timeline's and Seed's buy boxes): under "Nuri" the
@@ -75,11 +96,15 @@ export function nameFit(first: string, second: string, spaced: boolean) {
 // promise, a wide Add to cart and the refund line.
 export function Opening({ product }: { product: ProductPage }) {
   const copy = useCopy();
-  const [first, second] = product.nameHalves ?? splitName(product.name);
+  const lockup = product.nameLockup;
+  const [first, second] = lockup
+    ? [lockup.left, lockup.right.join(" ")]
+    : (product.nameHalves ?? splitName(product.name));
   // A two-word name ("Green Bee Propolis") stacks its halves on a phone; one word ("NuriCell")
-  // stays one word.
-  const spaced = product.name.startsWith(`${first} `);
-  const fit = nameFit(first, second, spaced);
+  // stays one word. A lockup keeps its own shape on a phone.
+  const spaced = !lockup && product.name.startsWith(`${first} `);
+  const stacked = lockup ? lockupFit(lockup.left, lockup.right) : null;
+  const fit = stacked ?? nameFit(first, second, spaced);
   return (
     <section
       id={anchorId("overview")}
@@ -87,6 +112,7 @@ export function Opening({ product }: { product: ProductPage }) {
       data-chapter="overview"
       aria-labelledby="product-name"
       data-name-fit={fit ? "long" : undefined}
+      data-name-lockup={lockup ? "" : undefined}
       data-spaced={spaced || undefined}
       style={
         fit
@@ -94,6 +120,12 @@ export function Opening({ product }: { product: ProductPage }) {
               ["--name-scale" as string]: fit.scale.toFixed(4),
               ["--stand-ratio" as string]: fit.stand.toFixed(3),
               ["--phone-name" as string]: `${fit.phone.toFixed(2)}vw`,
+              ...(stacked
+                ? {
+                    ["--stack-ratio" as string]: stacked.ratio.toFixed(3),
+                    ["--tuck" as string]: stacked.tuck.toFixed(3),
+                  }
+                : {}),
             } as CSSProperties)
           : undefined
       }
@@ -123,7 +155,13 @@ export function Opening({ product }: { product: ProductPage }) {
             />
           </span>
           <span className={styles.second} aria-hidden="true">
-            {second}
+            {lockup
+              ? lockup.right.map((line) => (
+                  <span key={line} className={styles.stackLine}>
+                    {line}
+                  </span>
+                ))
+              : second}
           </span>
         </h1>
         <div className={styles.openingWords}>
