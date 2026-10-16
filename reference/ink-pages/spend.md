@@ -87,3 +87,15 @@ mockups and the paintings. Picks and rounds in `reference/ink-pages/propolis/REA
 
 29 jobs of the 42 cap, about $1.45 (at most $2.03 before refunds). Check open.higgsfield.ai/billing for
 the real total.
+
+## Turmerific ink page (October 16, 2026)
+
+Ledger: `C:/Users/mcbig/AppData/Local/HiggsfieldAPI/bigh-turmerific-ink/` (cap 42 jobs), Mo's $3 for the
+mockups and the paintings. Picks in `reference/ink-pages/turmerific/README.md`.
+
+| Round | Jobs | Pictures | Kept |
+| ----- | ---- | -------- | ---- |
+| 1 | 10 | why-soak-lit, why-soak-unlit, why-drops-lit, why-drops-unlit, inside-scoop, research-glasses, daily-glass, daily-sum, buy-plant, buy-california | why-soak-lit, why-soak-unlit, inside-scoop, research-glasses, daily-glass, daily-sum, buy-plant |
+
+10 jobs of the 42 cap, about $0.50 (at most $0.70 before refunds). Check open.higgsfield.ai/billing for
+the real total.
