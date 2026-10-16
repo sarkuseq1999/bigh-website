@@ -36,17 +36,17 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     headline word alone on a line; the footer's links at least 44 px tall).
   - everything that opens, and the keyboard path (October 4): "Skip to content" is the first Tab
     stop and puts focus at the page's words; every header control shows the ink focus ring and is
-    48 px tall; each of the seven sheets (Support from the header and the footer, Dr. Liu, Ask
-    BiGH Science, the three explainers) opens from the keyboard with focus inside, keeps focus,
+    48 px tall; each of the five sheets (Dr. Liu, Ask BiGH Science, the three explainers; Support is
+    a page of its own since October 14) opens from the keyboard with focus inside, keeps focus,
     closes on Escape and hands focus back to its button; the sheet is the page's paper on an ink
     wash and settles in; no button opens the product preview any more (all five products link to
     their pages); the wheel scrolls a long sheet, not the page under it; on a phone each sheet
     sits inside the window with no sideways scrolling, text at least 15 px, targets at least
     48 px and the close button in view when it scrolls; the menu (phone and a tablet held
     upright) is a full sheet with the page locked under it, links at least 48 px tall inside the
-    window, Tab goes from its button into it, Escape closes it, and Support opened from it hands
-    focus back to the menu button; with reduced motion a sheet and the menu are whole at once;
-    in Korean the Support sheet and the menu open inside the window.
+    window, Tab goes from its button into it, Escape closes it, and its Support is a link to the
+    Support page; with reduced motion a sheet and the menu are whole at once; in Korean the menu
+    opens inside the window.
   - the research index (October 4): on two columns every note is pinned to the spine (year,
     toggle and leader on one line, no rules between notes; the year beside the title on a wide
     window, heading the note on a narrow one), its leader answers in ink when the note is
@@ -1027,7 +1027,7 @@ def run(browser, look, mobile):
         """(() => { const n = document.querySelector('#site-navigation');
           return { triggers: [...n.querySelectorAll('[data-nav-trigger]')].map(b => b.dataset.navTrigger),
             about: n.querySelector('a[href$="/about"]')?.getAttribute('href') || '',
-            support: [...n.querySelectorAll('button')].some(b => b.textContent.trim() === 'Support'),
+            support: n.querySelector('a[href$="/support"]')?.getAttribute('href') || '',
             home: [...n.querySelectorAll('a')].some(a => a.textContent.trim() === 'Home'),
             products: new Set([...n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]')].map(a => a.getAttribute('href'))).size,
             science: new Set([...n.querySelectorAll('[data-nav-panel=science] a[href*="/science#"]')].map(a => a.getAttribute('href'))).size }; })()"""
@@ -1036,7 +1036,7 @@ def run(browser, look, mobile):
         f"{tag}: header links",
         nav["triggers"] == ["products", "science"]
         and nav["about"].endswith("/about")
-        and nav["support"]
+        and nav["support"].endswith("/support")
         and not nav["home"]
         and nav["products"] == 5
         and nav["science"] == 4,
@@ -1756,20 +1756,14 @@ def run_sizes(browser, look):
 
 
 INK = "rgb(12, 11, 10)"
-# The visible Support in the header: the bar's on a desktop, the open menu's on a phone.
-SUPPORT = (
-    "[...document.querySelectorAll('header button:not([data-nav-menu-button]):not([data-nav-trigger])"
-    ":not([data-nav-sheet-toggle]):not(:disabled)')].find(b => b.getClientRects().length)"
-)
+# Support is a page of its own (October 14): the sheets are the scientists' and the explainers'.
 SHEETS = [
-    ("Support (header)", SUPPORT, None),
     ("Dr. Liu", "document.querySelectorAll('#scientists button')[0]", None),
     ("Ask BiGH Science", "document.querySelectorAll('#scientists button')[1]", None),
     # The tabs' panel (phones, reduced motion) or, in the scroll story (round 7), the topic's own.
     ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"0\"] button')].pop()", 0),
     ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"1\"] button')].pop()", 1),
     ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"2\"] button')].pop()", 2),
-    ("Support (footer)", "document.querySelector('footer button')", None),
 ]
 MENU_BUTTON = "[data-nav-menu-button]"
 SHEET = "[data-nav-sheet]"
@@ -1896,7 +1890,7 @@ def run_opens(browser):
         back = page.evaluate("[document.querySelector('dialog').open, document.activeElement === window.__opener, document.body.style.overflow]")
         if back != [False, True, ""]:
             unreturned.append(f"{name} {back}")
-    check(f"{tag}: seven sheets open from the keyboard with focus inside", not unopened, f"not opened: {unopened}")
+    check(f"{tag}: five sheets open from the keyboard with focus inside", not unopened, f"not opened: {unopened}")
     check(f"{tag}: focus stays in each sheet, with the ink focus ring", not loose and not pale, f"left the sheet: {loose}; no ring: {pale[:4]}")
     check(
         f"{tag}: Escape closes each sheet, focus returns to its button and the page scrolls again",
@@ -1935,7 +1929,7 @@ def run_opens(browser):
     # A short window: the wheel scrolls the sheet, and the page under it stays where it is.
     tag = "opens 1280x640"
     context, page, response, problems = open_page(browser, f"{BASE}/", (1280, 640), False)
-    open_sheet(page, SHEETS[1][1])
+    open_sheet(page, SHEETS[0][1])
     before = page.evaluate("[scrollY, document.querySelector('dialog').scrollHeight - document.querySelector('dialog').clientHeight]")
     page.mouse.move(640, 320)
     for _ in range(6):
@@ -1955,9 +1949,6 @@ def run_opens(browser):
     context, page, response, problems = open_page(browser, f"{BASE}/", (390, 844), True)
     outside, small, lost = [], [], []
     for name, opener, topic in SHEETS:
-        if name == "Support (header)":
-            page.click(MENU_BUTTON)
-            page.wait_for_timeout(900)
         open_sheet(page, opener, topic)
         m = page.evaluate(
             """(() => { const d = document.querySelector('dialog'); if (!d.open) return null; const b = d.getBoundingClientRect();
@@ -2042,19 +2033,9 @@ def run_opens(browser):
             all(w[0] for w in walk) and walk[-1][2] and ringed and shut == ["false", "Open menu", ""],
             f"{walk}, ring {ringed}, after Escape {shut}",
         )
-        page.keyboard.press("Enter")
-        page.wait_for_timeout(900)
-        page.evaluate(f"{SUPPORT}.focus()")
-        page.keyboard.press("Enter")
-        page.wait_for_timeout(1300)
-        title = dialog_title(page)
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(600)
-        home = page.evaluate(f"[document.querySelector('dialog').open, {ACTIVE}]")
         check(
-            f"{tag}: Support opened from the menu hands focus back to the menu's button",
-            title == "BiGH support" and home == [False, "Open menu"],
-            f"{title!r}, then {home}",
+            f"{tag}: the menu's Support is a link to the Support page",
+            page.evaluate("document.querySelector('[data-nav-sheet] a[href$=\"/support\"]') !== null"),
         )
         check(f"{tag}: no errors (menu)", not problems, "; ".join(problems[:3]))
         context.close()
@@ -2062,7 +2043,7 @@ def run_opens(browser):
     # Reduced motion: a sheet and the menu are whole at once, and a sheet is gone at once.
     tag = "opens reduced motion"
     context, page, response, problems = open_page(browser, f"{BASE}/", (1440, 900), False, reduced=True)
-    open_sheet(page, SUPPORT, wait=0)
+    open_sheet(page, SHEETS[0][1], wait=0)
     page.wait_for_function("document.querySelector('dialog').open", timeout=3000)
     whole = page.evaluate(
         """(() => { const d = document.querySelector('dialog'); const s = getComputedStyle(d); const b = getComputedStyle(d, '::backdrop');
@@ -2094,7 +2075,7 @@ def run_opens(browser):
     check(f"{tag}: no errors (opens)", not problems, "; ".join(problems[:3]))
     context.close()
 
-    # Korean, on a phone: the Support sheet and the menu.
+    # Korean, on a phone: the menu (its Support is a link to the page, so no sheet opens).
     tag = "opens kr phone"
     context, page, response, problems = open_page(browser, f"{BASE}/kr", (390, 844), True)
     page.click(MENU_BUTTON)
@@ -2103,27 +2084,12 @@ def run_opens(browser):
         "[...new Set(document.querySelectorAll('[data-nav-sheet] [data-nav-sheet-toggle], [data-nav-sheet] [class*=sheetLink]'))].map(e => { const r = e.getBoundingClientRect(); return [e.textContent.trim(), Math.round(r.right), Math.round(r.height)]; })"
     )
     shoot(page, "opens-kr-phone-00-menu")
-    page.evaluate(f"{SUPPORT}.click()")
-    page.wait_for_timeout(1300)
-    sheet = page.evaluate(
-        """(() => { const d = document.querySelector('dialog'); const b = d.getBoundingClientRect();
-          return [d.open, d.querySelector('h2').textContent.trim(), Math.round(b.left), Math.round(b.right), d.scrollWidth <= d.clientWidth, document.documentElement.scrollWidth, d.querySelectorAll('details').length]; })()"""
-    )
-    shoot(page, "opens-kr-phone-01-sheet")
     check(
-        f"{tag}: the menu and the Support sheet open in Korean, inside the window",
+        f"{tag}: the menu opens in Korean, inside the window",
         len(links) == 4
         and all(l[1] <= 390 and l[2] >= 48 for l in links)
-        and "고객" in links[3][0]
-        and sheet[0]
-        and "BiGH" in sheet[1]
-        and sheet[1] != "BiGH support"
-        and sheet[2] >= 0
-        and sheet[3] <= 390
-        and sheet[4]
-        and sheet[5] <= 390
-        and sheet[6] == 4,
-        f"{links} | {sheet}",
+        and "고객" in links[3][0],
+        f"{links}",
     )
     check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
     context.close()

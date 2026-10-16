@@ -1,14 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { ArrowUpRight, Plus, X } from "lucide-react";
+import { ArrowUpRight, X } from "lucide-react";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { useCopy } from "@/i18n/use-copy";
 import { products, scienceImages } from "@/components/home-v2/content";
 import { lockPageScroll } from "./lock-scroll";
 import styles from "./dialogs.module.css";
 
-// The homepage's preview dialogs (product, Dr. Liu, Ask BiGH Science, support, the three short
+// The homepage's preview dialogs (product, Dr. Liu, Ask BiGH Science, the three short
 // explainers), moved out of home/homepage.tsx unchanged in wording so every look shares them.
 // The explainers show pictures only when the page passes its own (`articleImages`); the Ink & Gold
 // homepage passes none (its paintings carry the science).
@@ -21,7 +21,6 @@ type Dialogs = {
   openProduct: (index: number) => void;
   openScientist: () => void;
   openAsk: () => void;
-  openSupport: () => void;
   openArticle: (index: number) => void;
 };
 
@@ -233,51 +232,6 @@ export function SiteDialogs({
                   "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
                 )}
               </p>
-            </div>
-          </>
-        ),
-      });
-    },
-    openSupport() {
-      show({
-        eyebrow: copy("Here to help"),
-        title: copy("BiGH support"),
-        body: (
-          <>
-            <p>
-              {copy(
-                "This is a preview of the new BiGH website. You can explore the range and science, but purchases and account services are not connected yet.",
-              )}
-            </p>
-            <div className={styles.faq}>
-              {[
-                [
-                  "Can I place an order here?",
-                  "Not yet. Ordering will be available when the new store is connected. No payments are taken in this preview.",
-                ],
-                [
-                  "Where are shipping and return details?",
-                  "Market-specific shipping and return information will be added before the store opens.",
-                ],
-                [
-                  "Can I ask a health or science question?",
-                  "Ask BiGH Science is in development. It will explain research in everyday language. For personal treatment or medication questions, speak with your healthcare professional.",
-                ],
-                [
-                  "Will other languages be available?",
-                  "Use the language selector at the top of the page to switch between English, Simplified Chinese, Korean, Vietnamese, and Japanese.",
-                ],
-              ].map(([question, answer]) => (
-                <details key={question} name="home-support">
-                  <summary>
-                    <span>{copy(question)}</span>
-                    <span className={styles.toggle} aria-hidden="true">
-                      <Plus size={20} />
-                    </span>
-                  </summary>
-                  <p>{copy(answer)}</p>
-                </details>
-              ))}
             </div>
           </>
         ),

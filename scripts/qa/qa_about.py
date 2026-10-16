@@ -6,8 +6,8 @@ failed requests; one h1, English "Be in Good Health." with lang="en"; every lock
 page's main (the footer's "About BiGH" does not stand in for the opening's label); no canvas,
 no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
 and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
-15px+, navigation 18px+, targets 48px+; the opening's circle loads eagerly; the Support and Ask
-sheets open, close and hand focus back.
+15px+, navigation 18px+, targets 48px+; the opening's circle loads eagerly; Support is a link to its
+page; the Ask sheet opens, closes and hands focus back.
 rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
 one picture and its words; on two columns (from 960px) the pictures stand purpose left, roots
 right, experience left, closing right (the opening is centred), and are about the same size, and
@@ -707,16 +707,10 @@ def desktop_and_phone(browser):
         check(f"{tag} targets at least 48px", not targets, targets)
         eager = page.evaluate("(() => { const i = document.querySelector('[data-enso] img'); return i ? i.getAttribute('loading') : 'missing'; })()")
         check(f"{tag} the opening's circle loads eagerly", eager != "lazy" and eager != "missing", eager)
-        if width < 1101:
-            page.click("[data-nav-menu-button]")
-            page.wait_for_timeout(900)
-            page.click("[data-nav-sheet] button:has-text('Support')")
-        else:
-            page.click("#site-navigation button:has-text('Support')")
-        page.wait_for_timeout(900)
-        check(f"{tag} Support sheet opens", page.evaluate("!!document.querySelector('dialog[open]')"))
-        page.keyboard.press("Escape")
-        page.wait_for_timeout(600)
+        check(
+            f"{tag} Support links to its page",
+            page.evaluate("[...document.querySelectorAll('a')].some(a => a.textContent.trim() === 'Support' && a.getAttribute('href').endsWith('/support'))"),
+        )
         ask = page.locator("main button:has-text('Ask BiGH Science')")
         ask.scroll_into_view_if_needed()
         ask.click()

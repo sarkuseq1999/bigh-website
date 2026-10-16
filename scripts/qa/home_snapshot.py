@@ -9,7 +9,7 @@ usage:
   python -X utf8 scripts/qa/home_snapshot.py capture <base-url> <name>
   python -X utf8 scripts/qa/home_snapshot.py compare <base-url> <name> [against=baseline]
   python -X utf8 scripts/qa/home_snapshot.py layout <base-url> -
-  python -X utf8 scripts/qa/home_snapshot.py nav <base-url> -   (the menu bar on / and /about)
+  python -X utf8 scripts/qa/home_snapshot.py nav <base-url> -   (the menu bar on /, /about and /support)
   python -X utf8 scripts/qa/home_snapshot.py tiles <base-url> -
 
 A run empties its own folder first, so compare needs a new name (never the set it compares with), and
@@ -121,21 +121,26 @@ NAV_STATE_JS = """() => {
     mark: nav.querySelector('[data-nav-logo]')?.getAttribute('href') ?? null,
     triggers: [...nav.querySelectorAll('[data-nav-trigger]')].map(b => b.dataset.navTrigger),
     about: [...nav.querySelectorAll('a')].find(a => a.textContent.trim() === 'About')?.getAttribute('href') ?? null,
+    support: [...nav.querySelectorAll('a')].find(a => a.textContent.trim() === 'Support')?.getAttribute('href') ?? null,
   };
 }"""
 
 
 def nav_check(base: str) -> bool:
     """One menu bar ("Inscription") for every ink page: Products and Science (drop-downs), the mark
-    (it goes home: there is no Home link), About and Support. The homepage marks no link as the
-    current page; /about marks About, in the bar and in the narrow window's menu; the root carries
-    data-page."""
+    (it goes home: there is no Home link), About and Support (both links). The homepage marks no
+    link as the current page; /about marks About and /support marks Support, in the bar and in the
+    narrow window's menu; the root carries data-page."""
     words = ["Products", "Science", "About", "Support"]
     expected = {
         "/": {"page": "home", "words": words, "current": [], "menuCurrent": [], "mark": "/",
-              "triggers": ["products", "science"], "about": "/about"},
+              "triggers": ["products", "science"], "about": "/about", "support": "/support"},
         "/about": {"page": "about", "words": words, "current": ["About"], "menuCurrent": ["About"],
-                   "mark": "/", "triggers": ["products", "science"], "about": "/about"},
+                   "mark": "/", "triggers": ["products", "science"], "about": "/about",
+                   "support": "/support"},
+        "/support": {"page": "support", "words": words, "current": ["Support"],
+                     "menuCurrent": ["Support"], "mark": "/", "triggers": ["products", "science"],
+                     "about": "/about", "support": "/support"},
     }
     ok = True
     with sync_playwright() as p:
