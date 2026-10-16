@@ -53,7 +53,7 @@ PATH = "/en/products/nuricell"
 OTHERS = ["green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
 # The products still on the Chapters template (Green Bee Propolis has its own ink page since
 # October 14, 2026: scripts/qa/qa_propolis_ink.py).
-OLD_TEMPLATE = ["advanced-opc", "turmerific", "nature-calm"]
+OLD_TEMPLATE = ["turmerific", "nature-calm"]
 CHAPTERS = ["overview", "why", "inside", "research", "people", "daily", "buy"]
 # Next's prefetched-CSS warning is not an error of this page (qa_about.py's PREFETCH_CSS).
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")

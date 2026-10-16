@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no letters, no numbers, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds, no water, no landscape. Only the things named below are painted: no mountains, no pine trees, no hills, no ground, no soil, no extra plants or objects. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side. The subject fills most of the picture (about 85% of its height and width): bold, generous, never small in the middle of empty paper.\n\nA round magnifying glass with a slender handle lying on the paper, seen from straight above, filling most of the picture: its rim and handle a few confident dark strokes, its glass plain paper with one soft grey curved reflection. Under and beside the lens lie a few grape seeds (small teardrop-shaped seeds, each one dark ink dab) and one small curled sliver of pine bark; the two or three seeds seen through the glass are painted a little larger, as the lens would show them. Sumi ink only, black and grey, no gold, no colour. Calm, careful, curious.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "C:\\Users\\mcbig\\Documents\\codes\\bigh-opc-ink\\reference\\home-v2\\ink\\originals\\gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261016-123843"
+}

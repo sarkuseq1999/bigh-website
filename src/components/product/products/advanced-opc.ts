@@ -1,3 +1,4 @@
+import { opcArt } from "../ink/opc-art";
 import type { ProductPage } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -18,6 +19,10 @@ const advancedOpc: ProductPage = {
   ...opcSummary,
   // Short on purpose: on phones the eyebrow must fit one line above the giant name (360px wide).
   eyebrow: "From nature",
+  // The name round the bottle (Mo, October 16, 2026, "1C"): "Advanced" small over "OPC", the bottle,
+  // then "Formula" at the same size as "OPC".
+  nameHalves: ["OPC", "Formula"],
+  nameLead: "Advanced",
   headlineLines: ["Nature’s antioxidant power.", "Focused on your cells."],
   purpose:
     "A diverse blend of concentrated plant extracts, bringing together antioxidant compounds from grape seeds, pine bark, and other botanical sources.",
@@ -207,6 +212,13 @@ const advancedOpc: ProductPage = {
     {
       name: "Dr. Iris Wang",
       title: "Formulation guidance",
+      // Her face is never generated (text only, by her wish): a painting of her work stands beside
+      // her words on the ink page (Mo, October 16, 2026), captioned "Illustration".
+      painting: {
+        ...opcArt.mortar,
+        alt: "A stone mortar and pestle with a few marigold petals beside it, painted in ink",
+      },
+      paintingOf: "work",
       lines: [
         "Advanced OPC Formula was formulated under Dr. Wang’s guidance.",
         "In animal studies with Dr. Liu, she has researched oxidative damage: the harm free radicals can do inside cells.",
@@ -256,6 +268,38 @@ const advancedOpc: ProductPage = {
     fda: "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
   },
   related: ["nuricell", "green-bee-propolis", "turmerific", "nature-calm"],
+  // The ink page (Mo, October 16, 2026, "1C 2A 3A2"; paintings and picks in reference/ink-pages/opc/).
+  // Alt texts are drafts for Mo.
+  ink: {
+    why: {
+      unlit: opcArt.grapesUnlit,
+      lit: opcArt.grapesLit,
+      spread: opcArt.grapesSpread,
+      alt: "A bunch of grapes on the vine, lit from inside with gold leaf, painted in ink",
+    },
+    inside: {
+      ...opcArt.row,
+      alt: "Grapes, pine bark, bilberries, tea leaves, an orange slice and a marigold, painted in ink",
+    },
+    research: {
+      ...opcArt.lens,
+      alt: "A magnifying glass over a few grape seeds and a sliver of pine bark, painted in ink",
+    },
+    daily: {
+      picture: {
+        ...opcArt.plate,
+        alt: "An empty plate with the knife and fork laid together, a glass of water and two capsules, painted in ink",
+      },
+      sum: opcArt.sum,
+    },
+    buy: {
+      scene: {
+        ...opcArt.scene,
+        alt: "Grapevine leaves and a bunch of grapes painted in ink and watercolour",
+      },
+    },
+    supply: opcArt.capsules,
+  },
 };
 
 export default advancedOpc;

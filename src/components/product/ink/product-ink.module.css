@@ -93,6 +93,21 @@
   justify-self: end;
 }
 
+/* The lead word over the first half (Advanced OPC Formula: "Advanced" over "OPC"), set as wide as
+   it (--lead-scale, opening.tsx), the two on one left edge so they read as one block. */
+.page [data-lead] .first {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.page .lead {
+  display: block;
+  margin-bottom: 0.08em;
+  font-size: calc(1em * var(--lead-scale, 0.5));
+  letter-spacing: -0.02em;
+}
+
 .page .second {
   justify-self: start;
 }
@@ -432,6 +447,11 @@
   .page [data-spaced] h1.name {
     grid-template-columns: auto;
     justify-items: center;
+  }
+
+  /* With a lead word the halves are two words ("OPC Formula"): side by side with a word space. */
+  .page [data-lead] h1.name {
+    column-gap: 0.18em;
   }
 
   .page [data-spaced] .first,

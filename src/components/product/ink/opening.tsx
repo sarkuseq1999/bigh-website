@@ -46,6 +46,10 @@ const EMS: Record<string, number> = {
 };
 const ems = (text: string) => [...text].reduce((sum, c) => sum + (EMS[c] ?? 0.6), 0);
 
+/** The word space between two halves set side by side on a phone, in ems (product-ink.module.css,
+ *  `[data-lead] h1.name`). */
+const PHONE_GAP = 0.18;
+
 /** NuriCell's halves and bottle column, in name-sizes: the opening as approved (scale 1). */
 const NURI = { half: 1.762, stand: 1.66 };
 
@@ -58,12 +62,14 @@ const NURI = { half: 1.762, stand: 1.66 };
  * halves, the whole word for one that stays one word. NuriCell's own name needs none of it (null;
  * the small tolerance keeps it so whatever the sum's last digit).
  */
-export function nameFit(first: string, second: string, spaced: boolean) {
+export function nameFit(first: string, second: string, spaced: boolean, gap = 0) {
   const half = Math.max(ems(first), ems(second));
   if (half <= NURI.half + 0.005) return null;
   const scale = NURI.half / (half * 1.03);
   const stand = NURI.stand / scale;
-  const line = spaced ? half : ems(first) + ems(second);
+  // Two words that stay side by side on a phone ("OPC Formula", with a lead word) keep a word
+  // space between them (`gap`, in ems; product-ink.module.css), which the line must fit too.
+  const line = spaced ? half : ems(first) + ems(second) + gap;
   return { scale, stand, phone: 84.6 / (line * 1.03) };
 }
 
@@ -79,7 +85,11 @@ export function Opening({ product }: { product: ProductPage }) {
   // A two-word name ("Green Bee Propolis") stacks its halves on a phone; one word ("NuriCell")
   // stays one word.
   const spaced = product.name.startsWith(`${first} `);
-  const fit = nameFit(first, second, spaced);
+  const fit = nameFit(first, second, spaced, product.nameLead ? PHONE_GAP : 0);
+  // The lead word ("Advanced") is set as wide as the first half ("OPC"), so it sits over it like a
+  // line of the same block; it adds nothing to the fit, which the halves set.
+  const lead = product.nameLead;
+  const leadScale = lead ? Math.min(1, ems(first) / ems(lead)) : null;
   return (
     <section
       id={anchorId("overview")}
@@ -88,12 +98,18 @@ export function Opening({ product }: { product: ProductPage }) {
       aria-labelledby="product-name"
       data-name-fit={fit ? "long" : undefined}
       data-spaced={spaced || undefined}
+      data-lead={lead ? "" : undefined}
       style={
-        fit
+        fit || leadScale
           ? ({
-              ["--name-scale" as string]: fit.scale.toFixed(4),
-              ["--stand-ratio" as string]: fit.stand.toFixed(3),
-              ["--phone-name" as string]: `${fit.phone.toFixed(2)}vw`,
+              ...(fit
+                ? {
+                    ["--name-scale" as string]: fit.scale.toFixed(4),
+                    ["--stand-ratio" as string]: fit.stand.toFixed(3),
+                    ["--phone-name" as string]: `${fit.phone.toFixed(2)}vw`,
+                  }
+                : {}),
+              ...(leadScale ? { ["--lead-scale" as string]: leadScale.toFixed(4) } : {}),
             } as CSSProperties)
           : undefined
       }
@@ -104,6 +120,7 @@ export function Opening({ product }: { product: ProductPage }) {
         <h1 id="product-name" className={styles.name}>
           <span className={base.visuallyHidden}>{product.name}</span>
           <span className={styles.first} aria-hidden="true">
+            {lead ? <span className={styles.lead}>{lead}</span> : null}
             {first}
           </span>
           <span className={styles.stand} aria-hidden="true">

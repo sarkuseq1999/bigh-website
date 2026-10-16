@@ -87,3 +87,16 @@ mockups and the paintings. Picks and rounds in `reference/ink-pages/propolis/REA
 
 29 jobs of the 42 cap, about $1.45 (at most $2.03 before refunds). Check open.higgsfield.ai/billing for
 the real total.
+
+## Advanced OPC Formula ink page (October 16, 2026)
+
+Ledger: `C:/Users/mcbig/AppData/Local/HiggsfieldAPI/bigh-opc-ink/` (cap 42 jobs), Mo's $3 for the
+mockups and the paintings. Picks in `reference/ink-pages/opc/README.md`.
+
+| Round | Jobs | Pictures | Kept |
+| ----- | ---- | -------- | ---- |
+| 1 | 11 | why-grapes-gold, why-grapes-ink (edit), why-vineyard-gold, why-vineyard-ink (edit), inside-row, research-lens, people-mortar, daily-plate, sum, buy-vines, buy-stroke | why-grapes-gold + why-grapes-ink, inside-row, research-lens, people-mortar, daily-plate, sum |
+| 1b | 1 | buy-vines-left (edit of buy-vines: the bunch moved low to the far left, clear of the bottle) | buy-vines-left |
+
+12 jobs of the 42 cap, about $0.60 (at most $0.84 before refunds). Every first take was kept; Mo
+picked from the mockups in one round ("1C 2A 3A2"). Check open.higgsfield.ai/billing for the real total.

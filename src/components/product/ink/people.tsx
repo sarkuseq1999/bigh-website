@@ -9,13 +9,18 @@ import styles from "./product-ink.module.css";
 
 // Chapter 5: the person behind the formula. Dr. Liu as a painting in ink and colour (Mo's call,
 // October 9, 2026; never black-and-white: in Asia that signals a person has died); a person
-// without a painting keeps their photo on its mat; anyone else is text only, under the first.
+// without a painting keeps their photo on its mat; anyone else is text only, under the first. A
+// painting of the person's work rather than of them (Dr. Wang's mortar) is captioned "Illustration".
 export function People({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const [lead, ...others] = product.people;
   if (!lead) return null;
   const picture = lead.painting ? (
-    <InkFigure art={lead.painting} alt={lead.painting.alt} caption={CAPTIONS.portrait} />
+    <InkFigure
+      art={lead.painting}
+      alt={lead.painting.alt}
+      caption={lead.paintingOf === "work" ? CAPTIONS.illustration : CAPTIONS.portrait}
+    />
   ) : lead.photo ? (
     <figure className={styles.photo} data-picture="" data-stand="">
       <Image

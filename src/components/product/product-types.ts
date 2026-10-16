@@ -80,6 +80,13 @@ export type ProductPerson = {
   photo?: Picture;
   /** A painting of the person, for the ink page (Dr. Liu, October 9, 2026: Mo's call). */
   painting?: InkPainting;
+  /**
+   * What the painting shows: the person (a portrait, captioned "Portrait painting"; the default)
+   * or their work (Advanced OPC Formula, October 16, 2026: Dr. Wang has no photograph and her
+   * face is never generated, so a mortar and pestle stands beside her words, captioned
+   * "Illustration" like every other painting).
+   */
+  paintingOf?: "person" | "work";
   lines: string[];
 };
 
@@ -135,6 +142,12 @@ export type ProductPage = ProductSummary & {
    * Turmerific: "Turm | erific" sets two halves of nearly equal width (Mo, October 2, 2026).
    */
   nameHalves?: [string, string];
+  /**
+   * A short first word set small over the first half, as wide as it (Advanced OPC Formula, October
+   * 16, 2026: "Advanced" over "OPC", then the bottle, then "Formula" at the same size as "OPC"; the
+   * halves are "OPC" and "Formula"). Without it the name is its halves alone.
+   */
+  nameLead?: string;
   purpose: string;
   highlights: string[];
   credit?: string;

@@ -43,6 +43,9 @@ export const WORDS: readonly string[] = [
   "eight",
   "nine",
   "ten",
+  "eleven",
+  "twelve",
+  "thirteen",
 ];
 
 /** Oldest first. Studies from the same year keep the order the product's data gives them. */
