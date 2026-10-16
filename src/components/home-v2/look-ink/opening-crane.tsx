@@ -7,6 +7,7 @@ import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
 import { crane, craneFlight } from "./assets";
+import { useInkColor, useTint } from "./ink-color";
 import { useMist } from "./mist";
 import base from "@/components/ink/ink.module.css";
 import styles from "./opening.module.css";
@@ -44,6 +45,10 @@ function gild(lines: string[], className: string): ReactNode[] {
 }
 
 export function OpeningCrane({ motion }: { motion: boolean }) {
+  const color = useInkColor();
+  const tint = useTint();
+  const flightBig = tint(craneFlight.src);
+  const flightSmall = tint(craneFlight.small);
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const art = useRef<HTMLDivElement>(null);
@@ -70,7 +75,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
       const phone = window.matchMedia("(max-width: 720px)").matches;
       const pixels = still.getBoundingClientRect().width * window.devicePixelRatio;
       const small = phone && pixels <= 640;
-      timer = window.setTimeout(() => setFlight(small ? craneFlight.small : craneFlight.src), 400);
+      timer = window.setTimeout(() => setFlight(small ? flightSmall : flightBig), 400);
     };
     const watcher = new MutationObserver(() => {
       if (!bloomed()) return;
@@ -83,7 +88,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
       watcher.disconnect();
       window.clearTimeout(timer);
     };
-  }, [motion]);
+  }, [motion, flightBig, flightSmall]);
 
   // Depth as you leave the opening: the sun sinks slowly behind the ridges and the mountains
   // settle a little, while the crane (its own gentle float in CSS) stays on its flight path.
@@ -150,11 +155,13 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
           />
           {/* Light crossing the gold leaf, inside the leaf's own torn edge. */}
           <span className={styles.glint} />
+          {/* Green spring: a warm haze around the sun, behind the hills. */}
+          {color === "spring" && <span className={styles.glow} />}
         </span>
         <Image
           ref={landscape}
           className={`${base.ink} ${styles.landscape}`}
-          src={crane.landscape.src}
+          src={tint(crane.landscape.src)}
           alt=""
           width={crane.landscape.width}
           height={crane.landscape.height}
@@ -169,7 +176,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
           <Image
             ref={bird}
             className={styles.bird}
-            src={crane.crane.src}
+            src={tint(crane.crane.src)}
             alt=""
             width={crane.crane.width}
             height={crane.crane.height}

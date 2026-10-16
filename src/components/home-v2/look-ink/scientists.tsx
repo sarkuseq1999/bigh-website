@@ -8,6 +8,7 @@ import { useSiteDialogs } from "@/components/ink/dialogs";
 import { halo, inkstone, liu } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./scientists.module.css";
+import { useTint } from "./ink-color";
 
 /** A fact's number is set large and any words around it small ("20+ years", "20년 이상", "Hơn 20
  *  năm"), in every language. */
@@ -33,6 +34,7 @@ function Figure({ value }: { value: string }) {
 // at rest on its inkstone, the headline, words and button centred under it on open paper, the
 // brush line passing it in the margin.
 export function Scientists() {
+  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
 
@@ -69,7 +71,7 @@ export function Scientists() {
           <span className={styles.print} data-brush="liu">
             <Image
               className={`${base.ink} ${styles.halo}`}
-              src={halo.src}
+              src={tint(halo.src)}
               alt=""
               width={halo.width}
               height={halo.height}
@@ -138,7 +140,7 @@ export function Scientists() {
         <figure className={styles.askArt} aria-hidden="true" data-brush="ask-art">
           <Image
             className={`${base.ink} ${styles.inkstone}`}
-            src={inkstone.src}
+            src={tint(inkstone.src)}
             alt=""
             width={inkstone.width}
             height={inkstone.height}
