@@ -89,6 +89,29 @@
   height: auto;
 }
 
+/* Green spring (ink-color.tsx): a warm haze around the sun, behind the hills (the landscape
+   multiplies over it). It arrives with the leaf. */
+.glow {
+  position: absolute;
+  inset: -80%;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgb(243 191 146 / 0.55) 0%,
+    rgb(243 191 146 / 0.32) 28%,
+    rgb(243 191 146 / 0.12) 50%,
+    rgb(243 191 146 / 0) 70%
+  );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--breath) var(--ease);
+}
+
+.leaf[data-bloom="done"] ~ .glow {
+  opacity: 1;
+}
+
 /* Gold leaf is metal: every few breaths a band of light crosses it, held inside the leaf's own
    torn edge (the leaf's picture is the mask). It waits until the leaf has bloomed. */
 .glint {

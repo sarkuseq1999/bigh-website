@@ -10,12 +10,14 @@ import { useSiteDialogs } from "@/components/ink/dialogs";
 import { storyPaintings } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./stories.module.css";
+import { useTint } from "./ink-color";
 
 // "In their own words." Each fictional sample pairs a quiet ink still life of its everyday moment
 // (objects only, never a face; labelled "Illustration") with its words set large beside it; the
 // byline carries the name, the moment and the "Fictional sample" label. The three names below
 // choose a story.
 export function Stories() {
+  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const [index, setIndex] = useState(0);
@@ -49,7 +51,7 @@ export function Stories() {
               <Image
                 key={item.id}
                 className={`${base.ink} ${styles.still}`}
-                src={storyPaintings[item.id].src}
+                src={tint(storyPaintings[item.id].src)}
                 alt={i === index ? copy(item.topic) : ""}
                 aria-hidden={i !== index}
                 width={storyPaintings[item.id].width}

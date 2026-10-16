@@ -9,12 +9,14 @@ import { useSiteDialogs } from "@/components/ink/dialogs";
 import { gold, purposeCranes, purposePainting } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
+import { useTint } from "./ink-color";
 
 // The close, a bookend to the crane: an old pine over a sea of mist, the gold-leaf sun low on the
 // horizon, two cranes flying home (on their own layer: they fly toward the sun as the painting
 // comes into view); the purpose sits in its open sky, and the brush line lifts off in the
 // painting. Below it, on paper: why we do it and the three standards we keep.
 export function Purpose() {
+  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
 
@@ -32,7 +34,7 @@ export function Purpose() {
         <div className={styles.plate}>
           <Image
             className={`${base.ink} ${styles.painting}`}
-            src={purposePainting.src}
+            src={tint(purposePainting.src)}
             alt=""
             width={purposePainting.width}
             height={purposePainting.height}
@@ -54,7 +56,7 @@ export function Purpose() {
           >
             <Image
               className={`${base.ink} ${styles.cranes}`}
-              src={purposeCranes.src}
+              src={tint(purposeCranes.src)}
               alt=""
               width={purposeCranes.width}
               height={purposeCranes.height}
