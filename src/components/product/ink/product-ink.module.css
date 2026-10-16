@@ -41,8 +41,9 @@
 
 /* A lockup (Green Bee Propolis, Mo, October 16, 2026): the left word as large as its column allows,
    reaching --tuck into the bottle photo's empty margin (never its glass), and the right lines stacked
-   smaller (--stack-ratio of it), one word a line, reaching as far the other way. Both are centred on
-   the bottle's middle, like NuriCell's halves. */
+   smaller (--stack-ratio of it), one word a line, each centred on the longest (Mo, October 16: "Bee"
+   centred over "Propolis"), reaching as far the other way. Both are centred on the bottle's middle,
+   like NuriCell's halves. */
 .page [data-name-lockup] .first {
   margin-right: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
 }
@@ -50,6 +51,7 @@
 .page [data-name-lockup] .second {
   display: flex;
   flex-direction: column;
+  align-items: center;
   margin-left: calc(-1 * var(--tuck) * min(16.4vw, 30svh, 250px));
   font-size: calc(var(--stack-ratio) * 1em);
   line-height: 0.94;

@@ -6,7 +6,7 @@ cracks, one ingredient, no painted sum, the real bottle inside a painted scene.
 Sections (all, or --only=a,b):
   shell       200 in the ink look, one h1 (Green Bee Propolis), the real bottle, no canvas, no console
               errors (1440x900, 390x844)
-  name        1920 to 360: the lockup (Mo, October 16): "Green" large, "Bee" over "Propolis" smaller,
+  name        1920 to 360: the lockup (Mo, October 16): "Green" large, "Bee" centred over "Propolis" smaller,
               inside the wrap, on one middle; beside the bottle and clear of its glass from 960px,
               side by side over it below; vi too. The One bottle card's capsule pale, like NuriCell's
   chapters    overview, why, inside, research, daily, buy (no people, no sum); each its own painting;
@@ -138,7 +138,9 @@ def name(browser):
             lines = m["lines"]
             stacked = len(lines) == 2 and lines[0]["text"] == "Bee" and lines[1]["text"] == "Propolis" and lines[1]["t"] >= lines[0]["b"] - 6
             check(f"{tag}: Bee over Propolis, one word a line", stacked, str(lines))
-            check(f"{tag}: Green larger than the stack", g["size"] > 1.4 * k["size"], f"{g['size']:.0f} vs {k['size']:.0f}px")
+            check(f"{tag}: Green larger than the stack", g["size"] > 1.25 * k["size"], f"{g['size']:.0f} vs {k['size']:.0f}px")
+            centres = [(line["l"] + line["r"]) / 2 for line in lines]
+            check(f"{tag}: Bee centred over Propolis", len(centres) == 2 and abs(centres[0] - centres[1]) <= 1.5, str([round(c) for c in centres]))
             middle = abs((g["t"] + g["b"]) / 2 - (k["t"] + k["b"]) / 2) <= 3
             if w >= 960:
                 clear = g["r"] <= m["glass"]["l"] + 1 and k["l"] >= m["glass"]["r"] - 1

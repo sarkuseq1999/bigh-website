@@ -69,8 +69,9 @@ export function nameFit(first: string, second: string, spaced: boolean) {
 
 /** The lockup's right lines against its left word, and how far each side may reach into the bottle
  *  photo's empty margins (in NuriCell name-sizes; the glass starts 0.4 in), and the gap between
- *  the left word and the stack on a phone (in left-word sizes). Chosen on the page (October 16). */
-const LOCKUP = { right: 0.62, tuck: 0.2, phoneGap: 0.14 };
+ *  the left word and the stack on a phone (in left-word sizes). Chosen on the page (October 16; the
+ *  stack from 0.62 to 0.72 at Mo's "a little bigger"). */
+const LOCKUP = { right: 0.72, tuck: 0.2, phoneGap: 0.14 };
 
 /**
  * How a lockup is set (Mo, October 16, 2026: "Green" large on the bottle's left, "Bee" over
