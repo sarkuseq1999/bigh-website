@@ -155,12 +155,8 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
           />
           {/* Light crossing the gold leaf, inside the leaf's own torn edge. */}
           <span className={styles.glint} />
-          {color !== "ink" && (
-            <span
-              className={styles.glow}
-              style={{ ["--glow" as string]: color === "coast" ? "240 215 166" : "243 191 146" }}
-            />
-          )}
+          {/* Green spring: a warm haze around the sun, behind the hills. */}
+          {color === "spring" && <span className={styles.glow} />}
         </span>
         <Image
           ref={landscape}

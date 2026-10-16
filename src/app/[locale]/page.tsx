@@ -21,25 +21,15 @@ const titles = Ysabeau({
 // The homepage: "Ink & Gold", the crane (Mo's pick, October 2, 2026). The preview dialogs wrap it
 // (no explainer pictures: the look's own paintings carry the science). Products with their own
 // page (from the catalog) link there; the rest open the preview dialog.
-// The colour test (Mo, October 15, 2026; review only): `?color=b` or `?color=c` tints the paintings
-// (ink-color.tsx). Reading the parameter renders the page per request.
-export default async function HomePage({
-  params,
-  searchParams,
-}: {
-  params: Promise<{ locale: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
-}) {
+export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
   const { locale } = await params;
   if (locale === "hken") redirect({ href: "/", locale: "cns" });
   setRequestLocale(locale);
-  const choice = (await searchParams).color;
-  const color = choice === "b" ? "coast" : choice === "c" ? "spring" : "ink";
 
   return (
     <ProductPagesProvider pages={productPageLinks()}>
       <SiteDialogs>
-        <LookInk className={titles.variable} color={color} />
+        <LookInk className={titles.variable} />
       </SiteDialogs>
     </ProductPagesProvider>
   );

@@ -1,6 +1,8 @@
 /* Look "Ink & Gold" (round 4, October 2, 2026). Warm rice paper with real fibre, sumi ink and
    ink-wash greys, one gold leaf only for energy (the sun, the glow inside the cell). Switzer,
-   large and calm. No cards, no gradients, no red, no seals: paintings, paper, type and one
+   large and calm. (The homepage's paintings carry a thin green-spring watercolour since October
+   16, 2026, in the pictures only; the interface stays ink.) No cards, no gradients, no red
+   interface, no seals: paintings, paper, type and one
    continuous brush line. Shared pieces (tokens, type, pills, links, entrances) live here; each
    block has its own module. Rules are scoped under .look because the homepage's resets
    (.site p, .site button, .site h2) would otherwise win. */
@@ -158,28 +160,6 @@
 .look .pill:hover {
   background: #3a3833;
   border-color: #3a3833;
-}
-
-/* The homepage's colour test (ink-color.tsx): the solid pill takes the palette's deep colour,
-   slate blue for the coastal fog and pine green for the green spring (the logo's leaf). */
-.look[data-color="coast"] .pill:not(.pillGhost) {
-  background: #1f3442;
-  border-color: #1f3442;
-}
-
-.look[data-color="coast"] .pill:not(.pillGhost):hover {
-  background: #2f4a5c;
-  border-color: #2f4a5c;
-}
-
-.look[data-color="spring"] .pill:not(.pillGhost) {
-  background: #26402f;
-  border-color: #26402f;
-}
-
-.look[data-color="spring"] .pill:not(.pillGhost):hover {
-  background: #355640;
-  border-color: #355640;
 }
 
 .look .pill svg {

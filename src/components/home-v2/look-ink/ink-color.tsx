@@ -1,15 +1,16 @@
 "use client";
 
 import { createContext, useContext, type ReactNode } from "react";
-import styles from "./ink-color.module.css";
 
-// A touch of colour (Mo, October 14-15, 2026: the homepage is "a little too black and white";
-// of three tests she liked B and C and asked to try both). Review only: `?color=b` lays a thin
-// watercolour over the paintings in the coastal-fog palette, `?color=c` in the green-spring one,
-// and no parameter shows today's ink. The tinted paintings are the same pictures with their ink
-// treated as a coloured pigment (made outside the repo by recolor.py; the gold leaf is untouched);
-// they live beside the originals in /images/home-v2/ink/<coast|spring>/ under the same names.
-export type InkColor = "ink" | "coast" | "spring";
+// A touch of colour: "green spring" (Mo, October 16, 2026). The homepage was "a little too black
+// and white"; of three tests and then two live versions she chose C, green spring, with the
+// buttons kept in ink. The homepage's paintings carry a thin watercolour: blue in the far hills,
+// sage green near, pink blossoms, a red crown on the crane, the gold leaf untouched. Each tinted
+// painting is the same picture with its ink treated as a coloured pigment
+// (reference/home-v2/ink/recolor/recolor.py), saved beside the original in
+// /images/home-v2/ink/spring/ under the same name. Only the homepage provides the colour: the
+// footer's crane at rest and the bottles' ink pools stay grey on every other page.
+export type InkColor = "ink" | "spring";
 
 const DIR = "/images/home-v2/ink/";
 const TINTED = new Set([
@@ -43,7 +44,7 @@ export function useInkColor(): InkColor {
   return useContext(ColorContext);
 }
 
-/** The painting to show for a picture's path: its tinted twin while a colour is chosen. */
+/** The painting to show for a picture's path: its tinted twin where the page is in colour. */
 export function useTint(): (src: string) => string {
   const color = useContext(ColorContext);
   return (src) => {
@@ -51,30 +52,4 @@ export function useTint(): (src: string) => string {
     const name = src.slice(DIR.length);
     return TINTED.has(name) ? `${DIR}${color}/${name}` : src;
   };
-}
-
-const CHOICES: { color: InkColor; letter: string; name: string; href: string }[] = [
-  { color: "ink", letter: "Now", name: "Ink", href: "?" },
-  { color: "coast", letter: "B", name: "Coastal fog", href: "?color=b" },
-  { color: "spring", letter: "C", name: "Green spring", href: "?color=c" },
-];
-
-/** The review switch, bottom right: each choice reloads the page in that colour. */
-export function ColorSwitch() {
-  const color = useContext(ColorContext);
-  return (
-    <nav className={styles.switch} aria-label="Colour test">
-      {CHOICES.map((choice) => (
-        <a
-          key={choice.color}
-          className={styles.choice}
-          href={choice.href}
-          aria-current={choice.color === color ? "page" : undefined}
-        >
-          <b>{choice.letter}</b>
-          <span>{choice.name}</span>
-        </a>
-      ))}
-    </nav>
-  );
 }
