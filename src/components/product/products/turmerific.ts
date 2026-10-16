@@ -1,3 +1,4 @@
+import { turmerificArt } from "../ink/turmerific-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -168,6 +169,39 @@ const turmerific: ProductPage = {
     research:
       "These studies are about Longvida®, the curcumin in Turmerific, not the finished product. Each one says who took part and how much they took.",
     fda: "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
+  },
+  // The ink page (Mo, October 16, 2026: "Why A and Buy A"; paintings and picks in
+  // reference/ink-pages/turmerific/). Its own signature: the slice turns gold and the gold soaks
+  // out into the paper, the way watercolour soaks into rice paper (absorption, the chapter's point).
+  ink: {
+    why: {
+      unlit: turmerificArt.rootPlain,
+      lit: turmerificArt.rootGold,
+      soak: turmerificArt.soak,
+      alt: "A turmeric root and a slice cut from it, the gold soaking out into the paper, painted in ink and gold leaf",
+    },
+    inside: {
+      ...turmerificArt.spoon,
+      alt: "A wooden spoon of golden curcumin powder and two capsules, painted in watercolour",
+    },
+    research: {
+      ...turmerificArt.notebook,
+      alt: "Reading glasses on an open notebook, a turmeric leaf as a bookmark, painted in ink",
+    },
+    daily: {
+      picture: {
+        ...turmerificArt.glass,
+        alt: "A glass of water and two gold capsules, painted in ink and watercolour",
+      },
+      sum: turmerificArt.sum,
+    },
+    buy: {
+      scene: {
+        ...turmerificArt.scene,
+        alt: "A turmeric plant in flower painted in watercolour, gold slices of its root at its foot",
+      },
+    },
+    supply: turmerificArt.capsules,
   },
   related: ["nuricell", "green-bee-propolis", "advanced-opc", "nature-calm"],
 };

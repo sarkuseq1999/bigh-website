@@ -52,8 +52,9 @@ OUT.mkdir(parents=True, exist_ok=True)
 PATH = "/en/products/nuricell"
 OTHERS = ["green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
 # The products still on the Chapters template (Green Bee Propolis has its own ink page since
-# October 14, 2026: scripts/qa/qa_propolis_ink.py).
-OLD_TEMPLATE = ["advanced-opc", "turmerific", "nature-calm"]
+# October 14, 2026: scripts/qa/qa_propolis_ink.py; Turmerific since October 16:
+# scripts/qa/qa_turmerific_ink.py).
+OLD_TEMPLATE = ["advanced-opc", "nature-calm"]
 CHAPTERS = ["overview", "why", "inside", "research", "people", "daily", "buy"]
 # Next's prefetched-CSS warning is not an error of this page (qa_about.py's PREFETCH_CSS).
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")

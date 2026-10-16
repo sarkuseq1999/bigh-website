@@ -24,12 +24,14 @@ const DECODE_WAIT = 2500;
  * (a slow scroller sees the lantern before its light), and the lit picture has loaded and decoded,
  * so on a slow link the light still fades up instead of popping in when its picture arrives (a
  * lit picture that never loads leaves the lantern unlit). Reduced motion: lit from the first paint
- * (derived, not set in the effect). No script: the stylesheet shows it lit.
+ * (derived, not set in the effect). No script: the stylesheet shows it lit. `extra` is one more
+ * picture the light waits for (Turmerific's soak masks), decoded alongside the lit one.
  */
 function useLightComesOn(
   unlit: RefObject<HTMLImageElement | null>,
   lit: RefObject<HTMLImageElement | null>,
   motion: boolean,
+  extra?: string,
 ) {
   const [on, setOn] = useState(false);
   useEffect(() => {
@@ -49,7 +51,7 @@ function useLightComesOn(
         light.addEventListener("load", () => resolve(), { once: true, signal: listening.signal });
     }).then(() =>
       Promise.race([
-        light.decode().catch(() => {}),
+        Promise.all([light.decode().catch(() => {}), extra ? decoded(extra) : null]),
         new Promise<void>((resolve) => (wait = window.setTimeout(resolve, DECODE_WAIT))),
       ]),
     );
@@ -83,8 +85,15 @@ function useLightComesOn(
       window.clearTimeout(timer);
       window.clearTimeout(wait);
     };
-  }, [unlit, lit, motion]);
+  }, [unlit, lit, motion, extra]);
   return on || !motion;
+}
+
+/** A picture loaded and decoded (its failure only ends the wait). */
+function decoded(src: string) {
+  const picture = new window.Image();
+  picture.src = src;
+  return picture.decode().catch(() => {});
 }
 
 export function Why({ product, motion }: { product: InkProduct; motion: boolean }) {
@@ -93,12 +102,15 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
   const art = product.ink.why;
   const unlit = useRef<HTMLImageElement>(null);
   const lit = useRef<HTMLImageElement>(null);
-  const on = useLightComesOn(unlit, lit, motion);
+  const soak = art.soak;
+  const on = useLightComesOn(unlit, lit, motion, soak?.sprite);
   if (!why) return null;
   // NuriCell's lantern cross-fades to lit; Green Bee Propolis's gold spreads out from where the
-  // hive's cracks meet (product-ink.module.css, [data-spread]). The same moment and timing.
+  // hive's cracks meet (product-ink.module.css, [data-spread]); Turmerific's soaks into the paper
+  // from the slice, one mask after another ([data-soak]). The same moment, waiting for the same
+  // three things.
   const spread = art.spread;
-  const kind = spread ? { "data-spread": "" } : { "data-lantern": "" };
+  const kind = soak ? { "data-soak": "" } : spread ? { "data-spread": "" } : { "data-lantern": "" };
   return (
     <InkChapter
       id="why"
@@ -110,6 +122,30 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
           imgRef={unlit}
           attrs={{ ...kind, "data-light": on ? "on" : "off" }}
         >
+          {/* The soak's layers: the lit painting again (the same picture, fetched once) through each
+              of the sprite's masks but the last, under the whole lit painting, which comes last. */}
+          {soak
+            ? Array.from({ length: soak.frames - 1 }, (_, k) => (
+                <Image
+                  key={k}
+                  className={styles.soakLayer}
+                  src={art.lit.src}
+                  alt=""
+                  width={art.lit.width}
+                  height={art.lit.height}
+                  sizes={pictureSizes(art.lit)}
+                  loading="eager"
+                  data-soak-layer={k}
+                  style={
+                    {
+                      ["--k" as string]: k,
+                      ["--frames" as string]: soak.frames,
+                      ["--soak" as string]: `url(${soak.sprite})`,
+                    } as CSSProperties
+                  }
+                />
+              ))
+            : null}
           {/* Loaded at once, not lazily: the light waits for it (useLightComesOn). */}
           <Image
             ref={lit}
