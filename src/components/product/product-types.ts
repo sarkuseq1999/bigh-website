@@ -27,8 +27,18 @@ export type ProductInk = {
    * Why it matters: one painting unlit and lit, in register (its light comes on). With `spread`
    * (Green Bee Propolis, October 14, 2026), the lit painting is revealed outward from that point
    * (fractions of the painting) instead of cross-fading in: the gold runs along the hive's cracks.
+   * With `soak` (Turmerific, October 16, 2026), it soaks in through a sprite of `frames` masks
+   * stacked top to bottom, each a wider stretch of the gold (the last whole): one layer of the lit
+   * painting per mask fades in after the one before, so the gold spreads into the paper in its own
+   * ragged shape, as watercolour does.
    */
-  why: { unlit: InkArt; lit: InkArt; alt: string; spread?: { x: number; y: number } };
+  why: {
+    unlit: InkArt;
+    lit: InkArt;
+    alt: string;
+    spread?: { x: number; y: number };
+    soak?: { sprite: string; frames: number };
+  };
   inside: InkPainting;
   research: InkPainting;
   /** How to take it: a picture of when, and the serving as a painted sum (its numbers and their

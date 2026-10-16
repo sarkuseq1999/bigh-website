@@ -631,7 +631,8 @@
   transition: opacity calc(var(--breath) * 1.25) var(--ease);
 }
 
-.page [data-light] [data-bloom="waiting"] ~ img.lit {
+.page [data-light] [data-bloom="waiting"] ~ img.lit,
+.page [data-light] [data-bloom="waiting"] ~ img.soakLayer {
   opacity: 0;
   transition: none;
 }
@@ -676,6 +677,41 @@
 
 .page [data-spread][data-light="on"] .litGold {
   transition: opacity var(--breath) var(--ease) calc(var(--breath) * 1.6);
+}
+
+/* Turmerific (October 16, 2026): the gold soaks into the paper from the cut slice. Each layer is
+   the lit painting through one mask of the sprite (--soak; --k counts from 0, the sprite holds
+   --frames masks, the last of them the whole painting, which the plain lit picture stands for, on
+   top). Layer k starts at (k / frames) squared of the soak's 1.8 breaths: quick at first, then
+   slower as the bloom widens, as ink spreads into wet paper. Each fades over half a breath. */
+.page [data-soak] img.soakLayer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  -webkit-mask-image: var(--soak);
+  mask-image: var(--soak);
+  -webkit-mask-size: 100% calc(var(--frames) * 100%);
+  mask-size: 100% calc(var(--frames) * 100%);
+  -webkit-mask-position: 0 calc(var(--k) / (var(--frames) - 1) * 100%);
+  mask-position: 0 calc(var(--k) / (var(--frames) - 1) * 100%);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+.page [data-soak][data-light="on"] img.soakLayer {
+  opacity: 1;
+  transition: opacity calc(var(--breath) * 0.5) var(--ease)
+    calc(var(--k) * var(--k) / (var(--frames) * var(--frames)) * var(--breath) * 1.8);
+}
+
+.page [data-soak][data-light="on"] img.lit {
+  transition: opacity calc(var(--breath) * 0.5) var(--ease) calc(var(--breath) * 1.8 * 0.81);
+}
+
+.page [data-soak][data-light="on"] .litGold {
+  transition: opacity var(--breath) var(--ease) calc(var(--breath) * 2);
 }
 
 /* The Why chapter's figures (2% / 20%), as a list of terms. */
@@ -751,6 +787,10 @@
   }
 
   :global([data-look="ink"]).page .litGold {
+    transition: none;
+  }
+
+  :global([data-look="ink"]).page [data-soak] img.soakLayer {
     transition: none;
   }
 
