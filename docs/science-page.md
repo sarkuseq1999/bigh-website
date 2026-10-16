@@ -1,6 +1,20 @@
-# The Science page (September 25–28, 2026)
+# The Science page (September 25 – October 14, 2026)
 
-## Now: look B, "Scroll film" (Mo's pick, September 28)
+## Now: the handscroll, in Ink & Gold (October 14, 2026)
+
+Mo picked idea A, "the handscroll" (October 13), and approved the whole page (October 14). Spec:
+`docs/superpowers/specs/2026-10-14-science-ink-design.md`; plan:
+`docs/superpowers/plans/2026-10-14-science-ink.md`; mockups: `reference/ink-pages/mockups/science-ink/`.
+Code: `src/components/science/ink/`; paintings: `reference/ink-pages/science/` (build script, originals,
+prompts, spend). QA: `scripts/qa/qa_science_ink.py` (`--browser=webkit --only=journey,settled` for
+Safari's engine); review shots: `scripts/qa/shoot_science_ink.py` (viewport shots; full-page shots
+break the pinned scroll; `--screens=` re-shoots only some). The handscroll travels about 1.9 window
+heights at 1440x900 (accepted; a QA floor guards it); windows 3000px wide or wider, or 3 times as
+wide as tall, and print show the still scroll (final review, October 14). The film page it replaced is in
+`reference/science-page/looks/film/`. Open: a native check of the draft translations (m650 upward);
+most older Science lines are still English on the other languages (as before this page).
+
+## Before: look B, "Scroll film" (Mo's pick, September 28)
 
 Round 2's D was still "boring, vibe coded" to Mo, so round 3 was a complete redesign in three choices
 (A Liquid light, B Scroll film, C Journal; built by three helpers, each screen scored by me against an
@@ -8,7 +22,8 @@ Round 2's D was still "boring, vibe coded" to Mo, so round 3 was a complete rede
 bench and beakers ("nature, with a touch of science"), and a 9/10 bar. He picked opening idea 2,
 "Nature under the lens".
 
-- `/science` always shows it (`look-film.tsx`, `film-scene.ts`, `film-fonts.ts`); the page shell is
+- Retired October 14, 2026, now in `reference/science-page/looks/film/`. Until then `/science` always
+  showed it (`look-film.tsx`, `film-scene.ts`, `film-fonts.ts`); the page shell is
   `science-page.tsx` with the shared header/footer in `site-chrome.*` and Lenis smooth scrolling
   (`smooth-scroll.ts`, the `lenis` package).
 - The film (a pinned WebGL stage scrubbed by scroll): the leaf under a lens (`film/lens-leaf.webp`) → through

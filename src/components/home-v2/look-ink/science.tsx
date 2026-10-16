@@ -9,6 +9,7 @@ import { useSiteDialogs } from "@/components/ink/dialogs";
 import { gold, mito } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
+import { useTint } from "./ink-color";
 
 // "Make sense of the science." Three topics beside the SAME ink mitochondrion: close in on its two
 // gold-leaf folds, where energy is made (mitochondria); whole, with a frayed edge and a few
@@ -78,6 +79,7 @@ function useStoryFits(wanted: boolean) {
 }
 
 export function Science() {
+  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const wanted = useScrollStory();
@@ -367,7 +369,7 @@ export function Science() {
               {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
               <img
                 className={`${base.ink} ${styles.layer}`}
-                src={mito.closeup.src}
+                src={tint(mito.closeup.src)}
                 alt=""
                 loading="lazy"
                 data-on={topic === 0}
@@ -375,7 +377,7 @@ export function Science() {
               {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
               <img
                 className={`${base.ink} ${styles.layer}`}
-                src={mito.glow.src}
+                src={tint(mito.glow.src)}
                 alt=""
                 loading="lazy"
                 data-on={topic === 2}
@@ -384,7 +386,7 @@ export function Science() {
               {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
               <img
                 className={`${base.ink} ${styles.layer}`}
-                src={mito.radicals.src}
+                src={tint(mito.radicals.src)}
                 alt=""
                 loading="lazy"
                 data-on={topic === 1}
@@ -392,7 +394,7 @@ export function Science() {
               {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
               <img
                 className={`${base.ink} ${styles.layer} ${styles.aged}`}
-                src={mito.aged.src}
+                src={tint(mito.aged.src)}
                 alt=""
                 loading="lazy"
                 data-on={topic === 2}

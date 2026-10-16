@@ -1,0 +1,236 @@
+/* The research, health explained and Ask BiGH Science: the words under each strip. */
+.cols {
+  display: grid;
+  gap: 32px;
+  margin: 36px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 960px) {
+  .cols {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+  }
+}
+
+.col {
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+
+/* The research and health columns, from 960px: the three share four rows (subgrid), so the small
+   facts, the titles, the words and the links each start on one line however many lines a title
+   or its words take (at 1024px the first study's words run two lines longer than the second's).
+   The health scene's picture is hidden there, so it takes no row. */
+@media (min-width: 960px) {
+  .rows > li {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+
+  .rows .go,
+  .rows .links {
+    align-self: start;
+    justify-self: start;
+  }
+}
+
+.meta {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+/* One part of a meta line stays whole, and its dot stays with it, so no line starts with a dot. */
+.part {
+  white-space: nowrap;
+}
+
+.colTitle {
+  margin: 8px 0 0;
+  font-size: 26px;
+  line-height: 1.15;
+}
+
+.text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  margin-top: 14px;
+}
+
+/* A text link with the kit's hairline under it, in this page's size. */
+.go {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+  text-decoration: underline;
+  text-decoration-color: var(--hair);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition: text-decoration-color calc(var(--breath) / 5) var(--ease);
+}
+
+.go:hover {
+  text-decoration-color: var(--ink);
+}
+
+.tag {
+  padding: 3px 12px;
+  border: 1.5px solid var(--hair);
+  border-radius: 999px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.after {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 28px;
+  align-items: center;
+  margin-top: 40px;
+}
+
+/* The last part: room before the footer. */
+.last {
+  padding-bottom: clamp(96px, 10vw, 150px);
+}
+
+.note {
+  max-width: 620px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.number {
+  display: block;
+  font-family: var(--display-font);
+  font-size: 40px;
+  font-variant-numeric: lining-nums;
+  font-weight: 500;
+  line-height: 1;
+}
+
+.status {
+  padding: 8px 18px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  color: var(--ink);
+  font-size: 17px;
+}
+
+/* Health on phones: each scene over its article, with its own "Illustration" (the wide strip and
+   its caption show from 960px). The kit's .look .caption zeroes the margin at (0,2,0), so the
+   caption is scoped one step higher. */
+.sceneFigure {
+  width: min(100%, 360px);
+  margin: 0 auto 18px;
+}
+
+.scene {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.cols .sceneFigure figcaption {
+  margin-top: 2px;
+  text-align: right;
+}
+
+@media (min-width: 960px) {
+  .sceneFigure {
+    display: none;
+  }
+}
+
+/* Reduced motion and a page whose script never runs: the scene the server marks "waiting" is
+   shown whole (the strip's own rule, strip.module.css, does the same for the wide painting). */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]) .scene[data-bloom="waiting"] {
+    -webkit-mask: none;
+    mask: none;
+    filter: none;
+  }
+}
+
+/* The full list of sources. */
+.groups {
+  margin-top: 40px;
+}
+
+.group + .group {
+  margin-top: 40px;
+}
+
+.groupTitle {
+  margin: 0;
+  font-size: 26px;
+}
+
+.row {
+  --year: 3.6em;
+  --gap: 16px;
+  border-bottom: 1px solid var(--line);
+}
+
+/* The tag after a row's title. */
+.rowTag {
+  margin-left: 10px;
+}
+
+.row summary {
+  display: grid;
+  grid-template-columns: var(--year) minmax(0, 1fr) 28px;
+  gap: var(--gap);
+  align-items: baseline;
+  min-height: 56px;
+  padding: 14px 0;
+  cursor: pointer;
+  list-style: none;
+}
+
+.row summary::-webkit-details-marker {
+  display: none;
+}
+
+.row[open] .plus {
+  transform: rotate(45deg);
+}
+
+.plus {
+  transition: transform calc(var(--breath) / 3) var(--ease);
+}
+
+/* Under its title: the year's column and the summary's gap, then a line a reader can follow. */
+.rowBody {
+  max-width: calc(var(--year) + var(--gap) + 68ch);
+  padding: 0 0 18px calc(var(--year) + var(--gap));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .plus {
+    transition: none;
+  }
+}
