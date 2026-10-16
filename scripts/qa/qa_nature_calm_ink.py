@@ -331,7 +331,12 @@ def buy(browser):
     for w, h in [(1440, 900), (1024, 768), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         bring(page, '[data-chapter="buy"]', 100)
-        page.wait_for_timeout(300)
+        # Every picture of the chapter decoded before the comparison below: on the public CDN a
+        # lazily loaded scene can finish a sharper copy between its two screenshots, and edge
+        # pixels far from the bottle then differ (October 16, 2026: 15 pixels at the rows' ends).
+        page.evaluate("""() => Promise.all([...document.querySelectorAll('[data-chapter="buy"] img')]
+                            .map(i => i.decode().catch(() => {})))""")
+        page.wait_for_timeout(600)
         m = page.evaluate(BUY)
         tag = f"buy {w}x{h}"
         check(f"{tag}: a painted scene", m is not None)
