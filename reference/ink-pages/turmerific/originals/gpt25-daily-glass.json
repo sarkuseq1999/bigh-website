@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A traditional East Asian ink-wash painting (sumi-e) on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no letters, no numbers, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds, no water, no landscape. Only the things named below are painted: no mountains, no pine trees, no hills, no ground, no soil, no extra plants or objects. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Generous empty paper on every side. The subject fills most of the picture (about 85% of its height and width): bold, generous, never small in the middle of empty paper.\n\nA simple, clear drinking glass of water standing upright, seen from the front at table height, painted in a few confident grey strokes for its rim and sides, the water a pale, cool grey-blue wash with a bright highlight left as bare paper and a soft shadow on the paper. In front of the glass, a little to the right, lying on the same level, exactly two dietary-supplement capsules side by side: small, smooth, elongated oblong pills, each made of two rounded halves that meet in the middle, like vitamin capsules, never coffee pods; translucent warm golden-yellow in a soft wash with a touch of real gold leaf, a fine grey outline and a small soft shadow. Nothing else: no plate, no food, no table. Quiet morning calm. The capsules are the only gold.",
+  "settings": {
+    "aspect_ratio": "1:1",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261016-123853"
+}

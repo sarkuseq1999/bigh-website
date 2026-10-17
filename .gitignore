@@ -77,3 +77,6 @@ __pycache__/
 .impeccable/questions/
 reference/home-v2/ink/work/
 public/images/home-v2/ink/test/
+
+# Lossless plates the ink build scripts keep beside their originals (the page ships the webp)
+reference/ink-pages/*/plates/

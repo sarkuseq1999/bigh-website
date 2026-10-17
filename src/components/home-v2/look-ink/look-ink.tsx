@@ -4,6 +4,7 @@ import { InkPage } from "@/components/ink/ink-page";
 import type { NavFollow } from "@/components/ink/nav/nav-inscription";
 import { route } from "./brush-route";
 import { Cellular } from "./cellular";
+import { InkColorProvider } from "./ink-color";
 import { OpeningCrane } from "./opening-crane";
 import { Products } from "./products";
 import { Purpose } from "./purpose";
@@ -29,21 +30,29 @@ const FOLLOW: NavFollow = { products: ["products"], science: ["cellular", "scien
 // Keyboard: the first Tab shows "Skip to content" (as on the About, Science and product pages),
 // which puts focus at the start of the page's words, past the header's links.
 // `className` carries the title face's variable (loaded by the route, see page.tsx).
+// The paintings carry the green-spring watercolour (ink-color.tsx; Mo, October 16, 2026).
 export function LookInk({ className }: { className: string }) {
   return (
-    <InkPage current="home" route={route} follow={FOLLOW} className={`${home.titles} ${className}`}>
-      {(motion) => (
-        <>
-          <OpeningCrane motion={motion} />
-          <Cellular />
-          <Scientists />
-          <Products />
-          <Stories />
-          <Science />
-          <Research />
-          <Purpose />
-        </>
-      )}
-    </InkPage>
+    <InkColorProvider color="spring">
+      <InkPage
+        current="home"
+        route={route}
+        follow={FOLLOW}
+        className={`${home.titles} ${className}`}
+      >
+        {(motion) => (
+          <>
+            <OpeningCrane motion={motion} />
+            <Cellular />
+            <Scientists />
+            <Products />
+            <Stories />
+            <Science />
+            <Research />
+            <Purpose />
+          </>
+        )}
+      </InkPage>
+    </InkColorProvider>
   );
 }

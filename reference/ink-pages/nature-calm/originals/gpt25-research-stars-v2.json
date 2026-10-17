@@ -1,0 +1,13 @@
+{
+  "model": "marketing-studio/image/flare",
+  "prompt": "A loose ink-wash painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no text, no letters, no numbers, no signature, no red seal, no stamp. Paint it the way a master ink painter works: a few confident, loose brush strokes, wet ink bleeding softly into the paper, dry-brush texture where the brush runs out, simplified forms that suggest rather than describe, lots of white paper. It must look like a painting, expressive and artistic, with the brushwork of the reference picture: never a realistic drawing, never a detailed illustration, never a pencil sketch, never a 3D render, never a photograph. Copy only the reference's brushwork, never its subject: no bird, no crane, no reeds. Only the things named below are painted: no mountains, no pine trees, no buildings, no people, no extra plants or objects, nothing Asian in style or subject (no pagodas, no lanterns, no characters, no bamboo, no plum blossom). Sumi ink from deep black to soft grey washes, soft watercolour only where a colour is named, and real gold leaf only where stated. Generous empty paper on every side. The subject fills most of the picture (about 85% of its height and width): bold, generous, never small in the middle of empty paper.\n\nThe seven stars of the Big Dipper, large and bold, filling the upper two thirds of the picture: seven separate round flecks of real gold leaf, each one about a twelfth of the picture's width, with ragged torn edges and a soft, faint warm glow on the paper around it, set exactly in the Big Dipper's shape (four stars making the bowl on the right, three the curved handle rising to the upper left), bright and crisp against bare paper. The sky is bare paper, with no wash, no gradient, no colour and no clouds at all. Along the bottom of the picture, one long, soft, dark ridge line: a single confident sweep of wet black-grey ink, a low hill's silhouette fading into the paper at both ends. Nothing else: no trees, no moon, no other stars, no buildings, no people. Clear, quiet, steady.",
+  "settings": {
+    "aspect_ratio": "3:4",
+    "resolution": "2k",
+    "quality": "high"
+  },
+  "refs": [
+    "reference/home-v2/ink/originals/gpt25-crane-rest-v2.png"
+  ],
+  "made": "20261016-125347"
+}

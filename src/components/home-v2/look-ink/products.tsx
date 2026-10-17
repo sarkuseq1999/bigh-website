@@ -12,6 +12,7 @@ import { contactShadow, shadow } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import { useArrival, useMotionOk } from "@/components/ink/motion";
 import styles from "./products.module.css";
+import { useTint } from "./ink-color";
 
 // "Find your starting point." A showroom, not a shelf: the chosen bottle (the approved
 // photographs, never generated) stands large on the stage in its gathered ink pool, on the brush
@@ -28,6 +29,7 @@ import styles from "./products.module.css";
 // follow, 70ms apart (useArrival: the finished state is the default, so nothing can be left
 // waiting). Choosing another product keeps the cross-fade and the pool gathering again.
 export function Products() {
+  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const motion = useMotionOk();
@@ -82,7 +84,7 @@ export function Products() {
             <Image
               key={`pool-${shown}`}
               className={`${base.ink} ${styles.pool}`}
-              src={shadow.src}
+              src={tint(shadow.src)}
               alt=""
               width={shadow.width}
               height={shadow.height}
@@ -90,7 +92,7 @@ export function Products() {
             />
             <Image
               className={`${base.ink} ${styles.contact}`}
-              src={contactShadow.src}
+              src={tint(contactShadow.src)}
               alt=""
               width={contactShadow.width}
               height={contactShadow.height}
@@ -140,7 +142,7 @@ export function Products() {
               <span className={styles.mini}>
                 <Image
                   className={`${base.ink} ${styles.miniPool}`}
-                  src={shadow.src}
+                  src={tint(shadow.src)}
                   alt=""
                   width={shadow.width}
                   height={shadow.height}
@@ -148,7 +150,7 @@ export function Products() {
                 />
                 <Image
                   className={`${base.ink} ${styles.miniContact}`}
-                  src={contactShadow.src}
+                  src={tint(contactShadow.src)}
                   alt=""
                   width={contactShadow.width}
                   height={contactShadow.height}

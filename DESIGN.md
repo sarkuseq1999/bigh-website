@@ -99,7 +99,7 @@ components:
 
 **Creative North Star: "One Breath of Ink"**
 
-The page is an East Asian ink-wash painting on warm rice paper. Paintings, paper, type and one continuous brush line carry everything; there are no cards, no gradient fills, no red and no seals. A single gold leaf appears only where energy is meant: the sun, and the two folds inside the mitochondrion where energy is made. Switzer sets the words large and calm, in sentence case, beside paintings that bloom into the paper as they arrive.
+The page is an East Asian ink-wash painting on warm rice paper. Paintings, paper, type and one continuous brush line carry everything; there are no cards, no gradient fills and no seals. On the homepage the paintings carry a thin watercolour, "green spring" (Mo, October 16, 2026): blue in the far hills, sage green near, pink blossoms, a red crown on the crane, a warm haze around the sun; the interface stays ink. A single gold leaf appears only where energy is meant: the sun, and the two folds inside the mitochondrion where energy is made. Switzer sets the words large and calm, in sentence case, beside paintings that bloom into the paper as they arrive.
 
 The signature is the brush line. It leaves the crane's trailing legs (or the cell's foot), draws itself down the page as the visitor reads, and pins each section's label to itself with a fine leader line, so the page reads as one timeline painted in one stroke. Density is low: one idea per screen, generous paper, nothing boxed.
 
@@ -108,7 +108,7 @@ Every motion breathes at the same slow pace (`--breath: 2.4s`, ease `cubic-bezie
 **Key Characteristics:**
 
 - Rice paper with real fibre (a tiled 800px paper texture over the paper colour), never flat white.
-- Sumi ink and ink-wash greys for everything; gold leaf only inside paintings, only for energy.
+- Sumi ink and ink-wash greys for the interface; on the homepage the paintings take a thin green-spring watercolour; gold leaf only inside paintings, only for energy.
 - Paintings have their paper divided out and multiply onto the page's own paper.
 - One continuous calligraphic brush line on desktop; stations pinned to it by hairline leaders.
 - Switzer at 400/450/500, sentence case, never letter-spaced capitals.
@@ -117,7 +117,7 @@ Every motion breathes at the same slow pace (`--breath: 2.4s`, ease `cubic-bezie
 
 ## Colors
 
-A near-monochrome of sumi ink on warm paper, with one gold that belongs to the paintings, not the interface.
+A near-monochrome of sumi ink on warm paper, with one gold that belongs to the paintings, not the interface. On the homepage the paintings also carry a thin watercolour (below); it never reaches the interface.
 
 ### Primary
 
@@ -134,11 +134,23 @@ A near-monochrome of sumi ink on warm paper, with one gold that belongs to the p
 - **Pill Hover** (pill-hover): the solid pill's hover, ink thinned with water.
 - **Selection Gold** (selection-gold): text selection only, a pale wash of the gold.
 
+### Watercolour (homepage paintings only)
+
+"Green spring" (Mo, October 16, 2026, chosen from three tests and two live versions): California in spring. Each painting's ink is treated as a coloured pigment (reference/home-v2/ink/recolor/recolor.py), so pale washes turn blue with distance and heavy strokes turn sage green; the blackest lines stay nearly black and the gold leaf is untouched. The tinted files sit in `/images/home-v2/ink/spring/` and only the homepage serves them (ink-color.tsx).
+
+- **Far Haze** `#adc4da`: distant ridges, mist, the light washes.
+- **Sage** `#8fa77f` and **Deep Sage** `#4a5a42`: near hills, pines, leaves.
+- **Cell Slate** `#34404a`: the mitochondrion's and the inkstone's ink, cool so the gold reads warmer.
+- **Sun Haze** `rgb(243 191 146)`: the glow around both suns (behind the opening's hills, painted into the closing landscape).
+- **Crane Crown** `#d4482f` and **Blossom** `#f0a3ad`: small painted spots of colour.
+
 ### Named Rules
 
 **The One Gold Leaf Rule.** Gold is energy and only appears painted into the plates. If you are reaching for gold on a UI element, use sumi ink instead.
 
-**The No Red, No Seal Rule.** The genre's red seal is refused on purpose: no red anywhere, no stamps, no chops. This is a confirmed brand departure from the ink tradition, not an oversight.
+**The Ink Interface Rule.** The watercolour stays inside the paintings. Buttons, rules, links and labels stay sumi ink (Mo, October 16, 2026: the buttons keep "the ink design").
+
+**The No Seal Rule.** The genre's red seal is refused on purpose: no stamps, no chops, no red in the interface. The only red is painted: the crane's crown on the homepage. This is a confirmed brand departure from the ink tradition, not an oversight.
 
 ## Typography
 
