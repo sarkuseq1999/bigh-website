@@ -63,6 +63,9 @@ These sit on top of `DESIGN.md`.
 - **Even rhythm.** Every section uses the same pairing (one painting and its words, sides alternating).
   One picture per screen, and each chapter brings its own picture. A signature object lives only in
   the chapter where it means something. The brand name appears once per screen. No fake paper folds.
+- **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
+  (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
+  bottle. The phone layout may stack the name above the bottle to keep it readable.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park

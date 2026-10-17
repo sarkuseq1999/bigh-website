@@ -104,7 +104,7 @@ def shell(browser):
 
 
 def name(browser):
-    """Check the new opening's readable name, real bottle and working chapter links."""
+    """Keep the bottle between readable name parts on desktop, with a clear phone stack."""
     for locale in ["en", "vn"]:
         for w, h in SIZES:
             if locale == "vn" and w not in (1440, 1024, 390):
@@ -115,16 +115,17 @@ def name(browser):
               const h = document.querySelector('#product-name');
               const image = document.querySelector('[data-chapter=overview] img');
               const box = e => { const r=e.getBoundingClientRect(); return {l:r.left,r:r.right,t:r.top,b:r.bottom}; };
-              const range = document.createRange(); range.selectNodeContents(h);
-              return {name:box(h), bottle:box(image), font:getComputedStyle(h).fontFamily,
-                      lines:[...range.getClientRects()].map(r=>({l:r.left,r:r.right}))};
+              const left = document.querySelector('[data-name-left]');
+              const right = document.querySelector('[data-name-right]');
+              return {left:box(left), right:box(right), bottle:box(image), font:getComputedStyle(h).fontFamily};
             }""")
             tag = f"name {locale} {w}x{h}"
-            check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in m["lines"]))
+            check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in [m["left"],m["right"]]))
             check(f"{tag}: title font loaded", "Ysabeau" in m["font"] and page.evaluate("document.fonts.check('500 64px Ysabeau')"))
-            a, b = m["name"], m["bottle"]
-            clear = a["r"] <= b["l"] if w >= 960 else a["b"] <= b["t"]
-            check(f"{tag}: name and bottle do not overlap", clear, str(m))
+            left, right, b = m["left"], m["right"], m["bottle"]
+            clear = left["r"] <= b["l"] + 1 and b["r"] <= right["l"] + 1 if w >= 960 else max(left["b"],right["b"]) <= b["t"]
+            check(f"{tag}: bottle between words on desktop, below on phones", clear, str(m))
+            check(f"{tag}: bottle centered on the page", abs((b["l"]+b["r"])/2-w/2) <= 1)
             check(f"{tag}: bottle stays within the screen", b["l"] >= 0 and b["r"] <= w)
             if locale == "en" and w in (1440, 390):
                 nav = page.get_by_role("navigation", name="Green Bee Propolis", exact=True)

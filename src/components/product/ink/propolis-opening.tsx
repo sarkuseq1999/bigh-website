@@ -44,8 +44,8 @@ function followChapter(event: MouseEvent<HTMLAnchorElement>) {
   });
 }
 
-/** Propolis's own opening: a readable name beside the unchanged approved bottle.
- * On a phone, the name, bottle, introduction and purchase details form one reading order. */
+/** Mo's preferred composition: Green / the real bottle / Bee Propolis.
+ * Phones put the same name arrangement above the bottle so every word stays readable. */
 export function PropolisOpening({ product }: { product: InkProduct }) {
   const copy = useCopy();
   return (
@@ -56,51 +56,51 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
       aria-labelledby="product-name"
     >
       <div className={base.wrap}>
-        <div className={styles.heroGrid}>
-          <div className={styles.heroWords}>
-            <div className={styles.intro}>
-              <p className={styles.eyebrow}>{copy(product.eyebrow)}</p>
-              <h1 id="product-name" className={styles.name} lang="en">
-                <span>Green Bee</span> <span>Propolis</span>
-              </h1>
-            </div>
-            <div className={styles.description}>
-              <p className={styles.lead}>
-                {product.headlineLines.map((line, i) => (
-                  <span key={line}>
-                    {i > 0 ? " " : null}
-                    {copy(line)}
-                  </span>
-                ))}
-              </p>
-              <p className={styles.purpose}>{copy(product.purpose)}</p>
-              <div className={styles.purchase}>
-                <p className={styles.supply}>{keepTogether(copy(product.serving.supply))}</p>
-                <AddToCart wide />
-                <p className={styles.promise}>
-                  {copy("45 days to decide.")}{" "}
-                  {copy("Not right for you? Send it back for a refund.")}
-                </p>
-              </div>
-            </div>
-          </div>
-          <figure className={styles.productFigure}>
+        <h1 id="product-name" className={styles.name} lang="en" aria-label={product.name}>
+          <span className={styles.nameLeft} data-name-left aria-hidden="true">
+            Green
+          </span>
+          <span className={styles.bottleStand} aria-hidden="true">
             <Image
               className={styles.heroBottle}
               src={product.bottle.src}
-              alt={copy("{name} bottle", { name: product.name })}
+              alt=""
               width={product.bottle.width}
               height={product.bottle.height}
-              sizes="(max-width: 599px) 80vw, (max-width: 959px) 380px, 40vw"
+              sizes="(max-width: 959px) 76vw, (max-width: 1468px) 32vw, 470px"
               loading="eager"
               fetchPriority="high"
             />
-            <figcaption className={styles.provenance}>
-              {product.highlights.map((item) => (
-                <span key={item}>{copy(item)}</span>
+          </span>
+          <span className={styles.nameRight} data-name-right aria-hidden="true">
+            <span>Bee</span>
+            <span>Propolis</span>
+          </span>
+        </h1>
+        <div className={styles.heroDetails}>
+          <div className={styles.description}>
+            <p className={styles.lead}>
+              {product.headlineLines.map((line, i) => (
+                <span key={line}>
+                  {i > 0 ? " " : null}
+                  {copy(line)}
+                </span>
               ))}
-            </figcaption>
-          </figure>
+            </p>
+            <p className={styles.purpose}>{copy(product.purpose)}</p>
+          </div>
+          <div className={styles.purchase}>
+            <ul className={styles.provenance}>
+              {product.highlights.map((item) => (
+                <li key={item}>{copy(item)}</li>
+              ))}
+            </ul>
+            <p className={styles.supply}>{keepTogether(copy(product.serving.supply))}</p>
+            <AddToCart wide />
+            <p className={styles.promise}>
+              {copy("45 days to decide.")} {copy("Not right for you? Send it back for a refund.")}
+            </p>
+          </div>
         </div>
         <nav className={styles.chapterNav} aria-label={product.name}>
           {CHAPTERS.map(([id, label], index) => (

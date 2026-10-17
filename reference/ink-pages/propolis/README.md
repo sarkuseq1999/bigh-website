@@ -89,3 +89,35 @@ questions and footer. Raw captures and check logs live in `scripts/qa/out/propol
   would expose unpublished designs to other devices. The review is served only on this PC at
   `http://localhost:3008/`; the built page is at
   `http://localhost:3006/products/green-bee-propolis`.
+
+## Opening revision — bottle between the words
+
+Mo preferred the original opening direction and asked for a better version of it on October 16, 2026. That preference is now in `AGENTS.md`. This revision changes only the opening component and
+its scoped styles; the chapter design from the earlier local proposal remains.
+
+- Two browser mockups: A keeps Green on the left and Bee / Propolis on the right; B groups Green
+  Bee on the left. A was recommended, shown in chat, and developed.
+- The approved bottle stays in the middle on desktop. Lighter Ysabeau lettering and clear space
+  around the bottle replace the heavy lettering. The product introduction and simple purchase
+  area sit beneath it. The original bottle file is unchanged.
+- On a phone, the same name arrangement sits above the bottle at readable sizes. There is still
+  one accessible heading named Green Bee Propolis. The purchase preview and chapter links work
+  with mouse, keyboard and touch.
+- No new copy or generated assets. The extra "Made by bees" eyebrow from the first local proposal
+  is removed to restore the original opening's clean title composition.
+- `mockup_opening.py` captured the starting concepts. `build_centered_review.py` builds the new
+  review from real production-browser screenshots. The pictures and review are in
+  `reference/ink-pages/mockups/propolis-centered/`; raw captures and logs are ignored under
+  `scripts/qa/out/propolis-design/centered-*`.
+- Focused dev checks: 143/143. Final production Propolis checks: 230/230; homepage: 282/282;
+  navigation: 436/436, including 103 keyboard focus stops. All three scripts exited successfully.
+  Production build, lint, TypeScript and changed-file formatting passed. No public update or push.
+- WebKit touch smoke check: HTTP 200, no horizontal overflow or page errors, research shortcut
+  lands below the menu, and the honest checkout preview opens. The local review's pictures load.
+  **Font caveat:** Windows WebKit draws variable font weights too heavily and ignores explicit
+  weight-axis changes. The observed behavior matches the reproduced upstream issue
+  [Playwright #43004](https://github.com/microsoft/playwright/issues/43004). Its screenshots cannot
+  certify iPhone font appearance; no site workaround was added for this test-browser limitation.
+  The intended lighter lettering was also visually confirmed in Firefox.
+- Visual assessment: 9/10. The introductory paragraph is still dense on a small phone. Desktop,
+  phone and moving tree states were inspected on the production build.
