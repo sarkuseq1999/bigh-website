@@ -2,6 +2,10 @@
 
 Updated: September 24, 2026. Working brief — everything can be changed.
 
+> **October 2026:** the design notes below describe the September site (Deep Space hero, cobalt, Glass
+> cell), which the Ink & Gold look replaced. For the current look read [`DESIGN.md`](DESIGN.md) and
+> [`AGENTS.md`](AGENTS.md). The product facts (section 2) and Dr. Liu's story (section 4) still hold.
+
 **Chosen** means Mo selected it. **Proposed** means it still needs a decision.
 
 **Design reference — stated by Mo, September 24, 2026:** Timeline (timeline.com) is Mo's favorite overall design and vibe for this site. Use it as a reference for every section: one short idea per screen with calm space, full-bleed rounded photography with focus changes on scroll, a centered translucent "battery" with a small fact list, and the product set inside headline words. Keep BiGH's own palette and type, and keep navigation and labels large for older readers. That is the one part of Timeline Mo marked to avoid (Design Vault #045).
