@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Ysabeau } from "next/font/google";
 import { notFound } from "next/navigation";
 import { setRequestLocale } from "next-intl/server";
 import { getProduct, productPageLinks, productSlugs } from "@/components/product/catalog";
@@ -6,6 +7,15 @@ import { ProductTemplate } from "@/components/product/product-template";
 import { redirect } from "@/i18n/navigation";
 
 type Params = Promise<{ locale: string; slug: string }>;
+
+// The Propolis editorial uses the same title face as the homepage and Science.
+// No preload: other product pages do not request a font they do not use.
+const propolisTitles = Ysabeau({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-ysabeau",
+  display: "swap",
+  preload: false,
+});
 
 export const dynamicParams = false;
 
@@ -31,5 +41,12 @@ export default async function ProductRoute({ params }: { params: Params }) {
 
   // One template per page, each in its own chunks (product-template.tsx). The ink page's header
   // sheets and product links need the product pages, as About's do.
-  return <ProductTemplate product={product} pages={product.ink ? productPageLinks() : undefined} />;
+  const page = (
+    <ProductTemplate product={product} pages={product.ink ? productPageLinks() : undefined} />
+  );
+  return slug === "green-bee-propolis" ? (
+    <div className={propolisTitles.variable}>{page}</div>
+  ) : (
+    page
+  );
 }

@@ -11,6 +11,8 @@ import { Inside } from "./inside";
 import { Opening } from "./opening";
 import { People } from "./people";
 import styles from "./product-ink.module.css";
+import { PropolisOpening } from "./propolis-opening";
+import propolisStyles from "./propolis.module.css";
 import { Research } from "./research";
 import { Why } from "./why";
 
@@ -21,11 +23,15 @@ import { Why } from "./why";
 // coming on in "Why it matters", then the questions, the other products and the notes. Every word
 // of the product's data stays.
 export function ProductInkPage({ product }: { product: InkProduct }) {
+  const isPropolis = product.slug === "green-bee-propolis";
   return (
-    <InkPage current="products" className={styles.page}>
+    <InkPage
+      current="products"
+      className={`${styles.page}${isPropolis ? ` ${propolisStyles.propolis}` : ""}`}
+    >
       {(motion) => (
         <div data-product-ink={product.slug}>
-          <Opening product={product} />
+          {isPropolis ? <PropolisOpening product={product} /> : <Opening product={product} />}
           <Why product={product} motion={motion} />
           <Inside product={product} />
           {product.studies.length > 0 ? <Research product={product} /> : null}

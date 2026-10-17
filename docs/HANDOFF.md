@@ -5,12 +5,26 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 16, 2026, late evening, by Claude Code.
+- **Last updated:** October 16, 2026, by Codex.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` = `main` (`050247b`) plus the setup commits (docs only: the shared rulebook
-  and this note). Those docs are the only thing not yet pushed.
-- **In progress:** nothing.
-- **Next:** Mo decides. Open items are listed below.
+- **State:** `studio` contains the setup commits plus a local Green Bee Propolis design proposal.
+  The public demo still shows `bf4cb84`; nothing from this design turn has been pushed.
+- **In progress:** None. The Propolis refinement is complete locally and ready for Mo's review.
+- **Next:** Mo reviews the local proposal. It uses Ysabeau titles, a name beside the real bottle,
+  alternating chapter paintings, chapter links and clearer research rows on phones. The existing
+  copy, paintings, gold animation, menu and footer remain. Notes and A/B mockups:
+  `reference/ink-pages/propolis/README.md`. Publishing requires Mo's yes.
+- **Local checks:** Production build, lint, TypeScript and changed-file formatting passed.
+  Propolis: 217/217, homepage: 282/282, menu: 436/436. The last change only opts the new Propolis
+  shortcuts into heading-aware scrolling; its mouse, keyboard and touch checks passed in the final
+  production build, as did a smoke check of the existing homepage chapter link.
+- **Visual review:** Built desktop, phone and moving tree states inspected. Codex's assessment is
+  9/10; the remaining limit is dense research copy on small phones. Before/after and A/B captures
+  are in `reference/ink-pages/mockups/propolis-refinement/`. The built preview is running at
+  `http://localhost:3006/products/green-bee-propolis`; the screenshot gallery is at
+  `http://localhost:3008/` (this PC only). The dev server is stopped.
+- **Phone sharing:** Automatic approval review rejected exposing the unpublished gallery on the
+  local network. The gallery was instead bound to loopback. No public deployment or alias changed.
 
 ## What's live
 

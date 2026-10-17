@@ -6,10 +6,8 @@ cracks, one ingredient, no painted sum, the real bottle inside a painted scene.
 Sections (all, or --only=a,b):
   shell       200 in the ink look, one h1 (Green Bee Propolis), the real bottle, no canvas, no console
               errors (1440x900, 390x844)
-  name        1920 to 360: the lockup (Mo, October 16): "Green" large, "Bee" centred over "Propolis" smaller,
-              "Green" and "Propolis" on one baseline,
-              inside the wrap, on one middle; beside the bottle and clear of its glass from 960px,
-              side by side over it below; vi too. The One bottle card's capsule pale, like NuriCell's
+  name        1920 to 360: readable Ysabeau title, clear of the real bottle; Vietnamese too.
+              Keyboard chapter navigation and the honest checkout preview.
   chapters    overview, why, inside, research, daily, buy (no people, no sum); each its own painting;
               "Inside every capsule, one ingredient."; 200 mg; every study; the questions
   spread      the gold waits, then fills the cracks from their middle; reduced motion and no script:
@@ -17,8 +15,8 @@ Sections (all, or --only=a,b):
   multiply    every painting multiplies onto the paper with no box
   buy         the real bottle (green-bee-propolis.png) stands inside the scene, centred; the front layer
               multiplies over its foot and changes nothing beside it; captioned; Add to cart
-  size        both bottles exactly NuriCell's size (1440, 1024, 390)
-  layout      sizes 1536 to 360: no sideways scroll, painting left of its words from 960px and above
+  size        both original bottles undistorted and uncropped (1440, 1024, 390)
+  layout      sizes 1536 to 360: no sideways scroll, paintings alternate beside their words from 960px and above
               them below, text 15px+
   deep_links  #chapter-<id> lands its heading under the menu bar
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
@@ -54,11 +52,13 @@ def check(name, ok, detail=""):
     print(f"{'PASS' if ok else 'FAIL'} {name}" + (f"  ({detail})" if detail else ""), flush=True)
 
 
-def opened(browser, w, h, path=PATH, reduced=False, js=True):
+def opened(browser, w, h, path=PATH, reduced=False, js=True, touch=False):
     ctx = browser.new_context(
         viewport={"width": w, "height": h},
         reduced_motion="reduce" if reduced else "no-preference",
         java_script_enabled=js,
+        is_mobile=touch,
+        has_touch=touch,
     )
     page = ctx.new_page()
     errors = []
@@ -96,73 +96,48 @@ def shell(browser):
         )
         check(f"{tag}: the real bottle in the opening", page.locator('[data-chapter="overview"] img[src*="green-bee-propolis.png"]').count() >= 1)
         check(f"{tag}: no canvas", page.locator("canvas").count() == 0)
-        card = page.locator('[data-chapter="overview"] img[class*=bottleCardPicture]')
-        src = card.get_attribute("src") or ""
-        check(f"{tag}: the One bottle card's capsule is the pale one (Mo, October 16)", "capsule-v2" in src, src[:90])
+        check(f"{tag}: supply visible in the opening", "60-day supply" in page.locator('[data-chapter="overview"]').inner_text())
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         page.wait_for_timeout(2500)
         page.screenshot(path=str(OUT / f"shell-{w}.png"))
         ctx.close()
 
 
-NAME_BOXES = """() => {
-  const h = document.querySelector('h1#product-name');
-  const wrap = h.parentElement.getBoundingClientRect();
-  const style = getComputedStyle(h.parentElement);
-  const inner = [wrap.left + parseFloat(style.paddingLeft), wrap.right - parseFloat(style.paddingRight)];
-  const box = (el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
-  const first = h.querySelector('[class*=first]'), second = h.querySelector('[class*=second]');
-  const bottle = h.querySelector('[class*=stand] img');
-  // The bottle's glass: the photo has a wide transparent margin (its visible part is 51.5% of its
-  // width, centred).
-  const b = box(bottle), mid = (b.l + b.r) / 2, half = (b.r - b.l) * 0.515 / 2;
-  const sized = (el) => ({ ...box(el), size: parseFloat(getComputedStyle(el).fontSize) });
-  // Where a line of text sits: an empty inline-block's bottom is on the baseline.
-  const baseline = (el) => { const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0'; el.appendChild(m); const y = m.getBoundingClientRect().bottom; m.remove(); return y; };
-  const lines = [...second.querySelectorAll('[class*=stackLine]')].map((el) => ({ text: el.textContent, ...box(el) }));
-  const lineEls = [...second.querySelectorAll('[class*=stackLine]')];
-  return { inner, first: sized(first), second: sized(second), lines, glass: { l: mid - half, r: mid + half, t: b.t, b: b.b, mid: (b.t + b.b) / 2 },
-           baselines: { green: baseline(first), propolis: lineEls.length ? baseline(lineEls[lineEls.length - 1]) : null },
-           beeTop: lineEls.length ? baseline(lineEls[0]) - 0.7 * parseFloat(getComputedStyle(lineEls[0]).fontSize) : null };
-}"""
-
-
 def name(browser):
+    """Check the new opening's readable name, real bottle and working chapter links."""
     for locale in ["en", "vn"]:
         for w, h in SIZES:
             if locale == "vn" and w not in (1440, 1024, 390):
                 continue
             ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/green-bee-propolis", reduced=True)
             page.evaluate("document.fonts.ready")
-            page.wait_for_timeout(300)
-            m = page.evaluate(NAME_BOXES)
+            m = page.evaluate("""() => {
+              const h = document.querySelector('#product-name');
+              const image = document.querySelector('[data-chapter=overview] img');
+              const box = e => { const r=e.getBoundingClientRect(); return {l:r.left,r:r.right,t:r.top,b:r.bottom}; };
+              const range = document.createRange(); range.selectNodeContents(h);
+              return {name:box(h), bottle:box(image), font:getComputedStyle(h).fontFamily,
+                      lines:[...range.getClientRects()].map(r=>({l:r.left,r:r.right}))};
+            }""")
             tag = f"name {locale} {w}x{h}"
-            lo, hi = m["inner"]
-            inside = m["first"]["l"] >= lo - 1 and m["second"]["r"] <= hi + 1 and m["first"]["r"] <= hi + 1 and m["second"]["l"] >= lo - 1
-            check(f"{tag}: both halves inside the wrap", inside, f"wrap {lo:.0f}-{hi:.0f}, first {m['first']['l']:.0f}-{m['first']['r']:.0f}, second {m['second']['l']:.0f}-{m['second']['r']:.0f}")
-            g, k = m["first"], m["second"]
-            lines = m["lines"]
-            stacked = len(lines) == 2 and lines[0]["text"] == "Bee" and lines[1]["text"] == "Propolis" and lines[1]["t"] >= lines[0]["b"] - 6
-            check(f"{tag}: Bee over Propolis, one word a line", stacked, str(lines))
-            check(f"{tag}: Green larger than the stack", g["size"] > 1.25 * k["size"], f"{g['size']:.0f} vs {k['size']:.0f}px")
-            centres = [(line["l"] + line["r"]) / 2 for line in lines]
-            check(f"{tag}: Bee centred over Propolis", len(centres) == 2 and abs(centres[0] - centres[1]) <= 1.5, str([round(c) for c in centres]))
-            bl = m["baselines"]
-            check(f"{tag}: Green and Propolis on one baseline", bl["propolis"] is not None and abs(bl["green"] - bl["propolis"]) <= 2,
-                  f"{bl['green']:.1f} vs {bl['propolis']:.1f}")
-            # The name, from the top of "Bee" to the shared baseline, on the bottle's middle (desktop).
-            name_mid = (m["beeTop"] + bl["propolis"]) / 2
-            middle = w < 960 or abs(name_mid - m["glass"]["mid"]) <= 0.04 * (m["glass"]["b"] - m["glass"]["t"])
-            if w >= 960:
-                clear = g["r"] <= m["glass"]["l"] + 1 and k["l"] >= m["glass"]["r"] - 1
-                check(f"{tag}: Green left, the stack right, clear of the glass, the name on the bottle's middle", clear and middle,
-                      f"Green ends {g['r']:.0f}, glass {m['glass']['l']:.0f}-{m['glass']['r']:.0f}, stack starts {k['l']:.0f}")
-            else:
-                over = max(g["b"], k["b"]) <= m["glass"]["t"] + 30 and g["r"] <= k["l"] + 1
-                check(f"{tag}: Green beside the stack, over the bottle", over,
-                      f"Green {g['l']:.0f}-{g['r']:.0f}, stack {k['l']:.0f}-{k['r']:.0f}, bottle top {m['glass']['t']:.0f}")
-            if locale == "en" and w in (1440, 1024, 390):
-                page.screenshot(path=str(OUT / f"name-{w}.png"))
+            check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in m["lines"]))
+            check(f"{tag}: title font loaded", "Ysabeau" in m["font"] and page.evaluate("document.fonts.check('500 64px Ysabeau')"))
+            a, b = m["name"], m["bottle"]
+            clear = a["r"] <= b["l"] if w >= 960 else a["b"] <= b["t"]
+            check(f"{tag}: name and bottle do not overlap", clear, str(m))
+            check(f"{tag}: bottle stays within the screen", b["l"] >= 0 and b["r"] <= w)
+            if locale == "en" and w in (1440, 390):
+                nav = page.get_by_role("navigation", name="Green Bee Propolis", exact=True)
+                check(f"{tag}: four chapter links", nav.get_by_role("link").count() == 4)
+                link = nav.get_by_role("link").nth(1)
+                link.focus()
+                page.keyboard.press("Enter")
+                page.wait_for_timeout(1000)
+                top = page.locator("#chapter-inside-title").bounding_box()["y"]
+                bottom = page.locator("header").bounding_box()
+                check(f"{tag}: keyboard chapter link lands below the header", bottom["y"] + bottom["height"] <= top < h - 60, f"{top:.0f}px")
+                page.locator('[data-chapter=overview] button').click()
+                check(f"{tag}: checkout remains an honest preview", page.get_by_text("Checkout isn't connected yet. This page is a design preview.", exact=True).is_visible())
             ctx.close()
 
 
@@ -344,22 +319,18 @@ def buy(browser):
         ctx.close()
 
 
-SIZE = """() => { const w = (s) => Math.round(document.querySelector(s)?.getBoundingClientRect().width ?? -1);
-  return [w('[data-chapter=overview] img[class*=bottle]'), w('[data-chapter=buy] img[class*=buyBottle]')]; }"""
-
-
 def bottle_size(browser):
-    """Both bottles exactly NuriCell's size (Mo, October 14: "the bottle bigger, use NuriCell for
-    reference"), at a laptop, a tablet and a phone."""
+    """The approved image keeps its natural proportions and stays uncropped at both placements."""
     for w, h in [(1440, 900), (1024, 768), (390, 844)]:
-        sizes = {}
-        for slug in ["nuricell", "green-bee-propolis"]:
-            ctx, page, _, _ = opened(browser, w, h, f"/en/products/{slug}", reduced=True)
-            sizes[slug] = page.evaluate(SIZE)
-            ctx.close()
-        a, b = sizes["nuricell"], sizes["green-bee-propolis"]
-        check(f"size {w}x{h}: the opening bottle as big as NuriCell's", abs(a[0] - b[0]) <= 2, f"{b[0]} vs {a[0]}")
-        check(f"size {w}x{h}: the Buy bottle as big as NuriCell's", abs(a[1] - b[1]) <= 2, f"{b[1]} vs {a[1]}")
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        for chapter in ["overview", "buy"]:
+            image = page.locator(f'[data-chapter="{chapter}"] img[src*="green-bee-propolis.png"]').first
+            image.scroll_into_view_if_needed()
+            image.evaluate("i => i.decode()")
+            m = image.evaluate("""i => {const r=i.getBoundingClientRect(); return {w:r.width,h:r.height,nw:i.naturalWidth,nh:i.naturalHeight,l:r.left,r:r.right};}""")
+            check(f"bottle {w} {chapter}: original proportions", abs(m["w"]/m["h"] - m["nw"]/m["nh"]) < 0.01)
+            check(f"bottle {w} {chapter}: fully within the page", m["l"] >= 0 and m["r"] <= w)
+        ctx.close()
 
 
 def layout(browser):
@@ -372,11 +343,12 @@ def layout(browser):
             """(two) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
                  const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
                  const t = c.querySelector('[data-words]').getBoundingClientRect();
-                 const ok = two ? f.right <= t.left + 1 : f.bottom <= t.top + 1;
+                 const reverse = ['inside', 'daily'].includes(c.dataset.chapter);
+                 const ok = two ? (reverse ? t.right <= f.left + 1 : f.right <= t.left + 1) : f.bottom <= t.top + 1;
                  return ok ? null : c.dataset.chapter; }).filter(Boolean)""",
             w >= 960,
         )
-        check(f"{tag}: each painting {'left of' if w >= 960 else 'above'} its words", not bad, ", ".join(bad))
+        check(f"{tag}: each painting {'alternates beside' if w >= 960 else 'sits above'} its words", not bad, ", ".join(bad))
         small = page.evaluate(
             """() => [...document.querySelectorAll('main p, main li, main dd, main dt, main td, main th, main figcaption')]
                  .filter(e => e.offsetParent && e.textContent.trim() && parseFloat(getComputedStyle(e).fontSize) < 15)
@@ -418,6 +390,26 @@ def languages(browser):
         ctx.close()
 
 
+def navigation(browser):
+    """Native focus/auto-scroll must not leave the smooth-scroll clock behind the link target."""
+    for w, h, touch in [(1440, 900, False), (390, 844, False), (390, 844, True)]:
+        ctx, page, _, errors = opened(browser, w, h, touch=touch)
+        page.wait_for_timeout(2200)
+        nav = page.get_by_role("navigation", name="Green Bee Propolis", exact=True)
+        for index, chapter in enumerate(["why", "inside", "research", "daily"]):
+            link = nav.get_by_role("link").nth(index)
+            link.focus()
+            page.keyboard.press("Enter")
+            page.wait_for_timeout(1800)
+            target = page.locator(f"#chapter-{chapter}-title")
+            top = target.bounding_box()["y"]
+            header = page.locator("header").bounding_box()
+            check(f"navigation {w} {chapter}: heading near the top, below the menu", header["y"] + header["height"] <= top <= h / 2, f"{top:.0f}px")
+            check(f"navigation {w} {chapter}: focus and address follow the chapter", target.evaluate("e => e === document.activeElement") and page.url.endswith(f"#chapter-{chapter}"))
+        check(f"navigation {w}: no page errors", not errors, str(errors))
+        ctx.close()
+
+
 SECTIONS = {
     "shell": shell,
     "name": name,
@@ -429,6 +421,7 @@ SECTIONS = {
     "layout": layout,
     "deep_links": deep_links,
     "languages": languages,
+    "navigation": navigation,
 }
 
 if __name__ == "__main__":

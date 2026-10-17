@@ -26,6 +26,28 @@ export function useSmoothScroll(enabled: boolean) {
       if (!link || link.getAttribute("href") === "#") return;
       const target = document.querySelector(link.getAttribute("href")!);
       if (!target) return;
+      // Opt-in chapter shortcuts (Propolis): native focus/auto-scroll can move the window
+      // before Lenis's next frame. Measure the actual document position, resync that frame,
+      // and land on the heading. Other site anchors retain their existing behavior below.
+      const heading = link.hasAttribute("data-scroll-heading")
+        ? target.querySelector<HTMLElement>("h2")
+        : null;
+      if (heading) {
+        if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || event.button !== 0)
+          return;
+        event.preventDefault();
+        const destination = heading.getBoundingClientRect().top + window.scrollY - 120;
+        const finish = () => {
+          heading.tabIndex = -1;
+          heading.dataset.inkJumpTarget = "";
+          heading.focus({ preventScroll: true });
+        };
+        window.history.pushState(null, "", link.hash);
+        lenis.scrollTo(window.scrollY, { immediate: true });
+        if (Math.abs(window.scrollY - destination) < 1) finish();
+        else lenis.scrollTo(destination, { onComplete: finish });
+        return;
+      }
       event.preventDefault();
       lenis.scrollTo(target as HTMLElement, { offset: -84 });
     };
