@@ -7,40 +7,37 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 16, 2026, late evening, by Claude Code.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` = `main` (`bf4cb84`) plus this setup commit (the shared rulebook and this note).
-  Only docs changed. Nothing is waiting to be pushed except that docs commit.
+- **State:** `studio` = `main` (`050247b`) plus the setup commits (docs only: the shared rulebook
+  and this note). Those docs are the only thing not yet pushed.
 - **In progress:** nothing.
 - **Next:** Mo decides. Open items are listed below.
 
 ## What's live
 
 Public demo: <https://bigh-website-demo.vercel.app/>. It shows the production build of `main` at
-`bf4cb84`. On October 16 late evening, `/products/advanced-opc` returned 200 there with its ink
-paintings.
+`bf4cb84` (Advanced OPC Formula in Ink & Gold, live October 16).
 
 Every page is in Ink & Gold:
 
-| Page                 | Its own idea                                                                             | Last public browser check                                                   |
-| -------------------- | ---------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 16)                                              |
-| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 16)                                                   |
-| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 16)                                                   |
-| About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)                                                 |
-| NuriCell             | Paper lantern that lights                                                                | `qa_nuricell_ink` 363/363 (Oct 16)                                          |
-| Green Bee Propolis   | Gold flowing into the cracks of a bee tree; name on one line                             | `qa_propolis_ink` 204/204 (Oct 16)                                          |
-| Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 on the built site (Oct 16); public result not recorded |
-| Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)                                        |
-| Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 16)                                       |
-| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 16)                                         |
-| Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 16)                                               |
+| Page                 | Its own idea                                                                             | Last public browser check             |
+| -------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
+| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 16)        |
+| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 16)             |
+| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 16)             |
+| About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)           |
+| NuriCell             | Paper lantern that lights                                                                | `qa_nuricell_ink` 359/359 (Oct 16)    |
+| Green Bee Propolis   | Gold flowing into the cracks of a bee tree; name on one line                             | `qa_propolis_ink` 204/204 (Oct 16)    |
+| Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 16)         |
+| Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)  |
+| Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 16) |
+| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 16)   |
+| Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 16)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and
 spend are in `reference/ink-pages/<page>/`.
 
 ## Unfinished or waiting on Mo
 
-- **OPC:** its `docs/public-demo.md` entry isn't written, and the public check results weren't saved.
-  The demo alias already points at the OPC build.
 - **Translations:** new lines are drafts and need a native speaker's check: NuriCell m594–m609,
   Science m650–m661 (some older Science lines are still English in four languages), OPC m700–m705,
   Turmerific m740–m744, Nature Calm m780–m784. Support is English only for now (its keys start at m618).
