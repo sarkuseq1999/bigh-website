@@ -6,7 +6,7 @@ cracks, one ingredient, no painted sum, the real bottle inside a painted scene.
 Sections (all, or --only=a,b):
   shell       200 in the ink look, one h1 (Green Bee Propolis), the real bottle, no canvas, no console
               errors (1440x900, 390x844)
-  name        1920 to 360: readable Ysabeau title, clear of the real bottle; Vietnamese too.
+  name        1920 to 360: readable bold Switzer title, clear of the real bottle; Vietnamese too.
               Keyboard chapter navigation and the honest checkout preview.
   chapters    overview, why, inside, research, daily, buy (no people, no sum); each its own painting;
               "Inside every capsule, one ingredient."; 200 mg; every study; the questions
@@ -117,11 +117,11 @@ def name(browser):
               const box = e => { const r=e.getBoundingClientRect(); return {l:r.left,r:r.right,t:r.top,b:r.bottom}; };
               const left = document.querySelector('[data-name-left]');
               const right = document.querySelector('[data-name-right]');
-              return {left:box(left), right:box(right), bottle:box(image), font:getComputedStyle(h).fontFamily};
+              return {left:box(left), right:box(right), bottle:box(image), font:getComputedStyle(h).fontFamily, weight:getComputedStyle(h).fontWeight};
             }""")
             tag = f"name {locale} {w}x{h}"
             check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in [m["left"],m["right"]]))
-            check(f"{tag}: title font loaded", "Ysabeau" in m["font"] and page.evaluate("document.fonts.check('500 64px Ysabeau')"))
+            check(f"{tag}: title font loaded", "Switzer" in m["font"] and int(m["weight"]) >= 700 and page.evaluate("document.fonts.check('750 64px Switzer')"))
             left, right, b = m["left"], m["right"], m["bottle"]
             clear = left["r"] <= b["l"] + 1 and b["r"] <= right["l"] + 1 if w >= 960 else max(left["b"],right["b"]) <= b["t"]
             check(f"{tag}: bottle between words on desktop, below on phones", clear, str(m))
@@ -139,6 +139,11 @@ def name(browser):
                 check(f"{tag}: keyboard chapter link lands below the header", bottom["y"] + bottom["height"] <= top < h - 60, f"{top:.0f}px")
                 page.locator('[data-chapter=overview] button').click()
                 check(f"{tag}: checkout remains an honest preview", page.get_by_text("Checkout isn't connected yet. This page is a design preview.", exact=True).is_visible())
+            card = page.locator('[data-purchase-card]')
+            check(f"{tag}: original One bottle card restored", card.count() == 1 and card.locator('img[src*="capsule-v2.webp"]').count() == 1)
+            check(f"{tag}: refund promise badge restored", card.locator('[data-purchase-promise] svg').count() == 1)
+            checkout = page.locator('[data-chapter=overview] button')
+            check(f"{tag}: centered Add to cart without arrow", checkout.locator('svg,span').count() == 0 and checkout.evaluate("e=>getComputedStyle(e).textAlign") == "center")
             ctx.close()
 
 

@@ -66,6 +66,9 @@ These sit on top of `DESIGN.md`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. The phone layout may stack the name above the bottle to keep it readable.
+  Mo approved Bold Signature A on October 18: heavy Switzer (750), Green left, the real bottle
+  centred, Bee / Propolis right. Keep the original outlined One bottle card with the capsule,
+  overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
