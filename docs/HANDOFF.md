@@ -5,38 +5,36 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 17, 2026, by Codex.
+- **Last updated:** October 18, 2026, by Codex.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` contains the setup commits plus a local Green Bee Propolis design proposal.
-  The public demo still shows `bf4cb84`; nothing from this design turn has been pushed.
-- **In progress:** None. The revised opening is complete locally. Mo prefers the bottle between
-  the product-name text; this direction is now recorded in `AGENTS.md`.
-- **Next:** Mo reviews the revised opening: Green on the left, the real bottle in the middle,
-  Bee / Propolis on the right. The type is lighter and the purchase area simpler. The alternating
-  chapter paintings, chapter links and clearer research rows from the first local proposal remain.
-  Notes: `reference/ink-pages/propolis/README.md`; new A/B mockups and screenshots:
-  `reference/ink-pages/mockups/propolis-centered/`. Publishing requires Mo's explicit yes to a push.
-- **Local checks:** Production build, lint, TypeScript and changed-file formatting passed.
-  Propolis: 230/230, homepage: 282/282 and menu: 436/436 in the revised opening's production build.
-  Mouse, keyboard and touch chapter
-  navigation and the honest checkout preview passed. Chrome and Firefox render the intended type.
-  Windows WebKit touch checks passed, but its variable-font rendering has upstream issue #43004
-  (linked in the page notes); actual iPhone font appearance is not certified by those screenshots.
-- **Visual review:** Built desktop, phone and moving tree states inspected. Codex's assessment is
-  9/10; the remaining limit in the opening is its dense introductory paragraph on small phones.
-  Before/after and A/B captures are in `reference/ink-pages/mockups/propolis-centered/`.
-  The built preview is running at
-  `http://localhost:3006/products/green-bee-propolis`; the screenshot gallery is at
-  `http://localhost:3008/` (this PC only). The dev server is stopped.
-- **Phone sharing:** Automatic approval review rejected exposing the unpublished gallery on the
-  local network. The gallery was instead bound to loopback. It also rejected the subsequent push
-  when Mo requested a phone link because an explicit approval to push was still needed. No public
-  deployment or alias changed. Desktop screenshots have been shared directly in chat.
+- **State:** Mo approved Bold Signature A with the original purchase card and explicitly asked to
+  apply it live to the demo. The approved source is local commit `5a8ed9f`.
+- **Demo:** <https://bigh-website-demo.vercel.app/products/green-bee-propolis> now points to preview
+  deployment `dpl_Dyn8ybDmMjwUGrbfCXyW5XfgfJMN` (`bigh-website-393kqxd0f-sarkuseq1999s-projects.vercel.app`), in the existing `bigh-website` project.
+  Only the demo alias was updated; no production promotion, GitHub push or access-setting change.
+- **In progress:** None. The heavy Switzer title keeps Green left, the real bottle centred and
+  Bee / Propolis right. The original outlined One bottle card has the capsule, overlapping 45-day
+  badge, daily count, centred Add to cart without an arrow, and refund line. The real site's
+  existing copy, translations and honest checkout-preview notice remain.
+- **Local checks:** Build, lint, TypeScript and changed-file formatting passed. Propolis:
+  269/269 passed; homepage: 282/282 checks passed; menu: 436/436 checks passed.
+  Desktop and phone screenshots and the tree's gold state were inspected. Visual assessment:
+  9/10; the existing introductory paragraph remains fairly long on a small phone.
+- **Public verification:** A fresh unauthenticated browser confirmed the updated hero and card,
+  HTTP 200, loaded assets, responsive layout, chapter navigation and checkout-preview behavior.
+  The public Propolis suite finished with 269/269 passed; desktop and phone
+  homepage/menu navigation checks passed without browser errors.
+- **Release scope:** Only tracked website code, public assets, translations and build configuration
+  were uploaded. Notes, credentials, QA output and local comparison artifacts were excluded.
+  Changes from the previous public version are confined to Propolis and its opt-in chapter links.
+- **Next:** Mo can review the public demo. Continue the unrelated launch items below only when asked.
+- **Local previews:** Built page on `http://localhost:3012/products/green-bee-propolis` during this
+  task. The comparison artifacts at `http://localhost:3009/` and `http://localhost:3010/` are preserved.
 
 ## What's live
 
-Public demo: <https://bigh-website-demo.vercel.app/>. It shows the production build of `main` at
-`bf4cb84` (Advanced OPC Formula in Ink & Gold, live October 16).
+Public demo: <https://bigh-website-demo.vercel.app/>. It shows the preview build of `5a8ed9f`
+(approved Bold Signature Propolis opening and original purchase card, live October 18).
 
 Every page is in Ink & Gold:
 
@@ -47,7 +45,7 @@ Every page is in Ink & Gold:
 | Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 16)             |
 | About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)           |
 | NuriCell             | Paper lantern that lights                                                                | `qa_nuricell_ink` 359/359 (Oct 16)    |
-| Green Bee Propolis   | Gold flowing into the cracks of a bee tree; name on one line                             | `qa_propolis_ink` 204/204 (Oct 16)    |
+| Green Bee Propolis   | Bold Signature opening; real bottle between the name; gold flowing into the bee tree     | `qa_propolis_ink` 269/269 (Oct 18)    |
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 16)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)  |
 | Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 16) |
