@@ -65,7 +65,10 @@ These sit on top of `DESIGN.md`.
   the chapter where it means something. The brand name appears once per screen. No fake paper folds.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
-  bottle. The phone layout may stack the name above the bottle to keep it readable.
+  bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis
+  stacked on the left beside the real bottle, then the short description and original purchase
+  card. Put the longer explanation and provenance below the purchase controls on mobile only.
+  Preserve the approved desktop appearance.
   Mo approved Bold Signature A on October 18: heavy Switzer (750), Green left, the real bottle
   centred, Bee / Propolis right. Keep the original outlined One bottle card with the capsule,
   overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.

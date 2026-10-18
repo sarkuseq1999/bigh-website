@@ -46,7 +46,7 @@ function followChapter(event: MouseEvent<HTMLAnchorElement>) {
 }
 
 /** Mo's preferred composition: Green / the real bottle / Bee Propolis.
- * Phones put the same name arrangement above the bottle so every word stays readable. */
+ * Mobile uses Mo's selected Editorial pair: the whole name left, the bottle right. */
 export function PropolisOpening({ product }: { product: InkProduct }) {
   const copy = useCopy();
   return (
@@ -58,6 +58,11 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
     >
       <div className={`${base.wrap} ${styles.heroWrap}`}>
         <h1 id="product-name" className={styles.name} lang="en" aria-label={product.name}>
+          <span className={styles.mobileName} data-mobile-name aria-hidden="true">
+            <span>Green</span>
+            <span>Bee</span>
+            <span>Propolis</span>
+          </span>
           <span className={styles.nameLeft} data-name-left aria-hidden="true">
             Green
           </span>
@@ -68,7 +73,7 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
               alt=""
               width={product.bottle.width}
               height={product.bottle.height}
-              sizes="(max-width: 959px) 72vw, (max-width: 1920px) 28vw, 530px"
+              sizes="(max-width: 599px) 244px, (max-width: 959px) 360px, (max-width: 1920px) 28vw, 530px"
               loading="eager"
               fetchPriority="high"
             />
@@ -148,6 +153,14 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
             </div>
             <AddToCart wide align="center" />
             <p className={card.refund}>{copy("Not right for you? Send it back for a refund.")}</p>
+          </div>
+          <div className={styles.mobileStory} data-mobile-story>
+            <p className={styles.purpose}>{copy(product.purpose)}</p>
+            <ul className={styles.provenance}>
+              {product.highlights.map((item) => (
+                <li key={item}>{copy(item)}</li>
+              ))}
+            </ul>
           </div>
         </div>
         <nav className={styles.chapterNav} aria-label={product.name}>

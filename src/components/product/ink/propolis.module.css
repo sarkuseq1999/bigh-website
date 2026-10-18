@@ -376,57 +376,113 @@
   }
 }
 
+/* Only the mobile presentation uses these alternate name/story groups. */
+.propolis .mobileName,
+.propolis .mobileStory {
+  display: none;
+}
+
 @media (max-width: 959px) {
   .propolis[data-look="ink"] .hero {
-    padding-top: 124px;
+    padding-top: 98px;
+  }
+
+  .propolis .heroWrap {
+    max-width: 640px;
+    padding-inline: 22px;
   }
 
   .propolis h1.name {
-    grid-template-columns: auto auto;
-    justify-content: center;
-    column-gap: 12px;
-    min-height: 0;
+    grid-template-columns: 55% 45%;
+    align-items: center;
+    min-height: 244px;
+    font-size: 51px;
+    line-height: 0.94;
+    letter-spacing: -0.055em;
   }
 
-  .propolis .nameLeft {
+  .propolis .nameLeft,
+  .propolis .nameRight,
+  .propolis .description > .purpose,
+  .propolis .purchase > .provenance {
+    display: none;
+  }
+
+  .propolis .mobileName {
+    display: block;
     grid-column: 1;
     grid-row: 1;
-    padding-top: 0;
-    font-size: clamp(52px, 14vw, 104px);
+    position: relative;
+    z-index: 1;
   }
 
-  .propolis .nameRight {
-    grid-column: 2;
-    grid-row: 1;
-    padding-top: 0;
-    font-size: clamp(42px, 11vw, 82px);
+  .propolis .mobileName > span {
+    display: block;
   }
 
   .propolis .bottleStand {
-    grid-column: 1 / -1;
-    grid-row: 2;
-    justify-self: center;
-    width: min(72vw, 340px);
-    margin-top: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    grid-column: 2;
+    grid-row: 1;
+    height: 244px;
+    overflow: hidden;
+  }
+
+  /* The real bottle remains whole; only its generous transparent canvas is clipped. */
+  .propolis img.heroBottle {
+    width: auto;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    filter: drop-shadow(0 10px 12px rgb(41 30 12 / 0.06));
   }
 
   .propolis .heroDetails {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 32px;
-    margin-top: 32px;
+    display: block;
+    margin-top: 17px;
   }
 
   .propolis p.lead {
-    font-size: clamp(30px, 4.5vw, 36px);
+    max-width: 340px;
+    margin: 0;
+    font-size: 23px;
+    line-height: 1.23;
+    letter-spacing: -0.025em;
   }
 
-  .propolis .provenance {
-    font-size: 16px;
+  .propolis .lead > span {
+    display: inline;
   }
 
   .propolis .purchase {
     width: 100%;
-    max-width: 560px;
+    max-width: none;
+    margin-top: 30px;
+    padding-top: 0;
+  }
+
+  .propolis .mobileStory {
+    display: block;
+    margin-top: 28px;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  .propolis .mobileStory .purpose {
+    font-size: 17px;
+    line-height: 1.5;
+  }
+
+  .propolis .mobileStory .provenance {
+    grid-template-columns: 1.2fr 1fr;
+    grid-auto-flow: initial;
+    gap: 8px;
+    margin: 24px 0 0;
+    padding: 0;
+    border: 0;
+    font-size: 15px;
   }
 
   .propolis .chapterNav {
@@ -513,6 +569,41 @@
 
   .propolis[data-look="ink"] [data-chapter="buy"] h2 {
     font-size: clamp(48px, 12vw, 72px);
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  .propolis h1.name {
+    min-height: 340px;
+    font-size: clamp(60px, 8.3vw, 76px);
+  }
+
+  .propolis .bottleStand {
+    height: 340px;
+  }
+
+  .propolis p.lead {
+    max-width: none;
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 374px) {
+  .propolis .heroWrap {
+    padding-inline: 20px;
+  }
+
+  .propolis h1.name {
+    min-height: 229px;
+    font-size: 45px;
+  }
+
+  .propolis .bottleStand {
+    height: 229px;
+  }
+
+  .propolis p.lead {
+    font-size: 22px;
   }
 }
 

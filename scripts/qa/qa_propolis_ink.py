@@ -43,6 +43,11 @@ PATH = "/en/products/green-bee-propolis"
 CHAPTERS = ["overview", "why", "inside", "research", "daily", "buy"]
 PAINTED = ["why", "inside", "research", "daily"]
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
+BOTTLE_PATH = REPO / "public/images/products/green-bee-propolis.png"
+with Image.open(BOTTLE_PATH) as bottle_source:
+    visible = bottle_source.getchannel("A").point(lambda a: 255 if a > 32 else 0).getbbox()
+    BOTTLE_BOUNDS = [visible[0]/bottle_source.width, visible[1]/bottle_source.height,
+                     visible[2]/bottle_source.width, visible[3]/bottle_source.height]
 SIZES = [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800), (900, 900), (768, 1024), (390, 844), (360, 780)]
 results = []
 
@@ -104,29 +109,41 @@ def shell(browser):
 
 
 def name(browser):
-    """Keep the bottle between readable name parts on desktop, with a clear phone stack."""
+    """Keep desktop intact and the selected mobile Editorial pair readable and uncropped."""
     for locale in ["en", "vn"]:
         for w, h in SIZES:
             if locale == "vn" and w not in (1440, 1024, 390):
                 continue
             ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/green-bee-propolis", reduced=True)
             page.evaluate("document.fonts.ready")
-            m = page.evaluate("""() => {
+            m = page.evaluate("""bounds => {
               const h = document.querySelector('#product-name');
               const image = document.querySelector('[data-chapter=overview] img');
               const box = e => { const r=e.getBoundingClientRect(); return {l:r.left,r:r.right,t:r.top,b:r.bottom}; };
               const left = document.querySelector('[data-name-left]');
               const right = document.querySelector('[data-name-right]');
-              return {left:box(left), right:box(right), bottle:box(image), font:getComputedStyle(h).fontFamily, weight:getComputedStyle(h).fontWeight};
-            }""")
+              const ir=image.getBoundingClientRect();
+              const product={l:ir.left+ir.width*bounds[0],t:ir.top+ir.height*bounds[1],r:ir.left+ir.width*bounds[2],b:ir.top+ir.height*bounds[3]};
+              return {left:box(left), right:box(right), mobile:box(document.querySelector('[data-mobile-name]')),
+                stand:box(image.parentElement),product,bottle:box(image),font:getComputedStyle(h).fontFamily,weight:getComputedStyle(h).fontWeight};
+            }""", BOTTLE_BOUNDS)
             tag = f"name {locale} {w}x{h}"
-            check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in [m["left"],m["right"]]))
+            title_boxes = [m["left"],m["right"]] if w >= 960 else [m["mobile"]]
+            check(f"{tag}: title fits the window", all(15 <= r["l"] and r["r"] <= w-15 for r in title_boxes))
             check(f"{tag}: title font loaded", "Switzer" in m["font"] and int(m["weight"]) >= 700 and page.evaluate("document.fonts.check('750 64px Switzer')"))
             left, right, b = m["left"], m["right"], m["bottle"]
-            clear = left["r"] <= b["l"] + 1 and b["r"] <= right["l"] + 1 if w >= 960 else max(left["b"],right["b"]) <= b["t"]
-            check(f"{tag}: bottle between words on desktop, below on phones", clear, str(m))
-            check(f"{tag}: bottle centered on the page", abs((b["l"]+b["r"])/2-w/2) <= 1)
-            check(f"{tag}: bottle stays within the screen", b["l"] >= 0 and b["r"] <= w)
+            clear = left["r"] <= b["l"] + 1 and b["r"] <= right["l"] + 1 if w >= 960 else m["mobile"]["r"] <= m["product"]["l"]
+            check(f"{tag}: desktop composition or selected mobile pair stays clear", clear, str(m))
+            centered = abs((b["l"]+b["r"])/2-w/2) <= 1 if w >= 960 else abs((m["product"]["l"]+m["product"]["r"]-m["stand"]["l"]-m["stand"]["r"])/2) <= 3
+            check(f"{tag}: bottle centered in its approved placement", centered)
+            product, stand = m["product"], m["stand"]
+            whole = product["l"] >= max(0,stand["l"]) and product["r"] <= min(w,stand["r"]) and product["t"] >= stand["t"]-1 and product["b"] <= stand["b"]+1
+            check(f"{tag}: actual bottle stays whole inside its visible frame", whole)
+            if locale == "en" and w in (360,390):
+                button = page.locator('[data-chapter=overview] button').bounding_box()
+                check(f"{tag}: full purchase button on the first screen", button["y"]+button["height"] <= h)
+                story = page.locator('[data-mobile-story]').bounding_box()
+                check(f"{tag}: longer explanation follows the purchase controls", story["y"] >= button["y"]+button["height"])
             if locale == "en" and w in (1440, 390):
                 nav = page.get_by_role("navigation", name="Green Bee Propolis", exact=True)
                 check(f"{tag}: four chapter links", nav.get_by_role("link").count() == 4)
@@ -335,7 +352,9 @@ def bottle_size(browser):
             image.evaluate("i => i.decode()")
             m = image.evaluate("""i => {const r=i.getBoundingClientRect(); return {w:r.width,h:r.height,nw:i.naturalWidth,nh:i.naturalHeight,l:r.left,r:r.right};}""")
             check(f"bottle {w} {chapter}: original proportions", abs(m["w"]/m["h"] - m["nw"]/m["nh"]) < 0.01)
-            check(f"bottle {w} {chapter}: fully within the page", m["l"] >= 0 and m["r"] <= w)
+            actual_left = m["l"] + m["w"]*BOTTLE_BOUNDS[0]
+            actual_right = m["l"] + m["w"]*BOTTLE_BOUNDS[2]
+            check(f"bottle {w} {chapter}: actual bottle fully within the page", actual_left >= 0 and actual_right <= w)
         ctx.close()
 
 
