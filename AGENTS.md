@@ -72,6 +72,9 @@ These sit on top of `DESIGN.md`.
   Mo approved Bold Signature A on October 18: heavy Switzer (750), Green left, the real bottle
   centred, Bee / Propolis right. Keep the original outlined One bottle card with the capsule,
   overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
+  Mo approved Weathered Taupe A for the Propolis FDA footer sign on October 18: use the
+  unchanged blank artwork with the exact selectable disclaimer in charcoal. Keep this treatment
+  scoped to Propolis; preserve the approved desktop opening, mobile B and purchase card.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
