@@ -7,33 +7,30 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 18, 2026, by Codex.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** Mo selected mobile B, Editorial pair, for Green Bee Propolis. Source commit `6933d63`
-  is live on the existing public demo. The desktop Bold Signature opening is unchanged.
+- **State:** Mo approved Weathered Taupe A for the Propolis footer sign. Source commit `0c129ad`
+  is live on the existing public demo. The exact disclaimer remains selectable charcoal HTML.
 - **Demo:** <https://bigh-website-demo.vercel.app/products/green-bee-propolis>, preview deployment
-  `dpl_7QhgdKVpsi3m8DuASqXNVy2ER88G` (`bigh-website-f1unv5zvc-sarkuseq1999s-projects.vercel.app`).
+  `dpl_CXwdNDUmKRWcbCzo2uwuvKePaZdE` (`bigh-website-81xlphzs8-sarkuseq1999s-projects.vercel.app`).
+- **Scope:** Runtime changes are only Propolis footer CSS and its new blank sign PNG. The original
+  shared sign, other products, desktop Bold Signature opening, mobile B and purchase card remain.
   Only the demo alias changed; no production promotion, GitHub push or access-setting change.
-- **Mobile design:** Bold Green / Bee / Propolis on the left beside the authentic bottle; the
-  short description and original One bottle card follow. The long explanation and provenance
-  come after the purchase controls. No product facts, images, prices or checkout behavior changed.
-- **Checks:** Build, lint, TypeScript and formatting passed; Propolis 273/273 passed locally.
-  Both the built site and public demo passed all 10 responsive viewport checks (360 through 1440).
-  At 360 and 390, bottle/card/button positions match the reviewed B preview within 3px and the
-  full button fits the first screen. At 960, 1024 and 1440, desktop comparisons found zero changed
-  pixels. Images, card badge spacing, chapter links and the honest checkout notice passed.
-- **Visual review:** Actual mobile and tablet screenshots inspected; 9/10. This is the selected
-  compact composition; the existing long explanation remains available below the controls.
-- **Scope:** Runtime source changes since the prior demo are only `propolis-opening.tsx` and
-  `propolis.module.css`. No other product or shared navigation component changed. Focused checks
-  were used for this mobile-only request; the previous full homepage/menu checks remain recorded.
-- **In progress:** None. **Next:** Mo can review the updated demo.
-- **Local previews:** Built update at `http://localhost:3014/products/green-bee-propolis` during
-  this task. The three isolated mobile options remain at `http://localhost:3013/`; earlier
-  comparison files are preserved. Local URLs are for this PC only.
+- **Artwork:** Approved Library asset `libfile_7bef57cdb69c8191bd7457cc2a757a44`, copied byte-for-byte.
+  Original and provenance are retained under `reference/ink-pages/propolis/`.
+- **Checks:** Build (including TypeScript), lint and formatting passed; Propolis 273/273 passed.
+  Six local responsive views passed, including 360/390 phones and both sides of the 720px breakpoint.
+  Fresh unauthenticated public checks passed at 1440, 390 and 360: one exact selectable statement,
+  charcoal text, all lines inside the board, no overflow or page errors, exact approved asset hash.
+  Desktop and both phone openings have zero changed pixels versus the previous public demo.
+  Public homepage, NuriCell and OPC retain their original sign. The extra broad homepage suite
+  was stopped after the scoped release checks passed; no full homepage/navigation pass is claimed.
+- **Visual review:** Actual built and public desktop/phone screenshots inspected; 9/10.
+- **In progress:** None. **Next:** Mo can review the updated public demo.
+- **Local preview:** Built page at `http://localhost:3016/products/green-bee-propolis` during this task.
 
 ## What's live
 
-Public demo: <https://bigh-website-demo.vercel.app/>. It shows the preview build of `6933d63`
-(selected Editorial pair on mobile; approved Bold Signature desktop retained, live October 18).
+Public demo: <https://bigh-website-demo.vercel.app/>. It shows preview build `0c129ad`
+(Weathered Taupe A Propolis sign; Editorial pair mobile and Bold Signature desktop retained).
 
 Every page is in Ink & Gold:
 

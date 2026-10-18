@@ -4,7 +4,22 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-f1unv5zvc-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-81xlphzs8-sarkuseq1999s-projects.vercel.app`
+(`dpl_CXwdNDUmKRWcbCzo2uwuvKePaZdE`), a **preview** deployment of source commit
+`0c129ad36a07e8752cad46399ff62627eec1edb5`. Mo approved applying the reviewed Weathered Taupe A sign on
+October 18, 2026. The change is scoped to the Propolis footer: the exact approved blank artwork
+with charcoal, selectable HTML disclaimer text. Desktop Bold Signature, mobile B, the original
+purchase card, other product pages and checkout behavior are unchanged.
+
+Build/TypeScript, lint, formatting and all 273 Propolis checks passed. Six local sign viewports
+passed. Fresh unauthenticated public checks at 1440, 390 and 360 confirmed the exact asset hash,
+one complete real-text disclaimer, charcoal lettering, no clipping/overflow or page errors.
+The openings at all three sizes have zero changed pixels versus the prior public demo.
+Homepage, NuriCell and OPC still use their original sign. Actual public screenshots were
+inspected at desktop and both phone widths; 9/10. Only this demo alias was updated; no production
+promotion, GitHub push or access-setting change.
+
+Before this update, the alias pointed to `bigh-website-f1unv5zvc-sarkuseq1999s-projects.vercel.app`
 (`dpl_7QhgdKVpsi3m8DuASqXNVy2ER88G`), a **preview** deployment of source commit
 `6933d6307c513663d531e61953bbec8b8d8e480b`. Mo selected mobile option B, Editorial pair,
 on October 18, 2026, within the authorized demo work. The bold product name sits left of the
