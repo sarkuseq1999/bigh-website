@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-393kqxd0f-sarkuseq1999s-projects.vercel.app` (`dpl_Dyn8ybDmMjwUGrbfCXyW5XfgfJMN`), a **preview** deployment
+The alias currently points to `bigh-website-f1unv5zvc-sarkuseq1999s-projects.vercel.app`
+(`dpl_7QhgdKVpsi3m8DuASqXNVy2ER88G`), a **preview** deployment of source commit
+`6933d6307c513663d531e61953bbec8b8d8e480b`. Mo selected mobile option B, Editorial pair,
+on October 18, 2026, within the authorized demo work. The bold product name sits left of the
+unchanged real bottle; the original purchase card follows the short description. The longer
+explanation and provenance move below the controls on mobile. Desktop remains unchanged.
+
+Build, lint, TypeScript and formatting passed. The local Propolis suite passed 273/273.
+Fresh unauthenticated browsers checked 10 widths on both the built site and public demo,
+including 360/390 phone, 599/600 transition, 768/834/959 tablet and 960/1024/1440 desktop.
+The phone layout matches the reviewed B preview within 3px; the full button is on the first
+screen. Desktop geometry and screenshots have zero changed pixels against the prior demo.
+Images, no overflow, the original card, chapter links and checkout-preview behavior passed.
+Only the demo alias changed. No production promotion, GitHub push, access-setting changes,
+new checkout integration or other product redesign. Only tracked site files were uploaded.
+
+Before this update, the alias pointed to `bigh-website-393kqxd0f-sarkuseq1999s-projects.vercel.app` (`dpl_Dyn8ybDmMjwUGrbfCXyW5XfgfJMN`), a **preview** deployment
 of approved source commit `5a8ed9f977eed509fd281d632df2488fe0141b32`. Mo explicitly authorized "Apply it live to the demo site"
 on October 18, 2026, after approving Bold Signature A with the original outlined One bottle card.
 The Propolis hero uses heavy Switzer around the unchanged real bottle; the restored card retains
