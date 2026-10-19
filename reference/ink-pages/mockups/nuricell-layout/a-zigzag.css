@@ -1,0 +1,9 @@
+/* Concept A: zigzag. The painting swaps sides each chapter: left, right, left, right... */
+@media (min-width: 960px) {
+  html body :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"]) > div {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+  html body :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"]) > div > [data-picture] {
+    order: 2;
+  }
+}

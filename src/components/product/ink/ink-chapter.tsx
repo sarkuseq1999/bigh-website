@@ -21,13 +21,15 @@ const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px"
  * 520px would fetch a picture two or three times too wide. Plain calc() with vh, which every
  * browser reads in `sizes` (the CSS's 220px floor matters only on a short landscape window). A
  * painting nearly as wide as it is tall (the breakfast, 0.94) is held by its column in most
- * windows, so it keeps the column's sizes.
+ * windows, so it keeps the column's sizes. `reserve`: the window height a page leaves free beside
+ * the painting when it draws it taller than the template's (NuriCell's lantern and Dr. Liu,
+ * nuricell-layout.ts).
  */
-export function pictureSizes(art: { width: number; height: number }) {
+export function pictureSizes(art: { width: number; height: number }, reserve = 220) {
   const aspect = art.width / art.height;
   if (aspect >= 0.8) return PICTURE_SIZES;
   const a = aspect.toFixed(3);
-  return `(max-width: 959px) calc(46vh * ${a}), calc((100vh - 220px) * ${a})`;
+  return `(max-width: 959px) calc(46vh * ${a}), calc((100vh - ${reserve}px) * ${a})`;
 }
 
 /** Each hyphenated word ("30-day") on one line: a narrow column would break it after its hyphen. */
@@ -94,6 +96,7 @@ export function InkFigure({
   imgRef,
   attrs,
   eager = false,
+  sizes,
   children,
 }: {
   art: InkArt;
@@ -103,6 +106,8 @@ export function InkFigure({
   imgRef?: Ref<HTMLImageElement>;
   attrs?: Record<string, string | undefined>;
   eager?: boolean;
+  /** The picture's `sizes` when a page draws it at another size than the template's. */
+  sizes?: string;
   /** Layers drawn over the painting, inside its blend group (the lantern's light). */
   children?: ReactNode;
 }) {
@@ -122,7 +127,7 @@ export function InkFigure({
           alt={copy(alt)}
           width={art.width}
           height={art.height}
-          sizes={pictureSizes(art)}
+          sizes={sizes ?? pictureSizes(art)}
           loading={eager ? "eager" : undefined}
           data-bloom="waiting"
         />
@@ -141,7 +146,8 @@ export function InkFigure({
   );
 }
 
-/** One chapter: its painting (left from 960px, first on phones) and its words. */
+/** One chapter: its painting (left from 960px, first on phones; NuriCell places each its own way,
+ *  nuricell.module.css) and its words. */
 export function InkChapter({
   id,
   picture,

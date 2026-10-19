@@ -22,6 +22,14 @@ ruled on October 6 that each page shares the theme only and has its own design.
   chose to show it without waiting for Dr. Liu's approval; showing him first is still advised.
 - **The other four product pages keep today's template** until each gets its own paintings (1A).
 - **The floating chapter index goes** (2B).
+- **Each painting in its own place (October 19, 2026).** Mo found every painting on the left boring
+  and picked B over a plain left-right zigzag (A). From 960px the chapters go right, middle, left,
+  right, middle, left: the lantern right of its words; the open capsule in the middle with two
+  ingredients either side and the notes and the three pairs across the page under it; the books
+  larger, running in over the page's left margin; Dr. Liu right of his words; the breakfast right
+  of the heading with the brushed sum across the page under both; the bottle on the left as before.
+  Phones keep one column. NuriCell only (`nuricell.module.css`); the table "Painting (left)" below
+  describes the paintings, not their side. Mockups: `reference/ink-pages/mockups/nuricell-layout/`.
 
 ## Shared, and its own
 

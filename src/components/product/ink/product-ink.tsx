@@ -8,6 +8,8 @@ import { After } from "./after";
 import { Buy } from "./buy";
 import { Daily } from "./daily";
 import { Inside } from "./inside";
+import { isNuricell } from "./nuricell-layout";
+import nuricellStyles from "./nuricell.module.css";
 import { Opening } from "./opening";
 import { People } from "./people";
 import styles from "./product-ink.module.css";
@@ -21,14 +23,17 @@ import { Why } from "./why";
 // reference/ink-pages/mockups/nuricell-ink/). The shared theme (paper, menu bar, crane footer,
 // bloom); its own layout: seven chapters, each one painting beside its words, the lantern's light
 // coming on in "Why it matters", then the questions, the other products and the notes. Every word
-// of the product's data stays.
+// of the product's data stays. Green Bee Propolis and NuriCell add their own stylesheets (NuriCell:
+// each painting in its own place, October 19, 2026, nuricell-layout.ts).
 export function ProductInkPage({ product }: { product: InkProduct }) {
   const isPropolis = product.slug === "green-bee-propolis";
+  const own = isPropolis
+    ? ` ${propolisStyles.propolis}`
+    : isNuricell(product)
+      ? ` ${nuricellStyles.nuricell}`
+      : "";
   return (
-    <InkPage
-      current="products"
-      className={`${styles.page}${isPropolis ? ` ${propolisStyles.propolis}` : ""}`}
-    >
+    <InkPage current="products" className={`${styles.page}${own}`}>
       {(motion) => (
         <div data-product-ink={product.slug}>
           {isPropolis ? <PropolisOpening product={product} /> : <Opening product={product} />}

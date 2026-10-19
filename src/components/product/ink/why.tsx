@@ -7,6 +7,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { CAPTIONS, InkChapter, InkFigure, pictureSizes, sentences, titleId } from "./ink-chapter";
+import { nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 /** How long after the unlit lantern starts to bloom (with half of it in the window) its light
@@ -111,6 +112,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
   // three things.
   const spread = art.spread;
   const kind = soak ? { "data-soak": "" } : spread ? { "data-spread": "" } : { "data-lantern": "" };
+  const sizes = nuricellSizes(product, "why", art.unlit);
   return (
     <InkChapter
       id="why"
@@ -121,6 +123,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
           caption={CAPTIONS.illustration}
           imgRef={unlit}
           attrs={{ ...kind, "data-light": on ? "on" : "off" }}
+          sizes={sizes}
         >
           {/* The soak's layers: the lit painting again (the same picture, fetched once) through each
               of the sprite's masks but the last, under the whole lit painting, which comes last. */}
@@ -154,7 +157,7 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
             alt=""
             width={art.lit.width}
             height={art.lit.height}
-            sizes={pictureSizes(art.lit)}
+            sizes={sizes ?? pictureSizes(art.lit)}
             loading="eager"
             data-lit=""
             style={

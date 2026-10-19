@@ -21,7 +21,7 @@ Sections (all, or --only=a,b):
   sum         the painted sum matches the serving, a caption under each number; set in type
               (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
   buy         Add to cart: the kit's hover, a pill on focus
-  layout      sizes 1536 to 360: no sideways scroll, the painting left of its words from 960px and above
+  layout      sizes 1536 to 360: no sideways scroll, each painting in its own place from 960px and above
               them below, text 15px+, targets 44px+, words readable with pictures blocked
   deep_links  /en/products/nuricell#chapter-<id> lands its heading under the menu bar
   polish      Task 9's fixes pinned: the supply line's dot never starts or ends a line, More links end with their
@@ -675,13 +675,14 @@ def buy_check(browser):
 def sticky(browser):
     """With every study open, a sticky painting stays between the top of its spread and the bottom of
     its words (not just inside the chapter's padding), and it really does pin: it rides down beside
-    the words while they scroll."""
+    the words while they scroll. The research's books; the capsule stands still in the middle of its
+    ingredients since October 19 (nuricell.module.css), so What's inside has no sticky painting."""
     for w, h in [(1440, 900), (1024, 768)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         page.locator('[data-chapter="research"] button[aria-expanded]').click()
         for summary in page.locator('[data-chapter="research"] summary').all():
             summary.click()
-        for chapter in ("inside", "research"):
+        for chapter in ("research",):
             bring(page, f'[data-chapter="{chapter}"]', 0)
             tall = page.evaluate(f"() => document.querySelector('[data-chapter=\"{chapter}\"]').getBoundingClientRect().height")
             worst = 0.0
@@ -713,15 +714,31 @@ def layout(browser):
         tag = f"layout {w}x{h}"
         wide = page.evaluate("() => document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: no sideways scroll", wide <= 0, f"{wide}px")
+        # From 960px each painting in its own place (Mo picked B, October 19, 2026): the words left
+        # of the lantern and of Dr. Liu; the books and the bottle left of theirs; the capsule between
+        # its ingredients (the first and third left of it, the second and fourth right of it) under
+        # the heading; the breakfast right of its heading and over the brushed sum. One column: each
+        # painting over its words.
         bad = page.evaluate(
             """(two) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
-                 const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
-                 const t = c.querySelector('[data-words]').getBoundingClientRect();
-                 const ok = two ? f.right <= t.left + 1 : f.bottom <= t.top + 1;
-                 return ok ? null : c.dataset.chapter; }).filter(Boolean)""",
+                 const box = (e) => e.getBoundingClientRect();
+                 const f = box(c.querySelector('figure[data-picture]'));
+                 const t = box(c.querySelector('[data-words]'));
+                 const id = c.dataset.chapter;
+                 let ok;
+                 if (!two) ok = f.bottom <= t.top + 1;
+                 else if (id === 'why' || id === 'people') ok = t.right <= f.left + 1;
+                 else if (id === 'inside') {
+                   const rows = [...c.querySelectorAll('tbody tr')].map(box);
+                   ok = rows.length === 4 && box(c.querySelector('h2')).bottom <= f.top + 1
+                     && rows.every((r, i) => (i % 2 ? r.left >= f.right - 1 : r.right <= f.left + 1));
+                 } else if (id === 'daily') {
+                   ok = box(c.querySelector('h2')).right <= f.left + 1 && box(c.querySelector('[data-sum]')).top >= f.bottom - 1;
+                 } else ok = f.right <= t.left + 1;
+                 return ok ? null : id; }).filter(Boolean)""",
             w >= 960,
         )
-        check(f"{tag}: each painting {'left of' if w >= 960 else 'above'} its words", not bad, ", ".join(bad))
+        check(f"{tag}: each painting in its place {'(B, October 19)' if w >= 960 else '(above its words)'}", not bad, ", ".join(bad))
         small = page.evaluate(
             """() => [...document.querySelectorAll('main p, main li, main dd, main dt, main td, main th, main figcaption')]
                  .filter(e => e.offsetParent && e.textContent.trim() && parseFloat(getComputedStyle(e).fontSize) < 15)
