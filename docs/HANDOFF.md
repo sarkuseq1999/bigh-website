@@ -5,18 +5,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 19, 2026, by Claude Code (NuriCell layout B live).
+- **Last updated:** October 19, 2026, by Claude Code (About live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 19):** NuriCell layout B only. Mo said yes; `main` is `ad3561e` = the October
-  18 build (`5b7ba74`) plus the notes commit and NuriCell layout B, nothing else. Production
-  `dpl_9ebiBovTrZRUe5yyRYQsQuPaLbfq`; the demo alias points to it. Public demo checks:
-  `qa_nuricell_ink` 355/355, `qa_home_ink` 282/282, `qa_nav` 436/436 (`docs/public-demo.md`).
-  `studio` merged `main` back in (no file changes), so the next `git push origin studio:main` is a
-  fast-forward.
+- **Live (October 19):** NuriCell layout B, then About's oak and circle light. Mo said yes to each;
+  `main` is `d40cc45` = the October 18 build (`5b7ba74`) plus the notes commit, NuriCell layout B
+  and the two About commits, nothing else. Production `dpl_FRgQkMZhntzi5bJdAxT9utDeB8xf`; the demo
+  alias points to it. Public demo checks: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav`
+  436/436, `qa_nuricell_ink` 355/355 (`docs/public-demo.md`). `studio` merged `main` back in (no
+  file changes), so the next `git push origin studio:main` is a fast-forward.
 - **State:** `studio` still holds unpushed work: the FDA sign trial (`df0bb65`), the redwood park
-  sign on Propolis (`f1b528f`), About's oak and circle light (two commits, below), the redwood sign
-  in every page's footer (`06eabbd`) and the homepage science section (two commits, below). None
-  of it is live yet.
+  sign on Propolis (`f1b528f`), the redwood sign in every page's footer (`06eabbd`) and the
+  homepage science section (two commits, below). None of it is live yet.
 - **NuriCell layout B (Mo picked from mockups, October 19):** from 960px the lantern hangs right of
   its words, the capsule stands in the middle of its four ingredients, the books run in from the
   page edge, Dr. Liu stands right, the brushed 3 × 30 = 90 goes across the page. Phones keep one
@@ -27,11 +26,13 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   gold leaf lands as a spark of gold light runs once round the stroke, then glints now and then.
   The oak was painted with Codex's image tool (no API spend); notes in `reference/ink-pages/spend.md`.
   Its description is a draft translation (m900).
-- **About checks:** lint, type check, formatting of the changed files, build; built site
-  `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav` 436/436 on top of `433ac7b`; then on top
-  of `f1b528f` (the five commits together) `qa_about` 353/353 and `qa_fda` 220/220. Desktop, phone
-  and the four other languages inspected; the circle filmed frame by frame on dev and the built
-  site. Not yet checked on the public demo (nothing pushed).
+- **About checks (live):** on the built release copy `qa_about` 353/353, `qa_home_ink` 282/282,
+  `qa_nav` 436/436; on the public demo the same plus `qa_nuricell_ink` 355/355. Desktop, phone and
+  the four other languages inspected; the circle filmed frame by frame on dev, the built site and
+  the demo. `qa_about`'s allowance for Next's "preloaded but not used" CSS warning now accepts
+  Vercel's `?dpl=…` on CSS addresses (it counted that harmless warning on the first public run).
+  A local `next start` once hung on one image resize under heavy load (NuriCell's unlit lantern at
+  640px): restarting the server cleared it; Vercel's own image service served it fine.
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
 - **Homepage science section (Mo picked from mockups, October 19, Claude Code):** each of "Make

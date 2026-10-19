@@ -4,7 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-4ye6j68u4-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-9h3fabbek-sarkuseq1999s-projects.vercel.app`
+(`dpl_FRgQkMZhntzi5bJdAxT9utDeB8xf`), the **production** deployment of `main` at
+`d40cc454bbe8b52e962206b9764cba85f44938a0`. On October 19, 2026, Mo picked About's painted oak for
+"Our purpose" (with the mission line a step under the heading, in ink) and the gold light that runs
+the opening circle, then said yes to putting it live. Claude pushed `main` from a release copy: the
+NuriCell `main` (`ad3561e`) plus the two About commits only (`710406f`, `d40cc45`; `d183d22` and
+`d85ca64` on `studio`, without that commit's `studio`-only handoff note). The other `studio` work
+(the FDA sign trial, the redwood sign, the homepage science section) was left out, not yet approved
+for live. `bigh-website.vercel.app` serves the same build. `studio` then merged `main` back in
+(no file changes).
+
+Before the push, on the built release copy: lint, type check and build passed; `qa_about` 353/353,
+`qa_home_ink` 282/282, `qa_nav` 436/436. The same About code, built over all of `studio` at
+`d85ca64`, also passed `qa_fda` 220/220, `qa_nuricell_ink` 355/355, `qa_opc_ink` 185/185 and
+`qa_propolis_ink` 273/273. After the alias update, on the public demo in fresh unauthenticated
+browsers: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav` 436/436, `qa_nuricell_ink` 355/355.
+The first public `qa_about` run counted Next's harmless "preloaded but not used" CSS warning twice:
+on Vercel each CSS address now carries `?dpl=…`, which the check's allowance did not expect; the
+allowance now does. Desktop and phone screenshots of About on the demo were inspected, and the
+circle filmed frame by frame: the oak, the ink mission line, the light round the circle.
+
+Before this update, the alias pointed to `bigh-website-4ye6j68u4-sarkuseq1999s-projects.vercel.app`
 (`dpl_9ebiBovTrZRUe5yyRYQsQuPaLbfq`), the **production** deployment of `main` at
 `ad3561eec71437de654d28b99f3f7c06d1d17612`. On October 19, 2026, Mo approved NuriCell layout B
 (each painting in its own place) and said yes to putting it live. Claude pushed `main` from a

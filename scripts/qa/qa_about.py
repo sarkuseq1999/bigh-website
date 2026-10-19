@@ -122,9 +122,10 @@ def check(name, ok, detail=""):
 # ANOTHER route was preloaded and not used (Next's <Link> prefetch adds <link rel="preload"
 # as="style"> for each linked route's CSS; with the router's prefetch blocked it never appears).
 # Only this exact message for a /_next/static/*.css file is ignored.
+# Vercel adds its deployment to each asset's address (".css?dpl=dpl_..."), so the query is optional.
 PREFETCH_CSS = re.compile(
-    r"^The resource \S+/_next/static/\S+\.css was preloaded using link preload but not used "
-    r"within a few seconds from the window's load event\."
+    r"^The resource \S+/_next/static/\S+\.css(\?\S*)? was preloaded using link preload "
+    r"but not used within a few seconds from the window's load event\."
 )
 
 
