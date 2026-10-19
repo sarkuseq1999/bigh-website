@@ -7,6 +7,7 @@ import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { monthPlan, titleFor } from "../template-chapters-model";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
+import { nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 const LABELS = ["capsules a day", "days", "capsules in each bottle"] as const;
@@ -80,7 +81,7 @@ export function Daily({ product }: { product: InkProduct }) {
                 alt=""
                 width={sum.width}
                 height={sum.height}
-                sizes="(max-width: 959px) 88vw, 560px"
+                sizes={nuricellSizes(product, "sum", sum) ?? "(max-width: 959px) 88vw, 560px"}
                 data-bloom="waiting"
                 aria-hidden="true"
               />

@@ -63,6 +63,12 @@ These sit on top of `DESIGN.md`.
 - **Even rhythm.** Every section uses the same pairing (one painting and its words, sides alternating).
   One picture per screen, and each chapter brings its own picture. A signature object lives only in
   the chapter where it means something. The brand name appears once per screen. No fake paper folds.
+- **Don't park every painting on one side.** Mo found NuriCell's chapters boring with every
+  painting on the left (October 19, 2026) and picked B, "each painting gets its own spot", over a
+  plain left-right zigzag. From 960px: lantern right, the capsule in the middle of its four
+  ingredients, the books running in from the page edge, Dr. Liu right, the brushed 3 × 30 = 90
+  across the page, the bottle left. Phones keep one column. NuriCell only for now
+  (`nuricell.module.css`); the other four product pages still put every painting on the left.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

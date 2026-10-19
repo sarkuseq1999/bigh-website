@@ -1,0 +1,218 @@
+<title>NuriCell Page Layouts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@500;650&display=swap">
+<style>
+  /* Layout: one column of desktop screenshots, a three-way switch (Now / A / B) pinned on top. */
+  :root {
+    --paper: #f8f3ea;
+    --paper-deep: #ede8dd;
+    --ink: #0c0b0a;
+    --muted: #514e48;
+    --hair: rgba(28, 27, 25, 0.22);
+    --gold: #7d5f1c;
+    --display: "Ysabeau Office", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+    --body: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17;
+      --paper-deep: #26241f;
+      --ink: #f1ece2;
+      --muted: #b8b1a4;
+      --hair: rgba(241, 236, 226, 0.2);
+      --gold: #d6b25e;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17;
+    --paper-deep: #26241f;
+    --ink: #f1ece2;
+    --muted: #b8b1a4;
+    --hair: rgba(241, 236, 226, 0.2);
+    --gold: #d6b25e;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.5;
+  }
+  .page {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 64px;
+  }
+  h1 {
+    font-family: var(--display);
+    font-weight: 650;
+    font-size: clamp(32px, 6vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin: 0 0 12px;
+    text-wrap: balance;
+  }
+  .lead { margin: 0; max-width: 34em; color: var(--muted); }
+
+  .switch {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 2;
+    background: var(--paper);
+    padding-block: 16px 12px;
+    margin-top: 20px;
+    border-bottom: 1px solid var(--hair);
+  }
+  .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tabs button {
+    font: inherit;
+    font-size: 17px;
+    min-height: 48px;
+    padding: 0 20px;
+    border-radius: 999px;
+    border: 1.5px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .tabs button[aria-selected="true"] { background: var(--ink); color: var(--paper); }
+  .tabs button:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+  .tag {
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    margin-left: 6px;
+    color: var(--gold);
+  }
+  .tabs button[aria-selected="true"] .tag { color: inherit; opacity: 0.8; }
+
+  .intro { margin: 24px 0 8px; }
+  .intro h2 {
+    font-family: var(--display);
+    font-weight: 650;
+    font-size: clamp(26px, 4.4vw, 36px);
+    margin: 0 0 6px;
+    line-height: 1.1;
+  }
+  .intro p { margin: 0; max-width: 36em; }
+  .score { color: var(--muted); font-size: 15px; margin-top: 8px !important; }
+
+  .shots { display: grid; gap: 36px; margin-top: 24px; }
+  figure { margin: 0; display: grid; gap: 10px; }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--hair);
+    border-radius: 6px;
+  }
+  figcaption { font-size: 16px; }
+  figcaption b { font-weight: 600; }
+  .note { margin-top: 40px; color: var(--muted); font-size: 15px; max-width: 40em; }
+</style>
+
+<main class="page">
+  <h1>NuriCell page: less boring</h1>
+  <p class="lead">You picked B. It's built now. These are screenshots of the real built page, not mockups. Tap “Before” to compare.</p>
+
+  <div class="switch">
+    <div class="tabs" role="tablist" aria-label="Layout">
+      <button role="tab" id="tab-built" aria-controls="panel" aria-selected="true" data-k="built">Built <span class="tag">B</span></button>
+      <button role="tab" id="tab-now" aria-controls="panel" aria-selected="false" data-k="now">Before</button>
+      <button role="tab" id="tab-a" aria-controls="panel" aria-selected="false" data-k="a">A (not picked)</button>
+    </div>
+  </div>
+
+  <section id="panel" role="tabpanel" aria-live="polite"></section>
+
+  <p class="note">Desktop screenshots, 1440 wide. Phones stay as they were (painting on top, words under it). Built on this computer only: the live site hasn't changed.</p>
+</main>
+
+<script>
+  const SETS = {
+    built: {
+      title: "Built: each painting gets its own spot",
+      line: "Right, middle, left, right, middle, left. Same as the B mockup you picked.",
+      score: "My score: 8.5/10 on a laptop, 7.5/10 on a small laptop or tablet sideways (the ingredient notes get narrow). Still plain: Dr. Liu and Buy are a simple side-by-side.",
+      shots: [
+        ["built-2-why-1440.jpg", "Why it matters", "The lantern hangs on the right, taller."],
+        ["built-3-inside-1440.jpg", "What's inside", "The open capsule in the middle, its four ingredients around it."],
+        ["built-3-inside-1440-b.jpg", "What's inside, lower down", "“Why these four work together” as three columns."],
+        ["built-4-research-1440.jpg", "The research", "The books come in from the page edge, bigger."],
+        ["built-5-people-1440.jpg", "Dr. Liu", "His portrait on the right, taller."],
+        ["built-6-daily-1440.jpg", "How to take it", "The brushed 3 × 30 = 90 across the page."],
+        ["built-7-buy-1440.jpg", "Buy", "The bottle on the left, as before."],
+      ],
+    },
+    b: {
+      title: "B. Each painting gets its own spot",
+      line: "The paintings move around: right, middle, left, right, middle, left. Two chapters become centre pieces.",
+      score: "My score: 8/10. Still plain: Dr. Liu and the buy chapter are a simple side-by-side.",
+      shots: [
+        ["b-2-why.jpg", "Why it matters", "The lantern hangs on the right, taller."],
+        ["b-3-inside.jpg", "What's inside", "The open capsule in the middle, its four ingredients around it, like a specimen plate."],
+        ["b-3-inside-b.jpg", "What's inside, lower down", "“Why these four work together” as three columns."],
+        ["b-4-research.jpg", "The research", "The stepping-stone books come in from the page edge, bigger."],
+        ["b-5-people.jpg", "Dr. Liu", "His portrait on the right, taller."],
+        ["b-6-daily.jpg", "How to take it", "The brushed 3 × 30 = 90 becomes the big moment, across the page."],
+        ["b-7-buy.jpg", "Buy", "The bottle on the left, as today."],
+      ],
+    },
+    a: {
+      title: "A. Swap sides",
+      line: "Same layout as today, but the painting switches sides each chapter: left, right, left, right.",
+      score: "My score: 6.5/10. Less repetitive, but still reads like a template.",
+      shots: [
+        ["a-2-why.jpg", "Why it matters", "Painting left."],
+        ["a-3-inside.jpg", "What's inside", "Painting right."],
+        ["a-4-research.jpg", "The research", "Painting left."],
+        ["a-5-people.jpg", "Dr. Liu", "Painting right."],
+        ["a-6-daily.jpg", "How to take it", "Painting left."],
+        ["a-7-buy.jpg", "Buy", "Bottle right."],
+      ],
+    },
+    now: {
+      title: "Today",
+      line: "For comparison: every painting on the left, the same size.",
+      score: "",
+      shots: [
+        ["now-2-why.jpg", "Why it matters", ""],
+        ["now-3-inside.jpg", "What's inside", ""],
+        ["now-4-research.jpg", "The research", ""],
+        ["now-5-people.jpg", "Dr. Liu", ""],
+        ["now-6-daily.jpg", "How to take it", ""],
+        ["now-7-buy.jpg", "Buy", ""],
+      ],
+    },
+  };
+  const panel = document.getElementById("panel");
+  const tabs = [...document.querySelectorAll('[role="tab"]')];
+  function show(k) {
+    const set = SETS[k];
+    tabs.forEach((t) => t.setAttribute("aria-selected", String(t.dataset.k === k)));
+    panel.setAttribute("aria-labelledby", "tab-" + k);
+    panel.innerHTML =
+      `<div class="intro"><h2>${set.title}</h2><p>${set.line}</p>` +
+      (set.score ? `<p class="score">${set.score}</p>` : "") +
+      `</div><div class="shots">` +
+      set.shots
+        .map(([src, name, line], i) =>
+          `<figure><img src="${src}" alt="${set.title}: ${name}" width="1440" height="900" ${i > 1 ? 'loading="lazy"' : ""}>` +
+          `<figcaption><b>${name}.</b> ${line}</figcaption></figure>`)
+        .join("") +
+      `</div>`;
+  }
+  tabs.forEach((t) =>
+    t.addEventListener("click", () => {
+      show(t.dataset.k);
+      try { localStorage.setItem("nuricell-layout-tab", t.dataset.k); } catch (e) {}
+    }),
+  );
+  show("built");
+</script>

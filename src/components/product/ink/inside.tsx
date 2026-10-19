@@ -29,8 +29,9 @@ export function Inside({ product }: { product: InkProduct }) {
       </h2>
       {/* The rows are laid out as a grid (the amount beside the name, what it does under the
           name), which some browsers treat as the end of the table's meaning, so the table's parts
-          name their own roles. */}
-      <table className={styles.ingredients}>
+          name their own roles; NuriCell's table itself is laid out away (display: contents, its rows
+          placed round the capsule: nuricell.module.css), so it names its role too. */}
+      <table className={styles.ingredients} role="table">
         <caption className={`${base.caption} ${styles.tableNote}`}>
           {copy(product.notes.label)}
         </caption>

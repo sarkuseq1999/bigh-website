@@ -6,6 +6,7 @@ import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { byYear } from "../template-chapters-model";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
+import { nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 /** Studies shown before "Show all": the list stays about as tall as its painting. */
@@ -22,7 +23,13 @@ export function Research({ product }: { product: InkProduct }) {
   return (
     <InkChapter
       id="research"
-      picture={<InkFigure art={product.ink.research} alt={product.ink.research.alt} />}
+      picture={
+        <InkFigure
+          art={product.ink.research}
+          alt={product.ink.research.alt}
+          sizes={nuricellSizes(product, "research", product.ink.research)}
+        />
+      }
     >
       <p className={`${base.label} ${styles.label}`}>{copy("The research")}</p>
       <h2 id={titleId("research")} className={`${base.display} ${styles.heading}`}>

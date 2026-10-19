@@ -5,6 +5,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { CAPTIONS, InkChapter, InkFigure, titleId } from "./ink-chapter";
+import { nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 // Chapter 5: the person behind the formula. Dr. Liu as a painting in ink and colour (Mo's call,
@@ -20,6 +21,7 @@ export function People({ product }: { product: InkProduct }) {
       art={lead.painting}
       alt={lead.painting.alt}
       caption={lead.paintingOf === "work" ? CAPTIONS.illustration : CAPTIONS.portrait}
+      sizes={nuricellSizes(product, "people", lead.painting)}
     />
   ) : lead.photo ? (
     <figure className={styles.photo} data-picture="" data-stand="">
