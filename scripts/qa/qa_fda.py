@@ -1,13 +1,12 @@
-"""The FDA statement at the foot of every page, on its painted California trail sign (Mo's pick "I",
-October 13, 2026; ink/fda-statement.tsx).
+"""The FDA statement at the foot of every page, on its painted California park sign (the redwood
+park sign, Mo's pick, October 19, 2026, after the trail sign "I" of October 13; ink/fda-statement.tsx).
 
 On the ink pages (home, About, NuriCell) and the Science page: one statement, in the footer, the
 exact words as real text, in Zilla Slab (loaded), 600, 15 px or more (the preview note too); the
-sign's picture drawn as the paragraph's border (fda-sign.webp, or fda-sign-phone.webp without the
-oak on a phone), loading, and really painted (brown wood in the pixels, on the dark Science footer
-too); every line of the words inside the sign's face; cream letters at 4.5:1 or more against the
-painted face (measured from the pixels); two lines on a 1280+ window, centred; no sideways scroll;
-no hairline in the footer. The ink footer (no logo since the footer-crane redesign): the sign
+sign's picture drawn as the paragraph's border (fda-sign-redwood-v1.webp, the same picture on a
+phone), loading, and really painted (brown wood in the pixels); every line of the words inside the
+sign's face; cream letters at 4.5:1 or more against the painted face (measured from the pixels);
+two lines on a 1280+ window, centred; no sideways scroll; no hairline in the footer. The ink footer (no logo since the footer-crane redesign): the sign
 under the copyright line, centred, and the preview note last, under it, at every width. The last
 screen still shows the whole promise and crane at rest clear of the menu bar at eight laptop sizes
 (home, About, NuriCell). The words appear once per page (NuriCell does not repeat them above the
@@ -34,7 +33,7 @@ STATEMENT = (
 PAGES = {"home": "/", "about": "/about", "nuricell": "/products/nuricell", "science": "/science"}
 INK = ("home", "about", "nuricell")
 OLD = ["/products/green-bee-propolis", "/products/advanced-opc", "/products/turmerific", "/products/nature-calm"]
-CREAM = (246, 231, 189)
+CREAM = (243, 230, 195)
 results = []
 
 
@@ -166,7 +165,7 @@ def run_sign(browser):
                 "Zilla Slab" in g["family"] and g["loaded"] and g["weight"] >= 600 and g["size"] >= 15 and g["noteSize"] >= 15,
                 f"{g['family'][:30]}, loaded {g['loaded']}, {g['weight']}, {g['size']} px, note {g['noteSize']} px",
             )
-            want = "fda-sign-phone.webp" if phone else "fda-sign.webp"
+            want = "fda-sign-redwood-v1.webp"
             loaded = any(st == 200 and want in u for st, u in signs)
             check(
                 f"{tag}: the sign's picture ({want}) is the paragraph's border, and loads",
@@ -188,7 +187,7 @@ def run_sign(browser):
             ratio, tone = face_contrast(pixels(page, (x0 + bl, y0 + bt, x1 - br, y1 - bb)))
             check(
                 f"{tag}: cream words at 4.5:1 or more against the painted face",
-                g["color"] == "rgb(246, 231, 189)" and ratio >= 4.5,
+                g["color"] == "rgb(243, 230, 195)" and ratio >= 4.5,
                 f"{ratio:.2f}:1 against {tone}",
             )
             if size[0] >= 1280:
@@ -255,7 +254,7 @@ def run_elsewhere(browser):
         g = page.evaluate(GEOMETRY)
         check(
             f"{path}: the sign, its words, two lines",
-            g["count"] == 1 and g["text"] == STATEMENT and g["lines"] == 2 and g["mentions"] == 1 and "fda-sign.webp" in g["image"],
+            g["count"] == 1 and g["text"] == STATEMENT and g["lines"] == 2 and g["mentions"] == 1 and "fda-sign-redwood-v1.webp" in g["image"],
             f"count {g['count']}, lines {g['lines']}",
         )
         check(f"{path}: no errors", not problems, "; ".join(problems[:3]))

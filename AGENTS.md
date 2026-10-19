@@ -85,16 +85,15 @@ These sit on top of `DESIGN.md`.
   Mo approved Bold Signature A on October 18: heavy Switzer (750), Green left, the real bottle
   centred, Bee / Propolis right. Keep the original outlined One bottle card with the capsule,
   overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
-  Mo approved Weathered Taupe A for the Propolis FDA footer sign on October 18: use the
-  unchanged blank artwork with the exact selectable disclaimer in charcoal. Keep this treatment
-  scoped to Propolis; preserve the approved desktop opening, mobile B and purchase card.
-- **FDA footer sign trial (October 19):** Mo found the taupe sign still too much like a drawing
-  (pen outlines, wood grain) next to the homepage's soft ink wash. To compare two painted signs on
-  real pages, sign A (ink-wash trail sign) is on Advanced OPC and sign C (one-brushstroke board,
-  one California poppy) went on Green Bee Propolis, in place of the taupe sign. Mo liked C and
-  asked for the feel of California's park signs; of its park versions Mo picked 1, the redwood
-  park sign (muted redwood plank, rounded corners, cream carved border, cream letters, the poppy),
-  which is now on Propolis. Not rolled out; the other pages keep the brown sign. Mockups:
+  Preserve the approved desktop opening, mobile B and purchase card. (Its Weathered Taupe A
+  footer sign of October 18 was replaced on October 19 by the site-wide redwood park sign.)
+- **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
+  trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
+  next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the
+  one-brushstroke sign with a California poppy and asked for the feel of California's park signs,
+  then picked the redwood park sign: a muted redwood plank with rounded corners, a cream carved
+  border and cream letters, sage grass and the poppy, painted loosely with no pen outlines. Keep
+  its brown muted (ink, not orange) and its letters at 4.5:1 or more. Mockups:
   `reference/ink-pages/mockups/fda-sign/`.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like

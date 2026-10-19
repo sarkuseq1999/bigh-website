@@ -168,12 +168,20 @@
   font-size: 15px;
 }
 
-/* Short desktop windows (1280 x 800, 1366 x 768, 1440 x 700): the trail sign draws smaller, its
+/* Short desktop windows (1280 x 800, 1366 x 768, 1440 x 700): the park sign draws smaller, its
    words at 15 px, so the last screen still shows the whole promise and crane under the menu bar. */
 @media (min-width: 900px) and (max-height: 860px) {
   .footer .footerFda {
     --k: 0.34;
     --sign-size: 15px;
+  }
+}
+
+/* The shortest (1366 x 657 and below): the redwood park sign's posts and grass stand taller than
+   the trail sign's did, so it draws smaller still. */
+@media (min-width: 900px) and (max-height: 700px) {
+  .footer .footerFda {
+    --k: 0.28;
   }
 }
 

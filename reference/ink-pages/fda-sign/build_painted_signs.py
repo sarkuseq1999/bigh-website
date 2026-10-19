@@ -1,12 +1,11 @@
-"""Cut the painted trail signs Mo is comparing (October 19, 2026) into the site's pictures:
+"""Cut the painted trail signs Mo compared (October 19, 2026) into the site's pictures:
 
-- A, the ink-wash sign (originals/sign-ink-wash-a1.png) -> Advanced OPC's footer,
+- A, the ink-wash sign (originals/sign-ink-wash-a1.png), tried on Advanced OPC's footer,
   public/images/products/advanced-opc/ink/fda-sign-ink-wash-v1.webp
-- C, the brushstroke sign (originals/sign-brushstroke-c1.png),
-  public/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp (Propolis's
-  footer until Mo picked the park version of it)
-- C, park version 1, the redwood park sign (originals/sign-park-full-c5.png) -> Green Bee
-  Propolis's footer, public/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp
+- C, the brushstroke sign (originals/sign-brushstroke-c1.png), tried on Propolis's footer,
+  public/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp
+- C, park version 1, the redwood park sign (originals/sign-park-full-c5.png), Mo's pick: every
+  page's footer, public/images/home-v2/ink/fda-sign-redwood-v1.webp
 
 All were painted by Codex (prompts/sign-*.txt). The paper becomes transparent: the paint is
 un-multiplied from the paper, so over the site's paper it looks exactly as painted. Faint
@@ -51,7 +50,7 @@ SIGNS = [
     },
     {
         "src": "sign-park-full-c5.png",
-        "out": REPO / "public/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp",
+        "out": REPO / "public/images/home-v2/ink/fda-sign-redwood-v1.webp",
         "crop": (60, 210, 1500, 900),
         "board_rows": (70, 345),
         "fade": (60, 60, 0, 80),

@@ -1,30 +1,34 @@
-/* The FDA statement routed into a painted California trail sign (fda-sign.webp, made by
-   reference/ink-pages/fda-sign/build_sign.py from a GPT Image 2.5 painting; Mo's pick "I",
-   October 13, 2026). The sign is the paragraph's border image, cut nine ways: the corners and
-   edges (the post tops, the plank's ends, the posts, the grass, the hill and its oak) keep their
-   shape at --k CSS px per picture px, and only the middle (the face of the panel between the posts)
-   stretches to hold the words. The words reach a little past the middle into the panel's ends
-   (--reach-l, --reach-r). The picture's paper is transparent and its wood solid, so the sign stands
-   on the paper footers and on the Science page's dark one alike.
+/* The FDA statement routed into a painted California park sign: the redwood park sign
+   (fda-sign-redwood-v1.webp, made by reference/ink-pages/fda-sign/build_painted_signs.py from a
+   Codex painting; Mo's pick, October 19, 2026, after the brown trail sign of October 13 and the
+   taupe sign of October 18 looked drawn next to the homepage's soft ink wash). A muted redwood
+   plank with rounded corners and a cream carved border on two posts, sage grass and one
+   California poppy. The sign is the paragraph's border image, cut nine ways: the corners and
+   edges (the post tops, the plank's ends and carved border, the posts, the grass and the poppy)
+   keep their shape at --k CSS px per picture px, and only the middle (the plank's face between
+   the posts) stretches to hold the words. The words reach past the posts into the plank's ends,
+   inside the carved border (--reach-l, --reach-r). The picture's paper is transparent and its
+   plank solid; the same picture serves phones.
 
    A footer may set --k (the sign's scale) and --sign-size (the words' size) where its room is
    short. Rules are scoped under .fda (two classes) so the pages' shared `p` rules cannot win on the
    built site's stylesheet order. */
 .fda {
+  /* 0.48 draws the painting at 0.40 CSS px per painted px. */
   --k: 0.48;
   /* The words' measure: two balanced lines on a computer. */
-  --words: 680px;
+  --words: 600px;
   display: flex;
   justify-content: center;
 }
 
 .fda .text {
-  --bt: calc(92px * var(--k));
-  --br: calc(491px * var(--k));
-  --bb: calc(225px * var(--k));
-  --bl: calc(277px * var(--k));
-  --reach-l: calc(109px * var(--k));
-  --reach-r: calc(113px * var(--k));
+  --bt: calc(100px * var(--k));
+  --br: calc(308px * var(--k));
+  --bb: calc(331px * var(--k));
+  --bl: calc(288px * var(--k));
+  --reach-l: calc(179px * var(--k));
+  --reach-r: calc(183px * var(--k));
   box-sizing: border-box;
   display: flex;
   align-items: center;
@@ -34,10 +38,10 @@
   padding: 6px 0;
   border-style: solid;
   border-width: var(--bt) var(--br) var(--bb) var(--bl);
-  border-image: url("/images/home-v2/ink/fda-sign.webp") 92 491 225 277 fill / var(--bt) var(--br)
-    var(--bb) var(--bl) stretch;
-  /* Cream letters routed into the brown face (about 5:1 against it). */
-  color: #f6e7bd;
+  border-image: url("/images/home-v2/ink/fda-sign-redwood-v1.webp") 100 308 331 288 fill / var(--bt)
+    var(--br) var(--bb) var(--bl) stretch;
+  /* Cream letters routed into the redwood (6:1 against the plank, 4.5:1 on its lightest spots). */
+  color: #f3e6c3;
   font-family: var(--font-sign), Rockwell, Georgia, serif;
   font-size: var(--sign-size, 16px);
   font-weight: 600;
@@ -45,9 +49,7 @@
   letter-spacing: 0.01em;
   text-align: center;
   text-wrap: balance;
-  text-shadow:
-    0 1px 0 rgb(20 14 6 / 0.55),
-    0 -1px 0 rgb(255 240 200 / 0.12);
+  text-shadow: 0 1px 0 rgb(20 14 6 / 0.5);
 }
 
 .fda .words {
@@ -55,60 +57,15 @@
   margin: 0 calc(-1 * var(--reach-r)) 0 calc(-1 * var(--reach-l));
 }
 
-/* Phones: the sign without its hill and oak (fda-sign-phone.webp), smaller, the words on as many
-   lines as they need; the face grows taller around them. */
+/* Phones: the same sign, smaller, the words on as many lines as they need; the plank grows taller
+   around them. */
 @media (max-width: 720px) {
   .fda {
     --k: 0.36;
   }
 
   .fda .text {
-    --br: calc(210px * var(--k));
     width: 100%;
-    border-image-source: url("/images/home-v2/ink/fda-sign-phone.webp");
-    border-image-slice: 92 210 225 277 fill;
     font-size: var(--sign-size, 15px);
   }
-}
-
-/* A trial Mo asked for (October 19, 2026): softer, painted signs on two product pages, to
-   compare. Sign A, the ink-wash trail sign, on Advanced OPC; on Green Bee Propolis, the park
-   version of sign C that Mo picked: a redwood park sign with a cream carved border and one
-   California poppy (pictures from reference/ink-pages/fda-sign/build_painted_signs.py; mockups in
-   reference/ink-pages/mockups/fda-sign/). Only the picture and the words' colour change: the
-   footer's --k still sizes them (0.48 on a computer draws the painting at 0.40 CSS px per painted
-   px; smaller on short windows and phones), and the same picture serves phones. The page is found
-   by its product wrapper, so the shared product page needs no change; body:has() also outranks
-   the phone rules above. */
-body:has([data-product-ink="advanced-opc"]) .fda .text,
-body:has([data-product-ink="green-bee-propolis"]) .fda .text {
-  --words: 600px;
-  color: #3f3932;
-  text-shadow: none;
-}
-
-body:has([data-product-ink="advanced-opc"]) .fda .text {
-  --bt: calc(96px * var(--k));
-  --br: calc(313px * var(--k));
-  --bb: calc(271px * var(--k));
-  --bl: calc(317px * var(--k));
-  --reach-l: calc(150px * var(--k));
-  --reach-r: calc(158px * var(--k));
-  border-image-source: url("/images/products/advanced-opc/ink/fda-sign-ink-wash-v1.webp");
-  border-image-slice: 96 313 271 317 fill;
-}
-
-/* Cream letters routed into the redwood, inside its carved border (6:1 against the plank, 4.5:1
-   on its lightest spots). */
-body:has([data-product-ink="green-bee-propolis"]) .fda .text {
-  --bt: calc(100px * var(--k));
-  --br: calc(308px * var(--k));
-  --bb: calc(331px * var(--k));
-  --bl: calc(288px * var(--k));
-  --reach-l: calc(179px * var(--k));
-  --reach-r: calc(183px * var(--k));
-  color: #f3e6c3;
-  text-shadow: 0 1px 0 rgb(20 14 6 / 0.5);
-  border-image-source: url("/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp");
-  border-image-slice: 100 308 331 288 fill;
 }
