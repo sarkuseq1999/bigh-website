@@ -7,10 +7,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 19, 2026, by Claude Code (About).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` is seven local commits ahead of `main`, none pushed: the FDA sign trial
+- **State:** `studio` is eight local commits ahead of `main`, none pushed: the FDA sign trial
   (`df0bb65`), NuriCell layout B (`433ac7b`), the redwood park sign on Propolis (`f1b528f`),
-  About's oak and circle light (two commits, below) and the homepage science section (two
-  commits, below). `main` and the demo are still the October 18
+  About's oak and circle light (two commits, below), the redwood sign in every page's footer
+  (`06eabbd`) and the homepage science section (two commits, below). `main` and the demo are still the October 18
   build at `5b7ba74`.
 - **About (Mo picked both from mockups, October 19):** "Our purpose" shows a big painted valley
   oak (rope swing, gold light in the roots) in place of the seedling, larger than the page's other
