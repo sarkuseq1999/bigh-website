@@ -4,7 +4,21 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-81xlphzs8-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-qdfmigr4q-sarkuseq1999s-projects.vercel.app`
+(`dpl_E8PnPqm45gWJu2fdZG8KGLCgjmMS`), the **production** deployment of `main` at
+`5b7ba7413dd5dc4da2cd7ae1246280b0d6d7c724`. On October 18, 2026, Mo said yes to bringing `main` up
+to the demo. Mo pasted `git push origin studio:main` (the agent's push was blocked); Vercel built
+production from it, and `bigh-website.vercel.app` now carries the same Propolis work as the demo.
+The site code is the same as the previous demo build (`0c129ad`); the extra commit is notes only.
+
+Before the push, on the built site (`npm run build` + `npm start`): lint, type check and
+formatting passed; `qa_propolis_ink` 273/273, `qa_fda` 220/220, `qa_home_ink` 282/282,
+`qa_nav` 436/436, `qa_science_ink` 1279/1279. After the alias update, on the public demo in fresh
+unauthenticated browsers: `qa_propolis_ink` 273/273, `qa_fda` 220/220, `qa_home_ink` 282/282, `qa_nav` 436/436, `qa_science_ink` 1279/1279. Desktop
+and phone screenshots of Propolis on both `bigh-website-demo.vercel.app` and
+`bigh-website.vercel.app` were inspected: same opening, taupe sign, no page errors.
+
+Before this update, the alias pointed to `bigh-website-81xlphzs8-sarkuseq1999s-projects.vercel.app`
 (`dpl_CXwdNDUmKRWcbCzo2uwuvKePaZdE`), a **preview** deployment of source commit
 `0c129ad36a07e8752cad46399ff62627eec1edb5`. Mo approved applying the reviewed Weathered Taupe A sign on
 October 18, 2026. The change is scoped to the Propolis footer: the exact approved blank artwork
