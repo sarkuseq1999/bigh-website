@@ -5,47 +5,41 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 18, 2026, by Codex.
+- **Last updated:** October 18, 2026, by Claude Code.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** Mo approved Weathered Taupe A for the Propolis footer sign. Source commit `0c129ad`
-  is live on the existing public demo. The exact disclaimer remains selectable charcoal HTML.
-- **Demo:** <https://bigh-website-demo.vercel.app/products/green-bee-propolis>, preview deployment
-  `dpl_CXwdNDUmKRWcbCzo2uwuvKePaZdE` (`bigh-website-81xlphzs8-sarkuseq1999s-projects.vercel.app`).
-- **Scope:** Runtime changes are only Propolis footer CSS and its new blank sign PNG. The original
-  shared sign, other products, desktop Bold Signature opening, mobile B and purchase card remain.
-  Only the demo alias changed; no production promotion, GitHub push or access-setting change.
-- **Artwork:** Approved Library asset `libfile_7bef57cdb69c8191bd7457cc2a757a44`, copied byte-for-byte.
-  Original and provenance are retained under `reference/ink-pages/propolis/`.
-- **Checks:** Build (including TypeScript), lint and formatting passed; Propolis 273/273 passed.
-  Six local responsive views passed, including 360/390 phones and both sides of the 720px breakpoint.
-  Fresh unauthenticated public checks passed at 1440, 390 and 360: one exact selectable statement,
-  charcoal text, all lines inside the board, no overflow or page errors, exact approved asset hash.
-  Desktop and both phone openings have zero changed pixels versus the previous public demo.
-  Public homepage, NuriCell and OPC retain their original sign. The extra broad homepage suite
-  was stopped after the scoped release checks passed; no full homepage/navigation pass is claimed.
-- **Visual review:** Actual built and public desktop/phone screenshots inspected; 9/10.
-- **In progress:** None. **Next:** Mo can review the updated public demo.
-- **Local preview:** Built page at `http://localhost:3016/products/green-bee-propolis` during this task.
+- **State:** `main` has caught up with the demo. Mo pasted the push (`studio:main` at `5b7ba74`);
+  Vercel built production `dpl_E8PnPqm45gWJu2fdZG8KGLCgjmMS`, which now serves
+  `bigh-website.vercel.app`. The demo alias was moved to that same production build.
+- **What it carries:** Codex's Propolis work (Bold Signature desktop, Editorial pair mobile,
+  Weathered Taupe A footer sign). No other page changed.
+- **Checks:** lint, type check, formatting, build; built site `qa_propolis_ink` 273,
+  `qa_fda` 220, `qa_home_ink` 282, `qa_nav` 436, `qa_science_ink` 1279, all passing. Public demo:
+  `qa_propolis_ink` 273/273, `qa_fda` 220/220, `qa_home_ink` 282/282, `qa_nav` 436/436,
+  `qa_science_ink` 1279/1279. Desktop and phone screenshots of both public addresses inspected.
+- **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
+  this repo reaches it yet.
+- **In progress:** None. **Next:** Mo's call.
 
 ## What's live
 
-Public demo: <https://bigh-website-demo.vercel.app/>. It shows preview build `0c129ad`
-(Weathered Taupe A Propolis sign; Editorial pair mobile and Bold Signature desktop retained).
+Public demo: <https://bigh-website-demo.vercel.app/>. It shows the production build of `main`
+at `5b7ba74`, the same build as <https://bigh-website.vercel.app/> (Propolis: Bold Signature
+desktop, Editorial pair mobile, Weathered Taupe A sign). `bighnow.com` is still the old WordPress site.
 
 Every page is in Ink & Gold:
 
 | Page                 | Its own idea                                                                             | Last public browser check             |
 | -------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
-| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 16)        |
-| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 16)             |
-| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 16)             |
+| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 18)        |
+| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 18)             |
+| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 18)             |
 | About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)           |
 | NuriCell             | Paper lantern that lights                                                                | `qa_nuricell_ink` 359/359 (Oct 16)    |
-| Green Bee Propolis   | Bold Signature desktop; Editorial pair mobile; gold flowing into the bee tree            | 10 responsive public views (Oct 18)   |
+| Green Bee Propolis   | Bold Signature desktop; Editorial pair mobile; gold flowing into the bee tree            | `qa_propolis_ink` 273/273 (Oct 18)    |
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 16)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)  |
 | Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 16) |
-| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 16)   |
+| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 18)   |
 | Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 16)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and
