@@ -1020,11 +1020,12 @@ def motion(browser):
     # run round, which sets off 0.2s after the stroke closes) it is lit and its spark is on the
     # stroke (its centre within 0.12 of the stroke's box from the stroke's middle line), well past
     # where the brush began and not yet back (90-350 degrees clockwise from 12 o'clock), and the
-    # leaf has not landed: the light gathers into it.
+    # leaf has not landed: the light gathers into it. The clock is the run's own animation: the
+    # stroke's ends at 4.6s and is gone by then; the two start together, so it counts the same.
     light = page.evaluate(
         """(ms) => new Promise((resolve) => {
              const wrap = document.querySelector('[data-enso]');
-             const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
+             const draw = wrap.querySelector('[data-run]').getAnimations()[0];
              if (!draw) return resolve(null);
              const began = performance.now();
              const tick = () => {

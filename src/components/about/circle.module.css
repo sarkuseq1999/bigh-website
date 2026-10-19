@@ -122,6 +122,18 @@
   text-wrap: balance;
 }
 
+/* Japanese and Chinese: the mission breaks between phrases, as the headings do
+   (about-page.module.css), not inside a word ("思考 / の活力", "脑 / 力"); anywhere only when a phrase
+   is longer than the line. */
+.circle p[data-mission]:lang(ja) {
+  word-break: auto-phrase;
+}
+
+.circle p[data-mission]:lang(zh) {
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
 .circle [data-part="experience"] [data-picture] {
   --picture: calc(var(--h) * 1.35 * 0.998);
 }
