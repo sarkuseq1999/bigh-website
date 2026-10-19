@@ -70,3 +70,42 @@
     font-size: var(--sign-size, 15px);
   }
 }
+
+/* A trial Mo asked for (October 19, 2026): two softer, painted signs on two product pages, to
+   compare. Sign A, the ink-wash trail sign, on Advanced OPC; sign C, the brushstroke sign with one
+   California poppy, on Green Bee Propolis (pictures from reference/ink-pages/fda-sign/
+   build_painted_signs.py; mockups in reference/ink-pages/mockups/fda-sign/). Only the picture and
+   the words' colour change: the footer's --k still sizes them (0.48 on a computer draws the
+   painting at 0.40 CSS px per painted px; smaller on short windows and phones), and the same
+   picture serves phones. The page is found by its product wrapper, so the shared product page
+   needs no change; body:has() also outranks the phone rules above. */
+body:has([data-product-ink="advanced-opc"]) .fda .text,
+body:has([data-product-ink="green-bee-propolis"]) .fda .text {
+  --words: 600px;
+  color: #3f3932;
+  text-shadow: none;
+}
+
+body:has([data-product-ink="advanced-opc"]) .fda .text {
+  --bt: calc(96px * var(--k));
+  --br: calc(313px * var(--k));
+  --bb: calc(271px * var(--k));
+  --bl: calc(317px * var(--k));
+  --reach-l: calc(150px * var(--k));
+  --reach-r: calc(158px * var(--k));
+  border-image-source: url("/images/products/advanced-opc/ink/fda-sign-ink-wash-v1.webp");
+  border-image-slice: 96 313 271 317 fill;
+}
+
+/* The brushstroke is darker than the ink-wash board, so its words are darker too. */
+body:has([data-product-ink="green-bee-propolis"]) .fda .text {
+  --bt: calc(87px * var(--k));
+  --br: calc(305px * var(--k));
+  --bb: calc(285px * var(--k));
+  --bl: calc(283px * var(--k));
+  --reach-l: calc(150px * var(--k));
+  --reach-r: calc(138px * var(--k));
+  color: #2b2620;
+  border-image-source: url("/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp");
+  border-image-slice: 87 305 285 283 fill;
+}

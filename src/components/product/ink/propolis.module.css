@@ -636,37 +636,6 @@
   }
 }
 
-/* Mo's Weathered Taupe A footer sign (October 18, 2026), scoped to Propolis.
-   The approved blank painting stays unchanged; the existing translated disclaimer
-   remains selectable HTML. Nine-slice borders keep its frame, posts and grasses. */
-.propolis [data-fda] > p {
-  box-sizing: border-box;
-  width: min(100%, 884px);
-  max-width: 100%;
-  padding: 8px 0;
-  border-style: solid;
-  border-width: 78px 102px 126px;
-  border-image: url("/images/products/green-bee-propolis/ink/fda-sign-weathered-taupe-v1.png") 260
-    340 420 340 fill / 78px 102px 126px stretch;
-  color: #3f3932;
-  font-size: 17px;
-  font-weight: 600;
-  line-height: 1.45;
-  text-shadow: none;
-  mix-blend-mode: darken;
-}
-
-.propolis [data-fda] > p > span {
-  margin: 0;
-  min-width: 0;
-}
-
-@media (max-width: 720px) {
-  .propolis [data-fda] > p {
-    width: 100%;
-    border-width: 46.8px 61.2px 75.6px;
-    border-image-width: 46.8px 61.2px 75.6px;
-    font-size: 15px;
-    padding: 6px 0;
-  }
-}
+/* The footer sign: on trial since October 19, 2026 (painted sign C, the brushstroke sign), in
+   ink/fda-statement.module.css. Mo's Weathered Taupe A sign (October 18) is in git history and
+   still at /images/products/green-bee-propolis/ink/fda-sign-weathered-taupe-v1.png. */
