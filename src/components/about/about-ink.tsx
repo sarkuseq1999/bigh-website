@@ -10,7 +10,7 @@ import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, routes } from "./about-content";
-import { dots, enso, glasses, hills, pool, seedling, sequoia } from "./about-art";
+import { dots, enso, glasses, hills, oak, pool, sequoia } from "./about-art";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { Painting, Spread } from "./spread";
@@ -24,8 +24,7 @@ import styles from "./circle.module.css";
 // name once (the logo, then the title). The words are the locked ones in about-content.ts.
 
 export const ALT = {
-  seedling:
-    "An oak seedling growing from an acorn, painted in ink; a gold acorn lies among its roots",
+  oak: "A great valley oak with a rope swing, painted in ink; below the ground, a gold light glows among its roots",
   sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
   glasses: "Reading glasses resting on an open notebook, painted in ink",
 } as const;
@@ -38,9 +37,10 @@ export const ALT = {
 // column is 0.394 of the window up to 1395px, where --h caps at 330px (300px for the sequoia and
 // the glasses from 960 to 1279px, so they fill the column up to 1025px and 1083px). A shared
 // half-window figure asked for 1.5 to 2.3 times too many pixels at 1440px (662px for paintings
-// drawn at 327 to 470px).
-const SEEDLING =
-  "(max-width: 505px) 59vw, (max-width: 959px) 298px, (max-width: 1395px) 24vw, 328px";
+// drawn at 327 to 470px). The oak stands taller than the rest (a plain height of 1.72): it fills
+// its column up to 559px, is 475px wide from there to 959px, 0.373 of the window from 960px and
+// 521px from 1395px.
+const OAK = "(max-width: 559px) 85vw, (max-width: 959px) 475px, (max-width: 1395px) 38vw, 521px";
 const SEQUOIA =
   "(max-width: 505px) 80vw, (max-width: 959px) 405px, (max-width: 1025px) 40vw, (max-width: 1279px) 405px, (max-width: 1395px) 32vw, 445px";
 const GLASSES =
@@ -48,6 +48,24 @@ const GLASSES =
 // The brush's wet head lies about 26 degrees before its gold leaf (about-art.ts enso.startDeg), so
 // the circle's sweep starts there and the blackest part of the stroke is drawn first.
 const SWEEP_FROM = `${(enso.startDeg - 26).toFixed(1)}deg`;
+
+// Where the light that runs the circle goes (circle.module.css), as shares of the stroke's box:
+// the stroke's centre, its spark's start at 12 o'clock on the stroke's middle line (the radii's
+// mean, as a share of the box's height), and the leaf's centre, where its glow, its stars and its
+// band of light stand.
+const pct = (share: number) => `${(share * 100).toFixed(2)}%`;
+const [CX, CY] = enso.ink.centre;
+const RADIUS = enso.ink.radii.slice(0, -1).reduce((a, b) => a + b, 0) / (enso.ink.radii.length - 1);
+const SPARK_TOP = CY - (RADIUS * enso.width) / enso.height;
+const LEAF_X = enso.dot.left + enso.dot.size / 2;
+const LEAF_Y =
+  enso.dot.top +
+  (enso.dot.size * enso.dot.height * enso.width) / (enso.dot.width * enso.height) / 2;
+const LEAF_BOX = {
+  left: pct(enso.dot.left),
+  top: pct(enso.dot.top),
+  width: pct(enso.dot.size),
+};
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
@@ -78,6 +96,15 @@ function Opening() {
           data-enso=""
           data-stroke={ready ? "ready" : undefined}
           aria-hidden="true"
+          style={
+            {
+              "--start": SWEEP_FROM,
+              "--cx": pct(CX),
+              "--cy": pct(CY),
+              "--ink": `url(${enso.ink.src})`,
+              "--leaf": `url(${enso.dot.src})`,
+            } as CSSProperties
+          }
         >
           <Image
             ref={stroke}
@@ -93,7 +120,18 @@ function Opening() {
             sizes="(max-width: 833px) 200px, (max-width: 1499px) 24vw, 360px"
             preload
             fetchPriority="high"
-            style={{ "--start": SWEEP_FROM } as CSSProperties}
+          />
+          {/* The light that runs the circle once the brush closes (circle.module.css): the stroke's
+              ink lit gold through a window that travels round it, the spark at the window's head,
+              then the glow at the leaf as the light gathers into it. */}
+          <span className={styles.run} data-run="" />
+          <span className={styles.orbit} data-orbit="">
+            <span className={styles.spark} data-spark="" style={{ top: pct(SPARK_TOP) }} />
+          </span>
+          <span
+            className={styles.glow}
+            data-glow=""
+            style={{ left: pct(LEAF_X), top: pct(LEAF_Y) }}
           />
           {/* The gold start loads at once but is not preloaded, and asks for low priority (React's
               server render writes a preload link for every img that is not lazy unless its
@@ -111,11 +149,21 @@ function Opening() {
             loading="eager"
             fetchPriority="low"
             data-dot=""
-            style={{
-              left: `${(enso.dot.left * 100).toFixed(2)}%`,
-              top: `${(enso.dot.top * 100).toFixed(2)}%`,
-              width: `${(enso.dot.size * 100).toFixed(2)}%`,
-            }}
+            style={LEAF_BOX}
+          />
+          {/* As the light lands, a band of light crosses the leaf (only the leaf: its own picture is
+              the band's mask) and two small stars of light flash beside it; the band and the larger
+              star come back now and then while the page is open. */}
+          <span className={styles.sheen} data-sheen="" style={LEAF_BOX} />
+          <span
+            className={styles.star}
+            data-star=""
+            style={{ left: pct(LEAF_X + 0.033), top: pct(LEAF_Y - 0.045) }}
+          />
+          <span
+            className={`${styles.star} ${styles.starSmall}`}
+            data-star=""
+            style={{ left: pct(LEAF_X - 0.112), top: pct(LEAF_Y + 0.03) }}
           />
         </span>
         <p className={page.kicker}>{copy(about.hero.label)}</p>
@@ -156,16 +204,7 @@ function Purpose() {
       part="purpose"
       side="left"
       labelledBy="purpose-title"
-      picture={
-        <Painting
-          art={seedling}
-          alt={ALT.seedling}
-          sizes={SEEDLING}
-          gold={seedling.gold}
-          caption
-          eager
-        />
-      }
+      picture={<Painting art={oak} alt={ALT.oak} sizes={OAK} gold={oak.gold} caption eager />}
     >
       <p className={`${base.label} ${page.label}`} data-label="">
         {copy(about.purpose.label)}
@@ -175,7 +214,10 @@ function Purpose() {
           <span key={line}>{copy(line)}</span>
         ))}
       </h2>
-      <p className={page.body}>{copy(about.purpose.mission)}</p>
+      {/* The mission stands a step under the heading, in ink (circle.module.css). */}
+      <p className={page.body} data-mission="">
+        {copy(about.purpose.mission)}
+      </p>
     </Spread>
   );
 }

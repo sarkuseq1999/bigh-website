@@ -1,0 +1,10 @@
+Made October 19, 2026 with Codex's built-in image tool (Mo's ChatGPT plan, no API spend), with the
+homepage crane (public/images/home-v2/ink/crane-painted.webp, laid on paper) attached as a style
+reference only. Take 2 of 2 (take 1 had stamped leaf shapes). Mo picked it for "Our purpose" on
+October 19, 2026, in place of the oak seedling.
+
+Prompt:
+
+Traditional loose sumi-e ink painting on one plain sheet of warm, light rice paper with fine fibres, seen flat from straight above, evenly lit, no shadow, no frame, no table, no other objects, no text, no letters, no signature, no red seal, no stamp, no red anywhere. Sumi ink only, from deep black to soft grey washes, plus real gold leaf only where stated. Loose, wet, confident brushwork like the attached crane painting: it must look painted, never like a pen drawing, an etching or a botanical illustration. Generous empty paper on every side.
+
+A great California valley oak, wider than it is tall, painted with loose, wet, quick brushwork: its crown is a few big soft masses of wet ink wash that bleed into the paper, with dark accents of dry brush, never stamped leaf shapes; a gnarled, leaning trunk in a few bold strokes. A simple rope swing hangs from one low branch. A soft grey ground line like the crest of a gentle golden hill. Below the ground line, as if the earth were cut away, its roots spread almost as wide as the crown in pale, wet grey strokes that fade into the paper. At the heart of the roots, just under the trunk, a clear, bright patch of real gold leaf about the size of the swing's seat, as if the roots hold a warm light. Tree and roots together fill about 88% of the picture's height, centred. Portrait picture, 4:5.

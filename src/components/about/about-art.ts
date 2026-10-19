@@ -13,11 +13,11 @@ export const book = {
   gold: "/images/about-bc/book-v1-gold.webp",
 } as const;
 
-export const seedling = {
-  src: "/images/about-bc/seedling-v1.webp",
-  width: 1127,
-  height: 1363,
-  gold: "/images/about-bc/seedling-v1-gold.webp",
+export const oak = {
+  src: "/images/about-bc/oak-v1.webp",
+  width: 1122,
+  height: 1223,
+  gold: "/images/about-bc/oak-v1-gold.webp",
 } as const;
 
 export const desk = {
@@ -76,6 +76,13 @@ export const enso = {
     size: 0.1513,
   },
   startDeg: 32.8,
+  ink: {
+    src: "/images/about-bc/enso-ink-v1.webp",
+    centre: [0.5013, 0.4846],
+    radii: [
+      0.406, 0.415, 0.403, 0.39, 0.385, 0.404, 0.416, 0.408, 0.401, 0.405, 0.412, 0.423, 0.406,
+    ],
+  },
 } as const;
 
 export const hills = {

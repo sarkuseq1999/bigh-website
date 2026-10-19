@@ -6,11 +6,13 @@ failed requests; one h1, English "Be in Good Health." with lang="en"; every lock
 page's main (the footer's "About BiGH" does not stand in for the opening's label); no canvas,
 no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
 and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
-15px+, navigation 18px+, targets 48px+; the opening's circle loads eagerly; Support is a link to its
+15px+, navigation 18px+, targets 48px+; the mission 21px+ and in ink; the opening's circle loads
+eagerly; Support is a link to its
 page; the Ask sheet opens, closes and hands focus back.
 rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
 one picture and its words; on two columns (from 960px) the pictures stand purpose left, roots
-right, experience left, closing right (the opening is centred), and are about the same size, and
+right, experience left, closing right (the opening is centred), and are about the same size but
+the purpose's oak, which stands larger (1.0-1.8 of the others' average), and
 nothing in a words column reaches past its right edge; on one column each picture comes first; the
 name once (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under
 the purpose, experience and closing paintings, none under Dr. Liu's photo or the promise dots; no
@@ -24,13 +26,15 @@ paints itself around slowly from where the brush began (its stroke takes 4s, aft
 0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun: the quarter it starts
 in under half of its ink, the other three bare; stopped at 2.9s it is about three quarters round:
 the first two quarters whole, the third mostly drawn, the one reached last under half of its ink;
-then it ends whole), then its gold comes up (its delay at least the stroke's delay and duration),
-and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
+then it ends whole), then its gold comes up (its delay at least the stroke's delay and duration);
+stopped 5.9s in, a light runs the circle (lit, its spark on the stroke, part way round, the leaf
+not yet landed), then it gathers into the leaf and goes out; reduced motion keeps the light's
+parts hidden; and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
 3s) the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the
 picture is in and draws around, and the gold comes up the stroke's delay and duration after it;
 with no stroke picture, 9s in the gold has not risen alone; with JavaScript off the circle shows
-whole once the stroke and the gold have finished, and every other painting (the hills, the
-seedling, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
+whole once the stroke, the light and the gold have finished, and every other painting (the hills,
+the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -674,6 +678,15 @@ def desktop_and_phone(browser):
         check(f"{tag} every locked line", not missing, missing)
         h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => [h.textContent.trim(), h.lang])")
         check(f"{tag} one English h1", h1 == [["Be in Good Health.", "en"]], h1)
+        # The mission, a step under the heading and in ink (Mo, October 19, 2026: at the body's 19px
+        # grey it was too small to read): 21px or larger, larger than the other parts' body text,
+        # and the ink's #2a2824, not the muted grey.
+        mission = page.evaluate(
+            """(() => { const m = document.querySelector('[data-mission]'), b = document.querySelector('[data-part="roots"] [data-words] p:not([data-label])');
+                 return m && { size: parseFloat(getComputedStyle(m).fontSize), body: parseFloat(getComputedStyle(b).fontSize), color: getComputedStyle(m).color }; })()"""
+        )
+        check(f"{tag} the mission stands a step under the heading, in ink",
+              bool(mission) and mission["size"] >= 21 and mission["size"] > mission["body"] and mission["color"] == "rgb(42, 40, 36)", mission)
         check(f"{tag} no canvas and no brush layer", page.evaluate("!document.querySelector('main canvas') && !document.querySelector('[data-lifts]')"))
         folds = page.evaluate(
             "[...document.querySelectorAll('[data-part]')].filter(p => getComputedStyle(p, '::before').content !== 'none').length + document.querySelectorAll('[data-sheet]').length"
@@ -738,9 +751,16 @@ def rhythm(browser):
         if width >= TWO_COLUMNS:
             sides = {p: v and v["side"] for p, v in r.items()}
             check(f"{tag} pictures on alternating sides", sides == SIDES, sides)
-            heights = sorted(v["height"] for v in r.values() if v)
-            median = heights[len(heights) // 2]
-            check(f"{tag} the pictures about the same size (0.55-1.6 of the median)", all(0.55 <= h / median <= 1.6 for h in heights), heights)
+            # The purpose's oak stands larger than the rest by design (Mo, October 19, 2026); the
+            # other three read about the same size, measured against their average (the middle of
+            # three jumps with whichever painting is middle), and the oak is larger than that
+            # average, not huge.
+            heights = sorted(v["height"] for p, v in r.items() if v and p != "purpose")
+            average = sum(heights) / len(heights)
+            check(f"{tag} the pictures about the same size (0.55-1.6 of their average)", all(0.55 <= h / average <= 1.6 for h in heights), heights)
+            oak = r["purpose"] and r["purpose"]["height"]
+            check(f"{tag} the purpose's oak stands larger (1.0-1.8 of the others' average)",
+                  bool(oak) and 1.0 <= oak / average <= 1.8, {"oak": oak, "others": heights})
             over = page.evaluate(WORDS_FIT_JS)
             check(f"{tag} nothing in a words column past its right edge", not over, over[:4])
         else:
@@ -831,7 +851,7 @@ ENSO_LOG = """(() => {
   requestAnimationFrame(tick);
 })();"""
 
-# The page's paintings but the circle: the hills, the seedling, the pool under Dr. Liu's photo (not
+# The page's paintings but the circle: the hills, the oak, the pool under Dr. Liu's photo (not
 # the photo), the sequoia, the four promise dots and the glasses.
 PAINTINGS = "[data-picture-band], [data-picture] img:not([data-mount] img), [data-promise] img"
 
@@ -874,12 +894,15 @@ def motion(browser):
                       hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < (i.matches('[data-pool]') ? 0.7 : 1)).length,
                       pool: getComputedStyle(document.querySelector('[data-pool]')).opacity,
                       draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage, dot: getComputedStyle(d).opacity,
+                      light: [...document.querySelectorAll('[data-enso] :is([data-run], [data-orbit], [data-glow], [data-sheen], [data-star])')].map(x => getComputedStyle(x).opacity),
                       running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
                         return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""
     )
     check("reduced motion: the circle whole, its gold up, every painting shown, still",
           still["blooms"] == 0 and still["hidden"] == 0 and still["draw"] == "none" and still["mask"] == "none"
           and float(still["dot"]) == 1 and still["running"] == 0, still)
+    check("reduced motion: the light that runs the circle stays hidden (its six parts at opacity 0)",
+          len(still["light"]) == 6 and all(float(o) == 0 for o in still["light"]), still["light"])
     context.close()
 
     # With motion: the circle paints itself slowly (Mo, October 8: "start a moment after the page
@@ -887,7 +910,7 @@ def motion(browser):
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
     # the server sends, before any script could mark one: in the page's main, the hills, the
-    # seedling, the pool, the sequoia, the four promise dots and the glasses (the circle draws
+    # oak, the pool, the sequoia, the four promise dots and the glasses (the circle draws
     # itself instead; the shared closing crane after main is the kit's own).
     html = context.request.get(f"{BASE}/about").text()
     main = html[html.index("<main"):html.index("</main>")]
@@ -925,9 +948,10 @@ def motion(browser):
                                       reduced_motion="reduce" if reduced else "no-preference")
         page = context.new_page()
         page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-        # Still: at once. With motion (script off, so nothing holds): once the stroke and the gold
-        # have finished, 0.6s + 4s + 1.2s from when the page is styled, with a margin.
-        page.wait_for_timeout(1500 if reduced else 7000)
+        # Still: at once. With motion (script off, so nothing holds): once the stroke, the light
+        # that runs it and the leaf's glow have finished (the glow ends 0.6s + 4s + 0.2s + 1.78s +
+        # 2.2s, 8.8s, from when the page is styled) and before the leaf first glints again (13.5s).
+        page.wait_for_timeout(1500 if reduced else 9500)
         box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
         shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
         context.close()
@@ -992,8 +1016,46 @@ def motion(browser):
           clock is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
           and midway[2] >= 0.5 * still_circle[2] and midway[3] <= 0.5 * still_circle[3],
           {"clock_ms": clock, "midway": midway, "still": still_circle})
+    # The light that runs the circle (Mo, October 19, 2026): stopped 5.9s in (1.1s into its 1.9s
+    # run round, which sets off 0.2s after the stroke closes) it is lit and its spark is on the
+    # stroke (its centre within 0.12 of the stroke's box from the stroke's middle line), well past
+    # where the brush began and not yet back (90-350 degrees clockwise from 12 o'clock), and the
+    # leaf has not landed: the light gathers into it.
+    light = page.evaluate(
+        """(ms) => new Promise((resolve) => {
+             const wrap = document.querySelector('[data-enso]');
+             const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
+             if (!draw) return resolve(null);
+             const began = performance.now();
+             const tick = () => {
+               if (Number(draw.currentTime) >= ms) {
+                 wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
+                 const box = wrap.getBoundingClientRect(), s = wrap.querySelector('[data-spark]').getBoundingClientRect();
+                 const cx = box.left + box.width * parseFloat(wrap.style.getPropertyValue('--cx')) / 100;
+                 const cy = box.top + box.height * parseFloat(wrap.style.getPropertyValue('--cy')) / 100;
+                 const dx = s.left + s.width / 2 - cx, dy = s.top + s.height / 2 - cy;
+                 const out = { clock: Math.round(Number(draw.currentTime)),
+                               run: getComputedStyle(wrap.querySelector('[data-run]')).opacity,
+                               spark: getComputedStyle(wrap.querySelector('[data-orbit]')).opacity,
+                               dot: getComputedStyle(wrap.querySelector('[data-dot]')).opacity,
+                               angle: Math.round((Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360),
+                               radius: Math.hypot(dx, dy) / box.width };
+                 wrap.getAnimations({ subtree: true }).forEach((a) => a.play());
+                 return resolve(out);
+               }
+               if (performance.now() - began > 12000) return resolve(null);
+               requestAnimationFrame(tick);
+             };
+             tick();
+           })""",
+        5900,
+    )
+    check("motion: then a light runs the circle (lit, its spark on the stroke, part way round, the leaf not yet landed)",
+          bool(light) and float(light["run"]) > 0.9 and float(light["spark"]) > 0.9 and float(light["dot"]) == 0
+          and 90 <= light["angle"] <= 350 and abs(light["radius"] - 0.405) <= 0.12, light)
     wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'")
-    page.wait_for_timeout(400)
+    check("motion: the light gathers into the leaf and goes out (its parts back to opacity 0)",
+          wait_until(page, "[...document.querySelectorAll('[data-enso] :is([data-run], [data-orbit], [data-glow], [data-sheen], [data-star])')].every(x => getComputedStyle(x).opacity === '0')", 6000))
     end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
     check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
           all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})
