@@ -79,7 +79,7 @@
     gap: 20px;
     align-items: start;
   }
-  .views.two { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .views.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
   figure { margin: 0; display: grid; gap: 8px; min-width: 0; }
   figure a { display: block; }
   figure img {
@@ -104,31 +104,32 @@
   .note { font-size: 0.9rem; color: var(--muted); }
 
   @media (max-width: 720px) {
-    .views, .views.two { grid-template-columns: minmax(0, 1fr); }
+    .views { grid-template-columns: minmax(0, 1fr); }
     .views .phone { max-width: 320px; }
+    .views.three { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
   }
 </style>
 
 <main class="page">
   <section class="lead">
     <span class="tag">Homepage · Make sense of the science.</span>
-    <h1>Idea A: one painting per topic</h1>
-    <p>The mitochondrion now appears only once, in "Tiny power plants." Each tab here gets its own everyday California picture. These are the real homepage with the new paintings swapped in. The words are unchanged. Tap any picture to see it full size.</p>
+    <h1>Built: one painting per topic</h1>
+    <p>These are screenshots of the finished, built site. The mitochondrion now appears only once, in "Tiny power plants." The words are unchanged. Tap any picture to see it full size.</p>
   </section>
 
   <section class="topic">
     <header>
       <span class="tag">Tab 1 · Mitochondria</span>
       <h2>A hummingbird at California sage</h2>
-      <p>Energy you can see. The gold leaf is in its wings.</p>
+      <p>Energy you can see. The page's slow band of light crosses the gold leaf in its wings as you read.</p>
     </header>
     <div class="views">
       <figure>
-        <a href="img/desktop-energy.webp" target="_blank" rel="noopener"><img src="img/desktop-energy.webp" alt="Laptop view: the Mitochondria tab beside a painting of a hummingbird hovering at pink sage flowers, gold leaf in its wings" width="1440" height="900"></a>
+        <a href="built/desktop-energy.webp" target="_blank" rel="noopener"><img src="built/desktop-energy.webp" alt="Laptop: the Mitochondria topic beside the hummingbird painting" width="1440" height="900"></a>
         <figcaption>Laptop</figcaption>
       </figure>
       <figure class="phone">
-        <a href="img/phone-energy.webp" target="_blank" rel="noopener"><img src="img/phone-energy.webp" alt="Phone view of the hummingbird painting under the tab's links" width="780" height="800"></a>
+        <a href="built/phone-energy.webp" target="_blank" rel="noopener"><img src="built/phone-energy.webp" alt="Phone: the hummingbird painting" width="780" height="760"></a>
         <figcaption>Phone</figcaption>
       </figure>
     </div>
@@ -137,16 +138,16 @@
   <section class="topic">
     <header>
       <span class="tag">Tab 2 · Free radicals</span>
-      <h2>A cut apple and a Meyer lemon</h2>
-      <p>One half has browned. The half with lemon juice stays fresh. The gold leaf is on the lemon. It's a comparison, not the same chemistry, and the "Illustrations" label stays.</p>
+      <h2>A cut apple and a Meyer lemon, repainted</h2>
+      <p>Softer now, with no drawn edges. One half has browned. The half with lemon juice stays fresh. It sits on the same ground line as the Joshua tree.</p>
     </header>
     <div class="views">
       <figure>
-        <a href="img/desktop-balance.webp" target="_blank" rel="noopener"><img src="img/desktop-balance.webp" alt="Laptop view: the Free radicals tab beside a painting of two apple halves, one browned, one fresh, and half a lemon" width="1440" height="900"></a>
+        <a href="built/desktop-balance.webp" target="_blank" rel="noopener"><img src="built/desktop-balance.webp" alt="Laptop: the Free radicals topic beside the apple and lemon painting" width="1440" height="900"></a>
         <figcaption>Laptop</figcaption>
       </figure>
       <figure class="phone">
-        <a href="img/phone-balance.webp" target="_blank" rel="noopener"><img src="img/phone-balance.webp" alt="Phone view of the apple and lemon painting" width="780" height="800"></a>
+        <a href="built/phone-balance.webp" target="_blank" rel="noopener"><img src="built/phone-balance.webp" alt="Phone: the apple and lemon painting" width="780" height="760"></a>
         <figcaption>Phone</figcaption>
       </figure>
     </div>
@@ -155,40 +156,48 @@
   <section class="topic">
     <header>
       <span class="tag">Tab 3 · Aging cells</span>
-      <h2>A California valley oak that ages with the slider</h2>
-      <p>The same tree, on the same spot. At 30 it is young and straight. At 80 it is thick, twisted, missing a limb, and still full of leaves.</p>
+      <h2>A Joshua tree that ages with the slider</h2>
+      <p>Young, it is one trunk. In its middle years it has three arms. Old, it has many. The slider always shows one whole tree, never two blended. It opens at 45.</p>
     </header>
-    <div class="views two">
+    <div class="views three">
       <figure>
-        <a href="img/desktop-aging-30.webp" target="_blank" rel="noopener"><img src="img/desktop-aging-30.webp" alt="Laptop view: the Aging cells tab with the age slider at 30 and a young valley oak" width="1440" height="900"></a>
-        <figcaption>Laptop, age 30</figcaption>
+        <a href="built/desktop-age35.webp" target="_blank" rel="noopener"><img src="built/desktop-age35.webp" alt="Laptop: age 35, a young Joshua tree with a single trunk" width="1440" height="900"></a>
+        <figcaption>Age 35</figcaption>
       </figure>
       <figure>
-        <a href="img/desktop-aging-80.webp" target="_blank" rel="noopener"><img src="img/desktop-aging-80.webp" alt="Laptop view: the Aging cells tab with the age slider at 80 and an old, twisted valley oak" width="1440" height="900"></a>
-        <figcaption>Laptop, age 80</figcaption>
+        <a href="built/desktop-age45.webp" target="_blank" rel="noopener"><img src="built/desktop-age45.webp" alt="Laptop: age 45, the Joshua tree with three arms" width="1440" height="900"></a>
+        <figcaption>Age 45 (opens here)</figcaption>
+      </figure>
+      <figure>
+        <a href="built/desktop-age70.webp" target="_blank" rel="noopener"><img src="built/desktop-age70.webp" alt="Laptop: age 70, an old Joshua tree with many arms" width="1440" height="900"></a>
+        <figcaption>Age 70</figcaption>
       </figure>
     </div>
-    <div class="views two">
-      <figure class="phone">
-        <a href="img/phone-aging-30.webp" target="_blank" rel="noopener"><img src="img/phone-aging-30.webp" alt="Phone view: young oak and the age slider at 30" width="780" height="900"></a>
-        <figcaption>Phone, age 30</figcaption>
+    <div class="views three">
+      <figure>
+        <a href="built/phone-age35.webp" target="_blank" rel="noopener"><img src="built/phone-age35.webp" alt="Phone: age 35, the young tree" width="780" height="900"></a>
+        <figcaption>Phone, 35</figcaption>
       </figure>
-      <figure class="phone">
-        <a href="img/phone-aging-80.webp" target="_blank" rel="noopener"><img src="img/phone-aging-80.webp" alt="Phone view: old oak and the age slider at 80" width="780" height="900"></a>
-        <figcaption>Phone, age 80</figcaption>
+      <figure>
+        <a href="built/phone-age45.webp" target="_blank" rel="noopener"><img src="built/phone-age45.webp" alt="Phone: age 45, the tree with three arms" width="780" height="900"></a>
+        <figcaption>Phone, 45</figcaption>
+      </figure>
+      <figure>
+        <a href="built/phone-age70.webp" target="_blank" rel="noopener"><img src="built/phone-age70.webp" alt="Phone: age 70, the old tree" width="780" height="900"></a>
+        <figcaption>Phone, 70</figcaption>
       </figure>
     </div>
   </section>
 
   <section class="stand">
     <span class="tag">My honest score</span>
-    <p class="score">8 <small>out of 10, as a direction</small></p>
-    <p>The homepage needs 9 before it goes live. What still holds it back:</p>
+    <p class="score">8.5 <small>out of 10</small></p>
+    <p>The hummingbird and the Joshua tree are at the homepage's bar. What still holds the section back:</p>
     <ul>
-      <li>The apple looks more like a soft watercolour than brush and ink. I'd paint it again.</li>
-      <li>The slider starts at 45. Between the ends, the old tree shows as a faint ghost behind the young one. In the build, it would start at 30 and switch trees quickly in the middle.</li>
-      <li>The apple sits high in its frame and leaves empty paper below. I'd tighten that.</li>
+      <li>The apple is better but still reads as soft watercolour more than brush and ink. Five tries gave the same look.</li>
+      <li>The gold on the lemon and the tree is pale. It reads as yellow paint more than gold leaf.</li>
+      <li>Gold on the lemon stretches the rule that gold means energy. It can be plain yellow if you prefer.</li>
     </ul>
-    <p class="note">Nothing on the real site has changed. Codex painted these on your ChatGPT plan, with no extra spend.</p>
+    <p class="note">Checked on the built site: the homepage check passed 282 of 282 and the menu check 436 of 436. It is saved on its own branch and is not live. Codex painted these on your ChatGPT plan, with no extra spend.</p>
   </section>
 </main>
