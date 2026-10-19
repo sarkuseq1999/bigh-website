@@ -69,6 +69,13 @@ These sit on top of `DESIGN.md`.
   ingredients, the books running in from the page edge, Dr. Liu right, the brushed 3 × 30 = 90
   across the page, the bottle left. Phones keep one column. NuriCell only for now
   (`nuricell.module.css`); the other four product pages still put every painting on the left.
+- **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
+  the purpose and its mission line too small to read. She picked a big painted valley oak (a rope
+  swing above the ground, a gold light in the roots you can't see); it stands larger than the
+  page's other paintings on purpose. The mission line sits a step under the heading, in ink, not
+  the grey body size. The opening circle's gold leaf lands as a spark of gold light runs once
+  round the stroke ("light runs the circle"), then glints now and then. Keep that light gold,
+  never red.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

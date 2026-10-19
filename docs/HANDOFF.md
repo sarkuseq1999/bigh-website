@@ -5,20 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 18, 2026, by Claude Code.
+- **Last updated:** October 19, 2026, by Claude Code (About).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `main` has caught up with the demo. Mo pasted the push (`studio:main` at `5b7ba74`);
-  Vercel built production `dpl_E8PnPqm45gWJu2fdZG8KGLCgjmMS`, which now serves
-  `bigh-website.vercel.app`. The demo alias was moved to that same production build.
-- **What it carries:** Codex's Propolis work (Bold Signature desktop, Editorial pair mobile,
-  Weathered Taupe A footer sign). No other page changed.
-- **Checks:** lint, type check, formatting, build; built site `qa_propolis_ink` 273,
-  `qa_fda` 220, `qa_home_ink` 282, `qa_nav` 436, `qa_science_ink` 1279, all passing. Public demo:
-  `qa_propolis_ink` 273/273, `qa_fda` 220/220, `qa_home_ink` 282/282, `qa_nav` 436/436,
-  `qa_science_ink` 1279/1279. Desktop and phone screenshots of both public addresses inspected.
+- **State:** `studio` is five local commits ahead of `main`, none pushed: the FDA sign trial
+  (`df0bb65`), NuriCell layout B (`433ac7b`), the redwood park sign on Propolis (`f1b528f`), and
+  About's oak and circle light (two commits, below). `main` and the demo are still the October 18
+  build at `5b7ba74`.
+- **About (Mo picked both from mockups, October 19):** "Our purpose" shows a big painted valley
+  oak (rope swing, gold light in the roots) in place of the seedling, larger than the page's other
+  paintings on purpose; the mission line is a step under the heading, in ink. The opening circle's
+  gold leaf lands as a spark of gold light runs once round the stroke, then glints now and then.
+  The oak was painted with Codex's image tool (no API spend); notes in `reference/ink-pages/spend.md`.
+  Its description is a draft translation (m900).
+- **About checks:** lint, type check, formatting of the changed files, build; built site
+  `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav` 436/436 on top of `433ac7b`; then on top
+  of `f1b528f` (the five commits together) `qa_about` 353/353 and `qa_fda` 220/220. Desktop, phone
+  and the four other languages inspected; the circle filmed frame by frame on dev and the built
+  site. Not yet checked on the public demo (nothing pushed).
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **In progress:** None. **Next:** Mo's call.
+- **In progress:** another session's home-science paintings (untracked in
+  `reference/ink-pages/home-science/`). **Next:** Mo's call on pushing these commits.
 
 ## What's live
 
@@ -49,7 +56,8 @@ spend are in `reference/ink-pages/<page>/`.
 
 - **Translations:** new lines are drafts and need a native speaker's check: NuriCell m594–m609,
   Science m650–m661 (some older Science lines are still English in four languages), OPC m700–m705,
-  Turmerific m740–m744, Nature Calm m780–m784. Support is English only for now (its keys start at m618).
+  Turmerific m740–m744, Nature Calm m780–m784, About's oak m900. Support is English only for now
+  (its keys start at m618).
 - **Support form:** sends nothing yet. Real email needs an email service and domain setup (Mo's call
   and spend).
 - **Capsule colours:** unknown for Turmerific (painted gold) and Nature Calm (painted pale). Ask Mo.
