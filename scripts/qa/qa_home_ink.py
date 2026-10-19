@@ -17,8 +17,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
     words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
     Discover link to its page; the stories say
-    "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, the
-    age slider ages the cell and "Illustration, not a measurement" shows; research: filters and
+    "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, each
+    with its own painting (the mitochondrion only in the cell above), the age slider ages the
+    Joshua tree one whole painting at a time (no two trees blended) and "Illustration, not a
+    measurement" shows; research: filters and
     show all; no sideways scrolling; every image loads; text at least 15 px (reading text at least
     17 px); buttons and links at least 44 px tall.
   - desktop 1280x720: the opening holds (headline, intro and pills inside the window, clear of
@@ -108,7 +110,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     glides to a topic; a topic leaves whole (its heading with its words) and between two topics a
     heading always stands in focus under the index (the next comes into focus as one leaves);
     the age slider ages the
-    cell on the third topic, with its honesty line;
+    Joshua tree on the third topic, with its honesty line;
     each topic's explainer opens its own sheet; the painting, the index and the last topic leave
     together with no jump; the brush line passes beside the pinned painting (round 9: in the gap
     between the words and the painting's column, no longer the far margin), never over the
@@ -564,7 +566,7 @@ PAINTINGS = """(() => {
     quote: parseFloat(getComputedStyle(document.querySelector('#stories article h3')).fontSize),
     choices: r('#stories [data-brush=story-choices]'), arrows: r('#stories button[aria-label="Next sample story"]'),
     arrowsBox: r('#stories button[aria-label="Previous sample story"]'),
-    science: r('#science [data-brush=science-mito]'), inkstone: r('#scientists img[src*=inkstone]'),
+    science: r('#science [data-brush=science-painting]'), inkstone: r('#scientists img[src*=inkstone]'),
   };
 })()"""
 
@@ -636,7 +638,7 @@ FINALE = """(() => {
 
 def set_age(page, value):
     """Move the age slider (as a hand would) and read the age shown, the honesty line's opacity
-    and the aged painting's opacity."""
+    and the opacity of each of the Joshua tree's three paintings (young, middle, old)."""
     page.evaluate(
         f"""(() => {{ const input = document.querySelector('#science input[type=range]');
           const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
@@ -647,12 +649,16 @@ def set_age(page, value):
     honesty = page.evaluate(
         "(() => { const e = [...document.querySelectorAll('#science p')].find(s => s.textContent.includes('Illustration, not a measurement')); if (!e) return 0; return +getComputedStyle(e.parentElement).opacity; })()"
     )
-    aged = float(
-        page.evaluate(
-            "(() => { const i = [...document.querySelectorAll('#science img')].find(i => i.src.includes('mito-aged')); return i ? +getComputedStyle(i).opacity : 0; })()"
-        )
+    trees = page.evaluate(
+        "[...document.querySelectorAll('#science img')].filter(i => i.src.includes('/science/joshua-')).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
     )
-    return age, honesty, aged
+    return age, honesty, trees
+
+
+def one_tree(trees, want):
+    """At rest exactly one of the tree's ages shows: the paintings up to it are whole (each covers
+    the younger ones under it) and the older ones are gone, none half faded into a ghost."""
+    return len(trees) == 3 and trees == [1.0 if i <= want else 0.0 for i in range(3)]
 
 
 # Round 7: the science block's mode (the scroll story or the tabs) and its height.
@@ -661,8 +667,8 @@ TABBED = """(() => { const s = document.querySelector('#science');
     sticky: getComputedStyle(s.querySelector('figure')).position }; })()"""
 
 # Round 7: the scroll story's state: the pinned painting and index, the topic shown, each topic's
-# heading (top, bottom, opacity, words) and each painting layer's opacity (closeup, young, radicals,
-# aged), in the window.
+# heading (top, bottom, opacity, words) and each painting's opacity as seen (hummingbird, apple,
+# then the Joshua tree young, middle, old, each times its layer's), in the window.
 STORY_STATE = """(() => {
   const s = document.querySelector('#science'); const cs = getComputedStyle(s);
   const fig = s.querySelector('figure'); const nav = s.querySelector('nav');
@@ -678,7 +684,8 @@ STORY_STATE = """(() => {
     titles: [...s.querySelectorAll('[data-step] h3')].map(h => [r(h)[1], r(h)[3], +getComputedStyle(h).opacity * +getComputedStyle(h.parentElement).opacity, h.textContent]),
     words: [...s.querySelectorAll('[data-step]')].map(e => { const k = [...e.children].map(r);
       return [Math.min(...k.map(b => b[0])), Math.min(...k.map(b => b[1])), Math.max(...k.map(b => b[2])), Math.max(...k.map(b => b[3]))]; }),
-    layers: [...fig.querySelectorAll('img')].map(i => +getComputedStyle(i).opacity),
+    layers: [...fig.querySelectorAll('img')].map(i => +getComputedStyle(i).opacity *
+      (i.parentElement.hasAttribute('data-bloom') ? 1 : +getComputedStyle(i.parentElement).opacity)),
   };
 })()"""
 
@@ -707,11 +714,13 @@ def story_landing(page, i):
 def painting_shows(state, i):
     """Is topic i's painting the one on the stage (the others gone)?"""
     a = state["layers"]
+    if len(a) != 5:
+        return False
     if i == 0:
-        return a[0] >= 0.95 and a[2] <= 0.05 and a[3] <= 0.05
+        return a[0] >= 0.95 and a[1] <= 0.05 and max(a[2:]) <= 0.05
     if i == 1:
-        return a[2] >= 0.95 and a[0] <= 0.05 and a[3] <= 0.05
-    return a[1] + a[3] >= 0.95 and a[0] <= 0.05 and a[2] <= 0.05
+        return a[1] >= 0.95 and a[0] <= 0.05 and max(a[2:]) <= 0.05
+    return a[2] >= 0.95 and a[0] <= 0.05 and a[1] <= 0.05
 
 
 def science_story(page, tag, name, view_h):
@@ -782,12 +791,17 @@ def science_story(page, tag, name, view_h):
         f"no heading at {empty} px past the first topic (of {b - a})",
     )
     walk_to(page, story_landing(page, 2))
-    # The third topic: the age slider still ages the cell, with its honesty line.
-    age, honesty, aged = set_age(page, 70)
+    # The third topic: the age slider ages the Joshua tree, one whole painting at a time, with its
+    # honesty line: it opens at 45 on the middle tree; 35 is the young one, 70 the old.
+    rest = page.evaluate(
+        "[...document.querySelectorAll('#science img')].filter(i => i.src.includes('/science/joshua-')).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
+    )
+    _, _, young = set_age(page, 35)
+    age, honesty, old = set_age(page, 70)
     check(
-        f"{tag}: on the third topic the age slider ages the cell; honesty label shown",
-        age == "70" and honesty > 0.9 and 0.7 < aged < 0.9,
-        f"age {age}, label {honesty}, aged {aged:.2f}",
+        f"{tag}: on the third topic the age slider ages the Joshua tree, one tree at a time; honesty label shown",
+        age == "70" and honesty > 0.9 and one_tree(rest, 1) and one_tree(young, 0) and one_tree(old, 2),
+        f"age {age}, label {honesty}, trees at 45 {rest}, at 35 {young}, at 70 {old}",
     )
     shoot(page, f"{name}-06-science-age")
     set_age(page, 45)
@@ -1449,7 +1463,7 @@ def run(browser, look, mobile):
         page.click("#science [role=tab]:has-text('Aging cells')")
         page.wait_for_timeout(1300)
         aging = page.locator("#science [role=tabpanel] h3").text_content()
-        age, honesty, aged = set_age(page, 70)
+        age, honesty, old = set_age(page, 70)
         scroll_to(page, top_of(page, "#science figure") - 90, 900)
         shoot(page, f"{name}-06-science-age")
         check(
@@ -1458,10 +1472,11 @@ def run(browser, look, mobile):
             f"{radicals} | {aging}",
         )
         check(
-            f"{tag}: the age slider ages the cell; honesty label shown",
-            age == "70" and honesty > 0.9 and 0.7 < aged < 0.9,
-            f"age {age}, label {honesty}, aged {aged:.2f}",
+            f"{tag}: the age slider ages the Joshua tree (the old one, alone, at 70); honesty label shown",
+            age == "70" and honesty > 0.9 and one_tree(old, 2),
+            f"age {age}, label {honesty}, trees {old}",
         )
+        set_age(page, 45)
         page.click("#science [role=tab]:has-text('Mitochondria')")
 
     # Research.

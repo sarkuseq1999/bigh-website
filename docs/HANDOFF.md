@@ -7,9 +7,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 19, 2026, by Claude Code (About).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` is five local commits ahead of `main`, none pushed: the FDA sign trial
-  (`df0bb65`), NuriCell layout B (`433ac7b`), the redwood park sign on Propolis (`f1b528f`), and
-  About's oak and circle light (two commits, below). `main` and the demo are still the October 18
+- **State:** `studio` is seven local commits ahead of `main`, none pushed: the FDA sign trial
+  (`df0bb65`), NuriCell layout B (`433ac7b`), the redwood park sign on Propolis (`f1b528f`),
+  About's oak and circle light (two commits, below) and the homepage science section (two
+  commits, below). `main` and the demo are still the October 18
   build at `5b7ba74`.
 - **About (Mo picked both from mockups, October 19):** "Our purpose" shows a big painted valley
   oak (rope swing, gold light in the roots) in place of the seedling, larger than the page's other
@@ -24,8 +25,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   site. Not yet checked on the public demo (nothing pushed).
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **In progress:** another session's home-science paintings (untracked in
-  `reference/ink-pages/home-science/`). **Next:** Mo's call on pushing these commits.
+- **Homepage science section (Mo picked from mockups, October 19, Claude Code):** each of "Make
+  sense of the science."'s three topics has its own painting (a hummingbird at California sage, a
+  cut apple kept fresh by a Meyer lemon, a Joshua tree at three ages on the age slider), so the
+  mitochondrion shows only in "Tiny power plants." Mo chose the Joshua tree over a second oak,
+  since About now has the oak. The slider shows one whole tree at a time, never two blended.
+  Built on branch `home-science` in a separate worktree while another session worked here, then
+  replayed onto this `studio` and fast-forwarded in. Built site `qa_home_ink` 282/282 and
+  `qa_nav` 436/436, desktop (with motion) and phone screenshots. Notes:
+  `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
+- **In progress:** None from this work. **Next:** Mo's call on pushing these commits.
 
 ## What's live
 

@@ -6,16 +6,17 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { gold, mito } from "./assets";
+import { gold, sciencePaintings } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
-import { useTint } from "./ink-color";
 
-// "Make sense of the science." Three topics beside the SAME ink mitochondrion: close in on its two
-// gold-leaf folds, where energy is made (mitochondria); whole, with a frayed edge and a few
-// dry-brush flicks breaking away (free radicals, kept in balance); and, for aging cells, the young
-// and the older organelle (registered onto each other) blended by an age slider, with the honesty
-// line "Illustration, not a measurement".
+// "Make sense of the science." Three topics, each beside its own everyday California painting
+// (Mo, October 19, 2026: the mitochondrion is shown once, in "Tiny power plants.", above): a
+// hummingbird at a sage flower, energy you can see, the light crossing the gold leaf in its wings
+// (mitochondria); a cut apple, one half browned and one kept fresh by a drop of lemon (free
+// radicals); and one Joshua tree at three ages, young, middle and old, chosen by an age slider,
+// with the honesty line "Illustration, not a measurement" (aging cells). The slider shows one tree
+// at a time, never two blended into a ghost.
 //
 // Round 7 (October 4): from 900px up, with motion, the block is a scroll story, one idea per
 // screen, as Timeline explains its science. The painting is pinned (sticky) beside the words, the
@@ -24,6 +25,9 @@ import { useTint } from "./ink-color";
 // blooms into that topic's state. Phones and reduced motion keep the three tabs.
 const AGE_MIN = 30;
 const AGE_MAX = 80;
+/** The ages at which the slider moves the Joshua tree on to its next painting (young until 43,
+ *  middle until 68, then old): the slider opens at 45 on the middle tree. */
+const TREE_FROM = [43, 68];
 /** Paper between the index and a topic's first line when the topic has arrived. */
 const LEAD = 48;
 /** The reading line, as far down the window as the brush line draws (brush.tsx). */
@@ -79,7 +83,6 @@ function useStoryFits(wanted: boolean) {
 }
 
 export function Science() {
-  const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const wanted = useScrollStory();
@@ -98,6 +101,7 @@ export function Science() {
   const gliding = useRef<(() => void) | null>(null);
   const article = scienceArticles[topic];
   const aged = (age - AGE_MIN) / (AGE_MAX - AGE_MIN);
+  const tree = TREE_FROM.filter((from) => age >= from).length;
 
   const onKey = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
     const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[event.key];
@@ -363,47 +367,44 @@ export function Science() {
             ref={figure}
             className={styles.figure}
             data-topic={topic}
-            data-brush="science-mito"
+            data-brush="science-painting"
           >
             <div className={styles.stage} data-bloom="">
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
               <img
                 className={`${base.ink} ${styles.layer}`}
-                src={tint(mito.closeup.src)}
+                src={sciencePaintings.energy.src}
                 alt=""
                 loading="lazy"
                 data-on={topic === 0}
               />
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
+              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
               <img
                 className={`${base.ink} ${styles.layer}`}
-                src={tint(mito.glow.src)}
-                alt=""
-                loading="lazy"
-                data-on={topic === 2}
-                style={topic === 2 ? { opacity: 1 - aged } : undefined}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
-              <img
-                className={`${base.ink} ${styles.layer}`}
-                src={tint(mito.radicals.src)}
+                src={sciencePaintings.balance.src}
                 alt=""
                 loading="lazy"
                 data-on={topic === 1}
               />
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of one painting */}
-              <img
-                className={`${base.ink} ${styles.layer} ${styles.aged}`}
-                src={tint(mito.aged.src)}
-                alt=""
-                loading="lazy"
-                data-on={topic === 2}
-                style={{ ["--aged" as string]: aged }}
-              />
+              {/* The Joshua tree's three ages, one layer of the stage that multiplies as one:
+                  each older tree lies over the younger ones and covers them. */}
+              <div className={`${base.ink} ${styles.layer}`} data-on={topic === 2}>
+                {sciencePaintings.aging.map((painting, i) => (
+                  // eslint-disable-next-line @next/next/no-img-element -- one age of the tree
+                  <img
+                    key={painting.src}
+                    className={styles.tree}
+                    src={painting.src}
+                    alt=""
+                    loading="lazy"
+                    data-on={tree >= i}
+                  />
+                ))}
+              </div>
               <span
                 className={`${base.gold} ${styles.leafLight}`}
                 data-on={topic === 0}
-                style={{ ["--gold" as string]: `url(${gold.closeup})` }}
+                style={{ ["--gold" as string]: `url(${gold.energy})` }}
               />
             </div>
             <figcaption className={`${base.caption} ${styles.caption}`}>

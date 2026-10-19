@@ -123,8 +123,8 @@
   margin-top: 32px;
 }
 
-/* One painting, three states. Its column (the rail) is the brush line's anchor: it never moves,
-   while in the scroll story the painting inside it is pinned. */
+/* One stage, a painting for each topic. Its column (the rail) is the brush line's anchor: it never
+   moves, while in the scroll story the stage inside it is pinned. */
 .rail {
   min-width: 0;
   margin: 0 calc(-0.6 * var(--gutter)) 0 0;
@@ -146,7 +146,7 @@
   mix-blend-mode: multiply;
 }
 
-/* Light on the two gold folds of the close view. */
+/* Light on the gold leaf in the hummingbird's wings. */
 .stage > .leafLight {
   opacity: 0;
 }
@@ -168,14 +168,21 @@
   opacity: 1;
 }
 
-.aged[data-on="true"] {
-  opacity: var(--aged);
-  transition: opacity 0.25s linear;
+/* The Joshua tree's ages lie one over another inside their layer (which multiplies onto the paper
+   as one): each painting is opaque white paper, so the oldest one shown covers the younger ones
+   and only one tree is ever seen at rest. A new age fades in over the last; going back, it fades
+   out to show the younger tree under it. */
+.tree {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
 }
 
-/* While the slider moves, the two paintings cross-fade at the slider's pace. */
-.figure[data-topic="2"] .layer {
-  transition: opacity 0.25s linear;
+.tree[data-on="true"] {
+  opacity: 1;
 }
 
 .caption {
@@ -366,19 +373,19 @@
       animation-range: exit 0px exit 60px;
     }
 
-    /* The light crosses the close view's gold folds while its topic is read (the painting is
-       pinned, so it follows the topic, not the painting). */
+    /* The light crosses the gold in the hummingbird's wings while its topic is read (the
+       painting is pinned, so it follows the topic, not the painting). */
     .science.story {
-      timeline-scope: --science-mito;
+      timeline-scope: --science-energy;
     }
 
     .science.story [data-step="0"] {
-      view-timeline: --science-mito block;
+      view-timeline: --science-energy block;
     }
 
     .science.story .stage > .leafLight {
       animation: leaf-pass linear both;
-      animation-timeline: --science-mito;
+      animation-timeline: --science-energy;
       animation-range: cover 12% cover 50%;
     }
   }

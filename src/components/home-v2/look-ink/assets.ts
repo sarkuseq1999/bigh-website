@@ -46,22 +46,37 @@ export const craneRest: Picture = { src: `${I}/crane-rest-v2.webp`, width: 560, 
  *  smooth wet washes, no drawn sheet of paper. */
 export const inkstone: Picture = { src: `${I}/inkstone-v2.webp`, width: 1200, height: 896 };
 
-/** The ink mitochondrion with its two gold-leaf folds (ink), a close view, and two variations. */
-export const mito: Record<"glow" | "closeup" | "aged" | "radicals", Picture> = {
+/** The ink mitochondrion with its two gold-leaf folds (ink): "Tiny power plants." only. */
+export const mito: Record<"glow", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
-  /** Close in on the two gold folds, where energy is made (its own plate, the edges dissolving). */
-  closeup: { src: `${I}/mito-closeup.webp`, width: 1600, height: 1195 },
-  /** The same organelle, older: registered onto the first so the age slider blends one cell. */
-  aged: { src: `${I}/mito-aged.webp`, width: 1600, height: 1195 },
-  /** The same organelle with a frayed edge and a few dry-brush flicks: oxidative stress. */
-  radicals: { src: `${I}/mito-radicals.webp`, width: 1600, height: 1195 },
 };
+
+/** "Make sense of the science." (Mo, October 19, 2026: idea A): each topic its own everyday
+ *  California painting, so the mitochondrion is shown once, in "Tiny power plants.", not four
+ *  times. Painted by Codex, already in colour (they are not tinted); built by
+ *  reference/ink-pages/home-science/build_home_science.py into the stage's box (ink). */
+const S = `${I}/science`;
+export const sciencePaintings = {
+  /** A hummingbird at California hummingbird sage: energy you can see, gold leaf in its wings. */
+  energy: { src: `${S}/hummingbird-v1.webp`, width: 1600, height: 1195 },
+  /** A cut apple, one half browned and one kept fresh by a drop of Meyer lemon (gold leaf on the
+   *  lemon's face): what oxidation looks like, and what slows it. A comparison, not the same
+   *  chemistry; the stage says "Illustrations". */
+  balance: { src: `${S}/apple-lemon-v1.webp`, width: 1600, height: 1195 },
+  /** One Joshua tree at three ages on the same spot (one crop, so they line up): young, a single
+   *  trunk; middle, three arms; old, many. The age slider shows one of them at a time. */
+  aging: [
+    { src: `${S}/joshua-young-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/joshua-middle-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/joshua-old-v1.webp`, width: 1600, height: 1195 },
+  ],
+} satisfies Record<string, Picture | Picture[]>;
 
 /** Where each painting is gold leaf, as an alpha mask (build_assets.py gold): the page lays a
  *  moving band of light over the painting through it, so only the leaf catches the light. */
 export const gold = {
   mito: `${I}/mito-gold.webp`,
-  closeup: `${I}/mito-closeup-gold.webp`,
+  energy: `${S}/hummingbird-v1-gold.webp`,
   purpose: `${I}/purpose-gold.webp`,
 };
 
