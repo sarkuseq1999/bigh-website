@@ -33,10 +33,13 @@ URL = "/images/about-bc"
 TS = REPO / "src/components/about/about-art.ts"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
-# The take of each painting that ships (the original's name after "gpt25-").
+# The take of each painting that ships (the original's name after "gpt25-"; an original made with
+# another tool keeps its whole name, as Codex's oak does).
+# The oak replaced the seedling in "Our purpose" (Mo, October 19, 2026: the seedling was too slight
+# for the section's weight). The seedling's original stays in originals/; it no longer ships.
 TAKES = {
     "book": "book-v1",
-    "seedling": "seedling-v1",
+    "oak": "codex-oak-v1",
     "desk": "desk-v1",
     "sequoia": "sequoia-v3",
     "palms": "palms-v1",
@@ -65,8 +68,10 @@ _load = bd.load
 
 
 def load(take):
-    """D's load, with the MIRRORED takes flipped left to right (bd.painting calls bd.load)."""
-    img = _load(take)
+    """D's load, with the MIRRORED takes flipped left to right (bd.painting calls bd.load). An
+    original named in full (codex-oak-v1.png) is read as it is."""
+    own = bd.ORIG / f"{take}.png"
+    img = Image.open(own).convert("RGB") if own.exists() else _load(take)
     return img.transpose(Image.Transpose.FLIP_LEFT_RIGHT) if take in MIRRORED else img
 
 
@@ -150,7 +155,44 @@ def enso():
     cy = dot["top"] * h + dot["size"] * w * dot["height"] / dot["width"] / 2
     angle = math.degrees(math.atan2(cx - w / 2, -(cy - h / 2))) % 360
     art["startDeg"] = round(angle, 1)
+    art["ink"] = enso_ink(art)
     return art
+
+
+def enso_ink(art):
+    """The circle's ink as an alpha mask, for the gold light that runs once round the stroke when
+    it closes (Mo, October 19, 2026): black where the ink is, clear on bare paper, the stroke's dry
+    gaps kept. 720px wide is plenty for a light (the stroke shows at most 360px wide). Also the
+    stroke's centre and its middle line's radius every 30 degrees from where the conic sweeps
+    measure (12 o'clock, clockwise), from a circle fitted to the ink, so the light's spark can
+    follow the brush."""
+    with Image.open(OUT / f"enso-{V}.webp") as im:
+        grey = im.convert("L")
+    w = 720
+    h = round(grey.height * w / grey.width)
+    a = np.asarray(grey.resize((w, h), Image.LANCZOS)).astype(np.float32)
+    alpha = np.clip((255 - a) * 1.15, 0, 255).astype(np.uint8)
+    rgba = np.zeros((h, w, 4), np.uint8)
+    rgba[..., 3] = alpha
+    name = f"enso-ink-{V}"
+    Image.fromarray(rgba, "RGBA").save(OUT / f"{name}.webp", quality=80, alpha_quality=80, method=6)
+    ys, xs = np.nonzero(alpha > 128)
+    x, y = xs.astype(np.float64), ys.astype(np.float64)
+    (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * x, 2 * y, np.ones_like(x)], x * x + y * y, rcond=None)
+    r0 = math.sqrt(c + cx * cx + cy * cy)
+    radii = []
+    for deg in range(0, 361, 30):
+        t = math.radians(deg)
+        rs = np.linspace(0.6 * r0, 1.35 * r0, 240)
+        px = np.clip((cx + np.sin(t) * rs).astype(int), 0, w - 1)
+        py = np.clip((cy - np.cos(t) * rs).astype(int), 0, h - 1)
+        v = alpha[py, px].astype(np.float64)
+        radii.append(round(float((rs * v).sum() / v.sum()) / w if v.sum() > 255 else r0 / w, 3))
+    return {
+        "src": f"{URL}/{name}.webp",
+        "centre": [round(cx / w, 4), round(cy / h, 4)],
+        "radii": radii,
+    }
 
 
 def copied(name):
@@ -190,7 +232,9 @@ if __name__ == "__main__":
     write_ts(
         [
             ("book", gilded("book", 1400)),
-            ("seedling", gilded("seedling", 1200)),
+            # The oak's gold is a pale glow at the root heart: at 0.3 the mask held its brightest flakes
+            # (0.41% of the picture); at 0.22 it holds the glow, with nothing on the grey ink.
+            ("oak", gilded("oak", 1200, sat_from=0.22)),
             ("desk", bd.painting("desk", "desk", 1400)),
             # The sequoia's leaf is pale crackled gold: at 0.3 the mask held half the leaf's
             # outline (0.047% of the picture, the outline 0.092%), at 0.25 it holds 0.06% with no

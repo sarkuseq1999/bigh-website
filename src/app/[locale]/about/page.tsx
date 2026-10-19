@@ -17,9 +17,10 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   return { title: `BiGH — ${translate(copyKeys["About"])}` };
 }
 
-// The circle waits for its picture (circle.module.css): with script on, its stroke and gold hold
-// until the stroke's picture is in. This lets them go before React hydrates, where the parser
-// reaches it (after the page's HTML): once the picture is in, however late, it adopts a sheet that
+// The circle waits for its picture (circle.module.css): with script on, its stroke, its gold and
+// the light that runs it hold until the stroke's picture is in. This lets them go before React
+// hydrates, where the parser reaches it (after the page's HTML): once the picture is in, however
+// late, it adopts a sheet that
 // sets them running. No timer and no release on a failed picture: either would let the gold rise
 // alone on bare paper. It changes no node or attribute React rendered, so hydration cannot
 // mismatch. Without constructed sheets it does nothing; once hydrated, the Opening lets them go too
@@ -31,7 +32,7 @@ const LET_THE_CIRCLE_GO = `(() => {
   let sheet;
   try {
     sheet = new CSSStyleSheet();
-    sheet.replaceSync("[data-enso] img { animation-play-state: running !important; }");
+    sheet.replaceSync("[data-enso] * { animation-play-state: running !important; }");
   } catch (e) {
     return;
   }

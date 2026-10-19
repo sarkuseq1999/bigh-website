@@ -125,3 +125,18 @@ mockups and the paintings. Picks in `reference/ink-pages/opc/README.md`.
 
 12 jobs of the 42 cap, about $0.60 (at most $0.84 before refunds). Every first take was kept; Mo
 picked from the mockups in one round ("1C 2A 3A2"). Check open.higgsfield.ai/billing for the real total.
+
+## About "Our purpose" oak (October 19, 2026)
+
+Codex's built-in image tool on Mo's ChatGPT plan: no API spend. Mockup round of 5 pictures, all
+with the homepage crane as a style reference. Prompts: `reference/ink-pages/about-bc/prompts/`.
+
+| Take | Picture | Kept | Note |
+| ---- | ------- | ---- | ---- |
+| oak-a1 | Valley oak, rope swing, gold in the roots | no | Strong, but stamped leaf shapes. |
+| oak-a2 | Retake: looser wet crown, brighter gold at the root heart | yes | `originals/codex-oak-v1.png` |
+| hummingbird-a1 | Anna's hummingbird at a fuchsia, gold throat | no | Lovely, but says "energy", not "the part you can't see"; sprig cut at the edge. |
+| acorn-a1 | Giant acorn, gold in a crack, ghost oak behind | no | Gold-filled crack reads as Japanese pottery repair. |
+| acorn-a2 | Retake: cap lifted, gold in the gap | no | Reads as a gold ring. |
+
+The four unused originals are in `C:/Users/mcbig/Documents/codes/bigh-archive/about-purpose-2026-10-19/`.
