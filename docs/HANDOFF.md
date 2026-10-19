@@ -5,13 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 19, 2026, by Claude Code (About).
+- **Last updated:** October 19, 2026, by Claude Code (NuriCell layout B live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **State:** `studio` is eight local commits ahead of `main`, none pushed: the FDA sign trial
-  (`df0bb65`), NuriCell layout B (`433ac7b`), the redwood park sign on Propolis (`f1b528f`),
-  About's oak and circle light (two commits, below), the redwood sign in every page's footer
-  (`06eabbd`) and the homepage science section (two commits, below). `main` and the demo are still the October 18
-  build at `5b7ba74`.
+- **Live (October 19):** NuriCell layout B only. Mo said yes; `main` is `ad3561e` = the October
+  18 build (`5b7ba74`) plus the notes commit and NuriCell layout B, nothing else. Production
+  `dpl_9ebiBovTrZRUe5yyRYQsQuPaLbfq`; the demo alias points to it. Public demo checks:
+  `qa_nuricell_ink` 355/355, `qa_home_ink` 282/282, `qa_nav` 436/436 (`docs/public-demo.md`).
+  `studio` merged `main` back in (no file changes), so the next `git push origin studio:main` is a
+  fast-forward.
+- **State:** `studio` still holds unpushed work: the FDA sign trial (`df0bb65`), the redwood park
+  sign on Propolis (`f1b528f`), About's oak and circle light (two commits, below), the redwood sign
+  in every page's footer (`06eabbd`) and the homepage science section (two commits, below). None
+  of it is live yet.
+- **NuriCell layout B (Mo picked from mockups, October 19):** from 960px the lantern hangs right of
+  its words, the capsule stands in the middle of its four ingredients, the books run in from the
+  page edge, Dr. Liu stands right, the brushed 3 × 30 = 90 goes across the page. Phones keep one
+  column. NuriCell only; Mo said leave the other four product pages as they are for now.
 - **About (Mo picked both from mockups, October 19):** "Our purpose" shows a big painted valley
   oak (rope swing, gold light in the roots) in place of the seedling, larger than the page's other
   paintings on purpose; the mission line is a step under the heading, in ink. The opening circle's
@@ -34,23 +43,23 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   replayed onto this `studio` and fast-forwarded in. Built site `qa_home_ink` 282/282 and
   `qa_nav` 436/436, desktop (with motion) and phone screenshots. Notes:
   `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
-- **In progress:** None from this work. **Next:** Mo's call on pushing these commits.
+- **In progress:** None from this work. **Next:** Mo's call on pushing the unpushed commits.
 
 ## What's live
 
 Public demo: <https://bigh-website-demo.vercel.app/>. It shows the production build of `main`
-at `5b7ba74`, the same build as <https://bigh-website.vercel.app/> (Propolis: Bold Signature
-desktop, Editorial pair mobile, Weathered Taupe A sign). `bighnow.com` is still the old WordPress site.
+at `ad3561e`, the same build as <https://bigh-website.vercel.app/> (the October 18 Propolis work
+plus NuriCell layout B). `bighnow.com` is still the old WordPress site.
 
 Every page is in Ink & Gold:
 
 | Page                 | Its own idea                                                                             | Last public browser check             |
 | -------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
-| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 18)        |
-| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 18)             |
+| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 19)        |
+| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 19)             |
 | Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 18)             |
 | About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)           |
-| NuriCell             | Paper lantern that lights                                                                | `qa_nuricell_ink` 359/359 (Oct 16)    |
+| NuriCell             | Paper lantern that lights; each painting in its own place (layout B, Oct 19)             | `qa_nuricell_ink` 355/355 (Oct 19)    |
 | Green Bee Propolis   | Bold Signature desktop; Editorial pair mobile; gold flowing into the bee tree            | `qa_propolis_ink` 273/273 (Oct 18)    |
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 16)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)  |

@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-qdfmigr4q-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-4ye6j68u4-sarkuseq1999s-projects.vercel.app`
+(`dpl_9ebiBovTrZRUe5yyRYQsQuPaLbfq`), the **production** deployment of `main` at
+`ad3561eec71437de654d28b99f3f7c06d1d17612`. On October 19, 2026, Mo approved NuriCell layout B
+(each painting in its own place) and said yes to putting it live. Claude pushed `main` from a
+release copy: the previous `main` (`5b7ba74`) plus two commits only, the notes-only `3b31cf1` and
+NuriCell layout B (`433ac7b` on `studio`). The other `studio` work of that day (the FDA sign
+trial, the redwood sign, About's oak, the homepage science section) was left out, not yet approved
+for live. `bigh-website.vercel.app` serves the same build. `studio` then merged `main` back in.
+
+Before the push, on the built release copy: lint, type check and build passed; `qa_nuricell_ink`
+355/355, `qa_home_ink` 282/282, `qa_nav` 436/436. The same NuriCell code, built over `3b31cf1`,
+also passed `qa_opc_ink` 185/185, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159 and
+`qa_propolis_ink` 273/273. After the alias update, on the public demo in fresh unauthenticated
+browsers: `qa_nuricell_ink` 355/355, `qa_home_ink` 282/282, `qa_nav` 436/436. Desktop and phone
+screenshots of NuriCell on the demo were inspected: the new layout from 960px, phones unchanged.
+
+Before this update, the alias pointed to `bigh-website-qdfmigr4q-sarkuseq1999s-projects.vercel.app`
 (`dpl_E8PnPqm45gWJu2fdZG8KGLCgjmMS`), the **production** deployment of `main` at
 `5b7ba7413dd5dc4da2cd7ae1246280b0d6d7c724`. On October 18, 2026, Mo said yes to bringing `main` up
 to the demo. Mo pasted `git push origin studio:main` (the agent's push was blocked); Vercel built
