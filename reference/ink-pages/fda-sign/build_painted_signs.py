@@ -1,14 +1,19 @@
-"""Cut the two painted trail signs Mo is comparing (October 19, 2026) into the site's pictures:
+"""Cut the painted trail signs Mo is comparing (October 19, 2026) into the site's pictures:
 
 - A, the ink-wash sign (originals/sign-ink-wash-a1.png) -> Advanced OPC's footer,
   public/images/products/advanced-opc/ink/fda-sign-ink-wash-v1.webp
-- C, the brushstroke sign (originals/sign-brushstroke-c1.png) -> Green Bee Propolis's footer,
-  public/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp
+- C, the brushstroke sign (originals/sign-brushstroke-c1.png),
+  public/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp (Propolis's
+  footer until Mo picked the park version of it)
+- C, park version 1, the redwood park sign (originals/sign-park-full-c5.png) -> Green Bee
+  Propolis's footer, public/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp
 
-Both were painted by Codex (prompts/sign-*.txt). The paper becomes transparent: the paint is
+All were painted by Codex (prompts/sign-*.txt). The paper becomes transparent: the paint is
 un-multiplied from the paper, so over the site's paper it looks exactly as painted. Faint
 unevenness in the generated paper is dropped (it would show as a pale box), and the cut edges fade
-out (except along the board's own rows, so its ends stay whole).
+out (except along the board's own rows, so its ends stay whole). The redwood plank carries cream
+letters, so it is made solid (the paper no longer shows through its thin spots) and a little
+darker: cream on it measures 6:1 typically and 4.5:1 on its lightest 1%.
 
 The pictures are scaled so the footer's --k (0.48 on a computer) gives 0.40 CSS px per painting
 px. Prints the 9-slice numbers for the pages' CSS (in the webp's pixels).
@@ -19,7 +24,7 @@ usage: python -X utf8 reference/ink-pages/fda-sign/build_painted_signs.py
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 HERE = Path(__file__).parent
 REPO = HERE.parents[2]
@@ -44,7 +49,18 @@ SIGNS = [
         "slice": (104, 366, 342, 340),
         "reach": (180, 166),
     },
+    {
+        "src": "sign-park-full-c5.png",
+        "out": REPO / "public/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp",
+        "crop": (60, 210, 1500, 900),
+        "board_rows": (70, 345),
+        "fade": (60, 60, 0, 80),
+        "solid": ((82, 333, 72, 1368), 0.8),  # the plank's box (top, bottom, left, right), darkening
+        "slice": (120, 370, 397, 345),  # the words sit inside the carved border
+        "reach": (215, 220),
+    },
 ]
+PAPER = np.array([243.0, 238.0, 226.0])  # the site's paper, which a solid plank is painted over
 
 
 def cutout(rgb, floor=0.045):
@@ -54,6 +70,19 @@ def cutout(rgb, floor=0.045):
     alpha = 1.0 - c.min(axis=2) / 255.0
     colour = np.clip((c - 255.0 * (1.0 - alpha[..., None])) / np.maximum(alpha, 1e-3)[..., None], 0, 255)
     return colour, np.clip((alpha - floor) / (1 - floor), 0, 1)
+
+
+def solidify(colour, alpha, box, darken):
+    """The plank, wherever its wash is at least faint (holes closed), becomes opaque: the colour it
+    shows over the site's paper, a little darker."""
+    y0, y1, x0, x1 = box
+    inside = np.zeros(alpha.shape, bool)
+    inside[y0:y1, x0:x1] = True
+    mask = Image.fromarray(((alpha > 0.25) & inside).astype("uint8") * 255)
+    mask = mask.filter(ImageFilter.MaxFilter(7)).filter(ImageFilter.MinFilter(7)).filter(ImageFilter.GaussianBlur(1.5))
+    m = (np.asarray(mask).astype(float) / 255.0 * inside)[..., None]
+    on_paper = colour * alpha[..., None] + PAPER * (1.0 - alpha[..., None])
+    return colour * (1.0 - m) + on_paper * darken * m, np.maximum(alpha, m[..., 0])
 
 
 def build(s):
@@ -72,6 +101,8 @@ def build(s):
         alpha[:top] *= (np.linspace(0, 1, top) ** 1.5)[:, None]
     if bottom:
         alpha[h - bottom:] *= (np.linspace(1, 0, bottom) ** 1.5)[:, None]
+    if "solid" in s:
+        colour, alpha = solidify(colour, alpha, *s["solid"])
     img = Image.fromarray(np.dstack([colour, alpha * 255.0]).astype("uint8"), "RGBA")
     img = img.resize((round(w * SCALE), round(h * SCALE)), Image.LANCZOS)
     img.save(s["out"], "WEBP", quality=72, alpha_quality=70, method=6)

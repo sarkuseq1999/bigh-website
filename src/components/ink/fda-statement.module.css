@@ -71,14 +71,15 @@
   }
 }
 
-/* A trial Mo asked for (October 19, 2026): two softer, painted signs on two product pages, to
-   compare. Sign A, the ink-wash trail sign, on Advanced OPC; sign C, the brushstroke sign with one
-   California poppy, on Green Bee Propolis (pictures from reference/ink-pages/fda-sign/
-   build_painted_signs.py; mockups in reference/ink-pages/mockups/fda-sign/). Only the picture and
-   the words' colour change: the footer's --k still sizes them (0.48 on a computer draws the
-   painting at 0.40 CSS px per painted px; smaller on short windows and phones), and the same
-   picture serves phones. The page is found by its product wrapper, so the shared product page
-   needs no change; body:has() also outranks the phone rules above. */
+/* A trial Mo asked for (October 19, 2026): softer, painted signs on two product pages, to
+   compare. Sign A, the ink-wash trail sign, on Advanced OPC; on Green Bee Propolis, the park
+   version of sign C that Mo picked: a redwood park sign with a cream carved border and one
+   California poppy (pictures from reference/ink-pages/fda-sign/build_painted_signs.py; mockups in
+   reference/ink-pages/mockups/fda-sign/). Only the picture and the words' colour change: the
+   footer's --k still sizes them (0.48 on a computer draws the painting at 0.40 CSS px per painted
+   px; smaller on short windows and phones), and the same picture serves phones. The page is found
+   by its product wrapper, so the shared product page needs no change; body:has() also outranks
+   the phone rules above. */
 body:has([data-product-ink="advanced-opc"]) .fda .text,
 body:has([data-product-ink="green-bee-propolis"]) .fda .text {
   --words: 600px;
@@ -97,15 +98,17 @@ body:has([data-product-ink="advanced-opc"]) .fda .text {
   border-image-slice: 96 313 271 317 fill;
 }
 
-/* The brushstroke is darker than the ink-wash board, so its words are darker too. */
+/* Cream letters routed into the redwood, inside its carved border (6:1 against the plank, 4.5:1
+   on its lightest spots). */
 body:has([data-product-ink="green-bee-propolis"]) .fda .text {
-  --bt: calc(87px * var(--k));
-  --br: calc(305px * var(--k));
-  --bb: calc(285px * var(--k));
-  --bl: calc(283px * var(--k));
-  --reach-l: calc(150px * var(--k));
-  --reach-r: calc(138px * var(--k));
-  color: #2b2620;
-  border-image-source: url("/images/products/green-bee-propolis/ink/fda-sign-brushstroke-v1.webp");
-  border-image-slice: 87 305 285 283 fill;
+  --bt: calc(100px * var(--k));
+  --br: calc(308px * var(--k));
+  --bb: calc(331px * var(--k));
+  --bl: calc(288px * var(--k));
+  --reach-l: calc(179px * var(--k));
+  --reach-r: calc(183px * var(--k));
+  color: #f3e6c3;
+  text-shadow: 0 1px 0 rgb(20 14 6 / 0.5);
+  border-image-source: url("/images/products/green-bee-propolis/ink/fda-sign-redwood-v1.webp");
+  border-image-slice: 100 308 331 288 fill;
 }

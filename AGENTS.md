@@ -84,8 +84,11 @@ These sit on top of `DESIGN.md`.
 - **FDA footer sign trial (October 19):** Mo found the taupe sign still too much like a drawing
   (pen outlines, wood grain) next to the homepage's soft ink wash. To compare two painted signs on
   real pages, sign A (ink-wash trail sign) is on Advanced OPC and sign C (one-brushstroke board,
-  one California poppy) is on Green Bee Propolis, in place of the taupe sign. Not chosen yet; the
-  other pages keep the brown sign. Mockups: `reference/ink-pages/mockups/fda-sign/`.
+  one California poppy) went on Green Bee Propolis, in place of the taupe sign. Mo liked C and
+  asked for the feel of California's park signs; of its park versions Mo picked 1, the redwood
+  park sign (muted redwood plank, rounded corners, cream carved border, cream letters, the poppy),
+  which is now on Propolis. Not rolled out; the other pages keep the brown sign. Mockups:
+  `reference/ink-pages/mockups/fda-sign/`.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
