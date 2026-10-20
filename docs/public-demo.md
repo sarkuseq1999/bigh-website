@@ -4,7 +4,22 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-m0psvq7dk-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-loeu22wqp-sarkuseq1999s-projects.vercel.app`
+(`dpl_6eTzh1tqkEpWqmBV1nM9w3YfxVJ7`), the **production** deployment of `main` at
+`6e8aaca18451454a9ef137df5d322f85875d3bb4`. On October 19, 2026, Mo found About's opening circle
+"too round, not artistic enough" and its spark of gold light "fake". From three new hand-painted
+circles she picked A, "heavy to dry", with the gold leaf floating down onto it, and said to put it
+live. Claude pushed `main` from a release copy: `ea13c93` plus that one About commit. `studio`
+then merged `main` back in (no conflicts). `bigh-website.vercel.app` serves the same build.
+
+Before the push, on the built release copy: lint, type check, formatting of the changed files and
+build passed; `qa_about` 353/353 (its spark checks replaced by the float's), `qa_home_ink`
+282/282, `qa_nav` 436/436. After the alias update, on the public demo in fresh unauthenticated
+browsers: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav` 436/436. Laptop and phone
+screenshots of the opening on the demo were inspected and the circle filmed frame by frame: the
+brush paints circle A, then the leaf floats down onto its head, settles and catches the light.
+
+Before this update, the alias pointed to `bigh-website-m0psvq7dk-sarkuseq1999s-projects.vercel.app`
 (`dpl_3gGNUkJyuYSUcj3gbF8GQrJ46GcJ`), the **production** deployment of `main` at
 `ea13c93a9ab0dccbf49d74a4c81d756f782b9c3a`. On October 19, 2026, Mo said yes to taking all of
 `studio` live. Mo pasted `git -C ... push origin studio:main` (a fast-forward from `d40cc45`). It

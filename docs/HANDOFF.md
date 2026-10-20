@@ -5,16 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 19, 2026, by Claude Code (all of `studio` live).
+- **Last updated:** October 19, 2026, by Claude Code (About's new circle live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 19):** everything. Mo said yes to taking all of `studio` live and pasted the push:
-  `main` is `ea13c93` (NuriCell layout B, About's oak and circle light, the redwood park sign in
-  every page's footer and the homepage science section). Production
-  `dpl_3gGNUkJyuYSUcj3gbF8GQrJ46GcJ`; the demo alias points to it. Public demo checks, all 11
-  pages: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353, `qa_propolis_ink` 273,
-  `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155, `qa_nature_calm_ink` 159,
-  `qa_science_ink` 1279, `qa_support` 341, all passing (`docs/public-demo.md`).
-- **State:** `studio` is `main` plus this notes commit (and `qa_support`'s allowance fix), not
+- **Live (October 19, latest):** About's opening circle is now circle A, "heavy to dry" (a wet,
+  heavy start that thins into dry streaks and lifts before it closes), and its gold leaf floats
+  down onto the stroke like a real flake, then settles and catches the light; the spark of light
+  that ran round the old circle is gone. Mo picked it from three new circles; Claude pushed `main`
+  to `6e8aaca` (`ea13c93` plus that one commit). Production `dpl_6eTzh1tqkEpWqmBV1nM9w3YfxVJ7`;
+  the demo alias points to it. Public demo: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav`
+  436/436 (`docs/public-demo.md`).
+- **Live before that (October 19):** all of `studio`, which Mo pushed as `ea13c93` (NuriCell layout
+  B, About's oak, the redwood park sign in every page's footer and the homepage science section).
+  Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
+  `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
+  `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
+- **State:** `studio` is `main` plus two notes commits (and `qa_support`'s allowance fix), not
   pushed; the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
