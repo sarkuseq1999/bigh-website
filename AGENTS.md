@@ -73,9 +73,11 @@ These sit on top of `DESIGN.md`.
   the purpose and its mission line too small to read. She picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the
   page's other paintings on purpose. The mission line sits a step under the heading, in ink, not
-  the grey body size. The opening circle's gold leaf lands as a spark of gold light runs once
-  round the stroke ("light runs the circle"), then glints now and then. Keep that light gold,
-  never red.
+  the grey body size. Later the same day Mo found the opening circle "too round, not artistic
+  enough" and the spark of gold light that ran round it "fake". She picked circle A, "heavy to
+  dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and the gold
+  leaf floating down onto it like a real flake, settling, then catching the light. Gold leaf
+  behaves like real gold: no glow, no spark, no twinkling stars, never red.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

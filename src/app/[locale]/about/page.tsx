@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
 }
 
 // The circle waits for its picture (circle.module.css): with script on, its stroke, its gold and
-// the light that runs it hold until the stroke's picture is in. This lets them go before React
+// the gold's shadow and light hold until the stroke's picture is in. This lets them go before React
 // hydrates, where the parser reaches it (after the page's HTML): once the picture is in, however
 // late, it adopts a sheet that
 // sets them running. No timer and no release on a failed picture: either would let the gold rise

@@ -45,18 +45,13 @@ const SEQUOIA =
   "(max-width: 505px) 80vw, (max-width: 959px) 405px, (max-width: 1025px) 40vw, (max-width: 1279px) 405px, (max-width: 1395px) 32vw, 445px";
 const GLASSES =
   "(max-width: 505px) 85vw, (max-width: 959px) 427px, (max-width: 1083px) 40vw, (max-width: 1279px) 427px, (max-width: 1395px) 34vw, 470px";
-// The brush's wet head lies about 26 degrees before its gold leaf (about-art.ts enso.startDeg), so
-// the circle's sweep starts there and the blackest part of the stroke is drawn first.
-const SWEEP_FROM = `${(enso.startDeg - 26).toFixed(1)}deg`;
+// The circle's sweep starts where the brush began, a hair before its wet head (about-art.ts
+// enso.sweepDeg, found by the build), so the blackest part of the stroke is drawn first.
+const SWEEP_FROM = `${enso.sweepDeg}deg`;
 
-// Where the light that runs the circle goes (circle.module.css), as shares of the stroke's box:
-// the stroke's centre, its spark's start at 12 o'clock on the stroke's middle line (the radii's
-// mean, as a share of the box's height), and the leaf's centre, where its glow, its stars and its
-// band of light stand.
+// The leaf's box and centre, as shares of the stroke's box: its band of light lies on its box,
+// its faint shadow on the paper below its centre (circle.module.css).
 const pct = (share: number) => `${(share * 100).toFixed(2)}%`;
-const [CX, CY] = enso.ink.centre;
-const RADIUS = enso.ink.radii.slice(0, -1).reduce((a, b) => a + b, 0) / (enso.ink.radii.length - 1);
-const SPARK_TOP = CY - (RADIUS * enso.width) / enso.height;
 const LEAF_X = enso.dot.left + enso.dot.size / 2;
 const LEAF_Y =
   enso.dot.top +
@@ -96,15 +91,7 @@ function Opening() {
           data-enso=""
           data-stroke={ready ? "ready" : undefined}
           aria-hidden="true"
-          style={
-            {
-              "--start": SWEEP_FROM,
-              "--cx": pct(CX),
-              "--cy": pct(CY),
-              "--ink": `url(${enso.ink.src})`,
-              "--leaf": `url(${enso.dot.src})`,
-            } as CSSProperties
-          }
+          style={{ "--start": SWEEP_FROM, "--leaf": `url(${enso.dot.src})` } as CSSProperties}
         >
           <Image
             ref={stroke}
@@ -121,16 +108,11 @@ function Opening() {
             preload
             fetchPriority="high"
           />
-          {/* The light that runs the circle once the brush closes (circle.module.css): the stroke's
-              ink lit gold through a window that travels round it, the spark at the window's head,
-              then the glow at the leaf as the light gathers into it. */}
-          <span className={styles.run} data-run="" />
-          <span className={styles.orbit} data-orbit="">
-            <span className={styles.spark} data-spark="" style={{ top: pct(SPARK_TOP) }} />
-          </span>
+          {/* The leaf's faint shadow on the paper, closing in and sharpening as it floats down
+              (circle.module.css). */}
           <span
-            className={styles.glow}
-            data-glow=""
+            className={styles.shadow}
+            data-shadow=""
             style={{ left: pct(LEAF_X), top: pct(LEAF_Y) }}
           />
           {/* The gold start loads at once but is not preloaded, and asks for low priority (React's
@@ -151,20 +133,9 @@ function Opening() {
             data-dot=""
             style={LEAF_BOX}
           />
-          {/* As the light lands, a band of light crosses the leaf (only the leaf: its own picture is
-              the band's mask) and two small stars of light flash beside it; the band and the larger
-              star come back now and then while the page is open. */}
+          {/* Once it has settled, a band of light crosses the leaf (only the leaf: its own picture
+              is the band's mask), and comes back now and then while the page is open. */}
           <span className={styles.sheen} data-sheen="" style={LEAF_BOX} />
-          <span
-            className={styles.star}
-            data-star=""
-            style={{ left: pct(LEAF_X + 0.033), top: pct(LEAF_Y - 0.045) }}
-          />
-          <span
-            className={`${styles.star} ${styles.starSmall}`}
-            data-star=""
-            style={{ left: pct(LEAF_X - 0.112), top: pct(LEAF_Y + 0.03) }}
-          />
         </span>
         <p className={page.kicker}>{copy(about.hero.label)}</p>
         <h1 id="about-title" lang="en" className={page.title}>
