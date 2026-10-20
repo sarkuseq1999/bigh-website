@@ -27,13 +27,13 @@ paints itself around slowly from where the brush began (its stroke takes 4s, aft
 in under half of its ink, the other three bare; stopped at 2.9s it is about three quarters round:
 the first two quarters whole, the third mostly drawn, the one reached last under half of its ink;
 then it ends whole), then its gold comes up (its delay at least the stroke's delay and duration);
-stopped 5.9s in, a light runs the circle (lit, its spark on the stroke, part way round, the leaf
-not yet landed), then it gathers into the leaf and goes out; reduced motion keeps the light's
-parts hidden; and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
+stopped 5.9s in, the gold leaf is floating down (seen, above its place, its shadow on the
+paper), then it lands and settles (no transform, its shadow and band of light gone); reduced
+motion keeps the leaf's shadow and band hidden; and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
 3s) the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the
 picture is in and draws around, and the gold comes up the stroke's delay and duration after it;
 with no stroke picture, 9s in the gold has not risen alone; with JavaScript off the circle shows
-whole once the stroke, the light and the gold have finished, and every other painting (the hills,
+whole once the stroke and the gold's float and light have finished, and every other painting (the hills,
 the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
@@ -895,15 +895,15 @@ def motion(browser):
                       hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < (i.matches('[data-pool]') ? 0.7 : 1)).length,
                       pool: getComputedStyle(document.querySelector('[data-pool]')).opacity,
                       draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage, dot: getComputedStyle(d).opacity,
-                      light: [...document.querySelectorAll('[data-enso] :is([data-run], [data-orbit], [data-glow], [data-sheen], [data-star])')].map(x => getComputedStyle(x).opacity),
+                      light: [...document.querySelectorAll('[data-enso] :is([data-shadow], [data-sheen])')].map(x => getComputedStyle(x).opacity),
                       running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
                         return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""
     )
     check("reduced motion: the circle whole, its gold up, every painting shown, still",
           still["blooms"] == 0 and still["hidden"] == 0 and still["draw"] == "none" and still["mask"] == "none"
           and float(still["dot"]) == 1 and still["running"] == 0, still)
-    check("reduced motion: the light that runs the circle stays hidden (its six parts at opacity 0)",
-          len(still["light"]) == 6 and all(float(o) == 0 for o in still["light"]), still["light"])
+    check("reduced motion: the leaf lies still, its shadow and band of light hidden (opacity 0)",
+          len(still["light"]) == 2 and all(float(o) == 0 for o in still["light"]), still["light"])
     context.close()
 
     # With motion: the circle paints itself slowly (Mo, October 8: "start a moment after the page
@@ -949,9 +949,9 @@ def motion(browser):
                                       reduced_motion="reduce" if reduced else "no-preference")
         page = context.new_page()
         page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-        # Still: at once. With motion (script off, so nothing holds): once the stroke, the light
-        # that runs it and the leaf's glow have finished (the glow ends 0.6s + 4s + 0.2s + 1.78s +
-        # 2.2s, 8.8s, from when the page is styled) and before the leaf first glints again (13.5s).
+        # Still: at once. With motion (script off, so nothing holds): once the stroke, the leaf's
+        # float and its first light have finished (the light ends 0.6s + 4s + 2.6s + 0.35s +
+        # 1.4s, 8.95s, from when the page is styled) and before it first glints again (14.9s).
         page.wait_for_timeout(1500 if reduced else 9500)
         box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
         shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
@@ -1017,31 +1017,29 @@ def motion(browser):
           clock is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
           and midway[2] >= 0.5 * still_circle[2] and midway[3] <= 0.5 * still_circle[3],
           {"clock_ms": clock, "midway": midway, "still": still_circle})
-    # The light that runs the circle (Mo, October 19, 2026): stopped 5.9s in (1.1s into its 1.9s
-    # run round, which sets off 0.2s after the stroke closes) it is lit and its spark is on the
-    # stroke (its centre within 0.12 of the stroke's box from the stroke's middle line), well past
-    # where the brush began and not yet back (90-350 degrees clockwise from 12 o'clock), and the
-    # leaf has not landed: the light gathers into it. The clock is the run's own animation: the
-    # stroke's ends at 4.6s and is gone by then; the two start together, so it counts the same.
-    light = page.evaluate(
+    # The gold leaf floats down (Mo, October 19, 2026: real gold leaf, not a spark): stopped 5.9s
+    # in (1.3s into its 2.6s float, which sets off as the brush lifts) it is seen, it is still
+    # above its place (its centre at least 0.3 of its height higher), and its faint shadow is on
+    # the paper. The clock is the leaf's own float: the stroke's ends at 4.6s and is gone by then;
+    # the two start together, so it counts the same.
+    float_ = page.evaluate(
         """(ms) => new Promise((resolve) => {
              const wrap = document.querySelector('[data-enso]');
-             const draw = wrap.querySelector('[data-run]').getAnimations()[0];
-             if (!draw) return resolve(null);
+             const dot = wrap.querySelector('[data-dot]');
+             const fall = dot.getAnimations()[0];
+             if (!fall) return resolve(null);
              const began = performance.now();
              const tick = () => {
-               if (Number(draw.currentTime) >= ms) {
+               if (Number(fall.currentTime) >= ms) {
                  wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
-                 const box = wrap.getBoundingClientRect(), s = wrap.querySelector('[data-spark]').getBoundingClientRect();
-                 const cx = box.left + box.width * parseFloat(wrap.style.getPropertyValue('--cx')) / 100;
-                 const cy = box.top + box.height * parseFloat(wrap.style.getPropertyValue('--cy')) / 100;
-                 const dx = s.left + s.width / 2 - cx, dy = s.top + s.height / 2 - cy;
-                 const out = { clock: Math.round(Number(draw.currentTime)),
-                               run: getComputedStyle(wrap.querySelector('[data-run]')).opacity,
-                               spark: getComputedStyle(wrap.querySelector('[data-orbit]')).opacity,
-                               dot: getComputedStyle(wrap.querySelector('[data-dot]')).opacity,
-                               angle: Math.round((Math.atan2(dx, -dy) * 180 / Math.PI + 360) % 360),
-                               radius: Math.hypot(dx, dy) / box.width };
+                 const box = wrap.getBoundingClientRect(), r = dot.getBoundingClientRect();
+                 const restW = box.width * parseFloat(dot.style.width) / 100;
+                 const restH = restW * dot.naturalHeight / dot.naturalWidth;
+                 const restY = box.top + box.height * parseFloat(dot.style.top) / 100 + restH / 2;
+                 const out = { clock: Math.round(Number(fall.currentTime)), name: fall.animationName,
+                               dot: getComputedStyle(dot).opacity,
+                               above: (restY - (r.top + r.height / 2)) / restH,
+                               shadow: getComputedStyle(wrap.querySelector('[data-shadow]')).opacity };
                  wrap.getAnimations({ subtree: true }).forEach((a) => a.play());
                  return resolve(out);
                }
@@ -1052,12 +1050,10 @@ def motion(browser):
            })""",
         5900,
     )
-    check("motion: then a light runs the circle (lit, its spark on the stroke, part way round, the leaf not yet landed)",
-          bool(light) and float(light["run"]) > 0.9 and float(light["spark"]) > 0.9 and float(light["dot"]) == 0
-          and 90 <= light["angle"] <= 350 and abs(light["radius"] - 0.405) <= 0.12, light)
-    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'")
-    check("motion: the light gathers into the leaf and goes out (its parts back to opacity 0)",
-          wait_until(page, "[...document.querySelectorAll('[data-enso] :is([data-run], [data-orbit], [data-glow], [data-sheen], [data-star])')].every(x => getComputedStyle(x).opacity === '0')", 6000))
+    check("motion: then the gold leaf floats down (seen, above its place, its shadow on the paper)",
+          bool(float_) and float(float_["dot"]) == 1 and float_["above"] >= 0.3 and float(float_["shadow"]) > 0.1, float_)
+    check("motion: then it lands and settles (no transform, its shadow and band of light gone)",
+          wait_until(page, "(() => { const w = document.querySelector('[data-enso]'); return getComputedStyle(w.querySelector('[data-dot]')).transform === 'none' && [...w.querySelectorAll(':is([data-shadow], [data-sheen])')].every(x => getComputedStyle(x).opacity === '0'); })()", 8000))
     end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
     check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
           all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})

@@ -47,15 +47,18 @@ TAKES = {
     "moon": "moon-v1",
     "letter": "letter-v2",
     "lamp": "lamp-v1",
-    "enso": "enso-v2",
+    # Circle A, "heavy to dry" (Mo, October 19, 2026), in place of gpt25-enso-v2.
+    "enso": "codex-enso-v3",
     "hills": "hills-v1",
     "glasses": "glasses-v1",
 }
-# Takes that ship mirrored left to right. enso-v2 was brushed counter-clockwise (its wet head at
-# 12 o'clock with the gold beside it, down the left, drying up the right, lifting at 12:30), but
-# the circle page paints it with a clockwise conic sweep from the gold (enso.startDeg): mirrored,
-# the sweep follows the brush, wet to dry, instead of painting the dry tail first.
-MIRRORED = {"enso-v2"}
+# Takes that ship mirrored left to right, for a circle brushed counter-clockwise: the page paints
+# it with a clockwise sweep from its head, so mirrored the sweep follows the brush, wet to dry.
+# The first circle (gpt25-enso-v2) shipped mirrored; circle A was brushed clockwise.
+MIRRORED: set[str] = set()
+# The circle's own version: bumped when circle A replaced the first (the image optimizer caches by
+# URL). The gold flake keeps the first circle's enso-dot-v1.webp.
+V2 = "v2"
 
 # D's helpers read these module globals at call time: point them at this folder.
 bd.ORIG = HERE / "originals"
@@ -146,53 +149,86 @@ def vignette(key):
 
 
 def enso():
-    """The circle, its gold start as its own picture, and where the brush began: the angle of the
-    gold's centre around the circle's centre (CSS conic degrees, clockwise from 12 o'clock)."""
-    art = bd.painting("enso", "enso", 1400, with_dot=True)
-    dot = art["dot"]
-    w, h = art["width"], art["height"]
-    cx = (dot["left"] + dot["size"] / 2) * w
-    cy = dot["top"] * h + dot["size"] * w * dot["height"] / dot["width"] / 2
-    angle = math.degrees(math.atan2(cx - w / 2, -(cy - h / 2))) % 360
-    art["startDeg"] = round(angle, 1)
-    art["ink"] = enso_ink(art)
-    return art
+    """The circle (Mo, October 19, 2026: circle A, "heavy to dry", in place of the first circle,
+    which was "too round, not artistic enough"). It was painted without gold: the gold leaf is the
+    first circle's own flake (enso-dot-v1.webp, kept as it shipped), laid half on the stroke's
+    outer edge just after its wet head. Also where the brush began, for the page's clockwise sweep
+    (sweepDeg, CSS conic degrees clockwise from 12 o'clock round the picture's centre, a hair
+    before the head), and the angle of the leaf's centre (startDeg).
 
-
-def enso_ink(art):
-    """The circle's ink as an alpha mask, for the gold light that runs once round the stroke when
-    it closes (Mo, October 19, 2026): black where the ink is, clear on bare paper, the stroke's dry
-    gaps kept. 720px wide is plenty for a light (the stroke shows at most 360px wide). Also the
-    stroke's centre and its middle line's radius every 30 degrees from where the conic sweeps
-    measure (12 o'clock, clockwise), from a circle fitted to the ink, so the light's spark can
-    follow the brush."""
-    with Image.open(OUT / f"enso-{V}.webp") as im:
-        grey = im.convert("L")
-    w = 720
-    h = round(grey.height * w / grey.width)
-    a = np.asarray(grey.resize((w, h), Image.LANCZOS)).astype(np.float32)
-    alpha = np.clip((255 - a) * 1.15, 0, 255).astype(np.uint8)
-    rgba = np.zeros((h, w, 4), np.uint8)
-    rgba[..., 3] = alpha
-    name = f"enso-ink-{V}"
-    Image.fromarray(rgba, "RGBA").save(OUT / f"{name}.webp", quality=80, alpha_quality=80, method=6)
-    ys, xs = np.nonzero(alpha > 128)
+    The head is found, not typed in: the stroke's gap (the longest run of near-bare degrees round
+    a circle fitted to the ink), and of its two sides the one with the denser ink over 40 degrees
+    is the wet head. The page sweeps clockwise from the head, so a take brushed the other way
+    (its head counter-clockwise of the gap) stops the build: mirror it in MIRRORED."""
+    img = bd.load(TAKES["enso"])
+    flat = bd.divided(img)
+    x0, y0, x1, y1 = bd.ink_box(np.asarray(flat), pad=0.07)
+    # bd.levelled is this folder's: levelled, then its outer EDGE feathered to white.
+    art = bd.art_of(bd.levelled(flat.crop((x0, y0, x1, y1))), f"enso-{V2}", 1400)
+    with Image.open(OUT / f"enso-{V2}.webp") as im:
+        a = 1 - np.asarray(im.convert("L")).astype(np.float32) / 255
+    h, w = a.shape
+    ys, xs = np.nonzero(a > 0.5)
     x, y = xs.astype(np.float64), ys.astype(np.float64)
     (cx, cy, c), *_ = np.linalg.lstsq(np.c_[2 * x, 2 * y, np.ones_like(x)], x * x + y * y, rcond=None)
     r0 = math.sqrt(c + cx * cx + cy * cy)
-    radii = []
-    for deg in range(0, 361, 30):
+    rs = np.linspace(0.45 * r0, 1.45 * r0, 300)
+    mass, dense, outer = [], [], []
+    for deg in range(360):
         t = math.radians(deg)
-        rs = np.linspace(0.6 * r0, 1.35 * r0, 240)
         px = np.clip((cx + np.sin(t) * rs).astype(int), 0, w - 1)
         py = np.clip((cy - np.cos(t) * rs).astype(int), 0, h - 1)
-        v = alpha[py, px].astype(np.float64)
-        radii.append(round(float((rs * v).sum() / v.sum()) / w if v.sum() > 255 else r0 / w, 3))
-    return {
-        "src": f"{URL}/{name}.webp",
-        "centre": [round(cx / w, 4), round(cy / h, 4)],
-        "radii": radii,
+        v = a[py, px]
+        mass.append(float(v.sum()))
+        dense.append(float((v > 0.8).sum()))
+        inked = rs[v > 0.35]
+        outer.append(float(inked.max()) if len(inked) else r0)
+    mass = np.array(mass)
+    smooth = np.convolve(np.r_[mass[-5:], mass, mass[:5]], np.ones(11) / 11, mode="same")[5:-5]
+    bare = smooth < np.median(smooth) / 6
+    best, run, first = (0, 0, 0), 0, 0
+    for i in range(720):
+        if bare[i % 360]:
+            first = i if run == 0 else first
+            run += 1
+            if run > best[0]:
+                best = (run, first % 360, i % 360)
+        else:
+            run = 0
+    if best[0] < 8:
+        raise SystemExit(f"enso: no gap where the brush lifted ({best[0]} bare degrees)")
+    _, gap_from, gap_to = best
+    after = sum(dense[(gap_to + k) % 360] for k in range(1, 41))
+    before = sum(dense[(gap_from - k) % 360] for k in range(1, 41))
+    if before > after:
+        raise SystemExit("enso: brushed counter-clockwise (its head is before the gap): mirror it")
+    head = (gap_to + 1) % 360
+    # The leaf: centred on the stroke's outer edge 23 degrees after the head, so the sweep, which
+    # starts 3 degrees before the head, still begins 26 degrees before the leaf as it always has.
+    leaf_deg = (head + 23) % 360
+    t = math.radians(leaf_deg)
+    lr = outer[leaf_deg] + 0.005 * w
+    size = 0.1513  # the leaf's width as a share of the circle's picture, as before
+    with Image.open(OUT / "enso-dot-v1.webp") as dot:
+        dw, dh = dot.size
+    lw = size * w
+    lh = lw * dh / dw
+    lx, ly = cx + math.sin(t) * lr, cy - math.cos(t) * lr
+    art["dot"] = {
+        "src": f"{URL}/enso-dot-v1.webp",
+        "width": dw,
+        "height": dh,
+        "left": round((lx - lw / 2) / w, 4),
+        "top": round((ly - lh / 2) / h, 4),
+        "size": size,
     }
+    def around_middle(px, py):
+        return math.degrees(math.atan2(px - w / 2, -(py - h / 2))) % 360
+
+    head_x, head_y = cx + math.sin(math.radians(head)) * r0, cy - math.cos(math.radians(head)) * r0
+    art["sweepDeg"] = round(around_middle(head_x, head_y) - 3, 1)
+    art["startDeg"] = round(around_middle(lx, ly), 1)
+    return art
 
 
 def copied(name):

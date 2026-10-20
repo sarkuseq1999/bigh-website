@@ -64,25 +64,19 @@ export const lamp = {
 } as const;
 
 export const enso = {
-  src: "/images/about-bc/enso-v1.webp",
-  width: 1302,
-  height: 1335,
+  src: "/images/about-bc/enso-v2.webp",
+  width: 1247,
+  height: 1136,
   dot: {
     src: "/images/about-bc/enso-dot-v1.webp",
     width: 197,
     height: 205,
-    left: 0.6959,
-    top: 0.0127,
+    left: 0.6166,
+    top: 0.0077,
     size: 0.1513,
   },
-  startDeg: 32.8,
-  ink: {
-    src: "/images/about-bc/enso-ink-v1.webp",
-    centre: [0.5013, 0.4846],
-    radii: [
-      0.406, 0.415, 0.403, 0.39, 0.385, 0.404, 0.416, 0.408, 0.401, 0.405, 0.412, 0.423, 0.406,
-    ],
-  },
+  sweepDeg: 1.5,
+  startDeg: 27.5,
 } as const;
 
 export const hills = {
