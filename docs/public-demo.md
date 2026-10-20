@@ -4,7 +4,33 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-9h3fabbek-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-m0psvq7dk-sarkuseq1999s-projects.vercel.app`
+(`dpl_3gGNUkJyuYSUcj3gbF8GQrJ46GcJ`), the **production** deployment of `main` at
+`ea13c93a9ab0dccbf49d74a4c81d756f782b9c3a`. On October 19, 2026, Mo said yes to taking all of
+`studio` live. Mo pasted `git -C ... push origin studio:main` (a fast-forward from `d40cc45`). It
+adds the homepage science section (one painting per topic: a hummingbird at California sage, a cut
+apple kept fresh by a Meyer lemon, a Joshua tree at three ages on the age slider; `6986a4c`) and
+the redwood park sign in every page's footer (`06eabbd`, after the sign trial `df0bb65` and the
+Propolis sign `f1b528f`), plus notes. `bigh-website.vercel.app` serves the same build.
+
+Before the push, on the built release (a separate worktree at `5b3c485`, the same site code as
+`ea13c93`; `next build` + `next start`): lint, type check and build passed; `qa_home_ink` 282/282,
+`qa_nav` 436/436, `qa_about` 353/353, `qa_propolis_ink` 273/273, `qa_opc_ink` 185/185,
+`qa_nuricell_ink` 355/355, `qa_science_ink` 1279/1279, `qa_support` 341/341, `qa_nature_calm_ink`
+159/159 (a re-run; the first run found 15 px of the front layer beside the bottle, once). Locally
+`qa_turmerific_ink` and the end of `qa_fda` could not run: on the local server Turmerific never
+finishes loading (its `soak-v1.webp` sprite and three link prefetches stay open, and HTTP/1.1's
+six connections fill up); the live site shows the same open requests but finishes over HTTP/2. The
+FDA statement was counted by hand there instead (once on Turmerific and Nature Calm, no errors).
+After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink`
+282/282, `qa_nav` 436/436, `qa_fda` 220/220, `qa_about` 353/353, `qa_propolis_ink` 273/273,
+`qa_opc_ink` 185/185, `qa_nuricell_ink` 355/355, `qa_turmerific_ink` 155/155,
+`qa_nature_calm_ink` 159/159, `qa_science_ink` 1279/1279, `qa_support` 341/341. The first public
+`qa_support` run counted Next's harmless "preloaded but not used" CSS warning twice (Vercel's
+`?dpl=…` on CSS addresses); its allowance now accepts the query, as `qa_about`'s does. Desktop
+(with motion) and phone screenshots of the science section on the demo were inspected.
+
+Before this update, the alias pointed to `bigh-website-9h3fabbek-sarkuseq1999s-projects.vercel.app`
 (`dpl_FRgQkMZhntzi5bJdAxT9utDeB8xf`), the **production** deployment of `main` at
 `d40cc454bbe8b52e962206b9764cba85f44938a0`. On October 19, 2026, Mo picked About's painted oak for
 "Our purpose" (with the mission line a step under the heading, in ink) and the gold light that runs

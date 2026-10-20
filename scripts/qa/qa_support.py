@@ -81,9 +81,11 @@ OUT = os.path.join(HERE, "out", "support")
 os.makedirs(OUT, exist_ok=True)
 results = []
 
+# Vercel adds its deployment to each asset's address (".css?dpl=dpl_..."), so the query is optional
+# (as in qa_about.py).
 PREFETCH_CSS = re.compile(
-    r"^The resource \S+/_next/static/\S+\.css was preloaded using link preload but not used "
-    r"within a few seconds from the window's load event\."
+    r"^The resource \S+/_next/static/\S+\.css(\?\S*)? was preloaded using link preload "
+    r"but not used within a few seconds from the window's load event\."
 )
 
 

@@ -5,17 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 19, 2026, by Claude Code (About live).
+- **Last updated:** October 19, 2026, by Claude Code (all of `studio` live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 19):** NuriCell layout B, then About's oak and circle light. Mo said yes to each;
-  `main` is `d40cc45` = the October 18 build (`5b7ba74`) plus the notes commit, NuriCell layout B
-  and the two About commits, nothing else. Production `dpl_FRgQkMZhntzi5bJdAxT9utDeB8xf`; the demo
-  alias points to it. Public demo checks: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav`
-  436/436, `qa_nuricell_ink` 355/355 (`docs/public-demo.md`). `studio` merged `main` back in (no
-  file changes), so the next `git push origin studio:main` is a fast-forward.
-- **State:** `studio` still holds unpushed work: the FDA sign trial (`df0bb65`), the redwood park
-  sign on Propolis (`f1b528f`), the redwood sign in every page's footer (`06eabbd`) and the
-  homepage science section (two commits, below). None of it is live yet.
+- **Live (October 19):** everything. Mo said yes to taking all of `studio` live and pasted the push:
+  `main` is `ea13c93` (NuriCell layout B, About's oak and circle light, the redwood park sign in
+  every page's footer and the homepage science section). Production
+  `dpl_3gGNUkJyuYSUcj3gbF8GQrJ46GcJ`; the demo alias points to it. Public demo checks, all 11
+  pages: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353, `qa_propolis_ink` 273,
+  `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155, `qa_nature_calm_ink` 159,
+  `qa_science_ink` 1279, `qa_support` 341, all passing (`docs/public-demo.md`).
+- **State:** `studio` is `main` plus this notes commit (and `qa_support`'s allowance fix), not
+  pushed; the next push is a fast-forward.
+- **Turmerific on a local server:** the page never finishes loading under `next start` (its
+  `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
+  so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
+  requests but finishes over HTTP/2, and both checks pass there. Not fixed; worth a look.
 - **NuriCell layout B (Mo picked from mockups, October 19):** from 960px the lantern hangs right of
   its words, the capsule stands in the middle of its four ingredients, the books run in from the
   page edge, Dr. Liu stands right, the brushed 3 × 30 = 90 goes across the page. Phones keep one
@@ -35,7 +39,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   640px): restarting the server cleared it; Vercel's own image service served it fine.
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **Homepage science section (Mo picked from mockups, October 19, Claude Code):** each of "Make
+- **Homepage science section (live; Mo picked from mockups, October 19, Claude Code):** each of "Make
   sense of the science."'s three topics has its own painting (a hummingbird at California sage, a
   cut apple kept fresh by a Meyer lemon, a Joshua tree at three ages on the age slider), so the
   mitochondrion shows only in "Tiny power plants." Mo chose the Joshua tree over a second oak,
@@ -44,7 +48,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   replayed onto this `studio` and fast-forwarded in. Built site `qa_home_ink` 282/282 and
   `qa_nav` 436/436, desktop (with motion) and phone screenshots. Notes:
   `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
-- **In progress:** None from this work. **Next:** Mo's call on pushing the unpushed commits.
+- **In progress:** None. **Next:** Mo's call.
 
 ## What's live
 
