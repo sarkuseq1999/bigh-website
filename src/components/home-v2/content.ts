@@ -169,7 +169,7 @@ export const science = {
    *  topic, and for aging one per age of the hiker. */
   peek: [
     "Inside one cell: tiny power plants turn the orange into energy.",
-    "While they work hard, the power plants throw off sparks. Those sparks are free radicals.",
+    "Working hard, the power plants throw off sparks: free radicals.",
   ],
   peekAge: [
     "Younger: lots of bright power plants.",

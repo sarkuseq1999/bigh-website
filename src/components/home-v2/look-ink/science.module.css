@@ -523,8 +523,14 @@
     display: inline;
   }
 
+  /* One column keeps the tabs, not the scroll story, so the room needn't stay the longest
+     line's: only the shown line takes room (no gap above the slider). */
   .peeks {
     margin: 8px 4vw 0;
+  }
+
+  .science .peek:not([data-on="true"]) {
+    display: none;
   }
 }
 
