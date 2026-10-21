@@ -18,8 +18,8 @@
 }
 
 /* How far the title has settled with the scroll (round 9; 0 over the opening, 1 settled): the bar's
-   geometry (g), the paper under its words (q), the mist at its foot (m) and the painted rule (d).
-   See "The title settles with the scroll" below. */
+   geometry (g), the paper under its words (q) and the mist at its foot (m). See "The title settles
+   with the scroll" below. */
 @property --insc-g {
   syntax: "<number>";
   inherits: true;
@@ -33,12 +33,6 @@
 }
 
 @property --insc-m {
-  syntax: "<number>";
-  inherits: true;
-  initial-value: 0;
-}
-
-@property --insc-d {
   syntax: "<number>";
   inherits: true;
   initial-value: 0;
@@ -177,7 +171,11 @@
    its right end the brush lifts: one long tip that runs dry and fades to nothing. (The painting's
    bristles part there into three strands; Mo found them distracting, October 9, so the stroke is
    cut before they split.) Its body as thick as the whole painting's was here (about 3px at 1536),
-   never thinner than a hair on a phone; its middle sits on the bar's foot, on solid paper. */
+   never thinner than a hair on a phone; its middle sits on the bar's foot.
+   "Signed with one stroke" (Mo's pick A, October 21, 2026): the line is there from the start, under
+   the title over the opening too, so the bar is signed before anyone scrolls; it is laid once from
+   its loaded end as the page opens, and it rises with the bar as the title settles. It lifts while
+   a drop-down or the menu is down (their paper is the bar's then). */
 @property --insc-draw {
   syntax: "<number>";
   inherits: false;
@@ -205,7 +203,7 @@
      second mask layer: WebKit, Safari's engine, drew an intersected pair of layers wrongly.) */
   mask: linear-gradient(90deg, #000 calc(100% - var(--insc-lead)), transparent) 0 0 /
     calc(var(--insc-draw) * (100% + var(--insc-lead))) 100% no-repeat;
-  opacity: 0;
+  opacity: 0.75;
   pointer-events: none;
   transition:
     top 0.6s var(--ease),
@@ -221,13 +219,12 @@
   mask: url("/images/home-v2/nav/inscription/rule-lifted.webp") 0 0 / 100% 100% no-repeat;
 }
 
-.root[data-ground="solid"] .rule {
-  opacity: 0.75;
+.root[data-ground="paper"] .rule {
+  opacity: 0;
 }
 
-/* Over the opening, the reader's scroll lays the stroke (not a timed sweep): from its loaded end,
-   between 60px and 280px down the page (the bar settles at 48px), and back as the reader returns.
-   A page that opens on paper, and reduced motion: there whole. */
+/* Laid from its loaded end as the page opens, a beat after the words; with reduced motion it is
+   simply there. */
 @keyframes insc-draw {
   from {
     --insc-draw: 0;
@@ -238,32 +235,9 @@
   }
 }
 
-/* (Where the title settles with the scroll, the rule is laid with it: see below.) */
-@supports (animation-timeline: scroll()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .root[data-overlay]:not([data-settle]) .rule {
-      animation: insc-draw linear both;
-      animation-timeline: scroll(root);
-      animation-range: 60px 280px;
-    }
-  }
-}
-
-/* Without scroll-driven animation: laid as the bar settles (1.4s), lifted once it has faded. */
-@supports not (animation-timeline: scroll()) {
-  .root:not([data-settle], [data-ground="solid"]) .rule {
-    --insc-draw: 0;
-    transition:
-      top 0.6s var(--ease),
-      opacity 0.3s var(--ease),
-      --insc-draw 0s linear 0.3s;
-  }
-
-  .root:not([data-settle])[data-ground="solid"] .rule {
-    transition:
-      top 0.6s var(--ease),
-      opacity 0.3s var(--ease),
-      --insc-draw 1.4s var(--ease) 0.12s;
+@media (prefers-reduced-motion: no-preference) {
+  .rule {
+    animation: insc-draw 1.4s var(--ease) 0.3s backwards;
   }
 }
 
@@ -273,24 +247,24 @@
    reader scrolls on it settles into the bar of the page, tied to the reader's hand instead of a
    timed change at a threshold: between 48px and 240px down the page (--insc-from, --insc-to) the
    mark shrinks to its small size and rises, the words rise with its letters and the links beside
-   it close in, the bar's foot rises to the small bar's, rice paper comes in under the words, and
-   the painted rule is laid from its loaded end. Scrolling back up undoes it exactly.
+   it close in, the bar's foot rises to the small bar's with the painted rule on it, and rice
+   paper comes in under the words. Scrolling back up undoes it exactly.
 
    - The paper comes in first (90% within the settle's first 15px, whole by half way): the
      painting reaches the words from about 60px down on a phone and 80px on a desktop (the crane's
      wing tips, the sun's rim), and by then the words stand on paper, so they read as on the
      settled bar (17:1 against the ground under their letters all the way, measured).
-   - Mist: while the rule is being laid, the painting does not meet a cut paper edge. It sinks
-     into mist, a second sheet of the same paper whose foot falls away softly over 56-84px under
-     the bar (the opening's own mist), which thins away as the rule is laid; once the bar has
-     landed the rule is its edge (round 1's clean edge).
+   - Mist: while the bar settles, the painting does not meet a cut paper edge under the rule. It
+     sinks into mist, a second sheet of the same paper whose foot falls away softly over 56-84px
+     under the bar (the opening's own mist), which thins away as the bar lands; then the rule is
+     its edge (round 1's clean edge).
    - It is drawn, not laid out: the bar keeps its tall layout until the settle is complete, and
      the mark scales and moves, the words and links move, and the paper, the mist, the rule and
      anything hung from the bar's foot (the drop-downs' scroll, the menu) rise with it, all as
      transforms and opacity. At the end the bar takes the small layout in the same frame, the
      same picture, so the change is never seen. The mark's scale is the ratio of its two sizes,
      measured by the script (--insc-k).
-   - Where the browser runs scroll-driven animation (Chrome, Edge, Safari 26), the four values
+   - Where the browser runs scroll-driven animation (Chrome, Edge, Safari 26), the three values
      follow the page's scroll in the stylesheet; elsewhere (Firefox) the script writes the same
      values on each frame the page moves (use-nav.ts, settleValues; keep the two in step).
    - Reduced motion: two states, the title over the opening and the bar on paper (past 48px). */
@@ -341,32 +315,20 @@
   }
 }
 
-@keyframes insc-d {
-  from {
-    --insc-d: 0;
-  }
-
-  to {
-    --insc-d: 1;
-  }
-}
-
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .root[data-settle] {
       animation:
         insc-g cubic-bezier(0.45, 0, 0.3, 1) both,
         insc-q linear both,
-        insc-m linear both,
-        insc-d linear both;
+        insc-m linear both;
       /* (Said again: the build writes a list of animations out with 0s durations.) */
       animation-duration: auto;
       animation-timeline: scroll(root);
       animation-range:
         var(--insc-from) var(--insc-to),
         var(--insc-from) var(--insc-to),
-        var(--insc-from) var(--insc-to),
-        calc(var(--insc-from) + (var(--insc-to) - var(--insc-from)) / 12) var(--insc-to);
+        var(--insc-from) var(--insc-to);
     }
   }
 }
@@ -408,7 +370,6 @@
 }
 
 .root[data-settle][data-size="tall"] .rule {
-  --insc-draw: var(--insc-d);
   translate: -50% calc(-50% - var(--insc-dh) * var(--insc-g));
 }
 
@@ -419,10 +380,6 @@
   background-position: 0 var(--insc-dh);
   opacity: var(--insc-q);
   mask-image: linear-gradient(#000 calc(100% - 14px), transparent);
-}
-
-.root[data-ground="settling"] .rule {
-  opacity: calc(0.75 * var(--insc-q));
 }
 
 /* The mist: a second sheet of the same paper, as solid as the bar's under the words, whose foot
@@ -547,21 +504,43 @@
   inset: 0 min(0px, (100% - 48px) / 2);
 }
 
-/* With a mouse, an ink underline draws out from the middle of the word you point at (the open
-   drop-down keeps its own). */
-.word {
-  position: relative;
+/* The bar's words in the site's title face (Mo's pick A, "Signed with one stroke", October 21,
+   2026): Ysabeau, as in "Good health starts with your cells.", at 500 and a step larger than the
+   Switzer it replaces (its letters are smaller for their size: 21px of it is about as wide as 20px
+   of Switzer). Chinese, Japanese and Korean words have no Ysabeau letters, so those bars keep
+   their own face and sizes. */
+.root:not(:lang(ja), :lang(ko), :lang(zh)) :is(.link, .menuButton),
+.root:not(:lang(ja), :lang(ko), :lang(zh)) :is(.language, .account) > div {
+  font-family: var(--font-ysabeau), Switzer, "DM Sans", Arial, sans-serif;
+  font-size: clamp(19.5px, 1.5vw, 23px);
+  font-weight: 500;
+  /* A whole-pixel line, as the Switzer words' 24px was: at 1.2 of a size like 23.04px the words
+     stood on a fraction of a pixel and moved 1px as the settling bar took its small layout. */
+  line-height: 24px;
 }
 
-.word::after {
+/* With a mouse, a pale ink wash is laid behind the word you point at, from the left, the way a
+   brush lays it (Mo's pick A, in place of round 2's fine line); the open drop-down's button keeps
+   its own. The wash is the streaky middle of a real painted wash (inscription/wash-v1.webp, cut by
+   reference/nav/make_signed_strokes.py), its two ends softened into the paper. */
+.word {
+  position: relative;
+  isolation: isolate;
+}
+
+.word::after,
+.root :is(.account, .sheetFoot) a::after {
   content: "";
   position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -8px;
-  height: 2px;
-  border-radius: 2px;
+  z-index: -1;
+  inset: -0.5em -0.7em;
   background: currentColor;
+  opacity: 0.5;
+  mask:
+    url("/images/home-v2/nav/inscription/wash-v1.webp") 0 0 / 100% 100% no-repeat,
+    linear-gradient(90deg, transparent, #000 22%, #000 78%, transparent);
+  mask-composite: intersect;
+  transform-origin: 0 50%;
   scale: 0 1;
   transition: scale 0.5s var(--ease);
 }
@@ -723,23 +702,17 @@
   display: none;
 }
 
+/* Log in takes the same wash as the bar's words (its box is its 48px target, so the wash is laid
+   round its line of words). */
 .root :is(.account, .sheetFoot) a {
   position: relative;
+  isolation: isolate;
   min-height: 48px;
   padding: 0 2px;
 }
 
 .root :is(.account, .sheetFoot) a::after {
-  content: "";
-  position: absolute;
-  left: 2px;
-  right: 2px;
-  bottom: 6px;
-  height: 2px;
-  border-radius: 2px;
-  background: currentColor;
-  scale: 0 1;
-  transition: scale 0.5s var(--ease);
+  inset: calc(50% - 1.1em) -0.7em;
 }
 
 @media (hover: hover) {
@@ -752,13 +725,29 @@
   }
 }
 
+/* Sign up is written on a real loaded brushstroke (Mo's pick A, October 21, 2026;
+   inscription/swash-v1.webp, cut by reference/nav/make_signed_strokes.py): it lands round and
+   pressed at the left and dries out into streaks at the right, its words in paper. */
 .root :is(.account, .sheetFoot) button {
+  position: relative;
+  isolation: isolate;
   min-height: 48px;
-  padding: 0 22px;
-  border: 1.5px solid currentColor;
-  border-radius: 999px;
-  background: transparent;
+  padding: 0 27px 2px 21px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: var(--paper);
+  font: inherit;
   line-height: 1;
+}
+
+.root :is(.account, .sheetFoot) button::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -1px 0;
+  background: var(--ink);
+  mask: url("/images/home-v2/nav/inscription/swash-v1.webp") 0 50% / 100% 100% no-repeat;
 }
 
 /* The picker is as wide as the language it shows, so its arrow sits beside the word. */
@@ -919,8 +908,14 @@
   }
 
   .root:is(:lang(ja), :lang(vi)) .account button {
-    padding: 0 16px;
+    padding: 0 21px 2px 16px;
   }
+}
+
+/* Chinese, Japanese and Korean letters fill their whole height and have no descenders, so on the
+   brushstroke they sit 2px lower than a Latin word to stand in its middle. */
+.root:is(:lang(ja), :lang(ko), :lang(zh)) :is(.account, .sheetFoot) button {
+  padding-block: 2px 0;
 }
 
 @media (min-width: 1101px) and (max-width: 1339px) {
@@ -931,8 +926,11 @@
   .root:lang(ja) .account button {
     position: relative;
     padding: 0 2px;
-    border: 0;
-    border-radius: 0;
+    color: inherit;
+  }
+
+  .root:lang(ja) .account button::before {
+    display: none;
   }
 
   /* Its line, as Log in's, once it leads somewhere. */
@@ -1514,8 +1512,35 @@ img.plate {
     display: none;
   }
 
+  /* "Menu" is written on the same loaded brushstroke as Sign up (Mo's pick A). */
   .root .menuButton {
     display: inline-flex;
+    isolation: isolate;
+    margin-left: 0;
+    padding: 0 24px 2px 18px;
+    color: var(--paper);
+  }
+
+  .root .menuButton::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    inset: -1px 0;
+    background: var(--ink);
+    mask: url("/images/home-v2/nav/inscription/swash-v1.webp") 0 50% / 100% 100% no-repeat;
+  }
+
+  .root:not(:lang(ja), :lang(ko), :lang(zh)) :is(.menuButton, .account > div) {
+    font-size: clamp(20px, 2.6vw, 22px);
+  }
+
+  .root:is(:lang(ja), :lang(ko), :lang(zh)) .menuButton {
+    padding-block: 2px 0;
+  }
+
+  /* Its words are paper, so its keyboard ring is drawn in ink. */
+  .root .menuButton:focus-visible::after {
+    outline-color: var(--ink);
   }
 
   /* The language stands at the right, opposite "Menu"; Log in and Sign up are in the menu. */

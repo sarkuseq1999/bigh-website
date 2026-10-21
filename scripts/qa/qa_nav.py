@@ -12,13 +12,15 @@ On the real GPU (ANGLE/D3D11):
     Enter opens, Tab steps into the panel, Escape closes and hands focus back; the Tab order
     follows the line; a visible ring on the keyboard's focus; Support goes to its page; scrolled,
     the bar settles small with its painted rule; a product link goes to its page.
-  - the rule (round 3): the painted stroke (rule-lifted.webp), drawn whole once the page has moved
-    on, across the page's column and centred on the mark (2px), its ink over at least 92% of it,
-    its body 2-4.5px at 1536 (measured in the pixels) and 16px or more under the mark; one line to
-    its right end (October 9: the painting's bristles parted there into three strands, which Mo
-    found distracting; in the pixels, under 3% of its right 40% shows two runs of ink); laid by the
-    scroll from its loaded end (part way at 160px and not moving on its own a second later, whole
-    by 320px); with reduced motion, there whole.
+  - the rule (round 3; "Signed with one stroke", Mo's pick A, October 21): the painted stroke
+    (rule-lifted.webp), there whole from the start, under the tall title over the opening and once
+    the page has moved on, each time across the page's column and centred on the mark (2px), its
+    ink over at least 92% of it, its body 2-4.5px at 1536 (measured in the pixels) and 16px or
+    more under the mark; one line to its right end (October 9: the painting's bristles parted
+    there into three strands, which Mo found distracting; in the pixels, under 3% of its right 40%
+    shows two runs of ink); laid once from its loaded end as the page opens (part way on some
+    frame, never going back, whole by 2.5s; at the page's top, not by the scroll); with reduced
+    motion, there whole at once.
   - scrolled (desktop, phone, tablet 768): the bar is solid paper. A headline, a paragraph and a
     text link of the page are each put behind the bar's words and on its brush rule, and the band
     from the bar's top to just under the rule's ink must not change by more than 6 levels (round 1:
@@ -51,7 +53,7 @@ On the real GPU (ANGLE/D3D11):
     opening, the scientists, the stories or the purpose; under Products while #products is read;
     under Science in #cellular, #science and #research; laid whole (its ink 50%+) a moment after the
     part arrives, gone (ink 0) a moment after it leaves; in the pixels its ink runs under the word
-    from its first letter over 75%+ of it, 3-8px thick, centred where the fine line runs and clear of
+    from its first letter over 75%+ of it, 3-8px thick, centred 7px under the word's foot and clear of
     the chevron. Exactly one painted stroke at a time on every frame the page draws while the whole
     page is read down at a few hundred px a second. Pointing at About or opening a drop-down lifts
     it (ink 0) and it comes back after; with reduced motion it is there whole at once. On a phone
@@ -100,8 +102,8 @@ On the real GPU (ANGLE/D3D11):
     against the paper in the gaps between the bottles, and must not be more than 1 level over it:
     multiplied it reads -2 to -7 levels, an isolated blend about +3). Moving from one drop-down to the other (both ways):
     the scroll's ink never drops below 60% of the lighter drop-down's, one drop-down is always drawn
-    whole, only one word is ever underlined and no chevron is ever turned sideways; pointing on to
-    About keeps one line. The tablet menu opens, and the phone menu's Products unfolds, with no
+    whole, only one word is ever washed (round 2's underline until October 21) and no chevron is
+    ever turned sideways; pointing on to About keeps one wash. The tablet menu opens, and the phone menu's Products unfolds, with no
     light box round the pools and the chevron turning over, never sideways.
   - the title settles with the scroll (round 9), at 1536x900, every 6px from 0 to 300 down and
     back up: the mark only shrinks and the paper and the rule only grow going down, between its two
@@ -119,7 +121,8 @@ On the real GPU (ANGLE/D3D11):
     Products and Science open), on phones 390x844 and 360x640 and the tablet 834x1112 (the bar, the
     menu, each fold, its foot), and in Chinese, Korean, Vietnamese and Japanese (1101 over the
     opening, scrolled and both drop-downs; the phone menu's folds and foot): every visible text 15px
-    or larger and 7:1 or more on the paper, every control's target 48px or more both ways (a short
+    or larger and 7:1 or more on the paper (Sign up's and Menu's on the black brushstroke they are
+    written on, October 21), every control's target 48px or more both ways (a short
     word's and the mark's reach past their box). Sign up, with no link yet, promises nothing: not a
     Tab stop, the default cursor, the same pixels when pointed at and pressed (bar and menu). The
     wash under an open scroll is 26-32% (round 9). Focus rings, stepping through every control
@@ -247,30 +250,23 @@ def rule_ink(page, info):
     }
 
 
-def rule_checks(browser):
-    """Round 3: the scrolled bar's edge is a real brush stroke (not the drawn bar of before), light,
-    across the page's column and centred on the mark, laid by the reader's scroll (not on a timer);
-    with reduced motion it is there whole."""
-    page = browser.new_page(viewport={"width": 1536, "height": 900})
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(2000)
-    page.mouse.move(768, 896)
-    scroll_to(page, 1400)
+def rule_place(page, tag, shot):
+    """The rule as it stands: the painted stroke, whole, across the page's column and centred on the
+    mark, light, one line to its right end, and clear under the mark."""
     info = page.evaluate(RULE)
     ink = rule_ink(page, info)
     page.screenshot(
-        path=str(OUT / "desk-rule.png"),
+        path=str(OUT / shot),
         clip={"x": 0, "y": 0, "width": 1536, "height": round(info["bottom"]) + 16},
     )
     check(
-        "desk: the rule is the painted stroke, drawn whole once the page has moved on",
+        f"desk: {tag}, the rule is the painted stroke, drawn whole",
         "rule-lifted.webp" in info["mask"] and info["draw"] == 1 and info["opacity"] >= 0.6,
         f"draw {info['draw']}, opacity {info['opacity']}",
     )
     span = info["right"] - info["left"]
     check(
-        "desk: the rule runs across the page's column, centred on the mark (2px), its ink over 92% of it",
+        f"desk: {tag}, the rule runs across the page's column, centred on the mark (2px), its ink over 92% of it",
         abs(info["left"] - info["colLeft"]) <= 2
         and abs(info["right"] - info["colRight"]) <= 2
         and abs(info["mid"] - info["markMid"]) <= 2
@@ -280,48 +276,65 @@ def rule_checks(browser):
         f"mark centre {info['markMid']:.1f}, ink {ink['from']}-{ink['to']}",
     )
     check(
-        "desk: the rule is one line to its right end (no strands parting: under 3% of its right 40% in two runs)",
+        f"desk: {tag}, the rule is one line to its right end (no strands parting: under 3% of its right 40% in two runs)",
         ink["strands"] < 0.03,
         f"{ink['strands']:.0%} of the right 40% in two or more runs",
     )
     middle = (info["top"] + info["bottom"]) / 2
     check(
-        "desk: the rule is light (body 2-4.5px at 1536) and 16px or more under the mark",
+        f"desk: {tag}, the rule is light (body 2-4.5px at 1536) and 16px or more under the mark",
         2 <= ink["thick"] <= 4.5 and middle - info["markBottom"] >= 16,
         f"body {ink['thick']:.1f} px; rule middle {middle:.1f}, mark foot {info['markBottom']:.1f}",
     )
-    # Laid by the scroll: part way at 160px and the same a second later (no timer), its ink
-    # reaching only part of the column from the left; whole by 320px.
-    scroll_to(page, 160)
-    first = page.evaluate(RULE)
-    page.wait_for_timeout(1000)
-    later = page.evaluate(RULE)
-    part = rule_ink(page, later)
-    page.screenshot(path=str(OUT / "desk-rule-160.png"), clip={"x": 0, "y": 0, "width": 1536, "height": 110})
-    scroll_to(page, 320)
-    whole = page.evaluate(RULE)
+
+
+def rule_checks(browser):
+    """Round 3: the bar's edge is a real brush stroke (not the drawn bar of before), light, across
+    the page's column and centred on the mark. Since Mo's pick A (October 21) it is there from the
+    start, under the tall title too: laid once from its loaded end as the page opens (a timed lay,
+    not the scroll's), whole after; with reduced motion it is there whole at once."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="commit")
+    # The draw on every look while the page opens (the stroke may not be on the page yet).
+    draws = []
+    for _ in range(40):
+        draws.append(
+            page.evaluate(
+                """() => { const r = document.querySelector('header [class*="__rule"]');
+                return r ? parseFloat(getComputedStyle(r).getPropertyValue('--insc-draw')) : null; }"""
+            )
+        )
+        page.wait_for_timeout(70)
+    page.wait_for_load_state("networkidle")
+    page.wait_for_timeout(2500)
+    seen = [d for d in draws if d is not None]
     check(
-        "desk: the scroll lays the rule from its loaded end (part way at 160px and still a second later, whole by 320px)",
-        0.2 <= first["draw"] <= 0.7
-        and abs(later["draw"] - first["draw"]) < 0.01
-        and whole["draw"] == 1
-        and part["from"] - later["left"] <= 12
-        and part["to"] < later["left"] + 0.75 * (later["right"] - later["left"]),
-        f"at 160px: {first['draw']:.2f}, a second later {later['draw']:.2f}, ink {part['from']}-{part['to']}; "
-        f"at 320px: {whole['draw']}",
+        "desk: the rule is laid from its loaded end as the page opens (part way on some look, never going back, then whole)",
+        any(0.1 <= d <= 0.9 for d in seen)
+        and all(b >= a - 0.001 for a, b in zip(seen, seen[1:]))
+        and page.evaluate(RULE)["draw"] == 1,
+        "draws " + " ".join(f"{d:.2f}" for d in seen[::3]),
     )
+    page.mouse.move(768, 896)
+    rule_place(page, "over the opening", "desk-rule-top.png")
+    scroll_to(page, 1400)
+    rule_place(page, "scrolled", "desk-rule.png")
     page.close()
 
     page = browser.new_page(viewport={"width": 1536, "height": 900}, reduced_motion="reduce")
     watch(page)
-    page.goto(URL, wait_until="networkidle")
+    page.goto(URL, wait_until="commit")
+    page.wait_for_selector('header [class*="__rule"]', state="attached")
+    first = page.evaluate(RULE)
+    page.wait_for_load_state("networkidle")
     page.wait_for_timeout(1500)
     scroll_to(page, 160)
     info = page.evaluate(RULE)
     check(
-        "reduced motion: the rule is there whole",
-        info["draw"] == 1 and info["opacity"] >= 0.6,
-        f"draw {info['draw']}, opacity {info['opacity']}",
+        "reduced motion: the rule is there whole from the first look",
+        first["draw"] == 1 and info["draw"] == 1 and info["opacity"] >= 0.6,
+        f"first look {first['draw']}, then {info['draw']}, opacity {info['opacity']}",
     )
     page.close()
 
@@ -700,7 +713,7 @@ def switches(page, film):
         two = [(round(e["t"] - flip), e["lines"]) for e in during if len(e["lines"]) > 1]
         turned = [(round(e["t"] - flip), e["chev"]) for e in during if any(sideways(r) for r in e["chev"])]
         check(
-            f"desk: {leave.capitalize()} -> {arrive.capitalize()}: only one word underlined and no chevron sideways, every frame",
+            f"desk: {leave.capitalize()} -> {arrive.capitalize()}: only one word washed and no chevron sideways, every frame",
             len(during) >= 30 and not two and not turned,
             f"{len(during)} frames; two lines {two[:3]}; sideways {turned[:3]}",
         )
@@ -2081,15 +2094,17 @@ def inked(inks):
 
 def stroke_pixels(page, word):
     """The stroke under `word` in the pixels: where its ink runs (columns at least 40 levels darker
-    than the paper), its thickness, and the word's, the fine line's and the chevron's places."""
+    than the paper), its thickness, and the word's and the chevron's places, and its own line: 7px
+    under the word's foot (where round 2's fine line ran; since October 21 a pointer lays a wash
+    behind the word instead)."""
     box = page.evaluate(
         """w => { const link = [...document.querySelectorAll('#site-navigation [data-nav-ink]')]
         .map(i => i.closest('a, button')).find(l => l.innerText.trim() === w);
       const word = link.querySelector('[data-nav-ink]').parentElement;
-      const r = word.getBoundingClientRect(); const after = getComputedStyle(word, '::after');
+      const r = word.getBoundingClientRect();
       const chev = link.querySelector('svg'); const c = chev && chev.getBoundingClientRect();
       return { left: r.left, right: r.right, bottom: r.bottom, chevron: c ? c.left : null,
-        line: r.bottom - parseFloat(after.bottom) - parseFloat(after.height) / 2 }; }""",
+        line: r.bottom + 7 }; }""",
         word,
     )
     top = round(box["bottom"]) + 1
@@ -2166,7 +2181,7 @@ def reading_stroke(browser):
         span = px["right"] - px["left"]
         check(
             "stroke: in the pixels, under the word from its first letter over 75%+ of it, 3-8px thick, "
-            "where the fine line runs (3px), clear of the chevron",
+            "7px under the word's foot (3px), clear of the chevron",
             px["ink"]
             and abs(px["from"] - px["left"]) <= 3
             and px["to"] - px["from"] >= 0.75 * span
@@ -2290,10 +2305,16 @@ BAR_WORDS = r"""() => {
     const b = rects.length ? rects.reduce((a, c) => ({ left: Math.min(a.left, c.left), top: Math.min(a.top, c.top),
       right: Math.max(a.right, c.right), bottom: Math.max(a.bottom, c.bottom) })) : el.getBoundingClientRect();
     if (b.right - b.left < 4 || b.right <= 0 || b.left >= innerWidth) continue;
-    out.push({ text: (el.innerText || '').trim().split('\n')[0].slice(0, 12), left: b.left, top: b.top, right: b.right, bottom: b.bottom, color: s.color });
+    // Written in paper on a black brushstroke (Sign up, Menu; October 21): its ground is the stroke.
+    const control = el.closest('button'); const p = control && getComputedStyle(control, '::before');
+    const stroke = !!p && p.display !== 'none' && p.maskImage.includes('swash');
+    out.push({ text: (el.innerText || '').trim().split('\n')[0].slice(0, 12), left: b.left, top: b.top, right: b.right, bottom: b.bottom, color: s.color, stroke });
   }
   return out; }"""
-HIDE_WORDS = """#site-navigation :is([class*="__link"], [class*="account"], [class*="language"], [data-nav-menu-button], [data-nav-logo]) { visibility: hidden !important; }"""
+# The words are hidden to read what stands behind them; a word written on a brushstroke keeps its
+# stroke (its ground) and only its letters go.
+HIDE_WORDS = """#site-navigation :is([class*="__link"], [class*="account"], [class*="language"], [data-nav-menu-button], [data-nav-logo]) { visibility: hidden !important; }
+#site-navigation :is([class*="account"] button, [data-nav-menu-button]) { visibility: visible !important; color: transparent !important; }"""
 
 
 def relative_luminance(rgb):
@@ -2304,8 +2325,9 @@ def relative_luminance(rgb):
 
 def word_grounds(page, width):
     """What stands behind each of the bar's words (the words hidden): the contrast of the words' ink
-    with the darker tenth of the ground under the letters, and how busy that ground is (the spread
-    of its levels, p90 - p10, in 0-255)."""
+    with the darker tenth of the ground under the letters (for paper letters on a black brushstroke,
+    with its lighter tenth), and how busy that ground is (the spread of its levels, p90 - p10, in
+    0-255)."""
     words = page.evaluate(BAR_WORDS)
     tag = page.add_style_tag(content=HIDE_WORDS)
     page.wait_for_timeout(60)
@@ -2323,7 +2345,11 @@ def word_grounds(page, width):
         levels = np.asarray(Image.fromarray(ground.reshape(1, -1, 3).astype(np.uint8)).convert("L"), dtype=np.float32)
         out.append({
             "text": w["text"],
-            "ratio": float((np.percentile(lum, 10) + 0.05) / (ink + 0.05)),
+            "ratio": float(
+                (ink + 0.05) / (np.percentile(lum, 90) + 0.05)
+                if w["stroke"]
+                else (np.percentile(lum, 10) + 0.05) / (ink + 0.05)
+            ),
             "spread": float(np.percentile(levels, 90) - np.percentile(levels, 10)),
         })
     return out
@@ -2543,8 +2569,9 @@ def settle_checks(browser, playwright):
 # ---------------------------------------------------------------- round 10: nothing dead, nothing small
 
 # Everything the bar shows a visitor in its present state: visible text (each run of words, its
-# size and its contrast with the paper: its colour and its opacity through every ancestor, over the
-# paper), and every control a pointer or the keyboard can reach (its hit box).
+# size and its contrast with what it stands on: its colour and its opacity through every ancestor,
+# over the paper, or over the black brushstroke Sign up and Menu are written on since October 21),
+# and every control a pointer or the keyboard can reach (its hit box).
 SHOWN = """() => {
   const header = document.querySelector('header');
   const paper = [248, 243, 234];
@@ -2554,6 +2581,12 @@ SHOWN = """() => {
   const seen = el => el.checkVisibility({ opacityProperty: true, visibilityProperty: true }) && !el.closest('[inert]');
   const onScreen = b => b.width > 1 && b.height > 1 && b.bottom > 0 && b.top < innerHeight && b.right > 0 && b.left < innerWidth;
   const alpha = el => { let a = 1; for (let n = el; n && n !== document.documentElement; n = n.parentElement) a *= +getComputedStyle(n).opacity; return a; };
+  // The ground a text stands on: the brushstroke its control is written on, where it has one.
+  const ground = el => { for (let n = el; n && n !== header; n = n.parentElement) {
+      const p = getComputedStyle(n, '::before');
+      if (p.content !== 'none' && p.display !== 'none' && p.maskImage.includes('swash'))
+        return p.backgroundColor.match(/[\\d.]+/g).slice(0, 3).map(Number); }
+    return paper; };
   const texts = [];
   const walker = document.createTreeWalker(header, NodeFilter.SHOW_TEXT);
   while (walker.nextNode()) {
@@ -2562,9 +2595,9 @@ SHOWN = """() => {
     const r = document.createRange(); r.selectNodeContents(t);
     if (!onScreen(r.getBoundingClientRect())) continue;
     const s = getComputedStyle(el); const m = s.color.match(/[\\d.]+/g).map(Number);
-    const k = (m.length > 3 ? m[3] : 1) * alpha(el);
-    const shown = m.slice(0, 3).map((v, i) => v * k + paper[i] * (1 - k));
-    texts.push({ text: words.slice(0, 24), size: parseFloat(s.fontSize), ratio: +ratio(shown, paper).toFixed(1) });
+    const k = (m.length > 3 ? m[3] : 1) * alpha(el); const under = ground(el);
+    const shown = m.slice(0, 3).map((v, i) => v * k + under[i] * (1 - k));
+    texts.push({ text: words.slice(0, 24), size: parseFloat(s.fontSize), ratio: +ratio(shown, under).toFixed(1) });
   }
   // A control's hit box: its own, and what its ::before reaches over where that is laid round it
   // (the mark's, a little round its picture; a short word's, out to 48px).

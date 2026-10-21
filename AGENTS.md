@@ -116,6 +116,14 @@ These sit on top of `DESIGN.md`.
   template or the old design at rest, it fails.
 - **Menus show everything at once** on desktop (a row of all five bottles, not a list that swaps one
   picture on hover).
+- **Menu bar: "Signed with one stroke" (Mo picked A, October 21, 2026).** Mo found the bar plain
+  ("simple, it does its job") and picked A of three painted ideas over B (a two-line title page)
+  and C (the words on one pale brushstroke): the bar's words in Ysabeau, the title face (Chinese,
+  Japanese and Korean keep their own letters); the painted rule under the bar from the first frame,
+  laid once as the page opens; Sign up and the phone's Menu written in paper on a real black
+  brushstroke; a pale ink wash behind a pointed-at word. Drop-downs, the settle and the menu sheet
+  stay as they were. Mockups: `reference/ink-pages/mockups/nav/2026-10-21/`; strokes cut by
+  `reference/nav/make_signed_strokes.py` from two Codex paintings.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getTranslations, setRequestLocale } from "next-intl/server";
-import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif, Zilla_Slab } from "next/font/google";
+import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif, Ysabeau, Zilla_Slab } from "next/font/google";
 
 import { routing, type Locale } from "@/i18n/routing";
 import "../globals.css";
@@ -39,6 +39,17 @@ const sign = Zilla_Slab({
   subsets: ["latin", "latin-ext"],
   weight: "600",
   variable: "--font-sign",
+  display: "swap",
+  preload: false,
+});
+
+// Ysabeau, the site's title face, is also the menu bar's (Mo's pick A, "Signed with one stroke",
+// October 21, 2026), and the bar is on every page, so every page has it here. Not preloaded, as on
+// the pages that set their titles in it: Chinese, Japanese and Korean pages keep their own letters
+// in the bar and would never use a preloaded file.
+const titles = Ysabeau({
+  subsets: ["latin", "vietnamese"],
+  variable: "--font-ysabeau",
   display: "swap",
   preload: false,
 });
@@ -97,7 +108,7 @@ export default async function LocaleLayout({
   return (
     <html lang={languageTags[locale]} data-scroll-behavior="smooth">
       <body
-        className={`${sans.variable} ${serif.variable} ${sign.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
+        className={`${sans.variable} ${serif.variable} ${sign.variable} ${titles.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
       >
         <link rel="preconnect" href="https://api.fontshare.com" />
         <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />

@@ -25,7 +25,8 @@ const scrollTimelines = () =>
  *   the painting slides up behind them.
  * - m, the mist the painting dissolves into at the bar's foot: in with the paper, and gone as the
  *   bar lands (from then on the painted rule is the bar's edge).
- * - d, how far the painted rule is laid: with the scroll, from just after the paper starts.
+ * (The painted rule is no longer laid by the scroll: since Mo's pick A, October 21, 2026, it is
+ * there from the start and laid once as the page opens.)
  */
 function settleValues(t: number) {
   const clamp = (v: number) => Math.min(1, Math.max(0, v));
@@ -42,12 +43,11 @@ function settleValues(t: number) {
     g: bezier(SETTLE_EASE, clamp(t)),
     q: stops(PAPER_STOPS),
     m: stops(MIST_STOPS),
-    d: clamp((t - RULE_FROM) / (1 - RULE_FROM)),
   };
 }
 
-// Keep these four in step with the stylesheet's (insc-g's timing function, insc-q's and insc-m's
-// keyframes, insc-d's range).
+// Keep these three in step with the stylesheet's (insc-g's timing function, insc-q's and insc-m's
+// keyframes).
 const SETTLE_EASE = [0.45, 0, 0.3, 1] as const;
 const PAPER_STOPS: [number, number][] = [
   [0, 0],
@@ -62,7 +62,6 @@ const MIST_STOPS: [number, number][] = [
   [0.4, 0.85],
   [1, 0],
 ];
-const RULE_FROM = 1 / 12;
 
 /** A CSS cubic-bezier timing function at progress x. */
 function bezier([x1, y1, x2, y2]: readonly [number, number, number, number], x: number) {

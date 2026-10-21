@@ -5,8 +5,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 19, 2026, by Claude Code (About's new circle live).
+- **Last updated:** October 21, 2026, by Claude Code (menu bar A built, not live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Menu bar "Signed with one stroke" (Mo picked A, October 21; built, NOT live, not committed at
+  this note):** the bar's words in Ysabeau (CJK keep their own letters), the painted rule under the
+  bar from the first frame (laid once as the page opens), Sign up and the phone's Menu in paper on
+  a black Codex-painted brushstroke (`inscription/swash-v1.webp`), a pale wash behind a pointed-at
+  word (`inscription/wash-v1.webp`); `reference/nav/make_signed_strokes.py` cuts both. Ysabeau now
+  loads from the root layout (not preloaded). The Science eyebrow sits 22px under the rule from
+  1101px (`journey.module.css`). `qa_nav.py` updated (rule there from the start, wash, text on the
+  stroke). Built site: `qa_nav` 440/440, `qa_home_ink` 282/282, `qa_about` 353/353, `qa_fda`
+  220/220, `qa_support` 341/341, `qa_nuricell_ink` 355/355, `qa_science_ink` 1279/1279. Mockups,
+  the three ideas and the built screenshots: `reference/ink-pages/mockups/nav/2026-10-21/`.
 - **Live (October 19, latest):** About's opening circle is now circle A, "heavy to dry" (a wet,
   heavy start that thins into dry streaks and lifts before it closes), and its gold leaf floats
   down onto the stroke like a real flake, then settles and catches the light; the spark of light

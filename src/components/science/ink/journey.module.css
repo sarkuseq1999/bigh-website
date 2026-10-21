@@ -87,6 +87,16 @@
   }
 }
 
+/* Where the menu bar is the full line (from 1101px), its painted rule is there from the start,
+   under the tall title too (Mo's pick A, "Signed with one stroke", October 21, 2026): the eyebrow
+   stands 22px under that rule (the tall bar's height, clamp(88px, 6.6vw, 104px)), as it stands on
+   the settled bar's paper, instead of hanging just under the stroke. */
+@media (min-width: 1101px) {
+  .journey {
+    --pin-top: calc(clamp(88px, 6.6vw, 104px) + 22px);
+  }
+}
+
 /* Short windows and every window under 960px wide: the title goes on under the menu bar and gives
    its room to the painting. Where the painting is at its largest and paper is still left over (a
    tall phone, about 220px on a 390x844 iPhone; a tablet), the stuck box stands in the middle of
