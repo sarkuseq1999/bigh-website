@@ -24,3 +24,19 @@ purpose" now has an oak.
   `C:\Users\mcbig\Documents\codes\bigh-archive\home-science-unused-2026-10-19\`.
 - Mockups shown to Mo: `reference/ink-pages/mockups/home-science/`
   (https://claude.ai/artifact/T6vjFHVwfJ4ENzNeHhbAfe).
+
+## October 21, 2026: idea A mockup, "a hiker, and a peek inside" (not built)
+
+Mo found the three paintings decorative: they set a mood but did not explain their words. Mo
+asked for better concepts and picked A: a hiker on a California trail, with a round window (1px
+ring, 1px leader from the thigh) into one of their cells.
+
+- Hiker (Codex, face hidden by the hat): `hiker-55-a1` first, then `hiker-trailhead-a1` (eating an
+  orange), `hiker-climb-a1`, `hiker-30-a1`, `hiker-80-a1` painted from it.
+- Cell: `cell-young-a1` first, then `cell-energy-a1` (orange ribbons turn gold at the power plants),
+  `cell-middle-a1`, `cell-old-a1`, `cell-sparks-a2` painted from it. `cell-sparks-a1` (sparks like
+  tadpoles) and `-a3` (sparks like seeds) were rejected; neither try painted the antioxidant helpers.
+- Mockup page: `reference/ink-pages/mockups/home-science-hiker/` (`compose.py` makes its pictures).
+- Test build on the homepage (branch `home-science-hiker`): `build_hiker.py` makes the site's
+  `hiker-<state>-v1.webp` and `cell-<state>-v1.webp`; the window, its line and the caption are
+  drawn by the page (`science.tsx`).

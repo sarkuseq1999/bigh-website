@@ -1,22 +1,31 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "lucide-react";
-import { useCallback, useEffect, useRef, useState, type KeyboardEvent } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+} from "react";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { gold, sciencePaintings } from "./assets";
+import { sciencePaintings, type Peek } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
 
-// "Make sense of the science." Three topics, each beside its own everyday California painting
-// (Mo, October 19, 2026: the mitochondrion is shown once, in "Tiny power plants.", above): a
-// hummingbird at a sage flower, energy you can see, the light crossing the gold leaf in its wings
-// (mitochondria); a cut apple, one half browned and one kept fresh by a drop of lemon (free
-// radicals); and one Joshua tree at three ages, young, middle and old, chosen by an age slider,
-// with the honesty line "Illustration, not a measurement" (aging cells). The slider shows one tree
-// at a time, never two blended into a ghost.
+// "Make sense of the science." Three topics, each beside a picture that shows what its words say
+// (Mo, October 21, 2026: idea A, "a hiker, and a peek inside"): one hiker on a golden California
+// trail, a 1px leader from their thigh to a round window into one of their cells, and a line
+// under the picture saying what the window shows. Mitochondria: the hiker eats an orange, and the
+// orange turns to gold at the cell's power plants. Free radicals: the hiker climbs, and closer
+// in, a power plant at work throws off sparks. Aging cells: the same hiker at three ages, young,
+// middle and old, chosen by an age slider, with fewer and dimmer power plants, and the honesty
+// line "Illustration, not a measurement". The slider shows one age at a time, never two blended
+// into a ghost.
 //
 // Round 7 (October 4): from 900px up, with motion, the block is a scroll story, one idea per
 // screen, as Timeline explains its science. The painting is pinned (sticky) beside the words, the
@@ -25,9 +34,58 @@ import styles from "./science.module.css";
 // blooms into that topic's state. Phones and reduced motion keep the three tabs.
 const AGE_MIN = 30;
 const AGE_MAX = 80;
-/** The ages at which the slider moves the Joshua tree on to its next painting (young until 43,
- *  middle until 68, then old): the slider opens at 45 on the middle tree. */
+/** The ages at which the slider moves the hiker on to their next painting (young until 43,
+ *  middle until 68, then old): the slider opens at 45 on the middle one. */
 const TREE_FROM = [43, 68];
+/** The round window, in the stage's 1600 x 1195: centre and radius. Larger in one column (under
+ *  900px), so what is inside it can still be seen on a phone. */
+const WINDOWS = {
+  wide: { x: 1210, y: 345, r: 320 },
+  narrow: { x: 1185, y: 390, r: 375 },
+} as const;
+const pct = (value: number, of: number) => `${((value / of) * 100).toFixed(3)}%`;
+/** The window's box as the stage's custom properties (science.module.css places it by them). */
+const windowBoxes = Object.fromEntries(
+  Object.entries(WINDOWS).flatMap(([fit, { x, y, r }]) => [
+    [`--${fit}-left`, pct(x - r, 1600)],
+    [`--${fit}-top`, pct(y - r, 1195)],
+    [`--${fit}-width`, pct(2 * r, 1600)],
+    [`--${fit}-height`, pct(2 * r, 1195)],
+  ]),
+);
+
+/** One state of the stage: the hiker, the leader from their thigh to the window's edge, and the
+ *  window with the cell in it. */
+function PeekLayer({ peek }: { peek: Peek }) {
+  const [x, y] = peek.lead;
+  return (
+    <>
+      {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
+      <img className={styles.scene} src={peek.scene.src} alt="" loading="lazy" />
+      <svg className={styles.leads} viewBox="0 0 1600 1195" aria-hidden="true" focusable="false">
+        {(Object.keys(WINDOWS) as (keyof typeof WINDOWS)[]).map((fit) => {
+          const ring = WINDOWS[fit];
+          const d = Math.hypot(ring.x - x, ring.y - y);
+          return (
+            <line
+              key={fit}
+              className={styles[fit]}
+              x1={x}
+              y1={y}
+              x2={ring.x - ((ring.x - x) / d) * ring.r}
+              y2={ring.y - ((ring.y - y) / d) * ring.r}
+            />
+          );
+        })}
+      </svg>
+      <span className={styles.dot} style={{ left: pct(x, 1600), top: pct(y, 1195) }} />
+      <span className={styles.window}>
+        {/* eslint-disable-next-line @next/next/no-img-element -- the cell in the window */}
+        <img src={peek.cell.src} alt="" loading="lazy" />
+      </span>
+    </>
+  );
+}
 /** Paper between the index and a topic's first line when the topic has arrived. */
 const LEAD = 48;
 /** The reading line, as far down the window as the brush line draws (brush.tsx). */
@@ -369,47 +427,39 @@ export function Science() {
             data-topic={topic}
             data-brush="science-painting"
           >
-            <div className={styles.stage} data-bloom="">
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
-              <img
-                className={`${base.ink} ${styles.layer}`}
-                src={sciencePaintings.energy.src}
-                alt=""
-                loading="lazy"
-                data-on={topic === 0}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
-              <img
-                className={`${base.ink} ${styles.layer}`}
-                src={sciencePaintings.balance.src}
-                alt=""
-                loading="lazy"
-                data-on={topic === 1}
-              />
-              {/* The Joshua tree's three ages, one layer of the stage that multiplies as one:
-                  each older tree lies over the younger ones and covers them. */}
+            <div className={styles.stage} data-bloom="" style={windowBoxes as CSSProperties}>
+              {/* Each state is one layer of the stage that multiplies onto the paper as one. */}
+              <div className={`${base.ink} ${styles.layer}`} data-on={topic === 0}>
+                <PeekLayer peek={sciencePaintings.energy} />
+              </div>
+              <div className={`${base.ink} ${styles.layer}`} data-on={topic === 1}>
+                <PeekLayer peek={sciencePaintings.balance} />
+              </div>
+              {/* The hiker's three ages: each older one lies over the younger ones and covers
+                  them (each is opaque white paper). */}
               <div className={`${base.ink} ${styles.layer}`} data-on={topic === 2}>
-                {sciencePaintings.aging.map((painting, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element -- one age of the tree
-                  <img
-                    key={painting.src}
-                    className={styles.tree}
-                    src={painting.src}
-                    alt=""
-                    loading="lazy"
-                    data-on={tree >= i}
-                  />
+                {sciencePaintings.aging.map((peek, i) => (
+                  <div key={peek.scene.src} className={styles.tree} data-on={tree >= i}>
+                    <PeekLayer peek={peek} />
+                  </div>
                 ))}
               </div>
-              <span
-                className={`${base.gold} ${styles.leafLight}`}
-                data-on={topic === 0}
-                style={{ ["--gold" as string]: `url(${gold.energy})` }}
-              />
             </div>
             <figcaption className={`${base.caption} ${styles.caption}`}>
               {copy("Illustrations")}
             </figcaption>
+            {/* Every line is there, one over another, so the figure keeps the height of the
+                longest whichever is shown (the scroll story measures the figure). */}
+            <div className={styles.peeks}>
+              {[...science.peek, ...science.peekAge].map((line, i) => {
+                const on = i === (topic === 2 ? 2 + tree : topic);
+                return (
+                  <p key={line} className={styles.peek} data-on={on} aria-hidden={!on}>
+                    {copy(line)}
+                  </p>
+                );
+              })}
+            </div>
 
             <div className={styles.age} data-on={topic === 2} inert={topic !== 2}>
               <label className={styles.ageLabel} htmlFor="ink-age">

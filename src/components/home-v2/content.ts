@@ -165,6 +165,17 @@ export const science = {
   explainer: "Read a quick explainer",
   ageLabel: "Illustration, not a measurement",
   topics: ["Mitochondria", "Free radicals", "Aging cells"],
+  /** What the round window shows (draft, October 21, 2026; English only for now): one line per
+   *  topic, and for aging one per age of the hiker. */
+  peek: [
+    "Inside one cell: tiny power plants turn the orange into energy.",
+    "While they work hard, the power plants throw off sparks. Those sparks are free radicals.",
+  ],
+  peekAge: [
+    "Younger: lots of bright power plants.",
+    "The middle years: a few have dimmed.",
+    "Later in life: fewer, dimmer, more wear. Still working.",
+  ],
 };
 
 export const research = {

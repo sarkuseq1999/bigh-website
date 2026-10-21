@@ -51,26 +51,29 @@ export const mito: Record<"glow", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
 };
 
-/** "Make sense of the science." (Mo, October 19, 2026: idea A): each topic its own everyday
- *  California painting, so the mitochondrion is shown once, in "Tiny power plants.", not four
- *  times. Painted by Codex, already in colour (they are not tinted); built by
- *  reference/ink-pages/home-science/build_home_science.py into the stage's box (ink). */
+/** "Make sense of the science." (Mo, October 21, 2026: idea A, "a hiker, and a peek inside"): the
+ *  October 19 paintings set a mood but did not explain their words. Now one hiker walks a golden
+ *  California trail, and a round window shows what is happening in one of their cells, so each
+ *  picture shows what its words say. Painted by Codex (the hiker's face hidden by the hat); built
+ *  by reference/ink-pages/home-science/build_hiker.py: the scene in the stage's box and the cell
+ *  for the window (ink). `lead` is where the window's leader starts, the hiker's thigh, in the
+ *  stage's 1600 x 1195. */
 const S = `${I}/science`;
+export type Peek = { scene: Picture; cell: Picture; lead: [number, number] };
+const peek = (state: string, lead: [number, number]): Peek => ({
+  scene: { src: `${S}/hiker-${state}-v1.webp`, width: 1600, height: 1195 },
+  cell: { src: `${S}/cell-${state}-v1.webp`, width: 900, height: 900 },
+  lead,
+});
 export const sciencePaintings = {
-  /** A hummingbird at California hummingbird sage: energy you can see, gold leaf in its wings. */
-  energy: { src: `${S}/hummingbird-v1.webp`, width: 1600, height: 1195 },
-  /** A cut apple, one half browned and one kept fresh by a drop of Meyer lemon (gold leaf on the
-   *  lemon's face): what oxidation looks like, and what slows it. A comparison, not the same
-   *  chemistry; the stage says "Illustrations". */
-  balance: { src: `${S}/apple-lemon-v1.webp`, width: 1600, height: 1195 },
-  /** One Joshua tree at three ages on the same spot (one crop, so they line up): young, a single
-   *  trunk; middle, three arms; old, many. The age slider shows one of them at a time. */
-  aging: [
-    { src: `${S}/joshua-young-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/joshua-middle-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/joshua-old-v1.webp`, width: 1600, height: 1195 },
-  ],
-} satisfies Record<string, Picture | Picture[]>;
+  /** The hiker eats an orange; in the cell, the orange turns to gold at the power plants. */
+  energy: peek("energy", [411, 795]),
+  /** The hiker climbs; closer in, a power plant at work throws off sparks (free radicals). */
+  balance: peek("sparks", [471, 707]),
+  /** The same hiker at three ages on the same spot (young, middle, old), with fewer and dimmer
+   *  power plants in the cell. The age slider shows one of them at a time. */
+  aging: [peek("young", [458, 836]), peek("middle", [463, 843]), peek("old", [458, 847])],
+};
 
 /** Where each painting is gold leaf, as an alpha mask (build_assets.py gold): the page lays a
  *  moving band of light over the painting through it, so only the leaf catches the light. */
