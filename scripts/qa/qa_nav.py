@@ -308,7 +308,9 @@ def rule_checks(browser):
         page.wait_for_timeout(70)
     page.wait_for_load_state("networkidle")
     page.wait_for_timeout(2500)
-    seen = [d for d in draws if d is not None]
+    # A look before the bar's stylesheet has arrived reads no draw at all (the stroke is not drawn
+    # yet: an unstyled empty span); on the public site the first look can come that early.
+    seen = [d for d in draws if d is not None and not math.isnan(d)]
     check(
         "desk: the rule is laid from its loaded end as the page opens (part way on some look, never going back, then whole)",
         any(0.1 <= d <= 0.9 for d in seen)
@@ -326,6 +328,12 @@ def rule_checks(browser):
     watch(page)
     page.goto(URL, wait_until="commit")
     page.wait_for_selector('header [class*="__rule"]', state="attached")
+    # The first look once the bar's stylesheet has arrived (before it, no draw reads at all).
+    page.wait_for_function(
+        """() => !Number.isNaN(parseFloat(getComputedStyle(document.querySelector('header [class*="__rule"]'))
+          .getPropertyValue('--insc-draw')))""",
+        polling=16,
+    )
     first = page.evaluate(RULE)
     page.wait_for_load_state("networkidle")
     page.wait_for_timeout(1500)
