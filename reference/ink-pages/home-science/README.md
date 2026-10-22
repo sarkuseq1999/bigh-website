@@ -65,3 +65,29 @@ others were painted from it.
 - Sparks: `train-sparks-d1`/`-d2` had big sparks but most flew free; `-e1`/`-e2` keep about ten
   inside the screen and let two escape (`-e2` shows them leaving the screen).
 
+## October 22, 2026: Aging cells becomes a brain cell (B, up close)
+
+Mo found the engine growing old did not relate to the age slider and asked for painted cells
+that age. Tried first (Codex, with `style-crane` as the style to copy): a cut-open school cell
+(`cut-young-b2`; read as a cheese wheel, then a rock) and a patch of cells (`patch-young-a1`;
+read as frog eggs). A brain cell worked. Mockup with working sliders:
+`reference/ink-pages/mockups/home-science-cell/` (https://claude.ai/artifact/CZWSusKfxzSY8wbbe9FRTH).
+Mo picked B, the cell up close, over A, the whole cell like an oak in winter (`neuron-young-a1`,
+`neuron-middle-a1`, `neuron-old-b2`; its gold was too small on a phone).
+
+| Age    | Original          | Site picture     |
+| ------ | ----------------- | ---------------- |
+| Young  | `close-young-a2`  | `cell-young-v2`  |
+| Middle | `close-middle-a1` | `cell-middle-v2` |
+| Old    | `close-old-a1`    | `cell-old-v2`    |
+
+- `close-young-a2` was painted from `neuron-young-a1` (closer, broader strokes); the middle and
+  old cells from `close-young-a2`. Codex moved and resized them a little, so `build_cell.py`
+  scales each about its centre and shifts it back (values measured by the mockup's `align.py`)
+  before dividing the paper out.
+- Gold power plants: six (young), three (middle), one (old). No band of light over them.
+- The first two topics keep the steam engine (`build_train.py`).
+- Unused takes: `C:/Users/mcbig/Documents/codes/bigh-archive/home-science-cell-2026-10-22/`.
+- Reference pictures go to `codex exec` with `-i`, which takes several files: put `--` before the
+  prompt, or `-i` swallows it.
+

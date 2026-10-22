@@ -138,6 +138,12 @@ These sit on top of `DESIGN.md`.
   headline leads. Phones: 72% of the old crane (69vw, the bird about 45% of the window), clear of
   the window's left edge, its line unchanged. `opening.module.css`. Mockups:
   `reference/ink-pages/mockups/home-crane-size/`.
+- **Homepage "Aging cells": a brain cell up close (Mo picked B, October 22, 2026).** Mo found the
+  steam engine growing old did not relate to the age slider and asked for a cell that ages. One
+  brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
+  age goes up, still at work when old. Picked over A (the whole cell, whose gold was too small on
+  a phone). The first two topics keep the steam engine. DESIGN.md "The Science Stage Rule";
+  mockup: `reference/ink-pages/mockups/home-science-cell/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

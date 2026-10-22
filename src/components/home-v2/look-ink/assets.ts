@@ -55,7 +55,9 @@ export const mito: Record<"glow", Picture> = {
  *  paintings set a mood but did not explain their words, so one small steam engine in the
  *  redwoods tells all three, as the cells' "tiny power plants" do: fuel in, power out, a few
  *  sparks. Painted by Codex (the fire is the one gold leaf); built by
- *  reference/ink-pages/home-science/build_train.py into the stage's box (ink). */
+ *  reference/ink-pages/home-science/build_train.py into the stage's box (ink). Aging cells is
+ *  the exception (Mo, October 22, 2026: the engine did not relate to the age slider): one brain
+ *  cell up close, built by build_cell.py. */
 const S = `${I}/science`;
 export const sciencePaintings = {
   /** The fireman feeds a log to the gold fire and the engine pulls away: fuel in, power out. */
@@ -64,12 +66,13 @@ export const sciencePaintings = {
    *  two escape (free radicals, and the body's own defences). A comparison; the stage says
    *  "Illustrations". */
   balance: { src: `${S}/train-sparks-v2.webp`, width: 1600, height: 1195 },
-  /** The same engine at three ages on the same spot (one framing, so they line up): new, well
-   *  worn, and old but still running, its fire lower. The age slider shows one at a time. */
+  /** One brain cell up close at three ages, lined up on one framing: young (strong branches, six
+   *  gold power plants), middle-aged (thinner branches, three still gold) and old (thin, pale
+   *  branches, one still gold, still at work). The age slider shows one at a time. */
   aging: [
-    { src: `${S}/train-new-v2.webp`, width: 1600, height: 1195 },
-    { src: `${S}/train-middle-v2.webp`, width: 1600, height: 1195 },
-    { src: `${S}/train-old-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/cell-young-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/cell-middle-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/cell-old-v2.webp`, width: 1600, height: 1195 },
   ],
 } satisfies Record<string, Picture | Picture[]>;
 
