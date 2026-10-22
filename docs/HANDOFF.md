@@ -38,10 +38,12 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   to the mark from 360px in every language). Claude pushed `main` to `d9c8c34`; production
   `dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`, the demo alias points to it (`docs/public-demo.md`). Not
   fixed: on a 320px phone, Japanese "メニュー" runs onto the stroke's dry tail, 8px from the mark.
-- **Sign up's stroke stays as it is (Mo, October 21).** He looked at three other strokes (clean,
-  painted pill, dry brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`, originals
-  `reference/nav/originals/codex-signup-*.png`) and kept today's: at the size people see it, it
-  reads as one quick brush gesture.
+- **Sign up's stroke kept, then drawn bigger (Mo, October 21).** He looked at three other strokes
+  (clean, painted pill, dry brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`, originals
+  `reference/nav/originals/codex-signup-*.png`) and kept the painting itself: at the size people
+  see it, it reads as one quick brush gesture. Then he picked it a little fuller (C of three,
+  `mockups/nav/2026-10-21-signup-fuller/`): the same painting drawn bigger, live since October 22
+  (see above).
 - **Live before that (October 21): the menu bar "Signed with one stroke"** (Mo picked A of three
   painted ideas and said to push it): the bar's words in Ysabeau (CJK keep their own letters), the
   painted rule under the bar from the first frame (laid once as the page opens), Sign up and the
