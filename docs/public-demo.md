@@ -4,7 +4,47 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-loeu22wqp-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ep7z63jsw-sarkuseq1999s-projects.vercel.app`
+(`dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`), the **production** deployment of `main` at
+`d9c8c3475096d49204896065fb1476ec369f4594`. Later on October 21, 2026, Mo said to fix two phone
+details and push them: the homepage's warm sky was cut flat under the menu bar (the opening's
+picture now clips only its sides), and "✕ Close" was squeezed against the mark in the phone bar
+(from 400px down the bar's sides come out to 16px, the ✕ steps aside, and the stroke keeps a
+length of its own). Mo also looked at three other Sign up strokes (clean, painted pill, dry
+brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`) and kept today's. Claude pushed
+`studio` to `main` (a fast-forward from `849e26d`, with the October 21 release notes).
+
+Before the push, on the built site: lint, type check, formatting and build passed; `qa_nav`
+440/440, `qa_home_ink` 282/282; the sky's step at the picture's top under 1 level (was 12) at 360,
+390 and 430 wide in English, Korean and Vietnamese; "Close" and "Menu" 15px or more from the mark
+from 360px in all five languages. After the alias update, on the public demo in fresh
+unauthenticated browsers: `qa_nav` 440/440, `qa_home_ink` 282/282, and the same sky and "Close"
+measurements. Not fixed: on a 320px phone, Japanese "メニュー" still
+runs onto the stroke's dry tail and stands 8px from the mark (as before this change).
+
+Before this update, the alias pointed to `bigh-website-nwf8w44sb-sarkuseq1999s-projects.vercel.app`
+(`dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`), the **production** deployment of `main` at
+`849e26d4835cdad5a3f59e0c2ae7efd3e1ee87ff`. On October 21, 2026, Mo found the menu bar plain
+("simple, it does its job") and picked A, "Signed with one stroke", from three painted ideas: the
+bar's words in Ysabeau, the painted rule under the bar from the first frame (laid once as the page
+opens), Sign up and the phone's Menu in paper on a black brushstroke, and a pale ink wash behind a
+pointed-at word. Mo said to push it live. Claude pushed `studio` to `main` (a fast-forward from
+`6e8aaca`, with the October 19 notes). `bigh-website.vercel.app` serves the same build.
+
+Before the push, on the built site (`next build` + `next start`): lint, type check, formatting of
+the changed files and build passed; `qa_nav` 440/440, `qa_home_ink` 282/282, `qa_about` 353/353,
+`qa_fda` 220/220, `qa_support` 341/341, `qa_nuricell_ink` 355/355, `qa_science_ink` 1279/1279,
+`qa_propolis_ink` 273/273, `qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159 (a re-run; the
+first run found the same 15 px of the front layer beside the bottle as on October 19, once).
+After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink`
+282/282, `qa_turmerific_ink` 155/155, `qa_fda` 220/220, `qa_about` 353/353, `qa_science_ink`
+1279/1279, `qa_support` 341/341, `qa_nuricell_ink` 355/355, `qa_propolis_ink` 273/273,
+`qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159, and `qa_nav` 440/440. The first public
+`qa_nav` run failed two of its new rule checks (438/440): their first look came before the bar's
+stylesheet had arrived and read no draw at all (NaN); every look after it was right. Those looks
+are now skipped. Desktop and phone screenshots of the bar on the demo were inspected.
+
+Before this update, the alias pointed to `bigh-website-loeu22wqp-sarkuseq1999s-projects.vercel.app`
 (`dpl_6eTzh1tqkEpWqmBV1nM9w3YfxVJ7`), the **production** deployment of `main` at
 `6e8aaca18451454a9ef137df5d322f85875d3bb4`. On October 19, 2026, Mo found About's opening circle
 "too round, not artistic enough" and its spark of gold light "fake". From three new hand-painted

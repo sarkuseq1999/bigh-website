@@ -1631,6 +1631,38 @@ img.plate {
   }
 }
 
+/* "Close" needs the room "Menu" had. On a phone of 400px and narrower, "✕ Close" on its
+   brushstroke was wider than the bar's left side: the button was squeezed, its ✕ shrank to a dot
+   (in Japanese it went), and the stroke ran to 8px from the mark (Mo, October 21, 2026). There the
+   bar's sides come out to the window's 16px edge, the stroke hugs its word a little closer, the ✕
+   steps aside (the word says it; the button's name says "Close menu"), and Chinese, Japanese and
+   Korean set the word a pixel smaller, so the stroke ends 12px or more from the mark from 360px. */
+.root .menuButton > svg {
+  flex: none;
+}
+
+@media (max-width: 400px) {
+  .root .bar {
+    padding-inline: 16px;
+  }
+
+  /* Never shorter than a stroke: under a two-character word (닫기, 关闭) it read as a square blot. */
+  .root .menuButton {
+    justify-content: center;
+    min-width: clamp(78px, 26vw - 8px, 86px);
+    padding: 0 18px 2px 14px;
+  }
+
+  .root .menuButton > svg {
+    display: none;
+  }
+
+  .root:is(:lang(ja), :lang(ko), :lang(zh)) .menuButton {
+    padding-block: 2px 0;
+    font-size: 17px;
+  }
+}
+
 .sheetInner {
   display: flex;
   flex-direction: column;

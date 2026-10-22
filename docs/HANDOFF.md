@@ -5,32 +5,49 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 21, 2026, by Claude Code (menu bar A built, not live).
+- **Last updated:** October 21, 2026, by Claude Code (two phone fixes live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Menu bar "Signed with one stroke" (Mo picked A, October 21; built, NOT live, not committed at
-  this note):** the bar's words in Ysabeau (CJK keep their own letters), the painted rule under the
-  bar from the first frame (laid once as the page opens), Sign up and the phone's Menu in paper on
-  a black Codex-painted brushstroke (`inscription/swash-v1.webp`), a pale wash behind a pointed-at
-  word (`inscription/wash-v1.webp`); `reference/nav/make_signed_strokes.py` cuts both. Ysabeau now
-  loads from the root layout (not preloaded). The Science eyebrow sits 22px under the rule from
-  1101px (`journey.module.css`). `qa_nav.py` updated (rule there from the start, wash, text on the
-  stroke). Built site: `qa_nav` 440/440, `qa_home_ink` 282/282, `qa_about` 353/353, `qa_fda`
-  220/220, `qa_support` 341/341, `qa_nuricell_ink` 355/355, `qa_science_ink` 1279/1279. Mockups,
+- **Live (October 21, latest): two phone fixes** (Mo said to fix and push them). The homepage's
+  warm sky was cut flat under the menu bar on phones (the opening's picture now clips only its
+  sides, `opening.module.css`: a 12-level step, now under 1); and "✕ Close" was squeezed against
+  the mark in the phone bar (from 400px down the bar's sides come out to 16px, the ✕ steps aside,
+  the stroke is never shorter than clamp(78px, 26vw - 8px, 86px), CJK words at 17px: 15px or more
+  to the mark from 360px in every language). Claude pushed `main` to `d9c8c34`; production
+  `dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`, the demo alias points to it (`docs/public-demo.md`). Not
+  fixed: on a 320px phone, Japanese "メニュー" runs onto the stroke's dry tail, 8px from the mark.
+- **Sign up's stroke stays as it is (Mo, October 21).** He looked at three other strokes (clean,
+  painted pill, dry brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`, originals
+  `reference/nav/originals/codex-signup-*.png`) and kept today's: at the size people see it, it
+  reads as one quick brush gesture.
+- **Live before that (October 21): the menu bar "Signed with one stroke"** (Mo picked A of three
+  painted ideas and said to push it): the bar's words in Ysabeau (CJK keep their own letters), the
+  painted rule under the bar from the first frame (laid once as the page opens), Sign up and the
+  phone's Menu in paper on a black Codex-painted brushstroke (`inscription/swash-v1.webp`), a pale
+  wash behind a pointed-at word (`inscription/wash-v1.webp`); `reference/nav/make_signed_strokes.py`
+  cuts both. Ysabeau loads from the root layout (not preloaded: a preload would go unused on CJK
+  pages). The Science eyebrow sits 22px under the rule from 1101px (`journey.module.css`).
+  `qa_nav.py` updated (rule there from the start, the wash, text on the stroke). Claude pushed
+  `main` to `849e26d` (a fast-forward); production `dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`. Public
+  demo then: all eleven page checks pass (`docs/public-demo.md`). Mockups,
   the three ideas and the built screenshots: `reference/ink-pages/mockups/nav/2026-10-21/`.
-- **Live (October 19, latest):** About's opening circle is now circle A, "heavy to dry" (a wet,
-  heavy start that thins into dry streaks and lifts before it closes), and its gold leaf floats
-  down onto the stroke like a real flake, then settles and catches the light; the spark of light
-  that ran round the old circle is gone. Mo picked it from three new circles; Claude pushed `main`
-  to `6e8aaca` (`ea13c93` plus that one commit). Production `dpl_6eTzh1tqkEpWqmBV1nM9w3YfxVJ7`;
-  the demo alias points to it. Public demo: `qa_about` 353/353, `qa_home_ink` 282/282, `qa_nav`
-  436/436 (`docs/public-demo.md`).
+- **Not ours, left alone:** another agent's homepage-science sketches (hiker and cell paintings,
+  `reference/ink-pages/home-science/originals/*-a1.png`, `mockups/home-science-hiker/`, a
+  README edit) appeared in this folder on October 21 around 10:50, uncommitted. Ask Mo whose
+  they are before committing or deleting them.
+- **Live before that (October 19, latest then):** About's opening circle is now circle A, "heavy
+  to dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and its
+  gold leaf floats down onto the stroke like a real flake, then settles and catches the light; the
+  spark of light that ran round the old circle is gone. Mo picked it from three new circles; Claude
+  pushed `main` to `6e8aaca` (`ea13c93` plus that one commit). Production
+  `dpl_6eTzh1tqkEpWqmBV1nM9w3YfxVJ7`. Public demo then: `qa_about` 353/353, `qa_home_ink`
+  282/282, `qa_nav` 436/436.
 - **Live before that (October 19):** all of `studio`, which Mo pushed as `ea13c93` (NuriCell layout
   B, About's oak, the redwood park sign in every page's footer and the homepage science section).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `studio` is `main` plus two notes commits (and `qa_support`'s allowance fix), not
-  pushed; the next push is a fast-forward.
+- **State:** `studio` is `main` plus the October 21 release notes; the next push is a
+  fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
@@ -68,24 +85,24 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## What's live
 
 Public demo: <https://bigh-website-demo.vercel.app/>. It shows the production build of `main`
-at `ad3561e`, the same build as <https://bigh-website.vercel.app/> (the October 18 Propolis work
-plus NuriCell layout B). `bighnow.com` is still the old WordPress site.
+at `849e26d`, the same build as <https://bigh-website.vercel.app/> (everything below, with the
+October 21 menu bar). `bighnow.com` is still the old WordPress site.
 
 Every page is in Ink & Gold:
 
 | Page                 | Its own idea                                                                             | Last public browser check             |
 | -------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------- |
-| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 19)        |
-| Menu bar             | "Inscription", all five bottles in the Products drop-down                                | `qa_nav` 436/436 (Oct 19)             |
-| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 18)             |
-| About                | Design C, "circle"                                                                       | `qa_about` 343/343 (Oct 16)           |
-| NuriCell             | Paper lantern that lights; each painting in its own place (layout B, Oct 19)             | `qa_nuricell_ink` 355/355 (Oct 19)    |
-| Green Bee Propolis   | Bold Signature desktop; Editorial pair mobile; gold flowing into the bee tree            | `qa_propolis_ink` 273/273 (Oct 18)    |
-| Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 16)         |
-| Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 16)  |
-| Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 16) |
-| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 18)   |
-| Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 16)         |
+| Home                 | Crane; green spring watercolour in the paintings (Mo's pick C, Oct 16); buttons stay ink | `qa_home_ink` 282/282 (Oct 21)        |
+| Menu bar             | "Inscription", signed with one stroke (Oct 21); all five bottles in Products             | `qa_nav` 440/440 (Oct 21)             |
+| Footer               | FDA statement on a painted California trail sign                                         | `qa_fda` 220/220 (Oct 21)             |
+| About                | Design C, "circle"                                                                       | `qa_about` 353/353 (Oct 21)           |
+| NuriCell             | Paper lantern that lights; each painting in its own place (layout B, Oct 19)             | `qa_nuricell_ink` 355/355 (Oct 21)    |
+| Green Bee Propolis   | Bold Signature desktop; Editorial pair mobile; gold flowing into the bee tree            | `qa_propolis_ink` 273/273 (Oct 21)    |
+| Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 21)         |
+| Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 21)  |
+| Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 21) |
+| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 21)   |
+| Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 21)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and
 spend are in `reference/ink-pages/<page>/`.
