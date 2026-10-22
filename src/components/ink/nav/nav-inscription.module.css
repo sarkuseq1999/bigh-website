@@ -727,7 +727,11 @@
 
 /* Sign up is written on a real loaded brushstroke (Mo's pick A, October 21, 2026;
    inscription/swash-v1.webp, cut by reference/nav/make_signed_strokes.py): it lands round and
-   pressed at the left and dries out into streaks at the right, its words in paper. */
+   pressed at the left and dries out into streaks at the right, its words in paper. Later the same
+   day Mo kept this stroke over three others and then picked it "bigger" (C of three fuller
+   versions): the same painting drawn 5px taller above and below the button and running on 10px
+   past it, so its thinner body and dry tail no longer end under the word. ("Menu" keeps the
+   stroke at the button's own size, clear of the mark.) */
 .root :is(.account, .sheetFoot) button {
   position: relative;
   isolation: isolate;
@@ -745,7 +749,7 @@
   content: "";
   position: absolute;
   z-index: -1;
-  inset: -1px 0;
+  inset: -5px -10px -5px -3px;
   background: var(--ink);
   mask: url("/images/home-v2/nav/inscription/swash-v1.webp") 0 50% / 100% 100% no-repeat;
 }
