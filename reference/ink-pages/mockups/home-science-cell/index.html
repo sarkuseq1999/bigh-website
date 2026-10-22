@@ -81,6 +81,9 @@
   .dropped img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
   .dropped figcaption { font-size: 0.95rem; color: var(--grey); min-height: 0; text-align: left; }
   input:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+  .built { display: grid; gap: 14px; border-top: 1px solid var(--hair); padding-top: 32px; }
+  .built h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+  .built img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); }
 
   @media (max-width: 760px) {
     .slice { grid-template-columns: minmax(0, 1fr); }
@@ -97,6 +100,13 @@
     <h1>A cell that ages with the slider</h1>
     <p id="lede">In place of the steam train: one brain cell, painted at three ages. Drag the age on each.</p>
   </header>
+  <section class="built" aria-labelledby="built">
+    <span class="pick">You picked B · built, not live yet</span>
+    <h2 id="built">B on the homepage</h2>
+    <p class="note">Screenshots of the real built site. Phone at ages 35, 45 and 70, then a laptop at 45.</p>
+    <img src="img/site-phone-ages.webp" alt="The homepage on a phone at ages 35, 45 and 70: the brain cell's branches thin and its gold power plants go from six to three to one" width="1600" height="592">
+    <img src="img/site-desk-45.webp" alt="The homepage on a laptop at age 45: the Aging cells words beside the middle-aged brain cell, its caption and the age slider" width="1440" height="900">
+  </section>
   <div id="options"></div>
   <section class="verdict" id="verdict"></section>
 </main>
