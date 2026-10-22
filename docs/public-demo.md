@@ -4,7 +4,26 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-iyssbgrux-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ond3fvrzx-sarkuseq1999s-projects.vercel.app`
+(`dpl_GZa6NHXg59Qc8D1u9zJBUyXqqtW3`), the **production** deployment of `main` at
+`7ca818d8ebbe36879757df318151516b71dfa7e8`. On October 22, 2026, Mo liked the homepage's
+opening but found the flying crane a little big, and picked B of three sizes (80%, 65% and 50%;
+`reference/ink-pages/mockups/home-crane-size/`): on desktop the crane is 65% of the comp's,
+shrunk toward the point its brush line leaves from, then lifted 50 comp px and moved 40 left with
+its flight stroke, so it reads as farther off in the sky and the headline leads; on phones it is
+69vw (72% of the old 96vw), clear of the window's left edge, its line unchanged. Mo said to push
+it. Claude pushed `studio` to `main` (a fast-forward from `7895696`, with another session's
+release notes for the brush line and Sign up).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282 (its phone check now expects the bird at about 45% of the window),
+`qa_nav` 440/440; screenshots at 1920x1080, 1440x900 and 390x844 matched mockup B (the crane's
+box within 1px), and the tablet (820x1180), wide (2560x1440) and Korean openings were looked at.
+After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink`
+282/282, `qa_nav` 440/440, and the crane's box at 1920x1080, 1440x900 and 390x844 the same as
+on the built site.
+
+Before this update, the alias pointed to `bigh-website-iyssbgrux-sarkuseq1999s-projects.vercel.app`
 (`dpl_B9XcdfSd5XJS2R4L4UoondvxQcuk`), the **production** deployment of `main` at
 `789569691f3738fd3ef6d66ffa80c72f1ec87fbe`. On October 21, 2026, Mo asked for the homepage's
 page-long brush line a little thicker and picked B, twice as heavy, of three (1.5×, 2× and 2.5×;

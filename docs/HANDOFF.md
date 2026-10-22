@@ -7,14 +7,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 22, 2026, by Claude Code (homepage crane smaller and higher).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Not live yet (October 22, latest): the homepage's flying crane is smaller and higher** (Mo
-  found it a little big and picked B of 80%, 65% and 50%; mockups
+- **Live (October 22, latest): the homepage's flying crane is smaller and higher** (Mo
+  found it a little big, picked B of 80%, 65% and 50%, and said to push it; mockups
   `reference/ink-pages/mockups/home-crane-size/`). Desktop: 65% of the comp's crane, shrunk
   toward the point its brush line leaves from, then lifted 50 comp px and moved 40 left with its
   flight stroke. Phones: 69vw (72% of the old 96vw), the line unchanged. `opening.module.css`;
   `qa_home_ink`'s phone check now expects the bird at about 45% of the window. On the built site
   (`next start`): `qa_home_ink` 282/282, `qa_nav` 440/440; desktop 1920 and 1440, phone, tablet,
-  2560 and Korean looked at.
+  2560 and Korean looked at. Claude pushed `main` to `7ca818d` (a fast-forward from `7895696`);
+  production `dpl_GZa6NHXg59Qc8D1u9zJBUyXqqtW3`, the demo alias points to it; public demo
+  `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Live (October 22): the homepage's brush line twice as heavy, and Sign up's stroke drawn
   bigger** (Mo said to push both). The line: Mo picked B of 1.5×, 2× and 2.5× (mockups
   `reference/ink-pages/mockups/home-brush-weight/`); the running line takes the whole weight, the
@@ -25,7 +27,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   replacing the note below that the stroke stays as it is. Claude merged `main` (the steam
   train) into `studio` and pushed `main` to `7895696`; production
   `dpl_B9XcdfSd5XJS2R4L4UoondvxQcuk`, the demo alias points to it; public demo `qa_home_ink`
-  282/282, `qa_nav` 440/440 (`docs/public-demo.md`). The smaller crane above is not in it.
+  282/282, `qa_nav` 440/440 (`docs/public-demo.md`). The smaller crane above went live after it.
 - **Live (October 21): the homepage science steam train** (Mo said to put it live). See
   "Homepage science section" below. Claude pushed `main` to `7a042ce` (a fast-forward from
   `d9c8c34`); production `dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`, the demo alias points to it; public
@@ -70,9 +72,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `main` is `7895696` (live: the steam train, the bigger Sign up stroke and the brush
-  line's 2×); `studio` adds the October 22 release notes and, once committed, the smaller crane;
-  the next push is a fast-forward and takes the crane live.
+- **State:** `main` is `7ca818d` (live: the steam train, the bigger Sign up stroke, the brush
+  line's 2× and the smaller crane); `studio` adds only the crane's release notes, so the next push
+  is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
