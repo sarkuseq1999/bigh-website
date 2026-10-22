@@ -5,9 +5,13 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 21, 2026, by Claude Code (two phone fixes live).
+- **Last updated:** October 21, 2026, by Claude Code (the homepage science steam train live).
+- **Live (October 21, latest): the homepage science steam train** (Mo said to put it live). See
+  "Homepage science section" below. Claude pushed `main` to `7a042ce` (a fast-forward from
+  `d9c8c34`); production `dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`, the demo alias points to it; public
+  demo `qa_home_ink` 282/282 and `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 21, latest): two phone fixes** (Mo said to fix and push them). The homepage's
+- **Live (October 21): two phone fixes** (Mo said to fix and push them). The homepage's
   warm sky was cut flat under the menu bar on phones (the opening's picture now clips only its
   sides, `opening.module.css`: a 12-level step, now under 1); and "✕ Close" was squeezed against
   the mark in the phone bar (from 400px down the bar's sides come out to 16px, the ✕ steps aside,
