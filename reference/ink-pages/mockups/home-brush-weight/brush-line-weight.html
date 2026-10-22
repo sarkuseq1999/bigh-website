@@ -1,0 +1,202 @@
+<title>Brush Line Weight</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500&display=swap">
+<style>
+  /* Layout: one narrow column like a scroll; a sticky row of four weights; each view swaps in place. */
+  :root {
+    --paper: #f3efe4;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d8d1c0;
+    --chip: #e8e2d3;
+    --gold: #a8842c;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --ink: #f1ece0;
+      --ink-soft: #b4ac9c;
+      --rule: #3a362e;
+      --chip: #2a2721;
+      --gold: #d2ae58;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --ink: #f1ece0;
+    --ink-soft: #b4ac9c;
+    --rule: #3a362e;
+    --chip: #2a2721;
+    --gold: #d2ae58;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.5 var(--body);
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--paper);
+  }
+  .wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 56px;
+    display: grid;
+    gap: 22px;
+  }
+  h1 {
+    font: 500 34px/1.1 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    color: var(--ink-soft);
+  }
+  .picker {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--paper);
+    padding-block: 10px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .picker button {
+    font: 500 15px/1.15 var(--body);
+    color: var(--ink);
+    background: var(--chip);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 9px 4px;
+    min-height: 52px;
+    cursor: pointer;
+  }
+  .picker button small {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .picker button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .picker button[aria-pressed="true"] small {
+    color: var(--paper);
+    opacity: 0.8;
+  }
+  .picker button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    border-radius: 6px;
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  figcaption b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .notes {
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+    display: grid;
+    gap: 10px;
+  }
+  .notes h2 {
+    font: 500 22px/1.2 var(--title);
+    margin: 0;
+  }
+  .notes ul {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 6px;
+  }
+  .score {
+    margin: 0;
+  }
+  .score strong {
+    color: var(--gold);
+  }
+</style>
+
+<div class="wrap">
+  <h1>The homepage brush line, four weights</h1>
+  <p class="lede">The same line at four thicknesses. Tap a weight; every picture below switches. Desktop pictures, shown about real size.</p>
+
+  <div class="picker" role="group" aria-label="Line weight">
+    <button type="button" id="w-1" data-w="1" aria-pressed="false">Today<small>as live</small></button>
+    <button type="button" id="w-1_5" data-w="1_5" aria-pressed="false">A<small>1.5×</small></button>
+    <button type="button" id="w-2" data-w="2" aria-pressed="true">B<small>2× · my pick</small></button>
+    <button type="button" id="w-2_5" data-w="2_5" aria-pressed="false">C<small>2.5×</small></button>
+  </div>
+
+  <figure>
+    <img data-view="liu" src="img/liu-2.webp" width="440" height="804" alt="The brush line beside Dr. Liu's section">
+    <figcaption><b>Dr. Liu's section.</b> The long line running down the page.</figcaption>
+  </figure>
+  <figure>
+    <img data-view="sage" src="img/sage-2.webp" width="440" height="804" alt="The brush line beside the hummingbird painting">
+    <figcaption><b>The science section.</b> Where the brush reloads, it lands heavier.</figcaption>
+  </figure>
+  <figure>
+    <img data-view="research" src="img/research-2.webp" width="440" height="804" alt="The brush line curving past the research list">
+    <figcaption><b>The research list.</b> A curve where the ink runs dry.</figcaption>
+  </figure>
+  <figure>
+    <img data-view="close" src="img/close-2.webp" width="440" height="520" alt="A short painted rule and the closing stroke under Stay sharp, Live fully">
+    <figcaption><b>The end of the page.</b> A short rule, then the closing stroke under the crane.</figcaption>
+  </figure>
+
+  <div class="notes">
+    <h2>What changes</h2>
+    <ul>
+      <li>The long line gets thicker, top to bottom.</li>
+      <li>The crane's stroke at the very top stays as it is.</li>
+      <li>The two heaviest marks (under the big bottle, under "Stay sharp") get only a little heavier, so they don't turn into dark slabs.</li>
+      <li>Phones have no long line. There, only the three short rules and the closing stroke change.</li>
+    </ul>
+    <p class="score">My score for B: <strong>8 / 10</strong>. What holds it back: on dry curves the thicker line shows fine brush streaks. At C they can read as two thin lines.</p>
+  </div>
+</div>
+
+<script>
+  const buttons = [...document.querySelectorAll(".picker button")];
+  const images = [...document.querySelectorAll("img[data-view]")];
+  // Load every weight up front so switching never flashes.
+  for (const b of buttons) for (const img of images) new Image().src = `img/${img.dataset.view}-${b.dataset.w}.webp`;
+  const show = (w) => {
+    for (const b of buttons) b.setAttribute("aria-pressed", String(b.dataset.w === w));
+    for (const img of images) img.src = `img/${img.dataset.view}-${w}.webp`;
+  };
+  for (const b of buttons) b.addEventListener("click", () => show(b.dataset.w));
+</script>

@@ -42,6 +42,8 @@ type Sample = {
   fresh: boolean;
   /** How heavily the brush is loaded (1 = the page's usual stroke). */
   load: number;
+  /** How much heavier than the line of October 5 the page's weight paints it here. */
+  heavy: number;
   /** How sharply the line turns here (0 straight, toward 1 a hairpin). */
   turn: number;
   /** The anchors of the two waypoints this sample lies between (for checks: where it lifts). */
@@ -169,6 +171,7 @@ function sample(points: Point[], scale: number): Sample[] {
         classic: false,
         fresh: p1.fresh && k === (i === 1 ? 0 : 1),
         load: p1.load + (p2.load - p1.load) * e,
+        heavy: 1,
         turn: 0,
         from: p1.at,
         to: p2.at,
@@ -209,12 +212,15 @@ const STROKE_MAX = 1500;
 /** A stroke that ends by lifting off the paper still has ink when it lifts (the ground under the
  *  big bottle, the three rules, the closing stroke): its ink lasts as if it ran this far. */
 const STROKE_LIFT = 1150;
+/** The page line's weight against the line of October 5: Mo found that line too thin and picked
+ *  B, twice as heavy, of three (October 21, 2026). */
+const WEIGHT = 2;
 
 /**
  * The brush's life below the opening. The painter reloads where the route says (fresh: beside a
  * station, under the big bottle, where the brush touches down again), so each stroke lands loaded
- * at a place that means something (about 3.6 px at the comp's width) and has thinned toward
- * about 1 px and dried by the next reload; a stroke longer than STROKE_MAX is shared out into even
+ * at a place that means something (about 7 px at the comp's width) and has thinned toward
+ * about 2 px and dried by the next reload; a stroke longer than STROKE_MAX is shared out into even
  * loads. Along the way the hand slows and presses a little wider where the line turns, and the
  * pressure breathes on the long runs, so no stretch is mechanically even. Where the route lifts
  * the brush (ink 0) the stroke tapers to nothing and ends. Samples above `classicUntil` (page y)
@@ -259,7 +265,15 @@ function material(samples: Sample[], classicUntil: number, scale: number) {
       const land = first ? 1 : smooth(0, 36 * scale, into);
       const load = land * Math.pow(1 - phase, 0.85);
       const loaded = Math.pow(Math.max(0, p.ink), 0.6);
-      const width = (1.0 + 2.6 * load) * scale * loaded * p.load;
+      // The page's weight: the running line takes all of it; the heavily loaded accents (the
+      // ground under the big bottle, the closing stroke) take less, so they stay the heaviest
+      // marks without turning into slabs. It comes in gently after the opening's own line, so the
+      // join holds; on a phone the first stroke is the opening's whole stroke, kept as approved.
+      const gain = (WEIGHT - 1) * Math.min(1, 1 / (p.load * p.load));
+      const ramp = !first ? 1 : classicUntil < 0 ? 0 : smooth(0, 320 * scale, along);
+      const heavy = 1 + gain * ramp;
+      p.heavy = heavy;
+      const width = (1.0 + 2.6 * load) * scale * loaded * p.load * heavy;
       if (first) {
         // The opening's own line (and on a phone, the opening's whole stroke) as approved.
         p.w = width * (0.92 + 0.16 * noise(p.s / 90, 13));
@@ -319,6 +333,7 @@ function lifts(samples: Sample[]) {
  * The page's ink stroke: one continuous envelope with calligraphic width and paper-tooth edges,
  * a faint bleed into the fibres, and dry-brush streaks cut INSIDE the envelope where the brush
  * runs dry (flying white): the outer edges always hold, so the stroke never breaks into dashes.
+ * Streaks open where they would on the line of October 5, however heavy the page's weight.
  */
 function paintInk(
   ctx: CanvasRenderingContext2D,
@@ -382,25 +397,26 @@ function paintInk(
       const w = width(i);
       const q = samples[Math.min(b, i + 2)];
       const wq = width(Math.min(b, i + 2));
-      // Patchy density across the whole stroke.
+      // Patchy density across the whole stroke. The edges that hold keep the width they had on
+      // the line of October 5, so a heavier line thins as one stroke, never as a hollow tube.
       const thin = p.dry * (noise(p.s / 22, 251) * 0.55 + noise(p.s / 5, 257) * 0.2) - 0.08;
       if (thin > 0) {
         ctx.globalAlpha = Math.min(0.5, thin);
-        ctx.lineWidth = w * 0.62;
+        ctx.lineWidth = w * (1 - 0.38 / p.heavy);
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(q.x, q.y);
         ctx.stroke();
       }
       // Thin passages only thin out; streaks need a stroke wide enough to hold them inside.
-      if (w < 2.6) continue;
+      if (w < 2.6 * p.heavy) continue;
       lanes.forEach((lane, k) => {
         const streak = noise(p.s / (9 + 5 * k), 211 + k) * 0.8 + noise(p.s / 3, 223 + k) * 0.35;
         const cut = p.dry * 1.2 + streak - 1.05;
         if (cut <= 0) return;
         const off = lane + (noise(p.s / 40, 241 + k) - 0.5) * 0.1;
         ctx.globalAlpha = Math.min(0.95, cut * 2.2);
-        ctx.lineWidth = Math.max(0.3, w * 0.15);
+        ctx.lineWidth = Math.max(0.3, (w / p.heavy) * 0.15);
         ctx.beginPath();
         ctx.moveTo(p.x + p.nx * w * off, p.y + p.ny * w * off);
         ctx.lineTo(q.x + q.nx * wq * off, q.y + q.ny * wq * off);

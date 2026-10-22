@@ -124,6 +124,13 @@ These sit on top of `DESIGN.md`.
   brushstroke; a pale ink wash behind a pointed-at word. Drop-downs, the settle and the menu sheet
   stay as they were. Mockups: `reference/ink-pages/mockups/nav/2026-10-21/`; strokes cut by
   `reference/nav/make_signed_strokes.py` from two Codex paintings.
+- **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
+  page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
+  takes the whole weight; the two heavy accents (the ground under the big bottle, the closing
+  stroke under "Stay sharp.") only a little more, so they never turn into slabs; the crane's
+  opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
+  line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
+  Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

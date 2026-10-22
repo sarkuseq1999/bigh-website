@@ -5,8 +5,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 21, 2026, by Claude Code (two phone fixes live).
+- **Last updated:** October 21, 2026, by Claude Code (homepage brush line 2×, not live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Not live yet (October 21, latest): the homepage's brush line is twice as heavy** (Mo picked B
+  of 1.5×, 2× and 2.5×; mockups `reference/ink-pages/mockups/home-brush-weight/`). The running
+  line takes the whole weight, the bottle's ground and the closing stroke only a little, the
+  crane's opening stroke none; the dry-brush streaks keep their old size (`WEIGHT` and `heavy` in
+  `src/components/ink/brush.tsx`). On phones only the three rules and the closing stroke change.
+  Built in a scratch worktree (branch `home-brush-weight`) while another session's Sign up work
+  sat uncommitted here, then fast-forwarded into `studio`. Not pushed.
+- **Not live yet (October 21): Sign up's stroke drawn bigger** (`35e26bb`, another session; Mo
+  picked C of three fuller versions of the same painting; DESIGN.md has the details). It replaces
+  the note below that the stroke stays as it is.
 - **Live (October 21, latest): two phone fixes** (Mo said to fix and push them). The homepage's
   warm sky was cut flat under the menu bar on phones (the opening's picture now clips only its
   sides, `opening.module.css`: a 12-level step, now under 1); and "✕ Close" was squeezed against
@@ -46,8 +56,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `studio` is `main` plus the October 21 release notes; the next push is a
-  fast-forward.
+- **State:** `studio` is `main` plus the October 21 release notes, the bigger Sign up stroke and
+  the brush line's 2× commit; the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
