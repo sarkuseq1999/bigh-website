@@ -334,11 +334,15 @@
   /* Round 5: the first screen is a painting first. About 46% of a phone's height (388 px at
      390 x 844), never under 88% of its width (where a browser's bars shorten the window), never
      so tall that the headline leaves a short window (a phone on its side), at most 480 px. */
+  /* The paintings run off both sides of the window (the crane, the wide landscape), so the picture
+     is trimmed at its sides only: the warm haze round the sun reaches above it and fades out on its
+     own, instead of being cut flat at the menu bar's foot (Mo, October 21, 2026). */
   .art {
     position: relative;
     inset: auto;
     height: clamp(240px, min(max(46svh, 88vw), 100svh - 200px), 480px);
     overflow: hidden;
+    overflow: clip visible;
   }
 
   .sun {
