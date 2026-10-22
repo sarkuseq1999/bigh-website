@@ -1,0 +1,224 @@
+<title>Homepage Crane Size</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500&display=swap">
+<style>
+  /* Layout: one column like a scroll; a sticky row of four crane sizes; the desktop and phone
+     pictures and the note under them swap in place. */
+  :root {
+    --paper: #f3efe4;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d8d1c0;
+    --chip: #e8e2d3;
+    --gold: #a8842c;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --ink: #f1ece0;
+      --ink-soft: #b4ac9c;
+      --rule: #3a362e;
+      --chip: #2a2721;
+      --gold: #d2ae58;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --ink: #f1ece0;
+    --ink-soft: #b4ac9c;
+    --rule: #3a362e;
+    --chip: #2a2721;
+    --gold: #d2ae58;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.5 var(--body);
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--paper);
+  }
+  .wrap {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 56px;
+    display: grid;
+    gap: 22px;
+  }
+  h1 {
+    font: 500 34px/1.1 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 38em;
+    color: var(--ink-soft);
+  }
+  .picker {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--paper);
+    padding-block: 10px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+  .picker button {
+    font: 500 15px/1.15 var(--body);
+    color: var(--ink);
+    background: var(--chip);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 9px 4px;
+    min-height: 52px;
+    cursor: pointer;
+  }
+  .picker button small {
+    display: block;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink-soft);
+  }
+  .picker button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .picker button[aria-pressed="true"] small {
+    color: var(--paper);
+    opacity: 0.8;
+  }
+  .picker button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  .note {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .note h2 {
+    font: 500 24px/1.2 var(--title);
+    margin: 0;
+  }
+  .note p {
+    margin: 0;
+    max-width: 40em;
+  }
+  .note .score {
+    color: var(--ink-soft);
+  }
+  .note .score strong {
+    color: var(--gold);
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 8px;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+  figure.phone img {
+    max-width: 300px;
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  figcaption b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+</style>
+
+<div class="wrap">
+  <h1>The homepage crane, four sizes</h1>
+  <p class="lede">Real screenshots of the homepage, taken after the crane's two wingbeats, when it rests. Only the crane changes. Its brush line moves with it. Tap a size; the pictures below switch.</p>
+
+  <div class="picker" role="group" aria-label="Crane size">
+    <button type="button" data-v="now" aria-pressed="false">Today<small>as live</small></button>
+    <button type="button" data-v="a" aria-pressed="false">A<small>80%</small></button>
+    <button type="button" data-v="b" aria-pressed="true">B<small>65% · my pick</small></button>
+    <button type="button" data-v="c" aria-pressed="false">C<small>50%</small></button>
+  </div>
+
+  <div class="note" aria-live="polite">
+    <h2 id="note-title"></h2>
+    <p id="note-text"></p>
+    <p class="score" id="note-score"></p>
+  </div>
+
+  <figure>
+    <img id="desk" src="img/desk-b.webp" width="1440" height="810" alt="The homepage opening on a 1920 by 1080 desktop">
+    <figcaption><b>Desktop</b> (a 1920 × 1080 screen).</figcaption>
+  </figure>
+  <figure class="phone">
+    <img id="phone" src="img/phone-b.webp" width="540" height="900" alt="The homepage opening on a phone">
+    <figcaption><b>Phone</b> (first screen).</figcaption>
+  </figure>
+</div>
+
+<script>
+  const notes = {
+    now: {
+      title: "Today",
+      text: "The crane as it is live now. On a phone it runs off the left edge.",
+      score: "",
+    },
+    a: {
+      title: "A. A step smaller",
+      text: "80% of today's size, in the same spot. The brush line stays exactly where it is. A little more sky between the crane and the menu bar.",
+      score: "My score: <strong>8 / 10</strong>. Holds it back: the change is small. The crane is still the biggest shape at the top.",
+    },
+    b: {
+      title: "B. Smaller and higher",
+      text: "65% of today's size, lifted a little and moved slightly left, with its brush line rising with it. It reads as farther off in the sky, and the headline leads.",
+      score: "My score: <strong>9 / 10</strong>. Holds it back: the line now crosses open sky, a bit apart from the mist and mountains.",
+    },
+    c: {
+      title: "C. A distant bird",
+      text: "Half of today's size, high in the sky. The crane becomes a small accent; the brush line becomes the big gesture.",
+      score: "My score: <strong>7 / 10</strong>. Holds it back: too small for the page's main picture. On a phone the red crown is hard to see.",
+    },
+  };
+  const buttons = [...document.querySelectorAll(".picker button")];
+  const desk = document.getElementById("desk");
+  const phone = document.getElementById("phone");
+  // Load every size up front so switching never flashes.
+  for (const b of buttons) {
+    new Image().src = `img/desk-${b.dataset.v}.webp`;
+    new Image().src = `img/phone-${b.dataset.v}.webp`;
+  }
+  const show = (v) => {
+    for (const b of buttons) b.setAttribute("aria-pressed", String(b.dataset.v === v));
+    desk.src = `img/desk-${v}.webp`;
+    phone.src = `img/phone-${v}.webp`;
+    document.getElementById("note-title").textContent = notes[v].title;
+    document.getElementById("note-text").textContent = notes[v].text;
+    const score = document.getElementById("note-score");
+    score.innerHTML = notes[v].score;
+    score.hidden = !notes[v].score;
+  };
+  for (const b of buttons) b.addEventListener("click", () => show(b.dataset.v));
+  show("b");
+</script>

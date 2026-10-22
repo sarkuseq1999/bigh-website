@@ -131,6 +131,13 @@ These sit on top of `DESIGN.md`.
   opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
   line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
   Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
+- **Homepage crane: smaller and higher (Mo picked B, October 22, 2026).** Mo liked the opening
+  but found the flying crane a little big, and picked B (65% of its size) over A (80%, same spot)
+  and C (50%). It shrinks toward the point its brush line leaves from, then rises 50 comp px and
+  moves 40 left, its flight stroke with it, so it reads as farther off in the sky and the
+  headline leads. Phones: 72% of the old crane (69vw, the bird about 45% of the window), clear of
+  the window's left edge, its line unchanged. `opening.module.css`. Mockups:
+  `reference/ink-pages/mockups/home-crane-size/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

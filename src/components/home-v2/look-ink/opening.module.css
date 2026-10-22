@@ -46,6 +46,8 @@
 .flightPath {
   top: 10%;
   height: calc(1000 * var(--u));
+  /* The stroke rises and moves in with the smaller crane (B, below). */
+  translate: calc(-40 * var(--u)) calc(-50 * var(--u));
 }
 
 /* Region landscape: x 0, y 30%, w 100%, h 70%. Its lowest mountains dissolve into the paper, as
@@ -157,16 +159,19 @@
   visibility: hidden;
 }
 
-/* Region crane: x 20%, y 10%, w 40%, h 40%. The whole bird rides the air: a slow rise and fall
-   of a few pixels and a hair of pitch, on two cycles of their own (about 13 s and 21 s), out of
-   step with its two wingbeats (2.4 s each, in the picture) and with each other; it goes on
-   gliding after the wings have stopped. Small, so the page's brush line still leaves from under
-   its trailing legs. */
+/* Region crane: the comp's crane (x 20%, y 10%, w 40%) at 65% of its size, farther off in the
+   sky, so the headline leads (Mo picked B, October 22, 2026, of 80%, 65% and 50%: the comp's
+   bird looked a little big). Shrunk toward the point its brush line leaves from, then lifted 50
+   comp px and moved 40 left, with its flight stroke (.flightPath). The whole bird rides the air:
+   a slow rise and fall of a few pixels and a hair of pitch, on two cycles of their own (about
+   13 s and 21 s), out of step with its two wingbeats (2.4 s each, in the picture) and with each
+   other; it goes on gliding after the wings have stopped. Small, so the page's brush line still
+   leaves from under its trailing legs. */
 .crane {
   position: absolute;
-  left: calc(var(--inset) + min(20%, 362.4px));
-  top: 10%;
-  width: calc(614 * var(--u));
+  left: calc(var(--inset) + min(20%, 362.4px) + 62.5 * var(--u));
+  top: calc(10% + 62 * var(--u));
+  width: calc(399 * var(--u));
   transform-origin: 62% 60%;
   animation:
     ride calc(var(--breath) * 2.7) ease-in-out infinite alternate,
@@ -351,12 +356,13 @@
     width: 27vw;
   }
 
-  /* The bird spans about 62% of the window (its picture is 96vw, the bird 65% of it), flying in
-     from the left edge toward the sun, its beak under the sun's lower edge. */
+  /* The bird spans about 45% of the window (its picture is 69vw, the bird 65% of it: B, 72% of
+     round 5's crane, shrunk toward the point its brush line leaves from, so the line is
+     unchanged), flying toward the sun clear of the window's left edge. */
   .crane {
-    left: -11vw;
-    top: 4%;
-    width: 96vw;
+    left: 1.8vw;
+    top: calc(4% + 14vw);
+    width: 69vw;
   }
 
   .landscape {

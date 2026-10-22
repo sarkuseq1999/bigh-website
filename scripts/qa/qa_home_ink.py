@@ -1128,13 +1128,16 @@ def run(browser, look, mobile):
     inside = all(b[0] >= 0 and b[2] <= width for b in boxes)
     check(f"{tag}: the opening's words sit clear, inside the window", not overlaps and inside, f"{len(overlaps)} overlaps")
     # Round 5: the phone's opening is a painting first: the picture about 46% of the window's
-    # height, the bird about 62% of its width (a wingbeat picture sharp for the screen: the full
-    # one on a 2x screen), and the two pills one over the other at the column's full width, 52 px or taller.
+    # height, the bird about 45% of its width (Mo, October 22: B, 72% of round 5's crane, which
+    # spanned 62%; a wingbeat picture sharp for the screen), and the two pills one over the other
+    # at the column's full width, 52 px or taller.
     if mobile:
         o = page.evaluate(PHONE_OPENING)
         check(
-            f"{tag}: the opening is a painting first, the crane nearly the window's width",
-            o["art"] >= 0.44 * view_h and o["bird"] >= 0.58 * width and o["flight"] >= o["need"],
+            f"{tag}: the opening is a painting first, the crane about 45% of the window's width",
+            o["art"] >= 0.44 * view_h
+            and 0.42 * width <= o["bird"] <= 0.48 * width
+            and o["flight"] >= o["need"],
             f"picture {o['art']:.0f} px tall, bird {o['bird']:.0f} px wide, wingbeat picture {o['flight']} px (needs {o['need']})",
         )
         pills, col = o["pills"], o["col"]

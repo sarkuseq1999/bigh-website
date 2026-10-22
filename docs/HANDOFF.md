@@ -5,18 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 22, 2026, by Claude Code (homepage brush line 2× and the bigger Sign up).
+- **Last updated:** October 22, 2026, by Claude Code (homepage crane smaller and higher).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Not live yet (October 21, latest): the homepage's brush line is twice as heavy** (Mo picked B
-  of 1.5×, 2× and 2.5×; mockups `reference/ink-pages/mockups/home-brush-weight/`). The running
-  line takes the whole weight, the bottle's ground and the closing stroke only a little, the
-  crane's opening stroke none; the dry-brush streaks keep their old size (`WEIGHT` and `heavy` in
-  `src/components/ink/brush.tsx`). On phones only the three rules and the closing stroke change.
-  Built in a scratch worktree (branch `home-brush-weight`) while another session's Sign up work
-  sat uncommitted here, then fast-forwarded into `studio` and merged with `main`'s steam train.
-- **Not live yet (October 21): Sign up's stroke drawn bigger** (`35e26bb`, another session; Mo
-  picked C of three fuller versions of the same painting; DESIGN.md has the details). It replaces
-  the note below that the stroke stays as it is.
+- **Not live yet (October 22, latest): the homepage's flying crane is smaller and higher** (Mo
+  found it a little big and picked B of 80%, 65% and 50%; mockups
+  `reference/ink-pages/mockups/home-crane-size/`). Desktop: 65% of the comp's crane, shrunk
+  toward the point its brush line leaves from, then lifted 50 comp px and moved 40 left with its
+  flight stroke. Phones: 69vw (72% of the old 96vw), the line unchanged. `opening.module.css`;
+  `qa_home_ink`'s phone check now expects the bird at about 45% of the window. On the built site
+  (`next start`): `qa_home_ink` 282/282, `qa_nav` 440/440; desktop 1920 and 1440, phone, tablet,
+  2560 and Korean looked at.
+- **Live (October 22): the homepage's brush line twice as heavy, and Sign up's stroke drawn
+  bigger** (Mo said to push both). The line: Mo picked B of 1.5×, 2× and 2.5× (mockups
+  `reference/ink-pages/mockups/home-brush-weight/`); the running line takes the whole weight, the
+  bottle's ground and the closing stroke only a little, the crane's opening stroke none; the
+  dry-brush streaks keep their old size (`WEIGHT` and `heavy` in `src/components/ink/brush.tsx`).
+  On phones only the three rules and the closing stroke change. Sign up: Mo picked C of three
+  fuller versions of the same painting (`35e26bb`, another session; DESIGN.md has the details),
+  replacing the note below that the stroke stays as it is. Claude merged `main` (the steam
+  train) into `studio` and pushed `main` to `7895696`; production
+  `dpl_B9XcdfSd5XJS2R4L4UoondvxQcuk`, the demo alias points to it; public demo `qa_home_ink`
+  282/282, `qa_nav` 440/440 (`docs/public-demo.md`). The smaller crane above is not in it.
 - **Live (October 21): the homepage science steam train** (Mo said to put it live). See
   "Homepage science section" below. Claude pushed `main` to `7a042ce` (a fast-forward from
   `d9c8c34`); production `dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`, the demo alias points to it; public
@@ -59,8 +68,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `studio` is `main` (the steam train) merged with the bigger Sign up stroke and the
-  brush line's 2× commit; the next push is a fast-forward.
+- **State:** `main` is `7895696` (live: the steam train, the bigger Sign up stroke and the brush
+  line's 2×); `studio` adds the October 22 release notes and, once committed, the smaller crane;
+  the next push is a fast-forward and takes the crane live.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
