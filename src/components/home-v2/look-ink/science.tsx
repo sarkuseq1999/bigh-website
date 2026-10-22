@@ -6,17 +6,17 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { science, scienceArticles, scienceFacts } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { gold, sciencePaintings } from "./assets";
+import { sciencePaintings } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
 
-// "Make sense of the science." Three topics, each beside its own everyday California painting
-// (Mo, October 19, 2026: the mitochondrion is shown once, in "Tiny power plants.", above): a
-// hummingbird at a sage flower, energy you can see, the light crossing the gold leaf in its wings
-// (mitochondria); a cut apple, one half browned and one kept fresh by a drop of lemon (free
-// radicals); and one Joshua tree at three ages, young, middle and old, chosen by an age slider,
-// with the honesty line "Illustration, not a measurement" (aging cells). The slider shows one tree
-// at a time, never two blended into a ghost.
+// "Make sense of the science." Three topics, one small steam engine in the redwoods (Mo, October
+// 21, 2026: idea A), and a line under the picture that ties it to the words. Mitochondria: the
+// fireman feeds the gold fire and the engine pulls away, fuel in, power out. Free radicals: closer,
+// the screen on the smokestack holds the sparks the fire throws off. Aging cells: the same engine
+// new, well worn and old but still running, chosen by an age slider, with the honesty line
+// "Illustration, not a measurement". The slider shows one engine at a time, never two blended
+// into a ghost.
 //
 // Round 7 (October 4): from 900px up, with motion, the block is a scroll story, one idea per
 // screen, as Timeline explains its science. The painting is pinned (sticky) beside the words, the
@@ -25,8 +25,8 @@ import styles from "./science.module.css";
 // blooms into that topic's state. Phones and reduced motion keep the three tabs.
 const AGE_MIN = 30;
 const AGE_MAX = 80;
-/** The ages at which the slider moves the Joshua tree on to its next painting (young until 43,
- *  middle until 68, then old): the slider opens at 45 on the middle tree. */
+/** The ages at which the slider moves the engine on to its next painting (new until 43, well
+ *  worn until 68, then old): the slider opens at 45 on the well-worn one. */
 const TREE_FROM = [43, 68];
 /** Paper between the index and a topic's first line when the topic has arrived. */
 const LEAD = 48;
@@ -386,11 +386,11 @@ export function Science() {
                 loading="lazy"
                 data-on={topic === 1}
               />
-              {/* The Joshua tree's three ages, one layer of the stage that multiplies as one:
-                  each older tree lies over the younger ones and covers them. */}
+              {/* The engine's three ages, one layer of the stage that multiplies as one: each
+                  older one lies over the younger ones and covers them. */}
               <div className={`${base.ink} ${styles.layer}`} data-on={topic === 2}>
                 {sciencePaintings.aging.map((painting, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element -- one age of the tree
+                  // eslint-disable-next-line @next/next/no-img-element -- one age of the engine
                   <img
                     key={painting.src}
                     className={styles.tree}
@@ -401,15 +401,22 @@ export function Science() {
                   />
                 ))}
               </div>
-              <span
-                className={`${base.gold} ${styles.leafLight}`}
-                data-on={topic === 0}
-                style={{ ["--gold" as string]: `url(${gold.energy})` }}
-              />
             </div>
             <figcaption className={`${base.caption} ${styles.caption}`}>
               {copy("Illustrations")}
             </figcaption>
+            {/* Every line is there, one over another, so the figure keeps the height of the
+                longest whichever is shown (the scroll story measures the figure). */}
+            <div className={styles.peeks}>
+              {[...science.peek, ...science.peekAge].map((line, i) => {
+                const on = i === (topic === 2 ? 2 + tree : topic);
+                return (
+                  <p key={line} className={styles.peek} data-on={on} aria-hidden={!on}>
+                    {copy(line)}
+                  </p>
+                );
+              })}
+            </div>
 
             <div className={styles.age} data-on={topic === 2} inert={topic !== 2}>
               <label className={styles.ageLabel} htmlFor="ink-age">

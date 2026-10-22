@@ -24,3 +24,25 @@ purpose" now has an oak.
   `C:\Users\mcbig\Documents\codes\bigh-archive\home-science-unused-2026-10-19\`.
 - Mockups shown to Mo: `reference/ink-pages/mockups/home-science/`
   (https://claude.ai/artifact/T6vjFHVwfJ4ENzNeHhbAfe).
+
+## October 21, 2026: the steam train (idea A, test branch `home-science-train`)
+
+Mo found the October 19 paintings decorative, then a hiker with a round window into a cell (branch
+`home-science-hiker`) hard to relate to: the cell read as "a ball with worms in it". Of three
+new ideas painted as quick samples (mockup: `reference/ink-pages/mockups/home-science-ideas/`), A
+the train, B the campfire (`campfire-sparks-a1`) and C the clear mitochondrion (`mito-clear-a1`),
+Mo chose A: one small
+steam engine in the redwoods, as the cells' "tiny power plants" are, with a line under each picture
+that ties it to the words.
+
+| Topic         | Painting                                              | Original             |
+| ------------- | ----------------------------------------------------- | -------------------- |
+| Mitochondria  | The fireman feeds a log to the gold fire              | `train-fuel-a2`      |
+| Free radicals | The smokestack's mesh screen holds the sparks         | `train-sparks-c1`    |
+| Aging cells   | The same engine new, well worn, old (the age slider) | `train-new-a1`, `train-middle-a1`, `train-old-a1` |
+
+- `train-sparks-a1` (the first sample) was too dark and drawn; `train-sparks-b1` painted it again
+  lighter and looser and is the base the others were painted from, so they line up.
+- `build_train.py` makes the site's `train-<state>-v1.webp` (the originals are 4:3, the stage's
+  shape). The fire is the one gold leaf; there is no band of light over it.
+- Codex once hung waiting for input: `codex exec` needs `< /dev/null` when run from a script.

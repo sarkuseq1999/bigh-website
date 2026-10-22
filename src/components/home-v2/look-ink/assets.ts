@@ -51,24 +51,25 @@ export const mito: Record<"glow", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
 };
 
-/** "Make sense of the science." (Mo, October 19, 2026: idea A): each topic its own everyday
- *  California painting, so the mitochondrion is shown once, in "Tiny power plants.", not four
- *  times. Painted by Codex, already in colour (they are not tinted); built by
- *  reference/ink-pages/home-science/build_home_science.py into the stage's box (ink). */
+/** "Make sense of the science." (Mo, October 21, 2026: idea A, the steam train): the October 19
+ *  paintings set a mood but did not explain their words, so one small steam engine in the
+ *  redwoods tells all three, as the cells' "tiny power plants" do: fuel in, power out, a few
+ *  sparks. Painted by Codex (the fire is the one gold leaf); built by
+ *  reference/ink-pages/home-science/build_train.py into the stage's box (ink). */
 const S = `${I}/science`;
 export const sciencePaintings = {
-  /** A hummingbird at California hummingbird sage: energy you can see, gold leaf in its wings. */
-  energy: { src: `${S}/hummingbird-v1.webp`, width: 1600, height: 1195 },
-  /** A cut apple, one half browned and one kept fresh by a drop of Meyer lemon (gold leaf on the
-   *  lemon's face): what oxidation looks like, and what slows it. A comparison, not the same
-   *  chemistry; the stage says "Illustrations". */
-  balance: { src: `${S}/apple-lemon-v1.webp`, width: 1600, height: 1195 },
-  /** One Joshua tree at three ages on the same spot (one crop, so they line up): young, a single
-   *  trunk; middle, three arms; old, many. The age slider shows one of them at a time. */
+  /** The fireman feeds a log to the gold fire and the engine pulls away: fuel in, power out. */
+  energy: { src: `${S}/train-fuel-v1.webp`, width: 1600, height: 1195 },
+  /** Closer, the smokestack: the screen on top holds the sparks the fire throws off, and one or
+   *  two escape (free radicals, and the body's own defences). A comparison; the stage says
+   *  "Illustrations". */
+  balance: { src: `${S}/train-sparks-v1.webp`, width: 1600, height: 1195 },
+  /** The same engine at three ages on the same spot (one framing, so they line up): new, well
+   *  worn, and old but still running, its fire lower. The age slider shows one at a time. */
   aging: [
-    { src: `${S}/joshua-young-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/joshua-middle-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/joshua-old-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-new-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-middle-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-old-v1.webp`, width: 1600, height: 1195 },
   ],
 } satisfies Record<string, Picture | Picture[]>;
 
@@ -76,7 +77,6 @@ export const sciencePaintings = {
  *  moving band of light over the painting through it, so only the leaf catches the light. */
 export const gold = {
   mito: `${I}/mito-gold.webp`,
-  energy: `${S}/hummingbird-v1-gold.webp`,
   purpose: `${I}/purpose-gold.webp`,
 };
 

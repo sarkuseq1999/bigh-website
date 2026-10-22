@@ -165,6 +165,17 @@ export const science = {
   explainer: "Read a quick explainer",
   ageLabel: "Illustration, not a measurement",
   topics: ["Mitochondria", "Free radicals", "Aging cells"],
+  /** The line under each picture that ties the steam engine to the words (draft, October 21,
+   *  2026; English only for now): one per topic, and for aging one per age of the engine. */
+  peek: [
+    "Like a steam engine, your cells burn fuel (food) to make power.",
+    "Burning fuel throws off sparks. The screen on top catches most of them.",
+  ],
+  peekAge: [
+    "New: everything runs smoothly.",
+    "Well worn: a few parts need more care.",
+    "Old and still running: many parts have worn, not just the fire.",
+  ],
 };
 
 export const research = {
