@@ -30,10 +30,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `main` to `849e26d` (a fast-forward); production `dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`. Public
   demo then: all eleven page checks pass (`docs/public-demo.md`). Mockups,
   the three ideas and the built screenshots: `reference/ink-pages/mockups/nav/2026-10-21/`.
-- **Not ours, left alone:** another agent's homepage-science sketches (hiker and cell paintings,
-  `reference/ink-pages/home-science/originals/*-a1.png`, `mockups/home-science-hiker/`, a
-  README edit) appeared in this folder on October 21 around 10:50, uncommitted. Ask Mo whose
-  they are before committing or deleting them.
+- **The homepage-science sketches seen here on October 21** (hiker and cell paintings, a README
+  edit) were Claude Code's, for the science section (below). They were moved out of this folder
+  the same day; the kept ones are committed with the steam train.
 - **Live before that (October 19, latest then):** About's opening circle is now circle A, "heavy
   to dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and its
   gold leaf floats down onto the stroke like a real flake, then settles and catches the light; the
@@ -71,15 +70,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   640px): restarting the server cleared it; Vercel's own image service served it fine.
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **Homepage science section (live; Mo picked from mockups, October 19, Claude Code):** each of "Make
-  sense of the science."'s three topics has its own painting (a hummingbird at California sage, a
-  cut apple kept fresh by a Meyer lemon, a Joshua tree at three ages on the age slider), so the
-  mitochondrion shows only in "Tiny power plants." Mo chose the Joshua tree over a second oak,
-  since About now has the oak. The slider shows one whole tree at a time, never two blended.
-  Built on branch `home-science` in a separate worktree while another session worked here, then
-  replayed onto this `studio` and fast-forwarded in. Built site `qa_home_ink` 282/282 and
-  `qa_nav` 436/436, desktop (with motion) and phone screenshots. Notes:
-  `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
+- **Homepage science section: the steam train (Mo, October 21, Claude Code).** One small steam
+  engine in the redwoods tells "Make sense of the science."'s three topics, with a line under
+  each picture tying it to the words: fed with a log (mitochondria), its smokestack's screen
+  holding the sparks (free radicals), new, well worn and old on the age slider (aging). It
+  replaced the October 19 hummingbird, apple and Joshua tree, which Mo found decorative; a
+  hiker with a window into a cell was tried and dropped on a test branch (`home-science-hiker`).
+  Built on branch `home-science-train` in a separate worktree. The new caption lines
+  (`science.peek`, `science.peekAge` in `content.ts`) are English in every language for now.
+  `qa_home_ink` now checks the engine's three ages, and at 1024x768 the scroll story runs (every
+  topic now fits under the index). Notes: `reference/ink-pages/home-science/README.md`; rule:
+  DESIGN.md "The Science Stage Rule".
 - **In progress:** None. **Next:** Mo's call.
 
 ## What's live
