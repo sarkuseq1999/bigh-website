@@ -4,7 +4,26 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-d9ggrqo5r-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-iyssbgrux-sarkuseq1999s-projects.vercel.app`
+(`dpl_B9XcdfSd5XJS2R4L4UoondvxQcuk`), the **production** deployment of `main` at
+`789569691f3738fd3ef6d66ffa80c72f1ec87fbe`. On October 21, 2026, Mo asked for the homepage's
+page-long brush line a little thicker and picked B, twice as heavy, of three (1.5×, 2× and 2.5×;
+`reference/ink-pages/mockups/home-brush-weight/`): the running line takes the whole weight, the
+big bottle's ground and the closing stroke under "Stay sharp." only a little more, the crane's
+opening stroke none (on phones only the three rules and the closing stroke change), and the
+dry-brush streaks keep their old size, so the heavier line never reads as two lines. The same
+release carries Sign up's stroke drawn bigger (Mo's pick C, `35e26bb`). Mo said to push both.
+Claude merged `main` (the steam train, `0d9e409`) into `studio` and pushed it to `main` (a
+fast-forward).
+
+Before the push, on the merged built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440 (one earlier `qa_nav` run, on the line's test build,
+crashed its browser in the language sweep after 377 passes; its rerun passed); laptop
+screenshots of the line on the built site, scrolled, and phone screenshots on the line's test
+build. After the alias update, on the public demo in fresh
+unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440.
+
+Before this update, the alias pointed to `bigh-website-d9ggrqo5r-sarkuseq1999s-projects.vercel.app`
 (`dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`), the **production** deployment of `main` at
 `7a042cef670b1fa9147f2e4a1c377cf1e2d0e821`. On October 21, 2026, Mo found the homepage's
 "Make sense of the science." paintings (a hummingbird, a cut apple and lemon, a Joshua tree)
