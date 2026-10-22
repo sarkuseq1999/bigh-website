@@ -146,15 +146,6 @@
   mix-blend-mode: multiply;
 }
 
-/* Light on the gold leaf in the hummingbird's wings. */
-.stage > .leafLight {
-  opacity: 0;
-}
-
-.stage[data-bloom="done"] > .leafLight[data-on="true"] {
-  opacity: 1;
-}
-
 .layer {
   position: absolute;
   inset: 0;
@@ -168,10 +159,10 @@
   opacity: 1;
 }
 
-/* The Joshua tree's ages lie one over another inside their layer (which multiplies onto the paper
-   as one): each painting is opaque white paper, so the oldest one shown covers the younger ones
-   and only one tree is ever seen at rest. A new age fades in over the last; going back, it fades
-   out to show the younger tree under it. */
+/* The engine's ages lie one over another inside their layer (which multiplies onto the paper as
+   one): each painting is opaque white paper, so the oldest one shown covers the younger ones and
+   only one engine is ever seen at rest. A new age fades in over the last; going back, it fades
+   out to show the younger one under it. */
 .tree {
   position: absolute;
   inset: 0;
@@ -185,11 +176,34 @@
   opacity: 1;
 }
 
+/* In the top right, where every train painting leaves open paper (the redwoods stand at the
+   left). */
 .caption {
   position: absolute;
   top: 3%;
-  left: 5%;
+  right: 4%;
   margin: 0;
+}
+
+/* The line under the picture that ties it to the words. The lines lie one over another, so their
+   room is the longest one's and nothing below them moves when the topic changes. */
+.peeks {
+  display: grid;
+  margin: 10px 0 0 52%;
+}
+
+.science .peek {
+  grid-area: 1 / 1;
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.4;
+  text-wrap: pretty;
+  opacity: 0;
+  transition: opacity 0.5s var(--ease);
+}
+
+.science .peek[data-on="true"] {
+  opacity: 1;
 }
 
 .age {
@@ -312,9 +326,10 @@
     position: sticky;
     top: var(--pin, 120px);
     mix-blend-mode: multiply;
-    /* On a short window the painting gives way so all of it, the slider and its honesty line
-       stay in the window while it is pinned (the header, the slider and some paper: 236px). */
-    max-width: calc((100svh - 236px) * 2000 / 1493);
+    /* On a short window the painting gives way so all of it, its line, the slider and the
+       honesty line stay in the window while it is pinned (the header, the line, the slider and
+       some paper: 318px). */
+    max-width: calc((100svh - 318px) * 2000 / 1493);
     margin-inline: auto;
   }
 
@@ -372,22 +387,6 @@
       animation-timeline: --science-head;
       animation-range: exit 0px exit 60px;
     }
-
-    /* The light crosses the gold in the hummingbird's wings while its topic is read (the
-       painting is pinned, so it follows the topic, not the painting). */
-    .science.story {
-      timeline-scope: --science-energy;
-    }
-
-    .science.story [data-step="0"] {
-      view-timeline: --science-energy block;
-    }
-
-    .science.story .stage > .leafLight {
-      animation: leaf-pass linear both;
-      animation-timeline: --science-energy;
-      animation-range: cover 12% cover 50%;
-    }
   }
 
   /* Without scroll-driven animation the index stays where it is (no line passes under it). */
@@ -431,16 +430,6 @@
   }
 }
 
-@keyframes leaf-pass {
-  from {
-    background-position: 92% 0;
-  }
-
-  to {
-    background-position: 8% 0;
-  }
-}
-
 @keyframes unfold {
   from {
     --bloom: 0%;
@@ -468,6 +457,16 @@
 
   .rail {
     margin: 0 -4vw;
+  }
+
+  /* One column keeps the tabs, not the scroll story, so only the shown line takes room (no gap
+     above the slider). */
+  .peeks {
+    margin: 8px 4vw 0;
+  }
+
+  .science .peek:not([data-on="true"]) {
+    display: none;
   }
 }
 

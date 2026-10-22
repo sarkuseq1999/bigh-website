@@ -5,7 +5,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 21, 2026, by Claude Code (homepage brush line 2×, not live).
+- **Last updated:** October 22, 2026, by Claude Code (homepage brush line 2× and the bigger Sign up).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
 - **Not live yet (October 21, latest): the homepage's brush line is twice as heavy** (Mo picked B
   of 1.5×, 2× and 2.5×; mockups `reference/ink-pages/mockups/home-brush-weight/`). The running
@@ -13,11 +13,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   crane's opening stroke none; the dry-brush streaks keep their old size (`WEIGHT` and `heavy` in
   `src/components/ink/brush.tsx`). On phones only the three rules and the closing stroke change.
   Built in a scratch worktree (branch `home-brush-weight`) while another session's Sign up work
-  sat uncommitted here, then fast-forwarded into `studio`. Not pushed.
+  sat uncommitted here, then fast-forwarded into `studio` and merged with `main`'s steam train.
 - **Not live yet (October 21): Sign up's stroke drawn bigger** (`35e26bb`, another session; Mo
   picked C of three fuller versions of the same painting; DESIGN.md has the details). It replaces
   the note below that the stroke stays as it is.
-- **Live (October 21, latest): two phone fixes** (Mo said to fix and push them). The homepage's
+- **Live (October 21): the homepage science steam train** (Mo said to put it live). See
+  "Homepage science section" below. Claude pushed `main` to `7a042ce` (a fast-forward from
+  `d9c8c34`); production `dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`, the demo alias points to it; public
+  demo `qa_home_ink` 282/282 and `qa_nav` 440/440 (`docs/public-demo.md`).
+- **Live (October 21): two phone fixes** (Mo said to fix and push them). The homepage's
   warm sky was cut flat under the menu bar on phones (the opening's picture now clips only its
   sides, `opening.module.css`: a 12-level step, now under 1); and "✕ Close" was squeezed against
   the mark in the phone bar (from 400px down the bar's sides come out to 16px, the ✕ steps aside,
@@ -40,10 +44,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `main` to `849e26d` (a fast-forward); production `dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`. Public
   demo then: all eleven page checks pass (`docs/public-demo.md`). Mockups,
   the three ideas and the built screenshots: `reference/ink-pages/mockups/nav/2026-10-21/`.
-- **Not ours, left alone:** another agent's homepage-science sketches (hiker and cell paintings,
-  `reference/ink-pages/home-science/originals/*-a1.png`, `mockups/home-science-hiker/`, a
-  README edit) appeared in this folder on October 21 around 10:50, uncommitted. Ask Mo whose
-  they are before committing or deleting them.
+- **The homepage-science sketches seen here on October 21** (hiker and cell paintings, a README
+  edit) were Claude Code's, for the science section (below). They were moved out of this folder
+  the same day; the kept ones are committed with the steam train.
 - **Live before that (October 19, latest then):** About's opening circle is now circle A, "heavy
   to dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and its
   gold leaf floats down onto the stroke like a real flake, then settles and catches the light; the
@@ -56,8 +59,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `studio` is `main` plus the October 21 release notes, the bigger Sign up stroke and
-  the brush line's 2× commit; the next push is a fast-forward.
+- **State:** `studio` is `main` (the steam train) merged with the bigger Sign up stroke and the
+  brush line's 2× commit; the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
@@ -81,15 +84,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   640px): restarting the server cleared it; Vercel's own image service served it fine.
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **Homepage science section (live; Mo picked from mockups, October 19, Claude Code):** each of "Make
-  sense of the science."'s three topics has its own painting (a hummingbird at California sage, a
-  cut apple kept fresh by a Meyer lemon, a Joshua tree at three ages on the age slider), so the
-  mitochondrion shows only in "Tiny power plants." Mo chose the Joshua tree over a second oak,
-  since About now has the oak. The slider shows one whole tree at a time, never two blended.
-  Built on branch `home-science` in a separate worktree while another session worked here, then
-  replayed onto this `studio` and fast-forwarded in. Built site `qa_home_ink` 282/282 and
-  `qa_nav` 436/436, desktop (with motion) and phone screenshots. Notes:
-  `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
+- **Homepage science section: the steam train (Mo, October 21, Claude Code).** One small steam
+  engine in the redwoods tells "Make sense of the science."'s three topics, with a line under
+  each picture tying it to the words: fed with a log (mitochondria), its smokestack's screen
+  holding the sparks (free radicals), new, well worn and old on the age slider (aging). It
+  replaced the October 19 hummingbird, apple and Joshua tree, which Mo found decorative; a
+  hiker with a window into a cell was tried and dropped on a test branch (`home-science-hiker`).
+  Built on branch `home-science-train` in a separate worktree. The new caption lines
+  (`science.peek`, `science.peekAge` in `content.ts`) are English in every language for now.
+  `qa_home_ink` now checks the engine's three ages, and at 1024x768 the scroll story runs (every
+  topic now fits under the index). Notes: `reference/ink-pages/home-science/README.md`; rule:
+  DESIGN.md "The Science Stage Rule".
 - **In progress:** None. **Next:** Mo's call.
 
 ## What's live

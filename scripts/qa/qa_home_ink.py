@@ -19,7 +19,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     Discover link to its page; the stories say
     "Fictional sample" and "Illustration" and a name chooses a story; science: three topics, each
     with its own painting (the mitochondrion only in the cell above), the age slider ages the
-    Joshua tree one whole painting at a time (no two trees blended) and "Illustration, not a
+    steam engine one whole painting at a time (no two ages blended) and "Illustration, not a
     measurement" shows; research: filters and
     show all; no sideways scrolling; every image loads; text at least 15 px (reading text at least
     17 px); buttons and links at least 44 px tall.
@@ -110,7 +110,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     glides to a topic; a topic leaves whole (its heading with its words) and between two topics a
     heading always stands in focus under the index (the next comes into focus as one leaves);
     the age slider ages the
-    Joshua tree on the third topic, with its honesty line;
+    steam engine on the third topic, with its honesty line;
     each topic's explainer opens its own sheet; the painting, the index and the last topic leave
     together with no jump; the brush line passes beside the pinned painting (round 9: in the gap
     between the words and the painting's column, no longer the far margin), never over the
@@ -638,7 +638,7 @@ FINALE = """(() => {
 
 def set_age(page, value):
     """Move the age slider (as a hand would) and read the age shown, the honesty line's opacity
-    and the opacity of each of the Joshua tree's three paintings (young, middle, old)."""
+    and the opacity of each of the steam engine's three paintings (new, well worn, old)."""
     page.evaluate(
         f"""(() => {{ const input = document.querySelector('#science input[type=range]');
           const set = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set;
@@ -650,7 +650,7 @@ def set_age(page, value):
         "(() => { const e = [...document.querySelectorAll('#science p')].find(s => s.textContent.includes('Illustration, not a measurement')); if (!e) return 0; return +getComputedStyle(e.parentElement).opacity; })()"
     )
     trees = page.evaluate(
-        "[...document.querySelectorAll('#science img')].filter(i => i.src.includes('/science/joshua-')).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
+        "[...document.querySelectorAll('#science img')].filter(i => /science.train-(new|middle|old)-/.test(i.src)).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
     )
     return age, honesty, trees
 
@@ -667,8 +667,8 @@ TABBED = """(() => { const s = document.querySelector('#science');
     sticky: getComputedStyle(s.querySelector('figure')).position }; })()"""
 
 # Round 7: the scroll story's state: the pinned painting and index, the topic shown, each topic's
-# heading (top, bottom, opacity, words) and each painting's opacity as seen (hummingbird, apple,
-# then the Joshua tree young, middle, old, each times its layer's), in the window.
+# heading (top, bottom, opacity, words) and each painting's opacity as seen (the engine fed, its
+# sparks, then the engine new, well worn, old, each times its layer's), in the window.
 STORY_STATE = """(() => {
   const s = document.querySelector('#science'); const cs = getComputedStyle(s);
   const fig = s.querySelector('figure'); const nav = s.querySelector('nav');
@@ -791,15 +791,15 @@ def science_story(page, tag, name, view_h):
         f"no heading at {empty} px past the first topic (of {b - a})",
     )
     walk_to(page, story_landing(page, 2))
-    # The third topic: the age slider ages the Joshua tree, one whole painting at a time, with its
+    # The third topic: the age slider ages the steam engine, one whole painting at a time, with its
     # honesty line: it opens at 45 on the middle tree; 35 is the young one, 70 the old.
     rest = page.evaluate(
-        "[...document.querySelectorAll('#science img')].filter(i => i.src.includes('/science/joshua-')).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
+        "[...document.querySelectorAll('#science img')].filter(i => /science.train-(new|middle|old)-/.test(i.src)).map(i => +(+getComputedStyle(i).opacity).toFixed(2))"
     )
     _, _, young = set_age(page, 35)
     age, honesty, old = set_age(page, 70)
     check(
-        f"{tag}: on the third topic the age slider ages the Joshua tree, one tree at a time; honesty label shown",
+        f"{tag}: on the third topic the age slider ages the steam engine, one at a time; honesty label shown",
         age == "70" and honesty > 0.9 and one_tree(rest, 1) and one_tree(young, 0) and one_tree(old, 2),
         f"age {age}, label {honesty}, trees at 45 {rest}, at 35 {young}, at 70 {old}",
     )
@@ -932,6 +932,25 @@ def run_story(browser):
                   return { story: s.dataset.story, tabs, panels: s.querySelectorAll('[role=tabpanel]').length,
                     sticky: getComputedStyle(s.querySelector('figure')).position, steps: s.querySelectorAll('[data-step]').length }; })()"""
             )
+            if k["story"] == "true":
+                # October 21, 2026: the steam train's line under the picture makes the painting's
+                # column taller, so it pins higher and every topic now fits under the index here.
+                # Then the story runs, by the same rule: no topic cramped (the index pinned, each
+                # topic whole under it), the painting, slider and honesty line in the window.
+                walk_to(page, story_landing(page, 2), 2600)
+                st = page.evaluate(STORY_STATE)
+                cramped = page.evaluate("document.querySelector('#science').dataset.cramped")
+                check(
+                    f"{tag}: every topic fits under the index, so the story runs; the painting, slider and honesty line in the window",
+                    cramped != "true" and abs(st["fig"][1] - st["pin"]) <= 1 and st["fig"][3] <= size[1]
+                    and st["age"][3] <= size[1] and st["topic"] == 2,
+                    f"cramped {cramped}; painting {st['fig'][1]:.0f} to {st['fig'][3]:.0f}, slider ends {st['age'][3]:.0f}, window {size[1]}",
+                )
+                shoot(page, "story-1024x768-story")
+                wide = page.evaluate("document.documentElement.scrollWidth")
+                check(f"{tag}: no sideways scrolling, no errors", wide <= size[0] and not problems, f"scrollWidth {wide}; {problems[:2]}")
+                context.close()
+                continue
             page.click("#science [role=tab]:has-text('Aging cells')")
             page.wait_for_timeout(1300)
             aged = page.evaluate(STORY_STATE)
@@ -1472,7 +1491,7 @@ def run(browser, look, mobile):
             f"{radicals} | {aging}",
         )
         check(
-            f"{tag}: the age slider ages the Joshua tree (the old one, alone, at 70); honesty label shown",
+            f"{tag}: the age slider ages the steam engine (the old one, alone, at 70); honesty label shown",
             age == "70" and honesty > 0.9 and one_tree(old, 2),
             f"age {age}, label {honesty}, trees {old}",
         )

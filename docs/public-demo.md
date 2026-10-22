@@ -4,7 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ep7z63jsw-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-d9ggrqo5r-sarkuseq1999s-projects.vercel.app`
+(`dpl_CJt1fJcyGvX3aocGj47Wi3AjVg7V`), the **production** deployment of `main` at
+`7a042cef670b1fa9147f2e4a1c377cf1e2d0e821`. On October 21, 2026, Mo found the homepage's
+"Make sense of the science." paintings (a hummingbird, a cut apple and lemon, a Joshua tree)
+decorative: they did not explain their words. A hiker with a round window into a cell was tried
+on a test branch and dropped (the cell read as "a ball with worms in it"); of three painted
+ideas Mo chose a steam train, then asked for looser, lighter ink, bigger sparks and ages easier to
+tell apart, and said to put it live. One small steam engine in the redwoods now tells all three
+topics, painted in the homepage crane's hand, with a line under each picture: fed with a log
+(mitochondria), its smokestack's screen holding about ten big gold sparks and letting two escape
+(free radicals), and new, well worn and old on the age slider (aging cells). The new caption
+lines are English in every language for now. Claude pushed branch `home-science-train` to `main`
+(a fast-forward from `d9c8c34`, with the phone fixes' release notes merged in).
+
+Before the push, on the built site (merged with `d9c8c34`): lint, type check, formatting and build
+passed; `qa_home_ink` 282/282 (its science checks now follow the engine's three ages, and at
+1024x768 the scroll story runs because every topic fits under the index), `qa_nav` 440/440;
+laptop and phone screenshots and recordings of all three topics and the slider. After the alias
+update, on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav`
+440/440, and all five train pictures load.
+
+Before this update, the alias pointed to `bigh-website-ep7z63jsw-sarkuseq1999s-projects.vercel.app`
 (`dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`), the **production** deployment of `main` at
 `d9c8c3475096d49204896065fb1476ec369f4594`. Later on October 21, 2026, Mo said to fix two phone
 details and push them: the homepage's warm sky was cut flat under the menu bar (the opening's
