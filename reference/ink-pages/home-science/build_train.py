@@ -7,7 +7,8 @@ off an original's edge dissolves into the paper over the outer 8%. The originals
 stage's own shape (2000:1493), so each is only scaled into the stage's 1600 x 1195; the three ages
 were painted from one picture, so they still line up for the age slider.
 
-Output: public/images/home-v2/ink/science/train-<state>-v1.webp
+Output: public/images/home-v2/ink/science/train-<state>-v2.webp (v2, October 21: the looser repaint,
+in the homepage crane's hand)
 
 usage: python -X utf8 reference/ink-pages/home-science/build_train.py
 """
@@ -25,11 +26,11 @@ W, H = 1600, 1195
 
 # shipped state -> original
 TRAINS = {
-    "fuel": "train-fuel-a2",
-    "sparks": "train-sparks-c1",
-    "new": "train-new-a1",
-    "middle": "train-middle-a1",
-    "old": "train-old-a1",
+    "fuel": "train-fuel-b1",
+    "sparks": "train-sparks-e2",
+    "new": "train-new-b1",
+    "middle": "train-worn-b1",
+    "old": "train-old-b1",
 }
 
 
@@ -54,7 +55,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for state, name in TRAINS.items():
         im = Image.open(ORIG / f"{name}.png").resize((W, H), Image.LANCZOS)
-        out = OUT / f"train-{state}-v1.webp"
+        out = OUT / f"train-{state}-v2.webp"
         Image.fromarray(plate(im).astype(np.uint8)).save(out, quality=86, method=6)
         print(out.name, f"{out.stat().st_size // 1024} KB")
 

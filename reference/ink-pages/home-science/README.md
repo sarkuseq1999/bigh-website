@@ -46,3 +46,22 @@ that ties it to the words.
 - `build_train.py` makes the site's `train-<state>-v1.webp` (the originals are 4:3, the stage's
   shape). The fire is the one gold leaf; there is no band of light over it.
 - Codex once hung waiting for input: `codex exec` needs `< /dev/null` when run from a script.
+
+### Round 2, polished (v2 pictures)
+
+Mo asked for looser, lighter ink, bigger sparks, and new and well worn easier to tell apart. The
+homepage crane (`reference/home-v2/ink/originals/gpt25-crane-paint-a.png`, copied here as
+`style-crane`) was given to Codex as the style to copy; `train-loose-a2` is the new base, and the
+others were painted from it.
+
+| Topic         | Original           | Site picture          |
+| ------------- | ------------------ | --------------------- |
+| Mitochondria  | `train-fuel-b1`    | `train-fuel-v2`       |
+| Free radicals | `train-sparks-e2`  | `train-sparks-v2`     |
+| Aging: new    | `train-new-b1`     | `train-new-v2`        |
+| Aging: worn   | `train-worn-b1`    | `train-middle-v2`     |
+| Aging: old    | `train-old-b1`     | `train-old-v2`        |
+
+- Sparks: `train-sparks-d1`/`-d2` had big sparks but most flew free; `-e1`/`-e2` keep about ten
+  inside the screen and let two escape (`-e2` shows them leaving the screen).
+

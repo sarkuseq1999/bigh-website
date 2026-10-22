@@ -59,17 +59,17 @@ export const mito: Record<"glow", Picture> = {
 const S = `${I}/science`;
 export const sciencePaintings = {
   /** The fireman feeds a log to the gold fire and the engine pulls away: fuel in, power out. */
-  energy: { src: `${S}/train-fuel-v1.webp`, width: 1600, height: 1195 },
+  energy: { src: `${S}/train-fuel-v2.webp`, width: 1600, height: 1195 },
   /** Closer, the smokestack: the screen on top holds the sparks the fire throws off, and one or
    *  two escape (free radicals, and the body's own defences). A comparison; the stage says
    *  "Illustrations". */
-  balance: { src: `${S}/train-sparks-v1.webp`, width: 1600, height: 1195 },
+  balance: { src: `${S}/train-sparks-v2.webp`, width: 1600, height: 1195 },
   /** The same engine at three ages on the same spot (one framing, so they line up): new, well
    *  worn, and old but still running, its fire lower. The age slider shows one at a time. */
   aging: [
-    { src: `${S}/train-new-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/train-middle-v1.webp`, width: 1600, height: 1195 },
-    { src: `${S}/train-old-v1.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-new-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-middle-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/train-old-v2.webp`, width: 1600, height: 1195 },
   ],
 } satisfies Record<string, Picture | Picture[]>;
 
