@@ -4,7 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-nwf8w44sb-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ep7z63jsw-sarkuseq1999s-projects.vercel.app`
+(`dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`), the **production** deployment of `main` at
+`d9c8c3475096d49204896065fb1476ec369f4594`. Later on October 21, 2026, Mo said to fix two phone
+details and push them: the homepage's warm sky was cut flat under the menu bar (the opening's
+picture now clips only its sides), and "✕ Close" was squeezed against the mark in the phone bar
+(from 400px down the bar's sides come out to 16px, the ✕ steps aside, and the stroke keeps a
+length of its own). Mo also looked at three other Sign up strokes (clean, painted pill, dry
+brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`) and kept today's. Claude pushed
+`studio` to `main` (a fast-forward from `849e26d`, with the October 21 release notes).
+
+Before the push, on the built site: lint, type check, formatting and build passed; `qa_nav`
+440/440, `qa_home_ink` 282/282; the sky's step at the picture's top under 1 level (was 12) at 360,
+390 and 430 wide in English, Korean and Vietnamese; "Close" and "Menu" 15px or more from the mark
+from 360px in all five languages. After the alias update, on the public demo in fresh
+unauthenticated browsers: `qa_nav` 440/440, `qa_home_ink` 282/282, and the same sky and "Close"
+measurements. Not fixed: on a 320px phone, Japanese "メニュー" still
+runs onto the stroke's dry tail and stands 8px from the mark (as before this change).
+
+Before this update, the alias pointed to `bigh-website-nwf8w44sb-sarkuseq1999s-projects.vercel.app`
 (`dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`), the **production** deployment of `main` at
 `849e26d4835cdad5a3f59e0c2ae7efd3e1ee87ff`. On October 21, 2026, Mo found the menu bar plain
 ("simple, it does its job") and picked A, "Signed with one stroke", from three painted ideas: the

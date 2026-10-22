@@ -5,9 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 21, 2026, by Claude Code (menu bar A live).
+- **Last updated:** October 21, 2026, by Claude Code (two phone fixes live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 21, latest): the menu bar "Signed with one stroke"** (Mo picked A of three
+- **Live (October 21, latest): two phone fixes** (Mo said to fix and push them). The homepage's
+  warm sky was cut flat under the menu bar on phones (the opening's picture now clips only its
+  sides, `opening.module.css`: a 12-level step, now under 1); and "✕ Close" was squeezed against
+  the mark in the phone bar (from 400px down the bar's sides come out to 16px, the ✕ steps aside,
+  the stroke is never shorter than clamp(78px, 26vw - 8px, 86px), CJK words at 17px: 15px or more
+  to the mark from 360px in every language). Claude pushed `main` to `d9c8c34`; production
+  `dpl_FF2NdyPy2e95UY2tYzJ96CcBzpjD`, the demo alias points to it (`docs/public-demo.md`). Not
+  fixed: on a 320px phone, Japanese "メニュー" runs onto the stroke's dry tail, 8px from the mark.
+- **Sign up's stroke stays as it is (Mo, October 21).** He looked at three other strokes (clean,
+  painted pill, dry brush; `reference/ink-pages/mockups/nav/2026-10-21-signup/`, originals
+  `reference/nav/originals/codex-signup-*.png`) and kept today's: at the size people see it, it
+  reads as one quick brush gesture.
+- **Live before that (October 21): the menu bar "Signed with one stroke"** (Mo picked A of three
   painted ideas and said to push it): the bar's words in Ysabeau (CJK keep their own letters), the
   painted rule under the bar from the first frame (laid once as the page opens), Sign up and the
   phone's Menu in paper on a black Codex-painted brushstroke (`inscription/swash-v1.webp`), a pale
@@ -15,12 +27,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   cuts both. Ysabeau loads from the root layout (not preloaded: a preload would go unused on CJK
   pages). The Science eyebrow sits 22px under the rule from 1101px (`journey.module.css`).
   `qa_nav.py` updated (rule there from the start, the wash, text on the stroke). Claude pushed
-  `main` to `849e26d` (a fast-forward); production `dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`, the demo
-  alias points to it. Public demo: all eleven page checks pass (`docs/public-demo.md`). Mockups,
+  `main` to `849e26d` (a fast-forward); production `dpl_CuSdqu5hCtTLHH2tLy6m3ozDB38J`. Public
+  demo then: all eleven page checks pass (`docs/public-demo.md`). Mockups,
   the three ideas and the built screenshots: `reference/ink-pages/mockups/nav/2026-10-21/`.
-- **Seen on the phone homepage, not fixed:** the opening's peach sky starts with a straight edge
-  at the bar's foot (it was there before October 21; the new rule now covers most of it, not its
-  last bit at the right).
 - **Not ours, left alone:** another agent's homepage-science sketches (hiker and cell paintings,
   `reference/ink-pages/home-science/originals/*-a1.png`, `mockups/home-science-hiker/`, a
   README edit) appeared in this folder on October 21 around 10:50, uncommitted. Ask Mo whose
