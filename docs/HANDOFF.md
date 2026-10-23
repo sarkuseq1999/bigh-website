@@ -7,14 +7,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 23, 2026, by Claude Code (homepage crane between B and C, 57.5%).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Pushing (October 23, latest): the homepage's flying crane between B and C** (Mo found C, half
+- **Live (October 23, latest): the homepage's flying crane between B and C** (Mo found C, half
   size, too small; of B, a size between and C on `reference/ink-pages/mockups/home-crane-size/` he
   picked the size between and said to push it in place of C). Desktop: 57.5% of the comp's crane,
   shrunk toward the point its brush line leaves from, then lifted 60 comp px and moved 50 left
   with its flight stroke. Phones: 63.4vw (66% of the old 96vw), the line unchanged.
   `opening.module.css`; `qa_home_ink`'s phone check now expects the bird at about 41% of the
   window. On the built site (`next start`), the crane's box at 1920x1080, 1440x900 and 390x844
-  within 1px of the mockup.
+  within 1px of the mockup. Claude pushed `main` to `116c22f` (a fast-forward from `eac92d8`);
+  production `dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`, the demo alias points to it; public demo
+  `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Live (October 23): Switzer is served from the site itself** (Mo said to host it
   ourselves, saw the before/after, `reference/ink-pages/mockups/switzer-self-host/`, and said to
   push it). Fontshare's stylesheet kept dropping the
@@ -141,9 +143,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `main` is `619e77d` (live: the powerhouse and the brain cell, the bigger Sign up
-  stroke, the brush line's 2×, crane C and the self-hosted Switzer); `studio` adds only these
-  release notes, so the next push is a fast-forward.
+- **State:** `main` is `116c22f` (live: the powerhouse, Free radicals and the brain cell, the
+  bigger Sign up stroke, the brush line's 2×, the crane at 57.5% and the self-hosted Switzer);
+  `studio` adds only these release notes, so the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open

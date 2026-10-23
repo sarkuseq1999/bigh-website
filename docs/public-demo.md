@@ -4,7 +4,26 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-d1j0nrp2b-sarkuseq1999s-projects.vercel.app`
+(`dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`), the **production** deployment of `main` at
+`116c22fee90abc9a0829989bc0d8a628fd42c8f1`. On October 23, 2026, Mo found crane C (half the
+comp's size) too small and, of B (65%), a size between and C
+(`reference/ink-pages/mockups/home-crane-size/`), picked the size between and said to push it in
+place of C: the homepage's flying crane at 57.5% of the comp's size, shrunk toward the point its
+brush line leaves from, then lifted 60 comp px and moved 50 left with its flight stroke; on phones
+63.4vw (66% of the old 96vw), its line unchanged. Claude fast-forwarded `studio` to `main`
+(another session's Free radicals, `eac92d8`) and pushed `main` to `116c22f` (a fast-forward).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282 (its phone check now expects the bird at about 41% of the window),
+`qa_nav` 440/440; the crane's box at 1920x1080, 1440x900 and 390x844 within 1px of the mockup;
+the tablet (820x1180) and Korean openings looked at. After the alias update, on the public demo
+in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440, and the crane's box
+at the same three sizes the same as on the built site.
+
+Before this update, the alias pointed to `dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`, another session's
+production deployment of `main` at `eac92d8` (the homepage's Free radicals), and before that to
+`bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
 (`dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`), the **production** deployment of `main` at
 `619e77d8e81794517833b77ad4a3d0e2eb55637c`. On October 23, 2026, after Fontshare's stylesheet
 kept dropping the connection (pages then fell back to another face), Mo said to host Switzer
