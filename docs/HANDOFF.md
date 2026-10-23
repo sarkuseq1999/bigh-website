@@ -7,8 +7,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 23, 2026, by Claude Code (Switzer served from the site itself).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Not live yet (October 23, latest): Switzer is served from the site itself** (Mo said to host
-  it ourselves, and to show him before pushing). Fontshare's stylesheet kept dropping the
+- **Live (October 23, latest): Switzer is served from the site itself** (Mo said to host it
+  ourselves, saw the before/after, `reference/ink-pages/mockups/switzer-self-host/`, and said to
+  push it). Fontshare's stylesheet kept dropping the
   connection (the bullet below). Its licence (ITF Free Font License 2.0) allows self-hosting but
   not sharing the files through a public repository, and this one is public, so
   `scripts/fetch-fonts.mjs` fetches the two official variable files (upright 42 KB, italic 33 KB,
@@ -26,7 +27,13 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   hundreds of pixels between two identical screenshots, with Switzer or with it blocked; 159/159
   on the live site) and `qa_vn_font` 37/43 (the same six fail on the live site: the Ysabeau menu
   words and NuriCell's line heights). `qa_turmerific_ink` not run locally (it hangs on
-  `next start`). The Vercel build's own fetch is only tested by the push.
+  `next start`). Claude pushed `main` to `faf70af`, whose build failed (`MODULE_NOT_FOUND`:
+  `.vercelignore` skipped all of `scripts/`; production stayed as it was), then let the one script
+  through and pushed `619e77d`; its build log shows both files fetched (42 KB, 33 KB). Production
+  `dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`, the demo alias points to it; public demo: the font file 200
+  with the year-long cache, no request to Fontshare, every page check passes (`qa_turmerific_ink`
+  155/155 and `qa_nature_calm_ink` 159/159 included) but `qa_vn_font`'s six older failures
+  (`docs/public-demo.md`).
 - **Live (October 23): the homepage science powerhouse** (Mo picked D of six power
   plant ideas and said to put it live). See "Homepage science section" below. Claude pushed
   `main` to `5f800a8` (a fast-forward from `10ef0c5`); production
@@ -126,9 +133,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `main` is `10ef0c5` (live: the steam train and the brain cell, the bigger Sign up
-  stroke, the brush line's 2× and crane C); `studio` adds only crane C's release notes, so the
-  next push is a fast-forward.
+- **State:** `main` is `619e77d` (live: the powerhouse and the brain cell, the bigger Sign up
+  stroke, the brush line's 2×, crane C and the self-hosted Switzer); `studio` adds only these
+  release notes, so the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
