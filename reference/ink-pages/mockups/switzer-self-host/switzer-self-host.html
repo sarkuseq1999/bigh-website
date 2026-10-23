@@ -1,0 +1,225 @@
+<title>Switzer Font Fix</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500&display=swap">
+<style>
+  /* Layout: one column like a scroll; a sticky Desktop / Phone switch; each page shows the backup
+     face and Switzer side by side (stacked on a phone). */
+  :root {
+    --paper: #f3efe4;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d8d1c0;
+    --chip: #e8e2d3;
+    --gold: #a8842c;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --ink: #f1ece0;
+      --ink-soft: #b4ac9c;
+      --rule: #3a362e;
+      --chip: #2a2721;
+      --gold: #d2ae58;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --ink: #f1ece0;
+    --ink-soft: #b4ac9c;
+    --rule: #3a362e;
+    --chip: #2a2721;
+    --gold: #d2ae58;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 16px/1.5 var(--body);
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--paper);
+  }
+  .wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 56px;
+    display: grid;
+    gap: 22px;
+  }
+  h1 {
+    font: 500 34px/1.1 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  h2 {
+    font: 500 24px/1.2 var(--title);
+    margin: 0;
+  }
+  .lede {
+    margin: 0;
+    max-width: 40em;
+    color: var(--ink-soft);
+  }
+  .picker {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--paper);
+    padding-block: 10px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+    max-width: 360px;
+  }
+  .picker button {
+    font: 500 15px/1.15 var(--body);
+    color: var(--ink);
+    background: var(--chip);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 9px 4px;
+    min-height: 48px;
+    cursor: pointer;
+  }
+  .picker button[aria-pressed="true"] {
+    background: var(--ink);
+    color: var(--paper);
+  }
+  .picker button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 2px;
+  }
+  section {
+    display: grid;
+    gap: 12px;
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .pair.phone {
+    max-width: 640px;
+  }
+  @media (max-width: 640px) {
+    .pair:not(.phone) {
+      grid-template-columns: 1fr;
+    }
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 6px;
+    box-shadow: 0 0 0 1px var(--rule);
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  figcaption b {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .notes {
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+    display: grid;
+    gap: 10px;
+  }
+  .notes ul {
+    margin: 0;
+    padding-left: 20px;
+    display: grid;
+    gap: 6px;
+  }
+</style>
+
+<div class="wrap">
+  <h1>The font fix, before and after</h1>
+  <p class="lede">Real screenshots of the built site on this computer. Left: what a visitor got whenever the outside font service dropped the connection (a backup font). Right: Switzer, now served from our own site.</p>
+
+  <div class="picker" role="group" aria-label="Screen">
+    <button type="button" id="v-desk" data-v="desk" aria-pressed="true">Desktop</button>
+    <button type="button" id="v-phone" data-v="phone" aria-pressed="false">Phone</button>
+  </div>
+
+  <section>
+    <h2>Homepage</h2>
+    <div class="pair" data-pair>
+      <figure>
+        <img data-img="home-backup" src="img/home-desk-backup.webp" width="1200" height="750" alt="The homepage opening in the backup font">
+        <figcaption><b>Before</b>, when the font service failed: the paragraph runs wider and takes four lines.</figcaption>
+      </figure>
+      <figure>
+        <img data-img="home-switzer" src="img/home-desk-switzer.webp" width="1200" height="750" alt="The homepage opening in Switzer">
+        <figcaption><b>After</b>: Switzer, as designed.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>NuriCell page</h2>
+    <div class="pair" data-pair>
+      <figure>
+        <img data-img="nuricell-backup" src="img/nuricell-desk-backup.webp" width="1200" height="750" alt="The NuriCell opening in the backup font">
+        <figcaption><b>Before</b>: the big name and every line of text in the backup font.</figcaption>
+      </figure>
+      <figure>
+        <img data-img="nuricell-switzer" src="img/nuricell-desk-switzer.webp" width="1200" height="750" alt="The NuriCell opening in Switzer">
+        <figcaption><b>After</b>: Switzer, as designed.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <div class="notes">
+    <h2>What changed</h2>
+    <ul>
+      <li>The site no longer asks the outside font service for anything while people browse.</li>
+      <li>Each time the site is built, it downloads the official font file once and serves its own copy.</li>
+      <li>The font license allows this. It does not allow putting the font files in our public code, so they are never saved there.</li>
+      <li>If the download ever fails, the build stops and the live site stays as it was.</li>
+      <li>The look is the same as the approved design. Only the source of the font changed.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  const buttons = [...document.querySelectorAll(".picker button")];
+  const images = [...document.querySelectorAll("img[data-img]")];
+  const pairs = [...document.querySelectorAll("[data-pair]")];
+  for (const v of ["desk", "phone"]) for (const img of images) {
+    const [page, state] = img.dataset.img.split("-");
+    new Image().src = `img/${page}-${v}-${state}.webp`;
+  }
+  const show = (v) => {
+    for (const b of buttons) b.setAttribute("aria-pressed", String(b.dataset.v === v));
+    for (const img of images) {
+      const [page, state] = img.dataset.img.split("-");
+      img.src = `img/${page}-${v}-${state}.webp`;
+      img.width = v === "desk" ? 1200 : 540;
+      img.height = v === "desk" ? 750 : 876;
+    }
+    for (const pair of pairs) pair.classList.toggle("phone", v === "phone");
+  };
+  for (const b of buttons) b.addEventListener("click", () => show(b.dataset.v));
+</script>
