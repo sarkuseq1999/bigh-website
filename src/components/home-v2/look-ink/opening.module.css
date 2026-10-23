@@ -46,8 +46,8 @@
 .flightPath {
   top: 10%;
   height: calc(1000 * var(--u));
-  /* The stroke rises and moves in with the smaller crane (C, below). */
-  translate: calc(-60 * var(--u)) calc(-70 * var(--u));
+  /* The stroke rises and moves in with the smaller crane (below). */
+  translate: calc(-50 * var(--u)) calc(-60 * var(--u));
 }
 
 /* Region landscape: x 0, y 30%, w 100%, h 70%. Its lowest mountains dissolve into the paper, as
@@ -159,20 +159,20 @@
   visibility: hidden;
 }
 
-/* Region crane: the comp's crane (x 20%, y 10%, w 40%) at half its size, a distant bird high in
-   the sky, its brush line the big gesture (Mo, October 22, 2026: C of 80%, 65% and 50%, after B
-   went live; the comp's bird looked a little big). Shrunk toward the point its brush line leaves
-   from, then lifted 70 comp px and moved 60 left, with its flight stroke (.flightPath). The
-   whole bird rides the air:
+/* Region crane: the comp's crane (x 20%, y 10%, w 40%) at 57.5% of its size, farther off in the
+   sky, so the headline leads (Mo, October 23, 2026: the comp's bird looked a little big; B, 65%,
+   was live, then C, 50%, looked too small, and he picked this size between them). Shrunk toward
+   the point its brush line leaves from, then lifted 60 comp px and moved 50 left, with its
+   flight stroke (.flightPath). The whole bird rides the air:
    a slow rise and fall of a few pixels and a hair of pitch, on two cycles of their own (about
    13 s and 21 s), out of step with its two wingbeats (2.4 s each, in the picture) and with each
    other; it goes on gliding after the wings have stopped. Small, so the page's brush line still
    leaves from under its trailing legs. */
 .crane {
   position: absolute;
-  left: calc(var(--inset) + min(20%, 362.4px) + 86.4 * var(--u));
-  top: calc(10% + 90 * var(--u));
-  width: calc(307 * var(--u));
+  left: calc(var(--inset) + min(20%, 362.4px) + 74.5 * var(--u));
+  top: calc(10% + 76 * var(--u));
+  width: calc(353 * var(--u));
   transform-origin: 62% 60%;
   animation:
     ride calc(var(--breath) * 2.7) ease-in-out infinite alternate,
@@ -357,13 +357,13 @@
     width: 27vw;
   }
 
-  /* The bird spans about 37% of the window (its picture is 57.6vw, the bird 65% of it: C, 60% of
+  /* The bird spans about 41% of the window (its picture is 63.4vw, the bird 65% of it: 66% of
      round 5's crane, shrunk toward the point its brush line leaves from, so the line is
      unchanged), flying toward the sun clear of the window's left edge. */
   .crane {
-    left: 7.3vw;
-    top: calc(4% + 20vw);
-    width: 57.6vw;
+    left: 4.6vw;
+    top: calc(4% + 17vw);
+    width: 63.4vw;
   }
 
   .landscape {

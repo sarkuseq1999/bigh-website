@@ -131,14 +131,14 @@ These sit on top of `DESIGN.md`.
   opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
   line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
   Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
-- **Homepage crane: half size, a distant bird (Mo picked C, October 22, 2026).** Mo liked the
-  opening but found the flying crane a little big. Of three sizes (A 80%, B 65%, C 50%) he first
-  picked B and put it live, then tried C and put C live in its place. The crane is half the
-  comp's size, shrunk toward the point its brush line leaves from, then lifted 70 comp px and
-  moved 60 left, its flight stroke with it: a distant bird high in the sky, its brush line the
-  big gesture, the headline leading. Phones: 60% of the old crane (57.6vw, the bird about 37% of
-  the window), clear of the window's left edge, its line unchanged. `opening.module.css`.
-  Mockups: `reference/ink-pages/mockups/home-crane-size/`.
+- **Homepage crane: between B and C, 57.5% (Mo picked it, October 23, 2026).** Mo liked the
+  opening but found the flying crane a little big. Of three sizes (A 80%, B 65%, C 50%) he put B
+  live, then C, then found C too small and picked a size between them. The crane is 57.5% of the
+  comp's size, shrunk toward the point its brush line leaves from, then lifted 60 comp px and
+  moved 50 left, its flight stroke with it, so it reads as farther off in the sky and the
+  headline leads. Phones: 66% of the old crane (63.4vw, the bird about 41% of the window), clear
+  of the window's left edge, its line unchanged. `opening.module.css`. Mockups:
+  `reference/ink-pages/mockups/home-crane-size/`.
 - **Homepage "Aging cells": a brain cell up close (Mo picked B, October 22, 2026).** Mo found the
   steam engine growing old did not relate to the age slider and asked for a cell that ages. One
   brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
