@@ -206,6 +206,8 @@ These sit on top of `DESIGN.md`.
   is public. `scripts/fetch-fonts.mjs` fetches the official files from Fontshare before every
   `npm run build` / `npm run dev` into the git-ignored `public/fonts/switzer/`; run builds through
   npm, not `next build` alone, or the site ships without them. Never subset or convert them.
+  `.vercelignore` skips `scripts/` except this one file; a build script Vercel must run needs
+  the same exception (October 23: the first push failed with `MODULE_NOT_FOUND`).
 - **Homepage CSS specificity:** `src/components/home/homepage.module.css` resets `.site p`,
   `.site button` and `.site h2` (specificity 0,1,1). A single-class CSS-module rule such as
   `.cta { background: … }` loses to them silently. Scope component rules under the component's root

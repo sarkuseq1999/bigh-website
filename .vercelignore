@@ -4,7 +4,9 @@ reference/
 content/
 design-mockups/
 judging/
-scripts/
+# The build runs scripts/fetch-fonts.mjs (Switzer, fetched from Fontshare): keep it, skip the rest.
+scripts/*
+!scripts/fetch-fonts.mjs
 docs/
 .claude/
 .codex/
