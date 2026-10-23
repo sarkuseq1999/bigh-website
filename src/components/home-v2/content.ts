@@ -169,7 +169,7 @@ export const science = {
    *  only for now): one per topic for the steam engine, and for aging one per age of the brain
    *  cell (October 22). */
   peek: [
-    "Like a steam engine, your cells burn fuel (food) to make power.",
+    "Like your cells: food is the fuel, and the fire turns it into power.",
     "Burning fuel throws off sparks. The screen on top catches most of them.",
   ],
   peekAge: [

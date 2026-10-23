@@ -159,9 +159,9 @@
   opacity: 1;
 }
 
-/* The engine's ages lie one over another inside their layer (which multiplies onto the paper as
-   one): each painting is opaque white paper, so the oldest one shown covers the younger ones and
-   only one engine is ever seen at rest. A new age fades in over the last; going back, it fades
+/* The brain cell's ages lie one over another inside their layer (which multiplies onto the paper
+   as one): each painting is opaque white paper, so the oldest one shown covers the younger ones
+   and only one cell is ever seen at rest. A new age fades in over the last; going back, it fades
    out to show the younger one under it. */
 .tree {
   position: absolute;
@@ -176,8 +176,7 @@
   opacity: 1;
 }
 
-/* In the top right, where every train painting leaves open paper (the redwoods stand at the
-   left). */
+/* In the top right, where every painting of the section leaves open paper. */
 .caption {
   position: absolute;
   top: 3%;

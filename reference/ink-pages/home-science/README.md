@@ -86,8 +86,27 @@ Mo picked B, the cell up close, over A, the whole cell like an oak in winter (`n
   scales each about its centre and shifts it back (values measured by the mockup's `align.py`)
   before dividing the paper out.
 - Gold power plants: six (young), three (middle), one (old). No band of light over them.
-- The first two topics keep the steam engine (`build_train.py`).
+- The first two topics kept the steam engine (`build_train.py`) until October 22, below.
 - Unused takes: `C:/Users/mcbig/Documents/codes/bigh-archive/home-science-cell-2026-10-22/`.
 - Reference pictures go to `codex exec` with `-i`, which takes several files: put `--` before the
   prompt, or `-i` swallows it.
+
+## October 22, 2026: inside the powerhouse (Mitochondria and Free radicals)
+
+Mo asked for a power plant instead of the steam train. Six painted ideas (mockup:
+`reference/ink-pages/mockups/home-science-plants/`): A a brick powerhouse by a river
+(`plant-brick-a1`), B a powerhouse at a Sierra waterfall (`plant-hydro-a2`), C a power station
+lighting a town (`plant-town-a1`), D inside the powerhouse (`plant-inside-a2`), E a tiny powerhouse
+on a palm (`plant-hand-a2`), F an old dynamo (`plant-dynamo-a1`). Mo picked D. Aging cells keeps
+the brain cell (`build_cell.py`).
+
+| Topic         | Painting                                                           | Original          | Site picture      |
+| ------------- | ------------------------------------------------------------------ | ----------------- | ----------------- |
+| Mitochondria  | The open powerhouse: log into the gold fire, steam turns the wheel | `plant-fuel-b1`   | `plant-fuel-v1`   |
+| Free radicals | The chimney opened up: sparks rise into the screen, two escape     | `plant-sparks-a1` | `plant-sparks-v1` |
+
+- `plant-fuel-b1` repainted `plant-inside-a2` in the crane's hand (`style-crane`), grey ink instead
+  of pink brick and fewer parts; `plant-sparks-a1` was painted from `plant-fuel-b1`.
+- `build_plant.py` makes the site pictures. Unused tries:
+  `C:/Users/mcbig/Documents/codes/bigh-archive/home-science-plant-2026-10-22/`.
 

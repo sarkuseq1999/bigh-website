@@ -51,21 +51,23 @@ export const mito: Record<"glow", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
 };
 
-/** "Make sense of the science." (Mo, October 21, 2026: idea A, the steam train): the October 19
- *  paintings set a mood but did not explain their words, so one small steam engine in the
- *  redwoods tells all three, as the cells' "tiny power plants" do: fuel in, power out, a few
- *  sparks. Painted by Codex (the fire is the one gold leaf); built by
- *  reference/ink-pages/home-science/build_train.py into the stage's box (ink). Aging cells is
- *  the exception (Mo, October 22, 2026: the engine did not relate to the age slider): one brain
- *  cell up close, built by build_cell.py. */
+/** "Make sense of the science.": every picture shows what its words say. Mitochondria and Free
+ *  radicals (Mo, October 22, 2026, pick D, after the October 21 steam engine): one old powerhouse
+ *  with its front left open like a storybook, as the words call mitochondria "tiny power plants":
+ *  fuel feeds the fire, the fire turns the wheel, power runs out along the wire, and the chimney's
+ *  screen catches the sparks. Painted by Codex in the homepage crane's hand (the fire and the
+ *  sparks are the gold); built by reference/ink-pages/home-science/build_plant.py into the
+ *  stage's box (ink). Aging cells (Mo, October 22): one brain cell up close, built by
+ *  build_cell.py. */
 const S = `${I}/science`;
 export const sciencePaintings = {
-  /** The fireman feeds a log to the gold fire and the engine pulls away: fuel in, power out. */
-  energy: { src: `${S}/train-fuel-v2.webp`, width: 1600, height: 1195 },
-  /** Closer, the smokestack: the screen on top holds the sparks the fire throws off, and one or
-   *  two escape (free radicals, and the body's own defences). A comparison; the stage says
-   *  "Illustrations". */
-  balance: { src: `${S}/train-sparks-v2.webp`, width: 1600, height: 1195 },
+  /** Inside the powerhouse: a worker feeds a log to the gold fire, its steam turns the big wheel,
+   *  and power runs out along the wire (a thread of gold): fuel in, power out. */
+  energy: { src: `${S}/plant-fuel-v1.webp`, width: 1600, height: 1195 },
+  /** Closer, the chimney opened up: sparks fly up it from the fire, the screen on top holds most
+   *  of them and two escape (free radicals, and the body's own defences). A comparison; the
+   *  stage says "Illustrations". */
+  balance: { src: `${S}/plant-sparks-v1.webp`, width: 1600, height: 1195 },
   /** One brain cell up close at three ages, lined up on one framing: young (strong branches, six
    *  gold power plants), middle-aged (thinner branches, three still gold) and old (thin, pale
    *  branches, one still gold, still at work). The age slider shows one at a time. */

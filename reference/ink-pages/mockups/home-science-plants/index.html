@@ -1,0 +1,288 @@
+<title>Power Plant Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500&family=Instrument+Sans:wght@400;500&display=swap">
+<style>
+  /* Layout: three options down one column on the site's rice paper. Each is a slice of the real
+     section (the Mitochondria words beside the sample painting, its line under it), then a
+     short note on what the other two topics would show. One light world, like the site. */
+  :root {
+    --paper: #f6f3ec;
+    --ink: #1c1a16;
+    --grey: #5f5a50;
+    --hair: #d9d2c2;
+    --gold: #8a6a22;
+    --title: "Ysabeau", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    color-scheme: light;
+  }
+  [hidden] { display: none !important; }
+  body {
+    background: var(--paper) url("img/paper.webp") center top / 900px auto repeat;
+    color: var(--ink);
+    font: 18px/1.55 var(--body);
+  }
+  .page {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 36px 80px;
+    display: grid;
+    gap: 64px;
+  }
+  h1, h2, h3 { font-family: var(--title); font-weight: 500; line-height: 1.12; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2rem, 5.4vw, 3rem); }
+  p { margin: 0; }
+  .tag { font-size: 0.78rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--gold); }
+  .intro { display: grid; gap: 12px; max-width: 46rem; }
+  .intro p { color: var(--grey); }
+
+  .option { display: grid; gap: 24px; border-top: 1px solid var(--hair); padding-top: 32px; }
+  .option > header { display: grid; gap: 6px; }
+  .option > header h2 { font-size: clamp(1.7rem, 4vw, 2.3rem); }
+  .pick { font: 500 0.8rem var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold); }
+
+  /* the slice of the section */
+  .slice {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.25fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+  }
+  .words { display: grid; gap: 14px; align-content: start; }
+  .words h3 { font-size: clamp(1.35rem, 2.3vw, 1.7rem); }
+  .words > p { color: var(--grey); }
+  .words ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .words li { display: flex; gap: 12px; }
+  .words li::before { content: "\2014"; color: var(--grey); }
+  figure { margin: 0; display: grid; gap: 10px; min-width: 0; }
+  .stage { position: relative; }
+  .stage img { display: block; width: 100%; max-width: 100%; height: auto; mix-blend-mode: multiply; }
+  .illus { position: absolute; top: 2%; right: 3%; font-size: 0.82rem; color: var(--grey); }
+  .label {
+    position: absolute;
+    font-size: clamp(0.85rem, 1.5vw, 1rem);
+    font-weight: 500;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+  }
+  figcaption { font-size: 1.02rem; line-height: 1.4; }
+
+  .rest { display: grid; gap: 8px; max-width: 46rem; }
+  .rest h3 { font: 500 1rem var(--body); color: var(--grey); }
+  .rest ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+  .note { color: var(--grey); max-width: 46rem; }
+
+  .verdict { display: grid; gap: 14px; border-top: 1px solid var(--hair); padding-top: 32px; max-width: 46rem; }
+  .verdict ul { margin: 0; padding-left: 1.2em; display: grid; gap: 8px; }
+
+  @media (max-width: 760px) {
+    .slice { grid-template-columns: minmax(0, 1fr); }
+    .slice figure { order: -1; }
+  }
+</style>
+
+<main class="page">
+  <header class="intro">
+    <span class="tag">Homepage · Make sense of the science · Power plant ideas</span>
+    <h1>Six power plants</h1>
+    <p>One quick sample painting for each idea, beside the real Mitochondria words, the way it would sit on the homepage. The three new ones, D, E and F, come first; A, B and C from before are below. The one you pick would carry Mitochondria and Free radicals; Aging cells keeps the brain cell you picked.</p>
+  </header>
+
+  <section class="option" aria-labelledby="opt-d">
+    <header>
+      <span class="pick">My pick</span>
+      <h2 id="opt-d">D. Inside the powerhouse</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-inside-a2.webp" alt="An open-fronted brick powerhouse: a worker feeds a log into a furnace with a gold fire, steam runs through a pipe to a big turning wheel, and a gold thread runs out along a wire to a pole" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>Inside a power plant: fuel feeds the fire, the fire turns the wheel, and power runs out along the wire.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>Closer on the furnace: the fire throws off sparks, and a screen in the chimney catches most of them.</li>
+      </ul>
+    </div>
+    <p class="note">Why I pick it: it shows how the power is made, step by step, the way your cells turn food into energy. Fuel in, fire, wheel, power out, all in one look. It's the most like a storybook. The worry: it has the most parts, so the real one must stay this simple.</p>
+  </section>
+  <section class="option" aria-labelledby="opt-e">
+    <header>
+      <h2 id="opt-e">E. A tiny power plant in your hand</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-hand-a2.webp" alt="An open hand, palm up; on the palm stands a tiny brick powerhouse with gold windows, and thin gold lines run from it along the palm" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>Inside you, tiny power plants are always at work.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>Sparks rise from the tiny chimney, and most fall back onto the palm and fade.</li>
+      </ul>
+    </div>
+    <p class="note">The good: it's the only idea that says "tiny" and "inside you" at a glance, and it's the most memorable. The problems: the hand looks a little like grey stone, and gold lines running through a hand can look like cracks. It's also the least "science" of the six.</p>
+  </section>
+  <section class="option" aria-labelledby="opt-f">
+    <header>
+      <h2 id="opt-f">F. The machine that makes the power</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-dynamo-a1.webp" alt="An antique dynamo painted large on bare paper: black iron magnets around a drum wound with gold coils, a belt coming in at the left and two wires going out at the right" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>The heart of a power plant: it turns motion into power.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>Old dynamos really do throw small sparks where they spin, so the close-up can show sparks at the drum.</li>
+      </ul>
+    </div>
+    <p class="note">The good: one bold object, very clear on a phone, like the homepage's other single paintings. The problem: most people don't know what a dynamo is. It can read as a spool of gold thread, not a power plant.</p>
+  </section>
+  <section class="verdict" aria-label="From before">
+    <span class="tag">From before</span>
+    <p class="note">A, B and C, the first three ideas, for comparison.</p>
+  </section>
+
+  <section class="option" aria-labelledby="opt-a">
+    <header>
+      <h2 id="opt-a">A. A brick powerhouse by a river</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-brick-a1.webp" alt="A small brick power station with a tall smokestack beside a river under golden hills; its arched windows glow gold, a worker carries logs in, power poles lead over the hill" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>Like a power plant: fuel goes in, and power flows out to the whole town.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>Closer on the smokestack. Burning fuel throws off sparks, and a screen on top catches most of them.</li>
+              </ul>
+    </div>
+    <p class="note">The good: it's the clearest power plant from the outside, and it tells all three topics. Fuel in (the worker's logs), power out (the wires), sparks from the smokestack, and a building that can age. To fix in the real one: the golden hills are bright; I'd soften them so the gold windows stand out.</p>
+  </section>
+  <section class="option" aria-labelledby="opt-b">
+    <header>
+      <h2 id="opt-b">B. A powerhouse at a Sierra waterfall</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-hydro-a2.webp" alt="A small stone powerhouse at the foot of a waterfall in a granite canyon; a big pipe brings water down into it, its windows glow gold, and wires lead away" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>Like a power plant: falling water goes in, and power flows out.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>Harder. Water makes no sparks, so this topic would need a different picture (for example, the generator inside throwing a few sparks).</li>
+              </ul>
+    </div>
+    <p class="note">The good: the most beautiful of the three, the closest to the homepage's crane style, and no smoke at all (a clean picture for a health brand). The problem: there's no fuel being burned, so it doesn't explain free radicals.</p>
+  </section>
+  <section class="option" aria-labelledby="opt-c">
+    <header>
+      <h2 id="opt-c">C. A power station lighting a town</h2>
+    </header>
+    <div class="slice">
+      <div class="words">
+        <h3>What are mitochondria—and why do they matter?</h3>
+        <p>A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.</p>
+        <ul>
+          <li>Inside most of your cells</li>
+          <li>Turn food into usable energy</li>
+          <li>A small part with a big job</li>
+        </ul>
+      </div>
+      <figure>
+        <div class="stage">
+          <img src="img/plant-town-a1.webp" alt="A small brick power station at the left of a wide valley; wires on poles run across a field to a little town whose windows and street lamps glow gold" width="1600" height="1200">
+          <span class="illus">Illustrations</span>
+        </div>
+        <figcaption>Like a power plant: the energy it makes reaches every house in town.</figcaption>
+      </figure>
+    </div>
+    <div class="rest">
+      <h3>Free radicals</h3>
+      <ul>
+        <li>The station's smokestack throws off sparks, caught by a screen.</li>
+              </ul>
+    </div>
+    <p class="note">The good: it shows where the energy goes, like energy reaching your whole body. The problem: at the size it shows on the page, everything is tiny. The town's gold lights are hard to see, especially on a phone.</p>
+  </section>
+  <section class="verdict" aria-label="My honest take">
+    <span class="tag">My honest take</span>
+    <ul>
+      <li>These are quick samples, one try each. The one you pick gets polished, and painted again for Free radicals.</li>
+      <li>A power plant matches the words exactly: the text already calls mitochondria "your cells' tiny power plants".</li>
+      <li>In all six, the gold is the energy: the fire, the light in the windows, or the coils.</li>
+    </ul>
+  </section>
+</main>

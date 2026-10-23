@@ -667,8 +667,8 @@ TABBED = """(() => { const s = document.querySelector('#science');
     sticky: getComputedStyle(s.querySelector('figure')).position }; })()"""
 
 # Round 7: the scroll story's state: the pinned painting and index, the topic shown, each topic's
-# heading (top, bottom, opacity, words) and each painting's opacity as seen (the engine fed, its
-# sparks, then the engine new, well worn, old, each times its layer's), in the window.
+# heading (top, bottom, opacity, words) and each painting's opacity as seen (the powerhouse fed,
+# its sparks, then the brain cell young, middle-aged, old, each times its layer's), in the window.
 STORY_STATE = """(() => {
   const s = document.querySelector('#science'); const cs = getComputedStyle(s);
   const fig = s.querySelector('figure'); const nav = s.querySelector('nav');

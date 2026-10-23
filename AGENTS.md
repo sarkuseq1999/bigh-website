@@ -143,8 +143,14 @@ These sit on top of `DESIGN.md`.
   steam engine growing old did not relate to the age slider and asked for a cell that ages. One
   brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
   age goes up, still at work when old. Picked over A (the whole cell, whose gold was too small on
-  a phone). The first two topics keep the steam engine. DESIGN.md "The Science Stage Rule";
+  a phone). DESIGN.md "The Science Stage Rule";
   mockup: `reference/ink-pages/mockups/home-science-cell/`.
+- **Homepage "Mitochondria" and "Free radicals": inside the powerhouse (Mo picked D, October 22,
+  2026).** Mo asked for a power plant instead of the steam train and picked D of six painted ideas:
+  an old powerhouse with its front left open like a storybook (a worker feeds the gold fire, its
+  steam turns the wheel, power runs out along the wire), and for Free radicals its chimney opened
+  up, the screen on top catching the sparks. Grey ink, few parts, the crane's hand. DESIGN.md
+  "The Science Stage Rule"; mockups: `reference/ink-pages/mockups/home-science-plants/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 
