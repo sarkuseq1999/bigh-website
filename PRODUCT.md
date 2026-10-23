@@ -55,8 +55,10 @@ preview.
   Dr. Liu's real photo (`public/images/jiankang-liu.jpg`, 512×768) are used as they are; bottles
   and labels are never generated or faked.
 - Logo: `public/images/brand/bigh-logo-*.png` (black wordmark with a green leaf).
-- Typeface: Switzer, site-wide (Mo's pick, September 28, 2026; loaded from Fontshare in the locale
-  layout, never committed to the public repo). Labels and navigation stay large for older readers.
+- Typeface: Switzer, site-wide (Mo's pick, September 28, 2026). Served from the site itself since
+  October 23, 2026: `scripts/fetch-fonts.mjs` fetches the official files from Fontshare before each
+  build; they are never committed to the public repo (the licence forbids it). Labels and
+  navigation stay large for older readers.
 - Voice: understated, concrete, no hype; "sharpness" over vague wording.
 
 ## Evidence on Hand

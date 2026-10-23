@@ -201,6 +201,11 @@ These sit on top of `DESIGN.md`.
 
 ## Code traps
 
+- **Switzer's font files are never committed** (Mo, October 23, 2026: host it ourselves). Its
+  licence allows self-hosting but not sharing the files through a public repository, and this one
+  is public. `scripts/fetch-fonts.mjs` fetches the official files from Fontshare before every
+  `npm run build` / `npm run dev` into the git-ignored `public/fonts/switzer/`; run builds through
+  npm, not `next build` alone, or the site ships without them. Never subset or convert them.
 - **Homepage CSS specificity:** `src/components/home/homepage.module.css` resets `.site p`,
   `.site button` and `.site h2` (specificity 0,1,1). A single-class CSS-module rule such as
   `.cta { background: … }` loses to them silently. Scope component rules under the component's root

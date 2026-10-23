@@ -5,8 +5,28 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 22, 2026, by Claude Code (homepage crane C, half size).
+- **Last updated:** October 23, 2026, by Claude Code (Switzer served from the site itself).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Not live yet (October 23, latest): Switzer is served from the site itself** (Mo said to host
+  it ourselves, and to show him before pushing). Fontshare's stylesheet kept dropping the
+  connection (the bullet below). Its licence (ITF Free Font License 2.0) allows self-hosting but
+  not sharing the files through a public repository, and this one is public, so
+  `scripts/fetch-fonts.mjs` fetches the two official variable files (upright 42 KB, italic 33 KB,
+  unchanged) from Fontshare's CDN before every `npm run build` and `npm run dev` into the
+  git-ignored `public/fonts/switzer/`; if it cannot, the build stops. `globals.css` declares them
+  as "Switzer" (so every existing stack and check still names it), the locale layout preloads the
+  upright one (not on `/vn`), and `next.config.ts` caches `/fonts/*` for a year (a new file gets
+  a new name). No page asks Fontshare for anything any more. Never commit the font files. On the
+  built site (`npm run build` + `next start`): every page's first paragraph drawn in "Switzer
+  Variable", the file 200 with the year-long cache, no request to Fontshare, `/vn` in Be Vietnam
+  Pro without the preload; `qa_home_ink` 282/282, `qa_nav` 440/440, `qa_fda` 220/220, `qa_about`
+  353/353, `qa_nuricell_ink` 355/355, `qa_propolis_ink` 273/273, `qa_opc_ink` 185/185,
+  `qa_science_ink` 1279/1279, `qa_support` 341/341. Two that fail for older reasons:
+  `qa_nature_calm_ink` 158/159 (the front-layer pixel check: on this computer the scene repaints
+  hundreds of pixels between two identical screenshots, with Switzer or with it blocked; 159/159
+  on the live site) and `qa_vn_font` 37/43 (the same six fail on the live site: the Ysabeau menu
+  words and NuriCell's line heights). `qa_turmerific_ink` not run locally (it hangs on
+  `next start`). The Vercel build's own fetch is only tested by the push.
 - **Live (October 22, latest): the homepage's flying crane at half size (C)**. After B (below)
   went live, Mo asked to try C, then said to push C live in its place. Desktop: half the comp's
   crane, shrunk toward the point its brush line leaves from, then lifted 70 comp px and moved 60
@@ -18,7 +38,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Claude pushed `main` to `10ef0c5` (a fast-forward from `28ee762`); production
   `dpl_CgS1YYUsbc1vtCWQeL69crspWZtJ`, the demo alias points to it; public demo `qa_home_ink`
   282/282, `qa_nav` 439/440 (the font host, below; `docs/public-demo.md`).
-- **Open (October 22): the Switzer font host drops connections.** Switzer's stylesheet comes from
+- **Fixed by the bullet at the top (October 23): the Switzer font host drops connections.** Switzer's stylesheet came from
   `api.fontshare.com`; from this computer the browser's request was reset
   (`net::ERR_CONNECTION_RESET`) in 5 of 6 loads of the demo and 3 of 6 of a local `next start`,
   and the page then falls back to another face (`qa_nav`'s "no console errors" fails on it).

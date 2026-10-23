@@ -5,8 +5,25 @@
 @custom-variant dark (&:is(.dark *));
 
 /* The brand face. The page shells (homepage, product page, About) put var(--font-brand) at the
-   top of their font stacks. Switzer (Fontshare, loaded in the locale layout) for every language
-   but Vietnamese, which it cannot set: see html:lang(vi) below. */
+   top of their font stacks. Switzer for every language but Vietnamese, which it cannot set: see
+   html:lang(vi) below. Served from this site (October 23, 2026: Fontshare's stylesheet kept
+   dropping the connection): the official variable files, fetched before each build by
+   scripts/fetch-fonts.mjs and never committed (its licence allows self-hosting, not a public
+   repository). The upright one is preloaded in the locale layout. */
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/switzer-variable-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Switzer";
+  src: url("/fonts/switzer/switzer-variable-italic-v1.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
 :root {
   --font-brand: "Switzer";
 }

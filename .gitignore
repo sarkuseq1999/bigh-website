@@ -57,6 +57,10 @@ Thumbs.db
 # synced from content/harvest/assets at build time
 /public/original/
 
+# Switzer, fetched from Fontshare before every build (scripts/fetch-fonts.mjs). Its licence allows
+# self-hosting but not sharing the files through a public repository: never commit them.
+/public/fonts/switzer/
+
 # Third-party design inspiration (recordings/screenshots of other companies' sites).
 # Keep on this PC only; this repo is public.
 /reference/motionsites-*

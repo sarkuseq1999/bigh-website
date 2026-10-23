@@ -12,10 +12,14 @@ const sans = DM_Sans({
   variable: "--font-dm-sans",
   display: "swap",
 });
-// Switzer, the brand face (Mo, September 28, 2026). Its licence (ITF Free Font License) allows
-// web use but not redistributing the files, and this repository is public, so it loads from
-// Fontshare's own stylesheet rather than next/font/local.
-const SWITZER = "https://api.fontshare.com/v2/css?f[]=switzer@1,2&display=swap";
+// Switzer, the brand face (Mo, September 28, 2026), is served from this site (October 23, 2026:
+// Fontshare's stylesheet kept dropping the connection, and pages fell back to another face). Its
+// licence (ITF Free Font License 2.0) allows self-hosting but not sharing the files through a
+// public repository, and this one is public: so not next/font/local, whose files would have to be
+// committed. scripts/fetch-fonts.mjs fetches the official files before each build into
+// public/fonts/switzer/ (git-ignored); globals.css declares them. The upright face is preloaded,
+// except on Vietnamese pages, which set their words in Be Vietnam Pro.
+const SWITZER = "/fonts/switzer/switzer-variable-v1.woff2";
 
 // Be Vietnam Pro, for Vietnamese only (Mo, September 28, 2026): Switzer lacks 92 of the 134
 // Vietnamese letters, so Chrome drew them from Arial one by one. SIL Open Font License, so next/font
@@ -110,9 +114,9 @@ export default async function LocaleLayout({
       <body
         className={`${sans.variable} ${serif.variable} ${sign.variable} ${titles.variable}${locale === "vn" ? ` ${vietnamese.variable}` : ""}`}
       >
-        <link rel="preconnect" href="https://api.fontshare.com" />
-        <link rel="preconnect" href="https://cdn.fontshare.com" crossOrigin="anonymous" />
-        <link rel="stylesheet" href={SWITZER} precedence="default" />
+        {locale !== "vn" && (
+          <link rel="preload" href={SWITZER} as="font" type="font/woff2" crossOrigin="anonymous" />
+        )}
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>
