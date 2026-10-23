@@ -4,7 +4,26 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2aruqvdra-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-8ou9tyl0b-sarkuseq1999s-projects.vercel.app`
+(`dpl_DMQiiuemFPhNiqRgyRX2HNMVuYvS`), the **production** deployment of `main` at
+`5f800a8d13f26a0e1ed9313a5efbd224c948e343`. On October 22, 2026, Mo asked for a power plant
+instead of the steam train in "Make sense of the science." and, of six painted ideas, picked D,
+inside the powerhouse; on October 23 he said to put it live. Mitochondria: an old powerhouse with
+its front left open like a storybook, a worker feeding a log into the gold fire whose steam turns a
+big wheel, power running out along the wire; the line under it now reads "Like your cells: food is
+the fuel, and the fire turns it into power." (English in every language for now). Free radicals:
+the same powerhouse closer, its chimney opened up, gold sparks rising into the screen on top, two
+escaping. Aging cells keeps the brain cell. Claude pushed branch `home-science-plant` to `main` (a
+fast-forward from `10ef0c5`, with the crane C release notes merged in).
+
+Before the push, on the built site: lint, type check, formatting and build passed; laptop and
+phone screenshots and recordings of all three topics. `qa_home_ink` 268/282 and `qa_nav` 439/440:
+every failure was a "no errors" check hit by `api.fontshare.com` (the Switzer font host) cutting
+connections, the same resets the crane C release recorded; every science and layout check passed.
+After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440 (a first run's one failure was `ERR_NO_BUFFER_SPACE` on the checking computer), and
+both powerhouse pictures load.
+
+Before this update, the alias pointed to `bigh-website-2aruqvdra-sarkuseq1999s-projects.vercel.app`
 (`dpl_CgS1YYUsbc1vtCWQeL69crspWZtJ`), the **production** deployment of `main` at
 `10ef0c584745d2dcb4d99b60f54ecd786c320136`. On October 22, 2026, after crane B (65%) had gone
 live, Mo asked to try C of the same three sizes, then said to push C live in its place: the
