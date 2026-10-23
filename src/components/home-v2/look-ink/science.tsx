@@ -25,7 +25,8 @@ import styles from "./science.module.css";
 // screen, as Timeline explains its science. The painting is pinned (sticky) beside the words, the
 // three topics follow one another down the page under the index (the tabs, now a progress index
 // that stays at the top of the words), and as each topic reaches the reading line the painting
-// blooms into that topic's state. Phones and reduced motion keep the three tabs.
+// blooms into that topic's state. Phones and reduced motion keep the three tabs; in one column
+// (under 900px) the tabs sit right above the picture and the words follow it (Mo, October 23).
 const AGE_MIN = 30;
 const AGE_MAX = 80;
 /** The ages at which the slider moves the cell on to its next painting (young until 43, middle-
