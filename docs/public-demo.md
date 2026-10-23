@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-gubpwpetu-sarkuseq1999s-projects.vercel.app`
+(`dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`), the **production** deployment of `main` at
+`eac92d8cc90047413104b799377fd1259e6375e9`. On October 23, 2026, Mo found the homepage's Free
+radicals picture (the powerhouse chimney, its screen catching the sparks) showed no harm, while
+free radicals harm us. Of three painted harm ideas he picked A and said to put it live: the
+screen catches most sparks, and the few that slip past fall on the roof and burn black holes in
+it, one still smoking (black ink only, a dull fleck of gold in each; `plant-sparks-v2`). The line
+under it reads "Most sparks are caught. The few that slip out leave burns." (English in every
+language for now). Claude pushed branch `home-science-harm` to `main` (a fast-forward from
+`619e77d`, with the Switzer release notes merged in).
+
+Before the push, on the built site (with Switzer self-hosted): lint, type check, formatting and
+build passed; `qa_home_ink` 282/282, `qa_nav` 440/440; laptop and phone screenshots and
+recordings. After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282,
+`qa_nav` 440/440, and the new picture and its line load.
+
+Before this update, the alias pointed to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
 (`dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`), the **production** deployment of `main` at
 `619e77d8e81794517833b77ad4a3d0e2eb55637c`. On October 23, 2026, after Fontshare's stylesheet
 kept dropping the connection (pages then fell back to another face), Mo said to host Switzer

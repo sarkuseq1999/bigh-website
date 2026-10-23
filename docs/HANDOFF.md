@@ -5,9 +5,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 23, 2026, by Claude Code (Switzer served from the site itself).
+- **Last updated:** October 23, 2026, by Claude Code (Free radicals shows the harm).
+- **Live (October 23, latest): Free radicals shows the harm** (Mo picked A of three and said to
+  put it live): the few sparks that slip past the chimney's screen burn black holes in the roof.
+  See "Homepage science section" below. Claude pushed `main` to `eac92d8` (a fast-forward from
+  `619e77d`); production `dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`, the demo alias points to it; public
+  demo `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 23, latest): Switzer is served from the site itself** (Mo said to host it
+- **Live (October 23): Switzer is served from the site itself** (Mo said to host it
   ourselves, saw the before/after, `reference/ink-pages/mockups/switzer-self-host/`, and said to
   push it). Fontshare's stylesheet kept dropping the
   connection (the bullet below). Its licence (ITF Free Font License 2.0) allows self-hosting but
@@ -162,8 +167,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 - **Homepage science section (Claude Code).** "Make sense of the science." shows, with a line
   under each picture tying it to the words: Mitochondria and Free radicals, an old powerhouse
   with its front left open (a worker feeding the gold fire, its steam turning the wheel, power
-  out along the wire; then its chimney opened up, the screen catching the sparks), Mo's pick D
-  of six power plant ideas on October 22 (branch `home-science-plant`, `build_plant.py`); Aging
+  out along the wire), Mo's pick D of six power plant ideas on October 22; for Free radicals its
+  chimney opened up, the screen catching most sparks and the few that slip past burning black
+  holes in the roof (Mo's pick A, October 23, after the caught sparks alone showed no harm;
+  `build_plant.py`); Aging
   cells, a brain cell up close at three ages (`build_cell.py`). Before: the October 19
   hummingbird, apple and Joshua tree (decorative), a hiker with a window into a cell (dropped),
   the October 21 steam train. The caption lines (`science.peek`, `science.peekAge` in
