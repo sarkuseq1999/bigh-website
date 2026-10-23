@@ -4,7 +4,29 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2uvqpl6xl-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2aruqvdra-sarkuseq1999s-projects.vercel.app`
+(`dpl_CgS1YYUsbc1vtCWQeL69crspWZtJ`), the **production** deployment of `main` at
+`10ef0c584745d2dcb4d99b60f54ecd786c320136`. On October 22, 2026, after crane B (65%) had gone
+live, Mo asked to try C of the same three sizes, then said to push C live in its place: the
+homepage's flying crane at half the comp's size, shrunk toward the point its brush line leaves
+from, then lifted 70 comp px and moved 60 left with its flight stroke; on phones 57.6vw (60% of
+the old 96vw), its line unchanged (`reference/ink-pages/mockups/home-crane-size/`). Claude built C
+in a scratch worktree (branch `home-crane-c`), fast-forwarded `studio` to it and pushed `studio`
+to `main` (a fast-forward from `28ee762`, with the brain cell's release notes).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282 (its phone check now expects the bird at about 37% of the window),
+`qa_nav` 440/440; screenshots at 1920x1080, 1440x900 and 390x844 matched mockup C (the crane's
+box within 1px), and the tablet (820x1180) and Korean openings were looked at.
+After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink`
+282/282 and the crane's box at 1920x1080, 1440x900 and 390x844 the same as on the built site;
+`qa_nav` 439/440 twice. Its one failure: the Switzer stylesheet from `api.fontshare.com` was cut
+off (`net::ERR_CONNECTION_RESET`), so those loads fell back to another face. Measured from this
+computer it failed in 5 of 6 loads of the demo and 3 of 6 of the previous build on a local
+`next start`, while `curl` and a direct browser visit to the same address got 200: it is the font
+host, not this release. Not checked from another network.
+
+Before this update, the alias pointed to `bigh-website-2uvqpl6xl-sarkuseq1999s-projects.vercel.app`
 (`dpl_C5C7DQ72sYC5jJTy6JH4zA8b3KAX`), the **production** deployment of `main` at
 `28ee762ad74ea1507afdf18fc57b7e97071a162c`. On October 22, 2026, Mo found that the steam engine
 growing old in the homepage science's "Aging cells" did not relate to the age slider, and asked
