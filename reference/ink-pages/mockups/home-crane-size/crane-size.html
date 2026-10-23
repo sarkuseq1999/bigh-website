@@ -152,14 +152,14 @@
 </style>
 
 <div class="wrap">
-  <h1>The homepage crane, four sizes</h1>
-  <p class="lede">Real screenshots of the homepage, taken after the crane's two wingbeats, when it rests. Only the crane changes. Its brush line moves with it. Tap a size; the pictures below switch.</p>
+  <h1>The homepage crane, one size between B and C</h1>
+  <p class="lede">C (half size) is live and looks a little too small. Here is a size between B and C. Real screenshots of the homepage, taken after the crane's two wingbeats, when it rests. Only the crane changes; its brush line moves with it. Tap a size; the pictures below switch.</p>
 
   <div class="picker" role="group" aria-label="Crane size">
-    <button type="button" data-v="now" aria-pressed="false">Today<small>as live</small></button>
-    <button type="button" data-v="a" aria-pressed="false">A<small>80%</small></button>
-    <button type="button" data-v="b" aria-pressed="true">B<small>65% · my pick</small></button>
-    <button type="button" data-v="c" aria-pressed="false">C<small>50%</small></button>
+    <button type="button" data-v="now" aria-pressed="false">Original<small>100%</small></button>
+    <button type="button" data-v="b" aria-pressed="false">B<small>65%</small></button>
+    <button type="button" data-v="mid" aria-pressed="true">Between<small>58% · my pick</small></button>
+    <button type="button" data-v="c" aria-pressed="false">C<small>50% · live</small></button>
   </div>
 
   <div class="note" aria-live="polite">
@@ -181,23 +181,23 @@
 <script>
   const notes = {
     now: {
-      title: "Today",
-      text: "The crane as it is live now. On a phone it runs off the left edge.",
+      title: "Original",
+      text: "The crane before this week's changes, for reference. On a phone it runs off the left edge.",
       score: "",
-    },
-    a: {
-      title: "A. A step smaller",
-      text: "80% of today's size, in the same spot. The brush line stays exactly where it is. A little more sky between the crane and the menu bar.",
-      score: "My score: <strong>8 / 10</strong>. Holds it back: the change is small. The crane is still the biggest shape at the top.",
     },
     b: {
       title: "B. Smaller and higher",
-      text: "65% of today's size, lifted a little and moved slightly left, with its brush line rising with it. It reads as farther off in the sky, and the headline leads.",
-      score: "My score: <strong>9 / 10</strong>. Holds it back: the line now crosses open sky, a bit apart from the mist and mountains.",
+      text: "65% of the original size, lifted a little and moved slightly left, with its brush line rising with it. Live for a few hours on October 22.",
+      score: "My score: <strong>9 / 10</strong>. Holds it back: the bird is still the strongest shape at the top.",
+    },
+    mid: {
+      title: "Between B and C",
+      text: "58% of the original size, placed halfway between B and C. Big enough to read as the crane at a glance, with the red crown clear on a phone. The headline still leads.",
+      score: "My score: <strong>9 / 10</strong>. Holds it back: it is a compromise, a little less of a centrepiece than B. Not yet checked on a tablet.",
     },
     c: {
-      title: "C. A distant bird",
-      text: "Half of today's size, high in the sky. The crane becomes a small accent; the brush line becomes the big gesture.",
+      title: "C. A distant bird (live now)",
+      text: "Half of the original size, high in the sky. The crane becomes a small accent; the brush line becomes the big gesture.",
       score: "My score: <strong>7 / 10</strong>. Holds it back: too small for the page's main picture. On a phone the red crown is hard to see.",
     },
   };
@@ -220,5 +220,5 @@
     score.hidden = !notes[v].score;
   };
   for (const b of buttons) b.addEventListener("click", () => show(b.dataset.v));
-  show("b");
+  show("mid");
 </script>

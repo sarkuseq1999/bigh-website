@@ -5,9 +5,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 23, 2026, by Claude Code (Switzer served from the site itself).
+- **Last updated:** October 23, 2026, by Claude Code (homepage crane between B and C, 57.5%).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 23, latest): Switzer is served from the site itself** (Mo said to host it
+- **Pushing (October 23, latest): the homepage's flying crane between B and C** (Mo found C, half
+  size, too small; of B, a size between and C on `reference/ink-pages/mockups/home-crane-size/` he
+  picked the size between and said to push it in place of C). Desktop: 57.5% of the comp's crane,
+  shrunk toward the point its brush line leaves from, then lifted 60 comp px and moved 50 left
+  with its flight stroke. Phones: 63.4vw (66% of the old 96vw), the line unchanged.
+  `opening.module.css`; `qa_home_ink`'s phone check now expects the bird at about 41% of the
+  window. On the built site (`next start`), the crane's box at 1920x1080, 1440x900 and 390x844
+  within 1px of the mockup.
+- **Live (October 23): Switzer is served from the site itself** (Mo said to host it
   ourselves, saw the before/after, `reference/ink-pages/mockups/switzer-self-host/`, and said to
   push it). Fontshare's stylesheet kept dropping the
   connection (the bullet below). Its licence (ITF Free Font License 2.0) allows self-hosting but

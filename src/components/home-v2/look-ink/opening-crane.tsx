@@ -70,8 +70,8 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
       // The animated painting is a megabyte or two: not for visitors who asked to save data.
       const link = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
       if (link?.saveData) return;
-      // Phones take the small one only where it is sharp enough: the phone's crane is 57.6vw
-      // (October 22), which a 2x screen gets from the small one and a 3x screen needs in full.
+      // Phones take the small one only where it is sharp enough: the phone's crane is 63.4vw
+      // (October 23), which a 2x screen gets from the small one and a 3x screen needs in full.
       const phone = window.matchMedia("(max-width: 720px)").matches;
       const pixels = still.getBoundingClientRect().width * window.devicePixelRatio;
       const small = phone && pixels <= 640;
@@ -180,7 +180,7 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
             alt=""
             width={crane.crane.width}
             height={crane.crane.height}
-            sizes="(max-width: 720px) 58vw, 20vw"
+            sizes="(max-width: 720px) 64vw, 23vw"
             loading="eager"
             data-bloom="waiting"
             style={{ ["--bloom-delay" as string]: 600 }}
