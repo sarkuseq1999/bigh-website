@@ -7,7 +7,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 22, 2026, by Claude Code (homepage crane C, half size).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Pushing (October 22, latest): the homepage's flying crane at half size (C)**. After B (below)
+- **Live (October 22, latest): the homepage's flying crane at half size (C)**. After B (below)
   went live, Mo asked to try C, then said to push C live in its place. Desktop: half the comp's
   crane, shrunk toward the point its brush line leaves from, then lifted 70 comp px and moved 60
   left with its flight stroke. Phones: 57.6vw (60% of the old 96vw), the line unchanged.
@@ -15,6 +15,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   window. Built in a scratch worktree (branch `home-crane-c`), then fast-forwarded here. On the
   built site (`next start`): `qa_home_ink` 282/282, `qa_nav` 440/440; desktop 1920 and 1440,
   phone, tablet, 2560 and Korean looked at (on a tablet, mid-wingbeat, the bird gets small).
+  Claude pushed `main` to `10ef0c5` (a fast-forward from `28ee762`); production
+  `dpl_CgS1YYUsbc1vtCWQeL69crspWZtJ`, the demo alias points to it; public demo `qa_home_ink`
+  282/282, `qa_nav` 439/440 (the font host, below; `docs/public-demo.md`).
+- **Open (October 22): the Switzer font host drops connections.** Switzer's stylesheet comes from
+  `api.fontshare.com`; from this computer the browser's request was reset
+  (`net::ERR_CONNECTION_RESET`) in 5 of 6 loads of the demo and 3 of 6 of a local `next start`,
+  and the page then falls back to another face (`qa_nav`'s "no console errors" fails on it).
+  `curl` and a direct visit got 200. Not checked from another network. Self-hosting Switzer would
+  remove the dependency; not done (not asked).
 - **Live (October 22): the homepage science's "Aging cells" shows a brain cell**
   in place of the steam engine (Mo: an engine growing old did not relate to the age slider; he
   picked B, the cell up close, of two painted ideas; mockup
@@ -92,9 +101,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `main` is `28ee762` (live: the steam train and the brain cell, the bigger Sign up
-  stroke, the brush line's 2× and crane B); `studio` adds the brain cell's release notes and crane
-  C, so the next push is a fast-forward and takes C live.
+- **State:** `main` is `10ef0c5` (live: the steam train and the brain cell, the bigger Sign up
+  stroke, the brush line's 2× and crane C); `studio` adds only crane C's release notes, so the
+  next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
