@@ -5,9 +5,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 22, 2026, by Claude Code (homepage crane C, half size).
+- **Last updated:** October 23, 2026, by Claude Code (the homepage science powerhouse live).
+- **Live (October 23, latest): the homepage science powerhouse** (Mo picked D of six power
+  plant ideas and said to put it live). See "Homepage science section" below. Claude pushed
+  `main` to `5f800a8` (a fast-forward from `10ef0c5`); production
+  `dpl_DMQiiuemFPhNiqRgyRX2HNMVuYvS`, the demo alias points to it; public demo `qa_home_ink` 282/282, `qa_nav` 440/440 (a first run's one failure was `ERR_NO_BUFFER_SPACE` on the checking computer)
+  (`docs/public-demo.md`).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 22, latest): the homepage's flying crane at half size (C)**. After B (below)
+- **Live (October 22): the homepage's flying crane at half size (C)**. After B (below)
   went live, Mo asked to try C, then said to push C live in its place. Desktop: half the comp's
   crane, shrunk toward the point its brush line leaves from, then lifted 70 comp px and moved 60
   left with its flight stroke. Phones: 57.6vw (60% of the old 96vw), the line unchanged.
@@ -127,17 +132,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   640px): restarting the server cleared it; Vercel's own image service served it fine.
 - **Customers:** `bighnow.com` is still the old WordPress site (checked October 18). Nothing in
   this repo reaches it yet.
-- **Homepage science section: the steam train (Mo, October 21, Claude Code).** One small steam
-  engine in the redwoods tells "Make sense of the science."'s three topics, with a line under
-  each picture tying it to the words: fed with a log (mitochondria), its smokestack's screen
-  holding the sparks (free radicals), new, well worn and old on the age slider (aging). It
-  replaced the October 19 hummingbird, apple and Joshua tree, which Mo found decorative; a
-  hiker with a window into a cell was tried and dropped on a test branch (`home-science-hiker`).
-  Built on branch `home-science-train` in a separate worktree. The new caption lines
-  (`science.peek`, `science.peekAge` in `content.ts`) are English in every language for now.
-  `qa_home_ink` now checks the engine's three ages, and at 1024x768 the scroll story runs (every
-  topic now fits under the index). Notes: `reference/ink-pages/home-science/README.md`; rule:
-  DESIGN.md "The Science Stage Rule".
+- **Homepage science section (Claude Code).** "Make sense of the science." shows, with a line
+  under each picture tying it to the words: Mitochondria and Free radicals, an old powerhouse
+  with its front left open (a worker feeding the gold fire, its steam turning the wheel, power
+  out along the wire; then its chimney opened up, the screen catching the sparks), Mo's pick D
+  of six power plant ideas on October 22 (branch `home-science-plant`, `build_plant.py`); Aging
+  cells, a brain cell up close at three ages (`build_cell.py`). Before: the October 19
+  hummingbird, apple and Joshua tree (decorative), a hiker with a window into a cell (dropped),
+  the October 21 steam train. The caption lines (`science.peek`, `science.peekAge` in
+  `content.ts`) are English in every language for now. Notes:
+  `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
 - **In progress:** None. **Next:** Mo's call.
 
 ## What's live
