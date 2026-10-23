@@ -14,7 +14,16 @@ HERE = Path(__file__).parent
 concept, out = sys.argv[1], Path(sys.argv[2])
 base = sys.argv[3] if len(sys.argv) > 3 else "https://bigh-website-demo.vercel.app"
 out.mkdir(parents=True, exist_ok=True)
-js = (HERE / f"mock_{concept}.js").read_text(encoding="utf-8") if concept != "now" else ""
+if (HERE / f"scene_{concept}.json").exists():
+    # A painting-beside-the-words idea: its settings, then the shared builder.
+    js = (
+        "window.__scene = "
+        + (HERE / f"scene_{concept}.json").read_text(encoding="utf-8")
+        + ";\n"
+        + (HERE / "mock_scene.js").read_text(encoding="utf-8")
+    )
+else:
+    js = (HERE / f"mock_{concept}.js").read_text(encoding="utf-8") if concept != "now" else ""
 
 SIZES = [
     ("desk1440", 1440, 900, 1, 1),
