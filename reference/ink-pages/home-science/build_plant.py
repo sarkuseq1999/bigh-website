@@ -7,7 +7,8 @@ page lays it on with mix-blend-mode: multiply and its own rice paper shows throu
 off an original's edge dissolves into the paper over the outer 8%. The originals are 4:3, the
 stage's own shape (2000:1493), so each is only scaled into the stage's 1600 x 1195.
 
-Output: public/images/home-v2/ink/science/plant-<state>-v1.webp
+Output: public/images/home-v2/ink/science/plant-fuel-v1.webp and plant-sparks-v2.webp (v2, October
+23: Free radicals shows harm, sparks that slip past the screen burning the roof, Mo's pick A)
 
 usage: python -X utf8 reference/ink-pages/home-science/build_plant.py
 """
@@ -26,8 +27,11 @@ W, H = 1600, 1195
 # shipped state -> original
 PLANTS = {
     "fuel": "plant-fuel-b1",
-    "sparks": "plant-sparks-a1",
+    "sparks": "harm-roof-b1",
 }
+
+# a picture replaced in place gets a new name (the image optimizer caches by name)
+VERSION = {"sparks": "v2"}
 
 
 def plate(im, fade=0.08):
@@ -51,7 +55,7 @@ def main():
     OUT.mkdir(parents=True, exist_ok=True)
     for state, name in PLANTS.items():
         im = Image.open(ORIG / f"{name}.png").resize((W, H), Image.LANCZOS)
-        out = OUT / f"plant-{state}-v1.webp"
+        out = OUT / f"plant-{state}-{VERSION.get(state, 'v1')}.webp"
         Image.fromarray(plate(im).astype(np.uint8)).save(out, quality=86, method=6)
         print(out.name, f"{out.stat().st_size // 1024} KB")
 

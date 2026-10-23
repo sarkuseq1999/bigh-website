@@ -64,10 +64,11 @@ export const sciencePaintings = {
   /** Inside the powerhouse: a worker feeds a log to the gold fire, its steam turns the big wheel,
    *  and power runs out along the wire (a thread of gold): fuel in, power out. */
   energy: { src: `${S}/plant-fuel-v1.webp`, width: 1600, height: 1195 },
-  /** Closer, the chimney opened up: sparks fly up it from the fire, the screen on top holds most
-   *  of them and two escape (free radicals, and the body's own defences). A comparison; the
-   *  stage says "Illustrations". */
-  balance: { src: `${S}/plant-sparks-v1.webp`, width: 1600, height: 1195 },
+  /** Closer, the chimney opened up: the screen on top holds most of the sparks, but the few that
+   *  slip past fall on the roof and burn black holes in it (Mo, October 23, 2026, pick A: free
+   *  radicals do harm, and the body's defences catch most, not all). A comparison; the stage
+   *  says "Illustrations". */
+  balance: { src: `${S}/plant-sparks-v2.webp`, width: 1600, height: 1195 },
   /** One brain cell up close at three ages, lined up on one framing: young (strong branches, six
    *  gold power plants), middle-aged (thinner branches, three still gold) and old (thin, pale
    *  branches, one still gold, still at work). The age slider shows one at a time. */

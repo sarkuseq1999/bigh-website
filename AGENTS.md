@@ -149,8 +149,11 @@ These sit on top of `DESIGN.md`.
   2026).** Mo asked for a power plant instead of the steam train and picked D of six painted ideas:
   an old powerhouse with its front left open like a storybook (a worker feeds the gold fire, its
   steam turns the wheel, power runs out along the wire), and for Free radicals its chimney opened
-  up, the screen on top catching the sparks. Grey ink, few parts, the crane's hand. DESIGN.md
-  "The Science Stage Rule"; mockups: `reference/ink-pages/mockups/home-science-plants/`.
+  up, the screen on top catching the sparks. Grey ink, few parts, the crane's hand. On October 23
+  Mo asked Free radicals to show harm ("free radicals harm us") and picked A of three: the few
+  sparks that slip past the screen burn black holes in the roof (black ink only, never red).
+  DESIGN.md "The Science Stage Rule"; mockups: `reference/ink-pages/mockups/home-science-plants/`
+  and `home-science-harm/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

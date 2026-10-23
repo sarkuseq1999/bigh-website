@@ -13,8 +13,9 @@ import styles from "./science.module.css";
 // "Make sense of the science." Three topics, each picture showing what its words say, with a line
 // under it that ties it to them. Mitochondria (Mo, October 22, 2026: pick D, after the October 21
 // steam engine): an old powerhouse with its front left open, a worker feeding the gold fire whose
-// steam turns the wheel, power running out along the wire. Free radicals: its chimney opened up,
-// the screen on top holding the sparks the fire throws off. Aging cells (Mo, October 22: the
+// steam turns the wheel, power running out along the wire. Free radicals (Mo, October 23: show
+// the harm): its chimney opened up, the screen on top holding most of the sparks, the few that
+// slip past burning black holes in the roof. Aging cells (Mo, October 22: the
 // engine did not relate to the slider): one brain cell up close, young, middle-aged and old,
 // its branches thinning and its gold power plants going out, chosen by an age slider, with the
 // honesty line "Illustration, not a measurement". The slider shows one cell at a time, never two

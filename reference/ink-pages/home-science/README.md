@@ -110,3 +110,13 @@ the brain cell (`build_cell.py`).
 - `build_plant.py` makes the site pictures. Unused tries:
   `C:/Users/mcbig/Documents/codes/bigh-archive/home-science-plant-2026-10-22/`.
 
+
+## October 23, 2026: Free radicals shows the harm
+
+Mo found the chimney picture showed sparks caught but no harm, and free radicals harm us. Three
+painted ideas (mockup: `reference/ink-pages/mockups/home-science-harm/`): A the few sparks that slip
+past the screen burn holes in the roof (`harm-roof-a2`), B stray sparks burn the wheel and belt
+(`harm-wheel-a1`), C two chimneys, with and without a screen (`harm-split-a1`). Mo picked A.
+`harm-roof-b1` repainted it with the burns darker and only a dull fleck of gold in each, so the
+black burns read first; `build_plant.py` ships it as `plant-sparks-v2`. Unused tries:
+`C:/Users/mcbig/Documents/codes/bigh-archive/home-science-harm-2026-10-23/`.

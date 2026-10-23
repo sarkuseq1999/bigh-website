@@ -170,7 +170,7 @@ export const science = {
    *  cell (October 22). */
   peek: [
     "Like your cells: food is the fuel, and the fire turns it into power.",
-    "Burning fuel throws off sparks. The screen on top catches most of them.",
+    "Most sparks are caught. The few that slip out leave burns.",
   ],
   peekAge: [
     "A young brain cell: strong branches, power plants burning bright.",
