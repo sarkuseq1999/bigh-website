@@ -4,7 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ond3fvrzx-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2uvqpl6xl-sarkuseq1999s-projects.vercel.app`
+(`dpl_C5C7DQ72sYC5jJTy6JH4zA8b3KAX`), the **production** deployment of `main` at
+`28ee762ad74ea1507afdf18fc57b7e97071a162c`. On October 22, 2026, Mo found that the steam engine
+growing old in the homepage science's "Aging cells" did not relate to the age slider, and asked
+for a painted cell that ages. Of two brain-cell ideas he picked B, the cell up close
+(`reference/ink-pages/mockups/home-science-cell/`): as the age goes up its branches thin and its
+six gold power plants go out (6, 3, 1), still at work when old; the first two topics keep the
+engine. Mo said to push it. Claude pushed `studio` to `main` (a fast-forward from `7ca818d`, with
+another session's release notes for the smaller crane).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282 (it now looks for the cell's pictures), `qa_nav` 440/440; laptop (1440x900,
+1280x720) and phone (390x844) looked at, at ages 35, 45 and 70 and mid-fade, and the
+"Illustrations" tag clear of the branches from 360 to 1920px. After the alias update, on the
+public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440, and the
+cell at ages 35, 45 and 70 the same as on the built site.
+
+Before this update, the alias pointed to `bigh-website-ond3fvrzx-sarkuseq1999s-projects.vercel.app`
 (`dpl_GZa6NHXg59Qc8D1u9zJBUyXqqtW3`), the **production** deployment of `main` at
 `7ca818d8ebbe36879757df318151516b71dfa7e8`. On October 22, 2026, Mo liked the homepage's
 opening but found the flying crane a little big, and picked B of three sizes (80%, 65% and 50%;

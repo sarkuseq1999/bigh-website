@@ -7,7 +7,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Last updated:** October 22, 2026, by Claude Code (homepage Aging cells: a brain cell).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Not live yet (October 22, latest): the homepage science's "Aging cells" shows a brain cell**
+- **Live (October 22, latest): the homepage science's "Aging cells" shows a brain cell**
   in place of the steam engine (Mo: an engine growing old did not relate to the age slider; he
   picked B, the cell up close, of two painted ideas; mockup
   `reference/ink-pages/mockups/home-science-cell/`). Its branches thin and its six gold power
@@ -16,7 +16,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `science.peekAge` (English only, like the others); DESIGN.md "The Science Stage Rule". Built in
   a separate worktree while another session pushed the crane, then merged here. On the built site
   (`next start`): `qa_home_ink` 282/282, `qa_nav` 440/440; laptop 1440 and 1280 and phone looked
-  at, ages 35, 45 and 70 and the fade. Not pushed: ask Mo.
+  at, ages 35, 45 and 70 and the fade. Mo said to push it: Claude pushed `main` to `28ee762` (a
+  fast-forward from `7ca818d`); production `dpl_C5C7DQ72sYC5jJTy6JH4zA8b3KAX`, the demo alias
+  points to it; public demo `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Live (October 22): the homepage's flying crane is smaller and higher** (Mo
   found it a little big, picked B of 80%, 65% and 50%, and said to push it; mockups
   `reference/ink-pages/mockups/home-crane-size/`). Desktop: 65% of the comp's crane, shrunk
