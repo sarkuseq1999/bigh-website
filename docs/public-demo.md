@@ -4,7 +4,37 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-8ou9tyl0b-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
+(`dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`), the **production** deployment of `main` at
+`619e77d8e81794517833b77ad4a3d0e2eb55637c`. On October 23, 2026, after Fontshare's stylesheet
+kept dropping the connection (pages then fell back to another face), Mo said to host Switzer
+ourselves and to show him before pushing; he saw the before/after
+(`reference/ink-pages/mockups/switzer-self-host/`) and said to push it. Switzer's licence allows
+self-hosting but not sharing the files through a public repository, so
+`scripts/fetch-fonts.mjs` fetches the two official files from Fontshare before every build into
+the git-ignored `public/fonts/switzer/`; no page asks Fontshare for anything any more. Claude
+merged `main` (the powerhouse's release notes) into `studio` and pushed `main` to `faf70af`; that
+production build failed (`MODULE_NOT_FOUND`: `.vercelignore` skipped all of `scripts/`, so the
+fetch script was not there; production stayed on the powerhouse build). Claude let the one script
+through (`scripts/*` + `!scripts/fetch-fonts.mjs`, tested with the same `ignore` rules) and pushed
+`main` to `619e77d`; its build log shows "Switzer: fetched switzer-variable-v1.woff2 (42 KB)" and
+the italic (33 KB).
+
+Before the push, on the built site: lint, type check, formatting and build passed; no request to
+Fontshare on any page, each page's first paragraph drawn in "Switzer Variable", `/vn` in Be
+Vietnam Pro without the preload; `qa_home_ink` 282/282, `qa_nav` 440/440, `qa_fda` 220/220,
+`qa_about` 353/353, `qa_nuricell_ink` 355/355, `qa_propolis_ink` 273/273, `qa_opc_ink` 185/185,
+`qa_science_ink` 1279/1279, `qa_support` 341/341; `qa_nature_calm_ink` 158/159 and `qa_vn_font`
+37/43 for older reasons (`docs/HANDOFF.md`). After the alias update, on the public demo in fresh
+unauthenticated browsers: the font file 200 (`font/woff2`, `public, max-age=31536000,
+immutable`), no request to Fontshare, Switzer drawn on `/`, `/about`, `/products/nuricell` and
+`/kr`, Be Vietnam Pro on `/vn`, no console errors; `qa_home_ink` 282/282, `qa_nav` 440/440,
+`qa_fda` 220/220, `qa_about` 353/353, `qa_nuricell_ink` 355/355, `qa_propolis_ink` 273/273,
+`qa_opc_ink` 185/185, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159,
+`qa_science_ink` 1279/1279, `qa_support` 341/341; `qa_vn_font` 37/43 (the same six as before
+this release: the Ysabeau menu words and NuriCell's line heights).
+
+Before this update, the alias pointed to `bigh-website-8ou9tyl0b-sarkuseq1999s-projects.vercel.app`
 (`dpl_DMQiiuemFPhNiqRgyRX2HNMVuYvS`), the **production** deployment of `main` at
 `5f800a8d13f26a0e1ed9313a5efbd224c948e343`. On October 22, 2026, Mo asked for a power plant
 instead of the steam train in "Make sense of the science." and, of six painted ideas, picked D,
