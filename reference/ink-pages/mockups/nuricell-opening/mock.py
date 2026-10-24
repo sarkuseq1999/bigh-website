@@ -24,6 +24,12 @@ if (HERE / f"scene_{concept}.json").exists():
     )
 else:
     js = (HERE / f"mock_{concept}.js").read_text(encoding="utf-8") if concept != "now" else ""
+# "//@include <file>" lines pull in another script (an idea that reuses another's builder with its
+# own settings).
+js = "\n".join(
+    (HERE / line.split(" ", 1)[1].strip()).read_text(encoding="utf-8") if line.startswith("//@include ") else line
+    for line in js.splitlines()
+)
 
 SIZES = [
     ("desk1440", 1440, 900, 1, 1),

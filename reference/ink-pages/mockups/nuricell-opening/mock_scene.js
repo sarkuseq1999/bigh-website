@@ -95,7 +95,7 @@
     const w = wrap.getBoundingClientRect();
     const c = col.getBoundingClientRect();
     const colBottom = c.bottom;
-    const footY = Math.min(H - 30, Math.max(colBottom + 40, H * 0.9));
+    let footY = Math.min(H - 30, Math.max(colBottom + 40, H * 0.9));
     const shift = Math.max(0, (footY - 40 - colBottom) / 2);
     col.style.marginTop = shift + "px";
     const room = H - 230;
@@ -107,6 +107,12 @@
       const bx = c.right + 50;
       x0 = bx + bw + (cfg.gap ?? 20);
       sw = Math.min(W - x0 + (cfg.bleed ?? 40), cfg.aspect * (H - 140));
+      if (cfg.centerScene) {
+        // The painting centred in the window's height under the menu bar; the bottle's foot on its baseline.
+        const sh0 = sw / cfg.aspect;
+        cfg.top = (110 + (H - 110 - sh0) / 2) * (900 / H);
+        footY = 110 + (H - 110 - sh0) / 2 + sh0 * (cfg.baseline ?? 0.9);
+      }
       Object.assign(bottle.style, { position: "absolute", width: bw + "px", left: bx - w.left + "px", top: footY - bh - w.top + "px" });
       Object.assign(shadow.style, {
         left: bx - w.left - bw * 0.12 + "px",
@@ -174,6 +180,7 @@
       if (!inScene && cfg.ground !== false) scene.append(shadow);
     }
     if (cfg.phoneMarginBottom) scene.style.marginBottom = cfg.phoneMarginBottom;
+    if (cfg.phoneMarginTop) scene.style.marginTop = cfg.phoneMarginTop;
     if (cap && cfg.phoneCaptionRight) Object.assign(cap.style, { right: cfg.phoneCaptionRight, fontSize: "13px", maxWidth: "18em" });
     if (cap && cfg.phoneCaptionBottom) cap.style.bottom = cfg.phoneCaptionBottom;
     if (cap && cfg.phoneCaptionLeft) Object.assign(cap.style, { left: cfg.phoneCaptionLeft, right: "auto", textAlign: "left", maxWidth: "80vw" });
