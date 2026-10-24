@@ -39,6 +39,23 @@
     mixBlendMode: "multiply",
     height: "5%",
   });
+  let cap = null;
+  if (cfg.caption) {
+    // One short line under the picture that says what it shows (like the page's other picture notes).
+    cap = document.createElement("p");
+    cap.textContent = cfg.caption;
+    Object.assign(cap.style, {
+      position: "absolute",
+      right: cfg.captionRight ?? "8%",
+      bottom: cfg.captionBottom ?? "2%",
+      margin: "0",
+      font: "500 15px/1.4 var(--font-switzer, Switzer), system-ui, sans-serif",
+      color: "#5b564d",
+      maxWidth: "22em",
+      textAlign: "right",
+    });
+    scene.append(cap);
+  }
   const inScene = !cfg.bottle.free;
   if (inScene) {
     if (cfg.ground !== false) scene.append(shadow);
@@ -157,5 +174,8 @@
       if (!inScene && cfg.ground !== false) scene.append(shadow);
     }
     if (cfg.phoneMarginBottom) scene.style.marginBottom = cfg.phoneMarginBottom;
+    if (cap && cfg.phoneCaptionRight) Object.assign(cap.style, { right: cfg.phoneCaptionRight, fontSize: "13px", maxWidth: "18em" });
+    if (cap && cfg.phoneCaptionBottom) cap.style.bottom = cfg.phoneCaptionBottom;
+    if (cap && cfg.phoneCaptionLeft) Object.assign(cap.style, { left: cfg.phoneCaptionLeft, right: "auto", textAlign: "left", maxWidth: "80vw" });
   }
 })();
