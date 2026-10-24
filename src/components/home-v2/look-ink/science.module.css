@@ -500,6 +500,62 @@
   }
 }
 
+/* One column (Mo, October 24, 2026: "swipe from one part of that section to another"): the three
+   topics, each with its picture, line and words, sit side by side in a strip as wide as the
+   window, which the finger swipes and which snaps to one topic at a time (never half way, never
+   two at once); the tabs above glide it too. It runs out to the window's edges so a topic slides
+   in from the edge, not from a seam inside the gutter; each slide puts the gutter back. Its
+   height is the resting topic's (science.tsx), changing gently. */
+@media (max-width: 899px) {
+  .slides {
+    display: flex;
+    align-items: flex-start;
+    margin: 16px calc(-1 * var(--gutter)) 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    transition: height 0.35s var(--ease);
+  }
+
+  .slides::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slide {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    min-width: 0;
+    padding: 0 var(--gutter);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .slide .figure {
+    margin: 0 -4vw;
+  }
+
+  .science .slideLine {
+    margin: 8px 4vw 0;
+  }
+
+  /* The slider keeps a sideways drag for itself (it would otherwise swipe the strip). */
+  .slide .age {
+    touch-action: pan-y;
+  }
+
+  .slideWords {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .slides {
+    transition: none;
+  }
+}
+
 /* Phones (round 5): the three topics on one line, spread across the column (at 21px they broke
    two and one, the chosen one's underline stranded between the rows). 17px at 390, never under
    15px (360). */

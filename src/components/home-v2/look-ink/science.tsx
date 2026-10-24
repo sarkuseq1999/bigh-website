@@ -26,7 +26,10 @@ import styles from "./science.module.css";
 // three topics follow one another down the page under the index (the tabs, now a progress index
 // that stays at the top of the words), and as each topic reaches the reading line the painting
 // blooms into that topic's state. Phones and reduced motion keep the three tabs; in one column
-// (under 900px) the tabs sit right above the picture and the words follow it (Mo, October 23).
+// (under 900px) the tabs sit right above the picture and the words follow it (Mo, October 23),
+// and the three topics, each with its picture, line and words, sit side by side in a strip the
+// finger swipes, snapping to one topic at a time (Mo, October 24: "swipe from one part of that
+// section to another"). A tab glides the strip to its topic; a swipe moves the tabs' line.
 const AGE_MIN = 30;
 const AGE_MAX = 80;
 /** The ages at which the slider moves the cell on to its next painting (young until 43, middle-
@@ -55,6 +58,19 @@ function useScrollStory() {
     };
   }, []);
   return story;
+}
+
+/** One column (under 900px): the swiped strip of topics instead of one panel beside the rail. */
+function useNarrow() {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 899px)");
+    const update = () => setNarrow(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return narrow;
 }
 
 /** Where a topic would not fit the room under the pinned index (round 10: a narrow window such
@@ -92,6 +108,7 @@ export function Science() {
   const wanted = useScrollStory();
   const { fits, giveWay } = useStoryFits(wanted);
   const story = wanted && fits;
+  const narrow = useNarrow() && !story;
   const [topic, setTopic] = useState(0);
   const [age, setAge] = useState(45);
   const tabs = useRef<(HTMLButtonElement | null)[]>([]);
@@ -103,6 +120,11 @@ export function Science() {
   const landing = useRef(0);
   /** While the page glides to a topic, the topic is already chosen (no passing through). */
   const gliding = useRef<(() => void) | null>(null);
+  /** One column: the strip of topics the finger swipes, its slides, and the topic a tab is
+   *  gliding the strip to (the topics it passes on the way are not chosen). */
+  const strip = useRef<HTMLDivElement>(null);
+  const slides = useRef<(HTMLDivElement | null)[]>([]);
+  const heading = useRef<number | null>(null);
   const article = scienceArticles[topic];
   const aged = (age - AGE_MIN) / (AGE_MAX - AGE_MIN);
   const tree = TREE_FROM.filter((from) => age >= from).length;
@@ -112,9 +134,71 @@ export function Science() {
     if (!step) return;
     event.preventDefault();
     const next = (index + step + 3) % 3;
-    setTopic(next);
+    choose(next);
     tabs.current[next]?.focus();
   };
+
+  /** A tab chooses its topic; in one column it also glides the strip there. */
+  const choose = (i: number) => {
+    setTopic(i);
+    const row = strip.current;
+    if (!narrow || !row) return;
+    heading.current = i;
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    row.scrollTo({ left: i * row.clientWidth, behavior: still ? "instant" : "smooth" });
+  };
+
+  // One column: a swipe chooses the topic the strip comes to rest on (it snaps to one), so the
+  // tabs' line follows the finger; the strip opens on the chosen topic.
+  useEffect(() => {
+    const row = strip.current;
+    if (!narrow || !row) return;
+    row.scrollLeft = topic * row.clientWidth;
+    let frame = 0;
+    const follow = () => {
+      frame = 0;
+      const i = Math.max(0, Math.min(2, Math.round(row.scrollLeft / row.clientWidth)));
+      if (heading.current !== null) {
+        if (i === heading.current) heading.current = null;
+        return;
+      }
+      setTopic(i);
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(follow);
+    };
+    // (a finger or a wheel takes over from a tab's glide)
+    const takeOver = () => {
+      heading.current = null;
+    };
+    row.addEventListener("scroll", onScroll, { passive: true });
+    row.addEventListener("pointerdown", takeOver);
+    row.addEventListener("wheel", takeOver, { passive: true });
+    return () => {
+      row.removeEventListener("scroll", onScroll);
+      row.removeEventListener("pointerdown", takeOver);
+      row.removeEventListener("wheel", takeOver);
+      cancelAnimationFrame(frame);
+    };
+    // (only when the strip appears: the topic it opens on is the one chosen then)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [narrow]);
+
+  // One column: the strip is as tall as the topic it rests on, so a shorter topic leaves no
+  // empty paper under its words (the slides are not all the same height: Aging cells carries
+  // the age slider).
+  useEffect(() => {
+    const row = strip.current;
+    const slide = slides.current[topic];
+    if (!narrow || !row || !slide) return;
+    const fit = () => {
+      row.style.height = `${slide.offsetHeight}px`;
+    };
+    fit();
+    const observer = new ResizeObserver(fit);
+    observer.observe(slide);
+    return () => observer.disconnect();
+  }, [narrow, topic]);
 
   // The story's measures: the painting is pinned centred in the window under the header, the
   // index level with its top; each topic stands under the index with the next just below, and
@@ -284,6 +368,92 @@ export function Science() {
     </div>
   );
 
+  /** The age slider and its honesty line, under the brain cell. */
+  const ageControl = (on: boolean) => (
+    <div className={styles.age} data-on={on} inert={!on}>
+      <label className={styles.ageLabel} htmlFor="ink-age">
+        <span>{copy("Age")}</span>
+        <strong>{age}</strong>
+      </label>
+      <input
+        id="ink-age"
+        type="range"
+        min={AGE_MIN}
+        max={AGE_MAX}
+        step={1}
+        value={age}
+        onChange={(event) => setAge(Number(event.target.value))}
+        className={styles.range}
+        style={{ ["--fill" as string]: `${aged * 100}%` }}
+      />
+      <p className={styles.honesty}>{copy(science.ageLabel)}</p>
+    </div>
+  );
+
+  /** One column: one topic of the swiped strip, its picture, its line and its words (the topics
+   *  beside the one at rest are inert: seen while swiping, never reached by a tab key). */
+  const slide = (i: number) => (
+    <div
+      key={i}
+      ref={(node) => {
+        slides.current[i] = node;
+      }}
+      id={`ink-topic-panel-${i}`}
+      role="tabpanel"
+      aria-labelledby={`ink-topic-${i}`}
+      className={styles.slide}
+      inert={topic !== i}
+    >
+      <figure className={styles.figure}>
+        <div className={styles.stage}>
+          {i < 2 ? (
+            // eslint-disable-next-line @next/next/no-img-element -- the topic's painting
+            <img
+              className={`${base.ink} ${styles.layer}`}
+              src={(i === 0 ? sciencePaintings.energy : sciencePaintings.balance).src}
+              alt=""
+              loading={i === 0 ? "lazy" : "eager"}
+              fetchPriority="low"
+              data-on
+            />
+          ) : (
+            <div className={`${base.ink} ${styles.layer}`} data-on>
+              {sciencePaintings.aging.map((painting, a) => (
+                // eslint-disable-next-line @next/next/no-img-element -- one age of the cell
+                <img
+                  key={painting.src}
+                  className={styles.tree}
+                  src={painting.src}
+                  alt=""
+                  loading="eager"
+                  fetchPriority="low"
+                  data-on={tree >= a}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <figcaption className={`${base.caption} ${styles.caption}`}>
+          {copy("Illustrations")}
+        </figcaption>
+        <p className={`${styles.peek} ${styles.slideLine}`} data-on>
+          {copy(i === 2 ? science.peekAge[tree] : science.peek[i])}
+        </p>
+        {i === 2 && ageControl(true)}
+      </figure>
+      <div className={styles.slideWords}>
+        <h3 className={styles.articleTitle}>{copy(scienceArticles[i].title)}</h3>
+        <p className={base.body}>{copy(scienceArticles[i].preview)}</p>
+        <ul className={styles.facts}>
+          {scienceFacts[i].map((fact) => (
+            <li key={fact}>{copy(fact)}</li>
+          ))}
+        </ul>
+        {actions(i)}
+      </div>
+    </div>
+  );
+
   return (
     <section
       ref={section}
@@ -335,10 +505,10 @@ export function Science() {
                     role="tab"
                     id={`ink-topic-${i}`}
                     aria-selected={topic === i}
-                    aria-controls="ink-topic-panel"
+                    aria-controls={narrow ? `ink-topic-panel-${i}` : "ink-topic-panel"}
                     tabIndex={topic === i ? 0 : -1}
                     className={styles.tab}
-                    onClick={() => setTopic(i)}
+                    onClick={() => choose(i)}
                     onKeyDown={(event) => onKey(event, i)}
                   >
                     {copy(name)}
@@ -346,102 +516,93 @@ export function Science() {
                 ))}
               </div>
 
-              <div
-                key={topic}
-                id="ink-topic-panel"
-                role="tabpanel"
-                aria-labelledby={`ink-topic-${topic}`}
-                className={styles.panel}
-              >
-                <h3 className={styles.articleTitle}>{copy(article.title)}</h3>
-                <p className={base.body}>{copy(article.preview)}</p>
-                <ul className={styles.facts}>
-                  {scienceFacts[topic].map((fact) => (
-                    <li key={fact}>{copy(fact)}</li>
-                  ))}
-                </ul>
-                {actions(topic)}
-              </div>
+              {!narrow && (
+                <div
+                  key={topic}
+                  id="ink-topic-panel"
+                  role="tabpanel"
+                  aria-labelledby={`ink-topic-${topic}`}
+                  className={styles.panel}
+                >
+                  <h3 className={styles.articleTitle}>{copy(article.title)}</h3>
+                  <p className={base.body}>{copy(article.preview)}</p>
+                  <ul className={styles.facts}>
+                    {scienceFacts[topic].map((fact) => (
+                      <li key={fact}>{copy(fact)}</li>
+                    ))}
+                  </ul>
+                  {actions(topic)}
+                </div>
+              )}
             </>
           )}
         </div>
 
-        <div className={styles.rail} data-brush="science-rail">
-          <figure
-            ref={figure}
-            className={styles.figure}
-            data-topic={topic}
-            data-brush="science-painting"
-          >
-            <div className={styles.stage} data-bloom="">
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
-              <img
-                className={`${base.ink} ${styles.layer}`}
-                src={sciencePaintings.energy.src}
-                alt=""
-                loading="lazy"
-                data-on={topic === 0}
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
-              <img
-                className={`${base.ink} ${styles.layer}`}
-                src={sciencePaintings.balance.src}
-                alt=""
-                loading="lazy"
-                data-on={topic === 1}
-              />
-              {/* The cell's three ages, one layer of the stage that multiplies as one: each
+        {narrow ? (
+          <div ref={strip} className={styles.slides}>
+            {[0, 1, 2].map(slide)}
+          </div>
+        ) : (
+          <div className={styles.rail} data-brush="science-rail">
+            <figure
+              ref={figure}
+              className={styles.figure}
+              data-topic={topic}
+              data-brush="science-painting"
+            >
+              <div className={styles.stage} data-bloom="">
+                {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
+                <img
+                  className={`${base.ink} ${styles.layer}`}
+                  src={sciencePaintings.energy.src}
+                  alt=""
+                  loading="lazy"
+                  data-on={topic === 0}
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element -- a layer of the stage */}
+                <img
+                  className={`${base.ink} ${styles.layer}`}
+                  src={sciencePaintings.balance.src}
+                  alt=""
+                  loading="lazy"
+                  data-on={topic === 1}
+                />
+                {/* The cell's three ages, one layer of the stage that multiplies as one: each
                   older one lies over the younger ones and covers them. */}
-              <div className={`${base.ink} ${styles.layer}`} data-on={topic === 2}>
-                {sciencePaintings.aging.map((painting, i) => (
-                  // eslint-disable-next-line @next/next/no-img-element -- one age of the cell
-                  <img
-                    key={painting.src}
-                    className={styles.tree}
-                    src={painting.src}
-                    alt=""
-                    loading="lazy"
-                    data-on={tree >= i}
-                  />
-                ))}
+                <div className={`${base.ink} ${styles.layer}`} data-on={topic === 2}>
+                  {sciencePaintings.aging.map((painting, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element -- one age of the cell
+                    <img
+                      key={painting.src}
+                      className={styles.tree}
+                      src={painting.src}
+                      alt=""
+                      loading="lazy"
+                      data-on={tree >= i}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-            <figcaption className={`${base.caption} ${styles.caption}`}>
-              {copy("Illustrations")}
-            </figcaption>
-            {/* Every line is there, one over another, so the figure keeps the height of the
+              <figcaption className={`${base.caption} ${styles.caption}`}>
+                {copy("Illustrations")}
+              </figcaption>
+              {/* Every line is there, one over another, so the figure keeps the height of the
                 longest whichever is shown (the scroll story measures the figure). */}
-            <div className={styles.peeks}>
-              {[...science.peek, ...science.peekAge].map((line, i) => {
-                const on = i === (topic === 2 ? 2 + tree : topic);
-                return (
-                  <p key={line} className={styles.peek} data-on={on} aria-hidden={!on}>
-                    {copy(line)}
-                  </p>
-                );
-              })}
-            </div>
+              <div className={styles.peeks}>
+                {[...science.peek, ...science.peekAge].map((line, i) => {
+                  const on = i === (topic === 2 ? 2 + tree : topic);
+                  return (
+                    <p key={line} className={styles.peek} data-on={on} aria-hidden={!on}>
+                      {copy(line)}
+                    </p>
+                  );
+                })}
+              </div>
 
-            <div className={styles.age} data-on={topic === 2} inert={topic !== 2}>
-              <label className={styles.ageLabel} htmlFor="ink-age">
-                <span>{copy("Age")}</span>
-                <strong>{age}</strong>
-              </label>
-              <input
-                id="ink-age"
-                type="range"
-                min={AGE_MIN}
-                max={AGE_MAX}
-                step={1}
-                value={age}
-                onChange={(event) => setAge(Number(event.target.value))}
-                className={styles.range}
-                style={{ ["--fill" as string]: `${aged * 100}%` }}
-              />
-              <p className={styles.honesty}>{copy(science.ageLabel)}</p>
-            </div>
-          </figure>
-        </div>
+              {ageControl(topic === 2)}
+            </figure>
+          </div>
+        )}
       </div>
     </section>
   );
