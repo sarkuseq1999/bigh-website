@@ -5,20 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 24, 2026, by Claude Code (homepage science on phones: tabs over the
-  picture, and swipe).
+- **Last updated:** October 25, 2026, by Claude Code (homepage science on phones: the short-drag
+  fix is live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 24, latest): homepage science on phones, the tabs over the picture and a
+- **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics
   (picture, line, words) sit side by side in a strip as wide as the window that snaps to one
   topic; the tabs glide it and follow the swipe; the age slider still drags sideways.
   `science.tsx` (`.slides`, `.slide`). Claude pushed `main` to `28a87db` (a fast-forward from
   `53913a3`); production `dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`, the demo alias points to it; public
-  demo `qa_home_ink` 282/282, `qa_nav` 440/440. **Not done:** on the public demo a short drag
-  sometimes left the strip 40 to 110px off a topic (11 of 48); fix `3537053` (glide to the
-  nearest topic once the strip is still with no finger on it) passed the same drags on the built
-  site, on branch `home-science-phone-tabs` only, waiting on Mo's yes to push.
+  demo `qa_home_ink` 282/282, `qa_nav` 440/440. That public test found a short drag sometimes
+  left the strip 40 to 110px off a topic (11 of 48), so on October 25, on Mo's yes, Claude pushed
+  the fix `3537053` (the strip glides to the nearest topic once it is still with no finger on it):
+  `main` `4d27258`, production `dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`, the demo alias points to it;
+  public demo 0 of 48 short drags off a topic, touch test passed, `qa_home_ink` 282/282,
+  `qa_nav` 440/440. Tested with synthesized touch in Chrome, not on a real phone.
 - **Live (October 23): the homepage's flying crane between B and C** (Mo found C, half
   size, too small; of B, a size between and C on `reference/ink-pages/mockups/home-crane-size/` he
   picked the size between and said to push it in place of C). Desktop: 57.5% of the comp's crane,
@@ -203,7 +205,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   swipe sideways in a strip (DESIGN.md "The Scroll Story Rule"). Touch test:
   `scripts/qa/qa_home_ink.py` covers the tabs; finger swipes were tested through Chrome's
   DevTools protocol (`Input.dispatchTouchEvent`; `synthesizeScrollGesture` does nothing headless).
-- **In progress:** the short-drag fix `3537053` (above), waiting on Mo's yes to push. **Next:** Mo's call.
+- **In progress:** None. **Next:** Mo's call.
 
 ## What's live
 

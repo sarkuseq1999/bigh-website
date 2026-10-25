@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-3z34y9nd3-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
+(`dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`), the **production** deployment of `main` at
+`4d272585f4a107280861ca67258e26cb397501a5`. On October 25, 2026, Mo said to push the short-drag
+fix found after the phone swipe release (below): on the homepage science strip, once the strip
+has been still for a moment with no finger on it, it glides the rest of the way to the nearest
+topic, so a short drag never leaves it resting between two topics (`3537053`). Claude pushed
+branch `home-science-phone-tabs` to `main` (a fast-forward from `28a87db`, with the crane's
+release notes merged in).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; the touch test passed and 0 of 48 short drags left the
+strip off a topic. After the alias update, on the public demo in fresh unauthenticated browsers:
+0 of 48 short drags off a topic (11 of 48 on the build before), the touch test passed,
+`qa_home_ink` 282/282, `qa_nav` 440/440. The drags are finger input through Chrome's DevTools
+protocol, not a real phone.
+
+Before this update, the alias pointed to `bigh-website-3z34y9nd3-sarkuseq1999s-projects.vercel.app`
 (`dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`), the **production** deployment of `main` at
 `28a87db1f83994c6133d3247fa77bd54d7efd9b7`. On October 23, 2026, Mo found that on phones the
 homepage science section's three tabs sat about 500px above the picture, out of sight, and picked
@@ -19,9 +35,7 @@ Before the push, on the built site: lint, type check, formatting and build passe
 protocol) at 390x844, 360x740 and 820x1180 passed. After the alias update, on the public demo in
 fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440. The touch test there found
 one fault: after a short drag the strip sometimes stayed 40 to 110px off a topic (11 of 48 short
-drags; the browser's snap did not finish). A fix (`3537053`, the strip glides to the nearest
-topic once it has been still with no finger on it) passed the same 48 drags and the touch test on
-the built site; it is not live yet (Mo decides).
+drags; the browser's snap did not finish). The fix (`3537053`) went live on October 25 (above).
 
 Before this update, the alias pointed to `bigh-website-d1j0nrp2b-sarkuseq1999s-projects.vercel.app`
 (`dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`), the **production** deployment of `main` at
