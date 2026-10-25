@@ -5,9 +5,23 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 23, 2026, by Claude Code (homepage crane between B and C, 57.5%).
+- **Last updated:** October 25, 2026, by Claude Code (homepage science on phones: the short-drag
+  fix is live).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live (October 23, latest): the homepage's flying crane between B and C** (Mo found C, half
+- **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
+  finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
+  said to put it live). Under 900px the three tabs sit right above the picture; the three topics
+  (picture, line, words) sit side by side in a strip as wide as the window that snaps to one
+  topic; the tabs glide it and follow the swipe; the age slider still drags sideways.
+  `science.tsx` (`.slides`, `.slide`). Claude pushed `main` to `28a87db` (a fast-forward from
+  `53913a3`); production `dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`, the demo alias points to it; public
+  demo `qa_home_ink` 282/282, `qa_nav` 440/440. That public test found a short drag sometimes
+  left the strip 40 to 110px off a topic (11 of 48), so on October 25, on Mo's yes, Claude pushed
+  the fix `3537053` (the strip glides to the nearest topic once it is still with no finger on it):
+  `main` `4d27258`, production `dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`, the demo alias points to it;
+  public demo 0 of 48 short drags off a topic, touch test passed, `qa_home_ink` 282/282,
+  `qa_nav` 440/440. Tested with synthesized touch in Chrome, not on a real phone.
+- **Live (October 23): the homepage's flying crane between B and C** (Mo found C, half
   size, too small; of B, a size between and C on `reference/ink-pages/mockups/home-crane-size/` he
   picked the size between and said to push it in place of C). Desktop: 57.5% of the comp's crane,
   shrunk toward the point its brush line leaves from, then lifted 60 comp px and moved 50 left
@@ -15,8 +29,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `opening.module.css`; `qa_home_ink`'s phone check now expects the bird at about 41% of the
   window. On the built site (`next start`), the crane's box at 1920x1080, 1440x900 and 390x844
   within 1px of the mockup. Claude pushed `main` to `116c22f` (a fast-forward from `eac92d8`);
-  production `dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`, the demo alias points to it; public demo
+  production `dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`, and the demo alias pointed to it; public demo
   `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
+- **Live (October 23): Free radicals shows the harm** (Mo picked A of three and said to put it
+  live): the few sparks that slip past the chimney's screen burn black holes in the roof. See
+  "Homepage science section" below. Claude pushed `main` to `eac92d8` (a fast-forward from
+  `619e77d`); production `dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`, and the demo alias pointed to it;
+  public demo `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`). The crane push
+  above is built on it.
 - **Live (October 23): Switzer is served from the site itself** (Mo said to host it
   ourselves, saw the before/after, `reference/ink-pages/mockups/switzer-self-host/`, and said to
   push it). Fontshare's stylesheet kept dropping the
@@ -172,13 +192,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 - **Homepage science section (Claude Code).** "Make sense of the science." shows, with a line
   under each picture tying it to the words: Mitochondria and Free radicals, an old powerhouse
   with its front left open (a worker feeding the gold fire, its steam turning the wheel, power
-  out along the wire; then its chimney opened up, the screen catching the sparks), Mo's pick D
-  of six power plant ideas on October 22 (branch `home-science-plant`, `build_plant.py`); Aging
+  out along the wire), Mo's pick D of six power plant ideas on October 22; for Free radicals its
+  chimney opened up, the screen catching most sparks and the few that slip past burning black
+  holes in the roof (Mo's pick A, October 23, after the caught sparks alone showed no harm;
+  `build_plant.py`); Aging
   cells, a brain cell up close at three ages (`build_cell.py`). Before: the October 19
   hummingbird, apple and Joshua tree (decorative), a hiker with a window into a cell (dropped),
   the October 21 steam train. The caption lines (`science.peek`, `science.peekAge` in
   `content.ts`) are English in every language for now. Notes:
   `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
+  On phones and tablets (under 900px) the tabs sit right above the picture and the three topics
+  swipe sideways in a strip (DESIGN.md "The Scroll Story Rule"). Touch test:
+  `scripts/qa/qa_home_ink.py` covers the tabs; finger swipes were tested through Chrome's
+  DevTools protocol (`Input.dispatchTouchEvent`; `synthesizeScrollGesture` does nothing headless).
 - **In progress:** None. **Next:** Mo's call.
 
 ## What's live

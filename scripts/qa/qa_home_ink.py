@@ -1470,21 +1470,26 @@ def run(browser, look, mobile):
             k["story"] == "false" and k["tabs"] == 3 and k["sticky"] != "sticky" and k["height"] < 2 * view_h,
             str(k),
         )
+        # October 24, 2026: in one column the topics sit side by side in a strip the finger swipes,
+        # so the slider lives in its own topic's slide (the others carry none and take no room
+        # for it); without the strip it takes no room until its topic is chosen.
         t = page.evaluate(
-            """(() => ({ tops: [...document.querySelectorAll('#science [role=tab]')].map(t => Math.round(t.getBoundingClientRect().top)),
-              age: getComputedStyle(document.querySelector('#science input[type=range]').closest('div')).display }))()"""
+            """(() => { const input = document.querySelector('#science input[type=range]');
+              const panel = input.closest('[role=tabpanel]');
+              return { tops: [...document.querySelectorAll('#science [role=tab]')].map(t => Math.round(t.getBoundingClientRect().top)),
+                age: panel ? panel.getAttribute('aria-labelledby') : getComputedStyle(input.closest('div')).display }; })()"""
         )
         check(
             f"{tag}: the three topics sit on one line; the age slider waits for its topic",
-            len(t["tops"]) == 3 and len(set(t["tops"])) == 1 and t["age"] == "none",
+            len(t["tops"]) == 3 and len(set(t["tops"])) == 1 and t["age"] in ("none", "ink-topic-2"),
             str(t),
         )
         page.click("#science [role=tab]:has-text('Free radicals')")
         page.wait_for_timeout(1300)
-        radicals = page.locator("#science [role=tabpanel] h3").text_content()
+        radicals = page.locator("#science [role=tabpanel]:not([inert]) h3").text_content()
         page.click("#science [role=tab]:has-text('Aging cells')")
         page.wait_for_timeout(1300)
-        aging = page.locator("#science [role=tabpanel] h3").text_content()
+        aging = page.locator("#science [role=tabpanel]:not([inert]) h3").text_content()
         age, honesty, old = set_age(page, 70)
         scroll_to(page, top_of(page, "#science figure") - 90, 900)
         shoot(page, f"{name}-06-science-age")
@@ -1798,9 +1803,9 @@ SHEETS = [
     ("Dr. Liu", "document.querySelectorAll('#scientists button')[0]", None),
     ("Ask BiGH Science", "document.querySelectorAll('#scientists button')[1]", None),
     # The tabs' panel (phones, reduced motion) or, in the scroll story (round 7), the topic's own.
-    ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"0\"] button')].pop()", 0),
-    ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"1\"] button')].pop()", 1),
-    ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel] button, #science [data-step=\"2\"] button')].pop()", 2),
+    ("explainer 1", "[...document.querySelectorAll('#science [role=tabpanel]:not([inert]) button, #science [data-step=\"0\"] button')].pop()", 0),
+    ("explainer 2", "[...document.querySelectorAll('#science [role=tabpanel]:not([inert]) button, #science [data-step=\"1\"] button')].pop()", 1),
+    ("explainer 3", "[...document.querySelectorAll('#science [role=tabpanel]:not([inert]) button, #science [data-step=\"2\"] button')].pop()", 2),
 ]
 MENU_BUTTON = "[data-nav-menu-button]"
 SHEET = "[data-nav-sheet]"

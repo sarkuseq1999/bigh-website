@@ -452,10 +452,41 @@
 @media (max-width: 899px) {
   .layout {
     grid-template-columns: 1fr;
+    row-gap: 0;
+  }
+
+  /* One column (Mo, October 23, 2026): the three tabs sit right above the picture and the words
+     come after it, so a tab and the picture it changes are on the screen together (stacked words
+     first, the tabs stood about 500 px above the picture, out of sight while it was looked at).
+     The words' box gives its children to the layout's grid, which orders them: the title, the
+     intro and the tabs, then the picture (the rail), then the chosen topic's words. The page
+     line is not routed through the block in one column (brush-route.ts), so nothing measures the
+     words' box here. */
+  .copy {
+    display: contents;
   }
 
   .rail {
-    margin: 0 -4vw;
+    order: 1;
+    margin: 16px -4vw 0;
+  }
+
+  .panel {
+    order: 2;
+  }
+
+  /* The age slider takes its room only with its own topic, in every one-column window (kept for
+     the others, its empty room left a gap of about 80px under the stage, and with the words
+     after the picture about 100px between its line and the words on a tablet); it fades in when
+     it comes. The tabs and the picture stay where they are; only the words below move. */
+  .age:not([data-on="true"]) {
+    display: none;
+  }
+
+  @starting-style {
+    .age[data-on="true"] {
+      opacity: 0;
+    }
   }
 
   /* One column keeps the tabs, not the scroll story, so only the shown line takes room (no gap
@@ -466,6 +497,62 @@
 
   .science .peek:not([data-on="true"]) {
     display: none;
+  }
+}
+
+/* One column (Mo, October 24, 2026: "swipe from one part of that section to another"): the three
+   topics, each with its picture, line and words, sit side by side in a strip as wide as the
+   window, which the finger swipes and which snaps to one topic at a time (never half way, never
+   two at once); the tabs above glide it too. It runs out to the window's edges so a topic slides
+   in from the edge, not from a seam inside the gutter; each slide puts the gutter back. Its
+   height is the resting topic's (science.tsx), changing gently. */
+@media (max-width: 899px) {
+  .slides {
+    display: flex;
+    align-items: flex-start;
+    margin: 16px calc(-1 * var(--gutter)) 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    transition: height 0.35s var(--ease);
+  }
+
+  .slides::-webkit-scrollbar {
+    display: none;
+  }
+
+  .slide {
+    box-sizing: border-box;
+    flex: 0 0 100%;
+    min-width: 0;
+    padding: 0 var(--gutter);
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+
+  .slide .figure {
+    margin: 0 -4vw;
+  }
+
+  .science .slideLine {
+    margin: 8px 4vw 0;
+  }
+
+  /* The slider keeps a sideways drag for itself (it would otherwise swipe the strip). */
+  .slide .age {
+    touch-action: pan-y;
+  }
+
+  .slideWords {
+    padding-top: 28px;
+  }
+}
+
+@media (max-width: 899px) and (prefers-reduced-motion: reduce) {
+  .slides {
+    transition: none;
   }
 }
 
@@ -480,17 +567,5 @@
 
   .science .tab {
     font-size: min(17px, 4.36vw);
-  }
-
-  /* The age slider takes its room only with its own topic (kept for the others, its empty room
-     left a gap of about 80px under the stage); it fades in when it comes. */
-  .age:not([data-on="true"]) {
-    display: none;
-  }
-
-  @starting-style {
-    .age[data-on="true"] {
-      opacity: 0;
-    }
   }
 }

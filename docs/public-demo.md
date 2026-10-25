@@ -4,7 +4,40 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-d1j0nrp2b-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
+(`dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`), the **production** deployment of `main` at
+`4d272585f4a107280861ca67258e26cb397501a5`. On October 25, 2026, Mo said to push the short-drag
+fix found after the phone swipe release (below): on the homepage science strip, once the strip
+has been still for a moment with no finger on it, it glides the rest of the way to the nearest
+topic, so a short drag never leaves it resting between two topics (`3537053`). Claude pushed
+branch `home-science-phone-tabs` to `main` (a fast-forward from `28a87db`, with the crane's
+release notes merged in).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; the touch test passed and 0 of 48 short drags left the
+strip off a topic. After the alias update, on the public demo in fresh unauthenticated browsers:
+0 of 48 short drags off a topic (11 of 48 on the build before), the touch test passed,
+`qa_home_ink` 282/282, `qa_nav` 440/440. The drags are finger input through Chrome's DevTools
+protocol, not a real phone.
+
+Before this update, the alias pointed to `bigh-website-3z34y9nd3-sarkuseq1999s-projects.vercel.app`
+(`dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`), the **production** deployment of `main` at
+`28a87db1f83994c6133d3247fa77bd54d7efd9b7`. On October 23, 2026, Mo found that on phones the
+homepage science section's three tabs sat about 500px above the picture, out of sight, and picked
+A: the tabs right above the picture, the words after it. On October 24 he asked to swipe with a
+finger from one topic to the next and said to put it live: in one column the three topics
+(picture, its line, its words) sit side by side in a strip as wide as the window that snaps to one
+topic; the tabs glide it and follow the swipe, and the age slider still drags sideways. Claude
+pushed branch `home-science-phone-tabs` to `main` (a fast-forward from `53913a3`).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; a touch test (finger input through Chrome's DevTools
+protocol) at 390x844, 360x740 and 820x1180 passed. After the alias update, on the public demo in
+fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440. The touch test there found
+one fault: after a short drag the strip sometimes stayed 40 to 110px off a topic (11 of 48 short
+drags; the browser's snap did not finish). The fix (`3537053`) went live on October 25 (above).
+
+Before this update, the alias pointed to `bigh-website-d1j0nrp2b-sarkuseq1999s-projects.vercel.app`
 (`dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`), the **production** deployment of `main` at
 `116c22fee90abc9a0829989bc0d8a628fd42c8f1`. On October 23, 2026, Mo found crane C (half the
 comp's size) too small and, of B (65%), a size between and C
@@ -21,9 +54,23 @@ the tablet (820x1180) and Korean openings looked at. After the alias update, on 
 in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440, and the crane's box
 at the same three sizes the same as on the built site.
 
-Before this update, the alias pointed to `dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`, another session's
-production deployment of `main` at `eac92d8` (the homepage's Free radicals), and before that to
-`bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
+Before that, the alias pointed to `bigh-website-gubpwpetu-sarkuseq1999s-projects.vercel.app`
+(`dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`), the **production** deployment of `main` at
+`eac92d8cc90047413104b799377fd1259e6375e9`. On October 23, 2026, Mo found the homepage's Free
+radicals picture (the powerhouse chimney, its screen catching the sparks) showed no harm, while
+free radicals harm us. Of three painted harm ideas he picked A and said to put it live: the
+screen catches most sparks, and the few that slip past fall on the roof and burn black holes in
+it, one still smoking (black ink only, a dull fleck of gold in each; `plant-sparks-v2`). The line
+under it reads "Most sparks are caught. The few that slip out leave burns." (English in every
+language for now). Claude pushed branch `home-science-harm` to `main` (a fast-forward from
+`619e77d`, with the Switzer release notes merged in).
+
+Before the push, on the built site (with Switzer self-hosted): lint, type check, formatting and
+build passed; `qa_home_ink` 282/282, `qa_nav` 440/440; laptop and phone screenshots and
+recordings. After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282,
+`qa_nav` 440/440, and the new picture and its line load.
+
+Before that, the alias pointed to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
 (`dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`), the **production** deployment of `main` at
 `619e77d8e81794517833b77ad4a3d0e2eb55637c`. On October 23, 2026, after Fontshare's stylesheet
 kept dropping the connection (pages then fell back to another face), Mo said to host Switzer
