@@ -149,12 +149,17 @@ export function Science() {
   };
 
   // One column: a swipe chooses the topic the strip comes to rest on (it snaps to one), so the
-  // tabs' line follows the finger; the strip opens on the chosen topic.
+  // tabs' line follows the finger; the strip opens on the chosen topic. The browser's snap did
+  // not always finish after a short drag (October 24: the strip stayed 40 to 110px off a topic),
+  // so once the strip has been still for a moment with no finger on it, it glides the rest of the
+  // way to the nearest topic itself.
   useEffect(() => {
     const row = strip.current;
     if (!narrow || !row) return;
     row.scrollLeft = topic * row.clientWidth;
     let frame = 0;
+    let settle = 0;
+    let touching = false;
     const follow = () => {
       frame = 0;
       const i = Math.max(0, Math.min(2, Math.round(row.scrollLeft / row.clientWidth)));
@@ -164,21 +169,49 @@ export function Science() {
       }
       setTopic(i);
     };
+    const home = () => {
+      if (touching) return;
+      const i = Math.max(0, Math.min(2, Math.round(row.scrollLeft / row.clientWidth)));
+      if (Math.abs(row.scrollLeft - i * row.clientWidth) <= 1) return;
+      const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      row.scrollTo({ left: i * row.clientWidth, behavior: still ? "instant" : "smooth" });
+    };
+    const later = () => {
+      window.clearTimeout(settle);
+      settle = window.setTimeout(home, 160);
+    };
     const onScroll = () => {
       if (!frame) frame = requestAnimationFrame(follow);
+      later();
     };
     // (a finger or a wheel takes over from a tab's glide)
     const takeOver = () => {
       heading.current = null;
     };
+    const down = () => {
+      touching = true;
+      takeOver();
+      window.clearTimeout(settle);
+    };
+    const up = () => {
+      touching = false;
+      later();
+    };
     row.addEventListener("scroll", onScroll, { passive: true });
     row.addEventListener("pointerdown", takeOver);
     row.addEventListener("wheel", takeOver, { passive: true });
+    row.addEventListener("touchstart", down, { passive: true });
+    row.addEventListener("touchend", up, { passive: true });
+    row.addEventListener("touchcancel", up, { passive: true });
     return () => {
       row.removeEventListener("scroll", onScroll);
       row.removeEventListener("pointerdown", takeOver);
       row.removeEventListener("wheel", takeOver);
+      row.removeEventListener("touchstart", down);
+      row.removeEventListener("touchend", up);
+      row.removeEventListener("touchcancel", up);
       cancelAnimationFrame(frame);
+      window.clearTimeout(settle);
     };
     // (only when the strip appears: the topic it opens on is the one chosen then)
     // eslint-disable-next-line react-hooks/exhaustive-deps
