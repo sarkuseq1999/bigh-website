@@ -5,16 +5,30 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 23, 2026, by Claude Code (homepage crane between B and C, 57.5%).
+- **Last updated:** October 24, 2026, by Claude Code (homepage science on phones: tabs over the
+  picture, and swipe).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Pushing (October 23, latest): the homepage's flying crane between B and C** (Mo found C, half
+- **Live (October 24, latest): homepage science on phones, the tabs over the picture and a
+  finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
+  said to put it live). Under 900px the three tabs sit right above the picture; the three topics
+  (picture, line, words) sit side by side in a strip as wide as the window that snaps to one
+  topic; the tabs glide it and follow the swipe; the age slider still drags sideways.
+  `science.tsx` (`.slides`, `.slide`). Claude pushed `main` to `28a87db` (a fast-forward from
+  `53913a3`); production `dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`, the demo alias points to it; public
+  demo `qa_home_ink` 282/282, `qa_nav` 440/440. **Not done:** on the public demo a short drag
+  sometimes left the strip 40 to 110px off a topic (11 of 48); fix `3537053` (glide to the
+  nearest topic once the strip is still with no finger on it) passed the same drags on the built
+  site, on branch `home-science-phone-tabs` only, waiting on Mo's yes to push.
+- **Live (October 23): the homepage's flying crane between B and C** (Mo found C, half
   size, too small; of B, a size between and C on `reference/ink-pages/mockups/home-crane-size/` he
   picked the size between and said to push it in place of C). Desktop: 57.5% of the comp's crane,
   shrunk toward the point its brush line leaves from, then lifted 60 comp px and moved 50 left
   with its flight stroke. Phones: 63.4vw (66% of the old 96vw), the line unchanged.
   `opening.module.css`; `qa_home_ink`'s phone check now expects the bird at about 41% of the
   window. On the built site (`next start`), the crane's box at 1920x1080, 1440x900 and 390x844
-  within 1px of the mockup.
+  within 1px of the mockup. Claude pushed `main` to `116c22f` (a fast-forward from `eac92d8`);
+  production `dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`, and the demo alias pointed to it; public demo
+  `qa_home_ink` 282/282, `qa_nav` 440/440 (`docs/public-demo.md`).
 - **Live (October 23): Free radicals shows the harm** (Mo picked A of three and said to put it
   live): the few sparks that slip past the chimney's screen burn black holes in the roof. See
   "Homepage science section" below. Claude pushed `main` to `eac92d8` (a fast-forward from
@@ -147,9 +161,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   Public demo then: `qa_home_ink` 282, `qa_nav` 436, `qa_fda` 220, `qa_about` 353,
   `qa_propolis_ink` 273, `qa_opc_ink` 185, `qa_nuricell_ink` 355, `qa_turmerific_ink` 155,
   `qa_nature_calm_ink` 159, `qa_science_ink` 1279, `qa_support` 341, all passing.
-- **State:** `main` is `619e77d` (live: the powerhouse and the brain cell, the bigger Sign up
-  stroke, the brush line's 2×, crane C and the self-hosted Switzer); `studio` adds only these
-  release notes, so the next push is a fast-forward.
+- **State:** `main` is `116c22f` (live: the powerhouse, Free radicals and the brain cell, the
+  bigger Sign up stroke, the brush line's 2×, the crane at 57.5% and the self-hosted Switzer);
+  `studio` adds only these release notes, so the next push is a fast-forward.
 - **Turmerific on a local server:** the page never finishes loading under `next start` (its
   `soak-v1.webp` sprite and three link prefetches stay open, filling HTTP/1.1's six connections),
   so `qa_turmerific_ink` and the end of `qa_fda` time out locally. The live site shows the same open
@@ -185,7 +199,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   the October 21 steam train. The caption lines (`science.peek`, `science.peekAge` in
   `content.ts`) are English in every language for now. Notes:
   `reference/ink-pages/home-science/README.md`; rule: DESIGN.md "The Science Stage Rule".
-- **In progress:** None. **Next:** Mo's call.
+  On phones and tablets (under 900px) the tabs sit right above the picture and the three topics
+  swipe sideways in a strip (DESIGN.md "The Scroll Story Rule"). Touch test:
+  `scripts/qa/qa_home_ink.py` covers the tabs; finger swipes were tested through Chrome's
+  DevTools protocol (`Input.dispatchTouchEvent`; `synthesizeScrollGesture` does nothing headless).
+- **In progress:** the short-drag fix `3537053` (above), waiting on Mo's yes to push. **Next:** Mo's call.
 
 ## What's live
 

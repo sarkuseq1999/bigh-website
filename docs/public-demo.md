@@ -4,7 +4,43 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-gubpwpetu-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-3z34y9nd3-sarkuseq1999s-projects.vercel.app`
+(`dpl_7vTcT4734Sht8EkW36E3sSwnyGa8`), the **production** deployment of `main` at
+`28a87db1f83994c6133d3247fa77bd54d7efd9b7`. On October 23, 2026, Mo found that on phones the
+homepage science section's three tabs sat about 500px above the picture, out of sight, and picked
+A: the tabs right above the picture, the words after it. On October 24 he asked to swipe with a
+finger from one topic to the next and said to put it live: in one column the three topics
+(picture, its line, its words) sit side by side in a strip as wide as the window that snaps to one
+topic; the tabs glide it and follow the swipe, and the age slider still drags sideways. Claude
+pushed branch `home-science-phone-tabs` to `main` (a fast-forward from `53913a3`).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; a touch test (finger input through Chrome's DevTools
+protocol) at 390x844, 360x740 and 820x1180 passed. After the alias update, on the public demo in
+fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440. The touch test there found
+one fault: after a short drag the strip sometimes stayed 40 to 110px off a topic (11 of 48 short
+drags; the browser's snap did not finish). A fix (`3537053`, the strip glides to the nearest
+topic once it has been still with no finger on it) passed the same 48 drags and the touch test on
+the built site; it is not live yet (Mo decides).
+
+Before this update, the alias pointed to `bigh-website-d1j0nrp2b-sarkuseq1999s-projects.vercel.app`
+(`dpl_GihZFmN8MjwBSwmjk1SujhiXWgKr`), the **production** deployment of `main` at
+`116c22fee90abc9a0829989bc0d8a628fd42c8f1`. On October 23, 2026, Mo found crane C (half the
+comp's size) too small and, of B (65%), a size between and C
+(`reference/ink-pages/mockups/home-crane-size/`), picked the size between and said to push it in
+place of C: the homepage's flying crane at 57.5% of the comp's size, shrunk toward the point its
+brush line leaves from, then lifted 60 comp px and moved 50 left with its flight stroke; on phones
+63.4vw (66% of the old 96vw), its line unchanged. Claude fast-forwarded `studio` to `main`
+(another session's Free radicals, `eac92d8`) and pushed `main` to `116c22f` (a fast-forward).
+
+Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282 (its phone check now expects the bird at about 41% of the window),
+`qa_nav` 440/440; the crane's box at 1920x1080, 1440x900 and 390x844 within 1px of the mockup;
+the tablet (820x1180) and Korean openings looked at. After the alias update, on the public demo
+in fresh unauthenticated browsers: `qa_home_ink` 282/282, `qa_nav` 440/440, and the crane's box
+at the same three sizes the same as on the built site.
+
+Before that, the alias pointed to `bigh-website-gubpwpetu-sarkuseq1999s-projects.vercel.app`
 (`dpl_GNdZYehqzkfJc1Gbq1HUgjxeNgrW`), the **production** deployment of `main` at
 `eac92d8cc90047413104b799377fd1259e6375e9`. On October 23, 2026, Mo found the homepage's Free
 radicals picture (the powerhouse chimney, its screen catching the sparks) showed no harm, while
@@ -20,7 +56,7 @@ build passed; `qa_home_ink` 282/282, `qa_nav` 440/440; laptop and phone screensh
 recordings. After the alias update, on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282,
 `qa_nav` 440/440, and the new picture and its line load.
 
-Before this update, the alias pointed to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
+Before that, the alias pointed to `bigh-website-2m7bpugp5-sarkuseq1999s-projects.vercel.app`
 (`dpl_3zWtHArBcvgNMjpdAs1BnMwNXfK9`), the **production** deployment of `main` at
 `619e77d8e81794517833b77ad4a3d0e2eb55637c`. On October 23, 2026, after Fontshare's stylesheet
 kept dropping the connection (pages then fell back to another face), Mo said to host Switzer
