@@ -20,6 +20,41 @@
   text-wrap: balance;
 }
 
+/* Why, every width (Mo picked the Gold Rush lantern with the tidier words, October 26, 2026): no
+   label over the heading (why.tsx); one lead-in line in ink, on the heading's left edge (the
+   template's 22px indent is room for the opening's ink line); the brain's small 2% beside its big
+   20%, so "small brain, big energy" reads at a glance. Phones stack the two, the small one first. */
+.nuricell[data-look="ink"] [data-chapter="why"] h2 + p {
+  max-width: 21em;
+  padding-left: 0;
+  color: var(--ink);
+  font-size: clamp(19px, 1.5vw, 22px);
+}
+
+.nuricell[data-look="ink"] [data-chapter="why"] dl {
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  align-items: end;
+}
+
+.nuricell[data-look="ink"] [data-chapter="why"] dl > div:first-child dt {
+  color: var(--muted);
+  font-size: clamp(44px, 4.2vw, 64px);
+}
+
+.nuricell[data-look="ink"] [data-chapter="why"] dl > div:last-child dt {
+  font-size: clamp(88px, 9.6vw, 150px);
+}
+
+.nuricell[data-look="ink"] [data-chapter="why"] dd {
+  max-width: 12em;
+}
+
+@media (max-width: 599px) {
+  .nuricell[data-look="ink"] [data-chapter="why"] dl {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
 @media (min-width: 960px) {
   /* The words take the left, at the template's width (6 : 5); the painting the right. */
   .nuricell[data-look="ink"] :is([data-chapter="why"], [data-chapter="people"]) > div {

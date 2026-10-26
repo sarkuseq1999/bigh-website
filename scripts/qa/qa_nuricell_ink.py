@@ -12,6 +12,7 @@ Sections (all, or --only=a,b):
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
   lantern     unlit blooms, then the light comes on once with no lighter flash; reduced motion: lit
+              (the Gold Rush lantern since October 26, 2026)
   nojs        with JavaScript off every painting shows and the lantern is lit
   words       every word in nuricell.ts on the page; each chapter its own painting; the four
               "More from BiGH" links
@@ -28,6 +29,9 @@ Sections (all, or --only=a,b):
               words, the lantern's fetched width, one line per Why sentence (320-1536), the phone
               lantern with its heading in view, the opening in 1440x900, Add to cart's width
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
+  why         the Why words tidied (Mo picked them with the Gold Rush lantern, October 26, 2026): no
+              label over the heading, one lead-in line on the heading's left edge, the 2% smaller than
+              the 20% (side by side from 600px, stacked, small first, below)
   plate       What's inside tidied (Mo picked 1A, October 26, 2026): no label over the heading, the
               amounts' "per serving" line between the heading and the rows, the label card
   gold        its gold leaf: still where nothing moves (reduced motion), and moving: it rises from the
@@ -311,8 +315,8 @@ def lantern_waits_for_its_picture(browser):
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
     page = ctx.new_page()
     held = []
-    # The lit picture itself (lantern-lit-core-v1.webp, or a later name), not its gold mask.
-    lit_picture = re.compile(r"lantern-lit-(?:core-)?v\d+\.webp")
+    # The lit picture itself (goldrush-lit-v1.webp, or a later name), not its gold mask.
+    lit_picture = re.compile(r"(?:lantern|goldrush)-lit-(?:core-)?v\d+\.webp")
     page.route("**/*", lambda route: held.append(route) if lit_picture.search(route.request.url) else route.continue_())
     page.goto(BASE + PATH, wait_until="domcontentloaded")
     # Hydrated: React has attached itself to the lantern's figure.
@@ -395,15 +399,16 @@ def lantern(browser):
     after = Image.open(OUT / "lantern-lit-1440.png").convert("RGB")
     box = page.locator("[data-lantern] img").first.bounding_box()
 
-    # Mean warmth (red minus blue) over the painting's middle half: its exact centre is the light's
-    # white-hot core, about as warm unlit as lit, so one pixel there says nothing.
+    # Mean warmth (red minus blue) over the lantern's glass (the Gold Rush lantern's globe: the middle
+    # 35-65% of the picture's width, 50-75% of its height; its tin is grey ink lit or not): its flame
+    # alone is too small to say anything. Measured October 26, 2026: 16.5 unlit, 31.2 lit.
     def warmth(img):
-        xs = range(int(box["x"] + box["width"] / 4), int(box["x"] + box["width"] * 3 / 4), 3)
-        ys = range(int(box["y"] + box["height"] / 4), int(min(box["y"] + box["height"] * 3 / 4, img.height)), 3)
+        xs = range(int(box["x"] + box["width"] * 0.35), int(box["x"] + box["width"] * 0.65), 3)
+        ys = range(int(box["y"] + box["height"] * 0.5), int(min(box["y"] + box["height"] * 0.75, img.height)), 3)
         px = [img.getpixel((x, y)) for x in xs for y in ys]
         return sum(p[0] - p[2] for p in px) / len(px)
 
-    check("lantern: it glows warmer once lit", warmth(after) > warmth(before) + 20, f"{warmth(before):.1f} -> {warmth(after):.1f}")
+    check("lantern: its glass glows warmer once lit", warmth(after) > warmth(before) + 10, f"{warmth(before):.1f} -> {warmth(after):.1f}")
     ctx.close()
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     still = lantern_state(page)
@@ -452,11 +457,13 @@ def nuricell_strings():
     # the pairs' note, which says it too, in place of notes.science (Mo picked the tidier What's
     # inside, October 26, 2026); the template still uses both.
     shown_elsewhere = [m.group(1) for m in re.finditer(r'\b(?:otherIngredients|science):\s*"((?:[^"\\]|\\.)*)"', source)]
+    # The Why label too: the ink page's heading stands alone (Mo, October 26, 2026).
+    shown_elsewhere += re.findall(r'why:\s*\{\s*label:\s*"((?:[^"\\]|\\.)*)"', source)
     return [text for text in keep if text not in shown_elsewhere]
 
 
 EXPECT = {
-    "why": "lantern-unlit",
+    "why": "goldrush-unlit",
     "inside": "capsule",
     "research": "books",
     "people": "liu-v1",
@@ -998,12 +1005,12 @@ def polish(browser):
         lines = page.evaluate(WHY_LINES)
         check(f"polish {w}: the Why heading, one line per sentence", lines == [1, 1], str(lines))
         ctx.close()
-    # The phone's lantern under the menu bar: its label and its heading are in the window too.
+    # The phone's lantern under the menu bar: its heading is in the window too.
     ctx, page, _, _ = opened(browser, 390, 844, reduced=True)
     page.evaluate("() => { const f = document.querySelector('[data-lantern]'); const bar = document.querySelector('header').getBoundingClientRect().bottom; window.scrollBy(0, f.getBoundingClientRect().top - bar - 8); }")
     page.wait_for_timeout(300)
     seen = page.evaluate("() => Math.round(document.getElementById('chapter-why-title').getBoundingClientRect().bottom)")
-    check("polish 390: the lantern under the bar leaves its label and heading in view", seen <= 844, f"heading bottom {seen} of 844")
+    check("polish 390: the lantern under the bar leaves its heading in view", seen <= 844, f"heading bottom {seen} of 844")
     ctx.close()
     # The opening's words (headline, purpose, highlights, Add to cart, supply) in the first window.
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
@@ -1026,14 +1033,18 @@ def polish(browser):
         ctx.close()
 
 
-NEW = ["Portrait painting", "capsules a day", "capsules in each bottle"]
+NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
+       # The Why chapter's tidied words (m901-m906, October 26, 2026).
+       "Inside many of your cells, mitochondria turn food into the energy you live on.",
+       "Your brain is about 2% of your weight.", "Yet it uses about 20% of your energy.",
+       "About 20 watts, day and night.", "Brain energy figures:"]
 # The ingredient table's hidden header and the research chapter's label and "Show all" button are new
 # words too, but each also sits inside English sentences the template leaves untranslated (the notes
 # say "Ingredient research…"), so they are read from their own elements.
 NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
 # The five paintings' descriptions as the page passes them (nuricell.ts), by chapter.
 ALTS = {
-    "why": "A paper lantern whose light comes on, painted in ink and gold leaf",
+    "why": "An old miner’s lantern whose light comes on, painted in ink and gold leaf",
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
     "research": "Seven books as stepping stones across a calm stream, painted in ink",
     "people": "A portrait painting of Dr. Jiankang Liu in ink and colour",
@@ -1121,6 +1132,43 @@ def languages(browser):
     for locale in ["jp", "cns"]:
         for w, h in [(1440, 900), (390, 844)]:
             sum_captions_whole(browser, locale, w, h)
+
+
+# The Why words, tidied (Mo picked them with the Gold Rush lantern, October 26, 2026; mockups
+# reference/ink-pages/mockups/nuricell-why/).
+WHY_GEOMETRY = """() => {
+  const c = document.querySelector('[data-chapter="why"] [data-words]');
+  const h2 = c.querySelector('h2');
+  const lead = h2.nextElementSibling;
+  const facts = [...c.querySelectorAll('dl > div')].map((d) => {
+    const dt = d.querySelector('dt');
+    const n = dt.getBoundingClientRect();
+    return { size: parseFloat(getComputedStyle(dt).fontSize), left: Math.round(n.left), top: Math.round(n.top), bottom: Math.round(n.bottom) };
+  });
+  const text = (e) => { const r = document.createRange(); r.selectNodeContents(e); return r.getClientRects()[0]; };
+  return { first: c.firstElementChild.tagName,
+           label: [...c.querySelectorAll('p')].some((p) => p.textContent.trim() === 'Why cellular health matters'),
+           lead: lead.tagName === 'P' ? lead.textContent.trim() : '', after: c.querySelectorAll('h2 ~ p').length,
+           edge: Math.round(text(lead).left - text(h2).left), facts };
+}"""
+
+
+def why_words(browser):
+    for w, h in [(1440, 900), (1024, 768), (600, 900), (390, 844), (320, 700)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        tag = f"why {w}x{h}"
+        g = page.evaluate(WHY_GEOMETRY)
+        check(f"{tag}: no label over the heading, the heading first", not g["label"] and g["first"] == "H2", f"{g['first']} label={g['label']}")
+        # After the heading: the lead-in, the comparison and the source.
+        check(f"{tag}: one lead-in line, then the figures", g["lead"].startswith("Inside many of your cells") and g["after"] == 3, f"{g['after']} after h2: {g['lead'][:40]}")
+        check(f"{tag}: the lead-in on the heading's left edge", abs(g["edge"]) <= 4, f"{g['edge']}px")
+        small, big = g["facts"]
+        check(f"{tag}: the 2% smaller than the 20%", small["size"] * 1.3 < big["size"], f"{small['size']} vs {big['size']}")
+        if w >= 600:
+            check(f"{tag}: the two figures side by side, their feet level", small["left"] < big["left"] and abs(small["bottom"] - big["bottom"]) <= 12, str(g["facts"]))
+        else:
+            check(f"{tag}: the two figures stacked, the small one first", small["bottom"] <= big["top"], str(g["facts"]))
+        ctx.close()
 
 
 # What's inside, tidied, its gold moving and its pairs as scenes (Mo picked 1A, October 26, 2026;
@@ -1312,6 +1360,7 @@ SECTIONS = {
     "polish": polish,
     "opening": opening_check,
     "languages": languages,
+    "why": why_words,
     "plate": plate,
     "gold": gold,
     "scenes": scenes,
