@@ -29,7 +29,9 @@ import styles from "./science.module.css";
 // (under 900px) the tabs sit right above the picture and the words follow it (Mo, October 23),
 // and the three topics, each with its picture, line and words, sit side by side in a strip the
 // finger swipes, snapping to one topic at a time (Mo, October 24: "swipe from one part of that
-// section to another"). A tab glides the strip to its topic; a swipe moves the tabs' line.
+// section to another"). A tab glides the strip to its topic; a swipe moves the tabs' line. The
+// next topic's painting peeks in at the window's edge, so the strip shows it can be swiped
+// before anyone touches it (Mo, October 26: "do people know that they could swipe?").
 const AGE_MIN = 30;
 const AGE_MAX = 80;
 /** The ages at which the slider moves the cell on to its next painting (young until 43, middle-
@@ -71,6 +73,15 @@ function useNarrow() {
     return () => query.removeEventListener("change", update);
   }, []);
   return narrow;
+}
+
+/** One column: how far the strip travels from one topic to the next, a slide and the paper after
+ *  it (a slide is narrower than the window, so the next topic's painting can peek in). */
+function stride(row: HTMLElement) {
+  const [first, second] = Array.from(row.children);
+  return first && second
+    ? second.getBoundingClientRect().left - first.getBoundingClientRect().left
+    : row.clientWidth;
 }
 
 /** Where a topic would not fit the room under the pinned index (round 10: a narrow window such
@@ -145,7 +156,7 @@ export function Science() {
     if (!narrow || !row) return;
     heading.current = i;
     const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    row.scrollTo({ left: i * row.clientWidth, behavior: still ? "instant" : "smooth" });
+    row.scrollTo({ left: i * stride(row), behavior: still ? "instant" : "smooth" });
   };
 
   // One column: a swipe chooses the topic the strip comes to rest on (it snaps to one), so the
@@ -156,13 +167,14 @@ export function Science() {
   useEffect(() => {
     const row = strip.current;
     if (!narrow || !row) return;
-    row.scrollLeft = topic * row.clientWidth;
+    row.scrollLeft = topic * stride(row);
     let frame = 0;
     let settle = 0;
     let touching = false;
+    const nearest = () => Math.max(0, Math.min(2, Math.round(row.scrollLeft / stride(row))));
     const follow = () => {
       frame = 0;
-      const i = Math.max(0, Math.min(2, Math.round(row.scrollLeft / row.clientWidth)));
+      const i = nearest();
       if (heading.current !== null) {
         if (i === heading.current) heading.current = null;
         return;
@@ -171,10 +183,10 @@ export function Science() {
     };
     const home = () => {
       if (touching) return;
-      const i = Math.max(0, Math.min(2, Math.round(row.scrollLeft / row.clientWidth)));
-      if (Math.abs(row.scrollLeft - i * row.clientWidth) <= 1) return;
+      const i = nearest();
+      if (Math.abs(row.scrollLeft - i * stride(row)) <= 1) return;
       const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      row.scrollTo({ left: i * row.clientWidth, behavior: still ? "instant" : "smooth" });
+      row.scrollTo({ left: i * stride(row), behavior: still ? "instant" : "smooth" });
     };
     const later = () => {
       window.clearTimeout(settle);

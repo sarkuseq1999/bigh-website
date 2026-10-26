@@ -504,13 +504,27 @@
    topics, each with its picture, line and words, sit side by side in a strip as wide as the
    window, which the finger swipes and which snaps to one topic at a time (never half way, never
    two at once); the tabs above glide it too. It runs out to the window's edges so a topic slides
-   in from the edge, not from a seam inside the gutter; each slide puts the gutter back. Its
-   height is the resting topic's (science.tsx), changing gently. */
+   in from the edge, not from a seam inside the gutter. Its height is the resting topic's
+   (science.tsx), changing gently.
+   The next topic's painting peeks in, paler, at the window's right edge (Mo, October 26: "do
+   people know that they could swipe?"), so the strip shows there is more before anyone touches
+   it. A slide is narrower than the window for that: every topic rests where the first does, its
+   painting's left edge where the one picture's stood, and its line and words keep the column
+   they had (they reach past the slide's edge, over the next topic's hidden words). */
 @media (max-width: 899px) {
   .slides {
+    /* where a resting painting starts, how much of the next one shows, the paper between them */
+    --edge: calc(var(--gutter) - 4vw);
+    --peek: clamp(36px, 10vw, 76px);
+    --between: 14px;
+    --reach: calc(var(--gutter) - var(--between) - var(--peek));
+
     display: flex;
+    gap: var(--between);
     align-items: flex-start;
     margin: 16px calc(-1 * var(--gutter)) 0;
+    padding-left: var(--edge);
+    scroll-padding-left: var(--edge);
     overflow-x: auto;
     overflow-y: hidden;
     overscroll-behavior-x: contain;
@@ -523,30 +537,59 @@
     display: none;
   }
 
+  /* Room after the last topic, so it too rests where the first does. */
+  .slides::after {
+    flex: 0 0 var(--peek);
+    content: "";
+  }
+
   .slide {
     box-sizing: border-box;
-    flex: 0 0 100%;
+    flex: 0 0 calc(100% - var(--between) - var(--peek));
     min-width: 0;
-    padding: 0 var(--gutter);
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
 
   .slide .figure {
-    margin: 0 -4vw;
+    margin: 0;
   }
 
   .science .slideLine {
-    margin: 8px 4vw 0;
+    margin: 8px var(--reach) 0 4vw;
   }
 
-  /* The slider keeps a sideways drag for itself (it would otherwise swipe the strip). */
+  /* The slider keeps a sideways drag for itself (it would otherwise swipe the strip). It stands
+     centred in the words' column (at most 480px wide), not in the narrower painting. */
   .slide .age {
+    --column: calc(100% - 4vw - var(--reach));
+
+    width: min(480px, var(--column));
+    margin: 8px 0 0 calc(4vw + (var(--column) - min(480px, var(--column))) / 2);
     touch-action: pan-y;
   }
 
   .slideWords {
+    margin: 0 var(--reach) 0 4vw;
     padding-top: 28px;
+  }
+
+  /* A topic beside the one at rest shows only its painting, paler; its line, its words and its
+     label come as it comes to rest (and go as it leaves). */
+  .slide .layer {
+    transition: opacity 0.6s var(--ease);
+  }
+
+  .slide[inert] .layer {
+    opacity: 0.65;
+  }
+
+  .slide :is(.slideWords, .slideLine, .caption, .age) {
+    transition: opacity 0.4s var(--ease);
+  }
+
+  .slide[inert] :is(.slideWords, .slideLine, .caption, .age) {
+    opacity: 0;
   }
 }
 
