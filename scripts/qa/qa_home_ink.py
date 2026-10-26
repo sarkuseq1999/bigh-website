@@ -1054,25 +1054,26 @@ def run(browser, look, mobile):
     check(f"{tag}: one h1", page.locator("h1").count() == 1)
 
     # Header links (the menu bar "Inscription", October 5, 2026; scripts/qa/qa_nav.py checks how it
-    # behaves): Products and Science open their drop-downs, no "Home" (the mark goes home). Each
-    # drop-down reaches every page: the five product pages, the Science page's four parts.
+    # behaves): Products opens its drop-down, which reaches the five product pages; Science is a
+    # plain link to its page (its drop-down put away, Mo, October 26, 2026); no "Home" (the mark
+    # goes home).
     nav = page.evaluate(
         """(() => { const n = document.querySelector('#site-navigation');
           return { triggers: [...n.querySelectorAll('[data-nav-trigger]')].map(b => b.dataset.navTrigger),
+            science: n.querySelector('[class*="__links"] > a[href$="/science"]')?.getAttribute('href') || '',
             about: n.querySelector('a[href$="/about"]')?.getAttribute('href') || '',
             support: n.querySelector('a[href$="/support"]')?.getAttribute('href') || '',
             home: [...n.querySelectorAll('a')].some(a => a.textContent.trim() === 'Home'),
-            products: new Set([...n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]')].map(a => a.getAttribute('href'))).size,
-            science: new Set([...n.querySelectorAll('[data-nav-panel=science] a[href*="/science#"]')].map(a => a.getAttribute('href'))).size }; })()"""
+            products: new Set([...n.querySelectorAll('[data-nav-panel=products] a[href*="/products/"]')].map(a => a.getAttribute('href'))).size }; })()"""
     )
     check(
         f"{tag}: header links",
-        nav["triggers"] == ["products", "science"]
+        nav["triggers"] == ["products"]
+        and nav["science"].endswith("/science")
         and nav["about"].endswith("/about")
         and nav["support"].endswith("/support")
         and not nav["home"]
-        and nav["products"] == 5
-        and nav["science"] == 4,
+        and nav["products"] == 5,
         str(nav),
     )
 

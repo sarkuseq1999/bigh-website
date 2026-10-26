@@ -20,6 +20,7 @@ import {
   navProductsIntro,
   navScience,
   navScienceIntro,
+  navScienceMenu,
   type NavPanelId,
 } from "./nav-data";
 import { NavLogo } from "./nav-logo";
@@ -42,7 +43,8 @@ import styles from "./nav-inscription.module.css";
 // link to all of them under the row. Products: the five real bottles, each on its own pale pool,
 // with no line under the row (Mo, October 12: it read as a repeat of the bar's own stroke).
 // Science: the Science page's four parts, Dr. Liu's print and three ink paintings set at one
-// weight (round 5). The two rows share one geometry
+// weight (round 5); put away for now (`navScienceMenu`, Mo, October 26, 2026), so Science is a
+// plain link to its page, on the bar and in the menu. The two rows share one geometry
 // (the title's room, the pictures' row, the names' line and the link under them), so moving from
 // one drop-down to the other keeps the scroll down and changes only what is written on it. On a
 // narrow window: "Menu", the mark, the language; the menu is a full-height scroll let down the
@@ -340,67 +342,83 @@ export function NavInscription({
                 />
               </div>
             </div>
-            <button
-              {...nav.triggerProps("science")}
-              className={styles.link}
-              data-nav-trigger="science"
-              data-current={current === "science" ? "" : undefined}
-              data-ink={inked("science")}
-            >
-              <span className={styles.word}>
-                {copy("Science")}
-                <Ink />
-              </span>
-              <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
-            </button>
-            <div
-              {...nav.panelProps("science")}
-              className={styles.panel}
-              data-nav-panel="science"
-              data-shown={shown === "science" ? "" : undefined}
-            >
-              <div ref={scienceInner} className={styles.panelInner}>
-                <Row
-                  id="science"
-                  title={copy(navScienceIntro.title)}
-                  items={navScience.map((item) => ({
-                    href: item.href,
-                    name: copy(item.label),
-                    line: <Phrases text={caption(item.caption)} />,
-                    picture: (
-                      <span className={styles.room}>
-                        {item.image.plate === "print" ? (
-                          <span className={styles.plate} data-plate="print">
-                            <Image
-                              className={styles.photo}
-                              src={item.image.src}
-                              alt=""
-                              width={item.image.width}
-                              height={item.image.height}
-                              sizes="(min-width: 1692px) 118px, (min-width: 1385px) 7vw, 96px"
-                              loading={loading}
-                            />
+            {navScienceMenu ? (
+              <>
+                <button
+                  {...nav.triggerProps("science")}
+                  className={styles.link}
+                  data-nav-trigger="science"
+                  data-current={current === "science" ? "" : undefined}
+                  data-ink={inked("science")}
+                >
+                  <span className={styles.word}>
+                    {copy("Science")}
+                    <Ink />
+                  </span>
+                  <ChevronDown className={styles.chevron} size={14} aria-hidden="true" />
+                </button>
+                <div
+                  {...nav.panelProps("science")}
+                  className={styles.panel}
+                  data-nav-panel="science"
+                  data-shown={shown === "science" ? "" : undefined}
+                >
+                  <div ref={scienceInner} className={styles.panelInner}>
+                    <Row
+                      id="science"
+                      title={copy(navScienceIntro.title)}
+                      items={navScience.map((item) => ({
+                        href: item.href,
+                        name: copy(item.label),
+                        line: <Phrases text={caption(item.caption)} />,
+                        picture: (
+                          <span className={styles.room}>
+                            {item.image.plate === "print" ? (
+                              <span className={styles.plate} data-plate="print">
+                                <Image
+                                  className={styles.photo}
+                                  src={item.image.src}
+                                  alt=""
+                                  width={item.image.width}
+                                  height={item.image.height}
+                                  sizes="(min-width: 1692px) 118px, (min-width: 1385px) 7vw, 96px"
+                                  loading={loading}
+                                />
+                              </span>
+                            ) : (
+                              <Image
+                                className={styles.plate}
+                                data-plate={item.image.plate}
+                                src={item.image.src}
+                                alt=""
+                                width={item.image.width}
+                                height={item.image.height}
+                                sizes="(min-width: 1692px) 272px, (min-width: 1385px) 16vw, 222px"
+                                loading={loading}
+                              />
+                            )}
                           </span>
-                        ) : (
-                          <Image
-                            className={styles.plate}
-                            data-plate={item.image.plate}
-                            src={item.image.src}
-                            alt=""
-                            width={item.image.width}
-                            height={item.image.height}
-                            sizes="(min-width: 1692px) 272px, (min-width: 1385px) 16vw, 222px"
-                            loading={loading}
-                          />
-                        )}
-                      </span>
-                    ),
-                  }))}
-                  more={{ href: navScienceIntro.href, text: copy(navScienceIntro.link) }}
-                  onGo={() => closePanel()}
-                />
-              </div>
-            </div>
+                        ),
+                      }))}
+                      more={{ href: navScienceIntro.href, text: copy(navScienceIntro.link) }}
+                      onGo={() => closePanel()}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <Link
+                href={navScienceIntro.href}
+                className={styles.link}
+                aria-current={current === "science" ? "page" : undefined}
+                data-ink={inked("science")}
+              >
+                <span className={styles.word}>
+                  {copy("Science")}
+                  <Ink />
+                </span>
+              </Link>
+            )}
           </div>
         </div>
 
@@ -491,64 +509,75 @@ export function NavInscription({
             </Link>
           </SheetPart>
           <span className={styles.dab} aria-hidden="true" />
-          <SheetPart
-            id="science"
-            label={copy("Science")}
-            here={current === "science"}
-            open={fold === "science"}
-            byHand={byHand}
-            onToggle={(word) => unfold("science", word)}
-          >
-            <ul className={styles.sheetRows} data-sheet-rows="science">
-              {navScience.map((item, i) => (
-                <li key={item.href} style={{ "--i": i } as CSSProperties}>
-                  <Link
-                    href={item.href}
-                    className={styles.sheetRow}
-                    onClick={() => setMenuOpen(false)}
-                  >
-                    <span className={styles.sheetThumb}>
-                      {item.image.plate === "print" ? (
-                        <span className={styles.thumbPrint}>
+          {navScienceMenu ? (
+            <SheetPart
+              id="science"
+              label={copy("Science")}
+              here={current === "science"}
+              open={fold === "science"}
+              byHand={byHand}
+              onToggle={(word) => unfold("science", word)}
+            >
+              <ul className={styles.sheetRows} data-sheet-rows="science">
+                {navScience.map((item, i) => (
+                  <li key={item.href} style={{ "--i": i } as CSSProperties}>
+                    <Link
+                      href={item.href}
+                      className={styles.sheetRow}
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      <span className={styles.sheetThumb}>
+                        {item.image.plate === "print" ? (
+                          <span className={styles.thumbPrint}>
+                            <Image
+                              className={styles.photo}
+                              src={item.image.src}
+                              alt=""
+                              width={item.image.width}
+                              height={item.image.height}
+                              sizes="(max-width: 699px) 56px, 96px"
+                              loading={loading}
+                            />
+                          </span>
+                        ) : (
                           <Image
-                            className={styles.photo}
+                            className={styles.thumbPlate}
+                            data-plate={item.image.plate}
                             src={item.image.src}
                             alt=""
                             width={item.image.width}
                             height={item.image.height}
-                            sizes="(max-width: 699px) 56px, 96px"
+                            sizes="(max-width: 699px) 100px, 170px"
                             loading={loading}
                           />
-                        </span>
-                      ) : (
-                        <Image
-                          className={styles.thumbPlate}
-                          data-plate={item.image.plate}
-                          src={item.image.src}
-                          alt=""
-                          width={item.image.width}
-                          height={item.image.height}
-                          sizes="(max-width: 699px) 100px, 170px"
-                          loading={loading}
-                        />
-                      )}
-                    </span>
-                    <span className={styles.sheetRowName}>{copy(item.label)}</span>
-                    <span className={styles.sheetRowLine}>
-                      <Phrases text={caption(item.caption)} />
-                    </span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+                        )}
+                      </span>
+                      <span className={styles.sheetRowName}>{copy(item.label)}</span>
+                      <span className={styles.sheetRowLine}>
+                        <Phrases text={caption(item.caption)} />
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+              <Link
+                href={navScienceIntro.href}
+                className={styles.more}
+                onClick={() => setMenuOpen(false)}
+              >
+                <Tail text={copy(navScienceIntro.link)} />
+              </Link>
+            </SheetPart>
+          ) : (
             <Link
               href={navScienceIntro.href}
-              className={styles.more}
+              className={styles.sheetLink}
+              aria-current={current === "science" ? "page" : undefined}
               onClick={() => setMenuOpen(false)}
             >
-              <Tail text={copy(navScienceIntro.link)} />
+              {copy("Science")}
             </Link>
-          </SheetPart>
+          )}
           <span className={styles.dab} aria-hidden="true" />
           <Link
             href="/about"

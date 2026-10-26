@@ -124,6 +124,12 @@ These sit on top of `DESIGN.md`.
   brushstroke; a pale ink wash behind a pointed-at word. Drop-downs, the settle and the menu sheet
   stay as they were. Mockups: `reference/ink-pages/mockups/nav/2026-10-21/`; strokes cut by
   `reference/nav/make_signed_strokes.py` from two Codex paintings.
+- **Menu bar: Science is a plain link for now (Mo, October 26, 2026).** The Science page is one
+  page, and the drop-down's four doors into it made the site look short of content. Science goes
+  straight to `/science` on the bar and in the phone's menu, like About and Support. Keep the
+  drop-down's design: it is switched off, not deleted (`navScienceMenu` in
+  `src/components/ink/nav/nav-data.ts`, `SCIENCE_MENU` in `scripts/qa/qa_nav.py`). Turn it back
+  on only when Mo says the Science page has grown enough.
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing

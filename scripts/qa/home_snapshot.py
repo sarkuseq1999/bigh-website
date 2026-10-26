@@ -127,19 +127,20 @@ NAV_STATE_JS = """() => {
 
 
 def nav_check(base: str) -> bool:
-    """One menu bar ("Inscription") for every ink page: Products and Science (drop-downs), the mark
-    (it goes home: there is no Home link), About and Support (both links). The homepage marks no
-    link as the current page; /about marks About and /support marks Support, in the bar and in the
-    narrow window's menu; the root carries data-page."""
+    """One menu bar ("Inscription") for every ink page: Products (a drop-down), Science (a link; its
+    drop-down put away, Mo, October 26, 2026), the mark (it goes home: there is no Home link), About
+    and Support (both links). The homepage marks no link as the current page; /about marks About
+    and /support marks Support, in the bar and in the narrow window's menu; the root carries
+    data-page."""
     words = ["Products", "Science", "About", "Support"]
     expected = {
         "/": {"page": "home", "words": words, "current": [], "menuCurrent": [], "mark": "/",
-              "triggers": ["products", "science"], "about": "/about", "support": "/support"},
+              "triggers": ["products"], "about": "/about", "support": "/support"},
         "/about": {"page": "about", "words": words, "current": ["About"], "menuCurrent": ["About"],
-                   "mark": "/", "triggers": ["products", "science"], "about": "/about",
+                   "mark": "/", "triggers": ["products"], "about": "/about",
                    "support": "/support"},
         "/support": {"page": "support", "words": words, "current": ["Support"],
-                     "menuCurrent": ["Support"], "mark": "/", "triggers": ["products", "science"],
+                     "menuCurrent": ["Support"], "mark": "/", "triggers": ["products"],
                      "about": "/about", "support": "/support"},
     }
     ok = True

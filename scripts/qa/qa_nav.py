@@ -134,6 +134,15 @@ On the real GPU (ANGLE/D3D11):
     pressed in the menu stays in the window while the folds move. The language picker is as wide
     as the language it shows, its arrow beside the word, in Chrome and in Firefox.
   - no page errors or console errors anywhere.
+Science's drop-down is put away for now (Mo, October 26, 2026: the Science page is one page, and
+four doors into it made it look thin), so Science is a plain link like About and Support
+(`navScienceMenu` in src/components/ink/nav/nav-data.ts). With `SCIENCE_MENU` False the checks of
+Science's drop-down and of its fold in the menu are skipped, and these run instead: on the bar,
+Science is one link to /science with no chevron and no drop-down, pointing at it opens nothing, a
+click goes to its page, and on its page its word carries the painted stroke as the current page;
+pointing on from the open Products to Science, one wash at a time; in the menu, Science is one word
+that goes to its page and closes the menu; the menu's crane and foot checked with Products unfolded.
+Set `SCIENCE_MENU` to True with `navScienceMenu` and the drop-down's checks come back as they were.
 Pictures land in scripts/qa/out/nav/.
 """
 
@@ -153,6 +162,11 @@ ONLY = next((a.split("=", 1)[1] for a in sys.argv[1:] if a.startswith("--only=")
 OUT = Path(__file__).parent / "out" / "nav"
 OUT.mkdir(parents=True, exist_ok=True)
 URL = f"{BASE}/"
+# Science's drop-down (Mo put it away on October 26, 2026); True with `navScienceMenu`.
+SCIENCE_MENU = False
+PANELS = ("products", "science") if SCIENCE_MENU else ("products",)
+# Science's word on the bar: its drop-down's button, or its plain link.
+SCI = '#site-navigation :is([data-nav-trigger="science"], [class*="__links"] > a[href$="/science"])'
 results: list[tuple[str, bool]] = []
 errors: list[str] = []
 
@@ -632,7 +646,7 @@ def drop_down_motion(browser):
         warm(page)
         film = Film(page)
         deckle = page.evaluate("parseFloat(getComputedStyle(document.querySelector('header')).getPropertyValue('--deckle'))")
-        for panel in ("science", "products"):
+        for panel in PANELS[::-1]:
             box = page.locator(f'[data-nav-trigger="{panel}"]').bounding_box()
             hide = None
             if panel == "products":
@@ -694,7 +708,22 @@ def switches(page, film):
         a = luma(img)[band[1] : band[3], band[0] : band[2]]
         return float(np.clip(np.median(a) - a - 6, 0, None).mean())
 
-    for leave, arrive in (("products", "science"), ("science", "products")):
+    if not SCIENCE_MENU:
+        # Science is a plain word beside Products: pointing on to it, Products rolls up and only one
+        # word is washed on every frame. Then Products is let down again for the move on to About.
+        box = page.locator(SCI).bounding_box()
+        film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=6), 1300)
+        two = [(round(e["t"] - film.t0), e["lines"]) for e in film.log if len(e["lines"]) > 1]
+        check(
+            "desk: pointing from the open Products on to Science (a plain link), one line at a time and Products rolls up (filmed)",
+            not two and not is_open(page, "products") and film.log[-1]["lines"] == ["Science"],
+            f"{len(film.log)} frames; two lines {two[:3]}; last {film.log[-1]['lines']}",
+        )
+        page.mouse.move(760, 880)
+        page.wait_for_timeout(900)
+        page.locator('[data-nav-trigger="products"]').click()
+        page.wait_for_timeout(1500)
+    for leave, arrive in (("products", "science"), ("science", "products")) if SCIENCE_MENU else ():
         before = ink(Image.open(BytesIO(page.screenshot())))
         box = page.locator(f'[data-nav-trigger="{arrive}"]').bounding_box()
         film.shoot(lambda: page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4), 1100)
@@ -950,6 +979,9 @@ def row_layout(browser):
         page.keyboard.press("Escape")
         page.mouse.move(w / 2, h - 6)
         page.wait_for_timeout(900)
+        if not SCIENCE_MENU:
+            page.close()
+            continue
 
         open_panel(page, "science")
         page.screenshot(path=str(OUT / f"rows-science-{w}x{h}.png"))
@@ -1012,7 +1044,7 @@ def row_reach(browser):
     brought forward while the others ease back a little), then the link under the row. By pointer:
     resting on a part does the same, and a click opens its page. On a touch laptop: the first tap on
     a part opens its page."""
-    for panel, want, more in (("products", NAMES, "Explore our products"), ("science", PARTS, "Explore the science")):
+    for panel, want, more in (("products", NAMES, "Explore our products"), ("science", PARTS, "Explore the science"))[: len(PANELS)]:
         page = browser.new_page(viewport={"width": 1536, "height": 900})
         watch(page)
         page.goto(URL, wait_until="networkidle")
@@ -1132,7 +1164,7 @@ def row_motion(browser):
     page.goto(URL, wait_until="networkidle")
     page.wait_for_timeout(2500)
     film = Film(page)
-    for panel, want in (("products", NAMES), ("science", PARTS)):
+    for panel, want in (("products", NAMES), ("science", PARTS))[: len(PANELS)]:
         open_panel(page, panel)
         sel = f'[data-nav-panel="{panel}"]'
         rest_on(page, panel, 0)
@@ -1179,6 +1211,9 @@ def row_motion(browser):
         page.keyboard.press("Escape")
         page.mouse.move(768, 896)
         page.wait_for_timeout(900)
+    if not SCIENCE_MENU:
+        page.close()
+        return
 
     # Over to Products and back: Science swaps in over Products. Products' pictures (bottles and
     # pools) stand elsewhere on the page, so during the dissolve they show through the new panel
@@ -1223,7 +1258,7 @@ def row_languages(browser):
             watch(page)
             page.goto(f"{BASE}/{loc}", wait_until="networkidle")
             page.wait_for_timeout(2000)
-            for panel, count in (("products", 5), ("science", 4)):
+            for panel, count in (("products", 5), ("science", 4))[: len(PANELS)]:
                 open_panel(page, panel)
                 page.screenshot(path=str(OUT / f"rows-{loc}{w}-{panel}.png"))
                 info = page.evaluate(ROW, panel)
@@ -1297,29 +1332,33 @@ def desktop(browser):
     page.mouse.move(box["x"] + box["width"] / 2, box["y"] + 40, steps=8)
     page.wait_for_timeout(700)
     check("desk: the pointer can cross into the panel", is_open(page, "products"))
-    page.locator('[data-nav-trigger="science"]').hover()
-    samples = []
-    for _ in range(6):
-        page.wait_for_timeout(60)
-        samples.append(float(r_value(page) or 0))
-    check(
-        "desk: Science swaps in", is_open(page, "science") and not is_open(page, "products")
-    )
-    check("desk: the swap keeps the scroll down", min(samples) > 0.99, samples)
-    page.wait_for_timeout(900)
-    page.screenshot(path=str(OUT / "desk-science.png"))
+    last = "products"
+    if SCIENCE_MENU:
+        page.locator('[data-nav-trigger="science"]').hover()
+        samples = []
+        for _ in range(6):
+            page.wait_for_timeout(60)
+            samples.append(float(r_value(page) or 0))
+        check(
+            "desk: Science swaps in", is_open(page, "science") and not is_open(page, "products")
+        )
+        check("desk: the swap keeps the scroll down", min(samples) > 0.99, samples)
+        page.wait_for_timeout(900)
+        page.screenshot(path=str(OUT / "desk-science.png"))
+        last = "science"
     page.mouse.move(760, 860, steps=6)
     page.wait_for_timeout(800)
-    check("desk: leaving closes it", not is_open(page, "science"))
+    check("desk: leaving closes it", not is_open(page, last))
     page.wait_for_timeout(500)
     check("desk: the scroll rolls back up", float(r_value(page) or 1) < 0.01, r_value(page))
 
-    page.locator('[data-nav-trigger="science"]').click()
+    trig = page.locator(f'[data-nav-trigger="{last}"]')
+    trig.click()
     page.wait_for_timeout(300)
-    check("desk: a click opens Science", is_open(page, "science"))
-    page.locator('[data-nav-trigger="science"]').click()
+    check(f"desk: a click opens {last.capitalize()}", is_open(page, last))
+    trig.click()
     page.wait_for_timeout(300)
-    check("desk: a second click closes it", not is_open(page, "science"))
+    check("desk: a second click closes it", not is_open(page, last))
 
     page.locator('[data-nav-trigger="products"]').click()
     page.wait_for_timeout(900)
@@ -1413,6 +1452,111 @@ def desktop(browser):
     page.locator('[data-nav-trigger="products"]').click()
     page.wait_for_timeout(50)
     check("reduced motion: the scroll is down at once", r_value(page) == "1", r_value(page))
+    page.close()
+
+
+# Science's word on the bar as a plain link: what it is, and whether any drop-down of it is left.
+SCI_LINK = """(sel) => { const a = document.querySelector(sel);
+  return { tag: a?.tagName, href: a?.getAttribute('href'), text: a?.innerText.trim(), chevron: !!a?.querySelector('svg'),
+    expanded: a?.getAttribute('aria-expanded') ?? null, current: a?.getAttribute('aria-current') ?? null,
+    h: a ? Math.round(a.getBoundingClientRect().height) : 0,
+    trigger: !!document.querySelector('[data-nav-trigger="science"]'),
+    panel: !!document.querySelector('[data-nav-panel="science"]'),
+    fold: !!document.querySelector('[data-nav-sheet-toggle="science"], #nav-sheet-science') }; }"""
+
+
+def science_link(browser):
+    """Science's drop-down put away (Mo, October 26, 2026): Science is a plain link to its page, on
+    the bar and in the menu, and on its page its word carries the painted stroke."""
+    page = browser.new_page(viewport={"width": 1536, "height": 900})
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(2000)
+    page.mouse.move(768, 896)
+    info = page.evaluate(SCI_LINK, SCI)
+    check(
+        "science link: on the bar Science is one plain link to /science, 48px+ tall: no chevron, no drop-down, "
+        "no fold in the menu",
+        info["tag"] == "A" and info["href"] == "/science" and info["text"] == "Science" and not info["chevron"]
+        and info["expanded"] is None and info["h"] >= 48 and not info["trigger"] and not info["panel"] and not info["fold"],
+        info,
+    )
+    box = page.locator(SCI).bounding_box()
+    page.mouse.move(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2, steps=4)
+    page.wait_for_timeout(900)
+    page.screenshot(path=str(OUT / "science-link-pointed.png"), clip={"x": 0, "y": 0, "width": 1536, "height": 260})
+    state = page.evaluate(
+        """() => ({ open: [...document.querySelectorAll('[data-nav-panel][data-open]')].map(p => p.dataset.navPanel),
+        unrolled: document.querySelector('header').hasAttribute('data-unrolled') })"""
+    )
+    check(
+        "science link: pointing at Science lets nothing down (no drop-down opens, the scroll stays up)",
+        not state["open"] and not state["unrolled"] and float(r_value(page) or 0) < 0.01,
+        state | {"r": r_value(page)},
+    )
+    page.mouse.click(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)
+    page.wait_for_url("**/science", timeout=30000)
+    check("science link: a click goes to the Science page", page.url.endswith("/science"), page.url)
+    page.mouse.move(768, 896)
+    page.wait_for_timeout(2000)
+    page.screenshot(path=str(OUT / "science-link-here.png"), clip={"x": 300, "y": 0, "width": 940, "height": 110})
+    inks = page.evaluate(INKS)
+    sci = next((i for i in inks if i["word"] == "Science"), None)
+    current = page.evaluate(SCI_LINK, SCI)["current"]
+    check(
+        "science link: on the Science page its word is the current page (aria-current) and carries the painted "
+        "stroke, the only one",
+        current == "page" and sci is not None and sci["state"] == "here" and sci["draw"] == 1 and inked(inks) == ["Science"],
+        f"aria-current {current}; {[(i['word'], i['state'], round(i['opacity'], 2), i['draw']) for i in inks]}",
+    )
+    px = stroke_pixels(page, "Science")
+    span = px["right"] - px["left"]
+    check(
+        "science link: in the pixels, the stroke runs under Science from its first letter over 75%+ of it, "
+        "3-8px thick, 7px under the word's foot (3px)",
+        px["ink"]
+        and abs(px["from"] - px["left"]) <= 3
+        and px["to"] - px["from"] >= 0.75 * span
+        and 3 <= px["thick"] <= 8
+        and abs(px["mid"] - px["line"]) <= 3,
+        {k: (round(v, 1) if isinstance(v, float) else v) for k, v in px.items()},
+    )
+    page.close()
+
+    # The menu: Science is one word, like About and Support, that goes to its page and closes the menu.
+    page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
+    watch(page)
+    page.goto(URL, wait_until="networkidle")
+    page.wait_for_timeout(1500)
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1500)
+    page.screenshot(path=str(OUT / "science-link-menu.png"))
+    word = page.locator("[data-nav-sheet] a", has_text="Science").first
+    info = word.evaluate(
+        """a => ({ href: a.getAttribute('href'), text: a.innerText.trim(), chevron: !!a.querySelector('svg'),
+        expanded: a.getAttribute('aria-expanded'), h: Math.round(a.getBoundingClientRect().height),
+        words: [...a.parentElement.children].filter(e => /sheetLink|sheetPart/.test(e.className))
+          .map(e => (e.querySelector('[data-nav-sheet-toggle]') || e).innerText.trim()) })"""
+    )
+    check(
+        "science link: in the menu Science is one word between Products and About, a link to /science (no fold, no chevron), 48px+ tall",
+        info["href"] == "/science" and info["text"] == "Science" and not info["chevron"] and info["expanded"] is None
+        and info["h"] >= 48 and info["words"] == ["Products", "Science", "About", "Support"],
+        info,
+    )
+    word.tap()
+    page.wait_for_url("**/science", timeout=30000)
+    page.wait_for_timeout(900)
+    check(
+        "science link: a tap on it goes to the Science page and closes the menu",
+        page.url.endswith("/science") and not menu_open(page),
+        f"{page.url}; menu open {menu_open(page)}",
+    )
+    page.locator("[data-nav-menu-button]").click()
+    page.wait_for_timeout(1500)
+    here = page.locator("[data-nav-sheet] a", has_text="Science").first.get_attribute("aria-current")
+    page.screenshot(path=str(OUT / "science-link-menu-here.png"))
+    check("science link: in the menu on the Science page, its word is the current page", here == "page", here)
     page.close()
 
 
@@ -1573,17 +1717,20 @@ def phone_rows(browser):
         page.screenshot(path=str(OUT / f"phone-{loc}-{w}-products.png"))
         m = page.evaluate(MENU)
         rows_checks(f"{tag} Products", m, 5, full)
-        unfold(page, "science")
-        page.screenshot(path=str(OUT / f"phone-{loc}-{w}-science.png"))
-        m = page.evaluate(MENU)
-        rows_checks(f"{tag} Science", m, 4, full)
+        last = "Products"
+        if SCIENCE_MENU:
+            unfold(page, "science")
+            page.screenshot(path=str(OUT / f"phone-{loc}-{w}-science.png"))
+            m = page.evaluate(MENU)
+            rows_checks(f"{tag} Science", m, 4, full)
+            last = "Science"
         y = m["pageY"]
         sheet_end(page)
         page.mouse.wheel(0, 400)
         page.wait_for_timeout(500)
         m = page.evaluate(MENU)
         page.screenshot(path=str(OUT / f"phone-{loc}-{w}-foot.png"))
-        finale_checks(f"{tag} Science unfolded", m, at_once=False)
+        finale_checks(f"{tag} {last} unfolded", m, at_once=False)
         check(f"{tag}: the menu scrolls on its own, the page under it stays put", m["locked"] and m["pageY"] == y and m["scrollTop"] > 0,
               {"locked": m["locked"], "pageY": [y, m["pageY"]], "scrollTop": m["scrollTop"]})
         page.close()
@@ -1633,25 +1780,39 @@ def tablet_rows(browser):
             rows_checks(f"{tag} Products", m, 5)
             lines = [round(r["lineBox"]["top"]) for r in m["rows"]]
             check(f"{tag}: the five focus lines start on one line", max(lines) - min(lines) <= 1, lines)
-        unfold(page, "science")
-        m = page.evaluate(MENU)
-        page.screenshot(path=str(OUT / f"tablet-{w}x{h}-science.png"))
-        rows_checks(f"{tag} Science", m, 4, full=upright)
-        lines = [round(r["lineBox"]["top"]) for r in m["rows"]]
-        check(f"{tag}: the four captions start on one line", max(lines) - min(lines) <= 1, lines)
-        sheet_end(page)
-        finale_checks(f"{tag} Science unfolded", page.evaluate(MENU), at_once=False)
+        if SCIENCE_MENU:
+            unfold(page, "science")
+            m = page.evaluate(MENU)
+            page.screenshot(path=str(OUT / f"tablet-{w}x{h}-science.png"))
+            rows_checks(f"{tag} Science", m, 4, full=upright)
+            lines = [round(r["lineBox"]["top"]) for r in m["rows"]]
+            check(f"{tag}: the four captions start on one line", max(lines) - min(lines) <= 1, lines)
+            sheet_end(page)
+            finale_checks(f"{tag} Science unfolded", page.evaluate(MENU), at_once=False)
+        elif not upright:
+            # Held sideways it opens with the four words; Products, unfolded, shows its five.
+            unfold(page, "products")
+            m = page.evaluate(MENU)
+            page.screenshot(path=str(OUT / f"tablet-{w}x{h}-products.png"))
+            rows_checks(f"{tag} Products", m, 5, full=False)
+            sheet_end(page)
+            finale_checks(f"{tag} Products unfolded", page.evaluate(MENU), at_once=False)
         page.close()
 
-    # Upright, moving from Products to Science: the crane eases with the fold, never pops.
+    # Upright, moving from Products to Science (with Science's drop-down; without it, Products
+    # folding away and back): the crane eases with the fold, never pops.
     page = browser.new_page(viewport={"width": 834, "height": 1112})
     watch(page)
     page.goto(URL, wait_until="networkidle")
     page.wait_for_timeout(1500)
     page.locator("[data-nav-menu-button]").click()
     page.wait_for_timeout(1500)
-    crane_motion(page, "tablet 834x1112, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
-    crane_motion(page, "tablet 834x1112, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+    if SCIENCE_MENU:
+        crane_motion(page, "tablet 834x1112, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+        crane_motion(page, "tablet 834x1112, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+    else:
+        crane_motion(page, "tablet 834x1112, Products folds away", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
+        crane_motion(page, "tablet 834x1112, Products unfolds again", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
     page.close()
 
 
@@ -1666,22 +1827,30 @@ def menu_light_boxes(browser):
     btn = page.locator("[data-nav-menu-button]")
     btn.click()
     page.wait_for_timeout(600)
-    toggle = page.locator('[data-nav-sheet-toggle="science"]')
-    toggle.click()
-    page.wait_for_function(
-        "[...document.querySelectorAll('[data-nav-sheet] img')].every(i => i.complete && i.naturalWidth > 0)", timeout=30000
-    )
-    page.wait_for_timeout(900)
-    toggle.click()
-    page.wait_for_timeout(1000)
-    box = toggle.bounding_box()
-    film = Film(page).shoot(lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1300)
-    pics = [p for p in page.evaluate(PICTURES, "#nav-sheet-science") if p["y"] + p["h"] < 844]
-    found = light_boxes(
-        film, pics, page.evaluate(ROWGAPS, "#nav-sheet-science"),
-        lambda e: next(f["bottom"] for f in e["folds"] if f["id"] == "nav-sheet-science"), 390, 0, 1200,
-    )
-    no_light_box("phone: Science unfolds with no light box round its paintings (filmed at real speed)", found, frames=4)
+    if SCIENCE_MENU:
+        toggle = page.locator('[data-nav-sheet-toggle="science"]')
+        toggle.click()
+        page.wait_for_function(
+            "[...document.querySelectorAll('[data-nav-sheet] img')].every(i => i.complete && i.naturalWidth > 0)", timeout=30000
+        )
+        page.wait_for_timeout(900)
+        toggle.click()
+        page.wait_for_timeout(1000)
+        box = toggle.bounding_box()
+        film = Film(page).shoot(lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2), 1300)
+        pics = [p for p in page.evaluate(PICTURES, "#nav-sheet-science") if p["y"] + p["h"] < 844]
+        found = light_boxes(
+            film, pics, page.evaluate(ROWGAPS, "#nav-sheet-science"),
+            lambda e: next(f["bottom"] for f in e["folds"] if f["id"] == "nav-sheet-science"), 390, 0, 1200,
+        )
+        no_light_box("phone: Science unfolds with no light box round its paintings (filmed at real speed)", found, frames=4)
+    else:
+        # The crane's picture loads with the menu; let it, then close the menu for the filmed opening.
+        page.wait_for_function(
+            "[...document.querySelectorAll('[data-nav-sheet] [class*=\"sheetFinale\"] img')].every(i => i.complete && i.naturalWidth > 0)",
+            timeout=30000,
+        )
+        page.wait_for_timeout(900)
     btn.click()
     page.wait_for_timeout(1200)
     film = Film(page).shoot(lambda: btn.tap(), 1500)
@@ -1734,14 +1903,15 @@ def phone(browser):
         "phone: Products folds open",
         page.locator("[data-nav-sheet] a", has_text="NuriCell").is_visible(),
     )
-    page.locator('[data-nav-sheet-toggle="science"]').click()
-    page.wait_for_timeout(800)
-    check(
-        "phone: Science folds open, Products folds away",
-        page.locator("[data-nav-sheet] a", has_text="Research library").is_visible()
-        and page.locator('[data-nav-sheet-toggle="products"]').get_attribute("aria-expanded")
-        == "false",
-    )
+    if SCIENCE_MENU:
+        page.locator('[data-nav-sheet-toggle="science"]').click()
+        page.wait_for_timeout(800)
+        check(
+            "phone: Science folds open, Products folds away",
+            page.locator("[data-nav-sheet] a", has_text="Research library").is_visible()
+            and page.locator('[data-nav-sheet-toggle="products"]').get_attribute("aria-expanded")
+            == "false",
+        )
     page.locator("[data-nav-sheet] a", has_text="Support").click()
     page.wait_for_url("**/support", timeout=30000)
     check("phone: Support goes to its page", page.url.endswith("/support"), page.url)
@@ -1862,7 +2032,8 @@ GROUPS = """() => {
   const right = nav.lastElementChild; const [about, support] = [...right.firstElementChild.children];
   const acct = right.lastElementChild;
   const items = { lang, prod: nav.querySelector('[data-nav-trigger="products"]'),
-    sci: nav.querySelector('[data-nav-trigger="science"]'), mark: nav.querySelector('[data-nav-logo]'),
+    sci: nav.querySelector('[data-nav-trigger="science"], [class*="__links"] > a[href$="/science"]'),
+    mark: nav.querySelector('[data-nav-logo]'),
     about, support, login: acct.querySelector('a'), signup: acct.querySelector('button') };
   const text = { lang: lang.querySelector('select'), prod: items.prod.firstElementChild,
     sci: items.sci.firstElementChild, about: about.firstElementChild, support: support.firstElementChild,
@@ -2216,17 +2387,18 @@ def reading_stroke(browser):
             f"pointing: {inked(pointed)}; after: {[(i['word'], round(i['opacity'], 2)) for i in back if i['opacity'] > 0.02]}",
         )
         # An open drop-down takes over; once it has rolled back up the stroke comes back.
-        point('[data-nav-trigger="science"]')
+        drop = PANELS[-1]
+        point(f'[data-nav-trigger="{drop}"]')
         page.wait_for_timeout(700)
         opened = page.evaluate(INKS)
-        was_open = is_open(page, "science")
+        was_open = is_open(page, drop)
         y0 = page.evaluate("scrollY")
         page.keyboard.press("Escape")
         page.wait_for_timeout(300)
         y1 = page.evaluate("scrollY")
         check(
             "desk: Escape hands focus back to the button without moving the page (scrolled)",
-            abs(y1 - y0) <= 1 and page.evaluate("document.activeElement?.dataset.navTrigger") == "science",
+            abs(y1 - y0) <= 1 and page.evaluate("document.activeElement?.dataset.navTrigger") == drop,
             f"scrollY {y0} -> {y1}",
         )
         page.mouse.move(768, 896)
@@ -2839,7 +3011,7 @@ def round10(browser, playwright):
         tab_rings(page, f"{tag} scrolled:", rings, 10)
         scroll_to(page, 0)
         page.mouse.move(w / 2, h - 4)
-        for panel, last in (("products", "Science"), ("science", "BiGH home")):
+        for panel, last in (("products", "Science"), ("science", "BiGH home"))[: len(PANELS)]:
             page.locator(f'[data-nav-trigger="{panel}"]').focus()
             page.keyboard.press("Enter")
             page.wait_for_timeout(1300)
@@ -2871,7 +3043,7 @@ def round10(browser, playwright):
         page.keyboard.press("Enter")
         page.wait_for_timeout(1400)
         nothing_small(page, f"{tag} open")
-        for part in ("products", "science"):
+        for part in PANELS:
             unfold(page, part)
             nothing_small(page, f"{tag} {part.capitalize()}")
         sheet_end(page)
@@ -2890,7 +3062,23 @@ def round10(browser, playwright):
     # A short phone, scrolled down through Products to Science at the window's foot: pressing it
     # folds Products away above it. The menu's own scroll used to carry Science up and out of the
     # window (focus left on a word above it, the visitor in the middle of its rows); the word pressed
-    # stays in the window, under the bar, on every frame and at the end.
+    # stays in the window, under the bar, on every frame and at the end. (Only with Science's
+    # drop-down: without it no word below a fold folds anything.)
+    if SCIENCE_MENU:
+        held_word(browser)
+
+    languages_r10(browser)
+
+    bad = [f"{name}: {why}" for name, why in rings if why]
+    check(
+        "focus rings: every control of the bar, its drop-downs and the menu (phone, short phone, tablet) "
+        "shows a whole 2px ink ring, inside the window, clear of the mark, the rule and the brush marks, round the picker's globe",
+        len(rings) >= (80 if SCIENCE_MENU else 70) and not bad,
+        f"{len(rings)} stops; " + ("; ".join(bad[:6]) if bad else "all whole"),
+    )
+
+
+def held_word(browser):
     page = browser.new_page(viewport={"width": 360, "height": 640}, is_mobile=True, has_touch=True, device_scale_factor=2)
     watch(page)
     page.goto(URL, wait_until="networkidle")
@@ -2930,9 +3118,11 @@ def round10(browser, playwright):
         "; ".join(f"Science {foot}px over the foot: {n} frames, ends at {end}px" + (f", out at {out}" if out else "") for foot, n, end, out in results_at),
     )
 
-    # Every language: the bar over the opening and scrolled, both drop-downs at the narrowest
-    # desktop, and the menu (its folds and its foot) on a phone. Two-character words (帮助, 登录,
-    # 소개) are about 40px wide; their targets reach out to 48px.
+
+def languages_r10(browser):
+    """Every language: the bar over the opening and scrolled, its drop-downs at the narrowest
+    desktop, and the menu (its folds and its foot) on a phone. Two-character words (帮助, 登录,
+    소개) are about 40px wide; their targets reach out to 48px."""
     for loc in ("cns", "kr", "vn", "jp"):
         page = browser.new_page(viewport={"width": 1101, "height": 800})
         watch(page)
@@ -2940,7 +3130,7 @@ def round10(browser, playwright):
         page.wait_for_timeout(2500)
         warm(page)
         nothing_small(page, f"r10 {loc} 1101x800 over the opening")
-        for panel in ("products", "science"):
+        for panel in PANELS:
             page.locator(f'[data-nav-trigger="{panel}"]').click()
             page.wait_for_timeout(1300)
             nothing_small(page, f"r10 {loc} 1101x800 {panel.capitalize()}")
@@ -2954,26 +3144,20 @@ def round10(browser, playwright):
         page.wait_for_timeout(2000)
         page.locator("[data-nav-menu-button]").click()
         page.wait_for_timeout(1400)
-        for part in ("products", "science"):
+        for part in PANELS:
             unfold(page, part)
             nothing_small(page, f"r10 {loc} 390x844 menu {part.capitalize()}")
         sheet_end(page)
         nothing_small(page, f"r10 {loc} 390x844 menu foot")
         page.close()
 
-    bad = [f"{name}: {why}" for name, why in rings if why]
-    check(
-        "focus rings: every control of the bar, both drop-downs and the menu (phone, short phone, tablet) "
-        "shows a whole 2px ink ring, inside the window, clear of the mark, the rule and the brush marks, round the picker's globe",
-        len(rings) >= 80 and not bad,
-        f"{len(rings)} stops; " + ("; ".join(bad[:6]) if bad else "all whole"),
-    )
-
 
 with sync_playwright() as p:
     browser = p.chromium.launch(args=["--use-angle=d3d11"])
     if ONLY in (None, "desk"):
         desktop(browser)
+        if not SCIENCE_MENU:
+            science_link(browser)
         rule_checks(browser)
         reading_stroke(browser)
         drop_down_motion(browser)

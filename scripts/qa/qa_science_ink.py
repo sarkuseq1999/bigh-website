@@ -93,8 +93,9 @@ def bring(page, selector, top=140):
 
 
 # The shared pieces' title face: the footer's promise ("Stay sharp. Live fully.") and the menu
-# bar's Science drop-down title (in the page at every width, shown or not).
-SHARED_FACES = """() => ['[data-brush="footer-promise"] p', '[data-nav-panel="science"] h2']
+# bar's drop-down title (Products'; Science's drop-down is put away, Mo, October 26, 2026; in the
+# page at every width, shown or not).
+SHARED_FACES = """() => ['[data-brush="footer-promise"] p', '[data-nav-panel="products"] h2']
   .map(s => { const e = document.querySelector(s); return e ? getComputedStyle(e).fontFamily : null; })"""
 
 
@@ -111,7 +112,7 @@ def shell(browser):
             check(f"shell {w}: {name} in the same face as on About", here is not None and here == there and "ysabeau" not in here.lower(), f"{here} | About: {there}")
         check(f"shell {w}: 200", response is not None and response.status == 200)
         check(f"shell {w}: ink look", page.locator('[data-look="ink"][data-page="science"]').count() == 1)
-        check(f"shell {w}: Science carries the menu's stroke", page.locator('[data-nav-trigger="science"][data-ink="here"]').count() == 1)
+        check(f"shell {w}: Science carries the menu's stroke", page.locator('#site-navigation a[href$="/science"][data-ink="here"]').count() == 1)
         h1 = page.locator("h1")
         check(f"shell {w}: one h1, the title", h1.count() == 1 and "Meet the scientists" in h1.inner_text(), h1.first.inner_text() if h1.count() else "")
         ids = page.evaluate("() => [...document.querySelectorAll('main > section[id]')].map(s => s.id)")

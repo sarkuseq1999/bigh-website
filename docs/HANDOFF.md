@@ -5,9 +5,24 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 25, 2026, by Claude Code (homepage science on phones: the short-drag
-  fix is live).
+- **Last updated:** October 26, 2026, by Claude Code (menu bar: Science is a plain link; local,
+  not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): Science is a plain link in the menu bar** (Mo: the Science page
+  is one page, and the drop-down's four doors into it made the site look short of content; keep
+  the design for later). On the bar and in the phone's menu Science goes straight to `/science`,
+  like About and Support; on the Science page its word carries the painted stroke. The drop-down
+  is switched off, not deleted: `navScienceMenu` in `src/components/ink/nav/nav-data.ts`, and
+  `SCIENCE_MENU` in `scripts/qa/qa_nav.py` (its drop-down checks skip; new Science-link checks
+  run). `qa_home_ink`, `qa_science_ink`, `qa_about` and `home_snapshot.py` now expect the plain
+  link. Built site (`npm run build` + `next start`): `qa_nav` 315/316, `qa_home_ink` 282/282,
+  `qa_science_ink` 1279/1279, `qa_about` 353/353 (dev: `qa_nav` 315/316); lint and type-check
+  clean. Mo's before/after page: https://claude.ai/artifact/DEE11nzfSvHRMeSgmFFfCC. The one
+  failure is old, newly checked: on an upright tablet,
+  folding Products away, the menu's crane stays put for most of the fold and then grows in its
+  last ~0.1s (834x1112: 176 -> 230px, steps up to 13.4px a frame; 768x1024: 130 -> 230px in six
+  frames, up to 25px a frame). Same code as before; with Science's fold gone, folding Products is
+  now the tablet menu's only fold, so it is seen more. Not fixed (Mo to decide). Not pushed.
 - **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics

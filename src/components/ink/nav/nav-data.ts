@@ -24,6 +24,12 @@ export const navProductsIntro = {
   allLink: "/#products",
 };
 
+/** Science's drop-down is put away for now (Mo, October 26, 2026): the Science page is one page,
+ *  and four doors into it made it look thin. Science is a plain link to the page, on the bar and in
+ *  the phone's menu, like About and Support. The drop-down (below) is kept as it was: set this to
+ *  true to bring it back once the page has more to show. */
+export const navScienceMenu = false;
+
 /** The Science page's four parts (the footer's Science column), each with its picture and its
  *  place on the Science page. Dr. Liu's is his real photograph (a print, never
  *  multiplied); the others are ink paintings with their paper divided out. `plate` names how the

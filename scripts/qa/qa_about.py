@@ -551,18 +551,22 @@ def nav_locales(browser):
             links["current"] == [f"/{locale}/about"] and links["menuCurrent"] == [f"/{locale}/about"],
             links,
         )
-        # Clicks: the first product, "Explore our products.", a Science part, and the mark.
+        # Clicks: the first product, "Explore our products.", Science (a plain link while its
+        # drop-down is put away, Mo, October 26, 2026), and the mark.
         for trigger, pick, want in [
             ("products", "first", f"/{locale}/products/nuricell"),
             ("products", "last", f"/{locale}#products"),
-            ("science", "nth1", f"/{locale}/science#health"),
+            ("science", None, f"/{locale}/science"),
         ]:
             page.goto(f"{BASE}/{locale}/about", wait_until="networkidle", timeout=120000)
-            page.click(f'[data-nav-trigger="{trigger}"]')
-            page.wait_for_timeout(1200)
-            items = page.locator(f'[data-nav-panel="{trigger}"] a')
-            item = items.first if pick == "first" else items.last if pick == "last" else items.nth(1)
-            item.click()
+            if pick is None:
+                page.click(f'#site-navigation [class*="__links"] > a[href="/{locale}/{trigger}"]')
+            else:
+                page.click(f'[data-nav-trigger="{trigger}"]')
+                page.wait_for_timeout(1200)
+                items = page.locator(f'[data-nav-panel="{trigger}"] a')
+                item = items.first if pick == "first" else items.last
+                item.click()
             page.wait_for_url(f"**{want}", timeout=30000)
             if want.endswith("#products"):
                 # The language's homepage, scrolled to its products section.
