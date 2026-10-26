@@ -69,6 +69,19 @@ These sit on top of `DESIGN.md`.
   ingredients, the books running in from the page edge, Dr. Liu right, the brushed 3 × 30 = 90
   across the page, the bottle left. Phones keep one column. NuriCell only for now
   (`nuricell.module.css`); the other four product pages still put every painting on the left.
+- **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
+  October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
+  grey "What's inside" label odd and the three grey notes under the plate messy, and the
+  "Why these four work together" columns dull. The gold leaf now rises out of the powder and
+  settles where it is painted, then each flake keeps turning slowly, catching the light like
+  real gold leaf (picked over a never-ending updraft). The label is gone (the heading says it);
+  "per serving of 3 capsules" sits right under the heading (the heading says "every capsule",
+  the amounts are for 3); the other ingredients are one label card; the research note is said
+  once, at the chapter's end. The pairs are three little scenes: each pair's two powder heaps
+  from the painting and its gold doing what the pair does together (lit, kept in reserve, two
+  halves made one), picked over a scroll story and a pick-a-partner game. NuriCell only
+  (`nuricell-leaf.tsx`, `nuricell-scenes.tsx`; pictures `build_nuricell_gold.py`). Mockups:
+  `reference/ink-pages/mockups/nuricell-inside/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. She picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

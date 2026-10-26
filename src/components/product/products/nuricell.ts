@@ -84,6 +84,11 @@ const nuricell: ProductPage = {
   ],
   otherIngredients:
     "Other ingredients: rice flour, silicon dioxide and magnesium stearate. Capsule: hypromellose and titanium dioxide.",
+  // The ink page shows the same two lines as a card (Mo picked the tidier chapter, October 26, 2026).
+  labelCard: [
+    { term: "Other ingredients", value: "Rice flour, silicon dioxide and magnesium stearate" },
+    { term: "Capsule", value: "Hypromellose and titanium dioxide" },
+  ],
   studies: studies([
     "11854529/",
     "11854487/",
@@ -157,12 +162,15 @@ const nuricell: ProductPage = {
   // as an acetyl donor for acetylcholine (review, Expert Rev Neurother 2013).
   synergy: {
     title: "Why these four work together",
-    note: "How each nutrient works in the body in general, and what researchers have studied. Not a study of NuriCell itself.",
+    // Said once, at the chapter's end, for the ingredients and the pairs (it took in notes.science on
+    // the ink page, October 26, 2026).
+    note: "How each nutrient works in the body in general, and what researchers have studied. Ingredient research does not establish the effects of NuriCell itself.",
     links: [
       {
         from: "alcar",
         to: "ala",
         title: "Fuel in, energy out",
+        gold: "lights",
         line: "Acetyl-L-carnitine carries fuel into your mitochondria. Alpha-lipoic acid helps turn it into energy, and helps clear the wear that making energy leaves behind.",
         evidence:
           "In Dr. Liu’s 2002 animal studies, the two together did more than either one alone.",
@@ -171,12 +179,14 @@ const nuricell: ProductPage = {
         from: "ala",
         to: "creatine",
         title: "Energy on hand",
+        gold: "stores",
         line: "Creatine keeps some of that energy in reserve, ready for the moments your brain and muscles need it fast.",
       },
       {
         from: "choline",
         to: "alcar",
         title: "Two halves of a messenger",
+        gold: "joins",
         line: "Your body joins choline with an acetyl group, which acetyl-L-carnitine can supply, to make acetylcholine, a messenger between nerve cells.",
       },
     ],

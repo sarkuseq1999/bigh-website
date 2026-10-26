@@ -4,7 +4,7 @@ docs/superpowers/plans/2026-10-09-nuricell-ink.md).
 
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Products, one h1 (the name), the real bottle,
-              no canvas, no console errors (1440x900, 390x844)
+              no canvas but the moving gold leaf's, no console errors (1440x900, 390x844)
   opening     no line over the name and no pool under the bottle (Mo, October 10); the bottle's middle
               on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word on a phone or
               tablet; each half on one line in every language
@@ -28,6 +28,14 @@ Sections (all, or --only=a,b):
               words, the lantern's fetched width, one line per Why sentence (320-1536), the phone
               lantern with its heading in view, the opening in 1440x900, Add to cart's width
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
+  plate       What's inside tidied (Mo picked 1A, October 26, 2026): no label over the heading, the
+              amounts' "per serving" line between the heading and the rows, the label card
+  gold        its gold leaf: still where nothing moves (reduced motion), and moving: it rises from the
+              powder (little gold at first, low down), settles as painted (about the painted leaf's
+              gold), then keeps turning (two frames differ)
+  scenes      the pairs as three scenes: heaps loaded, three across from 900px and stacked below; each
+              scene's gold where its pair puts it, under the title; Play again plays it again; reduced
+              motion: the last frame, still, no Play again
 Pictures: scripts/qa/out/nuricell-ink/.
 
 usage: python -X utf8 scripts/qa/qa_nuricell_ink.py [base-url] [--only=shell,others,...]
@@ -166,7 +174,8 @@ def shell(browser):
             page.get_by_role("region", name="NuriCell", exact=True).count() == 1,
         )
         check(f"{tag}: the real bottle", page.locator('[data-chapter="overview"] img[src*="nuricell.png"]').count() >= 1)
-        check(f"{tag}: no canvas", page.locator("canvas").count() == 0)
+        # The one canvas is What's inside's moving gold leaf (October 26, 2026).
+        check(f"{tag}: no canvas but the gold leaf's", page.locator("canvas:not([data-leaf])").count() == 0)
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         # After the opening's words have settled (they arrive from a blur), not mid-way.
         page.wait_for_timeout(2500)
@@ -439,7 +448,11 @@ def nuricell_strings():
             if len(text) < 4 or text.startswith(("/", "#", "../", "./")) or re.fullmatch(r"[a-z0-9-]+/?", text):
                 continue
             keep.append(text)
-    return keep
+    # The ink page shows the label card (labelCard) in place of the otherIngredients sentence, and
+    # the pairs' note, which says it too, in place of notes.science (Mo picked the tidier What's
+    # inside, October 26, 2026); the template still uses both.
+    shown_elsewhere = [m.group(1) for m in re.finditer(r'\b(?:otherIngredients|science):\s*"((?:[^"\\]|\\.)*)"', source)]
+    return [text for text in keep if text not in shown_elsewhere]
 
 
 EXPECT = {
@@ -1102,6 +1115,179 @@ def languages(browser):
             sum_captions_whole(browser, locale, w, h)
 
 
+# What's inside, tidied, its gold moving and its pairs as scenes (Mo picked 1A, October 26, 2026;
+# mockups reference/ink-pages/mockups/nuricell-inside/).
+PLATE_GEOMETRY = """() => {
+  const c = document.querySelector('[data-chapter="inside"]');
+  const box = (e) => e && e.getBoundingClientRect();
+  const h2 = box(c.querySelector('h2'));
+  const cap = box(c.querySelector('caption'));
+  const rows = [...c.querySelectorAll('tbody tr')].map(box);
+  const card = c.querySelector('[data-label-card]');
+  return {
+    first: c.querySelector('[data-words]').firstElementChild.tagName,
+    label: [...c.querySelectorAll('p')].some((p) => p.textContent.trim() === 'What’s inside'),
+    caption: c.querySelector('caption').textContent.trim(),
+    between: cap.top >= h2.bottom - 1 && rows.every((r) => cap.bottom <= r.top + 1),
+    terms: card ? [...card.querySelectorAll('dt')].map((d) => d.textContent.trim()) : [],
+    values: card ? card.querySelectorAll('dd').length : 0,
+    cardBelow: card ? rows.every((r) => box(card).top >= r.bottom - 1) : false,
+    notes: [...c.querySelectorAll('p')].filter((p) => /^(Other ingredients:|Each line describes)/.test(p.textContent.trim())).length,
+  };
+}"""
+
+
+def plate(browser):
+    for w, h in [(1440, 900), (1024, 768), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        tag = f"plate {w}x{h}"
+        g = page.evaluate(PLATE_GEOMETRY)
+        check(f"{tag}: no label over the heading, the heading first", not g["label"] and g["first"] == "H2", f"{g['first']} label={g['label']}")
+        check(f"{tag}: the amounts' per-serving line between the heading and the rows", g["between"] and "3 capsules" in g["caption"], g["caption"])
+        check(f"{tag}: the label card, two lines, under the rows", g["terms"] == ["Other ingredients", "Capsule"] and g["values"] == 2 and g["cardBelow"], str(g["terms"]))
+        check(f"{tag}: the old notes under the plate are gone", g["notes"] == 0, str(g["notes"]))
+        ctx.close()
+
+
+# The gold the canvas holds: how many pixels, and how low their middle sits (0 top, 1 bottom).
+CANVAS_GOLD = """() => {
+  const c = document.querySelector('[data-leaf]');
+  const d = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+  let n = 0, y = 0;
+  for (let i = 3; i < d.length; i += 4) if (d[i] > 60) { n++; y += Math.floor((i >> 2) / c.width); }
+  return { n, y: n ? y / n / c.height : 0, w: c.width, h: c.height };
+}"""
+# The still leaf's gold drawn at the canvas's size: what the painting holds.
+STILL_GOLD = """async () => {
+  const c = document.querySelector('[data-leaf]');
+  const img = new Image();
+  img.src = document.querySelector('[data-gold-still]').currentSrc;
+  await img.decode();
+  const o = document.createElement('canvas'); o.width = c.width; o.height = c.height;
+  const x = o.getContext('2d'); x.drawImage(img, 0, 0, o.width, o.height);
+  const d = x.getImageData(0, 0, o.width, o.height).data;
+  let n = 0; for (let i = 3; i < d.length; i += 4) if (d[i] > 60) n++;
+  return n;
+}"""
+CANVAS_DIFF = """async () => {
+  const c = document.querySelector('[data-leaf]');
+  const a = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+  await new Promise((r) => setTimeout(r, 900));
+  const b = c.getContext('2d').getImageData(0, 0, c.width, c.height).data;
+  let n = 0; for (let i = 3; i < a.length; i += 4) if (Math.abs(a[i] - b[i]) > 60) n++;
+  return n;
+}"""
+
+
+def gold(browser):
+    for w, h in [(1440, 900), (390, 844)]:
+        tag = f"gold {w}x{h}"
+        ctx, page, _, errors = opened(browser, w, h, reduced=True)
+        still = page.evaluate(
+            """() => { const s = document.querySelector('[data-gold-still]');
+                return { canvas: !!document.querySelector('[data-leaf]'), shown: getComputedStyle(s).visibility, w: s.naturalWidth }; }"""
+        )
+        check(f"{tag} reduced motion: the leaf as painted, nothing moving", not still["canvas"] and still["shown"] == "visible" and still["w"] > 0, str(still))
+        ctx.close()
+        ctx, page, _, errors = opened(browser, w, h)
+        bring(page, '[data-chapter="inside"] figure[data-picture]', 140 if w >= 960 else 100)
+        page.wait_for_timeout(700)
+        early = page.evaluate(CANVAS_GOLD)
+        page.wait_for_timeout(7300)
+        late = page.evaluate(CANVAS_GOLD)
+        painted = page.evaluate(STILL_GOLD)
+        hidden = page.locator('[data-gold-still="moving"]').count() == 1
+        moving = page.evaluate(CANVAS_DIFF)
+        check(f"{tag}: the still leaf gives way to the moving one", hidden)
+        check(
+            f"{tag}: it rises from the powder: little gold at first, low down",
+            early["n"] < late["n"] * 0.5 and (early["n"] == 0 or early["y"] > late["y"]),
+            f"{early['n']} at {early['y']:.2f} -> {late['n']} at {late['y']:.2f}",
+        )
+        ratio = late["n"] / painted if painted else 0
+        check(f"{tag}: settled, about the painted leaf's gold", 0.7 <= ratio <= 1.3, f"{late['n']} of {painted} ({ratio:.2f})")
+        check(f"{tag}: then it keeps turning", moving > 20, f"{moving} pixels changed in 0.9s")
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:2]))
+        page.screenshot(path=str(OUT / f"gold-{w}.png"))
+        ctx.close()
+
+
+SCENES = """() => [...document.querySelectorAll('[data-scene]')].map((s) => {
+  const box = (e) => e.getBoundingClientRect();
+  const heaps = [...s.querySelectorAll('[data-heap] img')];
+  const flakes = [...s.querySelectorAll('span[style*="background-image"]')]
+    .filter((f) => Number(getComputedStyle(f).opacity) > 0.5).map(box);
+  const title = box(document.querySelector('[data-synergy] h3'));
+  const [a, b] = heaps.map(box);
+  const mid = (r) => r.left + r.width / 2;
+  return {
+    kind: s.dataset.scene,
+    top: Math.round(box(s).top),
+    bottom: Math.round(box(s).bottom),
+    heaps: heaps.length === 2 && heaps.every((i) => i.complete && i.naturalWidth > 0),
+    flakes: flakes.length,
+    underTitle: flakes.every((f) => f.top >= title.bottom - 1),
+    overB: flakes.some((f) => mid(f) >= b.left && mid(f) <= b.right),
+    onB: flakes.filter((f) => mid(f) >= b.left && mid(f) <= b.right && f.top >= b.top - 4).length,
+    between: flakes.some((f) => mid(f) > Math.min(mid(a), mid(b)) && mid(f) < Math.max(mid(a), mid(b))),
+    again: !!s.querySelector('button'),
+  };
+})"""
+
+
+def scenes_ok(got):
+    by = {g["kind"]: g for g in got}
+    return by["lights"]["overB"] and by["stores"]["onB"] >= 4 and by["joins"]["between"]
+
+
+def scenes(browser):
+    for w, h in [(1440, 900), (390, 844)]:
+        tag = f"scenes {w}x{h}"
+        across = w >= 900
+        ctx, page, _, errors = opened(browser, w, h)
+        n = page.locator("[data-scene]").count()
+        for i in range(n):
+            # Each scene plays as it comes into view (three across: one after another).
+            page.evaluate(f"window.scrollBy(0, document.querySelectorAll('[data-scene]')[{i}].getBoundingClientRect().top - 160)")
+            page.wait_for_timeout(600 if across else 6500)
+        if across:
+            page.wait_for_timeout(6500)
+            page.evaluate("window.scrollBy(0, document.querySelector('[data-synergy]').getBoundingClientRect().top - 110)")
+            page.wait_for_timeout(300)
+        got = page.evaluate(SCENES)
+        kinds = [g["kind"] for g in got]
+        check(f"{tag}: three scenes, lights, stores, joins", kinds == ["lights", "stores", "joins"], str(kinds))
+        check(f"{tag}: every scene's two heaps loaded", all(g["heaps"] for g in got))
+        tops = [g["top"] for g in got]
+        laid = max(tops) - min(tops) <= 2 if across else all(got[i + 1]["top"] >= got[i]["bottom"] for i in range(len(got) - 1))
+        check(f"{tag}: {'three across' if across else 'one under another'}", laid, str(tops))
+        if across:
+            for g in got:
+                check(f"{tag} {g['kind']}: its gold shows, under the heading", g["flakes"] >= 1 and g["underTitle"], f"{g['flakes']} flakes")
+        by = {g["kind"]: g for g in got}
+        check(f"{tag} lights: the lit leaf over the second heap", by["lights"]["overB"])
+        check(f"{tag} stores: flecks settled on the second heap", by["stores"]["onB"] >= 4, str(by["stores"]["onB"]))
+        check(f"{tag} joins: one leaf between the two heaps", by["joins"]["between"])
+        check(f"{tag}: Play again on each scene", all(g["again"] for g in got))
+        page.screenshot(path=str(OUT / f"scenes-{w}.png"))
+        # Play again: the scene starts over (its gold leaves the second heap and rises again).
+        first = page.locator("[data-scene] button").first
+        first.scroll_into_view_if_needed()
+        first.click()
+        page.wait_for_timeout(250)
+        again = page.evaluate(SCENES)[0]
+        check(f"{tag}: Play again starts the scene over", again["flakes"] == 0 or not again["overB"], f"{again['flakes']} flakes")
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:2]))
+        ctx.close()
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        for i in range(3):
+            page.evaluate(f"window.scrollBy(0, document.querySelectorAll('[data-scene]')[{i}].getBoundingClientRect().top - 160)")
+            page.wait_for_timeout(300)
+        got = page.evaluate(SCENES)
+        check(f"{tag} reduced motion: each scene's last frame, still", all(g["flakes"] >= 1 for g in got) and scenes_ok(got), str([g["flakes"] for g in got]))
+        check(f"{tag} reduced motion: no Play again", not any(g["again"] for g in got))
+        ctx.close()
+
 SECTIONS = {
     "shell": shell,
     "others": others,
@@ -1118,6 +1304,9 @@ SECTIONS = {
     "polish": polish,
     "opening": opening_check,
     "languages": languages,
+    "plate": plate,
+    "gold": gold,
+    "scenes": scenes,
 }
 
 if __name__ == "__main__":

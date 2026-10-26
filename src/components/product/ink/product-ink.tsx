@@ -38,7 +38,7 @@ export function ProductInkPage({ product }: { product: InkProduct }) {
         <div data-product-ink={product.slug}>
           {isPropolis ? <PropolisOpening product={product} /> : <Opening product={product} />}
           <Why product={product} motion={motion} />
-          <Inside product={product} />
+          <Inside product={product} motion={motion} />
           {product.studies.length > 0 ? <Research product={product} /> : null}
           {product.people.length > 0 ? <People product={product} /> : null}
           <Daily product={product} />

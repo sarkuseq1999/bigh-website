@@ -175,6 +175,11 @@ export type ProductPage = ProductSummary & {
   why?: ProductWhy;
   ingredients: ProductIngredient[];
   otherIngredients: string;
+  /**
+   * The ink page's "Also on the label" card (NuriCell, October 26, 2026): the label's other lines
+   * as term and value, shown there in place of the `otherIngredients` sentence.
+   */
+  labelCard?: { term: string; value: string }[];
   studies: ProductStudy[];
   /** The research chapter's heading when "The research on the ingredients" is not true of every
    *  study (Nature Calm leads with its scientists' own research on stress). */
@@ -204,6 +209,12 @@ export type ProductSynergyLink = {
   line: string;
   /** A short, sourced research note, e.g. what a study of the pair found. */
   evidence?: string;
+  /**
+   * What the gold does in the pair's scene on the ink page (NuriCell, October 26, 2026): `lights`
+   * (carried from one heap to the other, lit there), `stores` (settles on the second heap, kept in
+   * reserve) or `joins` (half from each heap, made one).
+   */
+  gold?: "lights" | "stores" | "joins";
 };
 
 export type ProductSynergy = { title: string; note: string; links: ProductSynergyLink[] };

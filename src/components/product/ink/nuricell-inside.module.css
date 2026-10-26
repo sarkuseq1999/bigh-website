@@ -1,0 +1,230 @@
+/* NuriCell's What's inside, tidied, its gold moving and its pairs as scenes (Mo picked 1A, October
+   26, 2026; mockups reference/ink-pages/mockups/nuricell-inside/). Every rule names two classes or
+   an element and a class, so it outranks the kit's .look rules (0,2,0) and the template's .page
+   rules in either stylesheet order (the built site orders CSS differently from dev). Nothing here
+   makes a stacking context between the figure and the page root: the figure is its painting's blend
+   group (product-ink.module.css). */
+
+/* The leaf over the painting: the still layer (no script, reduced motion) and the canvas that
+   moves it. Both lie exactly on the painting. */
+.goldStill.goldStill,
+.leaf.leaf {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.goldStill[data-gold-still="moving"] {
+  visibility: hidden;
+}
+
+/* The card of the label's other lines: the plate's one boxed thing, like the label on a pressed
+   plant's sheet. */
+.labelCard.labelCard {
+  justify-self: center;
+  width: min(100%, 620px);
+  margin: clamp(20px, 2.4vw, 32px) auto 0;
+  padding: 16px 20px 18px;
+  border: 1px solid var(--hair);
+}
+
+.labelCard p.cardTitle {
+  margin: 0 0 10px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.labelCard dl {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 6px 20px;
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.labelCard dt {
+  color: var(--muted);
+}
+
+.labelCard dd {
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .labelCard dl {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+
+  .labelCard dd + dt {
+    margin-top: 10px;
+  }
+}
+
+/* The pairs: three scenes across from 900px, one under another on phones. */
+.scenes.scenes {
+  display: grid;
+  gap: clamp(20px, 2.4vw, 32px);
+  margin-top: clamp(48px, 6vw, 96px);
+}
+
+.scenes h3.scenesTitle {
+  margin: 0;
+  font-size: clamp(30px, 2.8vw, 40px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.scenes ul.sceneList {
+  display: grid;
+  gap: 56px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 900px) {
+  .scenes ul.sceneList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(24px, 3vw, 48px);
+  }
+}
+
+.scenes .scene {
+  display: grid;
+  align-content: start;
+  min-width: 0;
+}
+
+/* The scene: its two heaps along the bottom, open air above them for the gold. The heaps are drawn
+   at a share of their cut-out size (--heap: the cut-outs are from the full-size painting), so they
+   keep their sizes by amount: the 400 mg heap about 140px wide. */
+.scenes .stage {
+  --heap: 0.44;
+  position: relative;
+  height: 260px;
+  cursor: pointer;
+}
+
+@media (min-width: 900px) {
+  .scenes .stage {
+    --heap: 0.42;
+    height: 260px;
+  }
+}
+
+.scenes .duo {
+  position: absolute;
+  right: 0;
+  bottom: 6px;
+  left: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-around;
+}
+
+.scenes .who {
+  display: grid;
+  justify-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.scenes .who img {
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+.scenes .whoName {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.scenes .plus {
+  padding-bottom: 36px;
+  color: var(--muted);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.scenes .layer {
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  pointer-events: none;
+  perspective: 600px;
+}
+
+/* One flake, cut from the leaf sheet (nuricell-scenes.tsx sizes it); hidden until it moves. */
+.scenes .flake {
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+
+.scenes p.foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  margin: 0;
+}
+
+.scenes button.again {
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--muted);
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--hair);
+  text-underline-offset: 4px;
+  cursor: pointer;
+}
+
+.scenes button.again:hover {
+  color: var(--ink);
+}
+
+.scenes h4.title {
+  margin: 8px 0 8px;
+  font-size: clamp(22px, 2vw, 27px);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.scenes p.line {
+  margin: 0;
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+.scenes p.evidence {
+  margin: 10px 0 0;
+  color: var(--gold-ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.scenes p.note {
+  justify-self: center;
+  max-width: 46em;
+  margin: clamp(8px, 1.6vw, 24px) 0 0;
+  text-align: center;
+  text-wrap: balance;
+}
