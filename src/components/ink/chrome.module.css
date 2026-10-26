@@ -12,19 +12,18 @@
 }
 
 /* The promise at the left, centred on the links' height; the links at the right; under them all
-   the copyright line and "Back to top" (clear of the closing brush stroke), the FDA statement
-   under its brush line, across the whole width, and the preview note. No hairline over it (Mo,
-   October 13, 2026: fewer lines; the paper divides it from the page). One column: promise, links,
-   the legal line, the statement, the note. */
+   the FDA statement on its park sign (clear of the closing brush stroke), across the whole width,
+   then the copyright line and "Back to top", the page's very last line (Mo, October 26, 2026: no
+   preview note under the sign). No hairline over it (Mo, October 13, 2026: fewer lines; the paper
+   divides it from the page). One column: promise, links, the statement, the legal line. */
 .footerTop {
   display: grid;
   grid-template-columns: 1.1fr 1.4fr;
-  grid-template-rows: auto auto auto auto;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
     "promise columns"
-    "legal legal"
     "fda fda"
-    "note note";
+    "legal legal";
   gap: 0 48px;
   max-width: var(--wide);
   margin: 0 auto;
@@ -135,12 +134,14 @@
   text-underline-offset: 5px;
 }
 
-/* The legal line, under the closing stroke (its 44 px targets are the line). */
+/* The legal line, the page's last, under the sign: the copyright at the left, "Back to top" at
+   the right (its 44 px targets are the line). */
 .footerBottom {
   grid-area: legal;
   display: flex;
-  margin-top: clamp(36px, 3vw, 52px);
+  margin-top: clamp(16px, 1.6vw, 28px);
   flex-wrap: wrap;
+  justify-content: space-between;
   align-items: center;
   gap: 0 32px;
   font-size: 15px;
@@ -153,19 +154,11 @@
   min-height: 44px;
 }
 
-/* The FDA statement on its trail sign (fda-statement.tsx), centred under it all. */
+/* The FDA statement on its park sign (fda-statement.tsx), centred under it all, clear of the
+   closing brush stroke. */
 .footer .footerFda {
   grid-area: fda;
-  margin-top: clamp(28px, 2.4vw, 40px);
-}
-
-/* The preview note, the page's last line, under the statement (15 px, the site's smallest type:
-   two classes, so it is not left to the stylesheets' order as the single-class rule was). */
-.footer .footerNote {
-  grid-area: note;
-  margin: 8px 0 0;
-  color: var(--footer-muted, var(--muted));
-  font-size: 15px;
+  margin-top: clamp(48px, 4vw, 72px);
 }
 
 /* Short desktop windows (1280 x 800, 1366 x 768, 1440 x 700): the park sign draws smaller, its
@@ -192,9 +185,8 @@
     grid-template-areas:
       "promise"
       "columns"
-      "legal"
       "fda"
-      "note";
+      "legal";
     gap: 40px;
   }
 
@@ -203,20 +195,13 @@
     margin-bottom: 16px;
   }
 
-  .footerBottom {
-    margin-top: 0;
-  }
-
   .footer .footerFda {
     margin-top: 0;
   }
 
   /* Under the statement, closer than the grid's gap. */
-  .footer .footerNote {
-    margin: -20px 0 0;
-  }
-
   .footerBottom {
+    margin-top: -16px;
     gap: 4px 32px;
   }
 }
@@ -247,5 +232,12 @@
   /* The third list stands alone on its row: it takes the row, so its links stay on one line. */
   .footerColumns > :nth-child(3):last-child {
     grid-column: 1 / -1;
+  }
+
+  /* The two cannot share a phone's line: "Back to top" goes first, so the copyright stays the
+     page's very last line. */
+  .footerBottom {
+    flex-direction: column-reverse;
+    align-items: flex-start;
   }
 }

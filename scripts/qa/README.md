@@ -68,7 +68,7 @@ product's expected words and numbers are in the script's `PRODUCTS` table.
   sign's picture as the paragraph's border (the phone one on a phone) loading and really painted
   (pixels, the dark Science footer too), every line inside the sign's face, cream at 4.5:1 or more
   against the painted face (pixels), two lines on a 1280+ window; in the ink footer the sign under
-  the copyright line and the preview note last; the last screen still shows the crane and the
+  the links and the copyright line last, no preview note; the last screen still shows the crane and the
   promise at eight laptop sizes; the old-template product pages and another language too.
   Pictures in `out/fda/`.
 

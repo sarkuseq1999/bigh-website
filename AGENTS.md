@@ -97,6 +97,11 @@ These sit on top of `DESIGN.md`.
   border and cream letters, sage grass and the poppy, painted loosely with no pen outlines. Keep
   its brown muted (ink, not orange) and its letters at 4.5:1 or more. Mockups:
   `reference/ink-pages/mockups/fda-sign/`.
+- **Footer: the copyright line comes last (Mo, October 26, 2026).** "© 2026 BiGH. Be in Good
+  Health." and "Back to top" are the page's very last line, under the park sign (© left, Back to
+  top right; on phones Back to top above, © last). The grey preview note that sat under the sign
+  ("Educational content is for general information…") is gone; the product window still says
+  ordering is not open.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park

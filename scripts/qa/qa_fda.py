@@ -2,12 +2,13 @@
 park sign, Mo's pick, October 19, 2026, after the trail sign "I" of October 13; ink/fda-statement.tsx).
 
 On the ink pages (home, About, NuriCell) and the Science page: one statement, in the footer, the
-exact words as real text, in Zilla Slab (loaded), 600, 15 px or more (the preview note too); the
+exact words as real text, in Zilla Slab (loaded), 600, 15 px or more; the
 sign's picture drawn as the paragraph's border (fda-sign-redwood-v1.webp, the same picture on a
 phone), loading, and really painted (brown wood in the pixels); every line of the words inside the
 sign's face; cream letters at 4.5:1 or more against the painted face (measured from the pixels);
 two lines on a 1280+ window, centred; no sideways scroll; no hairline in the footer. The ink footer (no logo since the footer-crane redesign): the sign
-under the copyright line, centred, and the preview note last, under it, at every width. The last
+under the links, centred, and the copyright line last, under it, at every width; no preview note
+(Mo, October 26, 2026). The last
 screen still shows the whole promise and crane at rest clear of the menu bar at eight laptop sizes
 (home, About, NuriCell). The words appear once per page (NuriCell does not repeat them above the
 footer), also on the four old-template product pages and in another language.
@@ -79,6 +80,7 @@ GEOMETRY = """(() => {
   const footer = sign?.closest('footer');
   const note = [...(footer?.querySelectorAll('p') || [])].find(e => e.textContent.startsWith('Educational content'));
   const legal = [...(footer?.querySelectorAll('span') || [])].find(e => e.textContent.startsWith('©'));
+  const links = footer?.querySelector('h2')?.parentElement?.parentElement;
   const logo = footer?.querySelector('a[aria-label] img, img[alt=BiGH]');
   const grid = sign?.parentElement;
   const px = (v) => parseFloat(v) || 0;
@@ -99,8 +101,7 @@ GEOMETRY = """(() => {
                              Math.max(...glyphs.map(b => b.right)), Math.max(...glyphs.map(b => b.bottom))] : null,
     reach: p ? [-px(getComputedStyle(p.firstElementChild).marginLeft), -px(getComputedStyle(p.firstElementChild).marginRight)] : null,
     hairline: grid ? px(getComputedStyle(grid).borderTopWidth) + px(getComputedStyle(grid).borderBottomWidth) : -1,
-    noteSize: note ? px(getComputedStyle(note).fontSize) : 0,
-    sign: r(p), footer: r(footer), note: r(note), legal: r(legal), logo: r(logo), grid: r(grid),
+    sign: r(p), footer: r(footer), note: r(note), legal: r(legal), legalRow: r(legal?.parentElement), links: r(links), logo: r(logo), grid: r(grid),
     mentions: document.body.innerText.split('Food and Drug Administration').length - 1,
     sideways: document.documentElement.scrollWidth - innerWidth,
   };
@@ -161,9 +162,9 @@ def run_sign(browser):
                 context.close()
                 continue
             check(
-                f"{tag}: Zilla Slab, loaded, 600, 15 px or more (the preview note too)",
-                "Zilla Slab" in g["family"] and g["loaded"] and g["weight"] >= 600 and g["size"] >= 15 and g["noteSize"] >= 15,
-                f"{g['family'][:30]}, loaded {g['loaded']}, {g['weight']}, {g['size']} px, note {g['noteSize']} px",
+                f"{tag}: Zilla Slab, loaded, 600, 15 px or more",
+                "Zilla Slab" in g["family"] and g["loaded"] and g["weight"] >= 600 and g["size"] >= 15,
+                f"{g['family'][:30]}, loaded {g['loaded']}, {g['weight']}, {g['size']} px",
             )
             want = "fda-sign-redwood-v1.webp"
             loaded = any(st == 200 and want in u for st, u in signs)
@@ -199,17 +200,19 @@ def run_sign(browser):
             check(f"{tag}: no sideways scroll", g["sideways"] <= 0, f"{g['sideways']} px")
             check(f"{tag}: no hairline in the footer's second tier", g["hairline"] == 0, f"{g['hairline']} px")
             if name in INK:
-                note, legal, sign, foot, grid = g["note"], g["legal"], g["sign"], g["footer"], g["grid"]
+                legal, row, links, sign, foot, grid = g["legal"], g["legalRow"], g["links"], g["sign"], g["footer"], g["grid"]
                 check(
-                    f"{tag}: the sign under the copyright line, centred; the preview note last, under it",
-                    note and legal
-                    and sign[1] >= legal[3]
+                    f"{tag}: the sign under the links, centred; the copyright line last, under it",
+                    legal and links
+                    and sign[1] >= links[3]
                     and abs((sign[0] + sign[2]) / 2 - (grid[0] + grid[2]) / 2) <= 2
-                    and 0 <= note[1] - sign[3] <= 40
-                    and foot[3] - note[3] <= 48,
-                    f"© ends {legal[3]:.0f}, sign {sign[1]:.0f}-{sign[3]:.0f}, note {note[1]:.0f}-{note[3]:.0f}, "
-                    f"footer end {foot[3]:.0f}" if note and legal else "no note or legal line",
+                    and 0 <= row[1] - sign[3] <= 40
+                    and legal[3] >= row[3] - 12  # on the row's last line (centred in its 44 px targets)
+                    and foot[3] - legal[3] <= 48,
+                    f"links end {links[3]:.0f}, sign {sign[1]:.0f}-{sign[3]:.0f}, legal line {row[1]:.0f}-{row[3]:.0f}, "
+                    f"© {legal[1]:.0f}-{legal[3]:.0f}, footer end {foot[3]:.0f}" if legal and links else "no legal line or links",
                 )
+                check(f"{tag}: no preview note in the footer (Mo, October 26)", not g["note"])
             page.screenshot(path=os.path.join(OUT, f"{name}-{size[0]}x{size[1]}.png"))
             check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))
             context.close()

@@ -138,10 +138,11 @@ export function SiteFooter({
 
   // The promise at the left, centred on the links' height, with the look's closing picture beside
   // the words (Mo, October 13, 2026: no logo here, the menu bar's mark is always on screen; the
-  // promise and the crane, smaller, stand alone, centred), and the links at the right; the
-  // copyright line and "Back to top" run under them all, then the FDA statement on its trail sign,
-  // then the preview note. No hairline over the footer (October 13, 2026: fewer lines). On
-  // one column: the promise, the links, the legal line, the statement, the note.
+  // promise and the crane, smaller, stand alone, centred), and the links at the right; the FDA
+  // statement on its park sign under them all, then the copyright line and "Back to top", the
+  // page's very last line (Mo, October 26, 2026; the preview note under the sign was dropped).
+  // No hairline over the footer (October 13, 2026: fewer lines). On one column: the promise, the
+  // links, the statement, the legal line.
   return (
     <footer className={styles.footer}>
       <div className={styles.footerTop}>
@@ -182,6 +183,7 @@ export function SiteFooter({
             <Link href="/science#health">{copy("Health, explained")}</Link>
           </div>
         </div>
+        <FdaStatement className={styles.footerFda} />
         <div className={styles.footerBottom}>
           <span>
             © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
@@ -190,8 +192,6 @@ export function SiteFooter({
             {copy("Back to top")} <ArrowUp size={16} />
           </a>
         </div>
-        <FdaStatement className={styles.footerFda} />
-        <p className={styles.footerNote}>{copy(footer.note)}</p>
       </div>
     </footer>
   );
