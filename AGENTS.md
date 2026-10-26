@@ -82,12 +82,21 @@ These sit on top of `DESIGN.md`.
   halves made one), picked over a scroll story and a pick-a-partner game. NuriCell only
   (`nuricell-leaf.tsx`, `nuricell-scenes.tsx`; pictures `build_nuricell_gold.py`). Mockups:
   `reference/ink-pages/mockups/nuricell-inside/`.
+- **NuriCell "Tiny power plants": a Gold Rush lantern and fewer words (Mo picked A, October 26,
+  2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
+  the grey "Why cellular health matters" line on top strange. Of three California lights (A a Gold
+  Rush miner's lantern, B a coast lighthouse, C a San Francisco gas street lamp) he picked A; the
+  paper lantern read as Asian. Its light still comes on as you scroll. The label over the heading
+  is gone, the three paragraphs are one lead-in line on the heading's left edge (no indent), and
+  the brain's 2% is set small and grey beside a big 20% (stacked, small first, on phones). NuriCell
+  only (`why.tsx`, `nuricell.module.css`; pictures `build_nuricell.py`, Codex paintings). Mockups:
+  `reference/ink-pages/mockups/nuricell-why/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
-  the purpose and its mission line too small to read. She picked a big painted valley oak (a rope
+  the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the
   page's other paintings on purpose. The mission line sits a step under the heading, in ink, not
   the grey body size. Later the same day Mo found the opening circle "too round, not artistic
-  enough" and the spark of gold light that ran round it "fake". She picked circle A, "heavy to
+  enough" and the spark of gold light that ran round it "fake". He picked circle A, "heavy to
   dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and the gold
   leaf floating down onto it like a real flake, settling, then catching the light. Gold leaf
   behaves like real gold: no glow, no spark, no twinkling stars, never red.

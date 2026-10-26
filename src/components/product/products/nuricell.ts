@@ -28,11 +28,8 @@ const nuricell: ProductPage = {
   why: {
     label: "Why cellular health matters",
     title: "Tiny power plants. A big part of your health.",
-    lines: [
-      "Inside many of your body’s cells are mitochondria—tiny power plants that turn energy from food into a form your cells can use.",
-      "That energy helps your brain think, your heart beat, and your muscles move.",
-      "It’s one reason good health starts with your cells.",
-    ],
+    // One line in place of three (Mo, October 26, 2026: the chapter was too much to read).
+    lines: ["Inside many of your cells, mitochondria turn food into the energy you live on."],
     // The glass mitochondrion is a homepage image; a light bulb, off then on, made for this page.
     visual: {
       src: "/images/products/nuricell/why-bulb-off.webp",
@@ -42,8 +39,8 @@ const nuricell: ProductPage = {
       lit: { src: "/images/products/nuricell/why-bulb-on.webp", width: 2752, height: 1536 },
     },
     facts: [
-      { figure: 2, unit: "%", line: "Your brain is about 2% of your body’s weight." },
-      { figure: 20, unit: "%", line: "Yet it uses about 20% of your body’s energy." },
+      { figure: 2, unit: "%", line: "Your brain is about 2% of your weight." },
+      { figure: 20, unit: "%", line: "Yet it uses about 20% of your energy." },
     ],
     comparison: "About 20 watts, day and night. Like a light that never goes out.",
     source: "Brain energy figures: Raichle & Gusnard, PNAS 2002.",
@@ -197,7 +194,7 @@ const nuricell: ProductPage = {
     why: {
       unlit: nuricellArt.lanternUnlit,
       lit: nuricellArt.lanternLit,
-      alt: "A paper lantern whose light comes on, painted in ink and gold leaf",
+      alt: "An old miner’s lantern whose light comes on, painted in ink and gold leaf",
     },
     inside: {
       ...nuricellArt.capsule,

@@ -5,9 +5,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (NuriCell "What's inside": moving gold, a
-  tidier top, the pairs as scenes; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (NuriCell "Tiny power plants": the Gold Rush
+  lantern and fewer words; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick A** (mockups and the
+  built page `reference/ink-pages/mockups/nuricell-why/`, artifact `LiWF3jKo2tdLH4otM1SrRc`). A
+  Gold Rush miner's lantern on a nail replaces the paper lantern (it read as Asian); its light
+  still comes on as you scroll. Codex paintings: the lit take, then the unlit take as an edit of
+  it, of which only the glass is used (`build_nuricell.py`, `lantern()`). No label over the
+  heading, one lead-in line with no indent, the 2% small beside a big 20% (stacked on phones);
+  the section's six lines translated as drafts (m901–m906). On the built site: `qa_nuricell_ink`
+  428/429 then its `lantern` section 11/11 after its glass check was fixed, `qa_home_ink`
+  282/282, `qa_nav` 315/316 (the known tablet crane jump), `check_nuricell_art.py` all pass.
 - **Local, not live (October 26): NuriCell "What's inside", Mo's pick 1A** (mockups
   `reference/ink-pages/mockups/nuricell-inside/`, artifact `Bnhi2oV5MB9eoDusAmdiC2`; the built
   page recorded in `built.html`, artifact `UbeHphVKjW9BqEs2jXh8Fr`). The capsule painting's gold
@@ -269,7 +278,8 @@ spend are in `reference/ink-pages/<page>/`.
 
 - **Translations:** new lines are drafts and need a native speaker's check: NuriCell m594–m609,
   Science m650–m661 (some older Science lines are still English in four languages), OPC m700–m705,
-  Turmerific m740–m744, Nature Calm m780–m784, About's oak m900. Support is English only for now
+  Turmerific m740–m744, Nature Calm m780–m784, About's oak m900, NuriCell's tidied "Tiny power
+  plants" words and its Gold Rush lantern m901–m906. Support is English only for now
   (its keys start at m618).
 - **Support form:** sends nothing yet. Real email needs an email service and domain setup (Mo's call
   and spend).

@@ -7,7 +7,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { CAPTIONS, InkChapter, InkFigure, pictureSizes, sentences, titleId } from "./ink-chapter";
-import { nuricellSizes } from "./nuricell-layout";
+import { isNuricell, nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 /** How long after the unlit lantern starts to bloom (with half of it in the window) its light
@@ -178,7 +178,11 @@ export function Why({ product, motion }: { product: InkProduct; motion: boolean 
         </InkFigure>
       }
     >
-      <p className={`${base.label} ${styles.label}`}>{copy(why.label)}</p>
+      {/* NuriCell's heading stands alone (Mo, October 26, 2026: the label over it read as a stray
+          line); the template still shows it. */}
+      {isNuricell(product) ? null : (
+        <p className={`${base.label} ${styles.label}`}>{copy(why.label)}</p>
+      )}
       {/* One line per sentence (the kit's .display > span is a block): balance alone strands
           "A" at the end of the first line. Each sentence is translated on its own (the catalogs
           have them one by one), and a space between them keeps the text, to a screen reader or a
