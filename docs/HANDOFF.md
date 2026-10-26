@@ -5,9 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (menu bar: Science is a plain link; local,
-  not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (NuriCell "What's inside": moving gold, a
+  tidier top, the pairs as scenes; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): NuriCell "What's inside", Mo's pick 1A** (mockups
+  `reference/ink-pages/mockups/nuricell-inside/`, artifact `Bnhi2oV5MB9eoDusAmdiC2`; the built
+  page recorded in `built.html`, artifact `UbeHphVKjW9BqEs2jXh8Fr`). The capsule painting's gold
+  leaf rises out of the powder and settles where it is painted, then each flake keeps turning,
+  catching the light (`nuricell-leaf.tsx`: one canvas over the painting without its leaf; the leaf
+  as painted for reduced motion and no script). No label over the heading; "per serving of 3
+  capsules" right under it; the label's other lines as a card; the research note said once at
+  the chapter's end (NuriCell's synergy note now says what notes.science said). "Why these four
+  work together" is three scenes (`nuricell-scenes.tsx`): each pair's two powder heaps and its
+  gold (lit; kept in reserve; two halves made one), each with Play again. Pictures:
+  `reference/ink-pages/nuricell/build_nuricell_gold.py` (capsule-ink, capsule-gold, capsule-leaf,
+  `heap-*`). NuriCell only; the other four product pages are unchanged. On the built site
+  (`npm run build` + `next start`): `qa_nuricell_ink` 404/404 (new sections plate, gold,
+  scenes), `qa_home_ink` 282/282, `qa_propolis_ink` 273/273, `qa_opc_ink` 185/185,
+  `qa_nature_calm_ink` 158/159 (its older front-layer pixel check), `qa_nav` 315/316 (the
+  upright tablet's crane jump, recorded with the Science-link change above).
+  The new words ("Also on the label", the card's lines, the merged note) are English in every
+  language, like the rest of this chapter's product words.
 - **Local, not live (October 26): Science is a plain link in the menu bar** (Mo: the Science page
   is one page, and the drop-down's four doors into it made the site look short of content; keep
   the design for later). On the bar and in the phone's menu Science goes straight to `/science`,
