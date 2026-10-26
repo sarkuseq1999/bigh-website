@@ -1,0 +1,731 @@
+<title>NuriCell Inside Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column on the site's rice paper. Part 1 is a working slice of the real chapter
+     (tidied, its gold moving); Part 2 is three working versions of the teamwork block. One light
+     world, like the site. */
+  :root {
+    --paper: #f8f3ea;
+    --ink: #0c0b0a;
+    --muted: #514e48;
+    --line: rgba(28, 27, 25, 0.16);
+    --hair: rgba(28, 27, 25, 0.3);
+    --wash: rgba(28, 27, 25, 0.07);
+    --gold-ink: #7d5f1c;
+    --title: "Ysabeau", "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --body: "Instrument Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+    color-scheme: light;
+  }
+  body {
+    background: var(--paper) url("art/paper.webp") 0 0 / 800px 800px repeat;
+    color: var(--ink);
+    font: 18px/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  h1, h2, h3, h4, p, ol, ul, dl, dd, figure { margin: 0; }
+  button { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  .page {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 120px;
+    display: grid;
+    gap: clamp(72px, 10vw, 128px);
+  }
+
+  /* The page's own words (not the mock): Ysabeau, like the site's titles. */
+  .tag { font-size: 0.82rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--gold-ink); }
+  .intro { display: grid; gap: 14px; max-width: 44rem; }
+  .intro h1 { font: 500 clamp(2rem, 5.4vw, 3.2rem)/1.08 var(--title); text-wrap: balance; }
+  .intro p { color: var(--muted); }
+  .part { display: grid; gap: 36px; }
+  .part > header { display: grid; gap: 10px; max-width: 46rem; border-top: 1px solid var(--hair); padding-top: 32px; }
+  .part > header h2 { font: 500 clamp(1.7rem, 4vw, 2.5rem)/1.12 var(--title); text-wrap: balance; }
+  .part > header p { color: var(--muted); }
+
+  .choices { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+  .seg { display: inline-flex; flex-wrap: wrap; border: 1px solid var(--hair); border-radius: 26px; padding: 4px; gap: 4px; background: var(--paper); }
+  .seg button {
+    border: 0; background: none; border-radius: 999px; padding: 10px 18px; min-height: 44px;
+    cursor: pointer; font-weight: 500; transition: background 0.3s var(--ease), color 0.3s var(--ease);
+  }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .seg button:not([aria-pressed="true"]):hover { background: var(--wash); }
+  .ghost {
+    border: 1px solid var(--hair); background: none; border-radius: 999px; padding: 10px 18px;
+    min-height: 44px; cursor: pointer;
+  }
+  .ghost:hover { background: var(--wash); }
+  .say { max-width: 40rem; color: var(--muted); }
+  .say b { color: var(--ink); font-weight: 600; }
+
+  /* ── Part 1: the chapter, a specimen plate ── */
+  .plate { display: grid; gap: 22px; padding-block: 24px 8px; }
+  .plate .heading {
+    font: 500 clamp(2rem, 4.6vw, 3.5rem)/1.06 var(--body);
+    letter-spacing: -0.028em; text-align: center; text-wrap: balance;
+  }
+  .plate .per { text-align: center; font-size: clamp(1.06rem, 1.5vw, 1.3rem); text-wrap: balance; }
+  .spec { display: grid; gap: 4px; margin-top: 8px; }
+  .stage-wrap { display: grid; gap: 4px; }
+  .stage {
+    position: relative; width: 100%; max-width: 100%; aspect-ratio: 1200 / 1135;
+    mix-blend-mode: multiply; overflow: hidden;
+  }
+  .stage .ink { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .stage .fl { position: absolute; inset: 0; perspective: 700px; }
+  .stage .fl img { position: absolute; height: auto; max-width: none; will-change: transform; }
+  .cap { font-size: 0.9rem; color: var(--muted); text-align: right; }
+  .ing { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 18px; padding: 18px 0; border-top: 1px solid var(--line); }
+  .ing .amt { font: 400 clamp(2.6rem, 5vw, 4.8rem)/1 var(--body); letter-spacing: -0.035em; font-variant-numeric: tabular-nums; grid-row: span 3; color: var(--ink); }
+  .ing .amt span { font-size: 0.42em; letter-spacing: 0; margin-left: 0.1em; }
+  .ing h4 { font: 500 1.22rem/1.3 var(--body); }
+  .ing p { color: var(--muted); font-size: 1rem; max-width: 30em; }
+  .ing p + p { margin-top: 4px; }
+  @media (max-width: 859px) {
+    .ing .amt { font-size: 2.4rem; min-width: 3.6ch; }
+  }
+  @media (min-width: 860px) {
+    .spec {
+      grid-template-columns: minmax(0, 1fr) minmax(0, clamp(300px, 33vw, 440px)) minmax(0, 1fr);
+      column-gap: clamp(24px, 3.2vw, 56px); row-gap: 0; align-items: start;
+    }
+    .stage-wrap { grid-column: 2; grid-row: 1 / span 2; align-self: center; }
+    .ing { display: flex; flex-direction: column; border-top: 0; padding: 20px 0; }
+    .ing .amt { margin-bottom: 8px; }
+    .ing:nth-of-type(1) { grid-column: 1; grid-row: 1; }
+    .ing:nth-of-type(2) { grid-column: 3; grid-row: 1; }
+    .ing:nth-of-type(3) { grid-column: 1; grid-row: 2; }
+    .ing:nth-of-type(4) { grid-column: 3; grid-row: 2; }
+    .ing.l { align-items: flex-end; text-align: right; }
+  }
+  /* The label card: the one boxed thing on the plate, like the label on a pressed-plant sheet. */
+  .label-card {
+    justify-self: center; width: min(100%, 620px); border: 1px solid var(--hair);
+    padding: 16px 20px 18px; display: grid; gap: 10px; margin-top: 18px;
+  }
+  .label-card h4 { font: 500 1rem/1.3 var(--body); }
+  .label-card dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 20px; font-size: 1rem; }
+  .label-card dt { color: var(--muted); }
+  @media (max-width: 520px) {
+    .label-card dl { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .label-card dd { margin-bottom: 8px; }
+  }
+
+  .changes { display: grid; gap: 16px; max-width: 46rem; }
+  .changes h3, .option h3.name { font: 500 clamp(1.4rem, 3vw, 1.8rem)/1.15 var(--title); }
+  .changes ol { padding-left: 1.3em; display: grid; gap: 8px; }
+  .changes details { border-top: 1px solid var(--line); padding-top: 4px; }
+  .changes summary { cursor: pointer; font-weight: 500; min-height: 44px; display: flex; align-items: center; }
+  .changes details img { display: block; width: 100%; height: auto; margin-top: 8px; border: 1px solid var(--line); }
+
+  /* ── Part 2: the three teamwork versions ── */
+  .option { display: grid; gap: 22px; border-top: 1px solid var(--line); padding-top: 32px; }
+  .option > header { display: grid; gap: 8px; max-width: 44rem; }
+  .pick { font: 600 0.84rem var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--gold-ink); }
+  .proto { position: relative; display: grid; gap: 28px; padding-block: 12px; }
+  .proto h3.sub { font: 500 clamp(1.7rem, 3.4vw, 2.4rem)/1.1 var(--body); letter-spacing: -0.022em; text-align: center; text-wrap: balance; }
+  .layer { position: absolute; inset: 0; pointer-events: none; perspective: 600px; z-index: 3; overflow: visible; }
+  .spr { position: absolute; left: 0; top: 0; height: auto; max-width: none; will-change: transform; opacity: 0; }
+  .heap { display: flex; align-items: flex-end; justify-content: center; }
+  .heap img { display: block; height: auto; max-width: none; }
+  /* Each heap's width at full size; a block draws them at a share of it. */
+  .k-choline { --hw: 103px; } .k-alcar { --hw: 189px; } .k-ala { --hw: 145px; } .k-creatine { --hw: 198px; }
+  .note { font-size: 0.92rem; color: var(--muted); text-align: center; max-width: 46rem; justify-self: center; text-wrap: balance; }
+  .story { display: grid; gap: 8px; align-content: start; }
+  .story h4 { font: 500 clamp(1.45rem, 2.4vw, 1.85rem)/1.15 var(--body); letter-spacing: -0.015em; text-wrap: balance; }
+  .story p { font-size: 1.06rem; max-width: 34em; }
+  .story .ev { color: var(--gold-ink); font-size: 1rem; }
+  .weak { font-size: 0.98rem; color: var(--muted); max-width: 44rem; }
+  .weak b { color: var(--ink); font-weight: 600; }
+
+  /* A: three little scenes. Each team: its two heaps under open air where the gold does its part,
+     the team's name and line under it. Three across from 900px, one under another on phones. */
+  .scenes { display: grid; gap: 56px; }
+  .scene { display: grid; gap: 10px; align-content: start; }
+  .sc-stage {
+    position: relative; display: block; width: 100%; height: 270px; border: 0; padding: 0;
+    background: none; cursor: pointer; border-radius: 8px;
+  }
+  @media (hover: hover) { .sc-stage:hover { background: rgba(28, 27, 25, 0.035); } }
+  .duo { position: absolute; left: 0; right: 0; bottom: 6px; display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; }
+  .who { display: grid; justify-items: center; gap: 6px; }
+  .who .heap img { width: calc(var(--hw) * 0.74); }
+  .who b { font-weight: 500; font-size: 1rem; line-height: 1.2; text-align: center; }
+  .plus { font: 400 1.9rem/1 var(--body); color: var(--muted); padding-bottom: 2.3rem; }
+  .sc-foot { display: flex; justify-content: space-between; font-size: 0.88rem; color: var(--muted); margin-top: -4px; }
+  .scene .story { margin-top: 10px; }
+  .scene .story h4 { font-size: clamp(1.4rem, 2.2vw, 1.7rem); }
+  .scene .story p { font-size: 1.02rem; }
+  .scene .story .ev { font-size: 0.96rem; }
+  @media (min-width: 900px) {
+    .scenes { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(24px, 3vw, 48px); }
+    .sc-stage { height: 250px; }
+    .who .heap img { width: calc(var(--hw) * 0.72); }
+  }
+
+  /* B: follow the gold. A sticky stage (four heaps in a row) beside the steps; on phones the stage
+     sticks at the top and the steps scroll under it. */
+  .scrolly { display: grid; gap: 0; position: relative; }
+  .scrolly .stage-b {
+    position: sticky; top: 12vh; height: min(66vh, 540px); display: grid; align-content: end;
+    gap: 14px; z-index: 2; padding-bottom: 40px;
+  }
+  .row4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: end; gap: 8px; }
+  .row4 .st { display: grid; justify-items: center; text-align: center; gap: 6px; transition: opacity 0.6s var(--ease); }
+  .row4 .heap img { width: calc(var(--hw) * 0.84); }
+  .row4 b { font-weight: 500; font-size: 1.02rem; line-height: 1.2; }
+  .scrolly[data-active] .row4 .st { opacity: 0.3; }
+  .scrolly[data-active] .row4 .st.on { opacity: 1; }
+  .steps { display: grid; }
+  .step { min-height: 78vh; display: grid; align-content: center; }
+  .step .story { padding: 18px 0; }
+  .step .n { font-size: 0.95rem; color: var(--muted); }
+  @media (min-width: 760px) {
+    .scrolly { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: clamp(24px, 4vw, 64px); }
+    .steps { grid-column: 1; grid-row: 1; }
+    .scrolly .stage-b { grid-column: 2; grid-row: 1; align-self: start; }
+  }
+  @media (max-width: 759px) {
+    .scrolly .stage-b {
+      top: 0; height: 230px; padding-block: 0 12px; background: var(--paper) url("art/paper.webp") 0 0 / 800px 800px;
+      border-bottom: 1px solid var(--line); margin-inline: calc(-1 * max(16px, env(safe-area-inset-left, 0px)));
+      padding-inline: max(16px, env(safe-area-inset-left, 0px));
+    }
+    .row4 .heap img { width: calc(var(--hw) * 0.42); }
+    .row4 b { font-size: 0.82rem; }
+    .step { min-height: 72vh; }
+  }
+
+  /* C: pick a partner. Four heaps as big buttons; the pair's story under them. */
+  .prompt { text-align: center; font-size: 1.12rem; font-weight: 500; min-height: 1.6em; }
+  .grid4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+  .pbtn {
+    display: grid; justify-items: center; align-content: end; gap: 4px; padding: 64px 8px 16px; border: 1px solid var(--line);
+    background: none; cursor: pointer; border-radius: 8px; text-align: center; min-height: 44px;
+    transition: border-color 0.3s, background 0.3s, opacity 0.4s;
+  }
+  .pbtn .heap img { width: calc(var(--hw) * 0.7); }
+  .pbtn b { font-weight: 500; font-size: 1.05rem; line-height: 1.25; }
+  .pbtn .mg { color: var(--muted); font-size: 0.95rem; }
+  .pbtn .tag2 { font-size: 0.92rem; min-height: 1.4em; color: var(--muted); }
+  .pbtn:hover:not(:disabled) { background: var(--wash); }
+  .pbtn[data-s="picked"] { border-color: var(--ink); background: var(--wash); }
+  .pbtn[data-s="picked"] .tag2 { color: var(--ink); font-weight: 600; }
+  .pbtn[data-s="partner"] { border-color: var(--gold-ink); border-style: dashed; border-width: 2px; }
+  .pbtn[data-s="partner"] .tag2 { color: var(--gold-ink); font-weight: 600; }
+  .pbtn:disabled { opacity: 0.36; cursor: default; }
+  .proto-c .story { justify-self: center; width: min(100%, 40rem); min-height: 9em; }
+  @media (max-width: 759px) {
+    .grid4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .pbtn { padding-top: 40px; }
+    .pbtn .heap img { width: calc(var(--hw) * 0.56); }
+  }
+
+  .reply { display: grid; gap: 12px; border-top: 1px solid var(--hair); padding-top: 32px; max-width: 44rem; }
+  .reply h2 { font: 500 clamp(1.7rem, 4vw, 2.4rem)/1.1 var(--title); }
+  .reply p { color: var(--muted); }
+  .reply code { font: 600 1.05rem var(--body); color: var(--ink); background: var(--wash); padding: 2px 8px; border-radius: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+
+<main class="page">
+  <header class="intro">
+    <p class="tag">NuriCell · What's inside</p>
+    <h1>Moving gold, a tidier top, and three ways to show the teamwork</h1>
+    <p>Pick one gold motion and one teamwork idea. The paintings are the page's own. The type is a stand-in for Switzer.</p>
+  </header>
+
+  <!-- ── Part 1 ── -->
+  <section class="part" id="gold" aria-labelledby="gold-title">
+    <header>
+      <p class="tag">Part 1</p>
+      <h2 id="gold-title">The chapter, tidied, with the gold moving</h2>
+      <p>Two ways for the gold to move. Switch between them. Press Play again to watch the start.</p>
+    </header>
+
+    <div class="choices">
+      <div class="seg" role="group" aria-label="Gold motion">
+        <button type="button" id="m1" aria-pressed="true" data-motion="1">1 · Rise, then float</button>
+        <button type="button" id="m2" aria-pressed="false" data-motion="2">2 · Slow updraft</button>
+      </div>
+      <button type="button" class="ghost" id="replay">Play again</button>
+    </div>
+    <p class="say" id="say1"><b>1 · Rise, then float (my pick).</b> The gold lifts out of the powder and settles where it is painted. Then each flake keeps turning slowly, catching the light like real gold leaf.</p>
+    <p class="say" id="say2" hidden><b>2 · Slow updraft.</b> The gold never stops. Flakes keep drifting up out of the powder, turning as they go, and fade near the top.</p>
+
+    <div class="plate">
+      <h3 class="heading">Inside every capsule, four ingredients.</h3>
+      <p class="per">Amounts per serving of 3&nbsp;capsules, as printed on the label.</p>
+      <div class="spec">
+        <figure class="stage-wrap">
+          <div class="stage" id="stage">
+            <img class="ink" src="art/capsule-ink.webp" alt="An opened capsule with its four powders in a row and gold leaf rising, painted in ink" width="1200" height="1135">
+            <div class="fl" id="flakes"></div>
+          </div>
+          <figcaption class="cap">Illustration</figcaption>
+        </figure>
+        <div class="ing l">
+          <p class="amt">400<span>mg</span></p>
+          <h4>Acetyl-L-carnitine</h4>
+          <p>A form of carnitine. Carnitine carries fats into your mitochondria, where they are turned into energy.</p>
+          <p>On the label: Acetyl-L-carnitine hydrochloride</p>
+        </div>
+        <div class="ing">
+          <p class="amt">400<span>mg</span></p>
+          <h4>Creatine</h4>
+          <p>Helps your cells keep a quick reserve of energy.</p>
+          <p>On the label: Creatine monohydrate</p>
+        </div>
+        <div class="ing l">
+          <p class="amt">200<span>mg</span></p>
+          <h4>Alpha-lipoic acid</h4>
+          <p>Helps your mitochondria turn food into energy. It also works as an antioxidant.</p>
+        </div>
+        <div class="ing">
+          <p class="amt">100<span>mg</span></p>
+          <h4>Choline</h4>
+          <p>Your body uses it to make acetylcholine, a messenger between nerve cells.</p>
+          <p>On the label: Choline bitartrate</p>
+        </div>
+      </div>
+      <div class="label-card">
+        <h4>Also on the label</h4>
+        <dl>
+          <dt>Other ingredients</dt><dd>Rice flour, silicon dioxide and magnesium stearate</dd>
+          <dt>Capsule</dt><dd>Hypromellose and titanium dioxide</dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="changes">
+      <h3>What I tidied</h3>
+      <ol>
+        <li>The small grey "What's inside" is gone. The big heading already says it, so it only looked lost.</li>
+        <li>"Per serving of 3 capsules" moved up, right under the heading. The heading says "every capsule", but the amounts are for 3 capsules. Readers need that before the numbers, not after.</li>
+        <li>The other ingredients sit in one small label card, like the label on a pressed-plant sheet.</li>
+        <li>The note "research is about the nutrients, not the product" moves to the end of the chapter, joined with the one already there. Same honesty, said once.</li>
+      </ol>
+      <details>
+        <summary>See the page as it is now</summary>
+        <img src="art/now-desk.webp" alt="The live chapter now: a small grey label over the heading, and three grey notes under the plate" width="1080" height="900">
+      </details>
+    </div>
+  </section>
+
+  <!-- ── Part 2 ── -->
+  <section class="part" id="team" aria-labelledby="team-title">
+    <header>
+      <p class="tag">Part 2</p>
+      <h2 id="team-title">"Why these four work together": three ways</h2>
+      <p>All three are about the pairs, not single ingredients. Same words as now. Each uses the four powder heaps from the painting, sized by amount. The gold stands for energy.</p>
+    </header>
+
+    <!-- A -->
+    <article class="option" aria-labelledby="a-title">
+      <header>
+        <p class="pick">A · My pick</p>
+        <h3 class="name" id="a-title">Three little scenes</h3>
+        <p class="say">Each team gets its own small moving scene: its two heaps, and the gold doing what the pair does together. All three show at once. Tap a scene to play it again.</p>
+      </header>
+      <div class="proto proto-a">
+        <h3 class="sub">Why these four work together</h3>
+        <div class="scenes" id="scenesA"></div>
+        <p class="note">How each nutrient works in the body in general, and what researchers have studied. Ingredient research does not establish the effects of NuriCell itself.</p>
+      </div>
+      <p class="weak"><b>Good:</b> you see all three teams at a glance, and each one moves. <b>Weak:</b> on phones the three scenes stack, so it is a longer scroll.</p>
+    </article>
+
+    <!-- B -->
+    <article class="option" aria-labelledby="b-title">
+      <header>
+        <p class="pick">B</p>
+        <h3 class="name" id="b-title">Follow the gold</h3>
+        <p class="say">Scroll, and one flake of gold travels from ingredient to ingredient. One team per screen: carried in and lit up, kept in reserve, then two halves meet.</p>
+      </header>
+      <div class="proto proto-b">
+        <h3 class="sub">Why these four work together</h3>
+        <div class="scrolly" id="scrollyB">
+          <div class="stage-b">
+            <div class="row4" id="rowB"></div>
+            <div class="layer" id="layerB"></div>
+          </div>
+          <div class="steps" id="stepsB"></div>
+        </div>
+        <p class="note">Illustration. How each nutrient works in the body in general, and what researchers have studied. Ingredient research does not establish the effects of NuriCell itself.</p>
+      </div>
+      <p class="weak"><b>Good:</b> the most like a little film, and nothing to tap. <b>Weak:</b> three screens of scrolling for three short ideas.</p>
+    </article>
+
+    <!-- C -->
+    <article class="option" aria-labelledby="c-title">
+      <header>
+        <p class="pick">C</p>
+        <h3 class="name" id="c-title">Pick a partner</h3>
+        <p class="say">A small game. Tap an ingredient and its partners light up. Tap a partner to see what the two do together.</p>
+      </header>
+      <div class="proto proto-c" id="protoC">
+        <h3 class="sub">Why these four work together</h3>
+        <p class="prompt" id="promptC" aria-live="polite"></p>
+        <div class="grid4" id="gridC"></div>
+        <div class="story" id="storyC" aria-live="polite"></div>
+        <p class="note">Illustration. How each nutrient works in the body in general, and what researchers have studied. Ingredient research does not establish the effects of NuriCell itself.</p>
+        <div class="layer" id="layerC"></div>
+      </div>
+      <p class="weak"><b>Good:</b> the most playful. <b>Weak:</b> only one team shows at a time, so some readers never find the other two.</p>
+    </article>
+  </section>
+
+  <footer class="reply">
+    <h2>Your pick</h2>
+    <p>Reply with a number and a letter, like <code>1A</code> (rise-then-float gold, three little scenes). Or tell me what to change.</p>
+  </footer>
+</main>
+
+<script>
+(() => {
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Seeded random, so each visit moves the same way.
+  let seed = 7;
+  const rnd = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), 1 | seed); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  const R = (a, b) => a + rnd() * (b - a);
+
+  // ── Part 1: the flakes, cut from the painting (id, left, top, width, height as fractions). ──
+  const FL = [["14",0.515,0.17974,0.08917,0.09604],["30",0.49167,0.40529,0.09667,0.10132],["01",0.4975,0.0511,0.065,0.08634],["48",0.40333,0.53304,0.05083,0.09163],["17",0.40417,0.29956,0.05333,0.0837],["64",0.49,0.63348,0.0525,0.06872],["81",0.3975,0.74361,0.05167,0.04846],["73",0.48833,0.6837,0.02833,0.05198],["25",0.63583,0.35683,0.03083,0.04405],["88",0.54167,0.77533,0.0325,0.02555],["53",0.63083,0.57004,0.03,0.03348],["71",0.305,0.67841,0.03083,0.02467],["56",0.3425,0.59471,0.02833,0.02643],["43",0.3325,0.50749,0.02583,0.02996],["27",0.46083,0.39383,0.0225,0.02379],["00",0.40667,0.03348,0.0275,0.02026],["15",0.48167,0.20617,0.0225,0.02467],["16",0.435,0.24758,0.0225,0.02555],["95",0.5625,0.82731,0.02333,0.02115],["10",0.43,0.15419,0.02417,0.02115],["36",0.42833,0.44758,0.0225,0.02203],["76",0.41583,0.70044,0.01667,0.02467],["90",0.3625,0.80264,0.01833,0.01938],["51",0.48583,0.54449,0.02417,0.01498],["19",0.54417,0.3022,0.02,0.01586],["23",0.4875,0.35419,0.02167,0.01586],["13",0.4675,0.17709,0.01833,0.02291],["86",0.61,0.75859,0.01417,0.02203],["55",0.54583,0.57885,0.01583,0.01762],["42",0.5125,0.50485,0.01667,0.01762],["70",0.45917,0.67401,0.01667,0.01498],["79",0.36083,0.72335,0.01667,0.01586],["60",0.56333,0.62291,0.0175,0.01762],["21",0.5275,0.3304,0.0175,0.0141],["41",0.545,0.4793,0.0175,0.01938],["33",0.41583,0.42291,0.01667,0.01498],["07",0.46333,0.12863,0.015,0.01674],["26",0.44417,0.37445,0.0225,0.01586],["57",0.465,0.59471,0.015,0.01586],["91",0.48917,0.80529,0.01667,0.01322],["89",0.4725,0.79383,0.01333,0.01762],["40",0.43333,0.4793,0.01583,0.01498],["97",0.5875,0.85022,0.0125,0.01674],["82",0.60417,0.74802,0.01167,0.01586],["32",0.47,0.41498,0.0125,0.01586],["84",0.51417,0.75154,0.01167,0.01322],["62",0.45417,0.62467,0.01417,0.01498],["46",0.42833,0.52599,0.01167,0.0141],["92",0.35167,0.81498,0.01083,0.01498],["69",0.49583,0.66432,0.01167,0.01498],["11",0.4625,0.16211,0.01,0.01674],["28",0.495,0.39471,0.0125,0.01233],["87",0.44,0.77445,0.01417,0.01498],["49",0.50417,0.53304,0.01167,0.01322],["34",0.45083,0.43877,0.01167,0.0141],["67",0.5475,0.65639,0.01333,0.01233],["75",0.56417,0.69515,0.01333,0.0141],["47",0.48833,0.52687,0.01083,0.01322],["68",0.37417,0.65815,0.01417,0.01233],["02",0.4425,0.05815,0.01167,0.01322],["96",0.38667,0.83877,0.01083,0.01322],["39",0.37083,0.47665,0.0125,0.01233],["80",0.50417,0.72775,0.01083,0.01145],["44",0.48,0.51101,0.01083,0.01145],["37",0.5175,0.45727,0.01167,0.01145],["12",0.4525,0.17533,0.01167,0.01322],["94",0.51167,0.82026,0.01083,0.01233],["08",0.4975,0.13833,0.01,0.01233],["58",0.62,0.60705,0.01,0.01145],["78",0.56167,0.72159,0.01083,0.01145],["03",0.44583,0.07577,0.01,0.00969],["35",0.51083,0.44141,0.01167,0.01057],["72",0.57,0.67753,0.01,0.00969],["20",0.485,0.30749,0.00917,0.01057],["31",0.62417,0.40529,0.01,0.01057],["66",0.46667,0.64141,0.00917,0.01145],["83",0.47833,0.75242,0.01,0.00969],["05",0.48417,0.09692,0.00917,0.00969],["93",0.39333,0.82115,0.01,0.01057],["09",0.56917,0.1533,0.00917,0.00969],["50",0.605,0.54185,0.01,0.00969],["38",0.36583,0.46344,0.00833,0.00969],["45",0.46167,0.51718,0.00833,0.01057],["63",0.43583,0.62907,0.00917,0.01057],["85",0.4725,0.75771,0.00917,0.00969],["59",0.54917,0.61057,0.00833,0.00969],["24",0.52417,0.35507,0.01,0.00969],["61",0.45083,0.62555,0.01,0.00793],["54",0.39833,0.57357,0.00917,0.00881],["22",0.59583,0.33304,0.00833,0.00881],["29",0.63417,0.39559,0.00917,0.00881],["74",0.40417,0.69163,0.00917,0.00793],["04",0.50833,0.08899,0.00917,0.00705],["99",0.6075,0.88282,0.00833,0.00793],["06",0.45667,0.12335,0.00833,0.00793],["18",0.50917,0.30044,0.00833,0.00705],["65",0.36917,0.63524,0.0075,0.00881],["77",0.38917,0.71982,0.00667,0.00881],["52",0.52,0.55419,0.0075,0.00793],["98",0.61333,0.87313,0.0075,0.00705]];
+  // The tops of the four heaps, as fractions of the painting.
+  const HEAPS = [[0.335, 0.86], [0.47, 0.865], [0.625, 0.89], [0.717, 0.91]];
+
+  const stage = document.getElementById("stage");
+  const box = document.getElementById("flakes");
+  const flakes = FL.map(([id, x, y, w, h], i) => {
+    const im = document.createElement("img");
+    im.src = `art/flakes/f${id}.webp`;
+    im.alt = "";
+    im.decoding = "async";
+    im.style.left = x * 100 + "%";
+    im.style.top = y * 100 + "%";
+    im.style.width = w * 100 + "%";
+    box.appendChild(im);
+    return { im, x, y, w, h, big: i < 12, i };
+  });
+  const nearestHeap = (f) => HEAPS.reduce((a, b) => (Math.abs(b[0] - f.x - f.w / 2) < Math.abs(a[0] - f.x - f.w / 2) ? b : a));
+
+  let motion = "1";
+  const stop = () => flakes.forEach((f) => f.im.getAnimations().forEach((a) => a.cancel()));
+
+  // 1: each flake lifts out of the heap under it, sways, and settles where it is painted.
+  function rise() {
+    stop();
+    if (reduce) return;
+    seed = 7;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    flakes.forEach((f) => {
+      const cx = (f.x + f.w / 2) * W, cy = (f.y + f.h / 2) * H;
+      const hp = nearestHeap(f);
+      const sx = (hp[0] + R(-0.03, 0.03)) * W - cx, sy = (hp[1] + R(0, 0.02)) * H - cy;
+      const sway = R(-0.06, 0.06) * W, r0 = R(-70, 70), ry = R(-160, 160);
+      const dur = f.big ? R(3000, 3800) : R(2200, 3400);
+      const delay = R(0, 1400) + (1 - f.y) * 400;
+      const kf = [
+        { transform: `translate(${sx}px,${sy}px) scale(.25) rotate(${r0}deg) rotateY(${ry}deg)`, opacity: 0, filter: "brightness(1)" },
+        { opacity: 1, offset: 0.14 },
+        { transform: `translate(${sx * 0.35 + sway}px,${sy * 0.42}px) scale(.85) rotate(${r0 * 0.35}deg) rotateY(${ry * 0.3}deg)`, offset: 0.58, filter: "brightness(1.35)" },
+        { transform: "translate(0px,0px) scale(1) rotate(0deg) rotateY(0deg)", opacity: 1, filter: "brightness(1)" },
+      ];
+      if (!f.big) kf.forEach((o) => delete o.filter);
+      f.im.animate(kf, { duration: dur, delay, easing: "cubic-bezier(.3,.6,.25,1)", fill: "both" })
+        .finished.then(() => float(f)).catch(() => {});
+    });
+  }
+
+  // Each flake hangs in the air, turning slowly; as it turns it catches the light, then shows its
+  // darker side. No glow, no sparkle: real gold leaf.
+  function float(f) {
+    const amp = f.big ? R(3, 6) : R(4, 9);
+    const fr = R(3, 8) * (rnd() < 0.5 ? -1 : 1), fry = f.big ? R(16, 28) : R(24, 44);
+    const kf = [
+      { transform: "translate(0px,0px) rotate(0deg) rotateY(0deg)", filter: "brightness(1)" },
+      { transform: `translate(${R(-amp, amp)}px,${-amp}px) rotate(${fr}deg) rotateY(${fry}deg)`, filter: "brightness(1.28)", offset: 0.4 },
+      { transform: `translate(${R(-amp, amp)}px,${amp * 0.4}px) rotate(${-fr * 0.6}deg) rotateY(${-fry * 0.7}deg)`, filter: "brightness(.86)", offset: 0.78 },
+      { transform: "translate(0px,0px) rotate(0deg) rotateY(0deg)", filter: "brightness(1)" },
+    ];
+    if (!f.big) kf.forEach((o) => delete o.filter);
+    f.im.animate(kf, { duration: f.big ? R(7000, 11000) : R(5000, 9000), iterations: Infinity, easing: "ease-in-out", delay: R(0, 600) });
+  }
+
+  // 2: the gold keeps rising. Each flake runs up its own column from the powder to near the top,
+  // past where it is painted, and starts again; spread through the cycle so the air is always full.
+  function updraft() {
+    stop();
+    if (reduce) return;
+    seed = 11;
+    const W = stage.clientWidth, H = stage.clientHeight;
+    flakes.forEach((f, n) => {
+      const cx = (f.x + f.w / 2) * W, cy = (f.y + f.h / 2) * H;
+      const hp = nearestHeap(f);
+      const x0 = (hp[0] + R(-0.03, 0.03)) * W - cx, y0 = hp[1] * H - cy;
+      const y1 = R(0.0, 0.05) * H - cy;
+      const s1 = R(-0.05, 0.05) * W, s2 = R(-0.05, 0.05) * W;
+      const ry = R(120, 300) * (rnd() < 0.5 ? -1 : 1), r = R(-40, 40);
+      const dur = f.big ? R(14000, 18000) : R(9000, 14000);
+      const at = (p, x, extra) => Object.assign({ offset: p, transform: `translate(${x}px,${y0 + (y1 - y0) * p}px) rotate(${r * p}deg) rotateY(${ry * p}deg) scale(${0.45 + 0.55 * Math.min(1, p * 3)})` }, extra || {});
+      const kf = [
+        at(0, x0, { opacity: 0 }),
+        at(0.08, x0 * 0.85, { opacity: 1 }),
+        at(0.35, x0 * 0.4 + s1),
+        at(0.65, s2),
+        at(0.86, s1 * 0.5, { opacity: 1 }),
+        at(1, s2 * 0.3, { opacity: 0 }),
+      ];
+      if (f.big) kf.forEach((o, j) => (o.filter = `brightness(${[1, 1, 1.3, 0.86, 1.25, 1][j]})`));
+      // The big leaves spaced evenly through the cycle (golden-ratio steps), the specks at random.
+      const phase = f.big ? (n * 0.618034) % 1 : rnd();
+      f.im.animate(kf, { duration: dur, iterations: Infinity, easing: "linear", delay: -phase * dur });
+    });
+  }
+
+  const run = () => (motion === "1" ? rise() : updraft());
+  document.querySelectorAll("[data-motion]").forEach((b) =>
+    b.addEventListener("click", () => {
+      motion = b.dataset.motion;
+      document.querySelectorAll("[data-motion]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      document.getElementById("say1").hidden = motion !== "1";
+      document.getElementById("say2").hidden = motion !== "2";
+      run();
+    }),
+  );
+  document.getElementById("replay").addEventListener("click", run);
+  let started = false, rw = 0;
+  new IntersectionObserver((es, io) => {
+    if (es.some((e) => e.isIntersecting) && !started) { started = true; rw = stage.clientWidth; run(); io.disconnect(); }
+  }, { threshold: 0.3 }).observe(stage);
+  addEventListener("resize", () => { if (started && Math.abs(stage.clientWidth - rw) > 40) { rw = stage.clientWidth; run(); } });
+
+  // ── Part 2: the four, their pairs, and the gold passing between them ──
+  const ING = {
+    choline: { name: "Choline", mg: 100 },
+    alcar: { name: "Acetyl-L-carnitine", mg: 400 },
+    ala: { name: "Alpha-lipoic acid", mg: 200 },
+    creatine: { name: "Creatine", mg: 400 },
+  };
+  const PAIRS = {
+    fuel: { a: "alcar", b: "ala", title: "Fuel in, energy out", line: "Acetyl-L-carnitine carries fuel into your mitochondria. Alpha-lipoic acid helps turn it into energy, and helps clear the wear that making energy leaves behind.", ev: "In Dr. Liu’s 2002 animal studies, the two together did more than either one alone." },
+    store: { a: "ala", b: "creatine", title: "Energy on hand", line: "Creatine keeps some of that energy in reserve, ready for the moments your brain and muscles need it fast." },
+    msg: { a: "choline", b: "alcar", title: "Two halves of a messenger", line: "Your body joins choline with an acetyl group, which acetyl-L-carnitine can supply, to make acetylcholine, a messenger between nerve cells." },
+  };
+  const TEAMS = ["fuel", "store", "msg"];
+  const heapImg = (k) => `<span class="heap k-${k}"><img src="art/heap-${k}.webp" alt="" data-k="${k}"></span>`;
+  const storyHTML = (p) => `<h4>${p.title}</h4><p>${p.line}</p>${p.ev ? `<p class="ev">${p.ev}</p>` : ""}`;
+
+  // One flake sprite (cut from the painting) in a layer; T places its centre.
+  const ASPECT = Object.fromEntries(FL.map(([id, , , w, h]) => [id, (w * 1200) / (h * 1135)]));
+  function sprite(layer, id, w) {
+    const im = document.createElement("img");
+    im.src = `art/flakes/f${id}.webp`; im.alt = ""; im.className = "spr";
+    im.style.width = w + "px"; im.dataset.h = w / ASPECT[id];
+    layer.appendChild(im);
+    return im;
+  }
+  const T = (im, x, y, s = 1, r = 0, ry = 0) => `translate(${x - parseFloat(im.style.width) / 2}px,${y - im.dataset.h / 2}px) scale(${s}) rotate(${r}deg) rotateY(${ry}deg)`;
+  function hover(im, x, y, lit = 1) {
+    im.animate([
+      { transform: T(im, x, y), filter: `brightness(${lit})` },
+      { transform: T(im, x + 2, y - 5, 1, 6, 28), filter: `brightness(${lit * 1.22})`, offset: 0.45 },
+      { transform: T(im, x - 2, y + 2, 1, -4, -20), filter: `brightness(${lit * 0.88})`, offset: 0.8 },
+      { transform: T(im, x, y), filter: `brightness(${lit})` },
+    ], { duration: R(5600, 7200), iterations: Infinity, easing: "ease-in-out" });
+  }
+  // A heap's tip, width and height, in the layer's own coordinates.
+  function tip(layer, k, scope) {
+    const im = scope.querySelector(`img[data-k="${k}"]`);
+    const a = im.getBoundingClientRect(), b = layer.getBoundingClientRect();
+    return { x: a.left + a.width * 0.5 - b.left, y: a.top + a.height * 0.12 - b.top, w: a.width, h: a.height };
+  }
+
+  // What the gold does for each team.
+  // fuel: a dull flake (fuel) is carried from acetyl-L-carnitine to alpha-lipoic acid, lights up
+  //   there, and a few bright flecks lift off it (energy out).
+  // store: a bright flake is carried to creatine and breaks into flecks that settle on its heap
+  //   (kept in reserve); now and then one jumps up quickly (ready fast).
+  // msg: half a leaf rises from each heap; they meet in the middle and become one.
+  function playPair(layer, scope, id) {
+    layer.querySelectorAll(".spr").forEach((s) => s.remove());
+    if (reduce) return;
+    seed = 3;
+    const p = PAIRS[id], A = tip(layer, p.a, scope), B = tip(layer, p.b, scope);
+    const big = Math.max(28, Math.min(64, B.w * 0.46));
+    const lift = Math.max(70, Math.abs(B.x - A.x) * 0.3) + Math.abs(B.y - A.y) * 0.2;
+    const top = Math.min(A.y, B.y) - lift;
+    const mx = (A.x + B.x) / 2 + (Math.abs(B.x - A.x) < 30 ? 70 : 0);
+    if (id === "fuel") {
+      const f = sprite(layer, "14", big);
+      const end = { x: B.x, y: B.y - big * 1.25 };
+      f.animate([
+        { transform: T(f, A.x, A.y + 4, 0.3, -30, 70), opacity: 0, filter: "brightness(.6) saturate(.45)" },
+        { transform: T(f, A.x, A.y - big * 0.8, 0.75, -12, 30), opacity: 1, offset: 0.2, filter: "brightness(.6) saturate(.45)" },
+        { transform: T(f, mx, top, 0.95, 10, -40), offset: 0.55, filter: "brightness(.62) saturate(.5)" },
+        { transform: T(f, end.x, end.y, 1, 0, 0), opacity: 1, offset: 0.8, filter: "brightness(.7) saturate(.6)" },
+        { transform: T(f, end.x, end.y - 4, 1.06, -3, 0), opacity: 1, filter: "brightness(1.45) saturate(1.1)" },
+      ], { duration: 3000, easing: "ease-in-out", fill: "forwards" }).finished.then(() => {
+        hover(f, end.x, end.y - 4, 1.2);
+        [["15", -0.55, -0.9], ["16", 0.5, -1.25], ["10", 0.05, -1.75]].forEach(([sid, dx, dy], j) => {
+          const s = sprite(layer, sid, big * 0.34);
+          const to = { x: end.x + dx * big, y: end.y + dy * big };
+          s.animate([
+            { transform: T(s, end.x, end.y, 0.4, 0, 0), opacity: 0, filter: "brightness(1.4)" },
+            { transform: T(s, to.x, to.y, 1, 30, 40), opacity: 1, filter: "brightness(1.25)" },
+          ], { duration: 1300, delay: j * 220, easing: "cubic-bezier(.2,.7,.3,1)", fill: "forwards" })
+            .finished.then(() => hover(s, to.x, to.y, 1.2)).catch(() => {});
+        });
+      }).catch(() => {});
+    } else if (id === "store") {
+      const f = sprite(layer, "17", big);
+      const end = { x: B.x, y: B.y - big * 0.9 };
+      f.animate([
+        { transform: T(f, A.x, A.y + 4, 0.3, -30, 70), opacity: 0, filter: "brightness(1.2)" },
+        { transform: T(f, A.x, A.y - big * 0.8, 0.75, -12, 30), opacity: 1, offset: 0.2 },
+        { transform: T(f, mx, top, 0.95, 10, -40), offset: 0.55, filter: "brightness(1.25)" },
+        { transform: T(f, end.x, end.y, 1, 0, 0), opacity: 1, filter: "brightness(1.15)" },
+      ], { duration: 2600, easing: "ease-in-out", fill: "forwards" }).finished.then(() => {
+        f.animate([{ opacity: 1, transform: T(f, end.x, end.y) }, { opacity: 0, transform: T(f, end.x, end.y + 8, 0.5, 20, 60) }], { duration: 600, fill: "forwards" });
+        // Flecks settle on the heap's slopes, inside its outline.
+        const spots = [[-0.2, 0.42], [-0.06, 0.2], [0.1, 0.36], [0.24, 0.62], [-0.32, 0.7], [0.02, 0.6]];
+        const flecks = ["27", "15", "16", "10", "19", "23"].map((sid, j) => {
+          const s = sprite(layer, sid, Math.max(8, big * 0.36));
+          const to = { x: B.x + spots[j][0] * B.w, y: B.y + spots[j][1] * B.h };
+          s.animate([
+            { transform: T(s, end.x, end.y, 0.6, 0, 0), opacity: 0 },
+            { transform: T(s, end.x + (to.x - end.x) * 0.5, end.y - 8, 1, 90, 120), opacity: 1, offset: 0.35 },
+            { transform: T(s, to.x, to.y, 1, 160, 0), opacity: 1 },
+          ], { duration: 1500 + j * 150, delay: 150 + j * 90, easing: "cubic-bezier(.4,0,.6,1)", fill: "forwards" });
+          return { s, to };
+        });
+        // Ready fast: every few seconds one fleck jumps up, catches the light, and drops back.
+        const jump = (n) => {
+          if (!flecks[0].s.isConnected) return;
+          const { s, to } = flecks[n % flecks.length];
+          s.animate([
+            { transform: T(s, to.x, to.y, 1, 160, 0), filter: "brightness(1)" },
+            { transform: T(s, to.x + 4, to.y - big * 1.1, 1.15, 200, 60), filter: "brightness(1.5)", offset: 0.3 },
+            { transform: T(s, to.x, to.y, 1, 160, 0), filter: "brightness(1)" },
+          ], { duration: 1100, easing: "cubic-bezier(.2,.8,.4,1)" });
+          setTimeout(() => jump(n + 2), 3200);
+        };
+        setTimeout(() => jump(1), 2600);
+      }).catch(() => {});
+    } else {
+      const h1 = sprite(layer, "25", big * 0.55), h2 = sprite(layer, "53", big * 0.55);
+      const M = { x: mx, y: top + 16 };
+      [[h1, A, -1], [h2, B, 1]].forEach(([s, P, d]) =>
+        s.animate([
+          { transform: T(s, P.x, P.y + 4, 0.3, 40 * d, 60), opacity: 0 },
+          { transform: T(s, P.x, P.y - big * 0.8, 0.8, 20 * d, 20), opacity: 1, offset: 0.25 },
+          { transform: T(s, M.x + big * 0.2 * d, M.y, 1, 0, 0), opacity: 1 },
+        ], { duration: 2200, easing: "ease-in-out", fill: "forwards" }),
+      );
+      const one = sprite(layer, "30", big * 1.1);
+      one.animate([
+        { transform: T(one, M.x, M.y, 0.55, 0, 80), opacity: 0, filter: "brightness(1)" },
+        { transform: T(one, M.x, M.y, 1.06, 0, 0), opacity: 1, offset: 0.5, filter: "brightness(1.45)" },
+        { transform: T(one, M.x, M.y, 1, 0, 0), opacity: 1, filter: "brightness(1.1)" },
+      ], { duration: 1100, delay: 2100, easing: "ease-out", fill: "forwards" }).finished.then(() => hover(one, M.x, M.y, 1.1)).catch(() => {});
+      [h1, h2].forEach((s) => s.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 500, delay: 2200, fill: "forwards" }));
+    }
+  }
+  const onceInView = (el, fn, threshold = 0.5) =>
+    new IntersectionObserver((es, io) => { if (es.some((e) => e.isIntersecting)) { io.disconnect(); fn(); } }, { threshold }).observe(el);
+
+  // ── A: three little scenes ──
+  const scenesA = document.getElementById("scenesA");
+  scenesA.innerHTML = TEAMS.map((id) => {
+    const p = PAIRS[id];
+    return `<article class="scene" data-pair="${id}">
+      <button type="button" class="sc-stage" aria-label="Play “${p.title}” again">
+        <span class="duo"><span class="who">${heapImg(p.a)}<b>${ING[p.a].name}</b></span><span class="plus" aria-hidden="true">+</span><span class="who">${heapImg(p.b)}<b>${ING[p.b].name}</b></span></span>
+        <span class="layer"></span>
+      </button>
+      <p class="sc-foot"><span>Illustration</span><span>Tap to play again</span></p>
+      <div class="story">${storyHTML(p)}</div>
+    </article>`;
+  }).join("");
+  scenesA.querySelectorAll(".scene").forEach((sc, i) => {
+    const st = sc.querySelector(".sc-stage"), layer = sc.querySelector(".layer");
+    const play = () => playPair(layer, st, sc.dataset.pair);
+    st.addEventListener("click", play);
+    onceInView(st, () => setTimeout(play, matchMedia("(min-width: 900px)").matches ? i * 900 : 200), 0.6);
+  });
+
+  // ── B: follow the gold ──
+  const scrollyB = document.getElementById("scrollyB"), rowB = document.getElementById("rowB");
+  const stepsB = document.getElementById("stepsB"), layerB = document.getElementById("layerB");
+  const ORDER = ["choline", "alcar", "ala", "creatine"];
+  rowB.innerHTML = ORDER.map((k) => `<div class="st" data-k="${k}">${heapImg(k)}<b>${ING[k].name}</b></div>`).join("");
+  stepsB.innerHTML = TEAMS.map((id, i) => `<div class="step" data-pair="${id}"><div class="story"><p class="n">${i + 1} of 3 · ${ING[PAIRS[id].a].name} + ${ING[PAIRS[id].b].name}</p>${storyHTML(PAIRS[id])}</div></div>`).join("");
+  let activeB = null;
+  const ioB = new IntersectionObserver((es) => {
+    es.forEach((e) => {
+      if (!e.isIntersecting) return;
+      const id = e.target.dataset.pair;
+      if (id === activeB) return;
+      activeB = id;
+      scrollyB.dataset.active = id;
+      rowB.querySelectorAll(".st").forEach((s) => s.classList.toggle("on", s.dataset.k === PAIRS[id].a || s.dataset.k === PAIRS[id].b));
+      playPair(layerB, rowB, id);
+    });
+  }, { rootMargin: "-40% 0px -40% 0px" });
+  stepsB.querySelectorAll(".step").forEach((s) => ioB.observe(s));
+
+  // ── C: pick a partner ──
+  const gridC = document.getElementById("gridC"), protoC = document.getElementById("protoC");
+  const storyC = document.getElementById("storyC"), layerC = document.getElementById("layerC"), promptC = document.getElementById("promptC");
+  const PLATE = ["alcar", "creatine", "ala", "choline"];
+  const partners = (k) => TEAMS.filter((id) => PAIRS[id].a === k || PAIRS[id].b === k).map((id) => (PAIRS[id].a === k ? PAIRS[id].b : PAIRS[id].a));
+  gridC.innerHTML = PLATE.map((k) => `<button type="button" class="pbtn" data-k="${k}">${heapImg(k)}<b>${ING[k].name}</b><span class="mg">${ING[k].mg} mg</span><span class="tag2"></span></button>`).join("");
+  let first = null;
+  function paintC(picked, partnerOf) {
+    gridC.querySelectorAll(".pbtn").forEach((b) => {
+      const k = b.dataset.k;
+      let s = "";
+      if (picked.includes(k)) s = "picked";
+      else if (partnerOf && partners(partnerOf).includes(k)) s = "partner";
+      b.dataset.s = s;
+      b.disabled = Boolean(partnerOf) && !s;
+      b.querySelector(".tag2").textContent = s === "picked" ? "Picked" : s === "partner" ? "Partner" : partnerOf ? "Not a pair" : "";
+    });
+  }
+  function doneC(a, b, play = true) {
+    const id = TEAMS.find((x) => (PAIRS[x].a === a && PAIRS[x].b === b) || (PAIRS[x].a === b && PAIRS[x].b === a));
+    first = null;
+    paintC([a, b], null);
+    storyC.innerHTML = storyHTML(PAIRS[id]);
+    promptC.textContent = "Tap any ingredient to try another pair.";
+    if (play) requestAnimationFrame(() => playPair(layerC, gridC, id));
+  }
+  gridC.addEventListener("click", (e) => {
+    const b = e.target.closest(".pbtn");
+    if (!b || b.disabled) return;
+    const k = b.dataset.k;
+    if (first && first !== k) return doneC(first, k);
+    first = k;
+    layerC.querySelectorAll(".spr").forEach((s) => s.remove());
+    paintC([k], k);
+    storyC.innerHTML = "";
+    const n = partners(k).length;
+    promptC.textContent = n === 1 ? "Now tap its partner." : `Now tap one of its ${n} partners.`;
+  });
+  doneC("alcar", "ala", false);
+  onceInView(gridC, () => playPair(layerC, gridC, "fuel"));
+})();
+</script>
