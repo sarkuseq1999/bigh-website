@@ -1,0 +1,146 @@
+<title>NuriCell Light Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;600&display=swap">
+<style>
+  /* Layout: one column. The built section on a laptop, the light off and on, then two phone
+     screens. Rice paper and sumi ink, like the site. */
+  :root {
+    --paper: #f5f1e8;
+    --card: #fbf8f2;
+    --ink: #1c1a17;
+    --muted: #5f5a52;
+    --hair: #d8d1c3;
+    --gold: #a87b1f;
+    --title: "Ysabeau", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17;
+      --card: #24221e;
+      --ink: #efe9dd;
+      --muted: #b3ab9d;
+      --hair: #3a3630;
+      --gold: #d6a748;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17;
+    --card: #24221e;
+    --ink: #efe9dd;
+    --muted: #b3ab9d;
+    --hair: #3a3630;
+    --gold: #d6a748;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.5 var(--body);
+  }
+  main {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-block: 32px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 40px;
+  }
+  h1, h2 {
+    font-family: var(--title);
+    font-weight: 600;
+    line-height: 1.1;
+    text-wrap: balance;
+    margin: 0;
+  }
+  h1 { font-size: clamp(30px, 6vw, 44px); }
+  h2 { font-size: clamp(24px, 4.4vw, 32px); }
+  p { margin: 0; }
+  .lede { color: var(--muted); max-width: 36em; }
+  section { display: grid; gap: 14px; }
+  .tag {
+    font-family: var(--title);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+  }
+  ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+  .two {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 12px;
+    align-items: start;
+  }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border: 1px solid var(--hair);
+    border-radius: 6px;
+    background: var(--card);
+  }
+  .onoff { max-width: 560px; }
+  figcaption { font-size: 13px; color: var(--muted); }
+  .why { color: var(--muted); max-width: 40em; }
+  .note {
+    background: var(--card);
+    border: 1px solid var(--hair);
+    border-radius: 8px;
+    padding: 16px 18px;
+    display: grid;
+    gap: 8px;
+  }
+  .score {
+    font-family: var(--title);
+    font-weight: 600;
+    font-size: clamp(28px, 6vw, 40px);
+    color: var(--gold);
+    line-height: 1;
+  }
+</style>
+
+<main>
+  <header style="display:grid;gap:10px">
+    <span class="tag">A · BUILT</span>
+    <h1>NuriCell: the Gold Rush lantern</h1>
+    <p class="lede">Your pick, built into the page. These are real screenshots of the built site on this computer.
+      Nothing is live yet.</p>
+  </header>
+
+  <section>
+    <h2>On a laptop</h2>
+    <figure><img src="built-desk1440.webp" alt="The section on a laptop: the shorter words on the left, the lit Gold Rush lantern on the right" width="1440" height="900"><figcaption>1440 wide, the light on</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>The light comes on as you scroll</h2>
+    <p class="why">First the lantern paints in with grey, empty glass. A breath later the flame and its warm glow fade
+      up.</p>
+    <figure class="onoff"><img src="built-onoff.webp" alt="The lantern before and after: grey glass and a bare wick, then a gold flame and a warm glow" width="850" height="800" loading="lazy"><figcaption>Off, then on</figcaption></figure>
+  </section>
+
+  <section>
+    <h2>On a phone</h2>
+    <div class="two">
+      <figure><img src="built-phone-0.webp" alt="The section on a phone: the lantern, then the heading and the one line" width="780" height="1688" loading="lazy"><figcaption>First screen</figcaption></figure>
+      <figure><img src="built-phone-1.webp" alt="The section on a phone: 2% small, then 20% big, then the 20 watts line" width="780" height="1688" loading="lazy"><figcaption>Scrolled: small 2% first, then the big 20%</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="note">
+    <p class="score">8 / 10</p>
+    <p class="why">What still holds it back:</p>
+    <ul>
+      <li>The light coming on is gentler than the paper lantern's. Only the glass glows, not the whole lantern.</li>
+      <li>Up close, the painting's washes have a faint crackle texture from the picture tool.</li>
+      <li>The new lines in Chinese, Japanese, Korean and Vietnamese are draft translations.</li>
+    </ul>
+  </section>
+</main>
