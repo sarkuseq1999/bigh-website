@@ -4,7 +4,29 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ldi9944qm-sarkuseq1999s-projects.vercel.app`
+(`dpl_9WQV7zjP58QPYt84wWtLzcN9ZTJK`), the **production** deployment of `main` at
+`5fe0846bf9ba1362b87181d16e76792ff987027e` (October 27, 2026). Mo said to push the tablet menu's
+crane fix live, "only that fix": on a tablet the crane at the foot of the menu now grows and
+shrinks with Products' fold instead of jumping in about a tenth of a second (`useCraneRoom` in
+`nav-inscription.tsx`, built on `studio` as `f9c1132`). Claude made a release copy from live
+`main` (`88cdc38`) with only that commit's three code files (not its `docs/HANDOFF.md` change),
+in a scratch worktree, not the shared folder, and pushed `5fe0846` to `main` as a fast-forward.
+The other `studio` work was not pushed.
+
+Before the push, on the built release copy (`npm run build` + `next start`): lint, type check
+and formatting passed; `qa_nav` 326/326 (the crane filmed folding at 834x1112, 768x1024 and
+1024x768: its largest size step 4.2px, 7.9px and 7.8px a frame), `qa_home_ink` 282/282. After
+the alias update, on the public demo in fresh unauthenticated browsers: `qa_nav` 326/326 (the
+same steps), `qa_home_ink` 282/282.
+
+Before this update, the alias pointed to
+`bigh-website-bklg0rtyi-sarkuseq1999s-projects.vercel.app` (`dpl_7udmRJN6MrtNnB8peQqP75F6oDkL`),
+the **production** deployment of `main` at `610d70a` (October 26, 2026): another Claude session's
+release of NuriCell "Tiny power plants", the California lighthouse (Mo's B). Its entry is on
+`main` (`88cdc38`), not yet on `studio`.
+
+Before that, the alias pointed to `bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app`
 (`dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`), the **production** deployment of `main` at
 `e6e7e360c93251a9d095eadb3a66a8dfed8e09f0`. On October 26, 2026, Mo said to put the new Science
 page live on its own ("Science only, not the other sessions' unreleased work"): his pick B, Dr. Liu

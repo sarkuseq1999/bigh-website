@@ -5,11 +5,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (About's bigger circle merged into studio,
-  local). Earlier the same day: the product openings' release notes, the
-  Title face entry below marked live. October 26: NuriCell research, tap a book (local, not
-  pushed). Earlier the same day: Science, one place per screen, put live on its own; the tablet
-  menu's crane eases with the fold (local, not pushed).
+- **Last updated:** October 27, 2026, by Claude Code (the tablet menu's crane fix put live on its
+  own, `main` `5fe0846`). Earlier the same day: About's bigger circle merged into studio (local);
+  the product openings' release notes, the Title face entry below marked live. October 26:
+  NuriCell research, tap a book (local, not pushed). Earlier the same day: Science, one place per
+  screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
 - **Local, not live (October 26): About, a bigger circle and no gold leaf (Mo picked A twice).**
   The opening circle fills the first screen and "Be in Good Health." is written inside it (on a
@@ -55,9 +55,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   portrait and label. Built site (`npm run build` + `next start`, combined with the questions work
   at d15db52): `qa_nuricell_ink` 430/430, `qa_nature_calm_ink` 159/159; earlier build `qa_home_ink`
   282/282, `qa_nav` 315/316 (the tablet crane jump, since fixed in f9c1132). Not pushed.
-- **Local, not live (October 26): the tablet menu's crane eases with the fold** (Mo said to fix
-  the jump; before/after page `J5z9H46J76J8t2uM7nZqkf`). On a tablet the crane takes the room
-  left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
+- **Live (October 27): the tablet menu's crane eases with the fold** (Mo said to fix the jump,
+  then to push "only that fix"; before/after page `J5z9H46J76J8t2uM7nZqkf`). Released alone from
+  live `main`: `main` `5fe0846` (the code of `f9c1132`), production `dpl_9WQV7zjP…`, demo alias
+  → it; public `qa_nav` 326/326, `qa_home_ink` 282/282 (`docs/public-demo.md`). On a tablet the
+  crane takes the room left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
   layout it followed only the slice of the fold where that room lies between its two sizes:
   folding Products away at 834x1112 it grew 54px in 0.12s (up to 13px a frame) and stopped dead;
   at 768x1024, 100px in 0.07s (25px a frame). Now `useCraneRoom` in `nav-inscription.tsx`
@@ -67,7 +69,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   again. Biggest step now 4px a frame at 834x1112, 8px at 768x1024 and 1024x768; phones and
   1024x1366 unchanged. `qa_nav` films the fold at all three tablets and checks the size is let
   go after. Built site (`npm run build` + `next start`, studio `c947fcf` plus this): `qa_nav`
-  326/326, `qa_home_ink` 282/282; lint and type-check clean. Not pushed. Separately, still open:
+  326/326, `qa_home_ink` 282/282; lint and type-check clean. Separately, still open:
   `scripts/qa/qa_science_links.py` still clicks the Science drop-down switched off this morning.
 - **Local, not live (October 26): product questions, Mo's pick A, "a painting for each answer"**
   (mockups `reference/ink-pages/mockups/nuricell-questions/`, artifact `MceTcmgqxFuQPtLHrJ8xfE`;
@@ -177,8 +179,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_science_ink` 1279/1279, `qa_about` 353/353 (dev: `qa_nav` 315/316); lint and type-check
   clean. Mo's before/after page: https://claude.ai/artifact/DEE11nzfSvHRMeSgmFFfCC. The one
   failure was old, newly checked: the tablet menu's crane jumping as Products folds away (fixed
-  later the same day, local: "the tablet menu's crane eases with the fold" at the top). Live in
-  `c944a72`.
+  later the same day, live October 27 in `5fe0846`: "the tablet menu's crane eases with the
+  fold" at the top). Live in `c944a72`.
 - **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics
