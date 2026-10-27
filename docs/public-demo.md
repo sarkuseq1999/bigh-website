@@ -4,7 +4,22 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-bklg0rtyi-sarkuseq1999s-projects.vercel.app`
+(`dpl_7udmRJN6MrtNnB8peQqP75F6oDkL`), the **production** deployment of `main` at
+`610d70aeb4aa522b18f10ea64a09408097cec3b0` (October 26, 2026). Mo picked B, a California
+lighthouse, for NuriCell's "Tiny power plants" (after first picking A, a Gold Rush lantern, and
+seeing it built beside the lighthouse sample) and said to put it live: the lighthouse with its
+lamp and beam coming on as you scroll, drawn larger on phones, and the section's shorter words.
+Claude released it on its own from live `main` (a fast-forward from `e6e7e36`, the Science
+release below), from a scratch worktree, not the shared folder. Before the push, on the built
+site: lint, type check and build passed; `qa_nuricell_ink` 429/429, `qa_science_ink` 633/633
+(on top of the Science release), and on the build before the Science release `qa_home_ink`
+282/282, `qa_opc_ink` 185/185, `qa_nav` 315/316 (the known upright-tablet crane jump). After
+the alias update, on the public demo in fresh unauthenticated browsers: `qa_nuricell_ink`
+429/429 (the lighthouse off, then lit), `qa_home_ink` 282/282, `qa_science_ink` 633/633,
+`qa_nav` 315/316 (the same tablet crane jump).
+
+Before this update, for about 30 minutes, the alias pointed to `bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app`
 (`dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`), the **production** deployment of `main` at
 `e6e7e360c93251a9d095eadb3a66a8dfed8e09f0`. On October 26, 2026, Mo said to put the new Science
 page live on its own ("Science only, not the other sessions' unreleased work"): his pick B, Dr. Liu
@@ -22,32 +37,35 @@ the rebase onto `78ae1d6`, `qa_science_ink` shell, people, path and deep links 3
 alias update, on the public demo in fresh unauthenticated browsers: `qa_science_ink` 633/633,
 `qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet crane jump). Screenshots at 1440x900 and 390x844 matched the local build.
 
-Before this update, the alias pointed to `bigh-website-hqw4upzgt-sarkuseq1999s-projects.vercel.app`
+Before that, the alias pointed to `bigh-website-hqw4upzgt-sarkuseq1999s-projects.vercel.app`
 (`dpl_92LiEZJuxbddWQY2mQNmcV8Jw2mG`), the **production** deployment of `main` at
-`78ae1d616d4c68c41bb9d38b145234d6e272a5f4` (product openings, Mo's "Title face"); that session's
-own entry is not here yet. Before that, the alias pointed to
-`bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
+`78ae1d616d4c68c41bb9d38b145234d6e272a5f4` (product openings, Mo's "Title face"); that session records
+its checks in `docs/HANDOFF.md`.
+
+Before that, the alias pointed to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
 (`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
-`c944a72f0594068bff9dd833b1070a5f11763a59`. On October 26, 2026, Mo said to put NuriCell's
-"What's inside" live (his pick 1A: the gold leaf rises out of the powder and settles, then keeps
-turning; no label over the heading; the label card; the pairs as three scenes, `41f7a72`),
-together with two changes that were waiting on `studio`: Science as a plain link in the menu bar
-(`10befe3`) and the footer's copyright line last (`75c6190`). Claude pushed `c944a72` to `main`:
-`cecb78a` from `studio` merged with `75fb88e` (the homepage science peek, pushed by another
-session minutes earlier, which made the first push bounce). NuriCell "Tiny power plants"
-(`658577b` and later, on `studio`) was not pushed.
+`c944a72` (October 26, 2026): another Claude session's release of NuriCell "What's inside"
+(Mo's 1A), Science as a plain menu-bar link and the footer's copyright line last, merged with the
+homepage science peek below. That session records its checks in `docs/HANDOFF.md`. Checked again by
+the peek's session on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282,
+`qa_nav` 315/316 (the known upright-tablet crane jump when Products folds away, recorded with the
+Science-link change), the touch test passed, 0 of 48 short drags left the science strip off a
+topic.
 
-Before the push, on the built release copy (`npm run build` + `next start`): `qa_nuricell_ink`
-404/404, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet crane jump);
-`qa_fda` timed out loading Turmerific on the local `next start` (a known local hang). After the
-alias update, on the public demo in fresh unauthenticated browsers: `qa_nuricell_ink` 404/404,
-`qa_home_ink` 282/282, `qa_fda` 232/232, `qa_nav` 315/316 (the same tablet check). Screenshots
-of the chapter at 1440 and on a phone matched the local build.
-
-Before this update, the alias pointed to `bigh-website-2pyiz7a4c-sarkuseq1999s-projects.vercel.app`
-(`dpl_7sqGtYsvNqr2WjdM3AV37HqYNgpF`), the **production** deployment of `main` at
-`75fb88edd4787ef8fbfe7b7eaaee659fa45c82cd` (homepage science on phones: the next topic's painting
-peeks in; Mo's pick A). That session pointed the alias; its own entry is not here yet.
+Before this update, for about 25 minutes, the alias pointed to
+`bigh-website-2pyiz7a4c-sarkuseq1999s-projects.vercel.app` (`dpl_7sqGtYsvNqr2WjdM3AV37HqYNgpF`),
+the **production** deployment of `main` at `75fb88edd4787ef8fbfe7b7eaaee659fa45c82cd`. On October
+26, 2026, Mo asked how people would know the homepage science strip can be swiped on a phone,
+picked A of three hints (over a one-time nudge and three dots) and said to put it live: the next
+topic's painting peeks in at the window's right edge, at 65% (about 39px on a 390px phone, 76px on
+a tablet), with only its painting showing; each topic's painting is about 10% narrower and the
+words keep their column. Claude pushed branch `home-science-peek` to `main` (a fast-forward from
+`891071d`). Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; the touch test passed but for one tablet step (a tab tap
+within about half a second of a flick is sometimes lost; the live build before did the same in 2
+of 4 runs); 0 of 48 short drags off a topic. On the public demo `qa_home_ink` 282/282; the
+release above replaced it while the menu check was running, so the rest was checked on that.
+The touches are finger input through Chrome's DevTools protocol, not a real phone.
 
 Before that, the alias pointed to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
 (`dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`), the **production** deployment of `main` at
