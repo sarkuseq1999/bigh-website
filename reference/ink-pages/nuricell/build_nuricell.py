@@ -214,6 +214,123 @@ def capsule_pair():
     return art
 
 
+# Chapter 5 since October 26, 2026: Dr. Liu in "the view west" (Mo picked idea A, the Berkeley story,
+# then A2, round 2; mockups reference/ink-pages/mockups/nuricell-liu/). His shipped portrait (liu-v1,
+# his real face, never generated) stands on the Berkeley hills over the bay, the Golden Gate in the
+# fog: a Codex landscape behind him (take v2b; v2a is a spare) and a Codex band of dry grass in front
+# of his foot, kept clear of his hands. One wide plate for two columns (the words sit in its sky) and
+# a plate of its own for phones (the bridge larger, beside him). Positions are pixels on each canvas;
+# fades and the grass's window are fractions of it.
+BERKELEY = {"land": "liu-berkeley-west-ink-v2b", "grass": "liu-berkeley-grass-v1"}
+# Its own version (the image optimizer caches by URL): v3 since the bridge kept its cables and the
+# grass fades out at the right edge too.
+BERKELEY_V = "v3"
+BERKELEY_PLATES = {
+    "liu-berkeley": {
+        "canvas": (2600, 1444),
+        "land": {"width": 2600, "x": 0, "y": 150, "fade": (0.04, 0.06, 0.14)},
+        "figure": {"width": 940, "x": 1510, "y": 180, "fade": 0.16},
+        "grass": {"width": 1500, "x": 1250, "y": 520, "window": (0.5, 0.94), "hands": (0.615, 0.725), "soft": 0.06},
+    },
+    "liu-berkeley-phone": {
+        "canvas": (1500, 1600),
+        "land": {"width": 3600, "x": -40, "y": -300, "fade": (0.05, 0.07, 0.14)},
+        "figure": {"width": 1040, "x": 370, "y": 110, "fade": 0.16},
+        "grass": {"width": 1300, "x": 260, "y": 760, "window": (0.25, 0.94), "hands": (0.306, 0.534), "soft": 0.08},
+    },
+}
+# The landscape's straw and the grass a little warmer than painted (the hills read grey otherwise);
+# the grass at 85% so it seats him without hiding his jacket.
+LAND_SAT, GRASS_SAT, GRASS_INK = 1.3, 1.15, 0.85
+
+
+def smooth_ramp(n, length, reverse=False):
+    """0 -> 1 over `length` px (smoothstep), then 1; or the other way round."""
+    x = np.clip(np.arange(n, dtype=np.float32) / max(length, 1), 0, 1)
+    t = x * x * (3 - 2 * x) if length > 0 else np.ones(n, np.float32)
+    return t[::-1] if reverse else t
+
+
+def window(n, a, b, soft):
+    """1 between fractions a and b of n, softened over `soft` on each side."""
+    x = np.arange(n, dtype=np.float32) / n
+    return np.clip((x - (a - soft)) / soft, 0, 1) * np.clip(((b + soft) - x) / soft, 0, 1)
+
+
+def ink_layer(img, width, sat):
+    """A Codex painting as ink amounts (0 on bare paper): paper divided out (not lifted: lifting
+    whitened the Golden Gate's faint cables away), its colour warmed by `sat`, the faint paper grain
+    dropped, scaled to `width`."""
+    flat = np.asarray(bd.divided(img)).astype(np.float32)
+    grey = flat.mean(axis=2, keepdims=True)
+    flat = np.clip(grey + (flat - grey) * sat, 0, 255)
+    ink = 255.0 - np.asarray(Image.fromarray(flat.astype(np.uint8)).resize((width, round(img.height * width / img.width)), Image.LANCZOS)).astype(np.float32)
+    ink[ink.max(axis=2) < 8] = 0
+    return ink
+
+
+def placed(layer, canvas, x, y):
+    """`layer` (h, w[, c]) pasted on a zero canvas of `canvas` (w, h) with its corner at x, y."""
+    cw, ch = canvas
+    out = np.zeros((ch, cw) + layer.shape[2:], np.float32)
+    sx, sy, dx, dy = max(0, -x), max(0, -y), max(0, x), max(0, y)
+    w, h = min(layer.shape[1] - sx, cw - dx), min(layer.shape[0] - sy, ch - dy)
+    out[dy : dy + h, dx : dx + w] = layer[sy : sy + h, sx : sx + w]
+    return out
+
+
+def figure_mask(rgb):
+    """Where Dr. Liu's portrait stands, solid (his white shirt and face too), so the landscape behind
+    never shows through him: the ink closed into one body and filled, the edge pulled in so the
+    ragged brush edge itself sits over the landscape, then feathered."""
+    solid = (255 - rgb.min(axis=2).astype(np.int16)) > 18
+    solid = cv2.morphologyEx(solid.astype(np.uint8), cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (41, 41)))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(solid, 8)
+    body = (lab == 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))).astype(np.uint8)
+    holes = body.copy()
+    cv2.floodFill(holes, None, (0, 0), 1)
+    body = body | (1 - holes)
+    body = cv2.erode(body, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (23, 23)))
+    return np.clip(cv2.GaussianBlur(body.astype(np.float32), (0, 0), 7), 0, 1)
+
+
+def berkeley():
+    """Chapter 5's two plates (BERKELEY_PLATES): the landscape's ink, faded at its sides and foot,
+    gives way to paper where he stands; his portrait multiplies over it, drying out toward the foot;
+    the grass multiplies in front, kept off his hands."""
+    portrait = Image.open(OUT / f"liu-{V}.webp").convert("RGB")
+    mask_full = figure_mask(np.asarray(portrait))
+    land_img = Image.open(HERE / "originals" / f"{BERKELEY['land']}.png").convert("RGB")
+    grass_img = Image.open(HERE / "originals" / f"{BERKELEY['grass']}.png").convert("RGB")
+    arts = {}
+    for name, p in BERKELEY_PLATES.items():
+        cw, ch = p["canvas"]
+        land = p["land"]
+        lk = ink_layer(land_img, land["width"], LAND_SAT)
+        lk *= smooth_ramp(lk.shape[0], int(0.3 * lk.shape[0]))[:, None, None]  # its sky never quite paper
+        ink = placed(lk, (cw, ch), land["x"], land["y"])
+        left, right, foot = land["fade"]
+        fx = smooth_ramp(cw, int(left * cw)) * smooth_ramp(cw, int(right * cw), True)
+        ink *= (smooth_ramp(ch, int(foot * ch), True)[:, None] * fx[None, :])[..., None]
+
+        fig = p["figure"]
+        fh = round(portrait.height * fig["width"] / portrait.width)
+        him = 255.0 - np.asarray(portrait.resize((fig["width"], fh), Image.LANCZOS)).astype(np.float32)
+        where = cv2.resize(mask_full, (fig["width"], fh), interpolation=cv2.INTER_AREA)
+        dry = smooth_ramp(ch, int(fig["fade"] * ch), True)[:, None]
+        him = placed(him, (cw, ch), fig["x"], fig["y"]) * dry[..., None]
+        where = placed(where, (cw, ch), fig["x"], fig["y"]) * dry
+
+        g = p["grass"]
+        gk = placed(ink_layer(grass_img, g["width"], GRASS_SAT) * GRASS_INK, (cw, ch), g["x"], g["y"])
+        gx = window(cw, *g["window"], g["soft"]) * (1 - window(cw, *g["hands"], g["soft"]))
+        gk *= (smooth_ramp(ch, int(0.12 * ch), True)[:, None] * gx[None, :])[..., None]
+
+        plate = (255.0 - ink * (1 - where)[..., None]) * (255.0 - him) / 255.0 * (255.0 - gk) / 255.0
+        arts[name] = bd.art_of(Image.fromarray(np.clip(np.rint(plate), 0, 255).astype(np.uint8)), f"{name}-{BERKELEY_V}", cw)
+    return arts["liu-berkeley"], arts["liu-berkeley-phone"]
+
+
 def write_ts(art):
     head = [
         "// Generated by reference/ink-pages/nuricell/build_nuricell.py. Do not edit by hand: change",
@@ -231,6 +348,8 @@ def write_ts(art):
 
 if __name__ == "__main__":
     unlit, lit = lantern()
+    liu = finish(cropped("liu"), "liu", 1000)
+    liu_berkeley, liu_berkeley_phone = berkeley()
     write_ts(
         {
             "lanternUnlit": unlit,
@@ -238,7 +357,9 @@ if __name__ == "__main__":
             "capsule": gilded("capsule", 1200),
             "capsulePair": capsule_pair(),
             "books": finish(cropped("books"), "books", 1100),
-            "liu": finish(cropped("liu"), "liu", 1000),
+            "liu": liu,
+            "liuBerkeley": liu_berkeley,
+            "liuBerkeleyPhone": liu_berkeley_phone,
             "breakfast": gilded("breakfast", 1100),
             "sum": brushed_sum(),
             "stroke": finish(cropped("stroke", pad=0.08), "stroke", 1400),

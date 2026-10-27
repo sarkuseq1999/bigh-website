@@ -97,7 +97,16 @@ export type ProductPerson = {
    * "Illustration" like every other painting).
    */
   paintingOf?: "person" | "work";
+  /**
+   * The same painting framed again for one column (NuriCell, October 26, 2026: Dr. Liu's view west
+   * runs across the page from 960px; a phone gets him larger, the bridge beside him).
+   */
+  paintingPhone?: InkArt;
+  /** One line in ink between the title and the lines, the one thing to know (NuriCell). */
+  lead?: string;
   lines: string[];
+  /** A small line after the lines, saying what kind of study it was (NuriCell). */
+  note?: string;
 };
 
 export type ProductSummary = {

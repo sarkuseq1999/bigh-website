@@ -467,7 +467,7 @@ EXPECT = {
     "why": "lighthouse-unlit",
     "inside": "capsule",
     "research": "books",
-    "people": "liu-v1",
+    "people": "liu-berkeley",
     "daily": "breakfast",
     "buy": "stroke",
 }
@@ -475,18 +475,24 @@ EXPECT = {
 
 def people_painting(page):
     """Dr. Liu's chapter shows his painting, not his photograph, and in colour (never black and
-    white: in Asia that signals a person has died)."""
+    white: in Asia that signals a person has died). Since October 26, 2026 (Mo picked A2) it is the
+    view west, his portrait at the right of a grey ink landscape: the wide framing from 960px, the
+    phone framing below; the colour is measured on him (the plate's right 45%), not the grey bay."""
     selector = '[data-chapter="people"] figure[data-picture] img'
-    src = page.locator(selector).first.get_attribute("src") or ""
-    check("people: Dr. Liu's painting, not his photograph", "liu-v1" in src and "jiankang-liu" not in src, src)
+    shown = page.locator(selector).first.evaluate("img => img.currentSrc") or ""
+    wide = page.viewport_size["width"] >= 960
+    framing = "liu-berkeley-v" if wide else "liu-berkeley-phone-v"
+    check(f"people: Dr. Liu's painting, not his photograph ({'wide' if wide else 'phone'} framing)",
+          framing in shown and "jiankang-liu" not in shown, shown[-90:])
     bring(page, selector, 160)
     page.wait_for_timeout(400)
     box = page.locator(selector).first.bounding_box()
     vh = page.viewport_size["height"]
     top = max(box["y"], 0)
-    png = page.screenshot(clip={"x": box["x"], "y": top, "width": box["width"], "height": min(box["height"], vh - top)})
+    left = box["x"] + box["width"] * 0.55
+    png = page.screenshot(clip={"x": left, "y": top, "width": box["width"] * 0.45, "height": min(box["height"], vh - top)})
     share = saturated_share(png)
-    check("people: the painting is in colour", share > 0.03, f"{share:.1%} of its pixels clearly coloured (paper alone about 0)")
+    check("people: the painting is in colour", share > 0.03, f"{share:.1%} of his part's pixels clearly coloured (paper alone about 0)")
 
 
 def reachable_text(page):
@@ -519,7 +525,10 @@ def words(browser, chapters=tuple(CHAPTERS)):
                    "Choline", "Why these four work together", "Fuel in, energy out", "Energy on hand",
                    "Two halves of a messenger"],
         "research": ["The research on the ingredients", "Show all 7 studies"],
-        "people": ["The people behind the formula", "Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "Portrait painting"],
+        # No label over his name on NuriCell (Mo picked A2, October 26, 2026); a lead and a note.
+        "people": ["Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "Portrait painting",
+                   "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
+                   "An animal study, not a test of NuriCell."],
         "daily": ["How to take it", "One bottle, one month.", "Take 3 capsules once a day, with or after a meal.",
                   "capsules a day", "days", "capsules in each bottle"],
         "buy": ["In each bottle", "Formulated by Dr. Jiankang Liu.", "Add to cart"],
@@ -736,7 +745,9 @@ def layout(browser):
         wide = page.evaluate("() => document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: no sideways scroll", wide <= 0, f"{wide}px")
         # From 960px each painting in its own place (Mo picked B, October 19, 2026): the words left
-        # of the lantern and of Dr. Liu; the books and the bottle left of theirs; the capsule between
+        # of the lantern; Dr. Liu's view west across the chapter with his words in its sky, ending
+        # above its land (its lower 45%; Mo picked A2, October 26, 2026); the books and the bottle
+        # left of theirs; the capsule between
         # its ingredients (the first and third left of it, the second and fourth right of it) under
         # the heading; the breakfast right of its heading and over the brushed sum. One column: each
         # painting over its words.
@@ -748,7 +759,13 @@ def layout(browser):
                  const id = c.dataset.chapter;
                  let ok;
                  if (!two) ok = f.bottom <= t.top + 1;
-                 else if (id === 'why' || id === 'people') ok = t.right <= f.left + 1;
+                 else if (id === 'why') ok = t.right <= f.left + 1;
+                 else if (id === 'people') {
+                   const img = box(c.querySelector('figure[data-picture] img'));
+                   const last = box([...c.querySelectorAll('[data-words] > *')].pop());
+                   ok = img.width >= Math.min(window.innerWidth, 1.8 * (window.innerHeight - 140)) - 2
+                     && last.bottom <= img.top + img.height * 0.55 + 1 && t.left < img.left + img.width / 2;
+                 }
                  else if (id === 'inside') {
                    const rows = [...c.querySelectorAll('tbody tr')].map(box);
                    ok = rows.length === 4 && box(c.querySelector('h2')).bottom <= f.top + 1
@@ -1035,6 +1052,9 @@ def polish(browser):
 
 
 NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
+       # Dr. Liu in the view west (m907-m909, October 26, 2026).
+       "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
+       "Both are in NuriCell, which he formulated.", "An animal study, not a test of NuriCell.",
        # The Why chapter's tidied words (m901-m906, October 26, 2026).
        "Inside many of your cells, mitochondria turn food into the energy you live on.",
        "Your brain is about 2% of your weight.", "Yet it uses about 20% of your energy.",
@@ -1048,7 +1068,7 @@ ALTS = {
     "why": "A lighthouse on the California coast whose light comes on, painted in ink",
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
     "research": "Seven books as stepping stones across a calm stream, painted in ink",
-    "people": "A portrait painting of Dr. Jiankang Liu in ink and colour",
+    "people": "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and colour",
     "daily": "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink",
 }
 PLACEHOLDER = re.compile(r"\{[^{}]*\}")

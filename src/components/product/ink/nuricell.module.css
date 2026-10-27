@@ -63,6 +63,16 @@
   .nuricell[data-look="ink"] [data-chapter="why"] {
     --picture-height: 55svh;
   }
+
+  /* 5. Dr. Liu's phone framing (the bridge larger, beside him): the column's full width, out to the
+     window's edges, up to 640px; its caption back inside the gutter. */
+  .nuricell[data-look="ink"] [data-chapter="people"] > div > figure {
+    width: min(calc(100% + 2 * var(--gutter)), 640px);
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="people"] > div > figure figcaption {
+    padding-right: var(--gutter);
+  }
 }
 
 @media (min-width: 960px) {
@@ -76,13 +86,49 @@
   }
 
   /* 2. The lantern hangs taller than the template's paintings (its caption still in the window
-     under the menu bar); 5. Dr. Liu a little taller too. */
+     under the menu bar). */
   .nuricell[data-look="ink"] [data-chapter="why"] {
     --picture-height: calc(100svh - 150px);
   }
 
+  /* 5. Dr. Liu in the view west (Mo picked A2, October 26, 2026; mockups
+     reference/ink-pages/mockups/nuricell-liu/): one painting as wide as the window (on a short wide
+     screen at most 1.8 times the window's height less the bar and some air, centred), his name and words in its
+     sky at the left, the bay and the Golden Gate under them, him on the hill at the right. The
+     painting sits at the chapter's foot and the words keep out of its land (its lower 45%) by their
+     padding, so where the words are taller than the sky (a narrow two-column window) the chapter
+     grows and the painting stays under them. Not sticky: the painting is the chapter. */
   .nuricell[data-look="ink"] [data-chapter="people"] {
-    --picture-height: calc(100svh - 190px);
+    --liu-width: min(100vw, calc((100svh - 140px) * 1.8));
+    --liu-height: calc(var(--liu-width) / 1.8);
+    --liu-caption: 34px;
+    position: relative;
+    padding-block: 0;
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="people"] > div {
+    min-height: calc(var(--liu-height) + var(--liu-caption));
+    align-items: start;
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="people"] > div > figure {
+    position: absolute;
+    top: auto;
+    bottom: 0;
+    left: max(0px, calc(50% - var(--liu-width) / 2));
+    width: min(100%, var(--liu-width));
+  }
+
+  /* The caption under his right shoulder (his painting ends about 6% in from its right edge). */
+  .nuricell[data-look="ink"] [data-chapter="people"] > div > figure figcaption {
+    padding-right: 7%;
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="people"] [data-words] {
+    position: relative;
+    z-index: 1;
+    padding-top: clamp(32px, 3.9vw, 64px);
+    padding-bottom: calc(var(--liu-height) * 0.45 + var(--liu-caption));
   }
 
   /* 3. What's inside, a specimen plate: the heading and the amounts' "per serving" line centred

@@ -35,6 +35,16 @@ export const nuricellArt = {
     width: 1000,
     height: 1476,
   },
+  liuBerkeley: {
+    src: "/images/products/nuricell/ink/liu-berkeley-v3.webp",
+    width: 2600,
+    height: 1444,
+  },
+  liuBerkeleyPhone: {
+    src: "/images/products/nuricell/ink/liu-berkeley-phone-v3.webp",
+    width: 1500,
+    height: 1600,
+  },
   breakfast: {
     src: "/images/products/nuricell/ink/breakfast-v1.webp",
     width: 1100,
