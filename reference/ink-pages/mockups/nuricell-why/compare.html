@@ -4,8 +4,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;600&display=swap">
 <style>
-  /* Layout: one column. The built section on a laptop, the light off and on, then two phone
-     screens. Rice paper and sumi ink, like the site. */
+  /* Layout: one column. A (built) and B (a sample) on a laptop, then side by side on a phone, A's
+     light off and on, then the two scores. Rice paper and sumi ink, like the site. */
   :root {
     --paper: #f5f1e8;
     --card: #fbf8f2;
@@ -97,6 +97,10 @@
     display: grid;
     gap: 8px;
   }
+  .scores { gap: 12px; }
+  @media (max-width: 520px) {
+    .scores { grid-template-columns: minmax(0, 1fr); }
+  }
   .score {
     font-family: var(--title);
     font-weight: 600;
@@ -108,39 +112,54 @@
 
 <main>
   <header style="display:grid;gap:10px">
-    <span class="tag">A · BUILT</span>
-    <h1>NuriCell: the Gold Rush lantern</h1>
-    <p class="lede">Your pick, built into the page. These are real screenshots of the built site on this computer.
-      Nothing is live yet.</p>
+    <span class="tag">A OR B</span>
+    <h1>NuriCell: the lantern or the lighthouse</h1>
+    <p class="lede">Same words, two lights. A is built into the page. B is a sample: the lighthouse painting placed
+      into the same page. Nothing is live yet.</p>
   </header>
 
   <section>
     <h2>On a laptop</h2>
-    <figure><img src="built-desk1440.webp" alt="The section on a laptop: the shorter words on the left, the lit Gold Rush lantern on the right" width="1440" height="900"><figcaption>1440 wide, the light on</figcaption></figure>
-  </section>
-
-  <section>
-    <h2>The light comes on as you scroll</h2>
-    <p class="why">First the lantern paints in with grey, empty glass. A breath later the flame and its warm glow fade
-      up.</p>
-    <figure class="onoff"><img src="built-onoff.webp" alt="The lantern before and after: grey glass and a bare wick, then a gold flame and a warm glow" width="850" height="800" loading="lazy"><figcaption>Off, then on</figcaption></figure>
+    <span class="tag">A · THE GOLD RUSH LANTERN (BUILT)</span>
+    <figure><img src="built-desk1440.webp" alt="A on a laptop: the shorter words on the left, the lit Gold Rush lantern on the right" width="1440" height="900"><figcaption>1440 wide, the light on</figcaption></figure>
+    <span class="tag">B · THE LIGHTHOUSE (A SAMPLE)</span>
+    <figure><img src="lighthouse-a2-desk1440-0.webp" alt="B on a laptop: the same words on the left, a lighthouse on a misty cliff on the right" width="1440" height="900" loading="lazy"><figcaption>1440 wide, the same words</figcaption></figure>
   </section>
 
   <section>
     <h2>On a phone</h2>
     <div class="two">
-      <figure><img src="built-phone-0.webp" alt="The section on a phone: the lantern, then the heading and the one line" width="780" height="1688" loading="lazy"><figcaption>First screen</figcaption></figure>
-      <figure><img src="built-phone-1.webp" alt="The section on a phone: 2% small, then 20% big, then the 20 watts line" width="780" height="1688" loading="lazy"><figcaption>Scrolled: small 2% first, then the big 20%</figcaption></figure>
+      <figure><span class="tag">A</span><img src="built-phone-0.webp" alt="A on a phone: the lantern, then the heading and the one line" width="780" height="1688" loading="lazy"><figcaption>The lantern</figcaption></figure>
+      <figure><span class="tag">B</span><img src="lighthouse-a2-phone-0.webp" alt="B on a phone: the lighthouse, then the heading and the one line" width="780" height="1688" loading="lazy"><figcaption>The lighthouse</figcaption></figure>
     </div>
   </section>
 
-  <section class="note">
-    <p class="score">8 / 10</p>
-    <p class="why">What still holds it back:</p>
-    <ul>
-      <li>The light coming on is gentler than the paper lantern's. Only the glass glows, not the whole lantern.</li>
-      <li>Up close, the painting's washes have a faint crackle texture from the picture tool.</li>
-      <li>The new lines in Chinese, Japanese, Korean and Vietnamese are draft translations.</li>
-    </ul>
+  <section>
+    <h2>The light coming on</h2>
+    <p class="why">A: the lantern paints in with grey, empty glass. A breath later the flame and its warm glow fade
+      up. B can do the same (the lamp room dark, then lit), but it is not built yet.</p>
+    <figure class="onoff"><img src="built-onoff.webp" alt="The lantern before and after: grey glass and a bare wick, then a gold flame and a warm glow" width="850" height="800" loading="lazy"><figcaption>A: off, then on</figcaption></figure>
   </section>
+
+  <div class="two scores">
+    <section class="note">
+      <span class="tag">A · LANTERN</span>
+      <p class="score">8 / 10</p>
+      <ul>
+        <li>Bold and close. The light is the first thing you see.</li>
+        <li>The light coming on is gentle: only the glass glows.</li>
+        <li>Up close, a faint crackle texture in the washes.</li>
+      </ul>
+    </section>
+    <section class="note">
+      <span class="tag">B · LIGHTHOUSE</span>
+      <p class="score">7 / 10</p>
+      <ul>
+        <li>Calm and Californian. Fits "a light that never goes out".</li>
+        <li>The light is small and far away. On a phone it is a dot.</li>
+        <li>Its light is painted yellow, not gold leaf.</li>
+        <li>Stronger crackle texture on the cliff.</li>
+      </ul>
+    </section>
+  </div>
 </main>
