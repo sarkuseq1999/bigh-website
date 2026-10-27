@@ -5,9 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (Science, one place per screen, put live on
-  its own). Earlier the same day: the tablet menu's crane eases with the fold (local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (NuriCell research, tap a book; local, not
+  pushed). Earlier the same day: Science, one place per screen, put live on its own; the tablet
+  menu's crane eases with the fold (local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): NuriCell research, Mo's pick A, "tap a book, read its study"**
+  (mockup and the built page's shots `reference/ink-pages/mockups/nuricell-research/`, artifact
+  `UFqCskQg1VCPiKy8ZTTVLk`; the draft rounds in `codes/bigh-archive/nuricell-research-mockup-2026-10-26/`).
+  Mo asked for the research list to be more fun to read and found the small "The research" label
+  odd. Each of the seven books in the painting is a button (a clip-path over the painting, grown
+  around the far books): tap one and its study opens, the other books fade under a little paper
+  (`books-mask-v1-*.png`, cut by `reference/ink-pages/nuricell/find_books.py`). The studies are six
+  plain questions with short answers written from each paper's abstract; the two 2003 reviews
+  share "Scientists disagree" and light two books. On a phone a tapped book brings its question up
+  under the menu bar. No label, no "Show all"; without scripts every answer shows. The note is
+  shorter in `nuricell.ts`. New words translated as drafts (m930-m961), including the chapter's
+  heading, which was English in every language on all five product pages until now. On the built
+  site at db2b938 (`npm run build` + `next start`): `qa_nuricell_ink` 443/443 (a new research
+  section), `qa_questions` 403/403, `qa_home_ink` 282/282, `qa_nav` 326/326; the other four
+  products' language checks 16/16 each on the build just before (without the product questions).
+  Open: native check of m930-m961; the far books are small
+  to tap on a phone (the questions are the easy tap).
 - **Local, not live (October 26): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
   Berkeley story, then A2 of two mockups, then round 2 of A2; mockups and the built page's shots
   `reference/ink-pages/mockups/nuricell-liu/`, artifact `W7qmqUj4RNiCVLmtk94j5a`). His real
