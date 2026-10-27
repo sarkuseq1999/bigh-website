@@ -1,7 +1,9 @@
 // Words and facts for the Science page (/science). Mo's 9/16 plan: lead with the scientists, then
-// the research, health explained, and Ask BiGH Science. The page is now "the handscroll" in Ink &
-// Gold (Mo, October 13-14, 2026; components in ./ink/). It replaced look B, "Scroll film" (Mo's
-// pick of September 28, now in reference/science-page/looks/film/); the earlier looks are in
+// the research, health explained, and Ask BiGH Science. The page is Ink & Gold (Mo, October 13-14,
+// 2026; components in ./ink/): first "the handscroll", whose painting travelled sideways; since
+// Mo's pick B of October 26, Dr. Liu first, then his path one place per screen going down, then the
+// research, health explained, the formulas and Ask. It replaced look B, "Scroll film" (Mo's pick of
+// September 28, now in reference/science-page/looks/film/); the earlier looks are in
 // reference/science-page/looks/ and .../looks/round3/.
 //
 // Approved copy is marked "approved" with its date in BRAND-CHEATSHEET.md. Everything else is a
@@ -48,28 +50,6 @@ export const liu = {
     },
   ],
 };
-
-// DRAFT: three big numbers for look A, each from a dated source (RESEARCH-NOTES.md).
-export const liuNumbers = [
-  {
-    value: 280,
-    suffix: "+",
-    label: "scientific papers, as his university reported in 2025",
-    url: "https://www.uhrs.edu.cn/info/1050/1805.htm",
-  },
-  {
-    value: 1994,
-    suffix: "",
-    label: "the year he joined Bruce Ames’s laboratory at UC Berkeley",
-    url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
-  },
-  {
-    value: 2025,
-    suffix: "",
-    label: "elected to the European Academy of Sciences and Arts",
-    url: "https://www.uhrs.edu.cn/info/1050/1805.htm",
-  },
-];
 
 // DRAFT. Words only, never a photograph. Credits confirmed by Mo on September 25, 2026: NuriCell is
 // formulated by Dr. Liu only ("credit goes to Dr. Liu only"); Nature Calm by Dr. Liu and Dr. Iris
@@ -119,44 +99,63 @@ export const formulas = [
 export const formulasLine =
   "Every BiGH formula was developed by our scientists or under their direction and guidance.";
 
-// DRAFT: his path (the film strip). Years only where a source gives one.
-export const pathStops = [
+// DRAFT: his path, one place per screen (Mo's pick B, October 26, 2026), each beside its painting
+// (science-art.ts places). Years only where a source gives one: the faculty profile dates his
+// postdoctoral work in Bruce Ames's laboratory 1994-1997 (RESEARCH-NOTES.md), so Berkeley says 1994,
+// the year he joined, and the 2002 study is told as published then. The three numbers that stood
+// under his name (280+, 1994, 2025) are told here with the same sources. Today drops the stop's old
+// title (his BiGH title stands under his name above). English in every language, as the stops were.
+export const places = [
   {
-    mark: "Okayama",
+    key: "okayama",
+    when: "Japan",
+    name: "Okayama",
     title: "A doctorate in neuroscience",
     text: "His scientific training began at Okayama University in Japan.",
-    link: "Faculty profile (Chinese)",
-    url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
+    links: [
+      {
+        label: "Faculty profile (Chinese)",
+        url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
+      },
+    ],
+    alt: "Okayama Castle on its hill above the sea, painted in ink",
   },
   {
-    mark: "1994",
-    title: "Berkeley",
-    text: "Research in Bruce Ames’s laboratory at the University of California, Berkeley.",
-    link: "Faculty profile (Chinese)",
-    url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
+    key: "berkeley",
+    when: "1994 · California",
+    name: "Berkeley",
+    title: "Research in Bruce Ames’s laboratory",
+    text: "At the University of California, Berkeley. In 2002 their study of two nutrients and the aging cell appeared in PNAS, as an animal study.",
+    links: [
+      {
+        label: "Faculty profile (Chinese)",
+        url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
+      },
+      { label: "Read the 2002 study", url: "https://pubmed.ncbi.nlm.nih.gov/11854529/" },
+    ],
+    alt: "The bell tower at Berkeley among tall trees on a hill, painted in ink",
   },
   {
-    mark: "2002",
-    title: "Nutrients and the aging cell",
-    text: "Two nutrients, one aging cell. Published in PNAS as an animal study.",
-    link: "Read the 2002 study",
-    url: "https://pubmed.ncbi.nlm.nih.gov/11854529/",
-  },
-  {
-    mark: "2025",
+    key: "salzburg",
+    when: "2025 · Austria",
+    name: "Salzburg",
     title: "An academy honor",
-    text: "Elected to the European Academy of Sciences and Arts, with more than 280 papers.",
-    link: "University announcement",
-    url: "https://www.uhrs.edu.cn/info/1050/1805.htm",
+    text: "Elected to the European Academy of Sciences and Arts, based in Salzburg, with more than 280 papers.",
+    links: [
+      { label: "University announcement", url: "https://www.uhrs.edu.cn/info/1050/1805.htm" },
+    ],
+    alt: "Salzburg’s fortress above the old town and the river, painted in ink",
   },
   {
-    mark: "Today",
-    title: "Chief Scientific Advisor, BiGH",
+    key: "today",
+    when: "",
+    name: "Today",
+    title: "",
     text: "His research now guides the science behind our formulas.",
-    link: "",
-    url: "",
+    links: [],
+    alt: "California oaks on golden hills under a gold sun, painted in ink",
   },
-];
+] as const;
 
 // DRAFT: look C's three questions (look C is in reference/science-page/looks/; kept here so it can
 // come back as it was).
@@ -272,8 +271,8 @@ export const ask = {
   note: "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
 };
 
-// The ink page, "the handscroll" (Mo, October 13-14, 2026; spec
-// docs/superpowers/specs/2026-10-14-science-ink-design.md). DRAFT lines.
+// The ink page (Mo, October 13-14, 2026; spec docs/superpowers/specs/2026-10-14-science-ink-design.md;
+// one place per screen since October 26). DRAFT lines.
 export const ink = {
   // The opening's lead: the film's two lines, as one (DRAFT in the film as well; neither is in
   // BRAND-CHEATSHEET.md).
@@ -282,11 +281,6 @@ export const ink = {
     "From Okayama to Berkeley, and from the lab to BiGH.", // DRAFT
   ],
   formulasLabel: "The formulas", // DRAFT
-  source: "Source", // DRAFT
-  scrollHint: "Keep scrolling: the scroll unrolls", // DRAFT
-  scrollStill: "Scroll sideways to see the whole painting", // DRAFT
-  scrollAlt:
-    "A long ink painting of Dr. Liu’s path: Okayama Castle, the ocean, the bell tower at Berkeley, Salzburg, and California hills under a gold sun", // DRAFT
   readStudy: "Read the study", // DRAFT
   scrollsAlt: "A shelf of rolled scrolls painted in ink; three lie pulled forward", // DRAFT
   healthAlt:

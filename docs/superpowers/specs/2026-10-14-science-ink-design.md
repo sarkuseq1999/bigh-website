@@ -1,5 +1,11 @@
 # Science in Ink & Gold: the handscroll
 
+> **October 26, 2026: the handscroll is gone (Mo's pick B).** Mo found its sideways travel read as a
+> draft. The page now opens on the title and Dr. Liu, then his path goes down the page one place
+> per screen (four paintings cut from the band), then the research, health explained, the formulas
+> and Ask. The rows and the handscroll section below describe the October 14 page. See AGENTS.md
+> ("Science: his path one place per screen") and `reference/ink-pages/science/README.md`.
+
 October 14, 2026. Branch `science-ink` (worktree `codes/bigh-science-ink`), from `origin/main` c31650f,
 fast-forwarded to c62661b. The next page in the site-wide restyle (`2026-10-05-ink-pages-design.md`),
 after About C (live October 8) and NuriCell (live October 10). This spec replaces that file's

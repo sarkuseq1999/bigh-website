@@ -1,18 +1,19 @@
-/* Dr. Liu and the formulas (spec, "The page" rows 2 and 3). */
+/* Dr. Liu, under the page's title (Mo's pick B, October 26, 2026), and the formulas (spec, "The
+   page"). His photograph and words sit a little narrower than the page's other parts, so the two
+   read as one pair under the centred title. */
 .liu {
-  padding-top: clamp(96px, 10vw, 150px);
-}
-
-.liuGrid {
   display: grid;
   gap: 36px;
+  max-width: calc(1040px + 2 * var(--gutter));
+  margin-top: 36px;
 }
 
 @media (min-width: 960px) {
-  .liuGrid {
+  .liu {
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 72px;
     align-items: center;
+    margin-top: 56px;
   }
 }
 
@@ -52,81 +53,6 @@
 .liu p.intro {
   margin-top: 10px;
   max-width: 640px;
-}
-
-/* Three rows shared by the three numbers (subgrid): the numbers, their labels, their "Source"
-   links. Each row is as tall as its tallest cell, so the links stand on one line whatever a
-   label's length (or its translation). */
-.numbers {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 190px));
-  column-gap: 32px;
-  margin: 30px 0 0;
-}
-
-.numbers > div {
-  display: grid;
-  grid-row: span 3;
-  grid-template-rows: subgrid;
-  row-gap: 0;
-}
-
-.numbers dt {
-  font-family: var(--display-font);
-  font-size: clamp(44px, 4vw, 60px);
-  font-weight: 500;
-  line-height: 1;
-  letter-spacing: -0.02em;
-  color: var(--ink);
-}
-
-/* The label (an anonymous grid item) on the second row, the link on the third. */
-.numbers dd {
-  display: grid;
-  grid-row: span 2;
-  grid-template-rows: subgrid;
-  row-gap: 0;
-  align-items: start;
-  margin: 10px 0 0;
-  color: var(--muted);
-  font-size: 15px;
-  line-height: 1.4;
-}
-
-/* Phones: three columns of about 90px left the labels five or six lines deep. Each number stands
-   in its own row instead, its label beside it from the number's top. */
-@media (max-width: 559px) {
-  .numbers {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: 10px;
-  }
-
-  .numbers > div {
-    grid-row: auto;
-    grid-template-rows: none;
-    grid-template-columns: 112px minmax(0, 1fr);
-    column-gap: 16px;
-    align-items: start;
-  }
-
-  .numbers dd {
-    display: block;
-    grid-row: auto;
-    margin: 2px 0 0;
-  }
-}
-
-/* The link starts on its own line under every label, whatever its length (or its translation),
-   with a 48px target (DESIGN.md). Flex keeps the arrow beside the word: the site's reset makes an
-   svg a block, which dropped it under "Source" in an inline-block link. */
-.numbers dd a {
-  display: flex;
-  width: fit-content;
-  align-items: center;
-  gap: 4px;
-  min-height: 48px;
-  margin-top: 4px;
-  color: var(--ink);
 }
 
 .story {

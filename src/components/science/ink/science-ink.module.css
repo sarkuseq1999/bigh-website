@@ -1,5 +1,6 @@
-/* The Science page in Ink & Gold, "the handscroll" (Mo, October 13-14, 2026; spec
-   docs/superpowers/specs/2026-10-14-science-ink-design.md). The page's own titles in Ysabeau, the
+/* The Science page in Ink & Gold (Mo, October 13-14, 2026; spec
+   docs/superpowers/specs/2026-10-14-science-ink-design.md; one place per screen since Mo's pick B,
+   October 26). The page's own titles in Ysabeau, the
    homepage's title face; menus, words and pills stay in the kit's Switzer. Set on main, not the
    page's root: the menu bar (its drop-downs' titles) and the footer (its promise) are shared and
    read --display-font as on About and NuriCell (final review, Ruling 20). The attribute outranks
@@ -13,9 +14,29 @@
 }
 
 /* Small titles one step heavier in Latin scripts: Ysabeau's thin strokes read lighter than the
-   words beside them (as on the homepage). */
-.page[data-look="ink"] main h3:not(:lang(ko), :lang(ja), :lang(zh)) {
+   words beside them (as on the homepage). Not the path's place names, which are big (path.module.css). */
+.page[data-look="ink"] main h3:not(:lang(ko), :lang(ja), :lang(zh), [data-place-name]) {
   font-weight: 600;
+}
+
+/* The title and Dr. Liu open the page, then his path (Mo's pick B, October 26, 2026). The eyebrow
+   stands on the paper under the menu bar, about 20px clear of where the settled bar's paper ends
+   (92px; from 960px clamp(96px, 5.3vw + 22px, 104px)), and from 1101px, where the bar's painted rule
+   is there from the start, 24px under that rule (the tall bar is clamp(88px, 6.6vw, 104px)). */
+.scientists {
+  padding-top: 112px;
+}
+
+@media (min-width: 960px) {
+  .scientists {
+    padding-top: clamp(116px, calc(5.3vw + 42px), 124px);
+  }
+}
+
+@media (min-width: 1101px) {
+  .scientists {
+    padding-top: calc(clamp(88px, 6.6vw, 104px) + 24px);
+  }
 }
 
 .opening {
