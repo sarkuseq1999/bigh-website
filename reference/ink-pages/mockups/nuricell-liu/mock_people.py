@@ -58,7 +58,8 @@ A2_CSS = """
     position: absolute; left: 0; top: 0; width: 100%; height: auto;
     mix-blend-mode: multiply; pointer-events: none;
   }
-  [data-chapter="people"] .mock-wide-cap { position: absolute; right: 7.7%; bottom: 2%; z-index: 1; }
+  [data-chapter="people"] .mock-wide-cap { position: absolute; right: 7.7%; bottom: -6px; z-index: 1; }
+  [data-chapter="people"] { margin-bottom: 26px; }
 }
 @media (max-width: 959px) {
   [data-chapter="people"] .mock-wide, [data-chapter="people"] .mock-wide-cap { display: none; }
@@ -66,6 +67,19 @@ A2_CSS = """
   [data-chapter="people"] > div > figure figcaption { padding-right: 24px; }
 }
 """
+
+# A2 round 2: the ink repaint, a bigger portrait seated in grass, more air over the name.
+A2V2_CSS = A2_CSS.replace("padding-top: 1.6vw;", "padding-top: 3.9vw;")
+
+# Each variant's plates: [file, width / height] on desktop and on phones; `wide` spans the chapter.
+PLATES = {
+    "a1": {"desktop": ["liu-berkeley-a1.png", 1400 / 1560], "phone": ["liu-berkeley-a1.png", 1400 / 1560]},
+    "a2": {"desktop": ["liu-berkeley-a2.png", 2600 / 1444], "phone": ["liu-berkeley-a2-phone.png", 1800 / 1540], "wide": True},
+    "a2v2": {"desktop": ["liu-berkeley-a2v2.png", 2600 / 1444], "phone": ["liu-berkeley-a2v2-phone.png", 1500 / 1600], "wide": True},
+    "a2v2b": {"desktop": ["liu-berkeley-a2v2b.png", 2600 / 1444], "phone": ["liu-berkeley-a2v2b-phone.png", 1500 / 1600], "wide": True},
+}
+CSS = {"a1": A1_CSS, "a2": A2_CSS, "a2v2": A2V2_CSS, "a2v2b": A2V2_CSS}
+VARIANTS = sys.argv[4].split(",") if len(sys.argv) > 4 else ["now", "a1", "a2"]
 
 
 def route_mocks(page):
@@ -109,7 +123,7 @@ def frame(page, phone):
 
 def inject(page, variant, phone):
     page.evaluate(
-        """([variant, phone, WORDS]) => {
+        """([variant, phone, WORDS, PLATE]) => {
         const c = document.querySelector('[data-chapter="people"]');
         const words = c.querySelector('[data-words]');
         const cls = (sel) => (words.querySelector(sel) || {}).className || '';
@@ -121,26 +135,24 @@ def inject(page, variant, phone):
         words.innerHTML = html;
         const fig = c.querySelector('figure');
         const img = fig.querySelector('img');
-        const plate = variant === 'a1' ? 'liu-berkeley-a1.png'
-          : phone ? 'liu-berkeley-a2-phone.png' : 'liu-berkeley-a2.png';
-        const aspect = variant === 'a1' ? 1400 / 1560 : phone ? 1800 / 1540 : 2600 / 1444;
+        const [plate, aspect] = phone ? PLATE.phone : PLATE.desktop;
         img.removeAttribute('srcset'); img.removeAttribute('sizes');
         img.loading = 'eager';
         img.src = '/__mock/' + plate;
         fig.style.setProperty('--aspect', String(aspect));
-        if (variant === 'a2') {
+        if (PLATE.wide) {
           const wide = document.createElement('img');
           wide.className = 'mock-wide'; wide.alt = '';
-          wide.src = '/__mock/liu-berkeley-a2.png';
+          wide.src = '/__mock/' + PLATE.desktop[0];
           c.appendChild(wide);
           const cap = fig.querySelector('figcaption').cloneNode(true);
           cap.classList.add('mock-wide-cap');
           c.appendChild(cap);
         }
     }""",
-        [variant, phone, WORDS],
+        [variant, phone, WORDS, PLATES[variant]],
     )
-    page.add_style_tag(content=BASE_CSS + (A1_CSS if variant == "a1" else A2_CSS))
+    page.add_style_tag(content=BASE_CSS + CSS[variant])
     page.wait_for_function(
         """() => [...document.querySelectorAll('[data-chapter="people"] img')].every(i => i.complete && i.naturalWidth > 0)"""
     )
@@ -153,7 +165,7 @@ def run():
             vp = {"width": 390, "height": 844} if phone else {"width": 1440, "height": 900}
             dsf = 2 if phone else 1
             tag = "phone" if phone else "desktop"
-            for variant in ("now", "a1", "a2"):
+            for variant in VARIANTS:
                 ctx = b.new_context(viewport=vp, device_scale_factor=dsf)
                 page = ctx.new_page()
                 route_mocks(page)
