@@ -1,0 +1,13 @@
+NuriCell, chapter 5 (Dr. Liu), Berkeley background "the view west" A1 (Mo picked idea A "Where it started: Berkeley", October 26, 2026).
+Background only: Dr. Liu's real portrait painting (liu-v1) is stood in front of it afterwards; his face is never generated.
+Codex built-in image generation, run with codex exec.
+
+A loose sumi-e ink and watercolour landscape painted on plain white paper, wide format (landscape, about 3:2). The more it looks like a quick brush painting, the better: few strokes, wet soft edges, visible brush texture, lots of bare paper.
+
+The view west from the Berkeley hills in California late on a summer afternoon: in the foreground, dry golden-straw hills as loose pale ochre washes sloping down from the right; below them the wide bay as a pale grey-blue wash with low white fog drifting over the water; far away on the left, just visible through the fog, the two tiny towers of the Golden Gate Bridge, painted with only three or four light grey strokes, very small and faint.
+
+Composition: the landscape is one horizontal band across the lower middle of the picture. The top 45% is empty white paper sky. The bottom fades out into empty white paper with a few dry-brush streaks. The right third stays quiet (only the soft hill slope, nothing tall) because a portrait will be placed there later.
+
+Colours: grey and black ink, muted ochre and straw, a little pale grey-blue for the water. Nothing bright.
+
+No people, no buildings except the faint distant bridge towers, no boats, no sun, no gold, no text, no signature, no seal or stamp, no frame or border. Not photo-real, no detailed drawing, no Asian elements (no pagodas, no characters, no scrolls).

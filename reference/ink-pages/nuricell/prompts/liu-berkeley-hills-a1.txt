@@ -1,0 +1,13 @@
+NuriCell, chapter 5 (Dr. Liu), Berkeley background A1 (Mo picked idea A "Where it started: Berkeley", October 26, 2026).
+Background only: Dr. Liu's real portrait painting (liu-v1) is stood in front of it afterwards; his face is never generated.
+Codex built-in image generation, run with codex exec.
+
+A loose sumi-e ink and watercolour landscape painted on plain white paper, wide format (landscape, about 3:2). The more it looks like a quick brush painting, the better: few strokes, wet soft edges, visible brush texture, lots of bare paper.
+
+The view from the Berkeley hills in California in late summer: rolling hills of dry golden-straw grass in a pale ochre watercolour wash, a few small distant dark ink dabs for scattered trees on the slopes, and beyond the hills a calm band of San Francisco Bay in a pale grey-blue wash, with soft white fog lying low on the water and the far shore as faint grey ink hills.
+
+Composition: the landscape is one horizontal band across the middle of the picture. The top 40% is empty white paper sky. The bottom fades out into empty white paper with a few dry-brush streaks. The right third of the band stays quiet and low (only a soft grass wash, no trees, nothing tall) because a portrait will be placed there later.
+
+Colours: grey and black ink, muted ochre and straw, a little pale grey-blue for the water. Nothing bright.
+
+No people, no buildings, no bridge, no boats, no sun, no gold, no text, no signature, no seal or stamp, no frame or border. Not photo-real, no detailed drawing, no Asian elements (no pagodas, no characters, no scrolls).

@@ -1,0 +1,27 @@
+{
+ "landscape": "C:/Users/mcbig/Documents/codes/bigh-website/reference/ink-pages/nuricell/originals/liu-berkeley-west-a1.png",
+ "portrait": "C:/Users/mcbig/Documents/codes/bigh-website/public/images/products/nuricell/ink/liu-v1.webp",
+ "mask": "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/2edca760-c12f-449a-bde8-256296e87f33/scratchpad/liu-mask.png",
+ "out": "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/2edca760-c12f-449a-bde8-256296e87f33/scratchpad/comp/liu-berkeley-a2.png",
+ "canvas": [
+  2600,
+  1444
+ ],
+ "land": {
+  "width": 2600,
+  "x": 0,
+  "y": 41,
+  "sat": 0.8,
+  "fade": {
+   "left": 0.1,
+   "right": 0.03,
+   "top": 0,
+   "bottom": 0.14
+  }
+ },
+ "figure": {
+  "width": 783,
+  "x": 1617,
+  "y": 269
+ }
+}
