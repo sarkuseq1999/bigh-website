@@ -46,7 +46,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   local build. Open: native check of m930-m961; the far books are small to tap on a phone (the
   questions are the easy tap); on a Japanese phone the hint breaks inside タップ ("tap"; the hint
   is not in the `auto-phrase` rule).
-- **Local, not live (October 26): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
+- **Live (October 27): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
   Berkeley story, then A2 of two mockups, then round 2 of A2; mockups and the built page's shots
   `reference/ink-pages/mockups/nuricell-liu/`, artifact `W7qmqUj4RNiCVLmtk94j5a`). His real
   portrait (liu-v1) stands on the Berkeley hills over the bay, the Golden Gate in the fog, painted
@@ -60,7 +60,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `liu-berkeley-west-ink-v2b`, `liu-berkeley-grass-v1`; v2a a spare). Nature Calm keeps its plain
   portrait and label. Built site (`npm run build` + `next start`, combined with the questions work
   at d15db52): `qa_nuricell_ink` 430/430, `qa_nature_calm_ink` 159/159; earlier build `qa_home_ink`
-  282/282, `qa_nav` 315/316 (the tablet crane jump, since fixed in f9c1132). Not pushed.
+  282/282, `qa_nav` 315/316 (the tablet crane jump, since fixed in f9c1132). Mo said to put it
+  live (October 27). Released on its own from a copy of live `main` with only its commits (the two
+  mockup rounds, the code, the AGENTS rule, the deep-link fix, the docs), rebased once onto
+  `5fe0846` (the tablet crane fix, pushed meanwhile), rebuilt and re-checked (`npm run build` +
+  `next start`): lint and type check clean, `qa_nuricell_ink` 430/430, `qa_nature_calm_ink`
+  159/159, `qa_home_ink` 282/282, `qa_nav` 326/326. Pushed `main` `6766ae1` (fast-forward),
+  production `dpl_FQBFSg6uMe4kzy1KXVcj6ZHokg19`, demo alias on it. On the public demo, fresh
+  browsers: `qa_nuricell_ink` 430/430, `qa_nature_calm_ink` 159/159, `qa_home_ink` 282/282,
+  `qa_nav` 325/326 then 326/326 on a rerun (the settle film's frame timing over the network once);
+  screenshots at 1440×900 and 390×844 matched the local build. The questions release and the
+  go-live merge (`641a751`, which holds the demo now) went out on top of it minutes later; the
+  page still serves the plates there. Open: native check of m907-m910; the hills read grey more
+  than golden; on a 1280×800 laptop the section runs a little past the screen.
 - **Live (October 27): the tablet menu's crane eases with the fold** (Mo said to fix the jump,
   then to push "only that fix"; before/after page `J5z9H46J76J8t2uM7nZqkf`). Released alone from
   live `main`: `main` `5fe0846` (the code of `f9c1132`), production `dpl_9WQV7zjP…`, demo alias
