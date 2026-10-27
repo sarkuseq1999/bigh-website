@@ -186,13 +186,26 @@
   grid-column: 3;
 }
 
+/* Under "Nuri" (Mo, October 26, 2026: "C, title face", after the bottom-left read weak and
+   unfinished): the headline in Ysabeau, the title face, so the statement has its own voice under
+   the heavy name; the purpose a large lead in ink that runs under the bottle, with no side line.
+   Every product but Green Bee Propolis (its own opening) shares it, so it uses only the headline
+   and the purpose. Mockups: reference/ink-pages/mockups/nuricell-hero-left/. */
 .page p.headline {
-  margin: 0 0 24px;
-  font-family: var(--display-font);
+  margin: 0 0 26px;
+  font-family: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+  font-weight: 560;
+  /* At most 62px: the wrap stops growing past 1440px, and at 66px "Nature’s antioxidant power."
+     no longer fits its line. */
+  font-size: clamp(38px, 4.3vw, 62px);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+}
+
+/* Ysabeau has no Korean, Japanese or Chinese letters, and the system faces that set them have no
+   560 (Korean and Chinese came out bold): those keep the page's title weight. */
+.page p.headline:is(:lang(ko), :lang(ja), :lang(zh)) {
   font-weight: var(--display-weight);
-  font-size: clamp(34px, 3.9vw, 60px);
-  line-height: 1.06;
-  letter-spacing: -0.022em;
 }
 
 /* Each line of the headline its own block; a line too long for a phone ("Distinctive green
@@ -202,8 +215,6 @@
   text-wrap: balance;
 }
 
-/* The purpose carries the same thin ink line as the one between the highlights under "Cell" (Mo,
-   October 13: "D"), so the two sides under the name share one mark. */
 .page p.text {
   position: relative;
   margin: 0;
@@ -215,25 +226,55 @@
   text-wrap: pretty;
 }
 
-/* Drawn like the highlights' line (a 1.5px mark, not a border, which a screen rounds to 1px). */
-.page .openingWords p.text::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.3em;
-  bottom: 0.3em;
-  width: 1.5px;
-  background: var(--ink);
-  border-radius: 1px;
+.page .openingWords p.text {
+  max-width: 30em;
+  padding-left: 0;
+  color: var(--ink);
+  font-size: clamp(20px, 1.6vw, 24px);
+  font-weight: 420;
+  line-height: 1.4;
+  letter-spacing: -0.012em;
 }
 
 /* Under "Cell" (Mo, October 12, after Timeline's and Seed's buy boxes): the highlights, the "One
-   bottle" card, a wide Add to cart and the refund line. Its rows keep their own heights
-   (align-content: start). */
-.page .openingBuy {
+   bottle" card and a wide Add to cart (buyMain), then the refund line. Its rows keep their own
+   heights (align-content: start). */
+.page .openingBuy,
+.page .buyMain {
   display: grid;
   align-content: start;
   justify-items: stretch;
+}
+
+/* From 960px the two sides end together: the words' row ends where Add to cart ends (the refund
+   line sits in a second row, through a subgrid, whatever its length in any language), and the
+   headline and the purpose sit together at its foot (a narrow window's tall buy block leaves the
+   room above the headline, not a hole between the two). When the words are the taller side
+   (Turmerific's long purpose), the buy block sits down to their foot. */
+@media (min-width: 960px) {
+  .page .openingWords {
+    grid-template-rows: auto auto;
+  }
+
+  .page .openingWords > :first-child {
+    grid-row: 1;
+    align-self: stretch;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page .openingWords p.headline {
+    margin-top: auto;
+  }
+
+  .page .openingWords > .openingBuy {
+    grid-row: 1 / 3;
+    grid-template-rows: subgrid;
+  }
+
+  .page .buyMain {
+    align-self: end;
+  }
 }
 
 /* The highlights share the row, each centred in its own part, one ink line between them (Mo:
@@ -537,9 +578,10 @@
     padding-bottom: 8px;
   }
 
-  /* "Stay sharp. Live fully." as large as the phone mockup's, under a name four times its size. */
+  /* "Stay sharp. Live fully." as large as the phone mockup's, under a name four times its size
+     (Ysabeau sets smaller than Switzer at the same size, so a step larger). */
   .page p.headline {
-    font-size: clamp(30px, 9vw, 40px);
+    font-size: clamp(34px, 9.8vw, 44px);
   }
 }
 

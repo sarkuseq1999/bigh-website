@@ -908,8 +908,10 @@ def opening_check(browser):
     # The buy box (Mo, October 12, after Timeline's and Seed's): the highlights in equal parts of the
     # row, each centred, one ink line between them in the middle; the "One bottle" card with the
     # supply, how many a day and the promise badge on its top edge; a wide Add to cart, the refund
-    # line under it; under "Nuri" (Mo, October 13: "D", the credit and face gone), the purpose with
-    # the same ink line down its left edge as the one between the highlights.
+    # line under it; under "Nuri" (Mo, October 26: "C, title face"; October 13: the credit and face
+    # gone), the headline in Ysabeau and the purpose a lead in ink with no side line, the two
+    # together, and from 960px the purpose's row ending where Add to cart ends (the last line's
+    # box a few pixels lower: Add to cart's empty note keeps its gap).
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         box = page.evaluate(
@@ -918,12 +920,15 @@ def opening_check(browser):
                  const halves = lis.map((li) => li.getBoundingClientRect()); const bar = getComputedStyle(lis[1], '::before');
                  const card = o.querySelector('[class*=bottleCard]'); const badge = o.querySelector('p[class*=promise]').getBoundingClientRect(); const c = card.getBoundingClientRect();
                  const button = o.querySelector('[class*=openingBuy] button').getBoundingClientRect(); const refund = o.querySelector('p[class*=refund]').getBoundingClientRect();
-                 const text = getComputedStyle(o.querySelector('[class*=openingWords] p[class*=text]'), '::before');
+                 const lead = o.querySelector('[class*=openingWords] p[class*=text]'), head = o.querySelector('p[class*=headline]');
+                 const leadBox = lead.getBoundingClientRect(), headBox = head.getBoundingClientRect();
                  return { parts: halves.map((r) => Math.round(r.width)), centred: lis.every((li) => getComputedStyle(li).textAlign === 'center'),
                           barMiddle: Math.round(halves[1].left - (ul.left + ul.width / 2)), bar: bar.content !== 'none' && parseFloat(bar.width) > 0, oneBar: getComputedStyle(lis[0], '::before').content === 'none',
                           card: card.innerText, badgeOnEdge: Math.abs(badge.top + badge.height / 2 - c.top) <= 2, wide: Math.round(button.width) >= Math.round(c.width) - 1,
                           refundUnder: refund.top >= button.bottom,
-                          line: [text.content !== 'none', parseFloat(text.width), text.backgroundColor, bar.backgroundColor, parseFloat(bar.width)],
+                          lead: { ysabeau: /ysabeau/i.test(getComputedStyle(head).fontFamily), ink: getComputedStyle(lead).color === getComputedStyle(head).color,
+                                  side: getComputedStyle(lead, '::before').content !== 'none', foot: Math.round(leadBox.bottom - button.bottom),
+                                  together: Math.round(leadBox.top - headBox.bottom) },
                           credit: !!o.querySelector('[class*=credit]') }; }"""
         )
         ok = (len(box["parts"]) == 2 and abs(box["parts"][0] - box["parts"][1]) <= 1 and box["centred"] and abs(box["barMiddle"]) <= 1
@@ -933,9 +938,12 @@ def opening_check(browser):
         ok = all(s in card for s in ["One bottle", "90 vegetarian capsules", "30-day supply", "3 a day", "45 days to decide"]) and box["badgeOnEdge"]
         check(f"opening {w}: the 'One bottle' card (supply, 3 a day, the promise badge on its edge)", ok, " | ".join(box["card"].splitlines()))
         check(f"opening {w}: a wide Add to cart, the refund line under it", box["wide"] and box["refundUnder"], f"wide {box['wide']}, under {box['refundUnder']}")
-        drawn, width, colour, bar_colour, bar_width = box["line"]
-        ok = drawn and abs(width - bar_width) < 0.1 and colour == bar_colour and not box["credit"]
-        check(f"opening {w}: the purpose carries the highlights' ink line; no credit or face in the opening", ok, str(box["line"]) + f" credit {box['credit']}")
+        lead = box["lead"]
+        ok = lead["ysabeau"] and lead["ink"] and not lead["side"] and not box["credit"] and abs(lead["together"] - 26) <= 1
+        if w >= 960:
+            ok = ok and 0 <= lead["foot"] <= 10
+        check(f"opening {w}: the headline in Ysabeau, the purpose in ink with no side line, the two together" + (", ending where Add to cart ends" if w >= 960 else "")
+              + "; no credit or face in the opening", ok, str(lead) + f" credit {box['credit']}")
         ctx.close()
     # Each half of the name on one line in every language (Korean's overflow-wrap: anywhere broke
     # "Nuri" into "Nur" over "i"); on a phone or tablet the two halves are one word on one line,
