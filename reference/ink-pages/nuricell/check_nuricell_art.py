@@ -45,7 +45,8 @@ for key, entry in art.items():
     check(f"{key}: size as listed", (w, h) == (entry["width"], entry["height"]), f"{w}x{h}")
     rim = np.concatenate([arr[:3].reshape(-1, 3), arr[-3:].reshape(-1, 3), arr[:, :3].reshape(-1, 3), arr[:, -3:].reshape(-1, 3)])
     check(f"{key}: white rim (no box on the page)", rim.mean() >= 254.0, f"{rim.mean():.1f}")
-    if "gold" in entry:
+    # The lighthouse's lamp is a small light far off: its own check is below.
+    if "gold" in entry and key != "lanternLit":
         mask = np.asarray(Image.open(REPO / "public" / entry["gold"].lstrip("/")).split()[-1])
         share = float((mask > 128).mean())
         check(f"{key}: gold mask covers its leaf", 0.001 <= share <= 0.35, f"{share:.2%}")
@@ -61,26 +62,29 @@ overlap = (e1 & e2).sum() / max(1, min(e1.sum(), e2.sum()))
 check("lantern: lit and unlit in register", overlap > 0.35, f"edge overlap {overlap:.2f}")
 warm = lambda a: float(((a[..., 0] - a[..., 2]) > 40).mean())
 check("lantern: the unlit one has no gold", warm(unlit) < 0.002, f"{warm(unlit):.3%}")
-# The Gold Rush lantern (October 26, 2026; the paper lantern's own checks went with it): its glass
-# is where the light is. The glass: the lit picture's light pixels (darkest channel 190+) that are
-# warm (red over blue by 10+), the test build_nuricell.py's glow_mask starts from. Lit, it glows
-# (measured 0.12 of the picture, warmth 26 lit, 8 unlit, the unlit glass in the tin's warm grey).
-glass = ((lit[..., 0] - lit[..., 2]) > 10) & (lit.min(axis=2) > 190)
-check("lantern: the lit one has a glowing glass", 0.05 <= glass.mean() <= 0.3, f"{glass.mean():.2%} of the picture")
-glow = lambda a: float((a[..., 0] - a[..., 2])[glass].mean())
-check("lantern: its glass warm lit, grey unlit", glow(lit) >= glow(unlit) + 12, f"{glow(unlit):.1f} -> {glow(lit):.1f}")
-# The paper round the unlit lantern is white across its middle (no grey halo, no box on the page).
-H = lit.shape[0]
-beside = []
-for row in unlit[int(H * 0.3) : int(H * 0.7) : 4]:
-    ink = np.where(row.min(axis=1) < 236)[0]
-    beside.append(np.concatenate([row[max(0, ink.min() - 40) : max(0, ink.min() - 8)], row[ink.max() + 8 : ink.max() + 40]]))
-beside = np.concatenate(beside)
-check("lantern: the paper beside the unlit one stays white", beside.mean() >= 254.0, f"{beside.mean():.1f}")
-# The lit lantern's gold mask covers its flame's leaf, not the glow round it.
+# The lighthouse (October 26, 2026; the Gold Rush lantern's own checks went with it): its light is
+# the lamp room's glow and the beam's wash over the sky. The light: the lit picture's light pixels
+# (darkest channel 190+) that are warm (red over blue by 10+), the test build_nuricell.py's
+# glow_mask starts from. Lit, the light is warm; unlit, the same pixels are grey sky and glass.
+light = ((lit[..., 0] - lit[..., 2]) > 10) & (lit.min(axis=2) > 190)
+check("lantern: the lit one has a light", 0.03 <= light.mean() <= 0.3, f"{light.mean():.2%} of the picture")
+glow = lambda a: float((a[..., 0] - a[..., 2])[light].mean())
+check("lantern: its light warm lit, grey unlit", glow(lit) >= glow(unlit) + 12, f"{glow(unlit):.1f} -> {glow(lit):.1f}")
+# The lamp room itself (around the gold mask's leaf) lit warmer than unlit: the light is not only
+# a wash over the sky.
 flecks = np.asarray(Image.open(REPO / "public" / art["lanternLit"]["gold"].lstrip("/")).split()[-1])
+fy, fx = np.nonzero(flecks > 128)
+k = lit.shape[1] / flecks.shape[1]
+room = (slice(int(fy.min() * k), int(fy.max() * k) + 1), slice(int(fx.min() * k), int(fx.max() * k) + 1))
+lamp = lambda a: float((a[room][..., 0] - a[room][..., 2]).mean())
+check("lantern: its lamp room warm lit, grey unlit", lamp(lit) >= lamp(unlit) + 20, f"{lamp(unlit):.1f} -> {lamp(lit):.1f}")
+# The sky over the unlit lighthouse is white paper where the beam was (no grey ghost of the beam).
+H, W = lit.shape[:2]
+sky = unlit[: int(fy.min() * k), : int(fx.min() * k)]
+check("lantern: the sky where the beam was stays pale unlit", sky.mean() >= 240.0, f"{sky.mean():.1f}")
+# The lit lighthouse's gold mask covers its lamp's leaf, not the beam or the glow round it.
 fleck_share = float((flecks > 128).mean())
-check("lantern: its gold mask is the flame, not the glow", 0.0005 <= fleck_share <= 0.02, f"{fleck_share:.2%}")
+check("lantern: its gold mask is the lamp, not the glow", 0.0005 <= fleck_share <= 0.02, f"{fleck_share:.2%}")
 
 liu = pixels(art["liu"]["src"])
 hi, lo = liu.max(axis=2), liu.min(axis=2)

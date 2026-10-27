@@ -64,7 +64,7 @@ Updated: September 24, 2026. Working brief — everything can be changed.
 
 Mo accepted this wording as the working section. The proposed visual is a simple body → cell → mitochondria zoom; detailed visual design remains for later. Keep the power-plant analogy and accessible wording. Do not change “many” to “all”: mature human red blood cells normally lack mitochondria. This section leads into the Dr. Jian Kang Liu section below.
 
-On NuriCell's ink page (October 26, 2026) Mo found these lines too much to read and picked a shorter set with the Gold Rush lantern: no section label; one line, “Inside many of your cells, mitochondria turn food into the energy you live on.”; the figures “Your brain is about 2% of your weight.” and “Yet it uses about 20% of your energy.”; the close “About 20 watts, day and night. Like a light that never goes out.”
+On NuriCell's ink page (October 26, 2026) Mo found these lines too much to read and picked a shorter set (shown first with a Gold Rush lantern, then with the California lighthouse he kept): no section label; one line, “Inside many of your cells, mitochondria turn food into the energy you live on.”; the figures “Your brain is about 2% of your weight.” and “Yet it uses about 20% of your energy.”; the close “About 20 watts, day and night. Like a light that never goes out.”
 
 Science references for this section: [National Human Genome Research Institute — Mitochondria](https://www.genome.gov/genetics-glossary/Mitochondria), [National Institute of General Medical Sciences — The Maternal Magic of Mitochondria](https://nigms.nih.gov/biobeat/2020/05/the-maternal-magic-of-mitochondria).
 

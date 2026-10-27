@@ -23,13 +23,13 @@ const PICTURE_SIZES = "(max-width: 599px) 88vw, (max-width: 959px) 520px, 520px"
  * painting nearly as wide as it is tall (the breakfast, 0.94) is held by its column in most
  * windows, so it keeps the column's sizes. `reserve`: the window height a page leaves free beside
  * the painting when it draws it taller than the template's (NuriCell's lantern and Dr. Liu,
- * nuricell-layout.ts).
+ * nuricell-layout.ts); `over`: the share of the window (vh) it is drawn at over its words.
  */
-export function pictureSizes(art: { width: number; height: number }, reserve = 220) {
+export function pictureSizes(art: { width: number; height: number }, reserve = 220, over = 46) {
   const aspect = art.width / art.height;
   if (aspect >= 0.8) return PICTURE_SIZES;
   const a = aspect.toFixed(3);
-  return `(max-width: 959px) calc(46vh * ${a}), calc((100vh - ${reserve}px) * ${a})`;
+  return `(max-width: 959px) calc(${over}vh * ${a}), calc((100vh - ${reserve}px) * ${a})`;
 }
 
 /** Each hyphenated word ("30-day") on one line: a narrow column would break it after its hyphen. */

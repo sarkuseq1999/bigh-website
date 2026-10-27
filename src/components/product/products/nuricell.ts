@@ -194,7 +194,7 @@ const nuricell: ProductPage = {
     why: {
       unlit: nuricellArt.lanternUnlit,
       lit: nuricellArt.lanternLit,
-      alt: "An old miner’s lantern whose light comes on, painted in ink and gold leaf",
+      alt: "A lighthouse on the California coast whose light comes on, painted in ink",
     },
     inside: {
       ...nuricellArt.capsule,
