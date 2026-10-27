@@ -5,9 +5,25 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (Science: Dr. Liu first, then his path one
-  place per screen; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (product questions: a painting for each
+  answer, on all five product pages; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): product questions, Mo's pick A, "a painting for each answer"**
+  (mockups `reference/ink-pages/mockups/nuricell-questions/`, artifact `MceTcmgqxFuQPtLHrJ8xfE`;
+  the built pages in `.../built/`, artifact `S4ttkdJhyASQLXjr8uYigt`). All five ink product pages
+  (`questions.tsx`, shared): from 960px the questions on the left and the picked one's painting and
+  answer on the right (the first picked as the page opens, the menu bar's pale wash behind it, a
+  round "+" on the others; the old answer fades out before the new one fades in); on a phone each
+  question opens in place with its painting. 28 Codex paintings, one per question, true to each
+  label (capsule count and colour, 30 squares a month), cut to 3:2 by
+  `reference/ink-pages/questions/build_questions.py` (README there: what was repainted and why).
+  Propolis's old questions grid (heading left, list right) is gone; its heading keeps its own
+  face. No new words. On the built site (`npm run build` + `next start`) on top of studio 598cab0:
+  `qa_questions` 403/403 (new: all five pages, wide and phone, no script, four languages),
+  `qa_nuricell_ink` 430/430, `qa_opc_ink` 185/185, `qa_propolis_ink` 273/273,
+  `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159, `qa_home_ink` 282/282, `qa_nav`
+  315/316 (the known tablet crane jump). The product QA scripts now pick each question to read its
+  answer (only the picked one is shown).
 - **Local, not live (October 26): Science, Mo's pick B, "one place per screen"** (mockups and the
   built page's shots `reference/ink-pages/mockups/science-path/2026-10-26/` and `.../built/`,
   artifact `9jBznqoXRwUacxeKv2P8AP`). Mo liked the paintings but found the sideways handscroll
