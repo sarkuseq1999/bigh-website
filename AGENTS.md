@@ -178,12 +178,14 @@ These sit on top of `DESIGN.md`.
   sparks that slip past the screen burn black holes in the roof (black ink only, never red).
   DESIGN.md "The Science Stage Rule"; mockups: `reference/ink-pages/mockups/home-science-plants/`
   and `home-science-harm/`.
-- **Homepage science on phones: tabs over the picture, and swipe (Mo, October 23-24, 2026).** In
+- **Homepage science on phones: tabs over the picture, swipe, a peek (Mo, October 23-26, 2026).** In
   one column the three tabs sat about 500px above the picture, out of sight. Mo picked A (the tabs
   right above the picture, the words after it), then asked to swipe with a finger from one topic to
   the next: the three topics (picture, line, words) sit side by side in a strip as wide as the
-  window that snaps to one topic; the tabs glide it and follow the swipe. DESIGN.md "The Scroll
-  Story Rule"; `science.tsx` (`.slides`).
+  window that snaps to one topic; the tabs glide it and follow the swipe. On October 26 Mo asked
+  how people would know they can swipe and picked A of three hints (over a one-time nudge and three
+  dots): the next topic's painting peeks in, paler, at the window's right edge. DESIGN.md "The
+  Scroll Story Rule"; `science.tsx` (`.slides`).
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 
