@@ -49,25 +49,17 @@ const GLASSES =
 // enso.sweepDeg, found by the build), so the blackest part of the stroke is drawn first.
 const SWEEP_FROM = `${enso.sweepDeg}deg`;
 
-// The circle and its words (Mo, October 26, 2026: the circle was "too small ... not immersive
-// enough"). Two layouts to compare on the real page before one is kept: "inside", the circle
-// filling the first screen with the title written inside it (/about), and "below", the circle as
-// big as the first screen allows with the words under it (/about-below). circle.module.css.
-export type CircleLayout = "inside" | "below";
-
-// What the circle asks the server for follows the width it is drawn at (circle.module.css): on a
-// phone the window less 16px ("inside") or at most 340px ("below"); from 600px at most 1040px
-// ("inside") or 820px ("below"), less in a short window. The stroke's picture is 1247px wide.
-const ENSO_SIZES: Record<CircleLayout, string> = {
-  inside: "(max-width: 599px) 100vw, (max-width: 1100px) 94vw, 1040px",
-  below: "(max-width: 599px) 340px, (max-width: 1140px) 72vw, 820px",
-};
+// The circle fills the first screen with the title written inside it (Mo, October 26, 2026: it
+// was "too small ... not immersive enough"). What it asks the server for follows the width it is
+// drawn at (circle.module.css): on a phone the window less 16px; from 600px at most 1040px, less
+// in a short window. The stroke's picture is 1247px wide.
+const ENSO = "(max-width: 599px) 100vw, (max-width: 1100px) 94vw, 1040px";
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
 }
 
-function Opening({ circle }: { circle: CircleLayout }) {
+function Opening() {
   const copy = useCopy();
   // The circle waits for its picture (circle.module.css): its stroke holds until the stroke's
   // picture is in. Before hydration the page's inline script lets it go (about/page.tsx); this is
@@ -84,7 +76,6 @@ function Opening({ circle }: { circle: CircleLayout }) {
     <section
       className={`${page.opening} ${styles.opening}`}
       data-part="opening"
-      data-circle={circle}
       aria-labelledby="about-title"
     >
       <div className={`${base.wrap} ${styles.openingWords}`}>
@@ -106,7 +97,7 @@ function Opening({ circle }: { circle: CircleLayout }) {
             alt=""
             width={enso.width}
             height={enso.height}
-            sizes={ENSO_SIZES[circle]}
+            sizes={ENSO}
             preload
             fetchPriority="high"
           />
@@ -324,12 +315,12 @@ function Closing() {
   );
 }
 
-export function AboutInk({ circle = "inside" }: { circle?: CircleLayout }) {
+export function AboutInk() {
   return (
     <InkPage current="about" className={`${page.aboutPage} ${styles.circle}`}>
       {() => (
         <div data-about="circle">
-          <Opening circle={circle} />
+          <Opening />
           <Purpose />
           <Roots />
           <Experience />

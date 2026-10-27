@@ -134,9 +134,11 @@ These sit on top of `DESIGN.md`.
   behaves like real gold: no glow, no spark, no twinkling stars, never red. On October 26 Mo
   found that leaf's fall and shine cartoonish and picked A of three ideas: no gold on the circle
   at all (the opening's gold is the sunlit hilltop below it), over the hilltop warming to gold
-  and a still leaf. He also found the circle too small on a big screen ("not immersive enough");
-  two bigger layouts are built to compare, the title inside the circle (/about) or under it
-  (/about-below, a temporary route). Mockups: `reference/ink-pages/mockups/about-circle-size/`.
+  and a still leaf. He also found the circle too small on a big screen ("not immersive enough").
+  Of two bigger layouts built on the real page he picked A: the circle fills the first screen
+  and the title is written inside it (on a phone the lead sits under it), over B, a bigger
+  circle with the words under it, which hardly grew on a short laptop. Mockups:
+  `reference/ink-pages/mockups/about-circle-size/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

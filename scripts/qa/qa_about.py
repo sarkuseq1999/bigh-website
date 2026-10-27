@@ -34,14 +34,13 @@ is in, draws around and closes; with no stroke picture, 9s in the stroke still h
 JavaScript off the circle shows whole once the stroke has finished, and every other painting (the
 hills, the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does
 still.
-circle_layout (Mo, October 26, 2026: the circle bigger, two layouts to compare; /about inside,
-/about-below below). Inside (1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900, 390x844,
-360x780): the circle centred in the window; from 1280px wide at least 0.72 of the window's height
-tall; the kicker and the title inside the circle (and the lead, from 600px; on a phone it stands
-under the circle), the title centred in it; no word within 8px of the stroke's ink; the hills
-begin in the first screen; on a phone the circle 8px from each edge. Below (the same sizes): the
-circle centred, at least 1.5 times its old width (24vw, 200 to 360px) from 1280px wide, the
-words under it and all in the first screen. Both: no sideways scrolling.
+circle_layout (Mo, October 26, 2026: the circle bigger, the title written inside it; he picked
+this over the words under it). At 1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900,
+390x844 and 360x780: the circle centred in the window; from 1280px wide at least 0.72 of the
+window's height tall; the kicker and the title inside the circle (and the lead, from 600px; on a
+phone it stands under the circle), the title centred in it; no word within 8px of the stroke's
+ink; the hills begin in the first screen; on a phone the circle 8px from each edge; no sideways
+scrolling.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -862,7 +861,7 @@ ENSO_LOG = """(() => {
   requestAnimationFrame(tick);
 })();"""
 
-# The opening's words hidden, so a shot of the circle's box is the circle alone ("inside", they
+# The opening's words hidden, so a shot of the circle's box is the circle alone (they
 # stand within it).
 HIDE_WORDS = '[data-part="opening"] :is(h1, p) { visibility: hidden !important; }'
 
@@ -958,7 +957,7 @@ def motion(browser):
 
     # The circle's ink, by quarter in the order the stroke draws them (clockwise from the top
     # right: top right, bottom right, bottom left, top left): the share of each quarter's pixels
-    # that is dark, with the opening's words hidden (inside, they stand in the circle's box). The
+    # that is dark, with the opening's words hidden (they stand in the circle's box). The
     # still circle (reduced motion: no mask at all) is the whole one.
     def circle_shot(reduced):
         context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False,
@@ -1201,7 +1200,7 @@ def ink_near_words(page, geo, pad=8):
 def circle_layout(browser):
     sizes = [(1920, 1000), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
     for width, height in sizes:
-        tag = f"inside {width}x{height}"
+        tag = f"circle {width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
         g = page.evaluate(OPENING_JS)
         (rl, rt, rr, rb), (ww, wh) = g["ring"], g["win"]
@@ -1222,23 +1221,6 @@ def circle_layout(browser):
         near = ink_near_words(page, g)
         check(f"{tag} no word within 8px of the stroke's ink", near == 0, near)
         page.screenshot(path=os.path.join(OUT, f"circle-inside-{width}x{height}.png"))
-        context.close()
-
-        tag = f"below {width}x{height}"
-        context, page, response, errors, failed = open_page(browser, width, height, path="/about-below", reduced=True)
-        g = page.evaluate(OPENING_JS)
-        (rl, rt, rr, rb), (ww, wh) = g["ring"], g["win"]
-        check(f"{tag} the circle centred", abs((rl + rr) / 2 - ww / 2) <= 2, g["ring"])
-        if width >= 1280:
-            # Under the circle the words need about 284px of the first screen, so in a short
-            # window (720px tall) the circle grows only a little (1.19 times at 1280x720).
-            old = min(360, max(200, 0.24 * ww))
-            grow = 1.5 if height >= 860 else 1.15
-            check(f"{tag} the circle at least {grow} times its old width", (rr - rl) >= grow * old, {"width": rr - rl, "old": old})
-        check(f"{tag} the words under the circle, all in the first screen",
-              g["kicker"][1] >= rb - 1 and g["lead"][3] <= wh, {"ring": g["ring"], "kicker": g["kicker"], "lead": g["lead"]})
-        check(f"{tag} no sideways scrolling", g["sideways"] <= 0, g["sideways"])
-        page.screenshot(path=os.path.join(OUT, f"circle-below-{width}x{height}.png"))
         context.close()
 
 

@@ -12,7 +12,7 @@
   justify-items: center;
 }
 
-/* The circle is --ring wide (set by its layout, below), never wider than the page's column. */
+/* The circle is --ring wide (set below). */
 .circle .enso {
   position: relative;
   width: var(--ring);
@@ -26,7 +26,8 @@
   height: auto;
 }
 
-/* ---- Inside: the circle fills the first screen and frames the words (Mo, October 26, 2026) ----
+/* The circle fills the first screen and frames the words (Mo, October 26, 2026; he picked this,
+   A, over the circle as big as the first screen allows with the words under it).
    At 360px wide (24vw) the circle read as "just a small circle" on a big screen. Here it is as
    tall as the window allows under the menu bar (the window less 184px: the 88px the bar stands
    over, 8px above the circle and 88px under it, where the hills begin), at least 480px wide (so
@@ -45,56 +46,41 @@
    lines rather than reach the stroke: it is never wider than 0.56 of the circle.
    section[...] outranks the shared .aboutPage .opening padding in any stylesheet order;
    h1.title outranks the shared .aboutPage h1.title. */
-.circle section[data-circle="inside"] {
+.circle section[data-part="opening"] {
   padding-top: calc(88px + 8px);
 }
 
-.circle [data-circle="inside"] .openingWords {
+.circle [data-part="opening"] .openingWords {
   --ring: min(max(calc((100svh - 184px) * 1247 / 1136), 480px), calc(100vw - 32px), 1040px);
   grid-template-rows: 1fr auto 1fr;
 }
 
-.circle [data-circle="inside"] .enso {
+.circle [data-part="opening"] .enso {
   grid-area: 1 / 1 / 4 / 2;
   max-width: none;
   margin-inline: calc((100% - var(--ring)) / 2);
 }
 
-.circle [data-circle="inside"] .kicker {
+.circle [data-part="opening"] .kicker {
   grid-area: 1 / 1;
   align-self: end;
 }
 
-.circle [data-circle="inside"] h1.title {
+.circle [data-part="opening"] h1.title {
   grid-area: 2 / 1;
   max-width: calc(var(--ring) * 0.56);
   font-size: clamp(40px, calc(var(--ring) * 0.068), 72px);
 }
 
-.circle [data-circle="inside"] .lead {
+.circle [data-part="opening"] .lead {
   grid-area: 3 / 1;
   align-self: start;
 }
 
 /* The hills rise into the foot of the circle's picture (its last tenth is bare paper), so their
    peaks show at the foot of the first screen. */
-.circle [data-circle="inside"] .hills {
+.circle [data-part="opening"] .hills {
   margin-top: -3vw;
-}
-
-/* ---- Below: the circle as big as the first screen allows, the words under it --------------------
-   The window less 388px tall (the bar's 88px, 16px above the circle and about 284px for the words
-   under it), at least 280px and at most 820px wide, and never more than 72vw. */
-.circle section[data-circle="below"] {
-  padding-top: calc(88px + 16px);
-}
-
-.circle [data-circle="below"] .openingWords {
-  --ring: min(max(calc((100svh - 388px) * 1247 / 1136), 280px), 72vw, 820px);
-}
-
-.circle [data-circle="below"] .enso {
-  margin-bottom: clamp(8px, 1vw, 16px);
 }
 
 .circle .hills {
@@ -155,18 +141,18 @@
     margin-left: -54%;
   }
 
-  /* Inside, on a phone: the circle runs to 8px from the window's edges (the opening clips
+  /* On a phone the circle runs to 8px from the window's edges (the opening clips
      anything past them, so nothing scrolls sideways). It keeps its own height: the words are
      centred in the screen as one block with it, not spread over the screen's height. The title
      breaks into three short lines inside it; the lead stands under it. The kicker and the title
      sit 4% of the circle's height below its middle: the stroke's wet head bulges in at the top
      right, and centred the kicker came within 8px of it (the open space's own middle is a little
      low). */
-  .circle section[data-circle="inside"] {
+  .circle section[data-part="opening"] {
     padding-top: calc(88px + 4px);
   }
 
-  .circle [data-circle="inside"] .openingWords {
+  .circle [data-part="opening"] .openingWords {
     --ring: calc(100vw - 16px);
     grid-template-rows: 1fr auto 1fr auto;
     flex: 0 0 auto;
@@ -175,28 +161,23 @@
 
   /* 40px from a 390px phone, a little less below it: at 360px the kicker above the three lines
      reached the stroke's wet head. */
-  .circle [data-circle="inside"] .kicker {
+  .circle [data-part="opening"] .kicker {
     margin-bottom: 8px;
     translate: 0 calc(var(--ring) * 1136 / 1247 * 0.04);
   }
 
-  .circle [data-circle="inside"] h1.title {
+  .circle [data-part="opening"] h1.title {
     max-width: 3.6em;
     font-size: clamp(34px, 10.25vw, 40px);
     translate: 0 calc(var(--ring) * 1136 / 1247 * 0.04);
   }
 
-  .circle [data-circle="inside"] .lead {
+  .circle [data-part="opening"] .lead {
     grid-area: 4 / 1;
   }
 
-  .circle [data-circle="inside"] .hills {
+  .circle [data-part="opening"] .hills {
     margin-top: 0;
-  }
-
-  /* Below, on a phone: the column's width, at most 340px. */
-  .circle [data-circle="below"] .openingWords {
-    --ring: min(340px, calc(100vw - 2 * var(--gutter)));
   }
 }
 
