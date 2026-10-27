@@ -6,7 +6,8 @@ import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { byYear } from "../template-chapters-model";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
-import { nuricellSizes } from "./nuricell-layout";
+import { isNuricell, nuricellSizes } from "./nuricell-layout";
+import { NuricellResearch } from "./nuricell-research";
 import styles from "./product-ink.module.css";
 
 /** Studies shown before "Show all": the list stays about as tall as its painting. */
@@ -16,6 +17,12 @@ const FIRST = 5;
 // first like the Chapters template's timeline; each opens with its round toggle to what it found
 // and a link to it.
 export function Research({ product }: { product: InkProduct }) {
+  // Mockup: NuriCell's books as buttons and its studies as plain questions.
+  if (isNuricell(product)) return <NuricellResearch product={product} />;
+  return <TemplateResearch product={product} />;
+}
+
+function TemplateResearch({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const [all, setAll] = useState(false);
   const listId = useId();
