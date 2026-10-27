@@ -238,6 +238,15 @@ These sit on top of `DESIGN.md`.
   how people would know they can swipe and picked A of three hints (over a one-time nudge and three
   dots): the next topic's painting peeks in, paler, at the window's right edge. DESIGN.md "The
   Scroll Story Rule"; `science.tsx` (`.slides`).
+- **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
+  questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
+  each question", over B (one breakfast-table painting with numbered marks). All five product
+  pages: from 960px the questions on the left and the picked one's painting and answer on the
+  right, the first picked as the page opens, the menu bar's pale wash behind it and a round "+" on
+  the others; on a phone each question opens in place with its painting. Every painting shows its
+  own answer and is true to the label (the right number of capsules, their colour, 30 squares a
+  month); all are 3:2, so the answers line up. `questions.tsx`; paintings and their build script
+  `reference/ink-pages/questions/`; mockups `reference/ink-pages/mockups/nuricell-questions/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

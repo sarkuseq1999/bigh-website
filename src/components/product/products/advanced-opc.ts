@@ -1,4 +1,5 @@
 import { opcArt } from "../ink/opc-art";
+import { questionsArt } from "../ink/questions-art";
 import type { ProductPage } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -230,31 +231,37 @@ const advancedOpc: ProductPage = {
       question: "What does OPC mean?",
       answer:
         "OPC stands for oligomeric proanthocyanidins: small chains of plant compounds found in grape seeds and pine bark. Both are in this formula.",
+      art: questionsArt.opc.what,
     },
     {
       question: "How do I take Advanced OPC Formula?",
       answer:
         "Take 1 to 2 capsules once a day, with or after a meal, or as your healthcare professional advises.",
+      art: questionsArt.opc.take,
     },
     {
       question: "How long does one bottle last?",
       answer:
         "Each bottle holds 120 vegetarian capsules: 60 days at 2 capsules a day, or longer if you take 1.",
+      art: questionsArt.opc.month,
     },
     {
       question: "What is the capsule made of?",
       answer:
         "The capsule is vegetarian: hydroxypropyl methylcellulose (HPMC). The other ingredients are rice flour, magnesium stearate and silica.",
+      art: questionsArt.opc.capsule,
     },
     {
       question: "Has Advanced OPC Formula itself been tested in a clinical trial?",
       answer:
         "The research we share is about its ingredients, not the finished product. Each study says whether it was done in people or in animals.",
+      art: questionsArt.opc.studied,
     },
     {
       question: "Can I take it with medicines or other supplements?",
       answer:
         "Ask your doctor first, especially if you have a health condition, take medicines, or are pregnant or breastfeeding.",
+      art: questionsArt.opc.doctor,
     },
   ],
   caution:

@@ -1,4 +1,5 @@
 import { turmerificArt } from "../ink/turmerific-art";
+import { questionsArt } from "../ink/questions-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -138,26 +139,31 @@ const turmerific: ProductPage = {
     {
       question: "How do I take Turmerific?",
       answer: "Take 1 to 2 capsules a day, or as your healthcare professional advises.",
+      art: questionsArt.turmerific.take,
     },
     {
       question: "How long does one bottle last?",
       answer:
         "Each bottle holds 60 vegetarian capsules: 30 days at 2 capsules a day, or 60 days at 1.",
+      art: questionsArt.turmerific.month,
     },
     {
       question: "Is the 1,000 mg all curcumin?",
       answer:
         "No. 1,000 mg is the weight of the whole Longvida® extract in 2 capsules. Curcumin is one part of it.",
+      art: questionsArt.turmerific.part,
     },
     {
       question: "Has Turmerific itself been tested in a clinical trial?",
       answer:
         "The research we share is about Longvida®, the curcumin in Turmerific, not the finished product. Each study says who took part and how much they took.",
+      art: questionsArt.turmerific.studied,
     },
     {
       question: "Can I take it with medicines, before surgery or during pregnancy?",
       answer:
         "Ask your doctor first. The label advises this especially if you are pregnant or nursing, have surgery planned, take medicines regularly or are under medical care.",
+      art: questionsArt.turmerific.doctor,
     },
   ],
   caution:

@@ -8,8 +8,9 @@ import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct, ProductSummary } from "../product-types";
 import { summaries } from "../products/summaries";
 import styles from "./product-ink.module.css";
+import { Questions } from "./questions";
 
-// After Buy, full width on paper: the questions on hairlines with round toggles, the other bottles
+// After Buy, full width on paper: the questions, each answer with its painting, the other bottles
 // small in pale pools (each links to its page), then the caution, before the shared footer (whose
 // FDA statement closes every page, so the product does not repeat it here).
 export function After({ product }: { product: InkProduct }) {
@@ -27,21 +28,7 @@ export function After({ product }: { product: InkProduct }) {
             <h2 id="questions-title" className={`${base.display} ${styles.heading}`}>
               {copy("Questions")}
             </h2>
-            <ul className={styles.faq}>
-              {product.faq.map((item) => (
-                <li key={item.question}>
-                  <details className={styles.question}>
-                    <summary className={`${styles.summary} ${styles.faqSummary}`}>
-                      <span className={styles.studyTitle}>{copy(item.question)}</span>
-                      <span className={styles.toggle} aria-hidden="true">
-                        +
-                      </span>
-                    </summary>
-                    <p className={styles.answer}>{copy(item.answer)}</p>
-                  </details>
-                </li>
-              ))}
-            </ul>
+            <Questions faq={product.faq} />
           </div>
         </section>
       ) : null}

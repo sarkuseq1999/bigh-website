@@ -216,7 +216,15 @@ def chapters(browser):
     page.evaluate("""() => { document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click();
                          document.querySelectorAll('main details').forEach(d => { d.open = true; }); }""")
     page.wait_for_timeout(300)
-    text = page.evaluate("() => document.body.innerText.replace(/\\s+/g, ' ')")
+    # The questions show one answer at a time: each is one click away, so pick each and read it.
+    text = page.evaluate(
+        """async () => { const answers = [];
+             for (const b of document.querySelectorAll('#questions ol > li > h3 button')) {
+               if (b.getAttribute('aria-expanded') !== 'true') b.click();
+               await new Promise((r) => setTimeout(r, 60));
+               answers.push(b.closest('li').querySelector('[role=region]').innerText); }
+             return (document.body.innerText + ' ' + answers.join(' ')).replace(/\\s+/g, ' '); }"""
+    )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
     studies = page.locator("[data-study]").count()

@@ -1,4 +1,5 @@
 import { nuricellArt } from "../ink/nuricell-art";
+import { questionsArt } from "../ink/questions-art";
 import type { ProductPage } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -126,28 +127,34 @@ const nuricell: ProductPage = {
     {
       question: "How do I take NuriCell?",
       answer: "Take 3 capsules once a day, with or after a meal.",
+      art: questionsArt.nuricell.take,
     },
     {
       question: "How long does one bottle last?",
       answer: "Each bottle holds 90 vegetarian capsules: a 30-day supply at 3 capsules a day.",
+      art: questionsArt.nuricell.month,
     },
     {
       question: "What is the capsule made of?",
       answer:
         "The capsule is vegetarian: hypromellose, with titanium dioxide for its white colour. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
+      art: questionsArt.nuricell.capsule,
     },
     {
       question: "Has NuriCell itself been tested in a clinical trial?",
       answer:
         "The research we share is about NuriCell’s ingredients, not the finished product. Each study says whether it was done in people or in animals.",
+      art: questionsArt.nuricell.studied,
     },
     {
       question: "Can I take it with medicines or other supplements?",
       answer: "Ask your doctor first, especially if you have a health condition or take medicines.",
+      art: questionsArt.nuricell.doctor,
     },
     {
       question: "Can I take NuriCell during pregnancy?",
       answer: "No. The label advises not to take it if you are pregnant or breastfeeding.",
+      art: questionsArt.nuricell.pregnancy,
     },
   ],
   caution:
