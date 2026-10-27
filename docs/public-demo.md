@@ -4,7 +4,32 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
+(`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
+`c944a72` (October 26, 2026): another Claude session's release of NuriCell "What's inside"
+(Mo's 1A), Science as a plain menu-bar link and the footer's copyright line last, merged with the
+homepage science peek below. That session records its checks in `docs/HANDOFF.md`. Checked again by
+the peek's session on the public demo in fresh unauthenticated browsers: `qa_home_ink` 282/282,
+`qa_nav` 315/316 (the known upright-tablet crane jump when Products folds away, recorded with the
+Science-link change), the touch test passed, 0 of 48 short drags left the science strip off a
+topic.
+
+Before this update, for about 25 minutes, the alias pointed to
+`bigh-website-2pyiz7a4c-sarkuseq1999s-projects.vercel.app` (`dpl_7sqGtYsvNqr2WjdM3AV37HqYNgpF`),
+the **production** deployment of `main` at `75fb88edd4787ef8fbfe7b7eaaee659fa45c82cd`. On October
+26, 2026, Mo asked how people would know the homepage science strip can be swiped on a phone,
+picked A of three hints (over a one-time nudge and three dots) and said to put it live: the next
+topic's painting peeks in at the window's right edge, at 65% (about 39px on a 390px phone, 76px on
+a tablet), with only its painting showing; each topic's painting is about 10% narrower and the
+words keep their column. Claude pushed branch `home-science-peek` to `main` (a fast-forward from
+`891071d`). Before the push, on the built site: lint, type check, formatting and build passed;
+`qa_home_ink` 282/282, `qa_nav` 440/440; the touch test passed but for one tablet step (a tab tap
+within about half a second of a flick is sometimes lost; the live build before did the same in 2
+of 4 runs); 0 of 48 short drags off a topic. On the public demo `qa_home_ink` 282/282; the
+release above replaced it while the menu check was running, so the rest was checked on that.
+The touches are finger input through Chrome's DevTools protocol, not a real phone.
+
+Before that, the alias pointed to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
 (`dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`), the **production** deployment of `main` at
 `4d272585f4a107280861ca67258e26cb397501a5`. On October 25, 2026, Mo said to push the short-drag
 fix found after the phone swipe release (below): on the homepage science strip, once the strip
