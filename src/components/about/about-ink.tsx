@@ -49,18 +49,11 @@ const GLASSES =
 // enso.sweepDeg, found by the build), so the blackest part of the stroke is drawn first.
 const SWEEP_FROM = `${enso.sweepDeg}deg`;
 
-// The leaf's box and centre, as shares of the stroke's box: its band of light lies on its box,
-// its faint shadow on the paper below its centre (circle.module.css).
-const pct = (share: number) => `${(share * 100).toFixed(2)}%`;
-const LEAF_X = enso.dot.left + enso.dot.size / 2;
-const LEAF_Y =
-  enso.dot.top +
-  (enso.dot.size * enso.dot.height * enso.width) / (enso.dot.width * enso.height) / 2;
-const LEAF_BOX = {
-  left: pct(enso.dot.left),
-  top: pct(enso.dot.top),
-  width: pct(enso.dot.size),
-};
+// The circle fills the first screen with the title written inside it (Mo, October 26, 2026: it
+// was "too small ... not immersive enough"). What it asks the server for follows the width it is
+// drawn at (circle.module.css): on a phone the window less 16px; from 600px at most 1040px, less
+// in a short window. The stroke's picture is 1247px wide.
+const ENSO = "(max-width: 599px) 100vw, (max-width: 1100px) 94vw, 1040px";
 
 function sentences(text: string) {
   return text.match(/[^.!?。！？]+[.!?。！？]*\s*/gu)?.map((part) => part.trim()) ?? [text];
@@ -68,11 +61,11 @@ function sentences(text: string) {
 
 function Opening() {
   const copy = useCopy();
-  // The circle waits for its picture (circle.module.css): its stroke and gold hold until the
-  // stroke's picture is in. Before hydration the page's inline script lets them go (about/page.tsx);
-  // this is the hydrated key: [data-stroke="ready"] once the picture is in (Next's onLoad, which
-  // also reports a picture in before hydration, and a check on mount). No timer, and a failed
-  // picture never lets them go: the gold must not rise alone on bare paper.
+  // The circle waits for its picture (circle.module.css): its stroke holds until the stroke's
+  // picture is in. Before hydration the page's inline script lets it go (about/page.tsx); this is
+  // the hydrated key: [data-stroke="ready"] once the picture is in (Next's onLoad, which also
+  // reports a picture in before hydration, and a check on mount). No timer: on a slow link the
+  // circle paints itself once its picture is in, never half drawn.
   const stroke = useRef<HTMLImageElement>(null);
   const [ready, setReady] = useState(false);
   useEffect(() => {
@@ -91,7 +84,7 @@ function Opening() {
           data-enso=""
           data-stroke={ready ? "ready" : undefined}
           aria-hidden="true"
-          style={{ "--start": SWEEP_FROM, "--leaf": `url(${enso.dot.src})` } as CSSProperties}
+          style={{ "--start": SWEEP_FROM } as CSSProperties}
         >
           <Image
             ref={stroke}
@@ -104,44 +97,16 @@ function Opening() {
             alt=""
             width={enso.width}
             height={enso.height}
-            sizes="(max-width: 833px) 200px, (max-width: 1499px) 24vw, 360px"
+            sizes={ENSO}
             preload
             fetchPriority="high"
           />
-          {/* The leaf's faint shadow on the paper, closing in and sharpening as it floats down
-              (circle.module.css). */}
-          <span
-            className={styles.shadow}
-            data-shadow=""
-            style={{ left: pct(LEAF_X), top: pct(LEAF_Y) }}
-          />
-          {/* The gold start loads at once but is not preloaded, and asks for low priority (React's
-              server render writes a preload link for every img that is not lazy unless its
-              fetchPriority is low). Preloaded, the 2KB leaf won the race on a slow link and rose
-              alone on bare paper at about 3s, then the circle snapped in. This orders the
-              requests, the circle first; the hold above ties the two: the gold rises a breath
-              after the stroke's picture is in, however late it comes. */}
-          <Image
-            className={styles.dot}
-            src={enso.dot.src}
-            alt=""
-            width={enso.dot.width}
-            height={enso.dot.height}
-            sizes="56px"
-            loading="eager"
-            fetchPriority="low"
-            data-dot=""
-            style={LEAF_BOX}
-          />
-          {/* Once it has settled, a band of light crosses the leaf (only the leaf: its own picture
-              is the band's mask), and comes back now and then while the page is open. */}
-          <span className={styles.sheen} data-sheen="" style={LEAF_BOX} />
         </span>
-        <p className={page.kicker}>{copy(about.hero.label)}</p>
-        <h1 id="about-title" lang="en" className={page.title}>
+        <p className={`${page.kicker} ${styles.kicker}`}>{copy(about.hero.label)}</p>
+        <h1 id="about-title" lang="en" className={`${page.title} ${styles.title}`}>
           {about.hero.title}
         </h1>
-        <p className={page.lead}>
+        <p className={`${page.lead} ${styles.lead}`}>
           {sentences(copy(about.hero.lead)).map((sentence) => (
             <span key={sentence}>{sentence}</span>
           ))}

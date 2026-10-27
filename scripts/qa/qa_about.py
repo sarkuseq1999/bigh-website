@@ -20,21 +20,27 @@ words over a painting; four promises in one row from 1200px, two by two from 600
 below; Dr. Liu's photo in the middle of its pool; the circle appears once. In Vietnamese at 360,
 600, 960, 1080 and 1200px (the longest pill label, "Gặp các nhà khoa học", once ran past its
 column) nothing in a words column reaches past its right edge.
-motion: reduced motion complete and still (the circle whole, its gold up, every painting shown);
-every painting is server-marked waiting (none paints whole, then vanishes); with motion the circle
-paints itself around slowly from where the brush began (its stroke takes 4s, after a moment of
-0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun: the quarter it starts
-in under half of its ink, the other three bare; stopped at 2.9s it is about three quarters round:
-the first two quarters whole, the third mostly drawn, the one reached last under half of its ink;
-then it ends whole), then its gold comes up (its delay at least the stroke's delay and duration);
-stopped 5.9s in, the gold leaf is floating down (seen, above its place, its shadow on the
-paper), then it lands and settles (no transform, its shadow and band of light gone); reduced
-motion keeps the leaf's shadow and band hidden; and the hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held
-3s) the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the
-picture is in and draws around, and the gold comes up the stroke's delay and duration after it;
-with no stroke picture, 9s in the gold has not risen alone; with JavaScript off the circle shows
-whole once the stroke and the gold's float and light have finished, and every other painting (the hills,
-the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
+motion: reduced motion complete and still (the circle whole, every painting shown); no gold on
+the circle (Mo, October 26, 2026: its stroke is its only picture, no leaf, shadow or band of
+light); every painting is server-marked waiting (none paints whole, then vanishes); with motion
+the circle paints itself around slowly from where the brush began (its stroke takes 4s, after a
+moment of 0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun: the quarter
+it starts in under half of its ink, the other three bare; stopped at 2.9s it is about three
+quarters round: the first two quarters whole, the third mostly drawn, the one reached last under
+half of its ink; then it ends whole; the words inside the circle are hidden for these shots); the
+hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held 3s)
+the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the picture
+is in, draws around and closes; with no stroke picture, 9s in the stroke still holds; with
+JavaScript off the circle shows whole once the stroke has finished, and every other painting (the
+hills, the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does
+still.
+circle_layout (Mo, October 26, 2026: the circle bigger, the title written inside it; he picked
+this over the words under it). At 1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900,
+390x844 and 360x780: the circle centred in the window; from 1280px wide at least 0.72 of the
+window's height tall; the kicker and the title inside the circle (and the lead, from 600px; on a
+phone it stands under the circle), the title centred in it; no word within 8px of the stroke's
+ink; the hills begin in the first screen; on a phone the circle 8px from each edge; no sideways
+scrolling.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
 deep_links (1440x900, 1024x768, 768x1024, 390x844, 360x780): /about#purpose, #roots, #experience,
@@ -58,7 +64,7 @@ in the first screen.
 
 Pictures: scripts/qa/out/about-circle/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen,circle_layout]
 """
 
 import io
@@ -350,7 +356,7 @@ STACKING_JS = """() => {
     return why;
   };
   const found = [];
-  const paintings = [...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]'));
+  const paintings = [...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]'));
   for (const img of paintings) {
     for (let el = img.parentElement; el && el !== root; el = el.parentElement) {
       const why = makes(el);
@@ -700,7 +706,7 @@ def desktop_and_phone(browser):
         paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
         check(f"{tag} the kit's plain rice paper", "paper.webp" in paper and "aged" not in paper, paper)
         blends = page.evaluate(
-            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]') && !i.matches('[data-dot]')).map(i => getComputedStyle(i).mixBlendMode)"
+            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]')).map(i => getComputedStyle(i).mixBlendMode)"
         )
         check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
         stacking = page.evaluate(STACKING_JS)
@@ -823,7 +829,6 @@ def rhythm(browser):
             # On a desktop the photo stands about 200px wide on its wash, as in the mockup (its mat
             # was 240px and stood large).
             check(f"{tag} Dr. Liu's photo about 200px wide on its wash (190-210)", 190 <= wash["mat"] <= 210, wash)
-        # The stroke only: "enso" alone also matches its gold start, enso-dot-v1.webp.
         once_circle = page.evaluate("document.querySelectorAll('main img[src*=\"enso-v\"]').length")
         check(f"{tag} the circle appears once", once_circle == 1, once_circle)
         page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
@@ -840,21 +845,25 @@ def rhythm(browser):
 
 
 # The circle, every animation frame for 14s from navigation: [ms since navigation, the stroke's
-# sweep in degrees (-12 before it begins, 360 once whole), its gold's opacity, the stroke's picture
-# in]. Installed before the page's own scripts; it only reads.
+# sweep in degrees (-12 before it begins, 360 once whole), the stroke's picture in]. Installed
+# before the page's own scripts; it only reads.
 ENSO_LOG = """(() => {
   const log = (window.__enso = []);
   const tick = () => {
     const wrap = document.querySelector('[data-enso]');
     if (wrap) {
-      const stroke = wrap.querySelector('img:not([data-dot])'), dot = wrap.querySelector('[data-dot]');
+      const stroke = wrap.querySelector('img');
       log.push([Math.round(performance.now()), parseFloat(getComputedStyle(stroke).getPropertyValue('--sweep')),
-                parseFloat(getComputedStyle(dot).opacity), stroke.complete && stroke.naturalWidth > 0]);
+                stroke.complete && stroke.naturalWidth > 0]);
     }
     if (performance.now() < 14000) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 })();"""
+
+# The opening's words hidden, so a shot of the circle's box is the circle alone (they
+# stand within it).
+HIDE_WORDS = '[data-part="opening"] :is(h1, p) { visibility: hidden !important; }'
 
 # The page's paintings but the circle: the hills, the oak, the pool under Dr. Liu's photo (not
 # the photo), the sequoia, the four promise dots and the glasses.
@@ -894,24 +903,30 @@ def motion(browser):
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     scroll_through(page)
     still = page.evaluate(
-        """() => { const e = document.querySelector('[data-enso] img'), d = document.querySelector('[data-enso] [data-dot]');
+        """() => { const e = document.querySelector('[data-enso] img');
              return { blooms: [...document.querySelectorAll('[data-bloom]')].filter(x => x.dataset.bloom !== 'done').length,
                       hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < (i.matches('[data-pool]') ? 0.7 : 1)).length,
                       pool: getComputedStyle(document.querySelector('[data-pool]')).opacity,
-                      draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage, dot: getComputedStyle(d).opacity,
-                      light: [...document.querySelectorAll('[data-enso] :is([data-shadow], [data-sheen])')].map(x => getComputedStyle(x).opacity),
+                      draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage,
                       running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
                         return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""
     )
-    check("reduced motion: the circle whole, its gold up, every painting shown, still",
+    check("reduced motion: the circle whole, every painting shown, still",
           still["blooms"] == 0 and still["hidden"] == 0 and still["draw"] == "none" and still["mask"] == "none"
-          and float(still["dot"]) == 1 and still["running"] == 0, still)
-    check("reduced motion: the leaf lies still, its shadow and band of light hidden (opacity 0)",
-          len(still["light"]) == 2 and all(float(o) == 0 for o in still["light"]), still["light"])
+          and still["running"] == 0, still)
+    # No gold on the circle (Mo, October 26, 2026: the leaf that floated down and caught the light
+    # looked cartoonish, as the spark before it looked fake): its stroke is its only picture.
+    gold = page.evaluate(
+        """() => ({ pictures: [...document.querySelectorAll('[data-enso] img')].map(i => (i.getAttribute('src') || '').split('%2F').pop().split('&')[0]),
+                     parts: document.querySelectorAll('[data-enso] :is([data-dot], [data-shadow], [data-sheen])').length,
+                     dotFile: document.querySelectorAll('img[src*="enso-dot"]').length })"""
+    )
+    check("no gold on the circle (its stroke its only picture; no leaf, shadow or band of light)",
+          len(gold["pictures"]) == 1 and "enso-v" in gold["pictures"][0] and gold["parts"] == 0 and gold["dotFile"] == 0, gold)
     context.close()
 
     # With motion: the circle paints itself slowly (Mo, October 8: "start a moment after the page
-    # appears, and take about 4 seconds"), then its gold; the hills bloom.
+    # appears, and take about 4 seconds"); the hills bloom.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
     # the server sends, before any script could mark one: in the page's main, the hills, the
@@ -927,16 +942,11 @@ def motion(browser):
     early = page.evaluate(
         """() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
              return { name: e.animationName, duration: e.animationDuration, start: e.getPropertyValue('--start').trim(),
-                      wait: parseFloat(e.animationDelay), time: parseFloat(e.animationDuration),
-                      dot: getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity,
-                      delay: parseFloat(getComputedStyle(document.querySelector('[data-enso] [data-dot]')).animationDelay) }; }"""
+                      wait: parseFloat(e.animationDelay), time: parseFloat(e.animationDuration) }; }"""
     )
     check("motion: the circle paints itself slowly (its animation, 4s, after a moment of 0.4 to 1s, from where the brush began)",
           "draw" in early["name"] and early["duration"] == "4s" and 0.4 <= early["wait"] <= 1
           and early["start"].endswith("deg"), early)
-    check("motion: its gold waits for the stroke (its delay at least the stroke's delay and duration)",
-          float(early["dot"]) < 0.5 and early["delay"] >= early["wait"] + early["time"] - 0.001, early)
-    check("motion: then the gold is up", wait_until(page, "getComputedStyle(document.querySelector('[data-enso] [data-dot]')).opacity === '1'"))
     check("motion: the hills bloom", wait_until(page, "document.querySelector('[data-picture-band]').dataset.bloom === 'done'"))
     low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
     state = page.evaluate(f"[{low}.dataset.bloom ?? null, getComputedStyle({low}).opacity]")
@@ -947,17 +957,20 @@ def motion(browser):
 
     # The circle's ink, by quarter in the order the stroke draws them (clockwise from the top
     # right: top right, bottom right, bottom left, top left): the share of each quarter's pixels
-    # that is dark. The still circle (reduced motion: no mask at all, its gold up) is the whole one.
+    # that is dark, with the opening's words hidden (they stand in the circle's box). The
+    # still circle (reduced motion: no mask at all) is the whole one.
     def circle_shot(reduced):
         context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False,
                                       reduced_motion="reduce" if reduced else "no-preference")
         page = context.new_page()
+        # Script is off, so the words are hidden in the HTML itself, on its way in.
+        page.route(f"{BASE}/about", lambda route: route.fulfill(
+            response=(r := route.fetch()), body=r.text().replace("</head>", f"<style>{HIDE_WORDS}</style></head>", 1)))
         page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-        # Still: at once. With motion (script off, so nothing holds): once the stroke, the leaf's
-        # float and its first light have finished (the light ends 0.6s + 4s + 2.6s + 0.35s +
-        # 1.4s, 8.95s, from when the page is styled) and before it first glints again (14.9s).
-        page.wait_for_timeout(1500 if reduced else 9500)
-        box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
+        # Still: at once. With motion (script off, so nothing holds): once the stroke has finished
+        # (0.6s + 4s from when the page is styled), with time to spare.
+        page.wait_for_timeout(1500 if reduced else 6500)
+        box = page.locator("[data-enso] img").bounding_box()
         shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
         context.close()
         return shot
@@ -971,8 +984,8 @@ def motion(browser):
 
     # The stroke really progresses, at a brush's pace (a mask that never sweeps would pass "its
     # animation runs" with the circle whole from the first frame, or blank to the end; one that
-    # flashes round would be whole early). The animation runs in real time; the page stops it (and
-    # the gold's) in the frame its clock first reaches a set time, which counts its 0.6s delay, so
+    # flashes round would be whole early). The animation runs in real time; the page stops it in
+    # the frame its clock first reaches a set time, which counts its 0.6s delay, so
     # each shot is the same on a slow machine, then lets it run on. At 1.1s (half a second into
     # the stroke, about 5 degrees drawn) it has barely begun, a gentle press: the quarter it starts
     # in (top right) under half of its ink, the other three bare. At 2.9s (about 265 degrees, three
@@ -984,7 +997,8 @@ def motion(browser):
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
-    box = page.locator("[data-enso] img:not([data-dot])").bounding_box()
+    page.add_style_tag(content=HIDE_WORDS)
+    box = page.locator("[data-enso] img").bounding_box()
 
     def stop_at(ms):
         """Stop the circle's animations in the frame the stroke's clock first reaches `ms`, and
@@ -992,7 +1006,7 @@ def motion(browser):
         stopped = page.evaluate(
             """(ms) => new Promise((resolve) => {
                  const wrap = document.querySelector('[data-enso]');
-                 const draw = wrap.querySelector('img:not([data-dot])').getAnimations()[0];
+                 const draw = wrap.querySelector('img').getAnimations()[0];
                  if (!draw) return resolve(null);
                  const began = performance.now();
                  const tick = () => {
@@ -1021,55 +1035,18 @@ def motion(browser):
           clock is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
           and midway[2] >= 0.5 * still_circle[2] and midway[3] <= 0.5 * still_circle[3],
           {"clock_ms": clock, "midway": midway, "still": still_circle})
-    # The gold leaf floats down (Mo, October 19, 2026: real gold leaf, not a spark): stopped 5.9s
-    # in (1.3s into its 2.6s float, which sets off as the brush lifts) it is seen, it is still
-    # above its place (its centre at least 0.3 of its height higher), and its faint shadow is on
-    # the paper. The clock is the leaf's own float: the stroke's ends at 4.6s and is gone by then;
-    # the two start together, so it counts the same.
-    float_ = page.evaluate(
-        """(ms) => new Promise((resolve) => {
-             const wrap = document.querySelector('[data-enso]');
-             const dot = wrap.querySelector('[data-dot]');
-             const fall = dot.getAnimations()[0];
-             if (!fall) return resolve(null);
-             const began = performance.now();
-             const tick = () => {
-               if (Number(fall.currentTime) >= ms) {
-                 wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
-                 const box = wrap.getBoundingClientRect(), r = dot.getBoundingClientRect();
-                 const restW = box.width * parseFloat(dot.style.width) / 100;
-                 const restH = restW * dot.naturalHeight / dot.naturalWidth;
-                 const restY = box.top + box.height * parseFloat(dot.style.top) / 100 + restH / 2;
-                 const out = { clock: Math.round(Number(fall.currentTime)), name: fall.animationName,
-                               dot: getComputedStyle(dot).opacity,
-                               above: (restY - (r.top + r.height / 2)) / restH,
-                               shadow: getComputedStyle(wrap.querySelector('[data-shadow]')).opacity };
-                 wrap.getAnimations({ subtree: true }).forEach((a) => a.play());
-                 return resolve(out);
-               }
-               if (performance.now() - began > 12000) return resolve(null);
-               requestAnimationFrame(tick);
-             };
-             tick();
-           })""",
-        5900,
-    )
-    check("motion: then the gold leaf floats down (seen, above its place, its shadow on the paper)",
-          bool(float_) and float(float_["dot"]) == 1 and float_["above"] >= 0.3 and float(float_["shadow"]) > 0.1, float_)
-    check("motion: then it lands and settles (no transform, its shadow and band of light gone)",
-          wait_until(page, "(() => { const w = document.querySelector('[data-enso]'); return getComputedStyle(w.querySelector('[data-dot]')).transform === 'none' && [...w.querySelectorAll(':is([data-shadow], [data-sheen])')].every(x => getComputedStyle(x).opacity === '0'); })()", 8000))
+    page.wait_for_timeout(2500)
     end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
     check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
           all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})
     context.close()
 
-    # A slow link: the stroke's picture arrives late (its requests, enso-v1, held until 3s after
-    # navigation; the gold's, enso-dot-v1, are not). The circle waits for its picture: 2.5s in
-    # nothing shows (the gold hidden, the sweep not begun); the stroke starts only once the
-    # picture is in and draws around, and the gold comes up at least the stroke's delay and duration
-    # after that (0.6s and 4s, read from the page; less one frame, 17ms, for where the log samples),
-    # never with the picture or before it. Every frame is logged from navigation, to 14s (the gold
-    # is up about 3s + 0.6s + 4s + its 1.2s in).
+    # A slow link: the stroke's picture arrives late (its requests held until 3s after navigation).
+    # The circle waits for its picture: 2.5s in nothing shows (the sweep not begun); the stroke
+    # starts only once the picture is in, draws around, and closes at least its delay and duration
+    # after the picture (0.6s and 4s, read from the page; less one frame, 17ms, for where the log
+    # samples). Every frame is logged from navigation, to 14s (the circle closes about 3s + 0.6s +
+    # 4s in).
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     context.add_init_script(ENSO_LOG)
     page = context.new_page()
@@ -1082,52 +1059,51 @@ def motion(browser):
     wait_until(page, "performance.now() >= 13500", 20000)
     log = page.evaluate("window.__enso || []")
     stroke_ms = page.evaluate(
-        """(() => { const e = getComputedStyle(document.querySelector('[data-enso] img:not([data-dot])'));
+        """(() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
              return Math.round((parseFloat(e.animationDelay) + parseFloat(e.animationDuration)) * 1000); })()"""
     )
     context.close()
     at = [f for f in log if f[0] <= 2500]
     early = at[-1] if at else None
-    check("slow stroke: 2.5s in, nothing shows (the gold hidden, the sweep not begun)",
-          early is not None and not early[3] and early[2] == 0 and early[1] <= 0, {"held": len(held), "frame": early})
-    arrived = next((f[0] for f in log if f[3]), None)
+    check("slow stroke: 2.5s in, nothing shows (the sweep not begun)",
+          early is not None and not early[2] and early[1] <= 0, {"held": len(held), "frame": early})
+    arrived = next((f[0] for f in log if f[2]), None)
     began = next((f[0] for f in log if -11 < f[1] < 359.9), None)
     drawing = [f for f in log if arrived is not None and f[0] >= arrived and 20 < f[1] < 340]
     check("slow stroke: the stroke starts only once its picture is in, then draws around",
           arrived is not None and began is not None and began >= arrived and len(drawing) >= 10,
           {"arrived_ms": arrived, "began_ms": began, "frames_drawing": len(drawing)})
-    risen = next((f[0] for f in log if f[2] > 0.01), None)
+    # Closed: the sweep at 359.9 degrees, which its ease (a slow lift through the dry tail) reaches
+    # up to about 100ms before its end; so at least the stroke's delay and duration after the
+    # picture, less 150ms.
     closed = next((f[0] for f in log if f[1] >= 359.9 and f[0] >= (began or 0)), None)
-    check("slow stroke: the gold comes up after the stroke (its delay and duration after the picture), then is up",
-          arrived is not None and risen is not None and closed is not None and stroke_ms >= 4000
-          and risen >= arrived + stroke_ms - 17 and closed <= risen and bool(log) and log[-1][2] == 1,
-          {"arrived_ms": arrived, "stroke_ms": stroke_ms, "closed_ms": closed, "gold_rises_ms": risen,
-           "last": log[-1] if log else None})
+    check("slow stroke: then it closes (its delay and duration after the picture), and stays whole",
+          arrived is not None and closed is not None and stroke_ms >= 4000
+          and closed >= arrived + stroke_ms - 150 and bool(log) and log[-1][1] >= 359.9,
+          {"arrived_ms": arrived, "stroke_ms": stroke_ms, "closed_ms": closed, "last": log[-1] if log else None})
 
     # A failed stroke picture: nothing lets the circle go (no timer; Next's onLoad fires for a broken
-    # img that is complete when it hydrates, so the Opening checks naturalWidth), so the gold never
-    # rises alone on bare paper. 9s in (unheld, the gold would be up 0.6s + 4s + its 1.2s after the
-    # page is styled), the gold is still hidden and the stroke still holds.
+    # img that is complete when it hydrates, so the Opening checks naturalWidth). 9s in (unheld, the
+    # sweep would have ended 0.6s + 4s after the page is styled), the stroke still holds.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
     page.route(re.compile(r"enso-v\d"), lambda route: route.abort())
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, "performance.now() >= 9000", 20000)
     failed = page.evaluate(
-        """() => { const s = document.querySelector('[data-enso] img:not([data-dot])'), d = document.querySelector('[data-enso] [data-dot]');
-             return { picture: s.naturalWidth, play: getComputedStyle(s).animationPlayState, gold: getComputedStyle(d).opacity }; }"""
+        """() => { const s = document.querySelector('[data-enso] img');
+             return { picture: s.naturalWidth, play: getComputedStyle(s).animationPlayState }; }"""
     )
     context.close()
-    check("failed stroke picture: 9s in, the gold never rises alone (still hidden, the stroke held)",
-          failed["picture"] == 0 and failed["play"] == "paused" and float(failed["gold"]) == 0, failed)
+    check("failed stroke picture: 9s in, the stroke still holds",
+          failed["picture"] == 0 and failed["play"] == "paused", failed)
 
-    # JavaScript off: the circle shows whole (its stroke is pure CSS) once the stroke and the gold
-    # have finished (circle_shot waits 7s from load: the stroke's 0.6s and 4s, the gold's 1.2s,
-    # 5.8s from when the page is styled, before load). Visible is not whole: half drawn (2s after
-    # load), the circle's ink already passes the visible floor (0.076). So each quarter of it must
-    # also hold as much ink as the still circle's. The top-left quarter, drawn last, held 0.23 of
-    # its ink at 3.2s and 0.63 at 3.6s; the top-right holds the gold leaf, and held 0.94 of its ink
-    # until the gold rose (0.97 at 5s); whole, with the gold up, all four match exactly.
+    # JavaScript off: the circle shows whole (its stroke is pure CSS) once the stroke has finished
+    # (circle_shot waits 6.5s from load; the stroke's 0.6s and 4s count from when the page is
+    # styled, before load). Visible is not whole: half drawn (2s after load), the circle's ink
+    # already passes the visible floor (0.076). So each quarter of it must also hold as much ink as
+    # the still circle's. The top-left quarter, drawn last, held 0.23 of its ink at 3.2s and 0.63 at
+    # 3.6s; whole, all four match exactly.
     shot = circle_shot(False)
     ink = sum(shot.histogram()[:120]) / (shot.width * shot.height)
     check("JavaScript off: the circle is visible", ink >= 0.04, round(ink, 4))
@@ -1182,6 +1158,69 @@ def first_screen(browser):
                         picture: document.querySelector('[data-enso] img').getBoundingClientRect().top, win: innerHeight })"""
         )
         check(f"{tag} the title and the top of the opening's circle in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
+        context.close()
+
+
+# The opening's circle and words: the circle's box, the open centre's words (each line's box), and
+# the hills' top. The kicker is the opening's first p, the lead the p after the h1.
+OPENING_JS = """() => {
+  const ring = document.querySelector('[data-enso]').getBoundingClientRect();
+  const o = document.querySelector('[data-part="opening"]');
+  const lines = (e) => { const r = document.createRange(); r.selectNodeContents(e);
+    return [...r.getClientRects()].filter(x => x.width > 1).map(x => [x.left, x.top, x.right, x.bottom]); };
+  const box = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
+  const kicker = o.querySelector('p'), title = o.querySelector('h1'), lead = o.querySelector('h1 + p');
+  const t = lines(title);
+  return { ring: [ring.left, ring.top, ring.right, ring.bottom], win: [innerWidth, innerHeight],
+           kicker: box(kicker), title: [Math.min(...t.map(x => x[0])), Math.min(...t.map(x => x[1])), Math.max(...t.map(x => x[2])), Math.max(...t.map(x => x[3]))],
+           lead: box(lead), lines: [kicker, title, lead].flatMap(lines),
+           hills: o.querySelector('[data-picture-band]').getBoundingClientRect().top,
+           sideways: document.documentElement.scrollWidth - innerWidth };
+}"""
+
+
+def ink_near_words(page, geo, pad=8):
+    """The stroke's dark pixels (under 128) within `pad` px of any word: the words hidden, the
+    circle's box shot, and each line's box (grown by `pad`) counted in it."""
+    page.add_style_tag(content=HIDE_WORDS)
+    page.wait_for_timeout(100)
+    x0, y0, x1, y1 = geo["ring"]
+    clip = {"x": max(0, x0), "y": max(0, y0), "width": min(geo["win"][0], x1) - max(0, x0), "height": y1 - max(0, y0)}
+    shot = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("L")
+    sx, sy = shot.width / clip["width"], shot.height / clip["height"]
+    dark = 0
+    for l, t, r, b in geo["lines"]:
+        crop = (int((l - pad - clip["x"]) * sx), int((t - pad - clip["y"]) * sy), int((r + pad - clip["x"]) * sx), int((b + pad - clip["y"]) * sy))
+        crop = (max(0, crop[0]), max(0, crop[1]), min(shot.width, crop[2]), min(shot.height, crop[3]))
+        if crop[2] > crop[0] and crop[3] > crop[1]:
+            dark += sum(shot.crop(crop).histogram()[:128])
+    return dark
+
+
+def circle_layout(browser):
+    sizes = [(1920, 1000), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
+    for width, height in sizes:
+        tag = f"circle {width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        g = page.evaluate(OPENING_JS)
+        (rl, rt, rr, rb), (ww, wh) = g["ring"], g["win"]
+        cx, cy = (rl + rr) / 2, (rt + rb) / 2
+        check(f"{tag} the circle centred", abs(cx - ww / 2) <= 2, g["ring"])
+        if width >= 1280:
+            check(f"{tag} the circle fills the first screen (0.72 of its height or more)", (rb - rt) / wh >= 0.72, round((rb - rt) / wh, 3))
+        inside = lambda b: b[0] >= rl and b[2] <= rr and b[1] >= rt and b[3] <= rb
+        words = [g["kicker"], g["title"]] + ([g["lead"]] if width >= 600 else [])
+        check(f"{tag} the kicker, the title{' and the lead' if width >= 600 else ''} inside the circle", all(inside(b) for b in words), words)
+        if width < 600:
+            check(f"{tag} the lead under the circle", g["lead"][1] >= rb - 1, {"lead": g["lead"], "ring": g["ring"]})
+            check(f"{tag} the circle 8px from each edge", abs(rl - 8) <= 1 and abs(ww - rr - 8) <= 1, g["ring"])
+        tx, ty = (g["title"][0] + g["title"][2]) / 2, (g["title"][1] + g["title"][3]) / 2
+        check(f"{tag} the title centred in the circle", abs(tx - cx) <= 2 and abs(ty - cy) <= 0.08 * (rb - rt), {"title": g["title"], "ring": g["ring"]})
+        check(f"{tag} the hills begin in the first screen", g["hills"] < wh, g["hills"])
+        check(f"{tag} no sideways scrolling", g["sideways"] <= 0, g["sideways"])
+        near = ink_near_words(page, g)
+        check(f"{tag} no word within 8px of the stroke's ink", near == 0, near)
+        page.screenshot(path=os.path.join(OUT, f"circle-inside-{width}x{height}.png"))
         context.close()
 
 
@@ -1278,7 +1317,7 @@ def languages_layout(browser):
 
 
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen]
+GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, circle_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

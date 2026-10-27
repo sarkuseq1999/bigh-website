@@ -5,10 +5,24 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (NuriCell research, tap a book; local, not
-  pushed). Earlier the same day: Science, one place per screen, put live on its own; the tablet
-  menu's crane eases with the fold (local, not pushed).
+- **Last updated:** October 27, 2026, by Claude Code (the tablet menu's crane fix put live on its
+  own, `main` `5fe0846`). Earlier the same day: About's bigger circle merged into studio (local);
+  the product openings' release notes, the Title face entry below marked live. October 26:
+  NuriCell research, tap a book (local, not pushed). Earlier the same day: Science, one place per
+  screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): About, a bigger circle and no gold leaf (Mo picked A twice).**
+  The opening circle fills the first screen and "Be in Good Health." is written inside it (on a
+  phone the title sits inside on three lines, the lead under the circle). The gold leaf that fell
+  onto the circle is gone (Mo found its fall and shine cartoonish; the opening's gold is the sunlit
+  hilltop). Layout B, a bigger circle with the words under it, was built at a temporary
+  `/about-below` to compare and removed after Mo's pick. `circle.module.css`, `about-ink.tsx`,
+  `let-the-circle-go.ts`; mockups and the built shots `reference/ink-pages/mockups/about-circle-size/`,
+  artifact `CC6pZFonqYvRfZnJEB6g57`. Merged into studio October 27 on top of 598d10a and
+  re-checked on the built site (`npm run build` + `next start`): `qa_about` 404/404 (new
+  `circle_layout` section), `qa_home_ink` 282/282, `qa_nav` 326/326; lint and type-check clean.
+  `qa_fda` stops at Turmerific, which never goes network-idle on a local `next start` (old, not
+  this change).
 - **Local, not live (October 26): NuriCell research, Mo's pick A, "tap a book, read its study"**
   (mockup and the built page's shots `reference/ink-pages/mockups/nuricell-research/`, artifact
   `UFqCskQg1VCPiKy8ZTTVLk`; the draft rounds in `codes/bigh-archive/nuricell-research-mockup-2026-10-26/`).
@@ -41,9 +55,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   portrait and label. Built site (`npm run build` + `next start`, combined with the questions work
   at d15db52): `qa_nuricell_ink` 430/430, `qa_nature_calm_ink` 159/159; earlier build `qa_home_ink`
   282/282, `qa_nav` 315/316 (the tablet crane jump, since fixed in f9c1132). Not pushed.
-- **Local, not live (October 26): the tablet menu's crane eases with the fold** (Mo said to fix
-  the jump; before/after page `J5z9H46J76J8t2uM7nZqkf`). On a tablet the crane takes the room
-  left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
+- **Live (October 27): the tablet menu's crane eases with the fold** (Mo said to fix the jump,
+  then to push "only that fix"; before/after page `J5z9H46J76J8t2uM7nZqkf`). Released alone from
+  live `main`: `main` `5fe0846` (the code of `f9c1132`), production `dpl_9WQV7zjP…`, demo alias
+  → it; public `qa_nav` 326/326, `qa_home_ink` 282/282 (`docs/public-demo.md`). On a tablet the
+  crane takes the room left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
   layout it followed only the slice of the fold where that room lies between its two sizes:
   folding Products away at 834x1112 it grew 54px in 0.12s (up to 13px a frame) and stopped dead;
   at 768x1024, 100px in 0.07s (25px a frame). Now `useCraneRoom` in `nav-inscription.tsx`
@@ -53,7 +69,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   again. Biggest step now 4px a frame at 834x1112, 8px at 768x1024 and 1024x768; phones and
   1024x1366 unchanged. `qa_nav` films the fold at all three tablets and checks the size is let
   go after. Built site (`npm run build` + `next start`, studio `c947fcf` plus this): `qa_nav`
-  326/326, `qa_home_ink` 282/282; lint and type-check clean. Not pushed. Separately, still open:
+  326/326, `qa_home_ink` 282/282; lint and type-check clean. Separately, still open:
   `scripts/qa/qa_science_links.py` still clicks the Science drop-down switched off this morning.
 - **Local, not live (October 26): product questions, Mo's pick A, "a painting for each answer"**
   (mockups `reference/ink-pages/mockups/nuricell-questions/`, artifact `MceTcmgqxFuQPtLHrJ8xfE`;
@@ -96,20 +112,25 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   crane jump), `qa_home_ink` 282/282. `qa_science_links.py` crashes before checking anything: it still
   clicks the Science drop-down that became a plain link earlier on October 26 (not this change;
   not fixed).
-- **Local, not live (October 26): product openings, the words under the name, Mo's pick C "Title
-  face"** (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact
-  `1TNAN8z5fW6P14w7kv3QZz`). NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green
-  Bee Propolis keeps its own): the headline in Ysabeau (560; Korean, Japanese and Chinese keep the
-  title weight), the purpose a large lead in ink with no side line, and from 960px the two sit
-  together and end where Add to cart ends (the refund line sits in a subgrid row of its own). Mo
-  turned down Dr. Liu's photo there: pages without him would look lesser. On the built site
-  (`npm run build` + `next start`) at 59585a0 (on top of the lighthouse and What's inside):
-  `qa_nuricell_ink` 429/429 (its opening check now tests the new look), `qa_opc_ink` 185/185,
-  `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 158/159 (its older front-layer pixel check,
-  in the Buy chapter); a build before the last two small fixes (the dash kept with its word, the
-  CJK weight) also passed `qa_propolis_ink` 273/273, `qa_home_ink` 282/282, `qa_nav` 315/316 (the
-  known tablet crane jump). Open: on Turmerific at 1440x900 the refund line ends on the window's
-  bottom edge; on a phone its purpose runs six lines.
+- **Live (October 26): product openings, the words under the name, Mo's pick C "Title face"**
+  (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact `1TNAN8z5fW6P14w7kv3QZz`).
+  NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green Bee Propolis keeps its own):
+  the headline in Ysabeau (560; Korean, Japanese and Chinese keep the title weight), the purpose a
+  large lead in ink with no side line, and from 960px the two sit together and end where Add to cart
+  ends (the refund line sits in a subgrid row of its own). Mo turned down Dr. Liu's photo there:
+  pages without him would look lesser. On the built site (`npm run build` + `next start`) at 59585a0
+  (on top of the lighthouse and What's inside): `qa_nuricell_ink` 429/429 (its opening check now
+  tests the new look), `qa_opc_ink` 185/185, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink`
+  158/159 (its older front-layer pixel check, in the Buy chapter); a build before the last two small
+  fixes (the dash kept with its word, the CJK weight) also passed `qa_propolis_ink` 273/273,
+  `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet crane jump). Released on its own from a
+  copy of live `main` (`af7faf3`) with only this change cherry-picked: `main` `78ae1d6` (the same
+  content as `studio`'s `59585a0`), production `dpl_92LiEZJuxbddWQY2mQNmcV8Jw2mG`; public demo
+  `qa_nuricell_ink` 404/404, `qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159, `qa_turmerific_ink`
+  155/155, `qa_propolis_ink` 273/273, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet
+  crane jump). The Science release (`e6e7e36`) went on top minutes later and the demo alias moved
+  there, with the new openings still in it (`docs/public-demo.md`). Open: on Turmerific at 1440x900
+  the refund line ends on the window's bottom edge; on a phone its purpose runs six lines.
 - **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse**
   (mockups and the built page `reference/ink-pages/mockups/nuricell-why/`, artifact
   `LiWF3jKo2tdLH4otM1SrRc`). Mo first picked A (a Gold Rush miner's lantern), saw it built beside
@@ -158,8 +179,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_science_ink` 1279/1279, `qa_about` 353/353 (dev: `qa_nav` 315/316); lint and type-check
   clean. Mo's before/after page: https://claude.ai/artifact/DEE11nzfSvHRMeSgmFFfCC. The one
   failure was old, newly checked: the tablet menu's crane jumping as Products folds away (fixed
-  later the same day, local: "the tablet menu's crane eases with the fold" at the top). Live in
-  `c944a72`.
+  later the same day, live October 27 in `5fe0846`: "the tablet menu's crane eases with the
+  fold" at the top). Live in `c944a72`.
 - **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics

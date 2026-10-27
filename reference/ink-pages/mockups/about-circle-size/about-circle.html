@@ -1,0 +1,252 @@
+<title>About Circle Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column like a scroll. Two built versions of the About opening, each a card with
+     the real built page (big screen, phone, and a short film). The site's own paper and ink. */
+  :root {
+    --paper: #f4f0e6;
+    --card: #faf7f0;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d9d2c1;
+    --gold: #9a7a28;
+    --pick: #1f3d2b;
+    --pick-bg: #e3ebdf;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --card: #24211c;
+      --ink: #f1ece0;
+      --ink-soft: #b6ae9e;
+      --rule: #3a362e;
+      --gold: #d4b05a;
+      --pick: #cfe3c6;
+      --pick-bg: #2b3a2c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --card: #24211c;
+    --ink: #f1ece0;
+    --ink-soft: #b6ae9e;
+    --rule: #3a362e;
+    --gold: #d4b05a;
+    --pick: #cfe3c6;
+    --pick-bg: #2b3a2c;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.5 var(--body);
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+    display: grid;
+    gap: 32px;
+  }
+  header {
+    display: grid;
+    gap: 10px;
+  }
+  h1 {
+    font: 600 38px/1.08 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 36em;
+    color: var(--ink-soft);
+  }
+  .answer {
+    margin: 0;
+    font-weight: 600;
+  }
+  .answer code,
+  .links code {
+    font: 600 16px/1 var(--body);
+    background: var(--pick-bg);
+    color: var(--pick);
+    padding: 3px 8px;
+    border-radius: 6px;
+    overflow-wrap: anywhere;
+  }
+  .links {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 8px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  .card.pick {
+    border: 2px solid var(--pick);
+  }
+  .card h2 {
+    font: 600 26px/1.2 var(--title);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+  }
+  .tag {
+    font: 700 16px/1 var(--body);
+    letter-spacing: 0.04em;
+  }
+  .badge {
+    font: 600 13px/1 var(--body);
+    color: var(--pick);
+    background: var(--pick-bg);
+    padding: 5px 9px;
+    border-radius: 99px;
+  }
+  .card p {
+    margin: 0;
+    max-width: 40em;
+  }
+  .score {
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .shots {
+    display: grid;
+    grid-template-columns: 3.3fr 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  figure img,
+  figure video {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: #f3efe4;
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: 3.3fr 1fr;
+    gap: 12px;
+  }
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 32px;
+    }
+    .shots,
+    .pair {
+      grid-template-columns: 1fr 1fr;
+    }
+    .shots > figure:first-child,
+    .pair > figure:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>About page: the bigger circle</h1>
+    <p class="lede">
+      Both versions were built for real on the site, with no gold leaf. These pictures and films
+      come from the real built pages. Mo picked A on October 26; B has been removed. Nothing is
+      live yet.
+    </p>
+    <p class="answer">Picked: <code>A</code></p>
+  </header>
+
+  <article class="card pick">
+    <h2><span class="tag">A</span> Words inside the circle <span class="badge">Picked</span></h2>
+    <p>
+      The circle fills the first screen and frames the title. On your big screen it is 2.5 times
+      today's size. On a phone the title sits inside on three short lines.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="built/inside-desk.webp" width="1920" height="1000" alt="Big screen: a large ink circle fills the first screen, the title written inside it, the hills at the bottom.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="built/inside-phone.webp" width="780" height="1688" alt="Phone: the circle fills the width, the title inside it on three lines.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+    <div class="pair">
+      <figure>
+        <video src="built/inside-laptop.mp4" poster="built/inside-laptop.webp" controls muted playsinline preload="none" width="1440" height="900"></video>
+        <figcaption>Film: laptop, 9 seconds</figcaption>
+      </figure>
+      <figure>
+        <video src="built/inside-phone.mp4" poster="built/inside-phone.webp" controls muted playsinline preload="none" width="390" height="844"></video>
+        <figcaption>Film: phone</figcaption>
+      </figure>
+    </div>
+    <p class="score">
+      My score: 8.5 out of 10. It feels like stepping into the painting, and the hills still peek
+      in at the bottom. What holds it back: on a small laptop the title shrinks a little to fit
+      inside.
+    </p>
+  </article>
+
+  <article class="card">
+    <h2><span class="tag">B</span> Bigger, words below <span class="badge">Not picked</span></h2>
+    <p>
+      Today's layout, as big as it can be while the words still fit on the first screen. On your
+      big screen it is almost twice today's size.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="built/below-desk.webp" width="1920" height="1000" alt="Big screen: a larger ink circle with the title below it.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="built/below-phone.webp" width="780" height="1688" alt="Phone: a larger circle with the title below it.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+    <div class="pair">
+      <figure>
+        <video src="built/below-laptop.mp4" poster="built/below-laptop.webp" controls muted playsinline preload="none" width="1440" height="900"></video>
+        <figcaption>Film: laptop, 9 seconds</figcaption>
+      </figure>
+      <figure>
+        <video src="built/below-phone.mp4" poster="built/below-phone.webp" controls muted playsinline preload="none" width="390" height="844"></video>
+        <figcaption>Film: phone</figcaption>
+      </figure>
+    </div>
+    <p class="score">
+      My score: 8 out of 10. Clean and safe. What holds it back: on a small laptop screen it is
+      only a little bigger than today, because the words need room underneath.
+    </p>
+  </article>
+</div>

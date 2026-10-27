@@ -12,10 +12,12 @@
   justify-items: center;
 }
 
+/* The circle is --ring wide (set below). */
 .circle .enso {
   position: relative;
-  width: clamp(200px, 24vw, 360px);
-  margin: 0 0 clamp(16px, 2vw, 28px);
+  width: var(--ring);
+  max-width: 100%;
+  margin: 0;
 }
 
 .circle .enso img {
@@ -24,10 +26,61 @@
   height: auto;
 }
 
-.circle .dot {
-  position: absolute;
+/* The circle fills the first screen and frames the words (Mo, October 26, 2026; he picked this,
+   A, over the circle as big as the first screen allows with the words under it).
+   At 360px wide (24vw) the circle read as "just a small circle" on a big screen. Here it is as
+   tall as the window allows under the menu bar (the window less 184px: the 88px the bar stands
+   over, 8px above the circle and 88px under it, where the hills begin), at least 480px wide (so
+   the title fits inside it in a short window), at most 1040px, and 16px or more from the window's
+   sides: where the column is narrower (under about 960px) it runs into the side margins, centred
+   by negative margins as wide as its overhang (a grid item wider than its column would push the
+   column, and the words with it, to the right). At 600px, held to the column, the title broke
+   onto two lines and the lead's last line came within 8px of the stroke.
+   The kicker, the title and the lead are written inside it: one grid cell holds the circle
+   across three rows, the title in the middle row, the kicker at the foot of the row above and the
+   lead at the head of the row below, so the title stands at the circle's middle (the stroke's
+   open centre is the picture's centre: 49.5% across, 49.7% down) whatever the words' heights.
+   The title follows the circle's size (0.068 of its width, 40 to 72px), so it keeps clear of the
+   stroke: the open centre is 0.64 of the circle's width across, the title about 0.45. Where the
+   circle is narrow and the title's 40px floor holds it (about 600px wide), it breaks onto two
+   lines rather than reach the stroke: it is never wider than 0.56 of the circle.
+   section[...] outranks the shared .aboutPage .opening padding in any stylesheet order;
+   h1.title outranks the shared .aboutPage h1.title. */
+.circle section[data-part="opening"] {
+  padding-top: calc(88px + 8px);
+}
+
+.circle [data-part="opening"] .openingWords {
+  --ring: min(max(calc((100svh - 184px) * 1247 / 1136), 480px), calc(100vw - 32px), 1040px);
+  grid-template-rows: 1fr auto 1fr;
+}
+
+.circle [data-part="opening"] .enso {
+  grid-area: 1 / 1 / 4 / 2;
   max-width: none;
-  height: auto;
+  margin-inline: calc((100% - var(--ring)) / 2);
+}
+
+.circle [data-part="opening"] .kicker {
+  grid-area: 1 / 1;
+  align-self: end;
+}
+
+.circle [data-part="opening"] h1.title {
+  grid-area: 2 / 1;
+  max-width: calc(var(--ring) * 0.56);
+  font-size: clamp(40px, calc(var(--ring) * 0.068), 72px);
+}
+
+.circle [data-part="opening"] .lead {
+  grid-area: 3 / 1;
+  align-self: start;
+}
+
+/* The hills rise into the foot of the circle's picture (its last tenth is bare paper), so their
+   peaks show at the foot of the first screen. */
+.circle [data-part="opening"] .hills {
+  margin-top: -3vw;
 }
 
 .circle .hills {
@@ -86,6 +139,45 @@
     width: 180%;
     max-width: none;
     margin-left: -54%;
+  }
+
+  /* On a phone the circle runs to 8px from the window's edges (the opening clips
+     anything past them, so nothing scrolls sideways). It keeps its own height: the words are
+     centred in the screen as one block with it, not spread over the screen's height. The title
+     breaks into three short lines inside it; the lead stands under it. The kicker and the title
+     sit 4% of the circle's height below its middle: the stroke's wet head bulges in at the top
+     right, and centred the kicker came within 8px of it (the open space's own middle is a little
+     low). */
+  .circle section[data-part="opening"] {
+    padding-top: calc(88px + 4px);
+  }
+
+  .circle [data-part="opening"] .openingWords {
+    --ring: calc(100vw - 16px);
+    grid-template-rows: 1fr auto 1fr auto;
+    flex: 0 0 auto;
+    margin-block: auto;
+  }
+
+  /* 40px from a 390px phone, a little less below it: at 360px the kicker above the three lines
+     reached the stroke's wet head. */
+  .circle [data-part="opening"] .kicker {
+    margin-bottom: 8px;
+    translate: 0 calc(var(--ring) * 1136 / 1247 * 0.04);
+  }
+
+  .circle [data-part="opening"] h1.title {
+    max-width: 3.6em;
+    font-size: clamp(34px, 10.25vw, 40px);
+    translate: 0 calc(var(--ring) * 1136 / 1247 * 0.04);
+  }
+
+  .circle [data-part="opening"] .lead {
+    grid-area: 4 / 1;
+  }
+
+  .circle [data-part="opening"] .hills {
+    margin-top: 0;
   }
 }
 
@@ -252,60 +344,22 @@
    It starts that feather's width back, so nothing shows while it waits its delay (from 0deg a
    sliver of the head stood there alone). It is pure CSS, so it never waits on a script; once the
    sweep ends the mask is whole (--sweep's initial value is 360deg), so the circle never depends on
-   the animation finishing. The gold start comes up after. Reduced motion: no mask, no animation.
+   the animation finishing. Reduced motion: no mask, no animation.
    The stroke's timing is its own (Mo, October 8: slower and easier to see, "like someone really
    painting it"). In the kit's breath (2.4s after 0.3s, on the kit's ease, which draws most of the
    circle in its first 40%) it flashed round. Now it waits a moment once the page appears
    (--stroke-delay), takes 4 seconds (--stroke-time), and its ease is a brush's: a gentle press
    from the wet head, a steady pace round the dark of the stroke, and a slow lift through the dry
    tail as it closes (--stroke-ease). The kit's --breath and --ease are left as they are: the rest
-   of the site uses them. */
+   of the site uses them.
+   No gold on the circle (Mo, October 26, 2026): a spark of light that ran round it looked fake
+   (October 19), and the gold leaf that floated down onto it in its place looked cartoonish,
+   falling and then shining. The circle is ink only; the opening's gold is the sunlit hilltop in
+   the hills below it. */
 .circle .enso {
   --stroke-delay: 0.6s;
   --stroke-time: 4s;
   --stroke-ease: cubic-bezier(0.35, 0, 0.45, 1);
-  /* The gold leaf (below) sets off as the brush lifts and floats down for 2.6s. */
-  --float-from: calc(var(--stroke-delay) + var(--stroke-time));
-  --landed: calc(var(--float-from) + 2.6s);
-}
-
-/* ---- The gold leaf floats down (Mo, October 19, 2026) ---------------------------------------
-   Real gold leaf does not glow or race (a spark that ran round the circle "looks fake"): it is so
-   light it floats down like a feather. As the brush lifts, the flake drifts down onto the stroke
-   just after its wet head, rocking side to side and tilting (thin and darker edge-on, full and
-   brighter as it turns to the light), while its faint shadow on the paper closes in and sharpens
-   as it lands. Once it has settled, a band of light crosses it, and comes back now and then.
-   Hidden at rest (opacity 0): with reduced motion the leaf simply lies there. Each part is a
-   sibling of the stroke, never its ancestor, so the stroke still multiplies onto the paper. */
-.circle .shadow,
-.circle .sheen {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-}
-
-.circle .shadow {
-  width: 13%;
-  aspect-ratio: 1.5;
-  border-radius: 50%;
-  translate: -50% -50%;
-  background: radial-gradient(closest-side, rgb(60 48 30 / 0.55), rgb(60 48 30 / 0));
-  mix-blend-mode: multiply;
-}
-
-/* The band of light: only on the leaf (its own picture, --leaf, is the mask). */
-.circle .sheen {
-  aspect-ratio: 197 / 205;
-  -webkit-mask: var(--leaf) center / 100% 100% no-repeat;
-  mask: var(--leaf) center / 100% 100% no-repeat;
-  background: linear-gradient(
-    105deg,
-    rgb(255 252 238 / 0) 36%,
-    rgb(255 252 238 / 0.95) 50%,
-    rgb(255 252 238 / 0) 64%
-  );
-  background-size: 320% 100%;
-  mix-blend-mode: screen;
 }
 
 @property --sweep {
@@ -329,28 +383,6 @@
     animation: draw var(--stroke-time) var(--stroke-ease) var(--stroke-delay) backwards;
   }
 
-  /* The leaf floats down from as the brush lifts, catches the light once it has settled, and now
-     and then glints again. Its float comes first: its delay is the one a reader of
-     animationDelay sees, and it waits for the whole stroke. */
-  .circle .enso .dot {
-    animation:
-      leaf-float 2.6s linear var(--float-from) backwards,
-      leaf-catch 1.4s ease-in-out calc(var(--landed) + 0.35s),
-      leaf-glint 6s ease-in-out calc(var(--landed) + 3s) infinite;
-  }
-
-  .circle .shadow {
-    animation:
-      shadow-near 2.6s ease-in var(--float-from) both,
-      shadow-fade 0.9s ease-out var(--landed) forwards;
-  }
-
-  .circle .sheen {
-    animation:
-      sheen 1.4s ease-in-out calc(var(--landed) + 0.35s) both,
-      sheen-again 6s ease-in-out calc(var(--landed) + 3s) infinite;
-  }
-
   /* The hills spread from the middle as the stroke nears its close. Their delay is milliseconds
      from when the page wakes (the kit's useBloom reads it as a number, so it cannot be worked out
      from the stroke's): change it with the stroke's timing. */
@@ -360,18 +392,14 @@
 }
 
 /* The circle waits for its picture. CSS starts the sweep when the page is styled, not when the
-   stroke's picture is in: on a slow link the gold rose alone on bare paper (about 3s), then the
-   whole circle snapped in, or it showed part drawn. With script on, the stroke's and the gold's
-   animations hold, paused before their delays (their backwards fill keeps the stroke masked and
-   the gold at 0), until the picture is in; both are let go together, so the gold still follows
-   the stroke. Two keys let them go, neither touching a node React rendered before it hydrates:
-   the page's inline script (about/page.tsx) adopts a sheet that sets them running, and once
-   hydrated the Opening marks [data-stroke="ready"] (about-ink.tsx). No timer, and a failed
-   picture never lets them go (the gold must not rise alone). With script off, or in a browser
-   that does not know `scripting`,
-   nothing holds: the circle draws as before. Attribute selectors: the module's class names are
-   hashed. Every part of the circle holds and goes together (the floating leaf's shadow and its
-   band of light wait with the stroke too), and the page's sheet lets them all go. */
+   stroke's picture is in: on a slow link the sweep ran over bare paper, then the whole circle
+   snapped in, or it showed part drawn. With script on, the stroke's animation holds, paused before
+   its delay (its backwards fill keeps the stroke masked), until the picture is in. Two keys let it
+   go, neither touching a node React rendered before it hydrates: the page's inline script
+   (let-the-circle-go.ts) adopts a sheet that sets it running, and once hydrated the Opening marks
+   [data-stroke="ready"] (about-ink.tsx). No timer. With script off, or in a browser that does not
+   know `scripting`, nothing holds: the circle draws as before. Attribute selectors: the module's
+   class names are hashed. */
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
   .circle [data-enso]:not([data-stroke="ready"]) * {
     animation-play-state: paused;
@@ -385,158 +413,5 @@
 
   to {
     --sweep: 360deg;
-  }
-}
-
-/* Positions are shares of the leaf's own size: it starts about a leaf above its place (from two
-   leaves up it came into view at the menu bar's logo on a laptop, as if it fell out of the H). */
-@keyframes leaf-float {
-  0% {
-    opacity: 0;
-    transform: translate(-30%, -118%) rotate(-32deg) scaleY(0.45);
-    filter: brightness(0.82);
-    animation-timing-function: ease-in-out;
-  }
-
-  16% {
-    opacity: 1;
-    transform: translate(18%, -92%) rotate(22deg) scaleY(0.88);
-    filter: brightness(1.28);
-    animation-timing-function: ease-in-out;
-  }
-
-  34% {
-    transform: translate(-20%, -66%) rotate(-18deg) scaleY(0.55);
-    filter: brightness(0.86);
-    animation-timing-function: ease-in-out;
-  }
-
-  52% {
-    transform: translate(12%, -40%) rotate(13deg) scaleY(0.92);
-    filter: brightness(1.3);
-    animation-timing-function: ease-in-out;
-  }
-
-  68% {
-    transform: translate(-8%, -20%) rotate(-8deg) scaleY(0.62);
-    filter: brightness(0.9);
-    animation-timing-function: ease-in-out;
-  }
-
-  82% {
-    transform: translate(4%, -7%) rotate(4deg) scaleY(0.94);
-    filter: brightness(1.18);
-    animation-timing-function: ease-in-out;
-  }
-
-  92% {
-    transform: translate(-2%, -2%) rotate(-1deg) scaleY(0.86);
-    filter: brightness(1.02);
-    animation-timing-function: ease-in-out;
-  }
-
-  100% {
-    opacity: 1;
-    transform: none;
-    filter: brightness(1);
-  }
-}
-
-@keyframes leaf-catch {
-  0%,
-  100% {
-    filter: brightness(1) saturate(1);
-  }
-
-  50% {
-    filter: brightness(1.4) saturate(1.1);
-  }
-}
-
-@keyframes leaf-glint {
-  0%,
-  80%,
-  100% {
-    filter: brightness(1) saturate(1);
-  }
-
-  88% {
-    filter: brightness(1.3) saturate(1.1);
-  }
-}
-
-/* The shadow starts wide, soft and off to one side, and closes in under the leaf as it lands. */
-@keyframes shadow-near {
-  0% {
-    opacity: 0;
-    transform: translate(40%, 70%) scale(1.8);
-    filter: blur(8px);
-  }
-
-  35% {
-    opacity: 0.28;
-    transform: translate(30%, 50%) scale(1.5);
-    filter: blur(6px);
-  }
-
-  88% {
-    opacity: 0.5;
-    transform: translate(12%, 18%) scale(1.12);
-    filter: blur(3px);
-  }
-
-  100% {
-    opacity: 0.34;
-    transform: translate(6%, 8%) scale(1);
-    filter: blur(2px);
-  }
-}
-
-@keyframes shadow-fade {
-  from {
-    opacity: 0.34;
-    transform: translate(6%, 8%) scale(1);
-    filter: blur(2px);
-  }
-
-  to {
-    opacity: 0;
-    transform: translate(6%, 8%) scale(1);
-    filter: blur(2px);
-  }
-}
-
-@keyframes sheen {
-  0% {
-    background-position: 130% 0;
-    opacity: 0;
-  }
-
-  25%,
-  70% {
-    opacity: 1;
-  }
-
-  100% {
-    background-position: -30% 0;
-    opacity: 0;
-  }
-}
-
-@keyframes sheen-again {
-  0%,
-  78% {
-    background-position: 130% 0;
-    opacity: 0;
-  }
-
-  82%,
-  94% {
-    opacity: 0.7;
-  }
-
-  100% {
-    background-position: -30% 0;
-    opacity: 0;
   }
 }
