@@ -6,11 +6,32 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 The alias currently points to `bigh-website-p18whvrnd-sarkuseq1999s-projects.vercel.app`
 (`dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`), the **production** deployment of `main` at
-`641a7519aa2f2e6a139e1a85828956fd1324ee32` (October 27, 2026, from 11:47 Pacific): another Claude
-session's go-live merge of `studio` (NuriCell research, About's bigger circle, the footer crane and
-the releases below), which records its own checks. It contains the product questions release
-below unchanged; on it, `qa_questions` passed 403/403 on the public demo, and the `qa_home_ink`
-282/282 (in part) and `qa_nav` 326/326 runs listed below ran on it too.
+`641a7519aa2f2e6a139e1a85828956fd1324ee32` (October 27, 2026, from 11:47 Pacific). Mo said to put
+the footer crane live (his pick C: the crane at rest in the grass at the FDA park sign's right,
+bending toward its poppy; the promise alone, a size smaller) "with the other waiting changes" on
+`studio`. Claude merged `origin/main` into `studio` in a scratch worktree, not the shared folder.
+`main` held other sessions' separate releases of commits `studio` already had (the Science path,
+the product openings, the NuriCell lighthouse) with the same code, so `studio`'s files won and only
+the notes needed joining. Live `main` moved three times during the checks (the tablet crane fix
+`5fe0846`, NuriCell Dr. Liu `6766ae1`, the product questions `c1f56aa`, each the same code as
+`studio`'s) and `studio` gained About's bigger circle, so the copy was merged again each time; the
+last merge changed no file from the tested build. `641a751` was pushed to `main` as a fast-forward
+and `studio` fast-forwarded to it. New on the live site with it: the footer crane (every page),
+About's bigger circle with the title inside and no gold leaf, and NuriCell research, tap a book.
+
+Before the push, on the built copy (`npm run build` + `next start`), lint and type check clean. At
+`e9a1cb6` (`studio` with `main` `88cdc38`): `qa_home_ink` 282/282, `qa_nav` 326/326, `qa_fda`
+248/248, and with no failed check (their totals were not captured) `qa_nuricell_ink`,
+`qa_questions`, `qa_opc_ink`, `qa_propolis_ink`, `qa_nature_calm_ink`, `qa_science_ink`,
+`qa_about`, `qa_support`, `qa_turmerific_ink`. At `42dfd13` (adding About's circle; the same files
+as `641a751`): `qa_about` 404/404, `qa_home_ink` 282/282, `qa_nav` 326/326, `qa_fda` 248/248. After
+the alias update, on the public demo in fresh unauthenticated browsers: `qa_fda` 248/248,
+`qa_home_ink` 282/282, `qa_nav` 326/326, `qa_about` 404/404, `qa_nuricell_ink` 443/443,
+`qa_questions` 403/403, `qa_science_ink` 633/633, `qa_support` 341/341, `qa_opc_ink` 185/185,
+`qa_propolis_ink` 273/273, `qa_nature_calm_ink` 159/159, `qa_turmerific_ink` 155/155. Screenshots
+of the footer (home and About) and About's opening at 1440x900 and 390x844 matched the local build.
+The questions session's checks below (`qa_questions` 403/403, part of `qa_home_ink` 282/282, and
+`qa_nav` 326/326) also ran on this deployment.
 
 Before that, from about 11:31 to 11:47 Pacific on October 27, 2026, the alias pointed to
 `bigh-website-olk1m08d3-sarkuseq1999s-projects.vercel.app` (`dpl_5PpAAax57sJmj7rJEm1767VJ4FW2`),

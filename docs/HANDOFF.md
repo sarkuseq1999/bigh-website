@@ -5,14 +5,28 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (product questions put live on their own,
-  `main` `c1f56aa`, then carried by another session's go-live merge `641a751`; before that, the
-  tablet menu's crane fix put live on its own, `main` `5fe0846`). Earlier the same day: About's
-  bigger circle merged into studio (local); the product openings' release notes, the Title face entry below marked live. October 26:
-  NuriCell research, tap a book (local, not pushed). Earlier the same day: Science, one place per
-  screen, put live on its own.
+- **Last updated:** October 27, 2026, by Claude Code (the go-live merge: everything waiting on
+  `studio` put live together, `main` `641a751`, production `dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`,
+  demo alias on it; `studio` now equals `main` but for notes). Earlier the same day: product
+  questions put live on their own (`main` `c1f56aa`), NuriCell Dr. Liu (`6766ae1`) and the tablet
+  menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
+  product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Local, not live (October 26): About, a bigger circle and no gold leaf (Mo picked A twice).**
+- **Live (October 27): the footer crane by the park sign (Mo picked B "end of the trail", then
+  pose C).** The crane leaves "Stay sharp. Live fully." and stands at rest in the grass at the FDA
+  park sign's right, bending toward the sign's California poppy; the promise stands alone, a size
+  smaller. Red crown on the homepage, gold elsewhere. On phones the sign narrows for it (about
+  seven lines; the sign and crane a little smaller under 390 px). The homepage's brush line still
+  ends as a stroke under the words. `closing-crane.tsx`, `ink.module.css` (`.look .rest`),
+  `fda-statement.tsx`; picture `crane-poppy-v1.webp` from
+  `reference/ink-pages/footer-crane/build_footer_crane.py`; mockups and the built shots
+  `reference/ink-pages/mockups/footer-crane/`, artifact `Sa1u9LjcJRrHDxuKPPtvRy`. Built on
+  `studio` as `c947fcf`; released in the go-live merge `641a751` with About's circle and NuriCell
+  research (checks in `docs/public-demo.md`: on the public demo all 12 page checks green, `qa_fda`
+  248/248, `qa_home_ink` 282/282). Open: on a phone the crane is small and its tail comes within
+  about 17px of the window's edge.
+- **Live (October 27): About, a bigger circle and no gold leaf (Mo picked A twice)** (released in
+  the go-live merge `641a751`; public `qa_about` 404/404).
   The opening circle fills the first screen and "Be in Good Health." is written inside it (on a
   phone the title sits inside on three lines, the lead under the circle). The gold leaf that fell
   onto the circle is gone (Mo found its fall and shine cartoonish; the opening's gold is the sunlit
@@ -113,10 +127,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   production `dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`, the demo alias points to it; public demo
   `qa_science_ink` 633/633, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet check)
   (`docs/public-demo.md`). On `main` the Science commits are `d9d0010`, `a2554f4`, `e6e7e36`
-  (the same content as `studio`'s `8f7b99d`, `500873d`, `3a5cd0d`). `studio` has not merged
-  `origin/main` since: a trial merge conflicted in 13 files (NuriCell, the catalogs,
-  `copy-keys.json`, HANDOFF, AGENTS), so the next full release from `studio` must merge
-  `origin/main` first. Before that: (mockups and the
+  (the same content as `studio`'s `8f7b99d`, `500873d`, `3a5cd0d`). `studio` merged
+  `origin/main` again on October 27 (the go-live merge `641a751`). Before that: (mockups and the
   built page's shots `reference/ink-pages/mockups/science-path/2026-10-26/` and `.../built/`,
   artifact `9jBznqoXRwUacxeKv2P8AP`). Mo liked the paintings but found the sideways handscroll
   "feels like a draft". The page opens on the title and Dr. Liu (photo, name, intro; his numbers
@@ -151,7 +163,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   crane jump). The Science release (`e6e7e36`) went on top minutes later and the demo alias moved
   there, with the new openings still in it (`docs/public-demo.md`). Open: on Turmerific at 1440x900
   the refund line ends on the window's bottom edge; on a phone its purpose runs six lines.
-- **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse**
+- **Live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse** (`main`
+  `610d70a`, released on its own from live `main`; public checks in `docs/public-demo.md`)
   (mockups and the built page `reference/ink-pages/mockups/nuricell-why/`, artifact
   `LiWF3jKo2tdLH4otM1SrRc`). Mo first picked A (a Gold Rush miner's lantern), saw it built beside
   the lighthouse sample, and switched to B the same day; the lantern's pictures are gone and its
