@@ -147,6 +147,16 @@ These sit on top of `DESIGN.md`.
   top right; on phones Back to top above, © last). The grey preview note that sat under the sign
   ("Educational content is for general information…") is gone; the product window still says
   ordering is not open.
+- **Footer: the crane by the park sign (Mo picked C, October 26, 2026).** Mo asked for better
+  ideas for "Stay sharp. Live fully." and its crane, picked B, "end of the trail", then pose C of
+  three Codex paintings (A reading the sign, B on one leg): the crane leaves the promise and
+  stands in the grass at the FDA park sign's right, bending toward the sign's California poppy;
+  the promise stands alone, a size smaller. Red crown on the homepage, gold elsewhere. On phones
+  the sign narrows for it (about seven lines; a little smaller under 390 px). The homepage's
+  brush line still ends as a stroke under the words. `closing-crane.tsx`, `ink.module.css`
+  (`.look .rest`), `fda-statement.tsx`; picture
+  `reference/ink-pages/footer-crane/build_footer_crane.py`. Mockups:
+  `reference/ink-pages/mockups/footer-crane/`.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
