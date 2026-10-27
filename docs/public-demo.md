@@ -22,10 +22,28 @@ the rebase onto `78ae1d6`, `qa_science_ink` shell, people, path and deep links 3
 alias update, on the public demo in fresh unauthenticated browsers: `qa_science_ink` 633/633,
 `qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet crane jump). Screenshots at 1440x900 and 390x844 matched the local build.
 
-Before this update, the alias pointed to `bigh-website-hqw4upzgt-sarkuseq1999s-projects.vercel.app`
+Before this update, for about 20 minutes on October 26, the alias pointed to
+`bigh-website-hqw4upzgt-sarkuseq1999s-projects.vercel.app`
 (`dpl_92LiEZJuxbddWQY2mQNmcV8Jw2mG`), the **production** deployment of `main` at
-`78ae1d616d4c68c41bb9d38b145234d6e272a5f4` (product openings, Mo's "Title face"); that session's
-own entry is not here yet. Before that, the alias pointed to
+`78ae1d616d4c68c41bb9d38b145234d6e272a5f4`. Mo found the words under NuriCell's name weak and
+unfinished, turned down Dr. Liu's photo there (pages without him would look lesser), picked C
+"Title face" and said to put it live: on NuriCell, OPC, Nature Calm and Turmerific the headline is
+in Ysabeau and the purpose a large lead in ink with no side line, ending where Add to cart ends;
+Green Bee Propolis keeps its own opening. Claude released only that change: branch
+`release-hero-left`, the live `main` (`af7faf3`) plus the change cherry-picked from `studio`
+(`59585a0`), pushed as a fast-forward. The other sessions' local work on `studio` (the NuriCell
+lighthouse, the Science page's one place per screen) was not part of it. Before the push, on the
+built site: lint, type check, formatting and build passed; `qa_nuricell_ink` 404/404,
+`qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159, `qa_turmerific_ink` 155/155,
+`qa_propolis_ink` 273/273, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet
+crane jump). After the alias update, on the public demo in fresh unauthenticated browsers:
+`qa_nuricell_ink` 404/404, `qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159,
+`qa_turmerific_ink` 155/155, `qa_home_ink` 282/282, `qa_propolis_ink` 273/273, `qa_nav` 315/316
+(the same tablet crane jump). Then the Science release above went on top of it and moved the
+alias; the new openings were measured again on that public build (NuriCell and Turmerific at
+1440x900: the headline in Ysabeau, the purpose in ink, ending where Add to cart ends).
+
+Before that, the alias pointed to
 `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
 (`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
 `c944a72f0594068bff9dd833b1070a5f11763a59`. On October 26, 2026, Mo said to put NuriCell's

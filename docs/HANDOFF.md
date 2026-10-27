@@ -5,7 +5,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (NuriCell research, tap a book; local, not
+- **Last updated:** October 27, 2026, by Claude Code (the product openings' release notes, the
+  Title face entry below marked live). October 26: NuriCell research, tap a book (local, not
   pushed). Earlier the same day: Science, one place per screen, put live on its own; the tablet
   menu's crane eases with the fold (local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
@@ -96,20 +97,25 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   crane jump), `qa_home_ink` 282/282. `qa_science_links.py` crashes before checking anything: it still
   clicks the Science drop-down that became a plain link earlier on October 26 (not this change;
   not fixed).
-- **Local, not live (October 26): product openings, the words under the name, Mo's pick C "Title
-  face"** (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact
-  `1TNAN8z5fW6P14w7kv3QZz`). NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green
-  Bee Propolis keeps its own): the headline in Ysabeau (560; Korean, Japanese and Chinese keep the
-  title weight), the purpose a large lead in ink with no side line, and from 960px the two sit
-  together and end where Add to cart ends (the refund line sits in a subgrid row of its own). Mo
-  turned down Dr. Liu's photo there: pages without him would look lesser. On the built site
-  (`npm run build` + `next start`) at 59585a0 (on top of the lighthouse and What's inside):
-  `qa_nuricell_ink` 429/429 (its opening check now tests the new look), `qa_opc_ink` 185/185,
-  `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 158/159 (its older front-layer pixel check,
-  in the Buy chapter); a build before the last two small fixes (the dash kept with its word, the
-  CJK weight) also passed `qa_propolis_ink` 273/273, `qa_home_ink` 282/282, `qa_nav` 315/316 (the
-  known tablet crane jump). Open: on Turmerific at 1440x900 the refund line ends on the window's
-  bottom edge; on a phone its purpose runs six lines.
+- **Live (October 26): product openings, the words under the name, Mo's pick C "Title face"**
+  (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact `1TNAN8z5fW6P14w7kv3QZz`).
+  NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green Bee Propolis keeps its own):
+  the headline in Ysabeau (560; Korean, Japanese and Chinese keep the title weight), the purpose a
+  large lead in ink with no side line, and from 960px the two sit together and end where Add to cart
+  ends (the refund line sits in a subgrid row of its own). Mo turned down Dr. Liu's photo there:
+  pages without him would look lesser. On the built site (`npm run build` + `next start`) at 59585a0
+  (on top of the lighthouse and What's inside): `qa_nuricell_ink` 429/429 (its opening check now
+  tests the new look), `qa_opc_ink` 185/185, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink`
+  158/159 (its older front-layer pixel check, in the Buy chapter); a build before the last two small
+  fixes (the dash kept with its word, the CJK weight) also passed `qa_propolis_ink` 273/273,
+  `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet crane jump). Released on its own from a
+  copy of live `main` (`af7faf3`) with only this change cherry-picked: `main` `78ae1d6` (the same
+  content as `studio`'s `59585a0`), production `dpl_92LiEZJuxbddWQY2mQNmcV8Jw2mG`; public demo
+  `qa_nuricell_ink` 404/404, `qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159, `qa_turmerific_ink`
+  155/155, `qa_propolis_ink` 273/273, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet
+  crane jump). The Science release (`e6e7e36`) went on top minutes later and the demo alias moved
+  there, with the new openings still in it (`docs/public-demo.md`). Open: on Turmerific at 1440x900
+  the refund line ends on the window's bottom edge; on a phone its purpose runs six lines.
 - **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse**
   (mockups and the built page `reference/ink-pages/mockups/nuricell-why/`, artifact
   `LiWF3jKo2tdLH4otM1SrRc`). Mo first picked A (a Gold Rush miner's lantern), saw it built beside
