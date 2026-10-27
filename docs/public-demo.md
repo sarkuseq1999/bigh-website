@@ -4,7 +4,29 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app`
+(`dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`), the **production** deployment of `main` at
+`e6e7e360c93251a9d095eadb3a66a8dfed8e09f0`. On October 26, 2026, Mo said to put the new Science
+page live on its own ("Science only, not the other sessions' unreleased work"): his pick B, Dr. Liu
+first, then his path one place per screen going down (Okayama, Berkeley 1994, Salzburg 2025, Today),
+then research, health explained, the formulas and Ask; the sideways handscroll is gone. Claude made
+a release copy from live `main` with only the Science commits (`d9d0010`, `a2554f4`, mockups
+`e6e7e36`), rebased it once onto `78ae1d6` (product openings, pushed by another session during the
+checks) and pushed `e6e7e36` to `main` as a fast-forward. NuriCell "Tiny power plants" and the
+other `studio` work were not pushed.
+
+Before the push, on the built release copy (`npm run build` + `next start`): `qa_science_ink`
+633/633, `qa_home_ink` 282/282, `qa_nav` 314/316 (the known upright-tablet crane jump, and the
+settle film's frame timing on a busy machine; that section passed 17/17 twice when rerun); after
+the rebase onto `78ae1d6`, `qa_science_ink` shell, people, path and deep links 359/359. After the
+alias update, on the public demo in fresh unauthenticated browsers: `qa_science_ink` 633/633,
+`qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet crane jump). Screenshots at 1440x900 and 390x844 matched the local build.
+
+Before this update, the alias pointed to `bigh-website-hqw4upzgt-sarkuseq1999s-projects.vercel.app`
+(`dpl_92LiEZJuxbddWQY2mQNmcV8Jw2mG`), the **production** deployment of `main` at
+`78ae1d616d4c68c41bb9d38b145234d6e272a5f4` (product openings, Mo's "Title face"); that session's
+own entry is not here yet. Before that, the alias pointed to
+`bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
 (`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
 `c944a72f0594068bff9dd833b1070a5f11763a59`. On October 26, 2026, Mo said to put NuriCell's
 "What's inside" live (his pick 1A: the gold leaf rises out of the powder and settles, then keeps

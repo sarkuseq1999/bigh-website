@@ -5,8 +5,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (the tablet menu's crane eases with the
-  fold; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (Science, one place per screen, put live on
+  its own). Earlier the same day: the tablet menu's crane eases with the fold (local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
 - **Local, not live (October 26): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
   Berkeley story, then A2 of two mockups, then round 2 of A2; mockups and the built page's shots
@@ -53,7 +53,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159, `qa_home_ink` 282/282, `qa_nav`
   315/316 (the known tablet crane jump). The product QA scripts now pick each question to read its
   answer (only the picked one is shown).
-- **Local, not live (October 26): Science, Mo's pick B, "one place per screen"** (mockups and the
+- **Live (October 26): Science, Mo's pick B, "one place per screen"** (Mo: "Science only, not the
+  other sessions' unreleased work"). Released from a copy of live `main` with only the Science
+  commits, rebased once onto `78ae1d6` (product openings, pushed meanwhile): `main` `e6e7e36`,
+  production `dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`, the demo alias points to it; public demo
+  `qa_science_ink` 633/633, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet check)
+  (`docs/public-demo.md`). On `main` the Science commits are `d9d0010`, `a2554f4`, `e6e7e36`
+  (the same content as `studio`'s `8f7b99d`, `500873d`, `3a5cd0d`). `studio` has not merged
+  `origin/main` since: a trial merge conflicted in 13 files (NuriCell, the catalogs,
+  `copy-keys.json`, HANDOFF, AGENTS), so the next full release from `studio` must merge
+  `origin/main` first. Before that: (mockups and the
   built page's shots `reference/ink-pages/mockups/science-path/2026-10-26/` and `.../built/`,
   artifact `9jBznqoXRwUacxeKv2P8AP`). Mo liked the paintings but found the sideways handscroll
   "feels like a draft". The page opens on the title and Dr. Liu (photo, name, intro; his numbers
