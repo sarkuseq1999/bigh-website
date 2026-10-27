@@ -4,7 +4,44 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ldi9944qm-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-p18whvrnd-sarkuseq1999s-projects.vercel.app`
+(`dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`), the **production** deployment of `main` at
+`641a7519aa2f2e6a139e1a85828956fd1324ee32` (October 27, 2026, from 11:47 Pacific): another Claude
+session's go-live merge of `studio` (NuriCell research, About's bigger circle, the footer crane and
+the releases below), which records its own checks. It contains the product questions release
+below unchanged; on it, `qa_questions` passed 403/403 on the public demo, and the `qa_home_ink`
+282/282 (in part) and `qa_nav` 326/326 runs listed below ran on it too.
+
+Before that, from about 11:31 to 11:47 Pacific on October 27, 2026, the alias pointed to
+`bigh-website-olk1m08d3-sarkuseq1999s-projects.vercel.app` (`dpl_5PpAAax57sJmj7rJEm1767VJ4FW2`),
+the **production** deployment of `main` at `c1f56aa343dbd1a8ecddac3ff6b29680a7775bfd`. Mo picked
+A, "a picture for each question", for the product pages' Questions and said to push it live: on
+all five ink product pages, from 960px the questions on the left and the picked one's painting and
+answer on the right; on a phone each question opens in place with its painting; 28 new paintings,
+one per question. Claude made a release copy from live `main` with only the questions commits
+(built on `studio` as `75a196c` and `d15db52`), in a scratch worktree, not the shared folder. Live
+`main` moved twice during the checks (the tablet menu's crane fix `5fe0846`, then NuriCell Dr.
+Liu's view west `6766ae1`, both other sessions' releases), so the copy was rebased twice, rebuilt
+and re-checked, and `c1f56aa` was pushed to `main` as a fast-forward.
+
+Before the push, on the built release copy (`npm run build` + `next start`): lint, type check and
+formatting passed. On top of `88cdc38`: `qa_questions` 403/403, `qa_nuricell_ink` 429/429,
+`qa_opc_ink` 185/185, `qa_propolis_ink` 273/273, `qa_turmerific_ink` 155/155,
+`qa_nature_calm_ink` 159/159, `qa_home_ink` 282/282. On top of `5fe0846`: `qa_questions` 403/403,
+`qa_nuricell_ink` 429/429, `qa_home_ink` 282/282, `qa_nav` 326/326. On top of `6766ae1` (the files
+both releases touch): `qa_questions` 403/403, `qa_nuricell_ink` 430/430, `qa_propolis_ink`
+273/273. After the alias update, on the public demo in fresh unauthenticated browsers, on
+`c1f56aa`: `qa_questions` 403/403, `qa_nuricell_ink` 430/430, `qa_opc_ink` 185/185,
+`qa_propolis_ink` 273/273, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159; then
+`qa_home_ink` 282/282 (the alias moved to `641a751` during this run) and `qa_nav` 326/326 (on
+`641a751`).
+
+Before that, for about five minutes, the alias pointed to
+`bigh-website-fu85fuz6d-sarkuseq1999s-projects.vercel.app` (`dpl_FQBFSg6uMe4kzy1KXVcj6ZHokg19`),
+the **production** deployment of `main` at `6766ae1`: another Claude session's release of NuriCell
+Dr. Liu, the view west (Mo's A2), which records its own checks.
+
+Before that, the alias pointed to `bigh-website-ldi9944qm-sarkuseq1999s-projects.vercel.app`
 (`dpl_9WQV7zjP58QPYt84wWtLzcN9ZTJK`), the **production** deployment of `main` at
 `5fe0846bf9ba1362b87181d16e76792ff987027e` (October 27, 2026). Mo said to push the tablet menu's
 crane fix live, "only that fix": on a tablet the crane at the foot of the menu now grows and

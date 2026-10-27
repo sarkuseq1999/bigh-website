@@ -5,9 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (the tablet menu's crane fix put live on its
-  own, `main` `5fe0846`). Earlier the same day: About's bigger circle merged into studio (local);
-  the product openings' release notes, the Title face entry below marked live. October 26:
+- **Last updated:** October 27, 2026, by Claude Code (product questions put live on their own,
+  `main` `c1f56aa`, then carried by another session's go-live merge `641a751`; before that, the
+  tablet menu's crane fix put live on its own, `main` `5fe0846`). Earlier the same day: About's
+  bigger circle merged into studio (local); the product openings' release notes, the Title face entry below marked live. October 26:
   NuriCell research, tap a book (local, not pushed). Earlier the same day: Science, one place per
   screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
@@ -76,7 +77,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   go after. Built site (`npm run build` + `next start`, studio `c947fcf` plus this): `qa_nav`
   326/326, `qa_home_ink` 282/282; lint and type-check clean. Separately, still open:
   `scripts/qa/qa_science_links.py` still clicks the Science drop-down switched off this morning.
-- **Local, not live (October 26): product questions, Mo's pick A, "a painting for each answer"**
+- **Live (October 27, `main` `c1f56aa`): product questions, Mo's pick A, "a painting for each answer"**
   (mockups `reference/ink-pages/mockups/nuricell-questions/`, artifact `MceTcmgqxFuQPtLHrJ8xfE`;
   the built pages in `.../built/`, artifact `S4ttkdJhyASQLXjr8uYigt`). All five ink product pages
   (`questions.tsx`, shared): from 960px the questions on the left and the picked one's painting and
@@ -91,7 +92,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_nuricell_ink` 430/430, `qa_opc_ink` 185/185, `qa_propolis_ink` 273/273,
   `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159, `qa_home_ink` 282/282, `qa_nav`
   315/316 (the known tablet crane jump). The product QA scripts now pick each question to read its
-  answer (only the picked one is shown).
+  answer (only the picked one is shown). Released on its own from live `main` on October 27 (on
+  top of Dr. Liu's view west, `6766ae1`); the release and public checks are in
+  `docs/public-demo.md`.
 - **Live (October 26): Science, Mo's pick B, "one place per screen"** (Mo: "Science only, not the
   other sessions' unreleased work"). Released from a copy of live `main` with only the Science
   commits, rebased once onto `78ae1d6` (product openings, pushed meanwhile): `main` `e6e7e36`,
