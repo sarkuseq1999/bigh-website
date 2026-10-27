@@ -1,8 +1,7 @@
-/* Every ink page's footer (the About/Science chrome's shape): the promise with the look's closing
-   picture beside the words, the links, then the legal lines (no logo: the menu bar's mark is on
-   screen). The menu bar is
-   nav/nav-inscription (Mo's pick, October 5, 2026). The footer can be tuned with --footer-bg /
-   --footer-ink. */
+/* Every ink page's footer (the About/Science chrome's shape): the promise, the links, the FDA park
+   sign with the look's closing picture in the grass beside it, then the legal line (no logo: the
+   menu bar's mark is on screen). The menu bar is nav/nav-inscription (Mo's pick, October 5,
+   2026). The footer can be tuned with --footer-bg / --footer-ink. */
 
 .footer {
   /* Above it: the page's chapter silence (no hairline since October 13, 2026). */
@@ -29,36 +28,29 @@
   margin: 0 auto;
 }
 
-/* The promise and the crane, centred on the links' height (Mo, October 13, 2026: no logo above
-   them; on October 12 they left their band of open paper, smaller). The crane stands lower than
-   its box (on the closing stroke), so the box is lifted by half that, with a margin: a transform
-   here would make a stacking context and the crane's multiply blend would show its white. */
+/* The promise, centred on the links' height (Mo, October 13, 2026: no logo above it; October 26:
+   the crane left it for the park sign). The homepage's closing brush stroke runs under the words,
+   so the box is lifted by about half the stroke, with a margin. */
 .finale {
   grid-area: promise;
   align-self: center;
   margin-bottom: 24px;
 }
 
-/* The promise, one sentence to a line: still the page's last words, at about the size of a
-   section heading (60 px from 1,670 px wide, 40 px at 1,110 and under). Phones: 39 px at 390,
-   shrinking with a narrower window, so the closing picture still stands beside it. */
+/* The promise, one sentence to a line: the page's last words, standing alone a size under a
+   section heading (Mo, October 26, 2026; 48 px from 1,655 px wide, 34 px at 1,172 and under).
+   Phones: 34 px at 390. */
 .footerMessage {
   font-family: var(--display-font);
-  font-size: clamp(40px, 3.6vw, 60px);
+  font-size: clamp(34px, 2.9vw, 48px);
   font-weight: var(--display-weight);
   line-height: 1;
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
 
-/* The promise, and beside it whatever the look closes on, both on the same ground (the Ink look's
-   closing brush stroke runs under them). Where the two cannot share a line, the picture stands
-   under the words, at the right. */
+/* The promise's box, as wide as its words (the homepage's closing brush stroke runs under it). */
 .promise {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: 0 clamp(14px, 2.2vw, 36px);
   width: fit-content;
   max-width: 100%;
 }
@@ -81,12 +73,12 @@
 
 /* Korean and Japanese: a size smaller, the glyphs being full width. */
 .footerMessage:is(:lang(ko), :lang(ja)) {
-  font-size: clamp(32px, 2.8vw, 46px);
+  font-size: clamp(28px, 2.3vw, 37px);
 }
 
 /* Vietnamese: Be Vietnam Pro runs wider than Switzer and its tone marks need the taller line. */
 .footerMessage:lang(vi) {
-  font-size: clamp(30px, 2.6vw, 43px);
+  font-size: clamp(26px, 2.1vw, 35px);
 }
 
 .footerMessage:is(:lang(ko), :lang(ja), :lang(zh)) {
@@ -154,15 +146,16 @@
   min-height: 44px;
 }
 
-/* The FDA statement on its park sign (fda-statement.tsx), centred under it all, clear of the
-   closing brush stroke. */
+/* The FDA statement on its park sign (fda-statement.tsx), centred under it all with the crane in
+   the grass at its right, clear of the closing brush stroke. */
 .footer .footerFda {
   grid-area: fda;
   margin-top: clamp(48px, 4vw, 72px);
 }
 
-/* Short desktop windows (1280 x 800, 1366 x 768, 1440 x 700): the park sign draws smaller, its
-   words at 15 px, so the last screen still shows the whole promise and crane under the menu bar. */
+/* Short desktop windows (1280 x 800, 1366 x 768, 1440 x 700): the park sign and its crane draw
+   smaller, the words at 15 px, so the last screen still shows the whole promise under the menu
+   bar. */
 @media (min-width: 900px) and (max-height: 860px) {
   .footer .footerFda {
     --k: 0.34;
@@ -212,15 +205,15 @@
   }
 
   .footerMessage {
-    font-size: clamp(32px, 10vw, 44px);
+    font-size: clamp(30px, 8.6vw, 36px);
   }
 
   .footerMessage:is(:lang(ko), :lang(ja)) {
-    font-size: clamp(26px, 7.4vw, 34px);
+    font-size: clamp(24px, 6.4vw, 30px);
   }
 
   .footerMessage:lang(vi) {
-    font-size: clamp(24px, 6.8vw, 31px);
+    font-size: clamp(22px, 5.9vw, 27px);
   }
 }
 

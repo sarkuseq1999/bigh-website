@@ -7,7 +7,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     one h1; the header's links; the opening's paintings loaded and its words clear of each other;
     the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
-    promise, beside the crane at rest, after one short rule over each of the three standards);
+    promise, after one short rule over each of the three standards);
     the opening crane beats its wings (the animated painting takes the still's place) and stays a
     painting through the beat (its thinnest frame keeps at least 45% of the first pose's solid black
     ink: round 8; the old take fell to 38%), its wingbeats run without a pause (October 5: no frame
@@ -75,11 +75,13 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - the finale (round 3, October 4): a painting with its own soft edge (the opening's landscape,
     the closing painting) keeps it while it blooms (the ink blot is laid over it, not in its
     place); the promise opens the footer with no logo (October 12: smaller, no longer in a band
-    of its own; October 13: no logo, the menu bar's mark is on screen; 40 to 60 px on desktop, at
-    the links' left, centred on their height; 32 to 44 on a phone, before the links), one
-    sentence to a line, with no hairline over the footer (Mo, October 13, 2026: fewer lines),
-    with the crane at rest beside it (120 to 170 px tall on desktop, 96 to 132 on a phone),
-    which blooms only once all of it is in the window.
+    of its own; October 13: no logo, the menu bar's mark is on screen; October 26: alone, a size
+    smaller, 34 to 48 px on desktop, at the links' left, centred on their height; 30 to 36 on a
+    phone, before the links), one sentence to a line, with no hairline over the footer (Mo,
+    October 13, 2026: fewer lines); the crane at rest (red-crowned) stands in the grass at the
+    FDA park sign's right, under its plank and inside the window (Mo picked C, October 26, 2026:
+    120 to 160 px tall on desktop, 60 to 90 on a phone), and blooms only once all of it is in the
+    window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (wider than the science stage, which is at
     least 1.8 times the inkstone; a quarter smaller since October 12, the whole cell in the
@@ -608,12 +610,12 @@ STILL_SOURCE = """(async () => Promise.all([...document.querySelectorAll('#stori
 # The finale (October 12-13, Mo): the promise first in the footer, no logo, at the links' left and
 # centred on their height (on a phone, before the links), and no hairline over the footer
 # (October 13, 2026: fewer lines); its
-# size, its lines (one sentence to each), the crane's height.
+# size, its lines (one sentence to each), the height of the crane by the park sign (October 26).
 FINALE = """(() => {
   const f = document.querySelector('footer');
   const band = f.querySelector('[data-brush="footer-promise"]');
   const t = band.querySelector('[data-brush="footer-tagline"]');
-  const i = band.querySelector('img');
+  const i = f.querySelector('[data-fda] img');
   const columns = f.querySelector('h2').closest('div').parentElement;
   const tier = columns.parentElement;
   const logos = f.querySelectorAll('img[alt=BiGH], a[aria-label="BiGH home"]').length;
@@ -1562,7 +1564,7 @@ def run(browser, look, mobile):
     )
     # Round 3: the crane at rest blooms only once all of it is in the window (its bloom is the
     # page's arrival): half in view it still waits; at the page's end it has bloomed.
-    crane_rest = "document.querySelector('footer img[src*=\"crane-rest\"]')"
+    crane_rest = "document.querySelector('footer [data-fda] img')"
     scroll_to(
         page,
         page.evaluate(
@@ -1604,23 +1606,35 @@ def run(browser, look, mobile):
         rest_progress >= 0.999 and stroke > 40,
         f"progress {rest_progress:.3f}, ink under the promise {stroke}",
     )
+    # October 26, 2026 (Mo picked C): the crane left the promise for the FDA park sign; it stands
+    # in the grass at the sign's right (its picture just reaching back over the sign's end, its
+    # feet on the posts' ground), under the plank, inside the window, its crown red here.
     rest = page.evaluate(
         """(() => {
-          const i = document.querySelector('footer img[src*="crane-rest"]');
-          const t = document.querySelector('[data-brush="footer-tagline"]');
-          if (!i || !t) return null;
-          const a = i.getBoundingClientRect(), b = t.getBoundingClientRect();
-          return [i.complete && i.naturalWidth > 0, Math.round(a.left - b.right), Math.round(a.bottom - b.bottom)];
+          const i = document.querySelector('footer [data-fda] img');
+          const p = document.querySelector('footer [data-fda] p');
+          if (!i || !p) return null;
+          const a = i.getBoundingClientRect(), b = p.getBoundingClientRect();
+          const plank = b.bottom - parseFloat(getComputedStyle(p).borderBottomWidth);
+          return { loaded: i.complete && i.naturalWidth > 0, spring: /spring(%2F|\\/)crane-poppy/.test(i.currentSrc),
+                   over: Math.round(b.right - a.left), width: Math.round(a.width), above: Math.round(b.bottom - a.bottom),
+                   underPlank: Math.round(a.top - plank), right: Math.round(innerWidth - a.right) };
         })()"""
     )
     check(
-        f"{tag}: the crane at rest stands beside the promise",
-        bool(rest) and rest[0] and 0 < rest[1] < 80 and 0 < rest[2] < 60,
+        f"{tag}: the crane at rest stands in the grass at the park sign's right, red-crowned",
+        bool(rest)
+        and rest["loaded"]
+        and rest["spring"]
+        and 0 < rest["over"] < 0.3 * rest["width"]
+        and 0 <= rest["above"] <= 30
+        and rest["underPlank"] >= 0
+        and rest["right"] >= 0,
         str(rest),
     )
     finale = page.evaluate(FINALE)
-    font_ok = 32 <= finale["font"] <= 44 if mobile else 40 <= finale["font"] <= 60
-    crane_ok = 96 <= finale["crane"] <= 132 if mobile else 120 <= finale["crane"] <= 170
+    font_ok = 30 <= finale["font"] <= 36 if mobile else 34 <= finale["font"] <= 48
+    crane_ok = 60 <= finale["crane"] <= 90 if mobile else 120 <= finale["crane"] <= 160
     # Desktop: at the links' left, centred on their height (the box lifted 12 px for the crane
     # standing low on its stroke). Phone: before them.
     place_ok = finale["beforeLinks"] >= 24 if mobile else finale["besideLinks"] >= 24 and abs(finale["centre"] + 12) <= 16
@@ -2639,15 +2653,16 @@ def run_pause(browser):
         context, page, response, problems = open_page(browser, f"{BASE}/", size, False, reduced=True)
         page.evaluate("window.scrollTo(0, document.documentElement.scrollHeight)")
         page.wait_for_timeout(900)
-        crane, promise, header = page.evaluate(
-            """[document.querySelector('footer img:not([alt=BiGH])').getBoundingClientRect().top,
+        crane, bottom, promise, header = page.evaluate(
+            """[document.querySelector('footer [data-fda] img').getBoundingClientRect().top,
+               document.querySelector('footer [data-fda] img').getBoundingClientRect().bottom - innerHeight,
                document.querySelector('footer [data-brush=footer-promise] p').getBoundingClientRect().top,
                document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
         )
         check(
-            f"{tag}: the whole crane at rest and the whole promise, clear of the header",
-            crane >= header + 8 and promise >= header + 8,
-            f"crane top {crane:.0f}, promise top {promise:.0f}, header {header:.0f}",
+            f"{tag}: the whole crane at rest (by the sign) and the whole promise, clear of the header",
+            crane >= header + 8 and bottom <= 0 and promise >= header + 8,
+            f"crane top {crane:.0f}, below the window {bottom:.0f}, promise top {promise:.0f}, header {header:.0f}",
         )
         shoot(page, f"last-{size[0]}x{size[1]}")
         context.close()

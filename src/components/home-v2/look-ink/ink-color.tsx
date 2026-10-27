@@ -18,7 +18,7 @@ const TINTED = new Set([
   "crane-painted.webp",
   "crane-flight-a2-twice.webp",
   "crane-flight-a2-twice-600.webp",
-  "crane-rest-v2.webp",
+  "crane-poppy-v1.webp",
   "mito.webp",
   "halo.webp",
   "inkstone-v2.webp",

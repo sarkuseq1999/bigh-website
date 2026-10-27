@@ -93,10 +93,9 @@ export const rule = (at: string): Waypoint[] => [
 export type Layout = "phone" | "column" | "page";
 
 // The close, on every screen: the brush travels off the paper down to the footer, reloads, and
-// lays one confident stroke under the promise ("Stay sharp. Live fully.") and the crane at rest
-// beside it (the ground it stands on), sagging a little in the middle, still loaded under the
-// crane's feet (they stand at about 0.88 of the band), and flicking up as it lifts past its
-// tail. The line that left the crane in flight ends under the crane at rest.
+// lays one confident stroke under the promise ("Stay sharp. Live fully."), sagging a little in
+// the middle and flicking up as it lifts past the words. (Until October 26, 2026 the crane at
+// rest stood on it, beside the words; it now stands by the FDA park sign.)
 const T = "footer-promise";
 export const footerEnding: Waypoint[] = [
   { at: T, fx: -0.04, fy: 1, dy: 8, w: 0, ink: 0 },

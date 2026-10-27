@@ -373,24 +373,31 @@
   }
 }
 
-/* The crane at rest, the page's last painting, beside the footer's promise under the logo: it
-   answers the crane in flight at the top, its head over the words, and it blooms in as the page
-   arrives. Its feet are 8% up from the picture's bottom edge; it is set down so they stand on the
-   closing brush stroke under the promise. About 2.9 times the promise's size (170 px tall beside
-   60 px words), so the two keep to the logo's column, level with the links (Mo, October 12, 2026:
-   smaller, under the logo). */
+/* The crane at rest, the page's last painting, at the end of the trail: in the grass at the FDA
+   park sign's right, bending toward the sign's poppy (Mo picked C, October 26, 2026). It answers
+   the crane in flight at the top and blooms in as the page arrives. It is the sign's flex item
+   (fda-statement.tsx), sized and placed in the sign's own measure, --k CSS px per sign-picture px
+   (the posts stand 407 tall): --tall from its feet to its crown, its feet --gap right of the
+   sign, on the sign's ground (62.5 above the paragraph's bottom edge). Its picture's feet are
+   1.14 talls in from its left edge and 0.15 above its bottom edge (build_footer_crane.py). The
+   sign and the crane are centred together; on a phone the sign narrows to give it room. */
 .look .rest {
+  --tall: calc(250px * var(--k));
+  --gap: calc(208px * var(--k));
   flex: none;
-  width: auto;
-  height: clamp(120px, 10vw, 170px);
-  /* Where the promise is too long to share a line (the row wraps), it stands at the right. */
-  margin-left: auto;
-  translate: 0 calc(8% + 12px);
+  align-self: flex-end;
+  width: calc(var(--tall) * 2.0217);
+  height: calc(var(--tall) * 1.1693);
+  margin: 0 0 calc(62.5px * var(--k) - var(--tall) * 0.1506) calc(var(--gap) - var(--tall) * 1.1398);
 }
 
+/* Phones: it stands smaller and nearer the sign, so the sign keeps most of its width; its tail
+   and faded grass may reach into the page's margin. */
 @media (max-width: 720px) {
   .look .rest {
-    height: clamp(96px, 29vw, 132px);
+    --tall: calc(183px * var(--k));
+    --gap: calc(117px * var(--k));
+    margin-right: calc(-1 * var(--gutter));
   }
 }
 

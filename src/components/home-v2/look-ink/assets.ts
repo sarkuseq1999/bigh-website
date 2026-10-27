@@ -38,9 +38,11 @@ export const craneFlight = {
   small: `${I}/crane-flight-a2-twice-600.webp`,
 };
 
-/** The crane at rest, standing on the page's last brush stroke (ink). v2: painted again in the
- *  flying crane's hand; its feet are 8% above the picture's bottom edge (look-ink.module.css). */
-export const craneRest: Picture = { src: `${I}/crane-rest-v2.webp`, width: 560, height: 864 };
+/** The crane at rest in the footer, in the grass beside the FDA park sign, bending toward the
+ *  sign's poppy (ink; Mo picked C, October 26, 2026). Painted by Codex in the flying crane's hand
+ *  (reference/ink-pages/footer-crane, built by build_footer_crane.py); placed by its feet
+ *  (ink.module.css, `.look .rest`). It replaced crane-rest-v2, which stood beside the promise. */
+export const cranePoppy: Picture = { src: `${I}/crane-poppy-v1.webp`, width: 800, height: 463 };
 
 /** A brush at rest on its inkstone, beside "Good questions deserve clear answers." (ink). v2:
  *  smooth wet washes, no drawn sheet of paper. */

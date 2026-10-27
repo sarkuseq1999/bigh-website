@@ -11,7 +11,10 @@
    plank solid; the same picture serves phones.
 
    A footer may set --k (the sign's scale) and --sign-size (the words' size) where its room is
-   short. Rules are scoped under .fda (two classes) so the pages' shared `p` rules cannot win on the
+   short, and may stand a painting in the grass at the sign's right (the crane at rest, Mo,
+   October 26, 2026): a flex item after the paragraph, centred with the sign, which places itself
+   in the sign's measure (--k) and narrows the sign on a phone (ink.module.css, `.look .rest`).
+   Rules are scoped under .fda (two classes) so the pages' shared `p` rules cannot win on the
    built site's stylesheet order. */
 .fda {
   /* 0.48 draws the painting at 0.40 CSS px per painted px. */
@@ -20,6 +23,9 @@
   --words: 600px;
   display: flex;
   justify-content: center;
+  /* Never wider than its place: the sign's set width (and a painting beside it) would otherwise
+     widen the footer's grid on a tablet. */
+  min-width: 0;
 }
 
 .fda .text {
@@ -67,5 +73,16 @@
   .fda .text {
     width: 100%;
     font-size: var(--sign-size, 15px);
+    /* Narrowed beside a painting, the words run past the six lines balance works on: no word
+       alone on the last line. */
+    text-wrap: pretty;
+  }
+}
+
+/* Narrow phones (under 390 px, 360 is common): the sign and what stands beside it draw a little
+   smaller, so the words keep about seven lines and not nine. */
+@media (max-width: 389px) {
+  .fda {
+    --k: 0.31;
   }
 }

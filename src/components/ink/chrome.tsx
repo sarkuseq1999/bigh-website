@@ -78,23 +78,23 @@ export function Sentences({ text }: { text: string }) {
 export function SiteFooter({
   closing,
 }: {
-  /** What the look closes on, set beside the promise (the Ink look: its crane at rest). */
+  /** What the look closes on, standing in the grass beside the FDA park sign (the Ink look: its
+   *  crane at rest). */
   closing?: ReactNode;
 } = {}) {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const message = useRef<HTMLParagraphElement>(null);
-  const hasClosing = Boolean(closing);
 
-  // A paragraph that wraps keeps its full width, however short its lines are. With a closing
-  // picture beside it, the promise is narrowed to its longest line, so the picture stands next
-  // to the words and not across a gap.
+  // A paragraph that wraps keeps its full width, however short its lines are. The promise is
+  // narrowed to its longest line, so the homepage's closing brush stroke runs under the words and
+  // not past them (a long translation wraps a sentence).
   useEffect(() => {
     const paragraph = message.current;
     const words = paragraph?.firstElementChild;
-    // The promise's place under the logo, whose width decides where the lines break.
+    // The promise's place in the footer, whose width decides where the lines break.
     const column = paragraph?.parentElement?.parentElement;
-    if (!paragraph || !words || !column || !hasClosing) return;
+    if (!paragraph || !words || !column) return;
     // The words' own line boxes (text only: a sentence that wraps inside its inline block still
     // reports the block's full width, so the blocks themselves are not measured).
     const boxes = () => {
@@ -134,12 +134,13 @@ export function SiteFooter({
       document.fonts?.removeEventListener("loadingdone", fit);
       paragraph.style.width = "";
     };
-  }, [hasClosing]);
+  }, []);
 
-  // The promise at the left, centred on the links' height, with the look's closing picture beside
-  // the words (Mo, October 13, 2026: no logo here, the menu bar's mark is always on screen; the
-  // promise and the crane, smaller, stand alone, centred), and the links at the right; the FDA
-  // statement on its park sign under them all, then the copyright line and "Back to top", the
+  // The promise at the left, alone, centred on the links' height (Mo, October 13, 2026: no logo
+  // here, the menu bar's mark is always on screen), and the links at the right; the FDA statement
+  // on its park sign under them all, the look's closing picture standing in the grass at the
+  // sign's right, at the end of the trail (Mo picked it, October 26, 2026: the crane left the
+  // promise, which stands alone, a size smaller); then the copyright line and "Back to top", the
   // page's very last line (Mo, October 26, 2026; the preview note under the sign was dropped).
   // No hairline over the footer (October 13, 2026: fewer lines). On one column: the promise, the
   // links, the statement, the legal line.
@@ -153,7 +154,6 @@ export function SiteFooter({
                 <Sentences text={copy(footer.tagline)} />
               </span>
             </p>
-            {closing}
           </div>
         </div>
         <div className={styles.footerColumns}>
@@ -183,7 +183,7 @@ export function SiteFooter({
             <Link href="/science#health">{copy("Health, explained")}</Link>
           </div>
         </div>
-        <FdaStatement className={styles.footerFda} />
+        <FdaStatement className={styles.footerFda} beside={closing} />
         <div className={styles.footerBottom}>
           <span>
             © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
