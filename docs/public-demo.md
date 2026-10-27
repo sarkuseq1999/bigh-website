@@ -4,7 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-bklg0rtyi-sarkuseq1999s-projects.vercel.app`
+(`dpl_7udmRJN6MrtNnB8peQqP75F6oDkL`), the **production** deployment of `main` at
+`610d70aeb4aa522b18f10ea64a09408097cec3b0` (October 26, 2026). Mo picked B, a California
+lighthouse, for NuriCell's "Tiny power plants" (after first picking A, a Gold Rush lantern, and
+seeing it built beside the lighthouse sample) and said to put it live: the lighthouse with its
+lamp and beam coming on as you scroll, drawn larger on phones, and the section's shorter words.
+Claude released it on its own from live `main` (a fast-forward from `e6e7e36`, the Science
+release below), from a scratch worktree, not the shared folder. Before the push, on the built
+site: lint, type check and build passed; `qa_nuricell_ink` 429/429, `qa_science_ink` 633/633
+(on top of the Science release), and on the build before the Science release `qa_home_ink`
+282/282, `qa_opc_ink` 185/185, `qa_nav` 315/316 (the known upright-tablet crane jump). After
+the alias update, on the public demo in fresh unauthenticated browsers: `qa_nuricell_ink`
+429/429 (the lighthouse off, then lit), `qa_home_ink` 282/282, `qa_science_ink` 633/633,
+`qa_nav` 315/316 (the same tablet crane jump).
+
+Before this update, for about 30 minutes, the alias pointed to
+`bigh-website-l0ryjbqj0-sarkuseq1999s-projects.vercel.app` (`dpl_DAZ7E1Tfs5ubFa8w4nfLvu3yod2t`),
+the **production** deployment of `main` at `e6e7e36`: other Claude sessions' releases of the
+Science page "one place per screen" (Mo's B) and, before it, the product openings' "Title face"
+(Mo's C, `78ae1d6`). Those sessions record their checks in `docs/HANDOFF.md`.
+
+Before that, the alias pointed to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
 (`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
 `c944a72` (October 26, 2026): another Claude session's release of NuriCell "What's inside"
 (Mo's 1A), Science as a plain menu-bar link and the footer's copyright line last, merged with the

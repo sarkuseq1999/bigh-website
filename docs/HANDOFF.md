@@ -24,7 +24,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   crane jump), `qa_home_ink` 282/282. `qa_science_links.py` crashes before checking anything: it still
   clicks the Science drop-down that became a plain link earlier on October 26 (not this change;
   not fixed).
-- **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse**
+- **Live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse** (main
+  `610d70a`, released on its own from live main; demo alias and public checks in
+  `docs/public-demo.md`)
   (mockups and the built page `reference/ink-pages/mockups/nuricell-why/`, artifact
   `LiWF3jKo2tdLH4otM1SrRc`). Mo first picked A (a Gold Rush miner's lantern), saw it built beside
   the lighthouse sample, and switched to B the same day; the lantern's pictures are gone and its
