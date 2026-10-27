@@ -1,0 +1,247 @@
+<title>NuriCell How to Take It</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;600&display=swap">
+<style>
+  /* One calm column on rice paper, like the site: pick an idea at the top, see it on a phone and a laptop, read why. */
+  :root {
+    --paper: #f8f3ea;
+    --paper-deep: #efe7d8;
+    --ink: #0c0b0a;
+    --ink-soft: #514e48;
+    --rule: #d9cfbd;
+    --gold: #a8842c;
+    --display: "Ysabeau", "Iowan Old Style", Georgia, serif;
+    --body: "Helvetica Neue", Arial, system-ui, sans-serif;
+    color-scheme: light;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.55 var(--body);
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0 0 auto;
+    height: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    background: var(--paper);
+  }
+  .page {
+    max-width: 920px;
+    margin: 0 auto;
+    padding-block: 36px 64px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    display: grid;
+    gap: 28px;
+  }
+  header { display: grid; gap: 10px; }
+  .eyebrow { margin: 0; color: var(--ink-soft); font-size: 15px; }
+  h1 {
+    margin: 0;
+    font: 600 clamp(32px, 6vw, 46px)/1.08 var(--display);
+    letter-spacing: -0.01em;
+    text-wrap: balance;
+  }
+  .lede { margin: 0; font-size: 19px; max-width: 34em; }
+
+  /* The switch stays in reach while scrolling a tall phone shot. */
+  .switch {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    background: var(--paper);
+    padding-block: 10px;
+    border-bottom: 1px solid var(--rule);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .switch button {
+    display: grid;
+    gap: 2px;
+    justify-items: center;
+    min-height: 56px;
+    padding: 8px 4px;
+    border: 1px solid var(--ink);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--ink);
+    cursor: pointer;
+    font: inherit;
+  }
+  .switch .tag { font: 600 22px/1 var(--display); }
+  .switch .word { font-size: 13px; line-height: 1.2; color: var(--ink-soft); }
+  .switch button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+  .switch button[aria-pressed="true"] .word { color: var(--paper); }
+  .switch button.pick { border: 2px solid var(--gold); }
+  .switch button:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .idea { display: grid; gap: 22px; }
+  .idea h2 { margin: 0; font: 600 30px/1.15 var(--display); text-wrap: balance; }
+  .idea h2 small { display: block; margin-top: 4px; font: 500 15px/1.4 var(--body); color: var(--gold); }
+  .what { margin: 0; font-size: 18px; max-width: 36em; }
+  .score { margin: 0; font: 600 24px/1.2 var(--display); }
+  .score b { color: var(--gold); font-weight: 600; }
+  h3 { margin: 0; font: 600 20px/1.2 var(--display); }
+  .shots { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .shots.wide { grid-template-columns: 1fr; }
+  figure { margin: 0; display: grid; gap: 8px; align-content: start; min-width: 0; }
+  .shot {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    background: var(--paper-deep);
+  }
+  .phone .shot { max-width: 390px; }
+  figcaption { font-size: 14px; color: var(--ink-soft); }
+  .block { display: grid; gap: 10px; }
+  ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; max-width: 40em; }
+  .small { margin: 0; font-size: 14px; color: var(--ink-soft); max-width: 40em; }
+</style>
+
+<main class="page">
+  <header>
+    <p class="eyebrow">NuriCell · How to take it · round 2</p>
+    <h1>Four ideas, side by side</h1>
+    <p class="lede">The page already says how to take NuriCell three times in two screens: in this chapter, in the buy box and in the first question. That repeat is a big part of why it feels strange.</p>
+  </header>
+
+  <nav class="switch" aria-label="Pick an idea">
+    <button type="button" id="pick-now" data-show="now" aria-pressed="false"><span class="tag">Now</span><span class="word">live</span></button>
+    <button type="button" id="pick-d" data-show="d" aria-pressed="false"><span class="tag">D</span><span class="word">Hand</span></button>
+    <button type="button" id="pick-e" data-show="e" aria-pressed="false"><span class="tag">E</span><span class="word">Month</span></button>
+    <button type="button" id="pick-f" data-show="f" aria-pressed="false"><span class="tag">F</span><span class="word">Egg</span></button>
+    <button type="button" id="pick-g" data-show="g" aria-pressed="true" class="pick"><span class="tag">G</span><span class="word">Drop it</span></button>
+  </nav>
+
+  <section class="idea" data-idea="now" hidden>
+    <h2>Now, on the page</h2>
+    <p class="what">The egg cup, a brushed 3 × 30 = 90, then the sentence in small grey type.</p>
+    <div class="block phone">
+      <h3>On a phone</h3>
+      <div class="shots"><figure><img class="shot" src="r2-phone-now.jpg" width="780" height="1688" alt="The live chapter on a phone: the egg cup, the heading, 3 × 30 = 90 and the sentence"></figure></div>
+    </div>
+    <div class="block">
+      <h3>On a laptop</h3>
+      <div class="shots wide"><figure><img class="shot" src="r2-desk-now.jpg" width="1440" height="900" alt="The live chapter on a laptop: heading left, egg cup right, 3 × 30 = 90 across"></figure></div>
+    </div>
+  </section>
+
+  <section class="idea" data-idea="d" hidden>
+    <h2>D · In your hand</h2>
+    <p class="what">A new painting of an open hand holding three capsules. Beside it, the dose said once, big: three capsules, once a day, with or after a meal.</p>
+    <p class="score">My score: <b>8 / 10</b></p>
+    <div class="block phone">
+      <h3>On a phone</h3>
+      <div class="shots"><figure><img class="shot" src="r2-phone-d.jpg" width="780" height="1688" alt="Idea D on a phone: the heading and lead, then the painted hand with three capsules"></figure></div>
+    </div>
+    <div class="block">
+      <h3>On a laptop</h3>
+      <div class="shots wide"><figure><img class="shot" src="r2-desk-d.jpg" width="1440" height="900" alt="Idea D on a laptop: the words on the left, the painted hand on the right"></figure></div>
+    </div>
+    <div class="block">
+      <h3>What holds it back</h3>
+      <ul>
+        <li>The buy box right under it says the same thing again, and so does the first question.</li>
+        <li>The hand has a few more outlines than the homepage crane's loose brush.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="idea" data-idea="e" hidden>
+    <h2>E · A month on the wall</h2>
+    <p class="what">A painted month of 30 squares. The ticks fill in one by one as you scroll, until the month is done.</p>
+    <p class="score">My score: <b>7 / 10</b></p>
+    <div class="block phone">
+      <h3>On a phone</h3>
+      <div class="shots">
+        <figure><img class="shot" src="r2-phone-e12.jpg" width="780" height="1688" alt="Idea E on a phone while scrolling: twelve days ticked"><figcaption>While you scroll: day 12.</figcaption></figure>
+        <figure><img class="shot" src="r2-phone-e.jpg" width="780" height="1688" alt="Idea E on a phone once settled: all thirty days ticked"><figcaption>Settled: the whole month.</figcaption></figure>
+      </div>
+    </div>
+    <div class="block">
+      <h3>On a laptop</h3>
+      <div class="shots wide">
+        <figure><img class="shot" src="r2-desk-e12.jpg" width="1440" height="900" alt="Idea E on a laptop while scrolling: twelve days ticked"><figcaption>While you scroll: day 12.</figcaption></figure>
+        <figure><img class="shot" src="r2-desk-e.jpg" width="1440" height="900" alt="Idea E on a laptop once settled: all thirty days ticked"><figcaption>Settled: the whole month.</figcaption></figure>
+      </div>
+    </div>
+    <div class="block">
+      <h3>What holds it back</h3>
+      <ul>
+        <li>This calendar is already the painting for “How long does one bottle last?” in the questions below. The page would show it twice, so E means painting that question a new picture.</li>
+        <li>Rows of ticks can look like a chart.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="idea" data-idea="f" hidden>
+    <h2>F · Just the egg, bigger</h2>
+    <p class="what">The egg painting we already have, made big, with the dose beside it. No painted numbers.</p>
+    <p class="score">My score: <b>7.5 / 10</b></p>
+    <div class="block phone">
+      <h3>On a phone</h3>
+      <div class="shots"><figure><img class="shot" src="r2-phone-f.jpg" width="780" height="1688" alt="Idea F on a phone: the heading and lead, then the big egg painting"></figure></div>
+    </div>
+    <div class="block">
+      <h3>On a laptop</h3>
+      <div class="shots wide"><figure><img class="shot" src="r2-desk-f.jpg" width="1440" height="900" alt="Idea F on a laptop: the words on the left, the egg painting on the right"></figure></div>
+    </div>
+    <div class="block">
+      <h3>What holds it back</h3>
+      <ul>
+        <li>Two breakfasts on one page: this egg, and the oatmeal in the first question.</li>
+        <li>The dose is still said three times.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="idea" data-idea="g">
+    <h2>G · Drop the chapter<small>My pick</small></h2>
+    <p class="what">No “How to take it” chapter. Dr. Liu runs straight into the bottle, and its buy box already says how to take it. Further down, the questions open on “How do I take NuriCell?” with its own breakfast painting.</p>
+    <p class="score">My score: <b>8.5 / 10</b></p>
+    <div class="block phone">
+      <h3>On a phone</h3>
+      <div class="shots">
+        <figure><img class="shot" src="r2-phone-g1.jpg" width="780" height="1688" alt="Idea G on a phone: the end of Dr. Liu's chapter, then the bottle"><figcaption>Dr. Liu, then straight to the bottle.</figcaption></figure>
+        <figure><img class="shot" src="r2-phone-g2.jpg" width="780" height="1688" alt="Idea G on a phone: the buy box says how to take it, then the first question shows it with a painting"><figcaption>The buy box, then the first question.</figcaption></figure>
+      </div>
+    </div>
+    <div class="block">
+      <h3>On a laptop</h3>
+      <div class="shots wide">
+        <figure><img class="shot" src="r2-desk-g1.jpg" width="1440" height="900" alt="Idea G on a laptop: Dr. Liu's painting, then the bottle and its buy box"><figcaption>Dr. Liu, then straight to the bottle and its buy box.</figcaption></figure>
+        <figure><img class="shot" src="r2-desk-g2.jpg" width="1440" height="900" alt="Idea G on a laptop: the questions open on How do I take NuriCell, with the breakfast painting"><figcaption>The questions open on “How do I take NuriCell?”</figcaption></figure>
+      </div>
+    </div>
+    <div class="block">
+      <h3>What holds it back</h3>
+      <ul>
+        <li>The page loses one painting.</li>
+        <li>In the buy box, “How to take it” is plain text, not a picture.</li>
+      </ul>
+    </div>
+    <p class="small">OPC and Turmerific have the same chapter. G could go there too, so they don't keep the old look.</p>
+  </section>
+
+  <p class="small">Mockups only: placed on the real page with the real fonts. Nothing on the site has changed.</p>
+</main>
+
+<script>
+  const buttons = document.querySelectorAll(".switch button");
+  const ideas = document.querySelectorAll("[data-idea]");
+  function show(key, scroll) {
+    if (![...ideas].some((s) => s.dataset.idea === key)) return;
+    buttons.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.show === key)));
+    ideas.forEach((s) => { s.hidden = s.dataset.idea !== key; });
+    if (scroll) document.querySelector(".switch").scrollIntoView({ block: "start" });
+  }
+  buttons.forEach((b) => b.addEventListener("click", () => show(b.dataset.show, window.scrollY > 300)));
+  show(location.hash.slice(1) || "g", false);
+</script>
