@@ -14,3 +14,14 @@ used (about $0.75, at most $1.05 before refunds). Ledger:
 
 Build: `python -X utf8 reference/ink-pages/science/build_science.py`, then
 `python -X utf8 reference/ink-pages/science/check_science_art.py`.
+
+## One place per screen (October 26, 2026)
+
+Mo found the handscroll's sideways travel read as a draft and picked B: his path going down the
+page, one place per screen. No new paintings and no spend: `places()` in `build_science.py` cuts
+four places from the joined band (`PLACES`, band pixels, by eye, then checked on the page), each
+with a tighter phone cut: `place-okayama`, `place-berkeley`, `place-salzburg`, `place-today`
+(`-phone`), v1. The sea and the hills of 2002 are left out. The band itself no longer ships
+(`scroll-v2`, `scroll-phone-v2` deleted); it is kept as `plates/band.png` for the contact sheet,
+which marks each cut (red wide, blue phone). Mockups and the review page's shots:
+`reference/ink-pages/mockups/science-path/2026-10-26/`.

@@ -1,6 +1,7 @@
-"""Viewport shots of the Science ink page for review (never full-page: the pinned handscroll breaks
-those). Each screen as a visitor scrolls to it: the opening, the scroll at a quarter, half and its
-end, Dr. Liu, the formulas, each strip (its header and painting, then its words), the footer.
+"""Viewport shots of the Science ink page for review (viewport shots, as a visitor sees them). Each
+screen as a visitor scrolls to it: the opening (the title and Dr. Liu), each place of his path in the
+middle of the window (Mo's pick B, October 26, 2026), each strip (its header and painting, then its
+words), the formulas, the footer.
 
 usage: python -X utf8 scripts/qa/shoot_science_ink.py [base-url] [--sizes=1440x900,390x844] [--lang=en]
        [--screens=footer,opening]  (only those screens, same file names; default all)
@@ -21,13 +22,6 @@ LANG = OPTS.get("lang", "en")
 SCREENS = set(OPTS["screens"].split(",")) if "screens" in OPTS else None
 OUT = Path(__file__).resolve().parents[2] / "scripts/qa/out/science-ink/final"
 OUT.mkdir(parents=True, exist_ok=True)
-
-TRAVEL = """() => {
-  const s = document.querySelector('#scientists'); const pin = s.querySelector('[data-pin]');
-  const pad = parseFloat(getComputedStyle(s).paddingTop); const stick = parseFloat(getComputedStyle(pin).top);
-  return [Math.max(0, pad - stick), s.querySelector('[data-room]').offsetHeight];
-}"""
-
 
 def settle(page, y, wait=3600):
     # Arrive the way a visitor does (a few steps), so the strips' paintings bloom on the way in.
@@ -51,11 +45,18 @@ def shoot(browser, w, h):
     page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
     page.wait_for_timeout(3500)
     bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")
-    begin, room = page.evaluate(TRAVEL)
     screens = [("opening", None)]
-    screens += [(name, begin + room * f) for name, f in [("scroll-quarter", 0.25), ("scroll-half", 0.5), ("scroll-end", 1.0)]]
-    screens += [("liu", to(page, "#liu > div", bar + 40)), ("formulas", to(page, "#formulas header", bar + 40))]
-    for part in ["research", "health", "ask"]:
+    # Each place in the middle of what the menu bar leaves (or under the bar, if it is taller).
+    places = page.evaluate(
+        """bar => [...document.querySelectorAll('[data-place]')].map(li => { const r = li.getBoundingClientRect();
+          return [li.dataset.place, r.top + scrollY - bar - Math.max(0, (innerHeight - bar - r.height) / 2)]; })""",
+        bar,
+    )
+    screens += [(f"path-{key}", y) for key, y in places]
+    for part in ["research", "health", "formulas", "ask"]:
+        if part == "formulas":
+            screens.append((part, to(page, "#formulas header", bar + 40)))
+            continue
         screens.append((part, to(page, f"#{part} header", bar + 40)))
         # The words from the painting's caption down: the painting itself just gone under the
         # menu bar, so no sliver of it (or a half-hidden caption) sits under the bar.

@@ -3,11 +3,13 @@
 - every picture named in science-art.ts exists at its stated size;
 - each picture's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
-- the scroll is a long band (at least 8 times as wide as tall), its five stops in order inside it;
+- (October 26) Dr. Liu's path: four places, each with a phone cut, each wider than tall (a place
+  beside its words, not a band) and at least 1000px wide for the page's 60% column;
 - the health scenes are three, each narrower than the strip;
 - (Task 6) the mugs' steam is kept: ink above the mugs' rims, on the wide strip and the phone crop
   (the ink box once cut it off).
-Writes plates/contact.jpg (the scroll with its stops marked, the strips, the scenes) to look at.
+Writes plates/contact.jpg (the band with the places' cuts marked, the places, the strips, the
+scenes) to look at.
 
 usage: python -X utf8 reference/ink-pages/science/check_science_art.py
 """
@@ -50,11 +52,15 @@ def picture(entry):
 
 
 data = art()
-scroll = picture(data["scroll"])
-picture(data["scroll"]["phone"])
-check("scroll is a long band", scroll.width >= 8 * scroll.height, f"{scroll.width}x{scroll.height}")
-stops = [data["scroll"]["stops"][k] for k in ("okayama", "berkeley", "y2002", "salzburg", "today")]
-check("stops in order inside the band", all(0 < a < b < 1 for a, b in zip(stops, stops[1:])), str(stops))
+check("four places, in order", list(data["places"]) == ["okayama", "berkeley", "salzburg", "today"], str(list(data["places"])))
+places = []
+for key, entry in data["places"].items():
+    wide = picture(entry)
+    phone = picture(entry["phone"])
+    check(f"place {key}: wider than tall", wide.width > 1.5 * wide.height and phone.width > 1.2 * phone.height,
+          f"{wide.size} {phone.size}")
+    check(f"place {key}: 1000px or wider", wide.width >= 1000, f"{wide.width}")
+    places.append(wide)
 for key in ("scrolls", "mugs"):
     picture(data[key])
     picture(data[key]["phone"])
@@ -71,11 +77,27 @@ check("three health scenes", len(scenes) == 3)
 check("each scene narrower than the strip", all(s.width < health.width * 0.6 for s in scenes))
 
 sheet_w = 2400
-rows = [scroll.resize((sheet_w, round(scroll.height * sheet_w / scroll.width)))]
-draw = ImageDraw.Draw(rows[0])
-for f in stops:
-    x = round(f * sheet_w)
-    draw.line([(x, 0), (x, rows[0].height)], fill=(200, 0, 0), width=3)
+rows = []
+band_plate = HERE / "plates/band.png"
+if band_plate.exists():
+    # The band with each place's wide cut (red) and phone cut (blue), from build_science.PLACES.
+    sys.path.insert(0, str(HERE))
+    from build_science import PLACES  # noqa: E402
+
+    band = Image.open(band_plate).convert("RGB")
+    k = sheet_w / band.width
+    rows.append(band.resize((sheet_w, round(band.height * k))))
+    draw = ImageDraw.Draw(rows[0])
+    for wide, phone in PLACES.values():
+        for (a, b, *_), colour, inset in ((wide, (200, 0, 0), 2), (phone, (0, 60, 200), 10)):
+            draw.rectangle([round(a * k), inset, round(b * k) - 1, rows[0].height - 1 - inset], outline=colour, width=3)
+row = Image.new("RGB", (sheet_w, max(round(p.height * (sheet_w / 4 - 20) / p.width) for p in places)), "white")
+x = 0
+for p in places:
+    small = p.resize((sheet_w // 4 - 20, round(p.height * (sheet_w / 4 - 20) / p.width)))
+    row.paste(small, (x, 0))
+    x += sheet_w // 4
+rows.append(row)
 for img in (Image.open(REPO / "public" / data[k]["src"].lstrip("/")) for k in ("scrolls", "health", "mugs")):
     rows.append(img.convert("RGB").resize((sheet_w // 2, round(img.height * (sheet_w // 2) / img.width))))
 rows.append(Image.new("RGB", (sheet_w, max(s.height for s in scenes) // 2), "white"))

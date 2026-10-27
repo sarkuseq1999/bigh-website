@@ -14,9 +14,7 @@ ink stays ink and the mists join. Join 1 (the open sea) is a crossfade instead (
 panels paint spray and mist at that end (panel 1's last ~300px, panel 2's first ~550px), so two ends
 fading to paper left a blank gap that read as two seas (October 14 review); over a 900px overlap
 panel 1 fades out exactly as panel 2 fades in (weights summing to one), and the sea runs on through
-the spray. The band is then cropped to its ink and levelled to white. STOP_X: where each stop's
-place stands on the joined canvas, read off its contact sheet (Okayama's castle, Berkeley's tower,
-the hills of 2002, Salzburg's fortress, the oaks under the sun).
+the spray. The band is then cropped to its ink and levelled to white.
 
 The strips are cropped to their ink; phones get narrower crops (the scrolls' and the mugs' middle,
 trimmed to their own ink, their cut ends faded to paper) and the health strip's three scenes, cut
@@ -40,14 +38,25 @@ then open sea). Join 1 is still a crossfade, now over 200px of sea in both panel
 panel 1's sea top is row 654 at x 1550-1750, panel 2's about 700 at x 560-760; panel 3 keeps its
 5px under panel 2). The band is 5756 x 651 (6864 x 705 before: the sea's low spray at panel 1's
 right was its lowest ink). The tower's trees now stand about 2200px from the band's left (3290
-before), so they and the spire are in the first screen at 1280x720 and 1440x900. STOP_X is on the
-new canvas (checked on plates/contact.jpg). The scroll ships as v2 (SCROLL_V).
+before), so they and the spire were in the first screen at 1280x720 and 1440x900. The scroll
+shipped as v2 until October 26 (below).
 
 The health strip's wide picture (Ruling 14): two grey washes between the lamp, the stones and the
 poppies read as dirty marks. clean() keeps each scene's own box (the boxes its phone pictures are
 cut to, so the scenes' ground shadows stay) and fades everything else to paper over CLEAN_FEATHER
 px outside them. The wide picture ships as v2 (HEALTH_V); the phone scenes are cut from the
 uncleaned strip, so they do not change.
+
+One place per screen (Mo's pick B, October 26, 2026): the band no longer ships. Mo found the
+sideways travel read as a draft, and his path now goes down the page, one place to a screen, each
+beside its words. places() cuts the four places from the band (PLACES, by eye on the band, then
+checked on the page: reference/ink-pages/mockups/science-path/2026-10-26/): Okayama's castle,
+Berkeley's tower, Salzburg's fortress, the oaks under the gold sun. The sea and the hills of 2002
+are left out (the 2002 study is told with Berkeley, where it was done). Each cut's ends fade to
+paper over a share of its width where they run through ink, and its top and bottom are trimmed to
+the rows with real ink (PLACE_INK), so the place stands as large as it can. Phones get tighter cuts
+(the place larger on a narrow screen). The band itself is kept as a plate (plates/band.png) for the
+contact sheet.
 
 usage: python -X utf8 reference/ink-pages/science/build_science.py
 """
@@ -85,18 +94,23 @@ OVERLAP = (200, 300)
 CROSSFADE = (True, False)
 DY = (0, -46, -51)
 FADES = ((0, 0), (0, 420), (420, 0))
-# On the joined canvas: panel 1 at 0 (its x less 260), panel 2 at 1300 (its x less 620), panel 3 at
-# 3068. Castle 756-260; tower 1720-620+1300; the hills of 2002 2330-620+1300; fortress 824+3068;
-# oaks 2312+3068.
-STOP_X = {"okayama": 496, "berkeley": 2400, "y2002": 3010, "salzburg": 3892, "today": 5380}
-SCROLL_V = "v2"
 HEALTH_V = "v2"
 CLEAN_FEATHER = 60
-PHONE_H = 400  # the scroll's phone picture: 300px tall on screen, 1.33x
 EDGE = 0.03
 PHONE_FADE = 0.08  # the phone crops' cut ends (middle()): fade to paper over this share of their width
 TOPS = {"mugs": 225}  # a strip's top row on its original, where the ink box misses light strokes
 MUGS_V = "v2"
+# Each place on the band (band px): (left, right, left fade, right fade), the fades a share of the
+# cut's width; the wide cut, then the phone cut.
+PLACES = {
+    "okayama": ((0, 1250, 0.0, 0.28), (110, 1010, 0.06, 0.14)),
+    "berkeley": ((1850, 2950, 0.30, 0.16), (2080, 2960, 0.14, 0.12)),
+    "salzburg": ((3300, 4450, 0.16, 0.16), (3440, 4400, 0.10, 0.10)),
+    "today": ((4420, 5756, 0.16, 0.0), (4600, 5720, 0.10, 0.06)),
+}
+PLACE_INK = 200  # a row is ink when its darkest channel is under this on more than 1% of the cut
+PLACE_PAD = 0.03  # paper kept above and below the ink, a share of the band's height
+PLACES_V = "v1"
 
 bd.ORIG = HERE / "originals"
 bd.URL = URL
@@ -119,7 +133,8 @@ def faded(arr, left, right):
     return arr * k[None, :, None] + 255.0 * (1 - k[None, :, None])
 
 
-def handscroll():
+def band():
+    """The handscroll's band: the three panels joined to one horizon, cropped to its ink."""
     panels = []
     for i, (left, right) in zip((1, 2, 3), CROPS):
         arr = np.asarray(bd.divided(bd.load(TAKES[f"panel{i}"]))).astype(np.float32)
@@ -145,11 +160,28 @@ def handscroll():
         canvas[:, x : x + w] = out
     joined = Image.fromarray(np.clip(np.rint(canvas), 0, 255).astype(np.uint8))
     x0, y0, x1, y1 = bd.ink_box(np.asarray(joined), pad=0.02)
-    band = bd.feathered(bd.levelled(joined.crop((x0, y0, x1, y1))), EDGE)
+    img = bd.feathered(bd.levelled(joined.crop((x0, y0, x1, y1))), EDGE)
     print("handscroll canvas", canvas.shape[1], "x", canvas.shape[0], "panels at", xs, "ink box x", x0, x1)
-    art = bd.art_of(band, f"scroll-{SCROLL_V}", None)
-    art["phone"] = bd.art_of(band, f"scroll-phone-{SCROLL_V}", round(band.width * PHONE_H / band.height))
-    art["stops"] = {key: round((x - x0) / (x1 - x0), 4) for key, x in STOP_X.items()}
+    (HERE / "plates").mkdir(exist_ok=True)
+    img.save(HERE / "plates/band.png")
+    return img
+
+
+def place(img, left, right, fade_l, fade_r):
+    """One place cut from the band: its ends faded to paper, trimmed to its ink rows."""
+    w = right - left
+    arr = faded(np.asarray(img.crop((left, 0, right, img.height))).astype(np.float32), round(fade_l * w), round(fade_r * w))
+    rows = np.where((arr.min(axis=2) < PLACE_INK).sum(axis=1) > w * 0.01)[0]
+    pad = round(img.height * PLACE_PAD)
+    arr = arr[max(0, rows[0] - pad) : min(arr.shape[0], rows[-1] + 1 + pad)]
+    return bd.feathered(Image.fromarray(np.clip(np.rint(arr), 0, 255).astype(np.uint8)), EDGE)
+
+
+def places(img):
+    art = {}
+    for key, (wide, phone) in PLACES.items():
+        art[key] = bd.art_of(place(img, *wide), f"place-{key}-{PLACES_V}", None)
+        art[key]["phone"] = bd.art_of(place(img, *phone), f"place-{key}-phone-{PLACES_V}", None)
     return art
 
 
@@ -224,7 +256,7 @@ def write_ts(art):
         "// Generated by reference/ink-pages/science/build_science.py. Do not edit by hand: change",
         "// the script (or its TAKES) and run it again. The Science page's ink paintings (October 14,",
         "// 2026): GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's",
-        "// own paper. scroll.stops: where each stop's place stands, as fractions of the scroll's width.",
+        "// own paper. places: Dr. Liu's path, cut from the handscroll's band (October 26, 2026).",
         "",
     ]
     TS.parent.mkdir(parents=True, exist_ok=True)
@@ -240,7 +272,7 @@ if __name__ == "__main__":
     mugs = strip("mugs")
     write_ts(
         {
-            "scroll": handscroll(),
+            "places": places(band()),
             "scrolls": {**finish(scrolls, "scrolls", 2400), "phone": finish(middle(scrolls, 0.3, 0.7), "scrolls-phone", 1000)},
             "health": {**finish(clean(health), "health", 2400, HEALTH_V), "scenes": scenes(health)},
             "mugs": {

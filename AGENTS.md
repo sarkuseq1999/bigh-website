@@ -169,6 +169,16 @@ These sit on top of `DESIGN.md`.
   drop-down's design: it is switched off, not deleted (`navScienceMenu` in
   `src/components/ink/nav/nav-data.ts`, `SCIENCE_MENU` in `scripts/qa/qa_nav.py`). Turn it back
   on only when Mo says the Science page has grown enough.
+- **Science: his path one place per screen (Mo picked B, October 26, 2026).** Mo liked the
+  Science page's paintings but found the sideways handscroll "feels like a draft", and asked for
+  an order that is logical and easy. The page opens on the title and Dr. Liu (photo, name, intro;
+  no numbers row, his path tells them), then his path going down, one place per screen: Okayama
+  (painting left), Berkeley 1994 (right; the 2002 study is told there), Salzburg 2025 (left),
+  Today (wide, its words in the sky by the gold sun). Then the research, health explained, the
+  formulas, Ask. The paintings are cut from the old handscroll's band (`build_science.py`,
+  `PLACES`); phones get tighter cuts in one column. Berkeley says 1994, not 1994-2002: the
+  faculty profile dates his time in Bruce Ames's laboratory 1994-1997. Mockups:
+  `reference/ink-pages/mockups/science-path/2026-10-26/`.
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing

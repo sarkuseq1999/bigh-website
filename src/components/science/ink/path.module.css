@@ -1,0 +1,185 @@
+/* Dr. Liu's path, one place per screen (Mo's pick B, October 26, 2026; mockups
+   reference/ink-pages/mockups/science-path/2026-10-26/). Each place: its painting, then its words.
+   From 960px the paintings take turns, left and right, running out to the page's edge (their cut
+   ends fade to paper), the words in the other column; Today, the arrival, stands wide with its
+   words in the sky by the gold sun. Under 960px: one column, each painting the window's width over
+   its words. The whole path stops growing at 1600px wide, so a large screen does not blow the
+   paintings past their own size. The kit's .look rules (margins, sizes) sit at (0,2,0), so the
+   words' rules are scoped under .place. */
+.places {
+  display: grid;
+  row-gap: clamp(64px, 8vw, 128px);
+  width: 100%;
+  max-width: 1600px;
+  margin: clamp(48px, 4.5vw, 72px) auto 0;
+  padding: 0;
+  list-style: none;
+}
+
+.place {
+  display: grid;
+  align-items: center;
+}
+
+.figure {
+  position: relative;
+  margin: 0;
+}
+
+/* The painting's box is reserved from the ratio the stylesheet knows (the figure's --ar-wide and
+   --ar-narrow, set from the pictures' sizes), whichever picture loads. */
+.art {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ar-narrow);
+}
+
+.place .caption {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 2px;
+}
+
+.words {
+  padding: 18px var(--gutter) 0;
+}
+
+.place .when {
+  margin: 0;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* A place's name, the path's big word: Ysabeau at the page's title weight (science-ink.module.css
+   keeps its small titles one step heavier, not these). */
+.place .name {
+  margin: 12px 0 0;
+  font-size: 46px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.015em;
+}
+
+.place .title {
+  margin: 18px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.35;
+}
+
+.place .text {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.place .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 26px;
+  margin: 10px 0 0;
+}
+
+.place .links a {
+  gap: 4px;
+  font-size: 17px;
+  text-underline-offset: 6px;
+}
+
+@media (min-width: 960px) {
+  .art {
+    aspect-ratio: var(--ar-wide);
+  }
+
+  .place .name {
+    font-size: clamp(46px, 4.6vw, 70px);
+  }
+
+  .place .title {
+    font-size: 21px;
+  }
+
+  .place .text {
+    font-size: 19px;
+  }
+
+  .place .links {
+    margin-top: 14px;
+  }
+
+  /* The painting runs to the page's edge on its side; the words keep the page's gutter on theirs. */
+  .place[data-side="left"] {
+    grid-template-columns: minmax(0, 60fr) minmax(0, 40fr);
+    column-gap: 40px;
+  }
+
+  .place[data-side="right"] {
+    grid-template-columns: minmax(0, 40fr) minmax(0, 60fr);
+    column-gap: 40px;
+  }
+
+  .place[data-side="right"] .figure {
+    order: 2;
+  }
+
+  .words {
+    max-width: calc(470px + var(--gutter));
+    padding-top: 0;
+  }
+
+  .place[data-side="left"] .words {
+    padding-left: 0;
+  }
+
+  .place[data-side="right"] .words {
+    justify-self: end;
+    padding-right: 0;
+  }
+
+  .place[data-side="left"] .caption {
+    right: auto;
+    left: var(--gutter);
+  }
+
+  /* Today: the widest painting, its words over the sky at its top left (the sun stands at about
+     67-75% of its width and the top fifth of its height, the hills begin about a third of the way
+     down). Its sentence stays on one line: on two it reached the hills under 1080px wide. */
+  .place[data-side="wide"] {
+    width: min(1120px, 86vw);
+    margin: 0 auto;
+  }
+
+  .place[data-side="wide"] .figure,
+  .place[data-side="wide"] .words {
+    grid-area: 1 / 1;
+  }
+
+  .place[data-side="wide"] .words {
+    position: relative;
+    align-self: start;
+    justify-self: start;
+    max-width: 560px;
+    padding: 0;
+  }
+
+  .place[data-side="wide"] .caption {
+    right: 0;
+  }
+}
+
+/* Reduced motion is complete from the first paint, and so is a page whose script never runs, and a
+   printed page (printed before the visitor scrolled down, a painting would still be waiting): the
+   painting the server marks "waiting" is shown whole and crisp, not hidden by a bloom that will not
+   come. :global([data-look]) outranks the kit's bloom rules whatever order the stylesheets load in
+   (as strip.module.css). */
+@media print, (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]) .art[data-bloom="waiting"] {
+    -webkit-mask: none;
+    mask: none;
+    filter: none;
+  }
+}
