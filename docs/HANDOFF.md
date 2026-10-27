@@ -18,9 +18,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   hilltop). Layout B, a bigger circle with the words under it, was built at a temporary
   `/about-below` to compare and removed after Mo's pick. `circle.module.css`, `about-ink.tsx`,
   `let-the-circle-go.ts`; mockups and the built shots `reference/ink-pages/mockups/about-circle-size/`,
-  artifact `CC6pZFonqYvRfZnJEB6g57`. Built site (`npm run build` + `next start`): `qa_about`
-  404/404 (new `circle_layout` section), `qa_home_ink` 282/282, `qa_nav` 315/316 (the known
-  tablet crane jump); lint and type-check clean.
+  artifact `CC6pZFonqYvRfZnJEB6g57`. Merged into studio October 27 on top of 598d10a and
+  re-checked on the built site (`npm run build` + `next start`): `qa_about` 404/404 (new
+  `circle_layout` section), `qa_home_ink` 282/282, `qa_nav` 326/326; lint and type-check clean.
+  `qa_fda` stops at Turmerific, which never goes network-idle on a local `next start` (old, not
+  this change).
 - **Local, not live (October 26): NuriCell research, Mo's pick A, "tap a book, read its study"**
   (mockup and the built page's shots `reference/ink-pages/mockups/nuricell-research/`, artifact
   `UFqCskQg1VCPiKy8ZTTVLk`; the draft rounds in `codes/bigh-archive/nuricell-research-mockup-2026-10-26/`).
