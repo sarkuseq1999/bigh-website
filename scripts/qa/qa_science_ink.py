@@ -495,8 +495,8 @@ def strips(browser):
 
 # The key studies' links, as the catalogs translate "Read the study".
 READ_STUDY = {"kr": "연구 보기", "jp": "研究を読む", "cns": "阅读研究", "vn": "Đọc nghiên cứu"}
-# How the catalogs already name him (cns.json 刘健康; m198 in jp, kr, vn).
-LIU_NAME = {"kr": "Dr. Jiankang Liu", "jp": "Dr. Jiankang Liu", "cns": "刘健康博士", "vn": "Dr. Jiankang Liu"}
+# How the catalogs name him on his photo (liu.name: cns.json 刘健康博士, vn.json "Tiến sĩ", Doctor).
+LIU_NAME = {"kr": "Dr. Jiankang Liu", "jp": "Dr. Jiankang Liu", "cns": "刘健康博士", "vn": "Tiến sĩ Jiankang Liu"}
 
 
 def languages(browser):

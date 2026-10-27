@@ -172,14 +172,15 @@
 }
 
 /* Reduced motion is complete from the first paint, and so is a page whose script never runs, and a
-   printed page (printed before the visitor scrolled down, a painting would still be waiting): the
-   painting the server marks "waiting" is shown whole and crisp, not hidden by a bloom that will not
-   come. :global([data-look]) outranks the kit's bloom rules whatever order the stylesheets load in
-   (as strip.module.css). */
+   printed page (printed before the visitor scrolled down, a painting would still be waiting, or
+   halfway through its bloom): each painting is shown whole and crisp, not hidden by a bloom that
+   will not come. :global([data-look]) outranks the kit's bloom rules whatever order the stylesheets
+   load in (as strip.module.css). */
 @media print, (prefers-reduced-motion: reduce), (scripting: none) {
-  :global([data-look="ink"]) .art[data-bloom="waiting"] {
+  :global([data-look="ink"]) .art[data-bloom] {
     -webkit-mask: none;
     mask: none;
     filter: none;
+    transition: none;
   }
 }
