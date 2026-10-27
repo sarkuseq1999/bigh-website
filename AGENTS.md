@@ -80,6 +80,15 @@ These sit on top of `DESIGN.md`.
   2002 study is told as published, with "An animal study, not a test of NuriCell." NuriCell only:
   Nature Calm keeps the plain portrait. `people.tsx`, `nuricell.module.css`, `build_nuricell.py`
   (`berkeley()`); mockups `reference/ink-pages/mockups/nuricell-liu/`.
+- **NuriCell research: tap a book, read its study (Mo picked A, October 26, 2026).** Mo asked for
+  the research list to be more fun to read and found the small "The research" label over its
+  heading strange. Each of the seven books in the painting is a button: tap one and its study
+  opens, its book stays dark and the other books fade under a little paper (pointing at a book
+  previews it). Each study is a plain question with a short, honest answer (animal studies say
+  rats or animals first); the two 2003 reviews share one question, "Scientists disagree", and
+  light two books. No label over the heading, no "Show all"; without scripts every answer shows.
+  `nuricell-research.tsx`; masks `books-mask-v1-*.png` from `reference/ink-pages/nuricell/find_books.py`.
+  Mockups: `reference/ink-pages/mockups/nuricell-research/`.
 - **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
   October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
   grey "What's inside" label odd and the three grey notes under the plate messy, and the
