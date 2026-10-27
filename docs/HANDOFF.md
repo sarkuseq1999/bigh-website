@@ -21,7 +21,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   beside a big 20% (stacked on phones); the section's six lines translated as drafts
   (m901–m906). On the built site: `qa_nuricell_ink` 429/429, `qa_home_ink` 282/282, `qa_nav`
   315/316 (the known tablet crane jump), `check_nuricell_art.py` all pass.
-- **Local, not live (October 26): NuriCell "What's inside", Mo's pick 1A** (mockups
+- **Live (October 26): NuriCell "What's inside", Mo's pick 1A** (mockups
   `reference/ink-pages/mockups/nuricell-inside/`, artifact `Bnhi2oV5MB9eoDusAmdiC2`; the built
   page recorded in `built.html`, artifact `UbeHphVKjW9BqEs2jXh8Fr`). The capsule painting's gold
   leaf rises out of the powder and settles where it is painted, then each flake keeps turning,
@@ -38,8 +38,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_nature_calm_ink` 158/159 (its older front-layer pixel check), `qa_nav` 315/316 (the
   upright tablet's crane jump, recorded with the Science-link change above).
   The new words ("Also on the label", the card's lines, the merged note) are English in every
-  language, like the rest of this chapter's product words.
-- **Local, not live (October 26): Science is a plain link in the menu bar** (Mo: the Science page
+  language, like the rest of this chapter's product words. On Mo's yes Claude pushed `main` to
+  `c944a72` (this, the Science link and the footer's copyright line below, merged with the
+  homepage science peek `75fb88e`); production `dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`, the demo alias
+  points to it; public demo `qa_nuricell_ink` 404/404, `qa_home_ink` 282/282, `qa_fda` 232/232,
+  `qa_nav` 315/316 (the tablet crane jump). "Tiny power plants" above was not pushed.
+- **Live (October 26, with "What's inside"): the footer's copyright line comes last** (`75c6190`;
+  AGENTS.md "Footer: the copyright line comes last").
+- **Live (October 26, with "What's inside"): Science is a plain link in the menu bar** (Mo: the Science page
   is one page, and the drop-down's four doors into it made the site look short of content; keep
   the design for later). On the bar and in the phone's menu Science goes straight to `/science`,
   like About and Support; on the Science page its word carries the painted stroke. The drop-down
@@ -53,7 +59,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   folding Products away, the menu's crane stays put for most of the fold and then grows in its
   last ~0.1s (834x1112: 176 -> 230px, steps up to 13.4px a frame; 768x1024: 130 -> 230px in six
   frames, up to 25px a frame). Same code as before; with Science's fold gone, folding Products is
-  now the tablet menu's only fold, so it is seen more. Not fixed (Mo to decide). Not pushed.
+  now the tablet menu's only fold, so it is seen more. Not fixed (Mo to decide). Live in `c944a72`.
 - **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics

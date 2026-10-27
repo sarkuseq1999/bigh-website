@@ -4,7 +4,30 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2ep2o51s9-sarkuseq1999s-projects.vercel.app`
+(`dpl_4e5NFHzU2WD5VdsJAosxQVZZp6vf`), the **production** deployment of `main` at
+`c944a72f0594068bff9dd833b1070a5f11763a59`. On October 26, 2026, Mo said to put NuriCell's
+"What's inside" live (his pick 1A: the gold leaf rises out of the powder and settles, then keeps
+turning; no label over the heading; the label card; the pairs as three scenes, `41f7a72`),
+together with two changes that were waiting on `studio`: Science as a plain link in the menu bar
+(`10befe3`) and the footer's copyright line last (`75c6190`). Claude pushed `c944a72` to `main`:
+`cecb78a` from `studio` merged with `75fb88e` (the homepage science peek, pushed by another
+session minutes earlier, which made the first push bounce). NuriCell "Tiny power plants"
+(`658577b` and later, on `studio`) was not pushed.
+
+Before the push, on the built release copy (`npm run build` + `next start`): `qa_nuricell_ink`
+404/404, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known upright-tablet crane jump);
+`qa_fda` timed out loading Turmerific on the local `next start` (a known local hang). After the
+alias update, on the public demo in fresh unauthenticated browsers: `qa_nuricell_ink` 404/404,
+`qa_home_ink` 282/282, `qa_fda` 232/232, `qa_nav` 315/316 (the same tablet check). Screenshots
+of the chapter at 1440 and on a phone matched the local build.
+
+Before this update, the alias pointed to `bigh-website-2pyiz7a4c-sarkuseq1999s-projects.vercel.app`
+(`dpl_7sqGtYsvNqr2WjdM3AV37HqYNgpF`), the **production** deployment of `main` at
+`75fb88edd4787ef8fbfe7b7eaaee659fa45c82cd` (homepage science on phones: the next topic's painting
+peeks in; Mo's pick A). That session pointed the alias; its own entry is not here yet.
+
+Before that, the alias pointed to `bigh-website-meho0fdkp-sarkuseq1999s-projects.vercel.app`
 (`dpl_6BGC8Py9pvpEnCqtW2yzj1guNNFb`), the **production** deployment of `main` at
 `4d272585f4a107280861ca67258e26cb397501a5`. On October 25, 2026, Mo said to push the short-drag
 fix found after the phone swipe release (below): on the homepage science strip, once the strip
