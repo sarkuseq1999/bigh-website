@@ -1,0 +1,154 @@
+<title>Science Page, Idea B</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500&family=Source+Sans+3:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column of screenshots, read top to bottom like the page itself; rice paper and sumi ink, BiGH's own look. */
+  :root {
+    --paper: #f6f1e7;
+    --paper-deep: #ece5d6;
+    --ink: #14120f;
+    --muted: #5a554c;
+    --hair: rgba(28, 27, 25, 0.18);
+    --gold: #8a6a1f;
+    --display: "Ysabeau", "Palatino Linotype", Georgia, serif;
+    --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1916;
+      --paper-deep: #24211d;
+      --ink: #efe9dd;
+      --muted: #b7afa1;
+      --hair: rgba(239, 233, 221, 0.2);
+      --gold: #d6b25c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1916;
+    --paper-deep: #24211d;
+    --ink: #efe9dd;
+    --muted: #b7afa1;
+    --hair: rgba(239, 233, 221, 0.2);
+    --gold: #d6b25c;
+    color-scheme: dark;
+  }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font: 18px/1.55 var(--sans);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 72px;
+  }
+  main { max-width: 1040px; margin: 0 auto; display: grid; gap: 64px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 500; line-height: 1.08; margin: 0; text-wrap: balance; }
+  h1 { font-size: clamp(36px, 6vw, 58px); letter-spacing: -0.01em; }
+  h2 { font-size: clamp(28px, 4vw, 40px); }
+  p { margin: 0; }
+  .eyebrow { color: var(--muted); font-size: 15px; font-weight: 500; }
+  .lead { margin-top: 14px; max-width: 60ch; color: var(--muted); font-size: 19px; }
+  header { display: grid; gap: 6px; }
+  section { display: grid; gap: 22px; }
+  .points { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; max-width: 64ch; }
+  .points li { padding-left: 22px; position: relative; }
+  .points li::before { content: ""; position: absolute; left: 2px; top: 0.7em; width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+  figure { margin: 0; display: grid; gap: 10px; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--hair); background: #f8f3ea; }
+  figcaption { color: var(--muted); font-size: 16px; max-width: 64ch; }
+  figcaption b { color: var(--ink); font-weight: 600; }
+  .pair { display: grid; gap: 18px; grid-template-columns: minmax(0, 1fr); }
+  .tag { display: inline-block; font-size: 14px; font-weight: 600; letter-spacing: 0.04em; color: var(--muted); margin-bottom: 4px; }
+  .tag.new { color: var(--gold); }
+  .phones { display: flex; gap: 14px; overflow-x: auto; padding-bottom: 8px; scroll-snap-type: x mandatory; }
+  .phones figure { flex: 0 0 min(250px, 70vw); scroll-snap-align: start; }
+  .phones figure img { border-radius: 14px; }
+  .score { display: grid; gap: 12px; padding: 22px 24px; border: 1px solid var(--hair); background: var(--paper-deep); }
+  .score .num { font-family: var(--display); font-size: 48px; line-height: 1; }
+  .score .num span { font-size: 22px; color: var(--muted); }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
+  td { padding: 8px 0; border-bottom: 1px solid var(--hair); vertical-align: top; }
+  td:first-child { width: 36%; padding-right: 12px; color: var(--muted); }
+  .scroll-note { color: var(--muted); font-size: 15px; }
+  @media (min-width: 760px) {
+    .pair { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  }
+</style>
+
+<main>
+  <header>
+    <p class="eyebrow">BiGH website · Science page · built October 26, not live</p>
+    <h1>Idea B, built for real</h1>
+    <p class="lead">These are screenshots of the real page, built and running on my computer. Dr. Liu comes first. Then his path goes down the page, one place per screen. Nothing slides sideways. Nothing is on the public site yet.</p>
+  </header>
+
+  <section>
+    <h2>Two things changed from the mockup</h2>
+    <table>
+      <tr><td>Berkeley's years</td><td>Now <b>"1994"</b>, not "1994 – 2002". The source we cite says his years in Bruce Ames's lab were 1994–1997, so "2002" was my mistake. The 2002 study is still told there, as published in 2002.</td></tr>
+      <tr><td>Today's sentence</td><td>Now <b>one line</b>. On two lines it touched the painted hills on smaller laptops.</td></tr>
+    </table>
+  </section>
+
+  <section>
+    <h2>First screen, before and after</h2>
+    <div class="pair">
+      <figure>
+        <span class="tag">BEFORE (live today)</span>
+        <img src="img/laptop-before.jpg" alt="Live Science page first screen: title, the sliding painting, a thin timeline">
+      </figure>
+      <figure>
+        <span class="tag new">AFTER (built)</span>
+        <img src="img/built-laptop-top.jpg" alt="Built page first screen: title, then Dr. Liu's photo, name and intro; the castle starts at the bottom">
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <h2>On a laptop, scrolling down</h2>
+    <figure>
+      <img src="img/built-laptop-place1.jpg" alt="Okayama: castle painting on the left, words on the right">
+      <figcaption><b>Okayama.</b> Painting on the left, words on the right.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/built-laptop-place2.jpg" alt="Berkeley: words on the left, bell tower painting on the right">
+      <figcaption><b>Berkeley, 1994.</b> Sides swap. The 2002 study is told here, where it was done.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/built-laptop-place3.jpg" alt="Salzburg: fortress and town painting on the left, words on the right">
+      <figcaption><b>Salzburg, 2025.</b> The academy honor, and the town now has a name.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/built-laptop-place4.jpg" alt="Today: wide painting of California oaks under a gold sun, with the words in the sky">
+      <figcaption><b>Today.</b> The widest painting, its words in the sky, now on one line.</figcaption>
+    </figure>
+    <p class="scroll-note">Then, unchanged: his research, health explained, the formulas (moved down here), and Ask BiGH Science.</p>
+  </section>
+
+  <section>
+    <h2>On a phone</h2>
+    <p class="scroll-note">Swipe sideways to see all five screens.</p>
+    <div class="phones" tabindex="0" aria-label="Phone screens">
+      <figure><img src="img/built-phone-top.jpg" alt="Phone, first screen: title and Dr. Liu"><figcaption><b>First screen</b></figcaption></figure>
+      <figure><img src="img/built-phone-place1.jpg" alt="Phone, Okayama"><figcaption>Okayama</figcaption></figure>
+      <figure><img src="img/built-phone-place2.jpg" alt="Phone, Berkeley"><figcaption>Berkeley</figcaption></figure>
+      <figure><img src="img/built-phone-place3.jpg" alt="Phone, Salzburg"><figcaption>Salzburg</figcaption></figure>
+      <figure><img src="img/built-phone-place4.jpg" alt="Phone, Today"><figcaption>Today</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="score">
+    <p class="num">8.5<span> / 10</span></p>
+    <p>My honest score for the built page. His path is the strongest part (9): every painting is big, matches its words, and takes turns left and right. It passed all 633 of its automatic checks on the built site, on laptops, tablets and phones.</p>
+    <p><b>What still holds it back:</b></p>
+    <ul class="points">
+      <li>The first screen is calmer than today's. On a phone it is mostly his photo; his name sits just below it.</li>
+      <li>Some words are still my drafts: the Berkeley and Salzburg sentences, and Today's line.</li>
+      <li>His path's words are English in every language, as the old timeline's were.</li>
+    </ul>
+  </section>
+</main>
