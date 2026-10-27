@@ -90,6 +90,14 @@
   word-break: auto-phrase;
 }
 
+/* The hint must not split タップ on any phone: Safari has no auto-phrase, so keep-all comes first and
+   lets it break only after 、 and 。; anywhere only if a phrase is longer than the line. */
+.research p.hint:lang(ja) {
+  word-break: keep-all;
+  word-break: auto-phrase;
+  overflow-wrap: anywhere;
+}
+
 .research span.meta {
   display: block;
   margin-top: 2px;
