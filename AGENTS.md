@@ -69,6 +69,17 @@ These sit on top of `DESIGN.md`.
   ingredients, the books running in from the page edge, Dr. Liu right, the brushed 3 × 30 = 90
   across the page, the bottle left. Phones keep one column. NuriCell only for now
   (`nuricell.module.css`); the other four product pages still put every painting on the left.
+- **NuriCell Dr. Liu: the view west (Mo picked A2, October 26, 2026).** Mo wanted the Dr. Liu
+  chapter "more fun" and better designed. Of three ideas (A the Berkeley story, B a magazine cover,
+  C a line in his own words) he picked A, then A2 of two mockups, then asked for it improved. His
+  real portrait (liu-v1, never redrawn) stands on the Berkeley hills over the bay, the Golden Gate
+  in the fog, painted in the site's grey ink (round 1's colour watercolour looked borrowed), dry
+  grass in front of his foot. From 960px one painting runs across the chapter and his name and
+  words sit in its sky; phones get their own framing (him larger, the bridge beside him). No label
+  over his name; the lead says he studied two of NuriCell's nutrients together at UC Berkeley; the
+  2002 study is told as published, with "An animal study, not a test of NuriCell." NuriCell only:
+  Nature Calm keeps the plain portrait. `people.tsx`, `nuricell.module.css`, `build_nuricell.py`
+  (`berkeley()`); mockups `reference/ink-pages/mockups/nuricell-liu/`.
 - **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
   October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
   grey "What's inside" label odd and the three grey notes under the plate messy, and the
