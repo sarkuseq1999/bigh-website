@@ -4,9 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-p18whvrnd-sarkuseq1999s-projects.vercel.app`
-(`dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`), the **production** deployment of `main` at
-`641a7519aa2f2e6a139e1a85828956fd1324ee32` (October 27, 2026, from 11:47 Pacific). Mo said to put
+The alias currently points to `bigh-website-4by02q11q-sarkuseq1999s-projects.vercel.app`
+(`dpl_HMQSjsrqSr9Xcs9Aoe6smwbrQMFK`), the **production** deployment of `main` at
+`55c250a95768084b28f39e49fa5c4c43a9512317` (October 27, 2026, from about 15:56 Pacific). Mo said
+to fix the NuriCell research hint in Japanese, which split タップ ("tap") across two lines on
+phones, and put it live. One CSS rule: the hint gets `word-break: keep-all` before `auto-phrase`,
+because Safari (WebKit 26.4) has no `auto-phrase`; keep-all lets it break only after 、 and 。.
+`55c250a` is `641a751` plus that rule and four notes commits; it was pushed to `main` as a
+fast-forward. Before the push, on the built copy (`npm run build` + `next start`, a scratch
+worktree): `qa_nuricell_ink` 443/443, `qa_home_ink` 282/282, `qa_nav` 326/326, and a hint check in
+Chromium and WebKit at 320, 360, 390, 430 and 1280 px (the line ends at 。, タップ whole; the same
+check on the old demo failed at 360 and 390 px in Chromium: "…です。タ / ップ…", "…タッ / プ…").
+After the alias update, on the public demo in fresh unauthenticated browsers: the hint check
+passed in both engines at every width, `qa_nuricell_ink` 443/443, `qa_home_ink` 282/282,
+`qa_nav` 326/326.
+
+Before that, from 11:47 to about 15:56 Pacific on October 27, 2026, the alias pointed to
+`bigh-website-p18whvrnd-sarkuseq1999s-projects.vercel.app` (`dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`),
+the **production** deployment of `main` at `641a7519aa2f2e6a139e1a85828956fd1324ee32`. Mo said to put
 the footer crane live (his pick C: the crane at rest in the grass at the FDA park sign's right,
 bending toward its poppy; the promise alone, a size smaller) "with the other waiting changes" on
 `studio`. Claude merged `origin/main` into `studio` in a scratch worktree, not the shared folder.
