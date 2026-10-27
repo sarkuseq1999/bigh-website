@@ -20,10 +20,11 @@
   text-wrap: balance;
 }
 
-/* Why, every width (Mo picked the Gold Rush lantern with the tidier words, October 26, 2026): no
-   label over the heading (why.tsx); one lead-in line in ink, on the heading's left edge (the
-   template's 22px indent is room for the opening's ink line); the brain's small 2% beside its big
-   20%, so "small brain, big energy" reads at a glance. Phones stack the two, the small one first. */
+/* Why, every width (Mo picked the tidier words with the Gold Rush lantern, then the lighthouse,
+   October 26, 2026): no label over the heading (why.tsx); one lead-in line in ink, on the heading's
+   left edge (the template's 22px indent is room for the opening's ink line); the brain's small 2%
+   beside its big 20%, so "small brain, big energy" reads at a glance. Phones stack the two, the
+   small one first. */
 .nuricell[data-look="ink"] [data-chapter="why"] h2 + p {
   max-width: 21em;
   padding-left: 0;
@@ -52,6 +53,15 @@
 @media (max-width: 599px) {
   .nuricell[data-look="ink"] [data-chapter="why"] dl {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Over its words (one column) the lighthouse stands taller than the template's 46% of the window,
+   so on a phone it spans the column and its lamp is more than a dot; the heading still shows under
+   it once it sits under the menu bar (the label over the heading is gone). */
+@media (max-width: 959px) {
+  .nuricell[data-look="ink"] [data-chapter="why"] {
+    --picture-height: 55svh;
   }
 }
 

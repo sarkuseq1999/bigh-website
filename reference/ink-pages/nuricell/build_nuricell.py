@@ -71,15 +71,16 @@ def gilded(key, width, sat_from=0.3, pad=0.04):
     return art
 
 
-# The Why chapter's lantern since October 26, 2026: a Gold Rush miner's lantern (Mo picked A of three
-# California lights; the paper lantern read as Asian). Codex paintings, not GPT Image 2.5 (prompts
-# why-goldrush-*.txt): the lit take first (an edit of the sample why-tinlantern-a2 in the crane's
-# brushwork), then the unlit take as an edit of the lit one. The paper lantern's originals stay in
-# originals/; its pictures no longer ship.
-GOLDRUSH = {"lit": "why-goldrush-lit-b5", "unlit": "why-goldrush-unlit-b5b"}
-# The lit take's light: warm (red over blue) and light (its darkest channel), so the tin's warm grey
-# ink stays out. Its biggest patch is the globe's glow; its hull, widened by GLOW_PAD (the glow bleeds
-# a little past the glass) and softened by GLOW_SOFT, is where the unlit take is used.
+# The Why chapter's light since October 26, 2026: a lighthouse on the California coast. Mo first picked
+# A of three California lights (a Gold Rush miner's lantern; the paper lantern read as Asian), saw it
+# built beside the lighthouse sample, and switched to B the same day. Codex paintings, not GPT Image
+# 2.5 (prompts why-lighthouse-*.txt): the lit take (a2, a looser repaint of a1), then the unlit take
+# as an edit of it. The paper lantern's originals stay in originals/, the Gold Rush lantern's went
+# to codes/bigh-archive/nuricell-why-unused-2026-10-26/ (outside the public repo); neither ships.
+LIGHTHOUSE = {"lit": "why-lighthouse-a2", "unlit": "why-lighthouse-unlit-a2b"}
+# The lit take's light: warm (red over blue) and light (its darkest channel), so the warm grey ink
+# stays out. Its biggest patch is the lamp's light and its beam; its hull, widened by GLOW_PAD (the
+# light bleeds a little past the glass) and softened by GLOW_SOFT, is where the unlit take is used.
 WARM, LIGHT = 10, 190
 GLOW_PAD, GLOW_SOFT = 61, 14
 LUMA = np.array([0.299, 0.587, 0.114], np.float32)
@@ -115,11 +116,12 @@ def glow_mask(a):
 
 
 def lantern():
-    """The lantern lit and unlit, cut by one box. Only the unlit take's glass is used, and in the tin's
-    own ink colour (its values kept): everywhere else both pictures are the lit take's own strokes, so
-    nothing but the light changes as it comes on."""
+    """The lighthouse lit and unlit, cut by one box. Only the unlit take's light is used (the lamp
+    room's glass and the sky where the beam was), and in the painting's own ink colour (its values
+    kept): everywhere else both pictures are the lit take's own strokes, so nothing but the light
+    changes as it comes on."""
     load = lambda name: bd.divided(Image.open(HERE / "originals" / f"{name}.png").convert("RGB"))
-    lit, unlit = load(GOLDRUSH["lit"]), load(GOLDRUSH["unlit"])
+    lit, unlit = load(LIGHTHOUSE["lit"]), load(LIGHTHOUSE["unlit"])
     if unlit.size != lit.size:
         unlit = unlit.resize(lit.size, Image.LANCZOS)
     a = np.asarray(lit).astype(np.float32)
@@ -129,15 +131,15 @@ def lantern():
     tint = (255 - a[ink].mean(axis=0)) / (255 - (a[ink] @ LUMA).mean())
     glass = 255 - (255 - u @ LUMA)[..., None] * tint
     plain = Image.fromarray(np.clip(np.rint(a * (1 - mask) + glass * mask), 0, 255).astype(np.uint8))
-    # Wider at the sides than above and below: the board's dry-brush tips run past the ink the box
-    # finds, and a cut tip would show as a straight edge.
-    (x0, _, x1, _), (_, y0, _, y1) = bd.ink_box(a.astype(np.uint8), pad=0.16), bd.ink_box(a.astype(np.uint8), pad=0.04)
+    # More air above and below than at the sides: the sea and the clouds already run to the
+    # painting's sides, and the finial needs sky over it, clear of the feathered edge.
+    (x0, _, x1, _), (_, y0, _, y1) = bd.ink_box(a.astype(np.uint8), pad=0.04), bd.ink_box(a.astype(np.uint8), pad=0.07)
     box = (x0, y0, x1, y1)
-    # The gold mask is the flame's leaf alone: the glow round it is light, not leaf.
-    lit_art = bd.art_of(bd.feathered(bd.levelled(lit.crop(box)), EDGE), f"goldrush-lit-{V}", 1100)
-    ba.gold_mask(f"goldrush-lit-{V}")
-    lit_art["gold"] = f"{URL}/goldrush-lit-{V}-gold.webp"
-    unlit_art = bd.art_of(bd.feathered(bd.levelled(plain.crop(box)), EDGE), f"goldrush-unlit-{V}", 1100)
+    # The gold mask is the lamp's leaf alone: the light round it and the beam are light, not leaf.
+    lit_art = bd.art_of(bd.feathered(bd.levelled(lit.crop(box)), EDGE), f"lighthouse-lit-{V}", 1100)
+    ba.gold_mask(f"lighthouse-lit-{V}")
+    lit_art["gold"] = f"{URL}/lighthouse-lit-{V}-gold.webp"
+    unlit_art = bd.art_of(bd.feathered(bd.levelled(plain.crop(box)), EDGE), f"lighthouse-unlit-{V}", 1100)
     return unlit_art, lit_art
 
 

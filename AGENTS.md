@@ -91,14 +91,17 @@ These sit on top of `DESIGN.md`.
   together at the foot of their side and end where Add to cart ends. All four products on the
   shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
   approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
-- **NuriCell "Tiny power plants": a Gold Rush lantern and fewer words (Mo picked A, October 26,
-  2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
+- **NuriCell "Tiny power plants": a California lighthouse and fewer words (Mo picked B, October
+  26, 2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
   the grey "Why cellular health matters" line on top strange. Of three California lights (A a Gold
-  Rush miner's lantern, B a coast lighthouse, C a San Francisco gas street lamp) he picked A; the
-  paper lantern read as Asian. Its light still comes on as you scroll. The label over the heading
-  is gone, the three paragraphs are one lead-in line on the heading's left edge (no indent), and
-  the brain's 2% is set small and grey beside a big 20% (stacked, small first, on phones). NuriCell
-  only (`why.tsx`, `nuricell.module.css`; pictures `build_nuricell.py`, Codex paintings). Mockups:
+  Rush miner's lantern, B a coast lighthouse, C a San Francisco gas street lamp) he first picked A
+  (the paper lantern read as Asian), then saw A built beside the B sample and switched to B the
+  same day. Its light still comes on as you scroll (the lamp room dark, then lit, with its beam).
+  On phones and tablets it stands taller than the template's paintings (55% of the window, not
+  46%) so its lamp is more than a dot. The label over the heading is gone, the three paragraphs are
+  one lead-in line on the heading's left edge (no indent), and the brain's 2% is set small and grey
+  beside a big 20% (stacked, small first, on phones). NuriCell only (`why.tsx`,
+  `nuricell.module.css`; pictures `build_nuricell.py`, Codex paintings). Mockups:
   `reference/ink-pages/mockups/nuricell-why/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope

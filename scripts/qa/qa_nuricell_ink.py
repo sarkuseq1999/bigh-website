@@ -12,7 +12,7 @@ Sections (all, or --only=a,b):
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
   lantern     unlit blooms, then the light comes on once with no lighter flash; reduced motion: lit
-              (the Gold Rush lantern since October 26, 2026)
+              (the lighthouse since October 26, 2026)
   nojs        with JavaScript off every painting shows and the lantern is lit
   words       every word in nuricell.ts on the page; each chapter its own painting; the four
               "More from BiGH" links
@@ -29,7 +29,8 @@ Sections (all, or --only=a,b):
               words, the lantern's fetched width, one line per Why sentence (320-1536), the phone
               lantern with its heading in view, the opening in 1440x900, Add to cart's width
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
-  why         the Why words tidied (Mo picked them with the Gold Rush lantern, October 26, 2026): no
+  why         the Why words tidied (Mo picked them with the Gold Rush lantern, October 26, 2026, then the
+              lighthouse): no
               label over the heading, one lead-in line on the heading's left edge, the 2% smaller than
               the 20% (side by side from 600px, stacked, small first, below)
   plate       What's inside tidied (Mo picked 1A, October 26, 2026): no label over the heading, the
@@ -315,8 +316,8 @@ def lantern_waits_for_its_picture(browser):
     ctx = browser.new_context(viewport={"width": 1440, "height": 900})
     page = ctx.new_page()
     held = []
-    # The lit picture itself (goldrush-lit-v1.webp, or a later name), not its gold mask.
-    lit_picture = re.compile(r"(?:lantern|goldrush)-lit-(?:core-)?v\d+\.webp")
+    # The lit picture itself (lighthouse-lit-v1.webp, or a later name), not its gold mask.
+    lit_picture = re.compile(r"(?:lantern|goldrush|lighthouse)-lit-(?:core-)?v\d+\.webp")
     page.route("**/*", lambda route: held.append(route) if lit_picture.search(route.request.url) else route.continue_())
     page.goto(BASE + PATH, wait_until="domcontentloaded")
     # Hydrated: React has attached itself to the lantern's figure.
@@ -399,16 +400,16 @@ def lantern(browser):
     after = Image.open(OUT / "lantern-lit-1440.png").convert("RGB")
     box = page.locator("[data-lantern] img").first.bounding_box()
 
-    # Mean warmth (red minus blue) over the lantern's glass (the Gold Rush lantern's globe: the middle
-    # 35-65% of the picture's width, 50-75% of its height; its tin is grey ink lit or not): its flame
-    # alone is too small to say anything. Measured October 26, 2026: 16.5 unlit, 31.2 lit.
+    # Mean warmth (red minus blue) over the lighthouse's lamp room and the light round it (52-74%
+    # of the picture's width, 7-24% of its height; the tower's cap and rail are grey ink lit or
+    # not). Measured October 26, 2026: 12.0 unlit, 38.7 lit.
     def warmth(img):
-        xs = range(int(box["x"] + box["width"] * 0.35), int(box["x"] + box["width"] * 0.65), 3)
-        ys = range(int(box["y"] + box["height"] * 0.5), int(min(box["y"] + box["height"] * 0.75, img.height)), 3)
+        xs = range(int(box["x"] + box["width"] * 0.52), int(box["x"] + box["width"] * 0.74), 3)
+        ys = range(int(box["y"] + box["height"] * 0.07), int(min(box["y"] + box["height"] * 0.24, img.height)), 3)
         px = [img.getpixel((x, y)) for x in xs for y in ys]
         return sum(p[0] - p[2] for p in px) / len(px)
 
-    check("lantern: its glass glows warmer once lit", warmth(after) > warmth(before) + 10, f"{warmth(before):.1f} -> {warmth(after):.1f}")
+    check("lantern: its lamp glows warmer once lit", warmth(after) > warmth(before) + 10, f"{warmth(before):.1f} -> {warmth(after):.1f}")
     ctx.close()
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     still = lantern_state(page)
@@ -463,7 +464,7 @@ def nuricell_strings():
 
 
 EXPECT = {
-    "why": "goldrush-unlit",
+    "why": "lighthouse-unlit",
     "inside": "capsule",
     "research": "books",
     "people": "liu-v1",
@@ -1044,7 +1045,7 @@ NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
 NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
 # The five paintings' descriptions as the page passes them (nuricell.ts), by chapter.
 ALTS = {
-    "why": "An old miner’s lantern whose light comes on, painted in ink and gold leaf",
+    "why": "A lighthouse on the California coast whose light comes on, painted in ink",
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
     "research": "Seven books as stepping stones across a calm stream, painted in ink",
     "people": "A portrait painting of Dr. Jiankang Liu in ink and colour",
@@ -1134,7 +1135,8 @@ def languages(browser):
             sum_captions_whole(browser, locale, w, h)
 
 
-# The Why words, tidied (Mo picked them with the Gold Rush lantern, October 26, 2026; mockups
+# The Why words, tidied (Mo picked them with the Gold Rush lantern, then the lighthouse, October
+# 26, 2026; mockups
 # reference/ink-pages/mockups/nuricell-why/).
 WHY_GEOMETRY = """() => {
   const c = document.querySelector('[data-chapter="why"] [data-words]');
