@@ -479,13 +479,15 @@ def people_painting(page):
     view west, his portrait at the right of a grey ink landscape: the wide framing from 960px, the
     phone framing below; the colour is measured on him (the plate's right 45%), not the grey bay."""
     selector = '[data-chapter="people"] figure[data-picture] img'
+    bring(page, selector, 160)
+    page.wait_for_timeout(400)
+    # The picture is lazy: which framing it shows is known once it has loaded.
+    page.wait_for_function(f"() => document.querySelector('{selector}').complete")
     shown = page.locator(selector).first.evaluate("img => img.currentSrc") or ""
     wide = page.viewport_size["width"] >= 960
     framing = "liu-berkeley-v" if wide else "liu-berkeley-phone-v"
     check(f"people: Dr. Liu's painting, not his photograph ({'wide' if wide else 'phone'} framing)",
           framing in shown and "jiankang-liu" not in shown, shown[-90:])
-    bring(page, selector, 160)
-    page.wait_for_timeout(400)
     box = page.locator(selector).first.bounding_box()
     vh = page.viewport_size["height"]
     top = max(box["y"], 0)
