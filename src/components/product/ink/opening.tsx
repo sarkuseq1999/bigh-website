@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { CSSProperties } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { AddToCart } from "../add-to-cart";
@@ -14,6 +14,22 @@ import styles from "./product-ink.module.css";
 // with a full stop, which a badge drops.
 const PROMISE = "45 days to decide.";
 const REFUND = "Not right for you? Send it back for a refund.";
+
+/** A dash stays with the words either side of it ("mitochondria—the"), so no line of the purpose
+ *  starts with one; the words themselves are unchanged. */
+function dashWithWord(text: string): ReactNode {
+  const parts = text.split(/(\S+—\S+)/u);
+  if (parts.length === 1) return text;
+  return parts.map((part, i) =>
+    i % 2 === 1 ? (
+      <span key={i} className={styles.nowrap}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
+}
 
 const seal = (
   <svg viewBox="0 0 20 20" width="15" height="15" aria-hidden="true" focusable="false">
@@ -98,9 +114,9 @@ export function lockupFit(left: string, right: readonly string[]) {
 // Chapter 1: the giant name parts round the real bottle, centred on the letters, on bare paper (Mo,
 // October 10: no eyebrow over the name, no ink pool under the bottle). Phones stack the name over
 // the bottle. Under it (Mo, October 12-13, after Timeline's and Seed's buy boxes): under "Nuri" the
-// headline and the purpose, which carries the same ink line as the highlights; under "Cell", the
-// highlights either side of one ink line, a "One bottle" card with the supply and the About page's
-// promise, a wide Add to cart and the refund line.
+// headline in the title face and the purpose as a large lead (October 26, "C"), ending where Add
+// to cart ends; under "Cell", the highlights either side of one ink line, a "One bottle" card with
+// the supply and the About page's promise, a wide Add to cart and the refund line.
 export function Opening({ product }: { product: ProductPage }) {
   const copy = useCopy();
   const lockup = product.nameLockup;
@@ -189,38 +205,40 @@ export function Opening({ product }: { product: ProductPage }) {
                 <span key={line}>{copy(line)}</span>
               ))}
             </p>
-            <p className={styles.text}>{copy(product.purpose)}</p>
+            <p className={styles.text}>{dashWithWord(copy(product.purpose))}</p>
           </div>
           <div className={styles.openingBuy}>
-            <ul className={styles.highlights}>
-              {product.highlights.map((item) => (
-                <li key={item}>{copy(item)}</li>
-              ))}
-            </ul>
-            <div className={styles.bottleCard}>
-              {product.ink?.supply ? (
-                <Image
-                  className={styles.bottleCardPicture}
-                  src={product.ink.supply.src}
-                  alt=""
-                  width={product.ink.supply.width}
-                  height={product.ink.supply.height}
-                  sizes="96px"
-                />
-              ) : null}
-              <p className={styles.bottleCardName}>{copy("One bottle")}</p>
-              <p className={styles.bottleCardSupply}>
-                {keepTogether(copy(product.serving.supply))}
-              </p>
-              <p className={styles.bottleCardDaily}>
-                {copy("{count} a day", { count: product.serving.capsules })}
-              </p>
-              <p className={styles.promise}>
-                {seal}
-                {copy(PROMISE).replace(/[.。]$/, "")}
-              </p>
+            <div className={styles.buyMain}>
+              <ul className={styles.highlights}>
+                {product.highlights.map((item) => (
+                  <li key={item}>{copy(item)}</li>
+                ))}
+              </ul>
+              <div className={styles.bottleCard}>
+                {product.ink?.supply ? (
+                  <Image
+                    className={styles.bottleCardPicture}
+                    src={product.ink.supply.src}
+                    alt=""
+                    width={product.ink.supply.width}
+                    height={product.ink.supply.height}
+                    sizes="96px"
+                  />
+                ) : null}
+                <p className={styles.bottleCardName}>{copy("One bottle")}</p>
+                <p className={styles.bottleCardSupply}>
+                  {keepTogether(copy(product.serving.supply))}
+                </p>
+                <p className={styles.bottleCardDaily}>
+                  {copy("{count} a day", { count: product.serving.capsules })}
+                </p>
+                <p className={styles.promise}>
+                  {seal}
+                  {copy(PROMISE).replace(/[.。]$/, "")}
+                </p>
+              </div>
+              <AddToCart wide />
             </div>
-            <AddToCart wide />
             <p className={styles.refund}>{copy(REFUND)}</p>
           </div>
         </div>

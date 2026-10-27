@@ -5,9 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (NuriCell "Tiny power plants": the
-  lighthouse and fewer words; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (product openings: the headline in Ysabeau,
+  the purpose a large lead, Mo's "C"; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): product openings, the words under the name, Mo's pick C "Title
+  face"** (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact
+  `1TNAN8z5fW6P14w7kv3QZz`). NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green
+  Bee Propolis keeps its own): the headline in Ysabeau (560; Korean, Japanese and Chinese keep the
+  title weight), the purpose a large lead in ink with no side line, and from 960px the two sit
+  together and end where Add to cart ends (the refund line sits in a subgrid row of its own). Mo
+  turned down Dr. Liu's photo there: pages without him would look lesser. On the built site
+  (`npm run build` + `next start`): `qa_nuricell_ink` 429/429 (its opening check now tests the new
+  look), and on the build before the last two small fixes (the dash kept with its word, the CJK
+  weight) `qa_opc_ink` 185/185, `qa_nature_calm_ink` 159/159, `qa_propolis_ink` 273/273,
+  `qa_turmerific_ink` 155/155, `qa_home_ink` 282/282, `qa_nav` 315/316 (the known tablet crane
+  jump). Open: on Turmerific at 1440x900 the refund line ends on the window's bottom edge; on a
+  phone its purpose runs six lines.
 - **Local, not live (October 26): NuriCell "Tiny power plants", Mo's pick B, the lighthouse**
   (mockups and the built page `reference/ink-pages/mockups/nuricell-why/`, artifact
   `LiWF3jKo2tdLH4otM1SrRc`). Mo first picked A (a Gold Rush miner's lantern), saw it built beside

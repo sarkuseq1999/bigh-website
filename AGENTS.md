@@ -94,6 +94,15 @@ These sit on top of `DESIGN.md`.
   beside a big 20% (stacked, small first, on phones). NuriCell only (`why.tsx`,
   `nuricell.module.css`; pictures `build_nuricell.py`, Codex paintings). Mockups:
   `reference/ink-pages/mockups/nuricell-why/`.
+- **Product openings, the words under the name: "Title face" (Mo picked C, October 26, 2026).**
+  Mo found the bottom-left of NuriCell's first screen weak and unfinished (grey words, a thin side
+  line, ending above the buy box). He turned down Dr. Liu's photo there: the opening is shared, and
+  pages without him (Turmerific and Propolis have no scientist chapter) would look lesser. So a fix
+  for the shared opening uses only what every product has. The headline is in Ysabeau; the purpose
+  is a large lead in ink that runs under the bottle, with no side line; from 960px the two sit
+  together at the foot of their side and end where Add to cart ends. All four products on the
+  shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
+  approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the
