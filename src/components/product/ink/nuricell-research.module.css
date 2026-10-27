@@ -85,6 +85,11 @@
   text-wrap: pretty;
 }
 
+/* Japanese breaks the questions and verdicts between phrases, as the site's titles do (ink.module.css). */
+.research :is(.q .question, p.verdict, p.sideVerdict):lang(ja) {
+  word-break: auto-phrase;
+}
+
 .research span.meta {
   display: block;
   margin-top: 2px;

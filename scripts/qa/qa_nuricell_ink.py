@@ -84,6 +84,7 @@ QUESTIONS = [
     "Does creatine help healthy people think?",
 ]
 RESEARCH_WORDS = [
+    "The research on the ingredients",
     "Each book is one study. Tap one to read it.",
     *QUESTIONS,
     "Animal study · PNAS", "Two reviews of trials", "Review · Neurochem Res", "Review · BBA",
@@ -1228,8 +1229,8 @@ NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
        "Inside many of your cells, mitochondria turn food into the energy you live on.",
        "Your brain is about 2% of your weight.", "Yet it uses about 20% of your energy.",
        "About 20 watts, day and night.", "Brain energy figures:",
-       # The research as plain questions (m930-m960, October 26, 2026), closed answers too: the
-       # chapters' textContent holds them.
+       # The research as plain questions (m930-m961, the heading too, October 26, 2026), closed
+       # answers too: the chapters' textContent holds them.
        *RESEARCH_WORDS]
 # The ingredient table's hidden header is new words too, but each also sits inside English sentences
 # the template leaves untranslated (the notes say "Ingredient research…"), so they are read from
