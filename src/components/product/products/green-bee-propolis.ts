@@ -1,4 +1,5 @@
 import { propolisArt } from "../ink/propolis-art";
+import { questionsArt } from "../ink/questions-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -131,29 +132,35 @@ const greenBeePropolis: ProductPage = {
     {
       question: "How do I take Green Bee Propolis?",
       answer: "Take 1 capsule a day, or as your healthcare professional advises.",
+      art: questionsArt.propolis.take,
     },
     {
       question: "How long does one bottle last?",
       answer: "Each bottle holds 60 vegetarian capsules: a 60-day supply at 1 capsule a day.",
+      art: questionsArt.propolis.month,
     },
     {
       question: "What is the capsule made of?",
       answer:
         "The capsule is vegetarian: hypromellose, with titanium dioxide and yellow iron oxide for its colour. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
+      art: questionsArt.propolis.capsule,
     },
     {
       question: "I’m allergic to bee products. Can I take it?",
       answer:
         "Propolis is made by bees. The label advises caution if you are allergic to bee products, so ask your doctor first.",
+      art: questionsArt.propolis.bees,
     },
     {
       question: "Has Green Bee Propolis itself been tested in a clinical trial?",
       answer:
         "The research we share is about Brazilian green propolis, not the finished product. Each study says what kind of study it was.",
+      art: questionsArt.propolis.studied,
     },
     {
       question: "Can I take it during pregnancy?",
       answer: "No. The label advises not to take it if you are pregnant or breastfeeding.",
+      art: questionsArt.propolis.pregnancy,
     },
   ],
   caution:

@@ -194,7 +194,8 @@ export type ProductPage = ProductSummary & {
    *  study (Nature Calm leads with its scientists' own research on stress). */
   researchTitle?: string;
   people: ProductPerson[];
-  faq: { question: string; answer: string }[];
+  /** `art`: the answer's painting on the ink page (Mo's pick A for the questions, October 26, 2026). */
+  faq: { question: string; answer: string; art?: InkArt }[];
   caution: string;
   /** label: under amounts; science: under ingredient roles; research: leads the studies. */
   notes: { label: string; science: string; research: string; fda: string };

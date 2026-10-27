@@ -330,17 +330,6 @@
   font-weight: 500;
 }
 
-.propolis[data-look="ink"] [id="questions"] summary {
-  min-height: 88px;
-  padding-block: 20px;
-}
-
-.propolis[data-look="ink"] [id="questions"] summary > span:first-child {
-  font-size: 20px;
-  font-weight: 450;
-  line-height: 1.4;
-}
-
 @media (min-width: 960px) {
   .propolis[data-look="ink"] [data-chapter]:not([data-chapter="overview"]) > div {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -362,17 +351,6 @@
   .propolis[data-look="ink"] :is([data-chapter="inside"], [data-chapter="daily"]) [data-words] {
     grid-column: 1;
     grid-row: 1;
-  }
-
-  .propolis[data-look="ink"] [id="questions"] > div {
-    display: grid;
-    grid-template-columns: 0.7fr 1.3fr;
-    gap: var(--gap);
-    align-items: start;
-  }
-
-  .propolis[data-look="ink"] [id="questions"] ul {
-    margin-top: 0;
   }
 }
 

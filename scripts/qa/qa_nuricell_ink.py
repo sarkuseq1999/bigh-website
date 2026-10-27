@@ -507,7 +507,16 @@ def reachable_text(page):
                   document.querySelectorAll('main details').forEach((d) => { d.open = true; }); }"""
     )
     page.wait_for_timeout(300)
-    return re.sub(r"\s+", " ", page.locator("main").inner_text())
+    # The questions show one answer at a time, each one click away: pick each and read it too.
+    answers = page.evaluate(
+        """async () => { const answers = [];
+             for (const b of document.querySelectorAll('#questions ol > li > h3 button')) {
+               if (b.getAttribute('aria-expanded') !== 'true') b.click();
+               await new Promise((r) => setTimeout(r, 60));
+               answers.push(b.closest('li').querySelector('[role=region]').innerText); }
+             return answers.join(' '); }"""
+    )
+    return re.sub(r"\s+", " ", page.locator("main").inner_text() + " " + answers)
 
 
 def words(browser, chapters=tuple(CHAPTERS)):
@@ -553,12 +562,13 @@ def words(browser, chapters=tuple(CHAPTERS)):
 AFTER_GEOMETRY = """() => {
   const left = (e) => e.getBoundingClientRect().left;
   const tops = (selector) => [...document.querySelectorAll('#more li ' + selector)].map((e) => Math.round(e.getBoundingClientRect().top));
-  const list = document.querySelector('#questions ul').getBoundingClientRect();
+  const list = document.querySelector('#questions ol').getBoundingClientRect();
+  const more = document.querySelector('#more ul').getBoundingClientRect();
   return {
     questions: left(document.querySelector('#questions h2')),
     more: left(document.querySelector('#more h2')),
     notes: left(document.querySelector('[data-notes] p')),
-    list: list.left, listWidth: list.width,
+    list: list.left, listWidth: list.width, moreWidth: more.width,
     cards: [...document.querySelectorAll('#more li')].map((e) => Math.round(e.getBoundingClientRect().top)),
     stands: tops('a > span:nth-of-type(1)'), names: tops('a > span:nth-of-type(2)'), focus: tops('a > span:nth-of-type(3)'),
     scrollW: document.documentElement.scrollWidth, innerW: innerWidth,
@@ -568,7 +578,8 @@ AFTER_GEOMETRY = """() => {
 
 def after(browser):
     """After Buy: the questions' heading, the More heading and the notes start on one left edge (the
-    wrap's); the list of questions is capped at 820px; the four cards are four across from 960px and
+    wrap's); the questions (each answer with its painting beside it from 960px, qa_questions.py)
+    span the wrap, as the cards do; the four cards are four across from 960px and
     two by two below, and in each row the bottles, the names and the focus lines line up even when a
     name wraps."""
     for w, h in [(1440, 900), (1024, 768), (964, 768), (960, 768), (390, 844)]:
@@ -576,7 +587,7 @@ def after(browser):
         g = page.evaluate(AFTER_GEOMETRY)
         edges = [g["questions"], g["more"], g["notes"], g["list"]]
         check(f"after {w}: one left edge (questions, more, notes, the list)", max(edges) - min(edges) <= 1, str([round(e, 1) for e in edges]))
-        check(f"after {w}: the list of questions is at most 820px", g["listWidth"] <= 820.5, f"{g['listWidth']:.0f}px")
+        check(f"after {w}: the questions span the wrap, as the cards do", abs(g["listWidth"] - g["moreWidth"]) <= 1, f"{g['listWidth']:.0f} vs {g['moreWidth']:.0f}px")
         per_row = 4 if w >= 960 else 2
         rows = [g["cards"][i : i + per_row] for i in range(0, len(g["cards"]), per_row)]
         check(f"after {w}: {per_row} cards a row", len(g["cards"]) == 4 and all(len(set(r)) == 1 for r in rows), str(g["cards"]))
@@ -818,11 +829,13 @@ def layout(browser):
     page.route(re.compile(r"\.(webp|png|jpg|jpeg|avif)(\?|$)|/_next/image"), lambda route: route.abort())
     page.goto(BASE + PATH, wait_until="networkidle")
     # The studies past the first five wait behind "Show all" by design (not for want of a picture):
-    # pressed, every one of them must be readable too.
+    # pressed, every one of them must be readable too. The questions' other answers wait one click
+    # away the same way (qa_questions.py picks each).
     page.evaluate("""() => document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click()""")
     page.wait_for_timeout(300)
     hidden = page.evaluate(
         """() => [...document.querySelectorAll('main h1, main h2, main p')]
+             .filter(e => !e.closest('#questions li:not([data-open]) [role=region]'))
              .filter(e => e.textContent.trim() && (e.offsetParent === null || getComputedStyle(e).visibility === 'hidden' || Number(getComputedStyle(e).opacity) < 0.9))
              .map(e => e.textContent.trim().slice(0, 30))"""
     )

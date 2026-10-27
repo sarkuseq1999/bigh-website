@@ -1,5 +1,6 @@
 import { natureCalmArt } from "../ink/nature-calm-art";
 import { nuricellArt } from "../ink/nuricell-art";
+import { questionsArt } from "../ink/questions-art";
 import type { ProductPage, ProductStudy } from "../product-types";
 import { studies } from "./studies";
 import { summaries } from "./summaries";
@@ -291,24 +292,29 @@ const natureCalm: ProductPage = {
     {
       question: "How do I take Nature Calm?",
       answer: "Take 3 capsules once a day, with or after a meal.",
+      art: questionsArt.natureCalm.take,
     },
     {
       question: "How long does one bottle last?",
       answer: "Each bottle holds 90 vegetarian capsules: a 30-day supply at 3 capsules a day.",
+      art: questionsArt.natureCalm.month,
     },
     {
       question: "What is the capsule made of?",
       answer:
         "The capsule is vegetable cellulose. The other ingredients are rice flour, silicon dioxide, magnesium stearate and cellulose.",
+      art: questionsArt.natureCalm.capsule,
     },
     {
       question: "Has Nature Calm itself been tested in a clinical trial?",
       answer:
         "The research we share is about stress and about Nature Calm’s ingredients, not the finished product. Each study says whether it was done in people or in animals.",
+      art: questionsArt.natureCalm.studied,
     },
     {
       question: "Can I take it with medicines or other supplements?",
       answer: "Ask your doctor first, especially if you have a health condition or take medicines.",
+      art: questionsArt.natureCalm.doctor,
     },
   ],
   caution:
