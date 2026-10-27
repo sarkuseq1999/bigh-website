@@ -105,14 +105,21 @@ const nuricell: ProductPage = {
         height: 768,
         alt: "Portrait of Dr. Jiankang Liu",
       },
+      // The view west (Mo picked A2, October 26, 2026): his portrait on the Berkeley hills over the
+      // bay, the Golden Gate in the fog; the words tell where his work on two of NuriCell's
+      // nutrients was done. Liu et al., PNAS 2002 (PMID 11854529): first author at UC Berkeley,
+      // Bruce Ames senior; old rats fed acetyl-L-carnitine and/or R-alpha-lipoic acid. His years in
+      // Ames's laboratory were 1994-1997 (science-content.ts), so the study is told as published.
       painting: {
-        ...nuricellArt.liu,
-        alt: "A portrait painting of Dr. Jiankang Liu in ink and colour",
+        ...nuricellArt.liuBerkeley,
+        alt: "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and colour",
       },
+      paintingPhone: nuricellArt.liuBerkeleyPhone,
+      lead: "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
       lines: [
-        "Dr. Liu is an internationally recognized scientist in mitochondrial biology and aging. His research explores the connections between cellular energy, nutrition, and how we age.",
-        "As BiGH’s Chief Scientific Advisor, he brings decades of scientific experience to our purpose: helping people stay sharp, stay active, and live fully.",
+        "His study from Bruce Ames’s laboratory, published in 2002, gave acetyl-L-carnitine and alpha-lipoic acid to older animals. Both are in NuriCell, which he formulated.",
       ],
+      note: "An animal study, not a test of NuriCell.",
     },
   ],
   faq: [

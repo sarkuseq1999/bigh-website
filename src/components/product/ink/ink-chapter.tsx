@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image, { getImageProps } from "next/image";
 import type { CSSProperties, ReactNode, Ref } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
@@ -97,6 +97,7 @@ export function InkFigure({
   attrs,
   eager = false,
   sizes,
+  phone,
   children,
 }: {
   art: InkArt;
@@ -108,6 +109,9 @@ export function InkFigure({
   eager?: boolean;
   /** The picture's `sizes` when a page draws it at another size than the template's. */
   sizes?: string;
+  /** The same painting framed for one column, with its `sizes` there (NuriCell's Dr. Liu): `art`
+   *  is then used from 960px only. */
+  phone?: { art: InkArt; sizes: string };
   /** Layers drawn over the painting, inside its blend group (the lantern's light). */
   children?: ReactNode;
 }) {
@@ -115,22 +119,38 @@ export function InkFigure({
   return (
     <figure
       className={styles.figure}
-      style={{ ["--aspect" as string]: art.width / art.height } as CSSProperties}
+      style={
+        {
+          ["--aspect" as string]: art.width / art.height,
+          ...(phone ? { ["--aspect-phone" as string]: phone.art.width / phone.art.height } : {}),
+        } as CSSProperties
+      }
       data-picture=""
       {...attrs}
     >
       <span className={styles.body}>
-        <Image
-          ref={imgRef}
-          className={styles.art}
-          src={art.src}
-          alt={copy(alt)}
-          width={art.width}
-          height={art.height}
-          sizes={sizes ?? pictureSizes(art)}
-          loading={eager ? "eager" : undefined}
-          data-bloom="waiting"
-        />
+        {phone ? (
+          <FramedPicture
+            art={art}
+            sizes={sizes ?? pictureSizes(art)}
+            phone={phone}
+            alt={copy(alt)}
+            eager={eager}
+            imgRef={imgRef}
+          />
+        ) : (
+          <Image
+            ref={imgRef}
+            className={styles.art}
+            src={art.src}
+            alt={copy(alt)}
+            width={art.width}
+            height={art.height}
+            sizes={sizes ?? pictureSizes(art)}
+            loading={eager ? "eager" : undefined}
+            data-bloom="waiting"
+          />
+        )}
         {art.gold ? (
           <span
             className={base.gold}
@@ -143,6 +163,54 @@ export function InkFigure({
         <figcaption className={`${base.caption} ${styles.caption}`}>{copy(caption)}</figcaption>
       ) : null}
     </figure>
+  );
+}
+
+/** Two framings of one painting (Next's art direction, getImageProps): `art` from 960px, where the
+ *  chapters are two columns, `phone.art` below. One <img>, so the bloom and the alt are one. */
+function FramedPicture({
+  art,
+  sizes,
+  phone,
+  alt,
+  eager,
+  imgRef,
+}: {
+  art: InkArt;
+  sizes: string;
+  phone: { art: InkArt; sizes: string };
+  alt: string;
+  eager: boolean;
+  imgRef?: Ref<HTMLImageElement>;
+}) {
+  const loading = eager ? "eager" : undefined;
+  const { props: wide } = getImageProps({
+    src: art.src,
+    alt,
+    width: art.width,
+    height: art.height,
+    sizes,
+    loading,
+  });
+  const { props: narrow } = getImageProps({
+    src: phone.art.src,
+    alt,
+    width: phone.art.width,
+    height: phone.art.height,
+    sizes: phone.sizes,
+    loading,
+  });
+  return (
+    <picture className={styles.framed}>
+      <source
+        media="(min-width: 960px)"
+        srcSet={wide.srcSet}
+        sizes={wide.sizes}
+        width={art.width}
+        height={art.height}
+      />
+      <img {...narrow} ref={imgRef} className={styles.art} alt={alt} data-bloom="waiting" />
+    </picture>
   );
 }
 
