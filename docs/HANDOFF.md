@@ -5,11 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (the product openings' release notes, the
-  Title face entry below marked live). October 26: NuriCell research, tap a book (local, not
+- **Last updated:** October 27, 2026, by Claude Code (About's bigger circle merged into studio,
+  local). Earlier the same day: the product openings' release notes, the
+  Title face entry below marked live. October 26: NuriCell research, tap a book (local, not
   pushed). Earlier the same day: Science, one place per screen, put live on its own; the tablet
   menu's crane eases with the fold (local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): About, a bigger circle and no gold leaf (Mo picked A twice).**
+  The opening circle fills the first screen and "Be in Good Health." is written inside it (on a
+  phone the title sits inside on three lines, the lead under the circle). The gold leaf that fell
+  onto the circle is gone (Mo found its fall and shine cartoonish; the opening's gold is the sunlit
+  hilltop). Layout B, a bigger circle with the words under it, was built at a temporary
+  `/about-below` to compare and removed after Mo's pick. `circle.module.css`, `about-ink.tsx`,
+  `let-the-circle-go.ts`; mockups and the built shots `reference/ink-pages/mockups/about-circle-size/`,
+  artifact `CC6pZFonqYvRfZnJEB6g57`. Built site (`npm run build` + `next start`): `qa_about`
+  404/404 (new `circle_layout` section), `qa_home_ink` 282/282, `qa_nav` 315/316 (the known
+  tablet crane jump); lint and type-check clean.
 - **Local, not live (October 26): NuriCell research, Mo's pick A, "tap a book, read its study"**
   (mockup and the built page's shots `reference/ink-pages/mockups/nuricell-research/`, artifact
   `UFqCskQg1VCPiKy8ZTTVLk`; the draft rounds in `codes/bigh-archive/nuricell-research-mockup-2026-10-26/`).
