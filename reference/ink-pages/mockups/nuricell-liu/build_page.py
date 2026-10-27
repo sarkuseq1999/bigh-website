@@ -14,7 +14,7 @@ from PIL import Image
 
 HERE = Path(__file__).parent
 SHOTS = Path(sys.argv[1])
-NAMES = ["now-desktop", "a1-desktop", "a1-phone", "a2-desktop", "a2-phone", "a2v2b-desktop", "a2v2b-phone"]
+NAMES = ["now-desktop", "a2v2b-desktop", "built-desktop", "built-phone", "built-wide", "built-small"]
 
 html = (HERE / "page.template.html").read_text(encoding="utf-8")
 for name in NAMES:

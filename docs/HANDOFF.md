@@ -8,6 +8,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 - **Last updated:** October 26, 2026, by Claude Code (the tablet menu's crane eases with the
   fold; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
+  Berkeley story, then A2 of two mockups, then round 2 of A2; mockups and the built page's shots
+  `reference/ink-pages/mockups/nuricell-liu/`, artifact `W7qmqUj4RNiCVLmtk94j5a`). His real
+  portrait (liu-v1) stands on the Berkeley hills over the bay, the Golden Gate in the fog, painted
+  in grey ink, dry grass in front of his foot. From 960px one painting runs across the chapter
+  (as wide as the window, at most 1.8 × (window height - 140px), centred) and his name and words
+  sit in its sky, ending above its land; phones get their own framing (`paintingPhone`, Next art
+  direction in `ink-chapter.tsx`'s `FramedPicture`). No label over his name; a lead, one line on
+  the 2002 study (told as published from Ames's lab: his years there were 1994-1997) and the note
+  "An animal study, not a test of NuriCell." (m907-m910, drafts). Plates `liu-berkeley-v3`,
+  `liu-berkeley-phone-v3` from `build_nuricell.py`'s `berkeley()` (Codex originals
+  `liu-berkeley-west-ink-v2b`, `liu-berkeley-grass-v1`; v2a a spare). Nature Calm keeps its plain
+  portrait and label. Built site (`npm run build` + `next start`, combined with the questions work
+  at d15db52): `qa_nuricell_ink` 430/430, `qa_nature_calm_ink` 159/159; earlier build `qa_home_ink`
+  282/282, `qa_nav` 315/316 (the tablet crane jump, since fixed in f9c1132). Not pushed.
 - **Local, not live (October 26): the tablet menu's crane eases with the fold** (Mo said to fix
   the jump; before/after page `J5z9H46J76J8t2uM7nZqkf`). On a tablet the crane takes the room
   left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
