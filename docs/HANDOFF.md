@@ -5,9 +5,25 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (product openings: the headline in Ysabeau,
-  the purpose a large lead, Mo's "C"; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (Science: Dr. Liu first, then his path one
+  place per screen; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): Science, Mo's pick B, "one place per screen"** (mockups and the
+  built page's shots `reference/ink-pages/mockups/science-path/2026-10-26/` and `.../built/`,
+  artifact `9jBznqoXRwUacxeKv2P8AP`). Mo liked the paintings but found the sideways handscroll
+  "feels like a draft". The page opens on the title and Dr. Liu (photo, name, intro; his numbers
+  row is gone, his path tells it), then his path down the page: Okayama (painting left), Berkeley
+  1994 (right, with the 2002 study), Salzburg 2025 (left), Today (wide, one line in the sky by the
+  gold sun); then research, health explained, the formulas (moved down), Ask. Paintings cut from
+  the old band by `build_science.py` (`PLACES`, phone cuts too); `path.tsx`; the handscroll's
+  `journey.tsx` and `use-journey.ts` are deleted. Berkeley says 1994, not the mockup's 1994-2002
+  (the faculty profile dates his time in Ames's lab 1994-1997). The path's words are English in
+  every language, as the old stops were. `qa_science_ink` rewritten for the path (its journey,
+  rooms and last-resort checks are gone). On the built site (`npm run build` + `next start`):
+  `qa_science_ink` 633/633, `check_science_art.py` all pass, `qa_nav` 315/316 (the known tablet
+  crane jump), `qa_home_ink` 282/282. `qa_science_links.py` crashes before checking anything: it still
+  clicks the Science drop-down that became a plain link earlier on October 26 (not this change;
+  not fixed).
 - **Local, not live (October 26): product openings, the words under the name, Mo's pick C "Title
   face"** (mockups `reference/ink-pages/mockups/nuricell-hero-left/`, artifact
   `1TNAN8z5fW6P14w7kv3QZz`). NuriCell, OPC, Nature Calm and Turmerific (the shared opening; Green
@@ -291,7 +307,7 @@ Every page is in Ink & Gold:
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 21)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 21)  |
 | Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 21) |
-| Science              | Dr. Liu's life as a handscroll                                                           | `qa_science_ink` 1279/1279 (Oct 21)   |
+| Science              | Dr. Liu's life as a handscroll (local: his path, one place per screen, Oct 26)           | `qa_science_ink` 1279/1279 (Oct 21)   |
 | Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 21)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and
