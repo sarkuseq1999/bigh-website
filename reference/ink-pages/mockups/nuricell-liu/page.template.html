@@ -4,8 +4,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;650&family=Instrument+Sans:wght@400;500;600&display=swap">
 <style>
-  /* Layout: one quiet column like a page proof; each version is a sheet with its desktop shot,
-     then its phone shot beside the score. Rice paper and sumi ink, one gold mark for the pick. */
+  /* Layout: one quiet column like a page proof; the improved A2 first as a sheet (laptop shot, then
+     the phone shot beside what changed), then round 1 and today for comparison. Rice paper and
+     sumi ink, one gold mark for the current version. */
   :root {
     --paper: #f3efe6;
     --sheet: #faf8f3;
@@ -41,7 +42,6 @@
   p { margin: 0; max-width: 62ch; }
   .intro { display: grid; gap: 12px; }
   .intro p { color: var(--grey); }
-  .pick { color: var(--ink); font-weight: 600; }
   .sheet {
     background: var(--sheet);
     border: 1px solid var(--rule);
@@ -56,12 +56,12 @@
     font: 600 13px/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase;
     color: var(--gold); border: 1px solid currentColor; border-radius: 999px; padding: 6px 10px;
   }
-  .lede { color: var(--grey); }
   figure { margin: 0; display: grid; gap: 8px; }
   figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
   figcaption { font-size: 14px; color: var(--grey); }
   .pair { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 28px; align-items: start; }
-  .notes { display: grid; gap: 14px; min-width: 0; }
+  .notes { display: grid; gap: 16px; min-width: 0; }
+  .notes h3 { font: 600 15px/1.2 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--grey); margin: 0; }
   .score { font-family: var(--title); font-size: 40px; font-weight: 650; line-height: 1; }
   .score small { font-size: 18px; color: var(--grey); font-weight: 500; }
   ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
@@ -70,68 +70,51 @@
   .words .n { font-family: var(--title); font-size: 28px; font-weight: 650; }
   .words .lead { font-size: 21px; }
   .words .small { font-size: 15px; color: var(--grey); }
-  .now { display: grid; gap: 10px; }
-  .now figure { max-width: 720px; }
+  .compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
+  .compare-wrap { display: grid; gap: 14px; }
   @media (max-width: 720px) {
-    .pair { grid-template-columns: minmax(0, 1fr); }
+    .pair, .compare { grid-template-columns: minmax(0, 1fr); }
     .pair figure { max-width: 320px; }
   }
 </style>
 
 <main>
   <section class="intro">
-    <h1>Dr. Liu's section: the Berkeley story</h1>
-    <p>Idea A, two ways. Both use his real portrait and two new paintings of the Berkeley hills. The words are the same in both.</p>
-    <p class="pick">My pick: A2.</p>
-  </section>
-
-  <section class="sheet">
-    <div class="head"><h2>A1. Hills behind him</h2></div>
-    <p class="lede">The hills and the bay sit behind his shoulders, like an old portrait. The layout stays as it is today.</p>
-    <figure>
-      <img src="{{a1-desktop}}" alt="A1 on a laptop: the words on the left, Dr. Liu's portrait on the right with golden hills and the bay behind his shoulders" width="1440" height="900">
-      <figcaption>Laptop, 1440 × 900</figcaption>
-    </figure>
-    <div class="pair">
-      <figure>
-        <img src="{{a1-phone}}" alt="A1 on a phone: the portrait with hills behind, then the name and words" width="780" height="1688">
-        <figcaption>Phone</figcaption>
-      </figure>
-      <div class="notes">
-        <div class="score">8<small> / 10</small></div>
-        <ul>
-          <li>Calm and classic. The new words are much clearer than today's.</li>
-          <li>Holds it back: the landscape is small. From a distance it looks a lot like today.</li>
-        </ul>
-      </div>
-    </div>
+    <h1>Dr. Liu's section: A2, improved</h1>
+    <p>Round 2 of "the view west". Same idea and same words, painted again so it belongs on the site.</p>
   </section>
 
   <section class="sheet mine">
-    <div class="head"><h2>A2. The view west</h2><span class="tag">My pick</span></div>
-    <p class="lede">One wide painting across the whole section. The bay and the Golden Gate in fog run under the words; he stands on the hill at the right.</p>
+    <div class="head"><h2>A2, round 2</h2><span class="tag">New</span></div>
     <figure>
-      <img src="{{a2-desktop}}" alt="A2 on a laptop: the words in the sky at the top left, the bay, fog and Golden Gate below them, Dr. Liu on a golden hill at the right" width="1440" height="900">
+      <img src="{{a2v2b-desktop}}" alt="Round 2 on a laptop: the name and words in the sky at the top left, the bay and a small Golden Gate in grey ink fog below, Dr. Liu larger on the right with dry grass in front of him" width="1440" height="900">
       <figcaption>Laptop, 1440 × 900</figcaption>
     </figure>
     <div class="pair">
       <figure>
-        <img src="{{a2-phone}}" alt="A2 on a phone: the bay and the portrait edge to edge, then the name and words" width="780" height="1688">
+        <img src="{{a2v2b-phone}}" alt="Round 2 on a phone: the portrait large, the Golden Gate in fog at the left, grass at his feet, then the name and words" width="780" height="1688">
         <figcaption>Phone</figcaption>
       </figure>
       <div class="notes">
-        <div class="score">8.5<small> / 10</small></div>
+        <h3>What changed</h3>
         <ul>
-          <li>The painting fills the section, so the empty gap is gone.</li>
-          <li>The Golden Gate says "California" at a glance. It's the real view west from the Berkeley hills.</li>
-          <li>Holds it back: his portrait is a little smaller than today's. On a phone it's less dramatic than on a laptop.</li>
+          <li><strong>Painted in the site's grey ink</strong>, with mist, like the homepage. Round 1 was a colour watercolour that looked borrowed.</li>
+          <li><strong>He's bigger</strong>, a little larger than today's portrait.</li>
+          <li><strong>He stands in the grass</strong> instead of floating over the hill.</li>
+          <li><strong>The Golden Gate is clearer</strong>: real towers and cables, rising out of the fog.</li>
+          <li><strong>More air</strong> above his name, and the whole section fits on one laptop screen.</li>
+          <li><strong>Phone:</strong> the picture runs edge to edge, so he's large and the bridge still shows.</li>
+        </ul>
+        <div class="score">9<small> / 10</small></div>
+        <ul>
+          <li>Holds it back: the hills read grey more than golden. And it stands still; nothing moves yet.</li>
         </ul>
       </div>
     </div>
   </section>
 
   <section class="sheet">
-    <h2>The new words, in both</h2>
+    <h2>The words (unchanged)</h2>
     <div class="words">
       <div class="n">Dr. Jiankang Liu</div>
       <div class="small">Chief Scientific Advisor, BiGH</div>
@@ -139,17 +122,19 @@
       <p>In Bruce Ames’s laboratory, his 2002 study gave acetyl-L-carnitine and alpha-lipoic acid to older animals. Both are in NuriCell, which he formulated.</p>
       <div class="small">An animal study, not a test of NuriCell.</div>
     </div>
-    <ul>
-      <li>Checked against the study itself (PNAS, 2002): Dr. Liu is first author, at UC Berkeley, with Bruce Ames.</li>
-      <li>The small label over his name is gone, as on the other NuriCell chapters you changed today.</li>
-    </ul>
   </section>
 
-  <section class="now">
-    <h2>Today, for comparison</h2>
-    <figure>
-      <img src="{{now-desktop}}" alt="The section as it is today: words on the left, the portrait alone on the right" width="1440" height="900">
-      <figcaption>Live section today</figcaption>
-    </figure>
+  <section class="compare-wrap">
+    <h2>Before</h2>
+    <div class="compare">
+      <figure>
+        <img src="{{a2-desktop}}" alt="A2 round 1: the same layout with a colour watercolour landscape and a smaller portrait" width="1440" height="900">
+        <figcaption>A2, round 1</figcaption>
+      </figure>
+      <figure>
+        <img src="{{now-desktop}}" alt="The section as it is today: words on the left, the portrait alone on the right" width="1440" height="900">
+        <figcaption>Live section today</figcaption>
+      </figure>
+    </div>
   </section>
 </main>

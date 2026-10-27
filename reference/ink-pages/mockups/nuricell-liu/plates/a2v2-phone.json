@@ -1,0 +1,48 @@
+{
+ "portrait": "C:/Users/mcbig/Documents/codes/bigh-website/public/images/products/nuricell/ink/liu-v1.webp",
+ "mask": "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/2edca760-c12f-449a-bde8-256296e87f33/scratchpad/liu-mask.png",
+ "landscape": "C:/Users/mcbig/Documents/codes/bigh-website/reference/ink-pages/nuricell/originals/liu-berkeley-west-ink-v2a.png",
+ "out": "C:/Users/mcbig/AppData/Local/Temp/claude/C--Users-mcbig-Documents-codes-bigh-website/2edca760-c12f-449a-bde8-256296e87f33/scratchpad/comp/liu-berkeley-a2v2-phone.png",
+ "canvas": [
+  1500,
+  1600
+ ],
+ "land": {
+  "width": 2200,
+  "x": 0,
+  "y": 137,
+  "sat": 1.0,
+  "own_top": 0.3,
+  "fade": {
+   "left": 0.05,
+   "right": 0.02,
+   "top": 0,
+   "bottom": 0.1
+  }
+ },
+ "figure": {
+  "width": 1050,
+  "x": 450,
+  "y": 110,
+  "fade_bottom": 0.12
+ },
+ "front": {
+  "path": "C:/Users/mcbig/Documents/codes/bigh-website/reference/ink-pages/nuricell/originals/liu-berkeley-grass-v1.png",
+  "width": 1300,
+  "x": 300,
+  "y": 760,
+  "strength": 0.85,
+  "fade": {
+   "from": 0.25,
+   "to": 1.0,
+   "soft": 0.08,
+   "holes": [
+    [
+     0.36,
+     0.59
+    ]
+   ],
+   "bottom": 0.04
+  }
+ }
+}

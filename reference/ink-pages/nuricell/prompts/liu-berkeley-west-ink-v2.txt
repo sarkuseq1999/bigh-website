@@ -1,0 +1,15 @@
+NuriCell, chapter 5 (Dr. Liu), A2 "the view west", round 2 (Mo: A2 is the right direction, improve it; October 26, 2026).
+Background only: Dr. Liu's real portrait painting (liu-v1) is stood in front of it afterwards; his face is never generated.
+Codex built-in image generation, run with codex exec. Round 1 (liu-berkeley-west-a1) was a tidy colour watercolour; this asks for the site's loose grey ink.
+
+A loose sumi-e ink-wash landscape painted on plain white paper, wide format (landscape, about 3:2), in grey and black ink only, with a very faint warm straw wash on the nearest hillside and nowhere else. The hand of a quick, confident ink-and-mist painting: wet soft edges, ink bleeding into the paper, dry-brush streaks, very few strokes and lots of bare paper. The more it looks like a painting, the better.
+
+The place is California: the view west from the Berkeley hills over San Francisco Bay.
+
+Composition:
+- Right 40%: the near hillside rising from the bottom centre up to the right edge, its ridge about 55% of the way up at the right edge, painted with a few broad wet ink strokes and dry-brush grass, with three or four small dark ink dabs for oak trees on the slope.
+- Left 60%: in the lower middle, the bay as a pale grey wash that dissolves into bare-paper fog; the far shore as soft, pale grey ridges half lost in the mist.
+- Far left, tiny and faint: the two towers of the Golden Gate Bridge rising out of the fog, only three or four light grey strokes.
+- The upper half of the picture is empty white paper. Mist (bare paper) dissolves every edge; nothing ends in a hard line.
+
+No people, no buildings other than the faint bridge towers, no boats, no sun, no gold, no text, no signature, no seal or stamp, no frame or border. Not photo-real, not a detailed drawing. No Asian elements: no pagodas, no characters, no pine trees on rocks.

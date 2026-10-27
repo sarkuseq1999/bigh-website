@@ -84,10 +84,51 @@ def main() -> None:
     h = min(ph - sy0, ch - dy0)
     full_p[dy0 : dy0 + h, dx0 : dx0 + w] = prgb[sy0 : sy0 + h, sx0 : sx0 + w]
     full_m[dy0 : dy0 + h, dx0 : dx0 + w] = pm[sy0 : sy0 + h, sx0 : sx0 + w]
+    # Optional: his painting dries out toward the canvas's foot (when it runs past the bottom edge).
+    fb = int(fig.get("fade_bottom", 0) * ch)
+    if fb:
+        fy_fig = ramp(ch, fb, True)
+        full_p = 255.0 - (255.0 - full_p) * fy_fig[:, None, None]
+        full_m = full_m * fy_fig[:, None]
 
     # Where he stands the landscape gives way to paper; then his painting multiplies over it.
     ink *= (1.0 - full_m)[..., None]
     canvas = (255.0 - ink) * full_p / 255.0
+
+    # Optional front layer (grass in front of his base), multiplied over everything.
+    front = spec.get("front")
+    if front:
+        fimg = Image.open(front["path"]).convert("RGB")
+        fw = int(front["width"])
+        fh = round(fimg.height * fw / fimg.width)
+        frgb = saturate(divide_paper(np.asarray(fimg.resize((fw, fh), Image.LANCZOS))), front.get("sat", 1.0))
+        fink = 255.0 - frgb
+        fink[fink.max(axis=2) < 8] = 0
+        fink *= front.get("strength", 1.0)
+        layer = np.zeros((ch, cw, 3), np.float32)
+        x0, y0 = int(front["x"]), int(front["y"])
+        sx0, sy0 = max(0, -x0), max(0, -y0)
+        dx0, dy0 = max(0, x0), max(0, y0)
+        w = min(fw - sx0, cw - dx0)
+        h = min(fh - sy0, ch - dy0)
+        layer[dy0 : dy0 + h, dx0 : dx0 + w] = fink[sy0 : sy0 + h, sx0 : sx0 + w]
+        ff = front.get("fade", {})
+        gx = ramp(cw, int(ff.get("left", 0) * cw)) * ramp(cw, int(ff.get("right", 0) * cw), True)
+        gy = ramp(ch, int(ff.get("top", 0) * ch)) * ramp(ch, int(ff.get("bottom", 0) * ch), True)
+        # A horizontal window: full strength between from/to (canvas fractions), fading over `soft`.
+        if "from" in ff:
+            xs = np.arange(cw, dtype=np.float32) / cw
+            soft = ff.get("soft", 0.1)
+            win = np.clip((xs - (ff["from"] - soft)) / soft, 0, 1) * np.clip(((ff.get("to", 1.0) + soft) - xs) / soft, 0, 1)
+            gx = gx * win
+        # Holes: [x0, x1] canvas fractions kept clear (his hands), softened by `soft`.
+        for h0, h1 in ff.get("holes", []):
+            xs = np.arange(cw, dtype=np.float32) / cw
+            soft = ff.get("soft", 0.1)
+            inside = np.clip((xs - (h0 - soft)) / soft, 0, 1) * np.clip(((h1 + soft) - xs) / soft, 0, 1)
+            gx = gx * (1.0 - inside)
+        layer *= (gy[:, None] * gx[None, :])[..., None]
+        canvas = canvas * (255.0 - layer) / 255.0
     out = Image.fromarray(np.clip(canvas, 0, 255).astype(np.uint8))
     out.save(spec["out"], quality=92) if spec["out"].endswith(".webp") else out.save(spec["out"])
     print(spec["out"], out.size)
