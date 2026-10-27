@@ -163,8 +163,7 @@ const nuricell: ProductPage = {
     label: "Amounts per serving of 3 capsules, as printed on the NuriCell label.",
     science:
       "Each line describes what the nutrient does in the body in general. Ingredient research does not establish the effects of the finished product.",
-    research:
-      "These studies are about NuriCell’s ingredients, not the finished product. Each one says what kind of study it was.",
+    research: "These studies are about NuriCell’s ingredients, not the finished product.",
     fda: "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.",
   },
   signature: "capsule",

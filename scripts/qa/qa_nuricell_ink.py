@@ -18,7 +18,11 @@ Sections (all, or --only=a,b):
               "More from BiGH" links
   after       the questions, More from BiGH and the notes on one left edge; the four cards four across
               from 960px, two by two below, their rows lined up
-  sticky      with every study open a sticky painting stays inside its chapter
+  sticky      with the longest answer open the sticky books stay inside their chapter
+  research    the books open their studies (Mo picked A, October 26, 2026): six plain questions, the
+              first open; a book opens its question and the other books fade (the 2003 pair lights
+              two); a question lights its book, pointing previews one; on a phone a tapped book
+              brings its question up under the menu bar; reduced motion: no fades
   sum         the painted sum matches the serving, a caption under each number; set in type
               (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
   buy         Add to cart: the kit's hover, a pill on focus
@@ -69,6 +73,32 @@ OTHERS = ["green-bee-propolis", "advanced-opc", "turmerific", "nature-calm"]
 # scripts/qa/qa_propolis_ink.py, qa_turmerific_ink.py, qa_nature_calm_ink.py, qa_opc_ink.py).
 OLD_TEMPLATE: list[str] = []
 CHAPTERS = ["overview", "why", "inside", "research", "people", "daily", "buy"]
+# The research's six plain questions, oldest first, and every other word of its answers
+# (nuricell-research.tsx; Mo picked A, "tap a book, read its study", October 26, 2026).
+QUESTIONS = [
+    "Can two nutrients help an aging brain?",
+    "Do they help old cells make energy?",
+    "Does acetyl-L-carnitine help people with memory problems?",
+    "What does lipoic acid do in an aging brain?",
+    "What do we know about lipoic acid as a supplement?",
+    "Does creatine help healthy people think?",
+]
+RESEARCH_WORDS = [
+    "Each book is one study. Tap one to read it.",
+    *QUESTIONS,
+    "Animal study · PNAS", "Two reviews of trials", "Review · Neurochem Res", "Review · BBA",
+    "Review of trials · Exp Gerontol",
+    "In old rats, yes.", "Scientists disagree.", "In animals, it helped memory.",
+    "How it works is clearer than what it does for people.", "Maybe, for short-term memory and reasoning.",
+    "Old rats fed acetyl-L-carnitine and lipoic acid did better on memory tests",
+    "Their cells made energy better and showed less wear",
+    "Pooled trials", "A small benefit.", "Over a placebo, in people with mild memory problems",
+    "Cochrane review", "No clear benefit.", "On memory tests, in people with Alzheimer’s.",
+    "Both looked at patients, not healthy adults.", "Dr. Liu’s own overview:",
+    "A review of lab, animal and human studies.", "Six small trials, 281 people.",
+]
+# Which books each question lights (1-7, nearest first): the two 2003 reviews share one question.
+BOOKS_OF = [[1], [2], [3, 4], [5], [6], [7]]
 # Next's prefetched-CSS warning is not an error of this page (qa_about.py's PREFETCH_CSS).
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
 results = []
@@ -430,15 +460,23 @@ def nojs(browser):
     check("nojs: every painting shown", shown and not hidden, ", ".join(hidden[:4]))
     lit = page.evaluate("() => Number(getComputedStyle(document.querySelector('[data-lantern] [data-lit]')).opacity)")
     check("nojs: the lantern lit", lit > 0.95, str(lit))
-    # The studies past the first few wait behind "Show all" only where scripts run.
-    listed = page.evaluate(
-        """() => [...document.querySelectorAll('[data-chapter="research"] li[data-study]')].map(l => getComputedStyle(l).display !== 'none')"""
+    # The books and the questions' toggles need scripts: without them every answer shows, every book
+    # stays dark, and the hint ("Tap one to read it") and the toggles step aside.
+    research = page.evaluate(
+        """() => { const c = document.querySelector('[data-chapter="research"]');
+                  const shown = (e) => e && getComputedStyle(e).display !== 'none' && getComputedStyle(e).visibility === 'visible';
+                  const answers = [...c.querySelectorAll('[data-study] [id^="research-answer-"]')];
+                  return { rows: c.querySelectorAll('li[data-study]').length,
+                           answers: answers.filter((a) => shown(a) && a.getBoundingClientRect().height > 40).length,
+                           dim: [...c.querySelectorAll('[data-dim]')].filter(shown).length,
+                           hint: shown([...c.querySelectorAll('[data-words] p')].find((p) => p.textContent.startsWith('Each book'))),
+                           marks: [...c.querySelectorAll('[data-study] button [aria-hidden]')].filter(shown).length }; }"""
     )
-    button = page.evaluate(
-        """() => { const b = document.querySelector('[data-chapter="research"] button[aria-expanded]');
-                  return b ? getComputedStyle(b).display : 'none'; }"""
+    check(
+        "nojs: six questions, every answer readable, every book dark, no hint or toggles",
+        research["rows"] == 6 and research["answers"] == 6 and research["dim"] == 0 and not research["hint"] and research["marks"] == 0,
+        str(research),
     )
-    check("nojs: every study listed, no dead Show all button", len(listed) == 7 and all(listed) and button == "none", f"{sum(listed)}/{len(listed)} shown; button {button}")
     ctx.close()
 
 
@@ -499,16 +537,19 @@ def people_painting(page):
 
 def reachable_text(page):
     """Every word a visitor can read: innerText, which leaves out whatever is not rendered
-    (display:none, hidden), after pressing "Show all" and opening every question and study, each
-    one click away (a closed <details> is not rendered either, so its answer would otherwise be
-    missed; a string hidden for good still is)."""
-    page.evaluate(
-        """() => { document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click();
-                  document.querySelectorAll('main details').forEach((d) => { d.open = true; }); }"""
-    )
+    (display:none, hidden), after opening every question, each one click away (a closed <details>
+    is not rendered either, so its answer would otherwise be missed; a string hidden for good still
+    is). The research opens one answer at a time, so each is opened in turn and read."""
+    answers = []
+    for row in page.locator('[data-chapter="research"] li[data-study]').all():
+        if row.locator("button").first.get_attribute("aria-expanded") != "true":
+            row.locator("button").first.click()
+            page.wait_for_timeout(700)
+        answers.append(row.inner_text())
+    page.evaluate("() => document.querySelectorAll('main details').forEach((d) => { d.open = true; })")
     page.wait_for_timeout(300)
     # The questions show one answer at a time, each one click away: pick each and read it too.
-    answers = page.evaluate(
+    questions = page.evaluate(
         """async () => { const answers = [];
              for (const b of document.querySelectorAll('#questions ol > li > h3 button')) {
                if (b.getAttribute('aria-expanded') !== 'true') b.click();
@@ -516,7 +557,7 @@ def reachable_text(page):
                answers.push(b.closest('li').querySelector('[role=region]').innerText); }
              return answers.join(' '); }"""
     )
-    return re.sub(r"\s+", " ", page.locator("main").inner_text() + " " + answers)
+    return re.sub(r"\s+", " ", page.locator("main").inner_text() + " " + " ".join(answers) + " " + questions)
 
 
 def words(browser, chapters=tuple(CHAPTERS)):
@@ -535,7 +576,7 @@ def words(browser, chapters=tuple(CHAPTERS)):
         "inside": ["Inside every capsule, four ingredients.", "Acetyl-L-carnitine", "Creatine", "Alpha-lipoic acid",
                    "Choline", "Why these four work together", "Fuel in, energy out", "Energy on hand",
                    "Two halves of a messenger"],
-        "research": ["The research on the ingredients", "Show all 7 studies"],
+        "research": ["The research on the ingredients", "Each book is one study. Tap one to read it.", *QUESTIONS],
         # No label over his name on NuriCell (Mo picked A2, October 26, 2026); a lead and a note.
         "people": ["Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "Portrait painting",
                    "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
@@ -552,6 +593,9 @@ def words(browser, chapters=tuple(CHAPTERS)):
     everything = reachable_text(page) + " " + re.sub(r"\s+", " ", page.locator("footer").last.inner_text())
     missing = [s for s in nuricell_strings() if re.sub(r"\s+", " ", s) not in everything]
     check("words: every string of nuricell.ts on the page", not missing, f"{len(missing)} missing: {missing[:5]}")
+    if "research" in chapters:
+        unread = [s for s in RESEARCH_WORDS if s not in everything]
+        check("words research: every question and answer readable, one click away", not unread, ", ".join(unread[:3]))
     for slug in OTHERS:
         check(f"words: More from BiGH links {slug}", page.locator(f'#more a[href$="/products/{slug}"]').count() == 1)
     ctx.close()
@@ -716,15 +760,15 @@ def buy_check(browser):
 
 
 def sticky(browser):
-    """With every study open, a sticky painting stays between the top of its spread and the bottom of
-    its words (not just inside the chapter's padding), and it really does pin: it rides down beside
-    the words while they scroll. The research's books; the capsule stands still in the middle of its
-    ingredients since October 19 (nuricell.module.css), so What's inside has no sticky painting."""
+    """With the longest answer open (the 2003 pair: the words a few hundred px taller than the books),
+    a sticky painting stays between the top of its spread and the bottom of its words (not just
+    inside the chapter's padding), and it really does pin: it rides down beside the words while they
+    scroll. The research's books; the capsule stands still in the middle of its ingredients since
+    October 19 (nuricell.module.css), so What's inside has no sticky painting."""
     for w, h in [(1440, 900), (1024, 768)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
-        page.locator('[data-chapter="research"] button[aria-expanded]').click()
-        for summary in page.locator('[data-chapter="research"] summary').all():
-            summary.click()
+        page.locator('[data-chapter="research"] li[data-study]').nth(2).locator("button").first.click()
+        page.wait_for_timeout(300)
         for chapter in ("research",):
             bring(page, f'[data-chapter="{chapter}"]', 0)
             tall = page.evaluate(f"() => document.querySelector('[data-chapter=\"{chapter}\"]').getBoundingClientRect().height")
@@ -746,6 +790,122 @@ def sticky(browser):
             check(f"sticky {w}x{h} {chapter}: the painting stays beside its words", worst >= -1, f"worst {worst:.1f}px")
             check(f"sticky {w}x{h} {chapter}: it pins while the words scroll", rode >= 100, f"rode {rode:.0f}px")
         ctx.close()
+
+
+# The middle of a book's tap area in window px: its clip-path's points, averaged.
+BOOK_AT = """(n) => {
+  const b = document.querySelector('[data-chapter="research"] [data-book="' + n + '"]');
+  const r = b.getBoundingClientRect();
+  const pts = [...b.style.clipPath.matchAll(/([\\d.]+)% ([\\d.]+)%/g)].map((m) => [+m[1], +m[2]]);
+  const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
+  const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
+  return [r.left + (r.width * cx) / 100, r.top + (r.height * cy) / 100];
+}"""
+# Which questions are open (0-5) and which books are dark (1-7, not faded under paper).
+RESEARCH_STATE = """() => { const c = document.querySelector('[data-chapter="research"]');
+  return { open: [...c.querySelectorAll('li[data-study] > button')].flatMap((b, i) => b.getAttribute('aria-expanded') === 'true' ? [i] : []),
+           dark: [...c.querySelectorAll('[data-fade]')].flatMap((f) => f.hasAttribute('data-dim') ? [] : [Number(f.dataset.fade)]) }; }"""
+
+
+def research(browser):
+    """Tap a book, read its study (Mo picked A, October 26, 2026)."""
+    ctx, page, _, errors = opened(browser, 1440, 900)
+    bring(page, '[data-chapter="research"] h2', 110)
+    page.mouse.move(1430, 890)
+    page.wait_for_timeout(900)
+    state = lambda: page.evaluate(RESEARCH_STATE)
+    rest = state()
+    check("research: at rest the first question is open, its book dark, the other six faded", rest == {"open": [0], "dark": [1]}, str(rest))
+    rows = page.locator('[data-chapter="research"] li[data-study]')
+    check("research: six plain questions", rows.count() == 6 and rows.locator("button").first.inner_text().count("?") == 1)
+    names = page.locator('[data-chapter="research"] [data-book]').evaluate_all(
+        "els => els.map(e => [e.getAttribute('aria-label'), e.getAttribute('aria-controls')])"
+    )
+    want = [[q, f"research-answer-{i}"] for i, books in enumerate(BOOKS_OF) for q in [QUESTIONS[i]] * len(books)]
+    check("research: each book named by its year and question, and points at its answer",
+          [[n.split(": ", 1)[-1], c] for n, c in names] == want, str(names[:2]))
+    own = [
+        n for n in range(1, 8)
+        if page.evaluate(f"([x, y]) => document.elementFromPoint(x, y)?.dataset.book", page.evaluate(BOOK_AT, n)) != str(n)
+    ]
+    check("research 1440: each book's middle is its own button", not own, f"books {own} covered")
+    x, y = page.evaluate(BOOK_AT, 3)
+    page.mouse.click(x, y)
+    page.mouse.move(1430, 890)
+    page.wait_for_timeout(1200)
+    pair = state()
+    links = page.locator('[data-chapter="research"] li[data-study][data-open] a').evaluate_all(
+        "els => els.filter(e => getComputedStyle(e).visibility === 'visible' && e.getBoundingClientRect().height > 0).length"
+    )
+    faded = page.evaluate("() => Number(getComputedStyle(document.querySelector('[data-fade=\"1\"]')).opacity)")
+    check("research: a 2003 book opens the shared question and lights both books, two studies to read",
+          pair == {"open": [2], "dark": [3, 4]} and links == 2, f"{pair}, {links} links")
+    check("research: a faded book sits under a little paper (0.6)", abs(faded - 0.6) < 0.02, f"{faded:.2f}")
+    x, y = page.evaluate(BOOK_AT, 6)
+    page.mouse.move(x, y, steps=6)
+    page.wait_for_timeout(300)
+    peek = state()
+    page.mouse.move(1430, 890, steps=6)
+    page.wait_for_timeout(300)
+    back = state()
+    check("research: pointing at a book previews it, leaving it returns to the open study",
+          peek == {"open": [2], "dark": [6]} and back == pair, f"{peek} then {back}")
+    question = rows.nth(5).locator("button").first
+    question.hover()
+    page.wait_for_timeout(300)
+    lit = state()
+    question.click()
+    page.wait_for_timeout(700)
+    clicked = state()
+    check("research: pointing at a question lights its book; clicking opens it",
+          lit["dark"] == [7] and clicked == {"open": [5], "dark": [7]}, f"{lit} then {clicked}")
+    question.click()
+    page.mouse.move(1430, 890)
+    page.wait_for_timeout(700)
+    shut = state()
+    check("research: closing the open question leaves every book dark", shut == {"open": [], "dark": list(range(1, 8))}, str(shut))
+    page.locator('[data-chapter="research"] [data-book="5"]').focus()
+    page.wait_for_timeout(200)
+    focused = state()
+    page.keyboard.press("Enter")
+    page.wait_for_timeout(700)
+    pressed = state()
+    check("research: a book reached by keyboard lights, and Enter opens its question",
+          focused["dark"] == [5] and pressed["open"] == [3], f"{focused} then {pressed}")
+    check("research 1440: no console errors", not errors, "; ".join(errors[:2]))
+    ctx.close()
+
+    # A phone: the questions sit under the painting, so a tapped book brings its question up to the
+    # top, just under the menu bar, once the rows have settled.
+    ctx = browser.new_context(viewport={"width": 390, "height": 844}, device_scale_factor=2, is_mobile=True, has_touch=True)
+    page = ctx.new_page()
+    page.goto(BASE + PATH, wait_until="networkidle")
+    page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
+    bring(page, '[data-chapter="research"] figure', 90)
+    page.wait_for_timeout(600)
+    own = [
+        n for n in range(1, 8)
+        if page.evaluate(f"([x, y]) => document.elementFromPoint(x, y)?.dataset.book", page.evaluate(BOOK_AT, n)) != str(n)
+    ]
+    check("research 390: each book's middle is its own button", not own, f"books {own} covered")
+    x, y = page.evaluate(BOOK_AT, 6)
+    page.touchscreen.tap(x, y)
+    page.wait_for_timeout(1800)
+    top, bar = page.evaluate(
+        """() => [document.querySelectorAll('[data-chapter="research"] li[data-study]')[4].getBoundingClientRect().top,
+                  document.querySelector('header').getBoundingClientRect().bottom]"""
+    )
+    tapped = page.evaluate(RESEARCH_STATE)
+    check("research 390: a tapped book opens its question and brings it up under the menu bar",
+          tapped["open"] == [4] and bar <= top <= bar + 40, f"{tapped}; row top {top:.0f}, bar {bar:.0f}")
+    ctx.close()
+
+    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    still = page.evaluate(
+        "() => [...document.querySelectorAll('[data-chapter=\"research\"] [data-fade], [data-chapter=\"research\"] [id^=\"research-answer-\"]')].map(e => getComputedStyle(e).transitionDuration)"
+    )
+    check("research: reduced motion, the books and answers change without fading", still and all(set(d.split(", ")) == {"0s"} for d in still), str(sorted(set(still))))
+    ctx.close()
 
 
 SIZES = [(1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800), (900, 900), (768, 1024), (390, 844), (360, 780)]
@@ -802,39 +962,33 @@ def layout(browser):
             page.wait_for_timeout(150)
             page.screenshot(path=str(OUT / f"layout-{w}-{n:02d}.png"))
             y, n = y + h, n + 1
-        # Every target, including those inside closed questions and studies (each study's "Read the
-        # study" link) and the studies behind "Show all": all opened first (after the screenshots,
-        # which show the page as it arrives).
-        page.evaluate(
-            """() => { document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click();
-                 document.querySelectorAll('main details').forEach((d) => { d.open = true; }); }"""
-        )
+        # Every target, including those inside closed questions (opened first, after the screenshots,
+        # which show the page as it arrives) and each study's "Read the study" link, measured whether
+        # its answer is open or not (a closed answer keeps its link's size, out of sight).
+        page.evaluate("() => document.querySelectorAll('main details').forEach((d) => { d.open = true; })")
         page.wait_for_timeout(300)
         targets = page.evaluate(
             """() => [...document.querySelectorAll('main button, main summary, main a')]
                  .filter(e => e.offsetParent).map(e => e.getBoundingClientRect().height)"""
         )
         tiny = sum(1 for height in targets if height < 44)
-        links, studies = page.evaluate(
-            "() => [[...document.querySelectorAll('[data-study] details a')].filter(e => e.offsetParent).length, document.querySelectorAll('[data-study]').length]"
-        )
+        links = page.evaluate("() => [...document.querySelectorAll('[data-study] a')].filter(e => e.offsetParent).length")
         check(
-            f"{tag}: targets 44px or taller (questions and studies open)",
-            tiny == 0 and studies > 0 and links == studies,
-            f"{tiny} small of {len(targets)}; {links} of {studies} study links measured",
+            f"{tag}: targets 44px or taller (questions open, all seven study links)",
+            tiny == 0 and links == 7,
+            f"{tiny} small of {len(targets)}; {links} of 7 study links measured",
         )
         ctx.close()
     ctx = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="reduce")
     page = ctx.new_page()
     page.route(re.compile(r"\.(webp|png|jpg|jpeg|avif)(\?|$)|/_next/image"), lambda route: route.abort())
     page.goto(BASE + PATH, wait_until="networkidle")
-    # The studies past the first five wait behind "Show all" by design (not for want of a picture):
-    # pressed, every one of them must be readable too. The questions' other answers wait one click
-    # away the same way (qa_questions.py picks each).
-    page.evaluate("""() => document.querySelector('[data-chapter="research"] button[aria-expanded="false"]')?.click()""")
-    page.wait_for_timeout(300)
+    # The research's closed answers and the questions' other answers wait one click away by design
+    # (not for want of a picture), so they are left out (qa_questions.py picks each question); the
+    # open ones count.
     hidden = page.evaluate(
         """() => [...document.querySelectorAll('main h1, main h2, main p')]
+             .filter(e => !e.closest('[data-chapter="research"] li[data-study]:not([data-open])'))
              .filter(e => !e.closest('#questions li:not([data-open]) [role=region]'))
              .filter(e => e.textContent.trim() && (e.offsetParent === null || getComputedStyle(e).visibility === 'hidden' || Number(getComputedStyle(e).opacity) < 0.9))
              .map(e => e.textContent.trim().slice(0, 30))"""
@@ -1073,10 +1227,13 @@ NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
        # The Why chapter's tidied words (m901-m906, October 26, 2026).
        "Inside many of your cells, mitochondria turn food into the energy you live on.",
        "Your brain is about 2% of your weight.", "Yet it uses about 20% of your energy.",
-       "About 20 watts, day and night.", "Brain energy figures:"]
-# The ingredient table's hidden header and the research chapter's label and "Show all" button are new
-# words too, but each also sits inside English sentences the template leaves untranslated (the notes
-# say "Ingredient research…"), so they are read from their own elements.
+       "About 20 watts, day and night.", "Brain energy figures:",
+       # The research as plain questions (m930-m960, October 26, 2026), closed answers too: the
+       # chapters' textContent holds them.
+       *RESEARCH_WORDS]
+# The ingredient table's hidden header is new words too, but each also sits inside English sentences
+# the template leaves untranslated (the notes say "Ingredient research…"), so they are read from
+# their own elements.
 NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
 # The five paintings' descriptions as the page passes them (nuricell.ts), by chapter.
 ALTS = {
@@ -1150,20 +1307,11 @@ def languages(browser):
         check(f"languages {locale}: ingredient table headers translated", len(headers) == 3 and not set(headers) & set(NEW_TABLE_HEADERS), str(headers))
         captions = [c.strip() for c in page.locator("[data-sum] [data-sum-label]").all_inner_texts()]
         check(f"languages {locale}: the three sum captions (days too) translated", len(captions) == 3 and not set(captions) & set(SUM_CAPTIONS), str(captions))
-        label = page.locator('[data-chapter="research"] [data-words] > p').first.text_content().strip()
-        button = page.locator('[data-chapter="research"] button[aria-expanded]')
-        shown = button.text_content()
-        check(f"languages {locale}: the research label and 'Show all' translated", label != "The research" and "Show all" not in shown, f"{label} / {shown}")
         check(f"languages {locale}: no raw {{placeholder}} in a chapter", not PLACEHOLDER.search(text), str(PLACEHOLDER.findall(text)[:3]))
-        button.click()
-        page.wait_for_timeout(300)
-        fewer = button.text_content()
-        check(
-            f"languages {locale}: 'Show fewer studies' translated",
-            button.get_attribute("aria-expanded") == "true" and fewer != shown and "Show fewer" not in fewer and "studies" not in fewer,
-            f"{shown} -> {fewer}",
-        )
-        check(f"languages {locale}: no raw {{placeholder}} with every study shown", not PLACEHOLDER.search(chapters()), str(PLACEHOLDER.findall(chapters())[:3]))
+        # The books are named by their questions for screen readers: "2002: <question>", translated.
+        books = page.locator('[data-chapter="research"] [data-book]').evaluate_all("els => els.map(e => e.getAttribute('aria-label'))")
+        english = [b for b in books if b.split(": ", 1)[-1] in QUESTIONS]
+        check(f"languages {locale}: the seven books' names translated", len(books) == 7 and not english, ", ".join(english[:2]) or books[0])
         ctx.close()
     for locale in ["jp", "cns"]:
         for w, h in [(1440, 900), (390, 844)]:
@@ -1390,6 +1538,7 @@ SECTIONS = {
     "words": words,
     "after": after,
     "sticky": sticky,
+    "research": research,
     "sum": sum_check,
     "buy": buy_check,
     "layout": layout,

@@ -17,7 +17,7 @@ const FIRST = 5;
 // first like the Chapters template's timeline; each opens with its round toggle to what it found
 // and a link to it.
 export function Research({ product }: { product: InkProduct }) {
-  // Mockup: NuriCell's books as buttons and its studies as plain questions.
+  // NuriCell's books are buttons and its studies plain questions (Mo picked A, October 26, 2026).
   if (isNuricell(product)) return <NuricellResearch product={product} />;
   return <TemplateResearch product={product} />;
 }

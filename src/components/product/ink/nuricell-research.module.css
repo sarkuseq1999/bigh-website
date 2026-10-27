@@ -1,5 +1,5 @@
-/* Mockup (October 26, 2026): NuriCell's research as plain questions, each tied to its book in the
-   painting. Every selector starts at the chapter's own class, so it outranks the template's
+/* NuriCell's research as plain questions, each tied to its book in the painting (Mo picked A,
+   October 26, 2026). Every selector starts at the chapter's own class, so it outranks the template's
    .page rules (0,2,1) whatever order the stylesheets load in. */
 
 /* The books that are not the open study's fade back under a little paper, each through its own
@@ -113,15 +113,23 @@
   rotate: 45deg;
 }
 
-/* The answer opens by growing its row (0fr to 1fr), at the page's slow pace. */
+/* The answer opens by growing its row (0fr to 1fr), at the page's slow pace. A closed one is hidden
+   (out of the tab order and from screen readers) once it has folded away. */
 .research div.answer {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.6s var(--ease);
+  visibility: hidden;
+  transition:
+    grid-template-rows 0.6s var(--ease),
+    visibility 0s linear 0.6s;
 }
 
 .research div.answer[data-open] {
   grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 0.6s var(--ease),
+    visibility 0s;
 }
 
 .research div.answerClip {
@@ -191,9 +199,25 @@
   }
 }
 
+/* Without scripts the books and the round toggles do nothing: every answer shows, every book stays
+   dark, and the hint and the toggles step aside. */
+@media (scripting: none) {
+  .research div.answer {
+    grid-template-rows: 1fr;
+    visibility: visible;
+  }
+
+  .research span.fade,
+  .research p.hint,
+  .research .q .mark {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .research span.fade,
   .research div.answer,
+  .research div.answer[data-open],
   .research .q .mark {
     transition: none;
   }

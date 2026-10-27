@@ -9,9 +9,10 @@ import { nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 import s from "./nuricell-research.module.css";
 
-// Mockup (October 26, 2026): NuriCell's research as plain questions, each tied to its book in the
-// painting. Seven books, seven studies, nearest (oldest) first; the two 2003 reviews share one
-// question and light their two books together. Answers follow each paper's abstract (PubMed).
+// NuriCell's research as plain questions, each tied to its book in the painting (Mo picked A, "tap a
+// book, read its study", October 26, 2026; mockups: reference/ink-pages/mockups/nuricell-research/).
+// Seven books, seven studies, nearest (oldest) first; the two 2003 reviews share one question and
+// light their two books together. Answers follow each paper's abstract (PubMed).
 
 const P = "https://pubmed.ncbi.nlm.nih.gov/";
 
@@ -203,6 +204,7 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
             <span
               key={`fade-${i}`}
               className={s.fade}
+              data-fade={i + 1}
               data-dim={lit && !lit.includes(i) ? "" : undefined}
               style={
                 {
@@ -220,7 +222,7 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
                 type="button"
                 className={s.book}
                 style={{ clipPath: tapArea(outline, i < 2 ? 1.05 : 1.6) }}
-                aria-label={`${ROWS[row].year}: ${ROWS[row].question}`}
+                aria-label={`${ROWS[row].year}: ${copy(ROWS[row].question)}`}
                 aria-controls={`research-answer-${row}`}
                 aria-expanded={open === row}
                 onClick={() => openFromBook(row)}
@@ -238,10 +240,8 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
       <h2 id={titleId("research")} className={`${base.display} ${styles.heading}`}>
         {copy(product.researchTitle ?? "The research on the ingredients")}
       </h2>
-      <p className={styles.small}>
-        These studies are about NuriCell’s ingredients, not the finished product.
-      </p>
-      <p className={s.hint}>Each book is one study. Tap one to read it.</p>
+      <p className={styles.small}>{copy(product.notes.research)}</p>
+      <p className={s.hint}>{copy("Each book is one study. Tap one to read it.")}</p>
       <ul className={s.rows} data-studies="">
         {ROWS.map((row, i) => {
           const isOpen = open === i;
@@ -265,8 +265,8 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
               >
                 <span className={s.year}>{row.year}</span>
                 <span>
-                  <span className={s.question}>{row.question}</span>
-                  <span className={s.meta}>{row.meta}</span>
+                  <span className={s.question}>{copy(row.question)}</span>
+                  <span className={s.meta}>{copy(row.meta)}</span>
                 </span>
                 <span className={s.mark} aria-hidden="true">
                   +
@@ -276,14 +276,13 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
                 id={`research-answer-${i}`}
                 className={s.answer}
                 data-open={isOpen ? "" : undefined}
-                inert={!isOpen}
               >
                 <div className={s.answerClip}>
                   <div className={s.answerBody}>
-                    <p className={s.verdict}>{row.verdict}</p>
+                    <p className={s.verdict}>{copy(row.verdict)}</p>
                     {row.findings.length === 1 ? (
                       <>
-                        <p className={s.line}>{row.findings[0].line}</p>
+                        <p className={s.line}>{copy(row.findings[0].line)}</p>
                         <ReadLink url={row.findings[0].url} />
                       </>
                     ) : (
@@ -291,14 +290,14 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
                         <div className={s.sides}>
                           {row.findings.map((finding) => (
                             <div key={finding.url} className={s.side}>
-                              <span className={s.meta}>{finding.label}</span>
-                              <p className={s.sideVerdict}>{finding.verdict}</p>
-                              <p className={s.line}>{finding.line}</p>
+                              <span className={s.meta}>{copy(finding.label ?? "")}</span>
+                              <p className={s.sideVerdict}>{copy(finding.verdict)}</p>
+                              <p className={s.line}>{copy(finding.line)}</p>
                               <ReadLink url={finding.url} />
                             </div>
                           ))}
                         </div>
-                        {row.after ? <p className={s.line}>{row.after}</p> : null}
+                        {row.after ? <p className={s.line}>{copy(row.after)}</p> : null}
                       </>
                     )}
                   </div>
