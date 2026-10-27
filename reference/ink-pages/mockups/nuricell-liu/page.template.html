@@ -1,0 +1,155 @@
+<title>Berkeley Story Mockups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;650&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one quiet column like a page proof; each version is a sheet with its desktop shot,
+     then its phone shot beside the score. Rice paper and sumi ink, one gold mark for the pick. */
+  :root {
+    --paper: #f3efe6;
+    --sheet: #faf8f3;
+    --ink: #1c1a17;
+    --grey: #5f5a52;
+    --rule: #d9d2c4;
+    --gold: #9a7420;
+    --title: "Ysabeau", "Iowan Old Style", Georgia, serif;
+    --body: "Instrument Sans", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17; --sheet: #23211d; --ink: #ece7dc; --grey: #b0a99c; --rule: #3a3731; --gold: #d2a94d;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17; --sheet: #23211d; --ink: #ece7dc; --grey: #b0a99c; --rule: #3a3731; --gold: #d2a94d;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.55 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 56px;
+  }
+  main { max-width: 1080px; margin: 0 auto; display: grid; gap: 40px; }
+  h1, h2 { font-family: var(--title); font-weight: 650; text-wrap: balance; margin: 0; line-height: 1.1; }
+  h1 { font-size: clamp(30px, 5vw, 46px); }
+  h2 { font-size: clamp(26px, 3.6vw, 36px); }
+  p { margin: 0; max-width: 62ch; }
+  .intro { display: grid; gap: 12px; }
+  .intro p { color: var(--grey); }
+  .pick { color: var(--ink); font-weight: 600; }
+  .sheet {
+    background: var(--sheet);
+    border: 1px solid var(--rule);
+    border-radius: 6px;
+    padding: clamp(16px, 3vw, 32px);
+    display: grid;
+    gap: 22px;
+  }
+  .sheet.mine { border-color: var(--gold); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; }
+  .tag {
+    font: 600 13px/1 var(--body); letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--gold); border: 1px solid currentColor; border-radius: 999px; padding: 6px 10px;
+  }
+  .lede { color: var(--grey); }
+  figure { margin: 0; display: grid; gap: 8px; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 4px; background: #fff; }
+  figcaption { font-size: 14px; color: var(--grey); }
+  .pair { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: 28px; align-items: start; }
+  .notes { display: grid; gap: 14px; min-width: 0; }
+  .score { font-family: var(--title); font-size: 40px; font-weight: 650; line-height: 1; }
+  .score small { font-size: 18px; color: var(--grey); font-weight: 500; }
+  ul { margin: 0; padding-left: 1.1em; display: grid; gap: 6px; }
+  li { max-width: 60ch; }
+  .words { display: grid; gap: 10px; border-left: 2px solid var(--ink); padding-left: 16px; }
+  .words .n { font-family: var(--title); font-size: 28px; font-weight: 650; }
+  .words .lead { font-size: 21px; }
+  .words .small { font-size: 15px; color: var(--grey); }
+  .now { display: grid; gap: 10px; }
+  .now figure { max-width: 720px; }
+  @media (max-width: 720px) {
+    .pair { grid-template-columns: minmax(0, 1fr); }
+    .pair figure { max-width: 320px; }
+  }
+</style>
+
+<main>
+  <section class="intro">
+    <h1>Dr. Liu's section: the Berkeley story</h1>
+    <p>Idea A, two ways. Both use his real portrait and two new paintings of the Berkeley hills. The words are the same in both.</p>
+    <p class="pick">My pick: A2.</p>
+  </section>
+
+  <section class="sheet">
+    <div class="head"><h2>A1. Hills behind him</h2></div>
+    <p class="lede">The hills and the bay sit behind his shoulders, like an old portrait. The layout stays as it is today.</p>
+    <figure>
+      <img src="{{a1-desktop}}" alt="A1 on a laptop: the words on the left, Dr. Liu's portrait on the right with golden hills and the bay behind his shoulders" width="1440" height="900">
+      <figcaption>Laptop, 1440 × 900</figcaption>
+    </figure>
+    <div class="pair">
+      <figure>
+        <img src="{{a1-phone}}" alt="A1 on a phone: the portrait with hills behind, then the name and words" width="780" height="1688">
+        <figcaption>Phone</figcaption>
+      </figure>
+      <div class="notes">
+        <div class="score">8<small> / 10</small></div>
+        <ul>
+          <li>Calm and classic. The new words are much clearer than today's.</li>
+          <li>Holds it back: the landscape is small. From a distance it looks a lot like today.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet mine">
+    <div class="head"><h2>A2. The view west</h2><span class="tag">My pick</span></div>
+    <p class="lede">One wide painting across the whole section. The bay and the Golden Gate in fog run under the words; he stands on the hill at the right.</p>
+    <figure>
+      <img src="{{a2-desktop}}" alt="A2 on a laptop: the words in the sky at the top left, the bay, fog and Golden Gate below them, Dr. Liu on a golden hill at the right" width="1440" height="900">
+      <figcaption>Laptop, 1440 × 900</figcaption>
+    </figure>
+    <div class="pair">
+      <figure>
+        <img src="{{a2-phone}}" alt="A2 on a phone: the bay and the portrait edge to edge, then the name and words" width="780" height="1688">
+        <figcaption>Phone</figcaption>
+      </figure>
+      <div class="notes">
+        <div class="score">8.5<small> / 10</small></div>
+        <ul>
+          <li>The painting fills the section, so the empty gap is gone.</li>
+          <li>The Golden Gate says "California" at a glance. It's the real view west from the Berkeley hills.</li>
+          <li>Holds it back: his portrait is a little smaller than today's. On a phone it's less dramatic than on a laptop.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="sheet">
+    <h2>The new words, in both</h2>
+    <div class="words">
+      <div class="n">Dr. Jiankang Liu</div>
+      <div class="small">Chief Scientific Advisor, BiGH</div>
+      <div class="lead">At UC Berkeley, he studied two of NuriCell’s nutrients together.</div>
+      <p>In Bruce Ames’s laboratory, his 2002 study gave acetyl-L-carnitine and alpha-lipoic acid to older animals. Both are in NuriCell, which he formulated.</p>
+      <div class="small">An animal study, not a test of NuriCell.</div>
+    </div>
+    <ul>
+      <li>Checked against the study itself (PNAS, 2002): Dr. Liu is first author, at UC Berkeley, with Bruce Ames.</li>
+      <li>The small label over his name is gone, as on the other NuriCell chapters you changed today.</li>
+    </ul>
+  </section>
+
+  <section class="now">
+    <h2>Today, for comparison</h2>
+    <figure>
+      <img src="{{now-desktop}}" alt="The section as it is today: words on the left, the portrait alone on the right" width="1440" height="900">
+      <figcaption>Live section today</figcaption>
+    </figure>
+  </section>
+</main>
