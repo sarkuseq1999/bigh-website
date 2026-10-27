@@ -102,8 +102,12 @@
     --liu-width: min(100vw, calc((100svh - 140px) * 1.8));
     --liu-height: calc(var(--liu-width) / 1.8);
     --liu-caption: 34px;
+    --liu-pad: clamp(32px, 3.9vw, 64px);
     position: relative;
     padding-block: 0;
+    /* A deep link lands his name just under the settled bar, like every chapter's first words: the
+       chapter has no padding here, the words' own top padding stands in for it. */
+    scroll-margin-top: calc(108px - 150px - var(--liu-pad));
   }
 
   .nuricell[data-look="ink"] [data-chapter="people"] > div {
@@ -127,7 +131,7 @@
   .nuricell[data-look="ink"] [data-chapter="people"] [data-words] {
     position: relative;
     z-index: 1;
-    padding-top: clamp(32px, 3.9vw, 64px);
+    padding-top: var(--liu-pad);
     padding-bottom: calc(var(--liu-height) * 0.45 + var(--liu-caption));
   }
 
