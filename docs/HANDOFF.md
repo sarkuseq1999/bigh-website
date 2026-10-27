@@ -23,7 +23,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `circle_layout` section), `qa_home_ink` 282/282, `qa_nav` 326/326; lint and type-check clean.
   `qa_fda` stops at Turmerific, which never goes network-idle on a local `next start` (old, not
   this change).
-- **Local, not live (October 26): NuriCell research, Mo's pick A, "tap a book, read its study"**
+- **Live (October 27): NuriCell research, Mo's pick A, "tap a book, read its study"**
   (mockup and the built page's shots `reference/ink-pages/mockups/nuricell-research/`, artifact
   `UFqCskQg1VCPiKy8ZTTVLk`; the draft rounds in `codes/bigh-archive/nuricell-research-mockup-2026-10-26/`).
   Mo asked for the research list to be more fun to read and found the small "The research" label
@@ -38,8 +38,13 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   site at db2b938 (`npm run build` + `next start`): `qa_nuricell_ink` 443/443 (a new research
   section), `qa_questions` 403/403, `qa_home_ink` 282/282, `qa_nav` 326/326; the other four
   products' language checks 16/16 each on the build just before (without the product questions).
-  Open: native check of m930-m961; the far books are small
-  to tap on a phone (the questions are the easy tap).
+  Mo said to put it live on its own (October 27); it went out first in another session's go-live
+  merge of studio (`main` `641a751`, production `dpl_EvL92fanN6vxLecZp21Hu8PWHkYy`, the demo alias
+  on it), so the separate release copy was not pushed. On the public demo: `qa_nuricell_ink`
+  443/443 (the research section 14/14); screenshots in English, Korean and Japanese matched the
+  local build. Open: native check of m930-m961; the far books are small to tap on a phone (the
+  questions are the easy tap); on a Japanese phone the hint breaks inside タップ ("tap"; the hint
+  is not in the `auto-phrase` rule).
 - **Local, not live (October 26): NuriCell Dr. Liu, "the view west"** (Mo picked idea A, the
   Berkeley story, then A2 of two mockups, then round 2 of A2; mockups and the built page's shots
   `reference/ink-pages/mockups/nuricell-liu/`, artifact `W7qmqUj4RNiCVLmtk94j5a`). His real
