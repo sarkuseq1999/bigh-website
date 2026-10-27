@@ -166,9 +166,13 @@ export function NavInscription({
     scroller.querySelectorAll("[data-sheet-fold]").forEach((fold) => observer.observe(fold));
     return () => observer.disconnect();
   }, []);
+  const craneRoom = useRef<HTMLSpanElement>(null);
+  const easeCrane = useCraneRoom(sheet, craneRoom, menuOpen);
   const unfold = (id: NavPanelId, word: HTMLElement) => {
+    const next = fold === id ? null : id;
+    easeCrane(next);
     setByHand(true);
-    setFold(fold === id ? null : id);
+    setFold(next);
     held.current = { word, at: word.getBoundingClientRect().top, until: performance.now() + 900 };
   };
   const [wasOpen, setWasOpen] = useState(menuOpen);
@@ -599,7 +603,7 @@ export function NavInscription({
           {/* The menu ends where the page ends: the crane at rest on its brush ground (the footer's
               finale in miniature), with Log in and Sign up under it. */}
           <div className={styles.sheetFinale} aria-hidden="true">
-            <span className={styles.sheetStand}>
+            <span ref={craneRoom} className={styles.sheetStand}>
               <span className={styles.sheetGround} />
               <Image
                 className={styles.sheetCrane}
@@ -656,6 +660,147 @@ function useFittedPicker(header: RefObject<HTMLElement | null>, locale: string) 
     window.addEventListener("resize", fit);
     return () => window.removeEventListener("resize", fit);
   }, [header, locale]);
+}
+
+/** Where the crane's room is going while the menu's parts fold: its size and the folds' height
+ *  (together) at the start and at the end, and the room's limits. */
+type CraneEase = {
+  from: number;
+  to: number;
+  folds: number;
+  foldsTo: number;
+  low: number;
+  high: number;
+};
+
+/** On a tablet the menu's crane takes the room left under the words (130px to 230px), so it changes
+ *  size when a part folds. Left to the layout it follows only the slice of the fold where that room
+ *  lies between its two sizes, at the fold's speed there: folding Products away on an upright tablet
+ *  it grew 54px in an eighth of a second and stopped dead. So while the parts fold, its change is
+ *  spread over the whole fold: on every change of the folds' size, before it is drawn (a
+ *  ResizeObserver), it stands as far from its old size to its new one as the folds are through
+ *  theirs. When they stop, the layout has it again. A phone's crane keeps its size and is carried.
+ *  Returns what to call as a part is about to fold. */
+function useCraneRoom(
+  sheet: RefObject<HTMLDivElement | null>,
+  stand: RefObject<HTMLSpanElement | null>,
+  menuOpen: boolean,
+) {
+  const plan = useRef<CraneEase | null>(null);
+
+  useEffect(() => {
+    const scroller = sheet.current;
+    if (!scroller) return;
+    const follow = () => {
+      const ease = plan.current;
+      const room = stand.current;
+      if (!ease || !room) return;
+      const folds = foldsHeight(scroller);
+      const through = Math.min(1, Math.max(0, (folds - ease.folds) / (ease.foldsTo - ease.folds)));
+      holdRoom(room, ease.from + (ease.to - ease.from) * through);
+    };
+    // The folds have stopped: the layout has the crane again, at the size it was easing to.
+    const stopped = (event: TransitionEvent) => {
+      if (event.propertyName !== "grid-template-rows") return;
+      if (event.target instanceof Element && event.target.matches("[data-sheet-fold]")) {
+        letGo(stand.current, plan);
+      }
+    };
+    const observer = new ResizeObserver(follow);
+    scroller.querySelectorAll("[data-sheet-fold]").forEach((fold) => observer.observe(fold));
+    scroller.addEventListener("transitionend", stopped);
+    return () => {
+      observer.disconnect();
+      scroller.removeEventListener("transitionend", stopped);
+    };
+  }, [sheet, stand]);
+
+  // Opening or closing the menu sets its parts without a visitor watching: the layout has the crane.
+  useEffect(() => letGo(stand.current, plan), [stand, menuOpen]);
+
+  /** A part is about to fold open (`next`), or every part shut (null): where the crane goes. */
+  const ease = (next: NavPanelId | null) => {
+    const scroller = sheet.current;
+    const room = stand.current;
+    const finale = room?.parentElement;
+    const inner = finale?.parentElement;
+    if (!scroller || !room || !finale || !inner) return;
+    const looks = getComputedStyle(room);
+    if (looks.flexGrow === "0") return;
+    // With reduced motion the parts are simply open or shut, and so is the crane's room.
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return letGo(room, plan);
+    const low = plan.current?.low ?? (parseFloat(looks.minHeight) || 0);
+    const high = plan.current?.high ?? (parseFloat(looks.maxHeight) || Infinity);
+    // The room under the words now: the finale's own (it fills what the words leave), less what
+    // the menu runs past the window by.
+    const pane = getComputedStyle(scroller);
+    const view =
+      scroller.clientHeight - parseFloat(pane.paddingTop) - parseFloat(pane.paddingBottom);
+    const over = Math.max(0, inner.getBoundingClientRect().height - view);
+    const box = getComputedStyle(finale);
+    const space =
+      finale.getBoundingClientRect().height -
+      parseFloat(box.paddingTop) -
+      parseFloat(box.paddingBottom) -
+      over;
+    const folds = foldsHeight(scroller);
+    const opening = next ? scroller.querySelector<HTMLElement>(`#nav-sheet-${next}`) : null;
+    const foldsTo = opening ? foldFull(opening) : 0;
+    const from = room.getBoundingClientRect().height;
+    const to = Math.min(high, Math.max(low, space + folds - foldsTo));
+    if (Math.abs(to - from) < 0.5 || Math.abs(foldsTo - folds) < 1.5) return letGo(room, plan);
+    const mine = { from, to, folds, foldsTo, low, high };
+    plan.current = mine;
+    holdRoom(room, from);
+    // Should the folds' end never be heard, the layout takes the crane back all the same.
+    window.setTimeout(() => {
+      if (plan.current === mine) letGo(room, plan);
+    }, 1200);
+  };
+
+  return ease;
+}
+
+/** The crane's room held at a size (its least and most room both that size), or, at null, the
+ *  layout's again. */
+function holdRoom(room: HTMLElement, size: number | null) {
+  if (size === null) {
+    room.style.removeProperty("min-height");
+    room.style.removeProperty("max-height");
+    return;
+  }
+  room.style.minHeight = `${size}px`;
+  room.style.maxHeight = `${size}px`;
+}
+
+function letGo(room: HTMLElement | null, plan: RefObject<CraneEase | null>) {
+  plan.current = null;
+  if (room) holdRoom(room, null);
+}
+
+/** How tall the menu's folds are now, together. */
+function foldsHeight(scroller: HTMLElement) {
+  let sum = 0;
+  scroller.querySelectorAll<HTMLElement>("[data-sheet-fold]").forEach((fold) => {
+    sum += fold.getBoundingClientRect().height;
+  });
+  return sum;
+}
+
+/** How tall a fold is open: what it holds, down to the last piece's margin. (While it is shut, its
+ *  clipped inner's scroll height leaves that margin out: 20px under "See all products".) Layout
+ *  offsets, so the rows rising into place don't count. */
+function foldFull(fold: HTMLElement) {
+  const inner = fold.firstElementChild;
+  if (!(inner instanceof HTMLElement)) return 0;
+  let bottom = 0;
+  for (const piece of inner.children) {
+    if (!(piece instanceof HTMLElement)) continue;
+    const top = piece.offsetTop - (piece.offsetParent === inner ? 0 : inner.offsetTop);
+    const margin = parseFloat(getComputedStyle(piece).marginBottom) || 0;
+    bottom = Math.max(bottom, top + piece.offsetHeight + margin);
+  }
+  return bottom + (parseFloat(getComputedStyle(inner).paddingBottom) || 0);
 }
 
 /** The painted stroke under a word (shown by its link's `data-ink`: "here" for the current page,

@@ -5,9 +5,23 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 26, 2026, by Claude Code (product questions: a painting for each
-  answer, on all five product pages; local, not pushed).
+- **Last updated:** October 26, 2026, by Claude Code (the tablet menu's crane eases with the
+  fold; local, not pushed).
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Local, not live (October 26): the tablet menu's crane eases with the fold** (Mo said to fix
+  the jump; before/after page `J5z9H46J76J8t2uM7nZqkf`). On a tablet the crane takes the room
+  left under the menu's words (130px to 230px), so it changes size as Products folds. Left to the
+  layout it followed only the slice of the fold where that room lies between its two sizes:
+  folding Products away at 834x1112 it grew 54px in 0.12s (up to 13px a frame) and stopped dead;
+  at 768x1024, 100px in 0.07s (25px a frame). Now `useCraneRoom` in `nav-inscription.tsx`
+  works out the crane's end size as a part starts to fold and, on every change of the folds'
+  size (a ResizeObserver, before the frame is drawn), holds it as far from its old size to its
+  new one as the folds are through theirs; when the fold's transition ends the layout has it
+  again. Biggest step now 4px a frame at 834x1112, 8px at 768x1024 and 1024x768; phones and
+  1024x1366 unchanged. `qa_nav` films the fold at all three tablets and checks the size is let
+  go after. Built site (`npm run build` + `next start`, studio `c947fcf` plus this): `qa_nav`
+  326/326, `qa_home_ink` 282/282; lint and type-check clean. Not pushed. Separately, still open:
+  `scripts/qa/qa_science_links.py` still clicks the Science drop-down switched off this morning.
 - **Local, not live (October 26): product questions, Mo's pick A, "a painting for each answer"**
   (mockups `reference/ink-pages/mockups/nuricell-questions/`, artifact `MceTcmgqxFuQPtLHrJ8xfE`;
   the built pages in `.../built/`, artifact `S4ttkdJhyASQLXjr8uYigt`). All five ink product pages
@@ -101,11 +115,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   link. Built site (`npm run build` + `next start`): `qa_nav` 315/316, `qa_home_ink` 282/282,
   `qa_science_ink` 1279/1279, `qa_about` 353/353 (dev: `qa_nav` 315/316); lint and type-check
   clean. Mo's before/after page: https://claude.ai/artifact/DEE11nzfSvHRMeSgmFFfCC. The one
-  failure is old, newly checked: on an upright tablet,
-  folding Products away, the menu's crane stays put for most of the fold and then grows in its
-  last ~0.1s (834x1112: 176 -> 230px, steps up to 13.4px a frame; 768x1024: 130 -> 230px in six
-  frames, up to 25px a frame). Same code as before; with Science's fold gone, folding Products is
-  now the tablet menu's only fold, so it is seen more. Not fixed (Mo to decide). Live in `c944a72`.
+  failure was old, newly checked: the tablet menu's crane jumping as Products folds away (fixed
+  later the same day, local: "the tablet menu's crane eases with the fold" at the top). Live in
+  `c944a72`.
 - **Live (October 24-25, latest): homepage science on phones, the tabs over the picture and a
   finger swipe** (Mo picked A on October 23, then asked to swipe from one topic to the next and
   said to put it live). Under 900px the three tabs sit right above the picture; the three topics

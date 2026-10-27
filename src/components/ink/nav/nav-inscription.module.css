@@ -2029,8 +2029,8 @@ img.plate {
 }
 
 /* A tablet: the crane takes the room left under the words (130px to 230px), so a tablet held
-   upright shows it whole under the unfolded Products; when the room changes it eases with the
-   fold, never popping. */
+   upright shows it whole under the unfolded Products. When a part folds, the script spreads the
+   change of its size over the whole fold (useCraneRoom), so it eases with the fold, never popping. */
 @media (min-width: 700px) {
   .sheetFinale {
     flex: 1 0 auto;

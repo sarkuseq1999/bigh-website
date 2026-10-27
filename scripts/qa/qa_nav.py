@@ -1800,20 +1800,31 @@ def tablet_rows(browser):
         page.close()
 
     # Upright, moving from Products to Science (with Science's drop-down; without it, Products
-    # folding away and back): the crane eases with the fold, never pops.
-    page = browser.new_page(viewport={"width": 834, "height": 1112})
-    watch(page)
-    page.goto(URL, wait_until="networkidle")
-    page.wait_for_timeout(1500)
-    page.locator("[data-nav-menu-button]").click()
-    page.wait_for_timeout(1500)
-    if SCIENCE_MENU:
-        crane_motion(page, "tablet 834x1112, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
-        crane_motion(page, "tablet 834x1112, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
-    else:
-        crane_motion(page, "tablet 834x1112, Products folds away", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
-        crane_motion(page, "tablet 834x1112, Products unfolds again", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
-    page.close()
+    # folding away and back): the crane eases with the fold, never pops. On a tablet its room
+    # changes size with the fold, spread over the whole fold by the script (October 26: left to the
+    # layout it grew in an eighth of a second, 13px a frame at 834x1112 and 25px at 768x1024, and
+    # stopped dead); the shorter tablet and the one held sideways change the most. Once the fold
+    # stops, the layout has the crane again (no size left held).
+    held = "() => document.querySelector('[data-nav-sheet] [class*=\"sheetStand\"]').style.minHeight"
+    for w, h in ((834, 1112), (768, 1024), (1024, 768)):
+        tag = f"tablet {w}x{h}"
+        page = browser.new_page(viewport={"width": w, "height": h})
+        watch(page)
+        page.goto(URL, wait_until="networkidle")
+        page.wait_for_timeout(1500)
+        page.locator("[data-nav-menu-button]").click()
+        page.wait_for_timeout(1500)
+        if SCIENCE_MENU and (w, h) == (834, 1112):
+            crane_motion(page, f"{tag}, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+            crane_motion(page, f"{tag}, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+        elif not SCIENCE_MENU:
+            moves = ("folds away", "unfolds again") if h >= 900 else ("unfolds", "folds away again")
+            for move in moves:
+                log = crane_motion(page, f"{tag}, Products {move}", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
+                check(f"{tag}, Products {move}: the crane's size changes over the fold, and the layout has it once the fold stops",
+                      abs(log[-1]["h"] - log[0]["h"]) >= 40 and page.evaluate(held) == "",
+                      f"{round(log[0]['h'])} -> {round(log[-1]['h'])}px, held {page.evaluate(held)!r}")
+        page.close()
 
 
 def menu_light_boxes(browser):
