@@ -72,6 +72,29 @@ It is an American, California scene in the spirit of the California plein-air wa
 
 Never: no sun disc, no birds, no people, no animals, no buildings, no signs, no text, letters or numbers anywhere, no signature, no seal or stamp, no frame or border, no gold leaf."""
 
+# D, round 2 (October 28): Mo found D's sun cramped (the mockup had pushed it left, between the
+# crane and two far trunks Codex put where the sun was asked to go) and asked whether the crane
+# still suits. A clearing is edited into sequoia-2 so the sun can go home, and two American birds
+# are painted over the live crane's original, in its place and hand: Anna's hummingbird (Claude's
+# pick: it burns energy faster for its size than almost any animal, its flight muscles packed with
+# mitochondria) and the golden eagle. Each flies like the crane, so the page's stroke can still
+# leave from its tail where the crane's feet were.
+CLEARING = """EDIT the attached painting. Keep it exactly as it is, the same paper, hand and colours, with ONE change: remove the two farther tree trunks that stand between about 66% and 83% across (the pale, misty one at about 70-74% and the brown one at about 75-82%, behind the big front trunk). In their place, open bright morning haze: pale warm light and bare paper, with only a few faint, distant small conifer tips low down (below about 50% down). This makes a clear opening in the grove from about 58% to 83% across, from the top down to about 50% down. Keep the big front trunk on the right, the faint far trunks at the very right edge, the young conifers, the ferns, the fallen log and the slanting light exactly as they are. No sun disc, no birds, no text, no signature, no frame."""
+
+HUMMINGBIRD = """EDIT the attached painting. Replace the crane with an Anna's hummingbird, California's year-round hummingbird, painted in exactly the same loose watercolour hand on the same paper, with nothing else in the picture.
+- It flies toward the upper right, as the crane does: the body angled up to the right, the long, thin, straight bill pointing right, both wings raised high in a fast beat, their tips a little blurred with dry-brush strokes, the tail fanned out behind.
+- Size and place: smaller than the crane. From its tail tip at about 18% across and 82% down to its bill tip at about 68% across and 42% down; its raised wings reach up to about 15% down.
+- Colours, muted and soft: a green back and crown (sage to bottle green), a soft grey-white breast and belly, the male's throat and crown a muted rose-magenta (not bright red), dark grey wing feathers.
+- Few strokes, wet soft edges, like the crane. Not a detailed illustration, not a cartoon, not a greeting card.
+No flowers, no branches, no other birds, no text, no signature, no seal, no frame."""
+
+EAGLE = """EDIT the attached painting. Replace the crane with a golden eagle, painted in exactly the same loose watercolour hand on the same paper, with nothing else in the picture.
+- It soars toward the right in a calm glide: long, broad wings spread wide and almost flat, lifted in a very shallow V, the long dark primary feathers at the wing tips spread like fingers; the head forward to the right with a golden-buff nape and a hooked bill; the tail spread behind.
+- Size and place: its wingspan about as wide as the crane's wings, centred where the crane's body was; its tail tip at about 20% across and 75% down.
+- Colours, muted and soft: warm dark brown washes (not black), the golden-buff nape, a grey-yellow bill and feet tucked up.
+- Few strokes, wet soft edges, like the crane. Calm and gliding, not fierce: no open beak, no talons out. Not a detailed illustration, not a logo.
+No other birds, no text, no signature, no seal, no frame."""
+
 CRANE = """EDIT the attached painting. Keep the bird's exact pose, size, position and wing shapes, the same brush hand and the same paper. Change only the species: make it a North American SANDHILL CRANE.
 - Its whole body, neck and wings are soft mid-grey and pale warm-grey watercolour washes (not white).
 - The long flight feathers at the wing tips and along the wings' trailing edge are a darker slate grey (not solid black).
@@ -101,6 +124,9 @@ def main():
     for take in (1, 2):
         (PROMPTS / f"sequoia-{take}.txt").write_text(REF + GROVE + "\n", encoding="utf-8", newline="\n")
     (PROMPTS / "sequoia-3.txt").write_text(GROVE + "\n", encoding="utf-8", newline="\n")
+    for take in (1, 2):
+        for name, text in (("sequoia-2-clear", CLEARING), ("hummingbird", HUMMINGBIRD), ("golden-eagle", EAGLE)):
+            (PROMPTS / f"{name}-{take}.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
     print(sorted(p.name for p in PROMPTS.glob("*.txt")))
 
 

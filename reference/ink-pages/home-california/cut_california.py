@@ -131,7 +131,21 @@ def crane(take):
     print(take, "crane", CRANE, "warp", np.round(warp, 3).tolist())
 
 
+def bird(take):
+    """Another bird painted over the live crane's original, in its frame: no lining up (it is a
+    different shape), just its paper turned to transparency at the live cut-out's size."""
+    new = divided(Image.open(HERE / "originals" / f"{take}.png"))
+    new = cv2.resize(new, CRANE, interpolation=cv2.INTER_AREA)
+    to_alpha(new.astype(np.float32)).save(OUT / f"{take}.png", optimize=True)
+    print(take, "bird", CRANE)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     for name in sys.argv[1:]:
-        crane(name) if name.startswith("sandhill") else scene(name)
+        if name.startswith("sandhill"):
+            crane(name)
+        elif name.startswith(("hummingbird", "golden-eagle")):
+            bird(name)
+        else:
+            scene(name)

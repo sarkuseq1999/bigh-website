@@ -31,7 +31,16 @@ IDEAS = {
     "d1": ("sequoia-1", "sandhill-crane-1"),
     "d2": ("sequoia-2", "sandhill-crane-1"),
     "d3": ("sequoia-3", "sandhill-crane-1"),
+    "d2line": ("sequoia-2", "sandhill-crane-1"),
+    # D round 2: the clearing, with the sandhill crane (g), the hummingbird (e) or the eagle (f).
+    "g1": ("sequoia-2-clear-1", "sandhill-crane-1"),
+    "g2": ("sequoia-2-clear-2", "sandhill-crane-1"),
+    "e1": ("sequoia-2-clear-1", "hummingbird-1"),
+    "e2": ("sequoia-2-clear-1", "hummingbird-2"),
+    "f1": ("sequoia-2-clear-1", "golden-eagle-1"),
+    "f2": ("sequoia-2-clear-1", "golden-eagle-2"),
 }
+LINE = {"d2line", "g1", "g2", "e1", "e2", "f1", "f2"}
 
 # D is painted as the whole first screen (the trunks rise out of its top): its picture fills the
 # opening, its foot dissolving; on a phone the whole painting shows at the painting's height, its
@@ -70,13 +79,26 @@ SUNSET = """
 @media (min-width: 1700px) { section#top span[class*='__sun'] { top: 14.3% !important; } }
 @media (max-width: 720px) { section#top span[class*='__sun'] { left: 52% !important; } }
 """
-EXTRA = {"a1": SUNSET, "a2": SUNSET, "d1": FULL, "d2": FULL, "d3": FULL}
+# D round 2: the clearing (sequoia-2-clear-*) lets the sun go home: its own place at 1440, held
+# at most 1000 px in from the column's start on wider windows so it stays in the clearing (60-78%
+# across at 1440, 64-80% at 1920; the giant's trunk starts at 84%). On a phone it moves only to
+# the clearing's middle, at its own size.
+FULL2 = FULL.replace(
+    "left: calc(var(--inset) + min(53%, 833px)) !important;",
+    "left: calc(var(--inset) + min(60%, 1000px)) !important;",
+).replace(
+    "left: 34vw !important; top: 2% !important; width: 24vw !important;",
+    "left: 50vw !important;",
+)
+EXTRA = {"a1": SUNSET, "a2": SUNSET, "d1": FULL, "d2": FULL, "d3": FULL, "d2line": FULL}
+for key in ("e1", "e2", "f1", "f2", "g1", "g2"):
+    EXTRA[key] = FULL2
 
 # The mist canvas and the wingbeat would draw the live pictures: off, and the stills shown. The
-# page's brush line is routed for the live mountains (it would cut across El Capitan), so the
-# mockups leave it out; a build would draw it again for the chosen scene.
+# page's brush line is routed for the live mountains (it would cut across El Capitan), so A to D
+# leave it out; the bird ideas (Mo likes the stroke that goes down) keep it, as routed now.
+NO_LINE = "[data-brush-layer] { display: none !important; }"
 CSS = """
-[data-brush-layer] { display: none !important; }
 section#top canvas { display: none !important; }
 section#top img[class*="__landscape"] { visibility: visible !important; }
 section#top img[class*="__wingbeat"] { display: none !important; }
@@ -135,7 +157,8 @@ def main():
                 page.goto(f"{base}/", wait_until="networkidle")
                 page.evaluate("document.fonts.ready")
                 if key != "now":
-                    dress(page, land, bird, EXTRA.get(key, ""))
+                    line = "" if key in LINE else NO_LINE
+                    dress(page, land, bird, EXTRA.get(key, "") + line)
                 page.screenshot(path=str(SHOTS / f"{key}-{size}.png"))
                 print(key, size, "ok")
                 ctx.close()

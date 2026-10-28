@@ -43,6 +43,27 @@ sequoias (they live more than 3,000 years).
   of the menu's words. On a phone the whole painting shows at the picture's height, its right
   two-thirds in the window, the sun moved left and a little smaller, the crane a little lower.
 
+## D, round 2: the sun fixed, three birds (October 28, 2026)
+
+Mo liked D overall but found the sun "strange or cramped" (the mockup had squeezed it left,
+between the crane and two far trunks) and asked whether the crane still suits; he likes the
+stroke that goes down. Claude's view: the crane flying past a gold sun is the last Asian echo
+left, even in grey. Mo said "paint both" of the two birds offered.
+
+- The sun: Codex edited sequoia-2 into `sequoia-2-clear-1`, `-2`: the two far trunks gone, an
+  open clearing of morning light, one giant trunk left on the right. The sun is back in its own
+  place at 1440 (held at most 1000 px in from the column's start on wider windows so it stays in
+  the clearing); on a phone it sits in the clearing's middle at its own size. Shown: clear-1.
+- **1. Anna's hummingbird** (Claude's pick, 8.5/10, `hummingbird-1`): ties to the headline (it
+  burns energy faster for its size than almost any animal; its flight muscles are packed with
+  mitochondria). Its wings came out too big and feathery for a hummingbird; a build would repaint
+  them narrow and blurred. Its pink throat is a second colour beside the gold.
+- **2. Golden eagle** (8/10, `golden-eagle-1`): the most American; reads as strength and power,
+  a little like a bank's logo; the heaviest painting on the screen.
+- **3. Sandhill crane** (7.5/10 against the brief): calmest and least work, still the Asian echo.
+- Each bird was painted by Codex over the live crane's original, in its place, so the page's
+  stroke (shown again in these mockups, as routed today) leaves from the bird's tail.
+
 ## Files
 
 - Paintings: Codex (ChatGPT plan, no API spend), 8 pictures, two takes each:
