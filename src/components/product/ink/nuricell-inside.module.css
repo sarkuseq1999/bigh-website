@@ -1,5 +1,6 @@
 /* NuriCell's What's inside, tidied, its gold moving and its pairs as scenes (Mo picked 1A, October
-   26, 2026; mockups reference/ink-pages/mockups/nuricell-inside/). Every rule names two classes or
+   26, 2026; mockups reference/ink-pages/mockups/nuricell-inside/; the scenes moved to a ranch, Mo's
+   B, October 27, mockups reference/ink-pages/mockups/nuricell-pairs/). Every rule names two classes or
    an element and a class, so it outranks the kit's .look rules (0,2,0) and the template's .page
    rules in either stylesheet order (the built site orders CSS differently from dev). Nothing here
    makes a stacking context between the figure and the page root: the figure is its painting's blend
@@ -103,76 +104,163 @@
   min-width: 0;
 }
 
-/* The scene: its two heaps along the bottom, open air above them for the gold. The heaps are drawn
-   at a share of their cut-out size (--heap: the cut-outs are from the full-size painting), so they
-   keep their sizes by amount: the 400 mg heap about 140px wide. */
+/* The scene: a painting from the ranch (Mo picked B, October 27, 2026), multiplied onto the page like
+   the chapter's own painting. Over it, the parts that move, each un-multiplied (an alpha over any
+   paper): the windmill's wheel, its falling water and the gold that catches the light, the last two
+   cut to their boxes (nuricell-scenes.tsx). At rest every part lies where it is painted; data-play on
+   the stage runs the animations below, once ("on"). Until its turn comes ("wait": set when the scene
+   will play) the windmill's water has not yet poured, so it never shows and then pours again. */
 .scenes .stage {
-  --heap: 0.44;
   position: relative;
-  height: 260px;
   cursor: pointer;
 }
 
-@media (min-width: 900px) {
-  .scenes .stage {
-    --heap: 0.42;
-    height: 260px;
-  }
-}
-
-.scenes .duo {
-  position: absolute;
-  right: 0;
-  bottom: 6px;
-  left: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-around;
-}
-
-.scenes .who {
-  display: grid;
-  justify-items: center;
-  gap: 6px;
-  min-width: 0;
-}
-
-.scenes .who img {
+.scenes img.still {
   display: block;
+  width: 100%;
+  height: auto;
+  mix-blend-mode: multiply;
+}
+
+.scenes img.fan {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+}
+
+.scenes .cut {
+  position: absolute;
+  display: block;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.scenes .cut img {
+  position: absolute;
   max-width: none;
   height: auto;
 }
 
-.scenes .whoName {
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.2;
-  text-align: center;
+/* The gold catching the light: the gold itself, brighter, seen only through a narrow band of light
+   that crosses its box. At rest the band waits below the box, so nothing shows. Real gold leaf: the
+   light stays on the leaf, no glow round it, no sparkle. */
+.scenes .glint {
+  -webkit-mask: linear-gradient(to top, transparent 44%, #000 50%, transparent 56%) 0 0 / 100% 300%
+    no-repeat;
+  mask: linear-gradient(to top, transparent 44%, #000 50%, transparent 56%) 0 0 / 100% 300%
+    no-repeat;
 }
 
-.scenes .plus {
-  padding-bottom: 36px;
-  color: var(--muted);
-  font-size: 28px;
-  line-height: 1;
+.scenes .glint img {
+  filter: brightness(1.45);
 }
 
-.scenes .layer {
-  position: absolute;
-  inset: 0;
-  overflow: visible;
-  pointer-events: none;
-  perspective: 600px;
+/* The rider's letter: the light crosses it on a slant. */
+.scenes [data-scene="joins"] .glint {
+  -webkit-mask-image: linear-gradient(to top right, transparent 42%, #000 50%, transparent 58%);
+  mask-image: linear-gradient(to top right, transparent 42%, #000 50%, transparent 58%);
 }
 
-/* One flake, cut from the leaf sheet (nuricell-scenes.tsx sizes it); hidden until it moves. */
-.scenes .flake {
-  position: absolute;
-  top: 0;
-  left: 0;
-  opacity: 0;
-  background-repeat: no-repeat;
-  will-change: transform;
+/* The water in the tank: a ring of light spreads across it from where the water lands (--fx, --fy),
+   shaped like the tank's surface. At rest the ring is smaller than nothing, so nothing shows. */
+@property --nc-ring {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: -20%;
+}
+
+.scenes [data-scene="stores"] .glint {
+  -webkit-mask: radial-gradient(
+      ellipse at var(--fx) var(--fy),
+      transparent calc(var(--nc-ring) - 14%),
+      #000 var(--nc-ring),
+      transparent calc(var(--nc-ring) + 14%)
+    )
+    0 0 / 100% 100% no-repeat;
+  mask: radial-gradient(
+      ellipse at var(--fx) var(--fy),
+      transparent calc(var(--nc-ring) - 14%),
+      #000 var(--nc-ring),
+      transparent calc(var(--nc-ring) + 14%)
+    )
+    0 0 / 100% 100% no-repeat;
+}
+
+.scenes [data-scene="stores"] .stage[data-play="wait"] .stream {
+  clip-path: inset(0 0 100% 0);
+}
+
+/* Fuel in, energy out: the light runs up through the stove's fire, three times. */
+.scenes [data-scene="lights"] .stage[data-play="on"] .glint {
+  animation: nc-band 1.5s ease-in-out 0.2s 3 both;
+}
+
+/* Energy on hand: the wheel turns once, the water pours from the pipe, two rings of light spread
+   across the full tank. */
+.scenes [data-scene="stores"] .stage[data-play="on"] img.fan {
+  animation: nc-turn 3.4s cubic-bezier(0.45, 0.05, 0.3, 1) both;
+}
+
+.scenes [data-scene="stores"] .stage[data-play="on"] .stream {
+  animation: nc-pour 0.9s cubic-bezier(0.5, 0, 0.9, 0.6) 0.7s both;
+}
+
+.scenes [data-scene="stores"] .stage[data-play="on"] .glint {
+  animation: nc-ring 1.6s cubic-bezier(0.2, 0.6, 0.4, 1) 1.5s 2 both;
+}
+
+/* Two halves of a messenger: the light crosses the rider's letter, twice. */
+.scenes [data-scene="joins"] .stage[data-play="on"] .glint {
+  animation: nc-band 1.6s ease-in-out 0.3s 2 both;
+}
+
+@keyframes nc-band {
+  from {
+    -webkit-mask-position: 0 0%;
+    mask-position: 0 0%;
+  }
+
+  to {
+    -webkit-mask-position: 0 100%;
+    mask-position: 0 100%;
+  }
+}
+
+@keyframes nc-turn {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nc-pour {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes nc-ring {
+  from {
+    --nc-ring: -20%;
+  }
+
+  to {
+    --nc-ring: 125%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scenes .stage[data-play="on"] img.fan,
+  .scenes .stage[data-play="on"] .cut {
+    animation: none;
+  }
 }
 
 .scenes p.foot {
@@ -200,8 +288,20 @@
   color: var(--ink);
 }
 
+.scenes p.pair {
+  margin: 4px 0 0;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.scenes p.pair span {
+  padding-inline: 4px;
+  color: var(--muted);
+}
+
 .scenes h4.title {
-  margin: 8px 0 8px;
+  margin: 6px 0 8px;
   font-size: clamp(22px, 2vw, 27px);
   font-weight: 500;
   line-height: 1.15;

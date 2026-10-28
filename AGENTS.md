@@ -97,11 +97,26 @@ These sit on top of `DESIGN.md`.
   real gold leaf (picked over a never-ending updraft). The label is gone (the heading says it);
   "per serving of 3 capsules" sits right under the heading (the heading says "every capsule",
   the amounts are for 3); the other ingredients are one label card; the research note is said
-  once, at the chapter's end. The pairs are three little scenes: each pair's two powder heaps
-  from the painting and its gold doing what the pair does together (lit, kept in reserve, two
-  halves made one), picked over a scroll story and a pick-a-partner game. NuriCell only
-  (`nuricell-leaf.tsx`, `nuricell-scenes.tsx`; pictures `build_nuricell_gold.py`). Mockups:
+  once, at the chapter's end. The pairs became three little scenes (picked over a scroll story
+  and a pick-a-partner game); their powder heaps were replaced on October 27 (next rule).
+  NuriCell only (`nuricell-leaf.tsx`; pictures `build_nuricell_gold.py`). Mockups:
   `reference/ink-pages/mockups/nuricell-inside/`.
+- **NuriCell pairs: on the ranch, no powder (Mo picked B, October 27, 2026).** Mo found the
+  pairs' white powder heaps with gold on top "a little strange, like drugs". Of three painted
+  ideas (A two hands passing gold leaf, B an old California ranch, C a gold trail map with four
+  camps) he picked B. Each pair is a Codex painting of two ranch things that need each other,
+  gold marking the energy: firewood and the stove with a gold fire (acetyl-L-carnitine +
+  alpha-lipoic acid, painted flipped so the wood comes first), the windmill pouring gold water
+  into its tank (alpha-lipoic acid + creatine), the Pony Express rider and his horse with a gold
+  letter (choline + acetyl-L-carnitine). The pair's names sit under each painting; the words
+  are unchanged. Each plays once as it comes into view (Play again replays it): the light runs
+  up the fire, the wheel turns once while the water pours and light spreads across the tank,
+  the light crosses the letter. Gold behaves like gold leaf (no glow, no sparkle). No powder,
+  pills, capsules, tins or lab glass in these paintings: anything that could read as drugs.
+  The wheel turns over Codex's painting of the same scene without it. NuriCell only
+  (`nuricell-scenes.tsx`, `nuricell-pairs.ts`; pictures
+  `reference/ink-pages/nuricell-pairs/build_nuricell_pairs.py`). Mockups:
+  `reference/ink-pages/mockups/nuricell-pairs/`.
 - **NuriCell "Tiny power plants": a California lighthouse and fewer words (Mo picked B, October
   26, 2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
   the grey "Why cellular health matters" line on top strange. Of three California lights (A a Gold
