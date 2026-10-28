@@ -1,0 +1,116 @@
+<title>Desktop Sun Placement</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;650&display=swap">
+<style>
+  /* Layout: one column; each choice is its desktop screen at 1920, then at 1440. */
+  :root {
+    --paper: #f6f1e7;
+    --sheet: #fbf8f2;
+    --ink: #1d1b18;
+    --ink-soft: #5d574e;
+    --rule: #ddd4c4;
+    --gold: #a77c25;
+    --pick: #2f4a3a;
+    --title: "Ysabeau", "Palatino Linotype", Palatino, Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17; --sheet: #24221e; --ink: #f1ece2; --ink-soft: #b9b0a2;
+      --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17; --sheet: #24221e; --ink: #f1ece2; --ink-soft: #b9b0a2;
+    --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.55 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 1100px; margin: 0 auto; padding-block: 40px 72px; display: grid; gap: 52px; }
+  h1, h2 { font-family: var(--title); font-weight: 650; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.05; }
+  h2 { font-size: clamp(26px, 4vw, 34px); line-height: 1.1; }
+  p { margin: 0; max-width: 62ch; }
+  .intro { display: grid; gap: 12px; }
+  .intro p { color: var(--ink-soft); font-size: 18px; }
+  .choice { display: grid; gap: 14px; padding-top: 26px; border-top: 1px solid var(--rule); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+  .letter { font-family: var(--title); font-size: clamp(44px, 7vw, 60px); line-height: 0.8; color: var(--gold); font-weight: 650; }
+  .score { font: 600 15px/1 var(--body); font-variant-numeric: tabular-nums; padding: 7px 11px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); }
+  .tag { font: 600 13px/1 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper); background: var(--pick); padding: 7px 10px; border-radius: 999px; }
+  .what { font-size: 18px; }
+  .note { color: var(--ink-soft); }
+  .shots { display: grid; gap: 12px; }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+  figure img { display: block; width: 100%; height: auto; border-radius: 6px; border: 1px solid var(--rule); background: var(--sheet); }
+  figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  @media (max-width: 720px) {
+    body { font-size: 16px; }
+    main { gap: 40px; padding-block: 24px 56px; }
+  }
+</style>
+
+<main>
+  <header class="intro">
+    <h1>The sun on desktop</h1>
+    <p>Three ways to give the sun more room, laid on the live homepage. Phones stay as they are. Nothing on the live site has changed.</p>
+  </header>
+
+  <section class="choice" aria-labelledby="now-name">
+    <div class="head"><h2 id="now-name">Today</h2></div>
+    <p class="note">Big, and close to the giant trunk.</p>
+    <div class="shots">
+      <figure><img src="now-w1920.jpg" alt="Today's homepage at 1920 wide: a large gold sun close to the giant sequoia trunk" width="1600" height="867"><figcaption>Desktop, 1920 wide</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="choice" aria-labelledby="a-name">
+    <div class="head">
+      <span class="letter">A</span>
+      <h2 id="a-name">Smaller, same spot</h2>
+      <span class="score">8 / 10</span>
+    </div>
+    <p class="what">About three quarters of its size, so there is more sky around it.</p>
+    <p class="note">Calmer, but it still sits toward the trunk.</p>
+    <div class="shots">
+      <figure><img src="a-w1920.jpg" alt="Choice A at 1920 wide: a smaller sun in the same spot" width="1600" height="867"><figcaption>Desktop, 1920 wide</figcaption></figure>
+      <figure><img src="a-w1440.jpg" alt="Choice A at 1440 wide" width="1440" height="900"><figcaption>Laptop, 1440 wide</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="choice" aria-labelledby="b-name">
+    <div class="head">
+      <span class="letter">B</span>
+      <h2 id="b-name">Smaller, in the middle of the clearing</h2>
+      <span class="score">9 / 10</span>
+      <span class="tag">My pick</span>
+    </div>
+    <p class="what">Three quarters of its size and moved left, so it has open sky on both sides: the hummingbird on one, the giant trunk on the other.</p>
+    <p class="note">The best balance. The hummingbird now flies toward it, with the stroke passing underneath.</p>
+    <div class="shots">
+      <figure><img src="b-w1920.jpg" alt="Choice B at 1920 wide: a smaller sun centred in the clearing between the hummingbird and the trunk" width="1600" height="867"><figcaption>Desktop, 1920 wide</figcaption></figure>
+      <figure><img src="b-w1440.jpg" alt="Choice B at 1440 wide" width="1440" height="900"><figcaption>Laptop, 1440 wide</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="choice" aria-labelledby="c-name">
+    <div class="head">
+      <span class="letter">C</span>
+      <h2 id="c-name">Low, rising behind the young trees</h2>
+      <span class="score">7 / 10</span>
+    </div>
+    <p class="what">Lower and a little smaller, partly hidden behind the firs, like a real forest morning.</p>
+    <p class="note">The sky above opens up, but where a fir crosses the gold it looks muddy, and the gold loses its shine.</p>
+    <div class="shots">
+      <figure><img src="c-w1920.jpg" alt="Choice C at 1920 wide: the sun low behind the young firs" width="1600" height="867"><figcaption>Desktop, 1920 wide</figcaption></figure>
+      <figure><img src="c-w1440.jpg" alt="Choice C at 1440 wide" width="1440" height="900"><figcaption>Laptop, 1440 wide</figcaption></figure>
+    </div>
+  </section>
+</main>
