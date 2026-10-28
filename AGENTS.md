@@ -50,6 +50,9 @@ sometimes a builder). Both read this file. `CLAUDE.md` only points here. Mo owns
 - **Words:** understated and concrete, no hype; short lines ("a website, not an article"); keep the
   honesty labels (illustrations, fictional samples, research limits).
 - **Only add what was asked for.** No speculative features or integrations.
+- **One part at a time** (Mo, October 28, 2026: "the quality really kind of matters. We should
+  not rush it"). When several parts need redesigning, mock up one part on the real page, show
+  it, discuss it with Mo, build it, and only then start the next. Don't bundle parts.
 
 ## Design rules Mo has stated
 
