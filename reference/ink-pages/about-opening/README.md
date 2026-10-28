@@ -41,3 +41,28 @@ Mo asked to compare A and B on the live site. Both are built as temporary test p
   at once.
 - On a phone B is framed on the walker (33% across), so its gold ridge is off screen there: no gold
   and no movement on phones.
+
+## Where A's meadow ends (October 28, 2026)
+
+Mo picked A, but found that its first screen and the next section (Our purpose, the oak) "don't
+transition well". The painting stopped in a straight line with its biggest poppies on it (on a
+1920 x 1000 screen the 14% feather is cropped away entirely), then blank paper and the small grey
+oak. Two painted ends, the first screen unchanged in both:
+
+- **A. The meadow thins out** (Claude's pick, 8.5/10): the poppies run on past the fold, fewer and
+  smaller, then a few last ones and dry grass, then bare paper, then the oak. Costs about half a
+  screen of scrolling (two-thirds at 1920 wide); a few grass strokes at the very end are scratchy.
+- **B. Into the morning fog** (7.5/10): the meadow sinks into low valley fog. On a phone the fog
+  reads as a grey smudge, and it is gloomy after the bright meadow.
+
+- `join_foot.py canvas` makes the picture Codex edits (the painting's bottom half over bare
+  paper); Codex (ChatGPT plan) continued it: `originals/superbloom-foot-thin2.png` (A),
+  `superbloom-foot-fog1.png` (B), prompts `prompts/superbloom-foot-*.txt`. A third take,
+  thin1, is in `bigh-archive/about-opening/`. Codex kept the top half pixel for pixel (shift 0).
+- `join_foot.py join <take>` joins it under the painting (a 60-row cross-fade at the old foot):
+  1536 x 1536, painted down to row 1391, and cuts the two layers into `plates/join/`.
+- `shoot_join.py <take>` lays it over the public demo's /about-a (painting width
+  max(100vw, 150svh), its sky cut 30% of the excess as now, Purpose pushed down by what is painted
+  below the fold) and shoots it into `plates/join-shots/`.
+- Page for Mo: `../mockups/about-opening-join/about-opening-join.html`
+  (Artifact https://claude.ai/artifact/8fXZZqa9W5tFaPLY9cNnQo). Nothing in `src/` changed.

@@ -1,0 +1,257 @@
+<title>About Meadow Edge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column like a scroll. How About A's poppy meadow meets the next part of the
+     page: now, then two new endings, each laid over the real page (big screen beside phone,
+     scrolled to the moment the meadow ends). The site's own paper and ink. */
+  :root {
+    --paper: #f4f0e6;
+    --card: #faf7f0;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d9d2c1;
+    --pick: #1f3d2b;
+    --pick-bg: #e3ebdf;
+    --shot-bg: #f3efe4;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --card: #24211c;
+      --ink: #f1ece0;
+      --ink-soft: #b6ae9e;
+      --rule: #3a362e;
+      --pick: #cfe3c6;
+      --pick-bg: #2b3a2c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --card: #24211c;
+    --ink: #f1ece0;
+    --ink-soft: #b6ae9e;
+    --rule: #3a362e;
+    --pick: #cfe3c6;
+    --pick-bg: #2b3a2c;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.5 var(--body);
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+    display: grid;
+    gap: 32px;
+  }
+  header {
+    display: grid;
+    gap: 10px;
+  }
+  h1 {
+    font: 600 38px/1.08 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 36em;
+    color: var(--ink-soft);
+  }
+  .answer {
+    margin: 0;
+    font-weight: 600;
+  }
+  .answer code {
+    font: 600 16px/1 var(--body);
+    background: var(--pick-bg);
+    color: var(--pick);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  .card.pick {
+    border: 2px solid var(--pick);
+  }
+  .card h2 {
+    font: 600 26px/1.2 var(--title);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+  }
+  .tag {
+    font: 700 16px/1 var(--body);
+    letter-spacing: 0.04em;
+  }
+  .badge {
+    font: 600 13px/1 var(--body);
+    color: var(--pick);
+    background: var(--pick-bg);
+    padding: 5px 9px;
+    border-radius: 99px;
+  }
+  .card p {
+    margin: 0;
+    max-width: 40em;
+  }
+  .score {
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .shots {
+    display: grid;
+    grid-template-columns: 2.6fr 1fr 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .shots.two {
+    grid-template-columns: 3.3fr 1fr;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: var(--shot-bg);
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  footer {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 40em;
+  }
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 32px;
+    }
+    .shots,
+    .shots.two {
+      grid-template-columns: 1fr 1fr;
+    }
+    .shots > figure:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>About A: where the meadow ends</h1>
+    <p class="lede">
+      The poppy meadow stops in a straight line, like a photo cut with scissors. The biggest,
+      brightest flowers sit right on that line. Then there is blank paper and a small grey oak.
+      Here are two ways to let the meadow end softly. The first screen stays the same in both.
+    </p>
+    <p class="answer">My pick: <code>A</code></p>
+  </header>
+
+  <article class="card">
+    <h2>Now</h2>
+    <p>
+      Scrolled to where the meadow ends. On a very big screen there is no fade at all, just a hard
+      line.
+    </p>
+    <div class="shots two">
+      <figure>
+        <img src="img/now-desk.webp" width="1440" height="900" alt="Big screen, scrolled: the poppy meadow ends in a straight horizontal line, then blank paper, then the top of an ink oak beside the words Our purpose.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/now-phone.webp" width="780" height="1688" alt="Phone, scrolled: the meadow ends in a short fade above the oak.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="card pick">
+    <h2><span class="tag">A</span> The meadow thins out <span class="badge">My pick</span></h2>
+    <p>
+      The meadow keeps going past the bottom of the first screen. The poppies get fewer and
+      smaller, then a few last ones and some dry grass, then bare paper. Then the oak. It ends
+      like a watercolour the painter stopped before the edge of the sheet.
+    </p>
+    <p class="score">
+      8.5 out of 10. What holds it back: you scroll about half a screen of thinning meadow before
+      the oak, and about two-thirds of a screen on a very big screen. A few grass strokes at the
+      very end look a little scratchy.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="img/a-desk.webp" width="1440" height="900" alt="Big screen, scrolled: the poppies thin out into scattered flowers and dry grass, then bare paper, then the oak and the words Our purpose.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/a-phone-1.webp" width="780" height="1688" alt="Phone: the meadow thinning to a few last poppies above the oak.">
+        <figcaption>Phone</figcaption>
+      </figure>
+      <figure>
+        <img src="img/a-phone-2.webp" width="780" height="1688" alt="Phone, a little further: the last grass strokes, then the oak and its words.">
+        <figcaption>A little further</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="card">
+    <h2><span class="tag">B</span> Into the morning fog</h2>
+    <p>
+      The meadow sinks into a low morning fog, the way California valley fog lies in spring. A few
+      poppies show through it, then the fog fades into the paper and the oak appears below.
+    </p>
+    <p class="score">
+      7.5 out of 10. Softer and moodier than A. What holds it back: on a phone the fog looks more
+      like a grey smudge on the paper. Grey fog also makes the page a little gloomy right after
+      the bright meadow.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="img/b-desk.webp" width="1440" height="900" alt="Big screen, scrolled: the poppies sink into a pale grey fog, a few showing through, then the oak below.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/b-phone-1.webp" width="780" height="1688" alt="Phone: poppies fading into grey fog above the oak.">
+        <figcaption>Phone</figcaption>
+      </figure>
+      <figure>
+        <img src="img/b-phone-2.webp" width="780" height="1688" alt="Phone, a little further: a band of pale fog, then the oak and its words.">
+        <figcaption>A little further</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <footer>
+    Codex painted the new bottom of the meadow on Mo's ChatGPT plan, so no money was spent. The
+    painting above it is the same one you picked. Each picture was laid over the public demo's
+    About A page. Nothing is built or live yet.
+  </footer>
+</div>
