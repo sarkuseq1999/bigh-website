@@ -31,8 +31,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   replaced. Rule in `AGENTS.md`, DESIGN.md updated. Combined built site (with About's meadow):
   homepage 280/280, menu 326/326, About 403/403. On Mo's yes pushed as a fast-forward, `main`
   `d5e6858`, production `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; public demo
-  homepage 280/280, menu 326/326 (`docs/public-demo.md`). Open: if Mo wants one bird throughout,
-  the closing painting's cranes, the footer's crane and the phone menu's crane.
+  homepage 280/280, menu 326/326 (`docs/public-demo.md`). **Next parts, one at a time (Mo's
+  rule):** (1) the desktop sun, done: Mo picked A of three placements, three quarters of its
+  size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`), built and merged into `studio`
+  (built site homepage 280/280, menu 326/326), not live; (2) the hummingbird's look and wings
+  that never stop (ideas: keep the Anna's, a calmer green one, or Allen's; painted wing frames
+  flipped fast, free, or a paid video loop); (3) "Good questions deserve clear answers": the
+  inkstone and brush read as Chinese (ideas: a naturalist's notebook with a pressed poppy and a
+  hand lens, a country mailbox, a reading lamp); (4) "Our purpose" closing painting: pine on
+  rocks, misty peaks, red-crowned cranes (ideas: Big Sur at sunset with brown pelicans, the
+  hummingbird at dusk, golden hills); (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition

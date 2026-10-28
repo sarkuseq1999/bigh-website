@@ -91,14 +91,16 @@
 
 /* Region sun: x 60%, y 10%, w 20%, h 30%: in the clearing, between the bird and the giant trunk
    (which starts 84% across the painting). On a wide window it moves in with the words, but never
-   more than 1000 px into the column, so it stays in the clearing (the painting stays put). It
-   sinks a little as the page scrolls on, and leans a few pixels against the pointer (far things
-   move least). */
+   more than 1000 px into the column, so it stays in the clearing (the painting stays put). Since
+   October 28 about three quarters of the comp's 290 px, shrunk about its own centre (Mo found
+   the desktop sun "a little too big or too close to the tree" and picked A, smaller, same spot,
+   over moving it into the clearing's middle; phones keep theirs). It sinks a little as the page
+   scrolls on, and leans a few pixels against the pointer (far things move least). */
 .sun {
   position: absolute;
-  left: calc(var(--inset) + min(60%, 1000px));
-  top: 10%;
-  width: calc(290 * var(--u));
+  left: calc(var(--inset) + min(60%, 1000px) + 36 * var(--u));
+  top: calc(10% + 36 * var(--u));
+  width: calc(218 * var(--u));
   translate: calc(var(--lean-x, 0) * -7px) calc(var(--sink, 0px) + var(--lean-y, 0) * -4px);
 }
 

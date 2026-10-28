@@ -234,7 +234,11 @@ These sit on top of `DESIGN.md`.
   footer by the park sign and the phone menu. Built: the painting covers the whole opening
   (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
   hummingbird a still in the crane's frame (`hummingbird-v1.webp`, no wingbeat), the line pinned
-  to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`).
+  to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found
+  the desktop sun "a little too big or too close to the tree" and picked A of three placements
+  (A smaller, same spot; B smaller in the clearing's middle; C low behind the firs): the desktop
+  sun is three quarters of its size (218 comp px), shrunk about its own centre; phones keep
+  theirs. Mockups `reference/ink-pages/mockups/home-sun/`.
   `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in
   `reference/ink-pages/home-california/` (README); mockups
   `reference/ink-pages/mockups/home-california/`.
