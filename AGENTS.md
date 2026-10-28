@@ -167,7 +167,22 @@ These sit on top of `DESIGN.md`.
   Of two bigger layouts built on the real page he picked A: the circle fills the first screen
   and the title is written inside it (on a phone the lead sits under it), over B, a bigger
   circle with the words under it, which hardly grew on a short laptop. Mockups:
-  `reference/ink-pages/mockups/about-circle-size/`.
+  `reference/ink-pages/mockups/about-circle-size/`. (The circle left the page on October 28:
+  next rule.)
+- **About opening: the poppy meadow, thinning into the paper (Mo picked A, then A, October
+  27-28, 2026).** The big circle reminded Mo of the film The Ring ("a little scary"). Of three
+  painted ideas (A a poppy superbloom, B a morning walk, C the name painted) he compared A and B
+  on the live site and picked A: golden California hills in spring poppies fill the first screen,
+  the words in the painting's empty sky, the poppies' gold arriving from the foot of the screen
+  as the page opens (gold leaf: no glow, no shine). He then found the first screen and Our purpose
+  "don't transition well" (the painting stopped in a straight line on its biggest poppies) and
+  picked A of two painted ends over B, morning fog: below the first screen the meadow thins out,
+  fewer and smaller poppies, a few last ones and dry grass, then bare paper, then the oak. Never
+  end the meadow in a straight line or a gradient fade. The painting's paper is cut to
+  transparency (no multiply). `meadow.module.css`, `meadow-art.ts`; pictures
+  `reference/ink-pages/about-opening/build_about_opening.py` (Codex painting plus Codex's
+  continuation of its foot, `join_foot.py`). Mockups: `reference/ink-pages/mockups/about-opening/`
+  and `about-opening-join/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

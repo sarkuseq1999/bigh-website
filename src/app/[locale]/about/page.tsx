@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import { AboutInk } from "@/components/about/about-ink";
-import { BeforeHydration } from "@/components/about/before-hydration";
-import { LET_THE_CIRCLE_GO } from "@/components/about/let-the-circle-go";
 import { ProductPagesProvider } from "@/components/home/product-action";
 import { SiteDialogs } from "@/components/ink/dialogs";
 import { productPageLinks } from "@/components/product/catalog";
@@ -30,7 +28,6 @@ export default async function Page({ params }: { params: Params }) {
     <ProductPagesProvider pages={productPageLinks()}>
       <SiteDialogs>
         <AboutInk />
-        <BeforeHydration code={LET_THE_CIRCLE_GO} />
       </SiteDialogs>
     </ProductPagesProvider>
   );

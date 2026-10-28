@@ -66,3 +66,13 @@ oak. Two painted ends, the first screen unchanged in both:
   below the fold) and shoots it into `plates/join-shots/`.
 - Page for Mo: `../mockups/about-opening-join/about-opening-join.html`
   (Artifact https://claude.ai/artifact/8fXZZqa9W5tFaPLY9cNnQo). Nothing in `src/` changed.
+
+## Built (October 28, 2026)
+
+Mo picked A, "the meadow thins out". The meadow replaced the circle on `/about`; the test pages
+`/about-a` and `/about-b` and B's pictures are gone. `build_about_opening.py` now builds only the
+meadow, `superbloom-v2.webp` and `superbloom-gold-v2.webp` (1536 x 1439: the joined painting cut
+48 rows under its last stroke and eased out over them). On the page the painting is
+max(100%, 150svh) wide, its sky cut 30% of the excess, and the opening ends where the painting
+ends (`src/components/about/meadow.module.css`). `scripts/qa/qa_about.py` checks it
+(`meadow_layout`, `motion`).

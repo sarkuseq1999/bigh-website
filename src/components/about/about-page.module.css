@@ -15,11 +15,6 @@
   --gap: clamp(40px, 6vw, 112px);
 }
 
-/* The header floats over the opening (clear there), so the opening starts 88px down. */
-.aboutPage .opening {
-  padding: calc(88px + clamp(24px, 3.4vw, 64px)) 0 var(--part-half);
-}
-
 .aboutPage p.kicker {
   margin: 0 0 12px;
   color: var(--muted);
