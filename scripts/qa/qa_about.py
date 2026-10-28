@@ -1,14 +1,16 @@
-"""QA for About C, "The circle" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png;
-spec docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7").
+"""QA for About C (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png; spec
+docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"), opened by the
+poppy meadow since October 28, 2026 (it replaced the ink circle; Mo picked A "Superbloom", then A
+"the meadow thins out": reference/ink-pages/about-opening/README.md).
 
 desktop_and_phone (1440x900, 390x844): 200; no console errors or warnings (but PREFETCH_CSS); no
 failed requests; one h1, English "Be in Good Health." with lang="en"; every locked line in the
 page's main (the footer's "About BiGH" does not stand in for the opening's label); no canvas,
-no brush layer, no folds, no aged paper; every painting multiplies and nothing between a painting
-and the page root makes a stacking context; the menu bar marks About; no sideways scrolling; text
-15px+, navigation 18px+, targets 48px+; the mission 21px+ and in ink; the opening's circle loads
-eagerly; Support is a link to its
-page; the Ask sheet opens, closes and hands focus back.
+no brush layer, no folds, no aged paper; every painting multiplies (but the meadow, whose paper is
+cut to transparency) and nothing between a painting and the page root makes a stacking context;
+the menu bar marks About; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the
+mission 21px+ and in ink; the meadow loads at once, the painting with high priority; Support is a
+link to its page; the Ask sheet opens, closes and hands focus back.
 rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
 one picture and its words; on two columns (from 960px) the pictures stand purpose left, roots
 right, experience left, closing right (the opening is centred), and are about the same size but
@@ -17,29 +19,23 @@ nothing in a words column reaches past its right edge; on one column each pictur
 name once (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under
 the purpose, experience and closing paintings, none under Dr. Liu's photo or the promise dots; no
 words over a painting; four promises in one row from 1200px, two by two from 600px, one column
-below; Dr. Liu's photo in the middle of its pool; the circle appears once. In Vietnamese at 360,
+below; Dr. Liu's photo in the middle of its pool; the meadow appears once. In Vietnamese at 360,
 600, 960, 1080 and 1200px (the longest pill label, "Gặp các nhà khoa học", once ran past its
 column) nothing in a words column reaches past its right edge.
-motion: reduced motion complete and still (the circle whole, every painting shown); no gold on
-the circle (Mo, October 26, 2026: its stroke is its only picture, no leaf, shadow or band of
-light); every painting is server-marked waiting (none paints whole, then vanishes); with motion
-the circle paints itself around slowly from where the brush began (its stroke takes 4s, after a
-moment of 0.4 to 1s; stopped in the frame its clock reaches 1.1s it has barely begun: the quarter
-it starts in under half of its ink, the other three bare; stopped at 2.9s it is about three
-quarters round: the first two quarters whole, the third mostly drawn, the one reached last under
-half of its ink; then it ends whole; the words inside the circle are hidden for these shots); the
-hills bloom; a lower painting waits, then blooms; on a slow link (the stroke's picture held 3s)
-the circle waits for its picture: 2.5s in nothing shows, the stroke starts only once the picture
-is in, draws around and closes; with no stroke picture, 9s in the stroke still holds; with
-JavaScript off the circle shows whole once the stroke has finished, and every other painting (the
-hills, the oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does
-still.
-circle_layout (Mo, October 26, 2026: the circle bigger, the title written inside it; he picked
-this over the words under it). At 1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900,
-390x844 and 360x780: the circle centred in the window; from 1280px wide at least 0.72 of the
-window's height tall; the kicker and the title inside the circle (and the lead, from 600px; on a
-phone it stands under the circle), the title centred in it; no word within 8px of the stroke's
-ink; the hills begin in the first screen; on a phone the circle 8px from each edge; no sideways
+motion: reduced motion complete and still (the meadow and its gold whole, no mask, every painting
+shown); every painting below the opening is server-marked waiting (none paints whole, then
+vanishes); with motion the meadow's gold arrives (3.4s after 0.4s), spreading from the foot of the
+first screen: stopped 1.4s in, it holds under half of its gold, most of it in the screen's lower
+half; stopped 1.7s in, more, not yet all; then all of it; a lower painting waits, then blooms; on a
+slow link (the gold's picture held 3s) the meadow shows at once and its gold waits: 2.5s in none,
+the gold starts only once its picture is in and arrives whole; with no gold picture, 9s in it
+still holds; with JavaScript off the meadow shows with all its gold, and every other painting (the
+oak, the pool, the sequoia, the four promise dots and the glasses) as inked as it does still.
+meadow_layout (Mo, October 28, 2026: the meadow thins out into the paper before Our purpose). At
+1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900, 390x844 and 360x780: the painting
+spans the window; the words centred, no ink within 8px of them; the meadow fills the first
+screen's foot (no bare band, no edge); below it the painting ends in bare paper (its last 12px
+hold no ink) and its last strokes stand above Our purpose's first content; no sideways
 scrolling.
 focus: Skip to content puts focus at the words; with pictures blocked every heading and paragraph
 is visible.
@@ -59,12 +55,12 @@ once, the own language last and darkest.
 closing_pills (1440x900, 1024x768, 768x1024, 390x844): 4px above each closing pill's bottom edge the
 element is the pill; the footer starts at or under the closing part's end.
 boundary (959x900, 960x900): no sideways scrolling; one column at 959 (picture first), two at 960.
-first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the top of the opening's circle
-in the first screen.
+first_screen (1280x720, 1440x900, 1536x864, 390x844): the title and the meadow's far hills in the
+first screen.
 
-Pictures: scripts/qa/out/about-circle/<size>-NN.png.
+Pictures: scripts/qa/out/about/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen,circle_layout]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen,meadow_layout]
 """
 
 import io
@@ -72,14 +68,14 @@ import os
 import re
 import sys
 
-from PIL import Image
+from PIL import Image, ImageChops
 from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3025"
-OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about-circle")
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about")
 os.makedirs(OUT, exist_ok=True)
 results = []
 
@@ -607,9 +603,9 @@ def nav_locales(browser):
     context.close()
 
 
-DESIGN = "circle"
-# Each spread part and the side its picture stands on from 960px (the opening's circle and the
-# promise row are centred).
+DESIGN = "meadow"
+# Each spread part and the side its picture stands on from 960px (the opening and the promise row
+# are centred).
 SIDES = {"purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
 TWO_COLUMNS = 960
 
@@ -655,7 +651,7 @@ RHYTHM_JS = """(sides) => {
 OVERLAP_JS = """() => {
   const words = [...document.querySelectorAll('main h1, main h2, main h3, main p, main dt, main dd, main a, main button, main figcaption')]
     .filter(e => e.offsetParent && !e.closest('[data-picture]'));
-  const art = [...document.querySelectorAll('[data-picture] img, [data-promise] img, [data-picture-band]')].filter(e => e.offsetParent && !e.closest('[data-mount]'));
+  const art = [...document.querySelectorAll('[data-picture] img, [data-promise] img')].filter(e => e.offsetParent && !e.closest('[data-mount]'));
   const hits = [];
   for (const w of words) {
     const range = document.createRange(); range.selectNodeContents(w);
@@ -705,10 +701,12 @@ def desktop_and_phone(browser):
         check(f"{tag} no folds", folds == 0, folds)
         paper = page.evaluate("getComputedStyle(document.querySelector('[data-look=\"ink\"]')).backgroundImage")
         check(f"{tag} the kit's plain rice paper", "paper.webp" in paper and "aged" not in paper, paper)
+        # The meadow's paper is cut to transparency (build_about_opening.py), so it lies on the page
+        # with no blend; every other painting multiplies.
         blends = page.evaluate(
-            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount]')).map(i => getComputedStyle(i).mixBlendMode)"
+            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount], [data-meadow]')).map(i => getComputedStyle(i).mixBlendMode)"
         )
-        check(f"{tag} paintings multiply", blends and all(b == "multiply" for b in blends), blends)
+        check(f"{tag} paintings multiply (but the meadow)", blends and all(b == "multiply" for b in blends), blends)
         stacking = page.evaluate(STACKING_JS)
         check(f"{tag} nothing between a painting and the page root makes a stacking context", stacking["paintings"] > 0 and not stacking["found"], stacking["found"][:4])
         nav = page.evaluate(
@@ -729,8 +727,9 @@ def desktop_and_phone(browser):
                  .map(e => [e.textContent.trim().slice(0, 30), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)"""
         )
         check(f"{tag} targets at least 48px", not targets, targets)
-        eager = page.evaluate("(() => { const i = document.querySelector('[data-enso] img'); return i ? i.getAttribute('loading') : 'missing'; })()")
-        check(f"{tag} the opening's circle loads eagerly", eager != "lazy" and eager != "missing", eager)
+        eager = page.evaluate("[...document.querySelectorAll('[data-meadow] img')].map(i => [i.getAttribute('loading'), i.getAttribute('fetchpriority')])")
+        check(f"{tag} the meadow loads at once, the painting with high priority",
+              len(eager) == 2 and all(l != "lazy" for l, _ in eager) and eager[0][1] == "high", eager)
         check(
             f"{tag} Support links to its page",
             page.evaluate("[...document.querySelectorAll('a')].some(a => a.textContent.trim() === 'Support' && a.getAttribute('href').endsWith('/support'))"),
@@ -829,8 +828,10 @@ def rhythm(browser):
             # On a desktop the photo stands about 200px wide on its wash, as in the mockup (its mat
             # was 240px and stood large).
             check(f"{tag} Dr. Liu's photo about 200px wide on its wash (190-210)", 190 <= wash["mat"] <= 210, wash)
-        once_circle = page.evaluate("document.querySelectorAll('main img[src*=\"enso-v\"]').length")
-        check(f"{tag} the circle appears once", once_circle == 1, once_circle)
+        once = page.evaluate(
+            """['superbloom-v', 'superbloom-gold-v', 'enso', 'hills-v'].map(n => document.querySelectorAll(`main img[src*="${n}"]`).length)"""
+        )
+        check(f"{tag} the meadow appears once (its painting and its gold; no circle, no hills)", once == [1, 1, 0, 0], once)
         page.screenshot(path=os.path.join(OUT, f"rhythm-{tag}.png"))
         context.close()
     # The pill labels differ by language: the Vietnamese "Gặp các nhà khoa học" is the longest (in
@@ -844,30 +845,53 @@ def rhythm(browser):
         context.close()
 
 
-# The circle, every animation frame for 14s from navigation: [ms since navigation, the stroke's
-# sweep in degrees (-12 before it begins, 360 once whole), the stroke's picture in]. Installed
-# before the page's own scripts; it only reads.
-ENSO_LOG = """(() => {
-  const log = (window.__enso = []);
+# The meadow's two pictures: the painting (its gold a pale ghost) and the gold alone over it.
+INK = "[data-meadow] img:first-child"
+GOLD = "[data-meadow] img + img"
+
+# The meadow's gold, every animation frame for 14s from navigation: [ms since navigation, its
+# reach (the mask's edge, in %: 0 before it begins, 150 once whole), the gold's picture in, the
+# painting's picture in]. Installed before the page's own scripts; it only reads.
+GOLD_LOG = """(() => {
+  const log = (window.__gold = []);
   const tick = () => {
-    const wrap = document.querySelector('[data-enso]');
-    if (wrap) {
-      const stroke = wrap.querySelector('img');
-      log.push([Math.round(performance.now()), parseFloat(getComputedStyle(stroke).getPropertyValue('--sweep')),
-                stroke.complete && stroke.naturalWidth > 0]);
-    }
+    const ink = document.querySelector('[data-meadow] img:first-child'), gold = document.querySelector('[data-meadow] img + img');
+    if (ink && gold)
+      log.push([Math.round(performance.now()), parseFloat(getComputedStyle(gold).getPropertyValue('--reach')),
+                gold.complete && gold.naturalWidth > 0, ink.complete && ink.naturalWidth > 0]);
     if (performance.now() < 14000) requestAnimationFrame(tick);
   };
   requestAnimationFrame(tick);
 })();"""
 
-# The opening's words hidden, so a shot of the circle's box is the circle alone (they
-# stand within it).
+# The opening's words hidden, so a shot of the first screen is the meadow alone (they stand in
+# its sky).
 HIDE_WORDS = '[data-part="opening"] :is(h1, p) { visibility: hidden !important; }'
 
-# The page's paintings but the circle: the hills, the oak, the pool under Dr. Liu's photo (not
-# the photo), the sequoia, the four promise dots and the glasses.
-PAINTINGS = "[data-picture-band], [data-picture] img:not([data-mount] img), [data-promise] img"
+# The page's paintings below the opening: the oak, the pool under Dr. Liu's photo (not the
+# photo), the sequoia, the four promise dots and the glasses.
+PAINTINGS = "[data-picture] img:not([data-mount] img), [data-promise] img"
+
+
+def gold_shares(shot):
+    """The share of a shot's pixels that are gold (warm: red over blue by 70 or more, red 140 or
+    more; the paper, the ink and the gold's pale grey ghost are none of them), in all of it and in
+    its upper and lower halves."""
+    r, g, b = shot.convert("RGB").split()
+    warm = ImageChops.subtract(r, b).point(lambda v: 255 if v >= 70 else 0)
+    gold = ImageChops.multiply(warm, r.point(lambda v: 255 if v >= 140 else 0))
+    w, h = gold.size
+    upper = gold.crop((0, 0, w, h // 2)).histogram()[255]
+    lower = gold.crop((0, h // 2, w, h)).histogram()[255]
+    return {"all": round((upper + lower) / (w * h), 4), "upper": round(upper / (w * (h // 2)), 4), "lower": round(lower / (w * (h - h // 2)), 4)}
+
+
+def first_screen_shot(page):
+    """The first screen with the opening's words hidden, as a picture."""
+    page.evaluate("window.scrollTo(0, 0)")
+    page.add_style_tag(content=HIDE_WORDS)
+    page.wait_for_timeout(150)
+    return Image.open(io.BytesIO(page.screenshot())).convert("RGB")
 
 
 def inks(page):
@@ -899,55 +923,42 @@ def inks(page):
 def motion(browser):
     # Reduced motion: complete and still. Every picture at its full strength: opacity 1, but the
     # pool under Dr. Liu's photo, which lies at 0.7 by design (a light wash; circle.module.css), so
-    # it must be at least that.
+    # it must be at least that. The meadow's gold is whole at once: no mask, no animation.
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     scroll_through(page)
     still = page.evaluate(
-        """() => { const e = document.querySelector('[data-enso] img');
-             return { blooms: [...document.querySelectorAll('[data-bloom]')].filter(x => x.dataset.bloom !== 'done').length,
+        f"""() => {{ const g = document.querySelector('{GOLD}');
+             return {{ blooms: [...document.querySelectorAll('[data-bloom]')].filter(x => x.dataset.bloom !== 'done').length,
                       hidden: [...document.querySelectorAll('main img')].filter(i => parseFloat(getComputedStyle(i).opacity) < (i.matches('[data-pool]') ? 0.7 : 1)).length,
-                      pool: getComputedStyle(document.querySelector('[data-pool]')).opacity,
-                      draw: getComputedStyle(e).animationName, mask: getComputedStyle(e).maskImage,
-                      running: document.getAnimations().filter(a => { const t = a.effect && a.effect.target;
-                        return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }).length }; }"""
+                      arrive: getComputedStyle(g).animationName, mask: getComputedStyle(g).maskImage,
+                      running: document.getAnimations().filter(a => {{ const t = a.effect && a.effect.target;
+                        return t && t.closest && t.closest('main') && !t.closest('[class*=greetings]'); }}).length }}; }}"""
     )
-    check("reduced motion: the circle whole, every painting shown, still",
-          still["blooms"] == 0 and still["hidden"] == 0 and still["draw"] == "none" and still["mask"] == "none"
+    check("reduced motion: the meadow and its gold whole (no mask), every painting shown, still",
+          still["blooms"] == 0 and still["hidden"] == 0 and still["arrive"] == "none" and still["mask"] == "none"
           and still["running"] == 0, still)
-    # No gold on the circle (Mo, October 26, 2026: the leaf that floated down and caught the light
-    # looked cartoonish, as the spark before it looked fake): its stroke is its only picture.
-    gold = page.evaluate(
-        """() => ({ pictures: [...document.querySelectorAll('[data-enso] img')].map(i => (i.getAttribute('src') || '').split('%2F').pop().split('&')[0]),
-                     parts: document.querySelectorAll('[data-enso] :is([data-dot], [data-shadow], [data-sheen])').length,
-                     dotFile: document.querySelectorAll('img[src*="enso-dot"]').length })"""
-    )
-    check("no gold on the circle (its stroke its only picture; no leaf, shadow or band of light)",
-          len(gold["pictures"]) == 1 and "enso-v" in gold["pictures"][0] and gold["parts"] == 0 and gold["dotFile"] == 0, gold)
+    whole = gold_shares(first_screen_shot(page))
+    check("reduced motion: the first screen's meadow holds its gold", whole["all"] >= 0.08, whole)
     context.close()
 
-    # With motion: the circle paints itself slowly (Mo, October 8: "start a moment after the page
-    # appears, and take about 4 seconds"); the hills bloom.
+    # With motion. Every painting below the opening server-marked waiting (none paints whole, then
+    # vanishes), read from the HTML the server sends, before any script could mark one: in the
+    # page's main, the oak, the pool, the sequoia, the four promise dots and the glasses (the
+    # meadow's gold arrives instead; the shared closing crane after main is the kit's own).
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    # Every painting server-marked waiting (none paints whole, then vanishes), read from the HTML
-    # the server sends, before any script could mark one: in the page's main, the hills, the
-    # oak, the pool, the sequoia, the four promise dots and the glasses (the circle draws
-    # itself instead; the shared closing crane after main is the kit's own).
     html = context.request.get(f"{BASE}/about").text()
     main = html[html.index("<main"):html.index("</main>")]
     marks = re.findall(r'<img[^>]*?\sdata-bloom="([^"]*)"', main)
-    check("motion: every painting server-marked waiting (none paints whole, then vanishes)", len(marks) == 9 and all(m == "waiting" for m in marks), marks)
+    check("motion: every painting below the opening server-marked waiting (none paints whole, then vanishes)", len(marks) == 8 and all(m == "waiting" for m in marks), marks)
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
+    wait_until(page, f"getComputedStyle(document.querySelector('{GOLD}')).animationName !== 'none'", 5000)
     early = page.evaluate(
-        """() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
-             return { name: e.animationName, duration: e.animationDuration, start: e.getPropertyValue('--start').trim(),
-                      wait: parseFloat(e.animationDelay), time: parseFloat(e.animationDuration) }; }"""
+        f"""() => {{ const e = getComputedStyle(document.querySelector('{GOLD}'));
+             return {{ name: e.animationName, duration: e.animationDuration, wait: parseFloat(e.animationDelay) }}; }}"""
     )
-    check("motion: the circle paints itself slowly (its animation, 4s, after a moment of 0.4 to 1s, from where the brush began)",
-          "draw" in early["name"] and early["duration"] == "4s" and 0.4 <= early["wait"] <= 1
-          and early["start"].endswith("deg"), early)
-    check("motion: the hills bloom", wait_until(page, "document.querySelector('[data-picture-band]').dataset.bloom === 'done'"))
+    check("motion: the meadow's gold arrives (its animation, 3.4s after 0.4s)",
+          "arrive" in early["name"] and early["duration"] == "3.4s" and early["wait"] == 0.4, early)
     low = "document.querySelector('[data-part=\"experience\"] [data-picture] img')"
     state = page.evaluate(f"[{low}.dataset.bloom ?? null, getComputedStyle({low}).opacity]")
     check("motion: a lower painting waits out of view, hidden", state[0] == "waiting" and float(state[1]) == 0, state)
@@ -955,167 +966,126 @@ def motion(browser):
     check("motion: then it blooms", wait_until(page, f"{low}.dataset.bloom === 'done'"))
     context.close()
 
-    # The circle's ink, by quarter in the order the stroke draws them (clockwise from the top
-    # right: top right, bottom right, bottom left, top left): the share of each quarter's pixels
-    # that is dark, with the opening's words hidden (they stand in the circle's box). The
-    # still circle (reduced motion: no mask at all) is the whole one.
-    def circle_shot(reduced):
-        context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False,
-                                      reduced_motion="reduce" if reduced else "no-preference")
-        page = context.new_page()
-        # Script is off, so the words are hidden in the HTML itself, on its way in.
-        page.route(f"{BASE}/about", lambda route: route.fulfill(
-            response=(r := route.fetch()), body=r.text().replace("</head>", f"<style>{HIDE_WORDS}</style></head>", 1)))
-        page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
-        # Still: at once. With motion (script off, so nothing holds): once the stroke has finished
-        # (0.6s + 4s from when the page is styled), with time to spare.
-        page.wait_for_timeout(1500 if reduced else 6500)
-        box = page.locator("[data-enso] img").bounding_box()
-        shot = Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L")
-        context.close()
-        return shot
-
-    def quarters(shot):
-        w, h = shot.size
-        boxes = [(w // 2, 0, w, h // 2), (w // 2, h // 2, w, h), (0, h // 2, w // 2, h), (0, 0, w // 2, h // 2)]
-        return [round(sum(shot.crop(b).histogram()[:200]) / ((b[2] - b[0]) * (b[3] - b[1])), 4) for b in boxes]
-
-    still_circle = quarters(circle_shot(True))
-
-    # The stroke really progresses, at a brush's pace (a mask that never sweeps would pass "its
-    # animation runs" with the circle whole from the first frame, or blank to the end; one that
-    # flashes round would be whole early). The animation runs in real time; the page stops it in
-    # the frame its clock first reaches a set time, which counts its 0.6s delay, so
-    # each shot is the same on a slow machine, then lets it run on. At 1.1s (half a second into
-    # the stroke, about 5 degrees drawn) it has barely begun, a gentle press: the quarter it starts
-    # in (top right) under half of its ink, the other three bare. At 2.9s (about 265 degrees, three
-    # quarters round) the circle is partly drawn in order: the first two quarters whole, the third
-    # (bottom left) mostly drawn, the one the stroke reaches last (top left) under half. Then it
-    # runs on and ends whole. (The kit's breath, 2.4s on its front-loaded ease, drew about 255
-    # degrees by 1.1s and was whole by 2.9s.)
+    # The gold really spreads, from the foot of the first screen (a mask that never moves would
+    # pass "its animation runs" with the gold whole from the first frame, or none to the end). The
+    # page stops the gold in the frame its clock first reaches a set time (which counts its 0.4s
+    # delay), shoots the first screen, then lets it run on. At 1440x900 the first screen's gold
+    # comes in from about 1s to 2s (the bloom's far reach, past the screen, takes to 3.8s): 1.4s in
+    # it holds under half of the still meadow's gold (about a third), more of it in the screen's
+    # lower half than in its upper; 1.7s in, more (about 0.8), not yet all; then all of it. A clock
+    # past the animation's end (3.8s) is never reached.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
-    wait_until(page, "getComputedStyle(document.querySelector('[data-enso] img')).animationName !== 'none'", 5000)
+    wait_until(page, f"getComputedStyle(document.querySelector('{GOLD}')).animationName !== 'none'", 5000)
     page.add_style_tag(content=HIDE_WORDS)
-    box = page.locator("[data-enso] img").bounding_box()
 
     def stop_at(ms):
-        """Stop the circle's animations in the frame the stroke's clock first reaches `ms`, and
-        shoot it: [the clock where it stopped, the quarters' ink]."""
+        """Stop the gold's animation in the frame its clock first reaches `ms`, and shoot the first
+        screen: [the clock where it stopped, its gold]."""
         stopped = page.evaluate(
-            """(ms) => new Promise((resolve) => {
-                 const wrap = document.querySelector('[data-enso]');
-                 const draw = wrap.querySelector('img').getAnimations()[0];
-                 if (!draw) return resolve(null);
+            f"""(ms) => new Promise((resolve) => {{
+                 const arrive = document.querySelector('{GOLD}').getAnimations()[0];
+                 if (!arrive) return resolve(null);
                  const began = performance.now();
-                 const tick = () => {
-                   if (Number(draw.currentTime) >= ms) {
-                     wrap.getAnimations({ subtree: true }).forEach((a) => a.pause());
-                     return resolve(Math.round(Number(draw.currentTime)));
-                   }
+                 const tick = () => {{
+                   if (Number(arrive.currentTime) >= ms) {{ arrive.pause(); return resolve(Math.round(Number(arrive.currentTime))); }}
                    if (performance.now() - began > 12000) return resolve(null);
                    requestAnimationFrame(tick);
-                 };
+                 }};
                  tick();
-               })""",
+               }})""",
             ms,
         )
-        shot = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
-        page.evaluate("document.querySelector('[data-enso]').getAnimations({ subtree: true }).forEach((a) => a.play())")
+        shot = gold_shares(Image.open(io.BytesIO(page.screenshot())).convert("RGB"))
+        page.evaluate(f"document.querySelector('{GOLD}').getAnimations().forEach((a) => a.play())")
         return stopped, shot
 
-    clock, begun = stop_at(1100)
-    check("motion: the stroke starts gently (1.1s in it has barely begun: its first quarter under half, the rest bare)",
-          clock is not None and begun[0] <= 0.5 * still_circle[0]
-          and all(b <= 0.1 * s for b, s in zip(begun[1:], still_circle[1:])),
-          {"clock_ms": clock, "begun": begun, "still": still_circle})
-    clock, midway = stop_at(2900)
-    check("motion: the stroke is three quarters round 2.9s in (first quarters whole, the third mostly, the last under half)",
-          clock is not None and midway[0] >= 0.9 * still_circle[0] and midway[1] >= 0.9 * still_circle[1]
-          and midway[2] >= 0.5 * still_circle[2] and midway[3] <= 0.5 * still_circle[3],
-          {"clock_ms": clock, "midway": midway, "still": still_circle})
+    clock, begun = stop_at(1400)
+    check("motion: the gold starts at the foot (1.4s in: under half of it, more in the lower half than the upper)",
+          clock is not None and 0 < begun["all"] <= 0.5 * whole["all"] and begun["lower"] > begun["upper"],
+          {"clock_ms": clock, "begun": begun, "still": whole})
+    clock, midway = stop_at(1700)
+    check("motion: 1.7s in, more of it, not yet all",
+          clock is not None and begun["all"] < midway["all"] < 0.97 * whole["all"],
+          {"clock_ms": clock, "midway": midway, "begun": begun, "still": whole})
     page.wait_for_timeout(2500)
-    end = quarters(Image.open(io.BytesIO(page.screenshot(clip=box))).convert("L"))
-    check("motion: then the stroke ends whole (each quarter as inked as the still circle)",
-          all(e >= 0.97 * s for e, s in zip(end, still_circle)), {"end": end, "still": still_circle})
+    end = gold_shares(Image.open(io.BytesIO(page.screenshot())).convert("RGB"))
+    check("motion: then all of it arrives (as much gold as the still meadow)", end["all"] >= 0.97 * whole["all"], {"end": end, "still": whole})
     context.close()
 
-    # A slow link: the stroke's picture arrives late (its requests held until 3s after navigation).
-    # The circle waits for its picture: 2.5s in nothing shows (the sweep not begun); the stroke
-    # starts only once the picture is in, draws around, and closes at least its delay and duration
-    # after the picture (0.6s and 4s, read from the page; less one frame, 17ms, for where the log
-    # samples). Every frame is logged from navigation, to 14s (the circle closes about 3s + 0.6s +
-    # 4s in).
+    # A slow link: the gold's picture arrives late (its requests held until 3s after navigation).
+    # The meadow shows at once and its gold waits for its picture: 2.5s in, the painting is in and
+    # no gold has come; the gold starts only once its picture is in, and arrives whole at least its
+    # delay and duration after the picture (0.4s and 3.4s, read from the page; less 150ms, as its
+    # ease nears 150% a little before its end). Every frame is logged from navigation, to 14s.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
-    context.add_init_script(ENSO_LOG)
+    context.add_init_script(GOLD_LOG)
     page = context.new_page()
     held = []
-    page.route(re.compile(r"enso-v\d"), lambda route: held.append(route))
+    page.route(re.compile(r"superbloom-gold-v\d"), lambda route: held.append(route))
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, "performance.now() >= 3000", 15000)
     for route in held:
         route.continue_()
     wait_until(page, "performance.now() >= 13500", 20000)
-    log = page.evaluate("window.__enso || []")
-    stroke_ms = page.evaluate(
-        """(() => { const e = getComputedStyle(document.querySelector('[data-enso] img'));
-             return Math.round((parseFloat(e.animationDelay) + parseFloat(e.animationDuration)) * 1000); })()"""
+    log = page.evaluate("window.__gold || []")
+    gold_ms = page.evaluate(
+        f"""(() => {{ const e = getComputedStyle(document.querySelector('{GOLD}'));
+             return Math.round((parseFloat(e.animationDelay) + parseFloat(e.animationDuration)) * 1000); }})()"""
     )
     context.close()
     at = [f for f in log if f[0] <= 2500]
     early = at[-1] if at else None
-    check("slow stroke: 2.5s in, nothing shows (the sweep not begun)",
-          early is not None and not early[2] and early[1] <= 0, {"held": len(held), "frame": early})
+    check("slow gold: 2.5s in, the meadow shows and no gold has come",
+          early is not None and not early[2] and early[3] and early[1] <= 0, {"held": len(held), "frame": early})
     arrived = next((f[0] for f in log if f[2]), None)
-    began = next((f[0] for f in log if -11 < f[1] < 359.9), None)
-    drawing = [f for f in log if arrived is not None and f[0] >= arrived and 20 < f[1] < 340]
-    check("slow stroke: the stroke starts only once its picture is in, then draws around",
-          arrived is not None and began is not None and began >= arrived and len(drawing) >= 10,
-          {"arrived_ms": arrived, "began_ms": began, "frames_drawing": len(drawing)})
-    # Closed: the sweep at 359.9 degrees, which its ease (a slow lift through the dry tail) reaches
-    # up to about 100ms before its end; so at least the stroke's delay and duration after the
-    # picture, less 150ms.
-    closed = next((f[0] for f in log if f[1] >= 359.9 and f[0] >= (began or 0)), None)
-    check("slow stroke: then it closes (its delay and duration after the picture), and stays whole",
-          arrived is not None and closed is not None and stroke_ms >= 4000
-          and closed >= arrived + stroke_ms - 150 and bool(log) and log[-1][1] >= 359.9,
-          {"arrived_ms": arrived, "stroke_ms": stroke_ms, "closed_ms": closed, "last": log[-1] if log else None})
+    began = next((f[0] for f in log if 0 < f[1] < 149.9), None)
+    spreading = [f for f in log if arrived is not None and f[0] >= arrived and 5 < f[1] < 140]
+    check("slow gold: the gold starts only once its picture is in, then spreads",
+          arrived is not None and began is not None and began >= arrived and len(spreading) >= 10,
+          {"arrived_ms": arrived, "began_ms": began, "frames_spreading": len(spreading)})
+    done = next((f[0] for f in log if f[1] >= 149.9 and f[0] >= (began or 0)), None)
+    check("slow gold: then it arrives whole (its delay and duration after the picture), and stays",
+          arrived is not None and done is not None and gold_ms >= 3800
+          and done >= arrived + gold_ms - 150 and bool(log) and log[-1][1] >= 149.9,
+          {"arrived_ms": arrived, "gold_ms": gold_ms, "done_ms": done, "last": log[-1] if log else None})
 
-    # A failed stroke picture: nothing lets the circle go (no timer; Next's onLoad fires for a broken
-    # img that is complete when it hydrates, so the Opening checks naturalWidth). 9s in (unheld, the
-    # sweep would have ended 0.6s + 4s after the page is styled), the stroke still holds.
+    # A failed gold picture: nothing lets the gold go (no timer; Next's onLoad fires for a broken
+    # img that is complete when it hydrates, so the opening checks naturalWidth). 9s in (unheld,
+    # it would have arrived 0.4s + 3.4s after the page is styled), it still holds, and the meadow
+    # shows.
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     page = context.new_page()
-    page.route(re.compile(r"enso-v\d"), lambda route: route.abort())
+    page.route(re.compile(r"superbloom-gold-v\d"), lambda route: route.abort())
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, "performance.now() >= 9000", 20000)
     failed = page.evaluate(
-        """() => { const s = document.querySelector('[data-enso] img');
-             return { picture: s.naturalWidth, play: getComputedStyle(s).animationPlayState }; }"""
+        f"""() => {{ const g = document.querySelector('{GOLD}'), i = document.querySelector('{INK}');
+             return {{ picture: g.naturalWidth, play: getComputedStyle(g).animationPlayState, meadow: i.naturalWidth }}; }}"""
     )
     context.close()
-    check("failed stroke picture: 9s in, the stroke still holds",
-          failed["picture"] == 0 and failed["play"] == "paused", failed)
+    check("failed gold picture: 9s in, the gold still holds and the meadow shows",
+          failed["picture"] == 0 and failed["play"] == "paused" and failed["meadow"] > 0, failed)
 
-    # JavaScript off: the circle shows whole (its stroke is pure CSS) once the stroke has finished
-    # (circle_shot waits 6.5s from load; the stroke's 0.6s and 4s count from when the page is
-    # styled, before load). Visible is not whole: half drawn (2s after load), the circle's ink
-    # already passes the visible floor (0.076). So each quarter of it must also hold as much ink as
-    # the still circle's. The top-left quarter, drawn last, held 0.23 of its ink at 3.2s and 0.63 at
-    # 3.6s; whole, all four match exactly.
-    shot = circle_shot(False)
-    ink = sum(shot.histogram()[:120]) / (shot.width * shot.height)
-    check("JavaScript off: the circle is visible", ink >= 0.04, round(ink, 4))
-    drawn = quarters(shot)
-    check("JavaScript off: the circle shows whole (each quarter as inked as the still circle)",
-          all(d >= 0.97 * s for d, s in zip(drawn, still_circle)), {"drawn": drawn, "still": still_circle})
+    # JavaScript off: nothing holds the gold (its arrival is pure CSS); once it has arrived (0.4s
+    # and 3.4s from when the page is styled; shot 5s after load) the first screen holds as much
+    # gold as the still meadow.
+    context = browser.new_context(viewport={"width": 1440, "height": 900}, java_script_enabled=False, reduced_motion="no-preference")
+    page = context.new_page()
+    page.goto(f"{BASE}/about", wait_until="load", timeout=120000)
+    page.wait_for_timeout(5000)
+    # A plain shot: with script off Playwright cannot add a style or scroll, and the words are
+    # ink, never gold.
+    off = gold_shares(Image.open(io.BytesIO(page.screenshot())).convert("RGB"))
+    context.close()
+    check("JavaScript off: the meadow shows with all its gold", off["all"] >= 0.97 * whole["all"], {"off": off, "still": whole})
 
     # JavaScript off: every other painting shows too (nothing waits for a bloom that will not come).
-    # Each one's ink (the share of its pixels darker than 215: the hills and the palest dot are
-    # light wash) is read on the page with script off and on the still page (reduced motion, read
-    # to the end, every bloom done); with script off each holds at least 0.9 of its still ink. A
-    # painting left hidden holds none, one stuck in its blot only part of it.
+    # Each one's ink (the share of its pixels darker than 215: the palest dot is light wash) is
+    # read on the page with script off and on the still page (reduced motion, read to the end,
+    # every bloom done); with script off each holds at least 0.9 of its still ink. A painting left
+    # hidden holds none, one stuck in its blot only part of it.
     context, page, response, errors, failed = open_page(browser, 1440, 900, reduced=True)
     scroll_through(page)
     still = inks(page)
@@ -1129,7 +1099,7 @@ def motion(browser):
     faint = [(name, ink, s) for (name, ink), (_, s) in zip(off, still) if ink < 0.9 * s]
     check(
         "JavaScript off: every painting shows (each as inked as it is still)",
-        len(off) == 9 and len(still) == 9 and all(s >= 0.01 for _, s in still) and not faint,
+        len(off) == 8 and len(still) == 8 and all(s >= 0.01 for _, s in still) and not faint,
         {"faint": faint, "off": off, "still": still},
     )
 
@@ -1149,78 +1119,90 @@ def boundary(browser):
         context.close()
 
 
+def ink_rows(shot, level=200, least=2):
+    """For each row of a picture, whether it holds ink: at least `least` pixels darker than `level`
+    (the paper's fibres are lighter)."""
+    grey = shot.convert("L").point(lambda v: 255 if v < level else 0)
+    w, h = grey.size
+    return [grey.crop((0, y, w, y + 1)).histogram()[255] >= least for y in range(h)]
+
+
 def first_screen(browser):
     for width, height in [(1280, 720), (1440, 900), (1536, 864), (390, 844)]:
         tag = f"{width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        geo = page.evaluate(
-            """() => ({ title: document.querySelector('h1').getBoundingClientRect().bottom,
-                        picture: document.querySelector('[data-enso] img').getBoundingClientRect().top, win: innerHeight })"""
-        )
-        check(f"{tag} the title and the top of the opening's circle in the first screen", geo["title"] <= geo["win"] and geo["picture"] < geo["win"], geo)
+        title = page.evaluate("document.querySelector('h1').getBoundingClientRect().bottom")
+        rows = ink_rows(first_screen_shot(page).crop((0, 110, width, height)), least=max(2, width // 100))
+        hills = next((110 + y for y, inked in enumerate(rows) if inked), None)
+        check(f"{tag} the title and the meadow's far hills in the first screen", title <= height and hills is not None and hills < height,
+              {"title": title, "hills": hills, "win": height})
         context.close()
 
 
-# The opening's circle and words: the circle's box, the open centre's words (each line's box), and
-# the hills' top. The kicker is the opening's first p, the lead the p after the h1.
-OPENING_JS = """() => {
-  const ring = document.querySelector('[data-enso]').getBoundingClientRect();
+# The opening: the meadow's painting (its box, in page coordinates), the words (each line's box),
+# the window, where the opening ends and where Our purpose's first content (its painting, label or
+# heading) begins. The kicker is the opening's first p, the lead the p after the h1.
+MEADOW_JS = """() => {
   const o = document.querySelector('[data-part="opening"]');
+  const pic = o.querySelector('img').getBoundingClientRect();
   const lines = (e) => { const r = document.createRange(); r.selectNodeContents(e);
     return [...r.getClientRects()].filter(x => x.width > 1).map(x => [x.left, x.top, x.right, x.bottom]); };
-  const box = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
   const kicker = o.querySelector('p'), title = o.querySelector('h1'), lead = o.querySelector('h1 + p');
   const t = lines(title);
-  return { ring: [ring.left, ring.top, ring.right, ring.bottom], win: [innerWidth, innerHeight],
-           kicker: box(kicker), title: [Math.min(...t.map(x => x[0])), Math.min(...t.map(x => x[1])), Math.max(...t.map(x => x[2])), Math.max(...t.map(x => x[3]))],
-           lead: box(lead), lines: [kicker, title, lead].flatMap(lines),
-           hills: o.querySelector('[data-picture-band]').getBoundingClientRect().top,
+  const purpose = [...document.querySelectorAll('[data-part="purpose"] :is([data-picture] img, [data-label], h2)')].filter(e => e.offsetParent);
+  return { pic: [pic.left, pic.top + scrollY, pic.right, pic.bottom + scrollY], win: [document.documentElement.clientWidth, innerHeight],
+           title: [Math.min(...t.map(x => x[0])), Math.max(...t.map(x => x[2]))],
+           lines: [kicker, title, lead].flatMap(lines), end: o.getBoundingClientRect().bottom + scrollY,
+           purpose: Math.min(...purpose.map(e => e.getBoundingClientRect().top)) + scrollY,
            sideways: document.documentElement.scrollWidth - innerWidth };
 }"""
 
 
-def ink_near_words(page, geo, pad=8):
-    """The stroke's dark pixels (under 128) within `pad` px of any word: the words hidden, the
-    circle's box shot, and each line's box (grown by `pad`) counted in it."""
-    page.add_style_tag(content=HIDE_WORDS)
-    page.wait_for_timeout(100)
-    x0, y0, x1, y1 = geo["ring"]
-    clip = {"x": max(0, x0), "y": max(0, y0), "width": min(geo["win"][0], x1) - max(0, x0), "height": y1 - max(0, y0)}
-    shot = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("L")
-    sx, sy = shot.width / clip["width"], shot.height / clip["height"]
+def ink_near_words(shot, lines, pad=8):
+    """The painting's dark pixels (under 200) within `pad` px of any word, on a shot of the first
+    screen with the words hidden."""
+    grey = shot.convert("L")
     dark = 0
-    for l, t, r, b in geo["lines"]:
-        crop = (int((l - pad - clip["x"]) * sx), int((t - pad - clip["y"]) * sy), int((r + pad - clip["x"]) * sx), int((b + pad - clip["y"]) * sy))
-        crop = (max(0, crop[0]), max(0, crop[1]), min(shot.width, crop[2]), min(shot.height, crop[3]))
+    for l, t, r, b in lines:
+        crop = (max(0, int(l - pad)), max(0, int(t - pad)), min(grey.width, int(r + pad)), min(grey.height, int(b + pad)))
         if crop[2] > crop[0] and crop[3] > crop[1]:
-            dark += sum(shot.crop(crop).histogram()[:128])
+            dark += sum(grey.crop(crop).histogram()[:200])
     return dark
 
 
-def circle_layout(browser):
+def meadow_layout(browser):
     sizes = [(1920, 1000), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (600, 900), (390, 844), (360, 780)]
     for width, height in sizes:
-        tag = f"circle {width}x{height}"
+        tag = f"meadow {width}x{height}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
-        g = page.evaluate(OPENING_JS)
-        (rl, rt, rr, rb), (ww, wh) = g["ring"], g["win"]
-        cx, cy = (rl + rr) / 2, (rt + rb) / 2
-        check(f"{tag} the circle centred", abs(cx - ww / 2) <= 2, g["ring"])
-        if width >= 1280:
-            check(f"{tag} the circle fills the first screen (0.72 of its height or more)", (rb - rt) / wh >= 0.72, round((rb - rt) / wh, 3))
-        inside = lambda b: b[0] >= rl and b[2] <= rr and b[1] >= rt and b[3] <= rb
-        words = [g["kicker"], g["title"]] + ([g["lead"]] if width >= 600 else [])
-        check(f"{tag} the kicker, the title{' and the lead' if width >= 600 else ''} inside the circle", all(inside(b) for b in words), words)
-        if width < 600:
-            check(f"{tag} the lead under the circle", g["lead"][1] >= rb - 1, {"lead": g["lead"], "ring": g["ring"]})
-            check(f"{tag} the circle 8px from each edge", abs(rl - 8) <= 1 and abs(ww - rr - 8) <= 1, g["ring"])
-        tx, ty = (g["title"][0] + g["title"][2]) / 2, (g["title"][1] + g["title"][3]) / 2
-        check(f"{tag} the title centred in the circle", abs(tx - cx) <= 2 and abs(ty - cy) <= 0.08 * (rb - rt), {"title": g["title"], "ring": g["ring"]})
-        check(f"{tag} the hills begin in the first screen", g["hills"] < wh, g["hills"])
+        g = page.evaluate(MEADOW_JS)
+        (pl, pt, pr, pb), (ww, wh) = g["pic"], g["win"]
+        check(f"{tag} the painting spans the window", pl <= 0 and pr >= ww, g["pic"])
+        check(f"{tag} the title centred", abs((g["title"][0] + g["title"][1]) / 2 - ww / 2) <= 2, g["title"])
+        shot = first_screen_shot(page)
+        near = ink_near_words(shot, g["lines"])
+        check(f"{tag} no ink within 8px of the words", near == 0, near)
+        # The first screen's foot: the meadow runs on past it, its last 40px full of poppies and
+        # grass (no bare band and no edge there).
+        foot = shot.convert("L").crop((0, wh - 40, ww, wh))
+        full = sum(foot.histogram()[:215]) / (ww * 40)
+        check(f"{tag} the meadow fills the first screen's foot", pb > wh and full >= 0.2, {"inked": round(full, 3), "bottom": pb})
+        # Below the first screen the meadow ends in the paper: its painting's last 12px hold no ink,
+        # its last strokes stand under the first screen and above Our purpose's first content.
+        page.evaluate(f"window.scrollTo(0, {max(0, pb - wh * 0.7)})")
+        page.wait_for_timeout(300)
+        y0 = page.evaluate("scrollY")
+        view = Image.open(io.BytesIO(page.screenshot())).convert("RGB")
+        top, bottom = int(max(0, pt - y0)), int(min(wh, pb - y0))
+        rows = ink_rows(view.crop((0, top, ww, bottom)))
+        last = next((top + y0 + y for y in range(len(rows) - 1, -1, -1) if rows[y]), None)
+        bare = not any(rows[-12:])
+        check(f"{tag} the meadow ends in bare paper (its last 12px no ink)", bare, {"last_ink": last, "bottom": pb})
+        check(f"{tag} its last strokes under the first screen, 24px or more above Our purpose",
+              last is not None and last > wh and last + 24 <= g["purpose"], {"last_ink": last, "first_screen": wh, "purpose": g["purpose"], "end": g["end"]})
         check(f"{tag} no sideways scrolling", g["sideways"] <= 0, g["sideways"])
-        near = ink_near_words(page, g)
-        check(f"{tag} no word within 8px of the stroke's ink", near == 0, near)
-        page.screenshot(path=os.path.join(OUT, f"circle-inside-{width}x{height}.png"))
+        view.save(os.path.join(OUT, f"meadow-end-{width}x{height}.png"))
+        shot.save(os.path.join(OUT, f"meadow-{width}x{height}.png"))
         context.close()
 
 
@@ -1317,7 +1299,7 @@ def languages_layout(browser):
 
 
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, circle_layout]
+GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, meadow_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

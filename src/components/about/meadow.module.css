@@ -1,0 +1,123 @@
+/* The About opening: the poppy meadow (Mo, October 27-28, 2026). The ink circle that opened the
+   page reminded Mo of the film The Ring; of three painted ideas he compared two on the live site
+   and picked A, "Superbloom": golden hills in spring poppies fill the first screen, the words in
+   the painting's empty sky. Then he found that the first screen and Our purpose "don't transition
+   well": the painting stopped in a straight line, its biggest poppies on it, then blank paper and
+   the oak. Of two painted ends he picked A, "the meadow thins out": below the first screen the
+   poppies grow fewer and smaller, then a few last ones and dry grass, then bare paper, and the
+   oak follows. Gold behaves like gold leaf: it arrives, no glow, no shine.
+   The painting comes in two pictures (meadow-art.ts): the ink, whose gold is a pale grey ghost,
+   and the gold alone over it, let in once the gold's picture is in: the poppies bloom out from
+   the foot of the first screen's meadow. The pictures carry their own transparency (no
+   multiply), so the picture's box may be positioned.
+   Scoped under .root (the page root, with .aboutPage and .circle): section[...][...] outranks the
+   shared part rules in any stylesheet order. */
+
+/* One grid cell holds the painting and, over it, the words (later in the page, both positioned,
+   so the words paint over it with no z-index and no stacking context). The header floats over the
+   opening, so the words start 88px down; the painting starts at the top, under the header. The
+   section ends where the painting ends: the meadow's own bare paper is the space before Our
+   purpose. overflow-x: clip keeps the painting's sides from scrolling sideways; it makes no
+   stacking context and no scrolling box. */
+.root section[data-part="opening"][data-meadow] {
+  display: grid;
+  min-height: 100svh;
+  padding: 0;
+  overflow-x: clip;
+  text-align: center;
+}
+
+.root [data-meadow] > * {
+  grid-area: 1 / 1;
+}
+
+/* The painting is as wide as its first 3:2 part (`foot`, 1024 of its 1439 rows) must be to cover
+   the first screen: the window's width, or 1.5 times its height on a tall window, centred. Where
+   that part is taller than the window, its sky is cut 30% of the excess (the words keep their
+   sky) and its foot runs 70% of it past the first screen; the painted end runs on under it.
+   Percentages in margins are of the width, so the sky's cut can be worked out from it. */
+.root .picture {
+  --w: max(100%, 150svh);
+  position: relative;
+  align-self: start;
+  width: var(--w);
+  margin: calc((100svh - var(--w) / 1.5) * 0.3) calc((100% - var(--w)) / 2) 0;
+  pointer-events: none;
+}
+
+.root .picture img {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+.root .picture img.gold {
+  position: absolute;
+  inset: 0;
+}
+
+.root .words {
+  position: relative;
+  align-self: start;
+  display: grid;
+  justify-items: center;
+  padding-top: calc(88px + 7vh);
+}
+
+.root [data-part="opening"] .words h1 {
+  max-width: none;
+  font-size: clamp(44px, 5vw, 80px);
+}
+
+@media (max-width: 599px) {
+  .root [data-part="opening"] .words h1 {
+    max-width: 6em;
+    font-size: 40px;
+  }
+}
+
+@property --reach {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 150%;
+}
+
+/* The bloom spreads out from the middle of the first screen's foot over the slopes the poppies
+   cover: an ellipse 70% of the painting wide and 60% of its first part tall, centred on that
+   part's foot (--foot, its share of the painting's height, set by about-ink.tsx), so the far
+   slopes bloom last and the spread reads, and the painted end below blooms with it. */
+@media (prefers-reduced-motion: no-preference) {
+  .root .picture img.gold {
+    -webkit-mask-image: radial-gradient(
+      ellipse 70% calc(var(--foot) * 60%) at 50% calc(var(--foot) * 100%),
+      #000 calc(var(--reach) - 30%),
+      transparent var(--reach)
+    );
+    mask-image: radial-gradient(
+      ellipse 70% calc(var(--foot) * 60%) at 50% calc(var(--foot) * 100%),
+      #000 calc(var(--reach) - 30%),
+      transparent var(--reach)
+    );
+    animation: arrive 3.4s cubic-bezier(0.3, 0, 0.3, 1) 0.4s backwards;
+  }
+}
+
+/* The gold waits for its picture: with script on it holds, before its delay (its backwards fill
+   keeps it masked), until the opening marks [data-light="ready"] (about-ink.tsx). With script off
+   nothing holds. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .root [data-meadow]:not([data-light="ready"]) img.gold {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes arrive {
+  from {
+    --reach: 0%;
+  }
+
+  to {
+    --reach: 150%;
+  }
+}
