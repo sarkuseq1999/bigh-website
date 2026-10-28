@@ -4,9 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-4by02q11q-sarkuseq1999s-projects.vercel.app`
-(`dpl_HMQSjsrqSr9Xcs9Aoe6smwbrQMFK`), the **production** deployment of `main` at
-`55c250a95768084b28f39e49fa5c4c43a9512317` (October 27, 2026, from about 15:56 Pacific). Mo said
+The alias currently points to `bigh-website-nrigbdou0-sarkuseq1999s-projects.vercel.app`
+(`dpl_89aswJRrXAimKPgTGqVJNN8RJi35`), the **production** deployment of `main` at
+`4cd223146191ace89af17b6401ade8ea09e5d347` (October 27, 2026, from about 20:58 Pacific). Mo picked
+B for NuriCell's "Why these four work together" (the powder heaps read as drugs: three ranch
+paintings instead, firewood and the stove, the windmill filling its tank, the Pony Express rider)
+and said "Yes, put it live". It went out on its own: the two `studio` commits (`091c05f` code,
+pictures and checks; `c7a760a` mockups) cherry-picked onto `55c250a`, so other sessions' work on
+`studio` (NuriCell chapter 6, About opening ideas) stayed out; pushed as a fast-forward. Before the
+push, on the built copy (`npm run build` + `next start`, a scratch worktree): `qa_nuricell_ink`
+450/450, `qa_home_ink` 282/282, `qa_nav` 326/326. After the alias update, on the public demo in
+fresh unauthenticated browsers: the page serves the seven `pair-*-v1.webp` pictures and no heap,
+`qa_nuricell_ink` 450/450 (the release's own copy of the script; `studio`'s working copy then held
+chapter 6's unreleased checks, which fail on the demo as they should), `qa_home_ink` 282/282,
+`qa_nav` 326/326.
+
+Before that, from about 15:56 to 20:58 Pacific on October 27, 2026, the alias pointed to
+`bigh-website-4by02q11q-sarkuseq1999s-projects.vercel.app` (`dpl_HMQSjsrqSr9Xcs9Aoe6smwbrQMFK`),
+the **production** deployment of `main` at `55c250a95768084b28f39e49fa5c4c43a9512317`. Mo said
 to fix the NuriCell research hint in Japanese, which split タップ ("tap") across two lines on
 phones, and put it live. One CSS rule: the hint gets `word-break: keep-all` before `auto-phrase`,
 because Safari (WebKit 26.4) has no `auto-phrase`; keep-all lets it break only after 、 and 。.

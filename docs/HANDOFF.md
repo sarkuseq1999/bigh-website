@@ -5,9 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (NuriCell research: the Japanese hint no
-  longer splits タップ, live as `main` `55c250a`, production `dpl_HMQSjsrqSr9Xcs9Aoe6smwbrQMFK`,
-  demo alias on it). Before that the same day: the go-live merge (everything waiting on `studio`
+- **Last updated:** October 27, 2026, by Claude Code (NuriCell pairs on the ranch, live on its
+  own as `main` `4cd2231`, production `dpl_89aswJRrXAimKPgTGqVJNN8RJi35`, demo alias on it).
+  Before that the same day: NuriCell research's Japanese hint no longer splits タップ (`main`
+  `55c250a`); the go-live merge (everything waiting on `studio`
   put live together, `main` `641a751`; `studio` then equalled `main` but for notes); product
   questions put live on their own (`main` `c1f56aa`), NuriCell Dr. Liu (`6766ae1`) and the tablet
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
@@ -26,7 +27,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   in place of `sum`; the shared sum's checks (dev-only `?ink-sum` fixtures, jp/cns captions) moved
   to `qa_opc_ink` (`sum`). **Before going live:** Mo to confirm NuriCell's real start year ("about
   20 years" is his "almost 20-something years"; none is on file). Push only on Mo's yes.
-- **Built on `studio`, not live (October 27): NuriCell pairs on the ranch (Mo picked B).** Mo found
+- **Live (October 27, on its own): NuriCell pairs on the ranch (Mo picked B).** Mo found
   "Why these four work together"'s white powder heaps look like drugs. Of three painted ideas (A two
   hands, B an old California ranch, C a gold trail map; artifact `H9XUk1ya3vXH7Ei7WvghnL`) he picked
   B: firewood and the stove (flipped so the wood comes first), the windmill pouring gold water into
@@ -39,7 +40,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `reference/ink-pages/nuricell-pairs/build_nuricell_pairs.py`; recording artifact
   `S6d2aNgCzBhZMUHdoQQebb`. Checked on the built site (`npm run build` + `next start`, scratch
   worktree): `qa_nuricell_ink` 450/450 (the scenes section rewritten), `qa_home_ink` 282/282,
-  `qa_nav` 326/326; lint, type-check and Prettier clean. Push only on Mo's yes.
+  `qa_nav` 326/326; lint, type-check and Prettier clean. On Mo's yes, released alone: `091c05f`
+  and `c7a760a` cherry-picked onto `origin/main` `55c250a` (chapter 6 above stayed out), the same
+  three checks green on that build, pushed as `main` `4cd2231`; `studio` then merged it (no file
+  changes). Public demo: `qa_nuricell_ink` 450/450 (run from the release's own copy: `studio`'s
+  working copy then held chapter 6's checks), `qa_home_ink` 282/282, `qa_nav` 326/326.
 - **Live (October 27): the footer crane by the park sign (Mo picked B "end of the trail", then
   pose C).** The crane leaves "Stay sharp. Live fully." and stands at rest in the grass at the FDA
   park sign's right, bending toward the sign's California poppy; the promise stands alone, a size
