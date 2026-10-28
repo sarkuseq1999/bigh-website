@@ -13,9 +13,11 @@ import { about, routes } from "./about-content";
 import { dots, enso, glasses, hills, oak, pool, sequoia } from "./about-art";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
+import { scenes, type Scene } from "./scene-art";
 import { Painting, Spread } from "./spread";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
+import scene from "./scene.module.css";
 
 // About C, "The circle" (Mo, October 7, 2026; mockup reference/ink-pages/mockups/about-c.png; spec
 // docs/superpowers/specs/2026-10-05-ink-pages-design.md, "About (stage 1), October 7"). One circle
@@ -128,6 +130,70 @@ function Opening() {
         data-bloom="waiting"
         data-picture-band=""
       />
+    </section>
+  );
+}
+
+// The two openings Mo is comparing on the live site (October 27, 2026: the circle reminded him of
+// the film The Ring), at /about-a and /about-b (scene.module.css). One painting fills the first
+// screen; the words stand in its sky. Its gold waits for the gold's picture, then arrives, as the
+// circle waited for its stroke: [data-light="ready"] once the picture is in (Next's onLoad, which
+// also reports a picture in before hydration, and a check on mount). No timer.
+// On a phone the painting is drawn at its height (the window's) times 1.5, its shape.
+const SCENE = "(max-aspect-ratio: 3/2) 150vh, 100vw";
+
+function SceneOpening({ name }: { name: Scene }) {
+  const copy = useCopy();
+  const art = scenes[name];
+  const gold = useRef<HTMLImageElement>(null);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const img = gold.current;
+    if (img?.complete && img.naturalWidth) setReady(true);
+  }, []);
+  return (
+    <section
+      className={page.opening}
+      data-part="opening"
+      data-scene={name}
+      data-light={ready ? "ready" : undefined}
+      aria-labelledby="about-title"
+    >
+      <div className={scene.picture}>
+        <Image
+          src={art.src}
+          alt={art.alt}
+          width={art.width}
+          height={art.height}
+          sizes={SCENE}
+          preload
+          fetchPriority="high"
+        />
+        <Image
+          ref={gold}
+          onLoad={(event) => {
+            if (event.currentTarget.naturalWidth) setReady(true);
+          }}
+          className={scene.gold}
+          src={art.gold}
+          alt=""
+          width={art.width}
+          height={art.height}
+          sizes={SCENE}
+          loading="eager"
+        />
+      </div>
+      <div className={`${base.wrap} ${scene.words}`}>
+        <p className={page.kicker}>{copy(about.hero.label)}</p>
+        <h1 id="about-title" lang="en" className={page.title}>
+          {about.hero.title}
+        </h1>
+        <p className={page.lead}>
+          {sentences(copy(about.hero.lead)).map((sentence) => (
+            <span key={sentence}>{sentence}</span>
+          ))}
+        </p>
+      </div>
     </section>
   );
 }
@@ -315,12 +381,16 @@ function Closing() {
   );
 }
 
-export function AboutInk() {
+/** `opening`: one of the two test openings (/about-a, /about-b); without it, the circle. */
+export function AboutInk({ opening }: { opening?: Scene } = {}) {
   return (
-    <InkPage current="about" className={`${page.aboutPage} ${styles.circle}`}>
+    <InkPage
+      current="about"
+      className={`${page.aboutPage} ${styles.circle} ${opening ? scene.root : ""}`}
+    >
       {() => (
         <div data-about="circle">
-          <Opening />
+          {opening ? <SceneOpening name={opening} /> : <Opening />}
           <Purpose />
           <Roots />
           <Experience />
