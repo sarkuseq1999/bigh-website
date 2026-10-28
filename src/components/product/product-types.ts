@@ -220,9 +220,9 @@ export type ProductSynergyLink = {
   /** A short, sourced research note, e.g. what a study of the pair found. */
   evidence?: string;
   /**
-   * What the gold does in the pair's scene on the ink page (NuriCell, October 26, 2026): `lights`
-   * (carried from one heap to the other, lit there), `stores` (settles on the second heap, kept in
-   * reserve) or `joins` (half from each heap, made one).
+   * The pair's ranch scene on the ink page (NuriCell, Mo's B, October 27, 2026): `lights` (firewood
+   * and the stove, its gold fire), `stores` (the windmill filling its tank with gold water) or
+   * `joins` (the rider and his horse carrying a gold letter).
    */
   gold?: "lights" | "stores" | "joins";
 };

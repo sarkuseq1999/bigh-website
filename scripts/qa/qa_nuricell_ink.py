@@ -42,9 +42,11 @@ Sections (all, or --only=a,b):
   gold        its gold leaf: still where nothing moves (reduced motion), and moving: it rises from the
               powder (little gold at first, low down), settles as painted (about the painted leaf's
               gold), then keeps turning (two frames differ)
-  scenes      the pairs as three scenes: heaps loaded, three across from 900px and stacked below; each
-              scene's gold where its pair puts it, under the title; Play again plays it again; reduced
-              motion: the last frame, still, no Play again
+  scenes      the pairs as three ranch scenes (Mo picked B, October 27, 2026): paintings and their gold
+              loaded, multiplied onto the page, no powder heaps; three across from 900px and stacked
+              below; each pair's names in reading order; each plays as it comes into view (the wheel
+              turns, the water pours) and comes to rest as painted; Play again starts it over;
+              reduced motion: the paintings still, no Play again
 Pictures: scripts/qa/out/nuricell-ink/.
 
 usage: python -X utf8 scripts/qa/qa_nuricell_ink.py [base-url] [--only=shell,others,...]
@@ -1454,32 +1456,57 @@ def gold(browser):
         ctx.close()
 
 
+# The pairs as three scenes from a California ranch (Mo picked B, October 27, 2026; ideas
+# reference/ink-pages/mockups/nuricell-pairs/): they replaced the powder heaps, which read as drugs.
 SCENES = """() => [...document.querySelectorAll('[data-scene]')].map((s) => {
   const box = (e) => e.getBoundingClientRect();
-  const heaps = [...s.querySelectorAll('[data-heap] img')];
-  const flakes = [...s.querySelectorAll('span[style*="background-image"]')]
-    .filter((f) => Number(getComputedStyle(f).opacity) > 0.5).map(box);
-  const title = box(document.querySelector('[data-synergy] h3'));
-  const [a, b] = heaps.map(box);
-  const mid = (r) => r.left + r.width / 2;
+  const stage = s.querySelector('[class*="stage"]');
+  const still = stage.querySelector('img[class*="still"]');
+  const imgs = [...stage.querySelectorAll('img')];
+  const fan = stage.querySelector('img[class*="fan"]');
+  const stream = stage.querySelector('[class*="stream"]');
+  const angle = (e) => {
+    const t = getComputedStyle(e).transform;
+    if (!t || t === 'none') return 0;
+    const [a, b] = t.slice(7, -1).split(',').map(Number);
+    return Math.round((Math.atan2(b, a) * 180) / Math.PI);
+  };
+  const inside = (r, o) =>
+    r.left >= o.left - 1 && r.right <= o.right + 1 && r.top >= o.top - 1 && r.bottom <= o.bottom + 1;
+  const sb = box(still);
   return {
     kind: s.dataset.scene,
     top: Math.round(box(s).top),
     bottom: Math.round(box(s).bottom),
-    heaps: heaps.length === 2 && heaps.every((i) => i.complete && i.naturalWidth > 0),
-    flakes: flakes.length,
-    underTitle: flakes.every((f) => f.top >= title.bottom - 1),
-    overB: flakes.some((f) => mid(f) >= b.left && mid(f) <= b.right),
-    onB: flakes.filter((f) => mid(f) >= b.left && mid(f) <= b.right && f.top >= b.top - 4).length,
-    between: flakes.some((f) => mid(f) > Math.min(mid(a), mid(b)) && mid(f) < Math.max(mid(a), mid(b))),
+    loaded: imgs.length >= 2 && imgs.every((i) => i.complete && i.naturalWidth > 0),
+    multiply: getComputedStyle(still).mixBlendMode,
+    heaps: s.querySelectorAll('[data-heap]').length + imgs.filter((i) => /heap-/.test(i.currentSrc)).length,
+    layersOn: [...stage.querySelectorAll('[class*="cut"]')].every((e) => inside(box(e), sb)),
+    pair: s.querySelector('p[class*="pair"]')?.textContent.replace(/\\s+/g, ' ').trim(),
+    playing: stage.dataset.play === 'on',
+    angle: fan ? angle(fan) : null,
+    clip: stream ? getComputedStyle(stream).clipPath : null,
     again: !!s.querySelector('button'),
   };
 })"""
+PAIRS = {
+    "lights": "Acetyl-L-carnitine + Alpha-lipoic acid",
+    "stores": "Alpha-lipoic acid + Creatine",
+    "joins": "Choline + Acetyl-L-carnitine",
+}
 
 
-def scenes_ok(got):
-    by = {g["kind"]: g for g in got}
-    return by["lights"]["overB"] and by["stores"]["onB"] >= 4 and by["joins"]["between"]
+def whole(clip):
+    """The windmill's water shows whole: no clip-path, or an inset of nothing."""
+    return clip == "none" or bool(re.fullmatch(r"inset\((0(px|%)?\s*)+\)", clip or ""))
+
+# On a fresh page, before it plays, the windmill waits with its water hidden (not poured, then again).
+WAITING = """() => {
+  const stage = document.querySelector('[data-scene="stores"] [class*="stage"]');
+  const stream = stage.querySelector('[class*="stream"]');
+  return stage.dataset.play === 'wait' && /100%/.test(getComputedStyle(stream).clipPath);
+}"""
+TO_SCENE = "window.scrollBy(0, document.querySelectorAll('[data-scene]')[{i}].getBoundingClientRect().top - 120)"
 
 
 def scenes(browser):
@@ -1487,48 +1514,60 @@ def scenes(browser):
         tag = f"scenes {w}x{h}"
         across = w >= 900
         ctx, page, _, errors = opened(browser, w, h)
-        n = page.locator("[data-scene]").count()
-        for i in range(n):
-            # Each scene plays as it comes into view (three across: one after another).
-            page.evaluate(f"window.scrollBy(0, document.querySelectorAll('[data-scene]')[{i}].getBoundingClientRect().top - 160)")
-            page.wait_for_timeout(600 if across else 6500)
-        if across:
-            page.wait_for_timeout(6500)
-            page.evaluate("window.scrollBy(0, document.querySelector('[data-synergy]').getBoundingClientRect().top - 110)")
-            page.wait_for_timeout(300)
+        check(f"{tag} stores: until its turn, its water not yet poured", page.evaluate(WAITING))
+        # The windmill plays as it comes into view: mid-play its wheel is turned.
+        page.evaluate(TO_SCENE.format(i=1))
+        page.wait_for_function("document.querySelectorAll('[data-scene] [data-play]').length > 0", timeout=5000)
+        page.wait_for_timeout(1600 if across else 1400)
         got = page.evaluate(SCENES)
         kinds = [g["kind"] for g in got]
         check(f"{tag}: three scenes, lights, stores, joins", kinds == ["lights", "stores", "joins"], str(kinds))
-        check(f"{tag}: every scene's two heaps loaded", all(g["heaps"] for g in got))
+        if kinds != ["lights", "stores", "joins"]:
+            ctx.close()
+            continue
+        mid = got[1]
+        check(f"{tag} stores: it plays as it comes into view, the wheel turning", mid["playing"] and abs(mid["angle"]) > 10, f"{mid['angle']} deg")
+        for i in range(3):
+            page.evaluate(TO_SCENE.format(i=i))
+            page.wait_for_timeout(500)
+        page.wait_for_timeout(6000)
+        if across:
+            page.evaluate("window.scrollBy(0, document.querySelector('[data-synergy]').getBoundingClientRect().top - 110)")
+            page.wait_for_timeout(300)
+        got = page.evaluate(SCENES)
+        by = {g["kind"]: g for g in got}
+        check(f"{tag}: every scene's painting and gold loaded", all(g["loaded"] for g in got))
+        check(f"{tag}: the paintings multiply onto the page", all(g["multiply"] == "multiply" for g in got), str([g["multiply"] for g in got]))
+        check(f"{tag}: no powder heaps", sum(g["heaps"] for g in got) == 0)
+        check(f"{tag}: the gold lies on its painting", all(g["layersOn"] for g in got))
+        check(f"{tag}: each pair's names, in reading order", all(by[k]["pair"] == v for k, v in PAIRS.items()), str([g["pair"] for g in got]))
         tops = [g["top"] for g in got]
         laid = max(tops) - min(tops) <= 2 if across else all(got[i + 1]["top"] >= got[i]["bottom"] for i in range(len(got) - 1))
         check(f"{tag}: {'three across' if across else 'one under another'}", laid, str(tops))
-        if across:
-            for g in got:
-                check(f"{tag} {g['kind']}: its gold shows, under the heading", g["flakes"] >= 1 and g["underTitle"], f"{g['flakes']} flakes")
-        by = {g["kind"]: g for g in got}
-        check(f"{tag} lights: the lit leaf over the second heap", by["lights"]["overB"])
-        check(f"{tag} stores: flecks settled on the second heap", by["stores"]["onB"] >= 4, str(by["stores"]["onB"]))
-        check(f"{tag} joins: one leaf between the two heaps", by["joins"]["between"])
+        check(f"{tag}: all three played", all(g["playing"] for g in got))
+        rest = by["stores"]
+        check(f"{tag} stores: at rest as painted, the wheel upright, the water whole", rest["angle"] % 360 == 0 and whole(rest["clip"]), f"{rest['angle']} deg, {rest['clip']}")
         check(f"{tag}: Play again on each scene", all(g["again"] for g in got))
         page.screenshot(path=str(OUT / f"scenes-{w}.png"))
-        # Play again: the scene starts over (its gold leaves the second heap and rises again).
-        first = page.locator("[data-scene] button").first
-        first.scroll_into_view_if_needed()
-        first.click()
+        # Play again: the windmill starts over (its water gone from the pipe, its wheel near upright).
+        button = page.locator('[data-scene="stores"] button')
+        button.scroll_into_view_if_needed()
+        button.click()
         page.wait_for_timeout(250)
-        again = page.evaluate(SCENES)[0]
-        check(f"{tag}: Play again starts the scene over", again["flakes"] == 0 or not again["overB"], f"{again['flakes']} flakes")
+        again = page.evaluate(SCENES)[1]
+        check(f"{tag}: Play again starts the scene over", not whole(again["clip"]) and abs(again["angle"]) < 40, f"{again['angle']} deg, {again['clip']}")
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:2]))
         ctx.close()
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         for i in range(3):
-            page.evaluate(f"window.scrollBy(0, document.querySelectorAll('[data-scene]')[{i}].getBoundingClientRect().top - 160)")
+            page.evaluate(TO_SCENE.format(i=i))
             page.wait_for_timeout(300)
         got = page.evaluate(SCENES)
-        check(f"{tag} reduced motion: each scene's last frame, still", all(g["flakes"] >= 1 for g in got) and scenes_ok(got), str([g["flakes"] for g in got]))
+        still = all(not g["playing"] for g in got) and got[1]["angle"] == 0 and whole(got[1]["clip"])
+        check(f"{tag} reduced motion: the paintings as painted, nothing playing", still, str(got[1]))
         check(f"{tag} reduced motion: no Play again", not any(g["again"] for g in got))
         ctx.close()
+
 
 SECTIONS = {
     "shell": shell,

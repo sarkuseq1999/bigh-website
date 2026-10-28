@@ -12,6 +12,20 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Built on `studio`, not live (October 27): NuriCell pairs on the ranch (Mo picked B).** Mo found
+  "Why these four work together"'s white powder heaps look like drugs. Of three painted ideas (A two
+  hands, B an old California ranch, C a gold trail map; artifact `H9XUk1ya3vXH7Ei7WvghnL`) he picked
+  B: firewood and the stove (flipped so the wood comes first), the windmill pouring gold water into
+  its tank, the Pony Express rider with a gold letter. Each plays once as it comes into view: the
+  light runs up the fire, the wheel turns once while the water pours and light spreads across the
+  tank, the light crosses the letter; Play again replays; reduced motion and no script show the
+  paintings still. The wheel turns over a Codex repaint of the scene without it
+  (`ranch-windmill-nowheel.png`). The heaps' pictures and code are gone. `nuricell-scenes.tsx`,
+  `nuricell-inside.module.css`, generated `nuricell-pairs.ts` from
+  `reference/ink-pages/nuricell-pairs/build_nuricell_pairs.py`; recording artifact
+  `S6d2aNgCzBhZMUHdoQQebb`. Checked on the built site (`npm run build` + `next start`, scratch
+  worktree): `qa_nuricell_ink` 450/450 (the scenes section rewritten), `qa_home_ink` 282/282,
+  `qa_nav` 326/326; lint, type-check and Prettier clean. Push only on Mo's yes.
 - **Live (October 27): the footer crane by the park sign (Mo picked B "end of the trail", then
   pose C).** The crane leaves "Stay sharp. Live fully." and stands at rest in the grass at the FDA
   park sign's right, bending toward the sign's California poppy; the promise stands alone, a size

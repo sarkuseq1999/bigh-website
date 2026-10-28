@@ -3,7 +3,7 @@
 // 2026). capsule.leaf: one sheet of every flake in three bands (as painted, lit, turned away),
 // `band` px apart. capsule.flakes, biggest first: [x, y, w, h] on the sheet (px), then [left, top,
 // width, height] in the painting (fractions). capsule.tips: the heaps' tips, left to right
-// (fractions). heaps: the four powder heaps, cut out for the teamwork scenes.
+// (fractions).
 export const nuricellGold = {
   capsule: {
     ink: { src: "/images/products/nuricell/ink/capsule-ink-v1.webp", width: 1200, height: 1135 },
@@ -122,15 +122,5 @@ export const nuricellGold = {
       [282, 223, 9, 9, 0.52, 0.55419, 0.0075, 0.00793],
       [318, 223, 9, 8, 0.61333, 0.87313, 0.0075, 0.00705],
     ],
-  },
-  heaps: {
-    alcar: { src: "/images/products/nuricell/ink/heap-alcar-v1.webp", width: 322, height: 227 },
-    creatine: {
-      src: "/images/products/nuricell/ink/heap-creatine-v1.webp",
-      width: 338,
-      height: 178,
-    },
-    ala: { src: "/images/products/nuricell/ink/heap-ala-v1.webp", width: 248, height: 158 },
-    choline: { src: "/images/products/nuricell/ink/heap-choline-v1.webp", width: 176, height: 118 },
   },
 } as const;
