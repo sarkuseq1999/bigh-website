@@ -1,0 +1,247 @@
+<title>About Opening Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column like a scroll. Three ideas for the About page's first screen, each a card
+     with the real page (big screen beside phone). The site's own paper and ink. */
+  :root {
+    --paper: #f4f0e6;
+    --card: #faf7f0;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d9d2c1;
+    --pick: #1f3d2b;
+    --pick-bg: #e3ebdf;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --card: #24211c;
+      --ink: #f1ece0;
+      --ink-soft: #b6ae9e;
+      --rule: #3a362e;
+      --pick: #cfe3c6;
+      --pick-bg: #2b3a2c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --card: #24211c;
+    --ink: #f1ece0;
+    --ink-soft: #b6ae9e;
+    --rule: #3a362e;
+    --pick: #cfe3c6;
+    --pick-bg: #2b3a2c;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.5 var(--body);
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+    display: grid;
+    gap: 32px;
+  }
+  header {
+    display: grid;
+    gap: 10px;
+  }
+  h1 {
+    font: 600 38px/1.08 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 36em;
+    color: var(--ink-soft);
+  }
+  .answer {
+    margin: 0;
+    font-weight: 600;
+  }
+  .answer code {
+    font: 600 16px/1 var(--body);
+    background: var(--pick-bg);
+    color: var(--pick);
+    padding: 3px 8px;
+    border-radius: 6px;
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  .card.pick {
+    border: 2px solid var(--pick);
+  }
+  .card h2 {
+    font: 600 26px/1.2 var(--title);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+  }
+  .tag {
+    font: 700 16px/1 var(--body);
+    letter-spacing: 0.04em;
+  }
+  .badge {
+    font: 600 13px/1 var(--body);
+    color: var(--pick);
+    background: var(--pick-bg);
+    padding: 5px 9px;
+    border-radius: 99px;
+  }
+  .card p {
+    margin: 0;
+    max-width: 40em;
+  }
+  .score {
+    color: var(--ink-soft);
+    font-size: 15px;
+  }
+  .shots {
+    display: grid;
+    grid-template-columns: 3.3fr 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: #f3efe4;
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  footer {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 40em;
+  }
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 32px;
+    }
+    .shots {
+      grid-template-columns: 1fr 1fr;
+    }
+    .shots > figure:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>About page: a new first screen</h1>
+    <p class="lede">
+      The big ink circle reminded Mo of the movie The Ring. Here are three new ideas, each laid
+      over the real About page. Only the first screen changes. Nothing is built or live.
+    </p>
+    <p class="answer">My pick: <code>B</code></p>
+  </header>
+
+  <article class="card">
+    <h2><span class="tag">A</span> Superbloom</h2>
+    <p>
+      Golden hills covered in spring poppies fill the first screen, with the title in the sky.
+      When the page opens, the poppies would bloom across the hills.
+    </p>
+    <p class="score">
+      8 out of 10. What holds it back: the yellow is brighter, and there is far more of it, than
+      the site's single touch of gold. The poppies are also painted more carefully than the
+      site's loose ink.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="img/a1-desk.webp" width="1440" height="900" alt="Big screen: the title in a pale sky above rolling hills covered in yellow poppies, oaks on a far ridge.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/a1-phone.webp" width="780" height="1688" alt="Phone: the title at the top, poppy-covered hills filling the lower half.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="card pick">
+    <h2><span class="tag">B</span> Morning walk <span class="badge">My pick</span></h2>
+    <p>
+      A trail over golden hills in the morning. One person and their dog walk away from us, and
+      the sunlit ridge ahead is the only gold. It says: good health means you are still out
+      walking, at any age.
+    </p>
+    <p class="score">
+      8.5 out of 10. It is painted in the site's own grey ink and gold, and it tells a small
+      story. What holds it back: with the backpack, the walker looks more like a young hiker
+      than an older reader. A second painting could fix that.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="img/b1-desk.webp" width="1440" height="900" alt="Big screen: the title in a pale sky above misty grey hills; a person with a walking stick and a small dog walk up a dirt trail toward a gold-lit ridge.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/b1-phone.webp" width="780" height="1688" alt="Phone: the title at the top; below, the walker and dog on the trail.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <article class="card">
+    <h2><span class="tag">C</span> The name, painted</h2>
+    <p>
+      No new picture. The title's four first letters, B, i, G and H, are brushed big in ink, and
+      the dot on the i is gold leaf. It shows what the name stands for. The hills stay below.
+    </p>
+    <p class="score">
+      7 out of 10. What holds it back: it is close to the painted BiGH letters Mo turned down on
+      October 7. The brushed letters next to the heavy type look like two fonts that don't
+      match. It is also the quietest of the three at first glance.
+    </p>
+    <div class="shots">
+      <figure>
+        <img src="img/c-desk.webp" width="1440" height="900" alt="Big screen: the title Be in Good Health. with B, i, G and H brushed in black ink and the rest in type; pale hills at the bottom.">
+        <figcaption>Big screen</figcaption>
+      </figure>
+      <figure>
+        <img src="img/c-phone.webp" width="780" height="1688" alt="Phone: the title on three lines, its first letters brushed.">
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </article>
+
+  <footer>
+    Codex painted the pictures on Mo's ChatGPT plan, so no money was spent. Each picture was laid
+    over the public demo's About page. These are still pictures; the moving parts (the poppies
+    blooming, the trail drawing in) are not built yet.
+  </footer>
+</div>
