@@ -23,8 +23,9 @@ Sections (all, or --only=a,b):
               first open; a book opens its question and the other books fade (the 2003 pair lights
               two); a question lights its book, pointing previews one; on a phone a tapped book
               brings its question up under the menu bar; reduced motion: no fades
-  sum         the painted sum matches the serving, a caption under each number; set in type
-              (?ink-sum=type, ?ink-sum=odd) each caption sits under its own numeral
+  formula     "The same formula for about 20 years" (Mo picked it, October 27, 2026) in place of how
+              to take it: no label and no sum; the heading, a lead in ink and the note; the redwood
+              round with its gold ring's light mask; "acetyl-L-carnitine" never broken (1440 to 360)
   buy         Add to cart: the kit's hover, a pill on focus
   layout      sizes 1536 to 360: no sideways scroll, each painting in its own place from 960px and above
               them below, text 15px+, targets 44px+, words readable with pictures blocked
@@ -288,10 +289,9 @@ def multiply(browser):
             inside, outside, diff = corner_of(Image.open(shot).convert("RGB"), box)
             check(f"multiply {w} {chapter}: no box at its corner", diff <= 6, f"{inside} vs {outside}")
         # The buy chapter's stroke (its figure holds the bottle's photo, so it is not a blend group:
-        # the stroke multiplies on its own) and the painted sum.
+        # the stroke multiplies on its own).
         for name, selector, shot_name in [
             ("buy stroke", '[data-chapter="buy"] img[src*="stroke"]', f"multiply-{w}-buy-stroke.png"),
-            ("sum", '[data-sum] img[src*="sum-"]', f"multiply-{w}-sum.png"),
         ]:
             el = page.locator(selector).first
             blend = el.evaluate("e => getComputedStyle(e).mixBlendMode")
@@ -509,7 +509,7 @@ EXPECT = {
     "inside": "capsule",
     "research": "books",
     "people": "liu-berkeley",
-    "daily": "breakfast",
+    "daily": "rings-",
     "buy": "stroke",
 }
 
@@ -584,8 +584,8 @@ def words(browser, chapters=tuple(CHAPTERS)):
         "people": ["Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "Portrait painting",
                    "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
                    "An animal study, not a test of NuriCell."],
-        "daily": ["How to take it", "One bottle, one month.", "Take 3 capsules once a day, with or after a meal.",
-                  "capsules a day", "days", "capsules in each bottle"],
+        # The same formula for about 20 years (Mo picked it, October 27, 2026).
+        "daily": FORMULA,
         "buy": ["In each bottle", "Formulated by Dr. Jiankang Liu.", "Add to cart"],
     }
     for chapter in chapters:
@@ -652,91 +652,75 @@ def after(browser):
         ctx.close()
 
 
-SUM_CAPTIONS = ["capsules a day", "days", "capsules in each bottle"]
+# "The same formula for about 20 years" (Mo picked 2 of round 3, October 27, 2026; mockups
+# reference/ink-pages/mockups/nuricell-daily/): in place of how to take it, which the buy box and the
+# first question say.
+FORMULA = [
+    "The same formula for about 20 years.",
+    "Dr. Liu chose its four nutrients. We haven’t changed them since.",
+    "The gold ring is about 20 years ago. Each ring outside it is a year with the same four: "
+    "acetyl-L-carnitine, creatine, alpha-lipoic acid and choline.",
+]
 
-# Each caption's centre against its numeral's box, the caption below it, and nothing outside the sum.
-SUM_TYPE_GEOMETRY = """() => {
-  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
-  return [...document.querySelectorAll('[data-sum] [data-sum-type] > span')]
-    .filter((cell) => cell.querySelector('[data-sum-numeral]')).map((cell) => {
-      const n = cell.querySelector('[data-sum-numeral]').getBoundingClientRect();
-      const c = cell.querySelector('[data-sum-label]').getBoundingClientRect();
-      return { offset: c.left + c.width / 2 - (n.left + n.width / 2), half: n.width / 2, below: c.top - n.bottom,
-               inside: c.left >= figure.left - 1 && c.right <= figure.right + 1 && n.left >= figure.left - 1 && n.right <= figure.right + 1,
-               text: cell.querySelector('[data-sum-numeral]').textContent };
-    });
+# The chapter's words in order, the lead's ink, the painting and its gold ring's light mask, and on
+# how many lines each hyphenated nutrient sits (as the lines of its glyph rects).
+FORMULA_GEOMETRY = """(words) => {
+  const c = document.querySelector('[data-chapter="daily"]');
+  const kids = [...c.querySelector('[data-words]').children];
+  const img = c.querySelector('figure[data-picture] img');
+  const gold = c.querySelector('figure[data-picture] [style*="--gold"]');
+  const lines = (word) => {
+    const walk = document.createTreeWalker(c.querySelector('[data-words]'), NodeFilter.SHOW_TEXT);
+    for (let node = walk.nextNode(); node; node = walk.nextNode()) {
+      const i = node.data.indexOf(word);
+      if (i < 0 || node.parentElement.closest('[class*=visuallyHidden]')) continue;
+      const r = document.createRange(); r.setStart(node, i); r.setEnd(node, i + word.length);
+      return new Set([...r.getClientRects()].filter((x) => x.width > 0).map((x) => Math.round(x.top))).size;
+    }
+    return 0;
+  };
+  const style = (e) => getComputedStyle(e);
+  return {
+    tags: kids.map((k) => k.tagName), texts: kids.map((k) => k.textContent.replace(/\\s+/g, ' ').trim()),
+    sum: !!c.querySelector('[data-sum]'), howTo: c.textContent.includes('How to take it'),
+    leadInk: kids[1] && style(kids[1]).color === style(kids[0]).color, leadSize: kids[1] ? parseFloat(style(kids[1]).fontSize) : 0,
+    src: img ? decodeURIComponent(img.currentSrc || img.src) : '', loaded: !!img && img.complete && img.naturalWidth > 0,
+    caption: (c.querySelector('figure[data-picture] figcaption') || {}).textContent,
+    gold: gold ? style(gold).getPropertyValue('--gold') : '',
+    whole: Object.fromEntries(words.map((w) => [w, lines(w)])),
+  };
 }"""
 
 
-def sum_type(browser):
-    """The sum set in type (the dev-only ?ink-sum=type and ?ink-sum=odd fixtures; a painting whose
-    numbers are not the serving's gets this): a caption directly under its own numeral, the x and =
-    only when the numbers make that sum."""
-    for fixture, numerals, operators in [("type", ["3", "30", "90"], True), ("odd", ["3", "30", "91"], False)]:
-        for w, h in [(1440, 900), (390, 844)]:
-            tag = f"sum type ({fixture}) {w}"
-            ctx, page, response, errors = opened(browser, w, h, f"{PATH}?ink-sum={fixture}", reduced=True)
-            if not development(response):
-                # The fixtures are development only (daily.tsx): a built site (next start or the
-                # demo) shows the product as given, the painted sum, for each of them.
-                kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
-                check(f"sum type ({fixture}): a built site ignores ?ink-sum={fixture} (the painted sum)", kind == "painted", str(kind))
-                print(f"NOTE sum type ({fixture}) skipped: a built site ignores ?ink-sum (run it against the dev server)")
-                ctx.close()
-                break
-            try:
-                page.wait_for_selector('[data-sum-kind="type"]', timeout=15000)
-            except Exception:
-                pass
-            kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
-            check(f"{tag}: the type branch shows, no painting", kind == "type" and page.locator("[data-sum] img").count() == 0, str(kind))
-            check(f"{tag}: no centres claimed", page.locator("[data-sum]").get_attribute("data-centres") is None)
-            bring(page, "[data-sum]", 200)
-            page.wait_for_timeout(300)
-            cells = page.evaluate(SUM_TYPE_GEOMETRY)
-            check(f"{tag}: three numerals {numerals}", [c["text"] for c in cells] == numerals, str([c["text"] for c in cells]))
-            shown = page.locator("[data-sum] [data-sum-type]").inner_text()
-            check(
-                f"{tag}: the × and = {'shown' if operators else 'left out'}",
-                ("×" in shown and "=" in shown) if operators else ("×" not in shown and "=" not in shown),
-                repr(shown),
-            )
-            captions = page.locator("[data-sum] [data-sum-label]")
-            check(f"{tag}: the visible captions are the three words", captions.all_inner_texts() == SUM_CAPTIONS and all(c.is_visible() for c in captions.all()), str(captions.all_inner_texts()))
-            within = all(abs(c["offset"]) <= c["half"] for c in cells)
-            check(f"{tag}: each caption's centre within its numeral", len(cells) == 3 and within, ", ".join(f"{c['offset']:.1f}/{c['half']:.1f}" for c in cells))
-            check(f"{tag}: each caption under its numeral, all inside the figure", len(cells) == 3 and all(c["below"] >= -1 and c["inside"] for c in cells), str([(round(c["below"]), c["inside"]) for c in cells]))
-            check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
-            page.screenshot(path=str(OUT / f"sum-type-{fixture}-{w}.png"))
-            ctx.close()
-
-
-def sum_check(browser):
-    ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
-    painted = page.locator('[data-sum] img[src*="sum-"]')
-    check("sum: painted for NuriCell's 3 × 30 = 90", painted.count() == 1)
-    said = page.locator("[data-sum] [data-sum-text]").text_content()
-    check("sum: said in words for screen readers", "3" in said and "30" in said and "90" in said, said)
-    labels = page.evaluate(
-        """() => { const img = document.querySelector('[data-sum] img').getBoundingClientRect();
-                   return [...document.querySelectorAll('[data-sum] [data-sum-label]')].map(l => {
-                     const r = l.getBoundingClientRect(); return { centre: (r.left + r.width / 2 - img.left) / img.width, top: r.top - img.bottom }; }); }"""
-    )
-    art = page.evaluate("() => JSON.parse(document.querySelector('[data-sum]').dataset.centres)")
-    check("sum: three captions", len(labels) == 3, str(labels))
-    near = all(abs(l["centre"] - c) < 0.06 for l, c in zip(labels, art))
-    check("sum: each caption under its number", near, f"{[round(l['centre'], 3) for l in labels]} vs {art}")
-    # What is on screen, not the hidden sentence (which also holds "capsules a day").
-    captions = page.locator("[data-sum] [data-sum-label]")
-    check(
-        "sum: the visible captions are the three words",
-        captions.all_inner_texts() == SUM_CAPTIONS and all(c.is_visible() for c in captions.all()),
-        str(captions.all_inner_texts()),
-    )
-    kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
-    check("sum: painted by default", kind == "painted", str(kind))
-    ctx.close()
-    sum_type(browser)
+def formula_check(browser):
+    for w, h in [(1440, 900), (1024, 768), (768, 1024), (390, 844), (360, 780)]:
+        tag = f"formula {w}"
+        ctx, page, _, errors = opened(browser, w, h, reduced=True)
+        bring(page, '[data-chapter="daily"]', 100)
+        page.wait_for_timeout(400)
+        g = page.evaluate(FORMULA_GEOMETRY, ["acetyl-L-carnitine", "alpha-lipoic"])
+        check(f"{tag}: the heading, the lead, the note", g["tags"] == ["H2", "P", "P"] and g["texts"] == FORMULA, str(g["texts"]))
+        check(f"{tag}: no label and no sum", not g["sum"] and not g["howTo"])
+        check(f"{tag}: the lead in ink, a step under the heading", g["leadInk"] and g["leadSize"] >= 22, f"{g['leadInk']} {g['leadSize']}px")
+        check(f"{tag}: the redwood round, loaded, captioned Illustration", "/rings-" in g["src"] and g["loaded"] and g["caption"] == "Illustration", f"{g['src'][-50:]} {g['caption']}")
+        check(f"{tag}: its gold ring's light mask", "rings-v1-gold" in g["gold"], g["gold"])
+        check(f"{tag}: each hyphenated nutrient on one line", all(v == 1 for v in g["whole"].values()), str(g["whole"]))
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:2]))
+        if w == 1440:
+            mask = page.request.get(BASE + "/images/products/nuricell/ink/rings-v1-gold.webp")
+            check("formula: the gold ring's light mask is served", mask.status == 200, str(mask.status))
+        page.screenshot(path=str(OUT / f"formula-{w}.png"))
+        ctx.close()
+    # Chinese breaks between any two characters: the heading and lead break only at their
+    # punctuation, so "配方" and "营养素" stay whole (they split at 390 and 1440 before).
+    for w, h in [(1440, 900), (1024, 768), (390, 844), (360, 780)]:
+        ctx, page, _, _ = opened(browser, w, h, "/cns/products/nuricell", reduced=True)
+        bring(page, '[data-chapter="daily"]', 100)
+        page.wait_for_timeout(300)
+        g = page.evaluate(FORMULA_GEOMETRY, ["配方", "营养素"])
+        check(f"formula cns {w}: no word split in the heading or lead", all(v == 1 for v in g["whole"].values()), str(g["whole"]))
+        page.screenshot(path=str(OUT / f"formula-cns-{w}.png"))
+        ctx.close()
 
 
 def buy_check(browser):
@@ -925,7 +909,7 @@ def layout(browser):
         # above its land (its lower 45%; Mo picked A2, October 26, 2026); the books and the bottle
         # left of theirs; the capsule between
         # its ingredients (the first and third left of it, the second and fourth right of it) under
-        # the heading; the breakfast right of its heading and over the brushed sum. One column: each
+        # the heading; the redwood round right of its words (October 27, 2026). One column: each
         # painting over its words.
         bad = page.evaluate(
             """(two) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
@@ -935,7 +919,7 @@ def layout(browser):
                  const id = c.dataset.chapter;
                  let ok;
                  if (!two) ok = f.bottom <= t.top + 1;
-                 else if (id === 'why') ok = t.right <= f.left + 1;
+                 else if (id === 'why' || id === 'daily') ok = t.right <= f.left + 1;
                  else if (id === 'people') {
                    const img = box(c.querySelector('figure[data-picture] img'));
                    const last = box([...c.querySelectorAll('[data-words] > *')].pop());
@@ -946,8 +930,6 @@ def layout(browser):
                    const rows = [...c.querySelectorAll('tbody tr')].map(box);
                    ok = rows.length === 4 && box(c.querySelector('h2')).bottom <= f.top + 1
                      && rows.every((r, i) => (i % 2 ? r.left >= f.right - 1 : r.right <= f.left + 1));
-                 } else if (id === 'daily') {
-                   ok = box(c.querySelector('h2')).right <= f.left + 1 && box(c.querySelector('[data-sum]')).top >= f.bottom - 1;
                  } else ok = f.right <= t.left + 1;
                  return ok ? null : id; }).filter(Boolean)""",
             w >= 960,
@@ -1223,7 +1205,9 @@ def polish(browser):
         ctx.close()
 
 
-NEW = ["Portrait painting", "capsules a day", "capsules in each bottle",
+NEW = ["Portrait painting",
+       # The same formula for about 20 years (m962-m964, October 27, 2026).
+       *FORMULA,
        # Dr. Liu in the view west (m907-m909, October 26, 2026).
        "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
        "Both are in NuriCell, which he formulated.", "An animal study, not a test of NuriCell.",
@@ -1244,50 +1228,9 @@ ALTS = {
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
     "research": "Seven books as stepping stones across a calm stream, painted in ink",
     "people": "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and colour",
-    "daily": "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink",
+    "daily": "The cut end of a young redwood log, one ring about 20 years in from the bark laid in gold leaf, painted in ink",
 }
 PLACEHOLDER = re.compile(r"\{[^{}]*\}")
-
-# Each sum caption's lines: whole, and the word capsule (カプセル / 胶囊) alone, as the lines of its
-# glyph rects (a word split across two lines has rects at two heights); inside the sum's figure.
-SUM_CAPTION_LINES = """() => {
-  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
-  const lines = (node, a, b) => {
-    const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b);
-    const tops = [...r.getClientRects()].filter((x) => x.width > 0).map((x) => x.top).sort((p, q) => p - q);
-    return tops.reduce((n, t, i) => (i === 0 || t - tops[i - 1] > 4 ? n + 1 : n), 0);
-  };
-  return [...document.querySelectorAll('[data-sum] [data-sum-label]')].map((el) => {
-    const node = el.firstChild;
-    const text = node.data;
-    const word = ['カプセル', '胶囊'].find((w) => text.includes(w)) ?? null;
-    const box = el.getBoundingClientRect();
-    return { text, word, lines: lines(node, 0, text.length),
-             wordLines: word ? lines(node, text.indexOf(word), text.indexOf(word) + word.length) : 0,
-             inside: box.left >= figure.left - 1 && box.right <= figure.right + 1,
-             wide: document.documentElement.scrollWidth > window.innerWidth };
-  });
-}"""
-
-
-def sum_captions_whole(browser, locale, w, h):
-    """jp and cns break anywhere between characters, which split カプセル and 胶囊 across two lines
-    (1日のカ / プセル数): the captions keep their words whole and stay inside the figure."""
-    ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/nuricell", reduced=True)
-    bring(page, "[data-sum]", 200)
-    page.wait_for_timeout(300)
-    caps = page.evaluate(SUM_CAPTION_LINES)
-    tag = f"languages {locale} {w}"
-    having = [c for c in caps if c["word"]]
-    check(f"{tag}: three sum captions", len(caps) == 3, str([c["text"] for c in caps]))
-    check(
-        f"{tag}: no caption breaks inside its capsule word",
-        len(having) == 2 and all(c["wordLines"] == 1 for c in having),
-        str([(c["text"], c["wordLines"]) for c in caps]),
-    )
-    check(f"{tag}: the captions stay inside the sum, no sideways scroll", all(c["inside"] and not c["wide"] for c in caps), str([(c["text"], c["inside"], c["wide"]) for c in caps]))
-    ctx.close()
-
 
 def languages(browser):
     for locale in ["kr", "jp", "cns", "vn"]:
@@ -1308,17 +1251,12 @@ def languages(browser):
         check(f"languages {locale}: all five painting descriptions translated", not untranslated, ", ".join(untranslated) or alts["why"])
         headers = page.locator('[data-chapter="inside"] thead th').evaluate_all("els => els.map(e => e.textContent.trim())")
         check(f"languages {locale}: ingredient table headers translated", len(headers) == 3 and not set(headers) & set(NEW_TABLE_HEADERS), str(headers))
-        captions = [c.strip() for c in page.locator("[data-sum] [data-sum-label]").all_inner_texts()]
-        check(f"languages {locale}: the three sum captions (days too) translated", len(captions) == 3 and not set(captions) & set(SUM_CAPTIONS), str(captions))
         check(f"languages {locale}: no raw {{placeholder}} in a chapter", not PLACEHOLDER.search(text), str(PLACEHOLDER.findall(text)[:3]))
         # The books are named by their questions for screen readers: "2002: <question>", translated.
         books = page.locator('[data-chapter="research"] [data-book]').evaluate_all("els => els.map(e => e.getAttribute('aria-label'))")
         english = [b for b in books if b.split(": ", 1)[-1] in QUESTIONS]
         check(f"languages {locale}: the seven books' names translated", len(books) == 7 and not english, ", ".join(english[:2]) or books[0])
         ctx.close()
-    for locale in ["jp", "cns"]:
-        for w, h in [(1440, 900), (390, 844)]:
-            sum_captions_whole(browser, locale, w, h)
 
 
 # The Why words, tidied (Mo picked them with the Gold Rush lantern, then the lighthouse, October
@@ -1579,7 +1517,7 @@ SECTIONS = {
     "after": after,
     "sticky": sticky,
     "research": research,
-    "sum": sum_check,
+    "formula": formula_check,
     "buy": buy_check,
     "layout": layout,
     "deep_links": deep_links,

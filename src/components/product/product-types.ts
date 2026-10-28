@@ -46,6 +46,10 @@ export type ProductInk = {
   daily: {
     picture: InkPainting;
     sum?: InkArt & { numbers: readonly number[]; centres: readonly number[] };
+    /** In place of how to take it, which the buy box and the first question already say: a
+     *  heading, a lead in ink and a note on the painting (NuriCell's redwood round, Mo picked "the
+     *  same formula for about 20 years", October 27, 2026). The chapter then shows no sum. */
+    story?: { title: string; lead: string; note: string };
   };
   /** The buy chapter: the real bottle on one brush stroke (NuriCell), or standing inside a painted
    *  scene (Green Bee Propolis, October 14, 2026: the bottle photo is never redrawn). */

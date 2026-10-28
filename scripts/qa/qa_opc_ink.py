@@ -22,6 +22,9 @@ Sections (all, or --only=a,b):
               them below, text 15px+
   deep_links  #chapter-<id> lands its heading under the menu bar
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
+  sum         the shared sum (from qa_nuricell_ink.py, October 27, 2026): set in type (?ink-sum=type,
+              ?ink-sum=odd, dev server only) each caption sits under its own numeral; in jp and cns
+              no caption breaks inside its capsule word
 Pictures: scripts/qa/out/opc-ink/.
 
 usage: python -X utf8 scripts/qa/qa_opc_ink.py [base-url] [--only=shell,name,...]
@@ -73,6 +76,14 @@ def opened(browser, w, h, path=PATH, reduced=False, js=True):
     if js:
         page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
     return ctx, page, response, errors
+
+
+def development(response):
+    """The dev server (next dev) answers every page with no-cache; a built site does not, whether
+    `next start` (s-maxage) or Vercel (public, max-age=0, must-revalidate). Only the dev server
+    honours the dev-only fixtures."""
+    cache = (response.headers.get("cache-control") or "") if response is not None else ""
+    return "no-cache" in cache or "no-store" in cache
 
 
 def bring(page, selector, top=140):
@@ -438,6 +449,115 @@ def languages(browser):
         ctx.close()
 
 
+SUM_CAPTIONS = ["capsules a day", "days", "capsules in each bottle"]
+
+# The shared sum (daily.tsx) moved here from qa_nuricell_ink.py on October 27, 2026, when
+# NuriCell's chapter became the redwood round: Advanced OPC still shows a painted sum.
+# Each caption's centre against its numeral's box, the caption below it, and nothing outside the sum.
+SUM_TYPE_GEOMETRY = """() => {
+  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
+  return [...document.querySelectorAll('[data-sum] [data-sum-type] > span')]
+    .filter((cell) => cell.querySelector('[data-sum-numeral]')).map((cell) => {
+      const n = cell.querySelector('[data-sum-numeral]').getBoundingClientRect();
+      const c = cell.querySelector('[data-sum-label]').getBoundingClientRect();
+      return { offset: c.left + c.width / 2 - (n.left + n.width / 2), half: n.width / 2, below: c.top - n.bottom,
+               inside: c.left >= figure.left - 1 && c.right <= figure.right + 1 && n.left >= figure.left - 1 && n.right <= figure.right + 1,
+               text: cell.querySelector('[data-sum-numeral]').textContent };
+    });
+}"""
+
+
+def sum_type(browser):
+    """The sum set in type (the dev-only ?ink-sum=type and ?ink-sum=odd fixtures; a painting whose
+    numbers are not the serving's gets this): a caption directly under its own numeral, the x and =
+    only when the numbers make that sum."""
+    for fixture, numerals, operators in [("type", ["2", "60", "120"], True), ("odd", ["2", "60", "121"], False)]:
+        for w, h in [(1440, 900), (390, 844)]:
+            tag = f"sum type ({fixture}) {w}"
+            ctx, page, response, errors = opened(browser, w, h, f"{PATH}?ink-sum={fixture}", reduced=True)
+            if not development(response):
+                # The fixtures are development only (daily.tsx): a built site (next start or the
+                # demo) shows the product as given, the painted sum, for each of them.
+                kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
+                check(f"sum type ({fixture}): a built site ignores ?ink-sum={fixture} (the painted sum)", kind == "painted", str(kind))
+                print(f"NOTE sum type ({fixture}) skipped: a built site ignores ?ink-sum (run it against the dev server)")
+                ctx.close()
+                break
+            try:
+                page.wait_for_selector('[data-sum-kind="type"]', timeout=15000)
+            except Exception:
+                pass
+            kind = page.locator("[data-sum]").get_attribute("data-sum-kind")
+            check(f"{tag}: the type branch shows, no painting", kind == "type" and page.locator("[data-sum] img").count() == 0, str(kind))
+            check(f"{tag}: no centres claimed", page.locator("[data-sum]").get_attribute("data-centres") is None)
+            bring(page, "[data-sum]", 200)
+            page.wait_for_timeout(300)
+            cells = page.evaluate(SUM_TYPE_GEOMETRY)
+            check(f"{tag}: three numerals {numerals}", [c["text"] for c in cells] == numerals, str([c["text"] for c in cells]))
+            shown = page.locator("[data-sum] [data-sum-type]").inner_text()
+            check(
+                f"{tag}: the × and = {'shown' if operators else 'left out'}",
+                ("×" in shown and "=" in shown) if operators else ("×" not in shown and "=" not in shown),
+                repr(shown),
+            )
+            captions = page.locator("[data-sum] [data-sum-label]")
+            check(f"{tag}: the visible captions are the three words", captions.all_inner_texts() == SUM_CAPTIONS and all(c.is_visible() for c in captions.all()), str(captions.all_inner_texts()))
+            within = all(abs(c["offset"]) <= c["half"] for c in cells)
+            check(f"{tag}: each caption's centre within its numeral", len(cells) == 3 and within, ", ".join(f"{c['offset']:.1f}/{c['half']:.1f}" for c in cells))
+            check(f"{tag}: each caption under its numeral, all inside the figure", len(cells) == 3 and all(c["below"] >= -1 and c["inside"] for c in cells), str([(round(c["below"]), c["inside"]) for c in cells]))
+            check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+            page.screenshot(path=str(OUT / f"sum-type-{fixture}-{w}.png"))
+            ctx.close()
+
+
+# Each sum caption's lines: whole, and the word capsule (カプセル / 胶囊) alone, as the lines of its
+# glyph rects (a word split across two lines has rects at two heights); inside the sum's figure.
+SUM_CAPTION_LINES = """() => {
+  const figure = document.querySelector('[data-sum]').getBoundingClientRect();
+  const lines = (node, a, b) => {
+    const r = document.createRange(); r.setStart(node, a); r.setEnd(node, b);
+    const tops = [...r.getClientRects()].filter((x) => x.width > 0).map((x) => x.top).sort((p, q) => p - q);
+    return tops.reduce((n, t, i) => (i === 0 || t - tops[i - 1] > 4 ? n + 1 : n), 0);
+  };
+  return [...document.querySelectorAll('[data-sum] [data-sum-label]')].map((el) => {
+    const node = el.firstChild;
+    const text = node.data;
+    const word = ['カプセル', '胶囊'].find((w) => text.includes(w)) ?? null;
+    const box = el.getBoundingClientRect();
+    return { text, word, lines: lines(node, 0, text.length),
+             wordLines: word ? lines(node, text.indexOf(word), text.indexOf(word) + word.length) : 0,
+             inside: box.left >= figure.left - 1 && box.right <= figure.right + 1,
+             wide: document.documentElement.scrollWidth > window.innerWidth };
+  });
+}"""
+
+
+def sum_captions_whole(browser, locale, w, h):
+    """jp and cns break anywhere between characters, which split カプセル and 胶囊 across two lines
+    (1日のカ / プセル数): the captions keep their words whole and stay inside the figure."""
+    ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/{SLUG}", reduced=True)
+    bring(page, "[data-sum]", 200)
+    page.wait_for_timeout(300)
+    caps = page.evaluate(SUM_CAPTION_LINES)
+    tag = f"languages {locale} {w}"
+    having = [c for c in caps if c["word"]]
+    check(f"{tag}: three sum captions", len(caps) == 3, str([c["text"] for c in caps]))
+    check(
+        f"{tag}: no caption breaks inside its capsule word",
+        len(having) == 2 and all(c["wordLines"] == 1 for c in having),
+        str([(c["text"], c["wordLines"]) for c in caps]),
+    )
+    check(f"{tag}: the captions stay inside the sum, no sideways scroll", all(c["inside"] and not c["wide"] for c in caps), str([(c["text"], c["inside"], c["wide"]) for c in caps]))
+    ctx.close()
+
+
+def sum_section(browser):
+    sum_type(browser)
+    for locale in ["jp", "cns"]:
+        for w, h in [(1440, 900), (390, 844)]:
+            sum_captions_whole(browser, locale, w, h)
+
+
 SECTIONS = {
     "shell": shell,
     "name": name,
@@ -449,6 +569,7 @@ SECTIONS = {
     "layout": layout,
     "deep_links": deep_links,
     "languages": languages,
+    "sum": sum_section,
 }
 
 if __name__ == "__main__":

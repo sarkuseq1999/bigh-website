@@ -1135,14 +1135,20 @@
 }
 
 /* The one thing to know about the person, in ink, a step under the heading (NuriCell's Dr. Liu,
-   October 26, 2026); the note after the lines keeps the lines' indent. */
-.page p.personLead {
+   October 26, 2026); the note after the lines keeps the lines' indent. A chapter's own lead (the
+   daily chapter's story, NuriCell's redwood round, October 27) is set the same, a little wider. */
+.page p.personLead,
+.page p.chapterLead {
   margin: 22px 0 14px;
   max-width: 17em;
   color: var(--ink);
   font-size: clamp(22px, 2vw, 30px);
   line-height: 1.28;
   text-wrap: balance;
+}
+
+.page p.chapterLead {
+  max-width: 20em;
 }
 
 .page p.personNote {

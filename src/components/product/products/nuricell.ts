@@ -217,12 +217,20 @@ const nuricell: ProductPage = {
       ...nuricellArt.books,
       alt: "Seven books as stepping stones across a calm stream, painted in ink",
     },
+    // Chapter 6 (Mo picked 2 of round 3, October 27, 2026; mockups
+    // reference/ink-pages/mockups/nuricell-daily/): "3 capsules a day" was too thin for a chapter
+    // and the buy box right under it says it, so the chapter says what has stayed the same. "About
+    // 20 years" is Mo's "almost 20-something years" (BRAND-CHEATSHEET.md): no start year is on file.
     daily: {
       picture: {
-        ...nuricellArt.breakfast,
-        alt: "A soft-boiled egg with a gold yolk beside a dish of three capsules, painted in ink",
+        ...nuricellArt.rings,
+        alt: "The cut end of a young redwood log, one ring about 20 years in from the bark laid in gold leaf, painted in ink",
       },
-      sum: nuricellArt.sum,
+      story: {
+        title: "The same formula for about 20 years.",
+        lead: "Dr. Liu chose its four nutrients. We haven’t changed them since.",
+        note: "The gold ring is about 20 years ago. Each ring outside it is a year with the same four: acetyl-L-carnitine, creatine, alpha-lipoic acid and choline.",
+      },
     },
     buy: { stroke: nuricellArt.stroke },
     supply: nuricellArt.capsulePair,

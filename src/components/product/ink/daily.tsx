@@ -6,8 +6,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { monthPlan, titleFor } from "../template-chapters-model";
-import { InkChapter, InkFigure, titleId } from "./ink-chapter";
-import { nuricellSizes } from "./nuricell-layout";
+import { InkChapter, InkFigure, keepTogether, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
 const LABELS = ["capsules a day", "days", "capsules in each bottle"] as const;
@@ -34,7 +33,8 @@ function useSumFixture() {
 // sum is shown only when its numbers are the serving's (and it has a centre for each); otherwise
 // the sum is set in type, three cells each with its numeral and its caption under it, so a changed
 // label can never show a wrong painting, nor a caption under the wrong number. The "x" and "=" are
-// shown only when the numbers really make that sum.
+// shown only when the numbers really make that sum. A product with a `story` (NuriCell) says that
+// instead: its heading, a lead in ink and a note on its painting, no label and no sum.
 export function Daily({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const fixture = useSumFixture();
@@ -43,7 +43,19 @@ export function Daily({ product }: { product: InkProduct }) {
       ? { ...product.serving, perBottle: product.serving.perBottle + 1 }
       : product.serving;
   const plan = monthPlan(serving);
-  const { picture, sum } = product.ink.daily;
+  const { picture, sum, story } = product.ink.daily;
+  // NuriCell's (October 27, 2026): what has stayed the same, beside the redwood round.
+  if (story) {
+    return (
+      <InkChapter id="daily" picture={<InkFigure art={picture} alt={picture.alt} />}>
+        <h2 id={titleId("daily")} className={`${base.display} ${styles.heading}`}>
+          {copy(story.title)}
+        </h2>
+        <p className={styles.chapterLead}>{copy(story.lead)}</p>
+        <p className={styles.text}>{keepTogether(copy(story.note))}</p>
+      </InkChapter>
+    );
+  }
   const numbers = [plan.perDay, plan.days, plan.total];
   const painted =
     !!sum &&
@@ -81,7 +93,7 @@ export function Daily({ product }: { product: InkProduct }) {
                 alt=""
                 width={sum.width}
                 height={sum.height}
-                sizes={nuricellSizes(product, "sum", sum) ?? "(max-width: 959px) 88vw, 560px"}
+                sizes="(max-width: 959px) 88vw, 560px"
                 data-bloom="waiting"
                 aria-hidden="true"
               />

@@ -66,8 +66,9 @@ These sit on top of `DESIGN.md`.
 - **Don't park every painting on one side.** Mo found NuriCell's chapters boring with every
   painting on the left (October 19, 2026) and picked B, "each painting gets its own spot", over a
   plain left-right zigzag. From 960px: lantern right, the capsule in the middle of its four
-  ingredients, the books running in from the page edge, Dr. Liu right, the brushed 3 × 30 = 90
-  across the page, the bottle left. Phones keep one column. NuriCell only for now
+  ingredients, the books running in from the page edge, Dr. Liu right, the redwood round right
+  (October 27, 2026; it replaced the brushed 3 × 30 = 90), the bottle left. Phones keep one
+  column. NuriCell only for now
   (`nuricell.module.css`); the other four product pages still put every painting on the left.
 - **NuriCell Dr. Liu: the view west (Mo picked A2, October 26, 2026).** Mo wanted the Dr. Liu
   chapter "more fun" and better designed. Of three ideas (A the Berkeley story, B a magazine cover,
@@ -117,6 +118,18 @@ These sit on top of `DESIGN.md`.
   (`nuricell-scenes.tsx`, `nuricell-pairs.ts`; pictures
   `reference/ink-pages/nuricell-pairs/build_nuricell_pairs.py`). Mockups:
   `reference/ink-pages/mockups/nuricell-pairs/`.
+- **NuriCell chapter 6: "The same formula for about 20 years" (Mo picked 2, October 27, 2026).**
+  Mo found "How to take it" (the egg cup and the brushed 3 × 30 = 90) strange, then found "3
+  capsules a day" too thin for a chapter: the buy box right under it and the first question say
+  it too. Of round 3's two ideas (1 a painted California day with a line per moment, 2 the
+  formula's years) he picked 2: the cut end of a young California redwood (a Codex painting), the
+  ring about 20 rings in from the bark laid in gold leaf (with the kit's light mask). The heading
+  "The same formula for about 20 years.", a lead in ink ("Dr. Liu chose its four nutrients. We
+  haven't changed them since.") and a note naming the four. No label, no sum; from 960px the
+  words left and the round right, phones the round over its words. "About 20 years" is Mo's
+  "almost 20-something years": confirm the start year before it goes live. NuriCell only
+  (`daily.tsx` `story`, `nuricell.ts`); OPC and Turmerific keep the sum. Picture `rings()` in
+  `build_nuricell.py`; mockups `reference/ink-pages/mockups/nuricell-daily/` (round3).
 - **NuriCell "Tiny power plants": a California lighthouse and fewer words (Mo picked B, October
   26, 2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
   the grey "Why cellular health matters" line on top strange. Of three California lights (A a Gold

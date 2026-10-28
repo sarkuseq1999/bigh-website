@@ -58,6 +58,12 @@ export const nuricellArt = {
     numbers: [3, 30, 90],
     centres: [0.1017, 0.4433, 0.8467],
   },
+  rings: {
+    src: "/images/products/nuricell/ink/rings-v1.webp",
+    width: 1100,
+    height: 1038,
+    gold: "/images/products/nuricell/ink/rings-v1-gold.webp",
+  },
   stroke: {
     src: "/images/products/nuricell/ink/stroke-v1.webp",
     width: 1400,

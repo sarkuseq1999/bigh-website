@@ -13,6 +13,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Built on `studio`, not live (October 27): NuriCell chapter 6, "The same formula for about 20
+  years" (Mo picked 2).** "How to take it" (egg cup, brushed 3 × 30 = 90) read as strange and the
+  dose alone too thin for a chapter (the buy box and the first question say it). Three rounds of
+  mockups (artifact `Nxd5q7PQPnw5JVNmhVoJQQ`, `reference/ink-pages/mockups/nuricell-daily/`); Mo
+  picked round 3's 2 over a painted California day: a young redwood round (Codex,
+  `originals/daily-rings-b1.png`), one ring about 20 in from the bark in gold leaf, its light mask
+  made from the ring itself (`rings()` in `build_nuricell.py`); heading, a lead in ink and a note
+  naming the four nutrients, words left and the round right from 960px. NuriCell only:
+  `daily.tsx` takes a `story` (no label, no sum); OPC and Turmerific keep their sums. New strings
+  m962-m965 in all four languages (not native-checked). `qa_nuricell_ink` has a `formula` section
+  in place of `sum`; the shared sum's checks (dev-only `?ink-sum` fixtures, jp/cns captions) moved
+  to `qa_opc_ink` (`sum`). **Before going live:** Mo to confirm NuriCell's real start year ("about
+  20 years" is his "almost 20-something years"; none is on file). Push only on Mo's yes.
 - **Built on `studio`, not live (October 27): NuriCell pairs on the ranch (Mo picked B).** Mo found
   "Why these four work together"'s white powder heaps look like drugs. Of three painted ideas (A two
   hands, B an old California ranch, C a gold trail map; artifact `H9XUk1ya3vXH7Ei7WvghnL`) he picked
