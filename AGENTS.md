@@ -202,6 +202,19 @@ These sit on top of `DESIGN.md`.
   (`.look .rest`), `fda-statement.tsx`; picture
   `reference/ink-pages/footer-crane/build_footer_crane.py`. Mockups:
   `reference/ink-pages/mockups/footer-crane/`.
+- **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026; not built
+  yet).** Mo's colleagues loved the opening's watercolour and gold sun but said the whole read as
+  Chinese, "made in China": the misty peaks with pines and the red-crowned crane. Of California
+  scenes painted on the real page (A Big Sur sunset, B golden hills, C Yosemite) Mo asked how a
+  scene relates to "Good health starts with your cells." and picked D: a grove of giant sequoias
+  (they live more than 3,000 years) in the morning sun, the sun in a clearing beside one giant
+  trunk, the gold sun the same gold as "cells.". The crane goes: of three birds he picked Anna's
+  hummingbird (California's year-round hummingbird; for its size it burns energy faster than
+  almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
+  sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
+  Mockups only so far: `reference/ink-pages/home-california/` (README), page
+  `reference/ink-pages/mockups/home-california/`. A build also changes the homepage's closing
+  painting and the crane by the footer's park sign, and DESIGN.md's "East Asian ink-wash" words.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
