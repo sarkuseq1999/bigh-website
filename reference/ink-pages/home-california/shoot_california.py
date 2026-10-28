@@ -39,8 +39,13 @@ IDEAS = {
     "e2": ("sequoia-2-clear-1", "hummingbird-2"),
     "f1": ("sequoia-2-clear-1", "golden-eagle-1"),
     "f2": ("sequoia-2-clear-1", "golden-eagle-2"),
+    # Mo picked the hummingbird: its wings repainted narrow and blurred (h1, h2 edit
+    # hummingbird-1; h3 is painted again over the crane's original).
+    "h1": ("sequoia-2-clear-1", "hummingbird-wings-1"),
+    "h2": ("sequoia-2-clear-1", "hummingbird-wings-2"),
+    "h3": ("sequoia-2-clear-1", "hummingbird-3"),
 }
-LINE = {"d2line", "g1", "g2", "e1", "e2", "f1", "f2"}
+LINE = {"d2line", "g1", "g2", "e1", "e2", "f1", "f2", "h1", "h2", "h3"}
 
 # D is painted as the whole first screen (the trunks rise out of its top): its picture fills the
 # opening, its foot dissolving; on a phone the whole painting shows at the painting's height, its
@@ -91,7 +96,7 @@ FULL2 = FULL.replace(
     "left: 50vw !important;",
 )
 EXTRA = {"a1": SUNSET, "a2": SUNSET, "d1": FULL, "d2": FULL, "d3": FULL, "d2line": FULL}
-for key in ("e1", "e2", "f1", "f2", "g1", "g2"):
+for key in ("e1", "e2", "f1", "f2", "g1", "g2", "h1", "h2", "h3"):
     EXTRA[key] = FULL2
 
 # The mist canvas and the wingbeat would draw the live pictures: off, and the stills shown. The

@@ -19,6 +19,7 @@ for name in "${names[@]}"; do
   esac
   [[ "$name" == sandhill-* || "$name" == hummingbird-* || "$name" == golden-eagle-* ]] && ref=(-i "$REFS/current-crane.png")
   [[ "$name" == sequoia-2-clear-* ]] && ref=(-i "$HERE/originals/sequoia-2.png")
+  [[ "$name" == hummingbird-wings-* ]] && ref=(-i "$HERE/originals/hummingbird-1.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/$name.txt and follow it exactly. Use your built-in image generation tool to make exactly ONE picture (landscape 1536x1024 unless the order edits an attached picture). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \

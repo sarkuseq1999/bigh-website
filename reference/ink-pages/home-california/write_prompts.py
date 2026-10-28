@@ -95,6 +95,17 @@ EAGLE = """EDIT the attached painting. Replace the crane with a golden eagle, pa
 - Few strokes, wet soft edges, like the crane. Calm and gliding, not fierce: no open beak, no talons out. Not a detailed illustration, not a logo.
 No other birds, no text, no signature, no seal, no frame."""
 
+# Mo picked the hummingbird (October 28). Its first takes have big, broad, feathery wings, like
+# the crane's they were painted over; a hummingbird's are long, narrow and pointed, a blur in a
+# fast beat. Two edits of hummingbird-1 change only the wings; one fresh take over the crane's
+# original describes the whole bird again with the right wings.
+WINGS = """EDIT the attached painting. Keep the hummingbird's body, head, bill, tail, colours, size and place exactly as they are, the same paper and the same loose watercolour hand. Change ONLY the wings: they are wrong for a hummingbird (too big, too broad and too feathery, like a large bird's). Paint true hummingbird wings: long, narrow, pointed and swept back like thin blades, each about as long as the body, both raised up and back in a fast beat, with no separate feathers drawn; their edges softened into a few quick dry-brush motion streaks, so they read as a blur of speed. Pale grey and soft dark grey. Nothing else in the picture: no flowers, no text, no signature, no frame."""
+
+HUMMINGBIRD_3 = HUMMINGBIRD.replace(
+    "both wings raised high in a fast beat, their tips a little blurred with dry-brush strokes, the tail fanned out behind.",
+    "both wings raised up and back in a fast beat: true hummingbird wings, long, narrow and pointed like thin swept-back blades, each about as long as the body, no separate feathers drawn, their edges softened into a few quick dry-brush motion streaks so they read as a blur of speed; the tail fanned out behind.",
+)
+
 CRANE = """EDIT the attached painting. Keep the bird's exact pose, size, position and wing shapes, the same brush hand and the same paper. Change only the species: make it a North American SANDHILL CRANE.
 - Its whole body, neck and wings are soft mid-grey and pale warm-grey watercolour washes (not white).
 - The long flight feathers at the wing tips and along the wings' trailing edge are a darker slate grey (not solid black).
@@ -127,6 +138,9 @@ def main():
     for take in (1, 2):
         for name, text in (("sequoia-2-clear", CLEARING), ("hummingbird", HUMMINGBIRD), ("golden-eagle", EAGLE)):
             (PROMPTS / f"{name}-{take}.txt").write_text(text + "\n", encoding="utf-8", newline="\n")
+        (PROMPTS / f"hummingbird-wings-{take}.txt").write_text(WINGS + "\n", encoding="utf-8", newline="\n")
+    assert HUMMINGBIRD_3 != HUMMINGBIRD
+    (PROMPTS / "hummingbird-3.txt").write_text(HUMMINGBIRD_3 + "\n", encoding="utf-8", newline="\n")
     print(sorted(p.name for p in PROMPTS.glob("*.txt")))
 
 

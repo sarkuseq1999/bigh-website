@@ -64,6 +64,15 @@ left, even in grey. Mo said "paint both" of the two birds offered.
 - Each bird was painted by Codex over the live crane's original, in its place, so the page's
   stroke (shown again in these mockups, as routed today) leaves from the bird's tail.
 
+## Mo's pick: the hummingbird (October 28, 2026)
+
+Mo picked 1, the hummingbird (recorded in AGENTS.md). Its wings were repainted true: Codex
+edited `hummingbird-1` to change only the wings, `hummingbird-wings-1` and `-2` (long, narrow,
+pointed, a blur of speed); `hummingbird-3` was painted again over the crane's original (better,
+still a little feathery). Shown: `hummingbird-wings-1` (h1), 9/10 for the first screen. Still to
+do in a build: route the stroke along the forest floor (it still crosses the clearing and the big
+trunk as drawn for the mountains); the pink throat stays a second colour beside the gold.
+
 ## Files
 
 - Paintings: Codex (ChatGPT plan, no API spend), 8 pictures, two takes each:
