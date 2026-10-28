@@ -4,7 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-70jxsah4v-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-l0hspf8zq-sarkuseq1999s-projects.vercel.app`
+(`dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`), the **production** deployment of `main` at
+`d5e6858aa5dae9be5a2a601b82cd441a50c69112` (October 28, 2026, from about 13:16 Pacific). The
+homepage's first screen is California: Mo's colleagues read the misty peaks and the red-crowned
+crane as Chinese; of painted scenes Mo picked giant sequoias in the morning, the sun in a
+clearing beside one giant trunk, and Anna's hummingbird in the crane's place (first screen only:
+the crane stays in the closing painting, the footer and the phone menu). `d5e6858` is `2ea851d`
+plus the build (`e2c6bda`), its notes and the mockups commits (no other code), pushed as a
+fast-forward on Mo's "Yes, put it live". Before the push, on the built copy with About's meadow
+(`npm run build` + `next start`): `qa_home_ink` 280/280 (its wingbeat checks replaced by checks
+on the sequoias and the hummingbird, the sun's room in the clearing and no ink on the giant
+trunk), `qa_nav` 326/326, `qa_about` 403/403; lint and type-check clean. After the alias update,
+on the public demo: `/`, `/jp`, `/kr` and `/cns` 200, `/` serving `opening-sequoias-v1.webp` and
+`hummingbird-v1.webp`; in fresh unauthenticated browsers `qa_home_ink` 280/280 and `qa_nav`
+326/326, and the opening shot at 1920, 1440 and 390 px wide matches the built copy.
+
+Before that, from about 11:55 to about 13:16 Pacific on October 28, 2026, the alias pointed to
+`bigh-website-70jxsah4v-sarkuseq1999s-projects.vercel.app`
 (`dpl_76uqRyhhN2AYzkAdG4wLsbAqZATq`), the **production** deployment of `main` at
 `2ea851dc0add91e710b927d8aeb1d8bff80278b0` (October 28, 2026, from about 11:55 Pacific). About
 opens on the poppy meadow: the ink circle reminded Mo of the film The Ring; of the two test

@@ -6,7 +6,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## Now
 
 - **Last updated:** October 28, 2026, by Claude Code (the homepage's first screen as giant
-  sequoias and a hummingbird, built and merged into `studio`, not live; About's poppy meadow live on its own as
+  sequoias and a hummingbird, live as `main` `d5e6858`, production
+  `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; About's poppy meadow live on its own as
   `main` `2ea851d`, production `dpl_76uqRyhhN2AYzkAdG4wLsbAqZATq`, demo alias on it; NuriCell
   chapter 6, "The same formula for about 20 years", live as `main` `f5356a4`, production `dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`, demo
   alias on it). October 27: About's two test openings live as `main` `f4783bb`
@@ -18,7 +19,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Built, not live (October 28): the homepage's first screen is California.** Mo's colleagues
+- **Live (October 28): the homepage's first screen is California.** Mo's colleagues
   loved the opening's watercolour and gold sun but read the misty peaks and red-crowned crane as
   Chinese. Of painted scenes (artifact `XcSw57ecBtwFxZzn7SmqdY`: Big Sur, golden hills, Yosemite)
   Mo asked how a scene ties to "Good health starts with your cells." and picked giant sequoias in
@@ -28,7 +29,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `brush-route.ts` (`ground()`, the `opening-land` anchor), `assets.ts` (`opening`), pictures from
   `reference/ink-pages/home-california/build_home_opening.py`; `qa_home_ink`'s wingbeat checks
   replaced. Rule in `AGENTS.md`, DESIGN.md updated. Combined built site (with About's meadow):
-  homepage 280/280, menu 326/326, About 403/403. **Not pushed: waiting for Mo's yes.**
+  homepage 280/280, menu 326/326, About 403/403. On Mo's yes pushed as a fast-forward, `main`
+  `d5e6858`, production `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; public demo
+  homepage 280/280, menu 326/326 (`docs/public-demo.md`). Open: if Mo wants one bird throughout,
+  the closing painting's cranes, the footer's crane and the phone menu's crane.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
