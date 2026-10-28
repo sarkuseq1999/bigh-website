@@ -5,9 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (About's two test openings live as `main`
-  `f4783bb`, production `dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`, demo alias on it; merged into
-  `studio`). Before that the same day: NuriCell pairs on the ranch, live on its own (`main`
+- **Last updated:** October 28, 2026, by Claude Code (NuriCell chapter 6, "The same formula for
+  about 20 years", live as `main` `f5356a4`, production `dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`, demo
+  alias on it). October 27: About's two test openings live as `main` `f4783bb`
+  (`dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`); NuriCell pairs on the ranch, live on its own (`main`
   `4cd2231`); NuriCell research's Japanese hint no longer splits タップ (`main`
   `55c250a`); the go-live merge (everything waiting on `studio`
   put live together, `main` `641a751`; `studio` then equalled `main` but for notes); product
@@ -26,8 +27,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   (`build_about_opening.py`: the ink with its gold as a pale ghost, and the gold alone). **When Mo
   picks:** put the pick on `/about` (drop the circle, its hills and `let-the-circle-go.ts` if
   unused, and update `qa_about`), delete the two test routes, write his pick into `AGENTS.md`.
-- **Built on `studio`, not live (October 27): NuriCell chapter 6, "The same formula for about 20
-  years" (Mo picked 2).** "How to take it" (egg cup, brushed 3 × 30 = 90) read as strange and the
+- **Live (October 28): NuriCell chapter 6, "The same formula for about 20 years" (Mo picked 2,
+  October 27).** "How to take it" (egg cup, brushed 3 × 30 = 90) read as strange and the
   dose alone too thin for a chapter (the buy box and the first question say it). Three rounds of
   mockups (artifact `Nxd5q7PQPnw5JVNmhVoJQQ`, `reference/ink-pages/mockups/nuricell-daily/`); Mo
   picked round 3's 2 over a painted California day: a young redwood round (Codex,
@@ -37,8 +38,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `daily.tsx` takes a `story` (no label, no sum); OPC and Turmerific keep their sums. New strings
   m962-m965 in all four languages (not native-checked). `qa_nuricell_ink` has a `formula` section
   in place of `sum`; the shared sum's checks (dev-only `?ink-sum` fixtures, jp/cns captions) moved
-  to `qa_opc_ink` (`sum`). **Before going live:** Mo to confirm NuriCell's real start year ("about
-  20 years" is his "almost 20-something years"; none is on file). Push only on Mo's yes.
+  to `qa_opc_ink` (`sum`). No start year is on file ("about 20 years" is Mo's "almost
+  20-something years"); Mo put it live with those words on October 28 (`main` `f5356a4`, pushed
+  as a fast-forward of the tested commit). If a real start year turns up, change m962-m964.
+  Open: native check m962-m965.
 - **Live (October 27, on its own): NuriCell pairs on the ranch (Mo picked B).** Mo found
   "Why these four work together"'s white powder heaps look like drugs. Of three painted ideas (A two
   hands, B an old California ranch, C a gold trail map; artifact `H9XUk1ya3vXH7Ei7WvghnL`) he picked

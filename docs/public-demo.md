@@ -4,9 +4,27 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-kswkild8l-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-3zftix24p-sarkuseq1999s-projects.vercel.app`
+(`dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`), the **production** deployment of `main` at
+`f5356a4f9ac7713e6d997c2f107c01a81c42b0b7` (October 28, 2026, from about 10:15 Pacific). Mo
+picked 2, "The same formula for about 20 years", for NuriCell's chapter before Buy (the egg cup
+and the brushed 3 × 30 = 90 read as strange, and the dose alone was too thin for a chapter), and
+said "Yes, push it" with "about 20 years" (no start year is on file). The chapter: a young
+redwood round, one ring about 20 in from the bark in gold leaf, the heading, a lead in ink and a
+note naming the four nutrients; NuriCell only, OPC and Turmerific keep their sums. `f5356a4` is
+`studio` as built and checked: `f4783bb` plus chapter 6 (`4fdc3c4`) and notes and mockups
+commits; a later mockups-only commit on `studio` stayed out. Pushed as a fast-forward. Before the
+push, on the built copy (`npm run build` + `next start`): `qa_nuricell_ink` 457/457,
+`qa_opc_ink` 199/199 (now holding the shared sum's checks), `qa_home_ink` 282/282, `qa_nav`
+326/326, `qa_about` 404/404; lint and type-check clean. After the alias update, on the public
+demo: `/products/nuricell` serves the chapter and `rings-v1.webp` and `rings-v1-gold.webp` (200),
+no 3 × 30; in fresh unauthenticated browsers `qa_nuricell_ink` 457/457, `qa_opc_ink` 199/199,
+`qa_home_ink` 282/282, `qa_nav` 326/326.
+
+Before that, from about 21:18 Pacific on October 27 to about 10:15 on October 28, 2026, the alias
+pointed to `bigh-website-kswkild8l-sarkuseq1999s-projects.vercel.app`
 (`dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`), the **production** deployment of `main` at
-`f4783bb545d1634e0b12e061a95388d5d23853fe` (October 27, 2026, from about 21:18 Pacific). The ink
+`f4783bb545d1634e0b12e061a95388d5d23853fe`. The ink
 circle on About reminded Mo of the film The Ring; of three painted ideas he asked to compare two
 on the live site. Two temporary test pages: `/about-a`, A "Superbloom" (golden hills in spring
 poppies, the poppies bloom out from the foot of the hills), and `/about-b`, B "Morning walk" (a

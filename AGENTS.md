@@ -127,7 +127,8 @@ These sit on top of `DESIGN.md`.
   "The same formula for about 20 years.", a lead in ink ("Dr. Liu chose its four nutrients. We
   haven't changed them since.") and a note naming the four. No label, no sum; from 960px the
   words left and the round right, phones the round over its words. "About 20 years" is Mo's
-  "almost 20-something years": confirm the start year before it goes live. NuriCell only
+  "almost 20-something years"; no start year is on file, and Mo put it live with "about 20 years"
+  (October 28). If a real start year turns up, change the words (m962-m964) to match. NuriCell only
   (`daily.tsx` `story`, `nuricell.ts`); OPC and Turmerific keep the sum. Picture `rings()` in
   `build_nuricell.py`; mockups `reference/ink-pages/mockups/nuricell-daily/` (round3).
 - **NuriCell "Tiny power plants": a California lighthouse and fewer words (Mo picked B, October
