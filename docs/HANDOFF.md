@@ -5,8 +5,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 28, 2026, by Claude Code (NuriCell chapter 6, "The same formula for
-  about 20 years", live as `main` `f5356a4`, production `dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`, demo
+- **Last updated:** October 28, 2026, by Claude Code (About's poppy meadow built and merged into
+  `studio`, not live; NuriCell chapter 6, "The same formula for about 20 years", live as `main` `f5356a4`, production `dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`, demo
   alias on it). October 27: About's two test openings live as `main` `f4783bb`
   (`dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`); NuriCell pairs on the ranch, live on its own (`main`
   `4cd2231`); NuriCell research's Japanese hint no longer splits タップ (`main`
@@ -16,17 +16,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
-- **Live as a test, waiting for Mo's pick (October 27): About's new opening, A or B.** The ink
-  circle reminded Mo of the film The Ring. Of three painted ideas (artifact
-  `6hnK43uNUsZ3R1tFSPvy6N`: A superbloom, B morning walk, C the title's capitals brushed) he asked
-  to compare A and B on the live site: `/about-a` (golden hills in spring poppies; the poppies
-  bloom out from the foot of the hills) and `/about-b` (a person and a dog on a trail; the morning
-  light reaches a ridge in gold; on a phone the ridge is off screen, so no gold there). `/about`
-  keeps the circle. Code: `SceneOpening` in `about-ink.tsx` (`AboutInk opening=…`),
-  `scene.module.css`, `scene-art.ts`; pictures `reference/ink-pages/about-opening/`
-  (`build_about_opening.py`: the ink with its gold as a pale ghost, and the gold alone). **When Mo
-  picks:** put the pick on `/about` (drop the circle, its hills and `let-the-circle-go.ts` if
-  unused, and update `qa_about`), delete the two test routes, write his pick into `AGENTS.md`.
+- **Built, not live (October 28): About opens on the poppy meadow, thinning into the paper.**
+  The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
+  live as test pages and picked A, then found its first screen and Our purpose "don't transition
+  well" (the painting stopped in a straight line) and picked A of two painted ends (artifact
+  `8fXZZqa9W5tFaPLY9cNnQo`): below the first screen the meadow thins out into bare paper, then the
+  oak. Built on branch `about-meadow` (`2ea851d`, on top of `main` `f5356a4`) and merged into
+  `studio`: the meadow replaces the circle on `/about` (`meadow.module.css`, `meadow-art.ts`); the
+  circle, its hills, `let-the-circle-go.ts`, `before-hydration.tsx`, `/about-a`, `/about-b` and B's
+  pictures are gone; `qa_about` checks the meadow (`meadow_layout`, `motion`); rule in `AGENTS.md`.
+  Built site: About 403/403, homepage 282/282, menu 326/326. **Not pushed: waiting for Mo's yes.**
+  To release it on its own: push `about-meadow` (rebase onto `origin/main` first if it moved,
+  rebuild, re-check), point the demo alias, check the public demo.
 - **Live (October 28): NuriCell chapter 6, "The same formula for about 20 years" (Mo picked 2,
   October 27).** "How to take it" (egg cup, brushed 3 × 30 = 90) read as strange and the
   dose alone too thin for a chapter (the buy box and the first question say it). Three rounds of
