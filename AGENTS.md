@@ -217,8 +217,8 @@ These sit on top of `DESIGN.md`.
   (`.look .rest`), `fda-statement.tsx`; picture
   `reference/ink-pages/footer-crane/build_footer_crane.py`. Mockups:
   `reference/ink-pages/mockups/footer-crane/`.
-- **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026; not built
-  yet).** Mo's colleagues loved the opening's watercolour and gold sun but said the whole read as
+- **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026).** Mo's
+  colleagues loved the opening's watercolour and gold sun but said the whole read as
   Chinese, "made in China": the misty peaks with pines and the red-crowned crane. Of California
   scenes painted on the real page (A Big Sur sunset, B golden hills, C Yosemite) Mo asked how a
   scene relates to "Good health starts with your cells." and picked D: a grove of giant sequoias
@@ -227,9 +227,14 @@ These sit on top of `DESIGN.md`.
   hummingbird (California's year-round hummingbird; for its size it burns energy faster than
   almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
   sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
-  Mockups only so far: `reference/ink-pages/home-california/` (README), page
-  `reference/ink-pages/mockups/home-california/`. A build also changes the homepage's closing
-  painting and the crane by the footer's park sign, and DESIGN.md's "East Asian ink-wash" words.
+  **First screen only** (Mo, October 28): the crane stays in the homepage's closing painting, the
+  footer by the park sign and the phone menu. Built: the painting covers the whole opening
+  (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
+  hummingbird a still in the crane's frame (`hummingbird-v1.webp`, no wingbeat), the line pinned
+  to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`).
+  `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in
+  `reference/ink-pages/home-california/` (README); mockups
+  `reference/ink-pages/mockups/home-california/`.
 - **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
   characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
   "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park

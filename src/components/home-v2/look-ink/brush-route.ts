@@ -38,8 +38,22 @@ const flight = (x: number, y: number, w: number, ink = 1): Waypoint => ({
   ink,
 });
 
-// Crane comp: the line leaves the crane's trailing legs, rides the air to the right, flicks up
-// and lifts off over the far ridges...
+/** A point on the opening's painting (October 28: the sequoias), in the comp's pixels: where the
+ *  painting (1536 x 1024 at the comp's width) stands with its foot on the comp's foot. Pinned to
+ *  the painting's own box, so the line walks its forest floor, left of the giant trunk, however
+ *  the stage moves in on a wide window. */
+const ground = (x: number, y: number, w: number, ink = 1): Waypoint => ({
+  at: "opening-land",
+  fx: x / 1536,
+  fy: (y + 24) / 1024,
+  w,
+  ink,
+});
+
+// Crane comp: the line leaves the bird (since October 28 the hummingbird's tail, where the
+// crane's legs trailed), rides the air to the right under the sun, flicks up and lifts off into
+// the clearing's light under the sun, well short of the giant trunk (which a wide window brings
+// in to about 1216 comp px)...
 const craneFlight: Waypoint[] = [
   { at: "crane", fx: 0.477, fy: 0.786, w: 0.8, ink: 0.5 },
   flight(640, 437, 1.3),
@@ -48,31 +62,31 @@ const craneFlight: Waypoint[] = [
   flight(880, 452, 2.5),
   flight(960, 456, 2.8),
   flight(1012, 472, 3.2),
-  flight(1062, 500, 4),
-  flight(1112, 519, 5),
-  flight(1172, 524, 5.6),
-  flight(1230, 511, 5, 0.8),
-  flight(1268, 497, 3, 0.45),
-  flight(1292, 490, 1, 0),
+  flight(1056, 498, 4),
+  flight(1096, 515, 4.8),
+  flight(1132, 518, 5),
+  flight(1162, 508, 4.2, 0.8),
+  flight(1184, 498, 2.4, 0.45),
+  flight(1200, 492, 1, 0),
 ];
 
-// ...a new stroke drops from behind the near peaks and runs down to the bottom left, on into the
-// page. (Between the phone and the two-column page, 721 to 899 px, there is no page for it to
-// run into and the words no longer shrink out of its way: there the opening keeps the flight
-// stroke alone, as the phone's opening keeps its own.)
+// ...a new stroke drops in the clearing among the young firs, left of the giant trunk, winds down
+// the forest floor and runs on to the bottom left, into the page. (Between the phone and the
+// two-column page, 721 to 899 px, there is no page for it to run into and the words no longer
+// shrink out of its way: there the opening keeps the flight stroke alone, as the phone's opening
+// keeps its own.)
 const crane: Waypoint[] = [
   ...craneFlight,
-  comp(1302, 560, 0, 0),
-  comp(1263, 624, 1, 0.15),
-  comp(1242, 660, 2.6),
-  comp(1223, 696, 3.4),
-  comp(1240, 722, 4),
-  comp(1249, 746, 3.6),
-  comp(1218, 782, 3),
-  comp(1150, 826, 2.6, 0.55),
-  comp(1098, 851, 2.6),
-  comp(980, 905, 3),
-  comp(870, 955, 3.2),
+  ground(1186, 575, 0, 0),
+  ground(1160, 630, 1, 0.15),
+  ground(1146, 664, 2.6),
+  ground(1134, 700, 3.4),
+  ground(1150, 726, 4),
+  ground(1156, 750, 3.6),
+  ground(1128, 786, 3),
+  ground(1062, 828, 2.6, 0.55),
+  ground(1012, 852, 2.6),
+  ground(920, 902, 3),
   comp(790, 1000, 3),
   comp(700, 1060, 2.8),
 ];
@@ -179,12 +193,13 @@ const standards: Waypoint[] = [0, 1, 2].flatMap((i) => rule(`standard-${i}`));
 // page line is dropped on phones (the lead's decision, October 2): each opening keeps its own
 // line, and the station labels sit under their headings with their leader lines. The same holds
 // wherever the blocks are one column (under 900 px): the route above is drawn for two columns
-// and would run through the words.
+// and would run through the words. The phone's own line (October 28) dives from the bird down to
+// the clearing's floor and lifts off short of the giant trunk (84% across the painting).
 const cranePhone: Waypoint[] = [
   { at: "crane", fx: 0.477, fy: 0.786, w: 0.8, ink: 0.5 },
-  on("opening-art", 0.72, 0.7, 2.4),
-  on("opening-art", 0.92, 0.9, 2.2, 0.5),
-  lift("opening-art", 0.97, 1.0),
+  on("opening-land", 0.66, 0.74, 2.4),
+  on("opening-land", 0.74, 0.88, 2.2, 0.5),
+  lift("opening-land", 0.76, 0.95),
 ];
 
 /** The opening's waypoints, the route through the rest of the page (only where the blocks are

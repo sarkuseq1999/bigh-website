@@ -14,28 +14,19 @@ export const paper = `${I}/paper.webp`; // plate: reference/home-v2/ink/plates/p
 /** An ink blot's soft edge: paintings bloom through it as they enter. */
 export const bloomMask = `${I}/bloom-mask.png`;
 
-export const crane: Record<"landscape" | "crane" | "sun", Picture> = {
-  /** Misty mountains (ink). Plate: reference/home-v2/ink/plates/landscape.png */
-  landscape: { src: `${I}/landscape.webp`, width: 2400, height: 1029 },
-  /** The crane of long life, cut out (BiRefNet). October 9: painted again by hand in the same pose
-   *  (Mo: "more like a painting than a picture"; sample A), its whites brought to the first
-   *  crane's. Plate: reference/home-v2/ink/plates/crane-painted.png */
-  crane: { src: `${I}/crane-painted.webp`, width: 1600, height: 1062 },
+/** The opening's pictures. October 28, 2026 (Mo): the misty peaks and the red-crowned crane read
+ *  as Chinese to his colleagues; California took their place (Codex paintings, built by
+ *  reference/ink-pages/home-california/build_home_opening.py, plates in its plates/site/). */
+export const opening: Record<"landscape" | "bird" | "sun", Picture> = {
+  /** Giant sequoias in the morning (ink and watercolour), painted as the whole first screen: one
+   *  giant trunk on the right, a clearing of morning light beside it where the sun stands. */
+  landscape: { src: `${I}/opening-sequoias-v1.webp`, width: 2400, height: 1600 },
+  /** Anna's hummingbird, painted over the old crane's original in its place and pose (its tail
+   *  where the crane's feet were, so the page's line still leaves from the bird), its wings
+   *  repainted long, narrow and blurred. */
+  bird: { src: `${I}/hummingbird-v1.webp`, width: 1600, height: 1062 },
   /** The gold-leaf sun, its leaf edge kept. Plate: reference/home-v2/ink/plates/sun.png */
   sun: { src: `${I}/sun.webp`, width: 760, height: 743 },
-};
-
-/** The opening crane's wingbeat (round 5): the same painting brought to life by a Kling loop, cut
- *  out frame by frame like the still (build_crane_flight.py). An animated webp. `small` is for
- *  phones. v3 (October 5, round 8): a take in which the black flight feathers stay solid ink
- *  through the beat. v4 (October 5): no held pose, one wingbeat a breath (2.4 s), and the whole
- *  bird lifts as its wings press down and settles as they rise. v4-twice (Mo, October 5: "fly
- *  like 2 times, then stop"): two beats, then the picture stops for good on the still's pose
- *  (its loop count is 2 and its last frame is the first pose again). a2-twice (October 9): the
- *  same beat, played the same way, from a new take of the hand-painted crane (crane-paint-a). */
-export const craneFlight = {
-  src: `${I}/crane-flight-a2-twice.webp`,
-  small: `${I}/crane-flight-a2-twice-600.webp`,
 };
 
 /** The crane at rest in the footer, in the grass beside the FDA park sign, bending toward the

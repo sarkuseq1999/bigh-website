@@ -8,11 +8,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, after one short rule over each of the three standards);
-    the opening crane beats its wings (the animated painting takes the still's place) and stays a
-    painting through the beat (its thinnest frame keeps at least 45% of the first pose's solid black
-    ink: round 8; the old take fell to 38%), its wingbeats run without a pause (October 5: no frame
-    held longer than 300 ms; the old loop held the wings up for seconds), and it beats twice and
-    then rests on the still's pose (Mo, October 5: loop count 2, the last frame the first); Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
+    the opening is California (October 28: the giant sequoias and Anna's hummingbird, no wingbeat
+    picture), the sun stands in the clearing clear of the bird and of the giant trunk, and the
+    opening's line keeps off the trunk; Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
     words and both links (the big bottle and Discover) on the stage, NuriCell's big bottle and
@@ -92,8 +90,8 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the gaps beside both paintings and never over their subjects, their words or the story's
     names and arrows.
   - the phone as its own design (round 5, October 4): the opening is a painting first (its
-    picture at least 44% of the window's height, the bird at least 58% of its width, a wingbeat
-    picture sharp for the screen) with its two pills one over the other at the column's full
+    picture at least 44% of the window's height, the bird's frame about 41% of its width) with
+    its two pills one over the other at the column's full
     width; the closing painting keeps the gold sun and both cranes in the window, the cranes on
     their own flying layer and the light on the sun's leaf; the stories open with their heading,
     then the still life, then the sample; the still lifes ship at their full 1744 px; the three
@@ -168,33 +166,6 @@ results = []
 def check(name, ok, detail=""):
     results.append((name, bool(ok), detail))
     print(("PASS " if ok else "FAIL ") + name + (f"  [{detail}]" if detail else ""))
-
-
-def ink_through_beat(page, src):
-    """The wingbeat picture's solid black ink (dark areas at least 7 px across, so its thin lines
-    are left out; 5 px in the phones' small picture) in its thinnest frame, as a share of the first
-    pose's (the still's), its frame count, its longest frame in milliseconds, its loop count (0 =
-    forever) and how far its last frame is from its first (mean difference, premultiplied, 0-255)."""
-    import io
-
-    import numpy as np
-    from PIL import Image, ImageFilter, ImageSequence
-
-    picture = Image.open(io.BytesIO(page.request.get(src).body()))
-    k = 7 if picture.width >= 900 else 5
-    solid = []
-    longest = 0
-    first = last = None
-    for frame in ImageSequence.Iterator(picture):
-        a = np.asarray(frame.convert("RGBA")).astype(np.float32)
-        longest = max(longest, int(frame.info.get("duration") or 0))  # known once the frame is loaded
-        last = np.concatenate([a[..., :3] * a[..., 3:] / 255, a[..., 3:]], axis=-1)
-        first = last if first is None else first
-        lum = 0.299 * a[..., 0] + 0.587 * a[..., 1] + 0.114 * a[..., 2]
-        dark = Image.fromarray((((lum < 80) & (a[..., 3] > 128)) * 255).astype(np.uint8))
-        solid.append(int((np.asarray(dark.filter(ImageFilter.MinFilter(k)).filter(ImageFilter.MaxFilter(k))) > 0).sum()))
-    rest = float(np.abs(last - first).mean())
-    return min(solid) / max(solid[0], 1), len(solid), longest, int(picture.info.get("loop", 0)), rest
 
 
 def scroll_to(page, y, wait=700):
@@ -454,7 +425,9 @@ def line_at_picker(page, tag):
 # publishes them (data-lifts, brush.tsx). The picker's lift (round 9) was taken out on Mo's word
 # (October 5): a new lift must be added here on purpose.
 DESIGNED_LIFTS = {
-    ("opening-flight", "opening-stage"): "the opening's own lift over the far ridges",
+    # October 28: the sequoias. The flight lifts off into the clearing's light and lands again on
+    # the painting's forest floor (it lifted over the far ridges onto the stage before).
+    ("opening-flight", "opening-land"): "the opening's own lift into the clearing, onto the forest floor",
     ("purpose-painting", "standard-0"): "the lift into the closing painting's sky, on to the first standard's rule",
     ("standard-0", "standard-1"): "the travel between the standards' rules",
     ("standard-1", "standard-2"): "the travel between the standards' rules",
@@ -476,7 +449,7 @@ def run_line(browser):
         real = [l for l in (lifts or []) if l[2] > LIFT_MIN]
         stray = [f"{a} -> {b} ({n} px at y {y0}-{y1})" for a, b, n, y0, y1 in real if (a, b) not in DESIGNED_LIFTS]
         seen = {(a, b) for a, b, *_ in real}
-        read = lifts is not None and ("opening-flight", "opening-stage") in seen and ("standard-2", "footer-promise") in seen
+        read = lifts is not None and ("opening-flight", "opening-land") in seen and ("standard-2", "footer-promise") in seen
         check(
             f"line {w}x{h}: the page line leaves the paper only at its designed lifts",
             read and not stray,
@@ -573,19 +546,33 @@ PAINTINGS = """(() => {
 })()"""
 
 
-# Round 5, phones: the opening's picture, the bird's width (its picture is 64.6% bird), the
-# wingbeat picture's own width and the pixels the crane needs on this screen (the full picture is
-# 900), the two pills and the words' column, as [left, top, right, bottom].
+# Round 5, phones: the opening's picture, the bird's width (its picture is 64.6% bird: the
+# crane's frame, which the hummingbird inherited on October 28), the two pills and the words'
+# column, as [left, top, right, bottom].
 PHONE_OPENING = """(() => {
   const r = (e) => { const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
   const art = document.querySelector('#top [data-brush=opening-art]').getBoundingClientRect();
   const crane = document.querySelector('#top [data-brush=crane]').getBoundingClientRect();
-  const flight = document.querySelector('#top img[src*=crane-flight]');
   const title = document.querySelector('#opening-title');
   const pills = [...title.parentElement.querySelectorAll(':scope > div > a, :scope > div > button')].map(r);
-  return { art: art.height, bird: crane.width * 0.646, flight: flight ? flight.naturalWidth : 0,
-    need: Math.min(900, Math.round(crane.width * devicePixelRatio)), pills,
-    col: r(title.parentElement.querySelector('p')) };
+  return { art: art.height, bird: crane.width * 0.646, pills, col: r(title.parentElement.querySelector('p')) };
+})()"""
+
+# October 28: the opening's pictures, where the hummingbird's bill ends (68% across its picture),
+# the sun's leaf, where the giant trunk starts (84% across the painting's own box) and the
+# opening's height, in window pixels.
+OPENING_ROOM = """(() => {
+  const box = (s) => document.querySelector(s).getBoundingClientRect();
+  const land = box('#top [data-brush=opening-land]');
+  const bird = box('#top [data-brush=crane]');
+  const sun = box('#top img[src*="sun.webp"]');
+  return { land: document.querySelector('#top img[class*="landscape"]').currentSrc,
+    bird: document.querySelector('#top [data-brush=crane] img').currentSrc,
+    flights: document.querySelectorAll('#top img[src*=crane-flight]').length,
+    bill: bird.left + 0.68 * bird.width, billY: bird.top + 0.42 * bird.height,
+    sun: [sun.left, sun.top, sun.right, sun.bottom],
+    trunk: land.left + 0.84 * land.width, landW: land.width,
+    art: [box('#top [data-brush=opening-art]').top, box('#top [data-brush=opening-art]').bottom] };
 })()"""
 
 # Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width) and the
@@ -1080,44 +1067,28 @@ def run(browser, look, mobile):
     )
 
     # The opening: paintings loaded, words clear of each other, the brush line leaving it.
-    art = page.evaluate(
-        "[...document.querySelectorAll('#top img:not([src*=crane-flight])')].map(i => i.complete && i.naturalWidth > 0)"
-    )
+    art = page.evaluate("[...document.querySelectorAll('#top img')].map(i => i.complete && i.naturalWidth > 0)")
     check(f"{tag}: the opening's paintings have loaded", art and all(art), str(art))
-    # The wingbeat: the animated painting is fetched once the still has bloomed, and takes its place.
-    try:
-        page.wait_for_selector("#top [data-brush=crane][data-flying=true]", timeout=15000)
-        flying = True
-    except Exception:  # noqa: BLE001
-        flying = False
-    wing = page.evaluate(
-        "(() => { const i = document.querySelector('#top img[src*=crane-flight]'); return i ? [i.complete, i.naturalWidth, getComputedStyle(i).opacity] : null })()"
-    )
-    check(f"{tag}: the crane beats its wings", flying and wing and wing[0] and wing[1] > 0 and wing[2] == "1", str(wing))
-    # Round 8: the wingbeat stays a painting (the old take turned into an outline drawing mid-beat).
-    src = page.evaluate("document.querySelector('#top img[src*=crane-flight]')?.currentSrc || ''")
-    thinnest, frames, longest, loops, rest = ink_through_beat(page, src) if src else (0, 0, 0, -1, 99)
+    # October 28 (Mo): California in the opening. The giant sequoias and Anna's hummingbird, no
+    # wingbeat picture any more; Mo found the mockup's sun "strange or cramped", so the sun stands
+    # in the clearing with room on both sides: clear of the bird and of the giant trunk (84% across
+    # the painting's own box), and the brush line never over the trunk.
+    o = page.evaluate(OPENING_ROOM)
     check(
-        f"{tag}: the wingbeat keeps its black ink through the beat",
-        frames > 30 and thinnest >= 0.45,
-        f"thinnest frame {thinnest:.0%} of the first pose's solid ink, {frames} frames, {src[-28:]}",
+        f"{tag}: the opening is the sequoias and the hummingbird",
+        "opening-sequoias" in o["land"] and "hummingbird" in o["bird"] and o["flights"] == 0,
+        f"{o['land'][-40:]}, {o['bird'][-40:]}, {o['flights']} wingbeat pictures",
     )
-    # October 5 (Mo): the wings beat without a pause. The old loop held the wings-up pose for 1.4 s
-    # and 4.2 s around each beat, which read as fake; no frame may stay longer than 300 ms. Changed
-    # ON PURPOSE the same day (Mo: "fly like 2 times, then stop"): the beats still run without a
-    # pause, and the rest after them is the picture stopping (its loop count), not a held frame.
+    # On a phone the sun stands above the bird, so there it may be clear of the bill upward.
+    room = 24 if mobile else 60
+    clear_of_bird = o["sun"][0] - o["bill"] >= room or (mobile and o["billY"] - o["sun"][3] >= room)
     check(
-        f"{tag}: the crane's wingbeats run without a pause (no frame held over 300 ms)",
-        frames > 30 and 0 < longest <= 300,
-        f"longest frame {longest} ms",
+        f"{tag}: the sun has room in the clearing (clear of the bird and the giant trunk)",
+        clear_of_bird and o["trunk"] - o["sun"][2] >= room,
+        f"bird's bill {o['bill']:.0f}, {o['billY']:.0f}; sun {[round(v) for v in o['sun']]}; trunk {o['trunk']:.0f}",
     )
-    # Mo (October 5): two beats, then the crane rests for good in the still painting's pose. The
-    # picture plays twice (loop count 2) and its last frame, where it stops, is its first pose.
-    check(
-        f"{tag}: the crane beats twice, then rests on the still's pose (loop count 2, last frame = first)",
-        loops == 2 and rest <= 0.8,
-        f"loop count {loops}, last frame differs from the first by {rest:.2f} (0-255)",
-    )
+    on_trunk = ink_in_box(page, o["trunk"] + 8, o["art"][0], o["trunk"] + 0.1 * o["landW"], o["art"][1])
+    check(f"{tag}: the opening's line keeps off the giant trunk", on_trunk == 0, f"ink {on_trunk}")
     boxes = page.evaluate(
         """[...document.querySelectorAll('#top h1, #top p, #top a, #top button')].map(e => {
             const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; })"""
@@ -1131,17 +1102,15 @@ def run(browser, look, mobile):
     inside = all(b[0] >= 0 and b[2] <= width for b in boxes)
     check(f"{tag}: the opening's words sit clear, inside the window", not overlaps and inside, f"{len(overlaps)} overlaps")
     # Round 5: the phone's opening is a painting first: the picture about 46% of the window's
-    # height, the bird about 41% of its width (Mo, October 23: 66% of round 5's crane, which
-    # spanned 62%; a wingbeat picture sharp for the screen), and the two pills one over the other
-    # at the column's full width, 52 px or taller.
+    # height, the bird's frame about 41% of its width (Mo, October 23: 66% of round 5's crane,
+    # which spanned 62%), and the two pills one over the other at the column's full width, 52 px
+    # or taller.
     if mobile:
         o = page.evaluate(PHONE_OPENING)
         check(
-            f"{tag}: the opening is a painting first, the crane about 41% of the window's width",
-            o["art"] >= 0.44 * view_h
-            and 0.38 * width <= o["bird"] <= 0.44 * width
-            and o["flight"] >= o["need"],
-            f"picture {o['art']:.0f} px tall, bird {o['bird']:.0f} px wide, wingbeat picture {o['flight']} px (needs {o['need']})",
+            f"{tag}: the opening is a painting first, the bird's frame about 41% of the window's width",
+            o["art"] >= 0.44 * view_h and 0.38 * width <= o["bird"] <= 0.44 * width,
+            f"picture {o['art']:.0f} px tall, bird's frame {o['bird']:.0f} px wide",
         )
         pills, col = o["pills"], o["col"]
         check(

@@ -1,24 +1,26 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { crane, craneFlight } from "./assets";
-import { useInkColor, useTint } from "./ink-color";
+import { opening } from "./assets";
+import { useInkColor } from "./ink-color";
 import { useMist } from "./mist";
 import base from "@/components/ink/ink.module.css";
 import styles from "./opening.module.css";
 
-// Opening 2, "the crane" (Mo's approved comp, October 2, 2026): a full-width ink landscape of
-// misty mountains, the crane of long life in flight, a gold-leaf sun; the three-line headline at
-// the lower left on calm paper, the intro and two pills under it. The brush line that leaves the
-// crane is the page's own (brush.tsx). The painting is alive: mist drifts through the mountains
-// (mist.ts), light crosses the gold leaf, the sun sits at its own depth, and the crane beats its
-// wings twice, slowly, its body lifting with each stroke (the same painting, animated), then
-// glides on in the still's pose, while the whole bird rides the air in a slow float of its own
+// The opening, laid out on the crane comp (Mo's approved comp, October 2, 2026): a painting across
+// the first screen, a bird in flight, a gold-leaf sun; the three-line headline at the lower left
+// on calm paper, the intro and two pills under it. The brush line that leaves the bird is the
+// page's own (brush.tsx). October 28, 2026 (Mo): the misty peaks and the red-crowned crane read as
+// Chinese, so the painting is now giant sequoias in the morning (they live 3,000 years), the sun
+// standing in a clearing beside one giant trunk, and the bird Anna's hummingbird (for its size it
+// burns energy faster than almost any animal). The crane's place, anchors and float are the
+// bird's. The painting is alive: mist drifts through the grove (mist.ts), light crosses the gold
+// leaf, the sun sits at its own depth, and the bird rides the air in a slow float of its own
 // (opening.module.css).
 
 // The headline's one gold word (Mo, October 13, 2026: colour for an ink-and-paper page): "cells" in
@@ -46,9 +48,6 @@ function gild(lines: string[], className: string): ReactNode[] {
 
 export function OpeningCrane({ motion }: { motion: boolean }) {
   const color = useInkColor();
-  const tint = useTint();
-  const flightBig = tint(craneFlight.src);
-  const flightSmall = tint(craneFlight.small);
   const copy = useCopy();
   const dialogs = useSiteDialogs();
   const art = useRef<HTMLDivElement>(null);
@@ -56,44 +55,10 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
   const mist = useRef<HTMLCanvasElement>(null);
   useMist(art, landscape, mist, motion);
 
-  // The wingbeat: once the still crane has bloomed, the animated painting is fetched; it opens on
-  // the same pose, so it takes the still's place unseen, beats twice and rests on that pose.
-  const bird = useRef<HTMLImageElement>(null);
-  const [flight, setFlight] = useState<string | null>(null);
-  const [flying, setFlying] = useState(false);
-  useEffect(() => {
-    const still = bird.current;
-    if (!still || !motion) return;
-    let timer = 0;
-    const bloomed = () => still.dataset.bloom === "done";
-    const begin = () => {
-      // The animated painting is a megabyte or two: not for visitors who asked to save data.
-      const link = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
-      if (link?.saveData) return;
-      // Phones take the small one only where it is sharp enough: the phone's crane is 63.4vw
-      // (October 23), which a 2x screen gets from the small one and a 3x screen needs in full.
-      const phone = window.matchMedia("(max-width: 720px)").matches;
-      const pixels = still.getBoundingClientRect().width * window.devicePixelRatio;
-      const small = phone && pixels <= 640;
-      timer = window.setTimeout(() => setFlight(small ? flightSmall : flightBig), 400);
-    };
-    const watcher = new MutationObserver(() => {
-      if (!bloomed()) return;
-      watcher.disconnect();
-      begin();
-    });
-    if (bloomed()) begin();
-    else watcher.observe(still, { attributes: true, attributeFilter: ["data-bloom"] });
-    return () => {
-      watcher.disconnect();
-      window.clearTimeout(timer);
-    };
-  }, [motion, flightBig, flightSmall]);
-
-  // Depth as you leave the opening: the sun sinks slowly behind the ridges and the mountains
-  // settle a little, while the crane (its own gentle float in CSS) stays on its flight path.
-  // With a mouse, the sun also leans a few pixels against the pointer, as far things do when you
-  // move your head. (The crane stays put: the brush line is pinned to its trailing legs.)
+  // Depth as you leave the opening: the sun sinks slowly behind the trees and the grove settles
+  // a little, while the bird (its own gentle float in CSS) stays on its flight path. With a
+  // mouse, the sun also leans a few pixels against the pointer, as far things do when you move
+  // your head. (The bird stays put: the brush line is pinned to its tail.)
   useEffect(() => {
     const element = art.current;
     if (!element || !motion) return;
@@ -142,13 +107,15 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
         {/* What the brush line measures the opening's stroke on (see opening.module.css). */}
         <span className={styles.stage} data-brush="opening-stage" />
         <span className={styles.flightPath} data-brush="opening-flight" />
+        {/* The painting's own box (it covers the opening), so the line can walk its forest floor. */}
+        <span className={styles.land} data-brush="opening-land" />
         <span className={styles.sun}>
           <Image
             className={styles.leaf}
-            src={crane.sun.src}
+            src={opening.sun.src}
             alt=""
-            width={crane.sun.width}
-            height={crane.sun.height}
+            width={opening.sun.width}
+            height={opening.sun.height}
             sizes="(max-width: 720px) 34vw, 20vw"
             loading="eager"
             data-bloom="waiting"
@@ -161,34 +128,29 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
         <Image
           ref={landscape}
           className={`${base.ink} ${styles.landscape}`}
-          src={tint(crane.landscape.src)}
+          src={opening.landscape.src}
           alt=""
-          width={crane.landscape.width}
-          height={crane.landscape.height}
-          sizes="100vw"
+          width={opening.landscape.width}
+          height={opening.landscape.height}
+          sizes="(max-width: 720px) 150vw, 100vw"
           loading="eager"
           fetchPriority="high"
           data-bloom="waiting"
           style={{ ["--bloom-delay" as string]: 200, ["--bloom-origin" as string]: "72% 60%" }}
         />
         <canvas ref={mist} className={`${base.ink} ${styles.landscape} ${styles.mist}`} />
-        <span className={styles.crane} data-brush="crane" data-flying={motion && flying}>
+        <span className={styles.crane} data-brush="crane">
           <Image
-            ref={bird}
             className={styles.bird}
-            src={tint(crane.crane.src)}
+            src={opening.bird.src}
             alt=""
-            width={crane.crane.width}
-            height={crane.crane.height}
+            width={opening.bird.width}
+            height={opening.bird.height}
             sizes="(max-width: 720px) 64vw, 23vw"
             loading="eager"
             data-bloom="waiting"
             style={{ ["--bloom-delay" as string]: 600 }}
           />
-          {motion && flight && (
-            // eslint-disable-next-line @next/next/no-img-element -- an animated painting: the image optimizer would still it
-            <img className={styles.wingbeat} src={flight} alt="" onLoad={() => setFlying(true)} />
-          )}
         </span>
       </div>
 

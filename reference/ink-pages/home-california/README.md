@@ -73,6 +73,21 @@ still a little feathery). Shown: `hummingbird-wings-1` (h1), 9/10 for the first 
 do in a build: route the stroke along the forest floor (it still crosses the clearing and the big
 trunk as drawn for the mountains); the pink throat stays a second colour beside the gold.
 
+## Built: first screen only (October 28, 2026)
+
+Mo: "First screen only": the crane stays in the homepage's closing painting, the footer by the
+park sign and the phone menu. `build_home_opening.py` makes `opening-sequoias-v1.webp` (from
+`sequoia-2-clear-1`, the whole first screen) and `hummingbird-v1.webp` (from
+`hummingbird-wings-1`, in the crane's 1600 x 1062 frame). In the page: the painting covers the
+opening (its top dissolves to bare paper under the menu bar, so the bar's words and rule keep a
+quiet ground), the sun keeps its place but at most 1000 px into the column (in the clearing on
+wide windows), the hummingbird is a still (no wingbeat picture), and the line's second stroke is
+pinned to the painting's own box (`opening-land`) so it walks the forest floor left of the giant
+trunk at every width. Phones: the whole painting at the picture's height, the sun at 43%, the
+bird a little lower, a short dive to the clearing's floor. Built-site checks: `qa_home_ink`
+280/280 (its wingbeat checks replaced by: the sequoias and the hummingbird, the sun's room in the
+clearing, no ink on the trunk; the designed lift now lands on `opening-land`), `qa_nav` 326/326.
+
 ## Files
 
 - Paintings: Codex (ChatGPT plan, no API spend), 8 pictures, two takes each:

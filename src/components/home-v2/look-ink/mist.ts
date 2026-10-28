@@ -2,11 +2,12 @@
 
 import { useEffect, type RefObject } from "react";
 
-// Living mist for the opening's mountains. The landscape is one ink painting; here it is drawn
-// again on a canvas with slow banks of mist drifting through it. Mist in an ink painting is bare
-// paper, so the mist only ever takes ink away: the far, pale ridges dissolve and return while the
-// near, dark pines hold. The canvas takes the painting's place once it has bloomed (same pixels,
-// same box, same multiply), then the mist rises over one breath. Without WebGL, on a software
+// Living mist for the opening's painting (the misty mountains until October 28, 2026; since then
+// the giant sequoias in the morning). The landscape is one painting; here it is drawn again on a
+// canvas with slow banks of mist drifting through it. Mist in an ink painting is bare paper, so
+// the mist only ever takes ink away: the pale, far trees and light dissolve and return while the
+// dark ink holds. The canvas takes the painting's place once it has bloomed (same pixels, same
+// box, same multiply), then the mist rises over one breath. Without WebGL, on a software
 // renderer, or with reduced motion, the still painting simply stays.
 
 const VERTEX = `
@@ -121,7 +122,7 @@ export function useMist(
     let visible = true;
     let lost = false;
     let began = 0;
-    const aspect = image.naturalWidth / Math.max(1, image.naturalHeight) || 2400 / 1029;
+    const aspect = image.naturalWidth / Math.max(1, image.naturalHeight) || 2400 / 1600;
 
     /** The canvas holds the whole painting at the size it is shown (object-fit crops it). */
     const resize = () => {
