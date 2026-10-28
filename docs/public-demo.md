@@ -4,9 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-3zftix24p-sarkuseq1999s-projects.vercel.app`
-(`dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`), the **production** deployment of `main` at
-`f5356a4f9ac7713e6d997c2f107c01a81c42b0b7` (October 28, 2026, from about 10:15 Pacific). Mo
+The alias currently points to `bigh-website-70jxsah4v-sarkuseq1999s-projects.vercel.app`
+(`dpl_76uqRyhhN2AYzkAdG4wLsbAqZATq`), the **production** deployment of `main` at
+`2ea851dc0add91e710b927d8aeb1d8bff80278b0` (October 28, 2026, from about 11:55 Pacific). About
+opens on the poppy meadow: the ink circle reminded Mo of the film The Ring; of the two test
+openings he picked A, the superbloom, then found its first screen and Our purpose "don't
+transition well" (the painting stopped in a straight line) and picked A of two painted ends,
+"the meadow thins out". Below the first screen the poppies thin into bare paper, then the oak.
+The circle and the test pages `/about-a` and `/about-b` are gone. `2ea851d` is `f5356a4` plus the
+meadow (with its mockups commit), built in a scratch worktree on branch `about-meadow` so other
+`studio` work stayed out; pushed as a fast-forward. Before the push, on the built copy
+(`npm run build` + `next start`): `qa_about` 403/403 (rewritten for the meadow: `meadow_layout`,
+`motion`), `qa_home_ink` 282/282, `qa_nav` 326/326; lint and type-check clean. After the alias
+update, on the public demo: `/about` and `/jp/about` 200 serving `superbloom-v2.webp` and
+`superbloom-gold-v2.webp` and no circle, `/hken/about` 307 to `/cns/about`, `/about-a` and
+`/about-b` 404; in fresh unauthenticated browsers `qa_about` 403/403, `qa_home_ink` 282/282, `qa_nav` 326/326, and the page shot at 1440, 1920, 1280 and 390 px wide matches the built copy.
+
+Before that, from about 10:15 to about 11:55 Pacific on October 28, 2026, the alias pointed to
+`bigh-website-3zftix24p-sarkuseq1999s-projects.vercel.app` (`dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`),
+the **production** deployment of `main` at `f5356a4f9ac7713e6d997c2f107c01a81c42b0b7`. Mo
 picked 2, "The same formula for about 20 years", for NuriCell's chapter before Buy (the egg cup
 and the brushed 3 × 30 = 90 read as strange, and the dose alone was too thin for a chapter), and
 said "Yes, push it" with "about 20 years" (no start year is on file). The chapter: a young
