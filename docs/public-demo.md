@@ -4,9 +4,27 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-nrigbdou0-sarkuseq1999s-projects.vercel.app`
-(`dpl_89aswJRrXAimKPgTGqVJNN8RJi35`), the **production** deployment of `main` at
-`4cd223146191ace89af17b6401ade8ea09e5d347` (October 27, 2026, from about 20:58 Pacific). Mo picked
+The alias currently points to `bigh-website-kswkild8l-sarkuseq1999s-projects.vercel.app`
+(`dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`), the **production** deployment of `main` at
+`f4783bb545d1634e0b12e061a95388d5d23853fe` (October 27, 2026, from about 21:18 Pacific). The ink
+circle on About reminded Mo of the film The Ring; of three painted ideas he asked to compare two
+on the live site. Two temporary test pages: `/about-a`, A "Superbloom" (golden hills in spring
+poppies, the poppies bloom out from the foot of the hills), and `/about-b`, B "Morning walk" (a
+person and a dog on a trail, the morning light reaching a ridge in gold from the right; on a phone
+the ridge is off screen, so no gold there). `/about` keeps the circle until he picks; the test
+pages are noindex. `f4783bb` is `4cd2231` plus that one commit, built in a scratch worktree from
+`origin/main` so other `studio` work stayed out; pushed as a fast-forward. Before the push, on the
+built copy (`npm run build` + `next start`): `qa_about` 404/404, `qa_home_ink` 282/282, `qa_nav`
+326/326, and both test pages at 1440, 1920, 1280, 768 and 390 px wide (the gold arrives, no
+sideways scroll, no console errors, reduced motion shows the gold at once). After the alias
+update, on the public demo in fresh unauthenticated browsers: `/about-a`, `/about-b`, `/about`,
+`/jp/about-a` and `/kr/about-b` 200, `/hken/about-a` 307 to `/cns/about-a`; the same test page
+check at every width, no errors; `qa_about` 404/404, `qa_home_ink` 282/282, `qa_nav` 326/326,
+`qa_nuricell_ink` 450/450.
+
+Before that, from about 20:58 to 21:18 Pacific on October 27, 2026, the alias pointed to
+`bigh-website-nrigbdou0-sarkuseq1999s-projects.vercel.app` (`dpl_89aswJRrXAimKPgTGqVJNN8RJi35`),
+the **production** deployment of `main` at `4cd223146191ace89af17b6401ade8ea09e5d347`. Mo picked
 B for NuriCell's "Why these four work together" (the powder heaps read as drugs: three ranch
 paintings instead, firewood and the stove, the windmill filling its tank, the Pony Express rider)
 and said "Yes, put it live". It went out on its own: the two `studio` commits (`091c05f` code,

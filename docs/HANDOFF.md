@@ -5,15 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 27, 2026, by Claude Code (NuriCell pairs on the ranch, live on its
-  own as `main` `4cd2231`, production `dpl_89aswJRrXAimKPgTGqVJNN8RJi35`, demo alias on it).
-  Before that the same day: NuriCell research's Japanese hint no longer splits タップ (`main`
+- **Last updated:** October 27, 2026, by Claude Code (About's two test openings live as `main`
+  `f4783bb`, production `dpl_G6ie8SS3BEEsh5jpJcTiXoReTE8o`, demo alias on it; merged into
+  `studio`). Before that the same day: NuriCell pairs on the ranch, live on its own (`main`
+  `4cd2231`); NuriCell research's Japanese hint no longer splits タップ (`main`
   `55c250a`); the go-live merge (everything waiting on `studio`
   put live together, `main` `641a751`; `studio` then equalled `main` but for notes); product
   questions put live on their own (`main` `c1f56aa`), NuriCell Dr. Liu (`6766ae1`) and the tablet
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
+- **Live as a test, waiting for Mo's pick (October 27): About's new opening, A or B.** The ink
+  circle reminded Mo of the film The Ring. Of three painted ideas (artifact
+  `6hnK43uNUsZ3R1tFSPvy6N`: A superbloom, B morning walk, C the title's capitals brushed) he asked
+  to compare A and B on the live site: `/about-a` (golden hills in spring poppies; the poppies
+  bloom out from the foot of the hills) and `/about-b` (a person and a dog on a trail; the morning
+  light reaches a ridge in gold; on a phone the ridge is off screen, so no gold there). `/about`
+  keeps the circle. Code: `SceneOpening` in `about-ink.tsx` (`AboutInk opening=…`),
+  `scene.module.css`, `scene-art.ts`; pictures `reference/ink-pages/about-opening/`
+  (`build_about_opening.py`: the ink with its gold as a pale ghost, and the gold alone). **When Mo
+  picks:** put the pick on `/about` (drop the circle, its hills and `let-the-circle-go.ts` if
+  unused, and update `qa_about`), delete the two test routes, write his pick into `AGENTS.md`.
 - **Built on `studio`, not live (October 27): NuriCell chapter 6, "The same formula for about 20
   years" (Mo picked 2).** "How to take it" (egg cup, brushed 3 × 30 = 90) read as strange and the
   dose alone too thin for a chapter (the buy box and the first question say it). Three rounds of
