@@ -15,7 +15,7 @@ names=("$@")
 for name in "${names[@]}"; do
   ref=()
   case "$name" in
-    *-1) [[ "$name" == sandhill-* ]] || ref=(-i "$REFS/current-opening.png") ;;
+    *-1 | sequoia-2) [[ "$name" == sandhill-* ]] || ref=(-i "$REFS/current-opening.png") ;;
   esac
   [[ "$name" == sandhill-* ]] && ref=(-i "$REFS/current-crane.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \

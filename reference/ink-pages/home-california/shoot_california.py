@@ -28,7 +28,36 @@ IDEAS = {
     "b2": ("golden-hills-2", "sandhill-crane-1"),
     "c1": ("yosemite-1", "sandhill-crane-1"),
     "c2": ("yosemite-2", "sandhill-crane-1"),
+    "d1": ("sequoia-1", "sandhill-crane-1"),
+    "d2": ("sequoia-2", "sandhill-crane-1"),
+    "d3": ("sequoia-3", "sandhill-crane-1"),
 }
+
+# D is painted as the whole first screen (the trunks rise out of its top): its picture fills the
+# opening, its foot dissolving; on a phone the whole painting shows at the painting's height, its
+# right two-thirds in the window, so the grove stays in.
+# The trunks' tops dissolve into the morning light, so the menu's words never sit on bark. Codex
+# put a far trunk at 71-76% across, where the sun was asked to go, so the sun moves left into the
+# open haze between the crane and the grove (53% at 1440; at most 833 px in from the column's
+# start, so at 1920 its right edge stays at the far trunk's left, 1363 px). On a phone it moves
+# left and shrinks a little, and the crane comes down a little, to fit between them.
+FULL = """
+@media (min-width: 721px) {
+  section#top img[class*="__landscape"] { top: 0 !important; height: 100% !important;
+    object-position: 62% 100% !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 84%, transparent) !important;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 22%, #000 84%, transparent) !important; }
+  section#top span[class*='__sun'] { left: calc(var(--inset) + min(53%, 833px)) !important; }
+}
+@media (max-width: 720px) {
+  section#top img[class*="__landscape"] { top: 0 !important; bottom: auto !important;
+    height: 100% !important; left: -48% !important; width: 150% !important; object-position: 100% 100% !important;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 80%, transparent) !important;
+    mask-image: linear-gradient(to bottom, transparent 0, #000 14%, #000 80%, transparent) !important; }
+  section#top span[class*='__sun'] { left: 34vw !important; top: 2% !important; width: 24vw !important; }
+  section#top span[class*='__crane'] { top: calc(4% + 24vw) !important; }
+}
+"""
 
 SIZES = [("wide", 1920, 1040), ("desk", 1440, 900), ("phone", 390, 844)]
 
@@ -41,7 +70,7 @@ SUNSET = """
 @media (min-width: 1700px) { section#top span[class*='__sun'] { top: 14.3% !important; } }
 @media (max-width: 720px) { section#top span[class*='__sun'] { left: 52% !important; } }
 """
-EXTRA = {"a1": SUNSET, "a2": SUNSET}
+EXTRA = {"a1": SUNSET, "a2": SUNSET, "d1": FULL, "d2": FULL, "d3": FULL}
 
 # The mist canvas and the wingbeat would draw the live pictures: off, and the stills shown. The
 # page's brush line is routed for the live mountains (it would cut across El Capitan), so the

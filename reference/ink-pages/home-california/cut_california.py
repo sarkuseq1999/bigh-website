@@ -71,7 +71,17 @@ FEATHER = 0.28  # of the painting's width: its left edge fades into the paper
 TOP_FADE = 90  # rows: the box's top edge dissolves, so no window shows it as a cut
 
 
+def full(take):
+    """D, the sequoias, is painted as the whole first screen: paper divided out, kept whole."""
+    img = Image.open(HERE / "originals" / f"{take}.png")
+    out = Image.fromarray(divided(img, top=True).astype(np.uint8), "RGB").resize((2400, 1600), Image.LANCZOS)
+    out.save(OUT / f"{take}.png", optimize=True)
+    print(take, "full screen", out.size)
+
+
 def scene(take):
+    if take.startswith("sequoia"):
+        return full(take)
     img = Image.open(HERE / "originals" / f"{take}.png")
     arr = divided(img, top=True)
     w, h = img.size

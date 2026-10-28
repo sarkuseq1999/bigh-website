@@ -23,6 +23,26 @@ two cranes) and the footer's crane by the park sign would change to match, the b
 be routed again for the new scene, and the "California, not Asian" rule in AGENTS.md and DESIGN.md
 (which still calls the page "an East Asian ink-wash painting") would need updating.
 
+## D. Giant sequoias in the morning (October 28, 2026)
+
+Mo liked the outlook but asked how a scene relates to "Good health starts with your cells." The
+honest answer: no scene says "cells" by itself; the gold does (the sun and "cells." are the same
+gold, and on this site gold means energy). The old crane carried "long life", but only in Chinese
+tradition, and A's Pacific sun can only be a setting one ("the end of the day" for a brand about
+aging). Of three ways on, Mo picked 2: a California sign of long life in a morning sun, giant
+sequoias (they live more than 3,000 years).
+
+- **D** (9/10, `sequoia-2`): a grove of giant sequoias, cinnamon trunks rising out of the
+  picture, ferns and a fallen log, morning light slanting in; the sun in the open haze beside
+  them. Painted with more detail than the rest of the site; sandhill cranes winter in the valley
+  below, not in the groves.
+- Painted as the whole first screen, not the landscape band, so the trunks can rise out of it:
+  `sequoia-1`, `-2` (live opening attached), `-3` (words only; a blue wash at its top). Codex put
+  a far trunk at 71-76% across, where the sun was asked to go, so the mockup moves the sun left
+  (53% of the column at 1440, at most 833 px in) and fades the trunks' tops into the light, clear
+  of the menu's words. On a phone the whole painting shows at the picture's height, its right
+  two-thirds in the window, the sun moved left and a little smaller, the crane a little lower.
+
 ## Files
 
 - Paintings: Codex (ChatGPT plan, no API spend), 8 pictures, two takes each:
