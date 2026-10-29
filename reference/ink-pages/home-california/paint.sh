@@ -26,6 +26,11 @@ for name in "${names[@]}"; do
     ref=(-i "$HERE/originals/hummingbird-wings-1.png")
   [[ "$name" == hummingbird-female-body-* ]] && ref=(-i "$HERE/originals/hummingbird-female-1.png")
   [[ "$name" == allens-body-* ]] && ref=(-i "$HERE/originals/allens-1.png")
+  # Mo (October 29): Allen's, but more like a painting. Repainted from allens-1 in the hand of
+  # the old flying crane (only its way of painting); then each take's wings removed.
+  [[ "$name" == allens-wash-? || "$name" == allens-sketch-? || "$name" == allens-loose-? || "$name" == allens-few-? ]] &&
+    ref=(-i "$HERE/originals/allens-1.png" -i "$HERE/../../home-v2/ink/originals/gpt25-crane-paint-a.png")
+  [[ "$name" == allens-*-body-* ]] && ref=(-i "$HERE/originals/${name/-body/}.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/$name.txt and follow it exactly. Use your built-in image generation tool to make exactly ONE picture (landscape 1536x1024 unless the order gives another size or edits an attached picture). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \

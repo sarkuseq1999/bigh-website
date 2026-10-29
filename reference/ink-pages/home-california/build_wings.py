@@ -43,7 +43,19 @@ LOOKS = {
     "anna": ("hummingbird-wings-1", "hummingbird-body-1"),
     "female": ("hummingbird-female-1", "hummingbird-female-body-1"),
     "allens": ("allens-1", "allens-body-1"),
+    # Mo (October 29): Allen's, but more like a painting. Codex painted these afresh in the old
+    # crane's loose hand, so they are lined up on allens-1 (its bill tip and tail tip), where the
+    # page's line leaves from.
+    "allens-loose": ("allens-loose-2", "allens-loose-body-2"),
+    "allens-few": ("allens-few-1", "allens-few-body-1"),
 }
+LINE_UP = {"allens-loose": "allens-1", "allens-few": "allens-1"}
+# Where a look's shoulders and wing split differ from the rig's (its painting's own anatomy,
+# after lining up): near shoulder, far shoulder, (split point, split angle).
+# How much a look's colour is calmed (saturation, brightness): allens-few came out a bright
+# pumpkin orange, louder than the gold sun; calmed toward the redwood bark's copper.
+CALM = {"allens-few": (0.72, 0.94)}
+SHOULDERS = {"allens-few": ((686.0, 542.0), (700.0, 526.0), ((690.0, 540.0), -19.0))}
 # The beat, in the painting's pixels. Each wing turns about its shoulder (where it meets the
 # back). Its length along the shoulder-to-tip line runs from 1 (as painted, raised) to `low`
 # (negative: through the shoulder and out below the body), while it turns by `turn` degrees
@@ -51,10 +63,11 @@ LOOKS = {
 RIG = {
     "near": {"shoulder": (712.0, 512.0), "low": -0.78, "turn": 14.0, "chord": 0.82},
     "far": {"shoulder": (716.0, 494.0), "low": -0.62, "turn": 10.0, "chord": 0.82},
-    # Pixels whose direction from the near shoulder is clockwise of this (degrees from straight
-    # up) belong to the far wing; the rest to the near wing.
-    "divide": -8.0,
+    # Pixels whose direction from this point is clockwise of this angle (degrees from straight
+    # up) belong to the far wing; the rest to the near wing: a ray up the gap between the wings.
+    "split": ((712.0, 512.0), -8.0),
 }
+DEFAULT_SHOULDERS = (RIG["near"]["shoulder"], RIG["far"]["shoulder"], RIG["split"])
 
 
 def rgba(name):
@@ -73,6 +86,43 @@ def aligned(moving, fixed):
     h, w = fixed.shape[:2]
     out = cv2.warpAffine(moving, warp, (w, h), flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP)
     return out, warp
+
+
+def calmed(rgba_, sat, val):
+    """The painting's colours with less saturation and a little less brightness."""
+    hsv = cv2.cvtColor(np.ascontiguousarray(rgba_[..., :3]), cv2.COLOR_RGB2HSV)
+    hsv[..., 1] *= sat
+    hsv[..., 2] *= val
+    out = rgba_.copy()
+    out[..., :3] = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
+    return out
+
+
+def tips(rgba_):
+    """The bill's tip (the bird's rightmost ink) and the tail's (its lowest-left ink)."""
+    ys, xs = np.nonzero(rgba_[..., 3] > 0.35)
+    bill = np.array([xs.max(), ys[xs.argmax()]], np.float32)
+    k = (xs - ys).argmin()
+    tail = np.array([xs[k], ys[k]], np.float32)
+    return tail, bill
+
+
+def line_up(painted, body, ref_name):
+    """Turn, scale and move a fresh painting (and its wingless edit) so its tail tip and bill tip
+    land on the reference painting's."""
+    ref = rgba(ref_name)
+    (t0, b0), (t1, b1) = tips(painted), tips(ref)
+    v0, v1 = b0 - t0, b1 - t1
+    scale = np.linalg.norm(v1) / np.linalg.norm(v0)
+    turn = math.atan2(v1[1], v1[0]) - math.atan2(v0[1], v0[0])
+    a = scale * np.array([[math.cos(turn), -math.sin(turn)], [math.sin(turn), math.cos(turn)]])
+    m = np.zeros((2, 3), np.float32)
+    m[:, :2] = a
+    m[:, 2] = t1 - a @ t0
+    h, w = ref.shape[:2]
+    warp = lambda img: cv2.warpAffine(img, m, (w, h), flags=cv2.INTER_LINEAR, borderValue=0)
+    print(f"  lined up on {ref_name}: scale {scale:.3f}, turn {math.degrees(turn):.1f} deg")
+    return warp(painted), warp(body)
 
 
 def lift_wings(painted, body):
@@ -95,8 +145,9 @@ def lift_wings(painted, body):
     mask *= cv2.dilate(keep[labels].astype(np.uint8), np.ones((15, 15), np.uint8)).astype(np.float32)
     wings = painted.copy()
     wings[..., 3] *= mask
-    angle = np.degrees(np.arctan2(xx - sx, sy - yy))
-    far = (angle > RIG["divide"]) & (yy < sy + 10)
+    (px, py), divide = RIG["split"]
+    angle = np.degrees(np.arctan2(xx - px, py - yy))
+    far = (angle > divide) & (yy < py + 10)
     near_w, far_w = wings.copy(), wings.copy()
     near_w[..., 3] *= ~far
     far_w[..., 3] *= far
@@ -167,6 +218,11 @@ def build(look):
     painted_name, body_name = LOOKS[look]
     painted = rgba(painted_name)
     body, warp = aligned(rgba(body_name), painted)
+    RIG["near"]["shoulder"], RIG["far"]["shoulder"], RIG["split"] = SHOULDERS.get(look, DEFAULT_SHOULDERS)
+    if look in LINE_UP:
+        painted, body = line_up(painted, body, LINE_UP[look])
+    if look in CALM:
+        painted, body = calmed(painted, *CALM[look]), calmed(body, *CALM[look])
     near, far = lift_wings(painted, body)
     to_img(near).save(out / "lifted-near.png")
     to_img(far).save(out / "lifted-far.png")

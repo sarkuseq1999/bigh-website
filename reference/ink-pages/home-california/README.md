@@ -132,3 +132,18 @@ https://claude.ai/artifact/QUXRzND98STrXfrwPd5iCQ). A. today's Anna's 8/10 (its 
 second bright colour), B. the green female 7/10 (too quiet: pale, it almost vanishes as its
 wings come down), C. Allen's 8.5/10, Claude's pick (copper like the redwood bark beside it; it
 nests almost only on the California coast). Nothing in `src/` changed.
+
+### Round 2: Allen's, more like a painting (October 29, 2026)
+
+Mo: "Allen's is pretty good. But can we try to make them look more painting-like, a little bit
+more painting-like, instead of more realistic?" Edits of `allens-1` in the old crane's hand
+(`allens-wash-*`, `allens-sketch-*`) kept its fine speckle, so Codex painted it afresh from words,
+with `allens-1` for the pose and colours and the old flying crane
+(`reference/home-v2/ink/originals/gpt25-crane-paint-a.png`) for the hand: `allens-loose-2` (a
+little looser) and `allens-few-1` (a few wet washes; much more a painting), and removed their
+wings (`allens-loose-body-2`, `allens-few-body-1`). The other takes are in `bigh-archive`.
+`build_wings.py` lines each fresh painting up on `allens-1` (bill tip and tail tip), gives
+`allens-few` its own shoulders and wing split, and calms its orange (saturation 0.72, brightness
+0.94), which came out louder than the gold sun. The page (same Artifact, version 2) now shows
+A. Allen's as before 8/10, B. a little looser 8/10, C. painted in a few strokes 9/10, Claude's
+pick.

@@ -25,31 +25,33 @@ WINGS = HERE / "plates" / "wings"
 OUT = HERE.parent / "mockups" / "home-bird"
 DENSITY = 2  # both shots are 2x
 
+# Round 2 (Mo, October 29: "Allen's is pretty good. But can we try to make them look more
+# painting-like?"). Round 1 (today's Anna's, a green female, Allen's) is in git history.
 LOOKS = [
     {
-        "key": "anna",
-        "letter": "A",
-        "name": "Today's Anna's",
-        "score": "8 / 10",
-        "what": "The bird you have now, with its rose-pink throat. Only the wings change: they never stop.",
-        "note": "The pink throat is a second bright colour beside the gold.",
-    },
-    {
-        "key": "female",
-        "letter": "B",
-        "name": "A calm green one",
-        "score": "7 / 10",
-        "what": "A female Anna's: green and grey, a few rose flecks on the throat. The gold sun and the gold “cells.” stay the only bright colours.",
-        "note": "The quietest, but too quiet: pale against the paper, it almost vanishes as its wings come down.",
-    },
-    {
         "key": "allens",
+        "letter": "A",
+        "name": "Allen's, as shown before",
+        "score": "8 / 10",
+        "what": "The copper bird from the last page: fine brushwork, every feather speckled in.",
+        "note": "Pretty, but it reads more like a field-guide picture than a painting.",
+    },
+    {
+        "key": "allens-loose",
+        "letter": "B",
+        "name": "A little looser",
+        "score": "8 / 10",
+        "what": "Softer washes on the breast, wings of quick dry strokes.",
+        "note": "A step toward a painting, but up close the body still has the same fine speckle.",
+    },
+    {
+        "key": "allens-few",
         "letter": "C",
-        "name": "Allen's hummingbird",
-        "score": "8.5 / 10",
+        "name": "Painted in a few strokes",
+        "score": "9 / 10",
         "pick": True,
-        "what": "Copper, like the redwood bark beside it. It nests almost only on the California coast.",
-        "note": "The warmest and the most Californian. Its copper sits close to the gold, so the screen feels like one morning.",
+        "what": "A fresh painting: a few wet washes of copper and green that bleed into each other, wings of pale grey strokes, bare paper for the breast.",
+        "note": "Clearly a painting, in the hand of the old crane. Its orange came out loud, so it is calmed toward the redwood's copper and the gold sun still leads.",
     },
 ]
 
@@ -195,7 +197,7 @@ PAGE = """<title>Hummingbird Looks</title>
 <main>
   <header class="intro">
     <h1>The hummingbird</h1>
-    <p>Three looks, each laid on the live homepage. On all three the wings never stop: about ten beats a second, blurred the way your eye sees a real hummingbird.</p>
+    <p>Allen's hummingbird three ways, from today's brushwork to a loose painting, each laid on the live homepage. On all three the wings never stop: about ten beats a second, blurred the way your eye sees a real hummingbird.</p>
     <p>For visitors whose phone asks for less motion, the wings would rest in the raised pose. Nothing on the live site has changed.</p>
   </header>
 
