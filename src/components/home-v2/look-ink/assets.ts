@@ -21,12 +21,24 @@ export const opening: Record<"landscape" | "bird" | "sun", Picture> = {
   /** Giant sequoias in the morning (ink and watercolour), painted as the whole first screen: one
    *  giant trunk on the right, a clearing of morning light beside it where the sun stands. */
   landscape: { src: `${I}/opening-sequoias-v1.webp`, width: 2400, height: 1600 },
-  /** Anna's hummingbird, painted over the old crane's original in its place and pose (its tail
-   *  where the crane's feet were, so the page's line still leaves from the bird), its wings
-   *  repainted long, narrow and blurred. */
-  bird: { src: `${I}/hummingbird-v1.webp`, width: 1600, height: 1062 },
+  /** Allen's hummingbird without its wings (Mo picked C, October 29, 2026: Allen's, "more
+   *  painting-like", the beak one dry brush stroke), a few wet washes in the old crane's hand,
+   *  lined up in the crane's frame on the first hummingbird (its tail where the crane's feet were,
+   *  so the page's line still leaves from the bird). Its wings are `openingWings`. */
+  bird: { src: `${I}/hummingbird-v2.webp`, width: 1600, height: 1062 },
   /** The gold-leaf sun, its leaf edge kept. Plate: reference/home-v2/ink/plates/sun.png */
   sun: { src: `${I}/sun.webp`, width: 760, height: 743 },
+};
+
+/** The hummingbird's wings, never still (Mo, October 29, 2026: "like a dragonfly"): its own
+ *  painted wings, lifted out and beaten about the shoulder (build_wings.py), each frame blurred
+ *  over its slice of the beat. Each picture is one wing's six frames side by side; both are laid
+ *  in `box` (percent of the bird's frame), the far wing behind the body, the near one over it. */
+export const openingWings = {
+  near: `${I}/hummingbird-v2-near.webp`,
+  far: `${I}/hummingbird-v2-far.webp`,
+  frames: 6,
+  box: { left: 16.19, top: 14.174, width: 45.644, height: 76.931 },
 };
 
 /** The crane at rest in the footer, in the grass beside the FDA park sign, bending toward the

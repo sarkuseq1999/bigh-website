@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, type ReactNode } from "react";
+import { useEffect, useRef, type CSSProperties, type ReactNode } from "react";
 import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { hero } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { opening } from "./assets";
+import { opening, openingWings } from "./assets";
 import { useInkColor } from "./ink-color";
 import { useMist } from "./mist";
 import base from "@/components/ink/ink.module.css";
@@ -17,11 +17,24 @@ import styles from "./opening.module.css";
 // on calm paper, the intro and two pills under it. The brush line that leaves the bird is the
 // page's own (brush.tsx). October 28, 2026 (Mo): the misty peaks and the red-crowned crane read as
 // Chinese, so the painting is now giant sequoias in the morning (they live 3,000 years), the sun
-// standing in a clearing beside one giant trunk, and the bird Anna's hummingbird (for its size it
-// burns energy faster than almost any animal). The crane's place, anchors and float are the
-// bird's. The painting is alive: mist drifts through the grove (mist.ts), light crosses the gold
-// leaf, the sun sits at its own depth, and the bird rides the air in a slow float of its own
-// (opening.module.css).
+// standing in a clearing beside one giant trunk, and the bird a hummingbird (for its size it
+// burns energy faster than almost any animal): since October 29 Allen's, painted in a few wet
+// washes, its wings never still. The crane's place, anchors and float are the bird's. The
+// painting is alive: mist drifts through the grove (mist.ts), light crosses the gold leaf, the
+// sun sits at its own depth, and the bird rides the air in a slow float of its own while its
+// wings beat (opening.module.css).
+
+// A wing's six frames, laid in the wings' box in the bird's frame (assets.ts).
+function wing(src: string): CSSProperties {
+  const { box } = openingWings;
+  return {
+    left: `${box.left}%`,
+    top: `${box.top}%`,
+    width: `${box.width}%`,
+    height: `${box.height}%`,
+    backgroundImage: `url(${src})`,
+  };
+}
 
 // The headline's one gold word (Mo, October 13, 2026: colour for an ink-and-paper page): "cells" in
 // each language, wherever its line puts it (Korean and Japanese on the second line). Only the first
@@ -54,6 +67,21 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
   const landscape = useRef<HTMLImageElement>(null);
   const mist = useRef<HTMLCanvasElement>(null);
   useMist(art, landscape, mist, motion);
+
+  // The wings beat only while the opening is in the window (and never with reduced motion: they
+  // rest on the beat's first frame, raised as painted).
+  useEffect(() => {
+    const element = art.current;
+    if (!element || !motion) return;
+    const watcher = new IntersectionObserver(([entry]) => {
+      element.dataset.beat = entry.isIntersecting ? "on" : "off";
+    });
+    watcher.observe(element);
+    return () => {
+      watcher.disconnect();
+      delete element.dataset.beat;
+    };
+  }, [motion]);
 
   // Depth as you leave the opening: the sun sinks slowly behind the trees and the grove settles
   // a little, while the bird (its own gentle float in CSS) stays on its flight path. With a
@@ -140,17 +168,24 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
         />
         <canvas ref={mist} className={`${base.ink} ${styles.landscape} ${styles.mist}`} />
         <span className={styles.crane} data-brush="crane">
-          <Image
-            className={styles.bird}
-            src={opening.bird.src}
-            alt=""
-            width={opening.bird.width}
-            height={opening.bird.height}
-            sizes="(max-width: 720px) 64vw, 23vw"
-            loading="eager"
+          {/* The bird blooms in whole, its far wing behind its body and its near wing over it. */}
+          <span
+            className={styles.flock}
             data-bloom="waiting"
             style={{ ["--bloom-delay" as string]: 600 }}
-          />
+          >
+            <span className={styles.wing} style={wing(openingWings.far)} data-wing="far" />
+            <Image
+              className={styles.bird}
+              src={opening.bird.src}
+              alt=""
+              width={opening.bird.width}
+              height={opening.bird.height}
+              sizes="(max-width: 720px) 64vw, 23vw"
+              loading="eager"
+            />
+            <span className={styles.wing} style={wing(openingWings.near)} data-wing="near" />
+          </span>
         </span>
       </div>
 

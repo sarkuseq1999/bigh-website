@@ -8,8 +8,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the brush line draws itself (ink on the canvas, its progress grows with the scroll, it is past
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, after one short rule over each of the three standards);
-    the opening is California (October 28: the giant sequoias and Anna's hummingbird, no wingbeat
-    picture), the sun stands in the clearing clear of the bird and of the giant trunk, and the
+    the opening is California (October 28: the giant sequoias and a hummingbird; October 29:
+    Allen's, its two painted wings beating through their frames, paused once the opening is out
+    of the window), the sun stands in the clearing clear of the bird and of the giant trunk, and the
     opening's line keeps off the trunk; Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
@@ -569,10 +570,23 @@ OPENING_ROOM = """(() => {
   return { land: document.querySelector('#top img[class*="landscape"]').currentSrc,
     bird: document.querySelector('#top [data-brush=crane] img').currentSrc,
     flights: document.querySelectorAll('#top img[src*=crane-flight]').length,
+    wings: [...document.querySelectorAll('#top [data-brush=crane] [data-wing]')].map(w => w.dataset.wing + ' ' + getComputedStyle(w).backgroundImage),
     bill: bird.left + 0.68 * bird.width, billY: bird.top + 0.42 * bird.height,
     sun: [sun.left, sun.top, sun.right, sun.bottom],
     trunk: land.left + 0.84 * land.width, landW: land.width,
     art: [box('#top [data-brush=opening-art]').top, box('#top [data-brush=opening-art]').bottom] };
+})()"""
+
+# October 29 (Mo: the wings "always moving", like a dragonfly's): the near wing's frame read a
+# dozen times over a little more than one beat (0.1 s), and whether its beat runs.
+WING_BEAT = """(async () => {
+  const w = document.querySelector('#top [data-wing=near]');
+  const seen = new Set();
+  for (let i = 0; i < 12; i++) {
+    seen.add(getComputedStyle(w).backgroundPosition);
+    await new Promise((done) => setTimeout(done, 23));
+  }
+  return { frames: seen.size, state: getComputedStyle(w).animationPlayState };
 })()"""
 
 # Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width) and the
@@ -1079,6 +1093,17 @@ def run(browser, look, mobile):
         "opening-sequoias" in o["land"] and "hummingbird" in o["bird"] and o["flights"] == 0,
         f"{o['land'][-40:]}, {o['bird'][-40:]}, {o['flights']} wingbeat pictures",
     )
+    # October 29 (Mo picked C): Allen's in a few wet washes, its own painted wings beating.
+    wings_ok = sorted(w.split(" ")[0] for w in o["wings"]) == ["far", "near"] and all(
+        "hummingbird-v2-" in w for w in o["wings"]
+    )
+    check(f"{tag}: the hummingbird has its two painted wings, far and near", wings_ok, str(o["wings"]))
+    beat = page.evaluate(WING_BEAT)
+    check(
+        f"{tag}: the hummingbird's wings never stop (several frames in one beat)",
+        beat["state"] == "running" and beat["frames"] >= 3,
+        str(beat),
+    )
     # On a phone the sun stands above the bird, so there it may be clear of the bill upward.
     room = 24 if mobile else 60
     clear_of_bird = o["sun"][0] - o["bill"] >= room or (mobile and o["billY"] - o["sun"][3] >= room)
@@ -1194,6 +1219,8 @@ def run(browser, look, mobile):
 
     # Scientists and dialogs.
     scroll_to(page, top_of(page, "#scientists") + (40 if mobile else 0), 1200)
+    resting = page.evaluate("getComputedStyle(document.querySelector('#top [data-wing=near]')).animationPlayState")
+    check(f"{tag}: the wings rest once the opening is out of the window", resting == "paused", resting)
     shoot(page, f"{name}-02-scientists")
     facts = page.locator("#scientists dl > div").count()
     check(f"{tag}: Dr. Liu's three facts", facts == 3, str(facts))
@@ -2230,7 +2257,7 @@ def run_reduced(browser, look):
     check(f"{tag}: the whole brush line from the first frame", whole >= 0.999 and end_ink > 40, f"progress {whole}, ink {end_ink}")
     check(f"{tag}: every painting shown (no bloom waiting)", hidden == 0, str(hidden))
     gliding = page.evaluate(
-        "[...document.querySelectorAll('#top img, #top [data-brush=crane]')].filter(i => getComputedStyle(i).display !== 'none' && getComputedStyle(i).animationName !== 'none').length + document.querySelectorAll('#top img[src*=crane-flight]').length"
+        "[...document.querySelectorAll('#top img, #top [data-brush=crane], #top [data-wing]')].filter(i => getComputedStyle(i).display !== 'none' && getComputedStyle(i).animationName !== 'none').length + document.querySelectorAll('#top img[src*=crane-flight]').length"
     )
     check(f"{tag}: nothing moves", gliding == 0, str(gliding))
     check(f"{tag}: no errors", not problems, "; ".join(problems[:3]))

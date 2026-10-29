@@ -233,12 +233,24 @@ These sit on top of `DESIGN.md`.
   **First screen only** (Mo, October 28): the crane stays in the homepage's closing painting, the
   footer by the park sign and the phone menu. Built: the painting covers the whole opening
   (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
-  hummingbird a still in the crane's frame (`hummingbird-v1.webp`, no wingbeat), the line pinned
+  hummingbird in the crane's frame (Anna's as a still until October 29, below), the line pinned
   to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found
   the desktop sun "a little too big or too close to the tree" and picked A of three placements
   (A smaller, same spot; B smaller in the clearing's middle; C low behind the firs): the desktop
   sun is three quarters of its size (218 comp px), shrunk about its own centre; phones keep
   theirs. Mockups `reference/ink-pages/mockups/home-sun/`.
+  **The bird: Allen's, painted loose, wings never still (Mo, October 29).** Mo asked for other
+  hummingbirds and wings "always moving", like a dragonfly's. Of today's Anna's, a green female
+  Anna's and Allen's (copper, like the redwood bark; it nests almost only on the California
+  coast) he picked Allen's, then asked for it "more painting-like" and picked C, painted in a
+  few wet washes in the old crane's hand (fresh Codex paintings: edits of a detailed bird keep
+  its speckle), then found the beak "too realistic": the beak is one dry grey brush stroke, no
+  shine. Its orange is calmed toward the redwood's copper so the gold sun leads. The wings are
+  its own painted wings, lifted out and beaten about the shoulder, six blurred frames a beat at
+  ten beats a second (`hummingbird-v2-near/-far.webp`, `build_wings.py`), the far wing behind
+  the body; paused once the opening leaves the window, resting raised with reduced motion. The
+  bird is lined up on the first hummingbird's bill and tail, so the line still leaves from under
+  its tail. Mockups `reference/ink-pages/mockups/home-bird/`.
   `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in
   `reference/ink-pages/home-california/` (README); mockups
   `reference/ink-pages/mockups/home-california/`.

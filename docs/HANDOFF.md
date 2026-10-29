@@ -37,8 +37,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`); built site homepage 280/280, menu
   326/326; on Mo's yes live as `main` `f0ababa` (production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`,
   demo alias on it; public demo homepage 280/280, menu 326/326); (2) the hummingbird's look and wings
-  that never stop (ideas: keep the Anna's, a calmer green one, or Allen's; painted wing frames
-  flipped fast, free, or a paid video loop); (3) "Good questions deserve clear answers": the
+  that never stop, built: Mo picked Allen's (over today's Anna's and a green female), then "more
+  painting-like" (C, a few wet washes in the old crane's hand), then a beak of one dry brush
+  stroke; its own painted wings beat about the shoulder, six blurred frames a beat at ten a
+  second (`build_wings.py`, `hummingbird-v2*.webp`; artifact `QUXRzND98STrXfrwPd5iCQ`); on
+  `studio`, not live; (3) "Good questions deserve clear answers": the
   inkstone and brush read as Chinese (ideas: a naturalist's notebook with a pressed poppy and a
   hand lens, a country mailbox, a reading lamp); (4) "Our purpose" closing painting: pine on
   rocks, misty peaks, red-crowned cranes (ideas: Big Sur at sunset with brown pelicans, the

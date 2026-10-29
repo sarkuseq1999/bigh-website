@@ -153,3 +153,15 @@ repainted only the bill of `allens-few-body-1` as one dry brush stroke of soft g
 (`allens-few-bill-2`; take 1, darker and broken, is in `bigh-archive`), and `build_wings.py`
 swaps in just that bill, inside a soft band along it; the wings are still lifted against the
 original wingless edit. Page version 3.
+
+### Built: C on the homepage (October 29, 2026)
+
+Mo: "Yes, build C". `build_home_opening.py` now runs `build_wings.build("allens-few")` and writes
+`hummingbird-v2.webp` (the wingless body, 1600 x 1062, the crane's frame) and
+`hummingbird-v2-near.webp`, `-far.webp` (each wing's six frames side by side). The page
+(`opening-crane.tsx`, `opening.module.css`) blooms the bird in whole (`.flock`), the far wing
+laid before the body and the near one after it, in the wings' box (`openingWings` in
+`assets.ts`); the frames step at ten beats a second while the opening is in the window
+(`data-beat`, an IntersectionObserver), rest on the first frame off screen and with reduced
+motion. `qa_home_ink` checks both wings, several frames within one beat, the pause once the
+opening is out of view, and nothing moving with reduced motion.

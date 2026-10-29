@@ -183,7 +183,8 @@
    was live, then C, 50%, looked too small, and he picked this size between them). Shrunk toward
    the point its brush line leaves from, then lifted 60 comp px and moved 50 left, with its
    flight stroke (.flightPath). Since October 28 the hummingbird flies here, painted in the
-   crane's frame, its tail where the crane's feet were. The whole bird rides the air: a slow rise
+   crane's frame, its tail where the crane's feet were (Allen's since October 29, lined up on the
+   first one). The whole bird rides the air: a slow rise
    and fall of a few pixels and a hair of pitch, on two cycles of their own (about 13 s and
    21 s), out of step with each other. Small, so the page's brush line still leaves from under
    its tail. */
@@ -198,10 +199,45 @@
     pitch calc(var(--breath) * 4.3) ease-in-out -3s infinite alternate;
 }
 
+/* The bird and its two wings bloom in as one. */
+.flock {
+  position: relative;
+  display: block;
+}
+
 .bird {
+  position: relative;
   display: block;
   width: 100%;
   height: auto;
+}
+
+/* The wings never stop (Mo, October 29, 2026: "like a dragonfly"): each wing's six frames side
+   by side, stepped through ten times a second, each frame already blurred over its slice of the
+   beat (a real hummingbird beats about forty times a second, which a screen can't show without
+   the wings seeming to crawl). The far wing is laid before the body and the near one after it,
+   so they pass behind and in front of it. They beat only while the opening is in the window
+   (data-beat, set by opening-crane.tsx); otherwise, and with reduced motion, they rest on the
+   first frame, raised as painted. */
+.wing {
+  position: absolute;
+  background-repeat: no-repeat;
+  background-size: 600% 100%;
+  animation: beat 0.1s steps(6) infinite paused;
+}
+
+.art[data-beat="on"] .wing {
+  animation-play-state: running;
+}
+
+@keyframes beat {
+  from {
+    background-position: 0 0;
+  }
+
+  to {
+    background-position: 120% 0;
+  }
 }
 
 @keyframes ride {
@@ -226,6 +262,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .crane,
+  .wing,
   .leaf[data-bloom="done"] + .glint {
     animation: none;
   }
