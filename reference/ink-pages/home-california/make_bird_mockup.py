@@ -50,7 +50,7 @@ LOOKS = [
         "name": "Painted in a few strokes",
         "score": "9 / 10",
         "pick": True,
-        "what": "A fresh painting: a few wet washes of copper and green that bleed into each other, wings of pale grey strokes, bare paper for the breast.",
+        "what": "A fresh painting: a few wet washes of copper and green that bleed into each other, wings of pale grey strokes, bare paper for the breast, the beak one dry stroke of grey ink.",
         "note": "Clearly a painting, in the hand of the old crane. Its orange came out loud, so it is calmed toward the redwood's copper and the gold sun still leads.",
     },
 ]

@@ -147,3 +147,9 @@ wings (`allens-loose-body-2`, `allens-few-body-1`). The other takes are in `bigh
 0.94), which came out louder than the gold sun. The page (same Artifact, version 2) now shows
 A. Allen's as before 8/10, B. a little looser 8/10, C. painted in a few strokes 9/10, Claude's
 pick.
+
+Then Mo: "the beak was too realistic" (a crisp, glossy black pin on a loose painting). Codex
+repainted only the bill of `allens-few-body-1` as one dry brush stroke of soft grey-black
+(`allens-few-bill-2`; take 1, darker and broken, is in `bigh-archive`), and `build_wings.py`
+swaps in just that bill, inside a soft band along it; the wings are still lifted against the
+original wingless edit. Page version 3.

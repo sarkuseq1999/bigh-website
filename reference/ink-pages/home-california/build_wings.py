@@ -52,6 +52,10 @@ LOOKS = {
 LINE_UP = {"allens-loose": "allens-1", "allens-few": "allens-1"}
 # Where a look's shoulders and wing split differ from the rig's (its painting's own anatomy,
 # after lining up): near shoulder, far shoulder, (split point, split angle).
+# Mo (October 29): "the beak was too realistic". A look's bill taken from an edit of its wingless
+# body in which only the bill was repainted as one brush stroke: (that edit, the bill's base and
+# tip in the painting's pixels, the reach around that line).
+BILL = {"allens-few": ("allens-few-bill-2", (918.0, 411.0), (1134.0, 334.0), 26.0)}
 # How much a look's colour is calmed (saturation, brightness): allens-few came out a bright
 # pumpkin orange, louder than the gold sun; calmed toward the redwood bark's copper.
 CALM = {"allens-few": (0.72, 0.94)}
@@ -96,6 +100,21 @@ def calmed(rgba_, sat, val):
     out = rgba_.copy()
     out[..., :3] = cv2.cvtColor(hsv, cv2.COLOR_HSV2RGB)
     return out
+
+
+def with_bill(body, look):
+    """The body with its bill swapped for the repainted one, inside a soft band along the bill."""
+    name, (x0, y0), (x1, y1), reach = BILL[look]
+    new, _ = aligned(rgba(name), body)
+    h, w = body.shape[:2]
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    dx, dy = x1 - x0, y1 - y0
+    t = np.clip(((xx - x0) * dx + (yy - y0) * dy) / (dx * dx + dy * dy), 0, 1)
+    dist = np.hypot(xx - (x0 + t * dx), yy - (y0 + t * dy))
+    m = np.clip((reach - dist) / 8, 0, 1)[..., None]
+    a = body[..., 3:] * (1 - m) + new[..., 3:] * m
+    rgb = (body[..., :3] * body[..., 3:] * (1 - m) + new[..., :3] * new[..., 3:] * m) / np.maximum(a, 1e-6)
+    return np.concatenate([rgb, a], axis=2)
 
 
 def tips(rgba_):
@@ -218,12 +237,17 @@ def build(look):
     painted_name, body_name = LOOKS[look]
     painted = rgba(painted_name)
     body, warp = aligned(rgba(body_name), painted)
+    # The body shown (with a repainted bill, if any); the wings are still lifted against the
+    # wingless edit itself, so the new bill never counts as a wing.
+    shown = with_bill(body, look) if look in BILL else body
     RIG["near"]["shoulder"], RIG["far"]["shoulder"], RIG["split"] = SHOULDERS.get(look, DEFAULT_SHOULDERS)
     if look in LINE_UP:
         painted, body = line_up(painted, body, LINE_UP[look])
+        _, shown = line_up(rgba(painted_name), shown, LINE_UP[look])
     if look in CALM:
-        painted, body = calmed(painted, *CALM[look]), calmed(body, *CALM[look])
+        painted, body, shown = (calmed(x, *CALM[look]) for x in (painted, body, shown))
     near, far = lift_wings(painted, body)
+    body = shown
     to_img(near).save(out / "lifted-near.png")
     to_img(far).save(out / "lifted-far.png")
     size = (painted.shape[1], painted.shape[0])

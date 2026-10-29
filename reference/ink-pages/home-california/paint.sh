@@ -31,6 +31,8 @@ for name in "${names[@]}"; do
   [[ "$name" == allens-wash-? || "$name" == allens-sketch-? || "$name" == allens-loose-? || "$name" == allens-few-? ]] &&
     ref=(-i "$HERE/originals/allens-1.png" -i "$HERE/../../home-v2/ink/originals/gpt25-crane-paint-a.png")
   [[ "$name" == allens-*-body-* ]] && ref=(-i "$HERE/originals/${name/-body/}.png")
+  # Mo: "the beak was too realistic": allens-few's wingless body with only its bill repainted.
+  [[ "$name" == allens-few-bill-* ]] && ref=(-i "$HERE/originals/allens-few-body-1.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/$name.txt and follow it exactly. Use your built-in image generation tool to make exactly ONE picture (landscape 1536x1024 unless the order gives another size or edits an attached picture). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \
