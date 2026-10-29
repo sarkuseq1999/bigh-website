@@ -106,3 +106,29 @@ clearing, no ink on the trunk; the designed lift now lands on `opening-land`), `
   (and moved over its path on phones).
 - Page for Mo: `../mockups/home-california/home-california.html`
   (Artifact https://claude.ai/artifact/XcSw57ecBtwFxZzn7SmqdY).
+
+## Part 2: the bird's look, its wings never still (October 29, 2026)
+
+Mo asked for other hummingbird choices and wings that are "always moving", like a dragonfly's.
+Codex edited the live bird's painting (`hummingbird-wings-1`) three ways, all in the same pose and
+place so the line still leaves from under the tail: `hummingbird-body-1` (the same bird, its wings
+removed), `hummingbird-female-1` (a female Anna's, green and grey) and `allens-1` (Allen's
+hummingbird, copper), then removed the wings of the two new looks (`hummingbird-female-body-1`,
+`allens-body-1`). A lone painted wing (`hummingbird-one-wing-1`) was tried as the rig's wing and
+dropped (it floated off the shoulder); it is in `bigh-archive/home-california/`.
+
+`build_wings.py` lifts each look's painted wings out (the painting minus its wingless edit, the
+edit lined up by ECC) and beats them about the shoulder as a wing looks from the side: each
+shortens toward the shoulder as it swings toward you and comes out below the body, then back.
+Six frames a beat, each blurred over its slice of the beat; the page plays them at 60 a second,
+ten beats a second (a real Anna's beats about forty, which a screen cannot show without the wings
+appearing to crawl). Out, in `plates/wings/<look>/`: the wingless body, the near wing's and far
+wing's six frames side by side, and `rig.json` (the wings' box in the bird's frame).
+
+`make_bird_mockup.py` lays each look into shots of the live first screen with the bird hidden
+(laptop 1440 x 900 and a 390 phone, both 2x), its wings beating in the browser as they would on
+the site: `../mockups/home-bird/home-bird.html` (Artifact
+https://claude.ai/artifact/QUXRzND98STrXfrwPd5iCQ). A. today's Anna's 8/10 (its pink throat a
+second bright colour), B. the green female 7/10 (too quiet: pale, it almost vanishes as its
+wings come down), C. Allen's 8.5/10, Claude's pick (copper like the redwood bark beside it; it
+nests almost only on the California coast). Nothing in `src/` changed.
