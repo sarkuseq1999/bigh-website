@@ -5,8 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 28, 2026, by Claude Code (the homepage's first screen as giant
-  sequoias and a hummingbird, live as `main` `d5e6858`, production
+- **Last updated:** October 28, 2026, by Claude Code (the homepage's smaller desktop sun, live as
+  `main` `f0ababa`, production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`, demo alias on it; the
+  homepage's first screen as giant sequoias and a hummingbird, live as `main` `d5e6858`, production
   `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; About's poppy meadow live on its own as
   `main` `2ea851d`, production `dpl_76uqRyhhN2AYzkAdG4wLsbAqZATq`, demo alias on it; NuriCell
   chapter 6, "The same formula for about 20 years", live as `main` `f5356a4`, production `dpl_Ec1Gn8DoGjibsDfX4Kvyfc77LSka`, demo
@@ -33,8 +34,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `d5e6858`, production `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; public demo
   homepage 280/280, menu 326/326 (`docs/public-demo.md`). **Next parts, one at a time (Mo's
   rule):** (1) the desktop sun, done: Mo picked A of three placements, three quarters of its
-  size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`), built and merged into `studio`
-  (built site homepage 280/280, menu 326/326), not live; (2) the hummingbird's look and wings
+  size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`); built site homepage 280/280, menu
+  326/326; on Mo's yes live as `main` `f0ababa` (production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`,
+  demo alias on it; public demo homepage 280/280, menu 326/326); (2) the hummingbird's look and wings
   that never stop (ideas: keep the Anna's, a calmer green one, or Allen's; painted wing frames
   flipped fast, free, or a paid video loop); (3) "Good questions deserve clear answers": the
   inkstone and brush read as Chinese (ideas: a naturalist's notebook with a pressed poppy and a

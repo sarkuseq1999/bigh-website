@@ -4,7 +4,21 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-l0hspf8zq-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ctf7u9ic5-sarkuseq1999s-projects.vercel.app`
+(`dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`), the **production** deployment of `main` at
+`f0ababaacc0052d033b6ac3b06d789eabfba937e` (October 28, 2026, from about 18:35 Pacific). The
+homepage's desktop sun is three quarters of its size in the same spot: Mo found it "a little too
+big or too close to the tree" and picked A of three placements (A smaller, same spot; B smaller in
+the clearing's middle; C low behind the firs). Phones keep their sun. `f0ababa` is `d5e6858` plus
+that change, its notes and mockups (no other code), pushed as a fast-forward on Mo's "Yes, put it
+live". Before the push, on the built copy (`npm run build` + `next start`): `qa_home_ink` 280/280,
+`qa_nav` 326/326. After the alias update, in fresh unauthenticated browsers on the public demo:
+`qa_home_ink` 280/280 and `qa_nav` 326/326; the sun measures 235 px at 1920 × 1080, 196 px at
+1440 × 900 (218 comp px) and 105 px on a 390 px phone (unchanged), and the opening shots match
+mockup A.
+
+Before that, from about 13:16 to about 18:35 Pacific on October 28, 2026, the alias pointed to
+`bigh-website-l0hspf8zq-sarkuseq1999s-projects.vercel.app`
 (`dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`), the **production** deployment of `main` at
 `d5e6858aa5dae9be5a2a601b82cd441a50c69112` (October 28, 2026, from about 13:16 Pacific). The
 homepage's first screen is California: Mo's colleagues read the misty peaks and the red-crowned
