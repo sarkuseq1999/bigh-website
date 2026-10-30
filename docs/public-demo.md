@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ctf7u9ic5-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-qixz6zhmr-sarkuseq1999s-projects.vercel.app`
+(`dpl_9uBeu3iVYejS9NJGW7DWGPhEJa3y`), the **production** deployment of `main` at
+`48819f9b7ed767c9d808a4f14f76132509715c03` (October 29, 2026, from about 21:13 Pacific). The
+homepage's hummingbird is Allen's, painted in a few wet washes, its beak one dry brush stroke,
+its own painted wings always beating (ten beats a second, paused once the opening leaves the
+window, resting raised with reduced motion). Mo asked for other hummingbirds and wings "always
+moving", picked Allen's, then "more painting-like" (C), then a less realistic beak. `48819f9` is
+`f0ababa` plus that build, its notes and the mockups commits (no other code), pushed as a
+fast-forward on Mo's "Yes, put it live". Before the push, on the built copy (`npm run build` +
+`next start`): `qa_home_ink` 286/286 (six new checks: both wings, several frames within one beat,
+paused off screen, still with reduced motion), `qa_nav` 326/326; lint and type-check clean. After
+the alias update, in fresh unauthenticated browsers on the public demo: `qa_home_ink` 286/286 and
+`qa_nav` 326/326, and the opening shot at 1920, 1440 and 390 px wide shows the new bird with its
+wings at a different place at each moment.
+
+Before that, from about 18:35 Pacific on October 28 to about 21:13 Pacific on October 29, 2026,
+the alias pointed to `bigh-website-ctf7u9ic5-sarkuseq1999s-projects.vercel.app`
 (`dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`), the **production** deployment of `main` at
 `f0ababaacc0052d033b6ac3b06d789eabfba937e` (October 28, 2026, from about 18:35 Pacific). The
 homepage's desktop sun is three quarters of its size in the same spot: Mo found it "a little too

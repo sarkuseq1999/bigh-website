@@ -5,7 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 28, 2026, by Claude Code (the homepage's smaller desktop sun, live as
+- **Last updated:** October 29, 2026, by Claude Code (the homepage's hummingbird: Allen's painted
+  loose, its wings always beating, live as `main` `48819f9`, production
+  `dpl_9uBeu3iVYejS9NJGW7DWGPhEJa3y`, demo alias on it; the smaller desktop sun, live as
   `main` `f0ababa`, production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`, demo alias on it; the
   homepage's first screen as giant sequoias and a hummingbird, live as `main` `d5e6858`, production
   `dpl_FH3oK6Urx5Ws5sU4hw1S1X7jdxSV`, demo alias on it; About's poppy meadow live on its own as
@@ -40,8 +42,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   that never stop, built: Mo picked Allen's (over today's Anna's and a green female), then "more
   painting-like" (C, a few wet washes in the old crane's hand), then a beak of one dry brush
   stroke; its own painted wings beat about the shoulder, six blurred frames a beat at ten a
-  second (`build_wings.py`, `hummingbird-v2*.webp`; artifact `QUXRzND98STrXfrwPd5iCQ`); on
-  `studio`, not live; (3) "Good questions deserve clear answers": the
+  second (`build_wings.py`, `hummingbird-v2*.webp`; artifact `QUXRzND98STrXfrwPd5iCQ`); built
+  site homepage 286/286, menu 326/326; on Mo's yes live as `main` `48819f9` (production
+  `dpl_9uBeu3iVYejS9NJGW7DWGPhEJa3y`, demo alias on it; public demo homepage 286/286, menu
+  326/326); (3) "Good questions deserve clear answers": the
   inkstone and brush read as Chinese (ideas: a naturalist's notebook with a pressed poppy and a
   hand lens, a country mailbox, a reading lamp); (4) "Our purpose" closing painting: pine on
   rocks, misty peaks, red-crowned cranes (ideas: Big Sur at sunset with brown pelicans, the
