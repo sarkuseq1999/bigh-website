@@ -294,8 +294,8 @@
   font-weight: 500;
 }
 
-/* Ask BiGH Science (round 6): the page's one centred pause. The small painting (a brush at rest
-   on its inkstone: the "small" of the page's huge, large, small) centred, then the headline, the
+/* Ask BiGH Science (round 6): the page's one centred pause. The small painting (a country
+   mailbox, its flag up: the "small" of the page's huge, large, small) centred, then the headline, the
    words and the button centred under it, on open paper above and below; the brush line passes
    it in the left margin. Measured to the ink at 1536: 176 px of paper from Dr. Iris Wang's words
    to the painting. */
@@ -313,7 +313,7 @@
   margin: 0;
 }
 
-.inkstone {
+.mailbox {
   display: block;
   width: 100%;
   height: auto;

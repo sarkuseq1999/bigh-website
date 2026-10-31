@@ -83,7 +83,7 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (wider than the science stage, which is at
-    least 1.8 times the inkstone; a quarter smaller since October 12, the whole cell in the
+    least 1.8 times the mailbox; a quarter smaller since October 12, the whole cell in the
     window), keeps clear of its words' column and keeps its label in the window; the story
     still life runs off the left edge (about half the window wide), its label in the window, the
     quotation set large (4vw), the names and arrows under it and working; on a phone both run to
@@ -529,7 +529,7 @@ EDGES = """(() => {
 
 # Round 4: the three painting sizes. The cell (its figure, unturned) and its words, the story
 # still life and its words, the quotation's size, the story's names and arrows, and the science
-# stage and the inkstone for scale, as [left, top, right, bottom] in the window.
+# stage and the mailbox for scale, as [left, top, right, bottom] in the window.
 PAINTINGS = """(() => {
   const r = (s) => { const e = document.querySelector(s); if (!e) return null; const b = e.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
   const text = (s) => { const g = document.createRange(); g.selectNodeContents(document.querySelector(s)); const b = g.getBoundingClientRect(); return [b.left, b.top, b.right, b.bottom]; };
@@ -542,7 +542,7 @@ PAINTINGS = """(() => {
     quote: parseFloat(getComputedStyle(document.querySelector('#stories article h3')).fontSize),
     choices: r('#stories [data-brush=story-choices]'), arrows: r('#stories button[aria-label="Next sample story"]'),
     arrowsBox: r('#stories button[aria-label="Previous sample story"]'),
-    science: r('#science [data-brush=science-painting]'), inkstone: r('#scientists img[src*=inkstone]'),
+    science: r('#science [data-brush=science-painting]'), mailbox: r('#scientists img[src*=mailbox]'),
   };
 })()"""
 
@@ -1202,11 +1202,11 @@ def run(browser, look, mobile):
         )
     else:
         sci = g["science"][2] - g["science"][0]
-        stone = g["inkstone"][2] - g["inkstone"][0]
+        stone = g["mailbox"][2] - g["mailbox"][0]
         check(
-            f"{tag}: three painting sizes: the cell, then the science stage, then the inkstone",
+            f"{tag}: three painting sizes: the cell, then the science stage, then the mailbox",
             cw >= 1.05 * sci and sci >= 1.8 * stone,
-            f"cell {cw:.0f}, science {sci:.0f}, inkstone {stone:.0f} css px",
+            f"cell {cw:.0f}, science {sci:.0f}, mailbox {stone:.0f} css px",
         )
         check(
             f"{tag}: the whole cell in the window (Mo, October 12), clear of its words, its label in view",
@@ -1253,10 +1253,10 @@ def run(browser, look, mobile):
     )
     rest = print_at_rest(page)
     check(f"{tag}: Dr. Liu's print laid down, with its one shadow", rest[0] == "none" and rest[1], str(rest))
-    page.evaluate("document.querySelector('#scientists img[src*=inkstone]')?.scrollIntoView({block: 'center'})")
+    page.evaluate("document.querySelector('#scientists img[src*=mailbox]')?.scrollIntoView({block: 'center'})")
     page.wait_for_timeout(900)
     still_life = page.evaluate(
-        "(() => { const i = document.querySelector('#scientists img[src*=inkstone]'); return i ? [i.complete && i.naturalWidth > 0, i.closest('figure')?.textContent.trim()] : null })()"
+        "(() => { const i = document.querySelector('#scientists img[src*=mailbox]'); return i ? [i.complete && i.naturalWidth > 0, i.closest('figure')?.textContent.trim()] : null })()"
     )
     check(
         f"{tag}: Ask BiGH Science's painting shows, labelled Illustration",

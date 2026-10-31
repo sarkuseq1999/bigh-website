@@ -65,10 +65,10 @@ export const navScience = [
     href: "/science#ask",
     caption: "Good questions deserve clear answers.",
     image: {
-      src: "/images/home-v2/ink/inkstone-v2.webp",
+      src: "/images/home-v2/ink/mailbox-v1.webp",
       width: 1200,
       height: 896,
-      plate: "inkstone",
+      plate: "mailbox",
     },
   },
 ] as const;

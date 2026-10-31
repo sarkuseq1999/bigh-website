@@ -115,7 +115,7 @@ def paint(name, stops, s=1.0, washes=(), keep_black=0.65, gold_keep=True, spots=
 
 # ---------------------------------------------------------------- the palette
 # Two other palettes were tried and set aside: "small touches" (grey ink with spots of colour)
-# and "coastal fog" (blue-grey). The cell and the inkstone take their own cooler ink (`mito`) so
+# and "coastal fog" (blue-grey). The cell takes its own cooler ink (`mito`) so
 # the gold leaf stands out; the still lifes take `still` (a green vase would read as celadon).
 DIRS = {
     # Green spring: blue distance, sage-green hills, warm where the sun is.
@@ -210,7 +210,6 @@ def build(key):
     # The cell: its own cooler (or warmer) ink, so the gold leaf stands out more.
     for n in ["mito.webp", "mito-closeup.webp", "mito-aged.webp", "mito-radicals.webp"]:
         jobs[n] = paint(n, P["mito"], s * 0.75)
-    jobs["inkstone-v2.webp"] = paint("inkstone-v2.webp", P["mito"], s * 0.7)
     jobs["halo.webp"] = paint("halo.webp", st, s * 0.9)
     jobs["pool.webp"] = paint("pool.webp", st, s * 0.5)
     jobs["pool-foot.webp"] = paint("pool-foot.webp", st, s * 0.3)

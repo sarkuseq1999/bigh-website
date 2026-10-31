@@ -674,7 +674,7 @@ def drop_down_motion(browser):
             files = sorted(pic["file"].rsplit("/", 1)[-1] for pic in pics)
             if panel == "science":
                 name = f"{tag}: Science opens with no light box behind its three paintings (filmed at real speed)"
-                want = sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"])
+                want = sorted(["mito.webp", "reading-still-life.webp", "mailbox-v1.webp"])
             else:
                 name = f"{tag}: Products opens with no light box round the five bottles' pools (filmed at real speed)"
                 want = ["pool.webp"] * 5
@@ -770,8 +770,8 @@ SLUGS = ["nuricell", "green-bee-propolis", "advanced-opc", "turmerific", "nature
 NAMES = ["NuriCell", "Green Bee Propolis", "Advanced OPC Formula", "Turmerific", "Nature Calm"]
 PARTS = ["Our scientists", "Cellular health", "Research library", "Ask BiGH Science"]
 PART_HREFS = ["/science#scientists", "/science#health", "/science#research", "/science#ask"]
-PLATES = ["print", "cell", "reading", "inkstone"]
-PAINTED = {"mito": "cell", "reading": "reading", "inkstone": "inkstone"}
+PLATES = ["print", "cell", "reading", "mailbox"]
+PAINTED = {"mito": "cell", "reading": "reading", "mailbox": "mailbox"}
 ROW_SIZES = ((1536, 900, 1), (1280, 800, 1), (1920, 1080, 2), (1101, 800, 1), (1366, 657, 1))
 
 # A drop-down's row as drawn: its title, each part (its link, picture room, picture, name and line:
@@ -1204,7 +1204,7 @@ def row_motion(browser):
             found = light_boxes(film, list(pics.values()), gaps, lambda e: 10000, 1536, 0, 5000, under=paper_under(page, sel))
             names = sorted(p["file"].rsplit("/", 1)[-1] for p in pics.values())
             name = "rows: no Science painting shows its paper as a light box while the row is pointed along (filmed: never 4+ levels over the paper)"
-            if names == sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"]):
+            if names == sorted(["mito.webp", "reading-still-life.webp", "mailbox-v1.webp"]):
                 no_light_box(name, found)
             else:
                 check(name, False, f"pictures {names}")
@@ -1236,7 +1236,7 @@ def row_motion(browser):
     flip = next((e["t"] for e in film.log if e["open"] == "science"), None)
     name = "rows: swapping back in from Products, no light box behind Science's paintings (filmed)"
     names = sorted(p["file"].rsplit("/", 1)[-1] for p in shown)
-    if flip is None or names != sorted(["mito.webp", "reading-still-life.webp", "inkstone-v2.webp"]):
+    if flip is None or names != sorted(["mito.webp", "reading-still-life.webp", "mailbox-v1.webp"]):
         check(name, False, f"flip {flip}; shown {names}")
     else:
         found = light_boxes(

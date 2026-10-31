@@ -335,6 +335,14 @@ These sit on top of `DESIGN.md`.
   how people would know they can swipe and picked A of three hints (over a one-time nudge and three
   dots): the next topic's painting peeks in, paler, at the window's right edge. DESIGN.md "The
   Scroll Story Rule"; `science.tsx` (`.slides`).
+- **Homepage "Good questions": a country mailbox (Mo picked A, October 30, 2026).** The inkstone
+  and brush read as Chinese. Of three California pictures on the real page (A a country mailbox, B
+  a Gold Rush pan and pick, C a naturalist's notebook) Mo picked A: the rounded rural mailbox on its
+  post, its raised flag in gold leaf, poppies and dry grass at its foot, in a few wet washes. You
+  send a question, an answer comes back. Same small size and centred pause as before; the words
+  and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
+  `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
+  `reference/ink-pages/mockups/home-ask/`.
 - **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
   questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
   each question", over B (one breakfast-table painting with numbered marks). All five product

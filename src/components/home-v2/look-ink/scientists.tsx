@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { useCopy } from "@/i18n/use-copy";
 import { facts, scientists } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { halo, inkstone, liu } from "./assets";
+import { halo, liu, mailbox } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./scientists.module.css";
 import { useTint } from "./ink-color";
@@ -30,8 +30,8 @@ function Figure({ value }: { value: string }) {
 // headline sits to the right of the photograph, above his record in large thin numerals, which
 // ends on the mat's lower edge. Then what his work asks and Dr. Iris Wang in words only, on two
 // columns with the brush line running down between them, beside the print and never under it.
-// Last, Ask BiGH Science is the page's one centred pause (round 6): a small painting of a brush
-// at rest on its inkstone, the headline, words and button centred under it on open paper, the
+// Last, Ask BiGH Science is the page's one centred pause (round 6): a small painting of a country
+// mailbox with its flag up, the headline, words and button centred under it on open paper, the
 // brush line passing it in the margin.
 export function Scientists() {
   const tint = useTint();
@@ -139,11 +139,11 @@ export function Scientists() {
       <div className={`${base.wrap} ${styles.ask}`} data-brush="ask">
         <figure className={styles.askArt} aria-hidden="true" data-brush="ask-art">
           <Image
-            className={`${base.ink} ${styles.inkstone}`}
-            src={tint(inkstone.src)}
+            className={`${base.ink} ${styles.mailbox}`}
+            src={tint(mailbox.src)}
             alt=""
-            width={inkstone.width}
-            height={inkstone.height}
+            width={mailbox.width}
+            height={mailbox.height}
             sizes="(max-width: 899px) 70vw, 400px"
             data-bloom=""
           />

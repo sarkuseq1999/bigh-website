@@ -5,7 +5,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** October 29, 2026, by Claude Code (the homepage's hummingbird: Allen's painted
+- **Last updated:** October 30, 2026, by Claude Code (the homepage's "Good questions" picture: a
+  country mailbox built on `studio`, not live yet; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
   `dpl_9uBeu3iVYejS9NJGW7DWGPhEJa3y`, demo alias on it; the smaller desktop sun, live as
   `main` `f0ababa`, production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`, demo alias on it; the
@@ -46,8 +47,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   site homepage 286/286, menu 326/326; on Mo's yes live as `main` `48819f9` (production
   `dpl_9uBeu3iVYejS9NJGW7DWGPhEJa3y`, demo alias on it; public demo homepage 286/286, menu
   326/326); (3) "Good questions deserve clear answers": the
-  inkstone and brush read as Chinese (ideas: a naturalist's notebook with a pressed poppy and a
-  hand lens, a country mailbox, a reading lamp); (4) "Our purpose" closing painting: pine on
+  inkstone and brush read as Chinese; Mo picked A of three (a country mailbox, its flag up in gold
+  leaf, over a Gold Rush pan and a naturalist's notebook; artifact `UbRetC7irKBTVYyWPh8Gqj`), built
+  on `studio` (`mailbox-v1.webp`, `reference/ink-pages/home-ask/`), built site homepage 286/286,
+  menu 326/326, not live yet; (4) "Our purpose" closing painting: pine on
   rocks, misty peaks, red-crowned cranes (ideas: Big Sur at sunset with brown pelicans, the
   hummingbird at dusk, golden hills); (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**

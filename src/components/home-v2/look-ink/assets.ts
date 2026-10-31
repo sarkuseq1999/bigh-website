@@ -47,9 +47,11 @@ export const openingWings = {
  *  (ink.module.css, `.look .rest`). It replaced crane-rest-v2, which stood beside the promise. */
 export const cranePoppy: Picture = { src: `${I}/crane-poppy-v1.webp`, width: 800, height: 463 };
 
-/** A brush at rest on its inkstone, beside "Good questions deserve clear answers." (ink). v2:
- *  smooth wet washes, no drawn sheet of paper. */
-export const inkstone: Picture = { src: `${I}/inkstone-v2.webp`, width: 1200, height: 896 };
+/** A country mailbox with its flag up in gold leaf, beside "Good questions deserve clear answers."
+ *  (Mo picked A, October 30, 2026: the inkstone and brush read as Chinese). You send a question,
+ *  an answer comes back. A few wet washes by Codex, its paper divided out (ink), its own thin colour
+ *  in the painting, so no tinted twin (reference/ink-pages/home-ask, built by build_home_ask.py). */
+export const mailbox: Picture = { src: `${I}/mailbox-v1.webp`, width: 1200, height: 896 };
 
 /** The ink mitochondrion with its two gold-leaf folds (ink): "Tiny power plants." only. */
 export const mito: Record<"glow", Picture> = {

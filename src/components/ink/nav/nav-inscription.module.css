@@ -1276,7 +1276,7 @@
 /* Science's pictures (round 5): Dr. Liu's real photograph and three ink paintings at one weight,
    each centred in a room the size of a bottle's: the print on its paper mat at 80% of the room's
    height (never multiplied; the one sanctioned mount shadow), the paintings (their paper divided
-   out, multiplied) a little wider than the room (--over on each side), the inkstone most, for the
+   out, multiplied) a little wider than the room (--over on each side), the mailbox most, for the
    paper round it. No halo: tried behind all four, it read as a grey disc and muddied the cell.
    Centred by their insets, never a translate (the settle moves them). */
 .room {
@@ -1312,7 +1312,7 @@ img.plate {
   --over: 8%;
 }
 
-.plate[data-plate="inkstone"] {
+.plate[data-plate="mailbox"] {
   --over: 14%;
 }
 
@@ -1882,7 +1882,7 @@ img.plate {
 
 /* Science's pictures at the desktop's one weight: the print at 80% of the room on its mat (the one
    sanctioned mount shadow, never multiplied), the paintings multiplied a little wider than it (the
-   cell 4% each side, the reading still life 8%, the inkstone 14% for the paper round it). */
+   cell 4% each side, the reading still life 8%, the mailbox 14% for the paper round it). */
 .thumbPlate {
   --over: 0%;
   display: block;
@@ -1901,7 +1901,7 @@ img.plate {
   --over: 8%;
 }
 
-.thumbPlate[data-plate="inkstone"] {
+.thumbPlate[data-plate="mailbox"] {
   --over: 14%;
 }
 
