@@ -128,3 +128,33 @@ export const purposeCranes = {
   height: 172,
   box: { left: 1500 / 2400, top: 468 / 1029, width: 326 / 2400 },
 };
+
+/** For comparison only (Mo, November 2, 2026): the pine, the misty peaks and the cranes read as
+ *  Chinese, and Mo asked to try two California endings live, A Big Sur at evening (/home-a) and B
+ *  an evening walk on the ridge (/home-b); "/" keeps today's close until he picks. Codex paintings
+ *  in the opening's hand, the opening's own gold-leaf sun set on the horizon, `gold` its mask for
+ *  the band of light (reference/ink-pages/home-purpose, built by build_home_purpose.py). 2:1, not
+ *  the close's 7:3: at 7:3 the land rose into the words. `hide` is how much of the frame lies
+ *  under the statement on one column (its sky). */
+export const purposeEndings = {
+  "big-sur": {
+    land: { src: `${I}/purpose-big-sur-v1.webp`, width: 2400, height: 1200 },
+    gold: `${I}/purpose-big-sur-gold-v1.webp`,
+    hide: 0.19,
+  },
+  ridge: {
+    land: { src: `${I}/purpose-ridge-v1.webp`, width: 2400, height: 1200 },
+    gold: `${I}/purpose-ridge-gold-v1.webp`,
+    hide: 0.19,
+  },
+} satisfies Record<string, { land: Picture; gold: string; hide: number }>;
+
+export type PurposeEnding = keyof typeof purposeEndings;
+
+/** The endings' five brown pelicans, flying in where the cranes fly (ink, their own layer). */
+export const purposePelicans = {
+  src: `${I}/purpose-pelicans-v1.webp`,
+  width: 800,
+  height: 201,
+  box: { left: 0.52, top: 0.43, width: 0.17 },
+};

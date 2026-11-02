@@ -6,7 +6,14 @@ import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { gold, purposeCranes, purposePainting } from "./assets";
+import {
+  gold,
+  purposeCranes,
+  purposeEndings,
+  purposePainting,
+  purposePelicans,
+  type PurposeEnding,
+} from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
 import { useTint } from "./ink-color";
@@ -15,10 +22,15 @@ import { useTint } from "./ink-color";
 // horizon, two cranes flying home (on their own layer: they fly toward the sun as the painting
 // comes into view); the purpose sits in its open sky, and the brush line lifts off in the
 // painting. Below it, on paper: why we do it and the three standards we keep.
-export function Purpose() {
+// `ending` is one of the two California closes Mo is comparing (/home-a, /home-b; assets.ts):
+// its painting, its sun's gold mask and the pelicans in the cranes' place.
+export function Purpose({ ending }: { ending?: PurposeEnding }) {
   const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
+  const scene = ending ? purposeEndings[ending] : null;
+  const land = scene ? scene.land : purposePainting;
+  const birds = scene ? purposePelicans : purposeCranes;
 
   return (
     <section
@@ -31,35 +43,39 @@ export function Purpose() {
         {/* The painting with its layers (the light on the sun's leaf, the two cranes). On two
             columns it is the scene itself; on one column it is a frame of its own, so a phone
             sees the cranes flying home to the sun (purpose.module.css). */}
-        <div className={styles.plate}>
+        <div className={styles.plate} style={{ ["--hide" as string]: scene ? scene.hide : 0.195 }}>
           <Image
             className={`${base.ink} ${styles.painting}`}
-            src={tint(purposePainting.src)}
+            src={tint(land.src)}
             alt=""
-            width={purposePainting.width}
-            height={purposePainting.height}
+            width={land.width}
+            height={land.height}
             sizes="(max-width: 899px) min(220vw, 1500px), 100vw"
             data-bloom=""
             data-brush="purpose-painting"
           />
           <span
             className={`${base.gold} ${styles.sunLight}`}
-            style={{ ["--gold" as string]: `url(${gold.purpose})` }}
+            style={{
+              ["--gold" as string]: `url(${scene ? scene.gold : gold.purpose})`,
+              aspectRatio: `${land.width} / ${land.height}`,
+            }}
           />
           <span
             className={styles.flight}
             style={{
-              left: `${purposeCranes.box.left * 100}%`,
-              top: `${purposeCranes.box.top * 100}%`,
-              width: `${purposeCranes.box.width * 100}%`,
+              left: `${birds.box.left * 100}%`,
+              top: `${birds.box.top * 100}%`,
+              width: `${birds.box.width * 100}%`,
+              aspectRatio: `${birds.width} / ${birds.height}`,
             }}
           >
             <Image
               className={`${base.ink} ${styles.cranes}`}
-              src={tint(purposeCranes.src)}
+              src={tint(birds.src)}
               alt=""
-              width={purposeCranes.width}
-              height={purposeCranes.height}
+              width={birds.width}
+              height={birds.height}
               sizes="(max-width: 899px) 30vw, 14vw"
               data-bloom=""
               style={{ ["--bloom-delay" as string]: 500 }}

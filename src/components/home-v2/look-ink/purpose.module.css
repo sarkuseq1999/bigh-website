@@ -28,20 +28,20 @@
   display: contents;
 }
 
-/* Light on the low sun's leaf. Just above one column (900 to 979px) the painting's minimum height
-   crops its sides, and the leaf's light would miss the leaf. */
+/* Light on the low sun's leaf, as tall as its painting (purpose.tsx sets the ratio). Just above
+   one column (900 to 979px) the painting's minimum height crops its sides, and the leaf's light
+   would miss the leaf. */
 .purpose .scene .sunLight {
   bottom: auto;
-  aspect-ratio: 2400 / 1029;
 }
 
-/* The two cranes, on their own layer at their place in the painting (purpose.tsx sets the box).
+/* The two cranes, on their own layer at their place in the painting (purpose.tsx sets the box and
+   its ratio).
    As the painting rises into the window they fly up from the lower left to that place, toward
    the sun; they ride the air in the page's slow breath. Without scroll-driven animation, or with
    reduced motion, they are simply there, as painted. */
 .flight {
   position: absolute;
-  aspect-ratio: 326 / 172;
   pointer-events: none;
   /* The moving layer is its own group, so the group multiplies (as the painting does). */
   mix-blend-mode: multiply;
@@ -244,7 +244,9 @@
      The frame is the painting at 220% of the window (to 1500px), moved left until the sun's
      centre (81% of its width) stands at 76% of the window, its right edge never inside it; the
      window's edges cut only mist and far ridges (the look's root clips the rest). Its open sky
-     lies under the statement's last lines, so the cranes fly about 60px under its label. */
+     lies under the statement's last lines, so the cranes fly about 60px under its label: --hide is
+     how much of the frame's width lies under it (0.195 here; the endings Mo is comparing set
+     theirs, assets.ts). */
   .plate {
     --pw: min(220vw, 1500px);
     --shift: clamp(0px, 0.81 * var(--pw) - 76vw, var(--pw) - 100vw);
@@ -253,7 +255,7 @@
     flex: none;
     width: var(--pw);
     max-width: none;
-    margin: calc(60px - 0.195 * var(--pw)) 0 0 calc(-1 * var(--shift));
+    margin: calc(60px - var(--hide) * var(--pw)) 0 0 calc(-1 * var(--shift));
   }
 
   .painting {

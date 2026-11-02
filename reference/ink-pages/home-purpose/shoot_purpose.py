@@ -55,7 +55,8 @@ def sun_leaf():
     return a[..., :3], a[..., 3] / 255.0
 
 
-def cut(scene):
+def cut(scene, with_mask=False):
+    """The painting at 2400 x 1200, its sun set in; with_mask also returns where the leaf is."""
     s = SCENES[scene]
     a = np.asarray(Image.open(HERE / "originals" / f"{s['take']}.png").convert("RGB")).astype(float)
     y0 = s["y"]
@@ -76,7 +77,12 @@ def cut(scene):
     k[-6:] *= np.linspace(1.0, 0.25, min(6, rows))[:, None, None]
     box = out[top : top + rows, left : left + leaf.shape[1]]
     out[top : top + rows, left : left + leaf.shape[1]] = box * (1 - k) + leaf[:rows] * k
-    return Image.fromarray(out.astype(np.uint8))
+    im = Image.fromarray(out.astype(np.uint8))
+    if not with_mask:
+        return im
+    mask = np.zeros((H, W))
+    mask[top : top + rows, left : left + leaf.shape[1]] = k[..., 0]
+    return im, mask
 
 
 def cut_birds():
