@@ -3,7 +3,10 @@ after trying A Big Sur and B a walk on a golden ridge live): the painting with t
 gold-leaf sun on its horizon, its gold mask (where the leaf is, for the band of light that crosses
 it), and the pelicans. The cut is shoot_purpose.py's, the one Mo saw on the mockup page.
 
-    python -X utf8 reference/ink-pages/home-purpose/build_home_purpose.py
+    python -X utf8 reference/ink-pages/home-purpose/build_home_purpose.py [scene ...]
+
+November 2, later: Mo found the live coast walk "a little bit simple" and asked to try two richer
+Big Sur paintings live (rich-long, rich-falls; test pages /home-1 and /home-3).
 
 Out: public/images/home-v2/ink/purpose-coast-walk-v1.webp and purpose-coast-walk-gold-v1.webp,
 purpose-pelicans-v1.webp; lossless plates in plates/ (git-ignored).
@@ -11,6 +14,8 @@ purpose-pelicans-v1.webp; lossless plates in plates/ (git-ignored).
 
 import numpy as np
 from PIL import Image, ImageFilter
+
+import sys
 
 from shoot_purpose import HERE, cut, cut_birds
 
@@ -22,7 +27,7 @@ BIRDS_W = 800
 
 
 def main():
-    for scene in SCENES:
+    for scene in sys.argv[1:] or SCENES:
         img, mask = cut(scene, with_mask=True)
         img.save(PLATES / f"purpose-{scene}-v1.png", optimize=True)
         img.save(SITE / f"purpose-{scene}-v1.webp", quality=84, method=6)

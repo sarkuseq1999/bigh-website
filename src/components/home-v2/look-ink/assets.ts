@@ -126,6 +126,28 @@ export const purposePainting: Picture = {
   height: 1200,
 };
 
+/** For comparison only (Mo, November 2, 2026): the live close looked "a little bit simple" next
+ *  to the old pine painting, and Mo asked to try two richer Big Sur paintings live: 1 the long
+ *  view down the coast with Bixby Bridge (/home-1) and 3 McWay Falls (/home-3); "/" keeps the
+ *  coast walk until he picks. Codex paintings at the old painting's finish, the opening's sun on
+ *  each one's own glitter path, `gold` its mask (build_home_purpose.py). `phone` is the frame on
+ *  one column: the painting's width in vw and how far across it starts, so the walkers and the
+ *  whole sun both show. */
+export const purposeEndings = {
+  "rich-long": {
+    land: { src: `${I}/purpose-rich-long-v1.webp`, width: 2400, height: 1200 },
+    gold: `${I}/purpose-rich-long-gold-v1.webp`,
+    phone: { width: 150, left: 0.23 },
+  },
+  "rich-falls": {
+    land: { src: `${I}/purpose-rich-falls-v1.webp`, width: 2400, height: 1200 },
+    gold: `${I}/purpose-rich-falls-gold-v1.webp`,
+    phone: { width: 150, left: 0.21 },
+  },
+} satisfies Record<string, { land: Picture; gold: string; phone: { width: number; left: number } }>;
+
+export type PurposeEnding = keyof typeof purposeEndings;
+
 /** The close's five brown pelicans, on their own layer so they can fly home (ink). `box` is where
  *  they sit in the painting, as fractions of its width and height. */
 export const purposePelicans = {

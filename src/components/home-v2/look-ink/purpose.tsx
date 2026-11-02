@@ -6,7 +6,13 @@ import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import { gold, purposePainting, purposePelicans } from "./assets";
+import {
+  gold,
+  purposeEndings,
+  purposePainting,
+  purposePelicans,
+  type PurposeEnding,
+} from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
 import { useTint } from "./ink-color";
@@ -16,11 +22,14 @@ import { useTint } from "./ink-color";
 // flying home (on their own layer: they fly toward the sun as the painting comes into view); the
 // purpose sits in its open sky, and the brush line lifts off in the painting. Below it, on paper:
 // why we do it and the three standards we keep.
-export function Purpose() {
+// `ending` is one of the two richer closes Mo is comparing (/home-1, /home-3; assets.ts): its
+// painting, its sun's gold mask and its frame on one column.
+export function Purpose({ ending }: { ending?: PurposeEnding }) {
   const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
-  const land = purposePainting;
+  const scene = ending ? purposeEndings[ending] : null;
+  const land = scene ? scene.land : purposePainting;
   const birds = purposePelicans;
 
   return (
@@ -34,7 +43,17 @@ export function Purpose() {
         {/* The painting with its layers (the light on the sun's leaf, the pelicans). On two
             columns it is the scene itself; on one column it is a frame of its own, so a phone
             sees the walkers, the pelicans and the sun (purpose.module.css). */}
-        <div className={styles.plate}>
+        <div
+          className={styles.plate}
+          style={
+            scene
+              ? {
+                  ["--pw" as string]: `min(${scene.phone.width}vw, 1500px)`,
+                  ["--shift" as string]: `clamp(0px, ${scene.phone.left} * var(--pw), var(--pw) - 100vw)`,
+                }
+              : undefined
+          }
+        >
           <Image
             className={`${base.ink} ${styles.painting}`}
             src={tint(land.src)}
@@ -48,7 +67,7 @@ export function Purpose() {
           <span
             className={`${base.gold} ${styles.sunLight}`}
             style={{
-              ["--gold" as string]: `url(${gold.purpose})`,
+              ["--gold" as string]: `url(${scene ? scene.gold : gold.purpose})`,
               aspectRatio: `${land.width} / ${land.height}`,
             }}
           />
