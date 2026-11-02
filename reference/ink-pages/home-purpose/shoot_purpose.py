@@ -49,6 +49,12 @@ SCENES = {
         "box": {"left": 0.66, "top": 0.36, "width": 0.15},
         "phone": (170, 0.38),
     },
+    # Round 3 (Mo, November 2, on the live close: "a little bit simple" next to the old pine
+    # painting): richer Big Sur paintings, the old one as the reference for finish only. Each
+    # sun sits on its own glitter path (sun_x); phones get a frame that holds the walkers and it.
+    "rich-long": {"take": "rich-long-2", "y": 180, "horizon": 659, "birds": True, "sun_x": 0.839, "phone": (150, 0.23)},
+    "rich-same": {"take": "rich-same-1", "y": 180, "horizon": 639, "birds": True, "sun_x": 0.827, "phone": (155, 0.24)},
+    "rich-falls": {"take": "rich-falls-1", "y": 150, "horizon": 603, "birds": True, "sun_x": 0.82, "phone": (150, 0.21)},
 }
 BIRDS = {"take": "pelicans-2", "left": 0.52, "top": 0.43, "width": 0.17}
 HIDDEN = 0.38  # how much of the plate lies under the statement on a phone (its sky)
@@ -84,7 +90,7 @@ def cut(scene, with_mask=False):
     leaf, alpha = sun_leaf()
     line = round((s["horizon"] - y0) * SCALE)
     top = round(line - leaf.shape[0] * (1 - SUN_SET))
-    left = SUN_X - leaf.shape[1] // 2
+    left = round(s.get("sun_x", SUN_X / W) * W) - leaf.shape[1] // 2
     rows = max(0, min(leaf.shape[0], line - top))
     k = alpha[:rows, :, None].copy()
     # Its foot softened over a few pixels, as the water or grass laps it.
@@ -133,7 +139,7 @@ SWAP = """([url, birds, box, ratio, phone]) => {
   }
   img.loading = 'eager'; img.removeAttribute('srcset'); img.removeAttribute('sizes'); img.removeAttribute('height'); img.src = url;
   img.style.aspectRatio = '2 / 1';
-  const f = document.querySelector('#purpose img[src*=purpose-cranes], #purpose img[data-birds]');
+  const f = document.querySelector('#purpose img[src*=purpose-cranes], #purpose img[src*=purpose-pelicans], #purpose img[data-birds]');
   const flight = f.parentElement;
   if (!birds) { flight.style.display = 'none'; return img.decode(); }
   flight.style.display = '';

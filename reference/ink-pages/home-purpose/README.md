@@ -18,6 +18,12 @@ give the vibe of California" (November 2). Round 2, the same walk made Californi
 the sun), 2 among a valley oak, poppies and lupine 8.5 (echoes About's poppy hills and oak), 3 under
 palms by the Pacific 8.
 
+Mo picked 1, the coast walk; it went live as `main` `4d5f59e`. Then he found it "a little bit simple"
+next to the old pine painting. Round 3 (same page, v3), richer Big Sur paintings with the old one
+as the reference for finish only (`_style_rich.txt`; each sun on its own glitter path, `sun_x`):
+1 the long view down the coast with Bixby Bridge 9 (my pick), 2 today's view painted richer 8.5,
+3 McWay Falls 9.
+
 Unused takes: `bigh-archive/home-purpose/`.
 
 When building: `purposePainting`, `purposeCranes` and `gold.purpose` in `assets.ts`; their tinted

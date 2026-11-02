@@ -1,10 +1,11 @@
 """Part 4's page for Mo (October 30 - November 2, 2026): three California closing paintings for "Our
 purpose is simple. Help you live fully.", each shot on the live homepage by shoot_purpose.py.
 
-    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py [2]
+    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py [2 | 3]
 
 Round 2 (November 2): Mo tried A and B live and found the walk on the ridge doesn't give the vibe
-of California; three more Californian walks.
+of California; three more Californian walks. Round 3 (November 2): the coast walk, live, looked
+"a little bit simple" next to the old pine painting; three richer Big Sur paintings.
 
 Out: reference/ink-pages/mockups/home-purpose/ (home-purpose.html and its pictures).
 """
@@ -82,6 +83,42 @@ ROUND2 = [
 INTRO2 = """<header class="intro">
     <h1>A more California walk</h1>
     <p>You found the walk on the ridge didn't feel like California: bare golden hills could be anywhere. Three ways to fix it, each laid on the real homepage. The words, the gold sun and the pelicans stay.</p>
+  </header>"""
+
+
+ROUND3 = [
+    {
+        "key": "rich-long",
+        "letter": "1",
+        "name": "The long view down the coast",
+        "score": "9 / 10",
+        "pick": True,
+        "what": "The couple and their dog on the cliff-top trail, headland after headland fading into the evening haze, Bixby Bridge small in the middle, the sun's path glittering on the sea.",
+        "note": "The depth and light of the old painting, and the bridge says Big Sur at once. On a phone the painting is shown smaller, so both the walkers and the sun fit.",
+    },
+    {
+        "key": "rich-same",
+        "letter": "2",
+        "name": "Today's view, painted richer",
+        "score": "8.5 / 10",
+        "pick": False,
+        "what": "The scene that is live now, repainted: more coast behind it, gold light on the cliffs, long swells and glitter on the sea.",
+        "note": "Much richer than today's, but nothing in it you would remember on its own.",
+    },
+    {
+        "key": "rich-falls",
+        "letter": "3",
+        "name": "McWay Falls",
+        "score": "9 / 10",
+        "pick": False,
+        "what": "From the trail you look down on Big Sur's waterfall dropping onto a little beach, a turquoise cove and rocks, the coast fading behind.",
+        "note": "The most \"wow\", and a real Big Sur landmark. But the cove's rocks make the foot busier, and the waterfall is small at laptop size.",
+    },
+]
+
+INTRO3 = """<header class="intro">
+    <h1>Big Sur, painted richer</h1>
+    <p>You found the live ending a little simple next to the old pine painting. These three are painted at the old one's level: deep layers fading into the haze, gold evening light, fine brushwork up close. Each is laid on the real homepage; the words, the gold sun and the pelicans stay.</p>
   </header>"""
 
 
@@ -191,6 +228,11 @@ PAGE = """<title>Our Purpose Painting</title>
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    if sys.argv[1:] == ["3"]:
+        page = PAGE.split("<main>")[0] + "<main>\n  " + INTRO3 + "\n  __CHOICES__\n</main>\n"
+        html = page.replace("__CHOICES__", "\n  ".join(choice(look) for look in ROUND3))
+        (OUT / "home-purpose.html").write_text(html, encoding="utf-8", newline="\n")
+        return
     if sys.argv[1:] == ["2"]:
         page = PAGE.split("<main>")[0] + "<main>\n  " + INTRO2 + "\n  __CHOICES__\n</main>\n"
         html = page.replace("__CHOICES__", "\n  ".join(choice(look) for look in ROUND2))

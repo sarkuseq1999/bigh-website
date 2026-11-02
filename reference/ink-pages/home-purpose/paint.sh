@@ -10,7 +10,7 @@ LOGS="$HERE/plates/logs"
 CA="$HERE/../home-california/originals"
 mkdir -p "$LOGS" "$HERE/originals"
 names=("$@")
-[ ${#names[@]} -eq 0 ] && names=(coast-walk-1 oak-walk-1 palm-walk-2)
+[ ${#names[@]} -eq 0 ] && names=(rich-long-2 rich-same-1 rich-falls-1)
 for name in "${names[@]}"; do
   ref=(-i "$CA/sequoia-2-clear-1.png")
   [[ "$name" == pelicans-* ]] && ref+=(-i "$CA/allens-few-body-1.png")
@@ -18,6 +18,9 @@ for name in "${names[@]}"; do
   # on the Big Sur coast, among oaks and poppies, and under palms by the Pacific.
   [[ "$name" == coast-walk-* ]] && ref+=(-i "$HERE/originals/big-sur-1.png" -i "$HERE/originals/ridge-2.png")
   [[ "$name" == oak-walk-* || "$name" == palm-walk-* ]] && ref+=(-i "$HERE/originals/ridge-2.png")
+  # Mo (November 2, live): the coast walk "looks a little bit simple" next to the old pine painting;
+  # richer Big Sur paintings, the old painting as the reference for finish only.
+  [[ "$name" == rich-* ]] && ref=(-i "$HERE/../../home-v2/ink/plates/purpose.png" -i "$HERE/originals/coast-walk-1.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/$name.txt and follow it exactly. Use your built-in image generation tool to make exactly ONE picture (landscape 1536x1024). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \
