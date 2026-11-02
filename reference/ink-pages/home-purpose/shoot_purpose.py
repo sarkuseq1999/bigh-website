@@ -35,6 +35,20 @@ SCENES = {
     "big-sur": {"take": "big-sur-1", "y": 130, "horizon": 663, "birds": True},
     "ridge": {"take": "ridge-2", "y": 140, "horizon": 644, "birds": True},
     "beach": {"take": "beach-2", "y": 150, "horizon": 654, "birds": True},
+    # Round 2 (Mo, November 2: the walk on the ridge "doesn't give the vibe of California").
+    # On a phone the walkers (at 36%) and the sun (81%) are too far apart for the usual frame
+    # (220% of the window, 45% of the painting): a wider frame, from 26% across.
+    "coast-walk": {"take": "coast-walk-1", "y": 210, "horizon": 703, "birds": True, "phone": (170, 0.26)},
+    "oak-walk": {"take": "oak-walk-1", "y": 212, "horizon": 684, "birds": True},
+    # The palms stand where the pelicans fly elsewhere: they fly higher, to the right.
+    "palm-walk": {
+        "take": "palm-walk-2",
+        "y": 217,
+        "horizon": 724,
+        "birds": True,
+        "box": {"left": 0.66, "top": 0.36, "width": 0.15},
+        "phone": (170, 0.38),
+    },
 }
 BIRDS = {"take": "pelicans-2", "left": 0.52, "top": 0.43, "width": 0.17}
 HIDDEN = 0.38  # how much of the plate lies under the statement on a phone (its sky)
@@ -109,8 +123,14 @@ CSS = f"""
 }}
 """
 
-SWAP = """([url, birds, box, ratio]) => {
+SWAP = """([url, birds, box, ratio, phone]) => {
   const img = document.querySelector('#purpose [data-brush=purpose-painting]');
+  const plate = img.parentElement;
+  plate.style.removeProperty('--pw'); plate.style.removeProperty('--shift');
+  if (phone) {
+    plate.style.setProperty('--pw', `min(${phone[0]}vw, 1500px)`);
+    plate.style.setProperty('--shift', `clamp(0px, ${phone[1]} * var(--pw), var(--pw) - 100vw)`);
+  }
   img.loading = 'eager'; img.removeAttribute('srcset'); img.removeAttribute('sizes'); img.removeAttribute('height'); img.src = url;
   img.style.aspectRatio = '2 / 1';
   const f = document.querySelector('#purpose img[src*=purpose-cranes], #purpose img[data-birds]');
@@ -148,14 +168,14 @@ def main():
             )
             page = ctx.new_page()
             page.goto(base + "/", wait_until="networkidle")
-            if size == "1440":
+            if size == "1440" and not (SHOTS / "today-1440.png").exists():
                 top = page.evaluate("document.querySelector('#purpose').getBoundingClientRect().top + scrollY")
                 page.evaluate(f"window.scrollTo({{top: {top - 96}, behavior: 'instant'}})")
                 page.wait_for_timeout(3200)
                 page.screenshot(path=str(SHOTS / "today-1440.png"))
             page.add_style_tag(content=CSS)
             for name, url in urls.items():
-                page.evaluate(SWAP, [url, birds if SCENES[name]["birds"] else None, BIRDS, ratio])
+                page.evaluate(SWAP, [url, birds if SCENES[name]["birds"] else None, SCENES[name].get("box", BIRDS), ratio, SCENES[name].get("phone")])
                 top = page.evaluate("document.querySelector('#purpose').getBoundingClientRect().top + scrollY")
                 page.evaluate(f"window.scrollTo({{top: {top + (-60 if mobile else -96)}, behavior: 'instant'}})")
                 page.wait_for_timeout(3200)

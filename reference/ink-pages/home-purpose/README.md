@@ -12,6 +12,12 @@ red-crowned cranes read as Chinese. Mockup only; nothing in `src/` has changed.
 - Page for Mo: `make_purpose_mockup.py` (`../mockups/home-purpose/`): A Big Sur at evening 8.5,
   B an evening walk on the ridge 9 (my pick), C a surfer at low tide 8.
 
+Mo tried A and B live (`/home-a`, `/home-b`, main `c32fefb`) and found the walk on the ridge "doesn't
+give the vibe of California" (November 2). Round 2, the same walk made Californian (same page, v2):
+1 on the Big Sur coast 9 (my pick; on a phone a wider frame, from 26% across, keeps the walkers and
+the sun), 2 among a valley oak, poppies and lupine 8.5 (echoes About's poppy hills and oak), 3 under
+palms by the Pacific 8.
+
 Unused takes: `bigh-archive/home-purpose/`.
 
 When building: `purposePainting`, `purposeCranes` and `gold.purpose` in `assets.ts`; their tinted

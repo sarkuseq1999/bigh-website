@@ -1,11 +1,15 @@
 """Part 4's page for Mo (October 30 - November 2, 2026): three California closing paintings for "Our
 purpose is simple. Help you live fully.", each shot on the live homepage by shoot_purpose.py.
 
-    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py
+    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py [2]
+
+Round 2 (November 2): Mo tried A and B live and found the walk on the ridge doesn't give the vibe
+of California; three more Californian walks.
 
 Out: reference/ink-pages/mockups/home-purpose/ (home-purpose.html and its pictures).
 """
 
+import sys
 from pathlib import Path
 
 from PIL import Image
@@ -43,6 +47,42 @@ LOOKS = [
         "note": "As California as it gets. But a surfer reads young and sporty for older readers, and the figure is the most detailed thing in it.",
     },
 ]
+
+
+ROUND2 = [
+    {
+        "key": "coast-walk",
+        "letter": "1",
+        "name": "The walk on the Big Sur coast",
+        "score": "9 / 10",
+        "pick": True,
+        "what": "The same couple and dog walk a cliff-top trail above the Pacific, poppies by the path, the sun setting on the sea.",
+        "note": "A's coast with B's people: you know it's California, and it shows living fully. On a phone the people are small, at the left edge.",
+    },
+    {
+        "key": "oak-walk",
+        "letter": "2",
+        "name": "The walk among oaks and poppies",
+        "score": "8.5 / 10",
+        "pick": False,
+        "what": "The same ridge, now with a big California valley oak, orange poppies and purple lupine along the trail, the sea behind.",
+        "note": "The most California of the three, and the best on a phone. But About already has both: its first screen is poppies on golden hills, and its purpose is a big valley oak. The homepage would echo it.",
+    },
+    {
+        "key": "palm-walk",
+        "letter": "3",
+        "name": "The walk under palm trees",
+        "score": "8 / 10",
+        "pick": False,
+        "what": "A bluff-top path by the ocean, a row of tall palms, the couple and dog walking toward the sunset.",
+        "note": "Postcard California. But it reads beach town and Los Angeles more than calm health, and the tall trunks cut across the sky near the words.",
+    },
+]
+
+INTRO2 = """<header class="intro">
+    <h1>A more California walk</h1>
+    <p>You found the walk on the ridge didn't feel like California: bare golden hills could be anywhere. Three ways to fix it, each laid on the real homepage. The words, the gold sun and the pelicans stay.</p>
+  </header>"""
 
 
 def jpg(src, name, width):
@@ -151,6 +191,11 @@ PAGE = """<title>Our Purpose Painting</title>
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    if sys.argv[1:] == ["2"]:
+        page = PAGE.split("<main>")[0] + "<main>\n  " + INTRO2 + "\n  __CHOICES__\n</main>\n"
+        html = page.replace("__CHOICES__", "\n  ".join(choice(look) for look in ROUND2))
+        (OUT / "home-purpose.html").write_text(html, encoding="utf-8", newline="\n")
+        return
     jpg(SHOTS / "today-1440.png", "today.jpg", 1120)
     html = PAGE.replace("__CHOICES__", "\n  ".join(choice(look) for look in LOOKS))
     (OUT / "home-purpose.html").write_text(html, encoding="utf-8", newline="\n")
