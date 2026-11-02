@@ -4,9 +4,22 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-7cguv694s-sarkuseq1999s-projects.vercel.app`
-(`dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`), the **production** deployment of `main` at
-`4d5f59e093f733d7275dd334660c61031fe6ea22` (November 2, 2026, from about 12:53 Pacific). The
+The alias currently points to `bigh-website-dufzjm2ly-sarkuseq1999s-projects.vercel.app`
+(`dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`), the **production** deployment of `main` at
+`648e44d434e97d793e9ece5493ad79734e014b46` (November 2, 2026, from about 14:09 Pacific). It adds
+two test homepages for Mo to compare richer Big Sur closes live, since he found the coast walk
+(below) a little simple next to the old pine painting: `/home-1` closes on the long view down the
+coast with Bixby Bridge, `/home-3` on McWay Falls; `/` keeps the coast walk until he picks. Both
+test routes are noindex. `648e44d` is `4d5f59e` plus that build, its notes and the mockups commit
+(no other code), pushed as a fast-forward on Mo's "Yes, put them live". Before the push, on the
+built copy: `qa_home_ink` 286/286, `qa_nav` 326/326, and both test pages at 1920, 1440, 1280, 768
+and 390 px wide (painting, light and pelicans load, no overflow, no console errors). After the
+alias update, in fresh unauthenticated browsers on the public demo: the same, `qa_home_ink`
+286/286 and `qa_nav` 326/326.
+
+Before that, from about 12:53 to about 14:09 Pacific on November 2, 2026, the alias pointed to
+`bigh-website-7cguv694s-sarkuseq1999s-projects.vercel.app` (`dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`),
+the **production** deployment of `main` at `4d5f59e093f733d7275dd334660c61031fe6ea22`. The
 homepage closes on a walk on the Big Sur coast in place of the pine, the misty peaks and the
 cranes: an older couple and their dog on the cliff-top trail above the Pacific, poppies by the
 path, the opening's gold-leaf sun setting on the sea, five brown pelicans flying in. Mo tried A

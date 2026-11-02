@@ -5,9 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 2, 2026, by Claude Code (the homepage's close: the walk on the Big Sur
-  coast, live as `main` `4d5f59e`, production `dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`, demo alias on
-  it; the test pages `/home-a` and `/home-b` are gone; the homepage's "Good questions" picture: a
+- **Last updated:** November 2, 2026, by Claude Code (two test homepages to compare richer Big Sur
+  closes live, `/home-1` (the long view, Bixby Bridge) and `/home-3` (McWay Falls), as `main`
+  `648e44d`, production `dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`, demo alias on it; `/` closes on the
+  coast walk, live since `4d5f59e`; the homepage's "Good questions" picture: a
   country mailbox, live as `main` `fdb95ca`, production `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo
   alias on it; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
@@ -42,7 +43,12 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   rule):** (1) the desktop sun, done: Mo picked A of three placements, three quarters of its
   size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`); built site homepage 280/280, menu
   326/326; on Mo's yes live as `main` `f0ababa` (production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`,
-  demo alias on it; public demo homepage 280/280, menu 326/326); (2) the hummingbird's look and wings
+  demo alias on it; public demo homepage 280/280, menu 326/326). Mo then found it "a little bit simple" next to the old pine painting; of three
+  richer Big Sur paintings (artifact v3) he asked to try 1 and 3 live: test pages `/home-1` and
+  `/home-3` (`purposeEndings` in `assets.ts`, `Purpose ending=`), live as `main` `648e44d`. When he
+  picks: make it the close on `/`, remove the test routes, the other painting and `ending`, set
+  `qa_home_ink`'s `PURPOSE_FRAME` sun and walkers to the picked painting, and update the AGENTS.md
+  rule "Homepage close"; (2) the hummingbird's look and wings
   that never stop, built: Mo picked Allen's (over today's Anna's and a green female), then "more
   painting-like" (C, a few wet washes in the old crane's hand), then a beak of one dry brush
   stroke; its own painted wings beat about the shoulder, six blurred frames a beat at ten a
