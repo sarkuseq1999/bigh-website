@@ -1,0 +1,20 @@
+# Homepage closing painting, "Our purpose is simple." (October 30 - November 2, 2026)
+
+Part 4 of the homepage's California follow-ups: the old pine on its rock, the misty peaks and the two
+red-crowned cranes read as Chinese. Mockup only; nothing in `src/` has changed.
+
+- Pictures by Codex (`paint.sh`, ChatGPT plan, no API spend), the opening's sequoia painting as the
+  hand. Each scene was asked with its top 55% bare sky, the horizon level and the sun's spot clear.
+- `shoot_purpose.py` cuts each one from its paper, sets the opening's own gold-leaf sun on its
+  horizon (`sun.webp`, the closing sun's size, cut level where sea or land stands in front), lays
+  the pelicans where the cranes fly, and swaps them into the live homepage's `<img>`. The band is
+  2:1, not 7:3: at 7:3 the land rose into the words.
+- Page for Mo: `make_purpose_mockup.py` (`../mockups/home-purpose/`): A Big Sur at evening 8.5,
+  B an evening walk on the ridge 9 (my pick), C a surfer at low tide 8.
+
+Unused takes: `bigh-archive/home-purpose/`.
+
+When building: `purposePainting`, `purposeCranes` and `gold.purpose` in `assets.ts`; their tinted
+twins in `ink-color.tsx`; `purpose.module.css` (the 2400/1029 ratio on the sun's light, the phone
+frame's 0.195 margin and 81% sun line); `brush-route.ts` (`purpose-painting` stations);
+`qa_home_ink.py` (`PURPOSE_FRAME`, the cranes); a new gold mask for the sun's light.
