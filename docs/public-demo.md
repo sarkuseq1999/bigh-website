@@ -4,7 +4,22 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-pnmwtqbab-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-5vuddp89x-sarkuseq1999s-projects.vercel.app`
+(`dpl_2t64GrUZHakBSGtUvTQqkS1XzUv6`), the **production** deployment of `main` at
+`c32fefb252116acf8df81633cb913765fb07092a` (November 2, 2026, from about 11:41 Pacific). It adds
+two test homepages for Mo to compare the closing painting live: `/home-a` closes on A, Big Sur at
+evening, and `/home-b` on B, an evening walk on the ridge (an older couple and their dog), each
+with the opening's gold-leaf sun on its horizon and brown pelicans flying in where the cranes
+fly; `/` keeps the pine, the misty peaks and the cranes until Mo picks. Both test routes are
+noindex. `c32fefb` is `fdb95ca` plus that build, its notes and the mockups commit (no other code),
+pushed as a fast-forward on Mo's "Yes, put them live". Before the push, on the built copy:
+`qa_home_ink` 286/286, `qa_nav` 326/326, and both test pages at 1920, 1440, 1280, 768 and 390 px
+wide (painting, light and pelicans load, no overflow, no console errors). After the alias update,
+in fresh unauthenticated browsers on the public demo: the same, `qa_home_ink` 286/286 and `qa_nav`
+326/326.
+
+Before that, from about 18:51 Pacific on October 30 to about 11:41 Pacific on November 2, 2026,
+the alias pointed to `bigh-website-pnmwtqbab-sarkuseq1999s-projects.vercel.app`
 (`dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`), the **production** deployment of `main` at
 `fdb95ca40e4d6c2a459e21f4c55cccc5e3add7d6` (October 30, 2026, from about 18:51 Pacific). The
 homepage's "Good questions deserve clear answers." has a country mailbox in place of the inkstone
