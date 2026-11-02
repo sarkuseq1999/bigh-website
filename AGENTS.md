@@ -230,8 +230,8 @@ These sit on top of `DESIGN.md`.
   hummingbird (California's year-round hummingbird; for its size it burns energy faster than
   almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
   sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
-  **First screen only** (Mo, October 28): the crane stays in the homepage's closing painting, the
-  footer by the park sign and the phone menu. Built: the painting covers the whole opening
+  **First screen only** (Mo, October 28): the crane stays in the footer by the park sign and the
+  phone menu (the closing painting's cranes left on November 2: "Homepage close", below). Built: the painting covers the whole opening
   (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
   hummingbird in the crane's frame (Anna's as a still until October 29, below), the line pinned
   to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found
@@ -343,6 +343,19 @@ These sit on top of `DESIGN.md`.
   and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
   `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
   `reference/ink-pages/mockups/home-ask/`.
+- **Homepage close: a walk on the Big Sur coast (Mo picked 1, November 2, 2026).** "Our purpose is
+  simple." sat over an old pine on its rock, misty peaks and two red-crowned cranes: Chinese. Of
+  three California endings on the real page (A Big Sur at evening, B an evening walk on a golden
+  ridge, C a surfer at low tide) Mo tried A and B live as test pages, then found the walk with
+  people "doesn't give the vibe of California" (bare golden hills could be anywhere). Of three
+  Californian walks (1 on the Big Sur coast, 2 among a valley oak and poppies, which echoed
+  About, 3 under palms) he picked 1: an older couple and their dog on the cliff-top trail above
+  the Pacific, poppies by the path, the sun setting on the sea; morning sequoias to evening coast,
+  one full day. The sun is the opening's own gold leaf set on the horizon; five brown pelicans
+  fly in where the cranes flew. The painting is 2:1 (at the old 7:3 the land rose into the
+  words); on phones the frame is 165% of the window from 25% across, so the walkers and the whole
+  sun both show. `purpose.tsx`, `purpose.module.css`; pictures `build_home_purpose.py` in
+  `reference/ink-pages/home-purpose/`; mockups `reference/ink-pages/mockups/home-purpose/`.
 - **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
   questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
   each question", over B (one breakfast-table painting with numbered marks). All five product

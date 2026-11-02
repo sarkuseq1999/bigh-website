@@ -6,31 +6,22 @@ import { ProductAction } from "@/components/home/product-action";
 import { useCopy } from "@/i18n/use-copy";
 import { purpose } from "../content";
 import { useSiteDialogs } from "@/components/ink/dialogs";
-import {
-  gold,
-  purposeCranes,
-  purposeEndings,
-  purposePainting,
-  purposePelicans,
-  type PurposeEnding,
-} from "./assets";
+import { gold, purposePainting, purposePelicans } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./purpose.module.css";
 import { useTint } from "./ink-color";
 
-// The close, a bookend to the crane: an old pine over a sea of mist, the gold-leaf sun low on the
-// horizon, two cranes flying home (on their own layer: they fly toward the sun as the painting
-// comes into view); the purpose sits in its open sky, and the brush line lifts off in the
-// painting. Below it, on paper: why we do it and the three standards we keep.
-// `ending` is one of the two California closes Mo is comparing (/home-a, /home-b; assets.ts):
-// its painting, its sun's gold mask and the pelicans in the cranes' place.
-export function Purpose({ ending }: { ending?: PurposeEnding }) {
+// The close, a bookend to the morning sequoias: the Big Sur coast at evening, an older couple and
+// their dog on the cliff-top trail, the gold-leaf sun setting on the Pacific, five brown pelicans
+// flying home (on their own layer: they fly toward the sun as the painting comes into view); the
+// purpose sits in its open sky, and the brush line lifts off in the painting. Below it, on paper:
+// why we do it and the three standards we keep.
+export function Purpose() {
   const tint = useTint();
   const copy = useCopy();
   const dialogs = useSiteDialogs();
-  const scene = ending ? purposeEndings[ending] : null;
-  const land = scene ? scene.land : purposePainting;
-  const birds = scene ? purposePelicans : purposeCranes;
+  const land = purposePainting;
+  const birds = purposePelicans;
 
   return (
     <section
@@ -40,24 +31,24 @@ export function Purpose({ ending }: { ending?: PurposeEnding }) {
       data-brush="purpose"
     >
       <div className={styles.scene}>
-        {/* The painting with its layers (the light on the sun's leaf, the two cranes). On two
+        {/* The painting with its layers (the light on the sun's leaf, the pelicans). On two
             columns it is the scene itself; on one column it is a frame of its own, so a phone
-            sees the cranes flying home to the sun (purpose.module.css). */}
-        <div className={styles.plate} style={{ ["--hide" as string]: scene ? scene.hide : 0.195 }}>
+            sees the walkers, the pelicans and the sun (purpose.module.css). */}
+        <div className={styles.plate}>
           <Image
             className={`${base.ink} ${styles.painting}`}
             src={tint(land.src)}
             alt=""
             width={land.width}
             height={land.height}
-            sizes="(max-width: 899px) min(220vw, 1500px), 100vw"
+            sizes="(max-width: 899px) min(165vw, 1500px), 100vw"
             data-bloom=""
             data-brush="purpose-painting"
           />
           <span
             className={`${base.gold} ${styles.sunLight}`}
             style={{
-              ["--gold" as string]: `url(${scene ? scene.gold : gold.purpose})`,
+              ["--gold" as string]: `url(${gold.purpose})`,
               aspectRatio: `${land.width} / ${land.height}`,
             }}
           />
@@ -71,12 +62,12 @@ export function Purpose({ ending }: { ending?: PurposeEnding }) {
             }}
           >
             <Image
-              className={`${base.ink} ${styles.cranes}`}
+              className={`${base.ink} ${styles.birds}`}
               src={tint(birds.src)}
               alt=""
               width={birds.width}
               height={birds.height}
-              sizes="(max-width: 899px) 30vw, 14vw"
+              sizes="(max-width: 899px) 30vw, 18vw"
               data-bloom=""
               style={{ ["--bloom-delay" as string]: 500 }}
             />

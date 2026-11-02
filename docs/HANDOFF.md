@@ -5,9 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 2, 2026, by Claude Code (two test homepages to compare the closing
-  painting live, `/home-a` and `/home-b`, as `main` `c32fefb`, production
-  `dpl_2t64GrUZHakBSGtUvTQqkS1XzUv6`, demo alias on it; the homepage's "Good questions" picture: a
+- **Last updated:** November 2, 2026, by Claude Code (the homepage's close: the walk on the Big Sur
+  coast, built on `studio`, not live yet; the test pages `/home-a` and `/home-b` are gone from
+  `studio` but still live as `main` `c32fefb` until the next push; the homepage's "Good questions" picture: a
   country mailbox, live as `main` `fdb95ca`, production `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo
   alias on it; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
@@ -57,11 +57,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo alias on it; public demo homepage 286/286, menu 326/326); (4) "Our purpose" closing painting: pine on
   rocks, misty peaks, red-crowned cranes read as Chinese; of three California endings mocked on
   the real page (A Big Sur at evening, B an evening walk on the ridge, C a surfer at low tide;
-  artifact `7APcgk8f6k1ZG8JERvP1yw`) Mo asked to try A and B live: test pages `/home-a` and
-  `/home-b` (`purposeEndings` in `assets.ts`, `Purpose ending=`, `reference/ink-pages/home-purpose/`),
-  live as `main` `c32fefb`; `/` unchanged. When he picks: make it the close on `/`, remove the
-  test routes, the other ending's pictures and `ending`, swap the cranes for the pelicans in
-  `qa_home_ink` (`PURPOSE_FRAME`), and write the rule into AGENTS.md; (5) the footer's crane by the park sign.
+  artifact `7APcgk8f6k1ZG8JERvP1yw`) Mo tried A and B live (test pages, `main` `c32fefb`), found the
+  walk with people not Californian, and of three Californian walks (same artifact, v2) picked 1,
+  the walk on the Big Sur coast: built on `studio` as the close on `/` (`purpose-coast-walk-v1.webp`,
+  pelicans, test routes removed), not live yet; (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition

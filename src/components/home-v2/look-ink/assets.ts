@@ -90,7 +90,7 @@ export const sciencePaintings = {
  *  moving band of light over the painting through it, so only the leaf catches the light. */
 export const gold = {
   mito: `${I}/mito-gold.webp`,
-  purpose: `${I}/purpose-gold.webp`,
+  purpose: `${I}/purpose-coast-walk-gold-v1.webp`,
 };
 
 /** One breath of ink behind Dr. Liu's photograph (ink). */
@@ -112,46 +112,22 @@ export const storyPaintings: Record<string, Picture> = {
   susan: { src: `${I}/story-source-v2.webp`, width: 1744, height: 2336 },
 };
 
-/** The close: an old pine over a sea of mist, the gold sun low (ink). Its two cranes fly on their
- *  own layer (purposeCranes); the whole painting is the plate reference/home-v2/ink/plates/purpose.png. */
+/** The close: the Big Sur coast at evening, an older couple and their dog on the cliff-top trail,
+ *  poppies by the path, the gold-leaf sun setting on the Pacific (ink and its own thin colour, so
+ *  no tinted twin). Mo, November 2, 2026: the old pine, the misty peaks and the cranes read as
+ *  Chinese; he tried A (Big Sur) and B (a walk on a golden ridge) live, found the walk with people
+ *  "doesn't give the vibe of California", and picked the walk on the Big Sur coast. A Codex
+ *  painting in the opening's hand; the sun is the opening's own leaf, set on the horizon
+ *  (reference/ink-pages/home-purpose, built by build_home_purpose.py). 2:1, not the old 7:3: at 7:3
+ *  the land rose into the words. Its pelicans fly on their own layer (purposePelicans). */
 export const purposePainting: Picture = {
-  src: `${I}/purpose-land.webp`,
+  src: `${I}/purpose-coast-walk-v1.webp`,
   width: 2400,
-  height: 1029,
+  height: 1200,
 };
 
-/** The two cranes of the close, lifted out of the painting so they can fly (ink). `box` is where
- *  they sit in the painting, as fractions of its width and height (build_assets.py CRANES). */
-export const purposeCranes = {
-  src: `${I}/purpose-cranes.webp`,
-  width: 326,
-  height: 172,
-  box: { left: 1500 / 2400, top: 468 / 1029, width: 326 / 2400 },
-};
-
-/** For comparison only (Mo, November 2, 2026): the pine, the misty peaks and the cranes read as
- *  Chinese, and Mo asked to try two California endings live, A Big Sur at evening (/home-a) and B
- *  an evening walk on the ridge (/home-b); "/" keeps today's close until he picks. Codex paintings
- *  in the opening's hand, the opening's own gold-leaf sun set on the horizon, `gold` its mask for
- *  the band of light (reference/ink-pages/home-purpose, built by build_home_purpose.py). 2:1, not
- *  the close's 7:3: at 7:3 the land rose into the words. `hide` is how much of the frame lies
- *  under the statement on one column (its sky). */
-export const purposeEndings = {
-  "big-sur": {
-    land: { src: `${I}/purpose-big-sur-v1.webp`, width: 2400, height: 1200 },
-    gold: `${I}/purpose-big-sur-gold-v1.webp`,
-    hide: 0.19,
-  },
-  ridge: {
-    land: { src: `${I}/purpose-ridge-v1.webp`, width: 2400, height: 1200 },
-    gold: `${I}/purpose-ridge-gold-v1.webp`,
-    hide: 0.19,
-  },
-} satisfies Record<string, { land: Picture; gold: string; hide: number }>;
-
-export type PurposeEnding = keyof typeof purposeEndings;
-
-/** The endings' five brown pelicans, flying in where the cranes fly (ink, their own layer). */
+/** The close's five brown pelicans, on their own layer so they can fly home (ink). `box` is where
+ *  they sit in the painting, as fractions of its width and height. */
 export const purposePelicans = {
   src: `${I}/purpose-pelicans-v1.webp`,
   width: 800,

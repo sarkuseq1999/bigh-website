@@ -1,11 +1,11 @@
-"""Build the two closing paintings Mo is comparing on the live site (November 2, 2026): A Big Sur at
-evening and B an evening walk on the ridge, each with the opening's gold-leaf sun on its horizon,
-its gold mask (where the leaf is, for the band of light that crosses it), and the pelicans that fly
-in where the cranes fly today. The cut is shoot_purpose.py's, the one Mo saw on the mockup page.
+"""Build the homepage's closing painting (Mo picked the walk on the Big Sur coast, November 2, 2026,
+after trying A Big Sur and B a walk on a golden ridge live): the painting with the opening's
+gold-leaf sun on its horizon, its gold mask (where the leaf is, for the band of light that crosses
+it), and the pelicans. The cut is shoot_purpose.py's, the one Mo saw on the mockup page.
 
     python -X utf8 reference/ink-pages/home-purpose/build_home_purpose.py
 
-Out: public/images/home-v2/ink/purpose-<scene>-v1.webp and purpose-<scene>-gold-v1.webp,
+Out: public/images/home-v2/ink/purpose-coast-walk-v1.webp and purpose-coast-walk-gold-v1.webp,
 purpose-pelicans-v1.webp; lossless plates in plates/ (git-ignored).
 """
 
@@ -16,7 +16,7 @@ from shoot_purpose import HERE, cut, cut_birds
 
 SITE = HERE.parents[2] / "public" / "images" / "home-v2" / "ink"
 PLATES = HERE / "plates"
-SCENES = ["big-sur", "ridge"]
+SCENES = ["coast-walk"]
 MASK_W = 1000  # the gold masks' width (as the live purpose-gold.webp)
 BIRDS_W = 800
 

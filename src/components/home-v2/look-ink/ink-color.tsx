@@ -26,8 +26,6 @@ const TINTED = new Set([
   "story-morning-v2.webp",
   "story-reading-v2.webp",
   "story-source-v2.webp",
-  "purpose-land.webp",
-  "purpose-cranes.webp",
 ]);
 
 const ColorContext = createContext<InkColor>("ink");

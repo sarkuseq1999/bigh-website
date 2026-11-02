@@ -161,14 +161,6 @@ def build(key):
 
     # The opening's hills (the sun's glow is laid by the page above the picture, not in it).
     jobs["landscape.webp"] = paint("landscape.webp", st, s)
-    # The close: pine, sea of mist, low gold sun at (0.807, 0.574).
-    jobs["purpose-land.webp"] = paint(
-        "purpose-land.webp",
-        st,
-        s,
-        washes=[dict(mask=lambda h, w: blob(h, w, 0.807, 0.574, 0.20, 0.34, 2, 0.15), d=0.13, hex=P["sun"])],
-    )
-    jobs["purpose-cranes.webp"] = paint("purpose-cranes.webp", st, s * 0.5)
 
     # Still lifes: an overall tint plus a thin wash inside a few objects (hand-tinted, like an
     # old naturalist's print).

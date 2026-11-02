@@ -93,8 +93,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
   - the phone as its own design (round 5, October 4): the opening is a painting first (its
     picture at least 44% of the window's height, the bird's frame about 41% of its width) with
     its two pills one over the other at the column's full
-    width; the closing painting keeps the gold sun and both cranes in the window, the cranes on
-    their own flying layer and the light on the sun's leaf; the stories open with their heading,
+    width; the closing painting keeps the gold sun, the walkers and the pelicans in the window,
+    the pelicans on their own flying layer and the light on the sun's leaf (November 2, 2026: the
+    Big Sur coast walk replaced the pine and the cranes); the stories open with their heading,
     then the still life, then the sample; the still lifes ship at their full 1744 px; the three
     science topics sit on one line and the age slider takes no room until its topic.
   - one centred pause and the page's rhythm (round 6, October 4): Ask BiGH Science's painting,
@@ -589,15 +590,17 @@ WING_BEAT = """(async () => {
   return { frames: seen.size, state: getComputedStyle(w).animationPlayState };
 })()"""
 
-# Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width) and the
-# cranes' layer fall in the window, and whether the cranes and the light on the leaf are shown.
+# Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width), its
+# walkers (30% to 37%) and the pelicans' layer fall in the window, and whether the pelicans and
+# the light on the leaf are shown (November 2, 2026: the Big Sur coast walk).
 PURPOSE_FRAME = """(() => {
   const p = document.querySelector('#purpose [data-brush=purpose-painting]').getBoundingClientRect();
-  const f = document.querySelector('#purpose img[src*=purpose-cranes]');
+  const f = document.querySelector('#purpose img[src*=purpose-pelicans]');
   const b = f.parentElement.getBoundingClientRect();
   const light = document.querySelector('#purpose [data-brush=purpose-painting] + span');
   return { sun: [Math.round(p.left + 0.767 * p.width), Math.round(p.left + 0.846 * p.width)],
-    cranes: [Math.round(b.left), Math.round(b.right)], flight: getComputedStyle(f.parentElement).display,
+    walkers: [Math.round(p.left + 0.30 * p.width), Math.round(p.left + 0.37 * p.width)],
+    birds: [Math.round(b.left), Math.round(b.right)], flight: getComputedStyle(f.parentElement).display,
     light: getComputedStyle(light).display, loaded: f.complete && f.naturalWidth > 0 };
 })()"""
 
@@ -1534,16 +1537,19 @@ def run(browser, look, mobile):
     # lifted travel to the footer and the closing stroke).
     scroll_to(page, top_of(page, "#purpose") + (0 if mobile else 40), 2600)
     shoot(page, f"{name}-08-purpose")
-    # Round 5: on a phone the closing painting is framed for the window: the gold sun and both
-    # cranes inside it, the cranes on their own (flying) layer, the light on the sun's leaf on.
+    # Round 5: on a phone the closing painting is framed for the window: the gold sun, the
+    # walkers and the pelicans inside it, the pelicans on their own (flying) layer, the light on
+    # the sun's leaf on.
     if mobile:
         c = page.evaluate(PURPOSE_FRAME)
         check(
-            f"{tag}: the closing painting keeps the gold sun and both cranes in the window, flying",
+            f"{tag}: the closing painting keeps the gold sun, the walkers and the pelicans in the window, flying",
             0 <= c["sun"][0]
             and c["sun"][1] <= width
-            and 0 <= c["cranes"][0]
-            and c["cranes"][1] <= width
+            and 0 <= c["walkers"][0]
+            and c["walkers"][1] <= width
+            and 0 <= c["birds"][0]
+            and c["birds"][1] <= width
             and c["flight"] != "none"
             and c["light"] != "none"
             and c["loaded"],

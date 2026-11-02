@@ -35,11 +35,10 @@
   bottom: auto;
 }
 
-/* The two cranes, on their own layer at their place in the painting (purpose.tsx sets the box and
-   its ratio).
-   As the painting rises into the window they fly up from the lower left to that place, toward
-   the sun; they ride the air in the page's slow breath. Without scroll-driven animation, or with
-   reduced motion, they are simply there, as painted. */
+/* The pelicans, on their own layer at their place in the painting (purpose.tsx sets the box and
+   its ratio). As the painting rises into the window they fly up from the lower left to that place,
+   toward the sun; they ride the air in the page's slow breath. Without scroll-driven animation, or
+   with reduced motion, they are simply there, as painted. */
 .flight {
   position: absolute;
   pointer-events: none;
@@ -47,14 +46,14 @@
   mix-blend-mode: multiply;
 }
 
-.cranes {
+.birds {
   display: block;
   width: 100%;
   height: auto;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .cranes {
+  .birds {
     animation: ride calc(var(--breath) * 3) ease-in-out infinite alternate;
   }
 
@@ -239,23 +238,20 @@
     flex-direction: column;
   }
 
-  /* One column (round 5): the painting is too wide to keep both the pine and the sun, so a phone
-     sees the story's end: the two cranes flying home to the low gold sun over the sea of mist.
-     The frame is the painting at 220% of the window (to 1500px), moved left until the sun's
-     centre (81% of its width) stands at 76% of the window, its right edge never inside it; the
-     window's edges cut only mist and far ridges (the look's root clips the rest). Its open sky
-     lies under the statement's last lines, so the cranes fly about 60px under its label: --hide is
-     how much of the frame's width lies under it (0.195 here; the endings Mo is comparing set
-     theirs, assets.ts). */
+  /* One column: the painting is too wide for a phone, so the frame is the painting at 165% of
+     the window (to 1500px) from 25% across: the walkers (about 33% across) near its left edge,
+     the pelicans, and the whole sun (77% to 85%) inside its right edge; the window's edges cut
+     only headland and sea (the look's root clips the rest). Its open sky (the top 38%) lies
+     under the statement's last lines, so the pelicans fly just under its label. */
   .plate {
-    --pw: min(220vw, 1500px);
-    --shift: clamp(0px, 0.81 * var(--pw) - 76vw, var(--pw) - 100vw);
+    --pw: min(165vw, 1500px);
+    --shift: clamp(0px, 0.25 * var(--pw), var(--pw) - 100vw);
     position: relative;
     display: block;
     flex: none;
     width: var(--pw);
     max-width: none;
-    margin: calc(60px - var(--hide) * var(--pw)) 0 0 calc(-1 * var(--shift));
+    margin: calc(60px - 0.19 * var(--pw)) 0 0 calc(-1 * var(--shift));
   }
 
   .painting {
