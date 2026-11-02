@@ -6,8 +6,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## Now
 
 - **Last updated:** November 2, 2026, by Claude Code (the homepage's close: the walk on the Big Sur
-  coast, built on `studio`, not live yet; the test pages `/home-a` and `/home-b` are gone from
-  `studio` but still live as `main` `c32fefb` until the next push; the homepage's "Good questions" picture: a
+  coast, live as `main` `4d5f59e`, production `dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`, demo alias on
+  it; the test pages `/home-a` and `/home-b` are gone; the homepage's "Good questions" picture: a
   country mailbox, live as `main` `fdb95ca`, production `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo
   alias on it; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
@@ -60,7 +60,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   artifact `7APcgk8f6k1ZG8JERvP1yw`) Mo tried A and B live (test pages, `main` `c32fefb`), found the
   walk with people not Californian, and of three Californian walks (same artifact, v2) picked 1,
   the walk on the Big Sur coast: built on `studio` as the close on `/` (`purpose-coast-walk-v1.webp`,
-  pelicans, test routes removed), not live yet; (5) the footer's crane by the park sign.
+  pelicans, test routes removed); on Mo's yes live as `main` `4d5f59e` (production
+  `dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`, demo alias on it; public demo homepage 286/286, menu
+  326/326); (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
