@@ -5,10 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 2, 2026, by Claude Code (two test homepages to compare richer Big Sur
-  closes live, `/home-1` (the long view, Bixby Bridge) and `/home-3` (McWay Falls), as `main`
-  `648e44d`, production `dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`, demo alias on it; `/` closes on the
-  coast walk, live since `4d5f59e`; the homepage's "Good questions" picture: a
+- **Last updated:** November 2, 2026, by Claude Code (the homepage's close: Mo picked 1B, the long
+  view down the Big Sur coast in ink and wash, built on `studio` as the close on `/`, test pages
+  `/home-1` and `/home-3` removed; not live yet: live `main` is `648e44d`, production
+  `dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`, demo alias on it, closing on the coast walk; the homepage's "Good questions" picture: a
   country mailbox, live as `main` `fdb95ca`, production `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo
   alias on it; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
@@ -43,12 +43,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   rule):** (1) the desktop sun, done: Mo picked A of three placements, three quarters of its
   size in the same spot (artifact `Qp6v64HkGMzrJEwraJxXcD`); built site homepage 280/280, menu
   326/326; on Mo's yes live as `main` `f0ababa` (production `dpl_6fgjwKxM2Y4KjtzSjjxHSNn3SzMT`,
-  demo alias on it; public demo homepage 280/280, menu 326/326). Mo then found it "a little bit simple" next to the old pine painting; of three
-  richer Big Sur paintings (artifact v3) he asked to try 1 and 3 live: test pages `/home-1` and
-  `/home-3` (`purposeEndings` in `assets.ts`, `Purpose ending=`), live as `main` `648e44d`. When he
-  picks: make it the close on `/`, remove the test routes, the other painting and `ending`, set
-  `qa_home_ink`'s `PURPOSE_FRAME` sun and walkers to the picked painting, and update the AGENTS.md
-  rule "Homepage close"; (2) the hummingbird's look and wings
+  demo alias on it; public demo homepage 280/280, menu 326/326).; (2) the hummingbird's look and wings
   that never stop, built: Mo picked Allen's (over today's Anna's and a green female), then "more
   painting-like" (C, a few wet washes in the old crane's hand), then a beak of one dry brush
   stroke; its own painted wings beat about the shoulder, six blurred frames a beat at ten a
@@ -68,7 +63,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   the walk on the Big Sur coast: built on `studio` as the close on `/` (`purpose-coast-walk-v1.webp`,
   pelicans, test routes removed); on Mo's yes live as `main` `4d5f59e` (production
   `dpl_9mLMrnWT1LRA9hz1oN7PWJY4SxTD`, demo alias on it; public demo homepage 286/286, menu
-  326/326); (5) the footer's crane by the park sign.
+  326/326). Mo then found it "a little bit simple" next to the old pine painting; of three richer
+  Big Sur paintings (same artifact, v3) he tried 1 and 3 live (`/home-1`, `/home-3`, `main`
+  `648e44d`) and found them "more picture like"; of the same places painted loosely (v4: A a loose
+  watercolour, B ink and wash) he picked 1B, the long view in ink and wash: built on `studio` as
+  the close on `/` (`purpose-ink-long-v1.webp`, its gold mask; phone frame 150% from 22.5%;
+  `qa_home_ink` `PURPOSE_FRAME` set to its sun and walkers; the test routes, `purposeEndings` and
+  the coast-walk and rich pictures removed; `studio` `6c1cb12`); built site homepage 286/286, menu
+  326/326, the close at 1920, 1440, 1280, 768 and 390 px; not live yet; (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
