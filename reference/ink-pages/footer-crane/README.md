@@ -20,3 +20,25 @@ toward the sign's poppy (Claude's recommendation).
   CSS places the crane by (`src/components/ink/ink.module.css`, `.look .rest`).
 - On a phone the sign narrows to give the crane room (7 lines instead of 5, `text-wrap: pretty`);
   the crane draws smaller there, and the sign and crane a little smaller again under 390 px.
+
+## Part 5: a California animal in the crane's place (November 3, 2026)
+
+The red-crowned crane reads as Chinese, like the homepage's old opening crane and the old close's
+cranes did. Mo asked for part 5 of the homepage's California pass, one part at a time. Three
+California animals, each looking at the sign's poppy as the crane does, painted by Codex with the
+crane's painting (`originals/crane-sign-c1.png`, its hand and layout) and the park sign as
+references (`paint.sh`, prompts in `prompts/`):
+
+- A, California quail (the state bird): the covey's lookout stands tall, the other bends to the
+  poppy. `originals/quail-2.png` (a looser second take; the first was a detailed field-guide bird).
+- B, desert tortoise (the state reptile, among the Mojave's poppies): `originals/tortoise-2.png`
+  (the first came out a Galapagos giant).
+- C, black bear cub (state parks; the bear on the flag): `originals/bear-1.png` (the second take's
+  back read as a pale stripe).
+
+The unused takes are in `bigh-archive/footer-crane/`. `shoot_animals.py` swaps the built site's
+crane for each animal, placed as `.look .rest` places the crane (feet on the sign's ground, a gap
+right of the sign, all in the sign's `--k`), and shoots the homepage and Science at 1440 x 900 and
+390 x 844; on phones each keeps the sign at seven lines. `make_animals_mockup.py` cuts the shots
+and writes `../mockups/footer-crane/animals/footer-animal.html` (Artifact
+https://claude.ai/artifact/EHcCHzYJaB9jpPDvAhAKLb). Claude's pick: A.

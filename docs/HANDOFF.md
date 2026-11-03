@@ -72,7 +72,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   the coast-walk and rich pictures removed; `studio` `6c1cb12`); built site homepage 286/286, menu
   326/326, the close at 1920, 1440, 1280, 768 and 390 px; live as `main` `1e5aba5`, production
   `dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`, demo alias on it; public demo homepage 286/286, menu 326/326,
-  the close at the same five widths; (5) the footer's crane by the park sign.
+  the close at the same five widths; (5) the footer's crane by the park sign: mocked November 3
+  (artifact `EHcCHzYJaB9jpPDvAhAKLb`, `reference/ink-pages/footer-crane/README.md`): A California
+  quail, B desert tortoise, C black bear cub, each looking at the sign's poppy; waiting for Mo's pick.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
