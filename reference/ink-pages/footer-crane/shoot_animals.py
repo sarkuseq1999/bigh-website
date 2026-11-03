@@ -37,6 +37,13 @@ OPTIONS = {
     "a": {"take": "quail-2", "feet": (620, 820), "top": 130, "tall": 210, "gap": 44, "phoneTall": 180, "phoneGap": 36},
     "b": {"take": "tortoise-2", "feet": (650, 780), "top": 262, "tall": 165, "gap": 62, "phoneTall": 118, "phoneGap": 38},
     "c": {"take": "bear-1", "feet": (640, 810), "top": 225, "tall": 230, "gap": 83, "phoneTall": 140, "phoneGap": 52},
+    # Mo (November 3): the quail and the bear "a little more painting like". Each painted fresh in
+    # two hands he already picked: 1 the hummingbird's few wet washes, 2 the Big Sur close's ink
+    # and wash. Gaps keep the beak or nose where A's and C's reach the poppy.
+    "a1": {"take": "quail-wash-2", "feet": (620, 800), "top": 100, "tall": 235, "gap": 58, "phoneTall": 190, "phoneGap": 42},
+    "a2": {"take": "quail-ink-2", "feet": (620, 800), "top": 150, "tall": 210, "gap": 49, "phoneTall": 165, "phoneGap": 33},
+    "c1": {"take": "bear-wash-2", "feet": (560, 810), "top": 160, "tall": 230, "gap": 78, "phoneTall": 140, "phoneGap": 49},
+    "c2": {"take": "bear-ink-2", "feet": (600, 800), "top": 235, "tall": 230, "gap": 94, "phoneTall": 122, "phoneGap": 47},
 }
 PAGES = {"home": "/", "science": "/science"}
 SIZES = {"desktop": (1440, 900), "phone": (390, 844)}

@@ -42,3 +42,11 @@ right of the sign, all in the sign's `--k`), and shoots the homepage and Science
 390 x 844; on phones each keeps the sign at seven lines. `make_animals_mockup.py` cuts the shots
 and writes `../mockups/footer-crane/animals/footer-animal.html` (Artifact
 https://claude.ai/artifact/EHcCHzYJaB9jpPDvAhAKLb). Claude's pick: A.
+
+Round 2 (Mo, the same day: the quail and the bear cub "a little more painting like"), on the same
+page as version 2: each painted fresh in two hands Mo already picked for the homepage, 1 the
+hummingbird's few wet washes (`home-california/originals/allens-few-1.png`) and 2 the Big Sur
+close's ink and wash (`home-purpose/originals/ink-long-1.png`). A first try with the picked take as
+a layout reference copied its outlines and speckle (archived); the keepers had the hand alone and
+the animal and pose in words: `quail-wash-2` (A1), `quail-ink-2` (A2), `bear-wash-2` (C1),
+`bear-ink-2` (C2). Claude's pick: A1.

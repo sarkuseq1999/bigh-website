@@ -3,8 +3,13 @@ animal stands by the FDA park sign in place of the red-crowned crane. Cuts the s
 shoot_animals.py took into laptop, phone and close-up pictures and writes
 reference/ink-pages/mockups/footer-crane/animals/footer-animal.html.
 
-usage: python -X utf8 reference/ink-pages/footer-crane/make_animals_mockup.py
+Round 2 (Mo, November 3: the quail and the bear cub "a little more painting like") replaces the
+page with each of them painted two ways.
+
+usage: python -X utf8 reference/ink-pages/footer-crane/make_animals_mockup.py [1 | 2]
 """
+
+import sys
 
 from pathlib import Path
 
@@ -37,6 +42,55 @@ CHOICES = [
         "pick": False,
         "what": "A young black bear, the kind that lives in California's state parks. A bear stands on the state flag. It sniffs the poppy.",
         "note": "The biggest and darkest of the three: it pulls your eye away from the sign. A bear by a park sign can also read as a warning.",
+    },
+]
+
+
+# Round 2: per animal, last round's close-up, then the two new hands.
+ROUND2 = [
+    {
+        "title": "A, the quail",
+        "before": "a",
+        "takes": [
+            {
+                "key": "a1",
+                "name": "Wet wash",
+                "score": "9",
+                "pick": True,
+                "what": "A few soft wet washes and no outlines, like the hummingbird at the top of the homepage. The most painted of the four.",
+                "note": "Softer and paler than before, so it sits quietly next to the dark sign.",
+            },
+            {
+                "key": "a2",
+                "name": "Ink and wash",
+                "score": "8.5",
+                "pick": False,
+                "what": "Brush lines with pale colour laid over them, like the Big Sur painting at the end of the homepage. Their legs and feet show.",
+                "note": "A little more drawn than A1; up close, the fine lines around the eyes are busy.",
+            },
+        ],
+    },
+    {
+        "title": "C, the bear cub",
+        "before": "c",
+        "takes": [
+            {
+                "key": "c1",
+                "name": "Wet wash",
+                "score": "8.5",
+                "pick": False,
+                "what": "Soft brown washes, like the hummingbird. It reads as a grizzly cub, the bear on California's flag.",
+                "note": "Softer and lighter than before, so it pulls less on your eye; still the biggest thing in the footer, and its body is a little long.",
+            },
+            {
+                "key": "c2",
+                "name": "Ink and wash",
+                "score": "7",
+                "pick": False,
+                "what": "Bold black ink with bare paper left as the light, like the Big Sur painting.",
+                "note": "At footer size the bare patches on its back look like markings, like a badger.",
+            },
+        ],
     },
 ]
 
@@ -128,6 +182,65 @@ def section(c):
 """
 
 
+def section2(c):
+    k = c["key"]
+    tag = '<span class="tag">My pick</span>' if c["pick"] else ""
+    return f"""  <section class="choice" aria-labelledby="{k}-name">
+    <div class="head">
+      <span class="letter">{k.upper()}</span>
+      <h2 id="{k}-name">{c["name"]}</h2>
+      <span class="score">{c["score"]} / 10</span>
+      {tag}
+    </div>
+    <p class="what">{c["what"]}</p>
+    <p class="note">{c["note"]}</p>
+    <div class="shots">
+      <figure><img src="{k}-laptop.jpg" alt="{c["name"]} by the park sign, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="{k}-phone.jpg" alt="{c["name"]} by the park sign, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+    <figure><img src="{k}-close.jpg" alt="{c["name"]}, close-up"><figcaption>Close-up, full size</figcaption></figure>
+  </section>
+"""
+
+
+def main2():
+    keys = [g["before"] for g in ROUND2] + [t["key"] for g in ROUND2 for t in g["takes"]]
+    for key in keys:
+        shots(key)
+    body = ""
+    for g in ROUND2:
+        b = g["before"]
+        body += f"""  <section class="scene" aria-labelledby="{b}-scene">
+    <h2 id="{b}-scene" class="scene-title">{g["title"]}</h2>
+    <figure class="before"><img src="{b}-close.jpg" alt="Last round's {g["title"]}, close-up"><figcaption>Last round, close-up</figcaption></figure>
+  </section>
+{"".join(section2(t) for t in g["takes"])}"""
+    css = CSS + """  .scene { display: grid; gap: 12px; padding-top: 34px; border-top: 3px solid var(--ink); }
+  .scene-title { font-size: clamp(30px, 5vw, 42px); }
+  .before { width: min(100%, 640px); }
+"""
+    html = f"""<title>Footer Animal by the Sign</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;650&display=swap">
+<style>{css}</style>
+<main>
+  <header class="intro">
+    <h1>The quail and the bear, as paintings</h1>
+    <p>You asked for the quail and the bear cub to look more like paintings. Each is painted again two ways, in the two hands you already picked for the homepage, and laid on the real footer. The sign, its poppy and the words stay.</p>
+    <ul>
+      <li><b>1, wet wash:</b> a few soft wet washes, like the hummingbird at the top of the homepage.</li>
+      <li><b>2, ink and wash:</b> brush lines with pale colour over them, like the Big Sur painting at its end.</li>
+      <li>On a phone the sign keeps its seven lines. B, the tortoise, is as it was.</li>
+    </ul>
+  </header>
+{body}</main>
+"""
+    (OUT / "footer-animal.html").write_text(html, encoding="utf-8", newline="\n")
+    print("wrote", OUT / "footer-animal.html")
+
+
 def main():
     for key in ["now"] + [c["key"] for c in CHOICES]:
         shots(key)
@@ -161,4 +274,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main2() if sys.argv[1:] == ["2"] or not sys.argv[1:] else main()
