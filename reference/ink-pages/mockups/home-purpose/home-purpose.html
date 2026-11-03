@@ -42,6 +42,8 @@
   .intro { display: grid; gap: 12px; }
   .intro p { color: var(--ink-soft); font-size: 18px; }
   .today { width: min(100%, 560px); }
+  .scene { display: grid; gap: 12px; padding-top: 34px; border-top: 3px solid var(--ink); }
+  .scene-title { font-size: clamp(30px, 5vw, 42px); }
   .choice { display: grid; gap: 14px; padding-top: 26px; border-top: 1px solid var(--rule); }
   .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
   .letter { font-family: var(--title); font-size: clamp(44px, 7vw, 60px); line-height: 0.8; color: var(--gold); font-weight: 650; }
@@ -60,49 +62,80 @@
 </style>
 <main>
   <header class="intro">
-    <h1>Big Sur, painted richer</h1>
-    <p>You found the live ending a little simple next to the old pine painting. These three are painted at the old one's level: deep layers fading into the haze, gold evening light, fine brushwork up close. Each is laid on the real homepage; the words, the gold sun and the pelicans stay.</p>
+    <h1>Big Sur, as paintings</h1>
+    <p>You found 1 and 3 more like photos than paintings. Here are the same two places, painted two looser ways. Each is laid on the real homepage; the words, the gold sun and the pelicans stay.</p>
+    <ul>
+      <li><b>A, loose watercolour:</b> big wet washes, bare paper left as the light.</li>
+      <li><b>B, ink and wash:</b> drawn with an ink brush like the old pine painting, light colour over it.</li>
+      <li>Each has a close-up beside today's, so you can see the brushwork.</li>
+    </ul>
   </header>
-  <section class="choice" aria-labelledby="rich-long-name">
-    <div class="head">
-      <span class="letter">1</span>
-      <h2 id="rich-long-name">The long view down the coast</h2>
-      <span class="score">9 / 10</span>
-      <span class="tag">My pick</span>
-    </div>
-    <p class="what">The couple and their dog on the cliff-top trail, headland after headland fading into the evening haze, Bixby Bridge small in the middle, the sun's path glittering on the sea.</p>
-    <p class="note">The depth and light of the old painting, and the bridge says Big Sur at once. On a phone the painting is shown smaller, so both the walkers and the sun fit.</p>
-    <div class="shots">
-      <figure><img src="rich-long-laptop.jpg" alt="The long view down the coast on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
-      <figure><img src="rich-long-phone.jpg" alt="The long view down the coast on the homepage, phone"><figcaption>Phone</figcaption></figure>
-    </div>
+  <section class="scene" aria-labelledby="scene-1">
+    <h2 id="scene-1" class="scene-title">1, the long view</h2>
+    <figure class="now"><img src="rich-long-close.jpg" alt="Today's 1, the long view, close-up"><figcaption>Today, close-up: sharp like a photo</figcaption></figure>
   </section>
-  <section class="choice" aria-labelledby="rich-same-name">
+  <section class="choice" aria-labelledby="wash-long-name">
     <div class="head">
-      <span class="letter">2</span>
-      <h2 id="rich-same-name">Today's view, painted richer</h2>
+      <span class="letter">1A</span>
+      <h2 id="wash-long-name">Loose watercolour</h2>
       <span class="score">8.5 / 10</span>
       
     </div>
-    <p class="what">The scene that is live now, repainted: more coast behind it, gold light on the cliffs, long swells and glitter on the sea.</p>
-    <p class="note">Much richer than today's, but nothing in it you would remember on its own.</p>
+    <p class="what">Big wet washes, white paper left for the surf and the light. The most painted of the four.</p>
+    <p class="note">Bolder colour than the rest of the site, and the near cliff's purple shadows are heavy.</p>
     <div class="shots">
-      <figure><img src="rich-same-laptop.jpg" alt="Today's view, painted richer on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
-      <figure><img src="rich-same-phone.jpg" alt="Today's view, painted richer on the homepage, phone"><figcaption>Phone</figcaption></figure>
+      <figure><img src="wash-long-laptop.jpg" alt="Loose watercolour on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="wash-long-phone.jpg" alt="Loose watercolour on the homepage, phone"><figcaption>Phone</figcaption></figure>
     </div>
+    <figure><img src="wash-long-close.jpg" alt="Loose watercolour, close-up of the brushwork"><figcaption>Close-up, full size</figcaption></figure>
   </section>
-  <section class="choice" aria-labelledby="rich-falls-name">
+  <section class="choice" aria-labelledby="ink-long-name">
     <div class="head">
-      <span class="letter">3</span>
-      <h2 id="rich-falls-name">McWay Falls</h2>
+      <span class="letter">1B</span>
+      <h2 id="ink-long-name">Ink and wash</h2>
       <span class="score">9 / 10</span>
+      <span class="tag">My pick</span>
+    </div>
+    <p class="what">Drawn with an ink brush, light colour laid over it: the old pine painting's way of painting, now Big Sur.</p>
+    <p class="note">Calm, so the gold sun leads. Up close, the grass is still a little busy.</p>
+    <div class="shots">
+      <figure><img src="ink-long-laptop.jpg" alt="Ink and wash on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="ink-long-phone.jpg" alt="Ink and wash on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+    <figure><img src="ink-long-close.jpg" alt="Ink and wash, close-up of the brushwork"><figcaption>Close-up, full size</figcaption></figure>
+  </section>
+  <section class="scene" aria-labelledby="scene-3">
+    <h2 id="scene-3" class="scene-title">3, McWay Falls</h2>
+    <figure class="now"><img src="rich-falls-close.jpg" alt="Today's 3, McWay Falls, close-up"><figcaption>Today, close-up: sharp like a photo</figcaption></figure>
+  </section>
+  <section class="choice" aria-labelledby="wash-falls-name">
+    <div class="head">
+      <span class="letter">3A</span>
+      <h2 id="wash-falls-name">Loose watercolour</h2>
+      <span class="score">8.5 / 10</span>
       
     </div>
-    <p class="what">From the trail you look down on Big Sur's waterfall dropping onto a little beach, a turquoise cove and rocks, the coast fading behind.</p>
-    <p class="note">The most "wow", and a real Big Sur landmark. But the cove's rocks make the foot busier, and the waterfall is small at laptop size.</p>
+    <p class="what">Soft wet washes; the waterfall is one stroke of white paper.</p>
+    <p class="note">Gentle and calm. The near hill's texture is a little blotchy up close.</p>
     <div class="shots">
-      <figure><img src="rich-falls-laptop.jpg" alt="McWay Falls on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
-      <figure><img src="rich-falls-phone.jpg" alt="McWay Falls on the homepage, phone"><figcaption>Phone</figcaption></figure>
+      <figure><img src="wash-falls-laptop.jpg" alt="Loose watercolour on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="wash-falls-phone.jpg" alt="Loose watercolour on the homepage, phone"><figcaption>Phone</figcaption></figure>
     </div>
+    <figure><img src="wash-falls-close.jpg" alt="Loose watercolour, close-up of the brushwork"><figcaption>Close-up, full size</figcaption></figure>
+  </section>
+  <section class="choice" aria-labelledby="ink-falls-name">
+    <div class="head">
+      <span class="letter">3B</span>
+      <h2 id="ink-falls-name">Ink and wash</h2>
+      <span class="score">8.5 / 10</span>
+      
+    </div>
+    <p class="what">The same cove drawn in ink, with dark brushed rocks and light colour.</p>
+    <p class="note">Strong, but the dark rocks make the bottom of the picture busy.</p>
+    <div class="shots">
+      <figure><img src="ink-falls-laptop.jpg" alt="Ink and wash on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="ink-falls-phone.jpg" alt="Ink and wash on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+    <figure><img src="ink-falls-close.jpg" alt="Ink and wash, close-up of the brushwork"><figcaption>Close-up, full size</figcaption></figure>
   </section>
 </main>

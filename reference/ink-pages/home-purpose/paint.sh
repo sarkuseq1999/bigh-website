@@ -10,7 +10,7 @@ LOGS="$HERE/plates/logs"
 CA="$HERE/../home-california/originals"
 mkdir -p "$LOGS" "$HERE/originals"
 names=("$@")
-[ ${#names[@]} -eq 0 ] && names=(rich-long-2 rich-same-1 rich-falls-1)
+[ ${#names[@]} -eq 0 ] && names=(wash-long-1 wash-falls-1 ink-long-1 ink-falls-1)
 for name in "${names[@]}"; do
   ref=(-i "$CA/sequoia-2-clear-1.png")
   [[ "$name" == pelicans-* ]] && ref+=(-i "$CA/allens-few-body-1.png")
@@ -21,6 +21,13 @@ for name in "${names[@]}"; do
   # Mo (November 2, live): the coast walk "looks a little bit simple" next to the old pine painting;
   # richer Big Sur paintings, the old painting as the reference for finish only.
   [[ "$name" == rich-* ]] && ref=(-i "$HERE/../../home-v2/ink/plates/purpose.png" -i "$HERE/originals/coast-walk-1.png")
+  # Mo (November 2, on the two richer closes live): "more picture like"; the same two scenes
+  # painted loosely. The rich painting gives only place and layout; the hand is the old flying
+  # crane (wash-*) or the old pine painting's ink (ink-*).
+  [[ "$name" == wash-long-* || "$name" == ink-long-* ]] && ref=(-i "$HERE/originals/rich-long-2.png")
+  [[ "$name" == wash-falls-* || "$name" == ink-falls-* ]] && ref=(-i "$HERE/originals/rich-falls-1.png")
+  [[ "$name" == wash-* ]] && ref+=(-i "$HERE/../../home-v2/ink/originals/gpt25-crane-paint-a.png")
+  [[ "$name" == ink-* ]] && ref+=(-i "$HERE/../../home-v2/ink/plates/purpose.png")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/$name.txt and follow it exactly. Use your built-in image generation tool to make exactly ONE picture (landscape 1536x1024). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \

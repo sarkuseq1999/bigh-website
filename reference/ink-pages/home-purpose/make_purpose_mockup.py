@@ -1,11 +1,13 @@
 """Part 4's page for Mo (October 30 - November 2, 2026): three California closing paintings for "Our
 purpose is simple. Help you live fully.", each shot on the live homepage by shoot_purpose.py.
 
-    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py [2 | 3]
+    python -X utf8 reference/ink-pages/home-purpose/make_purpose_mockup.py [2 | 3 | 4]
 
 Round 2 (November 2): Mo tried A and B live and found the walk on the ridge doesn't give the vibe
 of California; three more Californian walks. Round 3 (November 2): the coast walk, live, looked
 "a little bit simple" next to the old pine painting; three richer Big Sur paintings.
+Round 4 (November 2): Mo tried 1 and 3 live and found them "more picture like"; each painted
+two looser ways, with a close-up of the brushwork beside today's.
 
 Out: reference/ink-pages/mockups/home-purpose/ (home-purpose.html and its pictures).
 """
@@ -17,6 +19,7 @@ from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 SHOTS = HERE / "plates" / "shots"
+CUT = HERE / "plates" / "cut"
 OUT = HERE.parent / "mockups" / "home-purpose"
 
 LOOKS = [
@@ -122,6 +125,113 @@ INTRO3 = """<header class="intro">
   </header>"""
 
 
+# Round 4: per scene, today's close-up, then its two painted takes (A loose watercolour, B ink and
+# wash). Filled in from the shots once the paintings are in.
+ROUND4 = [
+    {
+        "scene": "1",
+        "title": "1, the long view",
+        "now": "rich-long",
+        "takes": [
+            {
+                "key": "wash-long",
+                "letter": "1A",
+                "name": "Loose watercolour",
+                "score": "8.5 / 10",
+                "pick": False,
+                "what": "Big wet washes, white paper left for the surf and the light. The most painted of the four.",
+                "note": "Bolder colour than the rest of the site, and the near cliff's purple shadows are heavy.",
+            },
+            {
+                "key": "ink-long",
+                "letter": "1B",
+                "name": "Ink and wash",
+                "score": "9 / 10",
+                "pick": True,
+                "what": "Drawn with an ink brush, light colour laid over it: the old pine painting's way of painting, now Big Sur.",
+                "note": "Calm, so the gold sun leads. Up close, the grass is still a little busy.",
+            },
+        ],
+        "box": (450, 560, 1750, 1120),
+    },
+    {
+        "scene": "3",
+        "title": "3, McWay Falls",
+        "now": "rich-falls",
+        "takes": [
+            {
+                "key": "wash-falls",
+                "letter": "3A",
+                "name": "Loose watercolour",
+                "score": "8.5 / 10",
+                "pick": False,
+                "what": "Soft wet washes; the waterfall is one stroke of white paper.",
+                "note": "Gentle and calm. The near hill's texture is a little blotchy up close.",
+            },
+            {
+                "key": "ink-falls",
+                "letter": "3B",
+                "name": "Ink and wash",
+                "score": "8.5 / 10",
+                "pick": False,
+                "what": "The same cove drawn in ink, with dark brushed rocks and light colour.",
+                "note": "Strong, but the dark rocks make the bottom of the picture busy.",
+            },
+        ],
+        "box": (500, 560, 1800, 1120),
+    },
+]
+
+INTRO4 = """<header class="intro">
+    <h1>Big Sur, as paintings</h1>
+    <p>You found 1 and 3 more like photos than paintings. Here are the same two places, painted two looser ways. Each is laid on the real homepage; the words, the gold sun and the pelicans stay.</p>
+    <ul>
+      <li><b>A, loose watercolour:</b> big wet washes, bare paper left as the light.</li>
+      <li><b>B, ink and wash:</b> drawn with an ink brush like the old pine painting, light colour over it.</li>
+      <li>Each has a close-up beside today's, so you can see the brushwork.</li>
+    </ul>
+  </header>"""
+
+
+def close_up(key, name, box):
+    """A full-size piece of the painting itself (plates/cut), to judge its brushwork."""
+    im = Image.open(CUT / f"{key}.png").convert("RGB").crop(box)
+    im.save(OUT / name, "JPEG", quality=86, optimize=True)
+
+
+def take4(look, box):
+    k = look["key"]
+    jpg(SHOTS / f"{k}-1440.png", f"{k}-laptop.jpg", 1500)
+    jpg(SHOTS / f"{k}-390.png", f"{k}-phone.jpg", 620)
+    close_up(k, f"{k}-close.jpg", box)
+    tag = '<span class="tag">My pick</span>' if look["pick"] else ""
+    return f"""<section class="choice" aria-labelledby="{k}-name">
+    <div class="head">
+      <span class="letter">{look['letter']}</span>
+      <h2 id="{k}-name">{look['name']}</h2>
+      <span class="score">{look['score']}</span>
+      {tag}
+    </div>
+    <p class="what">{look['what']}</p>
+    <p class="note">{look['note']}</p>
+    <div class="shots">
+      <figure><img src="{k}-laptop.jpg" alt="{look['name']} on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="{k}-phone.jpg" alt="{look['name']} on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+    <figure><img src="{k}-close.jpg" alt="{look['name']}, close-up of the brushwork"><figcaption>Close-up, full size</figcaption></figure>
+  </section>"""
+
+
+def scene4(group):
+    box = group["box"]
+    close_up(group["now"], f"{group['now']}-close.jpg", box)
+    head = f"""<section class="scene" aria-labelledby="scene-{group['scene']}">
+    <h2 id="scene-{group['scene']}" class="scene-title">{group['title']}</h2>
+    <figure class="now"><img src="{group['now']}-close.jpg" alt="Today's {group['title']}, close-up"><figcaption>Today, close-up: sharp like a photo</figcaption></figure>
+  </section>"""
+    return "\n  ".join([head] + [take4(look, look.get("box", box)) for look in group["takes"]])
+
+
 def jpg(src, name, width):
     im = Image.open(src).convert("RGB")
     if im.width > width:
@@ -194,6 +304,8 @@ PAGE = """<title>Our Purpose Painting</title>
   .intro { display: grid; gap: 12px; }
   .intro p { color: var(--ink-soft); font-size: 18px; }
   .today { width: min(100%, 560px); }
+  .scene { display: grid; gap: 12px; padding-top: 34px; border-top: 3px solid var(--ink); }
+  .scene-title { font-size: clamp(30px, 5vw, 42px); }
   .choice { display: grid; gap: 14px; padding-top: 26px; border-top: 1px solid var(--rule); }
   .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
   .letter { font-family: var(--title); font-size: clamp(44px, 7vw, 60px); line-height: 0.8; color: var(--gold); font-weight: 650; }
@@ -228,6 +340,11 @@ PAGE = """<title>Our Purpose Painting</title>
 
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
+    if sys.argv[1:] == ["4"]:
+        page = PAGE.split("<main>")[0] + "<main>\n  " + INTRO4 + "\n  __CHOICES__\n</main>\n"
+        html = page.replace("__CHOICES__", "\n  ".join(scene4(group) for group in ROUND4))
+        (OUT / "home-purpose.html").write_text(html, encoding="utf-8", newline="\n")
+        return
     if sys.argv[1:] == ["3"]:
         page = PAGE.split("<main>")[0] + "<main>\n  " + INTRO3 + "\n  __CHOICES__\n</main>\n"
         html = page.replace("__CHOICES__", "\n  ".join(choice(look) for look in ROUND3))

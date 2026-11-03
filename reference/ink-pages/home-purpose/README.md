@@ -24,6 +24,16 @@ as the reference for finish only (`_style_rich.txt`; each sun on its own glitter
 1 the long view down the coast with Bixby Bridge 9 (my pick), 2 today's view painted richer 8.5,
 3 McWay Falls 9.
 
+Mo tried 1 and 3 live (`/home-1`, `/home-3`, main `648e44d`) and found them "more picture like"
+(November 2): they read as photos with a watercolour filter. Round 4 (same page, v4), the same two
+places painted loosely: fresh Codex paintings with the round-3 painting as place and layout only.
+A, a loose watercolour (the old flying crane as the hand; `wash-*`), B, ink and wash (the old pine
+painting's ink as the hand; `ink-*`). 1A 8.5, 1B 9 (my pick), 3A 8.5 (the first take's hills came
+out bright orange and fought the gold sun; `wash-falls-2` asks for calm colours), 3B 8.5. The page
+shows a full-size close-up of each beside today's.
+Codex could not decode the crane picture for the McWay Falls watercolours ("Unknown filter method"
+in `plates/logs/`), so `wash-falls-2` follows the words and the round-3 painting only.
+
 Unused takes: `bigh-archive/home-purpose/`.
 
 When building: `purposePainting`, `purposeCranes` and `gold.purpose` in `assets.ts`; their tinted

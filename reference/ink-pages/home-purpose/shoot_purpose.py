@@ -55,6 +55,14 @@ SCENES = {
     "rich-long": {"take": "rich-long-2", "y": 180, "horizon": 659, "birds": True, "sun_x": 0.839, "phone": (150, 0.23)},
     "rich-same": {"take": "rich-same-1", "y": 180, "horizon": 639, "birds": True, "sun_x": 0.827, "phone": (155, 0.24)},
     "rich-falls": {"take": "rich-falls-1", "y": 150, "horizon": 603, "birds": True, "sun_x": 0.82, "phone": (150, 0.21)},
+    # Round 4 (Mo, November 2, on 1 and 3 live: "more picture like"): the same two places painted
+    # loosely, A a loose watercolour (wash-*), B ink and wash (ink-*). Crops keep the land's top
+    # at about 37% of the plate, as before.
+    "wash-long": {"take": "wash-long-1", "y": 159, "horizon": 661, "birds": True, "sun_x": 0.845, "phone": (140, 0.18)},
+    "ink-long": {"take": "ink-long-1", "y": 178, "horizon": 670, "birds": True, "sun_x": 0.841, "phone": (150, 0.225)},
+    # wash-falls-1's hills came out bright orange, fighting the gold sun: a calmer second take.
+    "wash-falls": {"take": "wash-falls-2", "y": 154, "horizon": 610, "birds": True, "sun_x": 0.82, "phone": (150, 0.205)},
+    "ink-falls": {"take": "ink-falls-1", "y": 149, "horizon": 604, "birds": True, "sun_x": 0.818, "phone": (145, 0.18)},
 }
 BIRDS = {"take": "pelicans-2", "left": 0.52, "top": 0.43, "width": 0.17}
 HIDDEN = 0.38  # how much of the plate lies under the statement on a phone (its sky)
