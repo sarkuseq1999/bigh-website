@@ -5,7 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 2, 2026, by Claude Code (the homepage's close: Mo picked 1B, the long
+- **Last updated:** November 3, 2026, by Claude Code (the footer's painting by the park sign: Mo
+  picked A1, two California quail in a few wet washes, in place of the crane at rest; built on
+  `studio`, not live; the homepage's close: Mo picked 1B, the long
   view down the Big Sur coast in ink and wash, the close on `/`, test pages `/home-1` and `/home-3`
   removed; live as `main` `1e5aba5`, production `dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`, demo alias on
   it; the homepage's "Good questions" picture: a
@@ -76,7 +78,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   (artifact `EHcCHzYJaB9jpPDvAhAKLb`, `reference/ink-pages/footer-crane/README.md`): A California
   quail, B desert tortoise, C black bear cub, each looking at the sign's poppy; Mo asked for the
   quail and the bear more painting-like: round 2 (version 2) paints each in a wet wash (A1, C1) and
-  in ink and wash (A2, C2); waiting for Mo's pick.
+  in ink and wash (A2, C2); Mo picked A1, the wet-wash quail: built on `studio` November 3
+  (`quail-sign-v1.webp` from `build_footer_quail.py`, one picture on every page with no "green
+  spring" twin; `closing-quail.tsx` replaced `closing-crane.tsx`; `.look .rest` 235 tall and 58
+  right of the sign, phones 190 and 42 and inside the column, so the sign keeps seven lines at
+  390 px and eight at 360; `qa_fda` and `qa_home_ink` expect the quail); built site footer
+  248/248, homepage 286/286, menu 326/326, About 403, NuriCell 457, Propolis 273, OPC 199, Science
+  633, Support 341, Turmerific 155, Nature Calm 158/159 (the buy scene's front-layer pixel check
+  on a phone: a flaky race at the lavender painting's edges, failing about 1 run in 8 on the live
+  code built locally too; live demo 159/159); not live, waiting for Mo's yes. The crane's
+  pictures (`crane-poppy-v1.webp` and its spring twin) stay in `public/` unused; the phone menu
+  keeps its crane (`crane-rest-v2.webp`).
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition

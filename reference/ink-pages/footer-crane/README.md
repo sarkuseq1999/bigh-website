@@ -50,3 +50,14 @@ close's ink and wash (`home-purpose/originals/ink-long-1.png`). A first try with
 a layout reference copied its outlines and speckle (archived); the keepers had the hand alone and
 the animal and pose in words: `quail-wash-2` (A1), `quail-ink-2` (A2), `bear-wash-2` (C1),
 `bear-ink-2` (C2). Claude's pick: A1.
+
+Built (Mo picked A1, November 3, 2026): `build_footer_quail.py` divides the paper out of
+`originals/quail-wash-2.png`, trims it to its paint and saves
+`public/images/home-v2/ink/quail-sign-v1.webp` (800 x 558, one picture for every page: the quail
+carry their own thin colour, so no "green spring" twin), with the measurements `.look .rest`
+places it by (feet 0.65 talls from its left edge, 0.19 above its bottom edge; 235 tall and 58 right
+of the sign on desktop, 190 and 42 on phones, all in the sign's `--k`). On phones the quail stay
+inside the column (the crane's tail reached into the margin; the quail's would touch the window's
+edge), so the sign keeps seven lines at 390 px and eight at 360. The crane's pictures
+(`crane-poppy-v1.webp` and its spring twin) are no longer shown; `build_footer_crane.py` still
+rebuilds them.
