@@ -373,31 +373,32 @@
   }
 }
 
-/* The crane at rest, the page's last painting, at the end of the trail: in the grass at the FDA
-   park sign's right, bending toward the sign's poppy (Mo picked C, October 26, 2026). It answers
-   the crane in flight at the top and blooms in as the page arrives. It is the sign's flex item
-   (fda-statement.tsx), sized and placed in the sign's own measure, --k CSS px per sign-picture px
-   (the posts stand 407 tall): --tall from its feet to its crown, its feet --gap right of the
-   sign, on the sign's ground (62.5 above the paragraph's bottom edge). Its picture's feet are
-   1.14 talls in from its left edge and 0.15 above its bottom edge (build_footer_crane.py). The
-   sign and the crane are centred together; on a phone the sign narrows to give it room. */
+/* The page's last painting, at the end of the trail: two California quail in the grass at the FDA
+   park sign's right, one keeping watch, the other bending toward the sign's poppy (Mo picked A1,
+   November 3, 2026; they replaced the crane at rest, which read as Chinese). They bloom in as the
+   page arrives. The picture is the sign's flex item (fda-statement.tsx), sized and placed in the
+   sign's own measure, --k CSS px per sign-picture px (the posts stand 407 tall): --tall from the
+   birds' feet to the watching bird's plume, their feet --gap right of the sign, on the sign's
+   ground (62.5 above the paragraph's bottom edge). The picture's feet are 0.65 talls in from its
+   left edge and 0.19 above its bottom edge (build_footer_quail.py). The sign and the quail are
+   centred together; on a phone the sign narrows to give them room. */
 .look .rest {
-  --tall: calc(250px * var(--k));
-  --gap: calc(208px * var(--k));
+  --tall: calc(235px * var(--k));
+  --gap: calc(58px * var(--k));
   flex: none;
   align-self: flex-end;
-  width: calc(var(--tall) * 2.0217);
-  height: calc(var(--tall) * 1.1693);
-  margin: 0 0 calc(62.5px * var(--k) - var(--tall) * 0.1506) calc(var(--gap) - var(--tall) * 1.1398);
+  width: calc(var(--tall) * 1.7214);
+  height: calc(var(--tall) * 1.2);
+  margin: 0 0 calc(62.5px * var(--k) - var(--tall) * 0.1886) calc(var(--gap) - var(--tall) * 0.6529);
 }
 
-/* Phones: it stands smaller and nearer the sign, so the sign keeps most of its width; its tail
-   and faded grass may reach into the page's margin. */
+/* Phones: they stand smaller and nearer the sign, so the sign keeps its seven lines, and inside
+   the column (the crane's tail reached into the page's margin; the quail's would touch the
+   window's edge). */
 @media (max-width: 720px) {
   .look .rest {
-    --tall: calc(183px * var(--k));
-    --gap: calc(117px * var(--k));
-    margin-right: calc(-1 * var(--gutter));
+    --tall: calc(190px * var(--k));
+    --gap: calc(42px * var(--k));
   }
 }
 

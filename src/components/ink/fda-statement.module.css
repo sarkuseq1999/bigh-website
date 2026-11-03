@@ -11,8 +11,8 @@
    plank solid; the same picture serves phones.
 
    A footer may set --k (the sign's scale) and --sign-size (the words' size) where its room is
-   short, and may stand a painting in the grass at the sign's right (the crane at rest, Mo,
-   October 26, 2026): a flex item after the paragraph, centred with the sign, which places itself
+   short, and may stand a painting in the grass at the sign's right (the quail, Mo,
+   November 3, 2026): a flex item after the paragraph, centred with the sign, which places itself
    in the sign's measure (--k) and narrows the sign on a phone (ink.module.css, `.look .rest`).
    Rules are scoped under .fda (two classes) so the pages' shared `p` rules cannot win on the
    built site's stylesheet order. */

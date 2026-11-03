@@ -9,7 +9,7 @@ import styles from "./fda-statement.module.css";
 // the paragraph's border (fda-statement.module.css), so the words stay real text: read aloud,
 // translated, and fitted by the browser. Only the sign's face stretches around them; the posts, the
 // grass and the oak keep their shape. The parent footer places it (margins), and may stand a
-// painting in the grass at the sign's right (`beside`: the crane at rest, Mo, October 26, 2026).
+// painting in the grass at the sign's right (`beside`: the quail, Mo, November 3, 2026).
 export const FDA_STATEMENT =
   "These statements have not been evaluated by the Food and Drug Administration. This product is not intended to diagnose, treat, cure, or prevent any disease.";
 

@@ -210,16 +210,21 @@ These sit on top of `DESIGN.md`.
   top right; on phones Back to top above, © last). The grey preview note that sat under the sign
   ("Educational content is for general information…") is gone; the product window still says
   ordering is not open.
-- **Footer: the crane by the park sign (Mo picked C, October 26, 2026).** Mo asked for better
-  ideas for "Stay sharp. Live fully." and its crane, picked B, "end of the trail", then pose C of
-  three Codex paintings (A reading the sign, B on one leg): the crane leaves the promise and
-  stands in the grass at the FDA park sign's right, bending toward the sign's California poppy;
-  the promise stands alone, a size smaller. Red crown on the homepage, gold elsewhere. On phones
-  the sign narrows for it (about seven lines; a little smaller under 390 px). The homepage's
-  brush line still ends as a stroke under the words. `closing-crane.tsx`, `ink.module.css`
-  (`.look .rest`), `fda-statement.tsx`; picture
-  `reference/ink-pages/footer-crane/build_footer_crane.py`. Mockups:
-  `reference/ink-pages/mockups/footer-crane/`.
+- **Footer: two California quail by the park sign (Mo picked A1, November 3, 2026).** On
+  October 26 Mo asked for better ideas for "Stay sharp. Live fully." and its crane and picked B,
+  "end of the trail" (pose C): the painting leaves the promise and stands in the grass at the FDA
+  park sign's right, looking at the sign's California poppy; the promise stands alone, a size
+  smaller. On November 3 the red-crowned crane there read as Chinese, like the opening's crane
+  and the old close's cranes. Of three California animals (A California quail, the state bird; B
+  a desert tortoise; C a black bear cub) he picked A, then asked for the quail "a little more
+  painting like" and picked A1 of two looser takes (A2 ink and wash): two quail painted in a few
+  wet washes in the opening hummingbird's hand, no outlines, one keeping watch, the other bending
+  toward the poppy. A painting with its own thin colour, the same on every page (no tinted twin).
+  On phones the sign narrows for it (seven lines at 390 px, about seven under 390) and the quail
+  stay inside the column. The homepage's brush line still ends as a stroke under the words.
+  `closing-quail.tsx`, `ink.module.css` (`.look .rest`), `fda-statement.tsx`; picture
+  `reference/ink-pages/footer-crane/build_footer_quail.py` (Codex paintings, `paint.sh`).
+  Mockups: `reference/ink-pages/mockups/footer-crane/` (`animals/` for the quail).
 - **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026).** Mo's
   colleagues loved the opening's watercolour and gold sun but said the whole read as
   Chinese, "made in China": the misty peaks with pines and the red-crowned crane. Of California
@@ -230,8 +235,9 @@ These sit on top of `DESIGN.md`.
   hummingbird (California's year-round hummingbird; for its size it burns energy faster than
   almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
   sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
-  **First screen only** (Mo, October 28): the crane stays in the footer by the park sign and the
-  phone menu (the closing painting's cranes left on November 2: "Homepage close", below). Built: the painting covers the whole opening
+  **First screen only** (Mo, October 28): the crane stays in the phone menu (the closing
+  painting's cranes left on November 2, "Homepage close", below; the footer's crane on November
+  3, "Footer: two California quail", above). Built: the painting covers the whole opening
   (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
   hummingbird in the crane's frame (Anna's as a still until October 29, below), the line pinned
   to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found

@@ -41,11 +41,13 @@ export const openingWings = {
   box: { left: 16.19, top: 14.174, width: 45.644, height: 76.931 },
 };
 
-/** The crane at rest in the footer, in the grass beside the FDA park sign, bending toward the
- *  sign's poppy (ink; Mo picked C, October 26, 2026). Painted by Codex in the flying crane's hand
- *  (reference/ink-pages/footer-crane, built by build_footer_crane.py); placed by its feet
- *  (ink.module.css, `.look .rest`). It replaced crane-rest-v2, which stood beside the promise. */
-export const cranePoppy: Picture = { src: `${I}/crane-poppy-v1.webp`, width: 800, height: 463 };
+/** Two California quail in the footer, in the grass beside the FDA park sign, one keeping watch,
+ *  one bending toward the sign's poppy (Mo picked A1, November 3, 2026). A few wet washes by
+ *  Codex in the opening hummingbird's hand, in their own thin colour on every page
+ *  (reference/ink-pages/footer-crane, built by build_footer_quail.py); placed by their feet
+ *  (ink.module.css, `.look .rest`). They replaced crane-poppy-v1, the crane at rest, which read as
+ *  Chinese. */
+export const quailSign: Picture = { src: `${I}/quail-sign-v1.webp`, width: 800, height: 558 };
 
 /** A country mailbox with its flag up in gold leaf, beside "Good questions deserve clear answers."
  *  (Mo picked A, October 30, 2026: the inkstone and brush read as Chinese). You send a question,

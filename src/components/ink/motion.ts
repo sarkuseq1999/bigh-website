@@ -92,7 +92,7 @@ export function useArrival(
  * soft edge as it enters the window, in the page's one breath (look-ink.module.css). The
  * opening's paintings are marked "waiting" from the server, so they bloom on arrival instead of
  * flashing; reduced motion shows everything at once. A painting marked [data-bloom-whole] (the
- * crane at rest, whose bloom is the page's arrival) waits until all of it is in the window.
+ * footer's quail, whose bloom is the page's arrival) waits until all of it is in the window.
  */
 export function useBloom(root: RefObject<HTMLElement | null>, motion: boolean) {
   useEffect(() => {

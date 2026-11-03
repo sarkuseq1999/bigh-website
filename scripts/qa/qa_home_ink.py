@@ -77,10 +77,10 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     of its own; October 13: no logo, the menu bar's mark is on screen; October 26: alone, a size
     smaller, 34 to 48 px on desktop, at the links' left, centred on their height; 30 to 36 on a
     phone, before the links), one sentence to a line, with no hairline over the footer (Mo,
-    October 13, 2026: fewer lines); the crane at rest (red-crowned) stands in the grass at the
-    FDA park sign's right, under its plank and inside the window (Mo picked C, October 26, 2026:
-    120 to 160 px tall on desktop, 60 to 90 on a phone), and blooms only once all of it is in the
-    window.
+    October 13, 2026: fewer lines); two California quail stand in the grass at the FDA park
+    sign's right, under its plank and inside the window (Mo picked A1, November 3, 2026, in place
+    of the crane at rest (Mo picked C, October 26), which read as Chinese: 120 to 160 px tall on
+    desktop, 60 to 90 on a phone), and bloom only once all of the picture is in the window.
   - three painting sizes (round 4, October 4): on two columns the cell in "Tiny power plants." is
     the page's biggest painting after the opening (wider than the science stage, which is at
     least 1.8 times the mailbox; a quarter smaller since October 12, the whole cell in the
@@ -1565,8 +1565,9 @@ def run(browser, look, mobile):
         end_progress > (0.6 if mobile else 0.85),
         f"progress {end_progress:.3f}",
     )
-    # Round 3: the crane at rest blooms only once all of it is in the window (its bloom is the
-    # page's arrival): half in view it still waits; at the page's end it has bloomed.
+    # Round 3: the closing painting (the quail by the sign since November 3) blooms only once all
+    # of it is in the window (its bloom is the page's arrival): half in view it still waits; at the
+    # page's end it has bloomed.
     crane_rest = "document.querySelector('footer [data-fda] img')"
     scroll_to(
         page,
@@ -1580,7 +1581,7 @@ def run(browser, look, mobile):
     scroll_to(page, page.evaluate("document.documentElement.scrollHeight"), 2600)
     end_bloom = page.evaluate(f"{crane_rest}.dataset.bloom")
     check(
-        f"{tag}: the crane at rest blooms once it is whole in the window",
+        f"{tag}: the quail by the sign bloom once the picture is whole in the window",
         half_bloom == "waiting" and end_bloom in ("in", "done"),
         f"half in view {half_bloom}, at the end {end_bloom}",
     )
@@ -1609,9 +1610,10 @@ def run(browser, look, mobile):
         rest_progress >= 0.999 and stroke > 40,
         f"progress {rest_progress:.3f}, ink under the promise {stroke}",
     )
-    # October 26, 2026 (Mo picked C): the crane left the promise for the FDA park sign; it stands
-    # in the grass at the sign's right (its picture just reaching back over the sign's end, its
-    # feet on the posts' ground), under the plank, inside the window, its crown red here.
+    # October 26, 2026 (Mo picked C): the crane left the promise for the FDA park sign; on
+    # November 3 (Mo picked A1) two California quail took its place: in the grass at the sign's
+    # right (their picture just reaching back over the sign's end, their feet on the posts'
+    # ground), under the plank, inside the window, the same painting as on every page.
     rest = page.evaluate(
         """(() => {
           const i = document.querySelector('footer [data-fda] img');
@@ -1619,16 +1621,16 @@ def run(browser, look, mobile):
           if (!i || !p) return null;
           const a = i.getBoundingClientRect(), b = p.getBoundingClientRect();
           const plank = b.bottom - parseFloat(getComputedStyle(p).borderBottomWidth);
-          return { loaded: i.complete && i.naturalWidth > 0, spring: /spring(%2F|\\/)crane-poppy/.test(i.currentSrc),
+          return { loaded: i.complete && i.naturalWidth > 0, quail: /ink(%2F|\\/)quail-sign-v1/.test(i.currentSrc),
                    over: Math.round(b.right - a.left), width: Math.round(a.width), above: Math.round(b.bottom - a.bottom),
                    underPlank: Math.round(a.top - plank), right: Math.round(innerWidth - a.right) };
         })()"""
     )
     check(
-        f"{tag}: the crane at rest stands in the grass at the park sign's right, red-crowned",
+        f"{tag}: the quail stand in the grass at the park sign's right",
         bool(rest)
         and rest["loaded"]
-        and rest["spring"]
+        and rest["quail"]
         and 0 < rest["over"] < 0.3 * rest["width"]
         and 0 <= rest["above"] <= 30
         and rest["underPlank"] >= 0
@@ -2593,7 +2595,7 @@ PAUSE = """(() => {
 def run_pause(browser):
     """Round 6: Ask BiGH Science is the page's one centred pause, on open paper; the brush line
     passes it in the margin; the phone has no empty band before the science; on a short laptop
-    window the last screen shows the whole crane at rest and the whole promise, clear of the
+    window the last screen shows the whole quail by the sign and the whole promise, clear of the
     header."""
     for size, mobile in (((1536, 1000), False), ((1440, 900), False), ((390, 844), True)):
         tag = f"pause {size[0]}"
@@ -2663,7 +2665,7 @@ def run_pause(browser):
                document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
         )
         check(
-            f"{tag}: the whole crane at rest (by the sign) and the whole promise, clear of the header",
+            f"{tag}: the whole quail (by the sign) and the whole promise, clear of the header",
             crane >= header + 8 and bottom <= 0 and promise >= header + 8,
             f"crane top {crane:.0f}, below the window {bottom:.0f}, promise top {promise:.0f}, header {header:.0f}",
         )

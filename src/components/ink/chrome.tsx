@@ -78,8 +78,8 @@ export function Sentences({ text }: { text: string }) {
 export function SiteFooter({
   closing,
 }: {
-  /** What the look closes on, standing in the grass beside the FDA park sign (the Ink look: its
-   *  crane at rest). */
+  /** What the look closes on, standing in the grass beside the FDA park sign (the Ink look: two
+   *  California quail). */
   closing?: ReactNode;
 } = {}) {
   const copy = useCopy();
@@ -140,10 +140,11 @@ export function SiteFooter({
   // here, the menu bar's mark is always on screen), and the links at the right; the FDA statement
   // on its park sign under them all, the look's closing picture standing in the grass at the
   // sign's right, at the end of the trail (Mo picked it, October 26, 2026: the crane left the
-  // promise, which stands alone, a size smaller); then the copyright line and "Back to top", the
-  // page's very last line (Mo, October 26, 2026; the preview note under the sign was dropped).
-  // No hairline over the footer (October 13, 2026: fewer lines). On one column: the promise, the
-  // links, the statement, the legal line.
+  // promise, which stands alone, a size smaller; on November 3, 2026 two California quail took
+  // its place); then the copyright line and "Back to top", the page's very last line (Mo,
+  // October 26, 2026; the preview note under the sign was dropped). No hairline over the footer
+  // (October 13, 2026: fewer lines). On one column: the promise, the links, the statement, the
+  // legal line.
   return (
     <footer className={styles.footer}>
       <div className={styles.footerTop}>

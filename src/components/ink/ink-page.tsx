@@ -5,15 +5,15 @@ import { useSmoothScroll } from "@/components/science/smooth-scroll";
 import { useCopy } from "@/i18n/use-copy";
 import { BrushLine } from "./brush";
 import { SiteFooter, SiteHeader, type Current } from "./chrome";
-import { ClosingCrane } from "./closing-crane";
+import { ClosingQuail } from "./closing-quail";
 import { useBloom, useInkFill, useMotionOk } from "./motion";
 import type { NavFollow } from "./nav/nav-inscription";
 import type { Layout, Waypoint } from "./route-kit";
 import styles from "./ink.module.css";
 
 // Any page in the Ink & Gold look (October 5, 2026): rice paper, the site header (clear over the
-// opening, paper once scrolled), the page's sections, the footer that closes on the crane at
-// rest, and, where the page has one, its own brush line drawing itself down the page. Paintings marked
+// opening, paper once scrolled), the page's sections, the footer that closes on the quail by
+// the park sign, and, where the page has one, its own brush line drawing itself down the page. Paintings marked
 // [data-bloom] bloom as they enter; outlined pills fill like ink in water. Reduced motion: a
 // complete still page, with the whole line where the page has one. Keyboard: the first Tab shows
 // "Skip to content".
@@ -74,7 +74,7 @@ export function InkPage({
       <main ref={main} id="main" tabIndex={-1}>
         {children(motion)}
       </main>
-      <SiteFooter closing={<ClosingCrane />} />
+      <SiteFooter closing={<ClosingQuail />} />
       {route ? <BrushLine motion={motion} route={route} /> : null}
     </div>
   );

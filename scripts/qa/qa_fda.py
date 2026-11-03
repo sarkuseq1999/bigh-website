@@ -7,14 +7,15 @@ sign's picture drawn as the paragraph's border (fda-sign-redwood-v1.webp, the sa
 phone), loading, and really painted (brown wood in the pixels); every line of the words inside the
 sign's face; cream letters at 4.5:1 or more against the painted face (measured from the pixels);
 two lines on a 1280+ window, three at most on a laptop or tablet, seven at most on a phone (the
-sign narrows there for the crane); no sideways scroll; no hairline in the footer. The crane at
-rest stands in the grass at the sign's right (Mo picked C, October 26, 2026: it bends toward the
-sign's poppy): loaded, red-crowned on the homepage and gold elsewhere, its picture just reaching
-back over the sign's end, its feet on the posts' ground, under the plank, inside the window. The
-ink footer (no logo since the footer-crane redesign): the sign under the links, the sign and the
-crane centred together (on a phone the sign at the column's left edge, the crane at its right),
+sign narrows there for the quail); no sideways scroll; no hairline in the footer. Two California
+quail stand in the grass at the sign's right (Mo picked A1, November 3, 2026, in place of the
+crane at rest, which read as Chinese: one bends toward the sign's poppy): loaded, the same
+painting on every page (no tinted twin), their picture just reaching back over the sign's end,
+their feet on the posts' ground, under the plank, inside the window. The ink footer (no logo
+since the footer-crane redesign): the sign under the links, the sign and the quail centred
+together (on a phone the sign at the column's left edge, the quail at its right),
 and the copyright line last, under it, at every width; no preview note (Mo, October 26, 2026).
-The last screen still shows the whole promise and the whole crane by the sign clear of the menu
+The last screen still shows the whole promise and the whole quail by the sign clear of the menu
 bar at eight laptop sizes (home, About, NuriCell). The words appear once per page (NuriCell does
 not repeat them above the footer), also on the four old-template product pages and in another
 language.
@@ -209,32 +210,32 @@ def run_sign(browser):
             crane = g["crane"]
             if crane:
                 cw = crane[2] - crane[0]
-                crown = ("spring%2Fcrane-poppy" in g["craneSrc"]) if name == "home" else ("ink%2Fcrane-poppy" in g["craneSrc"])
+                quail = "ink%2Fquail-sign-v1" in g["craneSrc"]
                 check(
-                    f"{tag}: the crane at rest in the grass at the sign's right, under its plank, in the window",
+                    f"{tag}: the quail in the grass at the sign's right, under its plank, in the window",
                     g["craneLoaded"]
-                    and crown
+                    and quail
                     and 0 < x1 - crane[0] < 0.3 * cw
                     and 0 <= y1 - crane[3] <= 30
                     and crane[1] >= y1 - bb
                     and crane[2] <= g["win"],
-                    f"crane {crane}, sign {[round(v) for v in g['sign']]}, {g['craneSrc'][-48:]}",
+                    f"quail {crane}, sign {[round(v) for v in g['sign']]}, {g['craneSrc'][-48:]}",
                 )
             else:
-                check(f"{tag}: the crane at rest stands by the sign", False, "no crane")
+                check(f"{tag}: the quail stand by the sign", False, "no quail")
             check(f"{tag}: no sideways scroll", g["sideways"] <= 0, f"{g['sideways']} px")
             check(f"{tag}: no hairline in the footer's second tier", g["hairline"] == 0, f"{g['hairline']} px")
             if name in INK:
                 legal, row, links, sign, foot, grid = g["legal"], g["legalRow"], g["links"], g["sign"], g["footer"], g["grid"]
-                # The sign and the crane, centred together; on a phone the sign at the column's
-                # left edge, the crane at its right.
+                # The sign and the quail, centred together; on a phone the sign at the column's
+                # left edge, the quail at its right.
                 group = (
                     abs(sign[0] - grid[0]) <= 1
                     if phone
                     else crane and abs((sign[0] + crane[2]) / 2 - (grid[0] + grid[2]) / 2) <= 2
                 )
                 check(
-                    f"{tag}: the sign under the links, centred with the crane; the copyright line last, under it",
+                    f"{tag}: the sign under the links, centred with the quail; the copyright line last, under it",
                     legal and links
                     and sign[1] >= links[3]
                     and group
@@ -252,8 +253,8 @@ def run_sign(browser):
 
 def run_last_screen(browser):
     """The sign is taller than the strip it replaced: the last screen must still show the whole
-    promise clear of the menu bar (the homepage's rounds 6 and 10) and the whole crane at rest by
-    the sign, the sign and the crane drawing smaller on short windows."""
+    promise clear of the menu bar (the homepage's rounds 6 and 10) and the whole quail by the
+    sign, the sign and the quail drawing smaller on short windows."""
     for name in INK:
         for size in ((1280, 800), (1440, 900), (1536, 1000), (1280, 720), (1536, 864), (1366, 657), (1440, 700), (1920, 1080)):
             tag = f"{name} last screen {size[0]}x{size[1]}"
@@ -267,9 +268,9 @@ def run_last_screen(browser):
                    document.querySelector('#site-navigation').getBoundingClientRect().bottom]"""
             )
             check(
-                f"{tag}: the whole crane at rest (by the sign) and the whole promise, clear of the header",
+                f"{tag}: the whole quail (by the sign) and the whole promise, clear of the header",
                 crane >= header + 8 and bottom <= 0 and promise >= header + 8,
-                f"crane top {crane:.0f}, below the window {bottom:.0f}, promise top {promise:.0f}, header {header:.0f}",
+                f"quail top {crane:.0f}, below the window {bottom:.0f}, promise top {promise:.0f}, header {header:.0f}",
             )
             context.close()
 
