@@ -4,10 +4,29 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-mu7qyi7yv-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-bthyajpb7-sarkuseq1999s-projects.vercel.app`
+(`dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`), the **production** deployment of `main` at
+`9fd7d877adcee4993b183d73137fcfee424e512b` (November 3, 2026, from about 14:17 Pacific). Every
+page's footer now closes on two California quail, the state bird, in the grass by the FDA park
+sign, in place of the red-crowned crane at rest, which read as Chinese: Mo picked the quail of
+three California animals, then A1 of two looser takes, a few wet washes in the opening
+hummingbird's hand, one bird keeping watch, the other bending toward the sign's poppy. One
+picture on every page; on phones the quail stay inside the column. `9fd7d87` is `1e5aba5` plus
+the 1B release notes, the part 5 mockups (two commits), the quail build (`af37442`) and its notes
+(no other code), pushed as a fast-forward on Mo's "Yes, put it live". Before the push, on the
+built copy: `qa_fda` 248/248, `qa_home_ink` 286/286, `qa_nav` 326/326, About 403/403, NuriCell
+457/457, Propolis 273/273, OPC 199/199, Science 633/633, Support 341/341, Turmerific 155/155,
+Nature Calm 158/159 (its buy scene's front-layer pixel check on a phone, a flaky race at the
+painting's edges that also fails about one run in eight on `1e5aba5` built locally), type-check
+and lint clean. After the alias update, in fresh unauthenticated browsers on the public demo:
+`qa_fda` 248/248, `qa_home_ink` 286/286, `qa_nav` 326/326, Nature Calm 159/159, and the quail by
+the sign on the homepage and Green Bee Propolis at 1440 and 390 px wide (the picture loads from
+the new deployment, no sideways scroll).
+
+Before that, from about 21:55 Pacific on November 2 to about 14:17 Pacific on November 3, 2026,
+the alias pointed to `bigh-website-mu7qyi7yv-sarkuseq1999s-projects.vercel.app`
 (`dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`), the **production** deployment of `main` at
-`1e5aba52f09047af796ce1e72d8af29f1f87b0cc` (November 2, 2026, from about 21:55 Pacific). The
-homepage closes on Mo's pick 1B: the long view down the Big Sur coast in ink and wash, an older
+`1e5aba52f09047af796ce1e72d8af29f1f87b0cc`. The homepage closes on Mo's pick 1B: the long view down the Big Sur coast in ink and wash, an older
 couple and their dog on the cliff-top trail, Bixby Bridge small in the haze, the opening's
 gold-leaf sun on the horizon and five brown pelicans flying in. Mo found the richer test closes
 (below) "more picture like" and picked this of the same places painted loosely. The test pages

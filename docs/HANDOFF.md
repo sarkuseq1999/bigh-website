@@ -6,8 +6,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## Now
 
 - **Last updated:** November 3, 2026, by Claude Code (the footer's painting by the park sign: Mo
-  picked A1, two California quail in a few wet washes, in place of the crane at rest; built on
-  `studio`, not live; the homepage's close: Mo picked 1B, the long
+  picked A1, two California quail in a few wet washes, in place of the crane at rest; live as
+  `main` `9fd7d87`, production `dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`, demo alias on it; the
+  homepage's close: Mo picked 1B, the long
   view down the Big Sur coast in ink and wash, the close on `/`, test pages `/home-1` and `/home-3`
   removed; live as `main` `1e5aba5`, production `dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`, demo alias on
   it; the homepage's "Good questions" picture: a
@@ -86,7 +87,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   248/248, homepage 286/286, menu 326/326, About 403, NuriCell 457, Propolis 273, OPC 199, Science
   633, Support 341, Turmerific 155, Nature Calm 158/159 (the buy scene's front-layer pixel check
   on a phone: a flaky race at the lavender painting's edges, failing about 1 run in 8 on the live
-  code built locally too; live demo 159/159); not live, waiting for Mo's yes. The crane's
+  code built locally too; live demo 159/159); live as `main` `9fd7d87`, production
+  `dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`, demo alias on it; public demo: `qa_fda` 248/248,
+  `qa_home_ink` 286/286, `qa_nav` 326/326, Nature Calm 159/159, and the quail by the sign on the
+  homepage and Green Bee Propolis at 1440 and 390 px wide. The crane's
   pictures (`crane-poppy-v1.webp` and its spring twin) stay in `public/` unused; the phone menu
   keeps its crane (`crane-rest-v2.webp`).
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
