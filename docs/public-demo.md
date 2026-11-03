@@ -4,9 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-dufzjm2ly-sarkuseq1999s-projects.vercel.app`
-(`dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`), the **production** deployment of `main` at
-`648e44d434e97d793e9ece5493ad79734e014b46` (November 2, 2026, from about 14:09 Pacific). It adds
+The alias currently points to `bigh-website-mu7qyi7yv-sarkuseq1999s-projects.vercel.app`
+(`dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`), the **production** deployment of `main` at
+`1e5aba52f09047af796ce1e72d8af29f1f87b0cc` (November 2, 2026, from about 21:55 Pacific). The
+homepage closes on Mo's pick 1B: the long view down the Big Sur coast in ink and wash, an older
+couple and their dog on the cliff-top trail, Bixby Bridge small in the haze, the opening's
+gold-leaf sun on the horizon and five brown pelicans flying in. Mo found the richer test closes
+(below) "more picture like" and picked this of the same places painted loosely. The test pages
+`/home-1` and `/home-3` are gone (404). `1e5aba5` is `648e44d` plus that build, its notes and the
+round 4 mockups commit (no other code), pushed as a fast-forward on Mo's "Yes, put it live".
+Before the push, on the built copy: `qa_home_ink` 286/286 (its phone check holds the new
+painting's sun and walkers), `qa_nav` 326/326, type-check clean, the close at 1920, 1440,
+1280, 768 and 390 px wide. After the alias update, in fresh unauthenticated browsers on the public
+demo: `qa_home_ink` 286/286, `qa_nav` 326/326, and the close at the same five widths (painting,
+light and pelicans load, no cranes, no overflow, no console errors); `/home-1` and `/home-3`
+return 404.
+
+Before that, from about 14:09 to about 21:55 Pacific on November 2, 2026, the alias pointed to
+`bigh-website-dufzjm2ly-sarkuseq1999s-projects.vercel.app` (`dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`),
+the **production** deployment of `main` at `648e44d434e97d793e9ece5493ad79734e014b46`. It added
 two test homepages for Mo to compare richer Big Sur closes live, since he found the coast walk
 (below) a little simple next to the old pine painting: `/home-1` closes on the long view down the
 coast with Bixby Bridge, `/home-3` on McWay Falls; `/` keeps the coast walk until he picks. Both

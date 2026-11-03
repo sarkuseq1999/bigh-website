@@ -6,9 +6,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## Now
 
 - **Last updated:** November 2, 2026, by Claude Code (the homepage's close: Mo picked 1B, the long
-  view down the Big Sur coast in ink and wash, built on `studio` as the close on `/`, test pages
-  `/home-1` and `/home-3` removed; not live yet: live `main` is `648e44d`, production
-  `dpl_9CzDBjmBwXidF8bKpVE1vb5qYvFZ`, demo alias on it, closing on the coast walk; the homepage's "Good questions" picture: a
+  view down the Big Sur coast in ink and wash, the close on `/`, test pages `/home-1` and `/home-3`
+  removed; live as `main` `1e5aba5`, production `dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`, demo alias on
+  it; the homepage's "Good questions" picture: a
   country mailbox, live as `main` `fdb95ca`, production `dpl_8Xrvxj6hWL2yY2Z65Ptq7zhAJXoT`, demo
   alias on it; the homepage's hummingbird: Allen's painted
   loose, its wings always beating, live as `main` `48819f9`, production
@@ -70,7 +70,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   the close on `/` (`purpose-ink-long-v1.webp`, its gold mask; phone frame 150% from 22.5%;
   `qa_home_ink` `PURPOSE_FRAME` set to its sun and walkers; the test routes, `purposeEndings` and
   the coast-walk and rich pictures removed; `studio` `6c1cb12`); built site homepage 286/286, menu
-  326/326, the close at 1920, 1440, 1280, 768 and 390 px; not live yet; (5) the footer's crane by the park sign.
+  326/326, the close at 1920, 1440, 1280, 768 and 390 px; live as `main` `1e5aba5`, production
+  `dpl_EeGZp3TbSWNMQaKzKi2mZ9upbAgj`, demo alias on it; public demo homepage 286/286, menu 326/326,
+  the close at the same five widths; (5) the footer's crane by the park sign.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
