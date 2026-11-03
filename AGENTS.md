@@ -343,19 +343,26 @@ These sit on top of `DESIGN.md`.
   and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
   `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
   `reference/ink-pages/mockups/home-ask/`.
-- **Homepage close: a walk on the Big Sur coast (Mo picked 1, November 2, 2026).** "Our purpose is
-  simple." sat over an old pine on its rock, misty peaks and two red-crowned cranes: Chinese. Of
-  three California endings on the real page (A Big Sur at evening, B an evening walk on a golden
-  ridge, C a surfer at low tide) Mo tried A and B live as test pages, then found the walk with
-  people "doesn't give the vibe of California" (bare golden hills could be anywhere). Of three
-  Californian walks (1 on the Big Sur coast, 2 among a valley oak and poppies, which echoed
-  About, 3 under palms) he picked 1: an older couple and their dog on the cliff-top trail above
-  the Pacific, poppies by the path, the sun setting on the sea; morning sequoias to evening coast,
-  one full day. The sun is the opening's own gold leaf set on the horizon; five brown pelicans
-  fly in where the cranes flew. The painting is 2:1 (at the old 7:3 the land rose into the
-  words); on phones the frame is 165% of the window from 25% across, so the walkers and the whole
-  sun both show. `purpose.tsx`, `purpose.module.css`; pictures `build_home_purpose.py` in
-  `reference/ink-pages/home-purpose/`; mockups `reference/ink-pages/mockups/home-purpose/`.
+- **Homepage close: the long view down the Big Sur coast, in ink and wash (Mo picked 1B,
+  November 2, 2026).** "Our purpose is simple." sat over an old pine on its rock, misty peaks and
+  two red-crowned cranes: Chinese. Of three California endings on the real page (A Big Sur at
+  evening, B an evening walk on a golden ridge, C a surfer at low tide) Mo tried A and B live as
+  test pages, then found the walk with people "doesn't give the vibe of California" (bare golden
+  hills could be anywhere). Of three Californian walks (1 on the Big Sur coast, 2 among a valley
+  oak and poppies, which echoed About, 3 under palms) he picked 1 and put it live, then found it
+  "a little bit simple" next to the old pine painting ("that one looks really good, like a
+  picture"). Of three richer Big Sur paintings he tried 1 (the long view with Bixby Bridge) and 3
+  (McWay Falls) live and found them "more picture like": photos with a watercolour filter. Of the
+  same two places painted loosely (A a loose watercolour, B ink and wash) he picked 1B: an older
+  couple and their dog on the cliff-top trail, headland after headland fading down the coast,
+  Bixby Bridge small in the haze, drawn with an ink brush and light colour laid over it, the old
+  pine painting's way of painting. Richness comes from brushwork and ink, never from photographic
+  detail. Morning sequoias to evening coast, one full day. The sun is the opening's own gold leaf
+  set on the horizon at the head of the glitter; five brown pelicans fly in where the cranes flew.
+  The painting is 2:1 (at the old 7:3 the land rose into the words); on phones the frame is 150%
+  of the window from 22.5% across, so the walkers and the whole sun both show. `purpose.tsx`,
+  `purpose.module.css`; pictures `build_home_purpose.py` (`ink-long`) in
+  `reference/ink-pages/home-purpose/`; mockups `reference/ink-pages/mockups/home-purpose/` (round 4).
 - **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
   questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
   each question", over B (one breakfast-table painting with numbered marks). All five product

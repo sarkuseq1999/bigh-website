@@ -6,22 +6,24 @@ it), and the pelicans. The cut is shoot_purpose.py's, the one Mo saw on the mock
     python -X utf8 reference/ink-pages/home-purpose/build_home_purpose.py [scene ...]
 
 November 2, later: Mo found the live coast walk "a little bit simple" and asked to try two richer
-Big Sur paintings live (rich-long, rich-falls; test pages /home-1 and /home-3).
+Big Sur paintings live (rich-long, rich-falls; test pages /home-1 and /home-3), found them "more
+picture like", and of the same places painted loosely picked 1B, the long view in ink and wash
+(ink-long).
 
-Out: public/images/home-v2/ink/purpose-coast-walk-v1.webp and purpose-coast-walk-gold-v1.webp,
+Out: public/images/home-v2/ink/purpose-ink-long-v1.webp and purpose-ink-long-gold-v1.webp,
 purpose-pelicans-v1.webp; lossless plates in plates/ (git-ignored).
 """
 
+import sys
+
 import numpy as np
 from PIL import Image, ImageFilter
-
-import sys
 
 from shoot_purpose import HERE, cut, cut_birds
 
 SITE = HERE.parents[2] / "public" / "images" / "home-v2" / "ink"
 PLATES = HERE / "plates"
-SCENES = ["coast-walk"]
+SCENES = ["ink-long"]
 MASK_W = 1000  # the gold masks' width (as the live purpose-gold.webp)
 BIRDS_W = 800
 

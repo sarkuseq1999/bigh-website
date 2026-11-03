@@ -590,16 +590,17 @@ WING_BEAT = """(async () => {
   return { frames: seen.size, state: getComputedStyle(w).animationPlayState };
 })()"""
 
-# Round 5, phones: where the closing painting's gold sun (76.7% to 84.6% of its width), its
-# walkers (30% to 37%) and the pelicans' layer fall in the window, and whether the pelicans and
-# the light on the leaf are shown (November 2, 2026: the Big Sur coast walk).
+# Round 5, phones: where the closing painting's gold sun (80.2% to 88% of its width), its
+# walkers (26% to 33%) and the pelicans' layer fall in the window, and whether the pelicans and
+# the light on the leaf are shown (November 2, 2026: the long view down the Big Sur coast, ink
+# and wash).
 PURPOSE_FRAME = """(() => {
   const p = document.querySelector('#purpose [data-brush=purpose-painting]').getBoundingClientRect();
   const f = document.querySelector('#purpose img[src*=purpose-pelicans]');
   const b = f.parentElement.getBoundingClientRect();
   const light = document.querySelector('#purpose [data-brush=purpose-painting] + span');
-  return { sun: [Math.round(p.left + 0.767 * p.width), Math.round(p.left + 0.846 * p.width)],
-    walkers: [Math.round(p.left + 0.30 * p.width), Math.round(p.left + 0.37 * p.width)],
+  return { sun: [Math.round(p.left + 0.802 * p.width), Math.round(p.left + 0.88 * p.width)],
+    walkers: [Math.round(p.left + 0.26 * p.width), Math.round(p.left + 0.33 * p.width)],
     birds: [Math.round(b.left), Math.round(b.right)], flight: getComputedStyle(f.parentElement).display,
     light: getComputedStyle(light).display, loaded: f.complete && f.naturalWidth > 0 };
 })()"""

@@ -4,7 +4,6 @@ import { InkPage } from "@/components/ink/ink-page";
 import type { NavFollow } from "@/components/ink/nav/nav-inscription";
 import { route } from "./brush-route";
 import { Cellular } from "./cellular";
-import type { PurposeEnding } from "./assets";
 import { InkColorProvider } from "./ink-color";
 import { OpeningCrane } from "./opening-crane";
 import { Products } from "./products";
@@ -32,8 +31,7 @@ const FOLLOW: NavFollow = { products: ["products"], science: ["cellular", "scien
 // which puts focus at the start of the page's words, past the header's links.
 // `className` carries the title face's variable (loaded by the route, see page.tsx).
 // The paintings carry the green-spring watercolour (ink-color.tsx; Mo, October 16, 2026).
-// `ending` picks one of the two closing paintings Mo is comparing (/home-1, /home-3).
-export function LookInk({ className, ending }: { className: string; ending?: PurposeEnding }) {
+export function LookInk({ className }: { className: string }) {
   return (
     <InkColorProvider color="spring">
       <InkPage
@@ -51,7 +49,7 @@ export function LookInk({ className, ending }: { className: string; ending?: Pur
             <Stories />
             <Science />
             <Research />
-            <Purpose ending={ending} />
+            <Purpose />
           </>
         )}
       </InkPage>
