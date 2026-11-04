@@ -4,9 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-8crgt6r15-sarkuseq1999s-projects.vercel.app`
-(`dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`), the **production** deployment of `main` at
-`d26efc288c331e479a6ba6e03a9b415d79b36684` (November 4, 2026, from about 10:56 Pacific). The
+The alias currently points to `bigh-website-ksth0su14-sarkuseq1999s-projects.vercel.app`
+(`dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`), the **production** deployment of `main` at
+`e07ea92c93f949b650105a60ba7bd36e36101169` (November 4, 2026, from about 11:39 Pacific). Two test
+pages to compare the "Tiny power plants." mitochondrion on the real page: `/home-a`, California
+colour (a redwood copper skin, pale sage inside, warm grey folds), and `/home-b`, softer ink (a
+third lighter, warm sepia); `/` keeps today's cell. The same painting, every stroke kept, the gold
+layer unchanged; noindex, `/hken` goes to Chinese. `e07ea92` is `d26efc2` plus notes (`a9b01b5`,
+`e07ea92`), the mitochondrion mockups (`90ce86c`) and the test pages (`8bcd35e`), pushed as a
+fast-forward on Mo's "Yes, push them". Before the push, on a built copy (a scratch worktree:
+another agent's unfinished Science edit broke the build in the shared folder): `qa_home_ink`
+288/288; both test pages and `/` at 1920, 1440, 768 and 390 px wide (the right cell, its gold
+layer, no sideways scroll, no console errors); type-check and lint clean. After the alias update,
+in fresh unauthenticated browsers on the public demo: the same page check 12/12, `qa_home_ink`
+288/288, `qa_nav` 326/326.
+
+Before that, from about 10:56 to about 11:39 Pacific on November 4, 2026, the alias pointed to
+`bigh-website-8crgt6r15-sarkuseq1999s-projects.vercel.app` (`dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`),
+the **production** deployment of `main` at `d26efc288c331e479a6ba6e03a9b415d79b36684`. The
 homepage hummingbird's wings now beat as it arrives, then rest: beating non-stop they read as a
 fly's, and Mo picked A of three (A beat then rest, B short bursts, C always still): 3 s at ten
 beats a second while the bird blooms in, three slower beats, then the first frame, raised as
