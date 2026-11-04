@@ -1,17 +1,32 @@
 """Mockup page for part 6 of the homepage's California pass (November 3, 2026): what stands at the
 foot of the phone menu in place of the crane at rest, the last crane on the site. Cuts the shots that
 shoot_menu.py took into a whole phone screen, a close-up and a tablet close-up per option and writes
-reference/ink-pages/mockups/menu-finale/menu-finale.html.
+reference/ink-pages/mockups/menu-finale/menu-finale.html. An option with the opening's bird (its
+<key>-bird.json from shoot_menu.py) gets the bird's body and wings laid over its shots, the wings
+beating in the page as they do on the homepage.
 
-usage: python -X utf8 reference/ink-pages/menu-finale/make_menu_mockup.py
+usage: python -X utf8 reference/ink-pages/menu-finale/make_menu_mockup.py [option ...]
+(only the options named are cut again; their shots must exist)
 """
 
+import json
+import shutil
+import sys
 from pathlib import Path
 
 from PIL import Image
 
 HERE = Path(__file__).parent
 OUT = HERE.parents[0] / "mockups" / "menu-finale"
+INK = HERE.parents[2] / "public" / "images" / "home-v2" / "ink"
+ONLY = sys.argv[1:]
+
+# Each view: its shot and the part of it shown (css px: x, y, w, h), as shots() cuts it.
+VIEWS = {
+    "screen": ("phone", (0, 0, 390, 844), "The phone menu, whole"),
+    "close": ("phone", (20, 500, 350, 344), "Phone, close-up"),
+    "tablet": ("tablet", (150, 750, 468, 274), "Tablet, close-up"),
+}
 
 TODAY = {
     "key": "now",
@@ -21,10 +36,28 @@ TODAY = {
 
 CHOICES = [
     {
-        "key": "a",
-        "name": "One quail",
+        "key": "d",
+        "group": "The hummingbird (new)",
+        "name": "The hummingbird, at rest",
+        "score": "8.5",
+        "pick": False,
+        "what": "Allen's hummingbird on a bare twig, the way it sits and keeps watch over its flowers. A new painting of the homepage's bird, in the same calm copper.",
+        "note": "Still and quiet, like the crane at rest. Its beak is a fine dark line, a little sharper than the rest of the painting.",
+    },
+    {
+        "key": "e",
+        "name": "The hummingbird at a flower",
         "score": "9",
         "pick": True,
+        "what": "The homepage's own hummingbird, its wings beating as they do there, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.",
+        "note": "The liveliest idea: the bird that greets you on the homepage is waiting at the end of the menu. It moves beside the menu's words; for people whose phone asks for less motion, the wings rest, raised.",
+    },
+    {
+        "key": "a",
+        "group": "Earlier ideas",
+        "name": "One quail",
+        "score": "9",
+        "pick": False,
         "what": "The footer's lookout quail, standing on its own. The same bird and the same few wet washes as the two quail at the bottom of every page. One bird fits the tall spot the crane stood in.",
         "note": "Softer and paler than the crane, so it sits quietly under the menu's words. On a tablet it is small, as the crane was.",
     },
@@ -105,6 +138,20 @@ CSS = """
   figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
   figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
   figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  .group { font: 600 14px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: -30px; }
+  /* The opening's hummingbird laid over a shot: its far wing behind its body, its near wing over
+     it, six frames a beat, ten beats a second, as on the homepage. */
+  .scene { position: relative; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; }
+  .scene img { border: 0; border-radius: 0; }
+  .bird { position: absolute; aspect-ratio: 1600 / 1062; }
+  .bird .body { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .wing {
+    position: absolute; left: 16.19%; top: 14.174%; width: 45.644%; height: 76.931%;
+    background-size: 600% 100%; background-repeat: no-repeat;
+    animation: beat 0.1s steps(6) infinite;
+  }
+  @keyframes beat { from { background-position: 0 0; } to { background-position: 120% 0; } }
+  @media (prefers-reduced-motion: reduce) { .wing { animation: none; } }
   @media (max-width: 640px) {
     .shots { grid-template-columns: 1fr; }
     .shots .tablet, .shots .screen { grid-column: auto; grid-row: auto; }
@@ -114,11 +161,31 @@ CSS = """
 """
 
 
+def pct(v):
+    return f"{v:.3f}%"
+
+
+def picture(k, view, alt, birds):
+    """A view's picture; with the opening's bird, its body and beating wings over the shot."""
+    img = f'<img src="{k}-{view}.jpg" alt="{alt}">'
+    if not birds:
+        return img
+    shot, (cx, cy, cw, ch), _ = VIEWS[view]
+    x, y, w, _ = birds[shot]
+    at = f"left:{pct((x - cx) / cw * 100)};top:{pct((y - cy) / ch * 100)};width:{pct(w / cw * 100)}"
+    return f"""<div class="scene">{img}<span class="bird" style="{at}"><span class="wing" style="background-image:url({k}-far.webp)"></span><img class="body" src="{k}-body.webp" alt=""><span class="wing" style="background-image:url({k}-near.webp)"></span></span></div>"""
+
+
 def figures(k, name):
+    path = OUT / f"{k}-bird.json"
+    birds = json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+    where = {"screen": "the whole phone menu", "close": "the foot of the phone menu", "tablet": "the foot of the tablet menu"}
+    rows = "\n".join(
+        f'      <figure class="{v}">{picture(k, v, f"{name}, {where[v]}", birds)}<figcaption>{VIEWS[v][2]}</figcaption></figure>'
+        for v in VIEWS
+    )
     return f"""    <div class="shots">
-      <figure class="screen"><img src="{k}-screen.jpg" alt="{name}, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
-      <figure class="close"><img src="{k}-close.jpg" alt="{name}, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
-      <figure class="tablet"><img src="{k}-tablet.jpg" alt="{name}, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+{rows}
     </div>
 """
 
@@ -126,7 +193,8 @@ def figures(k, name):
 def section(c):
     k = c["key"]
     tag = '<span class="tag">My pick</span>' if c["pick"] else ""
-    return f"""  <section class="choice" aria-labelledby="{k}-name">
+    group = f'  <p class="group">{c["group"]}</p>\n' if c.get("group") else ""
+    return f"""{group}  <section class="choice" aria-labelledby="{k}-name">
     <div class="head">
       <span class="letter">{k.upper()}</span>
       <h2 id="{k}-name">{c["name"]}</h2>
@@ -141,7 +209,13 @@ def section(c):
 
 def main():
     for k in ["now"] + [c["key"] for c in CHOICES]:
+        if ONLY and k not in ONLY:
+            continue
         shots(k)
+        if (OUT / f"{k}-bird.json").exists():
+            shutil.copyfile(INK / "hummingbird-v2.webp", OUT / f"{k}-body.webp")
+            for side in ("near", "far"):
+                shutil.copyfile(INK / f"hummingbird-v2-{side}.webp", OUT / f"{k}-{side}.webp")
     today = f"""  <section class="choice" aria-labelledby="now-name">
     <div class="head"><h2 id="now-name">{TODAY["name"]}</h2></div>
     <p class="what">{TODAY["what"]}</p>
@@ -156,8 +230,8 @@ def main():
 <main>
   <header class="intro">
     <h1>The phone menu's last crane</h1>
-    <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are three California ideas, put into the real menu of the demo. Nothing on the site has changed.</p>
-    <p>Each is painted in the same few wet washes as the footer's quail. The black line under the crane goes too: each stands on its own painted grass, like the footer's quail.</p>
+    <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are California ideas to replace it, put into the real menu of the demo. Nothing on the site has changed.</p>
+    <p>New: the hummingbird, two ways (D and E). The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
   </header>
 {today}{"".join(section(c) for c in CHOICES)}</main>
 """

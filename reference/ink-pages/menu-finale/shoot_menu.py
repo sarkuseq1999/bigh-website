@@ -13,6 +13,7 @@ import json
 import sys
 from pathlib import Path
 
+import cv2
 import numpy as np
 from PIL import Image
 from playwright.sync_api import sync_playwright
@@ -37,18 +38,62 @@ OPTIONS = {
     "b": {"take": "../../footer-crane/originals/quail-wash-2", "feetY": 850, "room": 0.62, "bare": True},
     "c": {"take": "menu-poppy-1", "feetY": 1140, "room": 0.82, "bare": True},
     "a-stroke": {"take": "menu-quail-1", "feetY": 1125, "room": 0.82},
+    # Mo (November 3): "Can we try with the hummingbird?" D: Allen's at rest on a bare twig, a new
+    # painting in the opening bird's hand. E: the opening's own bird, its wings beating, at a sprig
+    # of California fuchsia (a new painting of the flower only); "bird" puts its bill tip at the
+    # flower's mouth (x, y in the painting's pixels) at `scale` of the bird's 1600 x 1062 frame.
+    # D is calmed as the opening's bird was (build_wings.py CALM): its orange came out as loud. The
+    # fuchsia's coral a little less, so the bird leads. Both take the crane's whole room: a small
+    # bird needs it, and the menu has paper to spare above it.
+    "d": {"take": "menu-perch-2", "feetY": None, "room": 1.0, "bare": True, "calm": (0.72, 0.94)},
+    "e": {
+        "take": "menu-fuchsia-1",
+        "feetY": None,
+        "room": 1.0,
+        "bare": True,
+        "calm": (0.8, 0.96),
+        "bird": {"x": 552, "y": 392, "scale": 0.58},
+    },
 }
 SIZES = {"phone": (390, 844), "small": (360, 740), "tablet": (768, 1024)}
 
+# The opening's bird (assets.ts): its frame, its bill tip and the box its wings and body fill.
+BIRD = {"w": 1600, "h": 1062, "bill": (1154, 409), "box": (283, 167, 1154, 946)}
 
-def cut(take):
+
+def bird_box(b):
+    """The bird's frame and its painted box in a painting's pixels, its bill tip at (x, y)."""
+    s = b["scale"]
+    fx, fy = b["x"] - BIRD["bill"][0] * s, b["y"] - BIRD["bill"][1] * s
+    bx0, by0, bx1, by1 = BIRD["box"]
+    return (fx, fy, BIRD["w"] * s, BIRD["h"] * s), (fx + bx0 * s, fy + by0 * s, fx + bx1 * s, fy + by1 * s)
+
+
+def calmed(rgb, sat, val):
+    """Less saturation, and the strongest colours up to `val` as bright; bare paper stays white."""
+    hsv = cv2.cvtColor(rgb, cv2.COLOR_RGB2HSV).astype(np.float32)
+    s = hsv[..., 1] / 255
+    hsv[..., 1] *= sat
+    hsv[..., 2] *= 1 - (1 - val) * s
+    return cv2.cvtColor(np.clip(hsv, 0, 255).astype(np.uint8), cv2.COLOR_HSV2RGB)
+
+
+def cut(take, keep=None, calm=None):
+    """The painting, its paper divided out, trimmed to its ink (and to `keep`, a box the bird will
+    fill, so the empty paper it hovers over stays)."""
     src = Image.open(HERE / "originals" / f"{take}.png").convert("RGB")
     c = divide_paper(np.asarray(src))
+    if calm:
+        c = calmed(np.ascontiguousarray(c), *calm)
     ink = (255 - c.min(axis=2)) > 10
     ys, xs = np.where(ink)
+    lo_x, lo_y, hi_x, hi_y = xs.min(), ys.min(), xs.max(), ys.max()
+    if keep:
+        lo_x, lo_y = min(lo_x, keep[0]), min(lo_y, keep[1])
+        hi_x, hi_y = max(hi_x, keep[2]), max(hi_y, keep[3])
     pad = 12
-    x0, x1 = int(max(xs.min() - pad, 0)), int(min(xs.max() + pad, c.shape[1]))
-    y0, y1 = int(max(ys.min() - pad, 0)), int(min(ys.max() + pad, c.shape[0]))
+    x0, x1 = int(max(lo_x - pad, 0)), int(min(hi_x + pad, c.shape[1]))
+    y0, y1 = int(max(lo_y - pad, 0)), int(min(hi_y + pad, c.shape[0]))
     OUT.mkdir(parents=True, exist_ok=True)
     path = OUT / f"{Path(take).name}-cut.png"
     Image.fromarray(c[y0:y1, x0:x1]).save(path, optimize=True)
@@ -74,10 +119,21 @@ PLACE = """([src, m]) => {
   const wide = 100 * Math.max((1.26 * 560) / 864 / (m.room * (m.w / m.h)), 1.1);
   Object.assign(ground.style, { top: `${feet - 4.5}%`, left: `${(100 - wide) / 2}%`, width: `${wide}%` });
   if (m.bare) ground.style.display = 'none';
+  // The opening's bird: only its frame is laid in (hidden), measured for the mockup page, which
+  // lays the body and its beating wings over the shot.
+  let bird = null;
+  if (m.bird) {
+    bird = document.createElement('span');
+    Object.assign(bird.style, {
+      position: 'absolute', left: `${m.bird.left}%`, top: `${m.bird.top}%`, width: `${m.bird.width}%`,
+      aspectRatio: '1600 / 1062', visibility: 'hidden',
+    });
+    stand.append(bird);
+  }
   img.getAnimations().forEach((a) => a.finish());
   return new Promise((done) => img.decode().then(() => {
-    const r = img.getBoundingClientRect(), g = ground.getBoundingClientRect();
-    done({ img: [r.x, r.y, r.width, r.height].map(Math.round), ground: [g.x, g.y, g.width, g.height].map(Math.round) });
+    const box = (e) => { const r = e.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; };
+    done({ img: box(img).map(Math.round), ground: box(ground).map(Math.round), bird: bird && box(bird) });
   }));
 }"""
 
@@ -90,10 +146,17 @@ def main():
             if ONLY and name not in ONLY:
                 continue
             src = m = None
+            rects = {}
             if opt:
-                path, (x0, y0, w, h) = cut(opt["take"])
+                frame = keep = None
+                if opt.get("bird"):
+                    frame, keep = bird_box(opt["bird"])
+                path, (x0, y0, w, h) = cut(opt["take"], keep, opt.get("calm"))
                 feet = opt["feetY"] if opt["feetY"] is not None else y0 + h - 12
                 m = {"w": w, "h": h, "feetY": feet - y0, "room": opt["room"], "bare": opt.get("bare", False)}
+                if frame:
+                    fx, fy, fw, _ = frame
+                    m["bird"] = {"left": (fx - x0) / w * 100, "top": (fy - y0) / h * 100, "width": fw / w * 100}
                 src = "data:image/png;base64," + base64.b64encode(path.read_bytes()).decode()
             for size_name, (vw, vh) in SIZES.items():
                 mobile = vw < 768
@@ -112,9 +175,13 @@ def main():
                     info = page.evaluate(PLACE, [src, m])
                     page.wait_for_timeout(500)
                     print(name, size_name, json.dumps(info))
+                    if info["bird"]:
+                        rects[size_name] = info["bird"]
                 page.screenshot(path=str(OUT / f"{name}-{size_name}.png"))
                 print("saved", f"{name}-{size_name}.png")
                 ctx.close()
+            if rects:
+                (OUT / f"{name}-bird.json").write_text(json.dumps(rects, indent=1), encoding="utf-8")
         browser.close()
 
 

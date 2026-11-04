@@ -53,6 +53,20 @@
   figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
   figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
   figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  .group { font: 600 14px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: -30px; }
+  /* The opening's hummingbird laid over a shot: its far wing behind its body, its near wing over
+     it, six frames a beat, ten beats a second, as on the homepage. */
+  .scene { position: relative; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; }
+  .scene img { border: 0; border-radius: 0; }
+  .bird { position: absolute; aspect-ratio: 1600 / 1062; }
+  .bird .body { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .wing {
+    position: absolute; left: 16.19%; top: 14.174%; width: 45.644%; height: 76.931%;
+    background-size: 600% 100%; background-repeat: no-repeat;
+    animation: beat 0.1s steps(6) infinite;
+  }
+  @keyframes beat { from { background-position: 0 0; } to { background-position: 120% 0; } }
+  @media (prefers-reduced-motion: reduce) { .wing { animation: none; } }
   @media (max-width: 640px) {
     .shots { grid-template-columns: 1fr; }
     .shots .tablet, .shots .screen { grid-column: auto; grid-row: auto; }
@@ -63,8 +77,8 @@
 <main>
   <header class="intro">
     <h1>The phone menu's last crane</h1>
-    <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are three California ideas, put into the real menu of the demo. Nothing on the site has changed.</p>
-    <p>Each is painted in the same few wet washes as the footer's quail. The black line under the crane goes too: each stands on its own painted grass, like the footer's quail.</p>
+    <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are California ideas to replace it, put into the real menu of the demo. Nothing on the site has changed.</p>
+    <p>New: the hummingbird, two ways (D and E). The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
   </header>
   <section class="choice" aria-labelledby="now-name">
     <div class="head"><h2 id="now-name">Today: the crane at rest</h2></div>
@@ -75,12 +89,44 @@
       <figure class="tablet"><img src="now-tablet.jpg" alt="The crane, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
     </div>
   </section>
+  <p class="group">The hummingbird (new)</p>
+  <section class="choice" aria-labelledby="d-name">
+    <div class="head">
+      <span class="letter">D</span>
+      <h2 id="d-name">The hummingbird, at rest</h2>
+      <span class="score">8.5 / 10</span>
+      
+    </div>
+    <p class="what">Allen's hummingbird on a bare twig, the way it sits and keeps watch over its flowers. A new painting of the homepage's bird, in the same calm copper.</p>
+    <p class="note">Still and quiet, like the crane at rest. Its beak is a fine dark line, a little sharper than the rest of the painting.</p>
+    <div class="shots">
+      <figure class="screen"><img src="d-screen.jpg" alt="The hummingbird, at rest, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><img src="d-close.jpg" alt="The hummingbird, at rest, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><img src="d-tablet.jpg" alt="The hummingbird, at rest, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="e-name">
+    <div class="head">
+      <span class="letter">E</span>
+      <h2 id="e-name">The hummingbird at a flower</h2>
+      <span class="score">9 / 10</span>
+      <span class="tag">My pick</span>
+    </div>
+    <p class="what">The homepage's own hummingbird, its wings beating as they do there, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.</p>
+    <p class="note">The liveliest idea: the bird that greets you on the homepage is waiting at the end of the menu. It moves beside the menu's words; for people whose phone asks for less motion, the wings rest, raised.</p>
+    <div class="shots">
+      <figure class="screen"><div class="scene"><img src="e-screen.jpg" alt="The hummingbird at a flower, the whole phone menu"><span class="bird" style="left:11.538%;top:66.156%;width:57.308%"><span class="wing" style="background-image:url(e-far.webp)"></span><img class="body" src="e-body.webp" alt=""><span class="wing" style="background-image:url(e-near.webp)"></span></span></div><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><div class="scene"><img src="e-close.jpg" alt="The hummingbird at a flower, the foot of the phone menu"><span class="bird" style="left:7.143%;top:16.965%;width:63.857%"><span class="wing" style="background-image:url(e-far.webp)"></span><img class="body" src="e-body.webp" alt=""><span class="wing" style="background-image:url(e-near.webp)"></span></span></div><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><div class="scene"><img src="e-tablet.jpg" alt="The hummingbird at a flower, the foot of the tablet menu"><span class="bird" style="left:31.177%;top:33.959%;width:28.048%"><span class="wing" style="background-image:url(e-far.webp)"></span><img class="body" src="e-body.webp" alt=""><span class="wing" style="background-image:url(e-near.webp)"></span></span></div><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+  <p class="group">Earlier ideas</p>
   <section class="choice" aria-labelledby="a-name">
     <div class="head">
       <span class="letter">A</span>
       <h2 id="a-name">One quail</h2>
       <span class="score">9 / 10</span>
-      <span class="tag">My pick</span>
+      
     </div>
     <p class="what">The footer's lookout quail, standing on its own. The same bird and the same few wet washes as the two quail at the bottom of every page. One bird fits the tall spot the crane stood in.</p>
     <p class="note">Softer and paler than the crane, so it sits quietly under the menu's words. On a tablet it is small, as the crane was.</p>
