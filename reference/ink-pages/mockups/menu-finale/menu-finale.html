@@ -1,0 +1,123 @@
+<title>Phone Menu Finale</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@650&display=swap">
+<style>
+  /* Layout: one column; today's crane first, then each idea: its words, then a whole phone screen
+     of the real menu, a close-up of its foot and the same on a tablet. */
+  :root {
+    --paper: #f6f1e7;
+    --ink: #1d1b18;
+    --ink-soft: #5d574e;
+    --rule: #ddd4c4;
+    --gold: #a77c25;
+    --pick: #2f4a3a;
+    --title: "Ysabeau", "Palatino Linotype", Palatino, Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17; --ink: #f1ece2; --ink-soft: #b9b0a2;
+      --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17; --ink: #f1ece2; --ink-soft: #b9b0a2;
+    --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.55 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 1000px; margin: 0 auto; padding-block: 40px 72px; display: grid; gap: 52px; }
+  h1, h2 { font-family: var(--title); font-weight: 650; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.05; }
+  h2 { font-size: clamp(26px, 4vw, 34px); line-height: 1.1; }
+  p { margin: 0; max-width: 62ch; }
+  .intro { display: grid; gap: 12px; }
+  .intro p { color: var(--ink-soft); font-size: 18px; }
+  .choice { display: grid; gap: 14px; padding-top: 26px; border-top: 1px solid var(--rule); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+  .letter { font-family: var(--title); font-size: clamp(44px, 7vw, 60px); line-height: 0.8; color: var(--gold); font-weight: 650; }
+  .score { font: 600 15px/1 var(--body); font-variant-numeric: tabular-nums; padding: 7px 11px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); }
+  .tag { font: 600 13px/1 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper); background: var(--pick); padding: 7px 10px; border-radius: 999px; }
+  .what { font-size: 18px; }
+  .note { color: var(--ink-soft); }
+  .shots { display: grid; grid-template-columns: 1fr 1.35fr; gap: 12px; align-items: start; }
+  .shots .tablet { grid-column: 2; }
+  .shots .screen { grid-row: span 2; }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+  figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  @media (max-width: 640px) {
+    .shots { grid-template-columns: 1fr; }
+    .shots .tablet, .shots .screen { grid-column: auto; grid-row: auto; }
+    .shots .close { order: -1; }
+    .shots .screen { width: 72%; }
+  }
+</style>
+<main>
+  <header class="intro">
+    <h1>The phone menu's last crane</h1>
+    <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are three California ideas, put into the real menu of the demo. Nothing on the site has changed.</p>
+    <p>Each is painted in the same few wet washes as the footer's quail. The black line under the crane goes too: each stands on its own painted grass, like the footer's quail.</p>
+  </header>
+  <section class="choice" aria-labelledby="now-name">
+    <div class="head"><h2 id="now-name">Today: the crane at rest</h2></div>
+    <p class="what">Tap Menu on a phone and a small crane stands at the bottom, on a black brush line. It was the footer's crane in miniature. The footer has quail now, so the two no longer match.</p>
+    <div class="shots">
+      <figure class="screen"><img src="now-screen.jpg" alt="The crane, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><img src="now-close.jpg" alt="The crane, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><img src="now-tablet.jpg" alt="The crane, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="a-name">
+    <div class="head">
+      <span class="letter">A</span>
+      <h2 id="a-name">One quail</h2>
+      <span class="score">9 / 10</span>
+      <span class="tag">My pick</span>
+    </div>
+    <p class="what">The footer's lookout quail, standing on its own. The same bird and the same few wet washes as the two quail at the bottom of every page. One bird fits the tall spot the crane stood in.</p>
+    <p class="note">Softer and paler than the crane, so it sits quietly under the menu's words. On a tablet it is small, as the crane was.</p>
+    <div class="shots">
+      <figure class="screen"><img src="a-screen.jpg" alt="One quail, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><img src="a-close.jpg" alt="One quail, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><img src="a-tablet.jpg" alt="One quail, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="b-name">
+    <div class="head">
+      <span class="letter">B</span>
+      <h2 id="b-name">The footer's two quail</h2>
+      <span class="score">8 / 10</span>
+      
+    </div>
+    <p class="what">The footer's own painting, made smaller. No new painting.</p>
+    <p class="note">You would see the same picture twice in one visit. On a phone the bending quail gets small.</p>
+    <div class="shots">
+      <figure class="screen"><img src="b-screen.jpg" alt="The footer's two quail, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><img src="b-close.jpg" alt="The footer's two quail, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><img src="b-tablet.jpg" alt="The footer's two quail, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="c-name">
+    <div class="head">
+      <span class="letter">C</span>
+      <h2 id="c-name">California poppies</h2>
+      <span class="score">8 / 10</span>
+      
+    </div>
+    <p class="what">California's state flower, the poppy from the park sign, on its own: two flowers and a bud.</p>
+    <p class="note">The brightest thing in the menu: its orange pulls your eye away from the words. Poppies are already on About and on the park sign.</p>
+    <div class="shots">
+      <figure class="screen"><img src="c-screen.jpg" alt="California poppies, the whole phone menu"><figcaption>The phone menu, whole</figcaption></figure>
+      <figure class="close"><img src="c-close.jpg" alt="California poppies, the foot of the phone menu"><figcaption>Phone, close-up</figcaption></figure>
+      <figure class="tablet"><img src="c-tablet.jpg" alt="California poppies, the foot of the tablet menu"><figcaption>Tablet, close-up</figcaption></figure>
+    </div>
+  </section>
+</main>
