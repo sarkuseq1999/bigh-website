@@ -13,10 +13,12 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   his path (Berkeley, Salzburg, Today; Okayama told in words), the formulas, "Read the research
   yourself.", Ask. AGENTS.md "Science round 3"; spec
   `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
-  `reference/ink-pages/science/` (README round 3). New lines are English in every language
-  (drafts, no catalog keys yet). Checks: `qa_science_ink` rewritten for the new order (opening,
-  why, three places); `check_science_art.py` rewritten. Built in a scratch worktree (branch
-  `science-ca`) while another session worked on About and the homepage in this folder.
+  `reference/ink-pages/science/` (README round 3). New lines have draft translations m1100-m1117
+  (`translations-science-round3.cjs`, not native-reviewed; the path's words stay English, as
+  before). Checks: `qa_science_ink` rewritten for the new order (opening, why, three places);
+  `check_science_art.py` rewritten. Built in a scratch worktree (branch `science-ca`) while
+  another session worked on About and the homepage in this folder. Waiting for Mo: his critique
+  (review page with screenshots, artifact link in the session); nothing pushed.
 - **Earlier, November 4, 2026, by Claude Code** (the homepage hummingbird's wings beat as
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run

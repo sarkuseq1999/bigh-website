@@ -500,7 +500,8 @@ def opening(browser):
             pass
         box = page.evaluate(OPENING_BOX)
         img, h1, lead = box["img"], box["h1"], box["lead"]
-        check(f"{tag}: the lead names Dr. Liu", "Dr. Jiankang Liu" in box["text"], box["text"][:60])
+        # "Dr." and his name are joined by a no-break space, so a phone never ends a line on "Dr.".
+        check(f"{tag}: the lead names Dr. Liu, never split after Dr.", "Dr. Jiankang Liu" in box["text"], box["text"][:60])
         check(f"{tag}: the title and lead on the first screen", h1["t"] >= box["bar"] - 1 and lead["b"] <= h, f"h1 at {h1['t']:.0f}, lead ends {lead['b']:.0f}")
         check(f"{tag}: the painting loaded and bloomed in", box["state"][:2] == [True, "done"], str(box["state"][:2]))
         check(f"{tag}: the {'phone' if w < 960 else 'wide'} cut in use", ("-phone-" in box["state"][2]) == (w < 960), box["state"][2][-40:])

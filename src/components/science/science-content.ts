@@ -23,7 +23,7 @@ export const opening = {
   title: "Our science starts in the cell.",
   // "Decades": his work on cells' energy and aging dates from Bruce Ames's laboratory, 1994
   // (RESEARCH-NOTES.md); his doctorate was in neuroscience, so not "his whole career".
-  lead: "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
+  lead: "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
   alt: "A brass microscope, a notebook and poppies on a desk by an open window over golden California hills, painted in ink and watercolour",
 };
 

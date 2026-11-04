@@ -21,11 +21,11 @@ const entries = [
     "私たちのサイエンスは、細胞から始まります。",
   ],
   [
-    "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
+    "How do your cells make energy? And what changes as we age? Dr.\u00a0Jiankang Liu has spent decades studying both.",
     "你的细胞如何产生能量？随着年龄增长，又会发生哪些变化？刘健康博士数十年来一直研究这两个问题。",
-    "세포는 어떻게 에너지를 만들까요? 그리고 나이가 들면 무엇이 달라질까요? Dr. Jiankang Liu는 수십 년 동안 이 두 가지를 연구해 왔습니다.",
+    "세포는 어떻게 에너지를 만들까요? 그리고 나이가 들면 무엇이 달라질까요? Dr.\u00a0Jiankang Liu는 수십 년 동안 이 두 가지를 연구해 왔습니다.",
     "Tế bào của bạn tạo ra năng lượng như thế nào? Và điều gì thay đổi khi chúng ta già đi? Tiến sĩ Jiankang Liu đã dành hàng chục năm nghiên cứu cả hai câu hỏi này.",
-    "細胞はどのようにエネルギーをつくるのでしょう？そして、年齢とともに何が変わるのでしょう？Dr. Jiankang Liu は、この二つを何十年も研究してきました。",
+    "細胞はどのようにエネルギーをつくるのでしょう？そして、年齢とともに何が変わるのでしょう？Dr.\u00a0Jiankang Liu は、この二つを何十年も研究してきました。",
   ],
   [
     "A brass microscope, a notebook and poppies on a desk by an open window over golden California hills, painted in ink and watercolour",
