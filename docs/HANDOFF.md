@@ -37,6 +37,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   questions put live on their own (`main` `c1f56aa`), NuriCell Dr. Liu (`6766ae1`) and the tablet
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
+- **Waiting for Mo (November 4): About, two new chapters, a DRAFT on branch `about-chapters`
+  (`c080a94`), NOT on `studio` and not for release.** Mo asked for more on About (scientists,
+  ingredients from where they grow best, proudly made in California by GMP-certified makers) and
+  for Claude's own ideas, to critique after. Built: "Each plant, from where it grows best." (four
+  painted specimens and a key; only Brazil is on file, the other three places show "Place to
+  confirm") and "Proudly made in California." (the five real bottles on a painted California
+  morning, GMP in plain words); the promise row is three ("Honest about the research." is new).
+  English only. Review page: artifact `Sju1s5FxENwBJ33trgL6Uq`; notes
+  `reference/ink-pages/about-chapters/README.md` on that branch. Next: Mo's critique and the three
+  missing places (turmeric, grape seed, pine bark), then translations.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
 - **Live (October 28): the homepage's first screen is California.** Mo's colleagues
   loved the opening's watercolour and gold sun but read the misty peaks and red-crowned crane as
