@@ -432,12 +432,21 @@ These sit on top of `DESIGN.md`.
   `python -X utf8 scripts/qa/<script>.py <base-url>`. Page scripts: `qa_home_ink`, `qa_nav`, `qa_fda`,
   `qa_about`, `qa_nuricell_ink`, `qa_propolis_ink`, `qa_opc_ink`, `qa_turmerific_ink`,
   `qa_nature_calm_ink`, `qa_science_ink`, `qa_support`. Run the ones for the pages you touched, plus
-  `qa_home_ink` and `qa_nav`.
+  `qa_home_ink` and `qa_nav`, one at a time (two at once, or a build beside them, can fail the
+  filmed-timing checks; rerun a failed script alone before calling it a defect). Each page script
+  imports `stall_guard.py`: if nothing prints for 10 minutes (`QA_STALL_MINUTES`), it prints
+  `FAIL frozen: …` with the last line it printed and stops with exit code 3. A browser can freeze
+  without an error (November 4, 2026: `qa_nav` sat idle for 55 minutes on the public demo).
 - **Code checks:** `npm run lint`, `npm run type-check`, and `npx prettier --check <changed files>`.
 - **Going live (only on Mo's yes):** `git fetch`, merge `origin/main`, rebuild and re-check, then
   `git push origin studio:main`. If the push is blocked for the agent, give Mo the exact command to
   paste. Vercel builds production from `main`; then point the demo alias (below), run the checks
   against the public demo, and add an entry to `docs/public-demo.md`.
+  **Mo doesn't wait for the public checks** (November 4, 2026: "I could just work on the next
+  thing"). Once the alias points at the new build and a quick look shows the change on the plain
+  demo address, tell Mo it is live and that the full checks are running; run them in the
+  background and go on with the next thing. Tell Mo only if one fails (and fix it first); write the
+  `docs/public-demo.md` entry with the counts when they finish.
 - **Preview share links:** only one `?_vercel_share=` link works at a time; making a new one kills the
   old one.
 

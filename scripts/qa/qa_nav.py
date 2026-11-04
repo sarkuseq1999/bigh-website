@@ -155,6 +155,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageChops
 from playwright.sync_api import sync_playwright
+import stall_guard  # noqa: E402,F401  (ends a frozen run; see stall_guard.py)
 
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = (ARGS[0] if ARGS else "http://localhost:3014").rstrip("/")

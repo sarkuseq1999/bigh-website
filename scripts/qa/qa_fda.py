@@ -30,6 +30,7 @@ from PIL import Image
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
+import stall_guard  # noqa: E402,F401  (ends a frozen run; see stall_guard.py)
 BASE = (sys.argv[1] if len(sys.argv) > 1 else "http://localhost:3036").rstrip("/")
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "fda")
 os.makedirs(OUT, exist_ok=True)

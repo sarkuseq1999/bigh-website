@@ -43,6 +43,7 @@ from pathlib import Path
 from playwright.sync_api import TimeoutError as PlaywrightTimeout, sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
+import stall_guard  # noqa: E402,F401  (ends a frozen run; see stall_guard.py)
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3050"
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)

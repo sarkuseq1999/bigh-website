@@ -73,6 +73,7 @@ from playwright.sync_api import TimeoutError as PlaywrightTimeoutError
 from playwright.sync_api import sync_playwright
 
 sys.stdout.reconfigure(encoding="utf-8")
+import stall_guard  # noqa: E402,F401  (ends a frozen run; see stall_guard.py)
 ARGS = [a for a in sys.argv[1:] if not a.startswith("--")]
 BASE = ARGS[0] if ARGS else "http://localhost:3025"
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "out", "about")
