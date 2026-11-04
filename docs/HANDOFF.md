@@ -5,9 +5,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 3, 2026, by Claude Code (the phone menu's foot: Mo picked E, the
-  homepage's hummingbird at a California fuchsia, its wings at rest, in place of the crane at
-  rest; built on `studio`, not pushed; the footer's painting by the park sign: Mo
+- **Last updated:** November 4, 2026, by Claude Code (the homepage hummingbird's wings beat as
+  it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
+  `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run
+  itself (`scripts/qa/stall_guard.py`) and Mo no longer waits for the public checks (AGENTS.md
+  "Going live"); **next, waiting for Mo:** the homepage mitochondrion in "Tiny power plants." to
+  fit the California colours (Mo, November 4: he loves its design, but the page has turned
+  California and colourful around it); the phone menu's foot: Mo picked E, the homepage's
+  hummingbird at a California fuchsia, its wings at rest, in place of the crane at rest; live as
+  `main` `d8ab9c4`, production `dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`; the footer's painting by the park sign: Mo
   picked A1, two California quail in a few wet washes, in place of the crane at rest; live as
   `main` `9fd7d87`, production `dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`, demo alias on it; the
   homepage's close: Mo picked 1B, the long
@@ -102,8 +108,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   built on `studio` November 3 (`menu-hummingbird-v1.webp` from `build_menu_finale.py`, the
   bird and its first wing frame baked into the fuchsia; no brush stroke under it;
   `nav-inscription.tsx` `.sheetBird` and `useBirdRoom`, the room's size unchanged; `qa_nav`
-  says bird); not pushed. `crane-rest-v2.webp` stays in `public/` unused. No crane is left on
-  the site once it is live.
+  says bird); live November 4 as `main` `d8ab9c4` (production
+  `dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`; public `qa_nav` 326/326, `qa_home_ink` 286/286).
+  `crane-rest-v2.webp` stays in `public/` unused. No crane is left on the site. (7) The homepage
+  hummingbird's wings: Mo found the non-stop beat "a little annoying", like a fly, and picked A
+  of three (A beat as it arrives, then rest; B short bursts; C always still; artifact
+  `Ga3RJ98KD1gcuqsAFzwoG9`, `reference/ink-pages/mockups/home-bird-rest/`): 3 s at full speed
+  while the bird blooms in, three slower beats, then the first frame, raised as painted
+  (`opening.module.css` only); `qa_home_ink` reads the wing arriving and settled (built copy
+  288/288); live November 4 as `main` `d26efc2`.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
