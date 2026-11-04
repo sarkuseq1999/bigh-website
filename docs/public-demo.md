@@ -4,9 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ljrkesm1i-sarkuseq1999s-projects.vercel.app`
-(`dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`), the **production** deployment of `main` at
-`d8ab9c4bb04996b9870f56f1c6af3a328f0b294a` (November 4, 2026, from about 09:06 Pacific). The
+The alias currently points to `bigh-website-8crgt6r15-sarkuseq1999s-projects.vercel.app`
+(`dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`), the **production** deployment of `main` at
+`d26efc288c331e479a6ba6e03a9b415d79b36684` (November 4, 2026, from about 10:56 Pacific). The
+homepage hummingbird's wings now beat as it arrives, then rest: beating non-stop they read as a
+fly's, and Mo picked A of three (A beat then rest, B short bursts, C always still): 3 s at ten
+beats a second while the bird blooms in, three slower beats, then the first frame, raised as
+painted (CSS only). `d26efc2` is `d8ab9c4` plus the freeze alarm in the page checks
+(`e03e6ae`, `scripts/qa/` and AGENTS.md only), the part 6 release notes (`7c62328`) and the wings
+(no other code), pushed as a fast-forward on Mo's "Yes, put it live". Before the push, on the
+built copy: `qa_home_ink` 288/288 (its wing checks now read the wing as the bird arrives and once
+it has settled), lint and type-check clean. After the alias update, in fresh unauthenticated
+browsers on the public demo: the wing filmed at 1440 and 390 px wide (beating from the page's
+start for about 3.5 s, then resting on the first frame), `qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, from about 09:06 to about 10:56 Pacific on November 4, 2026, the alias pointed to
+`bigh-website-ljrkesm1i-sarkuseq1999s-projects.vercel.app` (`dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`),
+the **production** deployment of `main` at `d8ab9c4bb04996b9870f56f1c6af3a328f0b294a`. The
 phone and tablet menu now ends on the homepage's own hummingbird sipping from a California
 fuchsia, in place of the crane at rest, the last crane on the site: Mo picked E of five ideas put
 into the real menu, then found its beating wings "annoying, like flys" at the menu's size, so
