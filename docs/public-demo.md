@@ -4,9 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-bthyajpb7-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ljrkesm1i-sarkuseq1999s-projects.vercel.app`
+(`dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`), the **production** deployment of `main` at
+`d8ab9c4bb04996b9870f56f1c6af3a328f0b294a` (November 4, 2026, from about 09:06 Pacific). The
+phone and tablet menu now ends on the homepage's own hummingbird sipping from a California
+fuchsia, in place of the crane at rest, the last crane on the site: Mo picked E of five ideas put
+into the real menu, then found its beating wings "annoying, like flys" at the menu's size, so
+there they rest, raised as painted (one picture: the bird and its first wing frame baked into
+Codex's fuchsia). `d8ab9c4` is `9fd7d87` plus the quail release notes (`03b77cf`), a DESIGN.md
+note (`438f7f7`), the part 6 mockups (three commits) and the build (no other code), pushed as a
+fast-forward on Mo's "Yes, put it live". Before the push, on the built copy: `qa_nav` 326/326
+(one earlier run 323/326, the desktop drop-down's filmed timing while the homepage check ran
+beside it; 326/326 alone), `qa_home_ink` 286/286, type-check, lint and Prettier clean. After the
+alias update, in fresh unauthenticated browsers on the public demo: `qa_nav` 326/326 and
+`qa_home_ink` 286/286, and the menu's hummingbird at five phone and tablet sizes (the picture
+loads from the new deployment). The first public `qa_nav` run froze after 259 passes and no fails
+and sat idle for 55 minutes; it was stopped and rerun, and since then every page check ends a
+frozen run itself (`scripts/qa/stall_guard.py`, on `studio`).
+
+Before that, from about 14:17 Pacific on November 3 to about 09:06 Pacific on November 4, 2026,
+the alias pointed to `bigh-website-bthyajpb7-sarkuseq1999s-projects.vercel.app`
 (`dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`), the **production** deployment of `main` at
-`9fd7d877adcee4993b183d73137fcfee424e512b` (November 3, 2026, from about 14:17 Pacific). Every
+`9fd7d877adcee4993b183d73137fcfee424e512b`. Every
 page's footer now closes on two California quail, the state bird, in the grass by the FDA park
 sign, in place of the red-crowned crane at rest, which read as Chinese: Mo picked the quail of
 three California animals, then A1 of two looser takes, a few wet washes in the opening
