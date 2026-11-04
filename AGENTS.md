@@ -322,7 +322,27 @@ These sit on top of `DESIGN.md`.
   formulas, Ask. The paintings are cut from the old handscroll's band (`build_science.py`,
   `PLACES`); phones get tighter cuts in one column. Berkeley says 1994, not 1994-2002: the
   faculty profile dates his time in Bruce Ames's laboratory 1994-1997. Mockups:
-  `reference/ink-pages/mockups/science-path/2026-10-26/`.
+  `reference/ink-pages/mockups/science-path/2026-10-26/`. (Round 3 below changed the order and
+  the paintings; the path's one place per screen stays.)
+- **Science round 3: start with the science, then the scientist (Mo, November 4, 2026; built
+  for his critique, not yet approved).** Mo: the design was good but "the way I put it together
+  could be better"; start broader, with what kind of science BiGH focuses on (cell science) and
+  the reason behind it; keep the water paint but shift from Asian to California. He then gave
+  Claude the whole job ("do the best you can ... I will come and critique"), so no options were
+  mocked; the built page is the proposal. Order: the opening "Our science starts in the cell."
+  (the two questions, how cells make energy and what changes with age, naming Dr. Liu on the
+  first screen; a desk at an open window over golden hills, a brass microscope on it); "Why start
+  with the cell?" (about 37 trillion cells, each making its own energy: San Francisco's houses at
+  dusk whose windows light a few at a time in gold leaf, once, as it arrives; three numbered lines
+  opening the existing explainer sheets; it keeps the `#health` address the footer links to);
+  Dr. Liu; his path (Berkeley with the Okayama doctorate in its words, Salzburg, Today: Okayama's
+  castle read as Asian); "Every formula has a scientist behind it."; "Read the research
+  yourself." (bound journals on a library table, three open); Ask BiGH Science (camp mugs on a
+  redwood picnic table). No labels over headings. Gone: the scrolls, the balanced stones and oil
+  lamp, the tea-set mugs, "Make sense of the science." (the homepage's own heading). Every
+  painting is Codex ink and wash, painted loose (the tidy first takes read as illustrations).
+  Spec `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
+  `reference/ink-pages/science/` (README, `build_science.py`, `paint.sh`).
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing

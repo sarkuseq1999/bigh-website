@@ -1,13 +1,11 @@
 "use client";
 
-import { ArrowRight, ArrowUpRight, Minus, Plus } from "lucide-react";
-import Image from "next/image";
+import { ArrowUpRight, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { researchItems } from "@/components/home/research-data";
-import { useSiteDialogs } from "@/components/ink/dialogs";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
-import { ask, health, ink, research } from "../science-content";
+import { ask, ink, research } from "../science-content";
 import { scienceArt } from "./science-art";
 import { Strip } from "./strip";
 import styles from "./explore.module.css";
@@ -28,22 +26,19 @@ function Meta({ parts }: { parts: string[] }) {
   );
 }
 
-/** A dash never starts a line: "What are mitochondria—and why do they matter?" breaks after it. */
-const keepDash = (text: string) => text.replace(/\s*—/g, "\u2060—");
-
-/** The research: the scroll rack, the three key studies, then all 36 sources on request. */
+/** The research: the journals on their library table (three laid open), the three key studies,
+ *  then all 36 sources on request. */
 export function Research() {
   const copy = useCopy();
   const [all, setAll] = useState(false);
   return (
     <Strip
       id="research"
-      label={research.eyebrow}
       title={research.title}
       lead={research.text}
-      art={scienceArt.scrolls}
-      phone={scienceArt.scrolls.phone}
-      alt={ink.scrollsAlt}
+      art={scienceArt.journals}
+      phone={scienceArt.journals.phone}
+      alt={ink.journalsAlt}
     >
       <ul className={`${styles.cols} ${styles.rows}`}>
         {KEY.map((item) => (
@@ -115,72 +110,17 @@ export function Research() {
   );
 }
 
-/** Health explained: one painting of three scenes over the three articles (on phones, each scene
- *  over its own article); each opens the kit's short explainer sheet. */
-export function Health() {
-  const copy = useCopy();
-  const dialogs = useSiteDialogs();
-  return (
-    <Strip
-      id="health"
-      label={health.eyebrow}
-      title={health.title}
-      lead={health.text}
-      art={scienceArt.health}
-      alt={ink.healthAlt}
-      wideOnly
-    >
-      <ul className={`${styles.cols} ${styles.rows}`}>
-        {health.doors.map((door, index) => {
-          const scene = scienceArt.health.scenes[index];
-          return (
-            <li key={door.topic} className={styles.col} data-scene="">
-              <figure className={styles.sceneFigure}>
-                <Image
-                  className={`${base.ink} ${styles.scene}`}
-                  src={scene.src}
-                  width={scene.width}
-                  height={scene.height}
-                  alt={copy(ink.sceneAlts[index])}
-                  sizes="360px"
-                  data-bloom="waiting"
-                />
-                <figcaption className={base.caption}>{copy(ink.illustration)}</figcaption>
-              </figure>
-              <p className={styles.meta}>{copy(door.topic)}</p>
-              <h3 id={`health-title-${index}`} className={styles.colTitle}>
-                {keepDash(copy(door.title))}
-              </h3>
-              <p className={styles.text}>{copy(door.preview)}</p>
-              {/* Three buttons with one name: each is described by its own article's title. */}
-              <button
-                type="button"
-                className={styles.go}
-                aria-describedby={`health-title-${index}`}
-                onClick={() => dialogs.openArticle(index)}
-              >
-                {copy(ink.explainer)} <ArrowRight size={16} aria-hidden="true" />
-              </button>
-            </li>
-          );
-        })}
-      </ul>
-    </Strip>
-  );
-}
-
-/** Ask BiGH Science: two mugs on a table, the three steps, its status. */
+/** Ask BiGH Science: two camp mugs on a redwood picnic table, the three steps, its status. */
 export function Ask() {
   const copy = useCopy();
   return (
     <Strip
       id="ask"
-      label={ask.eyebrow}
       title={ask.title}
       lead={`${copy(ask.lead)} ${copy(ask.text)}`}
-      art={scienceArt.mugs}
-      phone={scienceArt.mugs.phone}
-      alt={ink.mugsAlt}
+      art={scienceArt.picnic}
+      phone={scienceArt.picnic.phone}
+      alt={ink.picnicAlt}
     >
       {/* role="list": list-style none drops the list in Safari/VoiceOver. */}
       <ol className={styles.cols} role="list">

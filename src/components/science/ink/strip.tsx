@@ -10,14 +10,14 @@ import styles from "./strip.module.css";
 type Pic = { readonly src: string; readonly width: number; readonly height: number };
 
 /**
- * One part below Dr. Liu: the header row, one wide painting (its phone crop under 960px, or no
- * painting under 960px at all with `wideOnly`, where the part shows its own scenes), then `children`.
+ * One part below Dr. Liu's path: the header row (the heading, no label over it: round 3, November 4,
+ * 2026), one wide painting (its phone crop under 960px, or no painting under 960px at all with
+ * `wideOnly`, where the part shows its own scenes), then `children`.
  * The painting multiplies onto the page's paper (the kit's .ink) and blooms in as it arrives. The
  * server marks it "waiting" (the page's stylesheet shows it whole where no bloom will come).
  */
 export function Strip({
   id,
-  label,
   title,
   lead,
   art,
@@ -27,7 +27,6 @@ export function Strip({
   children,
 }: {
   id: string;
-  label: string;
   title: string;
   lead: string;
   art: Pic;
@@ -51,12 +50,9 @@ export function Strip({
     <section id={id} className={styles.strip} aria-labelledby={`${id}-title`}>
       <div className={base.wrap}>
         <header className={styles.head}>
-          <div>
-            <p className={base.caption}>{copy(label)}</p>
-            <h2 id={`${id}-title`} className={styles.title}>
-              {copy(title)}
-            </h2>
-          </div>
+          <h2 id={`${id}-title`} className={styles.title}>
+            {copy(title)}
+          </h2>
           <p className={base.body}>{copy(lead)}</p>
         </header>
         <figure

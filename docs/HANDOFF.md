@@ -5,7 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 4, 2026, by Claude Code (the homepage hummingbird's wings beat as
+- **Science round 3, built, waiting for Mo's critique (November 4, 2026, Claude Code; not
+  pushed).** Mo asked for the page to start broader (what science, and why) and to turn
+  California, then gave Claude the whole job and said he would critique the built page. The page
+  now opens "Our science starts in the cell." (a desk at a window over golden hills), then "Why
+  start with the cell?" (San Francisco's houses at dusk, windows lighting in gold leaf), Dr. Liu,
+  his path (Berkeley, Salzburg, Today; Okayama told in words), the formulas, "Read the research
+  yourself.", Ask. AGENTS.md "Science round 3"; spec
+  `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
+  `reference/ink-pages/science/` (README round 3). New lines are English in every language
+  (drafts, no catalog keys yet). Checks: `qa_science_ink` rewritten for the new order (opening,
+  why, three places); `check_science_art.py` rewritten. Built in a scratch worktree (branch
+  `science-ca`) while another session worked on About and the homepage in this folder.
+- **Earlier, November 4, 2026, by Claude Code** (the homepage hummingbird's wings beat as
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run
   itself (`scripts/qa/stall_guard.py`) and Mo no longer waits for the public checks (AGENTS.md
@@ -602,7 +614,7 @@ Every page is in Ink & Gold:
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 21)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 21)  |
 | Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 21) |
-| Science              | Dr. Liu's life as a handscroll (local: his path, one place per screen, Oct 26)           | `qa_science_ink` 1279/1279 (Oct 21)   |
+| Science              | Live: his path, one place per screen (Oct 26); local: round 3, the town's lamps (Nov 4)  | `qa_science_ink` 633/633 (Oct 26)     |
 | Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 21)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and

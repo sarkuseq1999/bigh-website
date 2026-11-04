@@ -1,29 +1,37 @@
 """QA for the Science page in Ink & Gold (spec docs/superpowers/specs/2026-10-14-science-ink-design.md;
-plan docs/superpowers/plans/2026-10-14-science-ink.md). Since Mo's pick B (October 26, 2026) the page
-opens on the title and Dr. Liu, then his path one place per screen going down (the handscroll's
-sideways travel and its checks are gone), then research, health explained, the formulas and Ask.
+since November 4, 2026 round 3, docs/superpowers/specs/2026-11-04-science-california-design.md).
+The page opens on the science ("Our science starts in the cell.", the desk at the window), then
+"Why start with the cell?" (the town whose lamps light up, three lines with their explainers),
+Dr. Liu and his path (Berkeley, Salzburg, Today), the formulas, the research and Ask.
 
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Science, one h1, the parts' ids in order,
               no canvas, no console errors (1440x900, 390x844); (final review) the shared footer
               promise and the menu's drop-down title in the same face as on About
-  people      Dr. Liu's real photo on its mount, on the first screen, his name and role, no numbers
-              row (his path tells them), "Read his story" opens his sheet; the five bottles with
-              their credits, each linking to its page; DESIGN.md's mount shadow, the intro's margin,
-              the bottles, names and credits each on one line per row
-  path        (October 26) his four places in order, each painting loaded and bloomed in, the phone
-              cut under 960px; from 960px the paintings take turns (left, right, left), each running
-              to the page's edge, Today wide with its words in its sky over paper; under 960px one
-              column, each painting over its words; each place fits one screen; its caption in the
-              painting's box and the window; its links out to their sources
-  settled     the parts below the path stand still once every painting has arrived (the menu's and
-              the footer's #research, #health and #ask links land by them)
-  still       reduced motion and no script: the path's and the strips' paintings whole and crisp
-              (no bloom left waiting); print: the path's paintings whole
+  opening     (round 3) the h1 and its lead (naming Dr. Liu) on the first screen; the desk painting
+              loaded and bloomed in, its phone cut under 960px; from 960px the words left of the
+              painting, which runs to the window's right edge; under 960px the painting over the words
+  why         (round 3) the town loaded and bloomed in; its lamps dark until it is in view, then lit
+              (the six layers from 960px, the phone's lit cut under it); its line and label; three
+              numbered lines, each explainer opening its own sheet and giving focus back; the cell
+              count's source; from 960px the numbers, lines and links each on one line
+  people      Dr. Liu's real photo on its mount, his name and role, no numbers row (his path tells
+              them), "Read his story" opens his sheet; the five bottles with their credits, each
+              linking to its page; DESIGN.md's mount shadow, the intro's margin, the bottles, names
+              and credits each on one line per row
+  path        (October 26; round 3: three places) his places in order, each painting loaded and
+              bloomed in, the phone cut under 960px; from 960px the paintings take turns (right,
+              left), each running to the page's edge, Today wide with its words in its sky over
+              paper; under 960px one column, each painting over its words; each place fits one
+              screen; its caption in the painting's box and the window; its links out to their sources
+  settled     the parts below the opening stand still once every painting has arrived (the menu's
+              and the footer's #health, #research and #ask links land by them)
+  still       reduced motion and no script: every painting whole and crisp (no bloom left waiting),
+              the town lit; print: the path's paintings whole
   multiply    every painting's blend group sits on the page with no stacking context
-  strips      research, health and ask: the painting in use (phone crop under 960px) and bloomed in,
-              year · kind · journal, the full list, each explainer's own sheet; from 960px the
-              columns' titles, words and links each start on one line
+  strips      research and ask: the painting in use (phone crop under 960px) and bloomed in,
+              year · kind · journal, the full list; from 960px the studies' titles, words and links
+              each start on one line
   languages   kr, jp, cns, vn: 200, no errors, the research links translated, Dr. Liu named as the
               site names him
   layout      sizes 1920 to 360: no sideways scroll, text 15px+, targets 44px+
@@ -52,7 +60,9 @@ REPO = Path(__file__).resolve().parents[2]
 OUT = REPO / "scripts/qa/out/science-ink" / ("" if BROWSER == "chromium" else BROWSER)
 OUT.mkdir(parents=True, exist_ok=True)
 PATH = "/en/science"
-PARTS = ["scientists", "research", "health", "formulas", "ask"]
+# The page's sections in order (the opening is its <header>). "health" is "Why start with the
+# cell?": it keeps the address of "Make sense of the science.", whose explainers it took.
+PARTS = ["health", "scientists", "formulas", "research", "ask"]
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
 results = []
 
@@ -107,7 +117,7 @@ def shell(browser):
         check(f"shell {w}: ink look", page.locator('[data-look="ink"][data-page="science"]').count() == 1)
         check(f"shell {w}: Science carries the menu's stroke", page.locator('#site-navigation a[href$="/science"][data-ink="here"]').count() == 1)
         h1 = page.locator("h1")
-        check(f"shell {w}: one h1, the title", h1.count() == 1 and "Meet the scientists" in h1.inner_text(), h1.first.inner_text() if h1.count() else "")
+        check(f"shell {w}: one h1, the title", h1.count() == 1 and "Our science starts in the cell." in h1.inner_text(), h1.first.inner_text() if h1.count() else "")
         ids = page.evaluate("() => [...document.querySelectorAll('main > section[id]')].map(s => s.id)")
         check(f"shell {w}: parts in order", ids == PARTS, str(ids))
         check(f"shell {w}: no canvas", page.locator("main canvas").count() == 0)
@@ -166,21 +176,19 @@ def people(browser):
     # (Task 6) The same real photo sits the same way on every page: DESIGN.md's one mount shadow.
     shadow = photo.evaluate("i => getComputedStyle(i.closest('figure')).boxShadow")
     check("people: the mount's shadow is DESIGN.md's photo mount", shadow == MOUNT_SHADOW, shadow)
-    margin = page.evaluate("getComputedStyle(document.querySelector('#liu h2 ~ p ~ p')).marginTop")
+    margin = page.evaluate("getComputedStyle(document.querySelector('#liu p[class*=intro]')).marginTop")
     check("people: the intro keeps its 10px under the headline", margin == "10px", margin)
     check("people: no console errors", not errors, "; ".join(errors[:3]))
     ctx.close()
     # (Task 6) Rows that read as rows: the bottles on one ground line, the names and the credits
-    # each starting on one line (per row of bottles). (October 26) He opens the page: his photo
-    # starts on the first screen, under the title.
+    # each starting on one line (per row of bottles). (Round 3) His name is on the first screen in
+    # the opening's lead (the opening's checks); his photo comes after "Why start with the cell?".
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h)
         rows = page.evaluate(BOTTLE_ROWS)
         for i, row in enumerate(rows):
             for part, edges in row.items():
                 check(f"people {w}: bottle row {i + 1}'s {part} on one line", max(edges) - min(edges) <= 1, str(edges))
-        top, title = page.evaluate("[document.querySelector('#liu figure').getBoundingClientRect().top, document.querySelector('h1').getBoundingClientRect().bottom]")
-        check(f"people {w}: his photo on the first screen, under the title", title < top < h * 0.6, f"title ends {title:.0f}, photo at {top:.0f}")
         ctx.close()
 
 STACKING = """el => {
@@ -205,9 +213,11 @@ STACKING = """el => {
   return found;
 }"""
 
-# (October 26) His path: the four places in order, their links' counts.
-PATH_NAMES = ["Okayama", "Berkeley", "Salzburg", "Today"]
-PATH_LINKS = [1, 2, 1, 0]
+# (October 26) His path: the places in order, their links' counts (round 3: Okayama's painting
+# went; his doctorate there is told in Berkeley's words, with its faculty profile).
+PATH_NAMES = ["Berkeley", "Salzburg", "Today"]
+PATH_LINKS = [2, 1, 0]
+PATH_SIDES = ["right", "left", "wide"]
 PATH_PICTURES = "#scientists [data-place] img"
 # The path stops growing at 1600px (path.module.css .places).
 PATH_MAX = 1600
@@ -249,7 +259,7 @@ def path(browser):
         tag = f"path {w}x{h}"
         ctx, page, _, errors = opened(browser, w, h)
         places = page.evaluate(PLACES)
-        check(f"{tag}: four places in order", [p["name"] for p in places] == PATH_NAMES, str([p["name"] for p in places]))
+        check(f"{tag}: the places in order", [p["name"] for p in places] == PATH_NAMES, str([p["name"] for p in places]))
         check(f"{tag}: one under another", all(a["li"]["b"] <= b["li"]["t"] + 1 for a, b in zip(places, places[1:])))
         bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")
         for place, links_wanted in zip(places, PATH_LINKS):
@@ -293,7 +303,7 @@ def path(browser):
                 check(f"{tag} {key}: the painting the window's width", img["w"] >= w - 1, f"{img['w']:.0f}")
         if w >= 960:
             sides = [p["side"] for p in places]
-            check(f"{tag}: the paintings take turns (left, right, left, wide)", sides == ["left", "right", "left", "wide"], str(sides))
+            check(f"{tag}: the paintings take turns (right, left, wide)", sides == PATH_SIDES, str(sides))
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
 
@@ -307,19 +317,25 @@ def still(browser):
             # and crisp, a strip's wide one with only its own soft ends (no bloom blot), the path's
             # and a phone scene with no mask at all.
             places = page.locator(PATH_PICTURES).all()
-            check(f"still {label} {w}: the path's four paintings show", len(places) == 4 and all(p.is_visible() for p in places), str(len(places)))
+            check(f"still {label} {w}: the path's paintings show", len(places) == len(PATH_NAMES) and all(p.is_visible() for p in places), str(len(places)))
             for img in places:
                 name = (img.get_attribute("alt") or "")[:36]
                 filt, mask, opacity = img.evaluate("i => { const s = getComputedStyle(i); return [s.filter, s.maskImage, s.opacity]; }")
                 check(f"still {label} {w}: {name} whole and crisp", filt == "none" and mask == "none" and opacity == "1", f"{filt} | {mask[:40]} | {opacity}")
             pictures = [p for p in page.locator(STRIP_PICTURES).all() if p.is_visible()]
-            check(f"still {label} {w}: the strips' paintings show", len(pictures) == (3 if w == 1440 else 5), str(len(pictures)))
+            check(f"still {label} {w}: the strips' paintings show", len(pictures) == 2, str(len(pictures)))
             for img in pictures:
                 name = (img.get_attribute("alt") or "")[:36]
-                filt, mask, opacity, scene = img.evaluate("i => { const s = getComputedStyle(i); return [s.filter, s.maskImage, s.opacity, !!i.closest('[data-scene]')]; }")
-                soft_ends = "none" if scene else "linear-gradient(90deg"
-                ok = filt == "none" and opacity == "1" and (mask == "none" if scene else (mask.startswith(soft_ends) and "url(" not in mask))
+                filt, mask, opacity = img.evaluate("i => { const s = getComputedStyle(i); return [s.filter, s.maskImage, s.opacity]; }")
+                ok = filt == "none" and opacity == "1" and mask.startswith("linear-gradient(90deg") and "url(" not in mask
                 check(f"still {label} {w}: {name} whole and crisp, only its own soft ends", ok, f"{filt} | {mask[:40]} | {opacity}")
+            # (Round 3) The opening's desk and the town (its group, with its lamps lit).
+            for sel, name in [("main > header img", "the desk"), ("#health [data-bloom]", "the town")]:
+                filt, mask, opacity = page.evaluate("sel => { const s = getComputedStyle(document.querySelector(sel)); return [s.filter, s.maskImage, s.opacity]; }", sel)
+                ok = filt == "none" and opacity == "1" and mask.startswith("linear-gradient(90deg") and "url(" not in mask
+                check(f"still {label} {w}: {name} whole and crisp, only its own soft ends", ok, f"{filt} | {mask[:40]} | {opacity}")
+            lamps = page.evaluate("() => [...document.querySelectorAll('#health img[data-lamp]')].filter(i => getComputedStyle(i).display !== 'none').map(i => getComputedStyle(i).opacity)")
+            check(f"still {label} {w}: the town lit", bool(lamps) and all(o == "1" for o in lamps), str(lamps))
             page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
             ctx.close()
     # Printed before the visitor scrolled down: the path's paintings whole (not left waiting).
@@ -329,11 +345,11 @@ def still(browser):
         page.emulate_media(media="print")
         page.wait_for_timeout(600)
         shown = page.evaluate("sel => [...document.querySelectorAll(sel)].map(i => { const s = getComputedStyle(i); return s.maskImage === 'none' && s.filter === 'none'; })", PATH_PICTURES)
-        check(f"still print {w}: the path's paintings whole", shown == [True] * 4, str(shown))
+        check(f"still print {w}: the path's paintings whole", shown == [True] * len(PATH_NAMES), str(shown))
         ctx.close()
 
 
-PART_TOPS = "['research', 'health', 'formulas', 'ask'].map(id => Math.round(document.getElementById(id).getBoundingClientRect().top + scrollY))"
+PART_TOPS = "['health', 'scientists', 'formulas', 'research', 'ask'].map(id => Math.round(document.getElementById(id).getBoundingClientRect().top + scrollY))"
 SETTLED_SIZES = [(1440, 900, "en"), (1280, 720, "en"), (1024, 768, "en"), (960, 800, "en"), (390, 844, "en"), (360, 740, "en"), (1440, 900, "vn"), (390, 844, "kr")]
 
 
@@ -341,7 +357,7 @@ def settled(browser):
     # The paintings are lazy and each phone cut has another ratio than its wide one: the stylesheet
     # reserves each one's box (path.module.css, strip.module.css), so once every painting has
     # arrived the parts below stand where they stood before (the menu's links land by them).
-    pictures = f"{PATH_PICTURES}, {STRIP_PICTURES}"
+    pictures = f"{PATH_PICTURES}, {STRIP_PICTURES}, main > header img, #health img"
     for w, h, lang in SETTLED_SIZES:
         ctx = browser.new_context(viewport={"width": w, "height": h})
         page = ctx.new_page()
@@ -357,7 +373,7 @@ def settled(browser):
         )
         page.wait_for_timeout(300)
         arrived = page.evaluate(PART_TOPS)
-        for name, before, after in zip(["#research", "#health", "#formulas", "#ask"], first, arrived):
+        for name, before, after in zip(["#health", "#scientists", "#formulas", "#research", "#ask"], first, arrived):
             check(f"settled {w}x{h} {lang}: {name} stays put once the paintings have arrived", abs(after - before) <= 2, f"{before} -> {after}")
         ctx.close()
 
@@ -365,8 +381,8 @@ def settled(browser):
 def multiply(browser):
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
-        for img in page.locator(f"{PATH_PICTURES}, main figure[data-picture] img, main [data-scene] img").all():
-            src = img.get_attribute("src")[:50]
+        for img in page.locator(f"{PATH_PICTURES}, main figure[data-picture] img, main > header img, #health [data-bloom]").all():
+            src = (img.get_attribute("src") or img.get_attribute("class") or "")[:50]
             check(f"multiply {w}: {src} multiplies", img.evaluate("i => getComputedStyle(i).mixBlendMode") == "multiply")
             found = img.evaluate(STACKING)
             check(f"multiply {w}: {src} sits on the paper", not found, "; ".join(found))
@@ -375,8 +391,8 @@ def multiply(browser):
 
 KEY_META = ["2002 · Animal study · PNAS", "2008 · Review · Neurochem Res", "2023 · Review · Cell"]
 EXPLAINER_SHEETS = ["Energy starts small.", "Balance matters.", "Aging is a bigger story."]
-# A painting the visitor was meant to see: the strips' wide paintings and the health scenes.
-STRIP_PICTURES = "#research figure[data-picture] img, #health figure[data-picture] img, #ask figure[data-picture] img, #health [data-scene] img"
+# A painting the visitor was meant to see: the strips' paintings.
+STRIP_PICTURES = "#research figure[data-picture] img, #ask figure[data-picture] img"
 
 
 # The tops of each column's title, words and link (the research's link row, or health's button).
@@ -397,7 +413,7 @@ def tidy(text):
 def strips(browser):
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, errors = opened(browser, w, h)
-        for part in ["research", "health", "ask"]:
+        for part in ["research", "ask"]:
             bring(page, f"#{part}")
             page.wait_for_timeout(500)
             check(f"strips {w} {part}: its title", page.locator(f"#{part} h2").count() == 1)
@@ -428,18 +444,9 @@ def strips(browser):
             for img in shown:
                 state = img.evaluate("i => [i.dataset.bloom, getComputedStyle(i).opacity, getComputedStyle(i).filter]")
                 check(f"strips {w} {part}: {img.get_attribute('alt')[:40]} has bloomed in", state == ["done", "1", "none"], str(state))
-            if part in ("research", "ask"):
-                # Art direction: the phone crop under 960px, the wide painting above.
-                src = shown[0].evaluate("i => decodeURIComponent(i.currentSrc)")
-                check(f"strips {w} {part}: the {'phone crop' if w == 390 else 'wide painting'} is the picture in use", ("-phone-" in src) == (w == 390), src[-60:])
-        scenes = page.locator("#health [data-scene] img")
-        wide = page.locator("#health figure[data-picture]")
-        if w == 390:
-            check("strips 390 health: one scene over each article", scenes.count() == 3 and all(s.is_visible() for s in scenes.all()))
-            check("strips 390 health: the wide painting is hidden", wide.count() == 1 and not wide.is_visible())
-        else:
-            check("strips 1440 health: the wide painting stands over the columns", wide.count() == 1 and wide.is_visible())
-            check("strips 1440 health: the phone scenes are hidden", scenes.count() == 3 and not any(s.is_visible() for s in scenes.all()))
+            # Art direction: the phone crop under 960px, the wide painting above.
+            src = shown[0].evaluate("i => decodeURIComponent(i.currentSrc)")
+            check(f"strips {w} {part}: the {'phone crop' if w == 390 else 'wide painting'} is the picture in use", ("-phone-" in src) == (w == 390), src[-60:])
         text = page.locator("#research").inner_text()
         for title in ["Mitochondrial nutrients and the aging cell", "Dr. Liu on lipoic acid and the aging brain", "Healthy aging has many moving parts"]:
             check(f"strips {w} research: {title}", title in text)
@@ -454,24 +461,6 @@ def strips(browser):
         page.get_by_role("button", name=re.compile(r"Show fewer sources")).click()
         page.wait_for_timeout(300)
         check(f"strips {w} research: and closes", page.locator("#research details").count() == 0)
-        buttons = page.locator("#health button")
-        check(f"strips {w} health: three explainers", buttons.count() == 3)
-        headings = [tidy(t) for t in page.locator("#health li h3").all_inner_texts()]
-        for i in range(3):
-            button = buttons.nth(i)
-            described = button.evaluate("b => { const e = document.getElementById(b.getAttribute('aria-describedby') || ''); return e ? e.textContent : null; }")
-            described = tidy(described or "")
-            check(f"strips {w} health: explainer {i + 1} is described by its article title", described == headings[i] and described != "", described)
-            button.scroll_into_view_if_needed()
-            button.click()
-            page.wait_for_timeout(700)
-            open_sheets = page.locator("dialog[open]")
-            title = open_sheets.locator("h2").first.inner_text() if open_sheets.count() == 1 else ""
-            check(f"strips {w} health: explainer {i + 1} opens its own sheet", open_sheets.count() == 1 and title == EXPLAINER_SHEETS[i], title)
-            page.keyboard.press("Escape")
-            page.wait_for_timeout(400)
-            check(f"strips {w} health: explainer {i + 1} closes on Escape", page.locator("dialog[open]").count() == 0)
-            check(f"strips {w} health: focus returns to explainer {i + 1}'s button", button.evaluate("b => b === document.activeElement"))
         ask = page.locator("#ask").inner_text()
         for word in ["Ask BiGH Science", "In development", "not accepting submissions"]:
             check(f"strips {w} ask: {word}", word in ask)
@@ -482,15 +471,113 @@ def strips(browser):
         check(f"strips {w} ask: the steps are a list to screen readers (role=list)", steps_role == "list" and steps_tree.lstrip().startswith("- list"), f"{steps_role} {steps_tree.strip()[:30]!r}")
         check(f"strips {w}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
-    # (Task 6) From 960px the research and health columns share their rows: the titles, the words
-    # and the links each start on one line (at 1024px the first study's words ran two lines longer
-    # than the second's, and the three "Read the study" links stood at three heights).
+    # (Task 6) From 960px the research columns share their rows: the titles, the words and the
+    # links each start on one line (at 1024px the first study's words ran two lines longer than the
+    # second's, and the three "Read the study" links stood at three heights).
     for w, h in [(1440, 900), (1024, 768)]:
         ctx, page, _, _ = opened(browser, w, h)
-        for part in ["research", "health"]:
-            rows = page.evaluate(COLUMN_ROWS, f"#{part} ul > li")
-            for name, tops in rows.items():
-                check(f"strips {w} {part}: the {name} start on one line", max(tops) - min(tops) <= 1, str(tops))
+        rows = page.evaluate(COLUMN_ROWS, "#research ul > li")
+        for name, tops in rows.items():
+            check(f"strips {w} research: the {name} start on one line", max(tops) - min(tops) <= 1, str(tops))
+        ctx.close()
+
+
+OPENING_BOX = """() => { const b = e => { const r = e.getBoundingClientRect(); return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width }; };
+  const img = document.querySelector('main > header img'), lead = document.querySelector('main > header h1 + p');
+  return { h1: b(document.querySelector('h1')), lead: b(lead), img: b(img), text: lead.textContent,
+           state: [img.complete && img.naturalWidth > 0, img.dataset.bloom, decodeURIComponent(img.currentSrc)],
+           bar: document.querySelector('header').getBoundingClientRect().bottom }; }"""
+
+
+# (Round 3) The opening: the h1 and its lead, the desk painting.
+def opening(browser):
+    for w, h in [(1920, 1080), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (390, 844), (360, 740)]:
+        tag = f"opening {w}x{h}"
+        ctx, page, _, errors = opened(browser, w, h)
+        try:
+            page.wait_for_function("document.querySelector('main > header img').dataset.bloom === 'done'", timeout=7000)
+        except PlaywrightTimeout:
+            pass
+        box = page.evaluate(OPENING_BOX)
+        img, h1, lead = box["img"], box["h1"], box["lead"]
+        check(f"{tag}: the lead names Dr. Liu", "Dr. Jiankang Liu" in box["text"], box["text"][:60])
+        check(f"{tag}: the title and lead on the first screen", h1["t"] >= box["bar"] - 1 and lead["b"] <= h, f"h1 at {h1['t']:.0f}, lead ends {lead['b']:.0f}")
+        check(f"{tag}: the painting loaded and bloomed in", box["state"][:2] == [True, "done"], str(box["state"][:2]))
+        check(f"{tag}: the {'phone' if w < 960 else 'wide'} cut in use", ("-phone-" in box["state"][2]) == (w < 960), box["state"][2][-40:])
+        if w >= 960:
+            check(f"{tag}: the words left of the painting", max(h1["r"], lead["r"]) <= img["l"] + 1, f"words to {max(h1['r'], lead['r']):.0f}, painting from {img['l']:.0f}")
+            check(f"{tag}: the painting to the window's right edge", img["r"] >= w - 2, f"{img['r']:.0f}")
+            check(f"{tag}: the painting under the menu bar, in the window", img["t"] >= box["bar"] - 1 and img["b"] <= h + 1, f"{img['t']:.0f}-{img['b']:.0f}")
+        else:
+            check(f"{tag}: the painting over the words", img["b"] <= h1["t"] + 1, f"painting ends {img['b']:.0f}, h1 at {h1['t']:.0f}")
+        if w in (1440, 390):
+            page.screenshot(path=str(OUT / f"opening-{w}.png"))
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+        ctx.close()
+
+
+# The lamp layers this layout shows: [opacity, loaded].
+LAMPS = """() => [...document.querySelectorAll('#health img[data-lamp]')].filter(i => getComputedStyle(i).display !== 'none')
+  .map(i => [Number(getComputedStyle(i).opacity), i.complete && i.naturalWidth > 0])"""
+WHY_ROWS = """() => { const top = e => Math.round(e.getBoundingClientRect().top); const li = [...document.querySelectorAll('#health ol > li')];
+  return { numbers: li.map(l => top(l.children[0])), lines: li.map(l => top(l.querySelector('p'))), links: li.map(l => top(l.querySelector('button'))) }; }"""
+TOWN_CENTRE = """bar => { const r = document.querySelector('#health figure').getBoundingClientRect();
+  window.scrollBy(0, r.top - bar - Math.max(0, (innerHeight - bar - r.height) / 2)); }"""
+TOWN_STATE = """() => { const g = document.querySelector('#health [data-bloom]'); const i = g.querySelector('picture img');
+  return [g.dataset.bloom, i.complete && i.naturalWidth > 0, decodeURIComponent(i.currentSrc)]; }"""
+DESCRIBED = "b => { const e = document.getElementById(b.getAttribute('aria-describedby') || ''); return e ? e.textContent : ''; }"
+
+
+# (Round 3) "Why start with the cell?": the town and its lamps, the three lines and their sheets.
+def why(browser):
+    for w, h in [(1440, 900), (1024, 768), (390, 844)]:
+        tag = f"why {w}x{h}"
+        ctx, page, _, errors = opened(browser, w, h)
+        check(f"{tag}: its heading", page.locator("#health h2").inner_text().strip() == "Why start with the cell?")
+        check(f"{tag}: about 37 trillion cells", "37 trillion" in page.locator("#health").inner_text())
+        dark = page.evaluate(LAMPS)
+        check(f"{tag}: the lamps dark before the town is in view", bool(dark) and all(o == 0 for o, _ in dark), str(dark))
+        bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")
+        page.evaluate(TOWN_CENTRE, bar)
+        try:
+            page.wait_for_function("document.querySelector('#health figure').dataset.lamps === 'on'", timeout=9000)
+        except PlaywrightTimeout:
+            pass
+        check(f"{tag}: the lamps come on once the town is in view", page.evaluate("document.querySelector('#health figure').dataset.lamps") == "on")
+        page.wait_for_timeout(4500)
+        lit = page.evaluate(LAMPS)
+        wanted = 6 if w >= 960 else 1
+        check(f"{tag}: {wanted} lamp layer(s) shown, loaded and lit", len(lit) == wanted and all(o == 1 and ok for o, ok in lit), str(lit))
+        state = page.evaluate(TOWN_STATE)
+        check(f"{tag}: the town loaded and bloomed in", state[:2] == ["done", True], str(state[:2]))
+        check(f"{tag}: the {'phone' if w < 960 else 'wide'} cut in use", ("-phone-" in state[2]) == (w < 960), state[2][-40:])
+        caption = page.locator("#health figcaption").inner_text()
+        check(f"{tag}: the line under the town and its label", "every house lights its own lamp" in caption and "Illustration" in caption, caption[:60])
+        if w in (1440, 390):
+            page.screenshot(path=str(OUT / f"why-town-{w}.png"))
+        buttons = page.locator("#health ol button")
+        check(f"{tag}: three explainers", buttons.count() == 3)
+        lines = [tidy(t) for t in page.locator("#health ol li p").all_inner_texts()]
+        for i in range(min(3, buttons.count())):
+            button = buttons.nth(i)
+            described = tidy(button.evaluate(DESCRIBED))
+            check(f"{tag}: explainer {i + 1} is described by its line", described == lines[i] and described != "", described[:50])
+            button.scroll_into_view_if_needed()
+            button.click()
+            page.wait_for_timeout(700)
+            sheets = page.locator("dialog[open]")
+            title = sheets.locator("h2").first.inner_text() if sheets.count() == 1 else ""
+            check(f"{tag}: explainer {i + 1} opens its own sheet", sheets.count() == 1 and title == EXPLAINER_SHEETS[i], title)
+            page.keyboard.press("Escape")
+            page.wait_for_timeout(400)
+            check(f"{tag}: explainer {i + 1} closes on Escape", page.locator("dialog[open]").count() == 0)
+            check(f"{tag}: focus returns to explainer {i + 1}'s button", button.evaluate("b => b === document.activeElement"))
+        source = page.locator("#health a[href*='pubmed']")
+        check(f"{tag}: the cell count's source opens in a new tab", source.count() == 1 and source.get_attribute("target") == "_blank" and "23829164" in (source.get_attribute("href") or ""))
+        if w >= 960:
+            for name, tops in page.evaluate(WHY_ROWS).items():
+                check(f"{tag}: the {name} start on one line", max(tops) - min(tops) <= 1, str(tops))
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
 
 
@@ -578,7 +665,7 @@ def deep_links(browser):
             ctx.close()
 
 
-SECTIONS = {"shell": shell, "people": people, "path": path, "settled": settled, "still": still, "multiply": multiply, "strips": strips, "languages": languages, "layout": layout, "deep_links": deep_links}
+SECTIONS = {"shell": shell, "opening": opening, "why": why, "people": people, "path": path, "settled": settled, "still": still, "multiply": multiply, "strips": strips, "languages": languages, "layout": layout, "deep_links": deep_links}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

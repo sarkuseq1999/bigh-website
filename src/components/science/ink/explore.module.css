@@ -1,4 +1,5 @@
-/* The research, health explained and Ask BiGH Science: the words under each strip. */
+/* The research and Ask BiGH Science: the words under each strip (health explained went in round
+   3; its explainers open from "Why start with the cell?", why.tsx). */
 .cols {
   display: grid;
   gap: 32px;
@@ -19,10 +20,9 @@
   border-top: 1px solid var(--hair);
 }
 
-/* The research and health columns, from 960px: the three share four rows (subgrid), so the small
-   facts, the titles, the words and the links each start on one line however many lines a title
-   or its words take (at 1024px the first study's words run two lines longer than the second's).
-   The health scene's picture is hidden there, so it takes no row. */
+/* The research columns, from 960px: the three share four rows (subgrid), so the small facts, the
+   titles, the words and the links each start on one line however many lines a title or its words
+   take (at 1024px the first study's words run two lines longer than the second's). */
 @media (min-width: 960px) {
   .rows > li {
     display: grid;
@@ -138,41 +138,6 @@
   border-radius: 999px;
   color: var(--ink);
   font-size: 17px;
-}
-
-/* Health on phones: each scene over its article, with its own "Illustration" (the wide strip and
-   its caption show from 960px). The kit's .look .caption zeroes the margin at (0,2,0), so the
-   caption is scoped one step higher. */
-.sceneFigure {
-  width: min(100%, 360px);
-  margin: 0 auto 18px;
-}
-
-.scene {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
-.cols .sceneFigure figcaption {
-  margin-top: 2px;
-  text-align: right;
-}
-
-@media (min-width: 960px) {
-  .sceneFigure {
-    display: none;
-  }
-}
-
-/* Reduced motion and a page whose script never runs: the scene the server marks "waiting" is
-   shown whole (the strip's own rule, strip.module.css, does the same for the wide painting). */
-@media (prefers-reduced-motion: reduce), (scripting: none) {
-  :global([data-look="ink"]) .scene[data-bloom="waiting"] {
-    -webkit-mask: none;
-    mask: none;
-    filter: none;
-  }
 }
 
 /* The full list of sources. */

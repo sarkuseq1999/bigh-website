@@ -1,62 +1,25 @@
-"""Build the Science page's ink paintings (Mo, October 13-14, 2026; spec
-docs/superpowers/specs/2026-10-14-science-ink-design.md).
+"""Build the Science page's paintings.
 
-Originals: reference/ink-pages/science/originals/gpt25-<take>.png (GPT Image 2.5 on rice paper;
-prompts in prompts/). Output: public/images/science/ink/*.webp (lossless plates in plates/, not
-committed) and src/components/science/ink/science-art.ts.
+Round 3 (Mo, November 4, 2026; spec docs/superpowers/specs/2026-11-04-science-california-design.md):
+the page opens on the science ("Our science starts in the cell.") and turns from an Asian feel to
+California. Every picture is a Codex painting (Mo's ChatGPT plan, no API spend; orders in prompts/,
+sent by paint.sh) in the homepage close's way of painting, ink and wash with light colour:
 
-The handscroll is three 21:9 panels painted to one horizon with mist at their ends. Each panel's
-paper is divided out; the panels are shifted to one horizon (DY, measured October 14: the sea's top
-row is 653 at panel 1's right and 696 at panel 2's left; the hills' top row is 498 at panel 2's
-right and 503 at panel 3's left) and laid side by side, overlapping by OVERLAP px. Join 2 (the
-hills): both inner ends fade to paper (a smoothstep over FADES px) and meet in a darken blend, so
-ink stays ink and the mists join. Join 1 (the open sea) is a crossfade instead (CROSSFADE): both
-panels paint spray and mist at that end (panel 1's last ~300px, panel 2's first ~550px), so two ends
-fading to paper left a blank gap that read as two seas (October 14 review); over a 900px overlap
-panel 1 fades out exactly as panel 2 fades in (weights summing to one), and the sea runs on through
-the spray. The band is then cropped to its ink and levelled to white.
+- desk: the opening, a scientist's desk at an open window over golden hills (desk-window-2).
+- town: "Why start with the cell?", San Francisco's houses at dusk (town-dusk-1) and the same
+  painting with every window lit (town-lit-1, an edit of it, registered onto it here). The lit
+  windows are found where the two differ (warm in the lit take, bare paper in the unlit one), laid
+  in gold leaf and split into GROUPS layers, so the page can light them a few at a time.
+- places: Dr. Liu's path, Berkeley, Salzburg and Today, each a Codex repaint of the October
+  handscroll's cut with light washes (wash-<place>-1). Today keeps the handscroll's own gold-leaf
+  sun, cut from its old picture and set in the new sky (SUN).
+- journals: the research, bound journals on a library table, three laid open (journals-1).
+- picnic: Ask BiGH Science, two camp mugs on a redwood picnic table (picnic-1).
 
-The strips are cropped to their ink; phones get narrower crops (the scrolls' and the mugs' middle,
-trimmed to their own ink, their cut ends faded to paper) and the health strip's three scenes, cut
-where the ink is thinnest near its thirds. The mugs' crop (0.27-0.70 of the strip) is the tightest
-that keeps both mugs, handles included, clear of the faded ends, so they are as large as they can
-be on a phone.
-
-The mugs' steam (Task 6 review, October 14): its strokes are thin and light, so the ink box (a
-blurred mask) missed them and cut the strip's top at the mugs' rims, and the steam the painting was
-made for was gone. TOPS keeps each named strip's top at that row of the original (the steam starts
-at about row 250), on the wide strip and the phone crop. The mugs' pictures are v2 (MUGS_V): a
-picture whose content changes gets a new name, so no cache serves the old one.
-
-A shorter crossing (Task 6 fix round 1, Ruling 13): the first screen at 1440 showed the castle, a
-wide empty ocean and nothing else, and a phone passed screens of sky over sea. CROPS cuts each
-panel before it is laid down: panel 1 loses 260px of mist at its left (its castle's left pine still
-clear of the band's misty end) and ends a short run of sea after the castle's rocks (they end near
-x 1500, it is cut at 1760); panel 2 starts just before the boat (x 620; its first 450px are mist,
-then open sea). Join 1 is still a crossfade, now over 200px of sea in both panels (panel 1's
-1560-1760, panel 2's 620-820, the boat just after it), to one horizon (DY re-measured there:
-panel 1's sea top is row 654 at x 1550-1750, panel 2's about 700 at x 560-760; panel 3 keeps its
-5px under panel 2). The band is 5756 x 651 (6864 x 705 before: the sea's low spray at panel 1's
-right was its lowest ink). The tower's trees now stand about 2200px from the band's left (3290
-before), so they and the spire were in the first screen at 1280x720 and 1440x900. The scroll
-shipped as v2 until October 26 (below).
-
-The health strip's wide picture (Ruling 14): two grey washes between the lamp, the stones and the
-poppies read as dirty marks. clean() keeps each scene's own box (the boxes its phone pictures are
-cut to, so the scenes' ground shadows stay) and fades everything else to paper over CLEAN_FEATHER
-px outside them. The wide picture ships as v2 (HEALTH_V); the phone scenes are cut from the
-uncleaned strip, so they do not change.
-
-One place per screen (Mo's pick B, October 26, 2026): the band no longer ships. Mo found the
-sideways travel read as a draft, and his path now goes down the page, one place to a screen, each
-beside its words. places() cuts the four places from the band (PLACES, by eye on the band, then
-checked on the page: reference/ink-pages/mockups/science-path/2026-10-26/): Okayama's castle,
-Berkeley's tower, Salzburg's fortress, the oaks under the gold sun. The sea and the hills of 2002
-are left out (the 2002 study is told with Berkeley, where it was done). Each cut's ends fade to
-paper over a share of its width where they run through ink, and its top and bottom are trimmed to
-the rows with real ink (PLACE_INK), so the place stands as large as it can. Phones get tighter cuts
-(the place larger on a narrow screen). The band itself is kept as a plate (plates/band.png) for the
-contact sheet.
+Each painting's paper is divided out and lifted to white (reference/ink-pages/about/build_about.py),
+so it multiplies onto the page's paper with no box, and its outer edge is feathered. Phones get
+tighter cuts. The October pictures (the handscroll's Okayama cut, the scrolls, the health scenes,
+the mugs) no longer ship; their originals stay in originals/ (gpt25-*).
 
 usage: python -X utf8 reference/ink-pages/science/build_science.py
 """
@@ -66,6 +29,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+import cv2
 import numpy as np
 from PIL import Image
 
@@ -78,46 +42,50 @@ ba = bd.ba
 OUT = REPO / "public/images/science/ink"
 URL = "/images/science/ink"
 TS = REPO / "src/components/science/ink/science-art.ts"
+ORIG = HERE / "originals"
+PLATES = HERE / "plates"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
-V = "v1"
+V = "v3"
+# The loose takes (November 4): the first takes (desk-window-2, town-dusk-1 and town-lit-1,
+# journals-1, picnic-1) read as tidy illustrations; each was painted again far more loosely
+# (paint.sh loose-*, town-loose-*), the town's lit take an edit of its loose one (lit-*).
 TAKES = {
-    "panel1": "S-panel-1",
-    "panel2": "S-panel-2",
-    "panel3": "S-panel-3",
-    "scrolls": "R-scrolls",
-    "health": "S-health-poppy",
-    "mugs": "S-mugs",
+    "desk": "loose-desk-window-2-1",
+    "town": "town-loose-1",
+    "town-lit": "lit-town-loose-1",
+    "berkeley": "wash-berkeley-1",
+    "salzburg": "wash-salzburg-1",
+    "today": "wash-today-1",
+    "journals": "loose-journals-1-1",
+    "picnic": "loose-picnic-1-1",
 }
-# Each panel's columns kept (left, right) in its own pixels; None keeps the rest.
-CROPS = ((260, 1760), (620, None), (0, None))
-OVERLAP = (200, 300)
-CROSSFADE = (True, False)
-DY = (0, -46, -51)
-FADES = ((0, 0), (0, 420), (420, 0))
-HEALTH_V = "v2"
-CLEAN_FEATHER = 60
 EDGE = 0.03
-PHONE_FADE = 0.08  # the phone crops' cut ends (middle()): fade to paper over this share of their width
-TOPS = {"mugs": 225}  # a strip's top row on its original, where the ink box misses light strokes
-MUGS_V = "v2"
-# Each place on the band (band px): (left, right, left fade, right fade), the fades a share of the
-# cut's width; the wide cut, then the phone cut.
-PLACES = {
-    "okayama": ((0, 1250, 0.0, 0.28), (110, 1010, 0.06, 0.14)),
-    "berkeley": ((1850, 2950, 0.30, 0.16), (2080, 2960, 0.14, 0.12)),
-    "salzburg": ((3300, 4450, 0.16, 0.16), (3440, 4400, 0.10, 0.10)),
-    "today": ((4420, 5756, 0.16, 0.0), (4600, 5720, 0.10, 0.06)),
+PHONE_FADE = 0.08
+# The town's windows light in this many groups, one after another (science-ink.module.css).
+GROUPS = 6
+# Phone cuts (left, right) as shares of the wide picture's width; their cut ends fade to paper.
+PHONE = {
+    "desk": (0.0, 1.0),
+    "town": (0.05, 0.72),
+    "berkeley": (0.14, 0.86),
+    "salzburg": (0.1, 0.94),
+    "today": (0.12, 0.92),
+    "journals": (0.18, 0.82),
+    "picnic": (0.12, 0.88),
 }
-PLACE_INK = 200  # a row is ink when its darkest channel is under this on more than 1% of the cut
-PLACE_PAD = 0.03  # paper kept above and below the ink, a share of the band's height
-PLACES_V = "v1"
+# Today's sun: the handscroll's gold leaf (old place-today-v1.webp), set at this point of the new
+# painting (shares of its width and height), this wide (a share of its width).
+SUN = (0.6, 0.2, 0.062)
 
-bd.ORIG = HERE / "originals"
+bd.ORIG = ORIG
 bd.URL = URL
 bd.V = V
-bd.TAKES = TAKES
 ba.OUT = OUT
-ba.PLATES = HERE / "plates"
+ba.PLATES = PLATES
+
+
+def load(key):
+    return Image.open(ORIG / f"{TAKES[key]}.png").convert("RGB")
 
 
 def faded(arr, left, right):
@@ -133,151 +101,211 @@ def faded(arr, left, right):
     return arr * k[None, :, None] + 255.0 * (1 - k[None, :, None])
 
 
-def band():
-    """The handscroll's band: the three panels joined to one horizon, cropped to its ink."""
-    panels = []
-    for i, (left, right) in zip((1, 2, 3), CROPS):
-        arr = np.asarray(bd.divided(bd.load(TAKES[f"panel{i}"]))).astype(np.float32)
-        panels.append(arr[:, left:right])
-    h = panels[0].shape[0]
-    widths = [arr.shape[1] for arr in panels]
-    top = max(0, -min(DY))
-    xs = [0, widths[0] - OVERLAP[0], widths[0] - OVERLAP[0] + widths[1] - OVERLAP[1]]
-    canvas = np.full((h + top + max(0, max(DY)), xs[2] + widths[2], 3), 255.0, np.float32)
-    for i, (arr, x, dy, (fade_l, fade_r)) in enumerate(zip(panels, xs, DY, FADES)):
-        w = arr.shape[1]
-        # The panel on a layer as tall as the canvas (paper above and below it), so a crossfade
-        # also fades the rows of the panel before that this one does not cover.
-        layer = np.full((canvas.shape[0], w, 3), 255.0, np.float32)
-        layer[top + dy : top + dy + h] = faded(arr, fade_l, fade_r)
-        region = canvas[:, x : x + w]
-        out = np.minimum(region, layer)
-        if i and CROSSFADE[i - 1]:
-            o = OVERLAP[i - 1]
-            t = np.linspace(0.0, 1.0, o, dtype=np.float32)
-            k = (t * t * (3 - 2 * t))[None, :, None]
-            out[:, :o] = region[:, :o] * (1 - k) + layer[:, :o] * k
-        canvas[:, x : x + w] = out
-    joined = Image.fromarray(np.clip(np.rint(canvas), 0, 255).astype(np.uint8))
-    x0, y0, x1, y1 = bd.ink_box(np.asarray(joined), pad=0.02)
-    img = bd.feathered(bd.levelled(joined.crop((x0, y0, x1, y1))), EDGE)
-    print("handscroll canvas", canvas.shape[1], "x", canvas.shape[0], "panels at", xs, "ink box x", x0, x1)
-    (HERE / "plates").mkdir(exist_ok=True)
-    img.save(HERE / "plates/band.png")
-    return img
+def faded_top(img, share):
+    """Fade a picture's top to white over `share` of its height (smoothstep): the desk's window
+    frame runs up to the painting's top edge, which would show as a cut line under the menu bar."""
+    arr = np.asarray(img).astype(np.float32)
+    h = arr.shape[0]
+    k = np.clip(np.arange(h, dtype=np.float32) / max(1, round(h * share)), 0, 1)
+    k = (k * k * (3 - 2 * k))[:, None, None]
+    return to_img(arr * k + 255.0 * (1 - k))
 
 
-def place(img, left, right, fade_l, fade_r):
-    """One place cut from the band: its ends faded to paper, trimmed to its ink rows."""
-    w = right - left
-    arr = faded(np.asarray(img.crop((left, 0, right, img.height))).astype(np.float32), round(fade_l * w), round(fade_r * w))
-    rows = np.where((arr.min(axis=2) < PLACE_INK).sum(axis=1) > w * 0.01)[0]
-    pad = round(img.height * PLACE_PAD)
-    arr = arr[max(0, rows[0] - pad) : min(arr.shape[0], rows[-1] + 1 + pad)]
-    return bd.feathered(Image.fromarray(np.clip(np.rint(arr), 0, 255).astype(np.uint8)), EDGE)
-
-
-def places(img):
-    art = {}
-    for key, (wide, phone) in PLACES.items():
-        art[key] = bd.art_of(place(img, *wide), f"place-{key}-{PLACES_V}", None)
-        art[key]["phone"] = bd.art_of(place(img, *phone), f"place-{key}-phone-{PLACES_V}", None)
-    return art
-
-
-def strip(key, pad=0.04):
-    flat = bd.divided(bd.load(TAKES[key]))
-    x0, y0, x1, y1 = bd.ink_box(np.asarray(flat), pad=pad)
-    return bd.levelled(flat.crop((x0, min(y0, TOPS.get(key, y0)), x1, y1)))
-
-
-def middle(img, start, end, keep_top=False):
-    """The middle of a strip for phones, trimmed to its ink. The cut drops the shelf's and the
-    table's legs, so the rows the strip kept for them would be dead paper under the ink (about 40%
-    of the mugs', 15% of the scrolls': October 14 review): the crop's ink box (bd.ink_box, on the
-    crop itself) sets its top and bottom. The cut runs through the shelf and the table, so its two
-    ends dissolve into paper (a smoothstep over PHONE_FADE of the crop's width) instead of ending
-    in a straight edge that would show on the page. keep_top keeps the strip's own top (TOPS: light
-    strokes above the ink box, the mugs' steam)."""
-    crop = img.crop((round(img.width * start), 0, round(img.width * end), img.height))
-    _, top, _, bottom = bd.ink_box(np.asarray(crop), pad=0.04)
-    top = 0 if keep_top else top
-    crop = crop.crop((0, top, crop.width, bottom))
-    side = round(crop.width * PHONE_FADE)
-    arr = faded(np.asarray(crop).astype(np.float32), side, side)
+def to_img(arr):
     return Image.fromarray(np.clip(np.rint(arr), 0, 255).astype(np.uint8))
 
 
-def finish(img, name, width, v=V):
-    return bd.art_of(bd.feathered(img, EDGE), f"{name}-{v}", width)
+def flat(img):
+    """Paper divided out and lifted to white."""
+    return bd.levelled(bd.divided(img))
 
 
-def cut_near(img, frac, span=0.08):
-    """The column with the least ink within `span` of `frac` of the width (smoothed)."""
-    ink = 255.0 - np.asarray(img.convert("L")).astype(np.float32)
-    profile = np.convolve(ink.mean(axis=0), np.ones(31) / 31, mode="same")
-    a, b = round(img.width * (frac - span)), round(img.width * (frac + span))
-    return a + int(np.argmin(profile[a:b]))
+def inked(img, pad=0.04, level=236):
+    """Cropped to its ink (the box found on the picture itself)."""
+    return img.crop(bd.ink_box(np.asarray(img), level=level, pad=pad))
 
 
-def scene_boxes(img):
-    """Each health scene's box on the strip: cut where the ink is thinnest near the thirds, then
-    the box of the scene's own ink (level 200: not the faint washes between scenes), padded."""
-    cuts = [0, cut_near(img, 1 / 3), cut_near(img, 2 / 3), img.width]
-    boxes = []
-    for a, b in zip(cuts, cuts[1:]):
-        x0, y0, x1, y1 = bd.ink_box(np.asarray(img.crop((a, 0, b, img.height))), level=200, pad=0.12)
-        boxes.append((a + x0, y0, a + x1, y1))
-    return boxes
+def phone_cut(img, key):
+    """The phone's cut of a wide picture: its middle (PHONE), trimmed to its ink, ends faded."""
+    a, b = PHONE[key]
+    crop = img.crop((round(img.width * a), 0, round(img.width * b), img.height))
+    _, top, _, bottom = bd.ink_box(np.asarray(crop), pad=0.04)
+    crop = crop.crop((0, top, crop.width, bottom))
+    side = round(crop.width * PHONE_FADE)
+    return to_img(faded(np.asarray(crop).astype(np.float32), side if a > 0 else 0, side if b < 1 else 0))
 
 
-def scenes(img):
-    return [finish(img.crop(box), f"health-scene-{i + 1}", 900) for i, box in enumerate(scene_boxes(img))]
+def art(img, name, width):
+    return bd.art_of(bd.feathered(img, EDGE), f"{name}-{V}", width)
 
 
-def clean(img):
-    """The strip with only its scenes: inside each scene's box the painting as it is, outside it
-    paper, with a smoothstep over CLEAN_FEATHER px (Ruling 14: the washes between the scenes)."""
-    arr = np.asarray(img).astype(np.float32)
-    h, w = arr.shape[:2]
-    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    keep = np.zeros((h, w), np.float32)
-    for x0, y0, x1, y1 in scene_boxes(img):
-        dx = np.maximum(np.maximum(x0 - xx, xx - (x1 - 1)), 0)
-        dy = np.maximum(np.maximum(y0 - yy, yy - (y1 - 1)), 0)
-        k = np.clip(1 - np.hypot(dx, dy) / CLEAN_FEATHER, 0, 1)
-        keep = np.maximum(keep, k * k * (3 - 2 * k))
-    out = arr * keep[..., None] + 255.0 * (1 - keep[..., None])
-    return Image.fromarray(np.clip(np.rint(out), 0, 255).astype(np.uint8))
+def with_phone(img, key, width=2400, phone_width=1100):
+    out = art(img, key, width)
+    out["phone"] = art(phone_cut(img, key), f"{key}-phone", phone_width)
+    return out
 
 
-def write_ts(art):
+def registered(moving, onto):
+    """`moving` (an edit of `onto`, the same size) shifted and turned onto it, as their blurred
+    greys say (as the NuriCell lighthouse's unlit take)."""
+    grey = lambda im: cv2.GaussianBlur(np.asarray(im.convert("L")).astype(np.float32) / 255, (0, 0), 3)
+    warp = np.eye(2, 3, dtype=np.float32)
+    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6)
+    _, warp = cv2.findTransformECC(grey(onto), grey(moving), warp, cv2.MOTION_EUCLIDEAN, criteria, None, 5)
+    w, h = onto.size
+    moved = cv2.warpAffine(
+        np.asarray(moving), warp, (w, h), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE
+    )
+    print(f"town: lit take registered by ({warp[0, 2]:.1f}, {warp[1, 2]:.1f}) px")
+    return Image.fromarray(moved)
+
+
+def window_mask(unlit, lit):
+    """Where the lit take is lamplight and the unlit take bare paper: the windows' panes, each a
+    connected patch (tiny specks dropped). Returns the soft mask (0..1) and the label image."""
+    u = np.asarray(unlit).astype(np.float32)
+    l = np.asarray(lit).astype(np.float32)
+    warm = (l[..., 0] - l[..., 2] > 70) & (l[..., 1] - l[..., 2] > 45)
+    bare = u.min(axis=2) > 200
+    m = (warm & bare).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((2, 2), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m, 8)
+    keep = np.zeros(n, bool)
+    keep[1:] = st[1:, cv2.CC_STAT_AREA] >= 6
+    lab = np.where(keep[lab], lab, 0)
+    soft = cv2.GaussianBlur((lab > 0).astype(np.float32), (0, 0), 0.6)
+    print(f"town: {int(keep.sum())} window panes")
+    return np.clip(soft * 1.4, 0, 1), lab
+
+
+def leaf_texture(h, w, seed=3, tile=96):
+    """The lamps' gold: real gold leaf, the homepage sun's own (sun.webp, the leaf of "cells."),
+    laid as random tiles from its solid middle, so each pane has the leaf's crinkle and colour."""
+    sun = np.asarray(Image.open(REPO / "public/images/home-v2/ink/sun.webp").convert("RGBA")).astype(np.float32)
+    ys, xs = np.nonzero(sun[..., 3] > 250)
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    cy, cx, r = (y0 + y1) // 2, (x0 + x1) // 2, min(y1 - y0, x1 - x0) // 2
+    # The solid square inside the disc.
+    s = int(r * 1.3)
+    core = sun[cy - s // 2 : cy + s // 2, cx - s // 2 : cx + s // 2, :3]
+    rng = np.random.default_rng(seed)
+    out = np.zeros((h, w, 3), np.float32)
+    for ty in range(0, h, tile):
+        for tx in range(0, w, tile):
+            oy, ox = rng.integers(0, core.shape[0] - tile), rng.integers(0, core.shape[1] - tile)
+            patch = core[oy : oy + tile, ox : ox + tile]
+            out[ty : ty + tile, tx : tx + tile] = patch[: h - ty, : w - tx]
+    return out
+
+
+def town():
+    unlit = load("town")
+    lit = registered(load("town-lit"), unlit)
+    mask, lab = window_mask(unlit, lit)
+    base = np.asarray(flat(unlit)).astype(np.float32)
+    h, w = mask.shape
+    gold = leaf_texture(h, w)
+    lit_all = base * (1 - mask[..., None]) + gold * mask[..., None]
+    # The panes in GROUPS groups: shuffled, so each group is spread over the whole town.
+    ids = np.unique(lab)[1:]
+    rng = np.random.default_rng(7)
+    order = rng.permutation(len(ids))
+    group_of = np.zeros(lab.max() + 1, np.int32) - 1
+    for rank, i in enumerate(order):
+        group_of[ids[i]] = rank * GROUPS // len(ids)
+    # One crop for all of them: the unlit painting's ink box.
+    box = bd.ink_box(base.astype(np.uint8), pad=0.03)
+    x0, y0, x1, y1 = box
+    out = {**art(to_img(base).crop(box), "town", 2400)}
+    # The page lays the six layers over the town and never shows a lit picture from 960px; the
+    # lit town is kept as a lossless plate (feathered as the town is), which the check compares
+    # the layers with (check_science_art.py).
+    bd.feathered(to_img(lit_all).crop(box), EDGE).save(PLATES / f"town-lit-{V}.png")
+    # Each group's layer: the gold panes only, on transparency (RGBA), the same crop and size,
+    # fading at the outer edge as the town does (bd.feathered: EDGE of its shorter side), so a
+    # lamp by the edge never shines brighter than the paper round it.
+    width = out["width"]
+    layers = []
+    pane = cv2.dilate((lab > 0).astype(np.uint8), np.ones((3, 3), np.uint8))
+    near = cv2.dilate(lab.astype(np.float32), np.ones((3, 3), np.uint8)).astype(np.int32)
+    ch, cw = y1 - y0, x1 - x0
+    f = max(2.0, min(ch, cw) * EDGE)
+    yy, xx = np.mgrid[0:ch, 0:cw].astype(np.float32)
+    feather = np.clip(np.minimum.reduce([xx, yy, cw - 1 - xx, ch - 1 - yy]) / f, 0, 1)
+    for g in range(GROUPS):
+        sel = (group_of[np.maximum(near, 0)] == g) & (pane > 0)
+        alpha = np.where(sel, mask, 0.0)[y0:y1, x0:x1] * feather
+        rgba = np.dstack([gold[y0:y1, x0:x1], alpha * 255])
+        img = Image.fromarray(np.clip(np.rint(rgba), 0, 255).astype(np.uint8), "RGBA")
+        img = img.resize((width, out["height"]), Image.LANCZOS)
+        name = f"town-lamps-{g + 1}-{V}"
+        OUT.mkdir(parents=True, exist_ok=True)
+        img.save(OUT / f"{name}.webp", "WEBP", quality=88, method=6)
+        print(f"{(OUT / f'{name}.webp').relative_to(REPO)}  {(OUT / f'{name}.webp').stat().st_size // 1024} KB")
+        layers.append(f"{URL}/{name}.webp")
+    out["lamps"] = layers
+    # The phone's cut of the town, unlit and lit (no groups: on a phone the lit picture fades in).
+    a, b = PHONE["town"]
+    for key, src in (("phone", base), ("phoneLit", lit_all)):
+        crop = to_img(src).crop(box)
+        crop = crop.crop((round(crop.width * a), 0, round(crop.width * b), crop.height))
+        side = round(crop.width * PHONE_FADE)
+        crop = to_img(faded(np.asarray(crop).astype(np.float32), side, side))
+        out[key] = art(crop, "town-phone" if key == "phone" else "town-phone-lit", 1100)
+    return out
+
+
+def sun_leaf():
+    """The handscroll's gold-leaf sun as an RGBA cut-out, from its old Today picture."""
+    old = Image.open(PLATES / "place-today.png").convert("RGB")
+    arr = np.asarray(old)
+    m = cv2.morphologyEx(bd.gold_pixels(arr).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((9, 9), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m, 8)
+    i = 1 + int(np.argmax(st[1:, cv2.CC_STAT_AREA]))
+    x, y, w, h = (int(v) for v in st[i, :4])
+    pad = int(max(w, h) * 0.3)
+    return ba.leaf(old.crop((x - pad, y - pad, x + w + pad, y + h + pad))), w
+
+
+def today(img):
+    """Today's new painting with the handscroll's own gold sun in its sky."""
+    leaf, disc = sun_leaf()
+    cx, cy, size = SUN
+    k = size * img.width / disc
+    leaf = leaf.resize((round(leaf.width * k), round(leaf.height * k)), Image.LANCZOS)
+    canvas = img.convert("RGBA")
+    canvas.alpha_composite(leaf, (round(cx * img.width - leaf.width / 2), round(cy * img.height - leaf.height / 2)))
+    return canvas.convert("RGB")
+
+
+def place(key):
+    img = flat(load(key))
+    if key == "today":
+        img = today(img)
+    return inked(img, pad=0.03)
+
+
+def write_ts(data):
     head = [
         "// Generated by reference/ink-pages/science/build_science.py. Do not edit by hand: change",
-        "// the script (or its TAKES) and run it again. The Science page's ink paintings (October 14,",
-        "// 2026): GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's",
-        "// own paper. places: Dr. Liu's path, cut from the handscroll's band (October 26, 2026).",
+        "// the script (or its TAKES) and run it again. The Science page's paintings (round 3,",
+        "// November 4, 2026): Codex paintings in ink and wash, the paper divided out so each",
+        "// multiplies onto the page's own paper; the town's lamps as gold-leaf layers.",
         "",
     ]
-    TS.parent.mkdir(parents=True, exist_ok=True)
-    TS.write_text("\n".join(head) + f"export const scienceArt = {json.dumps(art, indent=2)} as const;\n", encoding="utf-8", newline="\n")
+    TS.write_text("\n".join(head) + f"export const scienceArt = {json.dumps(data, indent=2)} as const;\n", encoding="utf-8", newline="\n")
     prettier = REPO / "node_modules/prettier/bin/prettier.cjs"
     subprocess.run(["node", str(prettier), "--write", str(TS)], cwd=REPO, check=True, capture_output=True)
     print(TS.relative_to(REPO))
 
 
 if __name__ == "__main__":
-    scrolls = strip("scrolls")
-    health = strip("health")
-    mugs = strip("mugs")
-    write_ts(
-        {
-            "places": places(band()),
-            "scrolls": {**finish(scrolls, "scrolls", 2400), "phone": finish(middle(scrolls, 0.3, 0.7), "scrolls-phone", 1000)},
-            "health": {**finish(clean(health), "health", 2400, HEALTH_V), "scenes": scenes(health)},
-            "mugs": {
-                **finish(mugs, "mugs", 2400, MUGS_V),
-                "phone": finish(middle(mugs, 0.27, 0.70, keep_top=True), "mugs-phone", 1000, MUGS_V),
-            },
-        }
-    )
+    desk = faded_top(inked(flat(load("desk")), pad=0.02), 0.07)
+    data = {
+        "desk": {**art(desk, "desk", 2000), "phone": art(phone_cut(desk, "desk"), "desk-phone", 1100)},
+        "town": town(),
+        "places": {key: with_phone(place(key), key, 1600, 1100) for key in ("berkeley", "salzburg", "today")},
+        "journals": with_phone(inked(flat(load("journals")), pad=0.03), "journals"),
+        "picnic": with_phone(inked(flat(load("picnic")), pad=0.03), "picnic"),
+    }
+    write_ts(data)

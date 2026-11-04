@@ -25,3 +25,36 @@ with a tighter phone cut: `place-okayama`, `place-berkeley`, `place-salzburg`, `
 (`scroll-v2`, `scroll-phone-v2` deleted); it is kept as `plates/band.png` for the contact sheet,
 which marks each cut (red wide, blue phone). Mockups and the review page's shots:
 `reference/ink-pages/mockups/science-path/2026-10-26/`.
+
+## Round 3: "Our science starts in the cell" (November 4, 2026)
+
+Mo: start broader (what science BiGH focuses on, and why), keep the water paint, turn from an
+Asian feel to California; then "do the best you can ... I will come and critique". Spec:
+`docs/superpowers/specs/2026-11-04-science-california-design.md`. Every picture is a Codex
+painting on Mo's ChatGPT plan (no API spend), sent by `paint.sh` with the homepage close
+(`home-purpose/originals/ink-long-1.png`, Mo's pick 1B) as the hand; the style block is
+`prompts/_style-ca.txt`. The first takes read as tidy illustrations, so each was painted again far
+more loosely (`prompts/loose.txt`, `prompts/town-loose-1.txt`); the loose takes ship.
+
+| Picture                   | Ships                                                | Painted from          | Note                                                                                                                    |
+| ------------------------- | ---------------------------------------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| Opening                   | `loose-desk-window-2-1`                              | `desk-window-2`       | A desk at an open window over golden hills: brass microscope, notebook, glasses, poppies                                |
+| Why start with the cell?  | `town-loose-1`, lit `lit-town-loose-1`               | `town-dusk-1`         | San Francisco's houses at dusk; the lit take is an edit of the loose one (`prompts/town-lit.txt`)                       |
+| Berkeley, Salzburg, Today | `wash-berkeley-1`, `wash-salzburg-1`, `wash-today-1` | the handscroll's cuts | Light washes over the October paintings (`prompts/place-wash-1.txt`); Today keeps the handscroll's own gold sun (`SUN`) |
+| The research              | `loose-journals-1-1`                                 | `journals-1`          | Bound journals along a library table, three laid open (the three studies to start with)                                 |
+| Ask BiGH Science          | `loose-picnic-1-1`                                   | `picnic-1`            | Two enamel camp mugs on a redwood picnic table                                                                          |
+
+The takes that were not used (`desk-window-1`, `town-dusk-2`, `town-lit-1`, `town-lit-1b`,
+`town-loose-2`, `lit2-town-loose-1`) are in
+`C:\Users\mcbig\Documents\codes\bigh-archive\science-round3-unused-2026-11-04\`, outside the
+public repo.
+
+The town's lamps: `build_science.py` registers the lit take onto the unlit one, finds the panes
+where the lit take is warm and the unlit one bare paper (209 panes), lays them in the homepage
+sun's own gold leaf (`sun.webp`, random tiles of its solid middle) and splits them into six
+shuffled groups, each an RGBA layer the town's size (`town-lamps-<n>-v3.webp`), feathered at the
+outer edge as the town is. The page lights the groups one after another (`why.module.css`); phones
+fade in one lit cut (`town-phone-lit-v3`). The lit town itself is a lossless plate only
+(`plates/town-lit-v3.png`): `check_science_art.py` lays the six layers over the town's plate and
+compares. Okayama's castle, the scrolls, the health scenes and the mugs no longer ship (their
+pictures are deleted from `public/`; their originals stay here as `gpt25-*`).

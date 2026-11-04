@@ -15,10 +15,45 @@
 // confirmed; no quote is invented for Dr. Liu; animal research is called "animal study"; the
 // research line under the list stays.
 
+// Round 3 (Mo, November 4, 2026: start broader, with what science BiGH focuses on and why; spec
+// docs/superpowers/specs/2026-11-04-science-california-design.md). The page opens on the science,
+// and names the scientist who has spent his career on it on the same screen (Mo's September rule:
+// real scientists in the first impression). DRAFT lines.
 export const opening = {
-  eyebrow: "Science",
-  // Mo's proposed opening (BRAND-CHEATSHEET.md, "Science page — opening priority chosen by Mo").
-  title: "Meet the scientists behind BiGH’s key formulas.",
+  title: "Our science starts in the cell.",
+  // "Decades": his work on cells' energy and aging dates from Bruce Ames's laboratory, 1994
+  // (RESEARCH-NOTES.md); his doctorate was in neuroscience, so not "his whole career".
+  lead: "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
+  alt: "A brass microscope, a notebook and poppies on a desk by an open window over golden California hills, painted in ink and watercolour",
+};
+
+// Why the cell (DRAFT). 37 trillion: Bianconi et al. 2013, Annals of Human Biology (PubMed
+// 23829164), about 3.72 x 10^13. The three lines open the kit's three explainer sheets (dialogs),
+// which "Make sense of the science." opened before (that heading is the homepage's own).
+export const why = {
+  title: "Why start with the cell?",
+  lead: "Everything you do, from a clear thought to a long walk, runs on energy your cells make. You have about 37 trillion of them, and each one makes its own.",
+  lines: [
+    {
+      // "Your cells", not "each cell": red blood cells, most of the 37 trillion, have none.
+      text: "Inside your cells, mitochondria turn food into energy.",
+      link: "What are mitochondria?",
+    },
+    {
+      text: "Making energy also makes free radicals, which your cells keep in check.",
+      link: "What are free radicals?",
+    },
+    {
+      text: "With age, mitochondria tend to work less well: one of the hallmarks of aging.",
+      link: "How do cells age?",
+    },
+  ],
+  source: "Cell count: Bianconi and colleagues, Annals of Human Biology, 2013.",
+  sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/23829164/",
+  // The line under the painting that ties it to the words (as the homepage science's lines).
+  caption:
+    "Like a town at dusk: every house lights its own lamp, as every cell makes its own energy.",
+  alt: "San Francisco’s Victorian houses on a hill at dusk, their windows lighting up, painted in ink and watercolour",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
@@ -99,33 +134,24 @@ export const formulas = [
 export const formulasLine =
   "Every BiGH formula was developed by our scientists or under their direction and guidance.";
 
+// Round 3 (DRAFT): the formulas' heading, short; formulasLine is its lead.
+export const formulasTitle = "Every formula has a scientist behind it.";
+
 // DRAFT: his path, one place per screen (Mo's pick B, October 26, 2026), each beside its painting
 // (science-art.ts places). Years only where a source gives one: the faculty profile dates his
 // postdoctoral work in Bruce Ames's laboratory 1994-1997 (RESEARCH-NOTES.md), so Berkeley says 1994,
 // the year he joined, and the 2002 study is told as published then. The three numbers that stood
 // under his name (280+, 1994, 2025) are told here with the same sources. Today drops the stop's old
 // title (his BiGH title stands under his name above). English in every language, as the stops were.
+// Round 3 (November 4): Okayama's castle painting read as Asian; his doctorate there is told in
+// Berkeley's words, and the path starts in California.
 export const places = [
-  {
-    key: "okayama",
-    when: "Japan",
-    name: "Okayama",
-    title: "A doctorate in neuroscience",
-    text: "His scientific training began at Okayama University in Japan.",
-    links: [
-      {
-        label: "Faculty profile (Chinese)",
-        url: "https://faculty.xjtu.edu.cn/j.liu/zh_CN/zhym/1002677/list/index.htm",
-      },
-    ],
-    alt: "Okayama Castle on its hill above the sea, painted in ink",
-  },
   {
     key: "berkeley",
     when: "1994 · California",
     name: "Berkeley",
     title: "Research in Bruce Ames’s laboratory",
-    text: "At the University of California, Berkeley. In 2002 their study of two nutrients and the aging cell appeared in PNAS, as an animal study.",
+    text: "After a doctorate in neuroscience at Okayama University in Japan, he joined Bruce Ames at the University of California, Berkeley. In 2002 their study of two nutrients and the aging cell appeared in PNAS, as an animal study.",
     links: [
       {
         label: "Faculty profile (Chinese)",
@@ -133,7 +159,7 @@ export const places = [
       },
       { label: "Read the 2002 study", url: "https://pubmed.ncbi.nlm.nih.gov/11854529/" },
     ],
-    alt: "The bell tower at Berkeley among tall trees on a hill, painted in ink",
+    alt: "The bell tower at Berkeley among tall trees on a hill over the bay, painted in ink and watercolour",
   },
   {
     key: "salzburg",
@@ -144,7 +170,7 @@ export const places = [
     links: [
       { label: "University announcement", url: "https://www.uhrs.edu.cn/info/1050/1805.htm" },
     ],
-    alt: "Salzburg’s fortress above the old town and the river, painted in ink",
+    alt: "Salzburg’s fortress above the old town and the river, painted in ink and watercolour",
   },
   {
     key: "today",
@@ -153,7 +179,7 @@ export const places = [
     title: "",
     text: "His research now guides the science behind our formulas.",
     links: [],
-    alt: "California oaks on golden hills under a gold sun, painted in ink",
+    alt: "California oaks on golden hills under a gold sun, painted in ink and watercolour",
   },
 ] as const;
 
@@ -177,43 +203,13 @@ export const questions = [
   },
 ];
 
-// Health explained: the three article titles and previews (approved September 21, 2026).
-export const health = {
-  eyebrow: "Health, explained simply",
-  title: "Make sense of the science.",
-  text: "Explore cellular health, mental energy, and healthy aging—with explanations that make the science easier to understand.",
-  soon: "Article coming soon",
-  doors: [
-    {
-      topic: "Mitochondria",
-      title: "What are mitochondria—and why do they matter?",
-      preview:
-        "A simple guide to your cells’ tiny power plants, their role in everyday energy, and what mitochondrial health means.",
-      image: "/images/science/glass-cell.webp",
-    },
-    {
-      topic: "Free radicals",
-      title: "What are free radicals—and how do antioxidants help?",
-      preview:
-        "A simple explanation of free radicals, the damage they can cause, and your cells’ natural defenses.",
-      image: "/images/science/antioxidant.webp",
-    },
-    {
-      topic: "Aging cells",
-      title: "What happens to your cells as you age?",
-      preview:
-        "A closer look at how cells change over time and what researchers are learning about healthy aging.",
-      image: "/images/science/glass-cell-aged.webp",
-    },
-  ],
-};
-
 // The research library: the homepage's 36 checked sources (home/research-data.ts), grouped the way
 // Timeline's "Our Studies" page groups its list. Group intros are DRAFT.
+// Round 3: a heading of its own ("Curiosity, with references." is the homepage's research heading),
+// no label over it. DRAFT.
 export const research = {
-  eyebrow: "The research",
-  title: "Curiosity, with references.",
-  text: "Science is most useful when you can understand it. Explore the ideas behind our approach, and see what each source actually tells us.",
+  title: "Read the research yourself.",
+  text: "Three studies to start with, and every source we cite. For each one we say what it shows, and what it does not.",
   groups: [
     {
       type: "Science",
@@ -249,8 +245,9 @@ export const research = {
 };
 
 // Ask BiGH Science: the homepage's own words (its dialog and strip).
+// Round 3: no label over the heading; "In development" and the note under the steps say it is
+// planned.
 export const ask = {
-  eyebrow: "A planned customer benefit",
   title: "Ask BiGH Science",
   lead: "Good questions deserve clear answers.",
   // The homepage dialog's line without its opening sentence, which repeated the lead (DRAFT).
@@ -271,26 +268,12 @@ export const ask = {
   note: "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
 };
 
-// The ink page (Mo, October 13-14, 2026; spec docs/superpowers/specs/2026-10-14-science-ink-design.md;
-// one place per screen since October 26). DRAFT lines.
+// The ink page (Mo, October 13-14, 2026; round 3 since November 4). DRAFT lines.
 export const ink = {
-  // The opening's lead: the film's two lines, as one (DRAFT in the film as well; neither is in
-  // BRAND-CHEATSHEET.md).
-  lead: [
-    "A life in cell science.", // DRAFT
-    "From Okayama to Berkeley, and from the lab to BiGH.", // DRAFT
-  ],
-  formulasLabel: "The formulas", // DRAFT
   readStudy: "Read the study", // DRAFT
-  scrollsAlt: "A shelf of rolled scrolls painted in ink; three lie pulled forward", // DRAFT
-  healthAlt:
-    "Three small ink paintings: an oil lamp with a gold flame, three balanced stones, and California poppies", // DRAFT
-  sceneAlts: [
-    "An oil lamp with a gold flame, painted in ink", // DRAFT
-    "Three balanced stones, painted in ink", // DRAFT
-    "California poppies, painted in ink", // DRAFT
-  ],
-  mugsAlt: "Two mugs on a low wooden table, steam rising, painted in ink", // DRAFT
-  explainer: "Read a quick explainer",
+  journalsAlt:
+    "Old bound journals along a library table, three laid open in front, painted in ink and watercolour", // DRAFT
+  picnicAlt:
+    "Two enamel camp mugs on a redwood picnic table in a California park, painted in ink and watercolour", // DRAFT
   illustration: "Illustration",
 };

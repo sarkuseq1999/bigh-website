@@ -1,0 +1,235 @@
+/* "Why start with the cell?" (round 3, November 4, 2026): the heading and lead, the town at dusk
+   across the window (its lamps lighting one group at a time), the line that ties it to the words,
+   then the three numbered lines. The kit's .look rules (margins, sizes) sit at (0,2,0), so the
+   words' rules are scoped under .why. */
+.why {
+  padding-top: clamp(104px, 11vw, 168px);
+}
+
+.head {
+  display: grid;
+  gap: 16px;
+}
+
+.why .title {
+  margin: 0;
+  font-size: clamp(36px, 3.9vw, 60px);
+  font-weight: 500;
+  line-height: 1.04;
+  text-wrap: balance;
+}
+
+.why .lead {
+  max-width: 30em;
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(19px, 1.4vw, 22px);
+  line-height: 1.55;
+}
+
+@media (min-width: 960px) {
+  .head {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 72px;
+    align-items: end;
+  }
+}
+
+/* The town: as wide as the window (up to 1600px, then centred), its two ends dissolving into the
+   paper so a very wide window never shows a cut edge. */
+.figure {
+  position: relative;
+  width: 100%;
+  max-width: 1600px;
+  margin: clamp(28px, 3.5vw, 52px) auto 0;
+}
+
+.art {
+  --edge: linear-gradient(90deg, transparent 0, #000 4%, #000 96%, transparent 100%);
+  position: relative;
+  aspect-ratio: var(--ar-narrow);
+  -webkit-mask-image: var(--edge);
+  mask-image: var(--edge);
+}
+
+.town,
+.lamp,
+.phoneLit {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.lamp,
+.phoneLit {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+}
+
+/* From 960px the six lamp layers; under it the phone's lit cut. */
+.lamp {
+  display: none;
+}
+
+@media (min-width: 960px) {
+  .art {
+    aspect-ratio: var(--ar-wide);
+  }
+
+  .lamp {
+    display: block;
+  }
+
+  .phoneLit {
+    display: none;
+  }
+}
+
+/* The lamps come on a group at a time: each layer fades up over half a breath, the next a little
+   after (the first a beat later than the town's bloom, useLampsOn). */
+.figure[data-lamps="on"] .lamp {
+  opacity: 1;
+  transition: opacity calc(var(--breath) * 0.5) var(--ease) calc(var(--k) * 0.42s);
+}
+
+.figure[data-lamps="on"] .phoneLit {
+  opacity: 1;
+  transition: opacity calc(var(--breath) * 1.2) var(--ease);
+}
+
+/* Reduced motion and no script: the town lit from the first paint, whole and crisp. */
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  .lamp,
+  .phoneLit {
+    opacity: 1;
+    transition: none;
+  }
+
+  .figure[data-lamps] .lamp,
+  .figure[data-lamps] .phoneLit {
+    transition: none;
+  }
+
+  :global([data-look="ink"]) .art[data-bloom="waiting"] {
+    -webkit-mask: var(--edge);
+    mask: var(--edge);
+    filter: none;
+  }
+}
+
+/* The line under the town and its honesty label, at the page's measure. */
+.caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 24px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.why .line {
+  max-width: 34em;
+  color: var(--ink);
+  font-size: 17px;
+  line-height: 1.45;
+}
+
+/* The three lines: numbered, each on a hairline, its explainer under it. */
+.lines {
+  display: grid;
+  gap: 28px;
+  margin: clamp(36px, 4vw, 56px) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 960px) {
+  .lines {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 48px;
+  }
+
+  /* The three share three rows (subgrid), so the numbers, the lines and the links each start on
+     one line however many lines a sentence takes. */
+  .lines > li {
+    display: grid;
+    grid-row: span 3;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+  }
+}
+
+.item {
+  padding-top: 18px;
+  border-top: 1px solid var(--hair);
+}
+
+.why .number {
+  display: block;
+  color: var(--ink);
+  font-family: var(--display-font);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.why .text {
+  margin: 12px 0 0;
+  color: var(--ink);
+  font-size: 19px;
+  line-height: 1.5;
+}
+
+/* A text link with the kit's hairline under it. */
+.go {
+  display: inline-flex;
+  align-items: center;
+  align-self: start;
+  justify-self: start;
+  gap: 6px;
+  min-height: 48px;
+  margin-top: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ink);
+  font: inherit;
+  font-size: 17px;
+  text-decoration: underline;
+  text-decoration-color: var(--hair-strong, var(--hair));
+  text-decoration-thickness: 1px;
+  text-underline-offset: 8px;
+  cursor: pointer;
+  transition: text-decoration-color calc(var(--breath) / 5) var(--ease);
+}
+
+.go:hover {
+  text-decoration-color: var(--ink);
+}
+
+.go:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.why .source {
+  margin: 28px 0 0;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.arrow {
+  margin-left: 4px;
+  vertical-align: -1px;
+}
+
+/* Inline, so on a phone its arrow stays with the last word instead of standing apart. */
+.source a {
+  display: inline-block;
+  padding: 14px 0;
+  color: var(--muted);
+  text-decoration: underline;
+  text-decoration-color: var(--hair);
+  text-underline-offset: 6px;
+}
