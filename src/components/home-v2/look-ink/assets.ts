@@ -60,6 +60,16 @@ export const mito: Record<"glow", Picture> = {
   glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
 };
 
+/** The same mitochondrion in the two colourings Mo is comparing on the live site (November 4,
+ *  2026; /home-a and /home-b; "/" keeps today's): California colour (a redwood copper skin, pale
+ *  sage inside, warm grey folds) and softer ink (a third lighter, warm sepia). Every stroke is the
+ *  original's; their own colour, so no tinted twin (reference/ink-pages/home-mito). */
+export type MitoColour = "california" | "soft";
+export const mitoColours: Record<MitoColour, Picture> = {
+  california: { src: `${I}/mito-california-v1.webp`, width: 2000, height: 1493 },
+  soft: { src: `${I}/mito-soft-v1.webp`, width: 2000, height: 1493 },
+};
+
 /** "Make sense of the science.": every picture shows what its words say. Mitochondria and Free
  *  radicals (Mo, October 22, 2026, pick D, after the October 21 steam engine): one old powerhouse
  *  with its front left open like a storybook, as the words call mitochondria "tiny power plants":

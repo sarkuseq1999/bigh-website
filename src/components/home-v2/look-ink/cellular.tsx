@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { cellular } from "../content";
-import { gold, mito } from "./assets";
+import { gold, mito, mitoColours, type MitoColour } from "./assets";
 import base from "@/components/ink/ink.module.css";
 import styles from "./cellular.module.css";
 import { useTint } from "./ink-color";
@@ -14,7 +14,8 @@ import { useTint } from "./ink-color";
 // with the three numbered lines on hairlines, the ink mitochondrion (its two gold-leaf folds where
 // energy is made) at the right, the page's biggest painting after the opening, the whole cell in
 // the window; the brush line passes between them.
-export function Cellular() {
+// `colour` is one of the two colourings Mo is comparing (/home-a, /home-b; assets.ts).
+export function Cellular({ colour }: { colour?: MitoColour }) {
   const tint = useTint();
   const copy = useCopy();
   const lines = [cellular.opening, cellular.explanation, cellular.closing];
@@ -58,7 +59,7 @@ export function Cellular() {
           <span className={styles.body}>
             <Image
               className={`${base.ink} ${styles.mito}`}
-              src={tint(mito.glow.src)}
+              src={colour ? mitoColours[colour].src : tint(mito.glow.src)}
               alt={copy(
                 "A mitochondrion, painted in ink, with two gold folds where energy is made",
               )}
