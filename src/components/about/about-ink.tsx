@@ -9,8 +9,10 @@ import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { about, routes } from "./about-content";
+import { about, drafts, routes } from "./about-content";
 import { dots, glasses, oak, pool, sequoia } from "./about-art";
+import { home, plants } from "./chapters-art";
+import more from "./chapters.module.css";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
@@ -30,7 +32,14 @@ export const ALT = {
   oak: "A great valley oak with a rope swing, painted in ink; below the ground, a gold light glows among its roots",
   sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
   glasses: "Reading glasses resting on an open notebook, painted in ink",
+  plants:
+    "Four plant specimens painted in ink and watercolour: a green propolis sprig with a honeybee, a turmeric root, a cluster of grapes, and a pine cone with pine bark",
+  home: "Our five bottles standing in golden grass on a California morning, palms and mountains behind",
 } as const;
+
+// DRAFT sizes for the two new chapters (November 4, 2026): the column's width, as the others.
+const PLANTS = "(max-width: 505px) 85vw, (max-width: 959px) 427px, (max-width: 1395px) 38vw, 520px";
+const HOME = "(max-width: 559px) 92vw, (max-width: 959px) 520px, (max-width: 1395px) 40vw, 560px";
 
 // What each painting asks the server for follows the width it is drawn at (circle.module.css: its
 // height a multiple of one plain height, --h, and its width that height times its shape; --h is
@@ -188,6 +197,114 @@ function Roots() {
   );
 }
 
+// Our ingredients (DRAFT, November 4, 2026): the botanist's four specimens, its key beside them in
+// the painting's own order (two by two, as the specimens lie). A place not yet on file shows as
+// missing (about-content.ts), never guessed.
+function Plants() {
+  const copy = useCopy();
+  return (
+    <Spread
+      id="plants"
+      part="plants"
+      side="left"
+      labelledBy="plants-title"
+      picture={<Painting art={plants} alt={ALT.plants} sizes={PLANTS} caption />}
+    >
+      <p className={`${base.label} ${page.label}`} data-label="">
+        {copy(about.plants.label)}
+      </p>
+      <h2 id="plants-title" className={`${base.display} ${page.heading}`}>
+        {copy(about.plants.title)}
+      </h2>
+      <p className={page.body}>{copy(about.plants.text)}</p>
+      <ul className={more.key} data-key="">
+        {about.plants.items.map((item) => (
+          <li key={item.plant}>
+            <h3>{copy(item.plant)}</h3>
+            {item.place ? (
+              <p className={more.place}>{copy(item.place)}</p>
+            ) : (
+              <p className={more.place} data-unknown="">
+                {copy(about.plants.unknown)}
+              </p>
+            )}
+            <p className={more.product}>
+              {copy(about.plants.inProduct, { product: item.product })}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </Spread>
+  );
+}
+
+// Our home (DRAFT, November 4, 2026): the five real bottles standing on a Southern California
+// morning, grass at their feet; GMP said in plain words under the promise.
+function Home() {
+  const copy = useCopy();
+  return (
+    <Spread
+      id="home"
+      part="home"
+      side="right"
+      labelledBy="home-title"
+      picture={
+        <figure className={`${page.painting} ${more.home}`} data-picture="">
+          <span className={page.paintingBody}>
+            <Image
+              className={base.ink}
+              src={home.src}
+              alt={copy(ALT.home)}
+              width={home.width}
+              height={home.height}
+              sizes={HOME}
+              data-bloom="waiting"
+            />
+            {/* The bottles and the grass at their feet arrive a moment after the scene. The
+                bottles are the real photographs: they lie as they are, never multiplied. */}
+            <Image
+              src={home.bottles}
+              alt=""
+              width={home.width}
+              height={home.height}
+              sizes={HOME}
+              data-bottles=""
+              data-bloom="waiting"
+              style={{ "--bloom-delay": 500 } as CSSProperties}
+            />
+            <Image
+              className={base.ink}
+              src={home.front}
+              alt=""
+              width={home.width}
+              height={home.height}
+              sizes={HOME}
+              data-bloom="waiting"
+              style={{ "--bloom-delay": 500 } as CSSProperties}
+            />
+          </span>
+          {/* The scene is painted (it is not the makers' own place): the honesty tag. */}
+          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+        </figure>
+      }
+    >
+      <p className={`${base.label} ${page.label}`} data-label="">
+        {copy(about.home.label)}
+      </p>
+      <h2 id="home-title" className={`${base.display} ${page.heading}`}>
+        {copy(about.home.title)}
+      </h2>
+      <p className={`${page.body} ${more.lead}`}>{copy(about.home.text)}</p>
+      <p className={more.gmp}>{copy(about.home.gmp)}</p>
+      <ul className={more.rules}>
+        {about.home.rules.map((rule) => (
+          <li key={rule}>{copy(rule)}</li>
+        ))}
+      </ul>
+    </Spread>
+  );
+}
+
 function Experience() {
   const copy = useCopy();
   const years = copy(about.experience.stats[1].unit);
@@ -232,6 +349,9 @@ function Experience() {
   );
 }
 
+// The promise the five greetings stand under.
+const LANGUAGES = about.promise.items[1];
+
 function Promises() {
   const copy = useCopy();
   return (
@@ -263,7 +383,7 @@ function Promises() {
               />
               <h3>{copy(item.title)}</h3>
               <p>{copy(item.text)}</p>
-              {i === 3 && <Greetings className={page.greetings} />}
+              {item === LANGUAGES && <Greetings className={page.greetings} />}
             </li>
           ))}
         </ul>
@@ -301,12 +421,17 @@ function Closing() {
 
 export function AboutInk() {
   return (
-    <InkPage current="about" className={`${page.aboutPage} ${styles.circle} ${field.root}`}>
+    <InkPage
+      current="about"
+      className={`${page.aboutPage} ${styles.circle} ${field.root} ${more.chapters}`}
+    >
       {() => (
         <div data-about="meadow">
           <Opening />
           <Purpose />
           <Roots />
+          <Plants />
+          <Home />
           <Experience />
           <Promises />
           <Closing />

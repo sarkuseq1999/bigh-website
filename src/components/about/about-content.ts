@@ -31,6 +31,39 @@ export const about = {
     // Dr. Iris Wang is named in words only: she asked for no photograph on the website.
     photo: { src: "/images/jiankang-liu.jpg", alt: "Dr. Jiankang Liu" },
   },
+  // DRAFT (November 4, 2026): two new chapters on Mo's ideas ("ingredients from the part of the
+  // world best for their natural growth"; "proudly made in California, by GMP-certified makers"),
+  // words by Claude for Mo to critique. Only the propolis origin is on file (RESEARCH-NOTES.md);
+  // every other place is null until Mo gives the real one: never guess a place onto the page.
+  // NuriCell's four nutrients are made, not grown, so the chapter speaks of plants only.
+  plants: {
+    label: "Our ingredients",
+    title: "Each plant, from where it grows best.",
+    text: "We look around the world for our plant ingredients, and choose each one from the place it grows best.",
+    items: [
+      { plant: "Green propolis", place: "Minas Gerais, Brazil", product: "Green Bee Propolis" },
+      { plant: "Turmeric", place: null, product: "Turmerific" },
+      { plant: "Grape seed", place: null, product: "Advanced OPC Formula" },
+      { plant: "Pine bark", place: null, product: "Advanced OPC Formula" },
+    ],
+    // Shown only while a place is still null (this mockup), so a missing fact looks missing.
+    unknown: "Place to confirm",
+    // The product names stay in English in every language, as on the menus.
+    inProduct: "In {product}",
+  },
+  home: {
+    label: "Our home",
+    title: "Proudly made in California.",
+    text: "Every bottle we sell is made here, by GMP-certified manufacturers.",
+    // What GMP (21 CFR 111) asks of every maker: identity checks on each dietary ingredient
+    // (111.75), a master manufacturing record (111.205) and a batch record (111.255).
+    gmp: "GMP means Good Manufacturing Practice: the rules for making supplements with care.",
+    rules: [
+      "Every ingredient is checked before it’s used.",
+      "Every batch follows a written recipe.",
+      "Every batch is recorded, so it can be traced.",
+    ],
+  },
   experience: {
     label: "Our experience",
     title: "Our flagship formula is older than BiGH.",
@@ -42,14 +75,15 @@ export const about = {
   promise: {
     label: "Our promise",
     title: "What you can count on.",
+    // DRAFT (November 4, 2026): "Made in California" and "Know where it comes from" have their
+    // own chapters now (plants, home); "Honest about the research" is new, for Mo to critique.
     items: [
-      { title: "Made in California.", text: "By GMP-certified manufacturers." },
-      {
-        title: "Know where it comes from.",
-        text: "Our green propolis comes only from Minas Gerais, Brazil.",
-      },
       { title: "45 days to decide.", text: "Not right for you? Send it back for a refund." },
       { title: "Answers in your language.", text: "We reply in the language you write in." },
+      {
+        title: "Honest about the research.",
+        text: "We show you the studies, and say what they don’t prove.",
+      },
     ],
   },
   closing: {
