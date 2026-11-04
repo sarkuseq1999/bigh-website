@@ -236,7 +236,7 @@ These sit on top of `DESIGN.md`.
   fuchsia is a new painting (Codex), its coral calmed so the bird leads. No brush stroke under it
   (one cut through the grass like a bar). Its room keeps the crane's: on phones a set size from
   the window's height (130-230px), on tablets the room left under the words. The homepage's
-  opening bird still beats its wings. `nav-inscription.tsx` (`.sheetBird`, `useBirdRoom`),
+  opening bird beats its wings only as it arrives (November 4). `nav-inscription.tsx` (`.sheetBird`, `useBirdRoom`),
   picture `menu-hummingbird-v1.webp` from `reference/ink-pages/menu-finale/build_menu_finale.py`;
   mockups `reference/ink-pages/mockups/menu-finale/`.
 - **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026).** Mo's
@@ -260,7 +260,8 @@ These sit on top of `DESIGN.md`.
   (A smaller, same spot; B smaller in the clearing's middle; C low behind the firs): the desktop
   sun is three quarters of its size (218 comp px), shrunk about its own centre; phones keep
   theirs. Mockups `reference/ink-pages/mockups/home-sun/`.
-  **The bird: Allen's, painted loose, wings never still (Mo, October 29).** Mo asked for other
+  **The bird: Allen's, painted loose, wings beating as it arrives (Mo, October 29 and November
+  4).** Mo asked for other
   hummingbirds and wings "always moving", like a dragonfly's. Of today's Anna's, a green female
   Anna's and Allen's (copper, like the redwood bark; it nests almost only on the California
   coast) he picked Allen's, then asked for it "more painting-like" and picked C, painted in a
@@ -269,7 +270,11 @@ These sit on top of `DESIGN.md`.
   shine. Its orange is calmed toward the redwood's copper so the gold sun leads. The wings are
   its own painted wings, lifted out and beaten about the shoulder, six blurred frames a beat at
   ten beats a second (`hummingbird-v2-near/-far.webp`, `build_wings.py`), the far wing behind
-  the body; paused once the opening leaves the window, resting raised with reduced motion. The
+  the body; paused once the opening leaves the window, resting raised with reduced motion. On
+  November 4 Mo found the non-stop beat "a little annoying", like a fly (as in the phone menu the
+  day before), and picked A of three (A beat as it arrives, then rest; B short bursts; C always
+  still): the wings beat at full speed for 3 s while the bird blooms in, slow over three beats,
+  then rest on their first frame, raised as painted. Never a beat that runs on. The
   bird is lined up on the first hummingbird's bill and tail, so the line still leaves from under
   its tail. Mockups `reference/ink-pages/mockups/home-bird/`.
   `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in

@@ -30,8 +30,8 @@ export const opening: Record<"landscape" | "bird" | "sun", Picture> = {
   sun: { src: `${I}/sun.webp`, width: 760, height: 743 },
 };
 
-/** The hummingbird's wings, never still (Mo, October 29, 2026: "like a dragonfly"): its own
- *  painted wings, lifted out and beaten about the shoulder (build_wings.py), each frame blurred
+/** The hummingbird's wings, beating as it arrives, then at rest (Mo, November 4, 2026; see
+ *  opening.module.css): its own painted wings, lifted out and beaten about the shoulder (build_wings.py), each frame blurred
  *  over its slice of the beat. Each picture is one wing's six frames side by side; both are laid
  *  in `box` (percent of the bird's frame), the far wing behind the body, the near one over it. */
 export const openingWings = {

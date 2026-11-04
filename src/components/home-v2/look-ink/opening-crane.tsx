@@ -19,10 +19,10 @@ import styles from "./opening.module.css";
 // Chinese, so the painting is now giant sequoias in the morning (they live 3,000 years), the sun
 // standing in a clearing beside one giant trunk, and the bird a hummingbird (for its size it
 // burns energy faster than almost any animal): since October 29 Allen's, painted in a few wet
-// washes, its wings never still. The crane's place, anchors and float are the bird's. The
-// painting is alive: mist drifts through the grove (mist.ts), light crosses the gold leaf, the
-// sun sits at its own depth, and the bird rides the air in a slow float of its own while its
-// wings beat (opening.module.css).
+// washes; since November 4 its wings beat as it arrives, then rest (non-stop, they read as a
+// fly's). The crane's place, anchors and float are the bird's. The painting is alive: mist
+// drifts through the grove (mist.ts), light crosses the gold leaf, the sun sits at its own depth,
+// and the bird rides the air in a slow float of its own (opening.module.css).
 
 // A wing's six frames, laid in the wings' box in the bird's frame (assets.ts).
 function wing(src: string): CSSProperties {
@@ -68,8 +68,8 @@ export function OpeningCrane({ motion }: { motion: boolean }) {
   const mist = useRef<HTMLCanvasElement>(null);
   useMist(art, landscape, mist, motion);
 
-  // The wings beat only while the opening is in the window (and never with reduced motion: they
-  // rest on the beat's first frame, raised as painted).
+  // The wings' short beat on arrival runs only while the opening is in the window (and never with
+  // reduced motion: they rest on the beat's first frame, raised as painted).
   useEffect(() => {
     const element = art.current;
     if (!element || !motion) return;

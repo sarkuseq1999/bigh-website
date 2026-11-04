@@ -9,8 +9,8 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the purpose's painting there, and it ends at the very bottom as the stroke under the footer's
     promise, after one short rule over each of the three standards);
     the opening is California (October 28: the giant sequoias and a hummingbird; October 29:
-    Allen's, its two painted wings beating through their frames, paused once the opening is out
-    of the window), the sun stands in the clearing clear of the bird and of the giant trunk, and the
+    Allen's, its two painted wings beating through their frames as it arrives, then resting
+    raised, as painted (November 4), paused once the opening is out of the window), the sun stands in the clearing clear of the bird and of the giant trunk, and the
     opening's line keeps off the trunk; Dr. Liu and Ask BiGH Science dialogs open and close; Dr. Liu's photo never shown
     past its own pixels; the products: five real bottles, choosing a name shows its words, NuriCell
     is chosen first and stands large on the stage, choosing each picker bottle puts its bottle,
@@ -579,17 +579,37 @@ OPENING_ROOM = """(() => {
     art: [box('#top [data-brush=opening-art]').top, box('#top [data-brush=opening-art]').bottom] };
 })()"""
 
-# October 29 (Mo: the wings "always moving", like a dragonfly's): the near wing's frame read a
-# dozen times over a little more than one beat (0.1 s), and whether its beat runs.
-WING_BEAT = """(async () => {
+# November 4 (Mo picked A: beating non-stop, the wings read as a fly's): the near wing's frame
+# read a dozen times over a little more than one beat (0.1 s) while the bird arrives, and again
+# once it has settled, when it must rest on the first frame, raised as painted.
+WING_FRAMES = """(async () => {
   const w = document.querySelector('#top [data-wing=near]');
   const seen = new Set();
   for (let i = 0; i < 12; i++) {
     seen.add(getComputedStyle(w).backgroundPosition);
     await new Promise((done) => setTimeout(done, 23));
   }
-  return { frames: seen.size, state: getComputedStyle(w).animationPlayState };
+  return { frames: seen.size, at: getComputedStyle(w).backgroundPosition,
+    beat: w.closest('[data-beat]')?.dataset.beat || '' };
 })()"""
+
+
+def wing_arrival(context, url, tag):
+    """A fresh page in the same window: the wings beat as the bird blooms in, then rest."""
+    p = context.new_page()
+    p.goto(url, wait_until="domcontentloaded", timeout=120000)
+    p.wait_for_function("!!document.querySelector('#top [data-beat=on]')", timeout=60000)
+    p.wait_for_timeout(1000)
+    arriving = p.evaluate(WING_FRAMES)
+    p.wait_for_timeout(4500)
+    settled = p.evaluate(WING_FRAMES)
+    p.close()
+    check(f"{tag}: the hummingbird's wings beat as it arrives", arriving["frames"] >= 3, str(arriving))
+    check(
+        f"{tag}: then they rest, raised as painted (Mo, November 4: non-stop, a fly)",
+        settled["frames"] == 1 and settled["at"] in ("0% 0%", "0px 0px"),
+        str(settled),
+    )
 
 # Round 5, phones: where the closing painting's gold sun (80.2% to 88% of its width), its
 # walkers (26% to 33%) and the pelicans' layer fall in the window, and whether the pelicans and
@@ -1103,12 +1123,7 @@ def run(browser, look, mobile):
         "hummingbird-v2-" in w for w in o["wings"]
     )
     check(f"{tag}: the hummingbird has its two painted wings, far and near", wings_ok, str(o["wings"]))
-    beat = page.evaluate(WING_BEAT)
-    check(
-        f"{tag}: the hummingbird's wings never stop (several frames in one beat)",
-        beat["state"] == "running" and beat["frames"] >= 3,
-        str(beat),
-    )
+    wing_arrival(context, url, tag)
     # On a phone the sun stands above the bird, so there it may be clear of the bill upward.
     room = 24 if mobile else 60
     clear_of_bird = o["sun"][0] - o["bill"] >= room or (mobile and o["billY"] - o["sun"][3] >= room)
@@ -1224,8 +1239,14 @@ def run(browser, look, mobile):
 
     # Scientists and dialogs.
     scroll_to(page, top_of(page, "#scientists") + (40 if mobile else 0), 1200)
-    resting = page.evaluate("getComputedStyle(document.querySelector('#top [data-wing=near]')).animationPlayState")
-    check(f"{tag}: the wings rest once the opening is out of the window", resting == "paused", resting)
+    resting = page.evaluate(
+        "(() => { const s = getComputedStyle(document.querySelector('#top [data-wing=near]')); return s.animationPlayState + ' | ' + s.backgroundPosition; })()"
+    )
+    check(
+        f"{tag}: the wings rest once the opening is out of the window",
+        set(x.strip() for x in resting.split("|")[0].split(",")) == {"paused"} and resting.endswith("0% 0%"),
+        resting,
+    )
     shoot(page, f"{name}-02-scientists")
     facts = page.locator("#scientists dl > div").count()
     check(f"{tag}: Dr. Liu's three facts", facts == 3, str(facts))
