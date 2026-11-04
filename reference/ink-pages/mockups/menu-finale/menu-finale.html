@@ -55,18 +55,15 @@
   figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
   .group { font: 600 14px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: -30px; }
   /* The opening's hummingbird laid over a shot: its far wing behind its body, its near wing over
-     it, six frames a beat, ten beats a second, as on the homepage. */
+     it, both on their first frame, raised as painted (the homepage's rest). */
   .scene { position: relative; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; }
   .scene img { border: 0; border-radius: 0; }
   .bird { position: absolute; aspect-ratio: 1600 / 1062; }
   .bird .body { position: absolute; inset: 0; width: 100%; height: 100%; }
   .wing {
     position: absolute; left: 16.19%; top: 14.174%; width: 45.644%; height: 76.931%;
-    background-size: 600% 100%; background-repeat: no-repeat;
-    animation: beat 0.1s steps(6) infinite;
+    background-size: 600% 100%; background-repeat: no-repeat; background-position: 0 0;
   }
-  @keyframes beat { from { background-position: 0 0; } to { background-position: 120% 0; } }
-  @media (prefers-reduced-motion: reduce) { .wing { animation: none; } }
   @media (max-width: 640px) {
     .shots { grid-template-columns: 1fr; }
     .shots .tablet, .shots .screen { grid-column: auto; grid-row: auto; }
@@ -78,7 +75,7 @@
   <header class="intro">
     <h1>The phone menu's last crane</h1>
     <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are California ideas to replace it, put into the real menu of the demo. Nothing on the site has changed.</p>
-    <p>New: the hummingbird, two ways (D and E). The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
+    <p>New: the hummingbird, two ways (D and E). E's wings no longer beat: they rest, raised, as painted. The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
   </header>
   <section class="choice" aria-labelledby="now-name">
     <div class="head"><h2 id="now-name">Today: the crane at rest</h2></div>
@@ -112,8 +109,8 @@
       <span class="score">9 / 10</span>
       <span class="tag">My pick</span>
     </div>
-    <p class="what">The homepage's own hummingbird, its wings beating as they do there, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.</p>
-    <p class="note">The liveliest idea: the bird that greets you on the homepage is waiting at the end of the menu. It moves beside the menu's words; for people whose phone asks for less motion, the wings rest, raised.</p>
+    <p class="what">The homepage's own hummingbird, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.</p>
+    <p class="note">Now still: its wings rest, raised, as they are painted, and nothing moves beside the menu's words. The bird that greets you on the homepage is waiting at the end of the menu.</p>
     <div class="shots">
       <figure class="screen"><div class="scene"><img src="e-screen.jpg" alt="The hummingbird at a flower, the whole phone menu"><span class="bird" style="left:11.538%;top:66.156%;width:57.308%"><span class="wing" style="background-image:url(e-far.webp)"></span><img class="body" src="e-body.webp" alt=""><span class="wing" style="background-image:url(e-near.webp)"></span></span></div><figcaption>The phone menu, whole</figcaption></figure>
       <figure class="close"><div class="scene"><img src="e-close.jpg" alt="The hummingbird at a flower, the foot of the phone menu"><span class="bird" style="left:7.143%;top:16.965%;width:63.857%"><span class="wing" style="background-image:url(e-far.webp)"></span><img class="body" src="e-body.webp" alt=""><span class="wing" style="background-image:url(e-near.webp)"></span></span></div><figcaption>Phone, close-up</figcaption></figure>

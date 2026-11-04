@@ -2,11 +2,12 @@
 foot of the phone menu in place of the crane at rest, the last crane on the site. Cuts the shots that
 shoot_menu.py took into a whole phone screen, a close-up and a tablet close-up per option and writes
 reference/ink-pages/mockups/menu-finale/menu-finale.html. An option with the opening's bird (its
-<key>-bird.json from shoot_menu.py) gets the bird's body and wings laid over its shots, the wings
-beating in the page as they do on the homepage.
+<key>-bird.json from shoot_menu.py) gets the bird's body and wings laid over its shots. Mo
+(November 3): the beating wings were "annoying, like flys" at the menu's size, so they rest on the
+first frame, raised as painted, as the homepage's do with reduced motion.
 
 usage: python -X utf8 reference/ink-pages/menu-finale/make_menu_mockup.py [option ...]
-(only the options named are cut again; their shots must exist)
+(only the options named are cut again; their shots must exist; `html` cuts none, only the page)
 """
 
 import json
@@ -49,8 +50,8 @@ CHOICES = [
         "name": "The hummingbird at a flower",
         "score": "9",
         "pick": True,
-        "what": "The homepage's own hummingbird, its wings beating as they do there, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.",
-        "note": "The liveliest idea: the bird that greets you on the homepage is waiting at the end of the menu. It moves beside the menu's words; for people whose phone asks for less motion, the wings rest, raised.",
+        "what": "The homepage's own hummingbird, sipping from California fuchsia, a wildflower of the dry hills that hummingbirds love. Only the flower is a new painting.",
+        "note": "Now still: its wings rest, raised, as they are painted, and nothing moves beside the menu's words. The bird that greets you on the homepage is waiting at the end of the menu.",
     },
     {
         "key": "a",
@@ -140,18 +141,15 @@ CSS = """
   figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
   .group { font: 600 14px/1.2 var(--body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-soft); margin-bottom: -30px; }
   /* The opening's hummingbird laid over a shot: its far wing behind its body, its near wing over
-     it, six frames a beat, ten beats a second, as on the homepage. */
+     it, both on their first frame, raised as painted (the homepage's rest). */
   .scene { position: relative; overflow: hidden; border: 1px solid var(--rule); border-radius: 6px; }
   .scene img { border: 0; border-radius: 0; }
   .bird { position: absolute; aspect-ratio: 1600 / 1062; }
   .bird .body { position: absolute; inset: 0; width: 100%; height: 100%; }
   .wing {
     position: absolute; left: 16.19%; top: 14.174%; width: 45.644%; height: 76.931%;
-    background-size: 600% 100%; background-repeat: no-repeat;
-    animation: beat 0.1s steps(6) infinite;
+    background-size: 600% 100%; background-repeat: no-repeat; background-position: 0 0;
   }
-  @keyframes beat { from { background-position: 0 0; } to { background-position: 120% 0; } }
-  @media (prefers-reduced-motion: reduce) { .wing { animation: none; } }
   @media (max-width: 640px) {
     .shots { grid-template-columns: 1fr; }
     .shots .tablet, .shots .screen { grid-column: auto; grid-row: auto; }
@@ -166,7 +164,7 @@ def pct(v):
 
 
 def picture(k, view, alt, birds):
-    """A view's picture; with the opening's bird, its body and beating wings over the shot."""
+    """A view's picture; with the opening's bird, its body and resting wings over the shot."""
     img = f'<img src="{k}-{view}.jpg" alt="{alt}">'
     if not birds:
         return img
@@ -231,7 +229,7 @@ def main():
   <header class="intro">
     <h1>The phone menu's last crane</h1>
     <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are California ideas to replace it, put into the real menu of the demo. Nothing on the site has changed.</p>
-    <p>New: the hummingbird, two ways (D and E). The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
+    <p>New: the hummingbird, two ways (D and E). E's wings no longer beat: they rest, raised, as painted. The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
   </header>
 {today}{"".join(section(c) for c in CHOICES)}</main>
 """
