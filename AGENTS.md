@@ -225,6 +225,20 @@ These sit on top of `DESIGN.md`.
   `closing-quail.tsx`, `ink.module.css` (`.look .rest`), `fda-statement.tsx`; picture
   `reference/ink-pages/footer-crane/build_footer_quail.py` (Codex paintings, `paint.sh`).
   Mockups: `reference/ink-pages/mockups/footer-crane/` (`animals/` for the quail).
+- **Phone menu's foot: the hummingbird at a California fuchsia (Mo picked E, November 3,
+  2026).** The crane at rest at the foot of the phone and tablet menu (the footer's old finale in
+  miniature) was the last crane on the site. Of five ideas put into the real menu (A one quail, B
+  the footer's two quail, C poppies; then, on "Can we try with the hummingbird?", D Allen's
+  perched on a twig and E the homepage's own bird at a California fuchsia) he picked E, then
+  found its beating wings "annoying, like flys" at the menu's size: here the wings never beat.
+  They rest on their first frame, raised as painted (the homepage's rest with reduced motion),
+  baked with the body into one picture. The bird is the homepage's own, never redrawn; only the
+  fuchsia is a new painting (Codex), its coral calmed so the bird leads. No brush stroke under it
+  (one cut through the grass like a bar). Its room keeps the crane's: on phones a set size from
+  the window's height (130-230px), on tablets the room left under the words. The homepage's
+  opening bird still beats its wings. `nav-inscription.tsx` (`.sheetBird`, `useBirdRoom`),
+  picture `menu-hummingbird-v1.webp` from `reference/ink-pages/menu-finale/build_menu_finale.py`;
+  mockups `reference/ink-pages/mockups/menu-finale/`.
 - **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026).** Mo's
   colleagues loved the opening's watercolour and gold sun but said the whole read as
   Chinese, "made in China": the misty peaks with pines and the red-crowned crane. Of California
@@ -235,9 +249,10 @@ These sit on top of `DESIGN.md`.
   hummingbird (California's year-round hummingbird; for its size it burns energy faster than
   almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
   sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
-  **First screen only** (Mo, October 28): the crane stays in the phone menu (the closing
-  painting's cranes left on November 2, "Homepage close", below; the footer's crane on November
-  3, "Footer: two California quail", above). Built: the painting covers the whole opening
+  **First screen only** (Mo, October 28): the crane stayed below it at first; the closing
+  painting's cranes left on November 2 ("Homepage close", below), the footer's crane and the
+  phone menu's on November 3 ("Footer: two California quail" and "Phone menu's foot", above).
+  No crane is left on the site. Built: the painting covers the whole opening
   (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
   hummingbird in the crane's frame (Anna's as a still until October 29, below), the line pinned
   to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found

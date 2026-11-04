@@ -69,17 +69,17 @@ On the real GPU (ANGLE/D3D11):
     inside the window's width, nothing cut off at a side and nothing scrolling sideways; in
     English at the three phones all of them in view at once without scrolling; rows 56px+ tall,
     names 20px+, lines 16px+; the link under the rows keeps its arrow on its last word's line.
-    With the four words alone (780px tall and more) the crane stands whole at the foot with Log
+    With the four words alone (780px tall and more) the bird stands whole at the foot with Log
     in and Sign up under it, no scrolling; with Science unfolded, scrolled to the end, the same,
     the menu scrolling on its own while the page under it stays put. Filmed frame by frame at
-    390x844: as Products unfolds the crane is carried down (never up), and folding it away brings
+    390x844: as Products unfolds the bird is carried down (never up), and folding it away brings
     it back, never hidden, faded or jumping (no frame over 64px). Tablets: 834x1112 and 768x1024
     open with Products unfolded (the five in a row, all in view, focus lines on one line, no
-    hollow over 120px between Support and the crane, the crane whole at the foot); 1024x768 opens
-    with the four words and the crane; Science shows its four in a row, captions on one line.
-    On the upright tablet the crane eases (never pops) as Science replaces Products and folds
+    hollow over 120px between Support and the bird, the bird whole at the foot); 1024x768 opens
+    with the four words and the bird; Science shows its four in a row, captions on one line.
+    On the upright tablet the bird eases (never pops) as Science replaces Products and folds
     away. Filmed at real speed on a phone: Science unfolding and the menu opening show no light
-    box round the paintings or the crane.
+    box round the paintings or the bird.
   - the bar's three groups in every language (round 8): English, Simplified Chinese, Korean,
     Vietnamese and Japanese at 1101, 1160, 1220, 1280, 1366, 1440, 1536 and 1920px, over the opening
     and scrolled: the gap before the account group (and after the language) at least 1.5 times the
@@ -141,7 +141,7 @@ Science's drop-down and of its fold in the menu are skipped, and these run inste
 Science is one link to /science with no chevron and no drop-down, pointing at it opens nothing, a
 click goes to its page, and on its page its word carries the painted stroke as the current page;
 pointing on from the open Products to Science, one wash at a time; in the menu, Science is one word
-that goes to its page and closes the menu; the menu's crane and foot checked with Products unfolded.
+that goes to its page and closes the menu; the menu's bird and foot checked with Products unfolded.
 Set `SCIENCE_MENU` to True with `navScienceMenu` and the drop-down's checks come back as they were.
 Pictures land in scripts/qa/out/nav/.
 """
@@ -1570,7 +1570,7 @@ ROWGAPS = """(sel) => { const t = [...document.querySelectorAll(sel + ' [class*=
 
 # The open menu as a visitor sees it: the visible part of the sheet (from the bar to the window's
 # foot), each unfolded row (its link, picture, name and line), the four words, the link under the
-# rows (and where its arrow stands against its last word), the crane and Log in / Sign up.
+# rows (and where its arrow stands against its last word), the bird and Log in / Sign up.
 MENU = """() => {
   const box = el => { const r = el.getBoundingClientRect(); return { left: r.left, right: r.right, top: r.top, bottom: r.bottom, w: r.width, h: r.height }; };
   const sheet = document.querySelector('[data-nav-sheet]');
@@ -1591,7 +1591,7 @@ MENU = """() => {
     const lines = [...range.getClientRects()]; const last = lines[lines.length - 1]; const s = svg.getBoundingClientRect();
     arrow = { sameLine: s.top < last.bottom && s.bottom > last.top, gap: Math.round(s.left - last.right) };
   }
-  const crane = sheet.querySelector('[class*="sheetCrane"]');
+  const bird = sheet.querySelector('[class*="sheetBird"]');
   const words = [...sheet.querySelectorAll(':scope [class*="sheetInner"] > a, :scope [class*="sheetInner"] > button, [data-nav-sheet-toggle]')]
     .map(e => ({ text: e.textContent.trim(), ...box(e) }));
   const foot = [...sheet.querySelectorAll('[class*="sheetFoot"] a, [class*="sheetFoot"] button')]
@@ -1599,7 +1599,7 @@ MENU = """() => {
   return { W: innerWidth, H: innerHeight, top: bar.bottom, scrollTop: sheet.scrollTop,
     scrollable: sheet.scrollHeight - sheet.clientHeight,
     hscroll: sheet.scrollWidth > sheet.clientWidth + 1 || document.documentElement.scrollWidth > innerWidth + 1,
-    rows, arrow, crane: box(crane), craneOpacity: +getComputedStyle(crane).opacity, words, foot,
+    rows, arrow, bird: box(bird), birdOpacity: +getComputedStyle(bird).opacity, words, foot,
     pageY: scrollY, locked: document.body.style.overflow === 'hidden' };
 }"""
 
@@ -1653,42 +1653,42 @@ def rows_checks(tag, m, count, full=True):
 
 
 def finale_checks(tag, m, at_once):
-    """The crane at the foot, whole on the screen, with Log in and Sign up under it."""
-    c = m["crane"]
+    """The bird at the foot, whole on the screen, with Log in and Sign up under it."""
+    c = m["bird"]
     foot = {f["text"]: f for f in m["foot"]}
-    ok = inside(c, m) and c["h"] >= 120 and m["craneOpacity"] > 0.99 and foot and all(inside(f, m) for f in foot.values()) \
+    ok = inside(c, m) and c["h"] >= 120 and m["birdOpacity"] > 0.99 and foot and all(inside(f, m) for f in foot.values()) \
         and all(f["top"] >= c["bottom"] - 4 for f in foot.values())
-    check(f"{tag}: the crane stands whole at the foot, Log in and Sign up under it" + (" (no scrolling)" if at_once else " (scrolled to the end)"),
+    check(f"{tag}: the bird stands whole at the foot, Log in and Sign up under it" + (" (no scrolling)" if at_once else " (scrolled to the end)"),
           ok and (not at_once or m["scrollTop"] == 0),
-          {"crane": [round(c["top"]), round(c["bottom"]), round(c["h"])], "H": m["H"], "foot": [round(f["top"]) for f in foot.values()],
-           "scrollTop": m["scrollTop"], "opacity": round(m["craneOpacity"], 3)})
+          {"bird": [round(c["top"]), round(c["bottom"]), round(c["h"])], "H": m["H"], "foot": [round(f["top"]) for f in foot.values()],
+           "scrollTop": m["scrollTop"], "opacity": round(m["birdOpacity"], 3)})
 
 
-# The crane on every frame the page draws while a part folds open or shut: where its top is, its
+# The bird on every frame the page draws while a part folds open or shut: where its top is, its
 # height, and whether it is drawn (never hidden, never faded).
-CRANE_LOG = """() => { const c = document.querySelector('[data-nav-sheet] [class*="sheetCrane"]');
-  window.__crane = []; window.__craneOn = true;
+BIRD_LOG = """() => { const c = document.querySelector('[data-nav-sheet] [class*="sheetBird"]');
+  window.__bird = []; window.__birdOn = true;
   const tick = () => { const r = c.getBoundingClientRect(); const s = getComputedStyle(c);
-    window.__crane.push({ t: performance.now(), top: r.top, h: r.height, o: +s.opacity, d: s.display, v: s.visibility });
-    if (window.__craneOn) requestAnimationFrame(tick); };
+    window.__bird.push({ t: performance.now(), top: r.top, h: r.height, o: +s.opacity, d: s.display, v: s.visibility });
+    if (window.__birdOn) requestAnimationFrame(tick); };
   requestAnimationFrame(tick); }"""
 
 
-def crane_motion(page, tag, act, ms=1200):
-    """Filmed frame by frame: the crane never disappears or jumps while a part folds (it eases with
+def bird_motion(page, tag, act, ms=1200):
+    """Filmed frame by frame: the bird never disappears or jumps while a part folds (it eases with
     the fold: no frame moves it more than 64px, or changes its size by more than 12px)."""
-    page.evaluate(CRANE_LOG)
+    page.evaluate(BIRD_LOG)
     page.wait_for_timeout(100)
     act()
     page.wait_for_timeout(ms)
-    page.evaluate("window.__craneOn = false")
-    log = page.evaluate("window.__crane")
+    page.evaluate("window.__birdOn = false")
+    log = page.evaluate("window.__bird")
     gone = [round(e["t"] - log[0]["t"]) for e in log if e["h"] < 100 or e["o"] < 0.99 or e["d"] == "none" or e["v"] == "hidden"]
     jumps = [round(abs(b["top"] - a["top"])) for a, b in zip(log, log[1:])]
     sizes = [round(abs(b["h"] - a["h"]), 1) for a, b in zip(log, log[1:])]
     moved = round(log[-1]["top"] - log[0]["top"])
     check(
-        f"{tag}: the crane eases with the fold, never pops (every frame drawn whole, no jump)",
+        f"{tag}: the bird eases with the fold, never pops (every frame drawn whole, no jump)",
         len(log) >= 30 and not gone and max(jumps) <= 64 and max(sizes) <= 12,
         f"{len(log)} frames, moved {moved}px, largest step {max(jumps)}px, size step {max(sizes)}px, hidden at {gone[:4]}",
     )
@@ -1708,7 +1708,7 @@ def phone_rows(browser):
         page.goto(BASE + ("/" if loc == "en" else f"/{loc}"), wait_until="networkidle")
         page.wait_for_timeout(1500)
         page.locator("[data-nav-menu-button]").click()
-        # The crane settles last (from 0.64s, for 0.9s): measured once it has.
+        # The bird settles last (from 0.64s, for 0.9s): measured once it has.
         page.wait_for_timeout(1900)
         m = page.evaluate(MENU)
         if h >= 780:
@@ -1735,7 +1735,7 @@ def phone_rows(browser):
               {"locked": m["locked"], "pageY": [y, m["pageY"]], "scrollTop": m["scrollTop"]})
         page.close()
 
-    # The crane, filmed: Products folding open and shut at 390x844.
+    # The bird, filmed: Products folding open and shut at 390x844.
     page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
     watch(page)
     page.goto(URL, wait_until="networkidle")
@@ -1745,19 +1745,19 @@ def phone_rows(browser):
     toggle = page.locator('[data-nav-sheet-toggle="products"]')
     box = toggle.bounding_box()
     tap = lambda: page.touchscreen.tap(box["x"] + box["width"] / 2, box["y"] + box["height"] / 2)  # noqa: E731
-    log = crane_motion(page, "phone 390x844, Products unfolds", tap)
-    check("phone 390x844: the crane is carried down, never up, as Products unfolds",
+    log = bird_motion(page, "phone 390x844, Products unfolds", tap)
+    check("phone 390x844: the bird is carried down, never up, as Products unfolds",
           all(b["top"] >= a["top"] - 0.5 for a, b in zip(log, log[1:])) and log[-1]["top"] > log[0]["top"] + 200,
           f"{round(log[0]['top'])} -> {round(log[-1]['top'])}")
-    crane_motion(page, "phone 390x844, Products folds away", tap)
+    bird_motion(page, "phone 390x844, Products folds away", tap)
     page.close()
 
 
 def tablet_rows(browser):
     """Round 7: the tablet menu. Held upright it opens with Products unfolded, the five in a row,
-    the four words and the crane at the foot all on the screen (no hollow over 120px between
-    Support and the crane); the names' lines start on one line; Science shows its four the same
-    way. Held sideways (1024x768) it opens with the four words and the crane."""
+    the four words and the bird at the foot all on the screen (no hollow over 120px between
+    Support and the bird); the names' lines start on one line; Science shows its four the same
+    way. Held sideways (1024x768) it opens with the four words and the bird."""
     for w, h in ((834, 1112), (768, 1024), (1024, 768)):
         tag = f"tablet {w}x{h}"
         page = browser.new_page(viewport={"width": w, "height": h})
@@ -1773,8 +1773,9 @@ def tablet_rows(browser):
               (len(m["rows"]) == 5) == upright, len(m["rows"]))
         finale_checks(f"{tag} menu", m, at_once=True)
         support = next(wd for wd in m["words"] if wd["text"] in ("Support",))
-        ink_top = m["crane"]["top"] + m["crane"]["h"] * 0.08
-        check(f"{tag}: no hollow over 120px between Support and the crane", ink_top - support["bottom"] <= 120 or not upright,
+        # The hummingbird's paint starts at its picture's top (its highest flower, 2% down).
+        ink_top = m["bird"]["top"] + m["bird"]["h"] * 0.02
+        check(f"{tag}: no hollow over 120px between Support and the bird", ink_top - support["bottom"] <= 120 or not upright,
               f"{round(ink_top - support['bottom'])}px")
         if upright:
             rows_checks(f"{tag} Products", m, 5)
@@ -1800,11 +1801,11 @@ def tablet_rows(browser):
         page.close()
 
     # Upright, moving from Products to Science (with Science's drop-down; without it, Products
-    # folding away and back): the crane eases with the fold, never pops. On a tablet its room
+    # folding away and back): the bird eases with the fold, never pops. On a tablet its room
     # changes size with the fold, spread over the whole fold by the script (October 26: left to the
     # layout it grew in an eighth of a second, 13px a frame at 834x1112 and 25px at 768x1024, and
     # stopped dead); the shorter tablet and the one held sideways change the most. Once the fold
-    # stops, the layout has the crane again (no size left held).
+    # stops, the layout has the bird again (no size left held).
     held = "() => document.querySelector('[data-nav-sheet] [class*=\"sheetStand\"]').style.minHeight"
     for w, h in ((834, 1112), (768, 1024), (1024, 768)):
         tag = f"tablet {w}x{h}"
@@ -1815,13 +1816,13 @@ def tablet_rows(browser):
         page.locator("[data-nav-menu-button]").click()
         page.wait_for_timeout(1500)
         if SCIENCE_MENU and (w, h) == (834, 1112):
-            crane_motion(page, f"{tag}, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
-            crane_motion(page, f"{tag}, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+            bird_motion(page, f"{tag}, Science unfolds as Products folds", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
+            bird_motion(page, f"{tag}, Science folds away", lambda: page.locator('[data-nav-sheet-toggle="science"]').click())
         elif not SCIENCE_MENU:
             moves = ("folds away", "unfolds again") if h >= 900 else ("unfolds", "folds away again")
             for move in moves:
-                log = crane_motion(page, f"{tag}, Products {move}", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
-                check(f"{tag}, Products {move}: the crane's size changes over the fold, and the layout has it once the fold stops",
+                log = bird_motion(page, f"{tag}, Products {move}", lambda: page.locator('[data-nav-sheet-toggle="products"]').click())
+                check(f"{tag}, Products {move}: the bird's size changes over the fold, and the layout has it once the fold stops",
                       abs(log[-1]["h"] - log[0]["h"]) >= 40 and page.evaluate(held) == "",
                       f"{round(log[0]['h'])} -> {round(log[-1]['h'])}px, held {page.evaluate(held)!r}")
         page.close()
@@ -1829,8 +1830,8 @@ def tablet_rows(browser):
 
 def menu_light_boxes(browser):
     """Round 7, filmed at real speed on a phone: Science unfolding (Dr. Liu's print and the three
-    paintings settle onto the paper) and the menu opening with its crane: no painting's paper, and
-    not the crane's, ever shows as a light box."""
+    paintings settle onto the paper) and the menu opening with its bird: no painting's paper, and
+    not the bird's, ever shows as a light box."""
     page = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True, has_touch=True, device_scale_factor=2)
     watch(page)
     page.goto(URL, wait_until="networkidle")
@@ -1856,7 +1857,7 @@ def menu_light_boxes(browser):
         )
         no_light_box("phone: Science unfolds with no light box round its paintings (filmed at real speed)", found, frames=4)
     else:
-        # The crane's picture loads with the menu; let it, then close the menu for the filmed opening.
+        # The bird's picture loads with the menu; let it, then close the menu for the filmed opening.
         page.wait_for_function(
             "[...document.querySelectorAll('[data-nav-sheet] [class*=\"sheetFinale\"] img')].every(i => i.complete && i.naturalWidth > 0)",
             timeout=30000,
@@ -1869,9 +1870,9 @@ def menu_light_boxes(browser):
     top, height = page.evaluate(
         "(() => { const r = document.querySelector('[data-nav-sheet]').getBoundingClientRect(); return [r.top, r.height]; })()"
     )
-    crane = page.evaluate(PICTURES, '[data-nav-sheet] [class*="sheetFinale"]')
-    found = light_boxes(film, crane, [16, 374], lambda e: top + e["s"] * height - deckle, 390, 300, 1400)
-    no_light_box("phone: the menu opens with the crane multiplied on its paper, no light box (filmed at real speed)", found, frames=4)
+    bird = page.evaluate(PICTURES, '[data-nav-sheet] [class*="sheetFinale"]')
+    found = light_boxes(film, bird, [16, 374], lambda e: top + e["s"] * height - deckle, 390, 300, 1400)
+    no_light_box("phone: the menu opens with the bird multiplied on its paper, no light box (filmed at real speed)", found, frames=4)
     page.close()
 
 

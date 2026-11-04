@@ -28,7 +28,7 @@ import { useNav } from "./use-nav";
 import styles from "./nav-inscription.module.css";
 
 // The menu bar, "Inscription" (Mo's pick, October 5, 2026). A Chinese hanging scroll carries its title
-// centred above the painting; this bar does the same over the crane. The BiGH mark stands in the
+// centred above the painting; this bar does the same over the opening. The BiGH mark stands in the
 // middle, large, with two links on each side of it (Products, Science | About, Support) set as one
 // balanced line; the language at the far left, Log in and Sign up at the far right. Over the
 // opening painting the bar is clear; as the page moves on it settles with the reader's scroll
@@ -50,8 +50,8 @@ import styles from "./nav-inscription.module.css";
 // narrow window: "Menu", the mark, the language; the menu is a full-height scroll let down the
 // same way (round 7): its four words
 // centred, Products and Science unfolding as rows (each picture with its name and line; on a
-// tablet side by side), and at its foot the page's own finale, the crane at rest on its brush
-// ground, with Log in and Sign up under it.
+// tablet side by side), and at its foot the homepage's hummingbird at a California fuchsia, with
+// Log in and Sign up under it.
 // Each drop-down's links follow its button in the page, so Tab goes from the button into them.
 // Where you are is written in ink (round 6): the current page's word carries a short painted brush
 // stroke under it (inscription/current-stroke.webp, cut by reference/nav/make_current_stroke.py from
@@ -166,11 +166,11 @@ export function NavInscription({
     scroller.querySelectorAll("[data-sheet-fold]").forEach((fold) => observer.observe(fold));
     return () => observer.disconnect();
   }, []);
-  const craneRoom = useRef<HTMLSpanElement>(null);
-  const easeCrane = useCraneRoom(sheet, craneRoom, menuOpen);
+  const birdRoom = useRef<HTMLSpanElement>(null);
+  const easeBird = useBirdRoom(sheet, birdRoom, menuOpen);
   const unfold = (id: NavPanelId, word: HTMLElement) => {
     const next = fold === id ? null : id;
-    easeCrane(next);
+    easeBird(next);
     setByHand(true);
     setFold(next);
     held.current = { word, at: word.getBoundingClientRect().top, until: performance.now() + 900 };
@@ -600,18 +600,18 @@ export function NavInscription({
           >
             {copy("Support")}
           </Link>
-          {/* The menu ends where the page ends: the crane at rest on its brush ground (the footer's
-              finale in miniature), with Log in and Sign up under it. */}
+          {/* The menu ends on the homepage's own hummingbird sipping from a California fuchsia
+              (Mo, November 3, 2026: the crane at rest here was the last crane on the site), its
+              wings at rest, raised as painted, with Log in and Sign up under it. */}
           <div className={styles.sheetFinale} aria-hidden="true">
-            <span ref={craneRoom} className={styles.sheetStand}>
-              <span className={styles.sheetGround} />
+            <span ref={birdRoom} className={styles.sheetStand}>
               <Image
-                className={styles.sheetCrane}
-                src="/images/home-v2/ink/crane-rest-v2.webp"
+                className={styles.sheetBird}
+                src="/images/home-v2/ink/menu-hummingbird-v1.webp"
                 alt=""
-                width={560}
-                height={864}
-                sizes="150px"
+                width={743}
+                height={720}
+                sizes="240px"
                 loading={loading}
               />
             </span>
@@ -662,9 +662,9 @@ function useFittedPicker(header: RefObject<HTMLElement | null>, locale: string) 
   }, [header, locale]);
 }
 
-/** Where the crane's room is going while the menu's parts fold: its size and the folds' height
+/** Where the bird's room is going while the menu's parts fold: its size and the folds' height
  *  (together) at the start and at the end, and the room's limits. */
-type CraneEase = {
+type BirdEase = {
   from: number;
   to: number;
   folds: number;
@@ -673,20 +673,20 @@ type CraneEase = {
   high: number;
 };
 
-/** On a tablet the menu's crane takes the room left under the words (130px to 230px), so it changes
+/** On a tablet the menu's bird takes the room left under the words (130px to 230px), so it changes
  *  size when a part folds. Left to the layout it follows only the slice of the fold where that room
  *  lies between its two sizes, at the fold's speed there: folding Products away on an upright tablet
  *  it grew 54px in an eighth of a second and stopped dead. So while the parts fold, its change is
  *  spread over the whole fold: on every change of the folds' size, before it is drawn (a
  *  ResizeObserver), it stands as far from its old size to its new one as the folds are through
- *  theirs. When they stop, the layout has it again. A phone's crane keeps its size and is carried.
+ *  theirs. When they stop, the layout has it again. A phone's bird keeps its size and is carried.
  *  Returns what to call as a part is about to fold. */
-function useCraneRoom(
+function useBirdRoom(
   sheet: RefObject<HTMLDivElement | null>,
   stand: RefObject<HTMLSpanElement | null>,
   menuOpen: boolean,
 ) {
-  const plan = useRef<CraneEase | null>(null);
+  const plan = useRef<BirdEase | null>(null);
 
   useEffect(() => {
     const scroller = sheet.current;
@@ -699,7 +699,7 @@ function useCraneRoom(
       const through = Math.min(1, Math.max(0, (folds - ease.folds) / (ease.foldsTo - ease.folds)));
       holdRoom(room, ease.from + (ease.to - ease.from) * through);
     };
-    // The folds have stopped: the layout has the crane again, at the size it was easing to.
+    // The folds have stopped: the layout has the bird again, at the size it was easing to.
     const stopped = (event: TransitionEvent) => {
       if (event.propertyName !== "grid-template-rows") return;
       if (event.target instanceof Element && event.target.matches("[data-sheet-fold]")) {
@@ -715,10 +715,10 @@ function useCraneRoom(
     };
   }, [sheet, stand]);
 
-  // Opening or closing the menu sets its parts without a visitor watching: the layout has the crane.
+  // Opening or closing the menu sets its parts without a visitor watching: the layout has the bird.
   useEffect(() => letGo(stand.current, plan), [stand, menuOpen]);
 
-  /** A part is about to fold open (`next`), or every part shut (null): where the crane goes. */
+  /** A part is about to fold open (`next`), or every part shut (null): where the bird goes. */
   const ease = (next: NavPanelId | null) => {
     const scroller = sheet.current;
     const room = stand.current;
@@ -727,7 +727,7 @@ function useCraneRoom(
     if (!scroller || !room || !finale || !inner) return;
     const looks = getComputedStyle(room);
     if (looks.flexGrow === "0") return;
-    // With reduced motion the parts are simply open or shut, and so is the crane's room.
+    // With reduced motion the parts are simply open or shut, and so is the bird's room.
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return letGo(room, plan);
     const low = plan.current?.low ?? (parseFloat(looks.minHeight) || 0);
     const high = plan.current?.high ?? (parseFloat(looks.maxHeight) || Infinity);
@@ -752,7 +752,7 @@ function useCraneRoom(
     const mine = { from, to, folds, foldsTo, low, high };
     plan.current = mine;
     holdRoom(room, from);
-    // Should the folds' end never be heard, the layout takes the crane back all the same.
+    // Should the folds' end never be heard, the layout takes the bird back all the same.
     window.setTimeout(() => {
       if (plan.current === mine) letGo(room, plan);
     }, 1200);
@@ -761,7 +761,7 @@ function useCraneRoom(
   return ease;
 }
 
-/** The crane's room held at a size (its least and most room both that size), or, at null, the
+/** The bird's room held at a size (its least and most room both that size), or, at null, the
  *  layout's again. */
 function holdRoom(room: HTMLElement, size: number | null) {
   if (size === null) {
@@ -773,7 +773,7 @@ function holdRoom(room: HTMLElement, size: number | null) {
   room.style.maxHeight = `${size}px`;
 }
 
-function letGo(room: HTMLElement | null, plan: RefObject<CraneEase | null>) {
+function letGo(room: HTMLElement | null, plan: RefObject<BirdEase | null>) {
   plan.current = null;
   if (room) holdRoom(room, null);
 }

@@ -35,6 +35,7 @@ TODAY = {
     "what": "Tap Menu on a phone and a small crane stands at the bottom, on a black brush line. It was the footer's crane in miniature. The footer has quail now, so the two no longer match.",
 }
 
+BUILT = "Your pick, built into the site on this computer (not live yet). The homepage's own hummingbird, its wings resting, raised as painted, sipping from the California fuchsia. Nothing moves; it stands where the crane stood, and Log in and Sign up stay where they were."
 CHOICES = [
     {
         "key": "d",
@@ -214,6 +215,15 @@ def main():
             shutil.copyfile(INK / "hummingbird-v2.webp", OUT / f"{k}-body.webp")
             for side in ("near", "far"):
                 shutil.copyfile(INK / f"hummingbird-v2-{side}.webp", OUT / f"{k}-{side}.webp")
+    # Built (Mo picked E, wings still): shots of the built site (npm run build + npm start), cut by
+    # hand to the same three views into built-*.jpg.
+    built = ""
+    if (OUT / "built-screen.jpg").exists():
+        built = f"""  <section class="choice" aria-labelledby="built-name">
+    <div class="head"><span class="letter">E</span><h2 id="built-name">Built: the hummingbird at a flower</h2><span class="tag">Mo's pick</span></div>
+    <p class="what">{BUILT}</p>
+{figures("built", "The hummingbird, built")}  </section>
+"""
     today = f"""  <section class="choice" aria-labelledby="now-name">
     <div class="head"><h2 id="now-name">{TODAY["name"]}</h2></div>
     <p class="what">{TODAY["what"]}</p>
@@ -229,9 +239,9 @@ def main():
   <header class="intro">
     <h1>The phone menu's last crane</h1>
     <p>Tap Menu on a phone: a small crane stands at the bottom. It is the last crane on the site. Here are California ideas to replace it, put into the real menu of the demo. Nothing on the site has changed.</p>
-    <p>New: the hummingbird, two ways (D and E). E's wings no longer beat: they rest, raised, as painted. The first three ideas are below them. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
+    <p>Mo picked E with its wings still. It is built first below, then the ideas as they were mocked. The black line under the crane goes in all of them: each stands on its own painted ground.</p>
   </header>
-{today}{"".join(section(c) for c in CHOICES)}</main>
+{built}{today}{"".join(section(c) for c in CHOICES)}</main>
 """
     (OUT / "menu-finale.html").write_text(html, encoding="utf-8", newline="\n")
     print("wrote", OUT / "menu-finale.html")

@@ -5,7 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 3, 2026, by Claude Code (the footer's painting by the park sign: Mo
+- **Last updated:** November 3, 2026, by Claude Code (the phone menu's foot: Mo picked E, the
+  homepage's hummingbird at a California fuchsia, its wings at rest, in place of the crane at
+  rest; built on `studio`, not pushed; the footer's painting by the park sign: Mo
   picked A1, two California quail in a few wet washes, in place of the crane at rest; live as
   `main` `9fd7d87`, production `dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`, demo alias on it; the
   homepage's close: Mo picked 1B, the long
@@ -91,8 +93,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `dpl_Hcfa9RqUPbimPg9AX1XRiPDJWLhP`, demo alias on it; public demo: `qa_fda` 248/248,
   `qa_home_ink` 286/286, `qa_nav` 326/326, Nature Calm 159/159, and the quail by the sign on the
   homepage and Green Bee Propolis at 1440 and 390 px wide. The crane's
-  pictures (`crane-poppy-v1.webp` and its spring twin) stay in `public/` unused; the phone menu
-  keeps its crane (`crane-rest-v2.webp`).
+  pictures (`crane-poppy-v1.webp` and its spring twin) stay in `public/` unused; (6) the phone
+  menu's crane at rest: mocked November 3 on the real menu (artifact `MKzpasUKpvbnY6vPM9xce9`,
+  `reference/ink-pages/menu-finale/`): A one quail, B the footer's two quail, C poppies, then on
+  Mo's "Can we try with the hummingbird?" D Allen's perched on a twig and E the homepage's own
+  bird at a California fuchsia (Codex painted the flower only); Mo picked E, then found its
+  beating wings "annoying, like flys" at the menu's size, so its wings rest, raised as painted:
+  built on `studio` November 3 (`menu-hummingbird-v1.webp` from `build_menu_finale.py`, the
+  bird and its first wing frame baked into the fuchsia; no brush stroke under it;
+  `nav-inscription.tsx` `.sheetBird` and `useBirdRoom`, the room's size unchanged; `qa_nav`
+  says bird); not pushed. `crane-rest-v2.webp` stays in `public/` unused. No crane is left on
+  the site once it is live.
 - **Live (October 28): About opens on the poppy meadow, thinning into the paper.**
   The ink circle reminded Mo of the film The Ring. He compared A (superbloom) and B (morning walk)
   live as test pages and picked A, then found its first screen and Our purpose "don't transition
