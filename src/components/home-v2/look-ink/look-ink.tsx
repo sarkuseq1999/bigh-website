@@ -2,7 +2,6 @@
 
 import { InkPage } from "@/components/ink/ink-page";
 import type { NavFollow } from "@/components/ink/nav/nav-inscription";
-import type { MitoColour } from "./assets";
 import { route } from "./brush-route";
 import { Cellular } from "./cellular";
 import { InkColorProvider } from "./ink-color";
@@ -32,8 +31,7 @@ const FOLLOW: NavFollow = { products: ["products"], science: ["cellular", "scien
 // which puts focus at the start of the page's words, past the header's links.
 // `className` carries the title face's variable (loaded by the route, see page.tsx).
 // The paintings carry the green-spring watercolour (ink-color.tsx; Mo, October 16, 2026).
-// `cell` picks one of the two mitochondrion colourings Mo is comparing (/home-a, /home-b).
-export function LookInk({ className, cell }: { className: string; cell?: MitoColour }) {
+export function LookInk({ className }: { className: string }) {
   return (
     <InkColorProvider color="spring">
       <InkPage
@@ -45,7 +43,7 @@ export function LookInk({ className, cell }: { className: string; cell?: MitoCol
         {(motion) => (
           <>
             <OpeningCrane motion={motion} />
-            <Cellular colour={cell} />
+            <Cellular />
             <Scientists />
             <Products />
             <Stories />

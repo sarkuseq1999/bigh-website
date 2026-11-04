@@ -140,7 +140,7 @@ A near-monochrome of sumi ink on warm paper, with one gold that belongs to the p
 
 - **Far Haze** `#adc4da`: distant ridges, mist, the light washes.
 - **Sage** `#8fa77f` and **Deep Sage** `#4a5a42`: near hills, pines, leaves.
-- **Cell Slate** `#34404a`: the mitochondrion's ink, cool so the gold reads warmer.
+- **Cell Sepia** `#6e6155` to `#3c332c`: the mitochondrion's ink since November 4, 2026 (Mo picked B, "softer ink"): the painting a third lighter and warmed to sepia, every stroke kept, its own colour rather than a spring tint (`reference/ink-pages/home-mito/build_mito_colour.py`). It was **Cell Slate** `#34404a`, a cool near-black that looked heavy under the California opening.
 - **Sun Haze** `rgb(243 191 146)`: the glow around both suns (behind the opening's hills, painted into the closing landscape).
 - **Crane Crown** `#d4482f` and **Blossom** `#f0a3ad`: small painted spots of colour.
 
