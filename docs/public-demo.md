@@ -15,8 +15,8 @@ A's picture are gone. `9bff13c` is `e07ea92` plus the test pages' release notes 
 copy (a scratch worktree): `qa_home_ink` 288/288, `qa_nav` 326/326; `/` at 1920, 1440, 768 and 390
 px wide (the softer cell, its gold layer, no sideways scroll, no console errors), both test pages
 404; type-check and lint clean. After the alias update, in fresh unauthenticated browsers on the
-public demo: the same page check 4/4 with both test pages 404; `qa_home_ink` and `qa_nav`
-running.
+public demo: the same page check 4/4 with both test pages 404, `qa_home_ink` 288/288, `qa_nav`
+326/326.
 
 Before that, from about 11:39 to about 18:03 Pacific on November 4, 2026, the alias pointed to
 `bigh-website-ksth0su14-sarkuseq1999s-projects.vercel.app` (`dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`),
