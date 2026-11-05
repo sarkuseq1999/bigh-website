@@ -4,9 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-ksth0su14-sarkuseq1999s-projects.vercel.app`
-(`dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`), the **production** deployment of `main` at
-`e07ea92c93f949b650105a60ba7bd36e36101169` (November 4, 2026, from about 11:39 Pacific). Two test
+The alias currently points to `bigh-website-8npbb8pjj-sarkuseq1999s-projects.vercel.app`
+(`dpl_FWByV2YLyXQytJTrMAGFah39BBdH`), the **production** deployment of `main` at
+`9bff13cc765efc9704eb3398f26ce2c108cba080` (November 4, 2026, from about 18:03 Pacific). The
+homepage's "Tiny power plants." mitochondrion is now in softer ink: Mo picked B of the two test
+pages (A California colour, B softer ink), the same painting a third lighter in warm sepia, every
+stroke and the gold layer kept (`mito-soft-v1.webp`). The test pages `/home-a` and `/home-b` and
+A's picture are gone. `9bff13c` is `e07ea92` plus the test pages' release notes (`3306c8c`) and B
+(no other code), pushed as a fast-forward on Mo's "Yes, put it live". Before the push, on a built
+copy (a scratch worktree): `qa_home_ink` 288/288, `qa_nav` 326/326; `/` at 1920, 1440, 768 and 390
+px wide (the softer cell, its gold layer, no sideways scroll, no console errors), both test pages
+404; type-check and lint clean. After the alias update, in fresh unauthenticated browsers on the
+public demo: the same page check 4/4 with both test pages 404; `qa_home_ink` and `qa_nav`
+running.
+
+Before that, from about 11:39 to about 18:03 Pacific on November 4, 2026, the alias pointed to
+`bigh-website-ksth0su14-sarkuseq1999s-projects.vercel.app` (`dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`),
+the **production** deployment of `main` at `e07ea92c93f949b650105a60ba7bd36e36101169`. Two test
 pages to compare the "Tiny power plants." mitochondrion on the real page: `/home-a`, California
 colour (a redwood copper skin, pale sage inside, warm grey folds), and `/home-b`, softer ink (a
 third lighter, warm sepia); `/` keeps today's cell. The same painting, every stroke kept, the gold

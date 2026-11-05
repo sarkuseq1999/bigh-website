@@ -23,13 +23,13 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run
   itself (`scripts/qa/stall_guard.py`) and Mo no longer waits for the public checks (AGENTS.md
-  "Going live"); **waiting for Mo:** the homepage mitochondrion in "Tiny power plants." to
-  fit the California colours (Mo, November 4: he loves its design, but the page has turned
-  California and colourful around it): A California colour and B softer ink (artifact
-  `WSgwUbri6dQ16J3npJe6mQ`, `reference/ink-pages/home-mito/build_mito_colour.py`), live to compare
-  as test pages `/home-a` and `/home-b` (`main` `e07ea92`, production
-  `dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`, demo alias on it); `/` keeps today's cell; once Mo picks,
-  put his pick on `/` (`Cellular`'s default) and remove both routes and `mitoColours`' other entry; the phone menu's foot: Mo picked E, the homepage's
+  "Going live"); the homepage mitochondrion in "Tiny power plants." now fits the California
+  colours: Mo loves its design but the page had turned California and colourful around it; of
+  two recolourings of the same painting compared live as test pages (A California colour, B
+  softer ink) he picked B, a third lighter, in warm sepia (`mito-soft-v1.webp`, AGENTS.md
+  "Homepage 'Tiny power plants.'", `reference/ink-pages/home-mito/build_mito_colour.py`); live as
+  `main` `9bff13c`, production `dpl_FWByV2YLyXQytJTrMAGFah39BBdH`, demo alias on it; the test
+  pages `/home-a` and `/home-b` and A's picture are gone; the phone menu's foot: Mo picked E, the homepage's
   hummingbird at a California fuchsia, its wings at rest, in place of the crane at rest; live as
   `main` `d8ab9c4`, production `dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`; the footer's painting by the park sign: Mo
   picked A1, two California quail in a few wet washes, in place of the crane at rest; live as
