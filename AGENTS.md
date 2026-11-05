@@ -358,6 +358,15 @@ These sit on top of `DESIGN.md`.
   headline leads. Phones: 66% of the old crane (63.4vw, the bird about 41% of the window), clear
   of the window's left edge, its line unchanged. `opening.module.css`. Mockups:
   `reference/ink-pages/mockups/home-crane-size/`.
+- **Homepage "Tiny power plants.": the mitochondrion in softer ink (Mo picked B, November 4,
+  2026).** Mo loves the cell's design, but its heavy black and blue-grey ink no longer fitted the
+  page once the opening turned California and colourful. Of two recolourings of the same painting,
+  every stroke kept (A California colour: a redwood copper skin, pale sage inside; B softer ink),
+  compared live as test pages `/home-a` and `/home-b`, he picked B: the ink a third lighter and
+  warmed to sepia, the blackest strokes a deep warm brown-grey. The gold folds are unchanged (the
+  gold layer). Its own colour, so no green-spring tint. Keep the design; change only the paint.
+  `mito-soft-v1.webp` from `reference/ink-pages/home-mito/build_mito_colour.py` (`softer`);
+  `assets.ts` `mito`, `cellular.tsx`. Mockups: `reference/ink-pages/mockups/home-mito/`.
 - **Homepage "Aging cells": a brain cell up close (Mo picked B, October 22, 2026).** Mo found the
   steam engine growing old did not relate to the age slider and asked for a cell that ages. One
   brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
