@@ -108,13 +108,16 @@ export const contactShadow: Picture = { src: `${I}/pool-foot.webp`, width: 600, 
 /** Dr. Liu's only photograph (512 x 768), never shown larger than its own pixels allow. */
 export const liu: Picture = { src: "/images/jiankang-liu.jpg", width: 512, height: 768 };
 
-/** Ink still lifes for the sample stories: objects only, never people (ink). v2 (round 5): built
- *  at the originals' full width (1744px; they were 1200px), sharp at their large size on 2x
- *  screens. */
+/** The sample stories' still lifes: objects only, never people. Mo, November 6, 2026: the old
+ *  ink still lifes (plum blossom in a vase, tea bowls, a low table) read as Asian; he picked A,
+ *  one California back porch with golden hills and a valley oak beyond its rail, at three times
+ *  of day: Lisa's breakfast in the morning, Michael's book at dusk, Susan's honeycomb and the
+ *  Brazilian shrub in the afternoon. Codex paintings in ink and thin watercolour, their own colour
+ *  (no green-spring twin), square, enlarged to 1744px (build_home_stories.py). */
 export const storyPaintings: Record<string, Picture> = {
-  lisa: { src: `${I}/story-morning-v2.webp`, width: 1744, height: 2336 },
-  michael: { src: `${I}/story-reading-v2.webp`, width: 1744, height: 2336 },
-  susan: { src: `${I}/story-source-v2.webp`, width: 1744, height: 2336 },
+  lisa: { src: `${I}/story-porch-morning-v1.webp`, width: 1744, height: 1744 },
+  michael: { src: `${I}/story-porch-dusk-v1.webp`, width: 1744, height: 1744 },
+  susan: { src: `${I}/story-porch-afternoon-v1.webp`, width: 1744, height: 1744 },
 };
 
 /** The close: the long view down the Big Sur coast at evening, an older couple and their dog on

@@ -23,9 +23,6 @@ const TINTED = new Set([
   "halo.webp",
   "pool.webp",
   "pool-foot.webp",
-  "story-morning-v2.webp",
-  "story-reading-v2.webp",
-  "story-source-v2.webp",
 ]);
 
 const ColorContext = createContext<InkColor>("ink");
