@@ -10,12 +10,34 @@ import more from "./chapters.module.css";
 import { madeArt as art } from "./made-art";
 import mock from "./made-mockups.module.css";
 
-// MOCKUPS for Mo (November 6, 2026): three ideas for "Proudly made in California." without the
-// bottles (Mo: "I'd rather not have the product bottle there"), shown with /about?made=a|b|c.
+// MOCKUPS for Mo (November 6, 2026): ideas for "Proudly made in California." without the
+// bottles (Mo: "I'd rather not have the product bottle there"), shown with /about?made=a..f
+// (round 1 a, b, c; Mo asked for more the same day: round 2 d, e, f).
 // English only; the words are the draft's. The page's blooms are found once, on mount, so these
 // paintings (picked after it) show whole, unbloomed. Pictures: reference/ink-pages/about-made/.
 
 const SIZES = "(max-width: 959px) 92vw, 620px";
+
+// "waiting" until the element is `share` in view, then "on" (once).
+function useArrive<T extends HTMLElement>(share: number) {
+  const ref = useRef<T>(null);
+  const [state, setState] = useState<"waiting" | "on">("waiting");
+  useEffect(() => {
+    const element = ref.current;
+    if (!element) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        observer.disconnect();
+        setState("on");
+      },
+      { threshold: share },
+    );
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, [share]);
+  return [ref, state] as const;
+}
 
 function Words({ children }: { children?: ReactNode }) {
   const copy = useCopy();
@@ -124,22 +146,7 @@ const LINES = [
 // the chapter's words are written into it, a line at a time, as it comes into view.
 function BookIdea() {
   const copy = useCopy();
-  const book = useRef<HTMLElement>(null);
-  const [write, setWrite] = useState<"waiting" | "on">("waiting");
-  useEffect(() => {
-    const figure = book.current;
-    if (!figure) return;
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        observer.disconnect();
-        setWrite("on");
-      },
-      { threshold: 0.45 },
-    );
-    observer.observe(figure);
-    return () => observer.disconnect();
-  }, []);
+  const [book, write] = useArrive<HTMLElement>(0.45);
   return (
     <Part idea="b">
       <div className={`${base.wrap} ${mock.bookWrap}`}>
@@ -219,6 +226,129 @@ function StateIdea() {
   );
 }
 
+// ---- Round 2 -----------------------------------------------------------------------------------
+
+// D: the checks in the sun. A clipboard on a sunlit stucco wall, a palm's shadow across it: as it
+// comes into view, a gold tick is brushed into each of its three boxes, one after another, one
+// for each rule.
+function WallIdea() {
+  const copy = useCopy();
+  const [wall, tick] = useArrive<HTMLElement>(0.5);
+  return (
+    <Part idea="d">
+      <div className={`${base.wrap} ${page.spread}`} data-side="right">
+        <figure
+          ref={wall}
+          className={`${page.painting} ${mock.wall}`}
+          data-picture=""
+          data-tick={tick}
+        >
+          <span className={`${page.paintingBody} ${mock.wallBody}`}>
+            <Image
+              className={base.ink}
+              src={art.wall.src}
+              alt="A clipboard hanging on a sunlit white stucco wall, a palm's shadow across it, three gold ticks in its boxes"
+              width={art.wall.width}
+              height={art.wall.height}
+              sizes={SIZES}
+            />
+            <svg
+              className={mock.over}
+              viewBox={`0 0 ${art.wall.width} ${art.wall.height}`}
+              aria-hidden="true"
+            >
+              {art.wall.boxes.map(([x, y, w, h], i) => (
+                <path
+                  key={i}
+                  className={mock.tick}
+                  pathLength={1}
+                  style={{ ["--n" as string]: i, strokeWidth: w * 0.22 }}
+                  d={`M${x + w * 0.1} ${y + h * 0.5} Q${x + w * 0.3} ${y + h * 0.7} ${x + w * 0.42} ${y + h * 0.92} Q${x + w * 0.75} ${y + h * 0.2} ${x + w * 1.3} ${y - h * 0.38}`}
+                />
+              ))}
+            </svg>
+          </span>
+          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+        </figure>
+        <div className={page.words} data-words="">
+          <Words>
+            <Rules />
+          </Words>
+        </div>
+      </div>
+    </Part>
+  );
+}
+
+// E: the gold pan. A Gold Rush pan at the edge of a Sierra creek, a few flakes of gold leaf caught
+// in it: California's oldest kind of careful sorting.
+function PanIdea() {
+  const copy = useCopy();
+  return (
+    <Part idea="e">
+      <div className={`${base.wrap} ${page.spread}`} data-side="right">
+        <figure className={`${page.painting} ${mock.pan}`} data-picture="">
+          <span className={page.paintingBody}>
+            <Image
+              className={base.ink}
+              src={art.pan.src}
+              alt="A Gold Rush pan resting at the edge of a clear Sierra Nevada creek, a few flakes of gold caught in it"
+              width={art.pan.width}
+              height={art.pan.height}
+              sizes={SIZES}
+            />
+          </span>
+          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+        </figure>
+        <div className={page.words} data-words="">
+          <Words>
+            <Rules />
+          </Words>
+        </div>
+      </div>
+    </Part>
+  );
+}
+
+// F: the valley at dawn. One painting across the chapter, California's Central Valley in the first
+// light, a few of its fields in gold leaf: the heading in its empty sky, the rules in a row under
+// it.
+function ValleyIdea() {
+  const copy = useCopy();
+  return (
+    <Part idea="f">
+      <div className={base.wrap}>
+        <figure className={mock.valley} data-picture="">
+          <span className={mock.valleyBody}>
+            <Image
+              className={base.ink}
+              src={art.valley.src}
+              alt="Early morning over California's Central Valley from a golden foothill: rows of fields, some in gold, the snowy Sierra behind"
+              width={art.valley.width}
+              height={art.valley.height}
+              sizes="(max-width: 1440px) 92vw, 1300px"
+            />
+            <span className={mock.sky}>
+              <Words>
+                <p className={`${page.body} ${more.lead}`}>{copy(about.home.text)}</p>
+              </Words>
+            </span>
+          </span>
+          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
+        </figure>
+        <div className={mock.row}>
+          <p className={more.gmp}>{copy(about.home.gmp)}</p>
+          <ul>
+            {about.home.rules.map((rule) => (
+              <li key={rule}>{copy(rule)}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </Part>
+  );
+}
+
 export function MadeMockup({ fallback }: { fallback: ReactNode }) {
   const idea = useSyncExternalStore(
     () => () => {},
@@ -228,5 +358,8 @@ export function MadeMockup({ fallback }: { fallback: ReactNode }) {
   if (idea === "a") return <CrateIdea />;
   if (idea === "b") return <BookIdea />;
   if (idea === "c") return <StateIdea />;
+  if (idea === "d") return <WallIdea />;
+  if (idea === "e") return <PanIdea />;
+  if (idea === "f") return <ValleyIdea />;
   return <>{fallback}</>;
 }

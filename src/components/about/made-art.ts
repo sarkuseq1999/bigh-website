@@ -16,4 +16,24 @@ export const madeArt = {
     height: 919,
     gold: "/images/about-made/state-gold-v1.webp",
   },
+  wall: {
+    src: "/images/about-made/wall-v1.webp",
+    width: 1024,
+    height: 1536,
+    boxes: [
+      [361, 562, 54, 52],
+      [362, 700, 54, 52],
+      [364, 839, 54, 52],
+    ],
+  },
+  pan: {
+    src: "/images/about-made/pan-v2.webp",
+    width: 1536,
+    height: 1024,
+  },
+  valley: {
+    src: "/images/about-made/valley-v1.webp",
+    width: 1536,
+    height: 1024,
+  },
 } as const;

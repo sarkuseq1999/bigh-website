@@ -27,4 +27,20 @@ rule round it, the book's ribbon crossed the right page's lines, the state was m
 Pictures: `paint.sh` (Codex, ChatGPT plan, no spend), `build_about_made.py` ->
 `public/images/about-made/` and `src/components/about/made-art.ts`. Review page:
 `reference/ink-pages/mockups/about-made/about-made.html` (Artifact Tye45mScMvZEoGSRxjZih9).
+
+**Round 2 (Mo asked for more ideas the same day):** `/about?made=d|e|f`.
+
+- **D, the checks in the sun**: a clipboard on a sunlit Southern California stucco wall, a palm's
+  shadow across it; the page brushes a gold tick into each of its three boxes, one after another
+  (`wall-1-a`; the boxes' places are `WALL_BOXES` in the build script). 8/10.
+- **E, the gold pan**: a Gold Rush pan at the edge of a Sierra creek with gold caught in it
+  (`pan-1-b`, then `pan-2-a` closer and paler). 7/10: the gold too small and its link to "checked"
+  a stretch. Built behind `?made=e` but left off the review page (under the 8/10 bar).
+- **F, the valley at dawn**: one painting across the chapter, the Central Valley in first light,
+  some fields in gold leaf, the heading in its empty sky and the three rules in a row under it
+  (`valley-1-b`; `valley-1-a` came back with a transparent sky). 8/10: farmland says "grown" more
+  than "made", and its oaks echo the page's own oak.
+
+My pick of the five shown stays B, the record book (9/10).
+
 Spend: none.

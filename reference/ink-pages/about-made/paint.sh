@@ -23,6 +23,7 @@ for order in "$@"; do
   extra=()
   case "$prompt" in
     state*) size="1024x1024"; extra=(-i "$HERE/ref/state-guide.png") ;;
+    wall*) size="1024x1536" ;;
   esac
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" -i "$OAK" -i "$SEQUOIA" -i "$LOOSE" "${extra[@]}" -- \

@@ -9,6 +9,14 @@ product bottle there") and asked for ideas. Three, no bottles in any:
 - C, the Golden State: California painted alone over its real outline, the Central Valley in
   gold leaf (Codex, state-1-a, over ref/state-guide.png from render_state.py).
 
+Mo asked for more ideas the same day (round 2):
+- D, the checks in the sun: a clipboard on a sunlit stucco wall, a palm's shadow across it, three
+  empty boxes the page ticks in gold (Codex, wall-1-a; the boxes found by eye and edge, WALL_BOXES).
+- E, the gold pan: a Gold Rush pan at the edge of a Sierra creek, a trail of gold-leaf flakes in
+  it (Codex, pan-2-a: closer and paler than pan-1, whose gold was too small to see).
+- F, the valley at dawn: California's Central Valley from a foothill, some fields in gold leaf, an
+  empty sky for the words (Codex, valley-1-b; valley-1-a came back with a transparent sky).
+
     python -X utf8 reference/ink-pages/about-made/build_about_made.py
 
 Out: public/images/about-made/*.webp and src/components/about/made-art.ts. Each painting's paper
@@ -30,11 +38,29 @@ ART = ROOT / "src" / "components" / "about" / "made-art.ts"
 FLOOR = 10
 FADE = 40
 
-TAKES = {"crate": "crate-1-a", "ledger": "ledger-1-a", "state": "state-1-a"}
+TAKES = {
+    "crate": "crate-1-a",
+    "ledger": "ledger-1-a",
+    "state": "state-1-a",
+    "wall": "wall-1-a",
+    "pan": "pan-2-a",
+    "valley": "valley-1-b",
+}
+# A replaced picture gets a new name (the image optimiser caches by name).
+VERSION = {"pan": 2}
+# The clipboard's three empty boxes on wall-1-a (x, y, width, height in its 1024 x 1536 pixels):
+# their straight grey edges, found by their rows and columns of darker paint.
+WALL_BOXES = [(361, 562, 54, 52), (362, 700, 54, 52), (364, 839, 54, 52)]
 
 
 def load(name):
-    return np.asarray(Image.open(HERE / "originals" / f"{name}.png").convert("RGB")).astype(float)
+    """The painting as RGB; a picture with transparency is laid on white paper first."""
+    img = Image.open(HERE / "originals" / f"{name}.png")
+    if img.mode in ("RGBA", "LA", "P"):
+        img = img.convert("RGBA")
+        paper = Image.new("RGBA", img.size, (255, 255, 255, 255))
+        img = Image.alpha_composite(paper, img)
+    return np.asarray(img.convert("RGB")).astype(float)
 
 
 def paperless(a):
@@ -83,9 +109,12 @@ def main():
     for key, take in TAKES.items():
         a = load(take)
         ink = paperless(a)
-        box = trim_box(ink)
+        # The valley keeps its empty sky: the words stand in it.
+        box = (0, 0, ink.width, ink.height) if key == "valley" else trim_box(ink)
         ink = ink.crop(box)
-        art[key] = {"src": save(ink, f"{key}-v1"), "width": ink.width, "height": ink.height}
+        art[key] = {"src": save(ink, f"{key}-v{VERSION.get(key, 1)}"), "width": ink.width, "height": ink.height}
+        if key == "wall":
+            art[key]["boxes"] = [[x - box[0], y - box[1], w, h] for x, y, w, h in WALL_BOXES]
         if key == "state":
             # An alpha mask, as the kit's other gold masks: white where the leaf is.
             leaf = gold(a).crop(box)
