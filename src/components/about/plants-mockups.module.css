@@ -1,0 +1,290 @@
+/* MOCKUPS for Mo (November 6, 2026): three ideas for the plants chapter (plants-mockups.tsx).
+   Every rule is scoped under the page's [data-about] root and the idea, so it outranks the kit's
+   .look rules in any stylesheet order. */
+
+/* ---- A: the map ------------------------------------------------------------------------------ */
+
+[data-about] [data-idea="a"] .mapWords {
+  max-width: 40em;
+  margin-bottom: clamp(8px, 1vw, 16px);
+}
+
+[data-about] [data-idea="a"] .map {
+  margin: 0;
+}
+
+[data-about] [data-idea="a"] .mapBody {
+  position: relative;
+  display: block;
+}
+
+[data-about] [data-idea="a"] .mapBody > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-about] [data-idea="a"] .routes {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+[data-about] [data-idea="a"] .routes path {
+  fill: none;
+  stroke: #b08326;
+  stroke-width: 3.4;
+  stroke-linecap: round;
+  stroke-dasharray: 0.1 10;
+}
+
+[data-about] [data-idea="a"] .dot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #b08326;
+  transform: translate(-50%, -50%);
+}
+
+[data-about] [data-idea="a"] .dot[data-home] {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 0 4px rgb(176 131 38 / 0.22);
+}
+
+[data-about] [data-idea="a"] .homeLabel {
+  position: absolute;
+  display: grid;
+  transform: translate(-50%, 16px);
+  text-align: center;
+  white-space: nowrap;
+}
+
+[data-about] [data-idea="a"] .homeLabel b,
+[data-about] [data-idea="a"] .pinWords b {
+  font-family: var(--display-font);
+  font-size: clamp(15px, 1.35vw, 19px);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+[data-about] [data-idea="a"] .homeLabel span,
+[data-about] [data-idea="a"] .pinWords span {
+  font-size: clamp(13px, 1.1vw, 15px);
+  color: var(--muted);
+}
+
+/* A map's words keep a little paper round them where they cross the washes. */
+[data-about] [data-idea="a"] .homeLabel,
+[data-about] [data-idea="a"] .pinWords {
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper),
+    0 0 12px var(--paper);
+}
+
+[data-about] [data-idea="a"] .pin {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  width: 9.5%;
+  /* Centred on its point by margins, not a transform: a transform would make a stacking context
+     and the painting would stop multiplying onto the page (a white box). Margins in % follow the
+     width, and the plants are about square. */
+  margin: -4.75% 0 0 -4.75%;
+}
+
+[data-about] [data-idea="a"] .pin img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-about] [data-idea="a"] .pinWords {
+  display: grid;
+  margin-top: 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+[data-about] [data-idea="a"] .map figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+[data-about] [data-idea="a"] .mapList {
+  display: none;
+}
+
+/* Phones: the map is too small for its plants: dots and routes stay on it, the plants are listed
+   under it. */
+@media (max-width: 759px) {
+  [data-about] [data-idea="a"] .pin {
+    display: none;
+  }
+
+  [data-about] [data-idea="a"] .homeLabel span {
+    display: none;
+  }
+
+  [data-about] [data-idea="a"] .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  [data-about] [data-idea="a"] .dot[data-home] {
+    width: 11px;
+    height: 11px;
+    box-shadow: 0 0 0 3px rgb(176 131 38 / 0.22);
+  }
+
+  [data-about] [data-idea="a"] .homeLabel {
+    transform: translate(-30%, 9px);
+  }
+
+  [data-about] [data-idea="a"] .mapList {
+    display: grid;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  [data-about] [data-idea="a"] .mapList li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  [data-about] [data-idea="a"] .mapList li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  [data-about] [data-idea="a"] .mapList img {
+    width: 64px;
+    height: auto;
+    flex: none;
+  }
+
+  [data-about] [data-idea="a"] .mapList li > span {
+    display: grid;
+  }
+
+  [data-about] [data-idea="a"] .mapList b {
+    font-family: var(--display-font);
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  [data-about] [data-idea="a"] .mapList li > span > span {
+    font-size: 16px;
+    color: var(--muted);
+  }
+}
+
+/* ---- B: four homes --------------------------------------------------------------------------- */
+
+[data-about] [data-idea="b"] .homesWords {
+  max-width: 40em;
+  margin-bottom: clamp(28px, 3vw, 48px);
+}
+
+[data-about] [data-idea="b"] .homes {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(18px, 2.2vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-about] [data-idea="b"] .homePic {
+  display: block;
+}
+
+[data-about] [data-idea="b"] .homePic img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 3 / 2;
+  object-fit: cover;
+}
+
+[data-about] [data-idea="b"] .homes h3 {
+  margin: 14px 0 0;
+  font-family: var(--display-font);
+  font-size: 22px;
+  font-weight: 500;
+  line-height: 1.25;
+}
+
+[data-about] [data-idea="b"] .homes p {
+  margin: 4px 0 0;
+  line-height: 1.4;
+}
+
+[data-about] [data-idea="b"] .homes p.place {
+  font-size: 17px;
+  color: var(--ink);
+}
+
+[data-about] [data-idea="b"] .homes p.product {
+  font-size: 15px;
+  color: var(--muted);
+}
+
+[data-about] [data-idea="b"] .homesCaption {
+  margin-top: 14px;
+  text-align: right;
+}
+
+/* From 960px the four homes step up and down a little, like stops on a trip, not a row of cards. */
+@media (min-width: 960px) {
+  [data-about] [data-idea="b"] .homes {
+    align-items: start;
+  }
+
+  [data-about] [data-idea="b"] .homes li:nth-child(even) {
+    margin-top: 56px;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 959px) {
+  [data-about] [data-idea="b"] .homes {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Phones: one home at a time, swiped, the next one peeking in. */
+@media (max-width: 599px) {
+  [data-about] [data-idea="b"] .homes {
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-right: calc(-1 * var(--gutter));
+    padding-right: var(--gutter);
+  }
+
+  [data-about] [data-idea="b"] .homes li {
+    scroll-snap-align: start;
+  }
+}
+
+/* ---- C: one plant, all the way --------------------------------------------------------------- */
+
+[data-about] [data-part="plants"] [data-picture].one {
+  --picture: 640px;
+}
+
+[data-about] [data-part="plants"] p.oneLead {
+  color: var(--ink);
+  font-size: clamp(21px, 1.7vw, 25px);
+  line-height: 1.4;
+}

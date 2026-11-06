@@ -17,6 +17,7 @@ import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
+import { PlantsMockup } from "./plants-mockups";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
 import field from "./meadow.module.css";
@@ -430,7 +431,7 @@ export function AboutInk() {
           <Opening />
           <Purpose />
           <Roots />
-          <Plants />
+          <PlantsMockup fallback={<Plants />} />
           <Home />
           <Experience />
           <Promises />
