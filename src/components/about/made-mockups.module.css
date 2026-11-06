@@ -167,14 +167,155 @@
 @media (max-width: 599px) {
   [data-about] section[data-made="a"] .crate[data-picture],
   [data-about] section[data-made="c"] .state[data-picture],
-  [data-about] section[data-made="b"] .book[data-picture] {
+  [data-about] section[data-made="b"] .book[data-picture],
+  [data-about] section[data-made="d"] .wall[data-picture],
+  [data-about] section[data-made="e"] .pan[data-picture],
+  [data-about] section[data-made="f"] .valley[data-picture] {
     width: 100%;
     margin-inline: 0;
   }
 
   [data-about] section[data-made] .crate figcaption,
   [data-about] section[data-made] .book figcaption,
-  [data-about] section[data-made] .state figcaption {
+  [data-about] section[data-made] .state figcaption,
+  [data-about] section[data-made] .wall figcaption,
+  [data-about] section[data-made] .pan figcaption,
+  [data-about] section[data-made] .valley figcaption {
     margin-right: 0;
+  }
+}
+
+/* ==== Round 2 (Mo asked for more ideas, November 6) ============================================= */
+
+/* ---- D: the checks in the sun ------------------------------------------------------------------ */
+
+/* The wall is tall (about 2:3): it stands as tall as the oak. */
+[data-about] section[data-made="d"] .wall[data-picture] {
+  --picture: calc(var(--h) * 1.62 * var(--shape, 0.68));
+}
+
+[data-about] section[data-made="d"] .wallBody {
+  position: relative;
+}
+
+/* A gold-leaf tick, one brushstroke, flat gold (no glow). */
+[data-about] section[data-made="d"] .tick {
+  fill: none;
+  stroke: #b08326;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  [data-about] section[data-made="d"] .wall .tick {
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  [data-about] section[data-made="d"] .wall[data-tick="on"] .tick {
+    animation: tick 0.7s cubic-bezier(0.5, 0, 0.3, 1) both;
+    animation-delay: calc(500ms + var(--n) * 900ms);
+  }
+}
+
+@keyframes tick {
+  from {
+    stroke-dashoffset: 1;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+/* ---- E: the gold pan --------------------------------------------------------------------------- */
+
+[data-about] section[data-made="e"] .pan[data-picture] {
+  --picture: calc(var(--h) * 1.1 * 1.5);
+}
+
+/* ---- F: the valley at dawn --------------------------------------------------------------------- */
+
+[data-about] section[data-made="f"] .valley {
+  margin: 0;
+}
+
+/* Under 960px the words stand over the painting (order); from 960px they sit in its empty sky. */
+[data-about] section[data-made="f"] .valleyBody {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-about] section[data-made="f"] .valleyBody > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-about] section[data-made="f"] .sky {
+  order: -1;
+  display: block;
+  max-width: 40em;
+  margin-bottom: 12px;
+}
+
+[data-about] section[data-made="f"] .valley figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* Under 960px the empty sky is cut away (it is bare paper): the hills start under the words. */
+@media (max-width: 959px) {
+  [data-about] section[data-made="f"] .valleyBody > img {
+    margin-top: -22%;
+  }
+}
+
+@media (min-width: 960px) {
+  [data-about] section[data-made="f"] .sky {
+    position: absolute;
+    left: 0;
+    top: 3%;
+    max-width: 36em;
+    margin: 0;
+  }
+}
+
+/* The GMP line and the three rules in one row under the painting. */
+[data-about] section[data-made="f"] .row {
+  display: grid;
+  gap: 20px clamp(24px, 3vw, 48px);
+  margin-top: clamp(20px, 2.4vw, 36px);
+}
+
+[data-about] section[data-made="f"] .row p {
+  margin: 0;
+}
+
+[data-about] section[data-made="f"] .row ul {
+  display: grid;
+  gap: 0 clamp(20px, 2.4vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-about] section[data-made="f"] .row li {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+@media (min-width: 960px) {
+  [data-about] section[data-made="f"] .row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    align-items: start;
+  }
+
+  [data-about] section[data-made="f"] .row ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

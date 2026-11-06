@@ -29,7 +29,7 @@ const H = art.map.height;
 const PIN: Record<Key, [number, number]> = {
   propolis: [828, 760],
   turmeric: [1400, 725],
-  grape: [720, 528],
+  grape: [742, 528],
   pine: [720, 348],
 };
 
