@@ -19,8 +19,8 @@ the push, on a built copy (a scratch worktree): `qa_home_ink` 288/288 (its still
 3-9% off the window and at least 45% of it wide), `qa_nav` 326/326; the three stories clicked at
 1920, 1440, 1280, 900, 768 and 390 px wide (each painting whole, no console errors); type-check
 and lint clean. After the alias update, in a fresh unauthenticated browser on the public demo: the
-three porch pictures served and no old still life, each story clicked at 1440 and 390 px (public
-`qa_home_ink` and `qa_nav` running).
+three porch pictures served and no old still life, each story clicked at 1440 and 390 px,
+`qa_home_ink` 288/288, `qa_nav` 326/326.
 
 Before that, from about 18:03 Pacific on November 4 to about 13:25 Pacific on November 6, 2026,
 the alias pointed to `bigh-website-8npbb8pjj-sarkuseq1999s-projects.vercel.app`
