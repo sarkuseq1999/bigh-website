@@ -343,6 +343,12 @@ These sit on top of `DESIGN.md`.
   painting is Codex ink and wash, painted loose (the tidy first takes read as illustrations).
   Spec `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
   `reference/ink-pages/science/` (README, `build_science.py`, `paint.sh`).
+  November 6: Mo kept the opening line ("Our science starts in the cell.") and asked for other
+  pictures for "Why start with the cell?" to compare. Shown on the real page, each lighting in
+  gold leaf a piece at a time: A the town (as built), B monarchs wintering at Pacific Grove (each
+  warms its own flight muscles before it can fly; Claude's pick), C a Sacramento Valley sunflower
+  field at sunrise. A microscope view of cheek cells was tried and left out (the gold cells looked
+  like chips). Waiting for his pick. Mockups `reference/ink-pages/mockups/science-why/`.
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing

@@ -58,3 +58,14 @@ fade in one lit cut (`town-phone-lit-v3`). The lit town itself is a lossless pla
 (`plates/town-lit-v3.png`): `check_science_art.py` lays the six layers over the town's plate and
 compares. Okayama's castle, the scrolls, the health scenes and the mugs no longer ship (their
 pictures are deleted from `public/`; their originals stay here as `gpt25-*`).
+
+## Other pictures for "Why start with the cell?" (November 6, 2026)
+
+Mo kept the opening line and asked for other picture ideas to compare with the town. Each was
+painted (`monarchs-1`, `sunflowers-1`, `cheek-cells-1`), painted again loosely (`loose-*-1-1`), then
+gilded by an edit (`paint.sh gild-*`, `prompts/gild-<key>.txt`: only the parts that light turn
+golden). `reference/ink-pages/mockups/science-why/build_why_mocks.py` turns each pair into the
+town's own layers (gold leaf in six groups; one butterfly, flower or cell lights at once), and
+`shoot_why_mocks.py` films them in the real page in place of the town. The sunflowers' gilded edit
+moved the flowers, so there the gilded take is the drawing and its petals are washed pale for the
+resting picture. Compare page for Mo: `mockups/science-why/page/`.

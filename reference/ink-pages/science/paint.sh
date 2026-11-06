@@ -43,6 +43,13 @@ for name in "$@"; do
       ref=(-i "$HERE/originals/town-dusk-${n%%[a-z]*}.png")
       cp "$HERE/prompts/town-lit.txt" "$order"
       ;;
+    gild-*)
+      # gild-<src>: originals/<src>.png with its lightable parts in gold (prompts/gild-<key>.txt,
+      # <key> = the first word of <src> after any "loose-": monarchs, sunflowers, cheek).
+      src="${name#gild-}"; key="${src#loose-}"; key="${key%%-*}"
+      ref=(-i "$HERE/originals/$src.png")
+      cp "$HERE/prompts/gild-$key.txt" "$order"
+      ;;
     wash-*)
       place="${name#wash-}"; place="${place%-*}"
       src="$HERE/plates/place-$place.png"
