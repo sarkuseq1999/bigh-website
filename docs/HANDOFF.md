@@ -5,8 +5,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Science round 3, built and kept by Mo, not live yet (November 4-6, 2026, Claude Code; not
-  pushed).** Mo asked for the page to start broader (what science, and why) and to turn
+- **Live November 6, 2026 (Claude Code): Science round 3, the science first, then the
+  scientist.** `main` `8b422fa`, production `dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`, the demo alias on
+  it; public checks `qa_science_ink` 642/642, `qa_home_ink` 288/288, `qa_nav` 326/326
+  (`docs/public-demo.md`). Still open: a native speaker's check of m1100-m1117. Mo asked for the page to start broader (what science, and why) and to turn
   California, then gave Claude the whole job and said he would critique the built page. The page
   now opens "Our science starts in the cell." (a desk at a window over golden hills), then "Why
   start with the cell?" (San Francisco's houses at dusk, windows lighting in gold leaf), Dr. Liu,
@@ -20,8 +22,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   another session worked on About and the homepage in this folder. November 6, Mo's critique:
   keep the opening line; of three pictures for "Why start with the cell?" (A the town, B
   monarchs, C sunflowers, all shown on the real page) he kept A, the town; leave the formulas'
-  bottles row as it is. So the page stays as built. Next: put it live only on Mo's yes (studio
-  is behind `origin/main` by the homepage stories release `c75cabb`, so merge it first).
+  bottles row as it is. So the page stays as built, and Mo said "Yes, put it live".
 - **Live November 6, 2026 (Claude Code): the homepage's "In their own words." on a California
   back porch.** The three sample stories' still lifes (plum blossom in a vase, tea bowls) read as
   Asian. Mo picked A, the back porch with golden hills and a valley oak, over B, the kitchen table,

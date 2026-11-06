@@ -4,10 +4,27 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-lyqrrdiec-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
+(`dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`), the **production** deployment of `main` at
+`8b422fa2f016cb473e82284bd7254f1b38957597` (November 6, 2026, from about 15:13 Pacific). The
+Science page, round 3: it now starts with the science, then the scientist. It opens "Our science
+starts in the cell." (a desk at a window over golden hills), then "Why start with the cell?" (San
+Francisco's houses at dusk, their windows lighting in gold leaf a few at a time), Dr. Liu, his path
+(Berkeley, Salzburg, Today), the formulas, "Read the research yourself." and Ask BiGH Science, in
+California paintings. Mo critiqued the built page on November 6: keep the opening line, keep the
+town (A, over B monarchs and C sunflowers shown on the real page), leave the formulas' bottles row;
+then "Yes, put it live". `8b422fa` is `c75cabb` plus the Science round 3 commits (`78a0be2`,
+`2a5edd7`), the picture comparison and notes (`a8748b0`, `5148bf1`) and studio's merge and notes,
+pushed as a fast-forward. Before the push, on a built copy (a scratch worktree): `qa_science_ink`
+642/642, `qa_home_ink` 288/288, `qa_nav` 326/326; type-check and lint clean. After the alias
+update, in fresh unauthenticated browsers on the public demo: `/science` at 1440 and 390 px (200,
+the new headline, the town and its lamps, the formulas row, no console errors), `qa_science_ink`
+642/642, `qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, from about 13:25 to about 15:13 Pacific on November 6, 2026, the alias pointed to
+`bigh-website-lyqrrdiec-sarkuseq1999s-projects.vercel.app`
 (`dpl_E1qdSYVbqA9hMdrvji9JstGR6Cmp`), the **production** deployment of `main` at
-`c75cabbcfc172361190672ada0e1c1e84dfedccc` (November 6, 2026, from about 13:25 Pacific). The
-homepage's "In their own words." still lifes are on a California back porch: Mo picked A (the
+`c75cabbcfc172361190672ada0e1c1e84dfedccc`. The homepage's "In their own words." still lifes are on a California back porch: Mo picked A (the
 porch, golden hills and a valley oak beyond its rail) over B (the kitchen table with a lemon tree
 in the window), then saw all three stories on the real page: Lisa's breakfast in the morning,
 Michael's book and reading glasses at dusk, Susan's honeycomb and the Brazilian shrub in the

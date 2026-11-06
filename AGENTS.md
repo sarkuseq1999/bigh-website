@@ -325,7 +325,7 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/mockups/science-path/2026-10-26/`. (Round 3 below changed the order and
   the paintings; the path's one place per screen stays.)
 - **Science round 3: start with the science, then the scientist (Mo, November 4, 2026; built
-  for his critique, which kept the page as built on November 6; not live yet).** Mo: the design was good but "the way I put it together
+  for his critique, which kept the page as built; live November 6, `main` `8b422fa`).** Mo: the design was good but "the way I put it together
   could be better"; start broader, with what kind of science BiGH focuses on (cell science) and
   the reason behind it; keep the water paint but shift from Asian to California. He then gave
   Claude the whole job ("do the best you can ... I will come and critique"), so no options were
