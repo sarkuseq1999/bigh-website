@@ -186,6 +186,18 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/about-opening/build_about_opening.py` (Codex painting plus Codex's
   continuation of its foot, `join_foot.py`). Mockups: `reference/ink-pages/mockups/about-opening/`
   and `about-opening-join/`.
+- **About "Our ingredients": the map home (Mo picked A, November 6, 2026; on the draft branch
+  `about-chapters`, not live).** Mo liked the idea of "Each plant, from where it grows best." but
+  not its first design (four specimens beside a two-by-two key). Of three ideas on the real page
+  (A a painted world map, each plant at its place, gold trails home to California; B four little
+  landscapes; C one plant told fully) he picked A. The trails are gold-leaf dabs, laid one plant
+  after another, once, as the map comes into view; phones list the plants under the map. Only
+  Minas Gerais, Brazil is a real place on file: the others are stand-ins (`confirmed: false` in
+  `about-content.ts`) and must never go live. On the same day he asked for no bottles in
+  "Proudly made in California." (three ideas waiting: A a crate label, B a record book, C the
+  Golden State) and for "Made in California" to stay in the promise list. `plants-map.tsx`;
+  pictures `reference/ink-pages/about-plants/`; mockups `reference/ink-pages/mockups/about-plants/`
+  and `about-made/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis
