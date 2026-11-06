@@ -22,6 +22,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   monarchs, C sunflowers, all shown on the real page) he kept A, the town; leave the formulas'
   bottles row as it is. So the page stays as built. Next: put it live only on Mo's yes (studio
   is behind `origin/main` by the homepage stories release `c75cabb`, so merge it first).
+- **Live November 6, 2026 (Claude Code): the homepage's "In their own words." on a California
+  back porch.** The three sample stories' still lifes (plum blossom in a vase, tea bowls) read as
+  Asian. Mo picked A, the back porch with golden hills and a valley oak, over B, the kitchen table,
+  then saw all three stories on the real page (Lisa's breakfast, Michael's book at dusk, Susan's
+  honeycomb and the Brazilian shrub). AGENTS.md "Homepage 'In their own words.'"; pictures and
+  `build_home_stories.py` in `reference/ink-pages/home-stories/`. Built in a scratch worktree from
+  `origin/main` (this folder holds the unreleased Science round 3) and live as `main` `c75cabb`,
+  production `dpl_E1qdSYVbqA9hMdrvji9JstGR6Cmp`, demo alias on it; studio has merged it
+  (`cdf0d5e`), so the Science release no longer needs to merge it first.
 - **Earlier, November 4, 2026, by Claude Code** (the homepage hummingbird's wings beat as
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run

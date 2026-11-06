@@ -4,9 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-8npbb8pjj-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-lyqrrdiec-sarkuseq1999s-projects.vercel.app`
+(`dpl_E1qdSYVbqA9hMdrvji9JstGR6Cmp`), the **production** deployment of `main` at
+`c75cabbcfc172361190672ada0e1c1e84dfedccc` (November 6, 2026, from about 13:25 Pacific). The
+homepage's "In their own words." still lifes are on a California back porch: Mo picked A (the
+porch, golden hills and a valley oak beyond its rail) over B (the kitchen table with a lemon tree
+in the window), then saw all three stories on the real page: Lisa's breakfast in the morning,
+Michael's book and reading glasses at dusk, Susan's honeycomb and the Brazilian shrub in the
+afternoon (`story-porch-{morning,dusk,afternoon}-v1.webp`). The old ink still lifes (plum blossom,
+tea bowls) and their green-spring twins are gone; from 900px the painting runs off the window's
+edge by 6% of its width (it was 14%). `c75cabb` is `9bff13c` plus the two mockup commits
+(`782ec12`, `8db5b53`) and the build, pushed as a fast-forward on Mo's "Yes, put it live". Before
+the push, on a built copy (a scratch worktree): `qa_home_ink` 288/288 (its still-life rule now
+3-9% off the window and at least 45% of it wide), `qa_nav` 326/326; the three stories clicked at
+1920, 1440, 1280, 900, 768 and 390 px wide (each painting whole, no console errors); type-check
+and lint clean. After the alias update, in a fresh unauthenticated browser on the public demo: the
+three porch pictures served and no old still life, each story clicked at 1440 and 390 px (public
+`qa_home_ink` and `qa_nav` running).
+
+Before that, from about 18:03 Pacific on November 4 to about 13:25 Pacific on November 6, 2026,
+the alias pointed to `bigh-website-8npbb8pjj-sarkuseq1999s-projects.vercel.app`
 (`dpl_FWByV2YLyXQytJTrMAGFah39BBdH`), the **production** deployment of `main` at
-`9bff13cc765efc9704eb3398f26ce2c108cba080` (November 4, 2026, from about 18:03 Pacific). The
+`9bff13cc765efc9704eb3398f26ce2c108cba080`. The
 homepage's "Tiny power plants." mitochondrion is now in softer ink: Mo picked B of the two test
 pages (A California colour, B softer ink), the same painting a third lighter in warm sepia, every
 stroke and the gold layer kept (`mito-soft-v1.webp`). The test pages `/home-a` and `/home-b` and
