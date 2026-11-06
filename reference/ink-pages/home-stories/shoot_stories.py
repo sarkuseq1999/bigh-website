@@ -103,6 +103,24 @@ PLACE = {
 }
 
 
+# The take "set" shoots all three stories with the picked porch (Mo picked A, November 6): each
+# story's own <img> swapped, then each name clicked as a visitor would, so its still life blooms in.
+SET = {"lisa": "porch-2", "michael": "porch-dusk-1", "susan": "porch-source-2"}
+
+SWAP_ALL = """(urls) => {
+  const imgs = [...document.querySelectorAll('[data-brush=story-painting] img')];
+  imgs.forEach((img, i) => {
+    img.removeAttribute('srcset');
+    img.removeAttribute('sizes');
+    img.src = urls[i];
+    img.style.objectPosition = '50% 50%';
+  });
+  const fig = imgs[0].closest('figure');
+  if (innerWidth >= 900) fig.style.setProperty('--w', 'min((var(--area) + var(--room)) / 0.94, 860px)');
+  return Promise.all(imgs.map((img) => img.decode()));
+}"""
+
+
 def main():
     args = sys.argv[1:]
     base = next((a.rstrip("/") for a in args if "://" in a), "https://bigh-website-demo.vercel.app")
@@ -113,6 +131,14 @@ def main():
     for name in takes:
         if name == "today":
             urls[name] = None
+            continue
+        if name == "set":
+            parts = []
+            for take in SET.values():
+                im = cut(take)
+                im.save(CUT / f"{take}.png")
+                parts.append(data_url(im))
+            urls[name] = parts
             continue
         im = cut(name)
         im.save(CUT / f"{name}.png")
@@ -139,6 +165,16 @@ def main():
                 page.wait_for_timeout(60 if abs(left) > 600 else 250)
             page.wait_for_timeout(3500)
             for name, url in urls.items():
+                if name == "set":
+                    page.evaluate(SWAP_ALL, url)
+                    page.wait_for_timeout(500)
+                    for i, story in enumerate(SET):
+                        page.evaluate(
+                            f"document.querySelectorAll('#stories [aria-pressed]')[{i}].click()"
+                        )
+                        page.wait_for_timeout(3500)
+                        page.screenshot(path=str(SHOTS / f"set-{story}-{size}.png"))
+                    continue
                 if url:
                     page.evaluate(SWAP, url)
                     page.wait_for_timeout(500)

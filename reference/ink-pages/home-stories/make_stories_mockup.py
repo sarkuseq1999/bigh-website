@@ -51,6 +51,23 @@ def choice(look):
   </section>"""
 
 
+def story(item):
+    """Round 2 (Mo picked A, the porch): one sample story, its name clicked on the real page."""
+    s = item["story"]
+    jpg(SHOTS / f"set-{s}-1440.png", f"set-{s}-laptop.jpg", 1500)
+    jpg(SHOTS / f"set-{s}-390.png", f"set-{s}-phone.jpg", 620)
+    return f"""<section class="choice" aria-labelledby="{s}-name">
+    <div class="head">
+      <h2 id="{s}-name">{item['name']}</h2>
+    </div>
+    <p class="what">{item['what']}</p>
+    <div class="shots">
+      <figure><img src="set-{s}-laptop.jpg" alt="{item['name']} on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="set-{s}-phone.jpg" alt="{item['name']} on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>"""
+
+
 PAGE = """<title>Stories Painting</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -114,7 +131,7 @@ PAGE = """<title>Stories Painting</title>
 </style>
 <main>
   <header class="intro">
-    <h1>In their own words, without the tea bowl</h1>
+    <h1>__TITLE__</h1>
     <p>__INTRO__</p>
     <figure class="today"><img src="today.jpg" alt="Today's blossom, tea bowl and pear on the homepage"><figcaption>Today: plum blossom, tea bowl, sliced pear</figcaption></figure>
   </header>
@@ -126,8 +143,12 @@ PAGE = """<title>Stories Painting</title>
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     jpg(SHOTS / "today-1440.png", "today.jpg", 1120)
-    html = PAGE.replace("__INTRO__", LOOKS["intro"]).replace(
-        "__CHOICES__", "\n  ".join(choice(look) for look in LOOKS["looks"])
+    # Round 2 shows the picked porch's three stories; round 1 showed the two mornings.
+    parts = [story(item) for item in LOOKS["set"]] if "set" in LOOKS else map(choice, LOOKS["looks"])
+    html = (
+        PAGE.replace("__TITLE__", LOOKS["title"])
+        .replace("__INTRO__", LOOKS["intro"])
+        .replace("__CHOICES__", "\n  ".join(parts))
     )
     (OUT / "home-stories.html").write_text(html, encoding="utf-8", newline="\n")
 
