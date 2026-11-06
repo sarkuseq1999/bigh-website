@@ -378,8 +378,8 @@ These sit on top of `DESIGN.md`.
   and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
   `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
   `reference/ink-pages/mockups/home-ask/`.
-- **Homepage "In their own words.": breakfast on the back porch (Mo picked A, November 6, 2026;
-  not built yet).** The three sample stories' still lifes were painted as East Asian ink still
+- **Homepage "In their own words.": breakfast on the back porch (Mo picked A, November 6,
+  2026).** The three sample stories' still lifes were painted as East Asian ink still
   lifes (plum blossom in a narrow vase, tea bowls, a low table, a sliced pear) and read as Asian.
   Of two California mornings on the real page (A the back porch, B the kitchen table with a lemon
   tree in the window) Mo picked A: coffee in an enamel mug, orange juice, a bowl of oranges,
@@ -389,8 +389,10 @@ These sit on top of `DESIGN.md`.
   porch (dusk with a book and reading glasses; a piece of honeycomb and a sprig of the Brazilian
   shrub). The real bottle stays out of the paintings (it read as an ad in a customer's story). The
   paintings are framed whole, and from 900px the window's edge falls at 6% of the painting (it was
-  14%), so nothing in it is cut in half. Pictures `reference/ink-pages/home-stories/` (`paint.sh`,
-  `shoot_stories.py`); mockups `reference/ink-pages/mockups/home-stories/`.
+  14%), so nothing in it is cut in half. `story-porch-{morning,dusk,afternoon}-v1.webp` from
+  `build_home_stories.py` in `reference/ink-pages/home-stories/` (`paint.sh`, `shoot_stories.py`);
+  `assets.ts` `storyPaintings`, `stories.module.css`. Mockups
+  `reference/ink-pages/mockups/home-stories/`.
 - **Homepage close: the long view down the Big Sur coast, in ink and wash (Mo picked 1B,
   November 2, 2026).** "Our purpose is simple." sat over an old pine on its rock, misty peaks and
   two red-crowned cranes: Chinese. Of three California endings on the real page (A Big Sur at

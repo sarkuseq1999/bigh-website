@@ -52,22 +52,24 @@
   line-height: 1.5;
 }
 
-/* The ink still lifes, stacked so a new choice dissolves in; the empty paper above each
-   painting is cropped so the objects sit level with the words. */
+/* The still lifes, stacked so a new choice dissolves in. The porch paintings are square and
+   framed whole (the box is a hair taller, so a sliver of each side is trimmed). */
 .painting {
   position: relative;
   display: grid;
 }
 
 /* Two columns (round 4): the still life ends at its column's right edge and runs off the left
-   edge of the window, which falls at 14% of its width (the look's root clips it). It stops
-   growing at 860px, where a 1920 window's edge still just cuts it. The column's width is worked
-   out from the window (5 of the grid's 11 parts), so the label can use it too. */
+   edge of the window, which falls at 6% of its width, inside the painting's own faded edge (the
+   look's root clips it). It was 14% for the old ink still lifes; the porch paintings (Mo, November
+   6, 2026) are framed whole, and at 14% the window's edge cut Lisa's mug in half. It stops
+   growing at 860px. The column's width is worked out from the window (5 of the grid's 11 parts),
+   so the label can use it too. */
 @media (min-width: 900px) {
   .stories .painting {
     --area: calc((min(100vw - 2 * var(--gutter), var(--wide)) - clamp(32px, 6vw, 104px)) * 5 / 11);
     --room: max(var(--gutter), (100vw - var(--wide)) / 2);
-    --w: min((var(--area) + var(--room)) / 0.86, 860px);
+    --w: min((var(--area) + var(--room)) / 0.94, 860px);
     width: var(--w);
     margin-left: calc(100% - var(--w));
   }
@@ -91,7 +93,7 @@
   height: auto;
   aspect-ratio: 1 / 1.02;
   object-fit: cover;
-  object-position: 50% 82%;
+  object-position: 50% 50%;
   opacity: 0;
   transition: opacity 1.2s var(--ease);
   /* The painting's own edges dissolve into the paper. */
