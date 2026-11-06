@@ -1,0 +1,180 @@
+/* MOCKUPS for Mo (November 6, 2026): three ideas for "Proudly made in California." without the
+   bottles (made-mockups.tsx). Every rule is scoped under the page's [data-about] root and the
+   idea's section (section[data-made]), so it outranks the draft's .chapters rules for the home
+   part and the kit's .look rules in any stylesheet order. Nothing between a painting and the page
+   root makes a stacking context (no transform, filter, opacity or containment on an ancestor):
+   the paintings multiply onto the paper. */
+
+/* Words drawn over a painting: an SVG the painting's own size, so they scale with it. */
+[data-about] section[data-made] .over {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* ---- A: the crate label ------------------------------------------------------------------------ */
+
+/* The crate is wide (1446 x 974) and stands a little larger than the page's other paintings, so
+   its label reads: at 1440px about 590px wide. */
+[data-about] section[data-made="a"] .crate[data-picture] {
+  --picture: calc(var(--h) * 1.2 * 1.485);
+}
+
+[data-about] section[data-made="a"] .crateBody {
+  position: relative;
+}
+
+/* Our name in the label's banner, as the growers named what they packed: the title face, in ink,
+   multiplied into the paper like the painting's own paint. */
+[data-about] section[data-made="a"] .banner {
+  font-family: var(--font-ysabeau), Georgia, serif;
+  font-size: 58px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  fill: #3b2f22;
+  opacity: 0.86;
+  mix-blend-mode: multiply;
+}
+
+/* ---- B: the record book ------------------------------------------------------------------------ */
+
+[data-about] section[data-made="b"] .bookWords {
+  max-width: 40em;
+  margin-bottom: clamp(8px, 1vw, 16px);
+}
+
+[data-about] section[data-made="b"] .book {
+  width: min(100%, 1100px);
+  margin: 0 auto;
+}
+
+[data-about] section[data-made="b"] .bookBody {
+  position: relative;
+  display: block;
+}
+
+[data-about] section[data-made="b"] .bookBody > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Written in the title face, a little browner than the ink, as a pen's ink dries. */
+[data-about] section[data-made="b"] .line {
+  font-family: var(--font-ysabeau), Georgia, serif;
+  font-size: 31px;
+  font-weight: 500;
+  fill: #2e2924;
+}
+
+[data-about] section[data-made="b"] .book figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+[data-about] section[data-made="b"] .unseen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Once the book is in view, each entry is written in, left to right, one after another. */
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  [data-about] section[data-made="b"] .book[data-write="waiting"] .line {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  [data-about] section[data-made="b"] .book[data-write="on"] .line {
+    animation: write 1.3s cubic-bezier(0.45, 0.05, 0.4, 1) both;
+    animation-delay: calc(500ms + var(--n) * 1100ms);
+  }
+}
+
+@keyframes write {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+/* From 900px the whole book, both pages written; under it, its right page only (the three rules),
+   larger, the lead and GMP standing above it as words. */
+@media (min-width: 900px) {
+  [data-about] section[data-made="b"] .outside {
+    display: none;
+  }
+}
+
+@media (max-width: 899px) {
+  /* The right page, x 790 to 1390 and y 150 to 800 of the painting: the painting and its words
+     grown together and moved together (no transform), the rest cut away. */
+  [data-about] section[data-made="b"] .bookBody {
+    aspect-ratio: 600 / 650;
+    overflow: hidden;
+  }
+
+  [data-about] section[data-made="b"] .bookBody > img,
+  [data-about] section[data-made="b"] .bookBody > .over {
+    position: absolute;
+    left: -131.67%;
+    top: -23.08%;
+    width: 256%;
+    max-width: none;
+  }
+
+  /* The cut fades into the paper on every side (never a straight edge): a mask on the painting
+     itself, in its own box (the window is x 51.4 to 90.5% and y 14.6 to 78.1% of it). */
+  [data-about] section[data-made="b"] .bookBody > img {
+    -webkit-mask-image:
+      linear-gradient(90deg, transparent 51.4%, #000 55.5%, #000 86.5%, transparent 90.5%),
+      linear-gradient(180deg, transparent 14.6%, #000 19%, #000 73.5%, transparent 78.1%);
+    mask-image:
+      linear-gradient(90deg, transparent 51.4%, #000 55.5%, #000 86.5%, transparent 90.5%),
+      linear-gradient(180deg, transparent 14.6%, #000 19%, #000 73.5%, transparent 78.1%);
+    -webkit-mask-composite: source-in;
+    mask-composite: intersect;
+  }
+
+  [data-about] section[data-made="b"] .bookBody > .over {
+    inset: auto;
+    left: -131.67%;
+    top: -23.08%;
+    height: 157.54%;
+  }
+
+  [data-about] section[data-made="b"] .outside {
+    margin-bottom: 18px;
+  }
+}
+
+/* ---- C: the Golden State ----------------------------------------------------------------------- */
+
+/* California is a little taller than wide (831 x 919): it stands as tall as the sequoia. */
+[data-about] section[data-made="c"] .state[data-picture] {
+  --picture: calc(var(--h) * 1.45 * 0.904);
+}
+
+/* Phones: in the column, not edge to edge as the draft's wide home was. */
+@media (max-width: 599px) {
+  [data-about] section[data-made="a"] .crate[data-picture],
+  [data-about] section[data-made="c"] .state[data-picture],
+  [data-about] section[data-made="b"] .book[data-picture] {
+    width: 100%;
+    margin-inline: 0;
+  }
+
+  [data-about] section[data-made] .crate figcaption,
+  [data-about] section[data-made] .book figcaption,
+  [data-about] section[data-made] .state figcaption {
+    margin-right: 0;
+  }
+}

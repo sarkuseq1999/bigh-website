@@ -8,10 +8,6 @@
    multiple, times the painting's shape). The specimens are square, like the sequoia; the home is
    wide (1536 x 914) and stands a little larger than the glasses, so its five bottles are bottles
    and not specks: at 1440px about 560px wide, the bottles about 100px tall. */
-.chapters [data-part="plants"] [data-picture] {
-  --picture: calc(var(--h) * 1.38 * 0.979);
-}
-
 .chapters [data-part="home"] [data-picture] {
   --picture: calc(var(--h) * 1.02 * 1.68);
 }
@@ -20,58 +16,9 @@
    and the home's bottles about 40px tall. They take the one-column plain height, 300px, as the
    sequoia and the glasses do there (circle.module.css), so both fill their column. */
 @media (min-width: 960px) and (max-width: 1279px) {
-  .chapters [data-part="plants"],
   .chapters [data-part="home"] {
     --h: 300px;
   }
-}
-
-/* ---- Our ingredients: the key ----------------------------------------------------------------- */
-
-/* The key lies two by two, as the specimens do in the painting beside it (propolis, turmeric;
-   grapes, pine), each entry on its hairline. */
-.chapters ul.key {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: clamp(20px, 2vw, 30px) clamp(20px, 2.4vw, 36px);
-  max-width: 34em;
-  margin: clamp(28px, 2.8vw, 44px) 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-.chapters .key li {
-  padding-top: 12px;
-  border-top: 1px solid var(--line);
-}
-
-.chapters .key h3 {
-  margin: 0;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1.3;
-}
-
-.chapters .key p {
-  margin: 4px 0 0;
-  font-size: 17px;
-  line-height: 1.4;
-}
-
-.chapters .key p.place {
-  color: #2a2824;
-}
-
-.chapters .key p.product {
-  color: var(--muted);
-}
-
-/* A place not yet on file (this mockup): shown as missing, never guessed. */
-.chapters .key p[data-unknown] {
-  display: inline-block;
-  color: var(--muted);
-  font-style: italic;
-  border-bottom: 1px dashed currentColor;
 }
 
 /* ---- Our home --------------------------------------------------------------------------------- */
@@ -198,12 +145,5 @@
 
   .chapters .home figcaption {
     margin-right: var(--gutter);
-  }
-}
-
-/* A phone's key is one entry per row (two narrow columns broke the plant names). */
-@media (max-width: 459px) {
-  .chapters ul.key {
-    grid-template-columns: minmax(0, 1fr);
   }
 }

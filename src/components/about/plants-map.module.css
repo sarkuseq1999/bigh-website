@@ -1,0 +1,234 @@
+/* Our ingredients: the map (plants-map.tsx; Mo picked A, November 6, 2026). Every rule is scoped
+   under the page's [data-about] root, so it outranks the kit's .look rules in any stylesheet
+   order (the built site orders them differently from the dev server). Nothing between a painting
+   and the page root makes a stacking context (no transform, filter or opacity on an ancestor):
+   the paintings multiply onto the paper. */
+
+[data-about] .part .words {
+  max-width: 40em;
+  margin-bottom: clamp(8px, 1vw, 16px);
+}
+
+[data-about] .part .map {
+  margin: 0;
+}
+
+[data-about] .part .body {
+  position: relative;
+  display: block;
+}
+
+[data-about] .part .body > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ---- The trails home: gold-leaf dabs, laid one after another ---------------------------------- */
+
+[data-about] .part .trails {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+/* Gold leaf, flat: three close golds, so the trail reads as laid by hand. No glow, no shine. The
+   dab is centred on its own origin, so its scale (--s) grows it in place. */
+[data-about] .part .dab {
+  fill: #b08326;
+  transform: scale(var(--s, 1));
+}
+
+[data-about] .part .dab[data-tone="1"] {
+  fill: #a2761f;
+}
+
+[data-about] .part .dab[data-tone="2"] {
+  fill: #c09743;
+}
+
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  [data-about] .part .map[data-draw="waiting"] .dab {
+    opacity: 0;
+  }
+
+  /* Once the map is in view: after the map's own bloom has begun, each trail in turn, from its
+     place home to California, a dab at a time. */
+  [data-about] .part .map[data-draw="on"] .dab {
+    animation: lay 0.5s var(--ease) both;
+    animation-delay: calc(700ms + var(--r) * 650ms + var(--i) * 17ms);
+  }
+}
+
+@keyframes lay {
+  from {
+    opacity: 0;
+    transform: scale(calc(var(--s, 1) * 0.4));
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(var(--s, 1));
+  }
+}
+
+/* ---- Places and home --------------------------------------------------------------------------- */
+
+[data-about] .part .dot {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #b08326;
+  transform: translate(-50%, -50%);
+}
+
+[data-about] .part .dot[data-home] {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 0 4px rgb(176 131 38 / 0.22);
+}
+
+[data-about] .part .homeLabel {
+  position: absolute;
+  display: grid;
+  transform: translate(-50%, 16px);
+  text-align: center;
+  white-space: nowrap;
+}
+
+[data-about] .part .homeLabel b,
+[data-about] .part .pinWords b {
+  font-family: var(--display-font);
+  font-size: clamp(15px, 1.35vw, 19px);
+  font-weight: 500;
+  color: var(--ink);
+}
+
+[data-about] .part .homeLabel span,
+[data-about] .part .pinWords span {
+  font-size: clamp(13px, 1.1vw, 15px);
+  color: var(--muted);
+}
+
+/* The map's words keep a little paper round them where they cross a wash. */
+[data-about] .part .homeLabel,
+[data-about] .part .pinWords {
+  text-shadow:
+    0 0 4px var(--paper),
+    0 0 8px var(--paper),
+    0 0 12px var(--paper);
+}
+
+/* A plant standing in the sea beside its place, its name and place under it. Centred on its
+   point by margins, not a transform (a transform would make a stacking context, and the
+   painting would stop multiplying: a white box). Margins in % follow the width, and the plants
+   are about square. */
+[data-about] .part .pin {
+  position: absolute;
+  display: grid;
+  justify-items: center;
+  width: 8.5%;
+  margin: -4.25% 0 0 -4.25%;
+}
+
+[data-about] .part .pin img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-about] .part .pinWords {
+  display: grid;
+  margin-top: 2px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+[data-about] .part .map figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+[data-about] .part .list {
+  display: none;
+}
+
+/* ---- Phones: the map, then the plants listed --------------------------------------------------- */
+
+@media (max-width: 759px) {
+  [data-about] .part .pin {
+    display: none;
+  }
+
+  /* Every other dab, each grown, so the trail still reads as dabs at a third of the size. */
+  [data-about] .part .trails g > g:nth-child(2n) {
+    display: none;
+  }
+
+  [data-about] .part .dab {
+    --s: 1.5;
+  }
+
+  [data-about] .part .homeLabel span {
+    display: none;
+  }
+
+  [data-about] .part .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  [data-about] .part .dot[data-home] {
+    width: 11px;
+    height: 11px;
+    box-shadow: 0 0 0 3px rgb(176 131 38 / 0.22);
+  }
+
+  [data-about] .part .homeLabel {
+    transform: translate(-30%, 9px);
+  }
+
+  [data-about] .part .list {
+    display: grid;
+    margin: 18px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  [data-about] .part .list li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+  }
+
+  [data-about] .part .list li:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+
+  [data-about] .part .list img {
+    width: 64px;
+    height: auto;
+    flex: none;
+  }
+
+  [data-about] .part .list li > span {
+    display: grid;
+  }
+
+  [data-about] .part .list b {
+    font-family: var(--display-font);
+    font-size: 19px;
+    font-weight: 500;
+  }
+
+  [data-about] .part .list li > span > span {
+    font-size: 16px;
+    color: var(--muted);
+  }
+}

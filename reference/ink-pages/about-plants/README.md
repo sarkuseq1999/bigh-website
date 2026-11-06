@@ -18,3 +18,11 @@ Pictures: `paint.sh` (Codex, ChatGPT plan, no spend), `build_about_plants.py` ->
 `public/images/about-plants/` and `src/components/about/plants-art.ts`. Review page:
 `reference/ink-pages/mockups/about-plants/about-plants.html` (Artifact CRNzLrmV8DbRdX7ZcAc5SP).
 Spend: none.
+
+**Mo picked A, the map (November 6, 2026).** Built for real as `src/components/about/plants-map.tsx`
+(the mockup switch and ideas B and C are gone; their paintings, prompts and mockup code went to
+`bigh-archive/about-plants-unpicked-2026-11-06/`). The page lays the trails home as gold-leaf dabs,
+one plant after another, once, as the map comes into view; each trail arcs to its own height so
+they fan out. The two European plants stand one over the other in the North Atlantic (side by
+side, the grapes stood on Morocco). The places other than Minas Gerais are still stand-ins
+(`confirmed: false` in `about-content.ts`).
