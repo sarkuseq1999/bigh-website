@@ -1,0 +1,31 @@
+{
+  "intro": "The last Asian-looking painting on the homepage. Two California mornings to take its place, each laid on the real homepage. Only the painting changes; the words stay. On a laptop the painting also runs off the screen's edge a little less, so nothing in it is cut in half.",
+  "looks": [
+    {
+      "take": "porch-2",
+      "letter": "A",
+      "name": "Breakfast on the back porch",
+      "score": "9 / 10",
+      "pick": true,
+      "what": "Coffee, orange juice, a bowl of oranges, poppies in a jam jar, a brown paper lunch bag and the car keys, on a porch looking out at golden hills and a valley oak. A busy family morning, plainly in California.",
+      "note": "California at one look, and the oak fills the corner the blossom used to. Holding it back: it is softer watercolour than the Big Sur painting at the bottom of the page.",
+      "rest": [
+        "Michael, “I read up on it first”: the same porch at dusk, an open book and reading glasses on the arm of a wooden porch chair, a mug beside it.",
+        "Susan, “The source mattered to me”: on the porch table, a piece of honeycomb on a board beside a sprig of the green Brazilian shrub the bees take their resin from."
+      ]
+    },
+    {
+      "take": "kitchen-2",
+      "letter": "B",
+      "name": "The kitchen table by the window",
+      "score": "8.5 / 10",
+      "pick": false,
+      "what": "The same breakfast things on the kitchen table, with the backyard lemon tree in the window behind.",
+      "note": "Warm and homey. But a kitchen could be anywhere; only the lemons say California, and the window frame is faint.",
+      "rest": [
+        "Michael: the same table in the evening, an open book, reading glasses and a mug, the lemon tree dark in the window.",
+        "Susan: on the table, a piece of honeycomb on a board beside a sprig of the green Brazilian shrub."
+      ]
+    }
+  ]
+}
