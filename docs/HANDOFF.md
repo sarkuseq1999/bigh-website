@@ -5,7 +5,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Science round 3, built, waiting for Mo's critique (November 4, 2026, Claude Code; not
+- **Science round 3, built and kept by Mo, not live yet (November 4-6, 2026, Claude Code; not
   pushed).** Mo asked for the page to start broader (what science, and why) and to turn
   California, then gave Claude the whole job and said he would critique the built page. The page
   now opens "Our science starts in the cell." (a desk at a window over golden hills), then "Why
@@ -17,8 +17,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   (`translations-science-round3.cjs`, not native-reviewed; the path's words stay English, as
   before). Checks: `qa_science_ink` rewritten for the new order (opening, why, three places);
   `check_science_art.py` rewritten. Built in a scratch worktree (branch `science-ca`) while
-  another session worked on About and the homepage in this folder. Waiting for Mo: his critique
-  (review page with screenshots, artifact link in the session); nothing pushed.
+  another session worked on About and the homepage in this folder. November 6, Mo's critique:
+  keep the opening line; of three pictures for "Why start with the cell?" (A the town, B
+  monarchs, C sunflowers, all shown on the real page) he kept A, the town; leave the formulas'
+  bottles row as it is. So the page stays as built. Next: put it live only on Mo's yes (studio
+  is behind `origin/main` by the homepage stories release `c75cabb`, so merge it first).
 - **Earlier, November 4, 2026, by Claude Code** (the homepage hummingbird's wings beat as
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run

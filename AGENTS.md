@@ -325,7 +325,7 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/mockups/science-path/2026-10-26/`. (Round 3 below changed the order and
   the paintings; the path's one place per screen stays.)
 - **Science round 3: start with the science, then the scientist (Mo, November 4, 2026; built
-  for his critique, not yet approved).** Mo: the design was good but "the way I put it together
+  for his critique, which kept the page as built on November 6; not live yet).** Mo: the design was good but "the way I put it together
   could be better"; start broader, with what kind of science BiGH focuses on (cell science) and
   the reason behind it; keep the water paint but shift from Asian to California. He then gave
   Claude the whole job ("do the best you can ... I will come and critique"), so no options were
@@ -348,7 +348,9 @@ These sit on top of `DESIGN.md`.
   gold leaf a piece at a time: A the town (as built), B monarchs wintering at Pacific Grove (each
   warms its own flight muscles before it can fly; Claude's pick), C a Sacramento Valley sunflower
   field at sunrise. A microscope view of cheek cells was tried and left out (the gold cells looked
-  like chips). Waiting for his pick. Mockups `reference/ink-pages/mockups/science-why/`.
+  like chips). Mo picked A, the town stays. He also left the formulas' row of five bottles as it
+  is ("Every formula has a scientist behind it."). Mockups `reference/ink-pages/mockups/science-why/`;
+  the unused takes are in `bigh-archive\science-why-unused-2026-11-06\`.
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing

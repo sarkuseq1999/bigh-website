@@ -69,3 +69,8 @@ town's own layers (gold leaf in six groups; one butterfly, flower or cell lights
 `shoot_why_mocks.py` films them in the real page in place of the town. The sunflowers' gilded edit
 moved the flowers, so there the gilded take is the drawing and its petals are washed pale for the
 resting picture. Compare page for Mo: `mockups/science-why/page/`.
+
+Mo picked A: the town stays. The nine takes (`monarchs-1`, `sunflowers-1`, `cheek-cells-1`, their
+`loose-*-1-1` and `gild-loose-*-1-1`) moved to
+`C:\Users\mcbig\Documents\codes\bigh-archive\science-why-unused-2026-11-06\`, outside the public
+repo; copy them back into `originals/` to rerun `build_why_mocks.py`. Their prompts stay here.
