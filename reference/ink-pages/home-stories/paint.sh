@@ -20,6 +20,12 @@ for name in "${names[@]}"; do
   # and its empty top left a bare corner; each take's first draft leads, as the hand to keep.
   [[ "$name" == kitchen-[2-9] ]] && ref=(-i "$HERE/originals/kitchen-1.png" "${ref[@]}")
   [[ "$name" == porch-[2-9] ]] && ref=(-i "$HERE/originals/porch-1.png" "${ref[@]}")
+  # Mo picked A, the porch (November 6): Michael's and Susan's stories on the same porch, the
+  # picked morning leading as the place and the hand.
+  [[ "$name" == porch-dusk-* || "$name" == porch-source-* ]] && ref=(-i "$HERE/originals/porch-2.png" "${ref[@]}")
+  # Susan's first take: its green resin at the comb's edge read as mould up close; the second
+  # keeps the first take and changes only what its order says.
+  [[ "$name" == porch-source-[2-9] ]] && ref=(-i "$HERE/originals/porch-source-1.png" "${ref[@]:2}")
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" "${ref[@]}" -- \
     "Read the picture order in prompts/_style.txt and then prompts/$name.txt, and follow both exactly. Use your built-in image generation tool to make exactly ONE picture (square 1024x1024). Copy the generated PNG into originals/ as $name.png. Reply with its full path." \
