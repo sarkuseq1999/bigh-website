@@ -11,13 +11,14 @@ import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, drafts, routes } from "./about-content";
 import { dots, glasses, oak, pool, sequoia } from "./about-art";
-import { home, plants } from "./chapters-art";
+import { home } from "./chapters-art";
 import more from "./chapters.module.css";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
-import { PlantsMockup } from "./plants-mockups";
+import { MadeMockup } from "./made-mockups";
+import { PlantsMap } from "./plants-map";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
 import field from "./meadow.module.css";
@@ -33,13 +34,10 @@ export const ALT = {
   oak: "A great valley oak with a rope swing, painted in ink; below the ground, a gold light glows among its roots",
   sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
   glasses: "Reading glasses resting on an open notebook, painted in ink",
-  plants:
-    "Four plant specimens painted in ink and watercolour: a green propolis sprig with a honeybee, a turmeric root, a cluster of grapes, and a pine cone with pine bark",
   home: "Our five bottles standing in golden grass on a California morning, palms and mountains behind",
 } as const;
 
-// DRAFT sizes for the two new chapters (November 4, 2026): the column's width, as the others.
-const PLANTS = "(max-width: 505px) 85vw, (max-width: 959px) 427px, (max-width: 1395px) 38vw, 520px";
+// DRAFT size for the home chapter (November 4, 2026): the column's width, as the others.
 const HOME = "(max-width: 559px) 92vw, (max-width: 959px) 520px, (max-width: 1395px) 40vw, 560px";
 
 // What each painting asks the server for follows the width it is drawn at (circle.module.css: its
@@ -194,47 +192,6 @@ function Roots() {
       <Link href={routes.scientists} className={`${base.pill} ${base.pillGhost} ${page.more}`}>
         {copy(about.roots.link)} <ArrowRight size={18} aria-hidden="true" />
       </Link>
-    </Spread>
-  );
-}
-
-// Our ingredients (DRAFT, November 4, 2026): the botanist's four specimens, its key beside them in
-// the painting's own order (two by two, as the specimens lie). A place not yet on file shows as
-// missing (about-content.ts), never guessed.
-function Plants() {
-  const copy = useCopy();
-  return (
-    <Spread
-      id="plants"
-      part="plants"
-      side="left"
-      labelledBy="plants-title"
-      picture={<Painting art={plants} alt={ALT.plants} sizes={PLANTS} caption />}
-    >
-      <p className={`${base.label} ${page.label}`} data-label="">
-        {copy(about.plants.label)}
-      </p>
-      <h2 id="plants-title" className={`${base.display} ${page.heading}`}>
-        {copy(about.plants.title)}
-      </h2>
-      <p className={page.body}>{copy(about.plants.text)}</p>
-      <ul className={more.key} data-key="">
-        {about.plants.items.map((item) => (
-          <li key={item.plant}>
-            <h3>{copy(item.plant)}</h3>
-            {item.place ? (
-              <p className={more.place}>{copy(item.place)}</p>
-            ) : (
-              <p className={more.place} data-unknown="">
-                {copy(about.plants.unknown)}
-              </p>
-            )}
-            <p className={more.product}>
-              {copy(about.plants.inProduct, { product: item.product })}
-            </p>
-          </li>
-        ))}
-      </ul>
     </Spread>
   );
 }
@@ -431,8 +388,8 @@ export function AboutInk() {
           <Opening />
           <Purpose />
           <Roots />
-          <PlantsMockup fallback={<Plants />} />
-          <Home />
+          <PlantsMap />
+          <MadeMockup fallback={<Home />} />
           <Experience />
           <Promises />
           <Closing />

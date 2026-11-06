@@ -33,23 +33,26 @@ export const about = {
   },
   // DRAFT (November 4, 2026): two new chapters on Mo's ideas ("ingredients from the part of the
   // world best for their natural growth"; "proudly made in California, by GMP-certified makers"),
-  // words by Claude for Mo to critique. Only the propolis origin is on file (RESEARCH-NOTES.md);
-  // every other place is null until Mo gives the real one: never guess a place onto the page.
-  // NuriCell's four nutrients are made, not grown, so the chapter speaks of plants only.
+  // words by Claude for Mo to critique. NuriCell's four nutrients are made, not grown, so the
+  // chapter speaks of plants only.
+  // November 6: Mo picked A, the map (plants-map.tsx). Only the propolis origin is on file
+  // (RESEARCH-NOTES.md). The other three places are STAND-INS, `confirmed: false`, so the design
+  // can be seen: never release them. When qa_about is brought up to the new chapters (not yet),
+  // it must fail while any place is unconfirmed. When Mo gives
+  // a real place, change `place`, set `confirmed: true` and move its point on the map
+  // (render_land.py PLACES, build_about_plants.py, plants-map.tsx PIN).
   plants: {
     label: "Our ingredients",
     title: "Each plant, from where it grows best.",
-    text: "We look around the world for our plant ingredients, and choose each one from the place it grows best.",
+    text: "We look around the world for our plants, and bring each one home from the place it grows best.",
+    home: { name: "California", note: "where we make them" },
+    alt: "A map of the world painted in ink and watercolour. Each plant stands where it grows, and a gold dotted line runs from each place to California.",
     items: [
-      { plant: "Green propolis", place: "Minas Gerais, Brazil", product: "Green Bee Propolis" },
-      { plant: "Turmeric", place: null, product: "Turmerific" },
-      { plant: "Grape seed", place: null, product: "Advanced OPC Formula" },
-      { plant: "Pine bark", place: null, product: "Advanced OPC Formula" },
+      { key: "propolis", plant: "Green propolis", place: "Minas Gerais, Brazil", confirmed: true },
+      { key: "turmeric", plant: "Turmeric", place: "India", confirmed: false },
+      { key: "grape", plant: "Grape seed", place: "Italy", confirmed: false },
+      { key: "pine", plant: "Pine bark", place: "France", confirmed: false },
     ],
-    // Shown only while a place is still null (this mockup), so a missing fact looks missing.
-    unknown: "Place to confirm",
-    // The product names stay in English in every language, as on the menus.
-    inProduct: "In {product}",
   },
   home: {
     label: "Our home",
