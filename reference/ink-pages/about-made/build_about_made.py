@@ -1,35 +1,23 @@
-"""Build the About "Made in California" round's pictures (mockups for Mo, November 6, 2026).
+"""Build the About "Proudly made in California." picture (Mo picked F, the valley at dawn,
+November 9, 2026).
 
 Mo found the five bottles in the draft's painted California morning bad ("I'd rather not have the
-product bottle there") and asked for ideas. Three, no bottles in any:
-- A, the crate label: an old California fruit-crate end, its label an orange grove under the
-  Sierra with a gold-leaf sun (Codex, crate-1-a).
-- B, the record book: an open batch record on a redwood table, a pressed poppy and a gold-leaf
-  ribbon; the page writes the chapter's words on its empty lines (Codex, ledger-1-a).
-- C, the Golden State: California painted alone over its real outline, the Central Valley in
-  gold leaf (Codex, state-1-a, over ref/state-guide.png from render_state.py).
-
-Mo asked for more ideas the same day (round 2):
-- D, the checks in the sun: a clipboard on a sunlit stucco wall, a palm's shadow across it, three
-  empty boxes the page ticks in gold (Codex, wall-1-a; the boxes found by eye and edge, WALL_BOXES).
-- E, the gold pan: a Gold Rush pan at the edge of a Sierra creek, a trail of gold-leaf flakes in
-  it (Codex, pan-2-a: closer and paler than pan-1, whose gold was too small to see).
-- F, the valley at dawn: California's Central Valley from a foothill, some fields in gold leaf, an
-  empty sky for the words (Codex, valley-1-b; valley-1-a came back with a transparent sky).
+product bottle there"). Of five ideas without them (A a crate label, B a record book, C the Golden
+State, D a clipboard ticked in gold, F the valley at dawn; a Gold Rush pan was dropped) he picked
+F: California's Central Valley in the first light from a golden foothill, some fields in gold
+leaf, the sky left empty for the words (Codex, valley-1-b; the others went to bigh-archive).
 
     python -X utf8 reference/ink-pages/about-made/build_about_made.py
 
-Out: public/images/about-made/*.webp and src/components/about/made-art.ts. Each painting's paper
-is divided out so it multiplies onto the page. The state's gold leaf is also saved as a light mask
-(where the kit's glint crosses); the crate's sun and the book's ribbon are too close in colour to
-their neighbours (the oranges, the hills, the table) for a colour mask, so they have none.
+Out: public/images/about-made/valley-v1.webp and src/components/about/made-art.ts. The paper is
+divided out so it multiplies onto the page; the sky is kept (not trimmed): the words stand in it.
 """
 
 import json
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageFilter
+from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 ROOT = HERE.parents[2]
@@ -38,19 +26,7 @@ ART = ROOT / "src" / "components" / "about" / "made-art.ts"
 FLOOR = 10
 FADE = 40
 
-TAKES = {
-    "crate": "crate-1-a",
-    "ledger": "ledger-1-a",
-    "state": "state-1-a",
-    "wall": "wall-1-a",
-    "pan": "pan-2-a",
-    "valley": "valley-1-b",
-}
-# A replaced picture gets a new name (the image optimiser caches by name).
-VERSION = {"pan": 2}
-# The clipboard's three empty boxes on wall-1-a (x, y, width, height in its 1024 x 1536 pixels):
-# their straight grey edges, found by their rows and columns of darker paint.
-WALL_BOXES = [(361, 562, 54, 52), (362, 700, 54, 52), (364, 839, 54, 52)]
+TAKES = {"valley": "valley-1-b"}
 
 
 def load(name):
@@ -75,29 +51,6 @@ def paperless(a):
     return Image.fromarray((255.0 - dark).astype(np.uint8))
 
 
-def gold(a):
-    """Where the painting is gold leaf: warm, saturated yellow (not the poppy's orange, not the
-    desert's pale ochre), softened a little at its edge."""
-    r, g, b = a[..., 0], a[..., 1], a[..., 2]
-    mx, mn = a.max(axis=2), a.min(axis=2)
-    sat = (mx - mn) / np.maximum(mx, 1)
-    hue = np.degrees(np.arctan2(np.sqrt(3) * (g - b), 2 * r - g - b)) % 360
-    leaf = (sat > 0.45) & (hue > 38) & (hue < 58) & (mx > 140)
-    m = Image.fromarray((leaf * 255).astype(np.uint8)).filter(ImageFilter.MedianFilter(5))
-    return m.filter(ImageFilter.GaussianBlur(1.2))
-
-
-def trim_box(img, pad=24, level=14):
-    c = np.asarray(img)
-    ys, xs = np.where((255 - c.min(axis=2)) > level)
-    return (
-        max(int(xs.min()) - pad, 0),
-        max(int(ys.min()) - pad, 0),
-        min(int(xs.max()) + 1 + pad, img.width),
-        min(int(ys.max()) + 1 + pad, img.height),
-    )
-
-
 def save(img, name, quality=90):
     SITE.mkdir(parents=True, exist_ok=True)
     img.save(SITE / f"{name}.webp", quality=quality, method=6)
@@ -107,20 +60,8 @@ def save(img, name, quality=90):
 def main():
     art = {}
     for key, take in TAKES.items():
-        a = load(take)
-        ink = paperless(a)
-        # The valley keeps its empty sky: the words stand in it.
-        box = (0, 0, ink.width, ink.height) if key == "valley" else trim_box(ink)
-        ink = ink.crop(box)
-        art[key] = {"src": save(ink, f"{key}-v{VERSION.get(key, 1)}"), "width": ink.width, "height": ink.height}
-        if key == "wall":
-            art[key]["boxes"] = [[x - box[0], y - box[1], w, h] for x, y, w, h in WALL_BOXES]
-        if key == "state":
-            # An alpha mask, as the kit's other gold masks: white where the leaf is.
-            leaf = gold(a).crop(box)
-            mask = Image.new("RGBA", leaf.size, (255, 255, 255, 0))
-            mask.putalpha(leaf)
-            art[key]["gold"] = save(mask, f"{key}-gold-v1", quality=80)
+        ink = paperless(load(take))
+        art[key] = {"src": save(ink, f"{key}-v1"), "width": ink.width, "height": ink.height}
     ART.write_text(
         "// Generated by reference/ink-pages/about-made/build_about_made.py. Do not edit by hand.\n"
         f"export const madeArt = {json.dumps(art, indent=2)} as const;\n",

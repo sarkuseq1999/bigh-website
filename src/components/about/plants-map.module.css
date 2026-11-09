@@ -1,4 +1,4 @@
-/* Our ingredients: the map (plants-map.tsx; Mo picked A, November 6, 2026). Every rule is scoped
+/* Our ingredients: the globe (plants-map.tsx; Mo picked B, November 9, 2026). Every rule is scoped
    under the page's [data-about] root, so it outranks the kit's .look rules in any stylesheet
    order (the built site orders them differently from the dev server). Nothing between a painting
    and the page root makes a stacking context (no transform, filter or opacity on an ancestor):
@@ -9,8 +9,11 @@
   margin-bottom: clamp(8px, 1vw, 16px);
 }
 
-[data-about] .part .map {
-  margin: 0;
+/* The globe's frame is wider than the globe (the plants stand past its rim): a little narrower
+   than the column, so the globe is not taller than a laptop's window. */
+[data-about] .part .globe {
+  max-width: 1180px;
+  margin: 0 auto;
 }
 
 [data-about] .part .body {
@@ -51,13 +54,13 @@
 }
 
 @media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
-  [data-about] .part .map[data-draw="waiting"] .dab {
+  [data-about] .part .globe[data-draw="waiting"] .dab {
     opacity: 0;
   }
 
   /* Once the map is in view: after the map's own bloom has begun, each trail in turn, from its
      place home to California, a dab at a time. */
-  [data-about] .part .map[data-draw="on"] .dab {
+  [data-about] .part .globe[data-draw="on"] .dab {
     animation: lay 0.5s var(--ease) both;
     animation-delay: calc(700ms + var(--r) * 650ms + var(--i) * 17ms);
   }
@@ -148,7 +151,7 @@
   white-space: nowrap;
 }
 
-[data-about] .part .map figcaption {
+[data-about] .part .globe figcaption {
   margin-top: 6px;
   text-align: right;
 }
@@ -157,11 +160,18 @@
   display: none;
 }
 
-/* ---- Phones: the map, then the plants listed --------------------------------------------------- */
+/* ---- Phones: the globe, then the plants listed --------------------------------------------------- */
 
 @media (max-width: 759px) {
   [data-about] .part .pin {
     display: none;
+  }
+
+  /* The plants beside the globe are too small to show: the trails start at its rim instead, as
+     if from its far side (the disc: radius 440 of the 1536 x 1024 frame's
+     sqrt((w^2 + h^2) / 2) = 1305, so 33.7%). */
+  [data-about] .part .trails {
+    clip-path: circle(33.7% at 50% 50%);
   }
 
   /* Every other dab, each grown, so the trail still reads as dabs at a third of the size. */
