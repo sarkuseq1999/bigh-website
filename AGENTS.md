@@ -186,18 +186,20 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/about-opening/build_about_opening.py` (Codex painting plus Codex's
   continuation of its foot, `join_foot.py`). Mockups: `reference/ink-pages/mockups/about-opening/`
   and `about-opening-join/`.
-- **About "Our ingredients": the map home (Mo picked A, November 6, 2026; on the draft branch
-  `about-chapters`, not live).** Mo liked the idea of "Each plant, from where it grows best." but
-  not its first design (four specimens beside a two-by-two key). Of three ideas on the real page
-  (A a painted world map, each plant at its place, gold trails home to California; B four little
-  landscapes; C one plant told fully) he picked A. The trails are gold-leaf dabs, laid one plant
-  after another, once, as the map comes into view; phones list the plants under the map. Only
-  Minas Gerais, Brazil is a real place on file: the others are stand-ins (`confirmed: false` in
-  `about-content.ts`) and must never go live. On November 9 Mo said not to name places at all
-  (he is still finding out where the pine bark and grape seed come from): the map should only
-  give the feeling that each plant comes from the region of the world best for its natural
-  growth. Three no-place designs are being mocked. `plants-map.tsx`; pictures
-  `reference/ink-pages/about-plants/`; mockups `reference/ink-pages/mockups/about-plants/`.
+- **About "Our ingredients": the globe (Mo picked A, the map, November 6, then B, the globe,
+  November 9, 2026; on the draft branch `about-chapters`, not live).** Mo liked the idea of "Each
+  plant, from where it grows best." but not its first design (four specimens beside a two-by-two
+  key). He picked a painted world map with each plant at its place and gold trails home to
+  California, then said not to name places at all (he is still finding out where the pine bark
+  and grape seed come from): the part should only give the feeling that each plant comes from the
+  region of the world best for its natural growth. Of two no-place designs (A the same map, the
+  plants in the seas; B a globe) he picked B: a painted globe over the real land, California
+  facing you, the four plants standing just past its rim all round it, and a trail of gold-leaf
+  dabs from each over the globe to California, laid one plant after another, once, as it comes
+  into view. Each plant carries the kind of place it thrives in ("Sunny slopes"), never a
+  country. On phones the trails start at the globe's rim and the plants are listed under it.
+  `plants-map.tsx`; pictures `reference/ink-pages/about-plants/` (`render_globe.py`, `globe-1-a`);
+  mockups `reference/ink-pages/mockups/about-plants/` (`no-places/`).
 - **About "Proudly made in California.": the valley at dawn (Mo picked F, November 9, 2026; on
   the draft branch `about-chapters`, not live).** Mo did not want the five bottles in the draft's
   painting ("I'd rather not have the product bottle there"). Of five no-bottle ideas on the real
