@@ -1,7 +1,8 @@
 """Viewport shots of the Science ink page for review (viewport shots, as a visitor sees them). Each
-screen as a visitor scrolls to it: the opening (the title and Dr. Liu), each place of his path in the
-middle of the window (Mo's pick B, October 26, 2026), each strip (its header and painting, then its
-words), the formulas, the footer.
+screen as a visitor scrolls to it (round 3, November 4, 2026): the opening, "Why start with the
+cell?" (its heading, the town in the middle of the window, its lamps lit, then its three lines),
+Dr. Liu, each place of his path in the middle of the window, the formulas, each strip (its header
+and painting, then its words), the footer.
 
 usage: python -X utf8 scripts/qa/shoot_science_ink.py [base-url] [--sizes=1440x900,390x844] [--lang=en]
        [--screens=footer,opening]  (only those screens, same file names; default all)
@@ -46,6 +47,18 @@ def shoot(browser, w, h):
     page.wait_for_timeout(3500)
     bar = page.evaluate("document.querySelector('header').getBoundingClientRect().bottom")
     screens = [("opening", None)]
+    screens.append(("why", to(page, "#health", bar + 40)))
+    # The town in the middle of what the menu bar leaves, waiting for its lamps (about 5s).
+    town = page.evaluate(
+        """bar => { const r = document.querySelector('#health figure').getBoundingClientRect();
+          return r.top + scrollY - bar - Math.max(0, (innerHeight - bar - r.height) / 2); }""",
+        bar,
+    )
+    screens.append(("why-town", town))
+    screens.append(("why-lines", to(page, "#health ol", bar + 40)))
+    screens.append(("liu", page.evaluate(
+        """bar => { const r = document.querySelector('#liu').getBoundingClientRect();
+          return r.top + scrollY - bar - Math.max(0, (innerHeight - bar - r.height) / 2); }""", bar)))
     # Each place in the middle of what the menu bar leaves (or under the bar, if it is taller).
     places = page.evaluate(
         """bar => [...document.querySelectorAll('[data-place]')].map(li => { const r = li.getBoundingClientRect();
@@ -53,25 +66,19 @@ def shoot(browser, w, h):
         bar,
     )
     screens += [(f"path-{key}", y) for key, y in places]
-    for part in ["research", "health", "formulas", "ask"]:
-        if part == "formulas":
-            screens.append((part, to(page, "#formulas header", bar + 40)))
-            continue
+    screens.append(("formulas", to(page, "#formulas header", bar + 40)))
+    for part in ["research", "ask"]:
         screens.append((part, to(page, f"#{part} header", bar + 40)))
         # The words from the painting's caption down: the painting itself just gone under the
         # menu bar, so no sliver of it (or a half-hidden caption) sits under the bar.
-        shown = page.evaluate(f"!!document.querySelector('#{part} figure[data-picture]').offsetParent")
-        if shown:
-            y = page.evaluate(f"document.querySelector('#{part} figure[data-picture] img').getBoundingClientRect().bottom + scrollY - {bar - 4}")
-        else:
-            y = to(page, f"#{part} ul, #{part} ol", bar + 40)
+        y = page.evaluate(f"document.querySelector('#{part} figure[data-picture] img').getBoundingClientRect().bottom + scrollY - {bar - 4}")
         screens.append((f"{part}-words", y))
     screens.append(("footer", page.evaluate("document.documentElement.scrollHeight - innerHeight")))
     for n, (name, y) in enumerate(screens, 1):
         if SCREENS is not None and name not in SCREENS:
             continue
         if y is not None:
-            settle(page, max(0, y))
+            settle(page, max(0, y), 6500 if name == "why-town" else 3600)
         path = OUT / f"{w}x{h}-{n:02d}-{name}{'' if LANG == 'en' else '-' + LANG}.png"
         page.screenshot(path=str(path))
         print(path.name, flush=True)

@@ -346,7 +346,35 @@ These sit on top of `DESIGN.md`.
   formulas, Ask. The paintings are cut from the old handscroll's band (`build_science.py`,
   `PLACES`); phones get tighter cuts in one column. Berkeley says 1994, not 1994-2002: the
   faculty profile dates his time in Bruce Ames's laboratory 1994-1997. Mockups:
-  `reference/ink-pages/mockups/science-path/2026-10-26/`.
+  `reference/ink-pages/mockups/science-path/2026-10-26/`. (Round 3 below changed the order and
+  the paintings; the path's one place per screen stays.)
+- **Science round 3: start with the science, then the scientist (Mo, November 4, 2026; built
+  for his critique, which kept the page as built; live November 6, `main` `8b422fa`).** Mo: the design was good but "the way I put it together
+  could be better"; start broader, with what kind of science BiGH focuses on (cell science) and
+  the reason behind it; keep the water paint but shift from Asian to California. He then gave
+  Claude the whole job ("do the best you can ... I will come and critique"), so no options were
+  mocked; the built page is the proposal. Order: the opening "Our science starts in the cell."
+  (the two questions, how cells make energy and what changes with age, naming Dr. Liu on the
+  first screen; a desk at an open window over golden hills, a brass microscope on it); "Why start
+  with the cell?" (about 37 trillion cells, each making its own energy: San Francisco's houses at
+  dusk whose windows light a few at a time in gold leaf, once, as it arrives; three numbered lines
+  opening the existing explainer sheets; it keeps the `#health` address the footer links to);
+  Dr. Liu; his path (Berkeley with the Okayama doctorate in its words, Salzburg, Today: Okayama's
+  castle read as Asian); "Every formula has a scientist behind it."; "Read the research
+  yourself." (bound journals on a library table, three open); Ask BiGH Science (camp mugs on a
+  redwood picnic table). No labels over headings. Gone: the scrolls, the balanced stones and oil
+  lamp, the tea-set mugs, "Make sense of the science." (the homepage's own heading). Every
+  painting is Codex ink and wash, painted loose (the tidy first takes read as illustrations).
+  Spec `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
+  `reference/ink-pages/science/` (README, `build_science.py`, `paint.sh`).
+  November 6: Mo kept the opening line ("Our science starts in the cell.") and asked for other
+  pictures for "Why start with the cell?" to compare. Shown on the real page, each lighting in
+  gold leaf a piece at a time: A the town (as built), B monarchs wintering at Pacific Grove (each
+  warms its own flight muscles before it can fly; Claude's pick), C a Sacramento Valley sunflower
+  field at sunrise. A microscope view of cheek cells was tried and left out (the gold cells looked
+  like chips). Mo picked A, the town stays. He also left the formulas' row of five bottles as it
+  is ("Every formula has a scientist behind it."). Mockups `reference/ink-pages/mockups/science-why/`;
+  the unused takes are in `bigh-archive\science-why-unused-2026-11-06\`.
 - **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
   page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
   takes the whole weight; the two heavy accents (the ground under the big bottle, the closing
@@ -362,6 +390,15 @@ These sit on top of `DESIGN.md`.
   headline leads. Phones: 66% of the old crane (63.4vw, the bird about 41% of the window), clear
   of the window's left edge, its line unchanged. `opening.module.css`. Mockups:
   `reference/ink-pages/mockups/home-crane-size/`.
+- **Homepage "Tiny power plants.": the mitochondrion in softer ink (Mo picked B, November 4,
+  2026).** Mo loves the cell's design, but its heavy black and blue-grey ink no longer fitted the
+  page once the opening turned California and colourful. Of two recolourings of the same painting,
+  every stroke kept (A California colour: a redwood copper skin, pale sage inside; B softer ink),
+  compared live as test pages `/home-a` and `/home-b`, he picked B: the ink a third lighter and
+  warmed to sepia, the blackest strokes a deep warm brown-grey. The gold folds are unchanged (the
+  gold layer). Its own colour, so no green-spring tint. Keep the design; change only the paint.
+  `mito-soft-v1.webp` from `reference/ink-pages/home-mito/build_mito_colour.py` (`softer`);
+  `assets.ts` `mito`, `cellular.tsx`. Mockups: `reference/ink-pages/mockups/home-mito/`.
 - **Homepage "Aging cells": a brain cell up close (Mo picked B, October 22, 2026).** Mo found the
   steam engine growing old did not relate to the age slider and asked for a cell that ages. One
   brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
@@ -393,6 +430,21 @@ These sit on top of `DESIGN.md`.
   and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
   `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
   `reference/ink-pages/mockups/home-ask/`.
+- **Homepage "In their own words.": breakfast on the back porch (Mo picked A, November 6,
+  2026).** The three sample stories' still lifes were painted as East Asian ink still
+  lifes (plum blossom in a narrow vase, tea bowls, a low table, a sliced pear) and read as Asian.
+  Of two California mornings on the real page (A the back porch, B the kitchen table with a lemon
+  tree in the window) Mo picked A: coffee in an enamel mug, orange juice, a bowl of oranges,
+  poppies in a jam jar, a brown paper lunch bag and the car keys on a weathered porch table, golden
+  hills and a valley oak beyond. Ink and thin watercolour in the mailbox's and the Big Sur close's
+  hand, its own colour (no green-spring twin). Michael's and Susan's stories follow on the same
+  porch (dusk with a book and reading glasses; a piece of honeycomb and a sprig of the Brazilian
+  shrub). The real bottle stays out of the paintings (it read as an ad in a customer's story). The
+  paintings are framed whole, and from 900px the window's edge falls at 6% of the painting (it was
+  14%), so nothing in it is cut in half. `story-porch-{morning,dusk,afternoon}-v1.webp` from
+  `build_home_stories.py` in `reference/ink-pages/home-stories/` (`paint.sh`, `shoot_stories.py`);
+  `assets.ts` `storyPaintings`, `stories.module.css`. Mockups
+  `reference/ink-pages/mockups/home-stories/`.
 - **Homepage close: the long view down the Big Sur coast, in ink and wash (Mo picked 1B,
   November 2, 2026).** "Our purpose is simple." sat over an old pine on its rock, misty peaks and
   two red-crowned cranes: Chinese. Of three California endings on the real page (A Big Sur at

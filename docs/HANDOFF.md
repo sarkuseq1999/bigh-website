@@ -5,13 +5,44 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Last updated:** November 4, 2026, by Claude Code (the homepage hummingbird's wings beat as
+- **Live November 6, 2026 (Claude Code): Science round 3, the science first, then the
+  scientist.** `main` `8b422fa`, production `dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`, the demo alias on
+  it; public checks `qa_science_ink` 642/642, `qa_home_ink` 288/288, `qa_nav` 326/326
+  (`docs/public-demo.md`). Still open: a native speaker's check of m1100-m1117. Mo asked for the page to start broader (what science, and why) and to turn
+  California, then gave Claude the whole job and said he would critique the built page. The page
+  now opens "Our science starts in the cell." (a desk at a window over golden hills), then "Why
+  start with the cell?" (San Francisco's houses at dusk, windows lighting in gold leaf), Dr. Liu,
+  his path (Berkeley, Salzburg, Today; Okayama told in words), the formulas, "Read the research
+  yourself.", Ask. AGENTS.md "Science round 3"; spec
+  `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
+  `reference/ink-pages/science/` (README round 3). New lines have draft translations m1100-m1117
+  (`translations-science-round3.cjs`, not native-reviewed; the path's words stay English, as
+  before). Checks: `qa_science_ink` rewritten for the new order (opening, why, three places);
+  `check_science_art.py` rewritten. Built in a scratch worktree (branch `science-ca`) while
+  another session worked on About and the homepage in this folder. November 6, Mo's critique:
+  keep the opening line; of three pictures for "Why start with the cell?" (A the town, B
+  monarchs, C sunflowers, all shown on the real page) he kept A, the town; leave the formulas'
+  bottles row as it is. So the page stays as built, and Mo said "Yes, put it live".
+- **Live November 6, 2026 (Claude Code): the homepage's "In their own words." on a California
+  back porch.** The three sample stories' still lifes (plum blossom in a vase, tea bowls) read as
+  Asian. Mo picked A, the back porch with golden hills and a valley oak, over B, the kitchen table,
+  then saw all three stories on the real page (Lisa's breakfast, Michael's book at dusk, Susan's
+  honeycomb and the Brazilian shrub). AGENTS.md "Homepage 'In their own words.'"; pictures and
+  `build_home_stories.py` in `reference/ink-pages/home-stories/`. Built in a scratch worktree from
+  `origin/main` (this folder holds the unreleased Science round 3) and live as `main` `c75cabb`,
+  production `dpl_E1qdSYVbqA9hMdrvji9JstGR6Cmp`, demo alias on it; studio has merged it
+  (`cdf0d5e`), so the Science release no longer needs to merge it first.
+- **Earlier, November 4, 2026, by Claude Code** (the homepage hummingbird's wings beat as
   it arrives, then rest: Mo picked A of three; live as `main` `d26efc2`, production
   `dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`, demo alias on it; every page check now ends a frozen run
   itself (`scripts/qa/stall_guard.py`) and Mo no longer waits for the public checks (AGENTS.md
-  "Going live"); **next, waiting for Mo:** the homepage mitochondrion in "Tiny power plants." to
-  fit the California colours (Mo, November 4: he loves its design, but the page has turned
-  California and colourful around it); the phone menu's foot: Mo picked E, the homepage's
+  "Going live"); the homepage mitochondrion in "Tiny power plants." now fits the California
+  colours: Mo loves its design but the page had turned California and colourful around it; of
+  two recolourings of the same painting compared live as test pages (A California colour, B
+  softer ink) he picked B, a third lighter, in warm sepia (`mito-soft-v1.webp`, AGENTS.md
+  "Homepage 'Tiny power plants.'", `reference/ink-pages/home-mito/build_mito_colour.py`); live as
+  `main` `9bff13c`, production `dpl_FWByV2YLyXQytJTrMAGFah39BBdH`, demo alias on it; the test
+  pages `/home-a` and `/home-b` and A's picture are gone; the phone menu's foot: Mo picked E, the homepage's
   hummingbird at a California fuchsia, its wings at rest, in place of the crane at rest; live as
   `main` `d8ab9c4`, production `dpl_9AxZLkdKWLM84az4Nb26gzmmUdq4`; the footer's painting by the park sign: Mo
   picked A1, two California quail in a few wet washes, in place of the crane at rest; live as
@@ -37,6 +68,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   questions put live on their own (`main` `c1f56aa`), NuriCell Dr. Liu (`6766ae1`) and the tablet
   menu's crane fix (`5fe0846`), each on its own; About's bigger circle merged into studio; the
   product openings' release notes. October 26: Science, one place per screen, put live on its own.
+- **Waiting for Mo (November 4): About, two new chapters, a DRAFT on branch `about-chapters`
+  (`c080a94`), NOT on `studio` and not for release.** Mo asked for more on About (scientists,
+  ingredients from where they grow best, proudly made in California by GMP-certified makers) and
+  for Claude's own ideas, to critique after. Built: "Each plant, from where it grows best." (four
+  painted specimens and a key; only Brazil is on file, the other three places show "Place to
+  confirm") and "Proudly made in California." (the five real bottles on a painted California
+  morning, GMP in plain words); the promise row is three ("Honest about the research." is new).
+  English only. Review page: artifact `Sju1s5FxENwBJ33trgL6Uq`; notes
+  `reference/ink-pages/about-chapters/README.md` on that branch. Next: Mo's critique and the three
+  missing places (turmeric, grape seed, pine bark), then translations.
 - **Folder:** `C:\Users\mcbig\Documents\codes\bigh-website`, branch `studio`, tracking `origin/main`.
 - **Live (October 28): the homepage's first screen is California.** Mo's colleagues
   loved the opening's watercolour and gold sun but read the misty peaks and red-crowned crane as
@@ -588,7 +629,7 @@ Every page is in Ink & Gold:
 | Advanced OPC Formula | Grapes lit from inside                                                                   | `qa_opc_ink` 185/185 (Oct 21)         |
 | Turmerific           | Gold soaking into the paper                                                              | `qa_turmerific_ink` 155/155 (Oct 21)  |
 | Nature Calm          | Still lake whose gold gathers into one line                                              | `qa_nature_calm_ink` 159/159 (Oct 21) |
-| Science              | Dr. Liu's life as a handscroll (local: his path, one place per screen, Oct 26)           | `qa_science_ink` 1279/1279 (Oct 21)   |
+| Science              | Live: his path, one place per screen (Oct 26); local: round 3, the town's lamps (Nov 4)  | `qa_science_ink` 633/633 (Oct 26)     |
 | Support              | "Pull up a chair" porch; the form is a preview and sends nothing                         | `qa_support` 341/341 (Oct 21)         |
 
 Details of each go-live are in [`public-demo.md`](public-demo.md). Each page's notes, prompts and

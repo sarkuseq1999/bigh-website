@@ -4,9 +4,74 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-8crgt6r15-sarkuseq1999s-projects.vercel.app`
-(`dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`), the **production** deployment of `main` at
-`d26efc288c331e479a6ba6e03a9b415d79b36684` (November 4, 2026, from about 10:56 Pacific). The
+The alias currently points to `bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
+(`dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`), the **production** deployment of `main` at
+`8b422fa2f016cb473e82284bd7254f1b38957597` (November 6, 2026, from about 15:13 Pacific). The
+Science page, round 3: it now starts with the science, then the scientist. It opens "Our science
+starts in the cell." (a desk at a window over golden hills), then "Why start with the cell?" (San
+Francisco's houses at dusk, their windows lighting in gold leaf a few at a time), Dr. Liu, his path
+(Berkeley, Salzburg, Today), the formulas, "Read the research yourself." and Ask BiGH Science, in
+California paintings. Mo critiqued the built page on November 6: keep the opening line, keep the
+town (A, over B monarchs and C sunflowers shown on the real page), leave the formulas' bottles row;
+then "Yes, put it live". `8b422fa` is `c75cabb` plus the Science round 3 commits (`78a0be2`,
+`2a5edd7`), the picture comparison and notes (`a8748b0`, `5148bf1`) and studio's merge and notes,
+pushed as a fast-forward. Before the push, on a built copy (a scratch worktree): `qa_science_ink`
+642/642, `qa_home_ink` 288/288, `qa_nav` 326/326; type-check and lint clean. After the alias
+update, in fresh unauthenticated browsers on the public demo: `/science` at 1440 and 390 px (200,
+the new headline, the town and its lamps, the formulas row, no console errors), `qa_science_ink`
+642/642, `qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, from about 13:25 to about 15:13 Pacific on November 6, 2026, the alias pointed to
+`bigh-website-lyqrrdiec-sarkuseq1999s-projects.vercel.app`
+(`dpl_E1qdSYVbqA9hMdrvji9JstGR6Cmp`), the **production** deployment of `main` at
+`c75cabbcfc172361190672ada0e1c1e84dfedccc`. The homepage's "In their own words." still lifes are on a California back porch: Mo picked A (the
+porch, golden hills and a valley oak beyond its rail) over B (the kitchen table with a lemon tree
+in the window), then saw all three stories on the real page: Lisa's breakfast in the morning,
+Michael's book and reading glasses at dusk, Susan's honeycomb and the Brazilian shrub in the
+afternoon (`story-porch-{morning,dusk,afternoon}-v1.webp`). The old ink still lifes (plum blossom,
+tea bowls) and their green-spring twins are gone; from 900px the painting runs off the window's
+edge by 6% of its width (it was 14%). `c75cabb` is `9bff13c` plus the two mockup commits
+(`782ec12`, `8db5b53`) and the build, pushed as a fast-forward on Mo's "Yes, put it live". Before
+the push, on a built copy (a scratch worktree): `qa_home_ink` 288/288 (its still-life rule now
+3-9% off the window and at least 45% of it wide), `qa_nav` 326/326; the three stories clicked at
+1920, 1440, 1280, 900, 768 and 390 px wide (each painting whole, no console errors); type-check
+and lint clean. After the alias update, in a fresh unauthenticated browser on the public demo: the
+three porch pictures served and no old still life, each story clicked at 1440 and 390 px,
+`qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, from about 18:03 Pacific on November 4 to about 13:25 Pacific on November 6, 2026,
+the alias pointed to `bigh-website-8npbb8pjj-sarkuseq1999s-projects.vercel.app`
+(`dpl_FWByV2YLyXQytJTrMAGFah39BBdH`), the **production** deployment of `main` at
+`9bff13cc765efc9704eb3398f26ce2c108cba080`. The
+homepage's "Tiny power plants." mitochondrion is now in softer ink: Mo picked B of the two test
+pages (A California colour, B softer ink), the same painting a third lighter in warm sepia, every
+stroke and the gold layer kept (`mito-soft-v1.webp`). The test pages `/home-a` and `/home-b` and
+A's picture are gone. `9bff13c` is `e07ea92` plus the test pages' release notes (`3306c8c`) and B
+(no other code), pushed as a fast-forward on Mo's "Yes, put it live". Before the push, on a built
+copy (a scratch worktree): `qa_home_ink` 288/288, `qa_nav` 326/326; `/` at 1920, 1440, 768 and 390
+px wide (the softer cell, its gold layer, no sideways scroll, no console errors), both test pages
+404; type-check and lint clean. After the alias update, in fresh unauthenticated browsers on the
+public demo: the same page check 4/4 with both test pages 404, `qa_home_ink` 288/288, `qa_nav`
+326/326.
+
+Before that, from about 11:39 to about 18:03 Pacific on November 4, 2026, the alias pointed to
+`bigh-website-ksth0su14-sarkuseq1999s-projects.vercel.app` (`dpl_Bt7HXvVFoz5CxFR1ouR2WunKXkxo`),
+the **production** deployment of `main` at `e07ea92c93f949b650105a60ba7bd36e36101169`. Two test
+pages to compare the "Tiny power plants." mitochondrion on the real page: `/home-a`, California
+colour (a redwood copper skin, pale sage inside, warm grey folds), and `/home-b`, softer ink (a
+third lighter, warm sepia); `/` keeps today's cell. The same painting, every stroke kept, the gold
+layer unchanged; noindex, `/hken` goes to Chinese. `e07ea92` is `d26efc2` plus notes (`a9b01b5`,
+`e07ea92`), the mitochondrion mockups (`90ce86c`) and the test pages (`8bcd35e`), pushed as a
+fast-forward on Mo's "Yes, push them". Before the push, on a built copy (a scratch worktree:
+another agent's unfinished Science edit broke the build in the shared folder): `qa_home_ink`
+288/288; both test pages and `/` at 1920, 1440, 768 and 390 px wide (the right cell, its gold
+layer, no sideways scroll, no console errors); type-check and lint clean. After the alias update,
+in fresh unauthenticated browsers on the public demo: the same page check 12/12, `qa_home_ink`
+288/288, `qa_nav` 326/326.
+
+Before that, from about 10:56 to about 11:39 Pacific on November 4, 2026, the alias pointed to
+`bigh-website-8crgt6r15-sarkuseq1999s-projects.vercel.app` (`dpl_6A3SfC9jBUWzyLSe5xeWgCAkCqDz`),
+the **production** deployment of `main` at `d26efc288c331e479a6ba6e03a9b415d79b36684`. The
 homepage hummingbird's wings now beat as it arrives, then rest: beating non-stop they read as a
 fly's, and Mo picked A of three (A beat then rest, B short bursts, C always still): 3 s at ten
 beats a second while the bird blooms in, three slower beats, then the first frame, raised as

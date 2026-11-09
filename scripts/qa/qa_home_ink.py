@@ -85,7 +85,9 @@ The homepage at / (and /kr). On the real GPU (ANGLE/D3D11):
     the page's biggest painting after the opening (wider than the science stage, which is at
     least 1.8 times the mailbox; a quarter smaller since October 12, the whole cell in the
     window), keeps clear of its words' column and keeps its label in the window; the story
-    still life runs off the left edge (about half the window wide), its label in the window, the
+    still life runs off the left edge (about half the window wide; since the porch paintings of
+    November 6, 2026 the window's edge falls at 6% of its width, not 14%, so nothing in them is
+    cut in half), its label in the window, the
     quotation set large (4vw), the names and arrows under it and working; on a phone both run to
     both edges of the screen; with reduced motion (the whole line drawn) the brush line runs down
     the gaps beside both paintings and never over their subjects, their words or the story's
@@ -1463,8 +1465,9 @@ def run(browser, look, mobile):
     else:
         check(
             f"{tag}: the still life runs off the window's left edge, about half the window wide, its label in view",
-            sl <= -0.08 * (sr - sl)
-            and sr - sl >= 0.47 * g["win"]
+            -0.09 * (sr - sl) <= sl <= -0.03 * (sr - sl)
+            # 46% of the window at 1440 since the porch paintings run off its edge less (47% before).
+            and sr - sl >= 0.45 * g["win"]
             and sr <= g["storyWords"][0] - 40
             and g["stillTag"][0] >= 16,
             f"still life {sl:.0f} to {sr:.0f}, words from {g['storyWords'][0]:.0f}, label at {g['stillTag'][0]:.0f}",

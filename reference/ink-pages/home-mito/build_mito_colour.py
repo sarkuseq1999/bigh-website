@@ -16,6 +16,9 @@ Ink is treated as pigment, as in reference/home-v2/ink/recolor/recolor.py: optic
 D = -ln(grey); a pigment absorbs each channel in its own ratio, so a colour is exp(-D * ratio).
 
     python -X utf8 build_mito_colour.py   (writes mito-a-v1.webp and mito-b-v1.webp next to it)
+
+Mo picked B (compared live as /home-a and /home-b): mito-b-v1.webp ships unchanged as
+public/images/home-v2/ink/mito-soft-v1.webp. A's picture is kept here only.
 """
 
 import sys

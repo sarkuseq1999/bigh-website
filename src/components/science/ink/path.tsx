@@ -9,18 +9,20 @@ import { ink, places } from "../science-content";
 import { scienceArt } from "./science-art";
 import styles from "./path.module.css";
 
-// From 960px the paintings take turns: Okayama left, Berkeley right, Salzburg left, Today wide.
-const SIDE = ["left", "right", "left", "wide"] as const;
+// From 960px the paintings take turns: Berkeley right, Salzburg left, Today wide (round 3: Okayama's
+// castle read as Asian; his doctorate there is told in Berkeley's words).
+const SIDE = ["right", "left", "wide"] as const;
 const SIZES = {
   left: "(max-width: 959px) 100vw, 60vw",
   right: "(max-width: 959px) 100vw, 60vw",
-  wide: "(max-width: 959px) 100vw, min(1120px, 86vw)",
+  wide: "(max-width: 959px) 100vw, min(1240px, 90vw)",
 };
 
 /**
  * Dr. Liu's path (Mo's pick B, October 26, 2026): one place per screen, going down the page, each
- * painting (cut from the old handscroll's band, science-art.ts places) beside its words. Phones get
- * a tighter cut of each place, one column, the painting over its words. Each painting blooms in as
+ * painting (since November 4 Codex repaints of the handscroll's places in ink and wash,
+ * science-art.ts places) beside its words. Phones get a tighter cut of each place, one column, the
+ * painting over its words. Each painting blooms in as
  * it arrives, like the strips' (the server marks it "waiting"; path.module.css shows it whole where
  * no bloom will come).
  */

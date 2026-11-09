@@ -1,11 +1,10 @@
-/* Dr. Liu, under the page's title (Mo's pick B, October 26, 2026), and the formulas (spec, "The
-   page"). His photograph and words sit a little narrower than the page's other parts, so the two
-   read as one pair under the centred title. */
+/* Dr. Liu (round 3, November 4, 2026: after "Why start with the cell?") and the formulas. His
+   photograph and words sit a little narrower than the page's other parts, so the two read as one
+   pair. */
 .liu {
   display: grid;
   gap: 36px;
   max-width: calc(1040px + 2 * var(--gutter));
-  margin-top: 36px;
 }
 
 @media (min-width: 960px) {
@@ -13,7 +12,6 @@
     grid-template-columns: 300px minmax(0, 1fr);
     gap: 72px;
     align-items: center;
-    margin-top: 56px;
   }
 }
 
@@ -36,10 +34,18 @@
 }
 
 .name {
-  margin: 8px 0 0;
+  margin: 0;
   font-size: clamp(40px, 3.6vw, 52px);
   font-weight: 500;
   line-height: 1.04;
+}
+
+/* His role under his name (no label over it), in the caption's grey at reading size. */
+.liu .role {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.4;
 }
 
 .headline {
@@ -87,7 +93,7 @@
 }
 
 .title {
-  margin: 12px 0 0;
+  margin: 0;
   font-size: clamp(32px, 3.4vw, 50px);
   font-weight: 500;
   line-height: 1.06;

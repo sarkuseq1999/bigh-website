@@ -1,15 +1,16 @@
-"""Checks the Science page's built pictures (spec docs/superpowers/specs/2026-10-14-science-ink-design.md).
+"""Checks the Science page's built pictures (round 3, November 4, 2026; spec
+docs/superpowers/specs/2026-11-04-science-california-design.md).
 
 - every picture named in science-art.ts exists at its stated size;
-- each picture's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
+- each painting's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
-- (October 26) Dr. Liu's path: four places, each with a phone cut, each wider than tall (a place
-  beside its words, not a band) and at least 1000px wide for the page's 60% column;
-- the health scenes are three, each narrower than the strip;
-- (Task 6) the mugs' steam is kept: ink above the mugs' rims, on the wide strip and the phone crop
-  (the ink box once cut it off).
-Writes plates/contact.jpg (the band with the places' cuts marked, the places, the strips, the
-scenes) to look at.
+- the town: its six lamp layers are the town's own size, each clear (alpha 0) at its border and
+  holding some gold, never one window in two layers, and all six over the town make its lit
+  plate (plates/town-lit-<V>.png, lossless, not shipped); its phone pictures, unlit and lit, the
+  same size as each other;
+- Dr. Liu's path: three places, each with a phone cut, each wider than tall (a place beside its
+  words, not a band) and at least 1000px wide for the page's 60% column.
+Writes plates/contact.jpg (every picture, the town half lit) to look at.
 
 usage: python -X utf8 reference/ink-pages/science/check_science_art.py
 """
@@ -20,7 +21,7 @@ import sys
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw
+from PIL import Image
 
 HERE = Path(__file__).resolve().parent
 REPO = HERE.parents[2]
@@ -41,78 +42,102 @@ def art():
     return json.loads(body)
 
 
-def picture(entry):
-    path = REPO / "public" / entry["src"].lstrip("/")
-    img = Image.open(path).convert("RGB")
-    check(f"{entry['src']} size", img.size == (entry["width"], entry["height"]), f"{img.size}")
-    a = np.asarray(img).astype(np.float32)
-    edge = np.concatenate([a[:3].reshape(-1, 3), a[-3:].reshape(-1, 3), a[:, :3].reshape(-1, 3), a[:, -3:].reshape(-1, 3)])
-    check(f"{entry['src']} white edge", edge.mean() >= 254.5, f"{edge.mean():.1f}")
+def file_of(src):
+    return REPO / "public" / src.lstrip("/")
+
+
+def opened(entry, name):
+    path = file_of(entry["src"])
+    if not path.exists():
+        check(f"{name}: exists", False, str(path))
+        return None
+    img = Image.open(path)
+    check(f"{name}: {img.width}x{img.height} as stated", img.size == (entry["width"], entry["height"]), f"{img.size} vs {entry['width']}x{entry['height']}")
     return img
 
 
-data = art()
-check("four places, in order", list(data["places"]) == ["okayama", "berkeley", "salzburg", "today"], str(list(data["places"])))
-places = []
-for key, entry in data["places"].items():
-    wide = picture(entry)
-    phone = picture(entry["phone"])
-    check(f"place {key}: wider than tall", wide.width > 1.5 * wide.height and phone.width > 1.2 * phone.height,
-          f"{wide.size} {phone.size}")
-    check(f"place {key}: 1000px or wider", wide.width >= 1000, f"{wide.width}")
-    places.append(wide)
-for key in ("scrolls", "mugs"):
-    picture(data[key])
-    picture(data[key]["phone"])
-for name, entry in (("wide", data["mugs"]), ("phone", data["mugs"]["phone"])):
-    gray = np.asarray(Image.open(REPO / "public" / entry["src"].lstrip("/")).convert("L")).astype(np.float32)
-    # The rows above the mugs: the first row where a column-run of dark ink (a mug's body) starts.
-    body = int(np.argmax((gray < 120).mean(axis=1) > 0.02))
-    steam = gray[: max(1, body - 10)]
-    check(f"mugs {name}: the steam above the mugs is kept", body > gray.shape[0] * 0.2 and (steam < 225).sum() > 200,
-          f"mugs start at row {body} of {gray.shape[0]}, {(steam < 225).sum()} ink pixels above them")
-health = picture(data["health"])
-scenes = [picture(s) for s in data["health"]["scenes"]]
-check("three health scenes", len(scenes) == 3)
-check("each scene narrower than the strip", all(s.width < health.width * 0.6 for s in scenes))
+def edge_white(img, name):
+    a = np.asarray(img.convert("RGB")).astype(np.float32)
+    strip = np.concatenate([a[:3].reshape(-1, 3), a[-3:].reshape(-1, 3), a[:, :3].reshape(-1, 3), a[:, -3:].reshape(-1, 3)])
+    check(f"{name}: outer 3px white", strip.mean() >= 254.5, f"{strip.mean():.2f}")
 
-sheet_w = 2400
-rows = []
-band_plate = HERE / "plates/band.png"
-if band_plate.exists():
-    # The band with each place's wide cut (red) and phone cut (blue), from build_science.PLACES.
-    sys.path.insert(0, str(HERE))
-    from build_science import PLACES  # noqa: E402
 
-    band = Image.open(band_plate).convert("RGB")
-    k = sheet_w / band.width
-    rows.append(band.resize((sheet_w, round(band.height * k))))
-    draw = ImageDraw.Draw(rows[0])
-    for wide, phone in PLACES.values():
-        for (a, b, *_), colour, inset in ((wide, (200, 0, 0), 2), (phone, (0, 60, 200), 10)):
-            draw.rectangle([round(a * k), inset, round(b * k) - 1, rows[0].height - 1 - inset], outline=colour, width=3)
-row = Image.new("RGB", (sheet_w, max(round(p.height * (sheet_w / 4 - 20) / p.width) for p in places)), "white")
-x = 0
-for p in places:
-    small = p.resize((sheet_w // 4 - 20, round(p.height * (sheet_w / 4 - 20) / p.width)))
-    row.paste(small, (x, 0))
-    x += sheet_w // 4
-rows.append(row)
-for img in (Image.open(REPO / "public" / data[k]["src"].lstrip("/")) for k in ("scrolls", "health", "mugs")):
-    rows.append(img.convert("RGB").resize((sheet_w // 2, round(img.height * (sheet_w // 2) / img.width))))
-rows.append(Image.new("RGB", (sheet_w, max(s.height for s in scenes) // 2), "white"))
-x = 0
-for s in scenes:
-    small = s.resize((s.width // 2, s.height // 2))
-    rows[-1].paste(small, (x, 0))
-    x += small.width + 40
-sheet = Image.new("RGB", (sheet_w, sum(r.height + 30 for r in rows)), "white")
-y = 0
-for r in rows:
-    sheet.paste(r, (0, y))
-    y += r.height + 30
-(HERE / "plates").mkdir(exist_ok=True)
-sheet.save(HERE / "plates/contact.jpg", quality=85)
-print("contact sheet: reference/ink-pages/science/plates/contact.jpg")
-print("ALL PASS" if all(results) else f"{results.count(False)} FAILED")
-sys.exit(0 if all(results) else 1)
+def painting(entry, name):
+    img = opened(entry, name)
+    if img is not None:
+        edge_white(img, name)
+    return img
+
+
+def main():
+    data = art()
+    shown = []
+    for key in ("desk", "journals", "picnic"):
+        shown.append(painting(data[key], key))
+        shown.append(painting(data[key]["phone"], f"{key} phone"))
+    town = data["town"]
+    base = painting(town, "town")
+    # The lit town is a lossless plate the page never shows (build_science.py town()).
+    lit_path = HERE / "plates" / f"town-lit-{town['src'].rsplit('-', 1)[1].split('.')[0]}.png"
+    lit = Image.open(lit_path) if lit_path.exists() else None
+    check("town: its lit plate", lit is not None and base is not None and lit.size == base.size, str(lit_path.name))
+    phone = painting(town["phone"], "town phone")
+    phone_lit = painting(town["phoneLit"], "town phone lit")
+    if phone is not None and phone_lit is not None:
+        check("town phone: unlit and lit the same size", phone.size == phone_lit.size, f"{phone.size} {phone_lit.size}")
+    lamps = town["lamps"]
+    check("town: six lamp layers", len(lamps) == 6, str(len(lamps)))
+    alphas = []
+    for i, src in enumerate(lamps):
+        layer = Image.open(file_of(src)).convert("RGBA")
+        check(f"town lamps {i + 1}: the town's size", base is not None and layer.size == base.size, f"{layer.size}")
+        a = np.asarray(layer)[..., 3].astype(np.float32) / 255
+        border = np.concatenate([a[:3].ravel(), a[-3:].ravel(), a[:, :3].ravel(), a[:, -3:].ravel()])
+        check(f"town lamps {i + 1}: clear at its border", border.max() < 0.02, f"{border.max():.3f}")
+        check(f"town lamps {i + 1}: holds some gold", (a > 0.5).mean() > 0.0015, f"{(a > 0.5).mean() * 100:.2f}%")
+        alphas.append(a)
+    if alphas and base is not None and lit is not None:
+        stack = np.stack(alphas)
+        check("town lamps: no window in two layers", ((stack > 0.5).sum(axis=0) > 1).mean() < 0.0005, f"{((stack > 0.5).sum(axis=0) > 1).mean() * 100:.3f}%")
+        # All six layers laid over the town (as the page lays them) give the lit picture: the
+        # town's own lossless plate, so the shipped webp's compression is not counted.
+        plate = HERE / "plates" / Path(town["src"]).with_suffix(".png").name
+        whole = (Image.open(plate) if plate.exists() else base).convert("RGBA")
+        for src in lamps:
+            whole.alpha_composite(Image.open(file_of(src)).convert("RGBA"))
+        diff = np.abs(np.asarray(whole.convert("RGB")).astype(np.float32) - np.asarray(lit.convert("RGB")).astype(np.float32)).max(axis=2)
+        check("town lamps: together they make the lit town", diff.mean() < 1.5 and np.percentile(diff, 99.9) < 40, f"mean {diff.mean():.2f}, 99.9% {np.percentile(diff, 99.9):.0f}")
+    places = data["places"]
+    check("path: three places", list(places) == ["berkeley", "salzburg", "today"], str(list(places)))
+    for key, entry in places.items():
+        img = painting(entry, f"place {key}")
+        painting(entry["phone"], f"place {key} phone")
+        if img is not None:
+            check(f"place {key}: wider than tall", img.width > img.height, f"{img.size}")
+            check(f"place {key}: at least 1000px wide", img.width >= 1000, f"{img.width}")
+        shown.append(img)
+    # The contact sheet: every painting, and the town half lit.
+    if base is not None:
+        half = base.convert("RGBA")
+        for src in lamps[:3]:
+            half.alpha_composite(Image.open(file_of(src)).convert("RGBA"))
+        shown.insert(0, half.convert("RGB"))
+    row_h, gap = 260, 16
+    tiles = [im.convert("RGB").resize((round(im.width * row_h / im.height), row_h)) for im in shown if im is not None]
+    width = max(1, sum(t.width for t in tiles[:4]) + gap * 3)
+    rows = [tiles[i : i + 4] for i in range(0, len(tiles), 4)]
+    sheet = Image.new("RGB", (max(sum(t.width for t in r) + gap * (len(r) - 1) for r in rows), len(rows) * (row_h + gap)), "white")
+    for y, r in enumerate(rows):
+        x = 0
+        for t in r:
+            sheet.paste(t, (x, y * (row_h + gap)))
+            x += t.width + gap
+    (HERE / "plates").mkdir(exist_ok=True)
+    sheet.save(HERE / "plates/contact.jpg", quality=88)
+    print(f"plates/contact.jpg  {sheet.width}x{sheet.height}  (width {width})")
+    print(f"\n{sum(results)}/{len(results)} passed")
+    return all(results)
+
+
+if __name__ == "__main__":
+    sys.exit(0 if main() else 1)

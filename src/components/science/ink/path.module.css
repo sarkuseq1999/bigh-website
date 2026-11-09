@@ -148,9 +148,17 @@
   /* Today: the widest painting, its words over the sky at its top left (the sun stands at about
      67-75% of its width and the top fifth of its height, the hills begin about a third of the way
      down). Its sentence stays on one line: on two it reached the hills under 1080px wide. */
+  /* Round 3: Today's painting (the November repaint) is 1.9 times as wide as it is tall, taller
+     than the handscroll's cut, so on a short window it narrows until it fits under the menu bar
+     (100px, its caption included). */
   .place[data-side="wide"] {
-    width: min(1120px, 86vw);
+    width: min(1120px, 86vw, calc((100svh - 100px) * 1.9));
     margin: 0 auto;
+  }
+
+  /* The name's box hugs its word, so nothing of the painting (the sun) sits under it. */
+  .place[data-side="wide"] .name {
+    width: fit-content;
   }
 
   .place[data-side="wide"] .figure,

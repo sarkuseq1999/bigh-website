@@ -12,8 +12,9 @@ import base from "@/components/ink/ink.module.css";
 import styles from "./stories.module.css";
 import { useTint } from "./ink-color";
 
-// "In their own words." Each fictional sample pairs a quiet ink still life of its everyday moment
-// (objects only, never a face; labelled "Illustration") with its words set large beside it; the
+// "In their own words." Each fictional sample pairs a still life of its everyday moment on one
+// California back porch (objects only, never a face; labelled "Illustration"; Mo picked the porch
+// on November 6, 2026) with its words set large beside it; the
 // byline carries the name, the moment and the "Fictional sample" label. The three names below
 // choose a story.
 export function Stories() {

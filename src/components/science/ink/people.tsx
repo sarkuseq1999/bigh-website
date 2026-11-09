@@ -7,14 +7,15 @@ import { useSiteDialogs } from "@/components/ink/dialogs";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { formulas, formulasLine, ink, iris, liu } from "../science-content";
+import { formulas, formulasLine, formulasTitle, iris, liu } from "../science-content";
 import styles from "./people.module.css";
 
 const BOTTLE = { width: 1230, height: 1278 };
 
-/** Dr. Liu, under the page's title: his real photograph on its mat, his role, name and intro, his
- *  story sheet. His dated record (280+ papers, 1994, 2025) is told by his path below, with its
- *  sources (Mo's pick B, October 26, 2026). */
+/** Dr. Liu, after "Why start with the cell?" (round 3, November 4, 2026): his real photograph on
+ *  its mat, his name with his role under it (no label over the name), the approved headline and
+ *  intro, his story sheet. His dated record (280+ papers, 1994, 2025) is told by his path below,
+ *  with its sources. */
 export function Liu() {
   const copy = useCopy();
   const dialogs = useSiteDialogs();
@@ -31,10 +32,10 @@ export function Liu() {
         />
       </figure>
       <div>
-        <p className={base.caption}>{copy(liu.role)}</p>
         <h2 id="liu-name" className={styles.name}>
           {copy(liu.name)}
         </h2>
+        <p className={styles.role}>{copy(liu.role)}</p>
         <p className={styles.headline}>{copy(liu.headline)}</p>
         <p className={`${base.body} ${styles.intro}`}>{copy(liu.intro)}</p>
         <button
@@ -49,7 +50,8 @@ export function Liu() {
   );
 }
 
-/** The five formulas: who developed each one, each bottle linking to its own page. */
+/** The five formulas: who developed each one, each bottle linking to its own page. Round 3: after
+ *  his path's "Today", a short heading of its own, the credit line as its lead (no label). */
 export function Formulas() {
   const copy = useCopy();
   const pageOf = useProductPage();
@@ -57,13 +59,12 @@ export function Formulas() {
     <section id="formulas" className={styles.formulas} aria-labelledby="formulas-title">
       <div className={base.wrap}>
         <header className={styles.head}>
-          <div>
-            <p className={base.caption}>{copy(ink.formulasLabel)}</p>
-            <h2 id="formulas-title" className={styles.title}>
-              {copy(formulasLine)}
-            </h2>
-          </div>
-          <p className={base.body}>{copy(iris.text)}</p>
+          <h2 id="formulas-title" className={styles.title}>
+            {copy(formulasTitle)}
+          </h2>
+          <p className={base.body}>
+            {copy(formulasLine)} {copy(iris.text)}
+          </p>
         </header>
         <ul className={styles.bottles}>
           {formulas.map((formula, index) => {

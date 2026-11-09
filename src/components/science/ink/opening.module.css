@@ -1,0 +1,109 @@
+/* The Science page's first screen (round 3, November 4, 2026): the h1 and its questions beside
+   the desk at the window. Under 960px: the painting first (the window's width), then the words.
+   From 960px: two columns in the window's full width, the words at the page's gutter (under the
+   logo's left edge) and the painting running out to the window's right edge, the pair as tall as
+   the window under the menu bar. The kit's .look rules (margins, sizes) sit at (0,2,0), so the
+   words' rules are scoped under .opening. */
+.opening {
+  display: grid;
+  padding-top: 88px;
+}
+
+.words {
+  order: 2;
+  padding: 18px var(--gutter) 0;
+}
+
+.figure {
+  position: relative;
+  order: 1;
+  margin: 0;
+}
+
+.opening .title {
+  margin: 0;
+  font-size: clamp(40px, 11vw, 52px);
+  font-weight: 500;
+  line-height: 1.04;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.opening .lead {
+  max-width: 30em;
+  margin: 18px 0 0;
+  color: var(--ink);
+  font-size: 20px;
+  line-height: 1.5;
+}
+
+/* The painting's box is reserved from its ratio (--ar-wide / --ar-narrow), whichever picture loads.
+   Its left end and its foot fade into the paper (--edge, under the kit's bloom). */
+.art {
+  --edge: linear-gradient(90deg, transparent 0, #000 9%);
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: var(--ar-narrow);
+  -webkit-mask-image: var(--edge);
+  mask-image: var(--edge);
+}
+
+.opening .caption {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 4px;
+}
+
+@media (min-width: 960px) {
+  .opening {
+    grid-template-columns: minmax(0, 0.84fr) minmax(0, 1.16fr);
+    align-items: center;
+    min-height: min(100svh, 1000px);
+    padding-top: clamp(96px, 7vw, 112px);
+    padding-bottom: 24px;
+  }
+
+  .words {
+    order: 1;
+    padding: 0 0 0 var(--gutter);
+  }
+
+  .figure {
+    order: 2;
+    justify-self: end;
+    /* As wide as its column, but never so tall that it leaves the window under the menu bar. */
+    width: min(100%, calc((100svh - 150px) * 1.12));
+  }
+
+  .art {
+    aspect-ratio: var(--ar-wide);
+  }
+
+  .opening .title {
+    font-size: clamp(48px, 4.6vw, 74px);
+    line-height: 1.02;
+  }
+
+  .opening .lead {
+    margin-top: 26px;
+    font-size: clamp(20px, 1.45vw, 23px);
+    line-height: 1.5;
+  }
+}
+
+/* The column stops growing on a very wide window: the words keep to the page's 1300px measure. */
+@media (min-width: 1600px) {
+  .opening {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    padding-left: calc((100vw - 1300px) / 2 - var(--gutter));
+  }
+}
+
+@media (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]) .art[data-bloom="waiting"] {
+    -webkit-mask: var(--edge);
+    mask: var(--edge);
+    filter: none;
+  }
+}

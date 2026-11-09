@@ -1,0 +1,98 @@
+<title>Stories Painting</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;650&display=swap">
+<style>
+  /* Layout: one column; each idea is its words, the laptop and phone screens of the real
+     homepage, then how the other two stories follow. */
+  :root {
+    --paper: #f6f1e7;
+    --ink: #1d1b18;
+    --ink-soft: #5d574e;
+    --rule: #ddd4c4;
+    --gold: #a77c25;
+    --pick: #2f4a3a;
+    --title: "Ysabeau", "Palatino Linotype", Palatino, Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1a17; --ink: #f1ece2; --ink-soft: #b9b0a2;
+      --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1a17; --ink: #f1ece2; --ink-soft: #b9b0a2;
+    --rule: #3a3630; --gold: #d6aa52; --pick: #9cc3a8; color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.55 var(--body);
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  main { max-width: 1100px; margin: 0 auto; padding-block: 40px 72px; display: grid; gap: 52px; }
+  h1, h2 { font-family: var(--title); font-weight: 650; text-wrap: balance; margin: 0; letter-spacing: -0.01em; }
+  h1 { font-size: clamp(34px, 6vw, 52px); line-height: 1.05; }
+  h2 { font-size: clamp(26px, 4vw, 34px); line-height: 1.1; }
+  p { margin: 0; max-width: 62ch; }
+  .intro { display: grid; gap: 12px; }
+  .intro p { color: var(--ink-soft); font-size: 18px; }
+  .today { width: min(100%, 560px); }
+  .choice { display: grid; gap: 14px; padding-top: 26px; border-top: 1px solid var(--rule); }
+  .head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+  .letter { font-family: var(--title); font-size: clamp(44px, 7vw, 60px); line-height: 0.8; color: var(--gold); font-weight: 650; }
+  .score { font: 600 15px/1 var(--body); font-variant-numeric: tabular-nums; padding: 7px 11px; border: 1px solid var(--rule); border-radius: 999px; color: var(--ink-soft); }
+  .tag { font: 600 13px/1 var(--body); letter-spacing: 0.06em; text-transform: uppercase; color: var(--paper); background: var(--pick); padding: 7px 10px; border-radius: 999px; }
+  .what { font-size: 18px; }
+  .note { color: var(--ink-soft); }
+  .shots { display: grid; grid-template-columns: 3fr 1fr; gap: 12px; align-items: start; }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+  figure img { display: block; width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+  figcaption { font-size: 13px; color: var(--ink-soft); letter-spacing: 0.02em; }
+  .rest { display: grid; gap: 4px; color: var(--ink-soft); }
+  .rest ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+  @media (max-width: 640px) {
+    .shots { grid-template-columns: 1fr; }
+    .shots figure:last-child { width: 62%; }
+  }
+</style>
+<main>
+  <header class="intro">
+    <h1>The back porch, all three stories</h1>
+    <p>You picked A, the porch. Here are all three sample stories on the real homepage: the same porch at three times of day. Each painting appears when you click that person's name. Only the paintings change; the words stay. My score for the set: 9 / 10. What holds it back: all three share one view, so only the table changes from story to story, and the watercolour is softer than the Big Sur painting at the bottom of the page.</p>
+    <figure class="today"><img src="today.jpg" alt="Today's blossom, tea bowl and pear on the homepage"><figcaption>Today: plum blossom, tea bowl, sliced pear</figcaption></figure>
+  </header>
+  <section class="choice" aria-labelledby="lisa-name">
+    <div class="head">
+      <h2 id="lisa-name">Lisa, “It fits into my mornings”</h2>
+    </div>
+    <p class="what">Morning: coffee, orange juice, oranges, poppies, a paper lunch bag and the car keys. The one you picked.</p>
+    <div class="shots">
+      <figure><img src="set-lisa-laptop.jpg" alt="Lisa, “It fits into my mornings” on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="set-lisa-phone.jpg" alt="Lisa, “It fits into my mornings” on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="michael-name">
+    <div class="head">
+      <h2 id="michael-name">Michael, “I read up on it first”</h2>
+    </div>
+    <p class="what">Dusk: an open book and reading glasses on the arm of a wooden porch chair, a notebook, a pencil and a mug.</p>
+    <div class="shots">
+      <figure><img src="set-michael-laptop.jpg" alt="Michael, “I read up on it first” on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="set-michael-phone.jpg" alt="Michael, “I read up on it first” on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+  <section class="choice" aria-labelledby="susan-name">
+    <div class="head">
+      <h2 id="susan-name">Susan, “The source mattered to me”</h2>
+    </div>
+    <p class="what">Afternoon: a piece of honeycomb on a board beside a sprig of the Brazilian shrub the bees take their resin from. (The first take had dark green resin on the comb that looked like mould up close; repainted clean.)</p>
+    <div class="shots">
+      <figure><img src="set-susan-laptop.jpg" alt="Susan, “The source mattered to me” on the homepage, laptop"><figcaption>Laptop</figcaption></figure>
+      <figure><img src="set-susan-phone.jpg" alt="Susan, “The source mattered to me” on the homepage, phone"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+</main>

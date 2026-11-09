@@ -19,47 +19,8 @@
   font-weight: 600;
 }
 
-/* The title and Dr. Liu open the page, then his path (Mo's pick B, October 26, 2026). The eyebrow
-   stands on the paper under the menu bar, about 20px clear of where the settled bar's paper ends
-   (92px; from 960px clamp(96px, 5.3vw + 22px, 104px)), and from 1101px, where the bar's painted rule
-   is there from the start, 24px under that rule (the tall bar is clamp(88px, 6.6vw, 104px)). */
+/* Dr. Liu and his path (round 3, November 4, 2026): after "Why start with the cell?", with a
+   chapter's silence before it. The opening's own rules are in opening.module.css. */
 .scientists {
-  padding-top: 112px;
-}
-
-@media (min-width: 960px) {
-  .scientists {
-    padding-top: clamp(116px, calc(5.3vw + 42px), 124px);
-  }
-}
-
-@media (min-width: 1101px) {
-  .scientists {
-    padding-top: calc(clamp(88px, 6.6vw, 104px) + 24px);
-  }
-}
-
-.opening {
-  text-align: center;
-}
-
-.opening h1 {
-  margin: 10px auto 0;
-  max-width: 22ch;
-  font-size: clamp(34px, 3.9vw, 58px);
-  font-weight: 500;
-  line-height: 1.04;
-  letter-spacing: -0.012em;
-  text-wrap: balance;
-}
-
-@media (min-width: 960px) {
-  .opening h1 {
-    max-width: none;
-  }
-}
-
-.opening p:last-child {
-  margin: 12px auto 0;
-  max-width: 62ch;
+  padding-top: clamp(112px, 12vw, 190px);
 }

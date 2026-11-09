@@ -55,20 +55,13 @@ export const quailSign: Picture = { src: `${I}/quail-sign-v1.webp`, width: 800, 
  *  in the painting, so no tinted twin (reference/ink-pages/home-ask, built by build_home_ask.py). */
 export const mailbox: Picture = { src: `${I}/mailbox-v1.webp`, width: 1200, height: 896 };
 
-/** The ink mitochondrion with its two gold-leaf folds (ink): "Tiny power plants." only. */
-export const mito: Record<"glow", Picture> = {
-  glow: { src: `${I}/mito.webp`, width: 2000, height: 1493 },
-};
-
-/** The same mitochondrion in the two colourings Mo is comparing on the live site (November 4,
- *  2026; /home-a and /home-b; "/" keeps today's): California colour (a redwood copper skin, pale
- *  sage inside, warm grey folds) and softer ink (a third lighter, warm sepia). Every stroke is the
- *  original's; their own colour, so no tinted twin (reference/ink-pages/home-mito). */
-export type MitoColour = "california" | "soft";
-export const mitoColours: Record<MitoColour, Picture> = {
-  california: { src: `${I}/mito-california-v1.webp`, width: 2000, height: 1493 },
-  soft: { src: `${I}/mito-soft-v1.webp`, width: 2000, height: 1493 },
-};
+/** The mitochondrion in "Tiny power plants." only, in softer ink (Mo picked B, November 4, 2026:
+ *  he loves the cell's design, but the heavy black ink no longer fitted the page's California
+ *  colours; he compared it live with a California colouring). The original ink painting
+ *  (`mito.webp`, its source) a third lighter and warmed to sepia, every stroke kept; its own
+ *  colour, so no tinted twin (reference/ink-pages/home-mito/build_mito_colour.py). Its two
+ *  gold-leaf folds are the gold layer (`gold.mito`). */
+export const mito: Picture = { src: `${I}/mito-soft-v1.webp`, width: 2000, height: 1493 };
 
 /** "Make sense of the science.": every picture shows what its words say. Mitochondria and Free
  *  radicals (Mo, October 22, 2026, pick D, after the October 21 steam engine): one old powerhouse
@@ -115,13 +108,16 @@ export const contactShadow: Picture = { src: `${I}/pool-foot.webp`, width: 600, 
 /** Dr. Liu's only photograph (512 x 768), never shown larger than its own pixels allow. */
 export const liu: Picture = { src: "/images/jiankang-liu.jpg", width: 512, height: 768 };
 
-/** Ink still lifes for the sample stories: objects only, never people (ink). v2 (round 5): built
- *  at the originals' full width (1744px; they were 1200px), sharp at their large size on 2x
- *  screens. */
+/** The sample stories' still lifes: objects only, never people. Mo, November 6, 2026: the old
+ *  ink still lifes (plum blossom in a vase, tea bowls, a low table) read as Asian; he picked A,
+ *  one California back porch with golden hills and a valley oak beyond its rail, at three times
+ *  of day: Lisa's breakfast in the morning, Michael's book at dusk, Susan's honeycomb and the
+ *  Brazilian shrub in the afternoon. Codex paintings in ink and thin watercolour, their own colour
+ *  (no green-spring twin), square, enlarged to 1744px (build_home_stories.py). */
 export const storyPaintings: Record<string, Picture> = {
-  lisa: { src: `${I}/story-morning-v2.webp`, width: 1744, height: 2336 },
-  michael: { src: `${I}/story-reading-v2.webp`, width: 1744, height: 2336 },
-  susan: { src: `${I}/story-source-v2.webp`, width: 1744, height: 2336 },
+  lisa: { src: `${I}/story-porch-morning-v1.webp`, width: 1744, height: 1744 },
+  michael: { src: `${I}/story-porch-dusk-v1.webp`, width: 1744, height: 1744 },
+  susan: { src: `${I}/story-porch-afternoon-v1.webp`, width: 1744, height: 1744 },
 };
 
 /** The close: the long view down the Big Sur coast at evening, an older couple and their dog on

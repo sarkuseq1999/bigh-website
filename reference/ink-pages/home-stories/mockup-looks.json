@@ -1,0 +1,21 @@
+{
+  "title": "The back porch, all three stories",
+  "intro": "You picked A, the porch. Here are all three sample stories on the real homepage: the same porch at three times of day. Each painting appears when you click that person's name. Only the paintings change; the words stay. My score for the set: 9 / 10. What holds it back: all three share one view, so only the table changes from story to story, and the watercolour is softer than the Big Sur painting at the bottom of the page.",
+  "set": [
+    {
+      "story": "lisa",
+      "name": "Lisa, “It fits into my mornings”",
+      "what": "Morning: coffee, orange juice, oranges, poppies, a paper lunch bag and the car keys. The one you picked."
+    },
+    {
+      "story": "michael",
+      "name": "Michael, “I read up on it first”",
+      "what": "Dusk: an open book and reading glasses on the arm of a wooden porch chair, a notebook, a pencil and a mug."
+    },
+    {
+      "story": "susan",
+      "name": "Susan, “The source mattered to me”",
+      "what": "Afternoon: a piece of honeycomb on a board beside a sprig of the Brazilian shrub the bees take their resin from. (The first take had dark green resin on the comb that looked like mould up close; repainted clean.)"
+    }
+  ]
+}
