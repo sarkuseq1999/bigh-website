@@ -4,9 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-jtewxtrcc-sarkuseq1999s-projects.vercel.app`
+(`dpl_5v3Eviam3ztm49K4itgG98pQtrNR`), the **production** deployment of `main` at
+`552f28c8377d2b61895408966a427849c03c5df7` (November 9, 2026, from about 14:25 Pacific). The
+Science page's opening is one slow zoom: a walker on golden California hills fills the first
+screen ("Our science starts in the cell.", "cell." in gold leaf), the view moves in on the
+walker's hand in the dry grass, then on one cell of it, where "Why start with the cell?" stands;
+the three numbered lines follow. Mo found round 3's first screen plain and the town at dusk
+unrelated to "cell", picked the zoom of three ideas, saw a sample, said "Yes, build it", then
+"Yes, go live". `552f28c` is `7f2c1a0` (the homepage's "Small beginnings." line in the title face,
+put live by another session a few minutes earlier as `dpl_3gCaVeVoio6hLxttywkcqBoay6EU`, which
+held the alias until this one; that session writes its own entry) plus the one Science commit,
+rebased onto it and pushed as a fast-forward. Before the push, on a built copy of exactly that
+commit (a scratch worktree): `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326;
+type-check and lint clean. After the alias update, in fresh unauthenticated browsers on the public
+demo: `/en/science` at 1440 and 390 px (200, the headline over the hills, the cell beside "Why
+start with the cell?", no console errors), then `qa_science_ink` 723/723, `qa_home_ink` 288/288,
+`qa_nav` 326/326.
+
+Before November 9, from about 15:13 Pacific on November 6, 2026, the alias pointed to
+`bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
 (`dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`), the **production** deployment of `main` at
-`8b422fa2f016cb473e82284bd7254f1b38957597` (November 6, 2026, from about 15:13 Pacific). The
+`8b422fa2f016cb473e82284bd7254f1b38957597`. The
 Science page, round 3: it now starts with the science, then the scientist. It opens "Our science
 starts in the cell." (a desk at a window over golden hills), then "Why start with the cell?" (San
 Francisco's houses at dusk, their windows lighting in gold leaf a few at a time), Dr. Liu, his path

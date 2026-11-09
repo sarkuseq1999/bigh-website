@@ -5,15 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Built November 9, 2026 (Claude Code), NOT live: the Science opening as one slow zoom.** Mo
+- **Live November 9, 2026 (Claude Code): the Science opening as one slow zoom.** `main`
+  `552f28c`, production `dpl_5v3Eviam3ztm49K4itgG98pQtrNR`, the demo alias on it; public checks
+  `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo
   found the first screen plain and the town at dusk unrelated to "cell"; he picked the zoom, saw a
-  sample and said "Yes, build it". A walker on golden hills (the h1 in the sky, "cell." in gold),
-  the walker's hand, then one cell beside "Why start with the cell?"; the three lines follow.
-  AGENTS.md "Science opening: one slow zoom". Branch `science-zoom` (from `3154a5d`, built in a
-  scratch worktree while another session worked in this folder). Checks on the built site: `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326, `check_science_art.py` 38/38.
-  Waiting for Mo to look at the built page and say whether
-  it goes live. Open: a native speaker's check of m1120-m1122; the feel of the motion between the
-  three paintings was judged from still frames only.
+  sample, said "Yes, build it", then "Yes, go live". A walker on golden hills (the h1 in the sky,
+  "cell." in gold), the walker's hand, then one cell beside "Why start with the cell?"; the three
+  lines follow. AGENTS.md "Science opening: one slow zoom". Built in a scratch worktree (branch
+  `science-zoom`) while another session worked in this folder, rebased onto that session's
+  homepage release (`7f2c1a0`) and pushed alone. Still open: Mo's word on how the motion feels
+  (it was judged from still frames only); a native speaker's check of m1120-m1122.
 - **Live November 6, 2026 (Claude Code): Science round 3, the science first, then the
   scientist.** `main` `8b422fa`, production `dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`, the demo alias on
   it; public checks `qa_science_ink` 642/642, `qa_home_ink` 288/288, `qa_nav` 326/326
