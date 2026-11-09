@@ -4,10 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-oieg8h981-sarkuseq1999s-projects.vercel.app`
+(`dpl_3gCaVeVoio6hLxttywkcqBoay6EU`), the **production** deployment of `main` at
+`7f2c1a0513e2060cf60d0e7023c7d7150c2a19a9` (November 9, 2026, from about 13:45 Pacific). The
+homepage's "Small beginnings. Bigger possibilities." under the Big Sur close is in the title
+face, both lines in ink. It is a `<p>`, so the homepage's Ysabeau for h1-h3 never reached it: it
+read as heavy Switzer with a grey second line, the page's only one. Mo picked B (both lines in
+ink) over A (the title face with the grey second line), shown on the real page; the words did
+not change. `7f2c1a0` is `8b422fa` plus the Science round 3 notes (`3154a5d`), the mockups
+(`359d699`) and the fix, pushed alone as a fast-forward on Mo's "Yes, put it live" (`studio`
+also holds About's two new chapters, not approved for live, so `studio:main` was not pushed).
+Before the push, on the built site (`npm run build` + `npm start`): `qa_home_ink` 288/288,
+`qa_nav` 326/326. After the alias update, in fresh unauthenticated browsers on the public demo:
+the line at 1440 and 390 px (Ysabeau, both lines the same ink as the headings), `qa_home_ink`
+288/288, `qa_nav` 326/326.
+
+Before that, from about 15:13 Pacific on November 6 to about 13:45 Pacific on November 9, 2026,
+the alias pointed to `bigh-website-7po41gh5g-sarkuseq1999s-projects.vercel.app`
 (`dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`), the **production** deployment of `main` at
-`8b422fa2f016cb473e82284bd7254f1b38957597` (November 6, 2026, from about 15:13 Pacific). The
-Science page, round 3: it now starts with the science, then the scientist. It opens "Our science
+`8b422fa2f016cb473e82284bd7254f1b38957597`. The Science page, round 3: it now starts with the science, then the scientist. It opens "Our science
 starts in the cell." (a desk at a window over golden hills), then "Why start with the cell?" (San
 Francisco's houses at dusk, their windows lighting in gold leaf a few at a time), Dr. Liu, his path
 (Berkeley, Salzburg, Today), the formulas, "Read the research yourself." and Ask BiGH Science, in

@@ -5,6 +5,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 9, 2026 (Claude Code): the homepage's "Small beginnings. Bigger
+  possibilities." in the title face, all ink.** `main` `7f2c1a0`, production
+  `dpl_3gCaVeVoio6hLxttywkcqBoay6EU`, the demo alias on it; public checks `qa_home_ink`
+  288/288, `qa_nav` 326/326 (`docs/public-demo.md`). The line under the Big Sur close is a `<p>`,
+  so it never got the headings' Ysabeau and read as heavy Switzer with a grey second line. Mo
+  picked B (both lines in ink) over A (grey second line). Pushed alone: `studio` also holds
+  About's two new chapters (next bullet), which are not live. AGENTS.md "Homepage 'Small
+  beginnings…'"; mockups `reference/ink-pages/mockups/home-graphic/`. Next on the homepage, if
+  Mo wants it: the plain Dr. Liu part.
 - **On `studio`, not live (Claude Code, November 9, 2026): About's two new chapters.** Mo asked
   on November 4 for more on the About page (ingredients "from the part of the world best for their
   natural growth", "proudly made in California" by GMP-certified makers) and critiqued each part
