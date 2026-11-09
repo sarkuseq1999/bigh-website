@@ -5,9 +5,20 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 9, 2026 (Claude Code): the Science opening as one slow zoom.** `main`
+  `552f28c`, production `dpl_5v3Eviam3ztm49K4itgG98pQtrNR`, the demo alias on it; public checks
+  `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo
+  found the first screen plain and the town at dusk unrelated to "cell"; he picked the zoom, saw a
+  sample, said "Yes, build it", then "Yes, go live". A walker on golden hills (the h1 in the sky,
+  "cell." in gold), the walker's hand, then one cell beside "Why start with the cell?"; the three
+  lines follow. AGENTS.md "Science opening: one slow zoom". Built in a scratch worktree (branch
+  `science-zoom`) while another session worked in this folder, rebased onto that session's
+  homepage release (`7f2c1a0`) and pushed alone. Still open: Mo's word on how the motion feels
+  (it was judged from still frames only); a native speaker's check of m1120-m1122.
 - **Live November 9, 2026 (Claude Code): the homepage's "Small beginnings. Bigger
   possibilities." in the title face, all ink.** `main` `7f2c1a0`, production
-  `dpl_3gCaVeVoio6hLxttywkcqBoay6EU`, the demo alias on it; public checks `qa_home_ink`
+  `dpl_3gCaVeVoio6hLxttywkcqBoay6EU` (the demo alias was on it until the Science release above,
+  about 40 minutes later); public checks `qa_home_ink`
   288/288, `qa_nav` 326/326 (`docs/public-demo.md`). The line under the Big Sur close is a `<p>`,
   so it never got the headings' Ysabeau and read as heavy Switzer with a grey second line. Mo
   picked B (both lines in ink) over A (grey second line). Pushed alone: `studio` also holds

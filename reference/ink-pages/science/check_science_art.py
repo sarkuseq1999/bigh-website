@@ -4,13 +4,12 @@ docs/superpowers/specs/2026-11-04-science-california-design.md).
 - every picture named in science-art.ts exists at its stated size;
 - each painting's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
-- the town: its six lamp layers are the town's own size, each clear (alpha 0) at its border and
-  holding some gold, never one window in two layers, and all six over the town make its lit
-  plate (plates/town-lit-<V>.png, lossless, not shipped); its phone pictures, unlit and lit, the
-  same size as each other;
+- the zoom opening (November 9, 2026): the hills and the hand are 3:2 and at least 1500px wide
+  (they fill the window, so they keep their whole frame and need no white edge); the cell has a
+  white edge like every other painting, is wider than tall, and holds gold (its mitochondria);
 - Dr. Liu's path: three places, each with a phone cut, each wider than tall (a place beside its
   words, not a band) and at least 1000px wide for the page's 60% column.
-Writes plates/contact.jpg (every picture, the town half lit) to look at.
+Writes plates/contact.jpg (every picture) to look at.
 
 usage: python -X utf8 reference/ink-pages/science/check_science_art.py
 """
@@ -72,41 +71,24 @@ def painting(entry, name):
 def main():
     data = art()
     shown = []
-    for key in ("desk", "journals", "picnic"):
+    for key in ("journals", "picnic"):
         shown.append(painting(data[key], key))
         shown.append(painting(data[key]["phone"], f"{key} phone"))
-    town = data["town"]
-    base = painting(town, "town")
-    # The lit town is a lossless plate the page never shows (build_science.py town()).
-    lit_path = HERE / "plates" / f"town-lit-{town['src'].rsplit('-', 1)[1].split('.')[0]}.png"
-    lit = Image.open(lit_path) if lit_path.exists() else None
-    check("town: its lit plate", lit is not None and base is not None and lit.size == base.size, str(lit_path.name))
-    phone = painting(town["phone"], "town phone")
-    phone_lit = painting(town["phoneLit"], "town phone lit")
-    if phone is not None and phone_lit is not None:
-        check("town phone: unlit and lit the same size", phone.size == phone_lit.size, f"{phone.size} {phone_lit.size}")
-    lamps = town["lamps"]
-    check("town: six lamp layers", len(lamps) == 6, str(len(lamps)))
-    alphas = []
-    for i, src in enumerate(lamps):
-        layer = Image.open(file_of(src)).convert("RGBA")
-        check(f"town lamps {i + 1}: the town's size", base is not None and layer.size == base.size, f"{layer.size}")
-        a = np.asarray(layer)[..., 3].astype(np.float32) / 255
-        border = np.concatenate([a[:3].ravel(), a[-3:].ravel(), a[:, :3].ravel(), a[:, -3:].ravel()])
-        check(f"town lamps {i + 1}: clear at its border", border.max() < 0.02, f"{border.max():.3f}")
-        check(f"town lamps {i + 1}: holds some gold", (a > 0.5).mean() > 0.0015, f"{(a > 0.5).mean() * 100:.2f}%")
-        alphas.append(a)
-    if alphas and base is not None and lit is not None:
-        stack = np.stack(alphas)
-        check("town lamps: no window in two layers", ((stack > 0.5).sum(axis=0) > 1).mean() < 0.0005, f"{((stack > 0.5).sum(axis=0) > 1).mean() * 100:.3f}%")
-        # All six layers laid over the town (as the page lays them) give the lit picture: the
-        # town's own lossless plate, so the shipped webp's compression is not counted.
-        plate = HERE / "plates" / Path(town["src"]).with_suffix(".png").name
-        whole = (Image.open(plate) if plate.exists() else base).convert("RGBA")
-        for src in lamps:
-            whole.alpha_composite(Image.open(file_of(src)).convert("RGBA"))
-        diff = np.abs(np.asarray(whole.convert("RGB")).astype(np.float32) - np.asarray(lit.convert("RGB")).astype(np.float32)).max(axis=2)
-        check("town lamps: together they make the lit town", diff.mean() < 1.5 and np.percentile(diff, 99.9) < 40, f"mean {diff.mean():.2f}, 99.9% {np.percentile(diff, 99.9):.0f}")
+    zoom = data["zoom"]
+    check("zoom: three views", list(zoom) == ["hills", "hand", "cell"], str(list(zoom)))
+    for key in ("hills", "hand"):
+        img = opened(zoom[key], f"zoom {key}")
+        if img is not None:
+            check(f"zoom {key}: 3:2", abs(img.width / img.height - 1.5) < 0.01, f"{img.size}")
+            check(f"zoom {key}: at least 1500px wide", img.width >= 1500, f"{img.width}")
+        shown.insert(0, img)
+    cell = painting(zoom["cell"], "zoom cell")
+    if cell is not None:
+        check("zoom cell: wider than tall", cell.width > cell.height, f"{cell.size}")
+        a = np.asarray(cell.convert("RGB")).astype(np.int32)
+        gold = (a[..., 0] - a[..., 2] > 70) & (a[..., 1] - a[..., 2] > 40) & (a[..., 0] > 170)
+        check("zoom cell: holds gold", gold.mean() > 0.01, f"{gold.mean() * 100:.2f}%")
+    shown.insert(0, cell)
     places = data["places"]
     check("path: three places", list(places) == ["berkeley", "salzburg", "today"], str(list(places)))
     for key, entry in places.items():
@@ -116,12 +98,7 @@ def main():
             check(f"place {key}: wider than tall", img.width > img.height, f"{img.size}")
             check(f"place {key}: at least 1000px wide", img.width >= 1000, f"{img.width}")
         shown.append(img)
-    # The contact sheet: every painting, and the town half lit.
-    if base is not None:
-        half = base.convert("RGBA")
-        for src in lamps[:3]:
-            half.alpha_composite(Image.open(file_of(src)).convert("RGBA"))
-        shown.insert(0, half.convert("RGB"))
+    # The contact sheet: every painting.
     row_h, gap = 260, 16
     tiles = [im.convert("RGB").resize((round(im.width * row_h / im.height), row_h)) for im in shown if im is not None]
     width = max(1, sum(t.width for t in tiles[:4]) + gap * 3)

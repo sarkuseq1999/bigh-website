@@ -74,3 +74,25 @@ Mo picked A: the town stays. The nine takes (`monarchs-1`, `sunflowers-1`, `chee
 `loose-*-1-1` and `gild-loose-*-1-1`) moved to
 `C:\Users\mcbig\Documents\codes\bigh-archive\science-why-unused-2026-11-06\`, outside the public
 repo; copy them back into `originals/` to rerun `build_why_mocks.py`. Their prompts stay here.
+
+## The zoom opening (November 9, 2026)
+
+Mo found the first screen plain and the town unrelated to "cell", and picked a slow zoom (AGENTS.md
+"Science opening: one slow zoom"). Codex paintings on Mo's ChatGPT plan, no API spend, sent by
+`paint.sh` with the Big Sur close as the hand:
+
+| Picture   | Original       | Note                                                                                           |
+| --------- | -------------- | ---------------------------------------------------------------------------------------------- |
+| The walk  | `zoom-hills-1` | A walker on a trail in golden hills, open sky at the upper left for the h1                     |
+| The hand  | `zoom-hand-2`  | The walker's hand in the dry grass, loose; take 1 drew every knuckle and nail                  |
+| One cell  | `zoom-cell-2`  | A wet wash, a dark blue nucleus, slender gold slivers; takes 1 and 3 were diagrams with beans  |
+| (dropped) | `zoom-tissue-1`| A patch of cells like flagstones: read as peanuts in dishes                                    |
+
+`zoom()` in `build_science.py` ships the walk and the hand whole (3:2, 1536px: they fill the window,
+so no feathered edge) and the cell cropped to its ink. The desk and the town (with its lamp
+layers) no longer ship; their originals stay. `shoot_zoom.py <base-url>` takes the page at eight
+scroll depths on six window sizes, and with reduced motion. New lines have draft translations
+m1120-m1122 (`translations-science-zoom.cjs`, not native-reviewed). The sample Mo saw:
+`reference/ink-pages/mockups/science-zoom/` (`build_zoom_mock.py`, artifact
+`UwMjAd5Zpbm8yzXowNLYSq`). The unused takes (`zoom-cell-1`, `zoom-cell-3`, `zoom-hand-1`,
+`zoom-tissue-1`) are in `bigh-archive\science-zoom-unused-2026-11-09\`; their prompts stay in `prompts/`.

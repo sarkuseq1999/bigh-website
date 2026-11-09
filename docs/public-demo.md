@@ -4,9 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-oieg8h981-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-jtewxtrcc-sarkuseq1999s-projects.vercel.app`
+(`dpl_5v3Eviam3ztm49K4itgG98pQtrNR`), the **production** deployment of `main` at
+`552f28c8377d2b61895408966a427849c03c5df7` (November 9, 2026, from about 14:25 Pacific). The
+Science page's opening is one slow zoom: a walker on golden California hills fills the first
+screen ("Our science starts in the cell.", "cell." in gold leaf), the view moves in on the
+walker's hand in the dry grass, then on one cell of it, where "Why start with the cell?" stands;
+the three numbered lines follow. Mo found round 3's first screen plain and the town at dusk
+unrelated to "cell", picked the zoom of three ideas, saw a sample, said "Yes, build it", then
+"Yes, go live". `552f28c` is `7f2c1a0` (the homepage's "Small beginnings." line in the title face,
+put live by another session a few minutes earlier as `dpl_3gCaVeVoio6hLxttywkcqBoay6EU`, which
+held the alias until this one; its entry is next) plus the one Science commit,
+rebased onto it and pushed as a fast-forward. Before the push, on a built copy of exactly that
+commit (a scratch worktree): `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326;
+type-check and lint clean. After the alias update, in fresh unauthenticated browsers on the public
+demo: `/en/science` at 1440 and 390 px (200, the headline over the hills, the cell beside "Why
+start with the cell?", no console errors), then `qa_science_ink` 723/723, `qa_home_ink` 288/288,
+`qa_nav` 326/326.
+
+Before that, from about 13:45 to about 14:25 Pacific on November 9, 2026, the alias pointed to
+`bigh-website-oieg8h981-sarkuseq1999s-projects.vercel.app`
 (`dpl_3gCaVeVoio6hLxttywkcqBoay6EU`), the **production** deployment of `main` at
-`7f2c1a0513e2060cf60d0e7023c7d7150c2a19a9` (November 9, 2026, from about 13:45 Pacific). The
+`7f2c1a0513e2060cf60d0e7023c7d7150c2a19a9`. The
 homepage's "Small beginnings. Bigger possibilities." under the Big Sur close is in the title
 face, both lines in ink. It is a `<p>`, so the homepage's Ysabeau for h1-h3 never reached it: it
 read as heavy Switzer with a grey second line, the page's only one. Mo picked B (both lines in
