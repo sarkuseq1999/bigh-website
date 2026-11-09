@@ -482,7 +482,7 @@ These sit on top of `DESIGN.md`.
   month); all are 3:2, so the answers line up. `questions.tsx`; paintings and their build script
   `reference/ink-pages/questions/`; mockups `reference/ink-pages/mockups/nuricell-questions/`.
 - **Science opening: one slow zoom, from a walker to one cell (Mo picked it, November 9, 2026;
-  built, not yet live).** Mo found round 3's first screen plain and boring (a small painting boxed
+  live the same day, `main` `552f28c`).** Mo found round 3's first screen plain and boring (a small painting boxed
   on one side, small black words, nothing moving, the word "cell" beside a desk), and doubted that
   the town at dusk "correlates to the topic" (it only made sense after its caption). Of three
   ideas for the opening (A the same window filling the screen, B a zoom, C one big cell) with
