@@ -5,6 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **On `studio`, not live (Claude Code, November 9, 2026): About's two new chapters.** Mo asked
+  on November 4 for more on the About page (ingredients "from the part of the world best for their
+  natural growth", "proudly made in California" by GMP-certified makers) and critiqued each part
+  on the real page. Between Dr. Liu and Our experience now stand "Each plant, from where it grows
+  best." (Mo picked B, the globe: a painted globe, the four plants round its rim, gold trails laid
+  home to California; no place named, as Mo asked, since he is still finding out where the pine
+  bark and grape seed come from) and "Proudly made in California." (Mo picked F, the valley at
+  dawn: no bottles; GMP and its three rules under it). "Made in California." is back in the
+  promise list, first of four. AGENTS.md has both rules. The new words are English only (DRAFT
+  in `about-content.ts`) until Mo approves them; then they need translation keys. `qa_about`
+  follows the new chapters (a `chapters` group). Built in a scratch worktree (branch
+  `about-chapters`); the unpicked ideas are in `bigh-archive\about-unpicked-2026-11-09\`. Going
+  live needs Mo's yes.
 - **Built November 9, 2026 (Claude Code), NOT live: the Science opening as one slow zoom.** Mo
   found the first screen plain and the town at dusk unrelated to "cell"; he picked the zoom, saw a
   sample and said "Yes, build it". A walker on golden hills (the h1 in the sky, "cell." in gold),
