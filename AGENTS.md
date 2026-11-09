@@ -193,11 +193,21 @@ These sit on top of `DESIGN.md`.
   landscapes; C one plant told fully) he picked A. The trails are gold-leaf dabs, laid one plant
   after another, once, as the map comes into view; phones list the plants under the map. Only
   Minas Gerais, Brazil is a real place on file: the others are stand-ins (`confirmed: false` in
-  `about-content.ts`) and must never go live. On the same day he asked for no bottles in
-  "Proudly made in California." (three ideas waiting: A a crate label, B a record book, C the
-  Golden State) and for "Made in California" to stay in the promise list. `plants-map.tsx`;
-  pictures `reference/ink-pages/about-plants/`; mockups `reference/ink-pages/mockups/about-plants/`
-  and `about-made/`.
+  `about-content.ts`) and must never go live. On November 9 Mo said not to name places at all
+  (he is still finding out where the pine bark and grape seed come from): the map should only
+  give the feeling that each plant comes from the region of the world best for its natural
+  growth. Three no-place designs are being mocked. `plants-map.tsx`; pictures
+  `reference/ink-pages/about-plants/`; mockups `reference/ink-pages/mockups/about-plants/`.
+- **About "Proudly made in California.": the valley at dawn (Mo picked F, November 9, 2026; on
+  the draft branch `about-chapters`, not live).** Mo did not want the five bottles in the draft's
+  painting ("I'd rather not have the product bottle there"). Of five no-bottle ideas on the real
+  page (A a fruit-crate label, B a record book written in as you scroll, C California painted
+  over its outline, D a clipboard ticked in gold on a sunlit wall, F the Central Valley at dawn;
+  a Gold Rush pan was tried and dropped) he picked F: one painting across the chapter, the
+  Central Valley in first light with some fields in gold leaf, the heading in its empty sky and
+  the three GMP rules in a row under it. "Made in California" goes back into the promise list.
+  `made-mockups.tsx` (`ValleyIdea`); pictures `reference/ink-pages/about-made/` (`valley-1-b`);
+  mockups `reference/ink-pages/mockups/about-made/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis
