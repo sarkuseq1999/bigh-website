@@ -20,7 +20,7 @@
 }
 
 /* Dr. Liu and his path (round 3, November 4, 2026): after "Why start with the cell?", with a
-   chapter's silence before it. The opening's own rules are in opening.module.css. */
+   chapter's silence before it. The zoom opening's own rules are in zoom.module.css. */
 .scientists {
   padding-top: clamp(112px, 12vw, 190px);
 }

@@ -24,7 +24,8 @@ export const opening = {
   // "Decades": his work on cells' energy and aging dates from Bruce Ames's laboratory, 1994
   // (RESEARCH-NOTES.md); his doctorate was in neuroscience, so not "his whole career".
   lead: "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
-  alt: "A brass microscope, a notebook and poppies on a desk by an open window over golden California hills, painted in ink and watercolour",
+  // The zoom opening (Mo, November 9, 2026): a walker on golden hills.
+  alt: "A walker with a sun hat and a stick on a trail through golden California hills and oaks, painted in ink and watercolour",
 };
 
 // Why the cell (DRAFT). 37 trillion: Bianconi et al. 2013, Annals of Human Biology (PubMed
@@ -50,10 +51,10 @@ export const why = {
   ],
   source: "Cell count: Bianconi and colleagues, Annals of Human Biology, 2013.",
   sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/23829164/",
-  // The line under the painting that ties it to the words (as the homepage science's lines).
-  caption:
-    "Like a town at dusk: every house lights its own lamp, as every cell makes its own energy.",
-  alt: "San Francisco’s Victorian houses on a hill at dusk, their windows lighting up, painted in ink and watercolour",
+  // The line under the cell that says what its gold is (the zoom opening, November 9, 2026).
+  // "Most of": cells also make a little energy outside their mitochondria.
+  caption: "In gold: its mitochondria, where the cell makes most of its energy.",
+  alt: "One cell painted in pale washes, its mitochondria as slivers of gold round a dark blue nucleus",
 };
 
 // Approved September 21, 2026 (homepage scientist section).

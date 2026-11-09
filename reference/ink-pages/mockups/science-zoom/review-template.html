@@ -1,0 +1,51 @@
+<title>Science Zoom Built</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column; screenshots in the order a visitor scrolls them. */
+:root {
+  --paper: #f6f1e5;
+  --ink: #1c1a16;
+  --ink-soft: #55514a;
+  --rule: #cfc7b3;
+  --frame: #e4dccb;
+  --title: "Ysabeau", "Optima", "Gill Sans", "Segoe UI", sans-serif;
+  --body: "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.5; }
+main {
+  max-width: 1040px; margin: 0 auto; padding-block: 32px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 40px;
+}
+h1, h2 { font-family: var(--title); font-weight: 500; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(32px, 5vw, 48px); line-height: 1.08; }
+h2 { font-size: 26px; padding-top: 20px; border-top: 1px solid var(--rule); }
+header p { margin: 10px 0 0; color: var(--ink-soft); max-width: 60ch; }
+section { display: grid; gap: 20px; }
+figure { margin: 0; }
+figure img { display: block; width: 100%; height: auto; border: 1px solid var(--frame); }
+figcaption { margin-top: 8px; color: var(--ink-soft); font-size: 16px; }
+.phones { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+@media (max-width: 720px) { .phones { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+</style>
+
+<main>
+  <header>
+    <h1>The Science opening, built</h1>
+    <p>Real screenshots of the built page, in the order you scroll. Not live yet.</p>
+  </header>
+  <section>
+    <h2>On a computer</h2>
+    {{desk}}
+  </section>
+  <section>
+    <h2>On a phone</h2>
+    <div class="phones">
+      {{phone}}
+    </div>
+  </section>
+</main>

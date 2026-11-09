@@ -1,0 +1,159 @@
+<title>Science Zoom Sample</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@400;500&display=swap">
+<style>
+/* Layout: one pinned screen; three paintings stacked in it; scrolling moves the camera in. */
+:root {
+  --paper: #f6f1e5;
+  --ink: #1c1a16;
+  --ink-soft: #4d4a43;
+  --gold: #a9812a;
+  --rule: #cfc7b3;
+  --title: "Ysabeau", "Optima", "Gill Sans", "Segoe UI", sans-serif;
+  --body: "Switzer", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+  color-scheme: light;
+}
+html { background: var(--paper); }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--body); font-size: 17px; line-height: 1.5; }
+.note {
+  padding-block: 14px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  color: var(--ink-soft); font-size: 15px; text-align: center; border-bottom: 1px solid var(--rule);
+}
+.note b { color: var(--ink); font-weight: 600; }
+.track { height: 520vh; position: relative; }
+.stage { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; background: var(--paper); }
+.plate { position: absolute; left: 0; top: 0; mix-blend-mode: multiply; will-change: transform, opacity; }
+.plate img { display: block; width: 100%; height: 100%; max-width: none; }
+#cell { opacity: 0; }
+.words { position: absolute; z-index: 2; will-change: opacity, transform; }
+h1, h2 { font-family: var(--title); font-weight: 400; margin: 0; text-wrap: balance; letter-spacing: -0.005em; }
+#w1 { left: max(24px, 7.5vw); top: 15vh; max-width: 46vw; }
+#w1 h1 { font-size: clamp(44px, 6.4vw, 104px); line-height: 1.02; }
+#w1 h1 em { font-style: normal; color: var(--gold); }
+#w1 p { font-size: clamp(18px, 1.55vw, 24px); max-width: 30em; margin: 1.1em 0 0; color: var(--ink); }
+#w1 .hint { margin-top: 2.2em; font-size: 15px; color: var(--ink-soft); }
+#w2 { left: max(24px, 7.5vw); top: 50%; transform: translateY(-50%); max-width: 27vw; opacity: 0; }
+#w2 h2 { font-size: clamp(34px, 3.9vw, 64px); line-height: 1.06; }
+#w2 p { font-size: clamp(17px, 1.35vw, 21px); margin: 1em 0 0; }
+#w2 .cap { font-size: 14px; color: var(--ink-soft); margin-top: 1.6em; }
+.step { position: absolute; z-index: 2; right: max(20px, 5vw); bottom: 5vh; font-size: 14px; color: var(--ink-soft); background: color-mix(in srgb, var(--paper) 78%, transparent); padding: 4px 10px; border-radius: 3px; }
+.after {
+  padding-block: 56px 80px; max-width: 1100px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.after h3 { font-family: var(--title); font-weight: 400; font-size: 30px; margin: 0 0 6px; }
+.after > p { color: var(--ink-soft); margin: 0 0 28px; max-width: 60ch; }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.three figure { margin: 0; }
+.three img { width: 100%; display: block; mix-blend-mode: multiply; }
+.three figcaption { font-size: 15px; margin-top: 8px; color: var(--ink-soft); }
+.three figcaption b { color: var(--ink); font-weight: 600; }
+@media (max-width: 760px) {
+  #w1 { top: 9vh; max-width: none; right: 24px; }
+  #w1 h1 { font-size: clamp(40px, 11.5vw, 60px); }
+  #w2 { top: 8vh; transform: none; max-width: none; right: 24px; }
+  .three { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .track { height: 520vh; } }
+</style>
+
+<div class="note"><b>Sample only.</b> Scroll down slowly. The picture moves in: hills, hand, one cell.</div>
+
+<div class="track" id="track">
+  <div class="stage" id="stage">
+    <div class="plate" id="hills" data-fx="0.66" data-fy="0.74"><img alt="A walker on a trail in golden California hills" src="{{hills}}"></div>
+    <div class="plate" id="hand" data-fx="0.46" data-fy="0.62"><img alt="The walker's hand brushing the dry grass" src="{{hand}}"></div>
+    <div class="plate" id="cell" data-fx="0.56" data-fy="0.50"><img alt="One cell, its mitochondria in gold" src="{{cell}}"></div>
+
+    <div class="words" id="w1">
+      <h1>Our science starts in the <em>cell.</em></h1>
+      <p>How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.</p>
+      <p class="hint">Scroll to look closer &darr;</p>
+    </div>
+    <div class="words" id="w2">
+      <h2>Why start with the cell?</h2>
+      <p>Everything you do, from a clear thought to a long walk, runs on energy your cells make. You have about 37 trillion of them, and each one makes its own.</p>
+      <p class="cap">Illustration. The gold marks are mitochondria, where the energy is made.</p>
+    </div>
+    <div class="step" id="step">1 of 3 &middot; the walk</div>
+  </div>
+</div>
+
+<section class="after">
+  <h3>The three paintings, whole</h3>
+  <p>These are first samples. On the real page each one would be painted again at full size, with its own phone version.</p>
+  <div class="three">
+    <figure><img alt="" src="{{hills}}"><figcaption><b>1. The walk.</b> The words sit in the sky.</figcaption></figure>
+    <figure><img alt="" src="{{hand}}"><figcaption><b>2. The hand.</b> No words, just passing through.</figcaption></figure>
+    <figure><img alt="" src="{{cell}}"><figcaption><b>3. One cell.</b> "Why start with the cell?" lands here.</figcaption></figure>
+  </div>
+</section>
+
+<script>
+(function () {
+  var track = document.getElementById('track'), stage = document.getElementById('stage');
+  var P = { hills: document.getElementById('hills'), hand: document.getElementById('hand'), cell: document.getElementById('cell') };
+  var w1 = document.getElementById('w1'), w2 = document.getElementById('w2'), step = document.getElementById('step');
+  var vw = 0, vh = 0, narrow = false;
+
+  function clamp(x, a, b) { return Math.min(b, Math.max(a, x)); }
+  function seg(p, a, b) { return clamp((p - a) / (b - a), 0, 1); }
+  function ease(t) { return t * t * (3 - 2 * t); }
+
+  // Size each 3:2 plate to cover the stage, and slide it so its focus point is in view.
+  function layout() {
+    vw = stage.clientWidth; vh = stage.clientHeight; narrow = vw / vh < 0.8;
+    Object.keys(P).forEach(function (k) {
+      var el = P[k], fx = +el.dataset.fx, fy = +el.dataset.fy, W, H, left, top;
+      if (k === 'cell') {
+        if (narrow) { W = vw * 1.32; H = W / 1.5; left = vw / 2 - W * fx; top = vh - H - vh * 0.06; }
+        else { H = Math.min(vh * 0.84, vw * 0.4); W = H * 1.5; left = vw * 0.67 - W * fx; top = (vh - H) / 2; }
+      } else {
+        W = Math.max(vw, vh * 1.5); H = W / 1.5;
+        left = clamp(vw * (narrow ? 0.5 : fx) - W * fx, vw - W, 0);
+        top = clamp(vh * 0.5 - H * 0.5, vh - H, 0);
+      }
+      el.style.width = W + 'px'; el.style.height = H + 'px';
+      el.style.left = left + 'px'; el.style.top = top + 'px';
+      el.style.transformOrigin = (fx * 100) + '% ' + (fy * 100) + '%';
+    });
+    frame();
+  }
+
+  function frame() {
+    var r = track.getBoundingClientRect();
+    var p = clamp(-r.top / (r.height - vh), 0, 1);
+
+    // 1. the walk: hold, then move in on the walker's hand
+    var a = ease(seg(p, 0.08, 0.40));
+    P.hills.style.transform = 'scale(' + Math.pow(9, a) + ')';
+    P.hills.style.opacity = 1 - seg(p, 0.33, 0.40);
+
+    // 2. the hand: arrives a little wide, settles, then moves in on its skin
+    var bIn = ease(seg(p, 0.28, 0.46)), bOut = ease(seg(p, 0.56, 0.80));
+    P.hand.style.transform = 'scale(' + ((1.25 - 0.25 * bIn) * Math.pow(7, bOut)) + ')';
+    P.hand.style.opacity = seg(p, 0.33, 0.40) * (1 - seg(p, 0.72, 0.80));
+
+    // 3. the cell: comes up out of the skin and settles
+    var c = ease(seg(p, 0.70, 0.90));
+    P.cell.style.transform = 'scale(' + (0.45 + 0.55 * c) + ')';
+    P.cell.style.opacity = seg(p, 0.70, 0.84);
+
+    w1.style.opacity = 1 - seg(p, 0.06, 0.16);
+    w1.style.visibility = p > 0.16 ? 'hidden' : 'visible';
+    var t = seg(p, 0.84, 0.94);
+    w2.style.opacity = t;
+    w2.style.visibility = t === 0 ? 'hidden' : 'visible';
+    step.textContent = p < 0.34 ? '1 of 3 · the walk' : p < 0.75 ? '2 of 3 · the hand' : '3 of 3 · one cell';
+  }
+
+  var ticking = false;
+  function onScroll() { if (!ticking) { ticking = true; requestAnimationFrame(function () { ticking = false; frame(); }); } }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', layout);
+  layout();
+})();
+</script>
