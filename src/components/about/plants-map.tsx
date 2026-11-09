@@ -40,7 +40,7 @@ const LIFT: Record<Key, number> = { propolis: 0.22, turmeric: 0.25, grape: 0.17,
 // The trail's dabs: one every STEP units of the map, a little irregular, as a brush lays them.
 const STEP = 13;
 
-function random(seed: number) {
+export function random(seed: number) {
   let s = seed;
   return () => {
     s = (s * 16807) % 2147483647;
@@ -48,13 +48,19 @@ function random(seed: number) {
   };
 }
 
-type Dab = { x: number; y: number; a: number; r: number; tone: number };
+export type Dab = { x: number; y: number; a: number; r: number; tone: number };
 
-// A trail from the plant's place home to California: a low arc (lifted `lift` of its length),
-// sampled finely and walked at an even step.
-function trail(from: readonly number[], to: readonly number[], lift: number, seed: number): Dab[] {
-  const [x1, y1] = [from[0] * W, from[1] * H];
-  const [x0, y0] = [to[0] * W, to[1] * H];
+// A trail of dabs from (x1, y1) to (x0, y0), in a picture's own pixels: a low arc (lifted `lift`
+// of its length), sampled finely and walked at an even step. It stops a dab short of its end
+// (the home mark).
+export function layTrail(
+  x1: number,
+  y1: number,
+  x0: number,
+  y0: number,
+  lift: number,
+  seed: number,
+): Dab[] {
   const cx = (x0 + x1) / 2;
   const cy = Math.min(y0, y1) - Math.hypot(x1 - x0, y1 - y0) * lift;
   const at = (t: number) => {
@@ -81,8 +87,35 @@ function trail(from: readonly number[], to: readonly number[], lift: number, see
     }
     [px, py] = [x, y];
   }
-  // The last dabs run into California's own mark: stop short of it.
   return dabs.slice(0, -1);
+}
+
+// A trail from the plant's place home to California, on the map.
+function trail(from: readonly number[], to: readonly number[], lift: number, seed: number): Dab[] {
+  return layTrail(from[0] * W, from[1] * H, to[0] * W, to[1] * H, lift, seed);
+}
+
+// The trails' dabs, one group per trail (--r its turn), each dab (--i its turn) laid in place.
+export function Dabs({ trails }: { trails: { key: string; dabs: Dab[] }[] }) {
+  return (
+    <>
+      {trails.map((t, r) => (
+        <g key={t.key} data-trail={t.key} style={{ "--r": r } as CSSProperties}>
+          {t.dabs.map((d, i) => (
+            <g key={i} transform={`translate(${d.x} ${d.y}) rotate(${d.a})`}>
+              <ellipse
+                className={styles.dab}
+                data-tone={d.tone}
+                rx={d.r * 1.3}
+                ry={d.r * 0.85}
+                style={{ "--i": i } as CSSProperties}
+              />
+            </g>
+          ))}
+        </g>
+      ))}
+    </>
+  );
 }
 
 const TRAILS = about.plants.items.map((item, i) => ({
@@ -141,21 +174,7 @@ export function PlantsMap() {
               data-bloom="waiting"
             />
             <svg className={styles.trails} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-              {TRAILS.map((t, r) => (
-                <g key={t.key} data-trail={t.key} style={{ "--r": r } as CSSProperties}>
-                  {t.dabs.map((d, i) => (
-                    <g key={i} transform={`translate(${d.x} ${d.y}) rotate(${d.a})`}>
-                      <ellipse
-                        className={styles.dab}
-                        data-tone={d.tone}
-                        rx={d.r * 1.3}
-                        ry={d.r * 0.85}
-                        style={{ "--i": i } as CSSProperties}
-                      />
-                    </g>
-                  ))}
-                </g>
-              ))}
+              <Dabs trails={TRAILS} />
             </svg>
             {about.plants.items.map((item, r) => (
               <span
