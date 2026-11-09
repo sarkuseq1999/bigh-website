@@ -31,7 +31,8 @@ export const about = {
     // Dr. Iris Wang is named in words only: she asked for no photograph on the website.
     photo: { src: "/images/jiankang-liu.jpg", alt: "Dr. Jiankang Liu" },
   },
-  // Two new chapters (DRAFT words for Mo, November 4-9, 2026) on Mo's ideas: ingredients "from
+  // Two new chapters (Mo, November 4-9, 2026; live November 9 with draft translations m1200-m1222,
+  // not native-reviewed) on Mo's ideas: ingredients "from
   // the part of the world best for their natural growth" and "proudly made in California, by
   // GMP-certified makers". NuriCell's four nutrients are made, not grown, so the plants chapter
   // speaks of plants only.
@@ -80,7 +81,7 @@ export const about = {
     title: "What you can count on.",
     // "Know where it comes from" became the plants chapter; "Made in California" stays here too
     // (Mo, November 6, 2026: "You can still keep the Made in California there"); "Honest about the
-    // research" is new (DRAFT, November 4), for Mo to critique.
+    // research" is new (November 4).
     items: [
       { title: "Made in California.", text: "By GMP-certified manufacturers." },
       { title: "45 days to decide.", text: "Not right for you? Send it back for a refund." },

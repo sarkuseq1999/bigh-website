@@ -32,7 +32,7 @@ the gold starts only once its picture is in and arrives whole; with no gold pict
 still holds; with JavaScript off the meadow shows with all its gold, and every other painting (the
 oak, the pool, the globe and its four plants, the valley, the sequoia, the four promise dots and
 the glasses) as inked as it does still.
-chapters (DRAFT, November 2026: the two new chapters between Dr. Liu and Our experience). Our
+chapters (November 2026: the two new chapters between Dr. Liu and Our experience). Our
 ingredients, the globe (Mo picked B, November 9): one picture, "Illustration" under it; no place
 named in the part (Mo: not until he knows); from 760px the four plants stand round the globe,
 apart, each with its name and kind of place; with motion the gold trails wait, then are all laid
@@ -124,9 +124,8 @@ LOCKED = [
 ]
 
 
-# DRAFT (November 2026): the two new chapters and the new promise, in English only until Mo
-# approves the words; then translate them, move them into LOCKED and drop the languages()
-# exception below. "where we make them" stands beside California from 760px only.
+# The two new chapters and the new promise (Mo put them live November 9, 2026; draft translations
+# m1200-m1222, not native-reviewed). "where we make them" stands beside California from 760px only.
 DRAFT_LINES = [
     "Our ingredients",
     "Each plant, from where it grows best.",
@@ -154,7 +153,6 @@ DRAFT_LINES = [
 # No place is named in the plants part (Mo, November 9, 2026: not until he knows where each comes
 # from).
 PLACE_WORDS = ["Brazil", "Minas Gerais", "India", "Italy", "France", "China", "Spain", "Africa", "Europe", "Asia"]
-DRAFT_PARTS = '[data-part="plants"], [data-part="home"]'
 
 
 def check(name, ok, detail=""):
@@ -726,7 +724,7 @@ def desktop_and_phone(browser):
         missing = [line for line in LOCKED if line not in text]
         check(f"{tag} every locked line", not missing, missing)
         missing = [line for line in DRAFT_LINES if line not in text and not (width < 760 and line == "where we make them")]
-        check(f"{tag} every draft line of the new chapters", not missing, missing)
+        check(f"{tag} every line of the new chapters", not missing, missing)
         h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => [h.textContent.trim(), h.lang])")
         check(f"{tag} one English h1", h1 == [["Be in Good Health.", "en"]], h1)
         # The mission, a step under the heading and in ink (Mo, October 19, 2026: at the body's 19px
@@ -1363,7 +1361,7 @@ def deep_links(browser):
 
 
 def languages(browser):
-    english = [line for line in LOCKED if len(line) > 24]
+    english = [line for line in LOCKED + DRAFT_LINES if len(line) > 24]
     for lang in ["kr", "jp", "cns", "vn"]:
         context, page, response, errors, failed = open_page(browser, 1440, 900, path=f"/{lang}/about", reduced=True)
         check(f"{lang} answers 200", response.status == 200, response.status)
@@ -1372,7 +1370,7 @@ def languages(browser):
         text = page.evaluate("document.querySelector('main').innerText")
         left = [line for line in english if line in text]
         check(f"{lang} no English sentence left", not left, left[:3])
-        alts = page.evaluate(f"[...document.querySelectorAll('[data-picture] img')].filter(i => !i.closest('{DRAFT_PARTS}')).map(i => i.alt).filter(a => a)")
+        alts = page.evaluate("[...document.querySelectorAll('[data-picture] img')].map(i => i.alt).filter(a => a)")
         check(f"{lang} the paintings' descriptions translated", alts and not any(" painted in ink" in a or a.startswith("An ") or a.startswith("A ") for a in alts), alts)
         check(f"{lang} no console errors or warnings", not errors, errors[:3])
         page.screenshot(path=os.path.join(OUT, f"{lang}-opening.png"))
