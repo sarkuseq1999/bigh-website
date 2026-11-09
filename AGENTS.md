@@ -481,6 +481,29 @@ These sit on top of `DESIGN.md`.
   own answer and is true to the label (the right number of capsules, their colour, 30 squares a
   month); all are 3:2, so the answers line up. `questions.tsx`; paintings and their build script
   `reference/ink-pages/questions/`; mockups `reference/ink-pages/mockups/nuricell-questions/`.
+- **Science opening: one slow zoom, from a walker to one cell (Mo picked it, November 9, 2026;
+  built, not yet live).** Mo found round 3's first screen plain and boring (a small painting boxed
+  on one side, small black words, nothing moving, the word "cell" beside a desk), and doubted that
+  the town at dusk "correlates to the topic" (it only made sense after its caption). Of three
+  ideas for the opening (A the same window filling the screen, B a zoom, C one big cell) with
+  three for "Why start with the cell?" (1 lead with the number, 2 the cell as a map of the three
+  lines, 3 the zoom lands on the cell) he took B with 3, saw a sample, and said "Yes, build it".
+  A walker on golden California hills fills the first screen, the h1 in the painting's sky,
+  "cell." in the homepage's gold leaf. As the page scrolls the view moves in on the walker's hand
+  in the dry grass, then on one cell of it, where "Why start with the cell?" and its lead stand;
+  the three numbered lines follow below. The cell is a loose wet wash with a dark blue nucleus,
+  its mitochondria about twenty-five slender slivers of gold, and a line under it says so ("In
+  gold: its mitochondria, where the cell makes most of its energy."). The first cell came out as a
+  schoolbook diagram with fat gold beans that read as peanuts, and the first hand as a realistic
+  illustration (knuckles, nails): never those; paint both loose. The gold is flat like leaf: no
+  glow. The stage is pinned while its track (4.4 windows) scrolls; reduced motion and no script
+  get no pinning, the hills then the cell beside its words. The desk at the window and the town
+  with its lamps are gone (their originals stay). `#health` now stands at the zoom's last view.
+  Keep in mind Mo's October 21 note on the homepage (a hiker with a round window into a cell was
+  "hard to relate to", the cell "a ball with worms in it"): here the hand is the step between,
+  and the heading beside the cell names it. `zoom.tsx`, `zoom.module.css`, `why.tsx` (the lines);
+  pictures `zoom()` in `build_science.py` (Codex paintings, `prompts/zoom-*.txt`); mockup
+  `reference/ink-pages/mockups/science-zoom/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

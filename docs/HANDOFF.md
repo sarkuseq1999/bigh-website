@@ -18,6 +18,15 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   follows the new chapters (a `chapters` group). Built in a scratch worktree (branch
   `about-chapters`); the unpicked ideas are in `bigh-archive\about-unpicked-2026-11-09\`. Going
   live needs Mo's yes.
+- **Built November 9, 2026 (Claude Code), NOT live: the Science opening as one slow zoom.** Mo
+  found the first screen plain and the town at dusk unrelated to "cell"; he picked the zoom, saw a
+  sample and said "Yes, build it". A walker on golden hills (the h1 in the sky, "cell." in gold),
+  the walker's hand, then one cell beside "Why start with the cell?"; the three lines follow.
+  AGENTS.md "Science opening: one slow zoom". Branch `science-zoom` (from `3154a5d`, built in a
+  scratch worktree while another session worked in this folder). Checks on the built site: `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326, `check_science_art.py` 38/38.
+  Waiting for Mo to look at the built page and say whether
+  it goes live. Open: a native speaker's check of m1120-m1122; the feel of the motion between the
+  three paintings was judged from still frames only.
 - **Live November 6, 2026 (Claude Code): Science round 3, the science first, then the
   scientist.** `main` `8b422fa`, production `dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`, the demo alias on
   it; public checks `qa_science_ink` 642/642, `qa_home_ink` 288/288, `qa_nav` 326/326
