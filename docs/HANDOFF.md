@@ -5,6 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 9, 2026 (Claude Code): About's two new chapters.** `main` `022a006`,
+  production `dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`, the demo alias on it; public checks `qa_about`
+  446/446, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo asked on
+  November 4 for more on the About page and critiqued each part on the real page. Between Dr. Liu
+  and Our experience now stand "Each plant, from where it grows best." (Mo picked B, the globe: a
+  painted globe, the four plants round its rim, gold trails laid home to California; no place
+  named, as Mo asked, since he is still finding out where the pine bark and grape seed come from)
+  and "Proudly made in California." (Mo picked F, the valley at dawn: no bottles; GMP and its
+  three rules under it). "Made in California." is back in the promise list, first of four.
+  AGENTS.md has both rules. Draft translations m1200-m1222 (`translations-about-chapters.cjs`,
+  not native-reviewed; the Chinese heading was shortened when it broke on phones). `qa_about`
+  follows the new chapters (a `chapters` group). Built in a scratch worktree (branch
+  `about-chapters`) and released alone on top of `main` `552f28c`; the unpicked ideas are in
+  `bigh-archive\about-unpicked-2026-11-09\`. Still open: a native speaker's check of
+  m1200-m1222; the real origins of the turmeric, grape seed and pine bark, if Mo ever wants them
+  named.
 - **Live November 9, 2026 (Claude Code): the Science opening as one slow zoom.** `main`
   `552f28c`, production `dpl_5v3Eviam3ztm49K4itgG98pQtrNR`, the demo alias on it; public checks
   `qa_science_ink` 723/723, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo
@@ -25,19 +41,6 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   About's two new chapters (next bullet), which are not live. AGENTS.md "Homepage 'Small
   beginnings…'"; mockups `reference/ink-pages/mockups/home-graphic/`. Next on the homepage, if
   Mo wants it: the plain Dr. Liu part.
-- **On `studio`, not live (Claude Code, November 9, 2026): About's two new chapters.** Mo asked
-  on November 4 for more on the About page (ingredients "from the part of the world best for their
-  natural growth", "proudly made in California" by GMP-certified makers) and critiqued each part
-  on the real page. Between Dr. Liu and Our experience now stand "Each plant, from where it grows
-  best." (Mo picked B, the globe: a painted globe, the four plants round its rim, gold trails laid
-  home to California; no place named, as Mo asked, since he is still finding out where the pine
-  bark and grape seed come from) and "Proudly made in California." (Mo picked F, the valley at
-  dawn: no bottles; GMP and its three rules under it). "Made in California." is back in the
-  promise list, first of four. AGENTS.md has both rules. The new words are English only (DRAFT
-  in `about-content.ts`) until Mo approves them; then they need translation keys. `qa_about`
-  follows the new chapters (a `chapters` group). Built in a scratch worktree (branch
-  `about-chapters`); the unpicked ideas are in `bigh-archive\about-unpicked-2026-11-09\`. Going
-  live needs Mo's yes.
 - **Live November 6, 2026 (Claude Code): Science round 3, the science first, then the
   scientist.** `main` `8b422fa`, production `dpl_AiSfndGjtc21x1JVEoYQa1wUUc1a`, the demo alias on
   it; public checks `qa_science_ink` 642/642, `qa_home_ink` 288/288, `qa_nav` 326/326

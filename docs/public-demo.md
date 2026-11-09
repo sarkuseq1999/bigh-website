@@ -4,7 +4,23 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-jtewxtrcc-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-2s1k7gu25-sarkuseq1999s-projects.vercel.app`
+(`dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`), the **production** deployment of `main` at
+`022a00640ce0d27279eb1b8f15559e69a8055e79` (November 9, 2026). The About page's two new chapters:
+"Each plant, from where it grows best." (a painted globe, the four plants round its rim, gold
+trails laid home to California, no place named) and "Proudly made in California." (the Central
+Valley at dawn, no bottles, GMP and its three rules), and "Made in California." back in the
+promise list, first of four; draft translations m1200-m1222. Mo picked the globe (B) and the
+valley (F) on the real page, then "Yes, go live". `022a006` is `552f28c` (the Science zoom) plus
+the About commits, cherry-picked from the branch `about-chapters`, pushed as a fast-forward.
+Before the push, on the exact build (a scratch worktree): `qa_about` 446/446, `qa_science_ink`
+723/723 (its first try hung on a local image worker, fine after a server restart), `qa_home_ink`
+288/288, `qa_nav` 326/326; type-check and lint clean. After the alias update, in fresh
+unauthenticated browsers on the public demo: `/about` at 1440 and 390 px and `/cns/about` at 390
+px (200, the globe, the valley, no bottle, four promises, no console errors), `qa_about` 446/446,
+`qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, the alias pointed to `bigh-website-jtewxtrcc-sarkuseq1999s-projects.vercel.app`
 (`dpl_5v3Eviam3ztm49K4itgG98pQtrNR`), the **production** deployment of `main` at
 `552f28c8377d2b61895408966a427849c03c5df7` (November 9, 2026, from about 14:25 Pacific). The
 Science page's opening is one slow zoom: a walker on golden California hills fills the first
