@@ -18,6 +18,7 @@ import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
 import { MadeMockup } from "./made-mockups";
+import { MapMockup } from "./map-mockups";
 import { PlantsMap } from "./plants-map";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
@@ -388,7 +389,7 @@ export function AboutInk() {
           <Opening />
           <Purpose />
           <Roots />
-          <PlantsMap />
+          <MapMockup fallback={<PlantsMap />} />
           <MadeMockup fallback={<Home />} />
           <Experience />
           <Promises />

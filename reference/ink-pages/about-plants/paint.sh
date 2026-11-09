@@ -22,6 +22,7 @@ for order in "$@"; do
   case "$prompt" in
     specimens*) size="1024x1024" ;;
     map*) extra=(-i "$HERE/ref/land-guide.png") ;;
+    globe*) extra=(-i "$HERE/ref/globe-guide.png") ;;
   esac
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \
     -o "$LOGS/$name.txt" -i "$OAK" -i "$SEQUOIA" -i "$LOOSE" "${extra[@]}" -- \

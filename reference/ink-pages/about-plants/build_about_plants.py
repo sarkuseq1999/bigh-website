@@ -26,6 +26,7 @@ FADE = 40
 TAKES = {
     "map": "map-1-a",
     "specimens": "specimens-1-a",
+    "globe": "globe-1-a",
 }
 # The places' pixels on the 1536 x 1024 land guide (render_land.py prints them).
 PLACES = {
@@ -87,6 +88,10 @@ def main():
         k: [round((x - x0) / m.width, 4), round((y - y0) / m.height, 4)] for k, (x, y) in PLACES.items()
     }
     art["map"]["crop"] = [x0, y0, x1, y1]
+    # MOCKUP (November 9, 2026), the no-place idea B: the globe, uncropped so render_globe.py's
+    # centre, radius and California (768, 512, 440; 636, 404) hold.
+    g = paperless(TAKES["globe"])
+    art["globe"] = save(g, "globe-v1")
     # The four plants, cut from the specimens painting.
     s = paperless(TAKES["specimens"])
     for key, box in BOXES.items():

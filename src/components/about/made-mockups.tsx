@@ -360,6 +360,8 @@ export function MadeMockup({ fallback }: { fallback: ReactNode }) {
   if (idea === "c") return <StateIdea />;
   if (idea === "d") return <WallIdea />;
   if (idea === "e") return <PanIdea />;
-  if (idea === "f") return <ValleyIdea />;
+  // Mo picked F (November 9, 2026): plain /about shows it; the draft with the bottles (fallback) is
+  // no longer shown.
+  if (idea === "f" || idea === null) return <ValleyIdea />;
   return <>{fallback}</>;
 }

@@ -13,6 +13,11 @@ export const plantsArt = {
     },
     crop: [2, 12, 1535, 988],
   },
+  globe: {
+    src: "/images/about-plants/globe-v1.webp",
+    width: 1536,
+    height: 1024,
+  },
   "plant-propolis": {
     src: "/images/about-plants/plant-propolis-v2.webp",
     width: 437,
