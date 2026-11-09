@@ -8,18 +8,18 @@ failed requests; one h1, English "Be in Good Health." with lang="en"; every lock
 page's main (the footer's "About BiGH" does not stand in for the opening's label); no canvas,
 no brush layer, no folds, no aged paper; every painting multiplies (but the meadow, whose paper is
 cut to transparency) and nothing between a painting and the page root makes a stacking context;
-the real bottles in Our home lie with no blend; the menu bar marks About; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the
+the menu bar marks About; no sideways scrolling; text 15px+, navigation 18px+, targets 48px+; the
 mission 21px+ and in ink; the meadow loads at once, the painting with high priority; Support is a
 link to its page; the Ask sheet opens, closes and hands focus back.
 rhythm (1440x900, 1280x800, 1080x800, 1024x768, 960x800, 768x1024, 390x844): every spread part has
 one picture and its words; on two columns (from 960px) the pictures stand purpose left, roots
-right, plants left, home right, experience left, closing right (the opening is centred), and are about the same size but
+right, experience left, closing right (the opening is centred), and are about the same size but
 the purpose's oak, which stands larger (1.0-1.8 of the others' average), and
 nothing in a words column reaches past its right edge; on one column each picture comes first; the
 name once (nothing in the page but the h1 at 56px or larger, no painted name); "Illustration" under
-the purpose, plants, home, experience and closing paintings, none under Dr. Liu's photo or the promise dots; no
-words over a painting; three promises in one row from 960px, a list of rows below (November 4,
-2026: two of the four became chapters); Dr. Liu's photo in the middle of its pool; the meadow appears once. In Vietnamese at 360,
+the purpose, experience and closing paintings, none under Dr. Liu's photo or the promise dots; no
+words over a painting; four promises in one row from 1200px, two by two from 600px, a list of rows
+below; Dr. Liu's photo in the middle of its pool; the meadow appears once. In Vietnamese at 360,
 600, 960, 1080 and 1200px (the longest pill label, "Gặp các nhà khoa học", once ran past its
 column) nothing in a words column reaches past its right edge.
 motion: reduced motion complete and still (the meadow and its gold whole, no mask, every painting
@@ -30,8 +30,17 @@ half; stopped 1.7s in, more, not yet all; then all of it; a lower painting waits
 slow link (the gold's picture held 3s) the meadow shows at once and its gold waits: 2.5s in none,
 the gold starts only once its picture is in and arrives whole; with no gold picture, 9s in it
 still holds; with JavaScript off the meadow shows with all its gold, and every other painting (the
-oak, the pool, the specimens, the home's three layers, the sequoia, the three promise dots and
+oak, the pool, the globe and its four plants, the valley, the sequoia, the four promise dots and
 the glasses) as inked as it does still.
+chapters (DRAFT, November 2026: the two new chapters between Dr. Liu and Our experience). Our
+ingredients, the globe (Mo picked B, November 9): one picture, "Illustration" under it; no place
+named in the part (Mo: not until he knows); from 760px the four plants stand round the globe,
+apart, each with its name and kind of place; with motion the gold trails wait, then are all laid
+6s after the globe comes into view; under 760px the plants are listed under the globe (four rows)
+and the trails start at its rim. Our home, the valley at dawn (Mo picked F, November 9): one
+painting, "Illustration" under it, no bottle in the part; from 960px the heading stands inside the
+painting's box, in its upper third (its empty sky), and the three rules sit in one row; under
+960px the heading stands above the painting and the rules one under another.
 meadow_layout (Mo, October 28, 2026: the meadow thins out into the paper before Our purpose). At
 1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900, 390x844 and 360x780: the painting
 spans the window; the words centred, no ink within 8px of them; the meadow fills the first
@@ -102,6 +111,8 @@ LOCKED = [
     "NuriCell’s formula, unchanged",
     "Our promise",
     "What you can count on.",
+    "Made in California.",
+    "By GMP-certified manufacturers.",
     "45 days to decide.",
     "Not right for you? Send it back for a refund.",
     "Answers in your language.",
@@ -113,16 +124,23 @@ LOCKED = [
 ]
 
 
-# DRAFT (November 4, 2026): the two new chapters and the new promise, in English only until Mo
+# DRAFT (November 2026): the two new chapters and the new promise, in English only until Mo
 # approves the words; then translate them, move them into LOCKED and drop the languages()
-# exception below.
+# exception below. "where we make them" stands beside California from 760px only.
 DRAFT_LINES = [
     "Our ingredients",
     "Each plant, from where it grows best.",
-    "We look around the world for our plant ingredients, and choose each one from the place it grows best.",
+    "We look around the world for our plants, and bring each one home from the place it grows best.",
+    "California",
+    "where we make them",
     "Green propolis",
-    "Minas Gerais, Brazil",
-    "In Green Bee Propolis",
+    "Warm, wild hillsides",
+    "Turmeric",
+    "Hot, rainy fields",
+    "Grape seed",
+    "Sunny slopes",
+    "Pine bark",
+    "Old pine forests",
     "Our home",
     "Proudly made in California.",
     "Every bottle we sell is made here, by GMP-certified manufacturers.",
@@ -133,6 +151,9 @@ DRAFT_LINES = [
     "Honest about the research.",
     "We show you the studies, and say what they don’t prove.",
 ]
+# No place is named in the plants part (Mo, November 9, 2026: not until he knows where each comes
+# from).
+PLACE_WORDS = ["Brazil", "Minas Gerais", "India", "Italy", "France", "China", "Spain", "Africa", "Europe", "Asia"]
 DRAFT_PARTS = '[data-part="plants"], [data-part="home"]'
 
 
@@ -627,7 +648,7 @@ def nav_locales(browser):
 DESIGN = "meadow"
 # Each spread part and the side its picture stands on from 960px (the opening and the promise row
 # are centred).
-SIDES = {"purpose": "left", "roots": "right", "plants": "left", "home": "right", "experience": "left", "closing": "right"}
+SIDES = {"purpose": "left", "roots": "right", "experience": "left", "closing": "right"}
 TWO_COLUMNS = 960
 
 
@@ -704,7 +725,7 @@ def desktop_and_phone(browser):
         text = page.evaluate("document.querySelector('main').innerText")
         missing = [line for line in LOCKED if line not in text]
         check(f"{tag} every locked line", not missing, missing)
-        missing = [line for line in DRAFT_LINES if line not in text]
+        missing = [line for line in DRAFT_LINES if line not in text and not (width < 760 and line == "where we make them")]
         check(f"{tag} every draft line of the new chapters", not missing, missing)
         h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => [h.textContent.trim(), h.lang])")
         check(f"{tag} one English h1", h1 == [["Be in Good Health.", "en"]], h1)
@@ -727,11 +748,9 @@ def desktop_and_phone(browser):
         # The meadow's paper is cut to transparency (build_about_opening.py), so it lies on the page
         # with no blend; every other painting multiplies.
         blends = page.evaluate(
-            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount], [data-meadow]') && !i.hasAttribute('data-bottles')).map(i => getComputedStyle(i).mixBlendMode)"
+            "[...document.querySelectorAll('main img')].filter(i => !i.closest('[data-mount], [data-meadow]')).map(i => getComputedStyle(i).mixBlendMode)"
         )
-        check(f"{tag} paintings multiply (but the meadow and the real bottles)", blends and all(b == "multiply" for b in blends), blends)
-        bottles = page.evaluate("[...document.querySelectorAll('[data-bottles]')].map(i => getComputedStyle(i).mixBlendMode)")
-        check(f"{tag} the real bottles lie as they are (no blend)", bottles == ["normal"], bottles)
+        check(f"{tag} paintings multiply (but the meadow)", blends and all(b == "multiply" for b in blends), blends)
         stacking = page.evaluate(STACKING_JS)
         check(f"{tag} nothing between a painting and the page root makes a stacking context", stacking["paintings"] > 0 and not stacking["found"], stacking["found"][:4])
         nav = page.evaluate(
@@ -769,8 +788,10 @@ def desktop_and_phone(browser):
         check(f"{tag} focus returns to Ask", page.evaluate("document.activeElement?.textContent?.trim()") == "Ask BiGH Science")
         page.evaluate("window.scrollTo(0, 0)")
         shots(page, tag, height)
-        loaded = page.evaluate("[...document.querySelectorAll('main img')].map(i => i.complete && i.naturalWidth > 0)")
-        check(f"{tag} every picture loaded", loaded and all(loaded), loaded)
+        # Every picture shown: the globe's plants are hidden on a phone and their list on a desktop,
+        # and a hidden lazy picture is rightly never fetched.
+        loaded = page.evaluate("[...document.querySelectorAll('main img')].filter(i => i.offsetParent).map(i => i.complete && i.naturalWidth > 0)")
+        check(f"{tag} every picture shown loaded", loaded and all(loaded), loaded)
         check(f"{tag} no console errors or warnings", not errors, errors[:3])
         check(f"{tag} no failed requests", not failed, failed[:3])
         context.close()
@@ -804,17 +825,17 @@ def rhythm(browser):
         once = page.evaluate(NAME_ONCE_JS)
         check(f"{tag} the name once", not once["big"] and not once["painted"], once)
         captions = {p: v and v["captions"] for p, v in r.items()}
-        want_captions = {"purpose": ["Illustration"], "roots": [], "plants": ["Illustration"], "home": ["Illustration"], "experience": ["Illustration"], "closing": ["Illustration"]}
+        want_captions = {"purpose": ["Illustration"], "roots": [], "experience": ["Illustration"], "closing": ["Illustration"]}
         check(f"{tag} Illustration under each painting that pictures something", captions == want_captions, captions)
         row_caption = page.evaluate("document.querySelector('[data-part=\"promise\"] [data-row-caption]')?.textContent.trim() ?? null")
         check(f"{tag} no caption under the promise dots", row_caption is None, row_caption)
         hits = page.evaluate(OVERLAP_JS)
         check(f"{tag} no words over a painting", not hits, hits[:4])
         rows = page.evaluate("new Set([...document.querySelectorAll('[data-promise]')].map(li => Math.round(li.getBoundingClientRect().top / 4))).size")
-        want = 1 if width >= 960 else 3
+        want = 1 if width >= 1200 else 2 if width >= 600 else 4
         check(f"{tag} the promises in {want} row(s)", rows == want, rows)
         hello = page.evaluate(GREETINGS_JS)
-        if width >= 960:
+        if width >= 600:
             check(f"{tag} Hello in five languages centred under its promise, the own language last and darkest", abs(hello["off"]) <= 2 and hello["under"] and hello["lines"] <= 2 and hello["ownLast"] and hello["ownDarkest"], hello)
         else:
             # A phone's promises are a list of rows (they were centred posters, two and a half
@@ -831,7 +852,7 @@ def rhythm(browser):
                 all(r["aligned"] and r["align"] in ("left/left", "start/start") for r in lst["rows"]),
                 lst["rows"],
             )
-            check(f"{tag} the promise rows evenly spaced", len(lst["gaps"]) == 2 and max(lst["gaps"]) - min(lst["gaps"]) <= 1, lst["gaps"])
+            check(f"{tag} the promise rows evenly spaced", len(lst["gaps"]) == 3 and max(lst["gaps"]) - min(lst["gaps"]) <= 1, lst["gaps"])
             check(f"{tag} the promise heading at the list's left edge", abs(lst["head"]) <= 1, lst["head"])
         liu = page.evaluate(
             """() => { const p = document.querySelector('[data-pool]'), f = document.querySelector('[data-mount] img');
@@ -894,7 +915,8 @@ GOLD_LOG = """(() => {
 HIDE_WORDS = '[data-part="opening"] :is(h1, p) { visibility: hidden !important; }'
 
 # The page's paintings below the opening: the oak, the pool under Dr. Liu's photo (not the
-# photo), the specimens, the home's three layers, the sequoia, the three promise dots and the glasses.
+# photo), the globe and its four plants, the valley, the sequoia, the four promise dots and the
+# glasses (the plants' list under the globe is a phone's, hidden on a desktop).
 PAINTINGS = "[data-picture] img:not([data-mount] img), [data-promise] img"
 
 
@@ -968,14 +990,14 @@ def motion(browser):
 
     # With motion. Every painting below the opening server-marked waiting (none paints whole, then
     # vanishes), read from the HTML the server sends, before any script could mark one: in the
-    # page's main, the oak, the pool, the specimens, the home's three layers, the sequoia, the three
-    # promise dots and the glasses (the
+    # page's main, the oak, the pool, the globe, its four plants and their four rows on a phone,
+    # the valley, the sequoia, the four promise dots and the glasses (the
     # meadow's gold arrives instead; the shared closing crane after main is the kit's own).
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     html = context.request.get(f"{BASE}/about").text()
     main = html[html.index("<main"):html.index("</main>")]
     marks = re.findall(r'<img[^>]*?\sdata-bloom="([^"]*)"', main)
-    check("motion: every painting below the opening server-marked waiting (none paints whole, then vanishes)", len(marks) == 11 and all(m == "waiting" for m in marks), marks)
+    check("motion: every painting below the opening server-marked waiting (none paints whole, then vanishes)", len(marks) == 18 and all(m == "waiting" for m in marks), marks)
     page = context.new_page()
     page.goto(f"{BASE}/about", wait_until="domcontentloaded", timeout=120000)
     wait_until(page, f"getComputedStyle(document.querySelector('{GOLD}')).animationName !== 'none'", 5000)
@@ -1125,9 +1147,82 @@ def motion(browser):
     faint = [(name, ink, s) for (name, ink), (_, s) in zip(off, still) if ink < 0.9 * s]
     check(
         "JavaScript off: every painting shows (each as inked as it is still)",
-        len(off) == 11 and len(still) == 11 and all(s >= 0.01 for _, s in still) and not faint,
+        len(off) == 14 and len(still) == 14 and all(s >= 0.01 for _, s in still) and not faint,
         {"faint": faint, "off": off, "still": still},
     )
+
+
+# The globe's plants and trails, and the valley's words, read where they stand.
+GLOBE_JS = """() => {
+  const part = document.querySelector('[data-part="plants"]');
+  const fig = part.querySelector('[data-picture]'), img = fig.querySelector('img');
+  const g = img.getBoundingClientRect();
+  const pins = [...part.querySelectorAll('[data-plant]')].filter(e => e.offsetParent).map(e => {
+    const b = e.getBoundingClientRect();
+    return { key: e.dataset.plant, l: b.left, r: b.right, t: b.top, b: b.bottom, words: e.innerText.trim().split('\\n').filter(Boolean).length };
+  });
+  const apart = pins.every((a, i) => pins.every((b, j) => i === j || a.r <= b.l || b.r <= a.l || a.b <= b.t || b.b <= a.t));
+  const dabs = [...part.querySelectorAll('svg ellipse')];
+  const shown = dabs.filter(d => parseFloat(getComputedStyle(d).opacity) > 0.99).length;
+  const list = [...part.querySelectorAll('ul li')].filter(e => e.offsetParent).length;
+  return { pictures: part.querySelectorAll('[data-picture]').length,
+           captions: [...part.querySelectorAll('[data-picture] figcaption')].map(c => c.textContent.trim()),
+           pins: pins.length, apart, words: pins.map(p => p.words), dabs: dabs.length, shown, list,
+           clip: getComputedStyle(part.querySelector('svg')).clipPath, text: part.innerText };
+}"""
+
+VALLEY_JS = """() => {
+  const part = document.querySelector('[data-part="home"]');
+  const img = part.querySelector('[data-picture] img').getBoundingClientRect();
+  const h = part.querySelector('h2').getBoundingClientRect();
+  const rules = [...part.querySelectorAll('ul li')].map(li => Math.round(li.getBoundingClientRect().top));
+  return { pictures: part.querySelectorAll('[data-picture]').length,
+           captions: [...part.querySelectorAll('[data-picture] figcaption')].map(c => c.textContent.trim()),
+           inside: h.top >= img.top - 1 && h.bottom <= img.top + img.height / 3 && h.left >= img.left - 1,
+           above: h.bottom <= img.top + img.height * 0.3, rows: new Set(rules).size, rules: rules.length,
+           bottles: part.querySelectorAll('img[src*="/products/"]').length };
+}"""
+
+
+def chapters(browser):
+    """The two new chapters: the globe (Our ingredients) and the valley (Our home)."""
+    for width, height in [(1440, 900), (1024, 768), (768, 1024), (390, 844)]:
+        tag = f"chapters {width}x{height}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=True)
+        g = page.evaluate(GLOBE_JS)
+        check(f"{tag} the globe: one picture, Illustration under it", g["pictures"] == 1 and g["captions"] == ["Illustration"], g["captions"])
+        named = [w for w in PLACE_WORDS if w in g["text"]]
+        check(f"{tag} no place named in the plants part", not named, named)
+        check(f"{tag} reduced motion: every trail laid", g["dabs"] > 100 and g["shown"] == g["dabs"], [g["shown"], g["dabs"]])
+        if width >= 760:
+            check(f"{tag} four plants round the globe, apart, each with its name and kind of place",
+                  g["pins"] == 4 and g["apart"] and all(n == 2 for n in g["words"]), g)
+        else:
+            check(f"{tag} the plants listed under the globe (four rows), none beside it", g["pins"] == 0 and g["list"] == 4, g)
+            check(f"{tag} the trails start at the globe's rim", g["clip"].startswith("circle"), g["clip"])
+        v = page.evaluate(VALLEY_JS)
+        check(f"{tag} the valley: one painting, Illustration under it, no bottle", v["pictures"] == 1 and v["captions"] == ["Illustration"] and v["bottles"] == 0, v)
+        if width >= 960:
+            check(f"{tag} the heading in the painting's empty sky (its upper third)", v["inside"], v)
+            check(f"{tag} the three rules in one row", v["rules"] == 3 and v["rows"] == 1, v)
+        else:
+            # Under 960px the painting's empty sky is cut away (made.module.css) and the words stand
+            # where it was: over bare paper, above the painted land (its upper 30%).
+            check(f"{tag} the heading above the painted land", v["above"], v)
+            check(f"{tag} the three rules one under another", v["rules"] == 3 and v["rows"] == 3, v)
+        context.close()
+    # With motion: the trails wait, then are all laid within 6s of the globe coming into view.
+    context, page, response, errors, failed = open_page(browser, 1440, 900)
+    before = page.evaluate(GLOBE_JS)
+    check("chapters motion: the trails wait out of view", before["shown"] == 0, [before["shown"], before["dabs"]])
+    page.evaluate("document.querySelector('[data-part=plants] [data-picture]').scrollIntoView({ block: 'center' })")
+    page.wait_for_timeout(1200)
+    mid = page.evaluate(GLOBE_JS)
+    page.wait_for_timeout(6000)
+    after = page.evaluate(GLOBE_JS)
+    check("chapters motion: laid one after another (part-way 1.2s in), all of them 7.2s in",
+          0 <= mid["shown"] < mid["dabs"] and after["shown"] == after["dabs"], [mid["shown"], after["shown"], after["dabs"]])
+    context.close()
 
 
 def boundary(browser):
@@ -1325,7 +1420,7 @@ def languages_layout(browser):
 
 
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, meadow_layout]
+GROUPS = [desktop_and_phone, rhythm, chapters, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, meadow_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

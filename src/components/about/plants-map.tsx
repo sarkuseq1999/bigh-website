@@ -9,38 +9,39 @@ import page from "./about-page.module.css";
 import { plantsArt as art } from "./plants-art";
 import styles from "./plants-map.module.css";
 
-// Our ingredients, "Each plant, from where it grows best." (Mo picked A, the map, November 6,
-// 2026; mockups reference/ink-pages/mockups/about-plants/). The world painted in ink over the
-// real land (reference/ink-pages/about-plants/), each plant standing where it grows, and a trail
-// of gold-leaf dabs that carries each one home to California, where we make them. The trails are
-// laid dab by dab, one after another, once, as the map comes into view; reduced motion and no
-// script show them laid. Phones list the plants under the map. Every place but Minas Gerais is
-// a STAND-IN until Mo gives the real one (about-content.ts).
+// Our ingredients, "Each plant, from where it grows best." (Mo picked the map on November 6,
+// 2026, then, with no place named, B, the globe, on November 9; mockups
+// reference/ink-pages/mockups/about-plants/). A globe painted in ink over the real land
+// (reference/ink-pages/about-plants/render_globe.py), California facing you; the four plants stand
+// just past its rim, all round it, each with the kind of place it thrives in, never a country.
+// A trail of gold-leaf dabs runs from each plant over the globe home to California, where we make
+// them: laid dab by dab, one plant after another, once, as the globe comes into view; reduced
+// motion and no script show them laid. Phones list the plants under the globe, and the trails
+// start at its rim, as if from its far side.
 
 type Key = (typeof about.plants.items)[number]["key"];
 
-const W = art.map.width;
-const H = art.map.height;
+const W = art.globe.width;
+const H = art.globe.height;
 
-// Where each plant's painting stands (its centre, in the 1536 x 1024 frame render_land.py drew
-// the land in): in open sea beside its place, clear of the coasts and of the trails. The two
-// European plants stand one over the other in the North Atlantic, west of their places (side by
-// side, the grapes stood on Morocco).
-const PIN: Record<Key, [number, number]> = {
-  propolis: [828, 760],
-  turmeric: [1400, 725],
-  grape: [742, 528],
-  pine: [720, 348],
+// California on the globe (render_globe.py: centre 768, 512, radius 440 on 1536 x 1024).
+const HOME: [number, number] = [636, 404];
+
+// Where each plant stands (its centre, in the globe's pixels): just past the rim, spread round it.
+const RIM: Record<Key, [number, number]> = {
+  pine: [215, 430],
+  grape: [1190, 175],
+  turmeric: [1305, 640],
+  propolis: [370, 830],
 };
 
-// How high each trail arcs, as a share of its length: different, so the three from Europe and
-// India fan out instead of running home as one rope.
-const LIFT: Record<Key, number> = { propolis: 0.22, turmeric: 0.25, grape: 0.17, pine: 0.1 };
+// How high each trail arcs, as a share of its length: different, so they fan out.
+const LIFT: Record<Key, number> = { pine: 0.15, grape: 0.18, turmeric: 0.2, propolis: 0.12 };
 
-// The trail's dabs: one every STEP units of the map, a little irregular, as a brush lays them.
+// The trail's dabs: one every STEP pixels of the picture, a little irregular, as a brush lays them.
 const STEP = 13;
 
-export function random(seed: number) {
+function random(seed: number) {
   let s = seed;
   return () => {
     s = (s * 16807) % 2147483647;
@@ -48,19 +49,11 @@ export function random(seed: number) {
   };
 }
 
-export type Dab = { x: number; y: number; a: number; r: number; tone: number };
+type Dab = { x: number; y: number; a: number; r: number; tone: number };
 
-// A trail of dabs from (x1, y1) to (x0, y0), in a picture's own pixels: a low arc (lifted `lift`
-// of its length), sampled finely and walked at an even step. It stops a dab short of its end
-// (the home mark).
-export function layTrail(
-  x1: number,
-  y1: number,
-  x0: number,
-  y0: number,
-  lift: number,
-  seed: number,
-): Dab[] {
+// A trail of dabs from (x1, y1) to (x0, y0): a low arc (lifted `lift` of its length), sampled
+// finely and walked at an even step. It stops a dab short of its end (the home mark).
+function layTrail(x1: number, y1: number, x0: number, y0: number, lift: number, seed: number) {
   const cx = (x0 + x1) / 2;
   const cy = Math.min(y0, y1) - Math.hypot(x1 - x0, y1 - y0) * lift;
   const at = (t: number) => {
@@ -90,48 +83,25 @@ export function layTrail(
   return dabs.slice(0, -1);
 }
 
-// A trail from the plant's place home to California, on the map.
-function trail(from: readonly number[], to: readonly number[], lift: number, seed: number): Dab[] {
-  return layTrail(from[0] * W, from[1] * H, to[0] * W, to[1] * H, lift, seed);
-}
+// Each trail leaves from a little above its plant's centre (under the painting, so it seems to
+// come out of the plant).
+const TRAILS = about.plants.items.map((item, i) => {
+  const [x, y] = RIM[item.key];
+  return {
+    key: item.key,
+    dabs: layTrail(x, y - 20, HOME[0], HOME[1], LIFT[item.key], 23 + i * 89),
+  };
+});
 
-// The trails' dabs, one group per trail (--r its turn), each dab (--i its turn) laid in place.
-export function Dabs({ trails }: { trails: { key: string; dabs: Dab[] }[] }) {
-  return (
-    <>
-      {trails.map((t, r) => (
-        <g key={t.key} data-trail={t.key} style={{ "--r": r } as CSSProperties}>
-          {t.dabs.map((d, i) => (
-            <g key={i} transform={`translate(${d.x} ${d.y}) rotate(${d.a})`}>
-              <ellipse
-                className={styles.dab}
-                data-tone={d.tone}
-                rx={d.r * 1.3}
-                ry={d.r * 0.85}
-                style={{ "--i": i } as CSSProperties}
-              />
-            </g>
-          ))}
-        </g>
-      ))}
-    </>
-  );
-}
-
-const TRAILS = about.plants.items.map((item, i) => ({
-  key: item.key,
-  dabs: trail(art.map.places[item.key], art.map.places.california, LIFT[item.key], 7 + i * 131),
-}));
-
-const at = (point: readonly number[]) =>
-  ({ left: `${point[0] * 100}%`, top: `${point[1] * 100}%` }) as CSSProperties;
+const at = ([x, y]: readonly number[]) =>
+  ({ left: `${(x / W) * 100}%`, top: `${(y / H) * 100}%` }) as CSSProperties;
 
 export function PlantsMap() {
   const copy = useCopy();
-  const map = useRef<HTMLElement>(null);
+  const globe = useRef<HTMLElement>(null);
   const [draw, setDraw] = useState<"waiting" | "on">("waiting");
   useEffect(() => {
-    const figure = map.current;
+    const figure = globe.current;
     if (!figure) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -144,7 +114,6 @@ export function PlantsMap() {
     observer.observe(figure);
     return () => observer.disconnect();
   }, []);
-  const home = art.map.places.california;
   return (
     <section
       id="plants"
@@ -162,45 +131,47 @@ export function PlantsMap() {
           </h2>
           <p className={page.body}>{copy(about.plants.text)}</p>
         </div>
-        <figure ref={map} className={styles.map} data-picture="" data-draw={draw}>
+        <figure ref={globe} className={styles.globe} data-picture="" data-draw={draw}>
           <span className={styles.body}>
             <Image
               className={base.ink}
-              src={art.map.src}
+              src={art.globe.src}
               alt={copy(about.plants.alt)}
               width={W}
               height={H}
-              sizes="(max-width: 1440px) 86vw, 1240px"
+              sizes="(max-width: 1440px) 86vw, 1180px"
               data-bloom="waiting"
             />
             <svg className={styles.trails} viewBox={`0 0 ${W} ${H}`} aria-hidden="true">
-              <Dabs trails={TRAILS} />
+              {TRAILS.map((t, r) => (
+                <g key={t.key} data-trail={t.key} style={{ "--r": r } as CSSProperties}>
+                  {t.dabs.map((d, i) => (
+                    <g key={i} transform={`translate(${d.x} ${d.y}) rotate(${d.a})`}>
+                      <ellipse
+                        className={styles.dab}
+                        data-tone={d.tone}
+                        rx={d.r * 1.3}
+                        ry={d.r * 0.85}
+                        style={{ "--i": i } as CSSProperties}
+                      />
+                    </g>
+                  ))}
+                </g>
+              ))}
             </svg>
-            {about.plants.items.map((item, r) => (
-              <span
-                key={item.key}
-                className={styles.dot}
-                data-place={item.key}
-                style={{ ...at(art.map.places[item.key]), "--r": r } as CSSProperties}
-              />
-            ))}
-            <span className={styles.dot} data-home="" style={at(home)} />
-            <span className={styles.homeLabel} style={at(home)}>
+            <span className={styles.dot} data-home="" style={at(HOME)} />
+            <span className={styles.homeLabel} style={at(HOME)}>
               <b>{copy(about.plants.home.name)}</b>
               <span>{copy(about.plants.home.note)}</span>
             </span>
             {about.plants.items.map((item, r) => {
-              const [px, py] = PIN[item.key];
               const pic = art[`plant-${item.key}`];
               return (
                 <span
                   key={item.key}
                   className={styles.pin}
                   data-plant={item.key}
-                  style={{
-                    left: `${((px - art.map.crop[0]) / W) * 100}%`,
-                    top: `${((py - art.map.crop[1]) / H) * 100}%`,
-                  }}
+                  style={at(RIM[item.key])}
                 >
                   <Image
                     className={base.ink}
@@ -214,7 +185,7 @@ export function PlantsMap() {
                   />
                   <span className={styles.pinWords}>
                     <b>{copy(item.plant)}</b>
-                    <span>{copy(item.place)}</span>
+                    <span>{copy(item.grows)}</span>
                   </span>
                 </span>
               );
@@ -222,7 +193,7 @@ export function PlantsMap() {
           </span>
           <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
         </figure>
-        {/* Phones: the map is too small for its plants, so they are listed under it. */}
+        {/* Phones: the plants are too small beside the globe, so they are listed under it. */}
         <ul className={styles.list}>
           {about.plants.items.map((item, r) => {
             const pic = art[`plant-${item.key}`];
@@ -240,7 +211,7 @@ export function PlantsMap() {
                 />
                 <span>
                   <b>{copy(item.plant)}</b>
-                  <span>{copy(item.place)}</span>
+                  <span>{copy(item.grows)}</span>
                 </span>
               </li>
             );

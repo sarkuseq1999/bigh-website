@@ -1,9 +1,10 @@
-"""Build the About plants map's pictures (Mo picked A, the map, November 6, 2026).
+"""Build the About plants part's pictures (Mo picked B, the globe, November 9, 2026).
 
-"Each plant, from where it grows best.": the world painted in ink (Codex over the real land,
-ref/land-guide.png), the four plants (cut from the specimens painting) standing at their places;
-the page lays the gold trails home to California (plants-map.tsx). Of the round's other ideas,
-B (four homes) and C (one plant) were not picked: their paintings went to bigh-archive.
+"Each plant, from where it grows best.": a globe painted in ink (Codex over the real land,
+ref/globe-guide.png from render_globe.py), and the four plants (cut from the specimens painting)
+that stand round its rim; the page lays the gold trails home to California (plants-map.tsx). The
+world map (picked November 6, before Mo asked that no place be named), the four homes and the
+other ideas went to bigh-archive.
 
     python -X utf8 reference/ink-pages/about-plants/build_about_plants.py
 
@@ -24,17 +25,8 @@ FLOOR = 10
 FADE = 40
 
 TAKES = {
-    "map": "map-1-a",
     "specimens": "specimens-1-a",
     "globe": "globe-1-a",
-}
-# The places' pixels on the 1536 x 1024 land guide (render_land.py prints them).
-PLACES = {
-    "california": (187, 359),
-    "propolis": (659, 717),
-    "turmeric": (1422, 518),
-    "grape": (1005, 310),
-    "pine": (930, 304),
 }
 # Each plant's box on the 1024 x 1024 specimens painting (its neighbours' tips cut away).
 BOXES = {
@@ -78,18 +70,8 @@ def save(img, name, quality=90):
 
 def main():
     art = {}
-    # The map, cropped to its ink; the places move with the crop (render_land's frame).
-    m = paperless(TAKES["map"])
-    if m.size != (1536, 1024):
-        m = m.resize((1536, 1024), Image.LANCZOS)
-    m, (x0, y0, x1, y1) = trim(m, pad=8, level=18)
-    art["map"] = save(m, "map-v2")
-    art["map"]["places"] = {
-        k: [round((x - x0) / m.width, 4), round((y - y0) / m.height, 4)] for k, (x, y) in PLACES.items()
-    }
-    art["map"]["crop"] = [x0, y0, x1, y1]
-    # MOCKUP (November 9, 2026), the no-place idea B: the globe, uncropped so render_globe.py's
-    # centre, radius and California (768, 512, 440; 636, 404) hold.
+    # The globe, uncropped so render_globe.py's centre, radius and California (768, 512, 440;
+    # 636, 404) hold.
     g = paperless(TAKES["globe"])
     art["globe"] = save(g, "globe-v1")
     # The four plants, cut from the specimens painting.

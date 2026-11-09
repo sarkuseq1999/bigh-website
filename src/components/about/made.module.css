@@ -1,0 +1,96 @@
+/* Our home: the valley at dawn (made-in-california.tsx; Mo picked F, November 9, 2026). Every
+   rule is scoped under the page's [data-about] root and the part, so it outranks the kit's .look
+   rules in any stylesheet order (the built site orders them differently from the dev server).
+   Nothing between the painting and the page root makes a stacking context: it multiplies onto
+   the paper. */
+
+[data-about] .part .valley {
+  margin: 0;
+}
+
+/* Under 960px the words stand over the painting (order); from 960px they sit in its empty sky. */
+[data-about] .part .body {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+[data-about] .part .body > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+[data-about] .part .sky {
+  order: -1;
+  display: block;
+  max-width: 40em;
+  margin-bottom: 12px;
+}
+
+[data-about] .part p.lead {
+  color: #2a2824;
+}
+
+[data-about] .part .valley figcaption {
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* Under 960px the empty sky is cut away (it is bare paper): the hills start under the words. */
+@media (max-width: 959px) {
+  [data-about] .part .body > img {
+    margin-top: -22%;
+  }
+}
+
+@media (min-width: 960px) {
+  [data-about] .part .sky {
+    position: absolute;
+    left: 0;
+    top: 3%;
+    max-width: 36em;
+    margin: 0;
+  }
+}
+
+/* GMP in plain words, and its three rules in one row under the painting. */
+[data-about] .part .row {
+  display: grid;
+  gap: 20px clamp(24px, 3vw, 48px);
+  margin-top: clamp(20px, 2.4vw, 36px);
+}
+
+[data-about] .part p.gmp {
+  max-width: 30em;
+  margin: 0;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+[data-about] .part .row ul {
+  display: grid;
+  gap: 0 clamp(20px, 2.4vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+[data-about] .part .row li {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+  font-size: 19px;
+  line-height: 1.45;
+}
+
+@media (min-width: 960px) {
+  [data-about] .part .row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2.4fr);
+    align-items: start;
+  }
+
+  [data-about] .part .row ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

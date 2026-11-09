@@ -44,3 +44,8 @@ true of the plant wherever it is bought. Mockups behind `/about?map=a|b|c`
 
 Review page: `reference/ink-pages/mockups/about-plants/no-places/` (Artifact CRNzLrmV8DbRdX7ZcAc5SP,
 version 2).
+
+**Mo picked B, the globe (November 9, 2026).** Built for real as `src/components/about/plants-map.tsx`
+(the world map, the mockup switch and ideas A and C are gone; the map's painting, guide and
+`render_land.py`, the four homes and the mockup code went to `bigh-archive/about-unpicked-2026-11-09/`).
+`build_about_plants.py` now builds the globe (`globe-1-a`, uncropped) and the four plants.

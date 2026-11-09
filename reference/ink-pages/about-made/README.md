@@ -1,4 +1,4 @@
-# About: "Proudly made in California." without the bottles (mockups, November 6, 2026)
+# About: "Proudly made in California." without the bottles (Mo picked F, November 9, 2026)
 
 Mo on the draft's Our home part (the five real bottles standing in a painted Southern California
 morning): "this section just doesn't look good when you put the product bottles in that image. I'd
@@ -44,3 +44,10 @@ Pictures: `paint.sh` (Codex, ChatGPT plan, no spend), `build_about_made.py` ->
 My pick of the five shown stays B, the record book (9/10).
 
 Spend: none.
+
+**Mo picked F, the valley at dawn (November 9, 2026).** Built for real as
+`src/components/about/made-in-california.tsx` (`made.module.css`); the mockup switch and the other
+ideas are gone. Their paintings, prompts, `render_state.py` and the mockup code went to
+`bigh-archive/about-unpicked-2026-11-09/`. `build_about_made.py` now builds the valley alone
+(`valley-1-b`, uncropped so its sky holds the words). "Made in California." is back in the promise
+list, first of four.

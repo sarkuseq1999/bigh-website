@@ -9,16 +9,13 @@ import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
-import { about, drafts, routes } from "./about-content";
+import { about, routes } from "./about-content";
 import { dots, glasses, oak, pool, sequoia } from "./about-art";
-import { home } from "./chapters-art";
-import more from "./chapters.module.css";
 import { CountUp } from "./count-up";
 import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
-import { MadeMockup } from "./made-mockups";
-import { MapMockup } from "./map-mockups";
+import { MadeInCalifornia } from "./made-in-california";
 import { PlantsMap } from "./plants-map";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
@@ -35,11 +32,7 @@ export const ALT = {
   oak: "A great valley oak with a rope swing, painted in ink; below the ground, a gold light glows among its roots",
   sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
   glasses: "Reading glasses resting on an open notebook, painted in ink",
-  home: "Our five bottles standing in golden grass on a California morning, palms and mountains behind",
 } as const;
-
-// DRAFT size for the home chapter (November 4, 2026): the column's width, as the others.
-const HOME = "(max-width: 559px) 92vw, (max-width: 959px) 520px, (max-width: 1395px) 40vw, 560px";
 
 // What each painting asks the server for follows the width it is drawn at (circle.module.css: its
 // height a multiple of one plain height, --h, and its width that height times its shape; --h is
@@ -197,73 +190,6 @@ function Roots() {
   );
 }
 
-// Our home (DRAFT, November 4, 2026): the five real bottles standing on a Southern California
-// morning, grass at their feet; GMP said in plain words under the promise.
-function Home() {
-  const copy = useCopy();
-  return (
-    <Spread
-      id="home"
-      part="home"
-      side="right"
-      labelledBy="home-title"
-      picture={
-        <figure className={`${page.painting} ${more.home}`} data-picture="">
-          <span className={page.paintingBody}>
-            <Image
-              className={base.ink}
-              src={home.src}
-              alt={copy(ALT.home)}
-              width={home.width}
-              height={home.height}
-              sizes={HOME}
-              data-bloom="waiting"
-            />
-            {/* The bottles and the grass at their feet arrive a moment after the scene. The
-                bottles are the real photographs: they lie as they are, never multiplied. */}
-            <Image
-              src={home.bottles}
-              alt=""
-              width={home.width}
-              height={home.height}
-              sizes={HOME}
-              data-bottles=""
-              data-bloom="waiting"
-              style={{ "--bloom-delay": 500 } as CSSProperties}
-            />
-            <Image
-              className={base.ink}
-              src={home.front}
-              alt=""
-              width={home.width}
-              height={home.height}
-              sizes={HOME}
-              data-bloom="waiting"
-              style={{ "--bloom-delay": 500 } as CSSProperties}
-            />
-          </span>
-          {/* The scene is painted (it is not the makers' own place): the honesty tag. */}
-          <figcaption className={base.caption}>{copy(drafts.illustration)}</figcaption>
-        </figure>
-      }
-    >
-      <p className={`${base.label} ${page.label}`} data-label="">
-        {copy(about.home.label)}
-      </p>
-      <h2 id="home-title" className={`${base.display} ${page.heading}`}>
-        {copy(about.home.title)}
-      </h2>
-      <p className={`${page.body} ${more.lead}`}>{copy(about.home.text)}</p>
-      <p className={more.gmp}>{copy(about.home.gmp)}</p>
-      <ul className={more.rules}>
-        {about.home.rules.map((rule) => (
-          <li key={rule}>{copy(rule)}</li>
-        ))}
-      </ul>
-    </Spread>
-  );
-}
-
 function Experience() {
   const copy = useCopy();
   const years = copy(about.experience.stats[1].unit);
@@ -309,7 +235,7 @@ function Experience() {
 }
 
 // The promise the five greetings stand under.
-const LANGUAGES = about.promise.items[1];
+const LANGUAGES = about.promise.items.find((item) => item.title === "Answers in your language.");
 
 function Promises() {
   const copy = useCopy();
@@ -380,17 +306,14 @@ function Closing() {
 
 export function AboutInk() {
   return (
-    <InkPage
-      current="about"
-      className={`${page.aboutPage} ${styles.circle} ${field.root} ${more.chapters}`}
-    >
+    <InkPage current="about" className={`${page.aboutPage} ${styles.circle} ${field.root}`}>
       {() => (
         <div data-about="meadow">
           <Opening />
           <Purpose />
           <Roots />
-          <MapMockup fallback={<PlantsMap />} />
-          <MadeMockup fallback={<Home />} />
+          <PlantsMap />
+          <MadeInCalifornia />
           <Experience />
           <Promises />
           <Closing />

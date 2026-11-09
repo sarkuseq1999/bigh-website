@@ -1,0 +1,246 @@
+<title>About Page Draft</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau+Office:wght@400;500;600&display=swap">
+<style>
+  /* Layout: one column like a scroll. Three ideas for the About page's plants part, each a card
+     with the real built page (big screen beside phone), its score and what still holds it back.
+     The site's own paper and ink, one gold for the recommendation. */
+  :root {
+    --paper: #f4f0e6;
+    --card: #faf7f0;
+    --ink: #171512;
+    --ink-soft: #5d574d;
+    --rule: #d9d2c1;
+    --gold: #7a5a14;
+    --gold-bg: #f1e4c4;
+    --ask: #1f3d2b;
+    --ask-bg: #e3ebdf;
+    --title: "Ysabeau Office", "Iowan Old Style", Georgia, serif;
+    --body: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #1b1915;
+      --card: #24211c;
+      --ink: #f1ece0;
+      --ink-soft: #b6ae9e;
+      --rule: #3a362e;
+      --gold: #f0d39a;
+      --gold-bg: #3d3220;
+      --ask: #cfe3c6;
+      --ask-bg: #2b3a2c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #1b1915;
+    --card: #24211c;
+    --ink: #f1ece0;
+    --ink-soft: #b6ae9e;
+    --rule: #3a362e;
+    --gold: #f0d39a;
+    --gold-bg: #3d3220;
+    --ask: #cfe3c6;
+    --ask-bg: #2b3a2c;
+    color-scheme: dark;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font: 17px/1.5 var(--body);
+  }
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 32px 72px;
+    display: grid;
+    gap: 28px;
+  }
+  header {
+    display: grid;
+    gap: 10px;
+  }
+  h1 {
+    font: 600 38px/1.08 var(--title);
+    margin: 0;
+    text-wrap: balance;
+  }
+  .lede {
+    margin: 0;
+    max-width: 38em;
+    color: var(--ink-soft);
+  }
+  .note {
+    margin: 0;
+    max-width: 40em;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px dashed var(--rule);
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--rule);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 14px;
+  }
+  .card h2 {
+    font: 600 26px/1.2 var(--title);
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px 12px;
+    text-wrap: balance;
+  }
+  .tag {
+    font: 700 22px/1 var(--title);
+    color: var(--ink);
+  }
+  .badge {
+    font: 600 13px/1 var(--body);
+    color: var(--gold);
+    background: var(--gold-bg);
+    padding: 5px 9px;
+    border-radius: 99px;
+  }
+  .card ul.notes {
+    margin: 0;
+    padding-left: 1.2em;
+    display: grid;
+    gap: 4px;
+    max-width: 44em;
+  }
+  .score {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 15px;
+    max-width: 44em;
+  }
+  .score b {
+    color: var(--ink);
+  }
+  .shots {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  figure {
+    margin: 0;
+    display: grid;
+    gap: 6px;
+    min-width: 0;
+  }
+  figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--rule);
+    background: #f3efe4;
+  }
+  figcaption {
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .stack {
+    display: grid;
+    gap: 12px;
+    min-width: 0;
+  }
+  .ask {
+    background: var(--ask-bg);
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    gap: 10px;
+  }
+  .ask h2 {
+    font: 600 24px/1.2 var(--title);
+    margin: 0;
+    color: var(--ask);
+  }
+  .ask ol {
+    margin: 0;
+    padding-left: 1.4em;
+    display: grid;
+    gap: 8px;
+    max-width: 44em;
+  }
+  footer {
+    font-size: 14px;
+    color: var(--ink-soft);
+    max-width: 44em;
+  }
+  @media (max-width: 640px) {
+    h1 {
+      font-size: 32px;
+    }
+    .shots {
+      grid-template-columns: 1fr;
+    }
+    .shots > figure.phone {
+      max-width: 300px;
+    }
+  }
+</style>
+
+<main class="wrap">
+  <header>
+    <h1>Your two picks, built</h1>
+    <p class="lede">The globe and the valley are now real parts of the draft About page, and "Made in California" is back in the promises. Nothing is live.</p>
+  </header>
+
+  <section class="card" aria-labelledby="g">
+    <h2 id="g">Each plant, from where it grows best: the globe</h2>
+    <ul class="notes">
+      <li>No place names. Each plant says the kind of place it loves.</li>
+      <li>The gold trails are laid one plant at a time as you scroll to it.</li>
+    </ul>
+    <div class="shots">
+      <figure><img src="web/globe-1440.webp" alt="The globe on a laptop" width="1440" height="900"><figcaption>Laptop</figcaption></figure>
+      <figure class="phone"><img src="web/globe-390.webp" alt="The globe on a phone" width="600" height="1298"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="v">
+    <h2 id="v">Proudly made in California: the valley at dawn</h2>
+    <div class="shots">
+      <div class="stack">
+        <figure><img src="web/valley-1440-top.webp" alt="The valley on a laptop, the heading in its sky" width="1440" height="900"><figcaption>Laptop, arriving</figcaption></figure>
+        <figure><img src="web/valley-1440-foot.webp" alt="The valley's foot and the three rules in a row" width="1440" height="900"><figcaption>Laptop, the rules under it</figcaption></figure>
+      </div>
+      <figure class="phone"><img src="web/valley-390.webp" alt="The valley on a phone" width="600" height="1298"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="card" aria-labelledby="p">
+    <h2 id="p">Our promise: four again</h2>
+    <ul class="notes">
+      <li>"Made in California." is back, first of four.</li>
+    </ul>
+    <div class="shots">
+      <figure><img src="web/promise-1440.webp" alt="The four promises on a laptop" width="1440" height="900"><figcaption>Laptop</figcaption></figure>
+      <figure class="phone"><img src="web/promise-390.webp" alt="The four promises on a phone" width="600" height="1298"><figcaption>Phone</figcaption></figure>
+    </div>
+  </section>
+
+  <section class="ask" aria-labelledby="ask">
+    <h2 id="ask">What I need from you</h2>
+    <ol>
+      <li>Look it over. Anything to change?</li>
+      <li>If it's good: may I add it to the main working copy (still not live)? Going live is a separate yes.</li>
+    </ol>
+  </section>
+
+  <footer>Checked on the finished (built) site: the About page's own checks pass. The new words are English only for now; they get translated once you're happy with them. Paintings are AI-made and marked "Illustration" on the page.</footer>
+</main>
