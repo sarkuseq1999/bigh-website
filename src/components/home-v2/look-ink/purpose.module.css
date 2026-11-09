@@ -146,8 +146,12 @@
   gap: clamp(32px, 5vw, 88px);
 }
 
+/* "Small beginnings. Bigger possibilities." in the title face, both lines in ink (Mo picked B,
+   November 9, 2026). It is a <p>, so home-titles.module.css's Ysabeau for h1-h3 never reached it:
+   it read as heavy Switzer with a grey second line, the page's only one, like a leftover. */
 .purpose .graphic {
   margin: 0;
+  font-family: var(--display-font);
   font-size: clamp(32px, 3vw, 46px);
   font-weight: var(--display-weight);
   line-height: 1.1;
@@ -156,10 +160,6 @@
 
 .graphic > span {
   display: block;
-}
-
-.graphic > span:last-child {
-  color: var(--muted);
 }
 
 .opening {

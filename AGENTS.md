@@ -465,6 +465,13 @@ These sit on top of `DESIGN.md`.
   of the window from 22.5% across, so the walkers and the whole sun both show. `purpose.tsx`,
   `purpose.module.css`; pictures `build_home_purpose.py` (`ink-long`) in
   `reference/ink-pages/home-purpose/`; mockups `reference/ink-pages/mockups/home-purpose/` (round 4).
+- **Homepage "Small beginnings. Bigger possibilities.": the title face, all ink (Mo picked B,
+  November 9, 2026).** The line under the Big Sur close is a `<p>`, so the homepage's title face
+  (Ysabeau, given to h1-h3) never reached it: it read as heavy Switzer with a grey second line,
+  the page's only one, like a leftover. Of two looks on the real page (A the title face with the
+  grey second line, B both lines in ink) Mo picked B. The words did not change. Any display line
+  that is not a heading takes `font-family: var(--display-font)` itself. `purpose.module.css`
+  (`.graphic`); mockups `reference/ink-pages/mockups/home-graphic/`.
 - **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
   questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
   each question", over B (one breakfast-table painting with numbered marks). All five product
