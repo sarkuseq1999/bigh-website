@@ -14,7 +14,7 @@ const entries = [
   ["Our ingredients", "我们的原料", "우리의 원료", "Nguyên liệu của chúng tôi", "私たちの原料"],
   [
     "Each plant, from where it grows best.",
-    "每一种植物，都来自它长得最好的地方。",
+    "每一种植物，都取自最宜生长之地。",
     "식물마다, 가장 잘 자라는 곳에서.",
     "Mỗi loại cây, từ nơi nó phát triển tốt nhất.",
     "それぞれの植物を、いちばんよく育つ場所から。",
