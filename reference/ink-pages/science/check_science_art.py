@@ -75,13 +75,31 @@ def main():
         shown.append(painting(data[key], key))
         shown.append(painting(data[key]["phone"], f"{key} phone"))
     zoom = data["zoom"]
-    check("zoom: three views", list(zoom) == ["hills", "hand", "cell"], str(list(zoom)))
-    for key in ("hills", "hand"):
+    check("zoom: four views, in the page's order", list(zoom) == ["inside", "cell", "hand", "hills"], str(list(zoom)))
+    for key in ("hills", "hand", "inside"):
         img = opened(zoom[key], f"zoom {key}")
         if img is not None:
             check(f"zoom {key}: 3:2", abs(img.width / img.height - 1.5) < 0.01, f"{img.size}")
             check(f"zoom {key}: at least 1500px wide", img.width >= 1500, f"{img.width}")
         shown.insert(0, img)
+    # The inside view ships without its gold, which rides above it in pieces (one picture).
+    inside, sheet = shown[0], zoom["inside"]["gold"]
+    if inside is not None:
+        a = np.asarray(inside.convert("RGB")).astype(np.int32)
+        gold = (a[..., 0] - a[..., 2] > 70) & (a[..., 1] - a[..., 2] > 40) & (a[..., 0] > 170)
+        check("zoom inside: its gold is lifted off it", gold.mean() < 0.002, f"{gold.mean() * 100:.3f}%")
+    pieces = Image.open(REPO / "public" / sheet["src"].lstrip("/"))
+    check("zoom inside gold: the picture is as described", pieces.size == (sheet["width"], sheet["height"]) and pieces.mode == "RGBA", f"{pieces.size} {pieces.mode}")
+    slivers = sheet["slivers"]
+    check("zoom inside gold: thirty slivers or more", len(slivers) >= 30, str(len(slivers)))
+    inside_frame = all(0 <= v <= 1 for s_ in slivers for v in s_["box"]) and all(s_["box"][0] + s_["box"][2] <= 1.001 and s_["box"][1] + s_["box"][3] <= 1.001 for s_ in slivers)
+    check("zoom inside gold: every sliver inside the painting", inside_frame)
+    in_sheet = all(s_["at"][0] + s_["at"][2] <= 1.001 and s_["at"][1] + s_["at"][3] <= 1.001 for s_ in slivers)
+    check("zoom inside gold: every sliver inside its picture", in_sheet)
+    b = np.asarray(pieces).astype(np.int32)
+    solid = b[..., 3] > 128
+    warm = (b[..., 0] - b[..., 2] > 60) & (b[..., 0] > 170)
+    check("zoom inside gold: the pieces are gold", solid.mean() > 0.03 and (warm & solid).sum() / max(1, solid.sum()) > 0.6, f"{solid.mean() * 100:.1f}% solid, {(warm & solid).sum() / max(1, solid.sum()) * 100:.0f}% of it warm")
     cell = painting(zoom["cell"], "zoom cell")
     if cell is not None:
         check("zoom cell: wider than tall", cell.width > cell.height, f"{cell.size}")

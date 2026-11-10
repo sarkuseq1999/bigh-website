@@ -503,7 +503,28 @@ These sit on top of `DESIGN.md`.
   "hard to relate to", the cell "a ball with worms in it"): here the hand is the step between,
   and the heading beside the cell names it. `zoom.tsx`, `zoom.module.css`, `why.tsx` (the lines);
   pictures `zoom()` in `build_science.py` (Codex paintings, `prompts/zoom-*.txt`); mockup
-  `reference/ink-pages/mockups/science-zoom/`.
+  `reference/ink-pages/mockups/science-zoom/`. (Since November 10 the zoom starts inside the
+  cell and pulls back: next rule.)
+- **Science opening: it starts inside the cell (Mo picked A, November 10, 2026; on the draft
+  branch `science-inside`, not live).** A day after the zoom went live Mo asked for more or
+  better ideas for the first screen, then to see them. What was weak: the picture said "hiking"
+  while the words said "cell" (they met only after scrolling), nothing moved until you scrolled,
+  the walker was small and in a corner, and golden hills with poppies looked like About's
+  opening. Mo's saved hero designs all fill the screen, show one clear main thing and move
+  gently at rest. Of four ideas mocked on the real page (A start inside the cell and pull back;
+  B the walker painted in dabs, "made of cells"; C the words very large, the full stop in gold
+  leaf, one cell below; D the same hills with the walker three times bigger) he picked A. The
+  first screen is the inside of one cell, its mitochondria as slivers of gold leaf that drift
+  and turn slowly, each on its own; the h1 in the painting's pale corner; a line at the foot
+  says what the gold is. Scrolling pulls back: that cell seen whole (the page's cell painting),
+  the walker's hand, then the walker on golden hills, where "Why start with the cell?" and its
+  lead stand in the sky; the three numbered lines follow. Gold leaf: no glow, no shine, and the
+  drift is slow (a few pixels over six seconds), never a flutter. Reduced motion and no script:
+  nothing pinned and nothing adrift, the inside view, then the hills. `#health` stands at the
+  last view. Gold laid on a person did not paint well: slivers on a clothed walker read as
+  scratches, a see-through body as a ghost, and the dabs as pebbles. `zoom.tsx`,
+  `zoom.module.css`; pictures `zoom()` and `lifted()` in `build_science.py` (`zoom-inside-1`);
+  mockups `reference/ink-pages/mockups/science-hero/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

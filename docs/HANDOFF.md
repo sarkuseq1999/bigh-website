@@ -5,6 +5,23 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Waiting for Mo (November 10, 2026, Claude Code): the Science opening now starts inside the
+  cell, a DRAFT on branch `science-inside`, NOT on `studio` and not live.** A day after the zoom
+  went live Mo asked for more or better ideas for the first screen, saw four on the real page
+  (artifact `5rauLXYKSbXSi9VhTg9aem`: A start inside the cell, B the walker in dabs, C the gold
+  dot, D the walker bigger) and said "Go with A". Built: the first screen is the inside of one
+  cell, its gold slivers adrift; scrolling pulls back to the cell seen whole, the walker's hand,
+  then the walker on golden hills, where "Why start with the cell?" now stands. AGENTS.md
+  "Science opening: it starts inside the cell"; pictures and notes
+  `reference/ink-pages/science/README.md` ("First-screen ideas"). Three calls were Claude's, not
+  Mo's, and he has not judged them yet: the whole cell shown between the inside view and the
+  hand, "Why start with the cell?" moved onto the hills, and the gold's line at the first
+  screen's foot. The motion was judged from filmed frames only (the same artifact shows the
+  built page scrolling). One new string, draft translation m1223
+  (`translations-science-inside.cjs`, not native-reviewed). Built in a scratch worktree because
+  another session (branch `nuricell-clear-day`) was leaving picture files in this folder. Next:
+  Mo's critique of the built page; on his yes, merge `origin/main`, re-check on the built site
+  and push (`docs/public-demo.md` entry after the public checks).
 - **Live November 9, 2026 (Claude Code): About's two new chapters.** `main` `022a006`,
   production `dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`, the demo alias on it; public checks `qa_about`
   446/446, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo asked on

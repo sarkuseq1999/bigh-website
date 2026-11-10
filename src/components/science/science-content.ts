@@ -24,8 +24,11 @@ export const opening = {
   // "Decades": his work on cells' energy and aging dates from Bruce Ames's laboratory, 1994
   // (RESEARCH-NOTES.md); his doctorate was in neuroscience, so not "his whole career".
   lead: "How do your cells make energy? And what changes as we age? Dr. Jiankang Liu has spent decades studying both.",
-  // The zoom opening (Mo, November 9, 2026): a walker on golden hills.
-  alt: "A walker with a sun hat and a stick on a trail through golden California hills and oaks, painted in ink and watercolour",
+  // The zoom opening starts inside the cell (Mo, November 10, 2026: he picked A of four ideas for
+  // the first screen). The line at its foot says what the gold is. "Most of": cells also make a
+  // little energy outside their mitochondria.
+  caption: "In gold: its mitochondria, where the cell makes most of its energy.",
+  alt: "The inside of one cell painted in pale blue washes: a dark blue nucleus, and its mitochondria as drifting slivers of gold",
 };
 
 // Why the cell (DRAFT). 37 trillion: Bianconi et al. 2013, Annals of Human Biology (PubMed
@@ -51,10 +54,9 @@ export const why = {
   ],
   source: "Cell count: Bianconi and colleagues, Annals of Human Biology, 2013.",
   sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/23829164/",
-  // The line under the cell that says what its gold is (the zoom opening, November 9, 2026).
-  // "Most of": cells also make a little energy outside their mitochondria.
-  caption: "In gold: its mitochondria, where the cell makes most of its energy.",
-  alt: "One cell painted in pale washes, its mitochondria as slivers of gold round a dark blue nucleus",
+  // Its heading and lead stand in the zoom's last view, the walker on golden hills (since
+  // November 10, 2026; the cell stood here before).
+  alt: "A walker with a sun hat and a stick on a trail through golden California hills and oaks, painted in ink and watercolour",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
