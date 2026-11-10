@@ -155,6 +155,24 @@ These sit on top of `DESIGN.md`.
   together at the foot of their side and end where Add to cart ends. All four products on the
   shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
   approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
+- **NuriCell opening: "A clear day" (Mo picked A, November 10, 2026; on the draft branch
+  `nuricell-clear-day`, not live).** Mo asked again for a better first screen for NuriCell (the 18
+  ideas of October 23-24 were all turned down). Three ideas were mocked on the real page, each
+  keeping the big "Nuri [bottle] Cell" he had asked to keep and giving the bottle a world to stand
+  in: A a clear day (a painting), B blue and gold (one blue brush stroke behind the name, a strip of
+  gold leaf under the bottle), C morning shade (an oak branch's shadow, no paint). He picked A: one
+  loose ink-and-wash painting behind the name and the bottle, a clear California morning sky over
+  the Pacific and a low grassy bluff with a few poppies and two stones. From 960px the name sits on
+  the horizon and the real bottle stands on the bluff; in one column the bottle stands on the bluff
+  under the name. As the page opens the morning fog lifts, once (reduced motion: no fog). The words
+  and the buy box stay on bare paper under the grass. The painting fills the window's width at
+  every size (two side pieces join it in a window wider than 1600px). Paint the coast loosely: ink
+  brush first, light washes, small poppies as single dabs (the first take, flat washes and big
+  poppies, read as a greeting card). No words about fog or a clear head near it: the lifting fog
+  must never become a promise ("clears brain fog"). NuriCell only: Advanced OPC, Turmerific and
+  Nature Calm keep the plain opening, Green Bee Propolis its own. `nuricell-opening.tsx`,
+  `nuricell.module.css`, `opening.tsx`; picture `reference/ink-pages/nuricell/build_nuricell_opening.py`
+  (a Codex painting, `paint_opening.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round6/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

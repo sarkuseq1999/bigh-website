@@ -262,3 +262,209 @@
     margin-left: calc(-1 * var(--gutter));
   }
 }
+
+/* 1. The opening, "A clear day" (Mo picked A of three, November 10, 2026; mockups
+   reference/ink-pages/mockups/nuricell-opening/round6/): one loose painting behind the name and the
+   bottle, a clear California morning over the Pacific and a low grassy bluff. From 960px the name
+   sits on the horizon and the bottle stands on the bluff; in one column the bottle stands on the
+   bluff under the name. The morning fog lifts once as the page opens. The words and the buy box
+   stay on bare paper under the grass. NuriCell only (nuricell-opening.tsx).
+
+   The painting is a child of the bottle's box, so it is sized and placed in boxes (percentages of
+   the box) and follows the bottle at every width and in every language. It sits behind all the
+   page's content (z-index -1: the page root is its own stacking context, ink.module.css `.look`)
+   and multiplies onto the paper as one group with its side pieces and its fog.
+   --col is one row or column of the painting, as a share of the box's width; a row's height in
+   shares of the box's height is that times 1230/1278 (the box's shape). The painting's own numbers
+   (--sky-w, its width; --sky-horizon, --sky-bluff and --sky-end, the rows of its horizon, of the
+   bluff's top and of its last paint) come from nuricell-opening-art.ts, set on the section. */
+/* One column: the whole painting would be 4.7 boxes wide (so its sky reaches the window's top over
+   the name, on a small phone and on a tablet); its middle is drawn (`phone`). The bluff's top
+   stands at 96% of the box's height (--sky-y is the painting's top), the glass's foot (97.2%) a
+   little into the grass. */
+.nuricell[data-look="ink"] [data-chapter="overview"] {
+  --col: calc(470% / var(--sky-w));
+  --sky-y: calc(96% - var(--sky-bluff) * var(--col) * 1230 / 1278);
+  /* The painting is wider than the window: its sides are cut, with no sideways scroll (no
+     stacking context, no scrolling box). */
+  overflow-x: clip;
+}
+
+.nuricell[data-look="ink"] .sky {
+  position: absolute;
+  z-index: -1;
+  top: var(--sky-y);
+  left: calc(50% - var(--sky-phone-w) * var(--col) / 2);
+  width: calc(var(--sky-phone-w) * var(--col));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.nuricell[data-look="ink"] .sky :is(picture, img) {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+/* The bottle's shadow on the grass: soft, under its foot, over the painting. */
+.nuricell[data-look="ink"] .skyShadow {
+  position: absolute;
+  z-index: -1;
+  top: 94.4%;
+  left: 17%;
+  width: 66%;
+  height: 5.6%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(38, 34, 28, 0.5),
+    rgba(38, 34, 28, 0.17) 62%,
+    transparent
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* The grass in front of the bottle's foot: two tufts of the painting's own grass, laid where
+   they stand on the painting (--sky-front-x, --sky-front-y), over the bottle. */
+.nuricell[data-look="ink"] .skyFront {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--sky-y) + var(--sky-front-y) * var(--col) * 1230 / 1278);
+  left: calc(50% + (var(--sky-front-x) - var(--sky-w) / 2) * var(--col));
+  display: block;
+  width: calc(var(--sky-front-w) * var(--col));
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+/* The side pieces, only in a window wider than the painting (from 960px; the same windows as
+   WIDER in nuricell-opening.tsx): each lies --sky-lap columns over the painting's edge and fades
+   in there. */
+.nuricell[data-look="ink"] .sky .skySide {
+  position: absolute;
+  top: 0;
+  display: none;
+  width: calc(var(--sky-side-w) / var(--sky-w) * 100%);
+  height: 100%;
+}
+
+.nuricell[data-look="ink"] .sky .skySide img {
+  height: 100%;
+}
+
+.nuricell[data-look="ink"] .sky .skyLeft {
+  right: calc(100% - var(--sky-lap) / var(--sky-w) * 100%);
+}
+
+.nuricell[data-look="ink"] .sky .skyRight {
+  left: calc(100% - var(--sky-lap) / var(--sky-w) * 100%);
+}
+
+@media (min-width: 1601px), (min-width: 960px) and (min-aspect-ratio: 19/10) {
+  .nuricell[data-look="ink"] .sky .skySide {
+    display: block;
+  }
+}
+
+/* The morning fog: white inside the painting's blend group, so where it lies the bare paper shows.
+   A bank that is thickest over the sea and thins up into the sky and out over the bluff's top,
+   uneven along its upper edge. At rest it is gone (opacity 0): the page is complete without it. */
+.nuricell[data-look="ink"] .skyFog {
+  position: absolute;
+  inset: 0 -80%;
+  background:
+    radial-gradient(ellipse 9% 13% at 33% 50%, rgba(255, 255, 255, 0.8), transparent 72%),
+    radial-gradient(ellipse 12% 11% at 41% 44%, rgba(255, 255, 255, 0.72), transparent 72%),
+    radial-gradient(ellipse 8% 14% at 47% 53%, rgba(255, 255, 255, 0.8), transparent 72%),
+    radial-gradient(ellipse 11% 12% at 54% 46%, rgba(255, 255, 255, 0.7), transparent 72%),
+    radial-gradient(ellipse 9% 13% at 61% 52%, rgba(255, 255, 255, 0.8), transparent 72%),
+    radial-gradient(ellipse 12% 11% at 69% 45%, rgba(255, 255, 255, 0.72), transparent 72%),
+    radial-gradient(ellipse 10% 13% at 24% 46%, rgba(255, 255, 255, 0.72), transparent 72%),
+    radial-gradient(ellipse 10% 13% at 78% 51%, rgba(255, 255, 255, 0.76), transparent 72%),
+    linear-gradient(
+      to bottom,
+      transparent 30%,
+      rgba(255, 255, 255, 0.45) 52%,
+      rgba(255, 255, 255, 0.9) 66%,
+      rgba(255, 255, 255, 0.97) 73%,
+      rgba(255, 255, 255, 0.97) 86%,
+      rgba(255, 255, 255, 0.5) 91%,
+      transparent 95.5%
+    );
+  opacity: 0;
+}
+
+/* It lifts once: it thins and drifts up a little. It waits for the painting's picture when
+   scripts are on (nuricell-opening.tsx marks [data-sky="ready"]); with scripts off nothing waits.
+   Reduced motion: no fog at all. */
+@media (prefers-reduced-motion: no-preference) {
+  .nuricell[data-look="ink"] .skyFog {
+    animation: fog-lifts 3.2s cubic-bezier(0.4, 0, 0.3, 1) 0.5s backwards;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) and (scripting: enabled) {
+  .nuricell[data-look="ink"] .sky:not([data-sky="ready"]) .skyFog {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes fog-lifts {
+  from {
+    translate: 0 0;
+    opacity: 1;
+  }
+
+  to {
+    translate: 0 -4%;
+    opacity: 0;
+  }
+}
+
+/* One column: the words start under the last of the grass. The bluff's top is 4% of the box's
+   height (0.04156 of its width) over the box's foot, and the grass ends --sky-end less --sky-bluff
+   rows under it, each 4.7 / --sky-w of the box's width (64vw, at most 320px). */
+.nuricell[data-look="ink"] [data-chapter="overview"] h1 + div {
+  margin-top: calc(
+    min(64vw, 320px) * ((var(--sky-end) - var(--sky-bluff)) * 4.7 / var(--sky-w) - 0.04156) + 4px
+  );
+}
+
+@media (min-width: 960px) {
+  /* Two columns: the painting is as wide as it must be for the bluff's top to sit under the
+     horizon as far as the bottle's foot sits under the letters' baseline: the horizon 0.012 of the
+     name's size under the baseline (71.31% of the box's height, measured for Switzer at the
+     name's line height), the bluff's top 0.02 over the glass's foot, 0.426 between them (25.663%
+     of the box's width). 6.48 name-sizes wide in all. */
+  .nuricell[data-look="ink"] [data-chapter="overview"] {
+    --col: calc(25.663% / (var(--sky-bluff) - var(--sky-horizon)));
+    --sky-y: calc(71.31% - var(--sky-horizon) * var(--col) * 1230 / 1278);
+  }
+
+  .nuricell[data-look="ink"] .sky {
+    left: calc(50% - var(--sky-w) * var(--col) / 2);
+    width: calc(var(--sky-w) * var(--col));
+  }
+
+  /* The name band a little higher and the words a little lower than the template's, so the grass
+     ends over the words and the first window still ends on the refund line (1440x900). The grass
+     ends under the horizon by its rows (0.426 of the name's size for the rows from the horizon to
+     the bluff's top), and the name's row ends 0.4948 of its size under the horizon. */
+  .nuricell[data-look="ink"] [data-chapter="overview"] {
+    padding-top: calc(88px + clamp(6px, 1.7vw, 26px));
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="overview"] h1 + div {
+    margin-top: calc(
+      var(--name) *
+        (
+          (var(--sky-end) - var(--sky-horizon)) * 0.426 / (var(--sky-bluff) - var(--sky-horizon)) -
+            0.4948
+        ) +
+        3px
+    );
+  }
+}

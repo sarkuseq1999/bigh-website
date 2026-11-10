@@ -5,9 +5,15 @@ docs/superpowers/plans/2026-10-09-nuricell-ink.md).
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Products, one h1 (the name), the real bottle,
               no canvas but the moving gold leaf's, no console errors (1440x900, 390x844)
-  opening     no line over the name and no pool under the bottle (Mo, October 10); the bottle's middle
-              on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word on a phone or
-              tablet; each half on one line in every language
+  opening     no line over the name and no pool painting under the bottle (Mo, October 10); the
+              bottle's middle on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word
+              on a phone or tablet; each half on one line in every language
+  clear_day   the opening's painting, "A clear day" (Mo picked A, November 10, 2026): it covers the
+              window's width and reaches its top, with no sideways scroll (2560 to 320 wide); from
+              960px the name sits on the horizon; the bottle stands on the bluff; the words start under
+              the last of the grass, a few blades in front of its foot; its side pieces load only in a
+              window wider than it; it multiplies onto the paper; every language; the fog waits for the
+              painting, lies over the sea, then lifts once; reduced motion and no scripts: no fog left
   others      the products not yet in ink keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
@@ -1058,17 +1064,23 @@ def opening_check(browser):
     eyebrow = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=overview]').innerText)")
     kept = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=buy]').innerText)")
     check("opening: no line over the name (the Buy chapter keeps 'Our flagship formula')", not eyebrow and kept, f"opening {eyebrow}, buy {kept}")
-    name = page.evaluate("() => [...document.querySelectorAll('[data-chapter=overview] h1 img')].map((e) => e.getAttribute('src'))")
+    name = [unquote(s) for s in page.evaluate("() => [...document.querySelectorAll('[data-chapter=overview] h1 img')].map((e) => e.getAttribute('src'))")]
     pools = page.evaluate(
         "() => [...document.querySelectorAll('[data-chapter=overview] img')].map((e) => decodeURIComponent(e.getAttribute('src'))).filter((s) => /shadow|pool|contact/i.test(s))"
     )
-    check("opening: the bottle alone in the name, no pool or contact shadow anywhere in the opening",
-          len(name) == 1 and "nuricell.png" in unquote(name[0]) and not pools, f"{name} {pools}")
+    # Since November 10, 2026 the bottle stands in a painting, "A clear day" (clear_day below): the
+    # name holds the real bottle once, that painting, its two side pieces (one transparent pixel
+    # where the window needs none) and its grass in front of the bottle's foot, and nothing else.
+    # The bottle's shadow on the grass is drawn, not a picture.
+    bottles = [s for s in name if "/products/nuricell.png" in s]
+    painting = [s for s in name if "opening-sky" in s or s.startswith("data:image/gif")]
+    check("opening: in the name, the real bottle once and the clear-day painting; no pool or contact-shadow picture anywhere in the opening",
+          len(bottles) == 1 and len(painting) == 4 and len(name) == 5 and not pools, f"{[s[-60:] for s in name]} {pools}")
     ctx.close()
     for w, h in [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
         boxes = page.evaluate(
-            """() => ['h1 [class*=first]', 'h1 [class*=second]', 'h1 img'].map((s) => {
+            """() => ['h1 [class*=first]', 'h1 [class*=second]', 'h1 img[class*=bottle]'].map((s) => {
                  const b = document.querySelector('[data-chapter=overview] ' + s).getBoundingClientRect();
                  return [b.left, b.top, b.right, b.bottom]; })"""
         )
@@ -1134,7 +1146,7 @@ def opening_check(browser):
             name = page.evaluate(
                 """() => { const h = document.querySelector('[data-chapter=overview] h1'); const lh = parseFloat(getComputedStyle(h).lineHeight);
                      const wrap = h.parentElement, ws = getComputedStyle(wrap), wr = wrap.getBoundingClientRect();
-                     const f = h.querySelector('[class*=first]').getBoundingClientRect(), s = h.querySelector('[class*=second]').getBoundingClientRect(), img = h.querySelector('img').getBoundingClientRect();
+                     const f = h.querySelector('[class*=first]').getBoundingClientRect(), s = h.querySelector('[class*=second]').getBoundingClientRect(), img = h.querySelector('img[class*=bottle]').getBoundingClientRect();
                      return { lines: [Math.round(f.height / lh), Math.round(s.height / lh)], row: Math.abs(f.top - s.top) < 1, gap: s.left - f.right,
                               inside: f.left >= wr.left + parseFloat(ws.paddingLeft) - 1 && s.right <= wr.right - parseFloat(ws.paddingRight) + 1,
                               below: img.top >= Math.max(f.bottom, s.bottom) - 1, sideways: document.documentElement.scrollWidth > innerWidth }; }"""
@@ -1508,6 +1520,142 @@ def scenes(browser):
         ctx.close()
 
 
+# The opening's painting and what it lines up with, in window pixels: the painting's box and, with
+# its side pieces where they show, how far it reaches; the rows of its horizon, of the bluff's top
+# and of its last paint (the section's --sky-* numbers, from nuricell-opening-art.ts); the letters'
+# baseline; the glass's foot (1242 of the bottle picture's 1278 rows); the first word under it.
+CLEAR_DAY = """() => {
+  const sec = document.querySelector('[data-chapter=overview]'), h1 = sec.querySelector('h1');
+  const sky = sec.querySelector('[data-sky]'), art = sky.querySelector('picture img');
+  const n = (k) => parseFloat(getComputedStyle(sec).getPropertyValue(k));
+  const a = art.getBoundingClientRect();
+  const row = a.height / Number(sky.querySelector('picture source').getAttribute('height'));
+  const probe = document.createElement('span');
+  probe.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+  h1.querySelector('[class*=first]').append(probe);
+  const baseline = probe.getBoundingClientRect().top;
+  probe.remove();
+  const bottle = h1.querySelector('img[class*=bottle]').getBoundingClientRect();
+  const sides = [...sky.querySelectorAll('picture')].slice(1).map((p) => {
+    const r = p.getBoundingClientRect();
+    return { shown: r.width > 0, fetched: !p.querySelector('img').currentSrc.startsWith('data:'), left: Math.round(r.left), right: Math.round(r.right) };
+  });
+  const shown = sides.filter((s) => s.shown);
+  const fog = sky.querySelector('[class*=skyFog]');
+  const tufts = h1.querySelector('img[class*=skyFront]'), t = tufts.getBoundingClientRect();
+  return {
+    glass: [bottle.left + bottle.width * 291 / 1230, bottle.left + bottle.width * 940 / 1230],
+    front: [t.left, t.top, t.right, t.bottom], frontIn: tufts.complete && tufts.naturalWidth > 0, frontOver: getComputedStyle(tufts).zIndex,
+    art: [a.left, a.right], top: a.top,
+    left: Math.min(a.left, ...shown.map((s) => s.left)), right: Math.max(a.right, ...shown.map((s) => s.right)),
+    width: document.documentElement.clientWidth, sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    name: parseFloat(getComputedStyle(h1).fontSize), baseline,
+    horizon: a.top + n('--sky-horizon') * row, bluff: a.top + n('--sky-bluff') * row, end: a.top + n('--sky-end') * row,
+    foot: bottle.top + bottle.height * 1242 / 1278,
+    words: Math.min(...[...h1.nextElementSibling.querySelectorAll('p, li, button')].map((e) => e.getBoundingClientRect().top)),
+    sides, picture: decodeURIComponent(art.currentSrc), loaded: art.complete && art.naturalWidth > 0,
+    blend: getComputedStyle(sky).mixBlendMode, behind: getComputedStyle(sky).zIndex,
+    fog: Number(getComputedStyle(fog).opacity), fogMoves: getComputedStyle(fog).animationName, state: sky.dataset.sky,
+  };
+}"""
+
+
+def clear_day_stands(tag, m, two):
+    """The painting covers the window; the name on the horizon (two columns); the bottle on the
+    bluff; the words under the grass."""
+    check(f"clear day {tag}: the painting covers the window's width and reaches its top, no sideways scroll",
+          m["loaded"] and m["left"] <= 0.5 and m["right"] >= m["width"] - 0.5 and m["top"] <= 0.5 and m["sideways"] == 0,
+          f"reaches {m['left']:.0f}..{m['right']:.0f} of {m['width']}, top {m['top']:.0f}, sideways {m['sideways']}")
+    if two:
+        under = m["horizon"] - m["baseline"]
+        check(f"clear day {tag}: the name sits on the horizon (the horizon at the letters' baseline, at most 3% of the name's size under it)",
+              -1.5 <= under <= 0.03 * m["name"], f"horizon {under:.1f}px under the baseline, name {m['name']:.0f}px")
+    stands = m["foot"] - m["bluff"]
+    check(f"clear day {tag}: the bottle stands on the bluff (its foot a little into the grass)", 0 <= stands <= 12, f"foot {stands:.1f}px under the bluff's top")
+    fl, ft, fr, fb = m["front"]
+    check(f"clear day {tag}: grass in front of its foot (the tufts over the bottle, across the glass's width, from above its foot to under it)",
+          m["frontIn"] and m["frontOver"] == "1" and fl < m["glass"][0] and fr > m["glass"][1] and ft < m["foot"] - 8 and fb > m["foot"] + 8,
+          f"tufts {fl:.0f}..{fr:.0f} x {ft:.0f}..{fb:.0f}, glass {m['glass'][0]:.0f}..{m['glass'][1]:.0f}, foot {m['foot']:.0f}")
+    check(f"clear day {tag}: the words start under the last of the grass", m["words"] >= m["end"] - 1, f"first word {m['words']:.0f}, last paint {m['end']:.0f}")
+
+
+def clear_day(browser):
+    """NuriCell's opening painting (Mo picked A, "A clear day", November 10, 2026;
+    nuricell-opening.tsx, nuricell.module.css; mockups
+    reference/ink-pages/mockups/nuricell-opening/round6/)."""
+    # Every width, still (reduced motion): wider needs the side pieces (wider than 1600px, or more
+    # than 1.9 times as wide as tall); from 960px two columns.
+    for w, h, wider in [(2560, 1300, True), (1920, 1080, True), (1700, 760, True), (1600, 1000, False), (1440, 900, False),
+                        (1280, 720, False), (1024, 768, False), (960, 700, False), (959, 800, False), (768, 1024, False),
+                        (430, 932, False), (390, 844, False), (320, 568, False)]:
+        ctx, page, _, errors = opened(browser, w, h, reduced=True)
+        m = page.evaluate(CLEAR_DAY)
+        two = w >= 960
+        clear_day_stands(f"{w}x{h}", m, two)
+        which = "opening-sky-v" if two else "opening-sky-phone-v"
+        check(f"clear day {w}x{h}: {'the whole painting' if two else 'its middle (one column)'} is the picture drawn", which in m["picture"], m["picture"][-70:])
+        alone = m["art"][0] <= 0.5 and m["art"][1] >= m["width"] - 0.5
+        if wider:
+            sides_ok = all(s["fetched"] and s["shown"] for s in m["sides"]) and not alone
+        else:
+            sides_ok = not any(s["fetched"] or s["shown"] for s in m["sides"]) and alone
+        check(f"clear day {w}x{h}: its side pieces " + ("fill a window wider than it" if wider else "are not fetched (the painting covers the window alone)"),
+              sides_ok, f"painting {m['art'][0]:.0f}..{m['art'][1]:.0f} of {m['width']}, sides {m['sides']}")
+        check(f"clear day {w}x{h}: no fog with reduced motion", m["fog"] == 0 and m["fogMoves"] == "none", f"opacity {m['fog']}, animation {m['fogMoves']}")
+        if (w, h) in [(1440, 900), (390, 844)]:
+            between = page.locator("[data-chapter=overview] [data-sky]").evaluate(STACKING)
+            check(f"clear day {w}x{h}: it multiplies onto the paper from behind the page's content, no stacking context in between",
+                  m["blend"] == "multiply" and m["behind"] == "-1" and not between, f"{m['blend']}, z-index {m['behind']}, {between}")
+            check(f"clear day {w}x{h}: no console errors", not errors, "; ".join(errors[:3]))
+            page.screenshot(path=str(OUT / f"clear-day-{w}.png"))
+        ctx.close()
+    # Every language: the Vietnamese name is set in another face, the others in Switzer.
+    for locale in ["kr", "jp", "cns", "vn"]:
+        for w, h in [(1440, 900), (390, 844)]:
+            ctx, page, _, _ = opened(browser, w, h, f"/{locale}/products/nuricell", reduced=True)
+            clear_day_stands(f"{locale} {w}x{h}", page.evaluate(CLEAR_DAY), w >= 960)
+            ctx.close()
+    # The fog: it waits for the painting (its picture held back 4s: the fog lies whole, nothing
+    # lifts), then lifts once and is gone. (Not opened(): a held picture never lets the page reach
+    # networkidle.)
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx = browser.new_context(viewport={"width": w, "height": h})
+        page = ctx.new_page()
+        held = []
+        painting = re.compile(r"opening-sky-(?:phone-)?v\d+\.webp")
+        page.route("**/*", lambda route: held.append(route) if painting.search(unquote(route.request.url)) else route.continue_())
+        page.goto(BASE + PATH, wait_until="domcontentloaded")
+        page.wait_for_function("() => { const s = document.querySelector('[data-sky]'); return s && Object.keys(s).some(k => k.startsWith('__react')); }", timeout=60000)
+        states = []
+        for _ in range(8):
+            page.wait_for_timeout(500)
+            states.append(page.evaluate("() => { const s = document.querySelector('[data-sky]'); return [s.dataset.sky, Number(getComputedStyle(s.querySelector('[class*=skyFog]')).opacity)]; }"))
+        check(f"clear day {w}: its picture held 4s, the fog waits whole", held and all(state == "waiting" and fog > 0.99 for state, fog in states), f"{len(held)} held; {states[-1]}")
+        for route in held:
+            route.continue_()
+        page.wait_for_function("() => document.querySelector('[data-sky]').dataset.sky === 'ready'", timeout=15000)
+        page.wait_for_timeout(250)
+        early = page.evaluate(CLEAR_DAY)
+        page.screenshot(path=str(OUT / f"clear-day-fog-{w}.png"))
+        check(f"clear day {w}: with the painting in, the fog still lies over the sea", early["loaded"] and early["fog"] > 0.9, f"opacity {early['fog']:.2f}")
+        page.wait_for_timeout(1900)
+        mid = page.evaluate(CLEAR_DAY)["fog"]
+        page.wait_for_timeout(2600)
+        late = page.evaluate(CLEAR_DAY)
+        check(f"clear day {w}: it lifts (thinner part-way, then gone), once", 0.05 < mid < 0.95 and late["fog"] == 0, f"part-way {mid:.2f}, at rest {late['fog']}")
+        clear_day_stands(f"{w}x{h} after the fog", late, w >= 960)
+        ctx.close()
+    # No scripts: the painting shows, nothing waits, and the fog has lifted by itself.
+    ctx, page, _, _ = opened(browser, 1440, 900, js=False)
+    page.wait_for_timeout(4200)
+    plain = page.evaluate(
+        "() => { const s = document.querySelector('[data-sky]'), i = s.querySelector('picture img');"
+        " return { loaded: i.complete && i.naturalWidth > 0, fog: Number(getComputedStyle(s.querySelector('[class*=skyFog]')).opacity) }; }"
+    )
+    check("clear day nojs: the painting shown, the fog lifted by itself", plain["loaded"] and plain["fog"] == 0, str(plain))
+    ctx.close()
+
+
 SECTIONS = {
     "shell": shell,
     "others": others,
@@ -1524,6 +1672,7 @@ SECTIONS = {
     "deep_links": deep_links,
     "polish": polish,
     "opening": opening_check,
+    "clear_day": clear_day,
     "languages": languages,
     "why": why_words,
     "plate": plate,

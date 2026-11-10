@@ -1,0 +1,203 @@
+<title>NuriCell Opening Mockups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+  /* Layout: a gallery wall. One column of sheets: first the built page (wide screenshot, then its
+     phone screenshot beside a short honest note), then the three mockups it was picked from. The
+     wall is a cool grey so the page's warm paper reads. */
+  :root {
+    --wall: #e6e9ec;
+    --sheet: #f6f7f8;
+    --ink: #15181b;
+    --soft: #56606a;
+    --rule: #cdd3d9;
+    --blue: #1668b8;
+    --gold: #9a6f14;
+    --pick: #fff6dc;
+    --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --text: "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #111316; --sheet: #1a1d21; --ink: #eceef0; --soft: #a0a9b3; --rule: #2d333a;
+      --blue: #62aef2; --gold: #dcb157; --pick: #2a2413; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #111316; --sheet: #1a1d21; --ink: #eceef0; --soft: #a0a9b3; --rule: #2d333a;
+    --blue: #62aef2; --gold: #dcb157; --pick: #2a2413; color-scheme: dark;
+  }
+  body {
+    background: var(--wall);
+    color: var(--ink);
+    font: 400 17px/1.5 var(--text);
+    padding-block: 28px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .page { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  header h1 { font: 600 clamp(28px, 5vw, 40px)/1.1 var(--display); margin: 0 0 8px; letter-spacing: -0.02em; text-wrap: balance; }
+  header p { margin: 0; color: var(--soft); max-width: 60ch; }
+  .pick { background: var(--pick); border-left: 4px solid var(--gold); padding: 14px 16px; border-radius: 0 10px 10px 0; max-width: 70ch; }
+  .pick strong { font-family: var(--display); font-weight: 600; }
+  .pick p { margin: 0; }
+  .pick p + p { margin-top: 6px; color: var(--soft); }
+  .idea { background: var(--sheet); border-radius: 14px; padding: clamp(14px, 2.4vw, 24px); display: flex; flex-direction: column; gap: 16px; }
+  .head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+  .tag { font: 600 22px/1 var(--display); color: var(--sheet); background: var(--blue); width: 40px; height: 40px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; align-self: center; }
+  .tag.plain { background: var(--soft); font-size: 13px; width: auto; height: auto; padding: 7px 12px; border-radius: 999px; letter-spacing: 0.04em; }
+  .tag.built { background: var(--gold); font-size: 13px; width: auto; height: auto; padding: 7px 12px; border-radius: 999px; letter-spacing: 0.04em; }
+  .head h2 { font: 600 clamp(22px, 3.6vw, 28px)/1.15 var(--display); margin: 0; letter-spacing: -0.01em; }
+  .score { margin-left: auto; font: 600 17px/1 var(--display); color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .what { margin: 0; max-width: 64ch; }
+  figure { margin: 0; }
+  figcaption { color: var(--soft); font-size: 15px; padding-top: 6px; }
+  .wide { border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); background: var(--wall); }
+  .wide button { all: unset; display: block; width: 100%; cursor: zoom-in; position: relative; }
+  .wide button:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+  .wide img { display: block; width: 100%; height: auto; }
+  .wide.zoomed { overflow-x: auto; }
+  .wide.zoomed button { width: 260%; cursor: zoom-out; }
+  .stack { position: relative; display: block; }
+  .stack img + img { position: absolute; inset: 0; opacity: 0; }
+  .stack.fogged img + img { opacity: 1; }
+  .stack.lifting img + img { opacity: 0; transition: opacity 3s ease-in-out; }
+  .row { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(16px, 3vw, 32px); align-items: start; }
+  .phone { border-radius: 22px; overflow: hidden; border: 1px solid var(--rule); background: var(--wall); }
+  .phone img { display: block; width: 100%; height: auto; }
+  .notes { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+  .notes dl { margin: 0; display: grid; gap: 10px; }
+  .notes dt { font: 600 13px/1.2 var(--display); letter-spacing: 0.06em; text-transform: uppercase; color: var(--soft); }
+  .notes dd { margin: 3px 0 0; max-width: 56ch; }
+  .notes ul { margin: 3px 0 0; padding-left: 1.1em; max-width: 56ch; }
+  .notes li + li { margin-top: 4px; }
+  .play { font: 600 15px/1 var(--text); color: var(--sheet); background: var(--blue); border: 0; border-radius: 999px; padding: 12px 18px; cursor: pointer; align-self: flex-start; }
+  .play:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+  .pair { display: grid; grid-template-columns: minmax(0, 0.42fr) minmax(0, 1fr); gap: clamp(12px, 2vw, 20px); align-items: start; }
+  .small { color: var(--soft); font-size: 15px; max-width: 70ch; margin: 0; }
+  details.older > summary { font: 600 18px/1.3 var(--display); cursor: pointer; padding: 12px 0; }
+  details.older > summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 2px; }
+  details.older > .idea { margin-top: 20px; }
+  @media (max-width: 640px) {
+    .row, .pair { grid-template-columns: minmax(0, 1fr); }
+    .phone { max-width: 320px; }
+    .score { margin-left: 0; width: 100%; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stack.lifting img + img { transition: none; }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <h1>NuriCell first screen: A is built</h1>
+    <p>You picked A, a clear day. These are photos of the real NuriCell page, built and running on my computer. It is not live. Tap a wide picture to zoom in, tap again to zoom out.</p>
+  </header>
+
+  <div class="pick">
+    <p><strong>My score: 8.5 out of 10.</strong> Your bar for a page’s main picture is 9, so read what holds it back before you decide.</p>
+    <p id="checks">Checked on the built site. All seven check suites pass: NuriCell 612 of 612, the other four product pages, the homepage and the menu bar with no failures.</p>
+  </div>
+
+  <section class="idea" aria-labelledby="t-built">
+    <div class="head">
+      <span class="tag built">BUILT</span>
+      <h2 id="t-built">A clear day, on the real page</h2>
+    </div>
+    <p class="what">The name sits on the horizon. The real bottle stands in the grass on the bluff. As the page opens, the morning fog lifts, once.</p>
+    <figure class="wide"><button type="button" aria-label="Zoom the picture of the built page on a desktop"><span class="stack"><img src="img/built-desk.jpg" alt="The built NuriCell first screen on a desktop: sky and sea behind the name, the bottle standing in the grass" width="1600" height="1000"><img src="img/built-desk-fog.jpg" alt="" width="1600" height="1000"></span></button></figure>
+    <button class="play" type="button" id="play">Play how it opens</button>
+    <div class="row">
+      <figure class="phone"><span class="stack"><img src="img/built-phone.jpg" alt="The built NuriCell first screen on a phone" width="780" height="1688"><img src="img/built-phone-fog.jpg" alt="" width="780" height="1688"></span></figure>
+      <div class="notes">
+        <dl>
+          <div><dt>Better than the mockup</dt>
+            <dd><ul>
+              <li>A few blades of grass stand in front of the bottle’s foot, so it stands in the grass, not on top of the picture.</li>
+              <li>Phones now show poppies on both sides of the bottle. The mockup’s phone had only sea.</li>
+              <li>It fills very wide screens too, with no gap at the sides.</li>
+            </ul></dd>
+          </div>
+          <div><dt>Holds it back</dt>
+            <dd><ul>
+              <li>It can read as a beach holiday. That comes with the idea.</li>
+              <li>On very sharp screens the painting is a little soft next to the crisp bottle. The painter makes pictures only so big.</li>
+              <li>The fog is a soft white bank that fades. It is simple, and I judged it from still frames, so you should watch it move.</li>
+            </ul></dd>
+          </div>
+          <div><dt>Not changed</dt><dd>Every word, the buy box, and the other four product pages.</dd></div>
+        </dl>
+      </div>
+    </div>
+    <div class="pair">
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of the built page on a tablet"><img src="img/built-tablet.jpg" alt="The built first screen on a tablet" width="768" height="1024"></button><figcaption>Tablet</figcaption></figure>
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of the built page on a very wide screen"><img src="img/built-wide.jpg" alt="The built first screen on a 1920 pixel wide screen" width="1920" height="1080"></button><figcaption>A big screen (1920 wide)</figcaption></figure>
+    </div>
+  </section>
+
+  <details class="older">
+    <summary>The three mockups you picked from</summary>
+
+    <section class="idea" aria-labelledby="t-now">
+      <div class="head">
+        <span class="tag plain">TODAY</span>
+        <h2 id="t-now">What is live now</h2>
+      </div>
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of today's first screen"><img src="img/now-desk.jpg" alt="Today's NuriCell first screen: the name either side of the bottle on bare paper" width="1600" height="1000" loading="lazy"></button></figure>
+    </section>
+
+    <section class="idea" aria-labelledby="t-a">
+      <div class="head">
+        <span class="tag">A</span>
+        <h2 id="t-a">A clear day (mockup)</h2>
+        <span class="score">Your pick</span>
+      </div>
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of idea A"><img src="img/a-desk.jpg" alt="Idea A as a mockup" width="1600" height="1000" loading="lazy"></button></figure>
+    </section>
+
+    <section class="idea" aria-labelledby="t-b">
+      <div class="head">
+        <span class="tag">B</span>
+        <h2 id="t-b">Blue and gold</h2>
+      </div>
+      <p class="what">One brush stroke of the bottle’s own blue behind the name, a torn strip of gold leaf under the bottle.</p>
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of idea B"><img src="img/b-desk.jpg" alt="Idea B: a broad blue watercolour brush stroke behind the name, a strip of gold leaf under the bottle" width="1600" height="1000" loading="lazy"></button></figure>
+    </section>
+
+    <section class="idea" aria-labelledby="t-c">
+      <div class="head">
+        <span class="tag">C</span>
+        <h2 id="t-c">Morning shade</h2>
+      </div>
+      <p class="what">The soft shadow of an oak branch across the page. No paint.</p>
+      <figure class="wide"><button type="button" aria-label="Zoom the picture of idea C"><img src="img/c-desk.jpg" alt="Idea C: soft oak-leaf shadows across the paper and a soft shadow beside the bottle" width="1600" height="1000" loading="lazy"></button></figure>
+    </section>
+  </details>
+
+  <p class="small">The built pictures are photos of the page as it ships (the built site on my computer), at 1600, 1920, 768 and 390 pixels wide. “Play how it opens” fades between two real photos: the first moment, then the page at rest.</p>
+</div>
+
+<script>
+  // Tap a wide picture to zoom it inside its own frame; tap again to fit.
+  for (const fig of document.querySelectorAll(".wide")) {
+    fig.querySelector("button").addEventListener("click", () => {
+      const on = fig.classList.toggle("zoomed");
+      if (on) fig.scrollLeft = (fig.scrollWidth - fig.clientWidth) / 2;
+    });
+  }
+  // The built page: the first moment (fog), then it lifts.
+  const fogs = [...document.querySelectorAll(".stack")];
+  const play = document.getElementById("play");
+  let timers = [];
+  play.addEventListener("click", () => {
+    timers.forEach(clearTimeout);
+    for (const fog of fogs) {
+      fog.classList.remove("lifting");
+      fog.classList.add("fogged");
+    }
+    timers = [
+      setTimeout(() => fogs.forEach((fog) => fog.classList.add("lifting")), 900),
+      setTimeout(() => fogs.forEach((fog) => fog.classList.remove("fogged", "lifting")), 4400),
+    ];
+  });
+</script>
