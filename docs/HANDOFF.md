@@ -25,10 +25,12 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   worktree because another session (branch `nuricell-clear-day`) was working in this folder.
   Next: Mo's critique of the built page; on his yes, merge `origin/main`, re-check on the built
   site and push (`docs/public-demo.md` entry after the public checks).
-- **Built November 10, 2026 (Claude Code), not live: NuriCell's opening, "A clear day".** On
-  `studio` (built in a scratch worktree, branch `nuricell-clear-day`, while another session worked
-  in this folder); not pushed. Mo asked for a better first screen for NuriCell, saw three ideas mocked on
-  the real page and picked A. One loose ink-and-wash painting now stands behind the name and the
+- **Live November 10, 2026 (Claude Code): NuriCell's opening, "A clear day".** `main`
+  `4d846c7`, production `dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`, the demo alias on it; public checks
+  `qa_nuricell_ink` 612/612, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Built
+  in a scratch worktree (branch `nuricell-clear-day`) while another session worked in this folder,
+  then fast-forwarded into `studio` and pushed. Mo asked for a better first screen for NuriCell,
+  saw three ideas mocked on the real page and picked A. One loose ink-and-wash painting now stands behind the name and the
   bottle: a clear morning sky over the Pacific and a low grassy bluff. From 960px the name sits
   on the horizon and the real bottle stands on the bluff, a few blades of the painting's own grass
   in front of its foot; in one column the painting is drawn closer, so a phone has poppies either
@@ -40,9 +42,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_home_ink` 288/288, `qa_nav` 326/326; lint, type-check and prettier clean. Mo's review page:
   https://claude.ai/artifact/Ft8hXJ2FF8mKJvNyw7UG5s (photos of the built page, then the three
   mockups). Claude's score 8.5: it can read as a beach holiday, the 1536px painting is a little
-  soft on a 2x screen, and the fog was judged from still frames. Mo saw the built page and said
-  "Looks right" (November 10). Still open: his yes before it goes live (then fetch, merge
-  `origin/main` if it moved, rebuild, re-check, push). The takes not used (the first coast, the blue stroke, the two shades) are in
+  soft on a 2x screen, and the fog was judged from still frames. Mo saw the built page, said
+  "Looks right", then "Yes, go live" (November 10). Still open: nothing but his word, if he has
+  one, on how the fog moves on the live page. The takes not used (the first coast, the blue stroke, the two shades) are in
   `bigh-archive\nuricell-opening\`.
 - **Live November 9, 2026 (Claude Code): About's two new chapters.** `main` `022a006`,
   production `dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`, the demo alias on it; public checks `qa_about`

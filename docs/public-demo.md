@@ -4,7 +4,27 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-2s1k7gu25-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-5zojz3ii3-sarkuseq1999s-projects.vercel.app`
+(`dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`), the **production** deployment of `main` at
+`4d846c7cc9324ad3ed0e34b00410e7d465901683` (November 10, 2026, from about 17:36 Pacific). NuriCell's
+opening is "A clear day": one loose ink-and-wash painting behind the name and the bottle, a clear
+California morning sky over the Pacific and a low grassy bluff. From 960px the name sits on the
+horizon and the real bottle stands on the bluff, a few blades of the painting's grass in front of
+its foot; in one column the bottle stands on the bluff under the name; the morning fog lifts once
+as the page opens (reduced motion: no fog). NuriCell only; no word changed. Mo asked for a better
+first screen, saw three ideas mocked on the real page, picked A, found the built page right
+("Looks right"), then "Yes, go live". `4d846c7` is `022a006` plus `studio`'s release notes (docs
+only), the NuriCell commit (`ac8db6f`) and its note, pushed as a fast-forward. Before the push, on
+the built site (a scratch worktree, `npm run build` + `npm start`): `qa_nuricell_ink` 612/612,
+`qa_opc_ink` 199/199, `qa_nature_calm_ink` 159/159, `qa_propolis_ink` 273/273,
+`qa_turmerific_ink` 155/155, `qa_home_ink` 288/288, `qa_nav` 326/326; type-check and lint clean.
+After the alias update, in fresh unauthenticated browsers on the public demo: `/products/nuricell`
+at 1440 and 390 px and `/cns/products/nuricell` at 390 px (200, the painting behind the name, the
+name on the horizon from 960px, the bottle on the bluff, no console errors), then
+`qa_nuricell_ink` 612/612, `qa_home_ink` 288/288, `qa_nav` 326/326.
+
+Before that, until about 17:36 Pacific on November 10, 2026, the alias pointed to
+`bigh-website-2s1k7gu25-sarkuseq1999s-projects.vercel.app`
 (`dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`), the **production** deployment of `main` at
 `022a00640ce0d27279eb1b8f15559e69a8055e79` (November 9, 2026). The About page's two new chapters:
 "Each plant, from where it grows best." (a painted globe, the four plants round its rim, gold
