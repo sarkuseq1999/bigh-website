@@ -163,7 +163,8 @@ These sit on top of `DESIGN.md`.
   gold leaf under the bottle), C morning shade (an oak branch's shadow, no paint). He picked A: one
   loose ink-and-wash painting behind the name and the bottle, a clear California morning sky over
   the Pacific and a low grassy bluff with a few poppies and two stones. From 960px the name sits on
-  the horizon and the real bottle stands on the bluff; in one column the bottle stands on the bluff
+  the horizon (since November 11 a strip of sky above it: next rule) and the real bottle stands on
+  the bluff; in one column the bottle stands on the bluff
   under the name. As the page opens the morning fog lifts, once (reduced motion: no fog). The words
   and the buy box stay on bare paper under the grass. The painting fills the window's width at
   every size (two side pieces join it in a window wider than 1600px). Paint the coast loosely: ink
@@ -173,6 +174,24 @@ These sit on top of `DESIGN.md`.
   Nature Calm keep the plain opening, Green Bee Propolis its own. `nuricell-opening.tsx`,
   `nuricell.module.css`, `opening.tsx`; picture `reference/ink-pages/nuricell/build_nuricell_opening.py`
   (a Codex painting, `paint_opening.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round6/`.
+- **NuriCell opening: room and sunshine (Mo picked A, November 11, 2026; built on the branch
+  `nuricell-sunlight`, not live).** Mo found the big name sitting right on the sea line and asked
+  for space between them, for more room between the painting and the words under it ("Stay sharp.
+  Live fully." and the two highlights), and for "some kind of reflection of the sun" in the upper
+  right corner: "California sunshine". From 960px "Nuri" and "Cell" are lifted 0.1 of their size,
+  so a strip of sky lies between their foot and the horizon; the bottle stays on the bluff, so its
+  middle now sits 0.1 name-sizes under the letters' middle (the October 10 rule, adjusted). The
+  words start 0.13 name-sizes under the last of the grass (20px on a phone). Of two sunshine ideas
+  on the real page (A light from the corner, B a small painted sun with its sparkle) he picked A:
+  the sun is just out of the picture, its warm light pours in from beyond the window's top right
+  corner and its sparkle lies on the sea under that corner. Both are Codex paint laid in the
+  painting's blend group (only the light is taken from Codex's sky, so the opening's own blue
+  stays) and placed against the window's right edge, so the light is in the corner at every
+  width. No sun disc here (it crowded "Cell" on a laptop, and the homepage has its sun), no lens
+  flare or glow, and the light never ends inside the window (a first take left a hard line along
+  a tablet's top). `nuricell-opening.tsx`, `nuricell.module.css`, `nuricell-sun-art.ts`,
+  `opening.tsx` (`data-half`); pictures `reference/ink-pages/nuricell/build_nuricell_sun.py`
+  (`paint_sun.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round7/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the
