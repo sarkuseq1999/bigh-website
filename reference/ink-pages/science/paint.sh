@@ -9,6 +9,9 @@
 #   town-loose-<n>      town-dusk-1 painted again, far looser (prompts/town-loose-1.txt)
 #   loose-<src>-<n>     originals/<src>.png painted again, far looser (prompts/loose.txt)
 #   wash-<place>-<n>    an edit of the shipped place painting: light washes (prompts/place-wash-1.txt)
+#   zoom-hands-<n>      the zoom's pair (originals/zoom-pair-1.png) seen close: the joined hands
+#   zoom-pair-phone-<n> the zoom's pair painted again as a tall picture for phones (1024x1536)
+#   zoom-hands-phone-<n> the joined hands (originals/zoom-hands-3.png) again as a tall picture
 # The picture lands in originals/<name>.png, Codex's log in plates/logs/ (git-ignored). stdin must
 # be /dev/null, or codex exec waits on it forever.
 set -u
@@ -49,6 +52,18 @@ for name in "$@"; do
       src="${name#gild-}"; key="${src#loose-}"; key="${key%%-*}"
       ref=(-i "$HERE/originals/$src.png")
       cp "$HERE/prompts/gild-$key.txt" "$order"
+      ;;
+    zoom-hands-*|zoom-pair-phone-*)
+      # A view of the pair painting: its people and colours (first attachment), the hand second.
+      # The tall hands are painted from the wide hands instead.
+      base="${name%-*}"
+      first="$HERE/originals/zoom-pair-1.png"
+      case "$name" in
+        zoom-hands-phone-*) shape="portrait 1024x1536"; first="$HERE/originals/zoom-hands-3.png" ;;
+        zoom-pair-phone-*) shape="portrait 1024x1536" ;;
+      esac
+      ref=(-i "$first" -i "$HAND")
+      cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"; cat "$HERE/prompts/$base-1.txt" >> "$order"
       ;;
     wash-*)
       place="${name#wash-}"; place="${place%-*}"

@@ -5,10 +5,33 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 10, 2026 (Claude Code): the Science opening starts inside the cell and pulls
+  back to a grandfather and grandchild, hand in hand.** `main` `e0f04ab`, production
+  `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, the demo alias on it from about 19:24 Pacific; a quick look
+  at the public demo showed it on desktop, phone and in Chinese; the full public checks (`qa_science_ink`, `qa_home_ink`, `qa_nav`) were still running when this was written (`docs/public-demo.md`).
+  A day after the zoom went live Mo asked for more or better ideas for the first screen, saw four
+  on the real page (artifact `5rauLXYKSbXSi9VhTg9aem`: A start inside the cell, B the walker in
+  dabs, C the gold dot, D the walker bigger) and said "Go with A". He saw A built and found its
+  last view (one small walker) plain; of four last pictures on the real page he picked 1, "hand
+  in hand"; he saw that built and said "Put it live". The first screen is the inside of one cell,
+  its gold slivers adrift; scrolling pulls back to the cell seen whole, a grandfather's hand
+  holding a child's, then the two of them on the trail, where "Why start with the cell?" now
+  stands, with tall paintings of the hands and the pair for upright windows. AGENTS.md "Science
+  opening: it starts inside the cell" and "Science opening, the last view: hand in hand";
+  pictures and notes `reference/ink-pages/science/README.md` ("First-screen ideas", "The last
+  view"). Built in a scratch worktree (branch `science-inside`) while other sessions worked in
+  this folder; released as `origin/main` (NuriCell's clear day, About's oak) plus `studio`'s notes
+  plus the two Science commits, a fast-forward. Before the push, on the combined built site:
+  `qa_science_ink` 765/765, `qa_home_ink` 288/288, `qa_nav` 326/326, `check_science_art` 53/53;
+  type-check and lint clean. Three calls were Claude's and Mo has seen them only in the films:
+  the whole cell shown between the inside view and the hands, "Why start with the cell?" moved
+  onto the hills, and the gold's line at the first screen's foot. Still open: Mo's word on how
+  the motion feels on the live page (it was judged from filmed frames only); a native speaker's
+  check of m1223-m1224 (`translations-science-inside.cjs`).
 - **Live November 10, 2026 (Claude Code): About's purpose oak, on a sunny afternoon.** `main`
   `a3bfad5`, production `dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`; the demo alias was on it from about
-  18:46 Pacific until another session's Science release (`main` `e0f04ab`,
-  `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, which contains this one) took it at about 19:23; public checks
+  18:45 Pacific until another session's Science release (`main` `e0f04ab`,
+  `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, which contains this one) took it at about 19:24; public checks
   `qa_about` 453/453, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo found
   the purpose's oak "a little dark or scary" (black ink, bare roots hanging in empty paper, an
   empty swing). Of three painted ideas on the real page he picked A: the same valley oak in soft
@@ -22,7 +45,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `reference/ink-pages/about-purpose/README.md`. Built in a scratch worktree while other sessions
   used this folder; `main` moved twice on the way (NuriCell's clear day before the push, so the
   release was rebuilt and re-checked on top of it; the Science release after it). `studio` holds
-  this release and these notes, not yet the Science release (`e0f04ab`): its session merges it.
+  all three of the day's releases and their notes.
   Claude's score 8.5: the gold patch is small, "Made in California" also has oaks, the people lean
   a little storybook. Still open: a native speaker's check of m1230 (the painting's description);
   a look on a real iPhone. Noted, not asked for: the sequoia, the pool behind Dr. Liu, the promise

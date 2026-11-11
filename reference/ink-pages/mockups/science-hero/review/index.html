@@ -1,0 +1,321 @@
+<title>Science Hero Ideas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Ysabeau:wght@400;500&display=swap">
+<style>
+/* Layout: one column of four "plates". Each plate: letter and name, one plain sentence, the first
+   screen as a short film (desktop beside phone; phone first on a narrow screen), what scrolling
+   does, and what still holds the idea back. The site's own paper, ink and gold. */
+:root {
+  --paper: #f6f1e5;
+  --card: #fbf8f0;
+  --ink: #1c1a16;
+  --ink-soft: #5a564d;
+  --gold: #8f6a1c;
+  --rule: #d8cfba;
+  --frame: #2a2722;
+  --display: "Ysabeau", "Optima", "Gill Sans", "Segoe UI", sans-serif;
+  --body: "Inter", "Helvetica Neue", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #1a1815;
+    --card: #23201b;
+    --ink: #ece6d8;
+    --ink-soft: #aaa393;
+    --gold: #d0aa55;
+    --rule: #3b372f;
+    --frame: #4a453b;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #1a1815;
+  --card: #23201b;
+  --ink: #ece6d8;
+  --ink-soft: #aaa393;
+  --gold: #d0aa55;
+  --rule: #3b372f;
+  --frame: #4a453b;
+  color-scheme: dark;
+}
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.5;
+}
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding-block: 36px 72px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  gap: 56px;
+}
+h1, h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; }
+h2 { font-size: clamp(28px, 4vw, 40px); line-height: 1.08; }
+p { margin: 0; max-width: 62ch; }
+.intro { display: flex; flex-direction: column; gap: 14px; }
+.intro p { font-size: 19px; }
+.pick {
+  padding: 16px 18px;
+  border: 1px solid var(--rule);
+  border-left: 3px solid var(--gold);
+  background: var(--card);
+}
+.pick b { font-weight: 600; }
+
+.plate { display: flex; flex-direction: column; gap: 18px; padding-top: 28px; border-top: 1px solid var(--rule); }
+.head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; }
+.letter { font-family: var(--display); font-size: clamp(28px, 4vw, 40px); color: var(--gold); line-height: 1; }
+.score { margin-left: auto; font-size: 15px; color: var(--ink-soft); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.score b { color: var(--ink); font-weight: 600; }
+.what { font-size: 19px; }
+
+.films { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; justify-items: center; }
+.film { margin: 0; width: 100%; display: flex; flex-direction: column; gap: 6px; }
+.film video, .film img { display: block; width: 100%; height: auto; max-width: 100%; background: var(--card); border: 1px solid var(--frame); }
+.film.desk video, .film.desk img { aspect-ratio: 1280 / 800; border-radius: 6px; }
+.film.phone { max-width: 390px; }
+.film.phone video, .film.phone img { aspect-ratio: 390 / 844; border-radius: 26px; }
+.film figcaption { font-size: 14px; color: var(--ink-soft); }
+@media (min-width: 820px) {
+  .films { grid-template-columns: minmax(0, 1fr) minmax(0, 0.289fr); align-items: start; }
+  .film.phone { order: 2; max-width: none; }
+}
+
+.notes { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 40px; }
+@media (min-width: 820px) { .notes { grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); align-items: start; } }
+.label { font-size: 14px; font-weight: 600; letter-spacing: 0.02em; color: var(--ink-soft); margin-bottom: 8px; }
+.strip { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.strip figure { margin: 0; flex: 1 1 120px; min-width: 0; max-width: 220px; display: flex; flex-direction: column; gap: 4px; }
+.strip img { display: block; width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); }
+.strip figcaption { font-size: 14px; color: var(--ink-soft); }
+.strip .to { flex: 0 0 auto; color: var(--ink-soft); font-size: 20px; padding-bottom: 22px; }
+@media (max-width: 519px) {
+  /* Three small pictures in one row; their numbers carry the order. */
+  .strip .to { display: none; }
+  .strip figure { flex: 1 1 28%; }
+}
+.back { font-size: 17px; }
+
+.today img { display: block; width: 100%; max-width: 560px; height: auto; border: 1px solid var(--rule); border-radius: 6px; }
+.small { font-size: 15px; color: var(--ink-soft); }
+@media (prefers-reduced-motion: reduce) { video { animation: none; } }
+</style>
+
+<div class="page">
+  <header class="intro">
+    <h1>Hand in hand, built on the real page</h1>
+    <p>You picked 1. This is the real Science page on a draft copy of the site. Each film rests on the first screen, scrolls all the way through, and rests on the last view. Nothing is live.</p>
+  </header>
+
+  <section class="plate" id="built">
+    <div class="head"><span class="letter">1</span><h2>From one cell to hand in hand</h2><span class="score">My score <b>9 / 10</b></span></div>
+    <p class="what">You open inside one cell with the gold adrift. Scrolling pulls back: the cell seen whole, a big hand holding a small one, then a grandfather and a grandchild on the trail, where "Why start with the cell?" stands.</p>
+    <div class="films">
+      <figure class="film phone"><video muted loop playsinline controls preload="metadata" poster="built-phone.jpg"><source src="built-phone.mp4" type="video/mp4"></video><figcaption>Phone, 18 seconds</figcaption></figure>
+      <figure class="film desk"><video muted loop playsinline controls preload="metadata" poster="built-desk.jpg"><source src="built-desk.mp4" type="video/mp4"></video><figcaption>Desktop, 18 seconds</figcaption></figure>
+    </div>
+    <p class="label">The last view, as a still</p>
+    <div class="films">
+      <figure class="film phone"><img alt="Phone: a grandfather and a child walk hand in hand up a trail, under the heading Why start with the cell?" src="built-phone-last.jpg" loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><img alt="Desktop: a grandfather and a child walk hand in hand up a trail, under the heading Why start with the cell?" src="built-desk-last.jpg" loading="lazy"><figcaption>Desktop</figcaption></figure>
+    </div>
+    <div class="notes">
+      <div>
+        <p class="label">What is new since the samples</p>
+        <p class="back">Three new paintings besides the one you picked: the two joined hands close up, and tall versions of the hands and of the pair for phones, so nothing is cropped there. The pull-back now starts exactly where the big hand stood, so the two pictures read as one move.</p>
+      </div>
+      <div>
+        <p class="label">What holds it back</p>
+        <p class="back">I have judged the motion from filmed frames, not by scrolling it with a hand. For a moment, as the big hand gives way to the pair, the picture is soft. Until you read the words, the first screen could still be water with gold leaves.</p>
+      </div>
+    </div>
+  </section>
+
+  <header class="intro">
+    <h2>The four choices for the last picture, from earlier</h2>
+    <p>Kept here so you can look back. You picked 1.</p>
+  </header>
+
+
+  <section class="plate" id="last-1">
+    <div class="head"><span class="letter">1</span><h2>Hand in hand</h2><span class="score">My score <b>9 / 10</b></span></div>
+    <p class="what">A grandfather and a grandchild on the trail. The hand you were just inside turns out to be holding a small one.</p>
+    <div class="films">
+      <figure class="film phone"><img alt="Phone: a grandfather and a child walk hand in hand up a trail through golden hills" src="last-pair-phone.jpg" loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><img alt="Desktop: a grandfather and a child walk hand in hand up a trail through golden hills" src="last-pair-desk.jpg"><figcaption>Desktop</figcaption></figure>
+    </div>
+    <p class="back"><b>Holds it back:</b> it is sweet, and some people may find it a little sentimental.</p>
+  </section>
+
+  <section class="plate" id="last-2">
+    <div class="head"><span class="letter">2</span><h2>The orange grove</h2><span class="score">My score <b>8.5 / 10</b></span></div>
+    <p class="what">A woman picks oranges. Her reaching hand is the clearest hand of the four, so it is easy to see where the cell was. It has the most colour.</p>
+    <div class="films">
+      <figure class="film phone"><img alt="Phone: a woman in a straw hat reaches up to pick an orange, a basket on her arm" src="last-grove-phone.jpg" loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><img alt="Desktop: a woman in a straw hat reaches up to pick an orange, a basket on her arm" src="last-grove-desk.jpg" loading="lazy"><figcaption>Desktop</figcaption></figure>
+    </div>
+    <p class="back"><b>Holds it back:</b> the tree crowds the top right, near the menu bar and the end of the heading. A final painting would keep it clear.</p>
+  </section>
+
+  <section class="plate" id="last-3">
+    <div class="head"><span class="letter">3</span><h2>The surfer</h2><span class="score">My score <b>8.5 / 10</b></span></div>
+    <p class="what">A silver-haired surfer walks down to the Pacific at first light. It says California and energy the fastest.</p>
+    <div class="films">
+      <figure class="film phone"><img alt="Phone: a silver-haired surfer carries a board across wet sand toward the sea" src="last-surf-phone.jpg" loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><img alt="Desktop: a silver-haired surfer carries a board across wet sand toward the sea" src="last-surf-desk.jpg" loading="lazy"><figcaption>Desktop</figcaption></figure>
+    </div>
+    <p class="back"><b>Holds it back:</b> far more of your customers walk than surf, so fewer will see themselves in it. The words say "a long walk" and would need to change.</p>
+  </section>
+
+  <section class="plate" id="last-4">
+    <div class="head"><span class="letter">4</span><h2>The same walker, bigger</h2><span class="score">My score <b>8 / 10</b></span></div>
+    <p class="what">Today's hills with the walker about three times bigger and nearer the middle. The smallest change.</p>
+    <div class="films">
+      <figure class="film phone"><img alt="Phone: a walker with a pack and a stick, large, on a trail through golden hills" src="last-near-phone.jpg" loading="lazy"><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><img alt="Desktop: a walker with a pack and a stick, large, on a trail through golden hills" src="last-near-desk.jpg" loading="lazy"><figcaption>Desktop</figcaption></figure>
+    </div>
+    <p class="back"><b>Holds it back:</b> it is still one person hiking, so it may still feel plain to you.</p>
+  </section>
+
+  <section class="plate today" id="last-today">
+    <div class="head"><h2>The last picture before, to compare</h2></div>
+    <img alt="The last view as built: a small walker on golden hills under the heading" src="last-today-desk.jpg" loading="lazy">
+  </section>
+
+  <header class="intro">
+    <h2>The four first samples, from earlier today</h2>
+    <p>Kept here so you can look back. A was my pick after painting. B was my pick in words, but it did not paint well.</p>
+  </header>
+
+  <section class="plate" id="idea-a">
+    <div class="head"><span class="letter">A</span><h2>Start inside the cell</h2><span class="score">My score <b>8 / 10</b></span></div>
+    <p class="what">The first screen is the inside of one cell. Its gold slivers, the mitochondria, drift slowly. Scroll, and the view pulls back: out of the cell, to a hand, to a walker on the golden hills.</p>
+    <div class="films">
+      <figure class="film phone"><video muted loop playsinline preload="metadata" poster="inside-phone.jpg"><source src="inside-phone.mp4" type="video/mp4"></video><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><video muted loop playsinline preload="metadata" poster="inside-desk.jpg"><source src="inside-desk.mp4" type="video/mp4"></video><figcaption>Desktop</figcaption></figure>
+    </div>
+    <div class="notes">
+      <div>
+        <p class="label">When you scroll</p>
+        <div class="strip">
+          <figure><img alt="Inside the cell" src="inside-desk.jpg" loading="lazy"><figcaption>1. Inside the cell</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="The walker's hand in dry grass" src="step-desk-s1.jpg" loading="lazy"><figcaption>2. A hand</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="A walker on golden hills" src="today-desk.jpg" loading="lazy"><figcaption>3. The walker</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <p class="label">What holds it back</p>
+        <p class="back">Until you read the words, it could be water or mist with gold leaves. It is also close to "one big cell", which you passed on last time. The new part is that the zoom runs backwards.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate" id="idea-c">
+    <div class="head"><span class="letter">C</span><h2>The gold dot</h2><span class="score">My score <b>8 / 10</b></span></div>
+    <p class="what">The words lead, very large. The full stop after "cell" is a dot of gold leaf, and one cell waits below it with its gold adrift. Scroll, and that cell grows to fill the screen.</p>
+    <div class="films">
+      <figure class="film phone"><video muted loop playsinline preload="metadata" poster="dot-phone.jpg"><source src="dot-phone.mp4" type="video/mp4"></video><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><video muted loop playsinline preload="metadata" poster="dot-desk.jpg"><source src="dot-desk.mp4" type="video/mp4"></video><figcaption>Desktop</figcaption></figure>
+    </div>
+    <div class="notes">
+      <div>
+        <p class="label">When you scroll</p>
+        <div class="strip">
+          <figure><img alt="The big words and the gold dot" src="dot-desk.jpg" loading="lazy"><figcaption>1. The words and the dot</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="One cell beside its words" src="step-desk-s2.jpg" loading="lazy"><figcaption>2. The cell, close up</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <p class="label">What holds it back</p>
+        <p class="back">There is less painting on the first screen than in the others, and no California. The "thousands would fit" line is my own arithmetic from a typical cell's size. It needs a source before it goes live.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate" id="idea-d">
+    <div class="head"><span class="letter">D</span><h2>Keep today's scene, walker bigger</h2><span class="score">My score <b>8 / 10</b></span></div>
+    <p class="what">The same golden hills. The walker is about three times bigger and near the middle, so she is clearly the main thing. A cloud's shadow drifts over the hills. Scrolling works as it does today.</p>
+    <div class="films">
+      <figure class="film phone"><video muted loop playsinline preload="metadata" poster="near-phone.jpg"><source src="near-phone.mp4" type="video/mp4"></video><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><video muted loop playsinline preload="metadata" poster="near-desk.jpg"><source src="near-desk.mp4" type="video/mp4"></video><figcaption>Desktop</figcaption></figure>
+    </div>
+    <div class="notes">
+      <div>
+        <p class="label">When you scroll</p>
+        <div class="strip">
+          <figure><img alt="The walker, large" src="near-desk.jpg" loading="lazy"><figcaption>1. The walker</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="The walker's hand in dry grass" src="step-desk-s1.jpg" loading="lazy"><figcaption>2. Her hand</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="One cell beside its words" src="step-desk-s2.jpg" loading="lazy"><figcaption>3. One cell</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <p class="label">What holds it back</p>
+        <p class="back">The picture still says "hiking" before it says "cell". The cloud shadow is a small movement. Grass that really moves would need a short painted video, which costs a few dollars, so I would ask you first.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate" id="idea-b">
+    <div class="head"><span class="letter">B</span><h2>Made of cells</h2><span class="score">My score <b>7 / 10</b></span></div>
+    <p class="what">A body is made of cells, so the walker is painted in small dabs, some of them gold leaf. A light passes over the gold now and then. Scroll dives into one dab, and it becomes the cell.</p>
+    <div class="films">
+      <figure class="film phone"><video muted loop playsinline preload="metadata" poster="dabs-phone.jpg"><source src="dabs-phone.mp4" type="video/mp4"></video><figcaption>Phone</figcaption></figure>
+      <figure class="film desk"><video muted loop playsinline preload="metadata" poster="dabs-desk.jpg"><source src="dabs-desk.mp4" type="video/mp4"></video><figcaption>Desktop</figcaption></figure>
+    </div>
+    <div class="notes">
+      <div>
+        <p class="label">When you scroll</p>
+        <div class="strip">
+          <figure><img alt="The walker painted in dabs" src="dabs-desk.jpg" loading="lazy"><figcaption>1. The walker in dabs</figcaption></figure>
+          <span class="to" aria-hidden="true">&rarr;</span>
+          <figure><img alt="One cell beside its words" src="step-desk-s2.jpg" loading="lazy"><figcaption>2. One dab is one cell</figcaption></figure>
+        </div>
+      </div>
+      <div>
+        <p class="label">What holds it back</p>
+        <p class="back">This is not the B I described. Gold laid on a normal walker came out looking like scratches, and a see-through body looked like a ghost, so I changed it to dabs. The dabs are clever, but they can read as pebbles or a patterned suit. It is below my usual bar. I am showing it because you asked to see all four.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="plate today" id="today">
+    <div class="head"><h2>Today, to compare</h2></div>
+    <img alt="Today's Science first screen: a small walker on golden hills" src="today-desk.jpg" loading="lazy">
+    <p class="small">The paintings are first samples from Codex, on your ChatGPT plan, with no spend. The walker in D and B is a new figure each time. A final build would get its own phone painting.</p>
+  </section>
+</div>
+
+<script>
+(function () {
+  // Each film plays only while it is on screen, and not at all for a viewer who asked for less motion.
+  var films = Array.prototype.slice.call(document.querySelectorAll('video'));
+  var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (calm) { films.forEach(function (v) { v.controls = true; }); return; }
+  if (!('IntersectionObserver' in window)) { films.forEach(function (v) { v.play().catch(function () {}); }); return; }
+  var watch = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.play().catch(function () { e.target.controls = true; }); }
+      else { e.target.pause(); }
+    });
+  }, { threshold: 0.2 });
+  films.forEach(function (v) { watch.observe(v); });
+})();
+</script>

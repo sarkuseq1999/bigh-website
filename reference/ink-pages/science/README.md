@@ -96,3 +96,75 @@ m1120-m1122 (`translations-science-zoom.cjs`, not native-reviewed). The sample M
 `reference/ink-pages/mockups/science-zoom/` (`build_zoom_mock.py`, artifact
 `UwMjAd5Zpbm8yzXowNLYSq`). The unused takes (`zoom-cell-1`, `zoom-cell-3`, `zoom-hand-1`,
 `zoom-tissue-1`) are in `bigh-archive\science-zoom-unused-2026-11-09\`; their prompts stay in `prompts/`.
+
+## First-screen ideas (November 10, 2026): Mo picked A, start inside the cell
+
+A day after the zoom went live Mo asked for more or better ideas for the first screen, then to see
+them. Four ideas were mocked on the real page without touching `src/`:
+`mockups/science-hero/` (`ideas.py` is injected into the dev server's page by `shoot_hero.py`,
+`split_gold.py` lifts a painting's gold slivers so they can drift, `gild_dabs.py` gilds idea B's
+dabs, `make_loops.py` makes the films; review page `review/`, artifact `5rauLXYKSbXSi9VhTg9aem`).
+Codex paintings on Mo's ChatGPT plan, no API spend. Claude's scores: A 8, C 8, D 8, B 7.
+
+| Idea                         | Original        | Note                                                                                  |
+| ---------------------------- | --------------- | ------------------------------------------------------------------------------------- |
+| A. Start inside the cell     | `zoom-inside-1` | Mo's pick (it was `hero-inside-1`): the view from inside one cell; the zoom pulls back |
+| (A, not used)                | `hero-inside-2` | The nucleus read as a boulder in mist                                                  |
+| (A, not used)                | `hero-inside-3` | Paler, "clear water"; read as a sky with clouds                                        |
+| B. Made of cells             | `hero-dabs-1`   | The walker in dabs, some gilded by `gild_dabs.py`; can read as pebbles                 |
+| (B, not used)                | `hero-dabs-2`   | The same facing us: a patterned suit                                                   |
+| (B, rejected)                | `hero-walker-1` | Gold slivers laid on a clothed walker: scratches across the face, chest and legs       |
+| (B, rejected)                | `hero-walker-2` | A see-through body with gold inside: a ghost                                           |
+| C. The gold dot              | (none)          | Words very large, the full stop in gold leaf, the page's own cell below                |
+| D. Today's scene, walker big | `hero-near-2`   | The walker about three times larger; `hero-near-1` was too tall (hat under the menu)   |
+
+Mo picked A ("Go with A"). Built on the branch `science-inside` (AGENTS.md "Science opening: it
+starts inside the cell"): `zoom()` in `build_science.py` now ships four views in the page's order.
+`lifted()` takes the gold slivers off `zoom-inside-1` (the painting is filled in behind them, in
+two rounds, and a sliver is what differs from that and is warm), `pieces()` packs them into one
+picture (`zoom-inside-gold-v3.webp`) and fixes each one's drift, so `zoom.tsx` can lay each sliver
+where it was painted and let it drift on its own. The whole cell (`zoom-cell-2`) is now a view on
+the way out, between the inside view and the hand. One new string, the first picture's
+description: draft translation m1223 (`translations-science-inside.cjs`, not native-reviewed).
+`check_science_art.py` and `qa_science_ink.py` follow the new order. The eight unused `hero-*`
+originals (`hero-inside-2`, `-3`, `hero-walker-1`, `-2`, `hero-dabs-1`, `-2`, `hero-near-1`,
+`-2`) are in `bigh-archive\science-hero-unused-2026-11-10\`; their prompts stay in `prompts/`,
+and `gild_dabs.py` and the mock scripts need them copied back to run again.
+
+## The last view: hand in hand (November 10, 2026)
+
+Mo saw A built and found the picture the zoom pulls back to (one small walker on empty hills)
+plain. Four last pictures were set in the built page's last view without touching `src/`
+(`mockups/science-hero/shoot_last.py`, pictures `review/last-*.jpg`); he picked 1 (AGENTS.md
+"Science opening, the last view: hand in hand"). `film_built.py` films the built page scrolling
+for the review page; its two films are not kept in the repo (about 4 MB each; they are on the
+artifact), only their first and last frames.
+
+| Choice                   | Original           | Note                                                                    |
+| ------------------------ | ------------------ | ----------------------------------------------------------------------- |
+| 1. Hand in hand          | `zoom-pair-1`      | Mo's pick (it was `out-pair-2`): a grandfather and a grandchild         |
+| 2. The orange grove      | `out-grove-2`      | The most colour; the tree crowded the menu bar on desktop               |
+| 3. The surfer            | `out-surf-1`       | Says California fastest; fewer customers surf than walk                 |
+| 4. The same walker, big  | `out-near-1`       | The walker three times bigger (it was `hero-near-2`): still one hiker   |
+| (left out)               | `out-painter-1/-2` | A painter at her easel: busy under the words                            |
+
+Built on it, each a Codex painting made from `zoom-pair-1` so the people match (`paint.sh`
+attaches the pair first, the Big Sur hand second; `prompts/zoom-hands-1.txt`,
+`zoom-pair-phone-1.txt`, `zoom-hands-phone-1.txt`):
+
+| Picture                    | Original             | Note                                                          |
+| -------------------------- | -------------------- | ------------------------------------------------------------- |
+| The joined hands           | `zoom-hands-3`       | The loosest of three; no nails, creases or veins              |
+| The pair, tall             | `zoom-pair-phone-2`  | For upright windows (1024 x 1536); the trail winds to the oak |
+| The joined hands, tall     | `zoom-hands-phone-1` | Painted from `zoom-hands-3`; a wide cut showed only knuckles  |
+
+`zoom()` ships them as `zoom-hands-v3`, `zoom-hands-phone-v3`, `zoom-pair-v3` and
+`zoom-pair-phone-v3` (new names: the walker's and his hand's were live and are cached by name;
+`zoom-hills-v3` and `zoom-hand-v3` are deleted, their originals stay). The page's layers keep
+their names (`hand`, `hills`). `zoom.tsx` picks the tall paintings with
+`<source media="(orientation: portrait)">` and starts the walk where the hands just seen stood
+(`slide`) and about as large (`NEAR`). One more new string, the last picture's description: draft
+translation m1224. The unused takes (`out-pair-1`, `out-grove-1/-2`, `out-surf-1/-2`,
+`out-painter-1/-2`, `out-near-1`, `zoom-hands-1/-2`, `zoom-pair-phone-1/-3`,
+`zoom-hands-phone-2/-3`) are in `bigh-archive\science-hero-unused-2026-11-10\`; their prompts
+stay in `prompts/`.

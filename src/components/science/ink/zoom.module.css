@@ -1,12 +1,22 @@
-/* The Science page's first screens as one slow zoom (Mo, November 9, 2026): a tall track with one
-   pinned stage. In the stage: the walker on golden hills (the window's full size, the h1 in its
-   sky), the walker's hand (the same, shown on the way), then one cell beside "Why start with the
-   cell?". zoom.tsx sets each layer's scale and opacity from the scroll. The kit's .look rules
-   (margins, sizes) sit at (0,2,0), so the words' rules are scoped under .zoom. */
+/* The Science page's first screens as one slow zoom (Mo, November 9, 2026), from inside the cell
+   since November 10 (Mo picked A of four ideas): a tall track with one pinned stage. In the stage,
+   from the top layer down: the inside of one cell (a little larger than the window, its gold
+   slivers adrift, the h1 in its pale corner), that cell seen whole, a grandfather's hand holding
+   a child's, then the two of them on golden hills with "Why start with the cell?" in the sky
+   (a wide painting, and a tall one for upright windows). zoom.tsx sets each layer's
+   scale, place and opacity from the scroll. The kit's .look rules (margins, sizes) sit at (0,2,0),
+   so the words' rules are scoped under .zoom. */
 .zoom {
+  --vh: 100vh;
   position: relative;
-  height: 440vh;
-  height: 440svh;
+  height: 480vh;
+  height: 480svh;
+}
+
+@supports (height: 100svh) {
+  .zoom {
+    --vh: 100svh;
+  }
 }
 
 /* Pinned for the track's length. Its own paper: a pinned box is a group of its own, so the
@@ -29,26 +39,135 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  opacity: 0;
   will-change: scale, opacity;
 }
 
-/* Which part of each painting a window keeps: the hills' sky and walker, the hand. */
+/* Which part of each painting a window keeps. The hills, wide: the pair and their feet (a short,
+   wide window crops the painting's top and foot). The hands: the big hand and the small wrist
+   in it. */
 .hills {
-  object-position: 66% 30%;
+  object-position: 60% 60%;
 }
 
 .hand {
-  object-position: 46% 60%;
-  opacity: 0;
+  object-position: 52% 55%;
 }
 
-/* The first screen's words, in the painting's sky, under the menu bar. */
-.first {
+/* An upright window gets the tall paintings (zoom.tsx). The hills: the pair a little right of the
+   window's middle, so the oak's crown comes in from the right edge and its trunk stays out; a
+   tablet (the painting cropped top and foot) keeps the pair's feet. The hands: the big hand, the
+   small wrist and the blue sleeve. */
+@media (orientation: portrait) {
+  .hills {
+    object-position: 39% 100%;
+  }
+
+  .hand {
+    object-position: 62% 55%;
+  }
+}
+
+/* The cell seen whole, on the way out: in the middle of the stage, as large as it comfortably
+   goes. zoom.tsx moves and sizes it from there. No box of its own between it and the stage: it
+   must multiply onto the stage's paper. */
+.cell {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  width: min(92%, calc(var(--vh) * 0.72 * (var(--ar-cell))));
+  aspect-ratio: var(--ar-cell);
+  margin: auto;
+  opacity: 0;
+  will-change: scale, translate, opacity;
+}
+
+.cellArt,
+.wash {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The first view's window: it only clips the inside view (which is larger than the stage). No
+   group of its own, so the view still multiplies onto the stage's paper. */
+.view {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* The inside of the cell: the painting's whole 3:2 frame, sized to cover the window and a tenth
+   more (--over), so the view can begin to pull back before the whole cell takes over. --px and
+   --py say which part a window keeps, as object-position would. Its slivers ride in the same
+   frame, so they stay on the painting at every window size. */
+.inside {
+  --over: 1.1;
+  --px: 0.46;
+  --py: 0.62;
+  --w: calc(max(100vw, calc(var(--vh) * 1.5)) * var(--over));
+  position: absolute;
+  top: calc((var(--vh) - var(--w) / 1.5) * var(--py));
+  left: calc((100% - var(--w)) * var(--px));
+  width: var(--w);
+  height: calc(var(--w) / 1.5);
+  transform-origin: 72% 62%;
+  will-change: scale, opacity;
+}
+
+/* The gold: each sliver is a piece of one picture (--sheet), laid where it was painted, drifting
+   and turning a little, each at its own pace. Gold leaf: no glow, no shine. */
+.slivers {
+  --reach: 11px;
+  position: absolute;
+  inset: 0;
+}
+
+.slivers span {
+  position: absolute;
+  background-image: var(--sheet);
+  background-repeat: no-repeat;
+  animation:
+    sway 6s ease-in-out infinite alternate,
+    turn 3s ease-in-out infinite alternate;
+}
+
+@keyframes sway {
+  from {
+    translate: calc(var(--dx) * var(--reach) * -1) calc(var(--dy) * var(--reach) * -1);
+  }
+
+  to {
+    translate: calc(var(--dx) * var(--reach)) calc(var(--dy) * var(--reach));
+  }
+}
+
+@keyframes turn {
+  from {
+    rotate: calc(var(--turn) * -1);
+  }
+
+  to {
+    rotate: var(--turn);
+  }
+}
+
+/* Nothing drifts once the view has left the cell. */
+.zoom[data-zoom-at="hand"] .slivers span,
+.zoom[data-zoom-at="hills"] .slivers span {
+  animation-play-state: paused;
+}
+
+/* Each view's words, in its painting's pale sky, under the menu bar. */
+.first,
+.second {
+  position: absolute;
+  inset: 0;
   box-sizing: border-box;
   padding: 104px var(--gutter) 0;
+}
+
+.first {
+  z-index: 2;
 }
 
 .zoom .title {
@@ -89,24 +208,34 @@
   line-height: 1.5;
 }
 
-/* The first screen's honesty label, at the window's foot. */
-.zoom .label {
+/* The first screen's foot: what the gold is, and the honesty label. */
+.zoom .foot {
   position: absolute;
   right: var(--gutter);
   bottom: 14px;
+  left: var(--gutter);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 20px;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0;
 }
 
-/* The last view: the words, then the cell under them (one column). No z-index and no opacity of
-   its own: either would make it a group, and the cell must multiply onto the stage's paper. */
+/* A breath of paper round the letters: the line lies on the painting's washes and gold. */
+.zoom .line {
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.4;
+  text-shadow:
+    0 0 3px var(--paper),
+    0 0 9px var(--paper),
+    0 0 14px var(--paper);
+}
+
+/* The last view: "Why start with the cell?" in the hills' sky. */
 .second {
   --words: 0;
-  position: absolute;
-  inset: 0;
-  display: grid;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-columns: minmax(0, 1fr);
-  gap: 12px;
-  padding: 100px var(--gutter) 16px;
   visibility: hidden;
 }
 
@@ -115,6 +244,7 @@
 }
 
 .zoom .subtitle {
+  max-width: 11em;
   margin: 0;
   font-size: clamp(34px, 9.4vw, 44px);
   font-weight: 500;
@@ -123,51 +253,19 @@
 }
 
 .zoom .sublead {
-  max-width: 30em;
+  max-width: 27em;
   margin: 12px 0 0;
   color: var(--ink);
   font-size: 18px;
   line-height: 1.5;
 }
 
-.figure {
-  display: grid;
-  grid-template-rows: minmax(0, 1fr) auto;
-  grid-template-columns: minmax(0, 1fr);
-  min-height: 0;
-  margin: 0;
-}
-
-/* The cell's box: as large as its row allows at its own ratio, a little wider than the column. */
-.cell {
-  position: relative;
-  justify-self: center;
-  align-self: center;
-  height: min(100%, calc((100vw - 12px) / (var(--ar-cell))));
-  aspect-ratio: var(--ar-cell);
-  opacity: 0;
-  will-change: scale, opacity;
-}
-
-.cellArt {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.caption {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2px 20px;
-  align-items: baseline;
-  justify-content: space-between;
+/* The last view's honesty label, at the window's foot. */
+.zoom .label {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 14px;
   opacity: var(--words);
-}
-
-.zoom .line {
-  color: var(--ink);
-  font-size: 16px;
-  line-height: 1.4;
 }
 
 /* Where #health lands: the stage's last screen. */
@@ -182,7 +280,17 @@
 }
 
 @media (min-width: 960px) {
-  .first {
+  .inside {
+    --px: 0.72;
+    --py: 0.6;
+  }
+
+  .slivers {
+    --reach: 16px;
+  }
+
+  .first,
+  .second {
     padding-top: clamp(128px, 19svh, 210px);
   }
 
@@ -197,17 +305,18 @@
     font-size: clamp(20px, 1.5vw, 23px);
   }
 
-  /* The words left, the cell right, centred in the window under the menu bar. */
+  /* The last view's words stand a little higher than the first's, and its heading may run
+     wider: the hills' far range and the pair's hats begin under them, and a longer language's
+     lead must keep clear of both (the Japanese heading broke in two and pushed its lead onto
+     the range). */
   .second {
-    grid-template-rows: none;
-    grid-template-columns: minmax(0, 0.78fr) minmax(0, 1.22fr);
-    gap: clamp(32px, 4vw, 72px);
-    align-items: center;
-    padding: 96px var(--gutter) 24px;
+    padding-top: clamp(108px, 14svh, 165px);
   }
 
   .zoom .subtitle {
-    font-size: clamp(38px, 3.9vw, 62px);
+    max-width: 13em;
+    font-size: clamp(46px, 5vw, 80px);
+    line-height: 1.03;
   }
 
   .zoom .sublead {
@@ -215,37 +324,23 @@
     font-size: clamp(19px, 1.4vw, 22px);
     line-height: 1.55;
   }
-
-  .figure {
-    grid-template-rows: auto auto;
-    align-content: center;
-    height: 100%;
-  }
-
-  .cell {
-    width: min(100%, calc((100svh - 210px) * (var(--ar-cell))));
-    height: auto;
-  }
-
-  .caption {
-    margin-top: 6px;
-  }
 }
 
 /* The words keep to the page's 1300px measure on a very wide window. */
 @media (min-width: 1600px) {
-  .first {
+  .first,
+  .second {
     padding-left: calc((100vw - 1300px) / 2);
   }
 
-  .second {
-    padding-right: calc((100vw - 1300px) / 2);
-    padding-left: calc((100vw - 1300px) / 2);
+  .zoom .foot {
+    left: calc((100vw - 1300px) / 2);
   }
 }
 
-/* Reduced motion and no script: nothing pinned and nothing moving. The hills with the h1 fill the
-   first screen, the hand is left out, and the cell stands beside its words like any chapter. */
+/* Reduced motion and no script: nothing pinned and nothing moving. The inside of the cell with
+   the h1 fills the first screen, its gold where it was painted; the whole cell and the hand are
+   left out; the hills with "Why start with the cell?" fill the second. */
 @media (prefers-reduced-motion: reduce), (scripting: none) {
   .zoom {
     height: auto;
@@ -254,55 +349,49 @@
   .stage {
     position: relative;
     height: auto;
-    overflow: visible;
   }
 
-  .hills {
+  .view {
     inset: 0 0 auto;
-    height: 100vh;
-    height: 100svh;
+    height: var(--vh);
   }
 
+  .slivers span {
+    animation: none;
+  }
+
+  .cell,
   .hand {
     display: none;
   }
 
-  .first {
+  .hills {
+    inset: auto 0 0;
+    height: var(--vh);
+    opacity: 1;
+  }
+
+  .first,
+  .second {
     position: relative;
     inset: auto;
-    min-height: 100vh;
-    min-height: 100svh;
+    min-height: var(--vh);
   }
 
   .second {
     --words: 1;
-    position: relative;
-    inset: auto;
-    padding-top: clamp(72px, 9vw, 120px);
     visibility: visible;
   }
 
-  .cell {
-    opacity: 1;
-  }
-
   .anchor {
-    top: 100vh;
-    top: 100svh;
+    top: var(--vh);
     bottom: auto;
     height: 1px;
   }
 
-  :global([data-look="ink"]) .hills[data-bloom="waiting"] {
+  :global([data-look="ink"]) .inside[data-bloom="waiting"] {
     -webkit-mask: none;
     mask: none;
     filter: none;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) and (min-width: 960px),
-  (scripting: none) and (min-width: 960px) {
-  .second {
-    min-height: min(100svh, 900px);
   }
 }

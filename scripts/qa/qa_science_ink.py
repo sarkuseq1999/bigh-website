@@ -1,22 +1,28 @@
 """QA for the Science page in Ink & Gold (spec docs/superpowers/specs/2026-10-14-science-ink-design.md;
 since November 4, 2026 round 3, docs/superpowers/specs/2026-11-04-science-california-design.md).
-Since November 9, 2026 the page opens as one slow zoom (Mo's pick): a walker on golden hills
-with "Our science starts in the cell." in the sky, the walker's hand, then one cell beside "Why
-start with the cell?"; then the three lines with their explainers, Dr. Liu and his path (Berkeley,
-Salzburg, Today), the formulas, the research and Ask.
+Since November 9, 2026 the page opens as one slow zoom (Mo's pick); since November 10 it starts
+inside the cell and pulls back (Mo picked A of four ideas for the first screen): the inside of one
+cell, its gold slivers adrift, with "Our science starts in the cell."; that cell seen whole; a
+grandfather's hand holding a child's; then the two of them walking hand in hand on golden hills
+with "Why start with the cell?" in the sky (Mo found the lone small walker plain and picked this of
+four last pictures; upright windows get tall paintings); then the three lines with their
+explainers, Dr. Liu and his path (Berkeley, Salzburg, Today), the formulas, the research and Ask.
 
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Science, one h1, the parts' ids in order,
               no canvas, no console errors (1440x900, 390x844); (final review) the shared footer
               promise and the menu's drop-down title in the same face as on About
   opening     (the zoom) the h1 (its one gold word) and its lead (naming Dr. Liu) on the first
-              screen, over the hills painting, which fills the window and has bloomed in; the stage
-              stays pinned while the track scrolls: half way the hand shows and the title is gone,
-              at the end the cell stands whole beside "Why start with the cell?", its words and
-              caption in the window and clear of the cell and the menu bar
-  why         its heading, lead and the cell's line and label in the zoom's last view; three
-              numbered lines, each explainer opening its own sheet and giving focus back; the cell
-              count's source; from 960px the numbers, lines and links each on one line
+              screen, over the inside of the cell, which covers the window and has bloomed in, its
+              gold slivers on the painting and adrift, the line that says what the gold is at the
+              window's foot; the stage stays pinned while the track scrolls: a quarter way the
+              cell stands whole in the window and the title is gone, half way the hand shows, at
+              the end the hills fill the window with "Why start with the cell?" and its lead
+              under the menu bar; an upright window has the tall hands and the tall hills, a wide
+              one the wide ones
+  why         its heading and lead in the zoom's last view, the gold's line and the label on its
+              first; three numbered lines, each explainer opening its own sheet and giving focus
+              back; the cell count's source; from 960px the numbers, lines and links each on one line
   people      Dr. Liu's real photo on its mount, his name and role, no numbers row (his path tells
               them), "Read his story" opens his sheet; the five bottles with their credits, each
               linking to its page; DESIGN.md's mount shadow, the intro's margin, the bottles, names
@@ -29,7 +35,8 @@ Sections (all, or --only=a,b):
   settled     the parts below the opening stand still once every painting has arrived (the menu's
               and the footer's #health, #research and #ask links land by them)
   still       reduced motion and no script: every painting whole and crisp (no bloom left waiting),
-              nothing pinned, the hills then the cell beside its words; print: the path's paintings whole
+              nothing pinned and nothing adrift, the inside of the cell then the hills with their
+              words; print: the path's paintings whole
   multiply    every painting's blend group sits on the page with no stacking context; the zoom's
               paintings multiply onto the pinned stage's own paper
   strips      research and ask: the painting in use (phone crop under 960px) and bloomed in,
@@ -334,14 +341,16 @@ def still(browser):
                 filt, mask, opacity = img.evaluate("i => { const s = getComputedStyle(i); return [s.filter, s.maskImage, s.opacity]; }")
                 ok = filt == "none" and opacity == "1" and mask.startswith("linear-gradient(90deg") and "url(" not in mask
                 check(f"still {label} {w}: {name} whole and crisp, only its own soft ends", ok, f"{filt} | {mask[:40]} | {opacity}")
-            # (The zoom) Nothing pinned and nothing left waiting: the hills whole on the first
-            # screen, the hand left out, the cell and its words in the page's flow.
+            # (The zoom) Nothing pinned, nothing adrift and nothing left waiting: the inside of
+            # the cell whole on the first screen, the whole cell and the hand left out, the hills
+            # and their words in the page's flow.
             z = page.evaluate(ZOOM_STILL)
             check(f"still {label} {w}: the stage is not pinned", z["stage"] != "sticky", z["stage"])
-            check(f"still {label} {w}: the hills whole and crisp", z["hills"] == ["none", "none", "1"], str(z["hills"]))
-            check(f"still {label} {w}: the hand left out", z["hand"] == "none", z["hand"])
-            check(f"still {label} {w}: the cell and its words shown", z["cell"] == "1" and z["words"] == "1" and z["second"] == "visible", f"{z['cell']} {z['words']} {z['second']}")
-            check(f"still {label} {w}: the cell's view under the first screen", z["secondTop"] >= h - 2, f"{z['secondTop']:.0f}")
+            check(f"still {label} {w}: the inside of the cell whole and crisp", z["inside"] == ["none", "none", "1"], str(z["inside"]))
+            check(f"still {label} {w}: its gold lies still", z["drift"] == ["none"], str(z["drift"]))
+            check(f"still {label} {w}: the whole cell and the hand left out", z["cell"] == "none" and z["hand"] == "none", f"{z['cell']} {z['hand']}")
+            check(f"still {label} {w}: the hills and their words shown", z["hills"] == "1" and z["words"] == "1" and z["second"] == "visible", f"{z['hills']} {z['words']} {z['second']}")
+            check(f"still {label} {w}: the hills' view under the first screen", z["secondTop"] >= h - 2, f"{z['secondTop']:.0f}")
             page.screenshot(path=str(OUT / f"still-{label.replace(' ', '-')}-{w}.png"))
             ctx.close()
     # Printed before the visitor scrolled down: the path's paintings whole (not left waiting).
@@ -356,9 +365,11 @@ def still(browser):
 
 
 ZOOM_STILL = """() => { const q = s => document.querySelector(s), cs = e => getComputedStyle(e);
-  const hills = cs(q('[data-zoom-layer=hills]'));
-  return { stage: cs(q('[data-zoom] > div')).position, hills: [hills.filter, hills.maskImage, hills.opacity],
-           hand: cs(q('[data-zoom-layer=hand]')).display, cell: cs(q('[data-zoom-layer=cell]')).opacity,
+  const inside = cs(q('[data-zoom-layer=inside]'));
+  const drift = [...new Set([...document.querySelectorAll('[data-zoom-layer=inside] span')].map(e => cs(e).animationName))];
+  return { stage: cs(q('[data-zoom] > div')).position, inside: [inside.filter, inside.maskImage, inside.opacity], drift,
+           hand: cs(q('[data-zoom-layer=hand]')).display, cell: cs(q('[data-zoom-layer=cell]')).display,
+           hills: cs(q('[data-zoom-layer=hills]')).opacity,
            words: cs(q('#why-title').parentElement).opacity, second: cs(q('#why-title').parentElement.parentElement).visibility,
            secondTop: q('#why-title').parentElement.parentElement.getBoundingClientRect().top + scrollY }; }"""
 PART_TOPS = "['health', 'scientists', 'formulas', 'research', 'ask'].map(id => Math.round(document.getElementById(id).getBoundingClientRect().top + scrollY))"
@@ -400,20 +411,21 @@ def multiply(browser):
             check(f"multiply {w}: {src} sits on the paper", not found, "; ".join(found))
         ctx.close()
         # (The zoom) A pinned box is a group of its own, so the stage carries the paper and its
-        # three paintings multiply onto that; nothing between the cell and the stage may make a
-        # group (the cell once showed as a white box).
+        # four paintings multiply onto that; nothing between a painting and the stage may make a
+        # group (the cell once showed as a white box; the inside view sits in a box that only
+        # clips it).
         ctx, page, _, _ = opened(browser, w, h)
         z = page.evaluate(ZOOM_BLEND)
         check(f"multiply {w}: the zoom's stage carries the paper", z["paper"] != "none" and z["colour"] not in ("rgba(0, 0, 0, 0)", "transparent"), f"{z['paper'][:40]} {z['colour']}")
-        check(f"multiply {w}: the zoom's three paintings multiply", z["blends"] == ["multiply"] * 3, str(z["blends"]))
-        check(f"multiply {w}: no group between the cell and the stage", not z["groups"], "; ".join(z["groups"]))
+        check(f"multiply {w}: the zoom's four paintings multiply", z["blends"] == ["multiply"] * 4, str(z["blends"]))
+        check(f"multiply {w}: no group between a painting and the stage", not z["groups"], "; ".join(z["groups"]))
         ctx.close()
 
 
 ZOOM_BLEND = """() => { const stage = document.querySelector('[data-zoom] > div'), cs = e => getComputedStyle(e);
   const layers = [...document.querySelectorAll('[data-zoom-layer]')];
   const groups = [];
-  for (let e = document.querySelector('[data-zoom-layer=cell]').parentElement; e && e !== stage; e = e.parentElement) {
+  for (const layer of layers) for (let e = layer.parentElement; e && e !== stage; e = e.parentElement) {
     const s = cs(e);
     if (s.zIndex !== 'auto' || s.opacity !== '1' || s.transform !== 'none' || s.filter !== 'none' || s.isolation === 'isolate' || s.mixBlendMode !== 'normal' || s.willChange !== 'auto')
       groups.push(e.className.slice(0, 40));
@@ -514,69 +526,94 @@ def strips(browser):
 
 ZOOM_BOX = """() => { const b = e => { const r = e.getBoundingClientRect(); return { l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height }; };
   const q = s => document.querySelector(s), cs = e => getComputedStyle(e);
-  const hills = q('[data-zoom-layer=hills]'), hand = q('[data-zoom-layer=hand]'), cell = q('[data-zoom-layer=cell]');
-  const h1 = q('h1'), lead = q('h1 + p'), h2 = q('#why-title'), words = h2.parentElement, caption = q('[data-zoom] figcaption');
-  return { h1: b(h1), lead: b(lead), hills: b(hills), cell: b(cell), words: b(words), sublead: b(q('#why-title + p')), caption: b(caption), stage: b(q('[data-zoom] > div')),
+  const inside = q('[data-zoom-layer=inside]'), cell = q('[data-zoom-layer=cell]'), hand = q('[data-zoom-layer=hand]'), hills = q('[data-zoom-layer=hills]');
+  const h1 = q('h1'), lead = q('h1 + p'), foot = q('h1 ~ p:last-child'), h2 = q('#why-title'), words = h2.parentElement;
+  const wash = inside.querySelector('img'), slivers = [...inside.querySelectorAll('span')], box = b(inside);
+  return { h1: b(h1), lead: b(lead), foot: b(foot), footText: foot.textContent, inside: box, cell: b(cell), hills: b(hills), words: b(words), sublead: b(q('#why-title + p')), stage: b(q('[data-zoom] > div')),
            text: lead.textContent, gold: (h1.querySelector('span') || {}).textContent || '',
-           state: [hills.complete && hills.naturalWidth > 0, hills.dataset.bloom],
+           state: [wash.complete && wash.naturalWidth > 0, inside.dataset.bloom],
+           slivers: slivers.length, sheet: slivers.length ? cs(slivers[0]).backgroundImage : '',
+           astray: slivers.filter(e => { const r = e.getBoundingClientRect(); return r.right < box.l - 40 || r.left > box.r + 40 || r.bottom < box.t - 40 || r.top > box.b + 40 || r.width < 2; }).length,
+           spots: slivers.slice(0, 12).map(e => { const r = e.getBoundingClientRect(); return [r.left, r.top]; }),
            at: q('[data-zoom]').dataset.zoomAt,
-           opacity: { hills: +cs(hills).opacity, hand: +cs(hand).opacity, cell: +cs(cell).opacity, first: +cs(h1.parentElement).opacity, words: +cs(words).opacity, caption: +cs(caption).opacity },
-           firstShown: cs(h1.parentElement).visibility, secondShown: cs(words.parentElement).visibility, cellScale: cs(cell).scale,
-           cellLoaded: (i => i.complete && i.naturalWidth > 0)(cell.querySelector('img')),
+           opacity: { inside: +cs(inside).opacity, cell: +cs(cell).opacity, hand: +cs(hand).opacity, hills: +cs(hills).opacity, first: +cs(h1.parentElement).opacity, words: +cs(words).opacity },
+           firstShown: cs(h1.parentElement).visibility, secondShown: cs(words.parentElement).visibility, cellScale: cs(cell).scale, hillsScale: cs(hills).scale,
+           loaded: [cell.querySelector('img'), hand, hills].map(i => i.complete && i.naturalWidth > 0),
+           src: [hand, hills].map(i => decodeURIComponent(i.currentSrc)),
+           shape: [hand, hills].map(i => i.naturalHeight > i.naturalWidth),
            bar: q('header').getBoundingClientRect().bottom }; }"""
 # Scroll the zoom's track to a share of its run, at once (the page's smooth scroll would glide).
 ZOOM_TO = "s => { const t = document.querySelector('[data-zoom]'); scrollTo({ top: t.offsetTop + (t.offsetHeight - innerHeight) * s, behavior: 'instant' }); }"
 
 
-# (The zoom, November 9, 2026) The opening: the h1 and its lead over the hills; the pinned stage
-# moves in on the hand, then on the cell beside "Why start with the cell?".
+# (The zoom, November 9, 2026; from inside the cell since November 10) The opening: the h1 and its
+# lead over the inside of the cell, its gold adrift; the pinned stage pulls back to the cell seen
+# whole, the hand, then the hills with "Why start with the cell?".
 def opening(browser):
     for w, h in [(1920, 1080), (1440, 900), (1280, 720), (1024, 768), (768, 1024), (390, 844), (360, 740)]:
         tag = f"opening {w}x{h}"
         ctx, page, _, errors = opened(browser, w, h)
         try:
-            page.wait_for_function("document.querySelector('[data-zoom-layer=hills]').dataset.bloom === 'done'", timeout=7000)
+            page.wait_for_function("document.querySelector('[data-zoom-layer=inside]').dataset.bloom === 'done'", timeout=7000)
         except PlaywrightTimeout:
             pass
         box = page.evaluate(ZOOM_BOX)
-        h1, lead, hills = box["h1"], box["lead"], box["hills"]
+        h1, lead, foot, inside = box["h1"], box["lead"], box["foot"], box["inside"]
         # "Dr." and his name are joined by a no-break space, so a phone never ends a line on "Dr.".
         check(f"{tag}: the lead names Dr. Liu, never split after Dr.", "Dr.\u00a0Jiankang Liu" in box["text"], box["text"][:60])
         check(f"{tag}: the title and lead on the first screen, under the menu bar", h1["t"] >= box["bar"] - 1 and lead["b"] <= h, f"h1 at {h1['t']:.0f}, lead ends {lead['b']:.0f}")
         check(f"{tag}: the title and lead inside the window's width", min(h1["l"], lead["l"]) >= 0 and max(h1["r"], lead["r"]) <= w, f"{min(h1['l'], lead['l']):.0f}-{max(h1['r'], lead['r']):.0f}")
         check(f"{tag}: one gold word, cell.", box["gold"] == "cell.", box["gold"])
-        check(f"{tag}: the hills loaded and bloomed in", box["state"] == [True, "done"], str(box["state"]))
-        check(f"{tag}: the hills fill the window", hills["l"] <= 0.5 and hills["t"] <= 0.5 and hills["r"] >= w - 0.5 and hills["b"] >= h - 0.5, f"{hills['l']:.0f},{hills['t']:.0f} to {hills['r']:.0f},{hills['b']:.0f}")
-        check(f"{tag}: only the hills show at first", box["opacity"]["hills"] == 1 and box["opacity"]["hand"] == 0 and box["opacity"]["cell"] == 0 and box["secondShown"] == "hidden", str(box["opacity"]))
+        check(f"{tag}: the inside of the cell loaded and bloomed in", box["state"] == [True, "done"], str(box["state"]))
+        check(f"{tag}: the inside of the cell covers the window", inside["l"] <= 0.5 and inside["t"] <= 0.5 and inside["r"] >= w - 0.5 and inside["b"] >= h - 0.5, f"{inside['l']:.0f},{inside['t']:.0f} to {inside['r']:.0f},{inside['b']:.0f}")
+        check(f"{tag}: only the inside of the cell shows at first", box["opacity"]["inside"] == 1 and box["opacity"]["cell"] == 0 and box["opacity"]["hand"] == 0 and box["opacity"]["hills"] == 0 and box["secondShown"] == "hidden", str(box["opacity"]))
+        # The gold: lifted off the painting, so each sliver can drift; all of it still on the painting.
+        check(f"{tag}: the gold slivers lie on the painting", box["slivers"] >= 30 and box["astray"] == 0 and "zoom-inside-gold" in box["sheet"], f"{box['slivers']} slivers, {box['astray']} astray, {box['sheet'][-40:]}")
+        page.wait_for_timeout(900)
+        later = page.evaluate(ZOOM_BOX)["spots"]
+        moved = max(abs(a[0] - b[0]) + abs(a[1] - b[1]) for a, b in zip(box["spots"], later))
+        check(f"{tag}: the gold drifts, slowly", 0.05 <= moved <= 12, f"the most a sliver moved in 0.9s: {moved:.2f}px")
+        check(f"{tag}: the foot says what the gold is, with the label", "In gold: its mitochondria" in box["footText"] and "Illustration" in box["footText"], box["footText"][:80])
+        check(f"{tag}: the foot in the window, under the lead", foot["t"] >= lead["b"] and foot["b"] <= h and foot["l"] >= 0 and foot["r"] <= w, f"lead ends {lead['b']:.0f}, foot {foot['t']:.0f}-{foot['b']:.0f}")
         if w in (1440, 390):
             page.screenshot(path=str(OUT / f"opening-{w}.png"))
-        # Half way: the stage still pinned, the hand in view, the title gone.
+        # A quarter way: the stage pinned, the cell seen whole in the window, the title gone.
+        page.evaluate(ZOOM_TO, 0.27)
+        page.wait_for_timeout(500)
+        whole = page.evaluate(ZOOM_BOX)
+        cell = whole["cell"]
+        check(f"{tag}: a quarter way the stage is pinned to the window", abs(whole["stage"]["t"]) <= 1 and abs(whole["stage"]["h"] - h) <= 1, f"top {whole['stage']['t']:.0f}, {whole['stage']['h']:.0f} tall")
+        check(f"{tag}: a quarter way the cell shows whole, alone", whole["at"] == "cell" and whole["opacity"]["cell"] == 1 and whole["cellScale"] in ("1", "none") and whole["opacity"]["inside"] == 0 and whole["opacity"]["hand"] == 0 and whole["opacity"]["hills"] == 0, f"{whole['at']} {whole['opacity']} scale {whole['cellScale']}")
+        check(f"{tag}: the whole cell inside the window, at least 240px wide", cell["l"] >= 0 and cell["r"] <= w and cell["t"] >= 0 and cell["b"] <= h and cell["w"] >= 240, f"{cell['l']:.0f},{cell['t']:.0f} to {cell['r']:.0f},{cell['b']:.0f}")
+        check(f"{tag}: a quarter way the title is put away", whole["firstShown"] == "hidden" and whole["secondShown"] == "hidden", f"{whole['firstShown']} {whole['secondShown']}")
+        if w in (1440, 390):
+            page.screenshot(path=str(OUT / f"opening-cell-{w}.png"))
+        # Half way: the hand in view, alone.
         page.evaluate(ZOOM_TO, 0.5)
         page.wait_for_timeout(500)
         mid = page.evaluate(ZOOM_BOX)
-        check(f"{tag}: half way the stage is pinned to the window", abs(mid["stage"]["t"]) <= 1 and abs(mid["stage"]["h"] - h) <= 1, f"top {mid['stage']['t']:.0f}, {mid['stage']['h']:.0f} tall")
-        check(f"{tag}: half way the hand shows, alone", mid["at"] == "hand" and mid["opacity"]["hand"] == 1 and mid["opacity"]["hills"] == 0 and mid["opacity"]["cell"] == 0, f"{mid['at']} {mid['opacity']}")
-        check(f"{tag}: half way the title is put away", mid["firstShown"] == "hidden" and mid["secondShown"] == "hidden", f"{mid['firstShown']} {mid['secondShown']}")
+        check(f"{tag}: half way the hand shows, alone", mid["at"] == "hand" and mid["opacity"]["hand"] == 1 and mid["opacity"]["inside"] == 0 and mid["opacity"]["cell"] == 0 and mid["opacity"]["hills"] == 0, f"{mid['at']} {mid['opacity']}")
+        check(f"{tag}: half way no words show", mid["firstShown"] == "hidden" and mid["secondShown"] == "hidden", f"{mid['firstShown']} {mid['secondShown']}")
         if w in (1440, 390):
             page.screenshot(path=str(OUT / f"opening-hand-{w}.png"))
-        # The end: the cell whole beside its words.
+        # The end: the hills fill the window, "Why start with the cell?" in their sky.
         page.evaluate(ZOOM_TO, 1)
         page.wait_for_timeout(500)
         end = page.evaluate(ZOOM_BOX)
-        cell, words, caption = end["cell"], end["words"], end["caption"]
-        check(f"{tag}: at the end the cell stands whole, alone", end["at"] == "cell" and end["opacity"]["cell"] == 1 and end["cellScale"] in ("1", "none") and end["opacity"]["hand"] == 0 and end["cellLoaded"], f"{end['at']} {end['opacity']} scale {end['cellScale']}")
-        check(f"{tag}: at the end its words and caption show", end["opacity"]["words"] == 1 and end["opacity"]["caption"] == 1 and end["secondShown"] == "visible", str(end["opacity"]))
-        check(f"{tag}: the words under the menu bar, in the window", words["t"] >= end["bar"] - 1 and words["l"] >= 0 and max(words["r"], end["sublead"]["r"]) <= w, f"top {words['t']:.0f}, {words['l']:.0f}-{words['r']:.0f}")
-        check(f"{tag}: the cell under the menu bar, its caption in the window", cell["t"] >= end["bar"] - 1 and caption["b"] <= h + 1 and caption["l"] >= 0 and caption["r"] <= w, f"cell from {cell['t']:.0f}, caption ends {caption['b']:.0f}")
-        check(f"{tag}: the cell at least 240px wide", cell["w"] >= 240, f"{cell['w']:.0f}")
-        if w >= 960:
-            check(f"{tag}: the words left of the cell", words["r"] <= cell["l"] + 1, f"words to {words['r']:.0f}, cell from {cell['l']:.0f}")
-            check(f"{tag}: the cell inside the window", cell["l"] >= 0 and cell["r"] <= w, f"{cell['l']:.0f}-{cell['r']:.0f}")
-        else:
-            check(f"{tag}: the words over the cell", end["sublead"]["b"] <= cell["t"] + 1, f"words end {end['sublead']['b']:.0f}, cell from {cell['t']:.0f}")
-        check(f"{tag}: the caption under the cell", caption["t"] >= cell["b"] - 1, f"cell ends {cell['b']:.0f}, caption at {caption['t']:.0f}")
+        hills, words = end["hills"], end["words"]
+        check(f"{tag}: at the end the hills stand whole, alone", end["at"] == "hills" and end["opacity"]["hills"] == 1 and end["hillsScale"] in ("1", "none") and end["opacity"]["hand"] == 0 and end["opacity"]["cell"] == 0 and end["opacity"]["inside"] == 0, f"{end['at']} {end['opacity']} scale {end['hillsScale']}")
+        check(f"{tag}: the hills fill the window", hills["l"] <= 0.5 and hills["t"] <= 0.5 and hills["r"] >= w - 0.5 and hills["b"] >= h - 0.5, f"{hills['l']:.0f},{hills['t']:.0f} to {hills['r']:.0f},{hills['b']:.0f}")
+        check(f"{tag}: every view's painting has loaded", all(end["loaded"]), str(end["loaded"]))
+        # An upright window gets the tall hands and the tall hills (each its own painting, so the
+        # big hand and the pair are whole on a phone); a wide window the wide ones.
+        tall = h > w
+        kind = "tall" if tall else "wide"
+        in_use = [("zoom-hands-phone" in end["src"][0]) == tall, ("zoom-pair-phone" in end["src"][1]) == tall]
+        check(f"{tag}: the {kind} hands and the {kind} hills are the paintings in use", all(in_use) and "zoom-hands" in end["src"][0] and "zoom-pair" in end["src"][1] and end["shape"] == [tall, tall], " | ".join(s[-48:] for s in end["src"]) + f" {end['shape']}")
+        check(f"{tag}: at the end its words show", end["opacity"]["words"] == 1 and end["secondShown"] == "visible" and end["firstShown"] == "hidden", f"{end['opacity']} {end['secondShown']}")
+        check(f"{tag}: the words under the menu bar, in the window", words["t"] >= end["bar"] - 1 and words["l"] >= 0 and max(words["r"], end["sublead"]["r"]) <= w and end["sublead"]["b"] <= h, f"top {words['t']:.0f}, {words['l']:.0f}-{words['r']:.0f}, ends {end['sublead']['b']:.0f}")
         if w in (1440, 390):
-            page.screenshot(path=str(OUT / f"opening-cell-{w}.png"))
+            page.screenshot(path=str(OUT / f"opening-hills-{w}.png"))
         check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
         ctx.close()
 
@@ -586,15 +623,16 @@ WHY_ROWS = """() => { const top = e => Math.round(e.getBoundingClientRect().top)
 DESCRIBED = "b => { const e = document.getElementById(b.getAttribute('aria-describedby') || ''); return e ? e.textContent : ''; }"
 
 
-# "Why start with the cell?": its words in the zoom's last view, the three lines and their sheets.
+# "Why start with the cell?": its words in the zoom's last view (the gold's line is on its first),
+# the three lines and their sheets.
 def why(browser):
     for w, h in [(1440, 900), (1024, 768), (390, 844)]:
         tag = f"why {w}x{h}"
         ctx, page, _, errors = opened(browser, w, h)
         check(f"{tag}: its heading", tidy(page.locator("#why-title").text_content() or "") == "Why start with the cell?")
         check(f"{tag}: about 37 trillion cells", "37 trillion" in (page.locator("#why-title + p").text_content() or ""))
-        caption = page.locator("[data-zoom] figcaption").text_content() or ""
-        check(f"{tag}: the cell's line and its label", "In gold: its mitochondria" in caption and "Illustration" in caption, caption[:70])
+        caption = page.locator("[data-zoom] h1 ~ p").last.text_content() or ""
+        check(f"{tag}: the gold's line and its label on the first screen", "In gold: its mitochondria" in caption and "Illustration" in caption, caption[:70])
         check(f"{tag}: the lines belong to the heading", page.locator("#why-lines").get_attribute("aria-labelledby") == "why-title")
         buttons = page.locator("#why-lines ol button")
         check(f"{tag}: three explainers", buttons.count() == 3)
@@ -714,7 +752,7 @@ def deep_links(browser):
             check(f"deep_links {w} #{part}: heading clear of the menu bar", heading >= bar - 1, f"{heading:.0f} vs {bar:.0f}")
             if part == "health":
                 shown = page.evaluate("() => { const t = document.querySelector('#why-title'); return [document.querySelector('[data-zoom]').dataset.zoomAt, getComputedStyle(t.parentElement).opacity, Math.round(t.getBoundingClientRect().bottom)]; }")
-                check(f"deep_links {w} #health: the cell and its heading show", shown[0] == "cell" and shown[1] == "1" and shown[2] <= h, str(shown))
+                check(f"deep_links {w} #health: the hills and its heading show", shown[0] == "hills" and shown[1] == "1" and shown[2] <= h, str(shown))
             ctx.close()
 
 
