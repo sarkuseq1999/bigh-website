@@ -24,11 +24,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   this folder; released as `origin/main` (NuriCell's clear day, About's oak) plus `studio`'s notes
   plus the two Science commits, a fast-forward. Before the push, on the combined built site:
   `qa_science_ink` 765/765, `qa_home_ink` 288/288, `qa_nav` 326/326, `check_science_art` 53/53;
-  type-check and lint clean. Three calls were Claude's and Mo has seen them only in the films:
-  the whole cell shown between the inside view and the hands, "Why start with the cell?" moved
-  onto the hills, and the gold's line at the first screen's foot. Still open: Mo's word on how
-  the motion feels on the live page (it was judged from filmed frames only); a native speaker's
-  check of m1223-m1224 (`translations-science-inside.cjs`).
+  type-check and lint clean. Three calls were Claude's and Mo had seen them only in the films
+  before the release: the whole cell shown between the inside view and the hands, "Why start with
+  the cell?" moved onto the hills, and the gold's line at the first screen's foot. Asked how the
+  motion feels when he scrolls the live page, Mo said "Feels right" (November 11, 2026). Still open: a
+  native speaker's check of m1223-m1224 (`translations-science-inside.cjs`).
 - **Live November 10, 2026 (Claude Code): About's purpose oak, on a sunny afternoon.** `main`
   `a3bfad5`, production `dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`; the demo alias was on it from about
   18:45 Pacific until another session's Science release (`main` `e0f04ab`,
