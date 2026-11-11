@@ -332,7 +332,12 @@ These sit on top of `DESIGN.md`.
   November 4 Mo found the non-stop beat "a little annoying", like a fly (as in the phone menu the
   day before), and picked A of three (A beat as it arrives, then rest; B short bursts; C always
   still): the wings beat at full speed for 3 s while the bird blooms in, slow over three beats,
-  then rest on their first frame, raised as painted. Never a beat that runs on. The
+  then rest on their first frame, raised as painted. Never a beat that runs on. On November 11
+  Mo found the wings swinging down by the belly wrong ("normally I just see the upper wings
+  move"): a hovering hummingbird beats in a flat figure 8 at shoulder height. The wings now fan
+  above the body, from raised as painted out to about level with the shoulder (the near wing
+  back over the back, the far wing forward over the head), never through the shoulder or below
+  the body (`hummingbird-v3-near/-far.webp`, `RIG` in `build_wings.py`). The
   bird is lined up on the first hummingbird's bill and tail, so the line still leaves from under
   its tail. Mockups `reference/ink-pages/mockups/home-bird/`.
   `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in

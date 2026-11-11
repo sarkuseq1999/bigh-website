@@ -165,3 +165,25 @@ laid before the body and the near one after it, in the wings' box (`openingWings
 (`data-beat`, an IntersectionObserver), rest on the first frame off screen and with reduced
 motion. `qa_home_ink` checks both wings, several frames within one beat, the pause once the
 opening is out of view, and nothing moving with reduced motion.
+
+## Part 3: the wings stay up (November 11, 2026)
+
+Mo sent a frame of the beat with the near wing below the belly: "normally I just see the upper
+wings move, not the wing ... around the belly part". He was right. The rig shortened each wing
+through the shoulder and out below the body. A hovering hummingbird beats its wings forward and
+back in a nearly level figure 8 at shoulder height (Tobalske et al. 2007, "Three-dimensional
+kinematics of hummingbird flight", rufous hummingbird, Allen's closest kin: stroke plane about 15
+degrees from level in hovering, body about 50 degrees up), and side-view photos of hovering birds
+show the wing reaching back level with the shoulder at the end of the stroke.
+
+`build_wings.py` now fans each wing about its shoulder, above the body: from its painted pose
+(raised, the top of the beat) to `sweep` degrees at the bottom (near wing 40 back toward the tail,
+level with the shoulder; far wing 24 forward, clear of the head), shortened to 0.9 and narrowed
+mid-stroke. Never through the shoulder. The blur takes 48 samples a frame (24 left visible steps in the
+wider sweep). The first frame, the rest pose, is unchanged. The wings are renamed
+`hummingbird-v3-near.webp`, `-far.webp` (the body keeps `hummingbird-v2.webp`); their box in the
+bird's frame is now 11.638 / 14.174 / 54.031 / 55.621 (it ends 70% down the frame, the old one
+91%), and `qa_home_ink` checks that it ends above the belly. `build_menu_finale.py` reads the v3
+wings (the menu's baked bird was not rebuilt: its rest pose is the same). Review page with
+before/after films shot on the built homepage: `../mockups/home-bird-wings/` (Artifact
+https://claude.ai/artifact/73RrLuccvfzBXFnusPv5vw).

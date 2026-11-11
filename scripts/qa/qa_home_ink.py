@@ -575,6 +575,8 @@ OPENING_ROOM = """(() => {
     bird: document.querySelector('#top [data-brush=crane] img').currentSrc,
     flights: document.querySelectorAll('#top img[src*=crane-flight]').length,
     wings: [...document.querySelectorAll('#top [data-brush=crane] [data-wing]')].map(w => w.dataset.wing + ' ' + getComputedStyle(w).backgroundImage),
+    wingLow: (() => { const b = box('#top [data-brush=crane] img');
+      return Math.max(...[...document.querySelectorAll('#top [data-brush=crane] [data-wing]')].map(w => (w.getBoundingClientRect().bottom - b.top) / b.height)); })(),
     bill: bird.left + 0.68 * bird.width, billY: bird.top + 0.42 * bird.height,
     sun: [sun.left, sun.top, sun.right, sun.bottom],
     trunk: land.left + 0.84 * land.width, landW: land.width,
@@ -1122,9 +1124,17 @@ def run(browser, look, mobile):
     )
     # October 29 (Mo picked C): Allen's in a few wet washes, its own painted wings beating.
     wings_ok = sorted(w.split(" ")[0] for w in o["wings"]) == ["far", "near"] and all(
-        "hummingbird-v2-" in w for w in o["wings"]
+        "hummingbird-v3-" in w for w in o["wings"]
     )
     check(f"{tag}: the hummingbird has its two painted wings, far and near", wings_ok, str(o["wings"]))
+    # November 11 (Mo: "I just see the upper wings move"): the wings fan above the body, out to
+    # about level with the shoulder, never down past the belly. The box every frame of both wings
+    # is laid in ends 70% down the bird's frame (the old beat's, swinging below the body, 91%).
+    check(
+        f"{tag}: the wings beat above the body, never down by the belly",
+        o["wingLow"] <= 0.72,
+        f"{o['wingLow']:.3f} of the bird's frame",
+    )
     wing_arrival(context, url, tag)
     # On a phone the sun stands above the bird, so there it may be clear of the bill upward.
     room = 24 if mobile else 60

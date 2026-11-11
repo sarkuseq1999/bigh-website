@@ -32,7 +32,7 @@ NAME = "menu-hummingbird-v1.webp"
 PICK = OPTIONS["e"]
 # The opening's wings (src/components/home-v2/look-ink/assets.ts, openingWings.box): their box in
 # the bird's frame, in percent; six frames side by side, the first raised as painted.
-WINGS = (16.19, 14.174, 45.644, 76.931)
+WINGS = (11.638, 14.174, 54.031, 55.621)  # the homepage's v3 wings (November 11, 2026)
 FRAMES = 6
 HEIGHT = 720  # drawn at most 230 CSS px tall: 720 covers a 3x screen
 
@@ -46,7 +46,7 @@ def bird():
     frame = Image.new("RGBA", (w, h), (0, 0, 0, 0))
 
     def wing(side):
-        strip = Image.open(INK / f"hummingbird-v2-{side}.webp").convert("RGBA")
+        strip = Image.open(INK / f"hummingbird-v3-{side}.webp").convert("RGBA")
         first = strip.crop((0, 0, strip.width // FRAMES, strip.height))
         layer = Image.new("RGBA", (w, h), (0, 0, 0, 0))
         layer.paste(first.resize((width, height), Image.LANCZOS), (left, top))

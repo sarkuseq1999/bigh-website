@@ -32,13 +32,15 @@ export const opening: Record<"landscape" | "bird" | "sun", Picture> = {
 
 /** The hummingbird's wings, beating as it arrives, then at rest (Mo, November 4, 2026; see
  *  opening.module.css): its own painted wings, lifted out and beaten about the shoulder (build_wings.py), each frame blurred
- *  over its slice of the beat. Each picture is one wing's six frames side by side; both are laid
+ *  over its slice of the beat. Since November 11 (Mo: "I just see the upper wings move") each
+ *  fans above the body, from raised as painted out to about level with the shoulder, and never
+ *  swings down past the belly (v3). Each picture is one wing's six frames side by side; both are laid
  *  in `box` (percent of the bird's frame), the far wing behind the body, the near one over it. */
 export const openingWings = {
-  near: `${I}/hummingbird-v2-near.webp`,
-  far: `${I}/hummingbird-v2-far.webp`,
+  near: `${I}/hummingbird-v3-near.webp`,
+  far: `${I}/hummingbird-v3-far.webp`,
   frames: 6,
-  box: { left: 16.19, top: 14.174, width: 45.644, height: 76.931 },
+  box: { left: 11.638, top: 14.174, width: 54.031, height: 55.621 },
 };
 
 /** Two California quail in the footer, in the grass beside the FDA park sign, one keeping watch,

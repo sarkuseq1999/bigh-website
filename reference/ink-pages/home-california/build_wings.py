@@ -4,11 +4,19 @@ Mo: "One of the very interesting features about hummingbirds is that its wings a
 dragonfly. The wings are always moving." Each look is two Codex paintings in the bird's frame
 (1538 x 1023): the bird with its wings raised (the still) and the same bird with its wings
 removed (an edit of it). The painted wings are what the two differ by; they are lifted out and
-beat about the shoulder as a wing does seen from the side: each one shortens toward the shoulder
-as it swings toward you and comes out the other side, below the body, then back. Each frame is
-blurred over its own slice of the beat, the way the eye sees a hummingbird's wings. Six frames a
-beat; at 60 frames a second that is ten beats a second (a real Anna's beats about forty times a
-second, which a screen cannot show without the wings appearing to crawl).
+beat about the shoulder. Each frame is blurred over its own slice of the beat, the way the eye sees
+a hummingbird's wings. Six frames a beat; at 60 frames a second that is ten beats a second (a real
+Anna's beats about forty times a second, which a screen cannot show without the wings appearing to
+crawl).
+
+November 11, 2026 (Mo): "normally I just see the upper wings move", not the wing coming down by
+the belly. Until then each wing shortened through the shoulder and came out below the body. A
+hovering hummingbird beats its wings forward and back in a nearly level figure 8 at shoulder
+height (Tobalske et al. 2007, rufous hummingbird, Allen's closest kin: in hovering the stroke plane
+is about 15 degrees from level), so seen from the side the wingtip stays near the shoulder's
+height. Now each wing fans about its shoulder, above the body: from its painted pose, raised (the
+top of the beat), out to about level with the shoulder (the bottom), the near wing back over the
+back, the far wing forward over the head, and up again. It never passes through the shoulder.
 
 Out: plates/wings/<look>/ (git-ignored): body.png/.webp (the wingless bird), near.png/.webp and
 far.png/.webp (the six frames of each wing side by side; near is drawn over the body, far behind
@@ -34,7 +42,7 @@ ORIG = HERE / "originals"
 OUT = HERE / "plates" / "wings"
 
 FRAMES = 6  # a beat; the page plays them at 60 a second
-BLUR = 24  # samples across each frame's slice of the beat
+BLUR = 48  # samples across each frame's slice of the beat
 SHUTTER = 0.85  # of a frame's slice the blur spans
 SCALE = 0.7  # of the original's pixels, for the sprite frames
 
@@ -61,12 +69,13 @@ BILL = {"allens-few": ("allens-few-bill-2", (918.0, 411.0), (1134.0, 334.0), 26.
 CALM = {"allens-few": (0.72, 0.94)}
 SHOULDERS = {"allens-few": ((686.0, 542.0), (700.0, 526.0), ((690.0, 540.0), -19.0))}
 # The beat, in the painting's pixels. Each wing turns about its shoulder (where it meets the
-# back). Its length along the shoulder-to-tip line runs from 1 (as painted, raised) to `low`
-# (negative: through the shoulder and out below the body), while it turns by `turn` degrees
-# toward the bottom of the beat (a little forward, as a hummingbird's wing sweeps).
+# back) by `sweep` degrees at the bottom of the beat (negative: anticlockwise on the screen, the
+# near wing back toward the tail; positive: clockwise, the far wing forward), its length running
+# from 1 (as painted, raised) to `short` (a little foreshortened as it turns toward you), and it
+# narrows to `chord` of its width mid-stroke (turning edge-on). It never passes the shoulder.
 RIG = {
-    "near": {"shoulder": (712.0, 512.0), "low": -0.78, "turn": 14.0, "chord": 0.82},
-    "far": {"shoulder": (716.0, 494.0), "low": -0.62, "turn": 10.0, "chord": 0.82},
+    "near": {"shoulder": (712.0, 512.0), "sweep": -40.0, "short": 0.9, "chord": 0.82},
+    "far": {"shoulder": (716.0, 494.0), "sweep": 24.0, "short": 0.9, "chord": 0.82},
     # Pixels whose direction from this point is clockwise of this angle (degrees from straight
     # up) belong to the far wing; the rest to the near wing: a ray up the gap between the wings.
     "split": ((712.0, 512.0), -8.0),
@@ -191,11 +200,10 @@ def posed(wing, side, t):
     u = tip_axis(wing, rig["shoulder"])
     v = np.array([-u[1], u[0]])
     c = math.cos(2 * math.pi * t)  # 1 at the top, -1 at the bottom
-    s = (1 + rig["low"]) / 2 + (1 - rig["low"]) / 2 * c
-    s = math.copysign(max(abs(s), 0.03), s)
     k = (1 - c) / 2  # 0 at the top, 1 at the bottom
+    s = 1 - (1 - rig["short"]) * k
     chord = 1 - (1 - rig["chord"]) * (1 - abs(c))
-    turn = math.radians(rig["turn"] * k)
+    turn = math.radians(rig["sweep"] * k)
     rot = np.array([[math.cos(turn), -math.sin(turn)], [math.sin(turn), math.cos(turn)]])
     a = rot @ (s * np.outer(u, u) + chord * np.outer(v, v))
     m = np.zeros((2, 3), np.float32)
