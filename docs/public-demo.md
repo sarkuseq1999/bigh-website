@@ -20,7 +20,8 @@ built site (a scratch worktree, `npm run build` + `npm start`): `qa_science_ink`
 After the alias update, in fresh unauthenticated browsers on the public demo: `/science` at 1440
 and 390 px and `/cns/science` at 390 px (200, the inside of the cell with its 46 gold slivers on
 the first screen, the pair under "Why start with the cell?" at the end, the tall paintings on the
-phone, no console errors); the full public checks (`qa_science_ink`, `qa_home_ink`, `qa_nav`) were still running when this was written.
+phone, no console errors); then the full public checks: `qa_science_ink` 765/765,
+`qa_home_ink` 288/288, `qa_nav` 326/326.
 
 Before that, from about 18:45 to about 19:24 Pacific on November 10, 2026, the alias pointed to
 `bigh-website-8di84tzto-sarkuseq1999s-projects.vercel.app` (`dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`),

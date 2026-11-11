@@ -8,7 +8,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 - **Live November 10, 2026 (Claude Code): the Science opening starts inside the cell and pulls
   back to a grandfather and grandchild, hand in hand.** `main` `e0f04ab`, production
   `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, the demo alias on it from about 19:24 Pacific; a quick look
-  at the public demo showed it on desktop, phone and in Chinese; the full public checks (`qa_science_ink`, `qa_home_ink`, `qa_nav`) were still running when this was written (`docs/public-demo.md`).
+  at the public demo showed it on desktop, phone and in Chinese; then the full public checks:
+  `qa_science_ink` 765/765, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`).
   A day after the zoom went live Mo asked for more or better ideas for the first screen, saw four
   on the real page (artifact `5rauLXYKSbXSi9VhTg9aem`: A start inside the cell, B the walker in
   dabs, C the gold dot, D the walker bigger) and said "Go with A". He saw A built and found its
