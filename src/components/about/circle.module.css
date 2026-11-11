@@ -11,14 +11,35 @@
    column's width). --h is 330px, or 0.6 of the column's width when that is less.
    The purpose's oak is the one exception: it carries the page's purpose, so it stands larger than
    the rest (Mo, October 19, 2026: the seedling it replaced, at 1.2, was too slight for the
-   section's weight). At 1.72 it is 568px tall at 1440px and fills its column on a phone.
+   section's weight). At 1.72 it is 564px tall at 1440px and fills its column on a phone. Since
+   November 10, 2026 it is the oak on a sunny afternoon (purpose-art.ts), nearly square (1.004).
    [data-picture] marks the painting's figure (its .painting class is another module's). */
 .circle {
   --h: min(330px, 60%);
 }
 
 .circle [data-part="purpose"] [data-picture] {
-  --picture: calc(var(--h) * 1.72 * 0.917);
+  --picture: calc(var(--h) * 1.72 * 1.004);
+}
+
+/* The oak's gold leaf is one small solid patch in the middle of the painting. On the kit's own
+   range (ink.module.css, .gold: cover 18% to 84%) the band of light stood on it just as the
+   painting rested in the middle of the window, and washed the gold to a pale cream that read as a
+   hole in the paint. Here the light crosses the leaf as the painting comes up (the leaf is lit
+   from about 31% to 46% of the way) and has left it before the painting is centred, so at rest
+   the leaf is plain gold. Browsers without scroll-driven animation get no band at all: the kit's
+   timed one would turn this patch pale every few breaths. The span after the picture is the
+   kit's gold layer (spread.tsx). */
+@supports (animation-timeline: view()) {
+  .circle [data-part="purpose"] [data-picture] img + span {
+    animation-range: cover 22% cover 52%;
+  }
+}
+
+@supports not (animation-timeline: view()) {
+  .circle [data-part="purpose"] [data-picture] img + span {
+    animation: none;
+  }
 }
 
 /* The mission, a step under the heading and in ink (Mo, October 19, 2026: at the shared body's 19px
