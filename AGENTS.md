@@ -155,10 +155,29 @@ These sit on top of `DESIGN.md`.
   together at the foot of their side and end where Add to cart ends. All four products on the
   shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
   approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
+- **NuriCell opening: "A clear day" (Mo picked A, November 10, 2026, and found the built page
+  right the same day; on `studio`, not live).** Mo asked again for a better first screen for NuriCell (the 18
+  ideas of October 23-24 were all turned down). Three ideas were mocked on the real page, each
+  keeping the big "Nuri [bottle] Cell" he had asked to keep and giving the bottle a world to stand
+  in: A a clear day (a painting), B blue and gold (one blue brush stroke behind the name, a strip of
+  gold leaf under the bottle), C morning shade (an oak branch's shadow, no paint). He picked A: one
+  loose ink-and-wash painting behind the name and the bottle, a clear California morning sky over
+  the Pacific and a low grassy bluff with a few poppies and two stones. From 960px the name sits on
+  the horizon and the real bottle stands on the bluff; in one column the bottle stands on the bluff
+  under the name. As the page opens the morning fog lifts, once (reduced motion: no fog). The words
+  and the buy box stay on bare paper under the grass. The painting fills the window's width at
+  every size (two side pieces join it in a window wider than 1600px). Paint the coast loosely: ink
+  brush first, light washes, small poppies as single dabs (the first take, flat washes and big
+  poppies, read as a greeting card). No words about fog or a clear head near it: the lifting fog
+  must never become a promise ("clears brain fog"). NuriCell only: Advanced OPC, Turmerific and
+  Nature Calm keep the plain opening, Green Bee Propolis its own. `nuricell-opening.tsx`,
+  `nuricell.module.css`, `opening.tsx`; picture `reference/ink-pages/nuricell/build_nuricell_opening.py`
+  (a Codex painting, `paint_opening.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round6/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the
-  page's other paintings on purpose. The mission line sits a step under the heading, in ink, not
+  page's other paintings on purpose (repainted in soft colour, with people, on November 10:
+  "About 'Our purpose'" below). The mission line sits a step under the heading, in ink, not
   the grey body size. Later the same day Mo found the opening circle "too round, not artistic
   enough" and the spark of gold light that ran round it "fake". He picked circle A, "heavy to
   dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and the gold
@@ -186,6 +205,21 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/about-opening/build_about_opening.py` (Codex painting plus Codex's
   continuation of its foot, `join_foot.py`). Mockups: `reference/ink-pages/mockups/about-opening/`
   and `about-opening-join/`.
+- **About "Our purpose": the oak on a sunny afternoon (Mo picked A, November 10, 2026; live the
+  same day).** Mo found the purpose's oak "a little dark or
+  scary": black ink right after the sunny meadow, bare roots hanging in empty paper, and an empty
+  swing (the words say "a full life", and nobody was in the picture). Of three painted ideas on the
+  real page (A the same oak on a sunny afternoon, B Monterey Bay above and below the water, a
+  gold-leaf kelp forest under a sea otter, C a San Francisco cable car over its hidden gold cable)
+  he picked A: the valley oak in the soft colour of the valley at dawn, a child on the swing, a
+  grandmother pushing, a dog and a picnic, the roots inside a slice of warm earth, a patch of gold
+  leaf among them. A picture of a full life has people in it. Never an empty swing, bare roots
+  hanging in empty paper, or black ink here. It still stands larger than the page's other
+  paintings. Its gold leaf is plain gold at rest: the kit's band of light crosses it only as the
+  painting comes up (on the kit's own range the band stood on the patch when the painting was
+  centred and washed it pale, like a hole in the paint). `purpose-art.ts`, `about-ink.tsx`,
+  `circle.module.css`; picture `reference/ink-pages/about-purpose/build_about_purpose.py` (Codex
+  painting `oak-1-b`, `paint.sh`); mockups `reference/ink-pages/mockups/about-purpose/`.
 - **About "Our ingredients": the globe (Mo picked A, the map, November 6, then B, the globe,
   November 9, 2026; on the draft branch `about-chapters`, not live).** Mo liked the idea of "Each
   plant, from where it grows best." but not its first design (four specimens beside a two-by-two
