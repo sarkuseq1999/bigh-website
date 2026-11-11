@@ -155,8 +155,8 @@ These sit on top of `DESIGN.md`.
   together at the foot of their side and end where Add to cart ends. All four products on the
   shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
   approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
-- **NuriCell opening: "A clear day" (Mo picked A, November 10, 2026, and found the built page
-  right the same day; on `studio`, not live).** Mo asked again for a better first screen for NuriCell (the 18
+- **NuriCell opening: "A clear day" (Mo picked A, November 10, 2026; live the same day, `main`
+  `4d846c7`).** Mo asked again for a better first screen for NuriCell (the 18
   ideas of October 23-24 were all turned down). Three ideas were mocked on the real page, each
   keeping the big "Nuri [bottle] Cell" he had asked to keep and giving the bottle a world to stand
   in: A a clear day (a painting), B blue and gold (one blue brush stroke behind the name, a strip of
