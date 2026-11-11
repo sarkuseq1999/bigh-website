@@ -1,36 +1,93 @@
-/* Dr. Liu (round 3, November 4, 2026: after "Why start with the cell?") and the formulas. His
-   photograph and words sit a little narrower than the page's other parts, so the two read as one
-   pair. */
+/* Dr. Liu, "the gold he studies" (Mo, November 11, 2026: he picked C of five ideas; mockups
+   reference/ink-pages/mockups/science-liu/), and the formulas. His painted portrait sits in front
+   of one huge cell (liu-art.ts). Under 960px: the tall painting, its right edge on the window's
+   (the cell runs off it), over his words. From 960px: the wide painting runs off the window's
+   right edge and his words stand on the bare paper at its left, in the same cell of a grid, so
+   the part is as tall as the taller of the two. */
 .liu {
   display: grid;
-  gap: 36px;
-  max-width: calc(1040px + 2 * var(--gutter));
 }
 
-@media (min-width: 960px) {
-  .liu {
-    grid-template-columns: 300px minmax(0, 1fr);
-    gap: 72px;
-    align-items: center;
-  }
-}
-
-/* The one shadow (DESIGN.md, "Photo mount"): the real photograph on its paper mat, the same on
-   the homepage (scientists.module.css) and About (about-page.module.css). */
-.mount {
-  width: min(300px, 70vw);
+/* The painting keeps its right edge on the window's: the cell is cut there. It never clips to a
+   box of its own on the paper (a drifting sliver must not widen the page: overflow, not a mask). */
+.scene {
+  position: relative;
+  justify-self: end;
+  width: min(100%, 620px);
   margin: 0;
-  padding: 14px 14px 16px;
-  background: #fbf9f4;
-  box-shadow:
-    0 22px 44px -22px rgba(12, 11, 10, 0.42),
-    0 3px 8px rgba(12, 11, 10, 0.1);
+  overflow: hidden;
 }
 
-.mount img {
+.plate {
+  position: relative;
+}
+
+/* The painting's box is reserved from the ratio the stylesheet knows (the figure's --ar-wide and
+   --ar-narrow), whichever picture loads. */
+.art {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: var(--ar-narrow);
+}
+
+/* The gold: each sliver is a piece of one picture (--sheet), laid where it was painted. Once the
+   script has seen the painting it drifts and turns a little, each at its own pace, and rests
+   while the painting is out of the window. Gold leaf: no glow, no shine. */
+.slivers {
+  --reach: 5px;
+  position: absolute;
+  inset: 0;
+}
+
+.wideGold {
+  display: none;
+}
+
+.slivers span {
+  position: absolute;
+  background-image: var(--sheet);
+  background-repeat: no-repeat;
+}
+
+.plate[data-adrift] .slivers span {
+  animation:
+    sway 6s ease-in-out infinite alternate,
+    turn 3s ease-in-out infinite alternate;
+}
+
+.plate[data-adrift="off"] .slivers span {
+  animation-play-state: paused;
+}
+
+@keyframes sway {
+  from {
+    translate: calc(var(--dx) * var(--reach) * -1) calc(var(--dy) * var(--reach) * -1);
+  }
+
+  to {
+    translate: calc(var(--dx) * var(--reach)) calc(var(--dy) * var(--reach));
+  }
+}
+
+@keyframes turn {
+  from {
+    rotate: calc(var(--turn) * -1);
+  }
+
+  to {
+    rotate: var(--turn);
+  }
+}
+
+.liu .caption {
+  position: absolute;
+  right: var(--gutter);
+  bottom: 2px;
+}
+
+.words {
+  padding-top: 18px;
 }
 
 .name {
@@ -61,18 +118,96 @@
   max-width: 640px;
 }
 
+/* What the painting's gold is, in ink, with a sliver of the same leaf before it. */
+.liu p.goldLine {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  max-width: 640px;
+  margin: 20px 0 0;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1.45;
+}
+
+.leaf {
+  flex: none;
+  width: 30px;
+  height: 7px;
+  border-radius: 60% 40% 60% 40%;
+  background: var(--accent) url("/images/home-v2/ink/gold-leaf-word.webp") center / 200px 200px;
+  rotate: -14deg;
+  translate: 0 -2px;
+}
+
 .story {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   min-height: 48px;
-  margin-top: 22px;
+  margin-top: 18px;
   padding: 0;
   border: 0;
   background: none;
   font: inherit;
   font-size: 19px;
   cursor: pointer;
+}
+
+@media (min-width: 960px) {
+  /* The wide painting: as wide as the window, at most 1800px, and no taller than the window under
+     the menu bar (its width is 2.148 times its height). */
+  .scene {
+    grid-area: 1 / 1;
+    width: min(100%, 1800px, calc((100svh - 110px) * 2.148));
+  }
+
+  .art {
+    aspect-ratio: var(--ar-wide);
+  }
+
+  .slivers {
+    --reach: 9px;
+  }
+
+  .wideGold {
+    display: block;
+  }
+
+  .tallGold {
+    display: none;
+  }
+
+  /* His words on the painting's bare paper: they end clear of the cell's edge, which stands
+     about 46% across the window when the painting is as wide as it. */
+  .words {
+    grid-area: 1 / 1;
+    align-self: center;
+    padding-top: 0;
+    pointer-events: none;
+  }
+
+  .column {
+    position: relative;
+    max-width: min(560px, calc(42vw - var(--gutter)));
+    pointer-events: auto;
+  }
+}
+
+/* Reduced motion and a page whose script never runs are complete from the first paint (and so is
+   a printed page): the painting whole and crisp, its gold where it was painted. :global([data-look])
+   outranks the kit's bloom rules whatever order the stylesheets load in (as path.module.css). */
+@media print, (prefers-reduced-motion: reduce), (scripting: none) {
+  :global([data-look="ink"]) .plate[data-bloom] {
+    -webkit-mask: none;
+    mask: none;
+    filter: none;
+    transition: none;
+  }
+
+  .plate[data-adrift] .slivers span {
+    animation: none;
+  }
 }
 
 .formulas {

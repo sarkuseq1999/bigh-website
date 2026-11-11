@@ -5,6 +5,32 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Built November 11, 2026 (Claude Code), NOT live: the Science page's Dr. Liu part, "the gold
+  he studies".** Mo sent a screenshot of the part (he took it for About's; it is Science's) and
+  found it "pretty plain or just a little boring": a small dark studio photograph on bare paper.
+  He saw three ideas mocked on the real page, then two more (review page
+  https://claude.ai/artifact/Une7FkzNpQuqCt4uyvdXQu), and picked C. His painted portrait
+  (`liu-v1`, his real face) now sits in front of one huge cell (a Codex painting, `liu-cell-1`),
+  its mitochondria slivers of gold that drift slowly while the painting is in the window (16 on
+  the wide plate, 21 on a phone's; none with reduced motion or without script). From 960px the
+  painting runs off the window's right edge and his words stand on its bare paper; a phone gets
+  a tall painting over the words. One new line, "In gold: mitochondria. He has studied them since
+  1994.", and the tags "Portrait painting · Illustration". AGENTS.md "Science, Dr. Liu";
+  `people.tsx`, `people.module.css`, `liu-art.ts`; pictures `reference/ink-pages/science/build_liu.py`
+  (README there, "Dr. Liu"); mockups and notes `reference/ink-pages/mockups/science-liu/`.
+  `qa_science_ink` has a new `liu` section (ten window sizes, the drift, reduced motion, no
+  script) and its `people`, `multiply`, `settled` and `languages` sections follow the new part.
+  On the built site (`npm run build` + `next start`): `qa_science_ink` 943/943, `qa_home_ink`
+  288/288, `qa_nav` 326/326; lint, type-check and prettier clean. A 7-second film of the drift is
+  on the review page (the farthest sliver travels 11px on a desktop, 7px on a phone). Claude's score 8.5: only the slivers clear of him and of the plate's edges drift, the
+  1536px painting is a little soft on a 2x screen, and the cell is the page's third. Still open:
+  Mo's look at the built page and his yes before any push; a native speaker's check of
+  m1231-m1232 (`translations-science-liu.cjs`).
+  **A new rule from the same session (AGENTS.md, "Real people"):** for mockups Dr. Liu's picture
+  may be redrawn by a picture model; nothing with a redrawn Dr. Liu goes on the public site until
+  Mo says Dr. Liu approved it. Ideas D (at his microscope) and E (paper planes) were mocked that
+  way; their paintings and shots are outside this public repo, in
+  `bigh-archive\science-liu-2026-11-11\`.
 - **Live November 10, 2026 (Claude Code): the Science opening starts inside the cell and pulls
   back to a grandfather and grandchild, hand in hand.** `main` `e0f04ab`, production
   `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, the demo alias on it from about 19:24 Pacific; a quick look

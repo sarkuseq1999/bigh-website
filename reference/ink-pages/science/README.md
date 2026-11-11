@@ -168,3 +168,38 @@ translation m1224. The unused takes (`out-pair-1`, `out-grove-1/-2`, `out-surf-1
 `out-painter-1/-2`, `out-near-1`, `zoom-hands-1/-2`, `zoom-pair-phone-1/-3`,
 `zoom-hands-phone-2/-3`) are in `bigh-archive\science-hero-unused-2026-11-10\`; their prompts
 stay in `prompts/`.
+
+## Dr. Liu: "the gold he studies" (November 11, 2026)
+
+Mo found the Dr. Liu part plain (a small dark studio photograph on bare paper) and picked C of
+five ideas mocked on the real page (AGENTS.md "Science, Dr. Liu"; the mockups, their scores and
+the ideas left out are in `mockups/science-liu/README.md`). Built on `studio`, not live.
+
+| Picture                 | Original      | Note                                                                 |
+| ----------------------- | ------------- | -------------------------------------------------------------------- |
+| The huge cell           | `liu-cell-1`  | No person in it (order `prompts/liu-cell-1.txt`); take 2 is greener   |
+| Dr. Liu                 | `liu-v1.webp` | The shipped painted portrait (NuriCell's): his real face, not redrawn |
+
+`build_liu.py` (its own script, so the page's other pictures are not rebuilt) ships
+`liu-cell-v1.webp` (2200 x 1024: bare paper on the left for his words, the cell running off the
+right edge), `liu-cell-phone-v1.webp` (1100 x 1180) and one picture of drifting gold pieces for
+each (`liu-cell-gold-v1.webp`, 16 slivers; `liu-cell-phone-gold-v1.webp`, 21), and writes
+`src/components/science/ink/liu-art.ts`.
+
+- The paper is the median of the brightest tenth of the painting: the cell runs off three edges,
+  so the picture's frame is not paper (as `build_about.divided()` takes it to be).
+- `build_science.lifted()` is tuned to the opening's painting: here it took a sand wash for gold
+  and left the slivers pale. `gold()` keys the gold as red well over blue and saturated (47
+  slivers).
+- A sliver drifts only if it is whole on the plate, clear of its edges and of him; it is painted
+  out of the plate (the hole cut wide, the wash filled in) and ships as a piece that fades as the
+  plate does. Every other sliver stays painted where it is, untouched.
+- He hides the cell behind him but follows his own paint toward his outline (`figure_cover()`):
+  a solid outline left white patches where his loose brush strokes show paper.
+- Two new strings (the gold's line and the painting's description): draft translations
+  m1231-m1232 (`translations-science-liu.cjs`, not native-reviewed).
+- The takes not used (`liu-cell-2`, `liu-office-1/-2/-3`, and the four paintings with a redrawn
+  Dr. Liu, `liu-scope-1/-2` and `liu-planes-1/-2`) and every mockup shot of D and E are in
+  `bigh-archive\science-liu-2026-11-11\`, outside this public repository: a redrawn Dr. Liu is
+  not published until he has approved it (AGENTS.md, "Real people"). Their orders stay in
+  `prompts/`.

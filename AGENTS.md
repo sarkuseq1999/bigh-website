@@ -350,6 +350,12 @@ These sit on top of `DESIGN.md`.
 - **Real people.** Dr. Liu's face is never generated: use his real photo, in colour (a living person in
   black and white reads as deceased). When editing a painting with his photo in it, give the edit model
   the empty frame and paste the real photo back afterwards. Dr. Iris Wang appears in words only.
+  **Mockups may redraw him (Mo, November 11, 2026):** while the site is being built, design ideas may
+  change Dr. Liu's picture (a new pose, new clothes, a new scene, painted by a picture model from his
+  photo): "you can make different kinds of designs and changes to it ... I will have him check and
+  approve later." So a redrawn or generated Dr. Liu may be mocked up and shown to Mo, labelled as
+  such. It is not put on the public site (the demo and `main` are public) until Mo says Dr. Liu has
+  seen and approved that picture. What is live keeps his real face.
 - **Never use:** lab glassware (reads as "chemicals you eat"), red or rust clustered dots or fuzzy glows
   (read as germs), a gold halo behind a product, a decorative picture that only repeats its sentence.
   Every picture must add information.
@@ -574,6 +580,23 @@ These sit on top of `DESIGN.md`.
   `<picture>`s); paintings `zoom-pair-1`, `zoom-pair-phone-2`, `zoom-hands-3`,
   `zoom-hands-phone-1` (`paint.sh` paints the three views from the pair, so the people match);
   mockups `reference/ink-pages/mockups/science-hero/` (`shoot_last.py`, `review/last-*.jpg`).
+- **Science, Dr. Liu: "the gold he studies" (Mo picked C, November 11, 2026; built on `studio`,
+  not live).** Mo found the Dr. Liu part "pretty plain or just a little boring": a small dark
+  studio photograph on bare paper, between a page of paintings. Of five ideas mocked on the real
+  page (A his own words beside a bigger portrait, which needs a real sentence from him; B office
+  hours, a desk and a blackboard; C the gold he studies; then, because C's cell repeats the
+  opening's, D at his microscope and E paper planes for his 280+ papers, both with him painted
+  new by a picture model) he picked C. His painted portrait (`liu-v1`, his real face, the one
+  NuriCell shows) sits in front of one huge cell, its mitochondria slivers of gold that drift
+  slowly, as on the first screen; from 960px the painting runs off the window's right edge and
+  his words stand on the bare paper at its left; a phone gets a tall painting over the words. One
+  new line says what the gold is ("In gold: mitochondria. He has studied them since 1994.").
+  The tags are "Portrait painting · Illustration". Gold leaf: no glow; the drift is a few pixels
+  over six seconds, only while the painting is in the window, never with reduced motion. Nothing
+  dark or busy behind his head, and no round shape centred on it (a halo). Never put the studio
+  photograph's black box back on this page. `people.tsx`, `people.module.css`, `liu-art.ts`;
+  pictures `reference/ink-pages/science/build_liu.py` (Codex painting `liu-cell-1`); mockups
+  `reference/ink-pages/mockups/science-liu/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

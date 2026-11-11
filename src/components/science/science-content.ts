@@ -70,7 +70,14 @@ export const liu = {
   purpose:
     "As BiGH’s Chief Scientific Advisor, he brings decades of scientific experience to our purpose: helping people stay sharp, stay active, and live fully.",
   button: "Read his story",
-  photo: { src: "/images/jiankang-liu.jpg", width: 512, height: 768 },
+  // Since November 11, 2026 (Mo found the part plain, a small dark photograph on bare paper, and
+  // picked C of five ideas, "the gold he studies"): his painted portrait in front of one huge
+  // cell, its mitochondria slivers of gold (liu-art.ts). One line says what the gold is. DRAFT.
+  // 1994: the year he joined Bruce Ames's laboratory, where his work on cells' energy and aging
+  // dates from (RESEARCH-NOTES.md), as the path's Berkeley stop tells it.
+  gold: "In gold: mitochondria. He has studied them since 1994.",
+  // DRAFT. It names him as the site does (the language checks look for his name in it).
+  alt: "Dr. Jiankang Liu, a painted portrait, in front of one large cell painted in pale blue watercolour, its mitochondria slivers of gold",
   highlights: [
     {
       text: "Research with Bruce Ames at the University of California, Berkeley, investigating mitochondria, nutrition, and aging in laboratory animals.",
@@ -280,4 +287,6 @@ export const ink = {
   picnicAlt:
     "Two enamel camp mugs on a redwood picnic table in a California park, painted in ink and watercolour", // DRAFT
   illustration: "Illustration",
+  // The honesty tag his painted portrait carries on NuriCell too (catalog m594).
+  portrait: "Portrait painting",
 };

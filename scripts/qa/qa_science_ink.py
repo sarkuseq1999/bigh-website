@@ -23,10 +23,17 @@ Sections (all, or --only=a,b):
   why         its heading and lead in the zoom's last view, the gold's line and the label on its
               first; three numbered lines, each explainer opening its own sheet and giving focus
               back; the cell count's source; from 960px the numbers, lines and links each on one line
-  people      Dr. Liu's real photo on its mount, his name and role, no numbers row (his path tells
-              them), "Read his story" opens his sheet; the five bottles with their credits, each
-              linking to its page; DESIGN.md's mount shadow, the intro's margin, the bottles, names
-              and credits each on one line per row
+  people      Dr. Liu's painted portrait in its painting (no studio photograph, no mount), his name
+              and role, the line that says what the gold is, no numbers row (his path tells them),
+              "Read his story" opens his sheet; the five bottles with their credits, each linking
+              to its page; the intro's margin, the bottles, names and credits each on one line per
+              row
+  liu         (November 11, Mo's pick C, "the gold he studies") the painting in use (wide from
+              960px, tall under it), bloomed in, its right edge on the window's, no taller than the
+              window under the menu bar; its gold slivers on the painting, adrift while it is in
+              the window and at rest when it is not; from 960px his words on the painting's bare
+              paper, clear of the cell; under 960px the painting over his words; the honesty tags;
+              reduced motion and no script: the painting whole and crisp, its gold still
   path        (October 26; round 3: three places) his places in order, each painting loaded and
               bloomed in, the phone cut under 960px; from 960px the paintings take turns (right,
               left), each running to the page's edge, Today wide with its words in its sky over
@@ -140,7 +147,6 @@ def shell(browser):
         ctx.close()
 
 
-MOUNT_SHADOW = "rgba(12, 11, 10, 0.42) 0px 22px 44px -22px, rgba(12, 11, 10, 0.1) 0px 3px 8px 0px"
 # Per row of bottles (bottles whose boxes share some height): their pictures' feet, their names'
 # and credits' tops.
 BOTTLE_ROWS = """() => {
@@ -162,11 +168,15 @@ def people(browser):
     ctx, page, _, errors = opened(browser, 1440, 900)
     bring(page, "#liu")
     page.wait_for_timeout(600)
-    photo = page.locator('#liu img[src*="jiankang-liu"]')
-    check("people: Dr. Liu's real photo", photo.count() == 1)
-    check("people: the photo on its mount", photo.evaluate("i => getComputedStyle(i.closest('figure')).boxShadow") != "none")
+    # (November 11) Mo found the small dark studio photograph on bare paper plain and picked "the
+    # gold he studies": his painted portrait (his real face, the one NuriCell shows) in a painting.
+    painting = page.locator("#liu [data-liu-plate] img")
+    shown = painting.evaluate("i => decodeURIComponent(i.currentSrc)") if painting.count() == 1 else ""
+    check("people: Dr. Liu's painted portrait in its painting", painting.count() == 1 and "liu-cell" in shown, shown[-80:])
+    check("people: no studio photograph, no mount", page.locator('#liu img[src*="jiankang-liu"]').count() == 0
+          and page.evaluate("[...document.querySelectorAll('#liu figure')].every(f => getComputedStyle(f).boxShadow === 'none')"))
     text = page.locator("#liu").inner_text()
-    for word in ["Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH"]:
+    for word in ["Dr. Jiankang Liu", "Chief Scientific Advisor, BiGH", "In gold: mitochondria. He has studied them since 1994."]:
         check(f"people: {word}", word in text)
     # (October 26) His dated record (280+, 1994, 2025) is told by his path, with its sources.
     check("people: no numbers row (his path tells them)", page.locator("#liu dl").count() == 0)
@@ -185,9 +195,6 @@ def people(browser):
     words = page.locator("#formulas").inner_text()
     check("people: Dr. Iris Wang in words", "Dr. Iris Wang developed Nature Calm" in words)
     check("people: no photo of Dr. Iris Wang", page.locator('img[alt*="Iris"]').count() == 0)
-    # (Task 6) The same real photo sits the same way on every page: DESIGN.md's one mount shadow.
-    shadow = photo.evaluate("i => getComputedStyle(i.closest('figure')).boxShadow")
-    check("people: the mount's shadow is DESIGN.md's photo mount", shadow == MOUNT_SHADOW, shadow)
     margin = page.evaluate("getComputedStyle(document.querySelector('#liu p[class*=intro]')).marginTop")
     check("people: the intro keeps its 10px under the headline", margin == "10px", margin)
     check("people: no console errors", not errors, "; ".join(errors[:3]))
@@ -202,6 +209,111 @@ def people(browser):
             for part, edges in row.items():
                 check(f"people {w}: bottle row {i + 1}'s {part} on one line", max(edges) - min(edges) <= 1, str(edges))
         ctx.close()
+
+# (November 11, 2026) Dr. Liu's painting, "the gold he studies" (Mo's pick C of five ideas mocked
+# on the real page: he found the small dark photograph on bare paper plain).
+LIU_SIZES = [(1920, 1080), (1440, 900), (1366, 657), (1280, 720), (1024, 768), (960, 800), (959, 800), (768, 1024), (390, 844), (360, 740)]
+# From 960px the whole part fits one screen under the menu bar at these sizes.
+LIU_ONE_SCREEN = {(1920, 1080), (1440, 900), (1366, 657), (1280, 720), (1024, 768), (960, 800)}
+LIU = """() => {
+  const box = e => { const r = e.getBoundingClientRect(); return { l: r.left, t: r.top + scrollY, r: r.right, b: r.bottom + scrollY, w: r.width, h: r.height }; };
+  const cs = e => getComputedStyle(e);
+  const liu = document.querySelector('#liu'), plate = liu.querySelector('[data-liu-plate]'), img = plate.querySelector('img');
+  const cap = liu.querySelector('figcaption'), column = liu.querySelector('#liu-name').parentElement;
+  const slivers = [...plate.querySelectorAll('span')].filter(s => s.offsetParent !== null);
+  const p = plate.getBoundingClientRect();
+  // A sliver may travel a few px and turn a little: 14px of the painting's edge is its own room.
+  const out = slivers.filter(s => { const r = s.getBoundingClientRect(); return r.left < p.left - 14 || r.right > p.right + 14 || r.top < p.top - 14 || r.bottom > p.bottom + 14; }).length;
+  return { liu: box(liu), plate: box(plate), words: box(column), cap: box(cap), capText: cap.textContent.replace(/\\s+/g, ' ').trim(),
+           src: decodeURIComponent(img.currentSrc), loaded: img.complete && img.naturalWidth > 0, bloom: plate.dataset.bloom,
+           blend: cs(plate).mixBlendMode, crisp: [cs(plate).filter, cs(plate).maskImage, cs(plate).opacity],
+           sets: [...plate.querySelectorAll(':scope > div')].map(d => cs(d).display !== 'none'), slivers: slivers.length, out,
+           // Each sliver has two animations (it sways and it turns): one state for both.
+           adrift: plate.dataset.adrift || null, play: [...new Set(slivers.flatMap(s => cs(s).animationPlayState.split(',').map(v => v.trim())))],
+           drift: [...new Set(slivers.map(s => cs(s).animationName))] };
+}"""
+# How many of the shown slivers have moved after 1.8s.
+LIU_MOVED = """() => new Promise(done => {
+  const shown = [...document.querySelectorAll('#liu [data-liu-plate] span')].filter(s => s.offsetParent !== null);
+  const at = () => shown.map(s => { const r = s.getBoundingClientRect(); return [r.left + scrollX, r.top + scrollY]; });
+  const first = at();
+  setTimeout(() => { const then = at(); done(first.filter((p, i) => Math.hypot(p[0] - then[i][0], p[1] - then[i][1]) > 0.2).length); }, 1800);
+})"""
+# The share of the painting's pixels under his words (page px) that are paint (darkest channel
+# under 200), read from the picture in use at its own size.
+LIU_INK_UNDER = """() => new Promise(done => {
+  const liu = document.querySelector('#liu'); const img = liu.querySelector('[data-liu-plate] img');
+  const r = img.getBoundingClientRect(); const b = liu.querySelector('#liu-name').parentElement.getBoundingClientRect();
+  const pic = new Image();
+  pic.onload = () => {
+    const k = pic.naturalWidth / r.width; const c = document.createElement('canvas');
+    c.width = pic.naturalWidth; c.height = pic.naturalHeight; const g = c.getContext('2d'); g.drawImage(pic, 0, 0);
+    const x = Math.max(0, Math.round((b.left - r.left) * k)), y = Math.max(0, Math.round((b.top - r.top) * k));
+    const w = Math.min(c.width - x, Math.round(b.width * k)), h = Math.min(c.height - y, Math.round(b.height * k));
+    if (w <= 0 || h <= 0) return done(0);
+    const d = g.getImageData(x, y, w, h).data; let ink = 0;
+    for (let i = 0; i < d.length; i += 4) if (Math.min(d[i], d[i + 1], d[i + 2]) < 200) ink++;
+    done(ink / (d.length / 4));
+  };
+  pic.src = img.currentSrc;
+})"""
+LIU_CENTRE = """bar => { const r = document.querySelector('#liu').getBoundingClientRect();
+  window.scrollBy(0, r.top - bar - Math.max(0, (innerHeight - bar - r.height) / 2)); }"""
+
+
+def liu(browser):
+    for w, h in LIU_SIZES:
+        ctx, page, _, errors = opened(browser, w, h)
+        tag, wide = f"liu {w}x{h}", w >= 960
+        # The page opens on the zoom, far above him: his gold rests until his painting is near.
+        page.wait_for_timeout(600)
+        far = page.evaluate(LIU)
+        check(f"{tag}: its gold rests while the painting is out of the window", far["adrift"] == "off" and far["play"] == ["paused"], f"{far['adrift']} {far['play']}")
+        page.evaluate(LIU_CENTRE, 96)
+        # A bloom takes about 3.4s from the painting's arrival to "done" (motion.ts).
+        page.wait_for_function("document.querySelector('#liu [data-liu-plate]').dataset.bloom === 'done'", timeout=9000)
+        page.wait_for_timeout(300)
+        m = page.evaluate(LIU)
+        kind = "the wide painting" if wide else "the tall painting"
+        check(f"{tag}: {kind} in use, loaded", m["loaded"] and ("liu-cell-phone" in m["src"]) == (not wide) and "liu-cell" in m["src"], m["src"][-60:])
+        check(f"{tag}: it has bloomed in, whole and crisp", m["bloom"] == "done" and m["crisp"][0] == "none" and m["crisp"][2] == "1", f"{m['bloom']} {m['crisp'][0]} {m['crisp'][2]}")
+        check(f"{tag}: it multiplies onto the paper", m["blend"] == "multiply", m["blend"])
+        check(f"{tag}: its right edge on the window's (the cell runs off it)", abs(m["plate"]["r"] - w) <= 1, f"{m['plate']['r']:.0f} of {w}")
+        check(f"{tag}: its own gold shown, the other plate's put away", m["sets"] == ([True, False] if wide else [False, True]) and m["slivers"] >= 12, f"{m['sets']} {m['slivers']}")
+        check(f"{tag}: every sliver on the painting", m["out"] == 0, str(m["out"]))
+        check(f"{tag}: its gold adrift in the window", m["adrift"] == "on" and m["play"] == ["running"], f"{m['adrift']} {m['play']}")
+        moved = page.evaluate(LIU_MOVED)
+        check(f"{tag}: the slivers move", moved >= m["slivers"] // 2, f"{moved} of {m['slivers']}")
+        if wide:
+            check(f"{tag}: the painting no taller than the window under the menu bar", m["plate"]["h"] <= h - 108, f"{m['plate']['h']:.0f} of {h}")
+            under = page.evaluate(LIU_INK_UNDER)
+            check(f"{tag}: his words on the painting's bare paper, clear of the cell", under <= 0.004, f"{under:.4f}")
+            check(f"{tag}: his words inside the part", m["words"]["t"] >= m["liu"]["t"] - 1 and m["words"]["b"] <= m["liu"]["b"] + 1, f"{m['words']['t']:.0f}-{m['words']['b']:.0f} in {m['liu']['t']:.0f}-{m['liu']['b']:.0f}")
+            if (w, h) in LIU_ONE_SCREEN:
+                check(f"{tag}: the part fits one screen under the menu bar", m["liu"]["h"] <= h - 96, f"{m['liu']['h']:.0f} of {h}")
+        else:
+            check(f"{tag}: the painting over his words", m["plate"]["b"] <= m["words"]["t"] + 1, f"{m['plate']['b']:.0f} vs {m['words']['t']:.0f}")
+            check(f"{tag}: the painting no wider than 620px", m["plate"]["w"] <= 621, f"{m['plate']['w']:.0f}")
+        cap = m["cap"]
+        check(f"{tag}: the honesty tags", m["capText"] == "Portrait painting · Illustration", m["capText"])
+        check(f"{tag}: the tags in the painting's box and the window", cap["l"] >= m["plate"]["l"] - 1 and cap["r"] <= min(w, m["plate"]["r"]) + 1 and m["plate"]["t"] <= cap["t"] and cap["b"] <= m["plate"]["b"] + 2, str({k: round(v) for k, v in cap.items()}))
+        overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
+        check(f"{tag}: no sideways scroll", overflow <= 0, str(overflow))
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:3]))
+        page.screenshot(path=str(OUT / f"liu-{w}x{h}.png"))
+        ctx.close()
+    # Reduced motion and no script: the painting whole and crisp from the first paint, its gold
+    # where it was painted and still.
+    for label, kwargs in [("reduced motion", {"reduced": True}), ("no script", {"js": False})]:
+        for w, h in [(1440, 900), (390, 844)]:
+            ctx, page, _, _ = opened(browser, w, h, **kwargs)
+            page.wait_for_timeout(800)
+            m = page.evaluate(LIU)
+            tag = f"liu {label} {w}"
+            check(f"{tag}: the painting whole and crisp", m["crisp"] == ["none", "none", "1"], str(m["crisp"]))
+            check(f"{tag}: its gold shown and still", m["slivers"] >= 12 and m["drift"] == ["none"], f"{m['slivers']} {m['drift']}")
+            ctx.close()
+
 
 STACKING = """el => {
   // Each element from the blend group's parent up to the page root that makes a stacking context
@@ -380,7 +492,7 @@ def settled(browser):
     # The paintings are lazy and each phone cut has another ratio than its wide one: the stylesheet
     # reserves each one's box (path.module.css, strip.module.css), so once every painting has
     # arrived the parts below stand where they stood before (the menu's links land by them).
-    pictures = f"{PATH_PICTURES}, {STRIP_PICTURES}, [data-zoom] img"
+    pictures = f"{PATH_PICTURES}, {STRIP_PICTURES}, [data-zoom] img, #liu [data-liu-plate] img"
     for w, h, lang in SETTLED_SIZES:
         ctx = browser.new_context(viewport={"width": w, "height": h})
         page = ctx.new_page()
@@ -409,6 +521,11 @@ def multiply(browser):
             check(f"multiply {w}: {src} multiplies", img.evaluate("i => getComputedStyle(i).mixBlendMode") == "multiply")
             found = img.evaluate(STACKING)
             check(f"multiply {w}: {src} sits on the paper", not found, "; ".join(found))
+        # Dr. Liu's painting and its gold are one group (the plate), which multiplies.
+        plate = page.locator("#liu [data-liu-plate]")
+        check(f"multiply {w}: Dr. Liu's painting multiplies", plate.evaluate("e => getComputedStyle(e).mixBlendMode") == "multiply")
+        found = plate.evaluate(STACKING)
+        check(f"multiply {w}: Dr. Liu's painting sits on the paper", not found, "; ".join(found))
         ctx.close()
         # (The zoom) A pinned box is a group of its own, so the stage carries the paper and its
         # four paintings multiply onto that; nothing between a painting and the stage may make a
@@ -669,7 +786,7 @@ def why(browser):
 
 # The key studies' links, as the catalogs translate "Read the study".
 READ_STUDY = {"kr": "연구 보기", "jp": "研究を読む", "cns": "阅读研究", "vn": "Đọc nghiên cứu"}
-# How the catalogs name him on his photo (liu.name: cns.json 刘健康博士, vn.json "Tiến sĩ", Doctor).
+# How the catalogs name him (liu.name: cns.json 刘健康博士, vn.json "Tiến sĩ", Doctor).
 LIU_NAME = {"kr": "Dr. Jiankang Liu", "jp": "Dr. Jiankang Liu", "cns": "刘健康博士", "vn": "Tiến sĩ Jiankang Liu"}
 
 
@@ -685,7 +802,10 @@ def languages(browser):
         metas = [tidy(m).split(" · ") for m in page.locator("#research ul > li > p:first-child").all_inner_texts()]
         check(f"languages {lang}: each key study's line is year · kind · journal", len(metas) == 3 and all(len(m) == 3 and all(m) for m in metas), str(metas))
         alt = page.locator("#liu img").get_attribute("alt") or ""
-        check(f"languages {lang}: his photo's alt names Dr. Liu as the site does", LIU_NAME[lang] in alt, alt[:40])
+        check(f"languages {lang}: his painting's description names Dr. Liu as the site does", LIU_NAME[lang] in alt, alt[:40])
+        # (November 11) The line that says what the gold is, in this language (not left in English).
+        gold = page.locator("#liu #liu-name ~ p").nth(3).inner_text().strip()
+        check(f"languages {lang}: the gold's line is translated", bool(gold) and "In gold" not in gold and "1994" in gold, gold[:50])
         overflow = page.evaluate("document.documentElement.scrollWidth - innerWidth")
         check(f"languages {lang}: no sideways scroll", overflow <= 0, str(overflow))
         check(f"languages {lang}: no console errors", not errors, "; ".join(errors[:3]))
@@ -756,7 +876,7 @@ def deep_links(browser):
             ctx.close()
 
 
-SECTIONS = {"shell": shell, "opening": opening, "why": why, "people": people, "path": path, "settled": settled, "still": still, "multiply": multiply, "strips": strips, "languages": languages, "layout": layout, "deep_links": deep_links}
+SECTIONS = {"shell": shell, "opening": opening, "why": why, "people": people, "liu": liu, "path": path, "settled": settled, "still": still, "multiply": multiply, "strips": strips, "languages": languages, "layout": layout, "deep_links": deep_links}
 
 if __name__ == "__main__":
     with sync_playwright() as p:

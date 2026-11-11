@@ -1,0 +1,5 @@
+# The full-size screenshots (review/ keeps the smaller copies the review page shows).
+shots/
+built/
+# The films of the built part's drift (about 1 MB each): they are on the review page.
+review/built-drift-*.webp
