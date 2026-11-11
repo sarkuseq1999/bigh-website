@@ -9,10 +9,14 @@ sent by paint.sh) in the homepage close's way of painting, ink and wash with lig
   desk at the window was plain and the town did not say "cell"). Since November 10 it starts
   inside the cell and pulls back (Mo picked A of four ideas for the first screen): the inside of
   one cell (zoom-inside-1), that cell whole, its mitochondria as slivers of gold (zoom-cell-2),
-  the walker's hand in the dry grass (zoom-hand-2), the walker on golden hills (zoom-hills-1).
-  The inside view, the hand and the hills fill the window, so they keep their whole frame and no
-  feathered edge; the cell is cropped to its ink. The inside view's gold slivers are lifted off
-  it (lifted()) and ship beside it as one picture of pieces, so each can drift on its own.
+  a grandfather's hand holding a child's (zoom-hands-3), then the two of them walking hand in
+  hand on golden hills (zoom-pair-1; Mo found the lone small walker plain and picked this of four
+  last pictures). Upright windows get the hands and the pair painted again as tall pictures
+  (zoom-hands-phone, zoom-pair-phone). The inside view, the hands and the hills fill the window,
+  so they keep their whole frame and no feathered edge; the cell is cropped to its ink. The
+  inside view's gold slivers are lifted off it (lifted()) and ship beside it as one picture of
+  pieces, so each can drift on its own. The first zoom's walker and hand (zoom-hills-1,
+  zoom-hand-2) no longer ship; their originals stay.
 - places: Dr. Liu's path, Berkeley, Salzburg and Today, each a Codex repaint of the October
   handscroll's cut with light washes (wash-<place>-1). Today keeps the handscroll's own gold-leaf
   sun, cut from its old picture and set in the new sky (SUN).
@@ -55,8 +59,10 @@ V = "v3"
 # looser (prompts/zoom-hand-2.txt, zoom-cell-2.txt).
 TAKES = {
     "zoom-inside": "zoom-inside-1",
-    "zoom-hills": "zoom-hills-1",
-    "zoom-hand": "zoom-hand-2",
+    "zoom-pair": "zoom-pair-1",
+    "zoom-pair-phone": "zoom-pair-phone-2",
+    "zoom-hands": "zoom-hands-3",
+    "zoom-hands-phone": "zoom-hands-phone-1",
     "zoom-cell": "zoom-cell-2",
     "berkeley": "wash-berkeley-1",
     "salzburg": "wash-salzburg-1",
@@ -225,17 +231,36 @@ def pieces(slivers, size, name, width=1024, gap=2):
     return {"src": f"{URL}/{name}.webp", "width": sheet.width, "height": sheet.height, "slivers": items}
 
 
+def lowered(img, share=0.06):
+    """A painting set lower in its own frame by a share of its height: its foot is cropped, and
+    its first rows (sky) fade in from white, so no seam shows where bare paper was added above.
+    For the tall pair: on a small phone a longer language's lead reached the grandfather's hat."""
+    a = np.asarray(img).astype(np.float32)
+    h = a.shape[0]
+    d = round(h * share)
+    out = np.full_like(a, 255.0)
+    ramp = np.clip(np.arange(h - d, dtype=np.float32) / (2 * d), 0, 1)
+    ramp = ramp * ramp * (3 - 2 * ramp)
+    out[d:] = 255.0 + (a[: h - d] - 255.0) * ramp[:, None, None]
+    return to_img(out)
+
+
 def zoom():
     """The opening's four views, in the order the page shows them. The inside of the cell, the
-    hand and the hills fill the window (object-fit: cover), so they keep their whole 3:2 frame,
+    hand and the hills fill the window (object-fit: cover), so they keep their whole frame,
     unfeathered; the cell stands alone on the paper, cropped to its ink and feathered like every
     other painting. The inside view ships without its gold (inside), which rides above it in
-    pieces (inside.gold)."""
+    pieces (inside.gold). The page's layers keep their names (hand, hills); their pictures are
+    the joined hands and the pair, under new file names (the walker's are cached by name), each
+    with a tall picture for upright windows (hand.phone, hills.phone)."""
     wash, slivers = lifted(flat(load("zoom-inside")))
     out = {"inside": bd.art_of(wash, f"zoom-inside-{V}", 1536)}
     out["inside"]["gold"] = pieces(slivers, wash.size, f"zoom-inside-gold-{V}")
     out["cell"] = art(inked(flat(load("zoom-cell")), pad=0.03), "zoom-cell", 1400)
-    out.update({key: bd.art_of(flat(load(f"zoom-{key}")), f"zoom-{key}-{V}", 1536) for key in ("hand", "hills")})
+    out["hand"] = bd.art_of(flat(load("zoom-hands")), f"zoom-hands-{V}", 1536)
+    out["hand"]["phone"] = bd.art_of(flat(load("zoom-hands-phone")), f"zoom-hands-phone-{V}", 1024)
+    out["hills"] = bd.art_of(flat(load("zoom-pair")), f"zoom-pair-{V}", 1536)
+    out["hills"]["phone"] = bd.art_of(lowered(flat(load("zoom-pair-phone"))), f"zoom-pair-phone-{V}", 1024)
     return out
 
 

@@ -4,7 +4,9 @@ docs/superpowers/specs/2026-11-04-science-california-design.md).
 - every picture named in science-art.ts exists at its stated size;
 - each painting's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
-- the zoom opening (November 9, 2026): the hills and the hand are 3:2 and at least 1500px wide
+- the zoom opening (November 9, 2026; from inside the cell, out to the pair hand in hand, since
+  November 10): the hands and the hills each have a tall picture for upright windows (2:3, at
+  least 1000px wide); the hills and the hand are 3:2 and at least 1500px wide
   (they fill the window, so they keep their whole frame and need no white edge); the cell has a
   white edge like every other painting, is wider than tall, and holds gold (its mitochondria);
 - Dr. Liu's path: three places, each with a phone cut, each wider than tall (a place beside its
@@ -82,6 +84,13 @@ def main():
             check(f"zoom {key}: 3:2", abs(img.width / img.height - 1.5) < 0.01, f"{img.size}")
             check(f"zoom {key}: at least 1500px wide", img.width >= 1500, f"{img.width}")
         shown.insert(0, img)
+    # Upright windows: the hands and the hills painted again as tall pictures.
+    for key in ("hand", "hills"):
+        img = opened(zoom[key]["phone"], f"zoom {key} tall")
+        if img is not None:
+            check(f"zoom {key} tall: 2:3", abs(img.width / img.height - 2 / 3) < 0.01, f"{img.size}")
+            check(f"zoom {key} tall: at least 1000px wide", img.width >= 1000, f"{img.width}")
+        shown.append(img)
     # The inside view ships without its gold, which rides above it in pieces (one picture).
     inside, sheet = shown[0], zoom["inside"]["gold"]
     if inside is not None:

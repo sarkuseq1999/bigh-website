@@ -345,14 +345,24 @@ export const scienceArt = {
       height: 981,
     },
     hand: {
-      src: "/images/science/ink/zoom-hand-v3.webp",
+      src: "/images/science/ink/zoom-hands-v3.webp",
       width: 1536,
       height: 1024,
+      phone: {
+        src: "/images/science/ink/zoom-hands-phone-v3.webp",
+        width: 1024,
+        height: 1536,
+      },
     },
     hills: {
-      src: "/images/science/ink/zoom-hills-v3.webp",
+      src: "/images/science/ink/zoom-pair-v3.webp",
       width: 1536,
       height: 1024,
+      phone: {
+        src: "/images/science/ink/zoom-pair-phone-v3.webp",
+        width: 1024,
+        height: 1536,
+      },
     },
   },
   places: {

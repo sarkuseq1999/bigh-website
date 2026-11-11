@@ -1,9 +1,9 @@
-// Adds the one new string of the Science page's inside-the-cell opening (November 10, 2026) to the
-// five catalogs: the first picture's description. DRAFT translation, not native-reviewed. Keys
-// start at m1223, after About's m1200-m1222 (re-running is safe: a string that already has a key
-// keeps it). hken.json stays {} (/hken redirects to /cns). Mitochondria as the catalogs already
-// say it (线粒体 / 미토콘드리아 / ty thể / ミトコンドリア). The whole cell's description (m1122) is
-// no longer shown: that picture is now a view on the way out, with no description of its own.
+// Adds the two new strings of the Science page's inside-the-cell opening (November 10, 2026) to
+// the five catalogs: the first and the last picture's descriptions. DRAFT translation, not
+// native-reviewed. Keys start at m1223, after About's m1200-m1222 (re-running is safe: a string
+// that already has a key keeps it). hken.json stays {} (/hken redirects to /cns). Mitochondria as
+// the catalogs already say it (线粒体 / 미토콘드리아 / ty thể / ミトコンドリア). The whole cell's and
+// the lone walker's descriptions (m1122, m1120) are no longer shown.
 // Run from the repo root:
 //   node reference/ink-pages/science/translations-science-inside.cjs
 // Row order: [en, cns (Simplified Chinese), kr, vn, jp]
@@ -15,6 +15,13 @@ const entries = [
     "옅은 푸른 담채로 그린 세포의 안쪽. 짙은 푸른 핵이 있고, 미토콘드리아는 떠다니는 가는 금빛 붓 자국으로 그렸습니다",
     "Bên trong một tế bào, vẽ bằng những lớp màu xanh nhạt: nhân màu xanh đậm, và ty thể là những nét vàng mảnh đang trôi",
     "淡い青の彩色で描いた細胞の内側。濃い青の核があり、ミトコンドリアは漂う細い金色の筆あとで描かれている",
+  ],
+  [
+    "A grandfather and a small child walk hand in hand up a trail through golden California hills, painted in ink and watercolour",
+    "水墨淡彩画：祖父和年幼的孩子手牵着手，走在金色加州山丘间的小路上",
+    "수묵 담채화: 할아버지와 어린아이가 손을 잡고 금빛 캘리포니아 언덕의 오솔길을 걸어 올라갑니다",
+    "Tranh mực và màu nước: một người ông và một em bé nắm tay nhau đi trên lối mòn giữa những ngọn đồi vàng của California",
+    "水墨淡彩画：祖父と小さな子どもが手をつなぎ、金色のカリフォルニアの丘の小道を歩いている",
   ],
 ];
 const path = "src/i18n/copy-keys.json";

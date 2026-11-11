@@ -9,21 +9,32 @@ import { scienceArt } from "./science-art";
 import styles from "./zoom.module.css";
 
 const SIZES = "100vw";
+// A tall painting covers a narrow upright window by its height: two thirds of a window high wide.
+const TALL_SIZES = "(max-aspect-ratio: 2/3) 67vh, 100vw";
 const INSIDE_SIZES = "(max-width: 959px) 180vw, 115vw";
 const CELL_SIZES = "(max-width: 959px) 100vw, 70vw";
+// Upright windows get the hands' and the hills' tall paintings (zoom.module.css frames them by
+// the same query).
+const UPRIGHT = "(orientation: portrait)";
 
 /** Points the view pulls back from, as shares of each painting: the inside view's nucleus, the
- *  whole cell's nucleus (measured from its box's middle), the back of the walker's hand, and that
- *  hand on the hills. */
+ *  whole cell's nucleus (measured from its box's middle), the back of the grandfather's hand, and
+ *  the two joined hands on the hills (each in its wide painting and in its tall one). */
 const FOCUS = {
   inside: [0.72, 0.62],
   cell: [0.118, -0.051],
-  hand: [0.566, 0.576],
-  hills: [0.662, 0.755],
+  hand: [0.449, 0.488],
+  handTall: [0.42, 0.52],
+  hills: [0.651, 0.674],
+  hillsTall: [0.544, 0.764],
 } as const;
 
 // How small the whole cell gets as it goes down into the skin of the hand.
 const SPECK = 0.22;
+// How near the walk starts: the pair's joined hands about as large as the hands just seen.
+const NEAR = 12;
+
+const upright = (img: HTMLImageElement) => img.naturalHeight > img.naturalWidth;
 
 // The headline's one gold word, as on the homepage ("cells." there): "cell" in each language. Only
 // the first match is gilded.
@@ -71,12 +82,13 @@ function pointOf(img: HTMLImageElement, focus: readonly number[]) {
  * and pulls back (Mo picked A of four ideas for the first screen: on the walker's hills the
  * picture said "hiking" while the words said "cell", and nothing moved until you scrolled). The
  * inside of one cell fills the window, its mitochondria as slivers of gold adrift, the h1 in its
- * pale corner. As the page scrolls the view pulls back: the cell seen whole, the walker's hand in
- * the dry grass, then the walker on golden California hills, where "Why start with the cell?" and
- * its lead stand in the sky. The stage is pinned while the track scrolls by; the script only sets
- * each layer's scale, place and opacity from the scroll. Reduced motion and no script: no pinning
- * and no drift, the inside view with the h1, then the hills with "Why start with the cell?"
- * (zoom.module.css).
+ * pale corner. As the page scrolls the view pulls back: the cell seen whole, a grandfather's hand
+ * holding a child's, then the two of them walking hand in hand on golden California hills, where
+ * "Why start with the cell?" and its lead stand in the sky (Mo found the first last view, one
+ * small walker, plain, and picked this of four). The stage is pinned while the track scrolls by;
+ * the script only sets each layer's scale, place and opacity from the scroll. Reduced motion and
+ * no script: no pinning and no drift, the inside view with the h1, then the hills with "Why start
+ * with the cell?" (zoom.module.css).
  */
 export function Zoom({ motion }: { motion: boolean }) {
   const copy = useCopy();
@@ -116,6 +128,8 @@ export function Zoom({ motion }: { motion: boolean }) {
     let fill = 4;
     let start = { x: 0, y: 0 };
     let end = { x: 0, y: 0 };
+    // From the pair's joined hands on the hills to where the hands just seen stood (px).
+    let slide = { x: 0, y: 0 };
     let frame = 0;
     const draw = () => {
       frame = 0;
@@ -137,19 +151,22 @@ export function Zoom({ motion }: { motion: boolean }) {
       cellBox.style.translate = `${mix(mix(start.x, 0, whole), end.x, down).toFixed(1)}px ${mix(mix(start.y, 0, whole), end.y, down).toFixed(1)}px`;
       cellBox.style.opacity = String(seg(p, 0.1, 0.2) * (1 - seg(p, 0.35, 0.42)));
 
-      // The hand: comes up out of its skin and settles, then gives way as the view widens.
+      // The hands: come up out of the skin and settle, then give way as the view widens.
       const arrive = ease(seg(p, 0.3, 0.54));
       const leave = ease(seg(p, 0.56, 0.7));
       handImg.style.scale = String(Math.pow(7, 1 - arrive) * (1.25 - 0.25 * leave));
       handImg.style.opacity = String(seg(p, 0.35, 0.42) * (1 - seg(p, 0.62, 0.7)));
 
-      // The walk: from the walker's hand out to the whole hillside; then its words, all there a
-      // little before the end (the #health link lands just short of it).
-      hillsImg.style.scale = String(Math.pow(9, 1 - ease(seg(p, 0.6, 0.88))));
+      // The walk: from the pair's joined hands out to the whole hillside. It starts where the
+      // hands just seen stood and about as large, and settles as the view widens; then its
+      // words, all there a little before the end (the #health link lands just short of it).
+      const wide = ease(seg(p, 0.6, 0.9));
+      hillsImg.style.scale = String(Math.pow(NEAR, 1 - wide));
+      hillsImg.style.translate = `${(slide.x * (1 - wide)).toFixed(1)}px ${(slide.y * (1 - wide)).toFixed(1)}px`;
       hillsImg.style.opacity = String(seg(p, 0.62, 0.7));
-      const words = seg(p, 0.84, 0.92);
+      const words = seg(p, 0.86, 0.93);
       el.second!.style.setProperty("--words", String(words));
-      el.second!.style.visibility = p < 0.82 ? "hidden" : "visible";
+      el.second!.style.visibility = p < 0.84 ? "hidden" : "visible";
       const title = 1 - seg(p, 0.05, 0.13);
       el.first!.style.opacity = String(title);
       el.first!.style.visibility = title === 0 ? "hidden" : "visible";
@@ -161,8 +178,9 @@ export function Zoom({ motion }: { motion: boolean }) {
       const stage = insideBox.offsetParent as HTMLElement | null;
       if (!stage) return;
       const middle = { x: stage.clientWidth / 2, y: stage.clientHeight / 2 };
-      const handAt = pointOf(handImg, FOCUS.hand);
-      const hillsAt = pointOf(hillsImg, FOCUS.hills);
+      // Each painting in use: the tall one on an upright window.
+      const handAt = pointOf(handImg, upright(handImg) ? FOCUS.handTall : FOCUS.hand);
+      const hillsAt = pointOf(hillsImg, upright(hillsImg) ? FOCUS.hillsTall : FOCUS.hills);
       handImg.style.transformOrigin = `${handAt.x.toFixed(1)}px ${handAt.y.toFixed(1)}px`;
       hillsImg.style.transformOrigin = `${hillsAt.x.toFixed(1)}px ${hillsAt.y.toFixed(1)}px`;
       // The whole cell is an oval about 0.47 of its box wide and 0.46 tall (from its middle): it
@@ -192,6 +210,7 @@ export function Zoom({ motion }: { motion: boolean }) {
         y: nucleus.y - size.h * FOCUS.cell[1] * fill - middle.y,
       };
       end = { x: handAt.x - middle.x, y: handAt.y - middle.y };
+      slide = { x: handAt.x - hillsAt.x, y: handAt.y - hillsAt.y };
       queue();
     };
     measure();
@@ -227,8 +246,8 @@ export function Zoom({ motion }: { motion: boolean }) {
     loading: "eager",
     fetchPriority: "high",
   }).props;
-  // The whole cell and the hand are views on the way out to the walker, not pictures of their
-  // own: no alt.
+  // The whole cell and the hands are views on the way out to the pair on the hills, not
+  // pictures of their own: no alt.
   const cellProps = getImageProps({
     alt: "",
     sizes: CELL_SIZES,
@@ -243,12 +262,26 @@ export function Zoom({ motion }: { motion: boolean }) {
     width: art.hand.width,
     height: art.hand.height,
   }).props;
+  const handTallProps = getImageProps({
+    alt: "",
+    sizes: TALL_SIZES,
+    src: art.hand.phone.src,
+    width: art.hand.phone.width,
+    height: art.hand.phone.height,
+  }).props;
   const hillsProps = getImageProps({
     alt: copy(why.alt),
     sizes: SIZES,
     src: art.hills.src,
     width: art.hills.width,
     height: art.hills.height,
+  }).props;
+  const hillsTallProps = getImageProps({
+    alt: "",
+    sizes: TALL_SIZES,
+    src: art.hills.phone.src,
+    width: art.hills.phone.width,
+    height: art.hills.phone.height,
   }).props;
   const gold = art.inside.gold;
   const sheet = { "--sheet": `url("${gold.src}")` } as CSSProperties;
@@ -257,23 +290,28 @@ export function Zoom({ motion }: { motion: boolean }) {
   return (
     <div ref={track} className={styles.zoom} data-zoom="" data-zoom-at="inside">
       <div className={styles.stage}>
-        {/* The last view, under the others until the view has pulled all the way back. */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          {...hillsProps}
-          ref={hills}
-          alt={hillsProps.alt}
-          className={`${base.ink} ${styles.plate} ${styles.hills}`}
-          data-zoom-layer="hills"
-        />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          {...handProps}
-          ref={hand}
-          alt=""
-          className={`${base.ink} ${styles.plate} ${styles.hand}`}
-          data-zoom-layer="hand"
-        />
+        {/* The last view, under the others until the view has pulled all the way back: the wide
+            painting, or the tall one on an upright window (art direction through getImageProps). */}
+        <picture>
+          <source media={UPRIGHT} srcSet={hillsTallProps.srcSet} sizes={TALL_SIZES} />
+          <img
+            {...hillsProps}
+            ref={hills}
+            alt={hillsProps.alt}
+            className={`${base.ink} ${styles.plate} ${styles.hills}`}
+            data-zoom-layer="hills"
+          />
+        </picture>
+        <picture>
+          <source media={UPRIGHT} srcSet={handTallProps.srcSet} sizes={TALL_SIZES} />
+          <img
+            {...handProps}
+            ref={hand}
+            alt=""
+            className={`${base.ink} ${styles.plate} ${styles.hand}`}
+            data-zoom-layer="hand"
+          />
+        </picture>
         <div
           ref={cell}
           className={`${base.ink} ${styles.cell}`}
@@ -339,7 +377,7 @@ export function Zoom({ motion }: { motion: boolean }) {
       </div>
       {/* id "health": the address the footer's "Cellular health" and "Health, explained", the
           homepage's science and the switched-off Science menu link to. It stands where the view
-          has pulled back to the walker and "Why start with the cell?". */}
+          has pulled back to the pair on the hills and "Why start with the cell?". */}
       <span id="health" className={styles.anchor} aria-hidden="true" />
     </div>
   );

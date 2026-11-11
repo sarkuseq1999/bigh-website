@@ -130,3 +130,41 @@ description: draft translation m1223 (`translations-science-inside.cjs`, not nat
 originals (`hero-inside-2`, `-3`, `hero-walker-1`, `-2`, `hero-dabs-1`, `-2`, `hero-near-1`,
 `-2`) are in `bigh-archive\science-hero-unused-2026-11-10\`; their prompts stay in `prompts/`,
 and `gild_dabs.py` and the mock scripts need them copied back to run again.
+
+## The last view: hand in hand (November 10, 2026)
+
+Mo saw A built and found the picture the zoom pulls back to (one small walker on empty hills)
+plain. Four last pictures were set in the built page's last view without touching `src/`
+(`mockups/science-hero/shoot_last.py`, pictures `review/last-*.jpg`); he picked 1 (AGENTS.md
+"Science opening, the last view: hand in hand"). `film_built.py` films the built page scrolling
+for the review page; its two films are not kept in the repo (about 4 MB each; they are on the
+artifact), only their first and last frames.
+
+| Choice                   | Original           | Note                                                                    |
+| ------------------------ | ------------------ | ----------------------------------------------------------------------- |
+| 1. Hand in hand          | `zoom-pair-1`      | Mo's pick (it was `out-pair-2`): a grandfather and a grandchild         |
+| 2. The orange grove      | `out-grove-2`      | The most colour; the tree crowded the menu bar on desktop               |
+| 3. The surfer            | `out-surf-1`       | Says California fastest; fewer customers surf than walk                 |
+| 4. The same walker, big  | `out-near-1`       | The walker three times bigger (it was `hero-near-2`): still one hiker   |
+| (left out)               | `out-painter-1/-2` | A painter at her easel: busy under the words                            |
+
+Built on it, each a Codex painting made from `zoom-pair-1` so the people match (`paint.sh`
+attaches the pair first, the Big Sur hand second; `prompts/zoom-hands-1.txt`,
+`zoom-pair-phone-1.txt`, `zoom-hands-phone-1.txt`):
+
+| Picture                    | Original             | Note                                                          |
+| -------------------------- | -------------------- | ------------------------------------------------------------- |
+| The joined hands           | `zoom-hands-3`       | The loosest of three; no nails, creases or veins              |
+| The pair, tall             | `zoom-pair-phone-2`  | For upright windows (1024 x 1536); the trail winds to the oak |
+| The joined hands, tall     | `zoom-hands-phone-1` | Painted from `zoom-hands-3`; a wide cut showed only knuckles  |
+
+`zoom()` ships them as `zoom-hands-v3`, `zoom-hands-phone-v3`, `zoom-pair-v3` and
+`zoom-pair-phone-v3` (new names: the walker's and his hand's were live and are cached by name;
+`zoom-hills-v3` and `zoom-hand-v3` are deleted, their originals stay). The page's layers keep
+their names (`hand`, `hills`). `zoom.tsx` picks the tall paintings with
+`<source media="(orientation: portrait)">` and starts the walk where the hands just seen stood
+(`slide`) and about as large (`NEAR`). One more new string, the last picture's description: draft
+translation m1224. The unused takes (`out-pair-1`, `out-grove-1/-2`, `out-surf-1/-2`,
+`out-painter-1/-2`, `out-near-1`, `zoom-hands-1/-2`, `zoom-pair-phone-1/-3`,
+`zoom-hands-phone-2/-3`) are in `bigh-archive\science-hero-unused-2026-11-10\`; their prompts
+stay in `prompts/`.

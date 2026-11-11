@@ -2,10 +2,11 @@
 since November 4, 2026 round 3, docs/superpowers/specs/2026-11-04-science-california-design.md).
 Since November 9, 2026 the page opens as one slow zoom (Mo's pick); since November 10 it starts
 inside the cell and pulls back (Mo picked A of four ideas for the first screen): the inside of one
-cell, its gold slivers adrift, with "Our science starts in the cell."; that cell seen whole; the
-walker's hand; then the walker on golden hills with "Why start with the cell?" in the sky; then the
-three lines with their explainers, Dr. Liu and his path (Berkeley, Salzburg, Today), the formulas,
-the research and Ask.
+cell, its gold slivers adrift, with "Our science starts in the cell."; that cell seen whole; a
+grandfather's hand holding a child's; then the two of them walking hand in hand on golden hills
+with "Why start with the cell?" in the sky (Mo found the lone small walker plain and picked this of
+four last pictures; upright windows get tall paintings); then the three lines with their
+explainers, Dr. Liu and his path (Berkeley, Salzburg, Today), the formulas, the research and Ask.
 
 Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Science, one h1, the parts' ids in order,
@@ -17,7 +18,8 @@ Sections (all, or --only=a,b):
               window's foot; the stage stays pinned while the track scrolls: a quarter way the
               cell stands whole in the window and the title is gone, half way the hand shows, at
               the end the hills fill the window with "Why start with the cell?" and its lead
-              under the menu bar
+              under the menu bar; an upright window has the tall hands and the tall hills, a wide
+              one the wide ones
   why         its heading and lead in the zoom's last view, the gold's line and the label on its
               first; three numbered lines, each explainer opening its own sheet and giving focus
               back; the cell count's source; from 960px the numbers, lines and links each on one line
@@ -537,6 +539,8 @@ ZOOM_BOX = """() => { const b = e => { const r = e.getBoundingClientRect(); retu
            opacity: { inside: +cs(inside).opacity, cell: +cs(cell).opacity, hand: +cs(hand).opacity, hills: +cs(hills).opacity, first: +cs(h1.parentElement).opacity, words: +cs(words).opacity },
            firstShown: cs(h1.parentElement).visibility, secondShown: cs(words.parentElement).visibility, cellScale: cs(cell).scale, hillsScale: cs(hills).scale,
            loaded: [cell.querySelector('img'), hand, hills].map(i => i.complete && i.naturalWidth > 0),
+           src: [hand, hills].map(i => decodeURIComponent(i.currentSrc)),
+           shape: [hand, hills].map(i => i.naturalHeight > i.naturalWidth),
            bar: q('header').getBoundingClientRect().bottom }; }"""
 # Scroll the zoom's track to a share of its run, at once (the page's smooth scroll would glide).
 ZOOM_TO = "s => { const t = document.querySelector('[data-zoom]'); scrollTo({ top: t.offsetTop + (t.offsetHeight - innerHeight) * s, behavior: 'instant' }); }"
@@ -600,6 +604,12 @@ def opening(browser):
         check(f"{tag}: at the end the hills stand whole, alone", end["at"] == "hills" and end["opacity"]["hills"] == 1 and end["hillsScale"] in ("1", "none") and end["opacity"]["hand"] == 0 and end["opacity"]["cell"] == 0 and end["opacity"]["inside"] == 0, f"{end['at']} {end['opacity']} scale {end['hillsScale']}")
         check(f"{tag}: the hills fill the window", hills["l"] <= 0.5 and hills["t"] <= 0.5 and hills["r"] >= w - 0.5 and hills["b"] >= h - 0.5, f"{hills['l']:.0f},{hills['t']:.0f} to {hills['r']:.0f},{hills['b']:.0f}")
         check(f"{tag}: every view's painting has loaded", all(end["loaded"]), str(end["loaded"]))
+        # An upright window gets the tall hands and the tall hills (each its own painting, so the
+        # big hand and the pair are whole on a phone); a wide window the wide ones.
+        tall = h > w
+        kind = "tall" if tall else "wide"
+        in_use = [("zoom-hands-phone" in end["src"][0]) == tall, ("zoom-pair-phone" in end["src"][1]) == tall]
+        check(f"{tag}: the {kind} hands and the {kind} hills are the paintings in use", all(in_use) and "zoom-hands" in end["src"][0] and "zoom-pair" in end["src"][1] and end["shape"] == [tall, tall], " | ".join(s[-48:] for s in end["src"]) + f" {end['shape']}")
         check(f"{tag}: at the end its words show", end["opacity"]["words"] == 1 and end["secondShown"] == "visible" and end["firstShown"] == "hidden", f"{end['opacity']} {end['secondShown']}")
         check(f"{tag}: the words under the menu bar, in the window", words["t"] >= end["bar"] - 1 and words["l"] >= 0 and max(words["r"], end["sublead"]["r"]) <= w and end["sublead"]["b"] <= h, f"top {words['t']:.0f}, {words['l']:.0f}-{words['r']:.0f}, ends {end['sublead']['b']:.0f}")
         if w in (1440, 390):
