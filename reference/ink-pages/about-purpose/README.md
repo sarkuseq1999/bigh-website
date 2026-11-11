@@ -61,6 +61,11 @@ new `purpose` group: the painting, its description, and the leaf plain gold at r
 390x844 and with reduced motion), `qa_home_ink` 288/288, `qa_nav` 326/326; lint, type-check and
 prettier clean. Looked at 1440x900, 1920x1000, 768x1024 and 390x844 (`shoot_built.py`): 8.5/10.
 
+**Live November 10, 2026:** `main` `a3bfad5` (this commit on top of `4d846c7`, NuriCell's clear
+day, which another session put live while this was being checked; rebuilt and re-checked on top
+of it: 453/453, 288/288, 326/326), production `dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`. On the public
+demo: `qa_about` 453/453, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`).
+
 Noted for later, not asked for: the sequoia in "Our experience" (and the grey pool behind
 Dr. Liu, the promise dots, the glasses) are in the same grey ink as the old oak; the sequoia is
 now the page's darkest painting. One part at a time.

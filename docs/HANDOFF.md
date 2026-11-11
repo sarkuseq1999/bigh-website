@@ -5,6 +5,29 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 10, 2026 (Claude Code): About's purpose oak, on a sunny afternoon.** `main`
+  `a3bfad5`, production `dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`; the demo alias was on it from about
+  18:46 Pacific until another session's Science release (`main` `e0f04ab`,
+  `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, which contains this one) took it at about 19:23; public checks
+  `qa_about` 453/453, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Mo found
+  the purpose's oak "a little dark or scary" (black ink, bare roots hanging in empty paper, an
+  empty swing). Of three painted ideas on the real page he picked A: the same valley oak in soft
+  colour, a child on the swing, a grandmother pushing, a dog and a picnic, the roots inside warm
+  earth, a patch of gold leaf among them (B was Monterey Bay with a gold kelp forest under a sea
+  otter, C a San Francisco cable car over its hidden gold cable; review page
+  https://claude.ai/artifact/8dvh62Mg1w7xtgNrYMz9Yp). He saw it built, then "Yes, go live". The
+  words did not change. The gold leaf is plain gold at rest: the kit's band of light crosses it
+  only as the painting comes up (on the kit's own range it stood on the patch when the painting was
+  centred and washed it pale). AGENTS.md "About 'Our purpose'";
+  `reference/ink-pages/about-purpose/README.md`. Built in a scratch worktree while other sessions
+  used this folder; `main` moved twice on the way (NuriCell's clear day before the push, so the
+  release was rebuilt and re-checked on top of it; the Science release after it). `studio` holds
+  this release and these notes, not yet the Science release (`e0f04ab`): its session merges it.
+  Claude's score 8.5: the gold patch is small, "Made in California" also has oaks, the people lean
+  a little storybook. Still open: a native speaker's check of m1230 (the painting's description);
+  a look on a real iPhone. Noted, not asked for: the sequoia, the pool behind Dr. Liu, the promise
+  dots and the glasses are still in the old grey ink; the sequoia is now the page's darkest
+  painting. The takes not used are in `bigh-archive\about-purpose-unpicked-2026-11-10\`.
 - **Live November 10, 2026 (Claude Code): NuriCell's opening, "A clear day".** `main`
   `4d846c7`, production `dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`, the demo alias on it; public checks
   `qa_nuricell_ink` 612/612, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Built

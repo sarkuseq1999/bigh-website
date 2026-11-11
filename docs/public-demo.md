@@ -4,9 +4,37 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-5zojz3ii3-sarkuseq1999s-projects.vercel.app`
+Since about 19:23 Pacific on November 10, 2026 the alias points to
+`bigh-website-f4jacqte1-sarkuseq1999s-projects.vercel.app` (`dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`),
+the **production** deployment of `main` at `e0f04ab835dc854fe000b9da1c690c91be0a3758`: another
+session's Science release, which contains everything below. That session writes its entry; this
+line only keeps the address's current target true.
+
+Before that, from about 18:46 to about 19:23 Pacific on November 10, 2026, the alias pointed to
+`bigh-website-8di84tzto-sarkuseq1999s-projects.vercel.app` (`dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`),
+the **production** deployment of `main` at `a3bfad56c4bd21fe94d6a9dfa0686fe04a0cb002`. The About
+page's purpose painting is the oak on a sunny afternoon: the valley oak in soft colour, a child on
+its swing, a grandmother pushing, a dog and a picnic, the roots inside a slice of warm earth, a
+patch of gold leaf among them, in place of the black ink oak with its empty swing and bare roots
+(Mo: "a little dark or scary"). Mo picked A of three ideas painted on the real page (B Monterey
+Bay, C a cable car), saw it built, then "Yes, go live". The words did not change; the painting's
+description is new (m1230, draft translations). `a3bfad5` is `4d846c7` (NuriCell's clear day, put
+live by another session about an hour earlier; its entry is next) plus the one About commit,
+pushed as a fast-forward. Before the push, on a built copy of exactly that commit (a scratch
+worktree, `npm run build` + `npm start`): `qa_about` 453/453 (its new `purpose` group: the
+painting, its description, the gold leaf plain gold at rest), `qa_home_ink` 288/288, `qa_nav`
+326/326; type-check and lint clean. (The same three had passed on `022a006` plus the commit
+before `main` moved.) After the alias update, in fresh unauthenticated browsers on the public
+demo: `/about` at 1440 and 390 px and `/cns/about` at 390 px (200, the sunny oak, its description
+translated, no console errors), then `qa_about` 453/453, `qa_home_ink` 288/288, `qa_nav` 326/326.
+`qa_about` and `qa_home_ink` ran wholly on this deployment; `qa_nav` ended at 19:24, so its last
+minute or two may have run on the Science release that had just taken the alias. The quick look
+was repeated on that release at 19:25: the oak is there.
+
+Before that, from about 17:36 to about 18:46 Pacific on November 10, 2026, the alias pointed to
+`bigh-website-5zojz3ii3-sarkuseq1999s-projects.vercel.app`
 (`dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`), the **production** deployment of `main` at
-`4d846c7cc9324ad3ed0e34b00410e7d465901683` (November 10, 2026, from about 17:36 Pacific). NuriCell's
+`4d846c7cc9324ad3ed0e34b00410e7d465901683`. NuriCell's
 opening is "A clear day": one loose ink-and-wash painting behind the name and the bottle, a clear
 California morning sky over the Pacific and a low grassy bluff. From 960px the name sits on the
 horizon and the real bottle stands on the bluff, a few blades of the painting's grass in front of
