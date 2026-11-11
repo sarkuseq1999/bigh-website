@@ -5,9 +5,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Built November 10, 2026 (Claude Code), not live: NuriCell's opening, "A clear day".** On the
-  branch `nuricell-clear-day` (built in a scratch worktree while another session worked in this
-  folder); not pushed. Mo asked for a better first screen for NuriCell, saw three ideas mocked on
+- **Built November 10, 2026 (Claude Code), not live: NuriCell's opening, "A clear day".** On
+  `studio` (built in a scratch worktree, branch `nuricell-clear-day`, while another session worked
+  in this folder); not pushed. Mo asked for a better first screen for NuriCell, saw three ideas mocked on
   the real page and picked A. One loose ink-and-wash painting now stands behind the name and the
   bottle: a clear morning sky over the Pacific and a low grassy bluff. From 960px the name sits
   on the horizon and the real bottle stands on the bluff, a few blades of the painting's own grass
@@ -20,9 +20,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `qa_home_ink` 288/288, `qa_nav` 326/326; lint, type-check and prettier clean. Mo's review page:
   https://claude.ai/artifact/Ft8hXJ2FF8mKJvNyw7UG5s (photos of the built page, then the three
   mockups). Claude's score 8.5: it can read as a beach holiday, the 1536px painting is a little
-  soft on a 2x screen, and the fog was judged from still frames. Still open: Mo's word on the built
-  page and on how the fog moves; his yes before it goes live (then merge `origin/main`, rebuild,
-  re-check, push). The takes not used (the first coast, the blue stroke, the two shades) are in
+  soft on a 2x screen, and the fog was judged from still frames. Mo saw the built page and said
+  "Looks right" (November 10). Still open: his yes before it goes live (then fetch, merge
+  `origin/main` if it moved, rebuild, re-check, push). The takes not used (the first coast, the blue stroke, the two shades) are in
   `bigh-archive\nuricell-opening\`.
 - **Live November 9, 2026 (Claude Code): About's two new chapters.** `main` `022a006`,
   production `dpl_H3nczVLAxKgViZsjP5oVzGKDFZPW`, the demo alias on it; public checks `qa_about`
