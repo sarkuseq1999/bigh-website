@@ -4,7 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-6ueqjp649-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-4o0u86k3t-sarkuseq1999s-projects.vercel.app`
+(`dpl_CozxuDzGWSnBPKsUhATWQjNqyYUr`), the **production** deployment of `main` at
+`5b1e4f4441508cf41921bd1b9cea6abd12a9ee65` (November 11, 2026). On the homepage the hummingbird's
+wings now fan above its body, from raised as painted out to about level with the shoulder, and
+never swing down past the belly (Mo: "normally I just see the upper wings move"; a hovering
+hummingbird beats in a flat figure 8 at shoulder height). New wing pictures
+`hummingbird-v3-near/-far.webp`; the rest pose is unchanged. Mo saw the before/after films on the
+review page (https://claude.ai/artifact/73RrLuccvfzBXFnusPv5vw) and said "Yes, go live".
+`5b1e4f4` is `dd73322` plus `studio`'s notes (docs only) and the one commit, pushed as a
+fast-forward (`main` had not moved). Before the push, on the built site (`npm run build` +
+`npm start`): `qa_home_ink` 290/290 (its new check: the wings' box ends 0.700 down the bird's
+frame, above the belly; the old wings' 0.910), `qa_nav` 326/326; lint, type-check and prettier
+clean. After the alias update, in a fresh unauthenticated browser on the public demo at 1440 and
+390 px: the v3 wings loaded, all six frames above the body; then the full public checks:
+`qa_home_ink` 290/290, `qa_nav` 326/326.
+
+Before that, from the Dr. Liu release until this one, the alias pointed to
+`bigh-website-6ueqjp649-sarkuseq1999s-projects.vercel.app`
 (`dpl_D1uJztZ12Ww73KwpKS3W4THDwkk4`), the **production** deployment of `main` at
 `dd7332249af8656dc0e683ecd2024357cad98db3` (November 11, 2026). On the Science page Dr. Liu's
 part is "the gold he studies": his painted portrait (`liu-v1`, his real face) in front of one huge

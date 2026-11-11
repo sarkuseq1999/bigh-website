@@ -5,6 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 11, 2026 (Claude Code): the homepage hummingbird's wings stay up.** Mo: the
+  wings swung down by the belly ("normally I just see the upper wings move"). Each wing now fans
+  about its shoulder from raised as painted out to about level with the shoulder, never through
+  it (`build_wings.py` `RIG`, `hummingbird-v3-near/-far.webp`, `openingWings.box` in
+  `assets.ts`); the rest pose and the phone menu's baked bird are unchanged. `main` `5b1e4f4`,
+  production `dpl_CozxuDzGWSnBPKsUhATWQjNqyYUr`, the demo alias on it; public checks
+  `qa_home_ink` 290/290 (a new check: the wings' box ends above the belly), `qa_nav` 326/326.
+  Review page with before/after films: https://claude.ai/artifact/73RrLuccvfzBXFnusPv5vw
+  (`reference/ink-pages/mockups/home-bird-wings/`). Claude's score 8.5: paused at the beat's
+  lowest frame the far wing lies flat over the head like a little crest (a blur at speed).
 - **Live November 11, 2026 (Claude Code): the Science page's Dr. Liu part, "the gold he
   studies".** `main` `dd73322`, production `dpl_D1uJztZ12Ww73KwpKS3W4THDwkk4`, the demo alias on
   it; a quick look at the public demo showed it on desktop, phone and in Chinese; then the full
