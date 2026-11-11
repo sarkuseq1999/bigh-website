@@ -5,8 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Built November 11, 2026 (Claude Code), NOT live: the Science page's Dr. Liu part, "the gold
-  he studies".** Mo sent a screenshot of the part (he took it for About's; it is Science's) and
+- **Live November 11, 2026 (Claude Code): the Science page's Dr. Liu part, "the gold he
+  studies".** `main` `dd73322`, production `dpl_D1uJztZ12Ww73KwpKS3W4THDwkk4`, the demo alias on
+  it; a quick look at the public demo showed it on desktop, phone and in Chinese; then the full
+  public checks: `qa_science_ink` 943/943, `qa_home_ink` 288/288, `qa_nav` 326/326
+  (`docs/public-demo.md`). Mo saw the built part on the review page and said "Yes, go live".
+  AGENTS.md's entry for it says "live" only in the working copy: another session had AGENTS.md
+  staged for its own rule when these notes were committed, so that two-line edit was left
+  uncommitted for it to carry (it is correct; keep it).
+  `dd73322` is `e0f04ab` plus `studio`'s notes (docs only) and the one commit, pushed as a
+  fast-forward. Mo sent a screenshot of the part (he took it for About's; it is Science's) and
   found it "pretty plain or just a little boring": a small dark studio photograph on bare paper.
   He saw three ideas mocked on the real page, then two more (review page
   https://claude.ai/artifact/Une7FkzNpQuqCt4uyvdXQu), and picked C. His painted portrait
@@ -24,8 +32,9 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   288/288, `qa_nav` 326/326; lint, type-check and prettier clean. A 7-second film of the drift is
   on the review page (the farthest sliver travels 11px on a desktop, 7px on a phone). Claude's score 8.5: only the slivers clear of him and of the plate's edges drift, the
   1536px painting is a little soft on a 2x screen, and the cell is the page's third. Still open:
-  Mo's look at the built page and his yes before any push; a native speaker's check of
-  m1231-m1232 (`translations-science-liu.cjs`).
+  a native speaker's check of m1231-m1232 (`translations-science-liu.cjs`); Mo's word on how the
+  drift feels on the live page. Seen again on the live Chinese page, an older gap: his headline
+  and intro (and the path's words) are still English in every language.
   **A new rule from the same session (AGENTS.md, "Real people"):** for mockups Dr. Liu's picture
   may be redrawn by a picture model; nothing with a redrawn Dr. Liu goes on the public site until
   Mo says Dr. Liu approved it. Ideas D (at his microscope) and E (paper planes) were mocked that

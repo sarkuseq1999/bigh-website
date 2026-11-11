@@ -4,9 +4,31 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-f4jacqte1-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-6ueqjp649-sarkuseq1999s-projects.vercel.app`
+(`dpl_D1uJztZ12Ww73KwpKS3W4THDwkk4`), the **production** deployment of `main` at
+`dd7332249af8656dc0e683ecd2024357cad98db3` (November 11, 2026). On the Science page Dr. Liu's
+part is "the gold he studies": his painted portrait (`liu-v1`, his real face) in front of one huge
+cell, its mitochondria slivers of gold that drift slowly while the painting is in the window, in
+place of the small dark studio photograph on bare paper (Mo: "pretty plain or just a little
+boring"). From 960px the painting runs off the window's right edge and his words stand on its bare
+paper; a phone gets a tall painting over the words. One new line, "In gold: mitochondria. He has
+studied them since 1994." (m1231, draft translations), and the painting's description (m1232). Mo
+picked C of five ideas mocked on the real page, saw it built, then "Yes, go live". `dd73322` is
+`e0f04ab` plus `studio`'s notes (docs only) and the one commit, pushed as a fast-forward (`main`
+had not moved). Before the push, on the built site (`npm run build` + `npm start`):
+`qa_science_ink` 943/943 (its new `liu` section: ten window sizes, the drift, reduced motion, no
+script), `qa_home_ink` 288/288, `qa_nav` 326/326; lint, type-check and prettier clean. After the
+alias update, in fresh unauthenticated browsers on the public demo: `/science` at 1440 and 390 px
+and `/cns/science` at 390 px (200, the painting loaded and bloomed in, 16 slivers adrift on the
+wide plate and 21 on the phone's, the gold's line and the painting's description translated, no
+studio photograph, no console errors); then the full public checks: `qa_science_ink` 943/943,
+`qa_home_ink` 288/288, `qa_nav` 326/326 (run from the shared folder's working copy, where another
+session had begun changing `qa_home_ink.py` for its own unreleased work; every check passed).
+
+Before that, from about 19:24 Pacific on November 10, 2026 until this release, the alias pointed to
+`bigh-website-f4jacqte1-sarkuseq1999s-projects.vercel.app`
 (`dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`), the **production** deployment of `main` at
-`e0f04ab835dc854fe000b9da1c690c91be0a3758` (November 10, 2026, from about 19:24 Pacific). The
+`e0f04ab835dc854fe000b9da1c690c91be0a3758`. The
 Science page's opening starts inside the cell and pulls back: the first screen is the inside of
 one cell, its mitochondria as slivers of gold leaf adrift ("Our science starts in the cell.");
 scrolling pulls back to the cell seen whole, a grandfather's hand holding a child's, then the two
