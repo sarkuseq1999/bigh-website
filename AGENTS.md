@@ -539,9 +539,8 @@ These sit on top of `DESIGN.md`.
   pictures `zoom()` in `build_science.py` (Codex paintings, `prompts/zoom-*.txt`); mockup
   `reference/ink-pages/mockups/science-zoom/`. (Since November 10 the zoom starts inside the
   cell and pulls back: next rule.)
-- **Science opening: it starts inside the cell (Mo picked A, November 10, 2026; on the draft
-  branch `science-inside`, not live).** A day after the zoom went live Mo asked for more or
-  better ideas for the first screen, then to see them. What was weak: the picture said "hiking"
+- **Science opening: it starts inside the cell (Mo picked A, November 10, 2026; live the same
+  day, `main` `e0f04ab`).** A day after the zoom went live Mo asked for more or better ideas for the first screen, then to see them. What was weak: the picture said "hiking"
   while the words said "cell" (they met only after scrolling), nothing moved until you scrolled,
   the walker was small and in a corner, and golden hills with poppies looked like About's
   opening. Mo's saved hero designs all fill the screen, show one clear main thing and move
@@ -559,8 +558,8 @@ These sit on top of `DESIGN.md`.
   see-through body as a ghost, and the dabs as pebbles. `zoom.tsx`, `zoom.module.css`; pictures
   `zoom()` and `lifted()` in `build_science.py` (`zoom-inside-1`); mockups
   `reference/ink-pages/mockups/science-hero/`.
-- **Science opening, the last view: hand in hand (Mo picked 1, November 10, 2026; on the draft
-  branch `science-inside`, not live).** Mo saw A built and found the picture the zoom pulls back
+- **Science opening, the last view: hand in hand (Mo picked 1, November 10, 2026; live the
+  same day, `main` `e0f04ab`).** Mo saw A built and found the picture the zoom pulls back
   to (one small walker on empty hills) "a little bit plain or a little bit like boring". Of four
   last pictures set in the real page's last view (1 a grandfather and a grandchild walking hand
   in hand; 2 a woman picking oranges in a grove; 3 a silver-haired surfer walking down to the

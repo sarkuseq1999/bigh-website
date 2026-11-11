@@ -5,26 +5,29 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Waiting for Mo (November 10, 2026, Claude Code): the Science opening now starts inside the
-  cell, a DRAFT on branch `science-inside`, NOT on `studio` and not live.** A day after the zoom
-  went live Mo asked for more or better ideas for the first screen, saw four on the real page
-  (artifact `5rauLXYKSbXSi9VhTg9aem`: A start inside the cell, B the walker in dabs, C the gold
-  dot, D the walker bigger) and said "Go with A". Built: the first screen is the inside of one
-  cell, its gold slivers adrift; scrolling pulls back to the cell seen whole, a hand, then a last
-  view on golden hills, where "Why start with the cell?" now stands. Mo saw it built and found
-  that last view (one small walker) plain; of four last pictures on the real page he picked 1,
-  "hand in hand": a grandfather's hand holding a child's, then the two of them on the trail,
-  with tall paintings of both for upright windows. That is built too. AGENTS.md "Science
+- **Live November 10, 2026 (Claude Code): the Science opening starts inside the cell and pulls
+  back to a grandfather and grandchild, hand in hand.** `main` `e0f04ab`, production
+  `dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`, the demo alias on it from about 19:24 Pacific; a quick look
+  at the public demo showed it on desktop, phone and in Chinese; the full public checks (`qa_science_ink`, `qa_home_ink`, `qa_nav`) were still running when this was written (`docs/public-demo.md`).
+  A day after the zoom went live Mo asked for more or better ideas for the first screen, saw four
+  on the real page (artifact `5rauLXYKSbXSi9VhTg9aem`: A start inside the cell, B the walker in
+  dabs, C the gold dot, D the walker bigger) and said "Go with A". He saw A built and found its
+  last view (one small walker) plain; of four last pictures on the real page he picked 1, "hand
+  in hand"; he saw that built and said "Put it live". The first screen is the inside of one cell,
+  its gold slivers adrift; scrolling pulls back to the cell seen whole, a grandfather's hand
+  holding a child's, then the two of them on the trail, where "Why start with the cell?" now
+  stands, with tall paintings of the hands and the pair for upright windows. AGENTS.md "Science
   opening: it starts inside the cell" and "Science opening, the last view: hand in hand";
   pictures and notes `reference/ink-pages/science/README.md` ("First-screen ideas", "The last
-  view"). Three calls were Claude's, not Mo's, and he has not judged them yet: the whole cell
-  shown between the inside view and the hand, "Why start with the cell?" moved onto the hills,
-  and the gold's line at the first screen's foot. The motion was judged from filmed frames only
-  (the same artifact shows the built page scrolling). Two new strings, draft translations
-  m1223-m1224 (`translations-science-inside.cjs`, not native-reviewed). Built in a scratch
-  worktree because another session (branch `nuricell-clear-day`) was working in this folder.
-  Next: Mo's critique of the built page; on his yes, merge `origin/main`, re-check on the built
-  site and push (`docs/public-demo.md` entry after the public checks).
+  view"). Built in a scratch worktree (branch `science-inside`) while other sessions worked in
+  this folder; released as `origin/main` (NuriCell's clear day, About's oak) plus `studio`'s notes
+  plus the two Science commits, a fast-forward. Before the push, on the combined built site:
+  `qa_science_ink` 765/765, `qa_home_ink` 288/288, `qa_nav` 326/326, `check_science_art` 53/53;
+  type-check and lint clean. Three calls were Claude's and Mo has seen them only in the films:
+  the whole cell shown between the inside view and the hands, "Why start with the cell?" moved
+  onto the hills, and the gold's line at the first screen's foot. Still open: Mo's word on how
+  the motion feels on the live page (it was judged from filmed frames only); a native speaker's
+  check of m1223-m1224 (`translations-science-inside.cjs`).
 - **Live November 10, 2026 (Claude Code): NuriCell's opening, "A clear day".** `main`
   `4d846c7`, production `dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`, the demo alias on it; public checks
   `qa_nuricell_ink` 612/612, `qa_home_ink` 288/288, `qa_nav` 326/326 (`docs/public-demo.md`). Built

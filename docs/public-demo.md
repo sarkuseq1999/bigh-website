@@ -4,7 +4,31 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-5zojz3ii3-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-f4jacqte1-sarkuseq1999s-projects.vercel.app`
+(`dpl_FgvoJMjUEeq3rntJo8Ku2eTb1tKN`), the **production** deployment of `main` at
+`e0f04ab835dc854fe000b9da1c690c91be0a3758` (November 10, 2026, from about 19:24 Pacific). The
+Science page's opening starts inside the cell and pulls back: the first screen is the inside of
+one cell, its mitochondria as slivers of gold leaf adrift ("Our science starts in the cell.");
+scrolling pulls back to the cell seen whole, a grandfather's hand holding a child's, then the two
+of them walking hand in hand on golden hills, where "Why start with the cell?" stands; upright
+windows get tall paintings of the hands and the pair. Mo picked A (start inside the cell) of four
+ideas for the first screen, then 1 (hand in hand) of four last pictures, each seen on the real
+page, then "Put it live". `e0f04ab` is `a3bfad5` plus `studio`'s notes (docs only) and the two
+Science commits (`051171c`, `b550c9f`), pushed as a fast-forward. Before the push, on the combined
+built site (a scratch worktree, `npm run build` + `npm start`): `qa_science_ink` 765/765,
+`qa_home_ink` 288/288, `qa_nav` 326/326; `check_science_art` 53/53; type-check and lint clean.
+After the alias update, in fresh unauthenticated browsers on the public demo: `/science` at 1440
+and 390 px and `/cns/science` at 390 px (200, the inside of the cell with its 46 gold slivers on
+the first screen, the pair under "Why start with the cell?" at the end, the tall paintings on the
+phone, no console errors); the full public checks (`qa_science_ink`, `qa_home_ink`, `qa_nav`) were still running when this was written.
+
+Before that, from about 18:45 to 19:24 Pacific on November 10, 2026, the alias pointed to
+`bigh-website-8di84tzto-sarkuseq1999s-projects.vercel.app` (`dpl_2ptufqJCHjqrP86VxnXgjem5sjGr`),
+the **production** deployment of `main` at `a3bfad5` (About's oak on a sunny afternoon; that
+release's own notes are its session's to add).
+
+Before that, until about 18:45 Pacific on November 10, 2026, the alias pointed to
+`bigh-website-5zojz3ii3-sarkuseq1999s-projects.vercel.app`
 (`dpl_AMJsMctxNdcoQd7GydtpaVkgBSxY`), the **production** deployment of `main` at
 `4d846c7cc9324ad3ed0e34b00410e7d465901683` (November 10, 2026, from about 17:36 Pacific). NuriCell's
 opening is "A clear day": one loose ink-and-wash painting behind the name and the bottle, a clear
