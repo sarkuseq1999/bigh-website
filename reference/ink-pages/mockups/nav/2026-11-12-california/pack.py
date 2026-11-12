@@ -9,7 +9,7 @@ SHOTS = HERE / "shots"
 OUT = HERE / "page" / "img"
 OUT.mkdir(parents=True, exist_ok=True)
 
-for v in ("today", "a", "b", "c", "e"):
+for v in ("today", "f", "g"):
     # The bar close up: the column only, at 2x.
     bar = Image.open(SHOTS / f"{v}-about-bar.png").convert("RGB")
     bar.crop((180, 0, 2900, 300)).save(OUT / f"{v}-bar.webp", quality=88)

@@ -119,7 +119,103 @@ SKY_CSS = WARM_CSS + f"""
 .{X}root[data-ground="settling"] .{X}ground {{ height: {SKY_H} !important; }}
 """
 
+R, B, L, RT = f".{X}root", f".{X}bar", f".{X}left", f".{X}right"
+
+# Shared quiet pieces for F and G: a 2px ink underline for the page you're on, and the hover wash
+# in a warm grey (not visible at rest).
+QUIET = f"""
+.{X}ink::before {{ mask: none !important; inset: auto 0 0 0 !important; height: 2px !important; background: currentColor !important; }}
+.{X}word::after, .{X}account a::after, .{X}sheetFoot a::after {{ background: #8a7a6a !important; opacity: .25 !important; }}
+.{X}dab {{ mask: none !important; height: 1px !important; width: 56px !important; background: #cdbfac !important; opacity: 1 !important; }}
+"""
+
+# F, masthead (Mo's Timeline reference #004, made large): the mark centred on its own row with the
+# language and the account at its two ends, all four links centred on a row under it, then a fine
+# dotted line. Once the page moves on it folds into one row: the mark at the left, the links in
+# the middle, the account at the right. Sign up an outlined pill like "Meet our scientists".
+MAST_CSS = QUIET + f"""
+@media (min-width: 1101px) {{
+  {R} {{ --tall: 142px !important; --mark-tall: 132px !important; }}
+  {R} {B} {{
+    display: grid !important; grid-template-columns: minmax(0, 1fr) auto auto minmax(0, 1fr);
+    grid-template-rows: 84px 50px; align-items: center; column-gap: var(--gap); align-content: start;
+  }}
+  {L}, {RT} {{ display: contents !important; }}
+  {L} > .{X}language {{ grid-area: 1 / 1; justify-self: start; margin-top: 18px; }}
+  {R} {B} a.{X}mark[href] {{ grid-area: 1 / 2 / 2 / 4; justify-self: center; top: 6px !important; }}
+  {RT} > .{X}account {{ grid-area: 1 / 4; justify-self: end; margin-top: 18px; }}
+  {L} > .{X}links {{ grid-area: 2 / 2; justify-self: end; }}
+  {RT} > .{X}links {{ grid-area: 2 / 3; justify-self: start; }}
+  {R}[data-size="small"] {B} {{
+    grid-template-columns: auto minmax(0, 1fr) auto auto minmax(0, 1fr) auto auto; grid-template-rows: 1fr;
+  }}
+  {R}[data-size="small"] {B} a.{X}mark[href] {{ grid-area: 1 / 1; top: 0 !important; }}
+  {R}[data-size="small"] {L} > .{X}links {{ grid-area: 1 / 3; }}
+  {R}[data-size="small"] {RT} > .{X}links {{ grid-area: 1 / 4; }}
+  {R}[data-size="small"] {L} > .{X}language {{ grid-area: 1 / 6; margin-top: 14px; }}
+  {R}[data-size="small"] {RT} > .{X}account {{ grid-area: 1 / 7; margin-top: 14px; }}
+  {R}[data-size="small"] {L} > .{X}links, {R}[data-size="small"] {RT} > .{X}links {{ margin-top: 14px; }}
+  main {{ margin-top: 38px; }}
+}}
+/* A fine dotted line in warm sepia under the bar. */
+.{X}rule {{ aspect-ratio: auto !important; height: 2px !important; min-height: 2px !important; }}
+{R} .{X}rule {{ opacity: 1; }}
+.{X}rule::before {{
+  mask: none !important;
+  background: radial-gradient(circle, #9a8672 0 0.9px, transparent 1.2px) 0 50% / 7px 2px repeat-x !important;
+}}
+/* Sign up and Menu: outlined pills. */
+.{X}account button::before, .{X}sheetFoot button::before, {R} .{X}menuButton::before {{
+  mask: none !important; inset: 0 !important; border-radius: 999px !important;
+  background: transparent !important; box-shadow: inset 0 0 0 1.5px var(--ink) !important;
+}}
+{R} :is(.{X}account, .{X}sheetFoot) button, {R} .{X}menuButton {{ color: var(--ink) !important; padding: 0 22px 1px !important; }}
+{R} .{X}menuButton {{ min-height: 44px; }}
+"""
+
+# G, floating paper (Mo's Seed reference #039): the whole bar is one rounded sheet of frosted rice
+# paper floating over the page, a soft shadow under it; the mark at its left, the links in its
+# middle, the language, Log in and an ink Sign up pill at its right. The painted rule and the bar's
+# own paper go: the page runs on behind the sheet.
+CAPSULE_CSS = QUIET + f"""
+.{X}rule, .{X}mist {{ display: none !important; }}
+{R} .{X}ground {{
+  opacity: 1 !important; height: 128px !important; mask-image: none !important;
+  background: linear-gradient(rgb(248 243 234) 0 58%, rgb(248 243 234 / 0)) !important;
+}}
+{R}[data-ground="clear"] .{X}ground {{ opacity: 0 !important; }}
+{R} {B} {{
+  display: flex !important; align-items: center;
+  max-width: min(1240px, 100% - 2 * var(--pad) + 40px) !important;
+  height: 78px !important; margin: 16px auto 0 !important; padding: 0 12px 0 32px !important;
+  border-radius: 999px;
+  background: rgb(249 245 237 / 0.95);
+  -webkit-backdrop-filter: blur(14px) saturate(1.1); backdrop-filter: blur(14px) saturate(1.1);
+  box-shadow: 0 0 0 1px rgb(110 88 66 / 0.14), 0 14px 34px -16px rgb(70 50 30 / 0.35);
+}}
+{L}, {RT} {{ display: contents !important; }}
+{R} {B} a.{X}mark[href] {{ order: 0; width: 114px !important; top: -3px !important; }}
+{L} > .{X}links {{ order: 1; margin-left: auto; }}
+{RT} > .{X}links {{ order: 2; }}
+{L} > .{X}language {{ order: 3; margin-left: auto; }}
+{RT} > .{X}account {{ order: 4; margin-left: 6px; }}
+{L} > .{X}menuButton {{ order: 5; margin-left: 10px; }}
+{L} > .{X}links, {RT} > .{X}links, {L} > .{X}language, {RT} > .{X}account {{ margin-top: 6px; }}
+.{X}account button::before, .{X}sheetFoot button::before, {R} .{X}menuButton::before {{
+  mask: none !important; inset: 0 !important; border-radius: 999px !important; background: var(--ink) !important;
+}}
+{R} :is(.{X}account, .{X}sheetFoot) button {{ padding: 0 24px 1px !important; min-height: 54px; }}
+@media (max-width: 1100px) {{
+  {R} {B} {{ height: 64px !important; margin: 10px 12px 0 !important; padding: 0 6px 0 18px !important; }}
+  {R} {B} a.{X}mark[href] {{ width: 86px !important; }}
+  {RT} > .{X}account {{ margin-left: auto; }}
+  {R} .{X}menuButton {{ padding: 0 20px 1px !important; min-height: 50px; }}
+}}
+"""
+
 VARIANTS = {
+    "f": MAST_CSS,
+    "g": CAPSULE_CSS,
     "today": "",
     "a": WARM_CSS,
     "b": WARM_CSS + ridge_css(),
