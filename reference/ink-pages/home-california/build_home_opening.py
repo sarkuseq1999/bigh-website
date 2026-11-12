@@ -5,7 +5,7 @@ its wings repainted true, from the Codex originals in originals/:
 
 - public/images/home-v2/ink/opening-sequoias-v1.webp: the whole first screen (2400 x 1600), its
   paper divided out to white, so the page multiplies it onto its own rice paper.
-- public/images/home-v2/ink/hummingbird-v2.webp and hummingbird-v3-near.webp, -far.webp (October
+- public/images/home-v2/ink/hummingbird-v2.webp and hummingbird-v4-near.webp, -far.webp (October
   29, Mo picked C): Allen's hummingbird painted in a few wet washes, its beak one dry stroke,
   its wings always beating (build_wings.py, look "allens-few"). The body without its wings, in
   the live crane's frame (1600 x 1062), and each wing's six frames side by side; the page lays
@@ -34,7 +34,8 @@ LANDSCAPE = ("sequoia-2-clear-1", "opening-sequoias-v1", (2400, 1600))
 BIRD = ("allens-few", "hummingbird-v2", (1600, 1062))
 # The wings, renamed when their beat changes (the image cache keys on the name). v3, November 11,
 # 2026: they fan above the shoulder instead of swinging down past the belly (build_wings.py).
-WINGS = "hummingbird-v3"
+# v4, November 12: they beat as a haze, too fast to see (rest, haze and settle frames).
+WINGS = "hummingbird-v4"
 
 
 def save(img, name):

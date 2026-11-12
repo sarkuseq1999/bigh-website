@@ -20,11 +20,11 @@ import styles from "./opening.module.css";
 // standing in a clearing beside one giant trunk, and the bird a hummingbird (for its size it
 // burns energy faster than almost any animal): since October 29 Allen's, painted in a few wet
 // washes; since November 4 its wings beat as it arrives, then rest (non-stop, they read as a
-// fly's). The crane's place, anchors and float are the bird's. The painting is alive: mist
+// fly's); since November 12 the beat is a haze, too fast to see (as a butterfly's it was slow). The crane's place, anchors and float are the bird's. The painting is alive: mist
 // drifts through the grove (mist.ts), light crosses the gold leaf, the sun sits at its own depth,
 // and the bird rides the air in a slow float of its own (opening.module.css).
 
-// A wing's six frames, laid in the wings' box in the bird's frame (assets.ts).
+// A wing's frames (rest, haze, settle), laid in the wings' box in the bird's frame (assets.ts).
 function wing(src: string): CSSProperties {
   const { box } = openingWings;
   return {

@@ -608,7 +608,9 @@ def wing_arrival(context, url, tag):
     p.wait_for_timeout(4500)
     settled = p.evaluate(WING_FRAMES)
     p.close()
-    check(f"{tag}: the hummingbird's wings beat as it arrives", arriving["frames"] >= 3, str(arriving))
+    # November 12 (Mo: "so fast you can barely see his wings"): the haze steps a new frame every
+    # screen frame, so the dozen reads over 0.28 s see most of its eight frames.
+    check(f"{tag}: the hummingbird's wings beat as it arrives, a fast haze", arriving["frames"] >= 5, str(arriving))
     check(
         f"{tag}: then they rest, raised as painted (Mo, November 4: non-stop, a fly)",
         settled["frames"] == 1 and settled["at"] in ("0% 0%", "0px 0px"),
@@ -1124,7 +1126,7 @@ def run(browser, look, mobile):
     )
     # October 29 (Mo picked C): Allen's in a few wet washes, its own painted wings beating.
     wings_ok = sorted(w.split(" ")[0] for w in o["wings"]) == ["far", "near"] and all(
-        "hummingbird-v3-" in w for w in o["wings"]
+        "hummingbird-v4-" in w for w in o["wings"]
     )
     check(f"{tag}: the hummingbird has its two painted wings, far and near", wings_ok, str(o["wings"]))
     # November 11 (Mo: "I just see the upper wings move"): the wings fan above the body, out to
