@@ -264,7 +264,7 @@ These sit on top of `DESIGN.md`.
   `made-mockups.tsx` (`ValleyIdea`); pictures `reference/ink-pages/about-made/` (`valley-1-b`);
   mockups `reference/ink-pages/mockups/about-made/`.
 - **About "Our experience": the sequoia, a little coloured (Mo picked 3, November 11, 2026;
-  built on `studio`, not live).** Mo asked for About's last three parts (Our experience, Our
+  live November 12, `main` `f46a497`).** Mo asked for About's last three parts (Our experience, Our
   promise, "Curious about the science?") to take the site's California colour, one part at a
   time. For Our experience he set aside three new paintings (A Riverside's parent navel orange
   tree, B a San Francisco sourdough starter, C a seaside carousel): "I think the sequoia tree is a

@@ -4,7 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-22zuf5dvj-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-ktvp3a2iw-sarkuseq1999s-projects.vercel.app`
+(`dpl_4XFanxGP5ZWDD7YBaxq7MJPjCuvp`), the **production** deployment of `main` at
+`f46a497aa794592648163041adfed8926fe89df8` (November 12, 2026). On the About page, Our
+experience's giant sequoia is a little coloured: Codex's repaint of the grey ink sequoia in thin
+watercolour (cinnamon bark, a sage crown, pale blue-green firs in the mist), its colour mixed 35%
+back toward grey, the gold leaf on the trunk at full colour (`sequoia-soft-v1.webp`, new
+description m1250). Its gold takes the purpose oak's glint range, so the leaf is plain gold at
+rest. Mo kept the sequoia over three new paintings ("Maybe just make it a little bit colored"),
+picked 3 of three colourings on the real page (review page
+https://claude.ai/artifact/5ovTaXUGkaFShrw2jp7D8A), saw it built and said "Yes, go live".
+`f46a497` is `dca5fc8` merged with the one commit `9e550a6`, pushed as a fast-forward (`main` had
+not moved). Before the push, on the merged built site (`npm run build` + `npm start`): `qa_about`
+460/460 (its new `experience` group), `qa_home_ink` 290/290, `qa_nav` 326/326; lint, type-check and
+prettier clean. After the alias update, in fresh unauthenticated browsers on the public demo:
+`/about` at 1440 and 390 px and `/cns/about` at 390 px (200, `sequoia-soft-v1` loaded, the leaf
+plain gold, the Chinese description); then the full public checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326.
+
+Before that, from the NuriCell sunshine release until this one, the alias pointed to
+`bigh-website-22zuf5dvj-sarkuseq1999s-projects.vercel.app`
 (`dpl_CcuAH3FX7DL9qrb5mxenjeJ3SaUE`), the **production** deployment of `main` at
 `dca5fc8c1fb71b92f3ae73b90f41f7ea828a4600` (November 11, 2026). NuriCell's opening, "A clear
 day", has room and sunshine: from 960px "Nuri" and "Cell" are lifted 0.1 of their size, so a

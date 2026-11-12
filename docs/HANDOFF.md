@@ -5,6 +5,23 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 12, 2026 (Claude Code): About's "Our experience" sequoia, a little coloured.**
+  `main` `f46a497`, production `dpl_4XFanxGP5ZWDD7YBaxq7MJPjCuvp`, the demo alias on it; public
+  checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). Mo asked for About's last three parts (Our
+  experience, Our promise, "Curious about the science?") to take the site's California colour, one
+  part at a time. For Our experience he set aside three new paintings (an orange tree, sourdough,
+  a carousel) and kept the giant sequoia: "Maybe just make it a little bit colored." Of three
+  colourings on the real page he picked 3: Codex's repaint in thin watercolour with its colour
+  mixed 35% back toward grey, the gold leaf on the trunk at full colour
+  (`build_about_experience.py`, `sequoia-soft-v1.webp`, `experience-art.ts`). The leaf takes the
+  purpose oak's glint range (at the kit's range the band of light washed it to cream at rest). New
+  description m1250 (draft translations); `qa_about`'s new `experience` group. Review page
+  https://claude.ai/artifact/5ovTaXUGkaFShrw2jp7D8A. Built on the branch `about-sequoia` in a
+  scratch worktree while another session worked in this folder; merged with `main` `dca5fc8` and
+  checked on the built site before the push: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav`
+  326/326; lint, type-check and prettier clean. Claude's score 8.5: the gold leaf is small, so from
+  a distance it reads as a little yellow spot. Next on About, one at a time: Our promise (the four
+  grey ink dots), then "Curious about the science?" (the grey glasses).
 - **Live November 11, 2026 (Claude Code): NuriCell's opening, room and sunshine.** `main`
   `dca5fc8`, production `dpl_CcuAH3FX7DL9qrb5mxenjeJ3SaUE`, the demo alias on it; a quick look at
   the public demo showed it at 1844, 1440 and 390 px and in Chinese; then the full public checks:
