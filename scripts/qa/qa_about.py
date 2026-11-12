@@ -46,6 +46,10 @@ oak with its empty swing). At 1440x900 and 390x844: the painting is the sunny oa
 gold-leaf mask, described with its child on the swing; resting in the middle of the window its
 gold leaf is plain gold (the kit's band of light once stood on it there and washed it pale); the
 same with reduced motion.
+experience (Mo picked 3, November 11, 2026: the giant sequoia repainted with soft colour, in place
+of the grey ink one). At 1440x900 and 390x844: the painting is the soft sequoia with its gold-leaf
+mask, described as watercolour; resting in the middle of the window its gold leaf is plain gold;
+the same with reduced motion.
 meadow_layout (Mo, October 28, 2026: the meadow thins out into the paper before Our purpose). At
 1920x1000, 1440x900, 1280x720, 1024x768, 768x1024, 600x900, 390x844 and 360x780: the painting
 spans the window; the words centred, no ink within 8px of them; the meadow fills the first
@@ -75,7 +79,7 @@ first screen.
 
 Pictures: scripts/qa/out/about/<size>-NN.png.
 
-Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,chapters,purpose,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen,meadow_layout]
+Usage: python -X utf8 scripts/qa/qa_about.py [base-url] [--only=desktop_and_phone,rhythm,chapters,purpose,experience,motion,focus,deep_links,languages,languages_layout,nav_locales,greetings,closing_pills,boundary,first_screen,meadow_layout]
 """
 
 import io
@@ -1430,22 +1434,23 @@ PURPOSE = '[data-part="purpose"] [data-picture] img'
 LEAF = (0.525, 0.745, 0.575, 0.772)
 
 
-def leaf_colour(page):
-    """The mean colour of the gold leaf's heart, from a shot of the window: [r, g, b]."""
-    box = page.evaluate(f"(() => {{ const r = document.querySelector('{PURPOSE}').getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }})()")
+def leaf_colour(page, selector=PURPOSE, leaf=LEAF):
+    """The mean colour of a painting's gold leaf's heart (`leaf`, in fractions of the painting),
+    from a shot of the window: [r, g, b]."""
+    box = page.evaluate(f"(() => {{ const r = document.querySelector('{selector}').getBoundingClientRect(); return [r.left, r.top, r.width, r.height]; }})()")
     shot = Image.open(io.BytesIO(page.screenshot())).convert("RGB")
     scale = shot.width / page.viewport_size["width"]
-    x0, y0, x1, y1 = LEAF
+    x0, y0, x1, y1 = leaf
     heart = shot.crop((round((box[0] + x0 * box[2]) * scale), round((box[1] + y0 * box[3]) * scale),
                        round((box[0] + x1 * box[2]) * scale), round((box[1] + y1 * box[3]) * scale)))
     return [round(v) for v in ImageStat.Stat(heart).mean]
 
 
-def rest_on_purpose(page):
-    """Scroll down to the purpose's painting like a visitor, and stop with it in the middle of the
-    window (or its top under the menu bar when it is taller than the room)."""
+def rest_on(page, selector=PURPOSE):
+    """Scroll down to a painting like a visitor, and stop with it in the middle of the window (or
+    its top under the menu bar when it is taller than the room)."""
     target = page.evaluate(
-        f"""(() => {{ const r = document.querySelector('{PURPOSE}').getBoundingClientRect();
+        f"""(() => {{ const r = document.querySelector('{selector}').getBoundingClientRect();
               return Math.max(0, r.top + scrollY - Math.max(96, (innerHeight - r.height) / 2)); }})()"""
     )
     y = 0
@@ -1453,7 +1458,7 @@ def rest_on_purpose(page):
         y = min(y + 240, target)
         page.evaluate(f"window.scrollTo(0, {y})")
         page.wait_for_timeout(100)
-    wait_until(page, f"document.querySelector('{PURPOSE}').dataset.bloom === 'done'")
+    wait_until(page, f"document.querySelector('{selector}').dataset.bloom === 'done'")
     page.wait_for_timeout(1800)  # the gold layer's own 1.2s fade, then still
 
 
@@ -1467,7 +1472,7 @@ def purpose(browser):
     for width, height, reduced in [(1440, 900, False), (390, 844, False), (1440, 900, True)]:
         tag = f"purpose {width}x{height}{' reduced motion' if reduced else ''}"
         context, page, response, errors, failed = open_page(browser, width, height, reduced=reduced)
-        rest_on_purpose(page)
+        rest_on(page)
         picture = page.evaluate(
             f"""(() => {{ const i = document.querySelector('{PURPOSE}'), g = i.nextElementSibling;
                   return {{ src: decodeURIComponent(i.currentSrc), alt: i.alt, bloom: i.dataset.bloom,
@@ -1483,8 +1488,41 @@ def purpose(browser):
         context.close()
 
 
+# The experience's painting: the giant sequoia beside a young one, repainted with soft colour (Mo
+# picked 3, November 11, 2026; the grey ink sequoia no longer fitted the site's colour). Its gold
+# leaf is one small pale patch on the trunk; SEQUOIA_LEAF is the patch's heart, in fractions of the
+# painting (build_about_experience.py lays the leaf at x 0.436-0.478, y 0.414-0.456).
+SEQUOIA = '[data-part="experience"] [data-picture] img'
+SEQUOIA_LEAF = (0.449, 0.427, 0.465, 0.443)
+
+
+def experience(browser):
+    """experience: the painting is the soft sequoia, described as watercolour; resting in the
+    middle of the window its gold leaf is plain gold. This leaf is paler than the oak's: plain, it
+    holds red over blue by about 115 and red over green by about 30 on the page; the kit's band of
+    light washes it toward cream (red over blue under 90). With reduced motion (no band at all) the
+    leaf is the same plain gold."""
+    for width, height, reduced in [(1440, 900, False), (390, 844, False), (1440, 900, True)]:
+        tag = f"experience {width}x{height}{' reduced motion' if reduced else ''}"
+        context, page, response, errors, failed = open_page(browser, width, height, reduced=reduced)
+        rest_on(page, SEQUOIA)
+        picture = page.evaluate(
+            f"""(() => {{ const i = document.querySelector('{SEQUOIA}'), g = i.nextElementSibling;
+                  return {{ src: decodeURIComponent(i.currentSrc), alt: i.alt, bloom: i.dataset.bloom,
+                           gold: g ? getComputedStyle(g).getPropertyValue('--gold') : '' }}; }})()"""
+        )
+        if not reduced:
+            check(f"{tag} the painting is the soft sequoia, with its gold-leaf mask",
+                  "about-experience/sequoia-soft-v" in picture["src"] and "sequoia-soft-v" in picture["gold"], picture)
+            check(f"{tag} its description says watercolour, not ink", "watercolour" in picture["alt"] and "ink" not in picture["alt"], picture["alt"])
+        r, g, b = leaf_colour(page, SEQUOIA, SEQUOIA_LEAF)
+        check(f"{tag} at rest its gold leaf is plain gold (the light has left it)",
+              picture["bloom"] == "done" and r >= 190 and r - b >= 100 and r - g >= 20, {"leaf": [r, g, b], "bloom": picture["bloom"]})
+        context.close()
+
+
 # --only=rhythm,boundary runs just those groups (while working on one thing); the full run is the gate.
-GROUPS = [desktop_and_phone, rhythm, chapters, purpose, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, meadow_layout]
+GROUPS = [desktop_and_phone, rhythm, chapters, purpose, experience, motion, focus, deep_links, languages, languages_layout, nav_locales, greetings, closing_pills, boundary, first_screen, meadow_layout]
 ONLY = next((a.split("=", 1)[1].split(",") for a in sys.argv[1:] if a.startswith("--only=")), None)
 
 with sync_playwright() as p:

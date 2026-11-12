@@ -10,8 +10,9 @@ import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, routes } from "./about-content";
-import { dots, glasses, pool, sequoia } from "./about-art";
+import { dots, glasses, pool } from "./about-art";
 import { CountUp } from "./count-up";
+import { experienceSequoia } from "./experience-art";
 import { Greetings } from "./greetings";
 import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
@@ -28,12 +29,15 @@ import field from "./meadow.module.css";
 // film The Ring); then the same rhythm as the album: one picture beside its words, the sides
 // swapping. California, not zen. The name once (the logo, then the title). The purpose's oak is
 // the sunny afternoon (November 10, 2026: the black ink oak with its empty swing and bare roots
-// read "a little dark or scary"; a picture of a full life has people in it). The words are the
-// locked ones in about-content.ts.
+// read "a little dark or scary"; a picture of a full life has people in it). The experience's
+// giant sequoia is repainted with soft colour (November 11, 2026: the grey ink one no longer fitted
+// the site's colour; Mo kept the tree and, of three colourings, picked the repaint made softer).
+// The words are the locked ones in about-content.ts.
 
 export const ALT = {
   oak: "A valley oak on a sunny afternoon, painted in watercolour: a child on its rope swing, a grandmother pushing, a dog watching, a picnic in the grass; under the ground, gold leaf lies among its roots",
-  sequoia: "An ancient giant sequoia rising from mist beside a young sequoia, painted in ink",
+  sequoia:
+    "An ancient giant sequoia rising from mist beside a young sequoia, painted in soft watercolour, a patch of gold leaf on its trunk",
   glasses: "Reading glasses resting on an open notebook, painted in ink",
 } as const;
 
@@ -206,7 +210,13 @@ function Experience() {
       side="left"
       labelledBy="experience-title"
       picture={
-        <Painting art={sequoia} alt={ALT.sequoia} sizes={SEQUOIA} gold={sequoia.gold} caption />
+        <Painting
+          art={experienceSequoia}
+          alt={ALT.sequoia}
+          sizes={SEQUOIA}
+          gold={experienceSequoia.gold}
+          caption
+        />
       }
     >
       <p className={`${base.label} ${page.label}`} data-label="">

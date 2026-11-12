@@ -244,6 +244,20 @@ These sit on top of `DESIGN.md`.
   the three GMP rules in a row under it. "Made in California" goes back into the promise list.
   `made-mockups.tsx` (`ValleyIdea`); pictures `reference/ink-pages/about-made/` (`valley-1-b`);
   mockups `reference/ink-pages/mockups/about-made/`.
+- **About "Our experience": the sequoia, a little coloured (Mo picked 3, November 11, 2026;
+  built on `studio`, not live).** Mo asked for About's last three parts (Our experience, Our
+  promise, "Curious about the science?") to take the site's California colour, one part at a
+  time. For Our experience he set aside three new paintings (A Riverside's parent navel orange
+  tree, B a San Francisco sourdough starter, C a seaside carousel): "I think the sequoia tree is a
+  good idea. Maybe just make it a little bit colored." Of three colourings on the real page (1
+  the ink painting tinted stroke for stroke, 2 Codex's repaint in thin watercolour, 3 that repaint
+  made softer) he picked 3: the same giant sequoia beside a young one, cinnamon bark, a sage
+  crown, pale blue-green firs in the mist, its colour mixed a third of the way back to grey so it
+  reads as a little coloured; the gold leaf on the trunk at full colour. Its gold takes the
+  purpose oak's light timing (plain gold at rest). The words and numbers did not change.
+  `experience-art.ts`, `circle.module.css`; picture
+  `reference/ink-pages/about-experience/build_about_experience.py` (Codex painting
+  `sequoia-colour-b`, `paint_colour.sh`); mockups `reference/ink-pages/mockups/about-experience/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

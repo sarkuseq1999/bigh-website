@@ -29,15 +29,18 @@
    from about 31% to 46% of the way) and has left it before the painting is centred, so at rest
    the leaf is plain gold. Browsers without scroll-driven animation get no band at all: the kit's
    timed one would turn this patch pale every few breaths. The span after the picture is the
-   kit's gold layer (spread.tsx). */
+   kit's gold layer (spread.tsx). The experience's sequoia (November 11, 2026: repainted with soft
+   colour, experience-art.ts) has the same kind of leaf, one small pale patch on its trunk, which
+   the band washed to cream at rest too; it takes the same range (its leaf, higher and further
+   left, is lit a little earlier in it). */
 @supports (animation-timeline: view()) {
-  .circle [data-part="purpose"] [data-picture] img + span {
+  .circle :is([data-part="purpose"], [data-part="experience"]) [data-picture] img + span {
     animation-range: cover 22% cover 52%;
   }
 }
 
 @supports not (animation-timeline: view()) {
-  .circle [data-part="purpose"] [data-picture] img + span {
+  .circle :is([data-part="purpose"], [data-part="experience"]) [data-picture] img + span {
     animation: none;
   }
 }
@@ -69,6 +72,8 @@
   overflow-wrap: anywhere;
 }
 
+/* The experience's sequoia, repainted with soft colour (experience-art.ts), keeps the ink one's
+   shape (0.998). */
 .circle [data-part="experience"] [data-picture] {
   --picture: calc(var(--h) * 1.35 * 0.998);
 }
