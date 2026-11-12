@@ -4,7 +4,24 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-22zuf5dvj-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-i389hojoh-sarkuseq1999s-projects.vercel.app`
+(`dpl_4JdX6cf6eJmb8pxzPuzJHm6BLFka`), the **production** deployment of `main` at
+`ff68f3e0c2d82521434e0310b38e7f12b3516171` (November 12, 2026). On the homepage the hummingbird's
+wings beat as a haze, too fast to see (Mo: "so fast you can barely see his wings. Right now he's
+so slow, it's like a butterfly"): each frame the wing blurred over most of a beat, a new frame
+every screen frame for about 3 s as the bird arrives, then a quick fold onto the raised wings and
+rest; no slow flaps. New pictures `hummingbird-v4-near/-far.webp` (rest, 8 haze, 2 fold frames).
+Mo saw the films on the review page (https://claude.ai/artifact/3doPJvZQtKNgusd7BCa9QZ) and said
+"Yes, go live". `main` had moved (the About sequoia, `f46a497`), so `ff68f3e` is that `main` plus
+the one commit (`874fc2b` on `studio`, cherry-picked), built and checked in a scratch worktree
+before the push: `qa_home_ink` 290/290, `qa_nav` 326/326. After the alias update, in a fresh
+unauthenticated browser on the public demo at 1440 and 390 px: the v4 wings, about 57 frame
+changes a second for 3.0 s, then the fold and rest; then the full public checks: `qa_home_ink`
+290/290, `qa_nav` 326/326.
+
+Before that the alias pointed to `dpl_4XFanxGP5ZWDD7YBaxq7MJPjCuvp`, the production deployment of
+`main` at `f46a497` (About: Our experience's sequoia, a little coloured; its notes come from the
+About session). Before that, to `bigh-website-22zuf5dvj-sarkuseq1999s-projects.vercel.app`
 (`dpl_CcuAH3FX7DL9qrb5mxenjeJ3SaUE`), the **production** deployment of `main` at
 `dca5fc8c1fb71b92f3ae73b90f41f7ea828a4600` (November 11, 2026). NuriCell's opening, "A clear
 day", has room and sunshine: from 960px "Nuri" and "Cell" are lifted 0.1 of their size, so a
