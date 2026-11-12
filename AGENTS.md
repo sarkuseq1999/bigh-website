@@ -174,8 +174,8 @@ These sit on top of `DESIGN.md`.
   Nature Calm keep the plain opening, Green Bee Propolis its own. `nuricell-opening.tsx`,
   `nuricell.module.css`, `opening.tsx`; picture `reference/ink-pages/nuricell/build_nuricell_opening.py`
   (a Codex painting, `paint_opening.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round6/`.
-- **NuriCell opening: room and sunshine (Mo picked A, November 11, 2026; built on the branch
-  `nuricell-sunlight`, not live).** Mo found the big name sitting right on the sea line and asked
+- **NuriCell opening: room and sunshine (Mo picked A, November 11, 2026; live the same day,
+  `main` `dca5fc8`).** Mo found the big name sitting right on the sea line and asked
   for space between them, for more room between the painting and the words under it ("Stay sharp.
   Live fully." and the two highlights), and for "some kind of reflection of the sun" in the upper
   right corner: "California sunshine". From 960px "Nuri" and "Cell" are lifted 0.1 of their size,
@@ -604,10 +604,10 @@ These sit on top of `DESIGN.md`.
   `<picture>`s); paintings `zoom-pair-1`, `zoom-pair-phone-2`, `zoom-hands-3`,
   `zoom-hands-phone-1` (`paint.sh` paints the three views from the pair, so the people match);
   mockups `reference/ink-pages/mockups/science-hero/` (`shoot_last.py`, `review/last-*.jpg`).
-- **Science, Dr. Liu: "the gold he studies" (Mo picked C, November 11, 2026; built on `studio`,
-  not live).** Mo found the Dr. Liu part "pretty plain or just a little boring": a small dark
-  studio photograph on bare paper, between a page of paintings. Of five ideas mocked on the real
-  page (A his own words beside a bigger portrait, which needs a real sentence from him; B office
+- **Science, Dr. Liu: "the gold he studies" (Mo picked C, November 11, 2026; live the same
+  day, `main` `dd73322`).** Mo found the Dr. Liu part "pretty plain or just a little boring": a
+  small dark studio photograph on bare paper, between a page of paintings. Of five ideas mocked
+  on the real page (A his own words beside a bigger portrait, which needs a real sentence from him; B office
   hours, a desk and a blackboard; C the gold he studies; then, because C's cell repeats the
   opening's, D at his microscope and E paper planes for his 280+ papers, both with him painted
   new by a picture model) he picked C. His painted portrait (`liu-v1`, his real face, the one
