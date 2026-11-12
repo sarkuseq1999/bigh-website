@@ -34,13 +34,17 @@ export const opening: Record<"landscape" | "bird" | "sun", Picture> = {
  *  opening.module.css): its own painted wings, lifted out and beaten about the shoulder (build_wings.py), each frame blurred
  *  over its slice of the beat. Since November 11 (Mo: "I just see the upper wings move") each
  *  fans above the body, from raised as painted out to about level with the shoulder, and never
- *  swings down past the belly (v3). Each picture is one wing's six frames side by side; both are laid
- *  in `box` (percent of the bird's frame), the far wing behind the body, the near one over it. */
+ *  swings down past the belly. Since November 12 (Mo: "so fast you can barely see his wings ...
+ *  right now ... it's like a butterfly") they beat as a haze, the pale fan the eye sees of a wing
+ *  beating forty times a second, not as distinct flaps (v4). Each picture is one wing's 11 frames
+ *  side by side: 0 the rest pose, 1-8 the haze, 9-10 the haze settling onto the raised wing. Both
+ *  are laid in `box` (percent of the bird's frame), the far wing behind the body, the near one
+ *  over it. */
 export const openingWings = {
-  near: `${I}/hummingbird-v3-near.webp`,
-  far: `${I}/hummingbird-v3-far.webp`,
-  frames: 6,
-  box: { left: 11.638, top: 14.174, width: 54.031, height: 55.621 },
+  near: `${I}/hummingbird-v4-near.webp`,
+  far: `${I}/hummingbird-v4-far.webp`,
+  frames: 11,
+  box: { left: 11.834, top: 14.174, width: 53.641, height: 55.425 },
 };
 
 /** Two California quail in the footer, in the grass beside the FDA park sign, one keeping watch,

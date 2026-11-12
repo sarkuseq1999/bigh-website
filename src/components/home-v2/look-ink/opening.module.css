@@ -213,36 +213,48 @@
 }
 
 /* The wings beat as the bird arrives, then rest (Mo picked A, November 4, 2026: beating non-stop
-   it read as a fly; on October 29 he had asked for them always moving, "like a dragonfly"). Each
-   wing's six frames side by side, stepped through ten times a second, each frame already blurred
-   over its slice of the beat (a real hummingbird beats about forty times a second, which a screen
-   can't show without the wings seeming to crawl): 3 s at full speed while the bird blooms in,
-   three slower beats, then the first frame, raised as painted, like the phone menu's bird. The far
-   wing is laid before the body and the near one after it, so they pass behind and in front of it.
-   They beat only while the opening is in the window (data-beat, set by opening-crane.tsx), so a
-   visitor who arrives further down sees the beat when they first reach the bird; with reduced
-   motion they never beat. */
+   it read as a fly; on October 29 he had asked for them always moving, "like a dragonfly").
+   November 12 (Mo: "so fast you can barely see his wings"; ten distinct flaps a second, slowing to
+   four, read as a butterfly): a hummingbird beats about forty times a second, faster than a screen
+   can show, so the eye sees a pale fan where the wing sweeps. Each wing's 11 frames side by side
+   (build_wings.py): 0 the rest pose, raised as painted; 1-8 the haze, each the wing blurred over
+   most of a beat at a different point of the stroke, stepped once a screen frame so the fan
+   shimmers; 9-10 the haze folding onto the raised wing. About 3 s of haze while the bird blooms
+   in, the fold (0.14 s; not "settle", the words' own keyframes below), then frame 0, like the
+   phone menu's bird. Frame k sits at k * 10%. The
+   far wing is laid before the body and the near one after it. They beat only while the opening is
+   in the window (data-beat, set by opening-crane.tsx), so a visitor who arrives further down sees
+   the beat when they first reach the bird; with reduced motion they never beat. */
 .wing {
   position: absolute;
   background-repeat: no-repeat;
-  background-size: 600% 100%;
+  background-size: 1100% 100%;
   animation:
-    beat 0.1s steps(6) 30 paused,
-    beat 0.16s steps(6) 3s 2 paused,
-    beat 0.24s steps(6) 3.32s 1 paused;
+    haze 0.1333s steps(8) 22 paused,
+    fold 0.14s steps(2) 2.933s 1 paused;
 }
 
 .art[data-beat="on"] .wing {
   animation-play-state: running;
 }
 
-@keyframes beat {
+@keyframes haze {
   from {
-    background-position: 0 0;
+    background-position: 10% 0;
   }
 
   to {
-    background-position: 120% 0;
+    background-position: 90% 0;
+  }
+}
+
+@keyframes fold {
+  from {
+    background-position: 90% 0;
+  }
+
+  to {
+    background-position: 110% 0;
   }
 }
 
