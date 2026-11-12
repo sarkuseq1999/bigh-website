@@ -4,7 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-4o0u86k3t-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-22zuf5dvj-sarkuseq1999s-projects.vercel.app`
+(`dpl_CcuAH3FX7DL9qrb5mxenjeJ3SaUE`), the **production** deployment of `main` at
+`dca5fc8c1fb71b92f3ae73b90f41f7ea828a4600` (November 11, 2026). NuriCell's opening, "A clear
+day", has room and sunshine: from 960px "Nuri" and "Cell" are lifted 0.1 of their size, so a
+strip of sky lies between them and the sea line; the words under the painting start 0.13
+name-sizes under the grass (20px on a phone); and the sun's warm light pours in from beyond the
+window's top right corner, its sparkle on the sea under it (two Codex layers,
+`opening-sun-v1.webp` and `opening-sun-glint-v1.webp`). Mo picked A, "light from the corner",
+of two ideas mocked on the real page (review page
+https://claude.ai/artifact/188m1vDatSxUdczs52ssHm), saw it built and said "Yes, go live".
+`dca5fc8` is `5b1e4f4` plus `studio`'s notes (docs only) and the two commits, pushed as a
+fast-forward (`main` had not moved). Before the push, on the built site (`npm run build` +
+`npm start`): `qa_nuricell_ink` 663/663, `qa_home_ink` 290/290, `qa_nav` 326/326 (before the
+rebase onto the hummingbird release also `qa_opc_ink` 199/199, `qa_turmerific_ink` 155/155,
+`qa_nature_calm_ink` 159/159 and `qa_propolis_ink` 273/273, for the shared opening's new
+`data-half` hook); lint, type-check and prettier clean. After the alias update, in fresh
+unauthenticated browsers on the public demo: `/en/products/nuricell` at 1844, 1440 and 390 px and
+`/cns/products/nuricell` at 390 px (200, both sun layers loaded, the name lifted from 960px);
+then the full public checks: `qa_nuricell_ink` 663/663, `qa_home_ink` 290/290, `qa_nav` 326/326.
+
+Before that, from the hummingbird wings release until this one, the alias pointed to
+`bigh-website-4o0u86k3t-sarkuseq1999s-projects.vercel.app`
 (`dpl_CozxuDzGWSnBPKsUhATWQjNqyYUr`), the **production** deployment of `main` at
 `5b1e4f4441508cf41921bd1b9cea6abd12a9ee65` (November 11, 2026). On the homepage the hummingbird's
 wings now fan above its body, from raised as painted out to about level with the shoulder, and

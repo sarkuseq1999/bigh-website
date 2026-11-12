@@ -5,9 +5,14 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Built November 11, 2026 (Claude Code), NOT live: NuriCell's opening, room and sunshine.**
-  Branch `nuricell-sunlight` (from `studio` `dd73322`), built in a scratch worktree while another
-  session's notes were uncommitted in this folder. Mo sent the live first screen with three notes:
+- **Live November 11, 2026 (Claude Code): NuriCell's opening, room and sunshine.** `main`
+  `dca5fc8`, production `dpl_CcuAH3FX7DL9qrb5mxenjeJ3SaUE`, the demo alias on it; a quick look at
+  the public demo showed it at 1844, 1440 and 390 px and in Chinese; then the full public checks:
+  `qa_nuricell_ink` 663/663, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`).
+  Built on the branch `nuricell-sunlight` in a scratch worktree while another session's notes were
+  uncommitted in this folder, then rebased onto `studio` `ee69a40` (the hummingbird release) and
+  checked again on the built site before the push: `qa_nuricell_ink` 663/663, `qa_home_ink`
+  290/290, `qa_nav` 326/326. Mo sent the live first screen with three notes:
   the big name sits right on the sea line, the words under the painting need room, and "some kind
   of reflection of the sun" in the upper right corner ("California sunshine"). Review page
   https://claude.ai/artifact/188m1vDatSxUdczs52ssHm: both ideas with the two spacing fixes, A light
@@ -27,8 +32,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   in the chain: its Buy chapter's front layer 12px beside the bottle on a phone, untouched by this
   change; alone it passed), `qa_propolis_ink` 273/273; lint, type-check and prettier clean.
   Claude's score 8.5: the light is a second painting laid over the sky (a sharp eye may see where
-  the two washes meet), and the old softness of the painting on a 2x screen stays. Still open:
-  Mo's look at the built page and his yes before any push.
+  the two washes meet), and the old softness of the painting on a 2x screen stays. Mo saw the
+  built page on the review page and said "Yes, go live".
 - **Live November 11, 2026 (Claude Code): the homepage hummingbird's wings stay up.** Mo: the
   wings swung down by the belly ("normally I just see the upper wings move"). Each wing now fans
   about its shoulder from raised as painted out to about level with the shoulder, never through
@@ -44,9 +49,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   it; a quick look at the public demo showed it on desktop, phone and in Chinese; then the full
   public checks: `qa_science_ink` 943/943, `qa_home_ink` 288/288, `qa_nav` 326/326
   (`docs/public-demo.md`). Mo saw the built part on the review page and said "Yes, go live".
-  AGENTS.md's entry for it says "live" only in the working copy: another session had AGENTS.md
-  staged for its own rule when these notes were committed, so that two-line edit was left
-  uncommitted for it to carry (it is correct; keep it).
+  AGENTS.md's entry for it says "live" since the NuriCell sunshine notes (the edit waited
+  uncommitted in the working copy at first, while another session had AGENTS.md staged).
   `dd73322` is `e0f04ab` plus `studio`'s notes (docs only) and the one commit, pushed as a
   fast-forward. Mo sent a screenshot of the part (he took it for About's; it is Science's) and
   found it "pretty plain or just a little boring": a small dark studio photograph on bare paper.
