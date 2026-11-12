@@ -369,6 +369,59 @@
   }
 }
 
+/* The sunshine (Mo picked A, "light from the corner", November 11, 2026: "some kind of reflection
+   of the sun ... California sunshine"; mockups reference/ink-pages/mockups/nuricell-opening/round7/).
+   The sun is just out of the picture, beyond the window's top right corner: its warm light pours
+   into the sky from there (.skyLight) and its sparkle lies on the sea under it (.skyGlint). Two
+   layers of Codex paint in the painting's blend group, over the painting and its side pieces and
+   under the fog (nuricell-opening.tsx; nuricell-sun-art.ts gives --light-w, --light-pad, --glint-w
+   and --glint-sun). The painting is centred on the window, so 50% + 50vw is the window's right
+   edge (a few pixels under a scrollbar). The light's corner is the end of its mirrored top
+   (--light-pad of its --light-w columns): it lands on a row of the painting at about the window's
+   top, and the mirrored top above it starts above the painting's own top, so the light never ends
+   inside the window. The sparkle lies on the sea just under the horizon, its sun's column
+   (--glint-sun) under the light's corner, a little in from the window's edge.
+   One column: the light 44% of the painting's middle wide, its corner on row 104; the sparkle
+   20.4% wide, its sun 34px in from the edge. */
+.nuricell[data-look="ink"] .sky .skyLight,
+.nuricell[data-look="ink"] .sky .skyGlint {
+  position: absolute;
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+.nuricell[data-look="ink"] .sky .skyLight {
+  top: calc(
+    (104 - var(--light-pad) * 0.44 * var(--sky-phone-w) / var(--light-w)) / var(--sky-rows) * 100%
+  );
+  left: calc(50% + 50vw - 44%);
+  width: 44%;
+}
+
+.nuricell[data-look="ink"] .sky .skyGlint {
+  top: calc((var(--sky-horizon) + 2) / var(--sky-rows) * 100%);
+  left: calc(50% + 50vw - 34px - 20.4% * var(--glint-sun) / var(--glint-w));
+  width: 20.4%;
+}
+
+/* Two columns: the light 42% of the painting wide, its corner on row 184; the sparkle 17.8% wide,
+   its sun 0.22 name-sizes in from the edge. */
+@media (min-width: 960px) {
+  .nuricell[data-look="ink"] .sky .skyLight {
+    top: calc(
+      (184 - var(--light-pad) * 0.42 * var(--sky-w) / var(--light-w)) / var(--sky-rows) * 100%
+    );
+    left: calc(50% + 50vw - 42%);
+    width: 42%;
+  }
+
+  .nuricell[data-look="ink"] .sky .skyGlint {
+    left: calc(50% + 50vw - 0.22 * var(--name) - 17.8% * var(--glint-sun) / var(--glint-w));
+    width: 17.8%;
+  }
+}
+
 /* The morning fog: white inside the painting's blend group, so where it lies the bare paper shows.
    A bank that is thickest over the sea and thins up into the sky and out over the bluff's top,
    uneven along its upper edge. At rest it is gone (opacity 0): the page is complete without it. */
@@ -424,12 +477,13 @@
   }
 }
 
-/* One column: the words start under the last of the grass. The bluff's top is 4% of the box's
-   height (0.04156 of its width) over the box's foot, and the grass ends --sky-end less --sky-bluff
-   rows under it, each 4.7 / --sky-w of the box's width (64vw, at most 320px). */
+/* One column: the words start 20px under the last of the grass (Mo, November 11, 2026: the
+   words "could use some space from the images"). The bluff's top is 4% of the box's height
+   (0.04156 of its width) over the box's foot, and the grass ends --sky-end less --sky-bluff rows
+   under it, each 4.7 / --sky-w of the box's width (64vw, at most 320px). */
 .nuricell[data-look="ink"] [data-chapter="overview"] h1 + div {
   margin-top: calc(
-    min(64vw, 320px) * ((var(--sky-end) - var(--sky-bluff)) * 4.7 / var(--sky-w) - 0.04156) + 4px
+    min(64vw, 320px) * ((var(--sky-end) - var(--sky-bluff)) * 4.7 / var(--sky-w) - 0.04156) + 20px
   );
 }
 
@@ -449,10 +503,21 @@
     width: calc(var(--sky-w) * var(--col));
   }
 
+  /* The name off the horizon (Mo, November 11, 2026: "give some space between the sea line ...
+     and the letters"): "Nuri" and "Cell" are lifted 0.1 of their size, so a strip of sky lies
+     between their foot and the sea. Everything above is measured from where they were set (the
+     horizon 0.012 of the name's size under that baseline); the bottle stays on the bluff, so its
+     middle is now 0.1 name-sizes under the letters' middle. */
+  .nuricell[data-look="ink"] [data-chapter="overview"] h1 > [data-half] {
+    translate: 0 -0.1em;
+  }
+
   /* The name band a little higher and the words a little lower than the template's, so the grass
      ends over the words and the first window still ends on the refund line (1440x900). The grass
      ends under the horizon by its rows (0.426 of the name's size for the rows from the horizon to
-     the bluff's top), and the name's row ends 0.4948 of its size under the horizon. */
+     the bluff's top), and the name's row ends 0.4948 of its size under the horizon. The words
+     start 0.13 of the name's size (and 3px) under the last of the grass (Mo, November 11, 2026:
+     the words "could use some space from the images"). */
   .nuricell[data-look="ink"] [data-chapter="overview"] {
     padding-top: calc(88px + clamp(6px, 1.7vw, 26px));
   }
@@ -462,7 +527,7 @@
       var(--name) *
         (
           (var(--sky-end) - var(--sky-horizon)) * 0.426 / (var(--sky-bluff) - var(--sky-horizon)) -
-            0.4948
+            0.4948 + 0.13
         ) +
         3px
     );

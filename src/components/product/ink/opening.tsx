@@ -174,7 +174,7 @@ export function Opening({ product }: { product: ProductPage }) {
             cells, which Chrome reads as "Nuri Cell". */}
         <h1 id="product-name" className={styles.name}>
           <span className={base.visuallyHidden}>{product.name}</span>
-          <span className={styles.first} aria-hidden="true">
+          <span className={styles.first} data-half="first" aria-hidden="true">
             {lead ? <span className={styles.lead}>{lead}</span> : null}
             {first}
           </span>
@@ -195,7 +195,7 @@ export function Opening({ product }: { product: ProductPage }) {
               fetchPriority="high"
             />
           </span>
-          <span className={styles.second} aria-hidden="true">
+          <span className={styles.second} data-half="second" aria-hidden="true">
             {lockup
               ? lockup.right.map((line) => (
                   <span key={line} className={styles.stackLine}>

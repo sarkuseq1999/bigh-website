@@ -1,0 +1,27 @@
+/* Mock: the name lifted off the horizon, the words lower under the grass. */
+@media (min-width: 960px) {
+  [data-chapter="overview"] h1 > [class*="__first"],
+  [data-chapter="overview"] h1 > [class*="__second"] {
+    translate: 0 calc(-1em * var(--lift, 0.1));
+  }
+
+  [data-chapter="overview"] h1 + div {
+    margin-top: calc(
+      var(--name) *
+        (
+          (var(--sky-end) - var(--sky-horizon)) * 0.426 / (var(--sky-bluff) - var(--sky-horizon)) -
+            0.4948 + var(--drop, 0.13)
+        ) +
+        3px
+    ) !important;
+  }
+}
+
+@media (max-width: 959px) {
+  [data-chapter="overview"] h1 + div {
+    margin-top: calc(
+      min(64vw, 320px) * ((var(--sky-end) - var(--sky-bluff)) * 4.7 / var(--sky-w) - 0.04156) + 4px +
+        var(--drop-phone, 16px)
+    ) !important;
+  }
+}

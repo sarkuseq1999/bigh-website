@@ -5,6 +5,30 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Built November 11, 2026 (Claude Code), NOT live: NuriCell's opening, room and sunshine.**
+  Branch `nuricell-sunlight` (from `studio` `dd73322`), built in a scratch worktree while another
+  session's notes were uncommitted in this folder. Mo sent the live first screen with three notes:
+  the big name sits right on the sea line, the words under the painting need room, and "some kind
+  of reflection of the sun" in the upper right corner ("California sunshine"). Review page
+  https://claude.ai/artifact/188m1vDatSxUdczs52ssHm: both ideas with the two spacing fixes, A light
+  from the corner, B a small painted sun; Mo picked A. Built: from 960px "Nuri" and "Cell" lifted
+  0.1 of their size (a strip of sky over the horizon; the bottle's middle now 0.1 name-sizes under
+  the letters'), the words 0.13 name-sizes under the last grass (20px on a phone), and the sun's
+  light pouring in from beyond the window's top right corner with its sparkle on the sea under it
+  (two Codex layers in the painting's blend group, `nuricell-sun-art.ts`). AGENTS.md "NuriCell
+  opening: room and sunshine"; pictures `reference/ink-pages/nuricell/build_nuricell_sun.py`;
+  mockups and notes `reference/ink-pages/mockups/nuricell-opening/round7/`. `qa_nuricell_ink`'s
+  `opening` and `clear_day` follow the new layout (the letters over the bottle's middle, the strip
+  of sky, the words' room, the light reaching the corner and never ending inside the window, the
+  corner warmer than the left, the sparkle on the sea, no scripts). `opening.tsx` gives every
+  product's name halves a `data-half` hook (NuriCell's stylesheet lifts them). On the built site
+  (`npm run build` + `next start`): `qa_nuricell_ink` 663/663, `qa_home_ink` 288/288, `qa_nav`
+  326/326, `qa_opc_ink` 199/199, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159 (158/159
+  in the chain: its Buy chapter's front layer 12px beside the bottle on a phone, untouched by this
+  change; alone it passed), `qa_propolis_ink` 273/273; lint, type-check and prettier clean.
+  Claude's score 8.5: the light is a second painting laid over the sky (a sharp eye may see where
+  the two washes meet), and the old softness of the painting on a 2x screen stays. Still open:
+  Mo's look at the built page and his yes before any push.
 - **Live November 11, 2026 (Claude Code): the homepage hummingbird's wings stay up.** Mo: the
   wings swung down by the belly ("normally I just see the upper wings move"). Each wing now fans
   about its shoulder from raised as painted out to about level with the shoulder, never through

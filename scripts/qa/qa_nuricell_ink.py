@@ -6,14 +6,18 @@ Sections (all, or --only=a,b):
   shell       200 in the ink look, the menu bar marks Products, one h1 (the name), the real bottle,
               no canvas but the moving gold leaf's, no console errors (1440x900, 390x844)
   opening     no line over the name and no pool painting under the bottle (Mo, October 10); the
-              bottle's middle on the letters' middle from 960px (1920 to 960 wide); "NuriCell" one word
-              on a phone or tablet; each half on one line in every language
+              bottle's middle on the letters' middle from 960px (1920 to 960 wide), the letters lifted
+              0.1 of their size over it since November 11; "NuriCell" one word on a phone or tablet;
+              each half on one line in every language
   clear_day   the opening's painting, "A clear day" (Mo picked A, November 10, 2026): it covers the
               window's width and reaches its top, with no sideways scroll (2560 to 320 wide); from
-              960px the name sits on the horizon; the bottle stands on the bluff; the words start under
-              the last of the grass, a few blades in front of its foot; its side pieces load only in a
-              window wider than it; it multiplies onto the paper; every language; the fog waits for the
-              painting, lies over the sea, then lifts once; reduced motion and no scripts: no fog left
+              960px the name a strip of sky over the horizon (Mo, November 11); the bottle stands on
+              the bluff; the words start clear of the last of the grass, a few blades in front of its
+              foot; its side pieces load only in a window wider than it; its sunshine (Mo picked A,
+              November 11): the light from beyond the window's top right corner, never ending inside
+              the window, the corner warmer than the left, the sparkle on the sea under it; it
+              multiplies onto the paper; every language; the fog waits for the painting, lies over the
+              sea, then lifts once; reduced motion and no scripts: no fog left
   others      the products not yet in ink keep today's template
   multiply    every painting multiplies onto the paper: no stacking context in between, no box
               (the four small pools under "More from BiGH" too)
@@ -1059,7 +1063,10 @@ BOTTLE_TOP, BOTTLE_BOTTOM = 0.038, 0.971
 
 def opening_check(browser):
     """Mo, October 10: no "Our flagship formula" over the name, no ink pool under the bottle, and
-    the bottle's middle on the letters' middle (it sat high, on their baseline)."""
+    the bottle's middle on the letters' middle (it sat high, on their baseline). Since November 11,
+    2026 the letters are lifted 0.1 of their size off the painting's horizon (Mo: "give some space
+    between the sea line ... and the letters"), the bottle staying on the bluff: the letters'
+    middle 0.1 name-sizes over the bottle's."""
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     eyebrow = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=overview]').innerText)")
     kept = page.evaluate("() => /Our flagship formula/.test(document.querySelector('[data-chapter=buy]').innerText)")
@@ -1070,12 +1077,14 @@ def opening_check(browser):
     )
     # Since November 10, 2026 the bottle stands in a painting, "A clear day" (clear_day below): the
     # name holds the real bottle once, that painting, its two side pieces (one transparent pixel
-    # where the window needs none) and its grass in front of the bottle's foot, and nothing else.
-    # The bottle's shadow on the grass is drawn, not a picture.
+    # where the window needs none) and its grass in front of the bottle's foot, its sunshine (the
+    # light and the sparkle, November 11) and nothing else. The bottle's shadow on the grass is
+    # drawn, not a picture.
     bottles = [s for s in name if "/products/nuricell.png" in s]
     painting = [s for s in name if "opening-sky" in s or s.startswith("data:image/gif")]
-    check("opening: in the name, the real bottle once and the clear-day painting; no pool or contact-shadow picture anywhere in the opening",
-          len(bottles) == 1 and len(painting) == 4 and len(name) == 5 and not pools, f"{[s[-60:] for s in name]} {pools}")
+    sunshine = [s for s in name if "opening-sun" in s]
+    check("opening: in the name, the real bottle once and the clear-day painting with its sunshine; no pool or contact-shadow picture anywhere in the opening",
+          len(bottles) == 1 and len(painting) == 4 and len(sunshine) == 2 and len(name) == 7 and not pools, f"{[s[-60:] for s in name]} {pools}")
     ctx.close()
     for w, h in [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800)]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
@@ -1084,6 +1093,7 @@ def opening_check(browser):
                  const b = document.querySelector('[data-chapter=overview] ' + s).getBoundingClientRect();
                  return [b.left, b.top, b.right, b.bottom]; })"""
         )
+        size = page.evaluate("() => parseFloat(getComputedStyle(document.querySelector('[data-chapter=overview] h1')).fontSize)")
         # The letters' ink, top to bottom: the darkest pixels in "Nuri"'s box (40px of air above and below).
         x0, y0, x1, y1 = boxes[0]
         clip = {"x": x0, "y": max(y0 - 40, 0), "width": x1 - x0, "height": y1 - y0 + 80}
@@ -1093,9 +1103,9 @@ def opening_check(browser):
         _, bt, _, bb = boxes[2]
         bottle = bt + (bb - bt) * (BOTTLE_TOP + BOTTLE_BOTTOM) / 2
         across = abs((boxes[2][0] + boxes[2][2]) / 2 - (boxes[0][2] + boxes[1][0]) / 2)
-        ok = letters is not None and abs(bottle - letters) <= 6 and across <= 6
-        check(f"opening {w}x{h}: the bottle's middle on the letters' middle, and midway between the halves", ok,
-              f"letters {letters}, bottle {bottle:.0f}, off across {across:.0f}")
+        ok = letters is not None and abs(bottle - 0.1 * size - letters) <= 6 and across <= 6
+        check(f"opening {w}x{h}: the letters' middle 0.1 of their size over the bottle's middle, and the bottle midway between the halves", ok,
+              f"letters {letters}, bottle {bottle:.0f} (lifted {bottle - (letters or 0):.0f}px, name {size:.0f}px), off across {across:.0f}")
         ctx.close()
     # The buy box (Mo, October 12, after Timeline's and Seed's): the highlights in equal parts of the
     # row, each centred, one ink line between them in the middle; the "One bottle" card with the
@@ -1523,7 +1533,9 @@ def scenes(browser):
 # The opening's painting and what it lines up with, in window pixels: the painting's box and, with
 # its side pieces where they show, how far it reaches; the rows of its horizon, of the bluff's top
 # and of its last paint (the section's --sky-* numbers, from nuricell-opening-art.ts); the letters'
-# baseline; the glass's foot (1242 of the bottle picture's 1278 rows); the first word under it.
+# baseline; the glass's foot (1242 of the bottle picture's 1278 rows); the first word under it; the
+# sunshine's light and sparkle (in the painting's group; the sparkle's sun column, --glint-sun of
+# its --glint-w).
 CLEAR_DAY = """() => {
   const sec = document.querySelector('[data-chapter=overview]'), h1 = sec.querySelector('h1');
   const sky = sec.querySelector('[data-sky]'), art = sky.querySelector('picture img');
@@ -1543,7 +1555,12 @@ CLEAR_DAY = """() => {
   const shown = sides.filter((s) => s.shown);
   const fog = sky.querySelector('[class*=skyFog]');
   const tufts = h1.querySelector('img[class*=skyFront]'), t = tufts.getBoundingClientRect();
+  const layer = (c) => { const i = sky.querySelector('img[class*=' + c + ']'); const r = i.getBoundingClientRect();
+    return { box: [r.left, r.top, r.right, r.bottom], loaded: i.complete && i.naturalWidth > 0, inGroup: i.parentElement === sky }; };
+  const light = layer('skyLight'), glint = layer('skyGlint');
+  glint.sun = glint.box[0] + (glint.box[2] - glint.box[0]) * n('--glint-sun') / n('--glint-w');
   return {
+    light, glint,
     glass: [bottle.left + bottle.width * 291 / 1230, bottle.left + bottle.width * 940 / 1230],
     front: [t.left, t.top, t.right, t.bottom], frontIn: tufts.complete && tufts.naturalWidth > 0, frontOver: getComputedStyle(tufts).zIndex,
     art: [a.left, a.right], top: a.top,
@@ -1561,22 +1578,39 @@ CLEAR_DAY = """() => {
 
 
 def clear_day_stands(tag, m, two):
-    """The painting covers the window; the name on the horizon (two columns); the bottle on the
-    bluff; the words under the grass."""
+    """The painting covers the window; the name a strip of sky over the horizon (two columns); the
+    bottle on the bluff; the words clear of the grass; the sunshine in the window's top right
+    corner and on the sea under it."""
     check(f"clear day {tag}: the painting covers the window's width and reaches its top, no sideways scroll",
           m["loaded"] and m["left"] <= 0.5 and m["right"] >= m["width"] - 0.5 and m["top"] <= 0.5 and m["sideways"] == 0,
           f"reaches {m['left']:.0f}..{m['right']:.0f} of {m['width']}, top {m['top']:.0f}, sideways {m['sideways']}")
     if two:
+        # Mo, November 11, 2026: "give some space between the sea line ... and the letters". They
+        # were set on it (the horizon 0.012 of their size under the baseline) and are lifted 0.1.
         under = m["horizon"] - m["baseline"]
-        check(f"clear day {tag}: the name sits on the horizon (the horizon at the letters' baseline, at most 3% of the name's size under it)",
-              -1.5 <= under <= 0.03 * m["name"], f"horizon {under:.1f}px under the baseline, name {m['name']:.0f}px")
+        check(f"clear day {tag}: a strip of sky between the name and the horizon (the horizon 0.1 to 0.13 of the name's size under the letters' baseline)",
+              0.1 * m["name"] - 1.5 <= under <= 0.13 * m["name"], f"horizon {under:.1f}px under the baseline, name {m['name']:.0f}px")
     stands = m["foot"] - m["bluff"]
     check(f"clear day {tag}: the bottle stands on the bluff (its foot a little into the grass)", 0 <= stands <= 12, f"foot {stands:.1f}px under the bluff's top")
     fl, ft, fr, fb = m["front"]
     check(f"clear day {tag}: grass in front of its foot (the tufts over the bottle, across the glass's width, from above its foot to under it)",
           m["frontIn"] and m["frontOver"] == "1" and fl < m["glass"][0] and fr > m["glass"][1] and ft < m["foot"] - 8 and fb > m["foot"] + 8,
           f"tufts {fl:.0f}..{fr:.0f} x {ft:.0f}..{fb:.0f}, glass {m['glass'][0]:.0f}..{m['glass'][1]:.0f}, foot {m['foot']:.0f}")
-    check(f"clear day {tag}: the words start under the last of the grass", m["words"] >= m["end"] - 1, f"first word {m['words']:.0f}, last paint {m['end']:.0f}")
+    # Mo, November 11, 2026: the words "could use some space from the images".
+    room = 0.12 * m["name"] if two else 18
+    check(f"clear day {tag}: the words start clear of the last of the grass ({'0.12 name-sizes' if two else '18px'} or more under it)",
+          m["words"] >= m["end"] + room, f"first word {m['words']:.0f}, last paint {m['end']:.0f}, room {m['words'] - m['end']:.0f}px")
+    # The sunshine (Mo picked A, November 11, 2026): the sun just out of the picture, beyond the
+    # window's top right corner.
+    light, glint = m["light"], m["glint"]
+    check(f"clear day {tag}: the sun's light reaches the window's right edge and starts above the painting's top (it never ends inside the window)",
+          light["loaded"] and light["inGroup"] and light["box"][2] >= m["width"] - 0.5 and light["box"][1] <= m["top"] + 0.5,
+          f"light {[round(v) for v in light['box']]}, painting's top {m['top']:.0f}, window {m['width']}")
+    edge = 0.4 * m["name"] if two else 50
+    check(f"clear day {tag}: the sun's sparkle on the sea under the corner (just under the horizon, over the bluff's top, its sun within {edge:.0f}px of the window's edge)",
+          glint["loaded"] and glint["inGroup"] and m["horizon"] <= glint["box"][1] <= m["horizon"] + 6 and glint["box"][3] < m["bluff"]
+          and m["width"] - edge <= glint["sun"] <= m["width"],
+          f"sparkle {[round(v) for v in glint['box']]}, its sun {glint['sun']:.0f}, horizon {m['horizon']:.0f}, bluff {m['bluff']:.0f}, window {m['width']}")
 
 
 def clear_day(browser):
@@ -1602,6 +1636,20 @@ def clear_day(browser):
         check(f"clear day {w}x{h}: its side pieces " + ("fill a window wider than it" if wider else "are not fetched (the painting covers the window alone)"),
               sides_ok, f"painting {m['art'][0]:.0f}..{m['art'][1]:.0f} of {m['width']}, sides {m['sides']}")
         check(f"clear day {w}x{h}: no fog with reduced motion", m["fog"] == 0 and m["fogMoves"] == "none", f"opacity {m['fog']}, animation {m['fogMoves']}")
+        if (w, h) in [(1920, 1080), (1440, 900), (1280, 720), (768, 1024), (390, 844)]:
+            # The light warms the window's top right: a strip of sky at its right edge, under the
+            # menu bar and clear of its words and the name, is yellower (red over blue) than the
+            # same strip at the left edge.
+            y0, y1 = (110, 170) if two else (80, 106)
+            shot = Image.open(io.BytesIO(page.screenshot())).convert("RGB")
+
+            def warmth(x0, x1):
+                px = [shot.getpixel((x, y)) for x in range(x0, x1, 3) for y in range(y0, y1, 3)]
+                return sum(r - b for r, g, b in px) / len(px)
+
+            right, left = warmth(w - 40, w - 8), warmth(8, 40)
+            check(f"clear day {w}x{h}: the window's top right corner warmer than its top left (the sun's light)",
+                  right > left + 25, f"red over blue: right {right:.0f}, left {left:.0f}")
         if (w, h) in [(1440, 900), (390, 844)]:
             between = page.locator("[data-chapter=overview] [data-sky]").evaluate(STACKING)
             check(f"clear day {w}x{h}: it multiplies onto the paper from behind the page's content, no stacking context in between",
@@ -1650,9 +1698,11 @@ def clear_day(browser):
     page.wait_for_timeout(4200)
     plain = page.evaluate(
         "() => { const s = document.querySelector('[data-sky]'), i = s.querySelector('picture img');"
-        " return { loaded: i.complete && i.naturalWidth > 0, fog: Number(getComputedStyle(s.querySelector('[class*=skyFog]')).opacity) }; }"
+        " const sun = [...s.querySelectorAll('img[class*=skyLight], img[class*=skyGlint]')];"
+        " return { loaded: i.complete && i.naturalWidth > 0, sun: sun.length === 2 && sun.every((e) => e.complete && e.naturalWidth > 0),"
+        " fog: Number(getComputedStyle(s.querySelector('[class*=skyFog]')).opacity) }; }"
     )
-    check("clear day nojs: the painting shown, the fog lifted by itself", plain["loaded"] and plain["fog"] == 0, str(plain))
+    check("clear day nojs: the painting and its sunshine shown, the fog lifted by itself", plain["loaded"] and plain["sun"] and plain["fog"] == 0, str(plain))
     ctx.close()
 
 

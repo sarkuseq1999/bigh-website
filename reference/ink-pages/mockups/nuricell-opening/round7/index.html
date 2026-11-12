@@ -1,0 +1,202 @@
+<title>NuriCell Sunshine Mockups</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&display=swap">
+<style>
+  /* Layout: a gallery wall, one column of sheets: the two spacing fixes (shared), then A and B
+     (each: Mo's screen, a close-up of the corner, the phone), then today's live page. A cool grey
+     wall so the page's warm paper and the warm light read. */
+  :root {
+    --wall: #e6e9ec;
+    --sheet: #f6f7f8;
+    --ink: #15181b;
+    --soft: #56606a;
+    --rule: #cdd3d9;
+    --blue: #1668b8;
+    --gold: #9a6f14;
+    --pick: #fff6dc;
+    --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+    --text: "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --wall: #111316; --sheet: #1a1d21; --ink: #eceef0; --soft: #a0a9b3; --rule: #2d333a;
+      --blue: #62aef2; --gold: #dcb157; --pick: #2a2413; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --wall: #111316; --sheet: #1a1d21; --ink: #eceef0; --soft: #a0a9b3; --rule: #2d333a;
+    --blue: #62aef2; --gold: #dcb157; --pick: #2a2413; color-scheme: dark;
+  }
+  body {
+    background: var(--wall);
+    color: var(--ink);
+    font: 400 17px/1.5 var(--text);
+    padding-block: 28px 56px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+  }
+  .page { max-width: 1120px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
+  header h1 { font: 600 clamp(28px, 5vw, 40px)/1.1 var(--display); margin: 0 0 8px; letter-spacing: -0.02em; text-wrap: balance; }
+  header p { margin: 0; color: var(--soft); max-width: 60ch; }
+  .pick { background: var(--pick); border-left: 4px solid var(--gold); padding: 14px 16px; border-radius: 0 10px 10px 0; max-width: 70ch; }
+  .pick p { margin: 0; }
+  .pick p + p { margin-top: 6px; color: var(--soft); }
+  .pick strong { font-family: var(--display); font-weight: 600; }
+  .idea { background: var(--sheet); border-radius: 14px; padding: clamp(14px, 2.4vw, 24px); display: flex; flex-direction: column; gap: 16px; }
+  .head { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .tag { font: 600 22px/1 var(--display); color: var(--sheet); background: var(--blue); width: 40px; height: 40px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; }
+  .tag.plain { background: var(--soft); font-size: 13px; width: auto; height: auto; padding: 7px 12px; border-radius: 999px; letter-spacing: 0.04em; }
+  .head h2 { font: 600 clamp(22px, 3.6vw, 28px)/1.15 var(--display); margin: 0; letter-spacing: -0.01em; }
+  .score { margin-left: auto; font: 600 17px/1 var(--display); color: var(--gold); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .what { margin: 0; max-width: 64ch; }
+  .what + .what { color: var(--soft); }
+  figure { margin: 0; min-width: 0; }
+  figcaption { color: var(--soft); font-size: 15px; padding-top: 6px; }
+  .shot { border-radius: 8px; overflow: hidden; border: 1px solid var(--rule); background: var(--wall); }
+  .shot button { all: unset; display: block; width: 100%; cursor: zoom-in; }
+  .shot button:focus-visible { outline: 3px solid var(--blue); outline-offset: -3px; }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot.zoomed { overflow-x: auto; }
+  .shot.zoomed button { width: 240%; cursor: zoom-out; }
+  .row { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; align-items: start; }
+  .pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  @media (max-width: 720px) {
+    .row, .pair { grid-template-columns: minmax(0, 1fr); }
+    .phone { max-width: 360px; }
+  }
+</style>
+
+<div class="page">
+  <header>
+    <h1>NuriCell opening: room and sunshine</h1>
+    <p>Your three notes, tried on the real page. A and B share the two spacing fixes; they differ only in the sun. Tap a picture to zoom.</p>
+  </header>
+
+  <div class="pick">
+    <p><strong>You picked A. It is built</strong>, on its own branch. Not live yet: the live site has not changed.</p>
+    <p>These first pictures are the real built site (production build), not a mockup.</p>
+  </div>
+
+  <section class="idea" aria-labelledby="built">
+    <div class="head">
+      <span class="tag">A</span>
+      <h2 id="built">Built: light from the corner</h2>
+      <span class="score">8.5 / 10</span>
+    </div>
+    <p class="what">The letters float in the sky, the words have room under the grass, and the sun's light pours in from the top right with its sparkle on the sea.</p>
+    <p class="what">Holds it back: the light is a second painting laid over the sky, so a sharp eye may see where the two washes meet. The painting is still a little soft on sharp phone screens (an older issue).</p>
+    <figure>
+      <div class="shot"><button type="button" aria-label="Zoom the built page on a big screen"><img src="img/built-desk.jpg" alt="The built opening at 1844 by 1000" width="1844" height="1000"></button></div>
+      <figcaption>Your screen size</figcaption>
+    </figure>
+    <div class="row">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom the built corner"><img src="img/built-close.jpg" alt="Close-up of the built top right corner: warm light and the sparkle on the sea" width="744" height="600" loading="lazy"></button></div>
+        <figcaption>Close-up of the corner</figcaption>
+      </figure>
+      <figure class="phone">
+        <div class="shot"><button type="button" aria-label="Zoom the built page on a phone"><img src="img/built-phone.jpg" alt="The built opening on a phone" width="780" height="1688" loading="lazy"></button></div>
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+    <div class="pair">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom the built page on a laptop"><img src="img/built-1280.jpg" alt="The built opening at 1280 by 720" width="1280" height="720" loading="lazy"></button></div>
+        <figcaption>Laptop (1280 wide)</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom the built page on a tablet"><img src="img/built-tablet.jpg" alt="The built opening on an upright tablet" width="1640" height="1600" loading="lazy"></button></div>
+        <figcaption>Tablet</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="idea" aria-labelledby="gaps">
+    <div class="head">
+      <span class="tag plain">IN BOTH</span>
+      <h2 id="gaps">The two gaps</h2>
+    </div>
+    <p class="what">The big letters now float in the sky, with a strip of air above the sea line. The words under the painting start lower, so the grass has room to end.</p>
+    <div class="pair">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom the before picture"><img src="img/gap-before.jpg" alt="Before: the letters of Cell sit right on the sea line, the words close under the grass" width="794" height="550"></button></div>
+        <figcaption>Before (live today)</figcaption>
+      </figure>
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom the after picture"><img src="img/gap-after.jpg" alt="After: a strip of sky between the letters and the sea line, more paper under the grass" width="794" height="550"></button></div>
+        <figcaption>After</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="idea" aria-labelledby="a">
+    <div class="head">
+      <span class="tag">A</span>
+      <h2 id="a">Light from the corner</h2>
+      <span class="score">8.5 / 10</span>
+    </div>
+    <p class="what">The sun is just out of the picture. Its warm light pours in from the top right corner, and its sparkle lies on the sea below it.</p>
+    <p class="what">Holds it back: the light is a second painting laid over the sky. A sharp eye may see where the two washes meet.</p>
+    <figure>
+      <div class="shot"><button type="button" aria-label="Zoom A on a big screen"><img src="img/a-desk.jpg" alt="Idea A at 1844 by 1000: warm light in the top right corner over the sky, sparkle on the sea at the right" width="1844" height="1000" loading="lazy"></button></div>
+      <figcaption>Your screen size</figcaption>
+    </figure>
+    <div class="row">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom A close-up"><img src="img/a-close.jpg" alt="Close-up of A's top right corner" width="744" height="600" loading="lazy"></button></div>
+        <figcaption>Close-up of the corner</figcaption>
+      </figure>
+      <figure class="phone">
+        <div class="shot"><button type="button" aria-label="Zoom A on a phone"><img src="img/a-phone.jpg" alt="Idea A on a phone: warm light behind the top right of the name" width="780" height="1688" loading="lazy"></button></div>
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="idea" aria-labelledby="b">
+    <div class="head">
+      <span class="tag">B</span>
+      <h2 id="b">The sun in the sky</h2>
+      <span class="score">8 / 10</span>
+    </div>
+    <p class="what">A small painted sun sits in the top right, with a warm halo and its sparkle on the sea.</p>
+    <p class="what">Holds it back: on a laptop it sits close to "Cell". Up close the round sun looks a little like a sticker. And the homepage already has a sun.</p>
+    <figure>
+      <div class="shot"><button type="button" aria-label="Zoom B on a big screen"><img src="img/b-desk.jpg" alt="Idea B at 1844 by 1000: a small pale sun with a warm halo at the top right, sparkle on the sea under it" width="1844" height="1000" loading="lazy"></button></div>
+      <figcaption>Your screen size</figcaption>
+    </figure>
+    <div class="row">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom B on a laptop"><img src="img/b-1280.jpg" alt="Idea B at 1280 by 720: the sun close to the letters of Cell" width="1280" height="720" loading="lazy"></button></div>
+        <figcaption>Laptop (1280 wide): the sun near "Cell"</figcaption>
+      </figure>
+      <figure class="phone">
+        <div class="shot"><button type="button" aria-label="Zoom B on a phone"><img src="img/b-phone.jpg" alt="Idea B on a phone: the sun beside the bottle" width="780" height="1688" loading="lazy"></button></div>
+        <figcaption>Phone: the sun beside the bottle</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="idea" aria-labelledby="now">
+    <div class="head">
+      <span class="tag plain">LIVE TODAY</span>
+      <h2 id="now">For comparison</h2>
+    </div>
+    <div class="row">
+      <figure>
+        <div class="shot"><button type="button" aria-label="Zoom today's page"><img src="img/now-desk.jpg" alt="The live opening today" width="1844" height="1000" loading="lazy"></button></div>
+        <figcaption>Your screen size</figcaption>
+      </figure>
+      <figure class="phone">
+        <div class="shot"><button type="button" aria-label="Zoom today's phone page"><img src="img/now-phone.jpg" alt="The live opening today on a phone" width="780" height="1688" loading="lazy"></button></div>
+        <figcaption>Phone</figcaption>
+      </figure>
+    </div>
+  </section>
+</div>
+
+<script>
+  document.querySelectorAll(".shot button").forEach((b) => {
+    b.addEventListener("click", () => b.parentElement.classList.toggle("zoomed"));
+  });
+</script>
