@@ -187,3 +187,26 @@ bird's frame is now 11.638 / 14.174 / 54.031 / 55.621 (it ends 70% down the fram
 wings (the menu's baked bird was not rebuilt: its rest pose is the same). Review page with
 before/after films shot on the built homepage: `../mockups/home-bird-wings/` (Artifact
 https://claude.ai/artifact/73RrLuccvfzBXFnusPv5vw).
+
+## Part 4: too fast to see (November 12, 2026)
+
+Mo: "the wing needs to move a lot faster ... so fast you can barely see his wings. Right now he's
+so slow, it's like a butterfly." The page stepped six poses a beat at ten beats a second, then
+slowed to about six and four: every flap could be followed. A hummingbird beats about forty to
+fifty times a second; a 60 Hz screen cannot show that, and the eye (or a camera at a normal
+shutter) sees a pale fan where the wing sweeps, darkest where the wing turns at each end.
+
+`build_wings.py` now writes 11 frames a wing: 0 the rest pose (unchanged); 1-8 the haze, each the
+wing averaged over 0.7 of a beat (96 samples) centred at a different point of the stroke
+(`HAZE_PHASES`, an order the eye can't follow); 9-10 the haze folding onto the raised wing
+(`SETTLE`, spans 0.45 and 0.24 centred on the top). Frames are 0.55 of the painting's pixels (was
+0.7), about 450 px, the wings' largest size on the page on a 2x screen; lossy alpha banded the haze
+into contour lines, so the webp keeps lossless alpha (near 252 KB, far 136 KB). Files
+`hummingbird-v4-near.webp`, `-far.webp`, box 11.834 / 14.174 / 53.641 / 55.425.
+
+The page (`opening.module.css`): `haze 0.1333s steps(8) 22` (one frame a screen frame, 2.93 s),
+then `fold 0.14s steps(2)`, then frame 0. The keyframes are `fold`, not `settle`: that name is
+the words' own entrance keyframes later in the same file, and the later one won (the first build
+showed no fold). On the built page the near wing changed about 58 times a second for 2.9 s, then
+90%, 100%, then rest at 3.06 s (laptop and phone). Review page with films:
+`../mockups/home-bird-wings/fast/` (Artifact https://claude.ai/artifact/3doPJvZQtKNgusd7BCa9QZ).

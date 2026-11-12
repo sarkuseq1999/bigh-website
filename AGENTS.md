@@ -370,7 +370,14 @@ These sit on top of `DESIGN.md`.
   move"): a hovering hummingbird beats in a flat figure 8 at shoulder height. The wings now fan
   above the body, from raised as painted out to about level with the shoulder (the near wing
   back over the back, the far wing forward over the head), never through the shoulder or below
-  the body (`hummingbird-v3-near/-far.webp`, `RIG` in `build_wings.py`). The
+  the body (`RIG` in `build_wings.py`). On November 12 Mo found the beat too slow ("so fast you
+  can barely see his wings ... right now ... it's like a butterfly"): ten clear flaps a second,
+  slowing to four. A hummingbird beats forty to fifty times a second, faster than a screen can
+  show, so the eye sees a pale fan. The wings now beat as a haze: each frame the wing blurred
+  over most of a beat, at a different point of the stroke, stepped once a screen frame so the
+  fan shimmers; about 3 s as the bird arrives, then a quick fold onto the raised wings, then
+  rest. No slow flaps at the end, and never distinct flaps a visitor can count
+  (`hummingbird-v4-near/-far.webp`: rest, 8 haze and 2 fold frames). The
   bird is lined up on the first hummingbird's bill and tail, so the line still leaves from under
   its tail. Mockups `reference/ink-pages/mockups/home-bird/`.
   `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in

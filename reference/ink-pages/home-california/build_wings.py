@@ -18,6 +18,17 @@ height. Now each wing fans about its shoulder, above the body: from its painted 
 top of the beat), out to about level with the shoulder (the bottom), the near wing back over the
 back, the far wing forward over the head, and up again. It never passes through the shoulder.
 
+November 12, 2026 (Mo): "the wing needs to move a lot faster ... so fast you can barely see his
+wings. Right now he's so slow, it's like a butterfly." Ten distinct poses a second read as a
+flap. A hummingbird beats about forty to fifty times a second, so the eye (and a camera at a
+normal shutter) sees a pale fan where the wing sweeps, darkest at the two ends of the stroke where
+the wing turns. So the sprite is no longer one beat cut in six. Each wing's strip holds 11 frames:
+0, the rest pose (raised as painted, as before); 1-8, the haze: the wing averaged over most of a
+beat (HAZE_SPAN), each frame centred at a different point of the stroke in an order the eye can't
+follow, so stepped once a screen frame (60 a second) the fan shimmers instead of flapping; 9-10,
+the haze narrowing onto the raised wing as the bird settles (SETTLE). The page plays the haze for
+about 3 s as the bird arrives, then the settle, then rests on frame 0.
+
 Out: plates/wings/<look>/ (git-ignored): body.png/.webp (the wingless bird), near.png/.webp and
 far.png/.webp (the six frames of each wing side by side; near is drawn over the body, far behind
 it), still.png (the frames' top pose over the body), sheet.png (the six frames, for looking), and
@@ -41,10 +52,19 @@ HERE = Path(__file__).resolve().parent
 ORIG = HERE / "originals"
 OUT = HERE / "plates" / "wings"
 
-FRAMES = 6  # a beat; the page plays them at 60 a second
-BLUR = 48  # samples across each frame's slice of the beat
+FRAMES = 6  # the rest pose is frame 0 of a beat cut in six (as it was until November 12)
+BLUR = 48  # samples across the rest frame's slice of the beat
 SHUTTER = 0.85  # of a frame's slice the blur spans
-SCALE = 0.7  # of the original's pixels, for the sprite frames
+# The haze (November 12): each frame is the wing averaged over HAZE_SPAN of a beat, centred at
+# these points of the stroke (0 = raised, 0.5 = level with the shoulder), in no order the eye can
+# follow. Then the settle: the haze narrowing onto the raised wing, these spans centred on the top.
+HAZE_PHASES = (0.0, 0.62, 0.27, 0.85, 0.41, 0.08, 0.71, 0.33)
+HAZE_SPAN = 0.7
+HAZE_BLUR = 96
+SETTLE = (0.45, 0.24)
+SCALE = 0.55  # of the original's pixels, for the sprite frames (November 12: 0.7 until the haze
+# nearly doubled the frames; 0.55 is about 450 px a frame, the wings' largest size on the page,
+# 224 CSS px, on a 2x screen)
 
 # Each look: its painting with raised wings and its wingless edit.
 LOOKS = {
@@ -216,17 +236,30 @@ def posed(wing, side, t):
     return out
 
 
-def blurred(wing, side, k):
-    """Frame k: the wing averaged over its slice of the beat, centred on k / FRAMES."""
+def spanned(wing, side, centre, span, samples):
+    """The wing averaged over `span` of a beat (in beats), centred on phase `centre`."""
     acc = None
-    for i in range(BLUR):
-        t = (k + SHUTTER * ((i + 0.5) / BLUR - 0.5)) / FRAMES
+    for i in range(samples):
+        t = centre + span * ((i + 0.5) / samples - 0.5)
         layer = posed(wing, side, t)
         acc = layer if acc is None else acc + layer
-    acc /= BLUR
+    acc /= samples
     a = acc[..., 3:]
     rgb = acc[..., :3] / np.maximum(a, 1e-6)
     return np.concatenate([rgb, a], axis=2)
+
+
+def blurred(wing, side, k):
+    """Frame k of a beat cut in FRAMES: the wing averaged over its slice, centred on k / FRAMES."""
+    return spanned(wing, side, k / FRAMES, SHUTTER / FRAMES, BLUR)
+
+
+def sequence(wing, side):
+    """The sprite's frames: the rest pose, the haze, the haze settling onto the raised wing."""
+    out = [blurred(wing, side, 0)]
+    out += [spanned(wing, side, c, HAZE_SPAN, HAZE_BLUR) for c in HAZE_PHASES]
+    out += [spanned(wing, side, 0.0, w, HAZE_BLUR // 2) for w in SETTLE]
+    return out
 
 
 def over(top, bottom):
@@ -259,7 +292,8 @@ def build(look):
     to_img(near).save(out / "lifted-near.png")
     to_img(far).save(out / "lifted-far.png")
     size = (painted.shape[1], painted.shape[0])
-    frames = {"near": [blurred(near, "near", k) for k in range(FRAMES)], "far": [blurred(far, "far", k) for k in range(FRAMES)]}
+    frames = {"near": sequence(near, "near"), "far": sequence(far, "far")}
+    count = len(frames["near"])
 
     # One box for every frame of both wings, so the page lays both sprites on the same spot.
     alpha = np.max([f[..., 3] for side in frames for f in frames[side]], axis=0)
@@ -269,7 +303,7 @@ def build(look):
     fw, fh = round(bw * SCALE), round(bh * SCALE)
 
     for side in ("near", "far"):
-        strip = Image.new("RGBA", (fw * FRAMES, fh), (0, 0, 0, 0))
+        strip = Image.new("RGBA", (fw * count, fh), (0, 0, 0, 0))
         for k, f in enumerate(frames[side]):
             strip.paste(to_img(f).crop(box).resize((fw, fh), Image.LANCZOS), (k * fw, 0))
         strip.save(out / f"{side}.png", optimize=True)
@@ -280,20 +314,21 @@ def build(look):
     still = over(frames["near"][0], over(body, frames["far"][0]))
     to_img(still).save(out / "still.png", optimize=True)
 
-    # For looking: each frame composited on paper, cropped round the bird, in a row of three.
+    # For looking: each frame composited on paper, cropped round the bird, four to a row.
     paper = np.ones((size[1], size[0], 4), np.float32)
     paper[..., :3] = np.array([0.96, 0.94, 0.90])
     ba = body[..., 3]
     bys, bxs = np.nonzero(np.maximum(ba, alpha) > 0.02)
     crop = (max(0, bxs.min() - 30), max(0, bys.min() - 30), min(size[0], bxs.max() + 30), min(size[1], bys.max() + 30))
     tiles = []
-    for k in range(FRAMES):
+    for k in range(count):
         f = over(frames["near"][k], over(body, over(frames["far"][k], paper)))
         tiles.append(to_img(f).convert("RGB").crop(crop))
     tw, th = tiles[0].size
-    sheet = Image.new("RGB", (tw * 3, th * 2), "white")
+    rows = -(-count // 4)
+    sheet = Image.new("RGB", (tw * 4, th * rows), "white")
     for k, tile in enumerate(tiles):
-        sheet.paste(tile, ((k % 3) * tw, (k // 3) * th))
+        sheet.paste(tile, ((k % 4) * tw, (k // 4) * th))
     sheet.thumbnail((2000, 2000))
     sheet.save(out / "sheet.png")
 
@@ -305,7 +340,10 @@ def build(look):
             "width": round(bw / size[0] * 100, 3),
             "height": round(bh / size[1] * 100, 3),
         },
-        "frames": FRAMES,
+        "frames": count,
+        "rest": 0,
+        "haze": [1, len(HAZE_PHASES)],
+        "settle": [1 + len(HAZE_PHASES), len(SETTLE)],
         "sprite": [fw, fh],
         "body_warp": warp.round(4).tolist(),
     }

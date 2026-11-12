@@ -41,6 +41,23 @@ the same review page (Version 2), and Claude's pick moved from A to C:
   on top of the homepage's redwood, and the settled bar chopped the hills. Paintings and shots in the
   archive folder.
 
+**Round 3 (same day).** Mo: "This doesn't look really good. Give me some more ideas." Claude pulled
+the menu bars Mo saved in his design vault (#004 Timeline's bar, "very simple and not boring, clear
+navigation"; #045 Timeline's header as an avoid: too small for older readers; #039 Seed's rounded
+frosted drop-down) and built two new layouts from them. The review page (Version 3) shows only Today,
+F and G; A to E stay in this folder's git history (`page/` at a674ae8).
+
+- **F, masthead** (from #004, made large). The mark centred alone on the top row (132px), the language
+  and Log in / an outlined Sign up pill at its two ends, all four links centred on a second row, a
+  fine sepia dotted line under the bar (`--tall` 142px; pages start 38px lower, mocked as
+  `main { margin-top: 38px }`). Once the page moves on it folds into one row: mark left, links in
+  the middle, language and account right. A 2px ink underline for the current page. Score 8.5/10;
+  Claude's pick.
+- **G, floating paper** (from #039). The bar is one rounded sheet of frosted rice paper (95%, blur 14px,
+  soft shadow) floating 16px from the top: mark (114px) left, links in the middle, language, Log in
+  and an ink Sign up pill right; a paper fade at the window's top so text fades before it slides
+  under the sheet. Score 8/10: tidy and modern, but more app than painting.
+
 How the shots were made: `shoot.py` opens the public demo in Playwright and lays the mock CSS over the
 built page (no site code changed; the CSS-module hash `KMPmia` is the demo build's; `nav_classes.py`
 lists the current ones). `pack.py` turns the shots into the page's webp files.
