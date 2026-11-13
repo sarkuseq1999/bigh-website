@@ -641,8 +641,8 @@ These sit on top of `DESIGN.md`.
   `zoom-hands-phone-1` (`paint.sh` paints the three views from the pair, so the people match);
   mockups `reference/ink-pages/mockups/science-hero/` (`shoot_last.py`, `review/last-*.jpg`).
   (Since November 12 the zoom ends on a climber: next rule.)
-- **Science opening, the last view: the climber (Mo picked A, November 12, 2026; built, not
-  live).** Mo still liked the scroll from the cell out, but found the picture it lands on (the
+- **Science opening, the last view: the climber (Mo picked A, November 12, 2026; live the same
+  day, `main` `d4a87f4`).** Mo still liked the scroll from the cell out, but found the picture it lands on (the
   pair walking away) "a little boring", then asked for ideas beyond it ("it doesn't have to be
   ... the hill ... the older man, the kid or kite. You can think freely"). Of round 1 (the pair
   flying a gold-leaf kite; the grandfather swinging the child round) and round 2 (A a climber in

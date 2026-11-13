@@ -23,8 +23,20 @@ loaded at 92px and 72px); then the full public checks: `qa_about` 460/460, `qa_h
 
 Before that the alias pointed to `bigh-website-qzh8ydbtr-sarkuseq1999s-projects.vercel.app`
 (`dpl_j4dfeNFJytZ7TVF7MsUR2XfGeP9J`), the **production** deployment of `main` at `d4a87f4`
-(November 12, 2026): the Science zoom pulls back to a climber above Yosemite (that session's
-release; see AGENTS.md "Science opening, the last view: the climber").
+(November 12, 2026). The Science page's zoom now pulls back to a climber: after the whole cell
+comes her hand gripping warm granite, then a woman in her sixties high on a sunlit wall above
+Yosemite Valley, Half Dome across it, with "Why start with the cell?" in the sky (it replaces the
+grandfather and grandchild walking away, which Mo found "a little boring"). New pictures
+`zoom-climb-v3`, `zoom-climb-phone-v3`, `zoom-climb-hand-v3`, `zoom-climb-hand-phone-v3`; new
+description m1251. Mo picked A of round 2's three ideas (review page
+https://claude.ai/artifact/5X8EEbsSgLNV7qayf1zMVs), saw the built scroll filmed and said "Yes, go
+live". `d4a87f4` is `ff68f3e` merged with the two commits `d9728de` and `44bf2ec`, pushed as a
+fast-forward (`main` had not moved). Before the push, on the merged built site (`npm run build` +
+`npm start`): `qa_science_ink` 943/943, `qa_home_ink` 290/290, `qa_nav` 326/326; lint and
+type-check clean. After the alias update, in fresh unauthenticated browsers on the public demo:
+`/science` at 1440 and 390 px and `/vn/science` at 390 px (200, the climber and her hand loaded,
+the new description); then the full public checks: `qa_science_ink` 943/943, `qa_home_ink`
+290/290, `qa_nav` 326/326.
 
 Before that the alias pointed to `bigh-website-i389hojoh-sarkuseq1999s-projects.vercel.app`
 (`dpl_4JdX6cf6eJmb8pxzPuzJHm6BLFka`), the **production** deployment of `main` at
