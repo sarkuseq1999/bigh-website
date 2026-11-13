@@ -415,7 +415,11 @@ These sit on top of `DESIGN.md`.
   laid once as the page opens; Sign up and the phone's Menu written in paper on a real black
   brushstroke; a pale ink wash behind a pointed-at word. Drop-downs, the settle and the menu sheet
   stay as they were. Mockups: `reference/ink-pages/mockups/nav/2026-10-21/`; strokes cut by
-  `reference/nav/make_signed_strokes.py` from two Codex paintings.
+  `reference/nav/make_signed_strokes.py` from two Codex paintings. On November 12 Mo asked whether
+  the bar should turn California too; of seven ideas over three rounds (A warm ink, B a golden
+  ridge, C a poppy Sign up, E open air, F a masthead, G a floating paper sheet; D dropped) he kept
+  this bar "for now". Don't redo it unasked. Mockups:
+  `reference/ink-pages/mockups/nav/2026-11-12-california/`.
 - **Menu bar: Science is a plain link for now (Mo, October 26, 2026).** The Science page is one
   page, and the drop-down's four doors into it made the site look short of content. Science goes
   straight to `/science` on the bar and in the phone's menu, like About and Support. Keep the

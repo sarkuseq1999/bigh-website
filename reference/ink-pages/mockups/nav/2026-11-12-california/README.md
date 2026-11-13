@@ -6,7 +6,10 @@ behind Sign up (and Menu on phones), and the bar's pure black ink now looks like
 the colourful paintings. Three ideas were offered in chat (A warm ink, B golden ridge, C a little
 redwood park-sign button, which borrows the footer's sign); Mo asked to see A and B.
 
-Review page: https://claude.ai/artifact/UtGCL7ex63HdX7gyxYM5Wx (`page/`). Not decided yet.
+Review page: https://claude.ai/artifact/UtGCL7ex63HdX7gyxYM5Wx (`page/`).
+
+**Outcome: Mo kept today's bar "for now" (November 12, after round 3).** Nothing was built. If he
+comes back to it, F (masthead) was Claude's last pick; the CSS for every idea is in `shoot.py`.
 
 - **A, warm ink.** Same bar. Every black brush mark turns warm umber (`#5e4535`): the rule, the
   current-page stroke, the pointing wash and the menu sheet's marks; Sign up and Menu take a loaded
