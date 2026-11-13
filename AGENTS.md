@@ -289,7 +289,7 @@ These sit on top of `DESIGN.md`.
   `circle.module.css`; pictures `reference/ink-pages/about-promise/build_about_promise.py` (Codex
   painting `dots-colour-2`); mockups `reference/ink-pages/mockups/about-promise/`.
 - **About "Curious about the science?": the tide pool with a guide (Mo picked B, November 13,
-  2026; built, not live).** The last of About's three parts: the grey ink reading glasses on a
+  2026; live the same day, `main` `05356fc`).** The last of About's three parts: the grey ink reading glasses on a
   notebook. Of three ideas on the real page (A the same glasses in colour, B a tide pool with a
   guide, C a field notebook by a creek) he picked B: low tide on the Monterey coast, a curious
   older woman in a straw hat looks into a tide pool with a hand lens while a park naturalist

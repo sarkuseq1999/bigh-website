@@ -5,6 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 13, 2026 (Claude Code): About's "Curious about the science?" at a tide pool.**
+  `main` `05356fc`, production `dpl_7a7wwtntaxeYgcBAvvHYqjA4ZLGU`, the demo alias on it; public
+  checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). The last of About's three parts to take the
+  site's California colour. Of three ideas on the real page (A the grey glasses in colour, B a
+  tide pool with a guide, C a field notebook by a creek) Mo picked B, Claude's pick: a curious
+  older woman looks into a Monterey tide pool with a hand lens while a park naturalist points to
+  a sea star (`build_about_closing.py`, `closing-art.ts`, `about-ink.tsx` `TIDEPOOL`,
+  `circle.module.css`). New description m1252 (draft translations; native check open). Review page
+  https://claude.ai/artifact/HU3F7GX5FB222N6QCJQ4fy (`reference/ink-pages/mockups/about-closing/`);
+  unused takes in `bigh-archive\about-closing-unused-2026-11-13\`. Checked on the built site
+  before the push: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326. Claude's score
+  8.5: on a phone the two people are small. The three parts Mo asked for on November 11 (Our
+  experience, Our promise, this one) are now all in colour.
 - **Live November 12, 2026 (Claude Code): About's "Our promise" dots, in colour.** `main`
   `57a87b5`, production `dpl_2Aj1fPozeJEpgdcFq7nm3nuefwDw`, the demo alias on it; public checks:
   `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). The second of About's last three parts. Of three ideas on

@@ -4,7 +4,27 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-lx0j06s65-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-jha2m9k9l-sarkuseq1999s-projects.vercel.app`
+(`dpl_7a7wwtntaxeYgcBAvvHYqjA4ZLGU`), the **production** deployment of `main` at
+`05356fcf6180ea05478795e3ef2afc246acf328d` (November 13, 2026). On the About page, "Curious about
+the science?" has a tide pool with a guide in place of the grey ink reading glasses: low tide on
+the Monterey coast, a curious older woman looks into a tide pool with a hand lens while a park
+naturalist kneels beside her and points to a sea star (Codex painting `tidepool-1`, cut by
+`build_about_closing.py` into `public/images/about-closing/tidepool-v1.webp`), a 3:2 painting a
+plain height tall (495 by 330px at 1440px), with a new description m1252 (draft translations).
+Of three ideas on the real page (A the glasses in colour, B the tide pool, C a field notebook by a
+creek) Mo picked B, saw it built on the review page
+(https://claude.ai/artifact/HU3F7GX5FB222N6QCJQ4fy) and said "Yes, go live". `05356fc` is the
+one commit on top of `studio` `35ff432` (the promise dots release `57a87b5` and its notes), pushed
+as a fast-forward (`main` had not moved, so the pushed tree is the one checked). Before the push,
+on that built site (`npm run build` + `npm start`): `qa_about` 460/460, `qa_home_ink` 290/290,
+`qa_nav` 326/326; lint, type-check and prettier clean; the painting's drawn width within 2% of
+what it asks the server for at 360 to 2560px. After the alias update, in a fresh unauthenticated
+browser on the public demo: `/about` at 1440 and 390 px and `/kr/about` at 390 px (200,
+`tidepool-v1` loaded at 495 and 330px, the Korean description); then the full public checks:
+`qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326.
+
+Before that the alias pointed to `bigh-website-lx0j06s65-sarkuseq1999s-projects.vercel.app`
 (`dpl_2Aj1fPozeJEpgdcFq7nm3nuefwDw`), the **production** deployment of `main` at
 `57a87b5b9bcc660e49c1f928c6e974edc13845bc` (November 12, 2026). On the About page, Our promise's
 four grey ink dots are in colour: four loose watercolour blooms in poppy orange, golden-hill
