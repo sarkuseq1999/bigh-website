@@ -5,6 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 12, 2026 (Claude Code): the Science zoom ends on a climber.** Mo found the last
+  picture (the grandfather and grandchild walking away) "a little boring" and, after a first round
+  that kept the pair (a gold-leaf kite, a swing), asked to think freely. Of a climber in Yosemite,
+  a rower among gold-leaf ripples and swing dancing in Golden Gate Park he picked the climber. The
+  zoom now goes inside the cell, the whole cell, her hand gripping warm granite, then her on a
+  sunlit wall above Yosemite Valley (`zoom.tsx` `FOCUS`, `NEAR` per painting; `zoom.module.css`
+  framing; `build_science.py` `calmer_blue`, the tall climber `lowered` 4%). `main` `d4a87f4`,
+  production `dpl_j4dfeNFJytZ7TVF7MsUR2XfGeP9J`, the demo alias on it; public checks
+  `qa_science_ink` 943/943, `qa_home_ink` 290/290, `qa_nav` 326/326. New description m1251 (draft
+  translations; native check open). Review page https://claude.ai/artifact/5X8EEbsSgLNV7qayf1zMVs
+  (`reference/ink-pages/mockups/science-last/`); unused takes in
+  `bigh-archive\science-last-unused-2026-11-12\`. Claude's score 8.5: nothing moves on the last
+  picture; on a phone Half Dome is half cut off at the left edge.
 - **Live November 12, 2026 (Claude Code): the homepage hummingbird's wings, too fast to see.**
   Mo: the beat was "so slow, it's like a butterfly". The wings now beat as a haze (each frame the
   wing blurred over most of a beat, a new one every screen frame) for about 3 s, fold onto the
