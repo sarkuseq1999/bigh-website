@@ -12,6 +12,13 @@
 #   zoom-hands-<n>      the zoom's pair (originals/zoom-pair-1.png) seen close: the joined hands
 #   zoom-pair-phone-<n> the zoom's pair painted again as a tall picture for phones (1024x1536)
 #   zoom-hands-phone-<n> the joined hands (originals/zoom-hands-3.png) again as a tall picture
+#   last-<idea>-<n>     a new last view with the same pair (originals/zoom-pair-1.png attached
+#                       first): prompts/_last-pair.txt + prompts/last-<idea>-<n>.txt (or -1)
+#   end-<idea>-<n>      a new last view of any kind: prompts/_end.txt + prompts/end-<idea>-<n>.txt
+#   climb-hand-<n>      the climber's hand on the rock (originals/end-climb-3.png attached first):
+#                       prompts/climb-hand-<n>.txt (or -1); its tall twin is tall-climb-hand-<n>-<m>
+#   tall-<src>-<n>      originals/<src>.png painted again as a tall picture for phones (1024x1536):
+#                       prompts/tall-<idea>-1.txt, <idea> = <src> without "loose-" and its takes
 # The picture lands in originals/<name>.png, Codex's log in plates/logs/ (git-ignored). stdin must
 # be /dev/null, or codex exec waits on it forever.
 set -u
@@ -64,6 +71,40 @@ for name in "$@"; do
       esac
       ref=(-i "$first" -i "$HAND")
       cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"; cat "$HERE/prompts/$base-1.txt" >> "$order"
+      ;;
+    climb-hand-*)
+      # Mo picked the climber (November 12, 2026): the zoom's hand view is her hand on the rock.
+      # The climber painting first (her colours, the granite), the Big Sur hand second.
+      base="${name%-*}"
+      ref=(-i "$HERE/originals/end-climb-3.png" -i "$HAND")
+      cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/$base-${name##*-}.txt" >> "$order" 2>/dev/null || cat "$HERE/prompts/$base-1.txt" >> "$order"
+      ;;
+    end-*)
+      # Mo, November 12, 2026 ("think freely"): a new last view of any kind. The style, the
+      # last view's brief (prompts/_end.txt), then prompts/end-<idea>-<n>.txt (or -1).
+      base="${name%-*}"
+      ref=(-i "$HAND")
+      cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/_end.txt" >> "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/$base-${name##*-}.txt" >> "$order" 2>/dev/null || cat "$HERE/prompts/$base-1.txt" >> "$order"
+      ;;
+    tall-*)
+      src="${name#tall-}"; src="${src%-*}"
+      idea="${src#loose-}"; idea="${idea%%-[0-9]*}"
+      shape="portrait 1024x1536"
+      ref=(-i "$HERE/originals/$src.png" -i "$HAND")
+      cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/tall-$idea-1.txt" >> "$order"
+      ;;
+    last-*)
+      # Mo, November 12, 2026: the last view's pair, in a scene where something happens. The
+      # pair painting first (its people), the Big Sur hand second.
+      base="${name%-*}"
+      ref=(-i "$HERE/originals/zoom-pair-1.png" -i "$HAND")
+      cat "$HERE/prompts/_style-ca.txt" > "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/_last-pair.txt" >> "$order"; printf '\n' >> "$order"
+      cat "$HERE/prompts/$base-${name##*-}.txt" >> "$order" 2>/dev/null || cat "$HERE/prompts/$base-1.txt" >> "$order"
       ;;
     wash-*)
       place="${name#wash-}"; place="${place%-*}"
