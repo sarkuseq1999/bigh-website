@@ -9,14 +9,16 @@ sent by paint.sh) in the homepage close's way of painting, ink and wash with lig
   desk at the window was plain and the town did not say "cell"). Since November 10 it starts
   inside the cell and pulls back (Mo picked A of four ideas for the first screen): the inside of
   one cell (zoom-inside-1), that cell whole, its mitochondria as slivers of gold (zoom-cell-2),
-  a grandfather's hand holding a child's (zoom-hands-3), then the two of them walking hand in
-  hand on golden hills (zoom-pair-1; Mo found the lone small walker plain and picked this of four
-  last pictures). Upright windows get the hands and the pair painted again as tall pictures
-  (zoom-hands-phone, zoom-pair-phone). The inside view, the hands and the hills fill the window,
-  so they keep their whole frame and no feathered edge; the cell is cropped to its ink. The
-  inside view's gold slivers are lifted off it (lifted()) and ship beside it as one picture of
-  pieces, so each can drift on its own. The first zoom's walker and hand (zoom-hills-1,
-  zoom-hand-2) no longer ship; their originals stay.
+  a climber's hand gripping warm granite (climb-hand-1), then the climber herself, a woman in her
+  sixties on a sunlit wall high above Yosemite Valley, Half Dome across it (end-climb-3; Mo picked
+  her on November 12, 2026 of three new last pictures after finding the grandfather and grandchild
+  walking away "a little boring"). Upright windows get the hand and the climber painted again as
+  tall pictures (tall-climb-hand-1-*, tall-end-climb-3-1). The inside view, the hand and the
+  climber fill the window, so they keep their whole frame and no feathered edge; the cell is
+  cropped to its ink. The inside view's gold slivers are lifted off it (lifted()) and ship beside
+  it as one picture of pieces, so each can drift on its own. The earlier last views (the walker
+  and his hand, zoom-hills-1 and zoom-hand-2; the pair hand in hand, zoom-pair-1 and
+  zoom-hands-3) no longer ship; their originals stay.
 - places: Dr. Liu's path, Berkeley, Salzburg and Today, each a Codex repaint of the October
   handscroll's cut with light washes (wash-<place>-1). Today keeps the handscroll's own gold-leaf
   sun, cut from its old picture and set in the new sky (SUN).
@@ -59,10 +61,10 @@ V = "v3"
 # looser (prompts/zoom-hand-2.txt, zoom-cell-2.txt).
 TAKES = {
     "zoom-inside": "zoom-inside-1",
-    "zoom-pair": "zoom-pair-1",
-    "zoom-pair-phone": "zoom-pair-phone-2",
-    "zoom-hands": "zoom-hands-3",
-    "zoom-hands-phone": "zoom-hands-phone-1",
+    "zoom-climb": "end-climb-3",
+    "zoom-climb-phone": "tall-end-climb-3-1",
+    "zoom-climb-hand": "climb-hand-1",
+    "zoom-climb-hand-phone": "tall-climb-hand-1-1",
     "zoom-cell": "zoom-cell-2",
     "berkeley": "wash-berkeley-1",
     "salzburg": "wash-salzburg-1",
@@ -115,6 +117,19 @@ def to_img(arr):
 def flat(img):
     """Paper divided out and lifted to white."""
     return bd.levelled(bd.divided(img))
+
+
+def calmer_blue(img, keep=0.7):
+    """Blue strokes a little greyer (their saturation times keep). The climber's hand painted its
+    granite's cracks a lighter, cooler blue than the slate cracks of the climbing painting it
+    fades into; on the page the hand's read as periwinkle."""
+    hsv = cv2.cvtColor(np.asarray(img.convert("RGB")), cv2.COLOR_RGB2HSV).astype(np.float32)
+    hue = hsv[..., 0]
+    # OpenCV hue runs 0-180: blue sits about 100-130; feathered over 10 either side.
+    weight = np.clip(1 - np.maximum(np.abs(hue - 115) - 15, 0) / 10, 0, 1)
+    hsv[..., 1] *= 1 - (1 - keep) * weight
+    rgb = cv2.cvtColor(np.clip(hsv, 0, 255).astype(np.uint8), cv2.COLOR_HSV2RGB)
+    return Image.fromarray(rgb)
 
 
 def inked(img, pad=0.04, level=236):
@@ -234,7 +249,8 @@ def pieces(slivers, size, name, width=1024, gap=2):
 def lowered(img, share=0.06):
     """A painting set lower in its own frame by a share of its height: its foot is cropped, and
     its first rows (sky) fade in from white, so no seam shows where bare paper was added above.
-    For the tall pair: on a small phone a longer language's lead reached the grandfather's hat."""
+    For the tall pair (on a small phone a longer language's lead reached the grandfather's hat),
+    and since November 12 the tall climber."""
     a = np.asarray(img).astype(np.float32)
     h = a.shape[0]
     d = round(h * share)
@@ -251,16 +267,18 @@ def zoom():
     unfeathered; the cell stands alone on the paper, cropped to its ink and feathered like every
     other painting. The inside view ships without its gold (inside), which rides above it in
     pieces (inside.gold). The page's layers keep their names (hand, hills); their pictures are
-    the joined hands and the pair, under new file names (the walker's are cached by name), each
-    with a tall picture for upright windows (hand.phone, hills.phone)."""
+    the climber's hand on the rock and the climber, under new file names (the pair's are cached
+    by name), each with a tall picture for upright windows (hand.phone, hills.phone)."""
     wash, slivers = lifted(flat(load("zoom-inside")))
     out = {"inside": bd.art_of(wash, f"zoom-inside-{V}", 1536)}
     out["inside"]["gold"] = pieces(slivers, wash.size, f"zoom-inside-gold-{V}")
     out["cell"] = art(inked(flat(load("zoom-cell")), pad=0.03), "zoom-cell", 1400)
-    out["hand"] = bd.art_of(flat(load("zoom-hands")), f"zoom-hands-{V}", 1536)
-    out["hand"]["phone"] = bd.art_of(flat(load("zoom-hands-phone")), f"zoom-hands-phone-{V}", 1024)
-    out["hills"] = bd.art_of(flat(load("zoom-pair")), f"zoom-pair-{V}", 1536)
-    out["hills"]["phone"] = bd.art_of(lowered(flat(load("zoom-pair-phone"))), f"zoom-pair-phone-{V}", 1024)
+    out["hand"] = bd.art_of(calmer_blue(flat(load("zoom-climb-hand"))), f"zoom-climb-hand-{V}", 1536)
+    out["hand"]["phone"] = bd.art_of(calmer_blue(flat(load("zoom-climb-hand-phone"))), f"zoom-climb-hand-phone-{V}", 1024)
+    out["hills"] = bd.art_of(flat(load("zoom-climb")), f"zoom-climb-{V}", 1536)
+    # Set a little lower (lowered()): on a 360px phone her reaching hand came within about 15px
+    # of a longer language's lead (Vietnamese, Japanese).
+    out["hills"]["phone"] = bd.art_of(lowered(flat(load("zoom-climb-phone")), 0.04), f"zoom-climb-phone-{V}", 1024)
     return out
 
 

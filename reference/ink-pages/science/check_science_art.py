@@ -4,8 +4,8 @@ docs/superpowers/specs/2026-11-04-science-california-design.md).
 - every picture named in science-art.ts exists at its stated size;
 - each painting's outer 3px strip is white (254.5 or whiter), so nothing shows a box when it
   multiplies onto the page;
-- the zoom opening (November 9, 2026; from inside the cell, out to the pair hand in hand, since
-  November 10): the hands and the hills each have a tall picture for upright windows (2:3, at
+- the zoom opening (November 9, 2026; from inside the cell since November 10, out to the climber
+  since November 12): the hands and the hills each have a tall picture for upright windows (2:3, at
   least 1000px wide); the hills and the hand are 3:2 and at least 1500px wide
   (they fill the window, so they keep their whole frame and need no white edge); the cell has a
   white edge like every other painting, is wider than tall, and holds gold (its mitochondria);

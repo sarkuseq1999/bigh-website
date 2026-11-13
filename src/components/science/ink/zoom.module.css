@@ -1,9 +1,9 @@
 /* The Science page's first screens as one slow zoom (Mo, November 9, 2026), from inside the cell
    since November 10 (Mo picked A of four ideas): a tall track with one pinned stage. In the stage,
    from the top layer down: the inside of one cell (a little larger than the window, its gold
-   slivers adrift, the h1 in its pale corner), that cell seen whole, a grandfather's hand holding
-   a child's, then the two of them on golden hills with "Why start with the cell?" in the sky
-   (a wide painting, and a tall one for upright windows). zoom.tsx sets each layer's
+   slivers adrift, the h1 in its pale corner), that cell seen whole, a climber's hand on warm
+   granite, then the climber high above Yosemite Valley with "Why start with the cell?" in the
+   sky (Mo's pick of November 12, 2026; a wide painting, and a tall one for upright windows). zoom.tsx sets each layer's
    scale, place and opacity from the scroll. The kit's .look rules (margins, sizes) sit at (0,2,0),
    so the words' rules are scoped under .zoom. */
 .zoom {
@@ -43,28 +43,29 @@
   will-change: scale, opacity;
 }
 
-/* Which part of each painting a window keeps. The hills, wide: the pair and their feet (a short,
-   wide window crops the painting's top and foot). The hands: the big hand and the small wrist
-   in it. */
+/* Which part of each painting a window keeps. The hills (the climber), wide: the climber and
+   the valley under her (a short, wide window crops the painting's top and foot; more of the foot,
+   so on a laptop her reaching hand keeps clear of the menu bar). The hand: her hand on the rock
+   and the forearm. */
 .hills {
-  object-position: 60% 60%;
+  object-position: 60% 40%;
 }
 
 .hand {
   object-position: 52% 55%;
 }
 
-/* An upright window gets the tall paintings (zoom.tsx). The hills: the pair a little right of the
-   window's middle, so the oak's crown comes in from the right edge and its trunk stays out; a
-   tablet (the painting cropped top and foot) keeps the pair's feet. The hands: the big hand, the
-   small wrist and the blue sleeve. */
+/* An upright window gets the tall paintings (zoom.tsx). The hills: the climber whole, the wall
+   running off the right edge, Half Dome at the left; a tablet (the painting cropped top and foot)
+   keeps the valley at her feet. The hand: her hand on the rock, its fingertips clear of the right
+   edge. */
 @media (orientation: portrait) {
   .hills {
-    object-position: 39% 100%;
+    object-position: 58% 100%;
   }
 
   .hand {
-    object-position: 62% 55%;
+    object-position: 66% 55%;
   }
 }
 
@@ -306,7 +307,7 @@
   }
 
   /* The last view's words stand a little higher than the first's, and its heading may run
-     wider: the hills' far range and the pair's hats begin under them, and a longer language's
+     wider: the far ridges and the climber's helmet begin under them, and a longer language's
      lead must keep clear of both (the Japanese heading broke in two and pushed its lead onto
      the range). */
   .second {

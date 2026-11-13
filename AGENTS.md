@@ -629,6 +629,24 @@ These sit on top of `DESIGN.md`.
   `<picture>`s); paintings `zoom-pair-1`, `zoom-pair-phone-2`, `zoom-hands-3`,
   `zoom-hands-phone-1` (`paint.sh` paints the three views from the pair, so the people match);
   mockups `reference/ink-pages/mockups/science-hero/` (`shoot_last.py`, `review/last-*.jpg`).
+  (Since November 12 the zoom ends on a climber: next rule.)
+- **Science opening, the last view: the climber (Mo picked A, November 12, 2026; built, not
+  live).** Mo still liked the scroll from the cell out, but found the picture it lands on (the
+  pair walking away) "a little boring", then asked for ideas beyond it ("it doesn't have to be
+  ... the hill ... the older man, the kid or kite. You can think freely"). Of round 1 (the pair
+  flying a gold-leaf kite; the grandfather swinging the child round) and round 2 (A a climber in
+  Yosemite, B a rower at sunrise among gold-leaf ripples, C an older couple swing dancing in
+  Golden Gate Park; a grandmother's cannonball into Lake Tahoe and wind turbines were tried and
+  left out) he picked round 2's A: a woman in her sixties, silver hair under her helmet, climbs a
+  sunlit granite wall high above Yosemite Valley, Half Dome small and pale across it, the words
+  in the open sky at the upper left. The hand before it is her hand gripping the warm granite
+  (her coral sleeve, the same wall's cracks), and the pull-back starts from the back of that
+  same hand in the climbing painting, about as large (`NEAR`, wide and tall). A picture of a full
+  life shows someone doing something, not walking away. Her face is two or three strokes, never
+  a storybook face; the hand is loose (no nails, creases, veins or tendons). The words did not
+  change. `zoom.tsx` (`FOCUS`, `NEAR`), `zoom.module.css`; paintings `end-climb-3`,
+  `tall-end-climb-3-1`, `climb-hand-1`, `tall-climb-hand-1-1` (`paint.sh` `end-*`,
+  `climb-hand-*`, `tall-*`); mockups `reference/ink-pages/mockups/science-last/`.
 - **Science, Dr. Liu: "the gold he studies" (Mo picked C, November 11, 2026; live the same
   day, `main` `dd73322`).** Mo found the Dr. Liu part "pretty plain or just a little boring": a
   small dark studio photograph on bare paper, between a page of paintings. Of five ideas mocked

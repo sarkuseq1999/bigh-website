@@ -3,9 +3,10 @@ since November 4, 2026 round 3, docs/superpowers/specs/2026-11-04-science-califo
 Since November 9, 2026 the page opens as one slow zoom (Mo's pick); since November 10 it starts
 inside the cell and pulls back (Mo picked A of four ideas for the first screen): the inside of one
 cell, its gold slivers adrift, with "Our science starts in the cell."; that cell seen whole; a
-grandfather's hand holding a child's; then the two of them walking hand in hand on golden hills
-with "Why start with the cell?" in the sky (Mo found the lone small walker plain and picked this of
-four last pictures; upright windows get tall paintings); then the three lines with their
+climber's hand on warm granite; then the climber, a woman in her sixties high above Yosemite
+Valley, with "Why start with the cell?" in the sky (Mo picked her on November 12, 2026, after a
+lone walker and then a grandfather and grandchild had read as plain; upright windows get tall
+paintings); then the three lines with their
 explainers, Dr. Liu and his path (Berkeley, Salzburg, Today), the formulas, the research and Ask.
 
 Sections (all, or --only=a,b):
@@ -722,11 +723,11 @@ def opening(browser):
         check(f"{tag}: the hills fill the window", hills["l"] <= 0.5 and hills["t"] <= 0.5 and hills["r"] >= w - 0.5 and hills["b"] >= h - 0.5, f"{hills['l']:.0f},{hills['t']:.0f} to {hills['r']:.0f},{hills['b']:.0f}")
         check(f"{tag}: every view's painting has loaded", all(end["loaded"]), str(end["loaded"]))
         # An upright window gets the tall hands and the tall hills (each its own painting, so the
-        # big hand and the pair are whole on a phone); a wide window the wide ones.
+        # hand and the climber are whole on a phone); a wide window the wide ones.
         tall = h > w
         kind = "tall" if tall else "wide"
-        in_use = [("zoom-hands-phone" in end["src"][0]) == tall, ("zoom-pair-phone" in end["src"][1]) == tall]
-        check(f"{tag}: the {kind} hands and the {kind} hills are the paintings in use", all(in_use) and "zoom-hands" in end["src"][0] and "zoom-pair" in end["src"][1] and end["shape"] == [tall, tall], " | ".join(s[-48:] for s in end["src"]) + f" {end['shape']}")
+        in_use = [("zoom-climb-hand-phone" in end["src"][0]) == tall, ("zoom-climb-phone" in end["src"][1]) == tall]
+        check(f"{tag}: the {kind} hand and the {kind} climber are the paintings in use", all(in_use) and "zoom-climb-hand" in end["src"][0] and "zoom-climb" in end["src"][1] and end["shape"] == [tall, tall], " | ".join(s[-48:] for s in end["src"]) + f" {end['shape']}")
         check(f"{tag}: at the end its words show", end["opacity"]["words"] == 1 and end["secondShown"] == "visible" and end["firstShown"] == "hidden", f"{end['opacity']} {end['secondShown']}")
         check(f"{tag}: the words under the menu bar, in the window", words["t"] >= end["bar"] - 1 and words["l"] >= 0 and max(words["r"], end["sublead"]["r"]) <= w and end["sublead"]["b"] <= h, f"top {words['t']:.0f}, {words['l']:.0f}-{words['r']:.0f}, ends {end['sublead']['b']:.0f}")
         if w in (1440, 390):

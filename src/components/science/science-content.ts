@@ -55,9 +55,9 @@ export const why = {
   source: "Cell count: Bianconi and colleagues, Annals of Human Biology, 2013.",
   sourceUrl: "https://pubmed.ncbi.nlm.nih.gov/23829164/",
   // Its heading and lead stand in the zoom's last view (since November 10, 2026; the cell stood
-  // here before): a grandfather and a child walking hand in hand on golden hills (Mo found the
-  // lone small walker plain and picked this of four last pictures).
-  alt: "A grandfather and a small child walk hand in hand up a trail through golden California hills, painted in ink and watercolour",
+  // here before): since November 12 a climber in her sixties high above Yosemite Valley (Mo
+  // found the grandfather and grandchild walking away "a little boring" and picked her of three).
+  alt: "A woman in her sixties climbs a sunlit granite wall high above Yosemite Valley, Half Dome across the valley, painted in ink and watercolour",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
