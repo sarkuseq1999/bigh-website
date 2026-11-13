@@ -288,6 +288,18 @@ These sit on top of `DESIGN.md`.
   phone); they bloom in one after another as before. The words did not change. `promise-art.ts`,
   `circle.module.css`; pictures `reference/ink-pages/about-promise/build_about_promise.py` (Codex
   painting `dots-colour-2`); mockups `reference/ink-pages/mockups/about-promise/`.
+- **About "Curious about the science?": the tide pool with a guide (Mo picked B, November 13,
+  2026; built, not live).** The last of About's three parts: the grey ink reading glasses on a
+  notebook. Of three ideas on the real page (A the same glasses in colour, B a tide pool with a
+  guide, C a field notebook by a creek) he picked B: low tide on the Monterey coast, a curious
+  older woman in a straw hat looks into a tide pool with a hand lens while a park naturalist
+  kneels beside her and points to a sea star; cypress on the headland behind. It shows the words:
+  you're curious, and someone who knows helps you look. A 3:2 painting a plain height tall (495 by
+  330px at 1440px; the glasses were 470 by 238px), so the two people are not specks. Its people
+  are loose (faces two or three strokes). The words did not change; new description m1252 (draft
+  translations). `closing-art.ts`, `about-ink.tsx` (`TIDEPOOL`), `circle.module.css`; picture
+  `reference/ink-pages/about-closing/build_about_closing.py` (Codex painting `tidepool-1`);
+  mockups `reference/ink-pages/mockups/about-closing/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis

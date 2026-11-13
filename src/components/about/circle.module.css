@@ -4,9 +4,9 @@
    until October 28, 2026, when the poppy meadow replaced it: meadow.module.css). */
 
 /* The pictures read about the same size: each painting's height is a multiple of one plain height,
-   --h (the sequoia 1.35, the wide glasses 0.72, so the tall and square ones stand taller than the
-   wide one: at 1440px 446px and 238px), and its width that height times its shape (width over
-   height, from about-art.ts). The shared rule caps every width at its column (--picture is read in
+   --h (the sequoia 1.35, the 3:2 tide pool 1, so the tall and square ones stand taller than the
+   wide one: at 1440px 446px and 330px), and its width that height times its shape (width over
+   height, from the art files). The shared rule caps every width at its column (--picture is read in
    .aboutPage .painting's width, where a percentage is of the column, so --h's 60% is 0.6 of the
    column's width). --h is 330px, or 0.6 of the column's width when that is less.
    The purpose's oak is the one exception: it carries the page's purpose, so it stands larger than
@@ -78,8 +78,11 @@
   --picture: calc(var(--h) * 1.35 * 0.998);
 }
 
+/* The closing's tide pool (Mo picked B, November 13, 2026: closing-art.ts) replaced the wide grey
+   glasses (0.72 at 1.977): a 3:2 scene stands a plain height tall (at 1440px 495 by 330px, the
+   glasses 470 by 238px), so the two people at the pool's edge are not specks. */
 .circle [data-part="closing"] [data-picture] {
-  --picture: calc(var(--h) * 0.72 * 1.977);
+  --picture: calc(var(--h) * 1 * 1.5005);
 }
 
 /* Dr. Liu's photo on its mat, resting on a wide, low pool of grey wash (D's pool, laid on its
@@ -161,9 +164,9 @@
 
 /* Two narrow columns (960 to 1279px): the experience's three stacked figures and the closing's
    stacked pills stand taller than a painting from a plain height of 0.6 of the column (at 960px
-   the sequoia stood 305px tall and the glasses 163px, beside those words). These two take the
-   one-column plain height, 300px (the sequoia and the glasses then fill their column up to 1025px
-   and 1083px), which meets the 0.6 rule's own size at 1280px (no jump). */
+   the sequoia stood 305px tall and the old glasses 163px, beside those words). These two take the
+   one-column plain height, 300px (the sequoia and the tide pool then fill their column up to
+   1025px and 1142px), which meets the 0.6 rule's own size at 1280px (no jump). */
 @media (min-width: 960px) and (max-width: 1279px) {
   .circle [data-part="experience"],
   .circle [data-part="closing"] {

@@ -31,7 +31,7 @@ slow link (the gold's picture held 3s) the meadow shows at once and its gold wai
 the gold starts only once its picture is in and arrives whole; with no gold picture, 9s in it
 still holds; with JavaScript off the meadow shows with all its gold, and every other painting (the
 oak, the pool, the globe and its four plants, the valley, the sequoia, the four promise dots and
-the glasses) as inked as it does still.
+the tide pool) as inked as it does still.
 chapters (November 2026: the two new chapters between Dr. Liu and Our experience). Our
 ingredients, the globe (Mo picked B, November 9): one picture, "Illustration" under it; no place
 named in the part (Mo: not until he knows); from 760px the four plants stand round the globe,
@@ -923,7 +923,7 @@ HIDE_WORDS = '[data-part="opening"] :is(h1, p) { visibility: hidden !important; 
 
 # The page's paintings below the opening: the oak, the pool under Dr. Liu's photo (not the
 # photo), the globe and its four plants, the valley, the sequoia, the four promise dots and the
-# glasses (the plants' list under the globe is a phone's, hidden on a desktop).
+# tide pool (the plants' list under the globe is a phone's, hidden on a desktop).
 PAINTINGS = "[data-picture] img:not([data-mount] img), [data-promise] img"
 
 
@@ -998,7 +998,7 @@ def motion(browser):
     # With motion. Every painting below the opening server-marked waiting (none paints whole, then
     # vanishes), read from the HTML the server sends, before any script could mark one: in the
     # page's main, the oak, the pool, the globe, its four plants and their four rows on a phone,
-    # the valley, the sequoia, the four promise dots and the glasses (the
+    # the valley, the sequoia, the four promise dots and the tide pool (the
     # meadow's gold arrives instead; the shared closing crane after main is the kit's own).
     context = browser.new_context(viewport={"width": 1440, "height": 900}, reduced_motion="no-preference")
     html = context.request.get(f"{BASE}/about").text()
