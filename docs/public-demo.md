@@ -4,7 +4,29 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-i389hojoh-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-lx0j06s65-sarkuseq1999s-projects.vercel.app`
+(`dpl_2Aj1fPozeJEpgdcFq7nm3nuefwDw`), the **production** deployment of `main` at
+`57a87b5b9bcc660e49c1f928c6e974edc13845bc` (November 12, 2026). On the About page, Our promise's
+four grey ink dots are in colour: four loose watercolour blooms in poppy orange, golden-hill
+straw, Pacific blue and sage green (Codex painting `dots-colour-2`, cut by
+`build_about_promise.py` into `public/images/about-promise/dot-colour-1..4-v1.webp`), sized so
+their paint stands as wide as the grey dots' did (92px squares at 1440px, 64px from 1000px down,
+a 72px row picture on a phone). Of three ideas on the real page (A the dots in colour, B four
+wildflowers, C one poppy counting to four) Mo compared B and C, then said "Let's try A", saw it
+built on the review page (https://claude.ai/artifact/HFiZwnB5sG4DMnAnLp8qhn) and said "Yes, go
+live". `57a87b5` is the one commit on top of `d4a87f4` (the Science climber, another session's
+release), pushed as a fast-forward. Before the push, on that built site (`npm run build` +
+`npm start`): `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326; lint, type-check and
+prettier clean. After the alias update, in a fresh unauthenticated browser on the public demo:
+`/about` at 1440 and 390 px and `/cns/about` at 390 px (200, the four `dot-colour-*-v1` pictures
+loaded at 92px and 72px); then the full public checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326.
+
+Before that the alias pointed to `bigh-website-qzh8ydbtr-sarkuseq1999s-projects.vercel.app`
+(`dpl_j4dfeNFJytZ7TVF7MsUR2XfGeP9J`), the **production** deployment of `main` at `d4a87f4`
+(November 12, 2026): the Science zoom pulls back to a climber above Yosemite (that session's
+release; see AGENTS.md "Science opening, the last view: the climber").
+
+Before that the alias pointed to `bigh-website-i389hojoh-sarkuseq1999s-projects.vercel.app`
 (`dpl_4JdX6cf6eJmb8pxzPuzJHm6BLFka`), the **production** deployment of `main` at
 `ff68f3e0c2d82521434e0310b38e7f12b3516171` (November 12, 2026). On the homepage the hummingbird's
 wings beat as a haze, too fast to see (Mo: "so fast you can barely see his wings. Right now he's

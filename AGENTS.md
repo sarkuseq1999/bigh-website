@@ -277,7 +277,8 @@ These sit on top of `DESIGN.md`.
   `experience-art.ts`, `circle.module.css`; picture
   `reference/ink-pages/about-experience/build_about_experience.py` (Codex painting
   `sequoia-colour-b`, `paint_colour.sh`); mockups `reference/ink-pages/mockups/about-experience/`.
-- **About "Our promise": the dots in colour (Mo picked A, November 12, 2026; built, not live).**
+- **About "Our promise": the dots in colour (Mo picked A, November 12, 2026; live the same day,
+  `main` `57a87b5`).**
   The second of About's last three parts. The four grey ink dots (black to pale) over "What you
   can count on." Of three ideas on the real page (A the same dots in colour, B four California
   wildflowers, C one poppy counting from bud to bloom, Claude's pick) Mo compared B and C side by

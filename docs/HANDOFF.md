@@ -5,6 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 12, 2026 (Claude Code): About's "Our promise" dots, in colour.** `main`
+  `57a87b5`, production `dpl_2Aj1fPozeJEpgdcFq7nm3nuefwDw`, the demo alias on it; public checks:
+  `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). The second of About's last three parts. Of three ideas on
+  the real page (A the four dots in colour, B four California wildflowers, C one poppy counting
+  from bud to bloom, Claude's pick) Mo compared B and C side by side, then said "Let's try A": four
+  loose watercolour blooms in poppy orange, golden-hill straw, Pacific blue and sage green
+  (`build_about_promise.py`, `promise-art.ts`, `circle.module.css`). Review page
+  https://claude.ai/artifact/HFiZwnB5sG4DMnAnLp8qhn (`reference/ink-pages/mockups/about-promise/`).
+  Built on the branch `about-promise` in a scratch worktree, rebased onto `main` `d4a87f4` and
+  checked on the built site before the push: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav`
+  326/326. Claude's score 7.5: calm and in the page's colours, but the dots mean nothing on their
+  own. The unused B and C originals are kept outside the repo. Next on About: "Curious about the
+  science?" (the grey glasses).
 - **Live November 12, 2026 (Claude Code): the homepage hummingbird's wings, too fast to see.**
   Mo: the beat was "so slow, it's like a butterfly". The wings now beat as a haze (each frame the
   wing blurred over most of a beat, a new one every screen frame) for about 3 s, fold onto the
