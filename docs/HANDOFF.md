@@ -5,6 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Live November 12, 2026 (Claude Code): the homepage hummingbird's wings, too fast to see.**
+  Mo: the beat was "so slow, it's like a butterfly". The wings now beat as a haze (each frame the
+  wing blurred over most of a beat, a new one every screen frame) for about 3 s, fold onto the
+  raised wings and rest (`build_wings.py` `HAZE_*`, `opening.module.css` `haze` / `fold`,
+  `hummingbird-v4-near/-far.webp`). `main` `ff68f3e`, production
+  `dpl_4JdX6cf6eJmb8pxzPuzJHm6BLFka`, the demo alias on it; public checks `qa_home_ink` 290/290,
+  `qa_nav` 326/326. On `studio` the same change is `874fc2b`; `studio` has not merged `origin/main`
+  (the About sequoia, `9e550a6`). Review page: https://claude.ai/artifact/3doPJvZQtKNgusd7BCa9QZ
+  (`reference/ink-pages/mockups/home-bird-wings/fast/`). Claude's score 8.5: faint curved streaks
+  in the blur up close; the wing pictures are 388 KB (were 226 KB).
 - **Live November 12, 2026 (Claude Code): About's "Our experience" sequoia, a little coloured.**
   `main` `f46a497`, production `dpl_4XFanxGP5ZWDD7YBaxq7MJPjCuvp`, the demo alias on it; public
   checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). Mo asked for About's last three parts (Our
