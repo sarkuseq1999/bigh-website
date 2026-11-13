@@ -10,7 +10,7 @@ import base from "@/components/ink/ink.module.css";
 import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { about, routes } from "./about-content";
-import { dots, glasses, pool } from "./about-art";
+import { glasses, pool } from "./about-art";
 import { CountUp } from "./count-up";
 import { experienceSequoia } from "./experience-art";
 import { Greetings } from "./greetings";
@@ -18,6 +18,7 @@ import { meadow } from "./meadow-art";
 import { Painting, Spread } from "./spread";
 import { MadeInCalifornia } from "./made-in-california";
 import { PlantsMap } from "./plants-map";
+import { dots } from "./promise-art";
 import { purposeOak } from "./purpose-art";
 import page from "./about-page.module.css";
 import styles from "./circle.module.css";
@@ -278,7 +279,7 @@ function Promises() {
                 alt=""
                 width={dots[i].width}
                 height={dots[i].height}
-                sizes="132px"
+                sizes="92px"
                 data-bloom="waiting"
                 style={{ "--bloom-delay": i * 260 } as CSSProperties}
               />

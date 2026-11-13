@@ -144,11 +144,19 @@
     0 1px 3px rgb(12 11 10 / 0.07);
 }
 
-/* The promise dots carry the row as the mockup's do: at the shared size (about 80px, the ink about
-   52px of it) they read as specks beside their words. [data-promise] img: the dots' .promiseDot
-   class is another module's. */
+/* The promise dots in colour (Mo picked A, November 12, 2026), at the size of the mockup he picked
+   from: 92px at 1440px and up, 64px from 1000px down; on a phone, a 72px row picture. Each dot
+   fills about 0.82 of its square, so its paint stands as wide as the grey dots' did (about 76px
+   at 1440px, 52px at 960px; their pale fringes needed a 132px box). [data-promise] img: the dots'
+   .promiseDot class is another module's. */
 .circle [data-promise] img {
-  width: clamp(84px, 8.4vw, 132px);
+  width: clamp(64px, 6.4vw, 92px);
+}
+
+@media (max-width: 599px) {
+  .circle [data-promise] {
+    --row-picture: 72px;
+  }
 }
 
 /* Two narrow columns (960 to 1279px): the experience's three stacked figures and the closing's

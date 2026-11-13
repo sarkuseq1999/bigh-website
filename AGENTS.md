@@ -277,6 +277,16 @@ These sit on top of `DESIGN.md`.
   `experience-art.ts`, `circle.module.css`; picture
   `reference/ink-pages/about-experience/build_about_experience.py` (Codex painting
   `sequoia-colour-b`, `paint_colour.sh`); mockups `reference/ink-pages/mockups/about-experience/`.
+- **About "Our promise": the dots in colour (Mo picked A, November 12, 2026; built, not live).**
+  The second of About's last three parts. The four grey ink dots (black to pale) over "What you
+  can count on." Of three ideas on the real page (A the same dots in colour, B four California
+  wildflowers, C one poppy counting from bud to bloom, Claude's pick) Mo compared B and C side by
+  side, then said "Let's try A": four loose watercolour blooms, poppy orange, golden-hill straw,
+  Pacific blue and sage green, the colours of the page's own paintings. Their paint stands as wide
+  as the grey dots' did (92px squares at 1440px, 64px from 1000px down, a 72px row picture on a
+  phone); they bloom in one after another as before. The words did not change. `promise-art.ts`,
+  `circle.module.css`; pictures `reference/ink-pages/about-promise/build_about_promise.py` (Codex
+  painting `dots-colour-2`); mockups `reference/ink-pages/mockups/about-promise/`.
 - **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
   (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
   bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis
