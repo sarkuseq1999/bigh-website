@@ -20,7 +20,9 @@ The cell ages retain six, three and one gold mitochondria and the illustration h
 White CSS backing inside the multiplied image group keeps transparent ages from showing through
 each other. The honesty label sits on bare paper above each painting.
 Actual-page captures and checks: [review notes](../mockups/home-science-california/actual-page/README.md).
-Local preview only; no public deployment or new image generation in this implementation round.
+Published at https://bigh-website-demo.vercel.app/#science on November 14 after Mo explicitly
+requested deployment (`main` `f5cc4c6`). No new image generation in this implementation round.
+Public verification is recorded in `docs/public-demo.md`.
 
 ## Earlier versions
 

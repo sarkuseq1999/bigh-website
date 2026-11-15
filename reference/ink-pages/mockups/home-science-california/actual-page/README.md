@@ -38,7 +38,7 @@ small on phones. The existing long explanatory text continues below the picture.
   the new transparent assets do not leak younger branches through at rest.
 - Full required checks, run sequentially on the same production build: `qa_home_ink`
   **290/290 passed** (`qa-home.log`), `qa_nav` **326/326 passed** (`qa-nav.log`).
-- `git diff --check` passed. No source edits after the verified build.
+- `git diff --check` passed. No runtime source edits after the verified build.
 
 Source assets and encoding: [painting notes](../../../home-science/README.md).
 

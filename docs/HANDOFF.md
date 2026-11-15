@@ -5,7 +5,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Implemented locally November 14, 2026 (Codex): all three California science topics.**
+- **Published November 14, 2026 (Codex): all three California science topics.**
   Mo asked: "put all 3 on the actual webpage so I can see how they look on computer and phone."
   The real homepage now uses C's ranch workshop (`workshop-fuel-v2.webp`), its matching chimney
   close-up (`workshop-sparks-v1.webp`) and the three blue/sage neuron ages (`cell-*-v3.webp`).
@@ -20,9 +20,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   small on phones. Evidence is in `reference/ink-pages/mockups/home-science-california/actual-page/`.
   Built-site checks completed: `qa_home_ink` **290/290**, `qa_nav` **326/326**, run sequentially;
   logs are beside the captures. `git diff --check` passed.
-  Mo then explicitly authorized publishing to the live demo on November 14. The fetched
-  `origin/main` is still `05356fc`, already an ancestor of this tested `studio` tree; no runtime
-  merge changes are needed. Release preparation is underway; public verification is pending.
+  Mo then explicitly authorized publishing to the live demo on November 14. `main` is now
+  `f5cc4c6`, production `dpl_6VDnDcX8WQ7iQdLiQBZm1vLiaRuv` (Ready), and the stable demo alias
+  points to it: https://bigh-website-demo.vercel.app/#science. The fetched `origin/main` had
+  remained `05356fc`, so no runtime merge changes were needed. Fresh signed-out public checks
+  passed at 1440 and 390px: HTTP 200, all topics, all three cell ages, seven slider positions,
+  all five assets loaded, labels clear, no page errors or overflow. Public screenshots viewed,
+  9/10 with the same phone limitations. Full public checks completed sequentially:
+  `qa_home_ink` **290/290**, `qa_nav` **326/326**, no page or console errors. Results are
+  recorded in `docs/public-demo.md` and `public-page/`. Release notes are committed locally on
+  `studio`; no second push is needed for documentation. The published runtime remains `f5cc4c6`.
   Earlier unselected painting studies remain local and are not part of the release.
 
 - **Scope correction, November 13, 2026 (Mo): all three homepage science topics.**

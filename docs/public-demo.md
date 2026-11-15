@@ -4,7 +4,31 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-jha2m9k9l-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-1lslc4i8z-sarkuseq1999s-projects.vercel.app`
+(`dpl_6VDnDcX8WQ7iQdLiQBZm1vLiaRuv`), the **production** deployment of `main` at
+`f5cc4c69a6ebdee2e666879051c05bf36734c530` (November 14, 2026). The homepage's "Make sense of
+the science." now uses the full California painting family: C's ranch workshop
+(`workshop-fuel-v2.webp`), its chimney and escaping sparks (`workshop-sparks-v1.webp`), and the
+young, middle and older blue/sage brain cells (`cell-*-v3.webp`). The existing desktop scroll
+story, phone swipe/tabs, age slider and honesty labels remain. The label has bare paper above
+the paintings; opaque CSS backing inside the multiplied cell group prevents transparent older
+cells from showing younger branches underneath. No new scientific claims or changed copy.
+
+Mo explicitly requested deployment to the live demo on November 14. `origin/main` was still
+`05356fc`, already an ancestor of the tested tree, so the fast-forward push carries exactly the
+runtime source and five WebPs already checked on `npm run build` + `npm start`: `qa_home_ink`
+290/290, `qa_nav` 326/326, build, lint, type-check and source formatting passed. The production
+deployment reported Ready, then the stable alias was assigned to it. General Vercel
+Authentication settings were not changed; the demo's existing public-access exception remains.
+Fresh unauthenticated desktop (1440x1000) and phone (390x844) checks passed on the plain public
+URL: HTTP 200, all five new paintings decode at 1448px, all three topics select, ages
+30/42/43/67/68/80/45 select the correct cell, labels clear the paintings, no overflow or page
+errors, and no younger cell shows through the settled old one. Screenshots viewed: 9/10; the
+worker and gold cell details remain small on phones. Full public checks completed sequentially:
+`qa_home_ink` **290/290 passed**, `qa_nav` **326/326 passed**, with no page or console errors.
+Evidence: `reference/ink-pages/mockups/home-science-california/public-page/`.
+
+Before that the alias pointed to `bigh-website-jha2m9k9l-sarkuseq1999s-projects.vercel.app`
 (`dpl_7a7wwtntaxeYgcBAvvHYqjA4ZLGU`), the **production** deployment of `main` at
 `05356fcf6180ea05478795e3ef2afc246acf328d` (November 13, 2026). On the About page, "Curious about
 the science?" has a tide pool with a guide in place of the grey ink reading glasses: low tide on
