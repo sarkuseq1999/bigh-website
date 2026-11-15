@@ -5,6 +5,73 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Implemented locally November 14, 2026 (Codex): all three California science topics.**
+  Mo asked: "put all 3 on the actual webpage so I can see how they look on computer and phone."
+  The real homepage now uses C's ranch workshop (`workshop-fuel-v2.webp`), its matching chimney
+  close-up (`workshop-sparks-v1.webp`) and the three blue/sage neuron ages (`cell-*-v3.webp`).
+  The existing desktop scroll story and phone swipe/tabs remain; no A/B layout was selected.
+  `build_california.py` preserves the five originals' colour, framing and alpha (1448x1086).
+  `science.module.css` gives the Illustrations label 28px of bare paper and white backs to the
+  cell images inside the multiplied group, preventing transparent ages from stacking visibly.
+  Build, lint, type-check and source formatting passed. Actual-page checks at 1440x1000,
+  1024x768, 390x844 and 360x800 passed: all topics, seven age positions, decoded assets,
+  labels clear, no overflow/page errors, and no younger cell leaking through the older one.
+  Desktop/phone captures and moving states viewed: 9/10; the worker and gold cell parts remain
+  small on phones. Evidence is in `reference/ink-pages/mockups/home-science-california/actual-page/`.
+  Built-site checks completed: `qa_home_ink` **290/290**, `qa_nav` **326/326**, run sequentially;
+  logs are beside the captures. `git diff --check` passed.
+  Mo then explicitly authorized publishing to the live demo on November 14. The fetched
+  `origin/main` is still `05356fc`, already an ancestor of this tested `studio` tree; no runtime
+  merge changes are needed. Release preparation is underway; public verification is pending.
+  Earlier unselected painting studies remain local and are not part of the release.
+
+- **Scope correction, November 13, 2026 (Mo): all three homepage science topics.**
+  Mo clarified that Mitochondria, Free radicals and Aging cells all need new section imagery,
+  then asked for Mitochondria redesign ideas too. The current B implementation below is only
+  partial completion of that request. Mo then answered 1 / A: improve the workshop painting and
+  layout, rather than switching scenes. Two static layout studies now await a choice:
+  A Picture first, B Guided painting (recommended), both using the closer repaint
+  `california-workshop-c4.png`. This A/B choice is separate from the earlier scene choice.
+  Captures at 1440px and 390px were viewed: no horizontal overflow, actual Ysabeau title font,
+  9/10 visually; A needs more scrolling, B retains a long phone text section.
+  Review: `reference/ink-pages/mockups/home-science-california/layouts/README.md`.
+  Mo then asked again to see all three topics together as a set. A coordinated concept board
+  now shows c4's workshop, the new `california-sparks-v1.png` and all three
+  `california-neuron-{young,middle,old}-v1.png` paintings. The sparks retain the caught/escaped
+  sparks and burned roof; the neuron retains the approved 6/3/1 gold convention with its
+  illustration honesty label. Built-in image generation, no API spending.
+  Latest review: `reference/ink-pages/mockups/home-science-california/full-set/README.md`.
+  The board was opened and captured at 1440px and 390px on the built site's real paper and
+  Ysabeau font; all six displayed images decoded, no horizontal overflow. Visual score 9/10;
+  the small gold cell parts remain the phone limitation. Static board only, no new motion.
+  Mo then asked for more Mitochondria image ideas. The latest comparison in `mito-ideas/`
+  shows A the current c4 painting, B a closer worker/fire (`california-workshop-close-v1.png`,
+  recommended), C an open ranch shed with hills and an oak (`california-workshop-shed-v1.png`).
+  B and C are new built-in-tool paintings, with exact prompts saved beside the others. The
+  matching Free radicals and Aging cells pictures sit under them for context. These letters
+  identify painting compositions, not the earlier A/B layout studies. Viewed at 1440/390px:
+  images decoded, no overflow, Ysabeau confirmed; 9/10 for B, whose fire reads more clearly on
+  phones; C trades some foreground size for a stronger California setting. Mo then preferred
+  **C**: "C matches with the next image of this section." The open shed's roof and chimney
+  connect to Free radicals' close-up. `full-set/selected-c.py` renders the coordinated set with
+  that painting, preserving the earlier board as `full-set-*.jpg`; latest: `selected-c-1440.jpg`
+  and `selected-c-390.jpg`. This is a painting preference, not a choice of the earlier layouts.
+  This concept round ended with C selected; the November 14 instruction above then authorized
+  the full set on the actual page. Neither alternative layout was selected.
+
+- **Selected and implemented locally November 13, 2026 (Codex): homepage science, B's California workshop.**
+  Mo picked B after asking for looser painting: broad wet washes, broken edges and fewer details.
+  The Mitochondria picture is now `workshop-fuel-v1.webp`, encoded from
+  `california-workshop-c3.png` by `reference/ink-pages/home-science/build_california.py`.
+  Original framing, colour and alpha are preserved; 1448x1086, 603 KB. Only the first topic's
+  picture and source comments changed. Free radicals and Aging cells await their own review.
+  Build, lint, type-check and changed-source formatting passed. Built-site screenshots at
+  1440x1000 and 390x844, including arrivals, viewed: 9/10; the worker remains small on a phone.
+  Built-site browser checks passed: `qa_home_ink` 290/290, `qa_nav` 326/326, both at
+  localhost:3006. No push or demo change.
+  Raw originals and prompts: `reference/ink-pages/home-science/`; review and built screenshots:
+  `reference/ink-pages/mockups/home-science-california/` (`round2/` and `built/`).
+  The previous completed release is below.
 - **Live November 13, 2026 (Claude Code): About's "Curious about the science?" at a tide pool.**
   `main` `05356fc`, production `dpl_7a7wwtntaxeYgcBAvvHYqjA4ZLGU`, the demo alias on it; public
   checks: `qa_about` 460/460, `qa_home_ink` 290/290, `qa_nav` 326/326 (`docs/public-demo.md`). The last of About's three parts to take the

@@ -69,31 +69,28 @@ export const mailbox: Picture = { src: `${I}/mailbox-v1.webp`, width: 1200, heig
  *  gold-leaf folds are the gold layer (`gold.mito`). */
 export const mito: Picture = { src: `${I}/mito-soft-v1.webp`, width: 2000, height: 1493 };
 
-/** "Make sense of the science.": every picture shows what its words say. Mitochondria and Free
- *  radicals (Mo, October 22, 2026, pick D, after the October 21 steam engine): one old powerhouse
- *  with its front left open like a storybook, as the words call mitochondria "tiny power plants":
- *  fuel feeds the fire, the fire turns the wheel, power runs out along the wire, and the chimney's
- *  screen catches the sparks. Painted by Codex in the homepage crane's hand (the fire and the
- *  sparks are the gold); built by reference/ink-pages/home-science/build_plant.py into the
- *  stage's box (ink). Aging cells (Mo, October 22): one brain cell up close, built by
- *  build_cell.py. */
+/** "Make sense of the science.": every picture shows what its words say. Mitochondria:
+ *  Mo's California ranch workshop, composition C (November 14, 2026), encoded by
+ *  reference/ink-pages/home-science/build_california.py with its generated transparency.
+ *  Free radicals shows its escaping sparks and burned roof; Aging cells shows one brain cell
+ *  at three ages in the same palette. All five are encoded by build_california.py. */
 const S = `${I}/science`;
 export const sciencePaintings = {
-  /** Inside the powerhouse: a worker feeds a log to the gold fire, its steam turns the big wheel,
-   *  and power runs out along the wire (a thread of gold): fuel in, power out. */
-  energy: { src: `${S}/plant-fuel-v1.webp`, width: 1600, height: 1195 },
+  /** In the California foothills, a worker feeds a log to the gold fire. The boiler drives a
+   *  blue-grey wheel, its belt turns the generator and a lamp lights: fuel in, power out. */
+  energy: { src: `${S}/workshop-fuel-v2.webp`, width: 1448, height: 1086 },
   /** Closer, the chimney opened up: the screen on top holds most of the sparks, but the few that
    *  slip past fall on the roof and burn black holes in it (Mo, October 23, 2026, pick A: free
    *  radicals do harm, and the body's defences catch most, not all). A comparison; the stage
    *  says "Illustrations". */
-  balance: { src: `${S}/plant-sparks-v2.webp`, width: 1600, height: 1195 },
+  balance: { src: `${S}/workshop-sparks-v1.webp`, width: 1448, height: 1086 },
   /** One brain cell up close at three ages, lined up on one framing: young (strong branches, six
    *  gold power plants), middle-aged (thinner branches, three still gold) and old (thin, pale
    *  branches, one still gold, still at work). The age slider shows one at a time. */
   aging: [
-    { src: `${S}/cell-young-v2.webp`, width: 1600, height: 1195 },
-    { src: `${S}/cell-middle-v2.webp`, width: 1600, height: 1195 },
-    { src: `${S}/cell-old-v2.webp`, width: 1600, height: 1195 },
+    { src: `${S}/cell-young-v3.webp`, width: 1448, height: 1086 },
+    { src: `${S}/cell-middle-v3.webp`, width: 1448, height: 1086 },
+    { src: `${S}/cell-old-v3.webp`, width: 1448, height: 1086 },
   ],
 } satisfies Record<string, Picture | Picture[]>;
 

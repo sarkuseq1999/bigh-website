@@ -687,6 +687,42 @@ These sit on top of `DESIGN.md`.
   photograph's black box back on this page. `people.tsx`, `people.module.css`, `liu-art.ts`;
   pictures `reference/ink-pages/science/build_liu.py` (Codex painting `liu-cell-1`); mockups
   `reference/ink-pages/mockups/science-liu/`.
+- **Homepage "Make sense of the science.": the California workshop (Mo picked B, November 13, 2026).**
+  Mo sent the current grey powerhouse section and asked for a redesign to match the site's shift
+  from Asian imagery to California. Codex prepared two painting directions on the existing page:
+  A a sunny Sierra timber powerhouse; B an open-air workshop against golden foothills. A camp-stove
+  concept was dropped before the final comparison. Start with this section only; keep the pictures explanatory, not scenery
+  unrelated to their topics. Mo found both first takes too picture-like and asked for more painting:
+  broad wet washes, broken brush edges and fewer small details. Round 2 repaints both in the loose
+  hand of the footer quail (style reference only), with the energy sequence still readable.
+  He picked B: the open-air workshop, a worker feeding a log to the gold fire, a blue-grey wheel,
+  a generator and a small gold lamp, California foothills and a valley oak behind them.
+  Mo then clarified that the redesign covers **all three topics**, not only Mitochondria, and
+  asked for fresh Mitochondria redesign ideas too. B is the current local painting, not a reason
+  to stop after one topic. Keep the three illustrations coordinated and explanatory; include
+  all three age-slider states when repainting Aging cells.
+  He chose to improve the workshop painting and layout, rather than switch to a different scene.
+  Layout studies A Picture first and B Guided painting are in the review's `layouts/` folder;
+  neither layout is selected yet.
+  Mo then explicitly asked to see redesign ideas for **all three topics together as a set**.
+  Show the whole painting family for this review, including young, middle and older cell states;
+  another Mitochondria-only comparison does not answer it. The coordinated concept board is in
+  `reference/ink-pages/mockups/home-science-california/full-set/`. This comparison is not a
+  request to put three paintings side by side in the production section.
+  After seeing more Mitochondria compositions, Mo preferred **C, the California ranch workshop**:
+  "C matches with the next image of this section." Its open cedar shed, copper chimney and blue
+  wheel connect to the close view of escaping sparks and the burned roof. Use
+  `california-workshop-shed-v1.png` in the coordinated preview (`full-set/selected-c-1440.jpg`).
+  On November 14 Mo asked to put all three on the actual webpage for computer and phone review.
+  The local page now uses C (`workshop-fuel-v2.webp`), the matching sparks
+  (`workshop-sparks-v1.webp`) and all three blue/sage cell ages (`cell-*-v3.webp`). Keep the
+  existing desktop scroll story and phone swipe/tabs: neither alternative layout was selected.
+  `build_california.py` encodes all five original RGBA paintings without changing their colour
+  or framing. The Illustrations label has bare paper above the stage; the transparent cell ages
+  each have a white CSS backing inside the multiplied group so only one cell shows at rest.
+  Actual-page review: `reference/ink-pages/mockups/home-science-california/actual-page/`.
+  Mo authorized publishing the full set to the live demo on November 14. The earlier c3 B painting
+  (`workshop-fuel-v1.webp`) is retained with the earlier review in `round2/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 

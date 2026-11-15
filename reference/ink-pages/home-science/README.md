@@ -1,5 +1,55 @@
 # Homepage science section: one painting per topic (idea A)
 
+## November 14, 2026: the full California set on the actual page
+
+Mo chose C, the ranch workshop, because its chimney and roof match Free radicals, then asked
+to see all three topics on the actual webpage on computer and phone. The existing layout,
+desktop scroll story and phone swipe/tabs remain. The earlier A/B layout studies are unselected.
+
+`build_california.py` encodes five RGBA originals at 1448x1086, with unchanged framing and colour:
+
+| Topic | Original | Site picture |
+| --- | --- | --- |
+| Mitochondria | `california-workshop-shed-v1.png` | `workshop-fuel-v2.webp` |
+| Free radicals | `california-sparks-v1.png` | `workshop-sparks-v1.webp` |
+| Aging: young | `california-neuron-young-v1.png` | `cell-young-v3.webp` |
+| Aging: middle | `california-neuron-middle-v1.png` | `cell-middle-v3.webp` |
+| Aging: old | `california-neuron-old-v1.png` | `cell-old-v3.webp` |
+
+The cell ages retain six, three and one gold mitochondria and the illustration honesty line.
+White CSS backing inside the multiplied image group keeps transparent ages from showing through
+each other. The honesty label sits on bare paper above each painting.
+Actual-page captures and checks: [review notes](../mockups/home-science-california/actual-page/README.md).
+Local preview only; no public deployment or new image generation in this implementation round.
+
+## Earlier versions
+
+### November 13, 2026: California workshop, Mo's pick B
+
+The Mitochondria topic now uses `california-workshop-c3.png`: an open-air workshop in California
+foothills, a worker feeding wood to a gold fire, a blue-grey wheel driving a generator and lamp.
+Mo chose it after asking for both initial concepts to be more like paintings: broad wet washes,
+soft and broken edges, fewer small details. The footer quail was a brushwork reference only.
+
+At this stage `build_california.py` encoded the approved PNG as `workshop-fuel-v1.webp`, retaining framing,
+colour and alpha; no recolouring or edge treatment. The exact prompt is
+`prompts/california-workshop-c3.txt`. The other two topics retain their existing paintings.
+Review and built-site screenshots: `../mockups/home-science-california/`. Not published yet.
+
+### November 13: the complete California family, awaiting review
+
+Mo asked to see all three topics together. The new concept board pairs the closer workshop
+`california-workshop-c4.png` with `california-sparks-v1.png` and
+`california-neuron-{young,middle,old}-v1.png`. Four new paintings were made with the built-in
+image tool using c4 as the color/brushwork reference and the prior approved paintings as
+concept references. The three cell stages retain six, three and one gold mitochondria.
+The exact prompts are under `prompts/` with the same names. No external API spending.
+
+Full-set review and checks: [review notes](../mockups/home-science-california/full-set/README.md).
+At this stage these were proposed paintings, not integrated assets. The local build still used c3
+for Mitochondria and the old grey paintings for the other two topics; the November 14 integration
+above supersedes this state.
+
 October 19, 2026. Mo found the mitochondrion overused: it showed in "Tiny power plants." and three
 more times in "Make sense of the science." She picked idea A (each tab its own everyday California
 painting) from a mockup, then the Joshua tree over a second oak, since the About page's "Our
