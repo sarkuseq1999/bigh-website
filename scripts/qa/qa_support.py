@@ -945,7 +945,7 @@ def languages(browser):
         # (so a screen reader reads them in English); the shared menu and footer, and the few words
         # that already have a translation, stay in the locale's language.
         langs = page.evaluate("""(() => { const lang = (e) => e ? e.closest('[lang]')?.getAttribute('lang') : 'missing';
-          const ask = [...document.querySelectorAll('#questions button')].pop();
+          const ask = [...document.querySelectorAll('#questions a[href*=topic]')].pop();
           return { html: document.documentElement.lang,
             english: ['h1', '#write-title', '#support-message', 'label[for=support-email]', '#questions-title', '[data-part="opening"] img[data-bloom]']
               .map(s => lang(document.querySelector(s))),

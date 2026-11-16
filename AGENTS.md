@@ -726,6 +726,30 @@ These sit on top of `DESIGN.md`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
 
+## The English launch (Mo, November 16, 2026)
+
+Mo's goal: make the English site ready for launch, with launch-quality words everywhere and nothing
+that reads as unfinished. The switches for launch day are in [`docs/launch-checklist.md`](docs/launch-checklist.md).
+
+- **Our own shop, not iMatrix.** BiGH will use its own back office and cart (bigh-backend); never link
+  the old iMatrix cart (`backoffice.office2office.com`, `aeg.imatrixoffice.com`). Everything the site
+  needs from the shop lives in `src/components/shop/shop.ts` (cart links, Log in, Sign up, prices);
+  until a link is set its button stays a polite placeholder.
+- **Prices:** the bighnow.com prices (NuriCell and Nature Calm $80, Advanced OPC Formula $65,
+  Turmerific $50, Green Bee Propolis $36), shown on each product page's card and buy chapter.
+- **Customer stories stay fictional for now**, labeled "Illustrative stories: the people and names
+  below are fictional, not real customers." Never "Design draft". Real words replace them later.
+- **Ask BiGH Science is live, through the Support form** (topic "A health or science question";
+  its buttons open `/support?topic=science#write`). BiGH's team answers, with the scientists it works
+  with when a question needs them. Never promise a personal answer from Dr. Liu; never medical advice.
+- **The Support form sends email through Resend** (`/api/support`) once its environment variables are
+  set; until then it keeps its placeholder line.
+- **Legal pages** `/privacy`, `/terms`, `/returns`: BiGH's own 2016 documents, wording kept; linked
+  in the footer's last line.
+- **American spelling** in every visible line (color, flavor, watercolor), except a label's own words
+  quoted as printed ("Optimised"). Counts one to nine in words, 10 and up in figures.
+- **Search stays closed until launch day** (`SITE_INDEXING=on` opens it).
+
 ## Pictures: where they go
 
 | What                                  | Where                                                                                   |

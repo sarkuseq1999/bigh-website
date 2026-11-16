@@ -5,6 +5,34 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **English launch pass, November 16, 2026 (Claude Code; local on `studio`, not pushed).** Mo's
+  goal: the English site ready for launch, launch-quality words, nothing that reads as unfinished.
+  Mo's answers the same day: no iMatrix (BiGH's own shop comes later, placeholders until then);
+  show the bighnow.com prices; keep the fictional stories; Ask BiGH Science live through Support;
+  build the form's email sending (Resend) for him to switch on. Done: prices on all five product
+  pages; one shop file (`src/components/shop/shop.ts`: cart links, Log in, Sign up, prices); Ask
+  BiGH Science live (dialog, Science strip, homepage line; the Support form's sixth topic,
+  `/support?topic=science#write`); `/api/support` + `src/lib/support-mail.ts` (switched on by env
+  vars); every "preview / in development / planned / design draft" line rewritten; legal pages
+  `/privacy`, `/terms`, `/returns` (BiGH's 2016 texts) linked in the footer; a branded 404 (`[...rest]`
+  catch-all, all languages); search basics (`src/lib/seo.ts`: titles, descriptions, canonical,
+  hreflang, link previews `public/og/*-v1.jpg`, sitemap, robots closed until `SITE_INDEXING=on`,
+  JSON-LD); the site icon (the old `icon.svg` was empty: blank tabs); American spelling; Nature
+  Calm's grey misty lake repainted at Lake Tahoe with a little colour (Codex, two rounds). Every
+  changed line keeps its translations (`reference/launch/copy_launch.py`; new drafts m1260-m1273).
+  Launch-day switches and what is still Mo's: [`docs/launch-checklist.md`](launch-checklist.md).
+  Checked on the built site (`npm run build` + `npm start`, localhost:3006), sequentially:
+  `qa_home_ink` 290/290, `qa_nav` 326/326, `qa_fda` 248/248, `qa_support` 341/341,
+  `qa_science_ink` 943/943, `qa_about` 460/460, `qa_nuricell_ink` 663/663, `qa_propolis_ink`
+  273/273, `qa_opc_ink` 199/199, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159 (nav,
+  science, about and the product pages ran before the footer's last change, a phone-only reorder
+  re-checked by `qa_fda` and `qa_home_ink`); the launch checks 53/53 and the Support email path
+  26/26 against a local stand-in for Resend (`reference/launch/test_support_mail.py`; the real
+  Resend is untested until its key is set). Lint, type-check and prettier clean. Not pushed; the
+  demo still shows `f5cc4c6`. A copy editor's pass (a subagent) found the slips fixed here and two
+  things left for Mo (the checklist): disease-population studies on product pages, two OPC label
+  quotes.
+
 - **Handoff to Claude, November 16, 2026 (Mo is switching agents).**
   Codex has stopped editing. The California science set was published and verified November 14
   as recorded below; no implementation or deployment work remains pending from this task.

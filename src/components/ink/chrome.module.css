@@ -133,10 +133,15 @@
   display: flex;
   margin-top: clamp(16px, 1.6vw, 28px);
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
-  gap: 0 32px;
+  gap: 0 24px;
   font-size: 15px;
+}
+
+/* "Back to top" keeps the line's far right; the copyright and the policies at its left. */
+.footerBottom .back {
+  margin-left: auto;
 }
 
 .footerBottom a {
@@ -146,30 +151,16 @@
   min-height: 44px;
 }
 
-/* The copyright, then Privacy, Terms and Returns, one quiet line. */
-.footerLegal {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0 24px;
-}
-
-.footerLegal a {
+/* Privacy, Terms and Returns: quiet links beside the copyright. */
+.footerBottom .policy {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: var(--footer-line, var(--line));
   text-underline-offset: 4px;
 }
 
-.footerLegal a:hover {
+.footerBottom .policy:hover {
   text-decoration-color: currentColor;
-}
-
-/* A phone: the copyright on its own line, the three policies in one row under it. */
-@media (max-width: 720px) {
-  .footerLegal > span {
-    flex-basis: 100%;
-  }
 }
 
 /* The FDA statement on its park sign (fda-statement.tsx), centred under it all with the crane in
@@ -253,10 +244,27 @@
     grid-column: 1 / -1;
   }
 
-  /* The two cannot share a phone's line: "Back to top" goes first, so the copyright stays the
-     page's very last line. */
+  /* They cannot share a phone's line: "Back to top" goes first, the three policies in one row
+     under it, and the copyright stays the page's very last line. */
   .footerBottom {
-    flex-direction: column-reverse;
-    align-items: flex-start;
+    display: grid;
+    grid-template-columns: repeat(3, max-content);
+    justify-content: start;
+    column-gap: 24px;
+  }
+
+  .footerBottom .back {
+    grid-column: 1 / -1;
+    grid-row: 1;
+    margin-left: 0;
+  }
+
+  .footerBottom .policy {
+    grid-row: 2;
+  }
+
+  .footerBottom .copyright {
+    grid-column: 1 / -1;
+    grid-row: 3;
   }
 }

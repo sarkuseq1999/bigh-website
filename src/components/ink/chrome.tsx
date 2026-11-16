@@ -186,16 +186,21 @@ export function SiteFooter({
         </div>
         <FdaStatement className={styles.footerFda} beside={closing} />
         <div className={styles.footerBottom}>
-          <div className={styles.footerLegal}>
-            <span>
-              © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
-            </span>
-            {/* The policies (November 16, 2026, for launch), small, beside the copyright. */}
-            <Link href="/privacy">{copy("Privacy")}</Link>
-            <Link href="/terms">{copy("Terms")}</Link>
-            <Link href="/returns">{copy("Returns")}</Link>
-          </div>
-          <a href="#top">
+          <span className={styles.copyright}>
+            © {new Date().getFullYear()} {copy("BiGH. Be in Good Health.")}
+          </span>
+          {/* The policies (November 16, 2026, for launch), small, beside the copyright; on a
+              phone in one row above it, so the copyright stays the page's very last line. */}
+          <Link className={styles.policy} href="/privacy">
+            {copy("Privacy")}
+          </Link>
+          <Link className={styles.policy} href="/terms">
+            {copy("Terms")}
+          </Link>
+          <Link className={styles.policy} href="/returns">
+            {copy("Returns")}
+          </Link>
+          <a className={styles.back} href="#top">
             {copy("Back to top")} <ArrowUp size={16} />
           </a>
         </div>
