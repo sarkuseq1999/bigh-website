@@ -5,6 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Handoff to Claude, November 16, 2026 (Mo is switching agents).**
+  Codex has stopped editing. The California science set was published and verified November 14
+  as recorded below; no implementation or deployment work remains pending from this task.
+  Continue in this same folder on `studio`. The release is `f5cc4c6`; its public verification
+  notes are in local commit `0bbc52c`. No tracked source changes were outstanding at handoff.
+  Untracked earlier painting alternatives, draft review pages/scripts and extra screenshots are
+  retained locally; they are not missing release files. Do not bulk-add or remove them.
+  The separate A/B layout studies were never selected; the existing layout was deliberately kept.
+  No new push, build or live-site verification was performed for this documentation-only handoff.
+
 - **Published November 14, 2026 (Codex): all three California science topics.**
   Mo asked: "put all 3 on the actual webpage so I can see how they look on computer and phone."
   The real homepage now uses C's ranch workshop (`workshop-fuel-v2.webp`), its matching chimney
