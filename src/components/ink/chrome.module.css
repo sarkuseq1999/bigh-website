@@ -146,6 +146,32 @@
   min-height: 44px;
 }
 
+/* The copyright, then Privacy, Terms and Returns, one quiet line. */
+.footerLegal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 24px;
+}
+
+.footerLegal a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--footer-line, var(--line));
+  text-underline-offset: 4px;
+}
+
+.footerLegal a:hover {
+  text-decoration-color: currentColor;
+}
+
+/* A phone: the copyright on its own line, the three policies in one row under it. */
+@media (max-width: 720px) {
+  .footerLegal > span {
+    flex-basis: 100%;
+  }
+}
+
 /* The FDA statement on its park sign (fda-statement.tsx), centred under it all with the crane in
    the grass at its right, clear of the closing brush stroke. */
 .footer .footerFda {

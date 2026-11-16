@@ -1,12 +1,11 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useSiteDialogs } from "@/components/ink/dialogs";
 import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { book, mailbox, parcel, porch } from "./support-art";
-import { ALT, SENDING_LIVE, support } from "./support-content";
+import { ALT, support } from "./support-content";
 import { Painting, Spread, useWordsLang } from "./spread";
 import { SupportForm } from "./support-form";
 import page from "./support-page.module.css";
@@ -69,7 +68,7 @@ const BOOK = "(max-width: 599px) 85vw, (max-width: 959px) 520px, min(34vw, 520px
 // The mailbox is the one painting that can reach the first screen (a tall phone, a short opening),
 // so it loads eagerly, at low priority behind the porch (no preload of its own); the other two sit
 // well below it. The form comes in through children.
-function Write({ children }: { children?: ReactNode }) {
+function Write({ children, live }: { children?: ReactNode; live: boolean }) {
   const copy = useCopy();
   const w = support.write;
   return (
@@ -92,7 +91,7 @@ function Write({ children }: { children?: ReactNode }) {
       <h2 id="write-title" className={page.heading}>
         {copy(w.title)}
       </h2>
-      <p className={page.body}>{copy(SENDING_LIVE ? w.lead : w.previewLead)}</p>
+      <p className={page.body}>{copy(live ? w.lead : w.previewLead)}</p>
       {children}
     </Spread>
   );
@@ -133,7 +132,6 @@ function Returns() {
 
 function Questions() {
   const copy = useCopy();
-  const dialogs = useSiteDialogs();
   const lang = useWordsLang();
   const q = support.questions;
   return (
@@ -160,14 +158,16 @@ function Questions() {
         ))}
       </div>
       <p className={page.more}>{copy(q.more)}</p>
-      <button
-        type="button"
+      {/* Ask BiGH Science goes through this page's own form (Mo, November 16, 2026): the button
+          reloads the page with the form's science topic chosen, at the form. A plain link, so the
+          form starts again and reads its topic. */}
+      <a
+        href="?topic=science#write"
         lang={lang(q.ask)}
         className={`${base.pill} ${base.pillGhost}`}
-        onClick={dialogs.openAsk}
       >
         {copy(q.ask)}
-      </button>
+      </a>
     </Spread>
   );
 }
@@ -175,14 +175,14 @@ function Questions() {
 // The page's own words have no translations yet, so its content is marked English (a screen reader
 // then reads it in English on /kr and the rest); the shared menu and footer, outside it, keep the
 // locale's language, and so do the few words that are translated (useWordsLang).
-export function SupportInk({ titleFont }: { titleFont: string }) {
+export function SupportInk({ titleFont, live }: { titleFont: string; live: boolean }) {
   return (
     <InkPage current="support" className={`${page.supportPage} ${titleFont}`}>
       {() => (
         <div data-support="porch" lang="en">
           <Opening />
-          <Write>
-            <SupportForm />
+          <Write live={live}>
+            <SupportForm live={live} />
           </Write>
           <Returns />
           <Questions />

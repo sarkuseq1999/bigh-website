@@ -158,15 +158,25 @@ def registered(fixed, moving):
 # --- the paintings --------------------------------------------------------------------------------
 
 
+# Lake Tahoe (November 16, 2026, for launch): the grey misty lake read as an East Asian ink
+# landscape, so Codex repainted it at Tahoe with a little colour (warm granite boulders in clear
+# shallows, the snowy Sierra), loose ink and wash (paint_tahoe.sh, take loose-e), and painted its
+# ruffled twin as an edit of it (paint_tahoe_ripple.sh, take a). Its washes are colour and already
+# carry on the page, so it is not deepened like the grey take was.
+TAHOE = {"still": "why-tahoe-loose-e", "ripple": "why-tahoe-ripple-a"}
+TAHOE_V = "v1"
+
+
 def lake():
-    """(unlit, lit): the ruffled water and the still water, in register, whole sheet, the same lift
-    and the same deepened wash."""
-    still = bd.divided(bd.load(TAKES["water-still"]))
-    ripple = registered(still, bd.divided(bd.load(TAKES["water-ripple"])))
+    """(unlit, lit): the ruffled water and the still water at Lake Tahoe, in register, whole sheet,
+    the same gentle lift."""
+    load = lambda name: Image.open(HERE / "originals" / f"{name}.png").convert("RGB")
+    still = bd.divided(load(TAHOE["still"]))
+    ripple = registered(still, bd.divided(load(TAHOE["ripple"])))
     lift = lambda img: gentle(img, 200, 252)
-    lit = finish(deepen_wash(richer_gold(still)), "lake-still", lift=lift)
-    unlit = finish(deepen_wash(richer_gold(ripple)), "lake-ruffled", lift=lift)
-    return unlit, gilded(lit, f"lake-still-{V}")
+    lit = bd.art_of(bd.feathered(lift(richer_gold(still)), EDGE), f"tahoe-still-{TAHOE_V}", WIDTH)
+    unlit = bd.art_of(bd.feathered(lift(richer_gold(ripple)), EDGE), f"tahoe-ruffled-{TAHOE_V}", WIDTH)
+    return unlit, gilded(lit, f"tahoe-still-{TAHOE_V}")
 
 
 def cone():

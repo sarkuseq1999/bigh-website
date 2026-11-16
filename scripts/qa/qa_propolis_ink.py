@@ -156,7 +156,7 @@ def name(browser):
                 bottom = page.locator("header").bounding_box()
                 check(f"{tag}: keyboard chapter link lands below the header", bottom["y"] + bottom["height"] <= top < h - 60, f"{top:.0f}px")
                 page.locator('[data-chapter=overview] button').click()
-                check(f"{tag}: checkout remains an honest preview", page.get_by_text("Checkout isn't connected yet. This page is a design preview.", exact=True).is_visible())
+                check(f"{tag}: checkout remains an honest preview", page.get_by_text("Our online shop opens soon. Until then, call us at 800-919-2089 and we’ll help.", exact=True).is_visible())
             card = page.locator('[data-purchase-card]')
             check(f"{tag}: original One bottle card restored", card.count() == 1 and card.locator('img[src*="capsule-v2.webp"]').count() == 1)
             check(f"{tag}: refund promise badge restored", card.locator('[data-purchase-promise] svg').count() == 1)

@@ -22,6 +22,18 @@ Their originals (54 MB) are kept out of the public repo in
 `codes/bigh-archive/nature-calm-ink-unused-originals-2026-10-16/`; `originals/` holds the six takes the page
 uses. Capsules are painted pale (their real colour unconfirmed).
 
+## Lake Tahoe (November 16, 2026, for launch)
+
+The grey misty lake read as an East Asian ink landscape, out of step with the site's California
+turn. Codex repainted it at Lake Tahoe with a little colour, keeping its meaning (wind-ruffled
+water and scattered gold that still into one gold line): warm granite boulders in clear shallows,
+a band of conifers, the snowy Sierra. Round 1 (`paint_tahoe.sh`, `prompts/why-tahoe-still.txt`,
+takes a-c) came out as smooth postcard watercolour; round 2 (`PROMPT=loose`,
+`prompts/why-tahoe-loose.txt`) asked for ink lines and uneven washes with paper between them, and
+take **loose-e** is the still lake. Its ruffled twin is an edit of it (`paint_tahoe_ripple.sh`,
+`prompts/why-tahoe-ripple.txt`, take **ripple-a**). Built as `tahoe-still-v1` / `tahoe-ruffled-v1`
+(colour washes, so no deepening). Unused takes: `codes/bigh-archive/nature-calm-tahoe-unused-2026-11-16/`.
+
 ## Rules learned on the way
 
 - A **pale wash dies on the page**: the still lake's water is only 7% darker than its paper, and

@@ -1250,7 +1250,7 @@ ALTS = {
     "why": "A lighthouse on the California coast whose light comes on, painted in ink",
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
     "research": "Seven books as stepping stones across a calm stream, painted in ink",
-    "people": "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and colour",
+    "people": "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and color",
     "daily": "The cut end of a young redwood log, one ring about 20 years in from the bark laid in gold leaf, painted in ink",
 }
 PLACEHOLDER = re.compile(r"\{[^{}]*\}")

@@ -4,6 +4,7 @@ import { useLocale } from "next-intl";
 import { useTransition } from "react";
 import { ChevronDown, Globe2 } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/navigation";
+import { LOGIN_URL, SIGNUP_URL } from "@/components/shop/shop";
 import { useCopy } from "@/i18n/use-copy";
 import type { Locale } from "@/i18n/routing";
 import styles from "./header-utilities.module.css";
@@ -36,13 +37,21 @@ export function HeaderUtilities() {
 
   return (
     <div className={styles.utilities}>
-      <a href="https://bigh-vn-demo.vercel.app" className={styles.login}>
-        {copy("Log in")}
-      </a>
-      {/* Sign up stays a placeholder until Mo provides its link. */}
-      <button type="button" className={styles.signup} disabled>
-        {copy("Sign up")}
-      </button>
+      {LOGIN_URL ? (
+        <a href={LOGIN_URL} className={styles.login}>
+          {copy("Log in")}
+        </a>
+      ) : null}
+      {/* Sign up stays a placeholder until the new shop's sign-up page is set in shop.ts. */}
+      {SIGNUP_URL ? (
+        <a href={SIGNUP_URL} className={styles.signup}>
+          {copy("Sign up")}
+        </a>
+      ) : (
+        <button type="button" className={styles.signup} disabled>
+          {copy("Sign up")}
+        </button>
+      )}
       <label className={styles.language}>
         <Globe2 size={16} aria-hidden="true" />
         <select

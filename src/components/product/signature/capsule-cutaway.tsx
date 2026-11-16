@@ -145,7 +145,7 @@ export function CapsuleCutaway({ product }: { product: ProductPage }) {
     count: copy(WORDS[count] ?? String(count)),
   });
   const proportion = copy(
-    "Each layer is as long as its share of one serving. The colours only tell them apart.",
+    "Each layer is as long as its share of one serving. The colors only tell them apart.",
   );
 
   if (reduced) {

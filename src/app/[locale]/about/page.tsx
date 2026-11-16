@@ -6,6 +6,7 @@ import { SiteDialogs } from "@/components/ink/dialogs";
 import { productPageLinks } from "@/components/product/catalog";
 import copyKeys from "@/i18n/copy-keys.json";
 import { redirect } from "@/i18n/navigation";
+import { pageMetadata } from "@/lib/seo";
 
 type Params = Promise<{ locale: string }>;
 
@@ -13,7 +14,19 @@ type Params = Promise<{ locale: string }>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale } = await params;
   const translate = await getTranslations({ locale, namespace: "Copy" });
-  return { title: `BiGH — ${translate(copyKeys["About"])}` };
+  return pageMetadata({
+    locale,
+    path: "/about",
+    title:
+      locale === "en"
+        ? "About BiGH — Be in Good Health, made in California"
+        : `${translate(copyKeys["About"])} — BiGH`,
+    description:
+      locale === "en"
+        ? "Be in Good Health: why BiGH focuses on your cells, where our ingredients grow, and what you can count on. Made in California, with 45 days to decide."
+        : translate("m169"),
+    image: { url: "/og/about-v1.jpg", width: 1200, height: 630, alt: "About BiGH" },
+  });
 }
 
 // The About page in the Ink & Gold look (October 5, 2026), on the shared kit and sheets.

@@ -7,6 +7,8 @@ import { productPageLinks } from "@/components/product/catalog";
 import { SupportInk } from "@/components/support/support-ink";
 import copyKeys from "@/i18n/copy-keys.json";
 import { redirect } from "@/i18n/navigation";
+import { pageMetadata } from "@/lib/seo";
+import { supportMailConfigured } from "@/lib/support-mail";
 
 type Params = Promise<{ locale: string }>;
 
@@ -23,7 +25,19 @@ const titles = Ysabeau({
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale } = await params;
   const translate = await getTranslations({ locale, namespace: "Copy" });
-  return { title: `BiGH — ${translate(copyKeys["Support"])}` };
+  return pageMetadata({
+    locale,
+    path: "/support",
+    title:
+      locale === "en"
+        ? "Support: orders, returns and questions — BiGH"
+        : `${translate(copyKeys["Support"])} — BiGH`,
+    description:
+      locale === "en"
+        ? "Questions about an order, a return or a product? Call 800-919-2089, email support@bighnow.com, or send us a message. Real people, Monday to Friday."
+        : translate("m169"),
+    image: { url: "/og/support-v1.jpg", width: 1200, height: 630, alt: "BiGH Support" },
+  });
 }
 
 // The Support page in the Ink & Gold look (Mo, October 14, 2026), on the shared kit and sheets.
@@ -36,7 +50,7 @@ export default async function Page({ params }: { params: Params }) {
   return (
     <ProductPagesProvider pages={productPageLinks()}>
       <SiteDialogs>
-        <SupportInk titleFont={titles.variable} />
+        <SupportInk titleFont={titles.variable} live={supportMailConfigured()} />
       </SiteDialogs>
     </ProductPagesProvider>
   );

@@ -87,7 +87,7 @@ const scienceSteps = [
   {
     title: "Energy starts small.",
     label: "Cellular energy",
-    text: "Inside most of your cells are mitochondria. They turn energy from food into a form your cells can use. Think of them as tiny energy converters.",
+    text: "Inside many of your cells are mitochondria. They turn energy from food into a form your cells can use. Think of them as tiny energy converters.",
     note: "A small part of a cell. A big part of how it works.",
     source: "https://www.genome.gov/genetics-glossary/Mitochondria",
     sourceLabel: "National Human Genome Research Institute",
@@ -368,7 +368,7 @@ function HomepageContent() {
             target="_blank"
             rel="noreferrer"
           >
-            {copy("University biography (Chinese)")} <ArrowUpRight size={18} />
+            {copy("University announcement (Chinese)")} <ArrowUpRight size={18} />
           </a>
           <a
             className={styles.textLink}

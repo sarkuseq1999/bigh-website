@@ -39,11 +39,11 @@ import field from "./meadow.module.css";
 // The words are the locked ones in about-content.ts.
 
 export const ALT = {
-  oak: "A valley oak on a sunny afternoon, painted in watercolour: a child on its rope swing, a grandmother pushing, a dog watching, a picnic in the grass; under the ground, gold leaf lies among its roots",
+  oak: "A valley oak on a sunny afternoon, painted in watercolor: a child on its rope swing, a grandmother pushing, a dog watching, a picnic in the grass; under the ground, gold leaf lies among its roots",
   sequoia:
-    "An ancient giant sequoia rising from mist beside a young sequoia, painted in soft watercolour, a patch of gold leaf on its trunk",
+    "An ancient giant sequoia rising from mist beside a young sequoia, painted in soft watercolor, a patch of gold leaf on its trunk",
   tidepool:
-    "An older woman looks into a tide pool on the California coast with a hand lens while a park naturalist points to a sea star, painted in soft watercolour",
+    "An older woman looks into a tide pool on the California coast with a hand lens while a park naturalist points to a sea star, painted in soft watercolor",
 } as const;
 
 // What each painting asks the server for follows the width it is drawn at (circle.module.css: its

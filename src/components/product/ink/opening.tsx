@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { CSSProperties, ReactNode } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
+import { formatPrice, priceOf } from "@/components/shop/shop";
 import { AddToCart } from "../add-to-cart";
 import type { ProductPage } from "../product-types";
 import { anchorId, splitName } from "../template-chapters-model";
@@ -123,6 +124,7 @@ export function lockupFit(left: string, right: readonly string[]) {
 // the sea and the bluff behind the name and the bottle (nuricell-opening.tsx).
 export function Opening({ product }: { product: ProductPage }) {
   const copy = useCopy();
+  const price = priceOf(product.slug);
   const lockup = product.nameLockup;
   const [first, second] = lockup
     ? [lockup.left, lockup.right.join(" ")]
@@ -233,6 +235,9 @@ export function Opening({ product }: { product: ProductPage }) {
                   />
                 ) : null}
                 <p className={styles.bottleCardName}>{copy("One bottle")}</p>
+                {price !== null ? (
+                  <p className={styles.bottleCardPrice}>{formatPrice(price)}</p>
+                ) : null}
                 <p className={styles.bottleCardSupply}>
                   {keepTogether(copy(product.serving.supply))}
                 </p>
@@ -244,7 +249,7 @@ export function Opening({ product }: { product: ProductPage }) {
                   {copy(PROMISE).replace(/[.。]$/, "")}
                 </p>
               </div>
-              <AddToCart wide />
+              <AddToCart slug={product.slug} wide />
             </div>
             <p className={styles.refund}>{copy(REFUND)}</p>
           </div>

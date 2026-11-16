@@ -4,13 +4,13 @@
 // has a copy key, so every language shows them in English (useCopy returns the source when a
 // string has no key). Mo approved the spec, the four answers included, on October 14 ("yes").
 
-/** Real sending (the email service, Resend through Vercel, and bighnow.com's DNS records at
- *  GoDaddy) comes later (Mo, October 14). Until then the form sends nothing and says so: the
- *  preview tag beside Send and the thank-you's preview line, and the page promises nothing a
- *  preview cannot keep (no ticket by email, no reply to a message that went nowhere). Set this to
- *  true when it does send, and the spec's words come back: the lead's ticket line, the thank-you's
- *  "We'll reply by email", both preview lines gone. */
-export const SENDING_LIVE = false;
+/** Real sending: the form posts to /api/support, which emails the message through Resend
+ *  (src/lib/support-mail.ts) once its environment variables are set on Vercel (Mo picked an email
+ *  service, November 16, 2026). The Support page reads that on the server and passes `live` to the
+ *  form. Until then the form sends nothing and says so: the placeholder tag beside Send and the
+ *  thank-you's line, and the page promises nothing it cannot keep (no ticket by email, no reply
+ *  to a message that went nowhere). Once live, the spec's words come back: the lead's ticket line,
+ *  the thank-you's "We'll reply by email", both placeholder lines gone. */
 
 export const support = {
   opening: {
@@ -31,7 +31,16 @@ export const support = {
     email: "Email",
     order: "Order number (optional)",
     topic: "What is it about?",
-    topics: ["An order", "A return", "A product question", "I had a reaction", "Something else"],
+    topics: [
+      "An order",
+      "A return",
+      "A product question",
+      "A health or science question",
+      "I had a reaction",
+      "Something else",
+    ],
+    // Ask BiGH Science's buttons open the form with this topic chosen (/support?topic=science#write).
+    scienceTopic: "A health or science question",
     message: "Your message",
     photo: "Add a photo (optional)",
     removePhoto: "Remove photo",
@@ -39,6 +48,10 @@ export const support = {
     reaction:
       "Had a reaction to a product? Choose “I had a reaction” and a person reads it first. In an emergency, call 911.",
     preview: "Preview: messages aren’t sent yet",
+    // When sending fails (the service is down): the message is not lost silently.
+    failed:
+      "We couldn’t send your message just now. Please try again, or email support@bighnow.com or call 800-919-2089.",
+    sending: "Sending…",
     // Shown instead of the form until script has run (and for anyone without it): the form's Send
     // would otherwise be a GET with the message in the address.
     fallback: "To write to us, email support@bighnow.com or call 800-919-2089.",
@@ -69,7 +82,8 @@ export const support = {
     to: "Send returns to",
     address: ["BiGH, 2200 E Route 66, Suite 103", "Glendora, CA 91740"],
     ordersLabel: "Orders and shipping",
-    orders: "Our new store opens soon. Until then, no orders or payments are taken on this site.",
+    orders:
+      "Our online shop opens soon. Until then, call or email us with any order question and we’ll help.",
   },
   questions: {
     label: "Questions",
@@ -85,7 +99,7 @@ export const support = {
       },
       {
         q: "Where is my order?",
-        a: "Our new store opens soon. Until then, call or email us and we’ll help.",
+        a: "Call 800-919-2089 or email support@bighnow.com with your name and order number, and we’ll look it up for you.",
       },
       {
         q: "Is this site in my language?",

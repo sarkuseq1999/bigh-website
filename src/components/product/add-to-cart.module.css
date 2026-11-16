@@ -8,6 +8,9 @@
   text-align: center;
 }
 .wrap .button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   min-height: 56px;
   padding: 0 34px;
   border: 0;
@@ -17,6 +20,7 @@
   font: inherit;
   font-size: 17px;
   font-weight: 600;
+  text-decoration: none;
   cursor: pointer;
   transition:
     background 0.3s var(--ease),

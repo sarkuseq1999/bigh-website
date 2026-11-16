@@ -138,7 +138,7 @@ def opening(browser):
         tag = f"opening {width}"
         context, page, response, errors, failed = open_page(browser, width, height)
         check(f"{tag}: 200", response and response.status == 200, response and response.status)
-        check(f"{tag}: the title", page.title() == "BiGH — Support", page.title())
+        check(f"{tag}: the title", page.title() == "Support: orders, returns and questions — BiGH", page.title())
         h1 = page.evaluate("[...document.querySelectorAll('h1')].map(h => h.textContent.trim())")
         check(f"{tag}: one h1, 'How can we help?'", h1 == ["How can we help?"], h1)
         main = page.inner_text("main")
@@ -440,12 +440,16 @@ def questions(browser):
     check("questions: the book stays put as answers open and close", moved == [0, 0], moved)
     heights = page.evaluate("[...document.querySelectorAll('#questions summary')].map(s => Math.round(s.getBoundingClientRect().height))")
     check("questions: every question is a 48px+ target", all(h >= 48 for h in heights), heights)
-    ask = page.locator("#questions button", has_text="Ask BiGH Science")
+    # Since November 16, 2026 Ask BiGH Science is live through this page's form: the button opens the
+    # form with "A health or science question" chosen.
+    ask = page.locator("#questions a", has_text="Ask BiGH Science")
     ask.scroll_into_view_if_needed()
     ask.click()
-    page.wait_for_timeout(1200)
-    check("questions: Ask BiGH Science opens its sheet", page.evaluate("!!document.querySelector('dialog[open]')"))
-    page.keyboard.press("Escape")
+    page.wait_for_load_state("networkidle")
+    page.wait_for_timeout(1500)
+    chosen = page.locator("input[name=topic]:checked")
+    check("questions: Ask BiGH Science opens the form with the science topic chosen",
+          "topic=science" in page.url and chosen.count() == 1 and chosen.get_attribute("value") == "A health or science question", page.url)
     context.close()
     # The page's last words stand clear of the footer, which (since October 13) opens straight onto
     # its link columns: with too little paper between them the Ask BiGH Science pill sat over the
@@ -458,7 +462,7 @@ def questions(browser):
           const footer = document.querySelector('footer');
           const first = Math.min(...[...footer.querySelectorAll('h2, p, a, img, span')].map(e => e.getBoundingClientRect())
             .filter(r => r.width && r.height).map(r => r.top));
-          return Math.round(first - document.querySelector('#questions button').getBoundingClientRect().bottom); })()""")
+          return Math.round(first - document.querySelector('#questions a[href*=topic]').getBoundingClientRect().bottom); })()""")
         check(f"questions {width}: the last words stand clear of the footer (100px+ of paper)", gap >= 100, gap)
         context.close()
 
@@ -492,11 +496,11 @@ def form(browser):
         check(f"{tag}: the message is on ruled lines that scroll with its words (background-attachment local)",
               page.evaluate("getComputedStyle(document.querySelector('#support-message')).backgroundAttachment") == "local")
         rows = page.evaluate("""(() => { const tops = {}; document.querySelectorAll('[data-topics] label').forEach(l => { const t = Math.round(l.getBoundingClientRect().top); tops[t] = (tops[t] || 0) + 1; }); return Object.values(tops); })()""")
-        check(f"{tag}: the topic chips never leave one alone on a row", rows == [1, 1, 1, 1, 1] or 1 not in rows, rows)
-        targets = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]), form textarea, form button, [data-topics] label, form label[for=support-photo]')]
+        check(f"{tag}: the topic chips never leave one alone on a row", set(rows) == {1} or 1 not in rows, rows)
+        targets = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]):not(#support-website), form textarea, form button, [data-topics] label, form label[for=support-photo]')]
           .map(e => [e.id || e.textContent.trim().slice(0, 20), Math.round(e.getBoundingClientRect().height)]).filter(([, h]) => h < 48)""")
         check(f"{tag}: every control is 48px or more", not targets, targets)
-        boxes = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]), form textarea')].filter(e => {
+        boxes = page.evaluate("""[...document.querySelectorAll('form input:not([type=radio]):not([type=file]):not(#support-website), form textarea')].filter(e => {
           const s = getComputedStyle(e); return parseFloat(s.borderTopWidth) > 0 || parseFloat(s.borderLeftWidth) > 0; }).map(e => e.id)""")
         check(f"{tag}: fields are writing lines, never boxes", not boxes, boxes)
 

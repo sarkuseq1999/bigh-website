@@ -161,7 +161,7 @@ EXPECT = [
     "Why the form matters",
     "A golden compound.",
     "A hard one to absorb.",
-    "Curcumin is the compound that gives turmeric its golden colour.",
+    "Curcumin is the compound that gives turmeric its golden color.",
     "Longvida® carries curcumin in tiny particles of fat, designed to help your body absorb it.",
     "Inside every capsule, one ingredient.",
     "Longvida® curcumin",

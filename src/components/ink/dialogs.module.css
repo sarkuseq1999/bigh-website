@@ -125,6 +125,13 @@
   border-radius: 6px;
 }
 
+/* A sheet taller than the window scrolls, and Chrome then lets Tab reach the sheet itself: it
+   takes the same ink ring, drawn just inside its edge (not the browser's blue). */
+.dialog:focus-visible {
+  outline: 2px solid var(--ink, #0c0b0a);
+  outline-offset: -4px;
+}
+
 /* The label and the close button stay at the top of the sheet; the words pass under the same
    paper. A hairline appears under them once the words have moved (where the browser can tie it
    to the sheet's own scrolling). */
@@ -369,4 +376,44 @@
   font-size: 15px;
   font-weight: 450;
   line-height: 1.4;
+}
+
+/* Ask BiGH Science's one action, under its steps: the kit's solid pill (ink.module.css .pill,
+   which is scoped to the page and does not reach the dialog), into the Support form. */
+.askAction {
+  margin: 28px 0 0;
+}
+
+.askButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 54px;
+  padding: 0 28px;
+  border: 1.5px solid var(--dialog-ink, #0c0b0a);
+  border-radius: 999px;
+  background: var(--dialog-ink, #0c0b0a);
+  color: var(--dialog-bg, #f8f3ea);
+  font-size: 20px;
+  font-weight: 450;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background-color 0.5s var(--ease),
+    border-color 0.5s var(--ease);
+}
+
+.askButton:hover {
+  background: #3a3833;
+  border-color: #3a3833;
+}
+
+.askButton:focus-visible {
+  outline: 2px solid var(--dialog-ink, #0c0b0a);
+  outline-offset: 4px;
+}
+
+.askAction + .note {
+  margin-top: 28px;
 }

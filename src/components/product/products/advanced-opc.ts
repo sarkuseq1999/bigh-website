@@ -104,7 +104,7 @@ const advancedOpc: ProductPage = {
       form: "Bilberry (fruit) extract (Vaccinium myrtillus, 25% anthocyanosides)",
       amount: 25,
       unit: "mg",
-      role: "A small dark berry that looks like a blueberry. Anthocyanins give it its deep colour.",
+      role: "A small dark berry that looks like a blueberry. Anthocyanins give it its deep color.",
       picture: { src: `${PLANTS}/bilberry.webp`, width: 320, height: 320 },
     },
     {
@@ -302,7 +302,7 @@ const advancedOpc: ProductPage = {
     buy: {
       scene: {
         ...opcArt.scene,
-        alt: "Grapevine leaves and a bunch of grapes painted in ink and watercolour",
+        alt: "Grapevine leaves and a bunch of grapes painted in ink and watercolor",
       },
     },
     supply: opcArt.capsules,

@@ -183,7 +183,7 @@ EXPECT = [
     "Why antioxidants matter",
     "A balance worth keeping.",
     "Making energy also makes a few free radicals",
-    "Inside every capsule, thirteen ingredients.",
+    "Inside every capsule, 13 ingredients.",
     "Grape seed extract",
     "Selenium",
     "Amounts per serving of 2 capsules, as printed on the Advanced OPC Formula label.",
@@ -434,7 +434,7 @@ def deep_links(browser):
 # The Inside heading is English in every language today, as NuriCell's "four" is (the product data
 # strings are not yet translated site-wide); the six painting descriptions are
 # (reference/ink-pages/opc/translations-opc.cjs, drafts m700-m705).
-HEADING = "Inside every capsule, thirteen ingredients."
+HEADING = "Inside every capsule, 13 ingredients."
 
 
 def languages(browser):

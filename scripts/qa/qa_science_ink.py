@@ -622,7 +622,7 @@ def strips(browser):
         page.wait_for_timeout(300)
         check(f"strips {w} research: and closes", page.locator("#research details").count() == 0)
         ask = page.locator("#ask").inner_text()
-        for word in ["Ask BiGH Science", "In development", "not accepting submissions"]:
+        for word in ["Ask BiGH Science", "Ask a question", "not medical advice"]:
             check(f"strips {w} ask: {word}", word in ask)
         check(f"strips {w} ask: three numbered steps", page.locator("#ask ol > li").count() == 3)
         # (Final review) list-style none drops the list's role in Safari/VoiceOver: role="list".

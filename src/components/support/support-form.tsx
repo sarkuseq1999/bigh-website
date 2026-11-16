@@ -12,10 +12,12 @@ import {
 } from "react";
 import { flushSync } from "react-dom";
 import base from "@/components/ink/ink.module.css";
+import { useSearchParams } from "next/navigation";
+import { useLocale } from "next-intl";
 import { useCopy } from "@/i18n/use-copy";
 import { useSteamGate, useWordsLang } from "./spread";
 import { cup } from "./support-art";
-import { SENDING_LIVE, support } from "./support-content";
+import { support } from "./support-content";
 import {
   checkFields,
   checkPhoto,
@@ -27,8 +29,9 @@ import page from "./support-page.module.css";
 
 // The Support form (spec "The form", "The moment", "Honesty"): writing lines on the paper, never
 // boxes; checks on Send in plain words beside each field, focus to the first; on Send the form
-// gives way to the cup, its gold steam rising again, and a ticket number. It sends nothing until
-// SENDING_LIVE: the preview tag and the thank-you's preview line say so.
+// gives way to the cup, its gold steam rising again, and a ticket number. It posts to /api/support
+// once the email service is set up (`live`, read by the page on the server); until then it sends
+// nothing, and the placeholder tag and the thank-you's line say so.
 
 const ORDER: FieldName[] = ["name", "email", "topic", "message", "photo"];
 const FOCUS: Record<FieldName, string> = {
@@ -49,7 +52,7 @@ const useMounted = () =>
     () => false,
   );
 
-export function SupportForm() {
+export function SupportForm({ live = false }: { live?: boolean }) {
   const copy = useCopy();
   const mounted = useMounted();
   const [ticket, setTicket] = useState<string | null>(null);
@@ -70,6 +73,7 @@ export function SupportForm() {
     return (
       <Thanks
         ticket={ticket}
+        live={live}
         onAgain={() => {
           setTicket(null);
           setRound((r) => r + 1);
@@ -77,17 +81,38 @@ export function SupportForm() {
       />
     );
   }
-  return <Message key={round} focusName={round > 0} onSent={setTicket} />;
+  return <Message key={round} live={live} focusName={round > 0} onSent={setTicket} />;
 }
 
-function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: string) => void }) {
+/** The topic a link chose for the form: Ask BiGH Science's buttons open /support?topic=science.
+ *  Read from the router, not window.location: arriving by a link, the page renders before the
+ *  address bar changes. */
+function useChosenTopic(): string {
+  const asked = useSearchParams().get("topic");
+  return asked === "science" ? support.write.scienceTopic : "";
+}
+
+function Message({
+  live,
+  focusName,
+  onSent,
+}: {
+  live: boolean;
+  focusName: boolean;
+  onSent: (ticket: string) => void;
+}) {
   const copy = useCopy();
   const lang = useWordsLang();
+  const locale = useLocale();
   const w = support.write;
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [order, setOrder] = useState("");
-  const [topic, setTopic] = useState("");
+  const chosen = useChosenTopic();
+  const [topic, setTopic] = useState(chosen);
+  const [failed, setFailed] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [website, setWebsite] = useState("");
   const [message, setMessage] = useState("");
   const [photo, setPhoto] = useState<File | null>(null);
   const [problems, setProblems] = useState<Problems>({});
@@ -122,10 +147,37 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
       return;
     }
     sending.current = true;
-    const ticket = ticketNumber();
     // Reduced motion: no fade, the thank-you at once.
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) onSent(ticket);
-    else setLeaving(ticket);
+    const thank = (ticket: string) => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) onSent(ticket);
+      else setLeaving(ticket);
+    };
+    if (!live) {
+      thank(ticketNumber());
+      return;
+    }
+    setFailed(false);
+    setBusy(true);
+    const body = new FormData();
+    body.set("name", name);
+    body.set("email", email);
+    body.set("order", order);
+    body.set("topic", topic);
+    body.set("message", message);
+    body.set("locale", locale);
+    body.set("website", website);
+    if (photo) body.set("photo", photo);
+    fetch("/api/support", { method: "POST", body })
+      .then(async (response) => {
+        const result = (await response.json().catch(() => ({}))) as { ticket?: string };
+        if (!response.ok || !result.ticket) throw new Error(String(response.status));
+        thank(result.ticket);
+      })
+      .catch(() => {
+        sending.current = false;
+        setBusy(false);
+        setFailed(true);
+      });
   };
 
   const choosePhoto = (file: File | undefined) => {
@@ -289,16 +341,31 @@ function Message({ focusName, onSent }: { focusName: boolean; onSent: (ticket: s
         ) : null}
         {error("photo")}
       </div>
+      {/* Left empty by people; a robot that fills every field gives itself away. */}
+      <div className={base.visuallyHidden} aria-hidden="true">
+        <label htmlFor="support-website">Website</label>
+        <input
+          id="support-website"
+          name="website"
+          tabIndex={-1}
+          autoComplete="off"
+          value={website}
+          onChange={(e) => setWebsite(e.target.value)}
+        />
+      </div>
       <div className={page.sendRow}>
-        <button type="submit" className={base.pill}>
-          {copy(w.send)} <ArrowRight size={18} aria-hidden="true" />
+        <button type="submit" className={base.pill} disabled={busy} aria-busy={busy || undefined}>
+          {copy(busy ? w.sending : w.send)} <ArrowRight size={18} aria-hidden="true" />
         </button>
-        {SENDING_LIVE ? null : (
+        {live ? null : (
           <span className={page.honesty} data-honesty="">
             {copy(w.preview)}
           </span>
         )}
       </div>
+      <p className={page.error} role="alert" data-error={failed ? "" : undefined}>
+        {failed ? reach(copy(w.failed), true) : null}
+      </p>
       <p className={page.note}>{copy(w.reaction)}</p>
     </form>
   );
@@ -327,7 +394,7 @@ function reach(text: string, links: boolean) {
 // The moment: the cup, its steam rising again, the number. The cup's pictures load only now, so
 // the steam is gated like the porch's (spread.tsx useSteamGate): it rises only once the cup's
 // picture and its own are in, never alone over bare paper.
-function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
+function Thanks({ ticket, live, onAgain }: { ticket: string; live: boolean; onAgain: () => void }) {
   const copy = useCopy();
   const s = support.sent;
   const gate = useSteamGate();
@@ -380,7 +447,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
       </h3>
       {/* While nothing is sent (Ruling 16): first, straight under "Thank you.", that nothing was
           sent and how to reach us today, with real links; no reply is promised. */}
-      {SENDING_LIVE ? null : (
+      {live ? null : (
         <p className={page.previewLine} data-honesty="">
           {reach(copy(s.preview), true)}
         </p>
@@ -389,7 +456,7 @@ function Thanks({ ticket, onAgain }: { ticket: string; onAgain: () => void }) {
       <p className={page.ticket} data-ticket="">
         {ticket}
       </p>
-      {SENDING_LIVE ? <p className={page.body}>{copy(s.reply)}</p> : null}
+      {live ? <p className={page.body}>{copy(s.reply)}</p> : null}
       <button type="button" className={base.textLink} onClick={onAgain}>
         {copy(s.again)}
       </button>

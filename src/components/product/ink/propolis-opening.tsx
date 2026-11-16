@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { MouseEvent } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
+import { formatPrice, priceOf } from "@/components/shop/shop";
 import { AddToCart } from "../add-to-cart";
 import type { InkProduct } from "../product-types";
 import { anchorId } from "../template-chapters-model";
@@ -49,6 +50,7 @@ function followChapter(event: MouseEvent<HTMLAnchorElement>) {
  * Mobile uses Mo's selected Editorial pair: the whole name left, the bottle right. */
 export function PropolisOpening({ product }: { product: InkProduct }) {
   const copy = useCopy();
+  const price = priceOf(product.slug);
   return (
     <section
       id={anchorId("overview")}
@@ -113,6 +115,7 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
                 />
               ) : null}
               <p className={card.bottleCardName}>{copy("One bottle")}</p>
+              {price !== null ? <p className={card.bottleCardPrice}>{formatPrice(price)}</p> : null}
               <p className={`${card.bottleCardSupply} ${styles.cardSupply}`}>
                 {copy(product.serving.supply)
                   .split(" · ")
@@ -151,7 +154,7 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
                 {copy("45 days to decide.").replace(/[.。]$/, "")}
               </p>
             </div>
-            <AddToCart wide align="center" />
+            <AddToCart slug={product.slug} wide align="center" />
             <p className={card.refund}>{copy("Not right for you? Send it back for a refund.")}</p>
           </div>
           <div className={styles.mobileStory} data-mobile-story>

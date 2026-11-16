@@ -168,7 +168,7 @@ const natureCalm: ProductPage = {
       form: "Vanillin",
       amount: 20,
       unit: "mg",
-      role: "The main flavour compound of vanilla.",
+      role: "The main flavor compound of vanilla.",
     },
     {
       key: "vitamin-c",
@@ -272,7 +272,7 @@ const natureCalm: ProductPage = {
       // is generated from his face).
       painting: {
         ...nuricellArt.liu,
-        alt: "A portrait painting of Dr. Jiankang Liu in ink and colour",
+        alt: "A portrait painting of Dr. Jiankang Liu in ink and color",
       },
       lines: [
         "Dr. Liu is an internationally recognized scientist in mitochondrial biology and aging. His research explores the connections between cellular energy, nutrition, and how we age.",
@@ -335,7 +335,7 @@ const natureCalm: ProductPage = {
     why: {
       unlit: natureCalmArt.lakeRuffled,
       lit: natureCalmArt.lakeStill,
-      alt: "A still lake at dusk, its gold reflection scattered by wind and then gathered into one line as the water stills, painted in ink and gold leaf",
+      alt: "Lake Tahoe at dusk, granite boulders in its clear shallows, its gold reflection scattered by wind and then gathered into one line as the water stills, painted in ink, watercolor and gold leaf",
     },
     inside: {
       ...natureCalmArt.cone,
@@ -348,13 +348,13 @@ const natureCalm: ProductPage = {
     daily: {
       picture: {
         ...natureCalmArt.moon,
-        alt: "A glass of water and three capsules, the moon's phases above them with the full moon in gold leaf, painted in ink",
+        alt: "A glass of water and three capsules, the moon’s phases above them with the full moon in gold leaf, painted in ink",
       },
     },
     buy: {
       scene: {
         ...natureCalmArt.lavender,
-        alt: "Rows of lavender in a California field, painted in watercolour",
+        alt: "Rows of lavender in a California field, painted in watercolor",
       },
     },
     supply: natureCalmArt.capsules,

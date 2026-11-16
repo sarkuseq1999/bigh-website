@@ -38,10 +38,13 @@ export const scientists = {
   text: "Dr. Jiankang Liu’s work explores mitochondria, oxidative stress, and aging. These connections help shape BiGH’s focus on cellular health and mental energy.",
   link: "Get to know Dr. Liu",
   portrait: { src: "/images/jiankang-liu.jpg", width: 512, height: 768 },
-  iris: { name: "Dr. Iris Wang", text: "Part of BiGH’s scientific and formulation roots." },
+  iris: {
+    name: "Dr. Iris Wang",
+    text: "Developed Nature Calm with Dr. Liu, and guided the formulation of Advanced OPC Formula.",
+  },
   ask: {
     title: "Good questions deserve clear answers.",
-    text: "Introducing Ask BiGH Science, a planned customer benefit.",
+    text: "Send us your questions about health and science. Our team answers, with help from our scientists.",
     link: "Discover Ask BiGH Science",
   },
 };
@@ -141,7 +144,7 @@ export const products = [
     description:
       "A cellular approach to everyday stress, bringing nutrients involved in cellular energy and antioxidant defenses into one formula.",
     credit:
-      "Developed by Dr. Jian Kang Liu and Dr. Iris Wang, drawing on their research into stress and cellular health.",
+      "Developed by Dr. Jiankang Liu and Dr. Iris Wang, drawing on their research into stress and cellular health.",
     highlights: ["Cellular energy", "Everyday stress"],
     tint: "#eef6ed",
     ink: "#487249",
@@ -153,7 +156,7 @@ export type HomeProduct = (typeof products)[number];
 export const storiesIntro = {
   title: "In their own words.",
   text: "The routines, questions, and choices behind everyday wellbeing.",
-  note: "Design draft — all testimonials and reviewer names below are fictional samples.",
+  note: "Illustrative stories: the people and names below are fictional, not real customers.",
   sample: "Fictional sample",
   photo: "Illustrative photo",
 };

@@ -105,7 +105,7 @@ const collection = [
     description:
       "A cellular approach to everyday stress, bringing nutrients involved in cellular energy and antioxidant defenses into one formula.",
     detail:
-      "Developed by Dr. Jian Kang Liu and Dr. Iris Wang, drawing on their research into stress and cellular health.",
+      "Developed by Dr. Jiankang Liu and Dr. Iris Wang, drawing on their research into stress and cellular health.",
     detailIcon: Microscope,
     highlights: [
       { icon: Zap, label: "Cellular energy" },

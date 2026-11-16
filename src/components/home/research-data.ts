@@ -102,14 +102,14 @@ export const researchItems: ResearchItem[] = [
     category: "Classic paper · Free radicals",
     title: "Where the free-radical idea came from",
     journal: "J Gerontol",
-    text: "Denham Harman's original proposal that free radicals drive aging. Parts of the theory have since been revised, but it started the field.",
+    text: "Denham Harman’s original proposal that free radicals drive aging. Parts of the theory have since been revised, but it started the field.",
     url: `${P}13332224/`,
   },
   // Ingredients · NuriCell (acetyl-L-carnitine, alpha-lipoic acid, creatine, choline)
   {
     year: "2002",
     type: "Ingredients",
-    category: "Animal study · Ingredients",
+    category: "Animal study · NuriCell ingredients",
     title: "Mitochondrial nutrients and the aging cell",
     journal: "PNAS",
     text: "Liu and colleagues studied acetyl-L-carnitine and R-alpha-lipoic acid in aging animals. This is part of the scientific background behind our interest in cellular health. It is not a clinical trial of NuriCell or evidence of a benefit in people.",
@@ -157,7 +157,7 @@ export const researchItems: ResearchItem[] = [
     category: "Pooled trials in patients · NuriCell ingredients",
     title: "Acetyl-L-carnitine in mild memory problems",
     journal: "Int Clin Psychopharm",
-    text: "A meta-analysis of trials in people with mild cognitive impairment or mild Alzheimer's disease reported a benefit over placebo. Patients, not healthy adults; older trials.",
+    text: "A meta-analysis of trials in people with mild cognitive impairment or mild Alzheimer’s disease reported a benefit over placebo. Patients, not healthy adults; older trials.",
     url: `${P}12598816/`,
   },
   {
@@ -192,7 +192,7 @@ export const researchItems: ResearchItem[] = [
     year: "2017",
     type: "Ingredients",
     category: "Review · Curcumin",
-    title: "Curcumin's chemistry problem",
+    title: "Curcumin’s chemistry problem",
     journal: "J Med Chem",
     text: "Nelson and colleagues explain why curcumin is poorly absorbed and why many laboratory results have not held up. A skeptical review, included on purpose.",
     url: `${P}28074653/`,
@@ -201,7 +201,7 @@ export const researchItems: ResearchItem[] = [
   {
     year: "2011",
     type: "Ingredients",
-    category: "Pooled trials · Advanced OPC ingredient",
+    category: "Pooled trials · Advanced OPC Formula ingredient",
     title: "Grape seed extract and blood pressure",
     journal: "J Am Diet Assoc",
     text: "A meta-analysis of nine trials found a modest drop in systolic blood pressure and heart rate with grape seed extract, and no change in cholesterol. Modest effects in short trials.",
@@ -210,8 +210,8 @@ export const researchItems: ResearchItem[] = [
   {
     year: "2010",
     type: "Ingredients",
-    category: "Human trial · Advanced OPC ingredient",
-    title: "Pine bark extract: a trial that found nothing",
+    category: "Human trial · Advanced OPC Formula ingredient",
+    title: "Pine bark extract: a trial that found no effect",
     journal: "Arch Intern Med",
     text: "A 12-week trial of pine bark extract in 130 adults found no effect on blood pressure, cholesterol or other heart-risk markers. A null result, shown because honesty matters.",
     url: `${P}20876405/`,
@@ -242,7 +242,7 @@ export const researchItems: ResearchItem[] = [
     category: "Review · Nature Calm ingredient",
     title: "CoQ10 in aging",
     journal: "Front Physiol",
-    text: "A review of coenzyme Q10's role in cellular energy and what supplement trials in aging and disease have shown. Mixed trial results.",
+    text: "A review of coenzyme Q10’s role in cellular energy and what supplement trials in aging and disease have shown. Mixed trial results.",
     url: `${P}29459830/`,
   },
   {
@@ -351,7 +351,7 @@ export const researchItems: ResearchItem[] = [
     category: "Science explained",
     title: "Antioxidants",
     journal: "MedlinePlus",
-    text: "The National Library of Medicine's plain introduction to antioxidants and free radicals.",
+    text: "The National Library of Medicine’s plain introduction to antioxidants and free radicals.",
     url: "https://medlineplus.gov/antioxidants.html",
   },
 ];

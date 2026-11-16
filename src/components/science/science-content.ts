@@ -57,7 +57,7 @@ export const why = {
   // Its heading and lead stand in the zoom's last view (since November 10, 2026; the cell stood
   // here before): since November 12 a climber in her sixties high above Yosemite Valley (Mo
   // found the grandfather and grandchild walking away "a little boring" and picked her of three).
-  alt: "A woman in her sixties climbs a sunlit granite wall high above Yosemite Valley, Half Dome across the valley, painted in ink and watercolour",
+  alt: "A woman in her sixties climbs a sunlit granite wall high above Yosemite Valley, Half Dome across the valley, painted in ink and watercolor",
 };
 
 // Approved September 21, 2026 (homepage scientist section).
@@ -77,7 +77,7 @@ export const liu = {
   // dates from (RESEARCH-NOTES.md), as the path's Berkeley stop tells it.
   gold: "In gold: mitochondria. He has studied them since 1994.",
   // DRAFT. It names him as the site does (the language checks look for his name in it).
-  alt: "Dr. Jiankang Liu, a painted portrait, in front of one large cell painted in pale blue watercolour, its mitochondria slivers of gold",
+  alt: "Dr. Jiankang Liu, a painted portrait, in front of one large cell painted in pale blue watercolor, its mitochondria slivers of gold",
   highlights: [
     {
       text: "Research with Bruce Ames at the University of California, Berkeley, investigating mitochondria, nutrition, and aging in laboratory animals.",
@@ -170,18 +170,18 @@ export const places = [
       },
       { label: "Read the 2002 study", url: "https://pubmed.ncbi.nlm.nih.gov/11854529/" },
     ],
-    alt: "The bell tower at Berkeley among tall trees on a hill over the bay, painted in ink and watercolour",
+    alt: "The bell tower at Berkeley among tall trees on a hill over the bay, painted in ink and watercolor",
   },
   {
     key: "salzburg",
     when: "2025 · Austria",
     name: "Salzburg",
     title: "An academy honor",
-    text: "Elected to the European Academy of Sciences and Arts, based in Salzburg, with more than 280 papers.",
+    text: "Elected to the European Academy of Sciences and Arts, based in Salzburg. He has published more than 280 papers.",
     links: [
       { label: "University announcement", url: "https://www.uhrs.edu.cn/info/1050/1805.htm" },
     ],
-    alt: "Salzburg’s fortress above the old town and the river, painted in ink and watercolour",
+    alt: "Salzburg’s fortress above the old town and the river, painted in ink and watercolor",
   },
   {
     key: "today",
@@ -190,7 +190,7 @@ export const places = [
     title: "",
     text: "His research now guides the science behind our formulas.",
     links: [],
-    alt: "California oaks on golden hills under a gold sun, painted in ink and watercolour",
+    alt: "California oaks on golden hills under a gold sun, painted in ink and watercolor",
   },
 ] as const;
 
@@ -255,37 +255,21 @@ export const research = {
   hideAll: "Show fewer sources",
 };
 
-// Ask BiGH Science: the homepage's own words (its dialog and strip).
-// Round 3: no label over the heading; "In development" and the note under the steps say it is
-// planned.
+// Ask BiGH Science: live through the Support form since November 16, 2026 (Mo). The steps, the
+// button and the note are the dialog's own (src/components/ink/dialogs.tsx `ASK`).
 export const ask = {
   title: "Ask BiGH Science",
   lead: "Good questions deserve clear answers.",
-  // The homepage dialog's line without its opening sentence, which repeated the lead (DRAFT).
-  text: "We are developing a way for BiGH customers to explore broader health and science questions with input from participating scientists.",
-  steps: [
-    "Start with a question about topics such as cellular health, nutrition, or healthy aging.",
-    "BiGH explains what the research says and involves scientific advisors when deeper input is needed.",
-    "Each answer identifies its contributors and where the science remains uncertain.",
-  ],
-  // DRAFT: example questions, labeled as examples.
-  examplesLabel: "Questions like these",
-  examples: [
-    "What do mitochondria actually do?",
-    "Are more antioxidants always better?",
-    "What changes in our cells as we age?",
-  ],
-  status: "In development",
-  note: "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
+  text: "Send us a question about health or science. Our team answers in plain language, and turns to the scientists we work with when a question needs them.",
 };
 
 // The ink page (Mo, October 13-14, 2026; round 3 since November 4). DRAFT lines.
 export const ink = {
   readStudy: "Read the study", // DRAFT
   journalsAlt:
-    "Old bound journals along a library table, three laid open in front, painted in ink and watercolour", // DRAFT
+    "Old bound journals along a library table, three laid open in front, painted in ink and watercolor", // DRAFT
   picnicAlt:
-    "Two enamel camp mugs on a redwood picnic table in a California park, painted in ink and watercolour", // DRAFT
+    "Two enamel camp mugs on a redwood picnic table in a California park, painted in ink and watercolor", // DRAFT
   illustration: "Illustration",
   // The honesty tag his painted portrait carries on NuriCell too (catalog m594).
   portrait: "Portrait painting",

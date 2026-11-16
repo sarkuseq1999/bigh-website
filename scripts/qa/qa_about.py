@@ -1514,7 +1514,7 @@ def experience(browser):
         if not reduced:
             check(f"{tag} the painting is the soft sequoia, with its gold-leaf mask",
                   "about-experience/sequoia-soft-v" in picture["src"] and "sequoia-soft-v" in picture["gold"], picture)
-            check(f"{tag} its description says watercolour, not ink", "watercolour" in picture["alt"] and "ink" not in picture["alt"], picture["alt"])
+            check(f"{tag} its description says watercolour, not ink", "watercolor" in picture["alt"] and "ink" not in picture["alt"], picture["alt"])
         r, g, b = leaf_colour(page, SEQUOIA, SEQUOIA_LEAF)
         check(f"{tag} at rest its gold leaf is plain gold (the light has left it)",
               picture["bloom"] == "done" and r >= 190 and r - b >= 100 and r - g >= 20, {"leaf": [r, g, b], "bloom": picture["bloom"]})

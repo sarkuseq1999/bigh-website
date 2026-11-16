@@ -210,7 +210,7 @@ def chapters(browser):
     check("chapters: each its own painting", all(srcs) and len(set(srcs)) == len(srcs), "; ".join(s or "none" for s in srcs))
     own = [s for s in srcs if s and f"{SLUG}/ink/" in s]
     check("chapters: Nature Calm's own paintings, Dr. Liu's from NuriCell", len(own) == 5 and srcs[3] and "nuricell/ink/liu" in srcs[3], "; ".join(s.split("/ink/")[-1][:24] for s in srcs if s))
-    check("chapters: the lake's lit layer", page.locator('[data-chapter="why"] figure img[data-lit][src*="lake-still"]').count() == 1)
+    check("chapters: the lake's lit layer", page.locator('[data-chapter="why"] figure img[data-lit][src*="tahoe-still"]').count() == 1)
     check("chapters: Dr. Liu captioned Portrait painting", page.locator('[data-chapter="people"] figcaption').inner_text().strip() == "Portrait painting")
     check("chapters: 18 rows of ingredients", page.locator('[data-chapter="inside"] tbody tr').count() == 18)
     check("chapters: 100 mg", page.locator('[data-chapter="inside"]').get_by_text("100").count() >= 1)

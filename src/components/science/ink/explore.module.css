@@ -132,14 +132,6 @@
   line-height: 1;
 }
 
-.status {
-  padding: 8px 18px;
-  border: 1.5px solid var(--ink);
-  border-radius: 999px;
-  color: var(--ink);
-  font-size: 17px;
-}
-
 /* The full list of sources. */
 .groups {
   margin-top: 40px;

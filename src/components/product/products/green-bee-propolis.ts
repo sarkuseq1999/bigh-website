@@ -142,7 +142,7 @@ const greenBeePropolis: ProductPage = {
     {
       question: "What is the capsule made of?",
       answer:
-        "The capsule is vegetarian: hypromellose, with titanium dioxide and yellow iron oxide for its colour. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
+        "The capsule is vegetarian: hypromellose, with titanium dioxide and yellow iron oxide for its color. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
       art: questionsArt.propolis.capsule,
     },
     {
@@ -185,22 +185,22 @@ const greenBeePropolis: ProductPage = {
     },
     inside: {
       ...propolisArt.resin,
-      alt: "Pieces of raw green propolis in a small dish, one yellow capsule beside it, painted in watercolour",
+      alt: "Pieces of raw green propolis in a small dish, one yellow capsule beside it, painted in watercolor",
     },
     research: {
       ...propolisArt.specimen,
-      alt: "A sprig of alecrim pressed on a botanist's specimen sheet, painted in ink",
+      alt: "A sprig of alecrim pressed on a botanist’s specimen sheet, painted in ink",
     },
     daily: {
       picture: {
         ...propolisArt.mug,
-        alt: "A mug of tea with one gold capsule beside it, painted in ink and watercolour",
+        alt: "A mug of tea with one gold capsule beside it, painted in ink and watercolor",
       },
     },
     buy: {
       scene: {
         ...propolisArt.scene,
-        alt: "Sprigs of alecrim and fallen golden ipê blossoms painted in watercolour, a bee flying above",
+        alt: "Sprigs of alecrim and fallen golden ipê blossoms painted in watercolor, a bee flying above",
       },
     },
     supply: propolisArt.capsule,

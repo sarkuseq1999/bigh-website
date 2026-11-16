@@ -30,7 +30,9 @@ export function splitName(name: string): [string, string] {
   return [name.slice(0, at).trim(), name.slice(at).trim()];
 }
 
-/** Small counts as words, for headings ("Inside every capsule, four ingredients."). */
+/** Small counts as words, for headings ("Inside every capsule, four ingredients."). One to nine
+ *  only, as American editors write them: 10 and up are figures ("13 ingredients", "18
+ *  ingredients"), so Advanced OPC Formula and Nature Calm read alike (November 16, 2026). */
 export const WORDS: readonly string[] = [
   "",
   "one",
@@ -42,10 +44,6 @@ export const WORDS: readonly string[] = [
   "seven",
   "eight",
   "nine",
-  "ten",
-  "eleven",
-  "twelve",
-  "thirteen",
 ];
 
 /** Oldest first. Studies from the same year keep the order the product's data gives them. */

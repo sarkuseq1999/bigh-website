@@ -5,6 +5,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { contactShadow } from "@/components/home-v2/look-ink/assets";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
+import { formatPrice, priceOf } from "@/components/shop/shop";
 import { AddToCart } from "../add-to-cart";
 import type { InkProduct, InkScene } from "../product-types";
 import { CAPTIONS, InkChapter, keepTogether, titleId } from "./ink-chapter";
@@ -21,6 +22,7 @@ const EYEBROW_ID = `${titleId("buy")}-eyebrow`;
 export function Buy({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const buy = product.ink.buy;
+  const price = priceOf(product.slug);
   const bottle = (
     <Image
       className={styles.buyBottle}
@@ -78,8 +80,14 @@ export function Buy({ product }: { product: InkProduct }) {
           <dt>{copy("In each bottle")}</dt>
           <dd>{keepTogether(copy(product.serving.supply))}</dd>
         </div>
+        {price !== null ? (
+          <div>
+            <dt>{copy("Price")}</dt>
+            <dd>{formatPrice(price)}</dd>
+          </div>
+        ) : null}
       </dl>
-      <AddToCart wide />
+      <AddToCart slug={product.slug} wide />
       {product.credit ? <p className={styles.small}>{copy(product.credit)}</p> : null}
     </InkChapter>
   );

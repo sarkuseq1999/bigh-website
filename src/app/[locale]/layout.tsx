@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { Be_Vietnam_Pro, DM_Sans, Instrument_Serif, Ysabeau, Zilla_Slab } from "next/font/google";
 
 import { routing, type Locale } from "@/i18n/routing";
+import { ROBOTS, SITE_URL } from "@/lib/seo";
 import "../globals.css";
 
 const sans = DM_Sans({
@@ -75,9 +76,10 @@ export async function generateMetadata({
   if (!hasLocale(routing.locales, locale)) notFound();
   const translate = await getTranslations({ locale, namespace: "Copy" });
   return {
+    metadataBase: new URL(SITE_URL),
     title: `BiGH — ${translate("m149")}`,
     description: translate("m169"),
-    robots: { index: false, follow: false },
+    robots: ROBOTS,
   };
 }
 

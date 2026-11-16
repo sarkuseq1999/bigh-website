@@ -8,15 +8,15 @@
 // in front of its foot. capsules: the three capsules for the opening's card, ink on a clear ground.
 export const natureCalmArt = {
   lakeRuffled: {
-    src: "/images/products/nature-calm/ink/lake-ruffled-v1.webp",
-    width: 1100,
-    height: 1473,
+    src: "/images/products/nature-calm/ink/tahoe-ruffled-v1.webp",
+    width: 1024,
+    height: 1536,
   },
   lakeStill: {
-    src: "/images/products/nature-calm/ink/lake-still-v1.webp",
-    width: 1100,
-    height: 1473,
-    gold: "/images/products/nature-calm/ink/lake-still-v1-gold.webp",
+    src: "/images/products/nature-calm/ink/tahoe-still-v1.webp",
+    width: 1024,
+    height: 1536,
+    gold: "/images/products/nature-calm/ink/tahoe-still-v1-gold.webp",
   },
   cone: {
     src: "/images/products/nature-calm/ink/cone-v1.webp",

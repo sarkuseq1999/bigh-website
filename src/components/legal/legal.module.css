@@ -1,0 +1,109 @@
+/* The legal pages: one reading column on the site's paper, under the menu bar. */
+
+.legalPage[data-look="ink"] {
+  --display-font: var(--font-ysabeau), var(--font-dm-sans), Arial, sans-serif;
+}
+
+.legalPage[data-look="ink"] main :is(h1, h2) {
+  font-family: var(--display-font);
+  font-variant-numeric: lining-nums;
+}
+
+.article {
+  width: min(720px, calc(100% - 2 * var(--gutter)));
+  margin: 0 auto;
+  padding: calc(88px + clamp(48px, 7vw, 120px)) 0 clamp(96px, 10vw, 150px);
+}
+
+.head {
+  margin-bottom: clamp(40px, 4vw, 64px);
+  padding-bottom: clamp(28px, 3vw, 40px);
+  border-bottom: 1px solid var(--line);
+}
+
+.legalPage h1.title {
+  margin: 0;
+  font-weight: var(--display-weight);
+  font-size: clamp(min(44px, 11vw), 4.4vw, 64px);
+  line-height: 1.04;
+  letter-spacing: -0.03em;
+  text-wrap: balance;
+}
+
+.legalPage p.updated {
+  margin: 16px 0 0;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.section + .section {
+  margin-top: clamp(32px, 3vw, 44px);
+}
+
+.legalPage .section h2 {
+  margin: 0 0 12px;
+  font-weight: var(--display-weight);
+  font-size: clamp(24px, 2vw, 30px);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+.legalPage .section p,
+.legalPage .section li {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.7;
+}
+
+.legalPage .section p + p,
+.legalPage .section p + ul,
+.legalPage .section ul + p,
+.legalPage .section p + address {
+  margin-top: 16px;
+}
+
+.legalPage .section ul {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding-left: 1.2em;
+}
+
+.legalPage .section a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.address {
+  display: grid;
+  font-style: normal;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.nowrap {
+  white-space: nowrap;
+}
+
+/* The other policies, and Support, at the column's end. */
+.others {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 32px;
+  margin-top: clamp(56px, 5vw, 80px);
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
+}
+
+.others a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  color: var(--ink);
+  font-size: 18px;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}

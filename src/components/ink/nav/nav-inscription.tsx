@@ -68,7 +68,8 @@ import styles from "./nav-inscription.module.css";
 const TABLET_TALL = "(min-width: 700px) and (min-height: 900px)";
 
 /** Which page the bar is on (its link is marked as the current page); the homepage marks none. */
-export type NavCurrent = "home" | "products" | "science" | "about" | "support";
+/** "legal": the Privacy, Terms and Returns pages, which have no word on the bar (none is marked). */
+export type NavCurrent = "home" | "products" | "science" | "about" | "support" | "legal";
 
 /** The homepage's parts that belong to each drop-down (the ids of their sections). */
 export type NavFollow = Partial<Record<NavPanelId, readonly string[]>>;

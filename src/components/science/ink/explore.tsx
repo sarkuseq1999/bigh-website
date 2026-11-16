@@ -4,6 +4,8 @@ import { ArrowUpRight, Minus, Plus } from "lucide-react";
 import { useState } from "react";
 import { researchItems } from "@/components/home/research-data";
 import base from "@/components/ink/ink.module.css";
+import { ASK } from "@/components/ink/dialogs";
+import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { ask, ink, research } from "../science-content";
 import { scienceArt } from "./science-art";
@@ -110,7 +112,7 @@ export function Research() {
   );
 }
 
-/** Ask BiGH Science: two camp mugs on a redwood picnic table, the three steps, its status. */
+/** Ask BiGH Science: two camp mugs on a redwood picnic table, the three steps, the way in. */
 export function Ask() {
   const copy = useCopy();
   return (
@@ -124,7 +126,7 @@ export function Ask() {
     >
       {/* role="list": list-style none drops the list in Safari/VoiceOver. */}
       <ol className={styles.cols} role="list">
-        {ask.steps.map((step, index) => (
+        {ASK.steps.map((step, index) => (
           <li key={step} className={styles.col}>
             <span className={styles.number}>{index + 1}</span>
             <p className={styles.text}>{copy(step)}</p>
@@ -132,8 +134,10 @@ export function Ask() {
         ))}
       </ol>
       <div className={`${styles.after} ${styles.last}`}>
-        <span className={styles.status}>{copy(ask.status)}</span>
-        <p className={styles.note}>{copy(ask.note)}</p>
+        <Link className={base.pill} href={ASK.href}>
+          {copy(ASK.button)}
+        </Link>
+        <p className={styles.note}>{copy(ASK.note)}</p>
       </div>
     </Strip>
   );

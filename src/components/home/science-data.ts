@@ -34,7 +34,7 @@ export const articles = [
 // Short facts per topic, each a condensed line from the approved explainer or plain background
 // science (mitochondria are a main source of free radicals; the body makes its own antioxidants).
 export const facts = [
-  ["Inside most of your cells", "Turn food into usable energy", "A small part with a big job"],
+  ["Inside many of your cells", "Turn food into usable energy", "A small part with a big job"],
   [
     "Mitochondria are one of the main sources of free radicals",
     "Your body also makes its own antioxidants",

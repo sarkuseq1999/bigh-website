@@ -89,7 +89,7 @@ const turmerific: ProductPage = {
     label: "Why the form matters",
     title: "A golden compound. A hard one to absorb.",
     lines: [
-      "Curcumin is the compound that gives turmeric its golden colour.",
+      "Curcumin is the compound that gives turmeric its golden color.",
       "On its own, very little of it reaches your bloodstream.",
       "Longvida® carries curcumin in tiny particles of fat, designed to help your body absorb it.",
     ],
@@ -188,7 +188,7 @@ const turmerific: ProductPage = {
     },
     inside: {
       ...turmerificArt.spoon,
-      alt: "A wooden spoon of golden curcumin powder and two capsules, painted in watercolour",
+      alt: "A wooden spoon of golden curcumin powder and two capsules, painted in watercolor",
     },
     research: {
       ...turmerificArt.notebook,
@@ -197,14 +197,14 @@ const turmerific: ProductPage = {
     daily: {
       picture: {
         ...turmerificArt.glass,
-        alt: "A glass of water and two gold capsules, painted in ink and watercolour",
+        alt: "A glass of water and two gold capsules, painted in ink and watercolor",
       },
       sum: turmerificArt.sum,
     },
     buy: {
       scene: {
         ...turmerificArt.scene,
-        alt: "A turmeric plant in flower painted in watercolour, gold slices of its root at its foot",
+        alt: "A turmeric plant in flower painted in watercolor, gold slices of its root at its foot",
       },
     },
     supply: turmerificArt.capsules,

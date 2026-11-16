@@ -67,7 +67,7 @@ PRODUCTS = {
     "turmerific": {
         "beats": ["line-1", "line-2", "line-3", "title"],
         "lines": [
-            "Curcumin is the compound that gives turmeric its golden colour.",
+            "Curcumin is the compound that gives turmeric its golden color.",
             "On its own, very little of it reaches your bloodstream.",
             "Longvida® carries curcumin in tiny particles of fat, designed to help your body absorb it.",
             "A golden compound. A hard one to absorb.",

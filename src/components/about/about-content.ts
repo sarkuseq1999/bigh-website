@@ -44,7 +44,7 @@ export const about = {
     title: "Each plant, from where it grows best.",
     text: "We look around the world for our plants, and bring each one home from the place it grows best.",
     home: { name: "California", note: "where we make them" },
-    alt: "A globe painted in ink and watercolour, California facing you. Four plants stand round its edge, and a gold dotted line runs from each over the globe to California.",
+    alt: "A globe painted in ink and watercolor, California facing you. Four plants stand around its edge, and a gold dotted line runs from each over the globe to California.",
     items: [
       { key: "propolis", plant: "Green propolis", grows: "Warm, wild hillsides" },
       { key: "turmeric", plant: "Turmeric", grows: "Hot, rainy fields" },
@@ -53,7 +53,7 @@ export const about = {
     ],
   },
   // Our home: the valley at dawn (Mo picked F, November 9; made-in-california.tsx). No bottles in
-  // the painting (Mo: "I'd rather not have the product bottle there").
+  // the painting (Mo: "I’d rather not have the product bottle there").
   home: {
     label: "Our home",
     title: "Proudly made in California.",

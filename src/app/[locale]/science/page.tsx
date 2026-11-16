@@ -7,6 +7,7 @@ import { productPageLinks } from "@/components/product/catalog";
 import { ScienceInk } from "@/components/science/ink/science-ink";
 import copyKeys from "@/i18n/copy-keys.json";
 import { redirect } from "@/i18n/navigation";
+import { pageMetadata } from "@/lib/seo";
 
 // Ysabeau, the homepage's title face (Mo, October 13, 2026), here for the Science page's titles as
 // the other pages follow the homepage. Not preloaded, as on the homepage ([locale]/page.tsx).
@@ -22,7 +23,19 @@ type Params = Promise<{ locale: string }>;
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { locale } = await params;
   const translate = await getTranslations({ locale, namespace: "Copy" });
-  return { title: `BiGH — ${translate(copyKeys["Science"])}` };
+  return pageMetadata({
+    locale,
+    path: "/science",
+    title:
+      locale === "en"
+        ? "Our science: cellular health, explained — BiGH"
+        : `${translate(copyKeys["Science"])} — BiGH`,
+    description:
+      locale === "en"
+        ? "Why BiGH starts with the cell: mitochondria, free radicals and aging, explained simply. Meet Dr. Jiankang Liu, and read the research yourself."
+        : translate("m169"),
+    image: { url: "/og/science-v1.jpg", width: 1200, height: 630, alt: "BiGH Science" },
+  });
 }
 
 // The Science page in Ink & Gold, "the handscroll" (Mo, October 13-14, 2026; spec

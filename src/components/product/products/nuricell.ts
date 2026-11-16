@@ -113,7 +113,7 @@ const nuricell: ProductPage = {
       // Ames's laboratory were 1994-1997 (science-content.ts), so the study is told as published.
       painting: {
         ...nuricellArt.liuBerkeley,
-        alt: "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and colour",
+        alt: "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and color",
       },
       paintingPhone: nuricellArt.liuBerkeleyPhone,
       lead: "At UC Berkeley, he studied two of NuriCell’s nutrients together.",
@@ -137,7 +137,7 @@ const nuricell: ProductPage = {
     {
       question: "What is the capsule made of?",
       answer:
-        "The capsule is vegetarian: hypromellose, with titanium dioxide for its white colour. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
+        "The capsule is vegetarian: hypromellose, with titanium dioxide for its white color. The other ingredients are rice flour, silicon dioxide and magnesium stearate.",
       art: questionsArt.nuricell.capsule,
     },
     {

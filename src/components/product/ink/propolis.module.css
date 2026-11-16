@@ -102,7 +102,7 @@
   padding-top: 3px;
 }
 
-.propolis .purchase button {
+.propolis .purchase [data-cart] {
   min-height: 60px;
   padding-inline: 44px;
   border-radius: 99px;
@@ -111,7 +111,7 @@
   text-align: center;
 }
 
-.propolis .purchase button:hover {
+.propolis .purchase [data-cart]:hover {
   background: #3a3833;
 }
 

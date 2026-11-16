@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { ArrowUpRight, X } from "lucide-react";
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from "react";
+import { Link } from "@/i18n/navigation";
 import { useCopy } from "@/i18n/use-copy";
 import { products, scienceImages } from "@/components/home-v2/content";
 import { lockPageScroll } from "./lock-scroll";
@@ -33,6 +34,24 @@ export function useSiteDialogs(): Dialogs {
 }
 
 type Content = { eyebrow: string; title: string; body: ReactNode };
+
+/** Ask BiGH Science, live through the Support form (Mo, November 16, 2026): questions come in
+ *  there; BiGH's team answers, with the scientists it works with when a question needs them. No
+ *  promise of a personal answer from Dr. Liu, and no medical advice. The Science page's strip uses
+ *  the same words (science-content.ts `ask`). */
+export const ASK = {
+  eyebrow: "Questions about health and science",
+  lead: "Good questions deserve clear explanations. Send us yours, and our team will answer in plain language, with help from the scientists we work with when a question needs them.",
+  steps: [
+    "Send a question about cellular health, nutrition, healthy aging, or one of our formulas.",
+    "Our team looks at what the research says, and asks our scientific advisors when a question needs deeper input.",
+    "Your answer says who helped with it, and where the science is still uncertain.",
+  ],
+  button: "Ask a question",
+  href: "/support?topic=science#write",
+  noteLabel: "Good to know",
+  note: "This is general science education, not medical advice. For questions about your own health or medicines, please talk with your doctor.",
+} as const;
 
 // Details for the product dialog (products without their own page yet).
 const productDetails = [
@@ -72,7 +91,7 @@ const productDetails = [
 const explainers = [
   {
     title: "Energy starts small.",
-    text: "Inside most of your cells are mitochondria. They turn energy from food into a form your cells can use. Think of them as tiny energy converters.",
+    text: "Inside many of your cells are mitochondria. They turn energy from food into a form your cells can use. Think of them as tiny energy converters.",
     note: "A small part of a cell. A big part of how it works.",
     source: "https://www.genome.gov/genetics-glossary/Mitochondria",
     sourceLabel: "National Human Genome Research Institute",
@@ -156,14 +175,6 @@ export function SiteDialogs({
             <p>{copy(details.detail)}</p>
             <h3>{copy("Inside the formula")}</h3>
             <p>{copy(details.ingredients)}</p>
-            <div className={styles.note}>
-              <strong>{copy("Product preview")}</strong>
-              <p>
-                {copy(
-                  "These details use the available product materials. Current labels, directions, availability, and pricing still need confirmation. Ordering is not open in this preview.",
-                )}
-              </p>
-            </div>
           </>
         ),
       });
@@ -191,7 +202,10 @@ export function SiteDialogs({
               )}
             </p>
             <h3>{copy("Read the research in context")}</h3>
-            {link("https://www.uhrs.edu.cn/info/1050/1805.htm", "University biography (Chinese)")}
+            {link(
+              "https://www.uhrs.edu.cn/info/1050/1805.htm",
+              "University announcement (Chinese)",
+            )}
             {link("https://pubmed.ncbi.nlm.nih.gov/11854529/", "Read the 2002 study")}
           </>
         ),
@@ -199,39 +213,24 @@ export function SiteDialogs({
     },
     openAsk() {
       show({
-        eyebrow: copy("A planned customer benefit"),
+        eyebrow: copy(ASK.eyebrow),
         title: copy("Ask BiGH Science"),
         body: (
           <>
-            <p>
-              {copy(
-                "Good questions deserve clear explanations. We are developing a way for BiGH customers to explore broader health and science questions with input from participating scientists.",
-              )}
-            </p>
+            <p>{copy(ASK.lead)}</p>
             <ol className={styles.list} role="list">
-              <li>
-                {copy(
-                  "Start with a question about topics such as cellular health, nutrition, or healthy aging.",
-                )}
-              </li>
-              <li>
-                {copy(
-                  "BiGH explains what the research says and involves scientific advisors when deeper input is needed.",
-                )}
-              </li>
-              <li>
-                {copy(
-                  "Each answer identifies its contributors and where the science remains uncertain.",
-                )}
-              </li>
+              {ASK.steps.map((step) => (
+                <li key={step}>{copy(step)}</li>
+              ))}
             </ol>
+            <p className={styles.askAction}>
+              <Link className={styles.askButton} href={ASK.href} onClick={close}>
+                {copy(ASK.button)}
+              </Link>
+            </p>
             <div className={styles.note}>
-              <strong>{copy("In development")}</strong>
-              <p>
-                {copy(
-                  "The question service is not accepting submissions yet. Eligibility and response arrangements are still being agreed. This will be general science education, not personal medical care.",
-                )}
-              </p>
+              <strong>{copy(ASK.noteLabel)}</strong>
+              <p>{copy(ASK.note)}</p>
             </div>
           </>
         ),
