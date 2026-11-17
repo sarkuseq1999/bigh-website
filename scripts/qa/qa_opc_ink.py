@@ -16,7 +16,7 @@ Sections (all, or --only=a,b):
               under the last grass, no sideways scroll; without scripts too; Green Bee Propolis keeps
               its own opening
   chapters    overview, why, inside, research, people, daily, buy; each its own painting; "thirteen
-              ingredients"; 300 mg; Dr. Wang's words with a work painting captioned Illustration; the
+              ingredients"; 300 mg; What's inside paints the nine plants; Dr. Wang's words with a work painting captioned Illustration; the
               painted sum; every study; the questions
   spread      the Why painting (Mo picked B, November 17, 2026: grapes and a cut grape): the gold
               waits, then spreads from the seeds; plain brown seeds before, gold leaf after, and no
@@ -225,6 +225,9 @@ def chapters(browser):
     rows = page.locator('[data-chapter="inside"] tbody tr').count()
     check("chapters: thirteen ingredient rows", rows == 13, f"{rows}")
     check("chapters: 300 mg", page.locator('[data-chapter="inside"]').get_by_text("300").count() >= 1)
+    # What's inside shows the nine plant sources (Mo picked B, November 17, 2026), not the six in ink.
+    plants = page.locator('[data-chapter="inside"] figure img[src*="plants-"]').count()
+    check("chapters: What's inside paints the nine plants", plants == 1, f"{plants}")
     people = page.locator('[data-chapter="people"]')
     check("chapters: Dr. Wang's painting is of her work, captioned Illustration",
           people.locator("figure[data-picture] figcaption").inner_text().strip() == "Illustration"

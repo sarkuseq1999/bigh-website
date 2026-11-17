@@ -5,8 +5,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Advanced OPC's plants chapter: all nine plants, November 17, 2026 (Claude Code; built,
+  committed locally, not pushed).** Part 6 of Mo's "superb" goal. "Inside every capsule, 13
+  ingredients." showed six plants in grey ink. Of two California-color ideas mocked on the live
+  page (A the same six in color, B all nine plant sources; review page
+  https://claude.ai/artifact/NKKQJAoqfm5rx6TmoTXpuV) Mo picked **B** (Claude's pick): take
+  `inside-nine-ah`, built as `plants-v1.webp` (art key `plants`); description m701 redrafted in
+  all five catalogs (draft translations); `qa_opc_ink` checks the painting. Built site, sequential:
+  `qa_opc_ink` 313/313, `qa_home_ink` 290/290, `qa_nav` 326/326. Three unused takes in
+  `bigh-archive\opc-inside-unused-2026-11-17\`. Next on OPC: the research painting (a hand lens
+  in grey ink), Dr. Wang's mortar, the plate and its painted sum.
 - **Advanced OPC's grapes chapter: the gold is in the seeds, November 17, 2026 (Claude Code;
-  built, committed locally, not pushed).** Part 5 of Mo's "superb" goal. "A balance worth keeping."
+  live, `main` `7b7ca60`, production `dpl_CjX6BUsuwvf7ntEaV8aDyskvncxu`, demo alias on it).** Part 5 of Mo's "superb" goal. "A balance worth keeping."
   showed grey ink grapes lit gold in a yellow haze (a glow, and Asian ink-painting style). Of two
   California-color ideas mocked on the live page (A a bunch ripening green to violet, B a cut grape
   whose seeds turn to gold leaf; review page https://claude.ai/artifact/EvBkXxw7h84qguGVAxYPDM) Mo

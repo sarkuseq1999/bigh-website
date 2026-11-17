@@ -17,6 +17,9 @@ Buy: the vine scene with its bunch at the far left (buy-vines-left, cut from a f
 photo stands in the gap, `front` is the painting's lowest band cut to the bottle's shape. The
 opening's card capsules are the two capsules cut from the plate painting.
 
+What's inside (Mo picked B, November 17, 2026; it replaced October's six plants in grey ink): the
+formula's nine plant sources in three rows of three, in colour (Codex take inside-nine-ah).
+
 usage: python -X utf8 reference/ink-pages/opc/build_opc.py
 """
 
@@ -41,10 +44,10 @@ TS = REPO / "src/components/product/ink/opc-art.ts"
 BOTTLE = REPO / "public/images/products/advanced-opc.png"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
-# The Why painting is a Codex take (no gpt25- prefix): loaded by seeds() itself.
+# The Why and What's inside paintings are Codex takes (no gpt25- prefix): loaded by codex_cropped().
 SEEDS_TAKE = "why-seedsbig-ah"
+PLANTS_TAKE = "inside-nine-ah"
 TAKES = {
-    "row": "inside-row",
     "lens": "research-lens",
     "mortar": "people-mortar",
     "plate": "daily-plate",
@@ -72,6 +75,12 @@ def finish(img, name, width=1100, gold=False):
 
 def cropped(key, pad=0.04):
     flat = bd.divided(bd.load(TAKES[key]))
+    return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
+
+
+def codex_cropped(take, pad=0.04):
+    """A Codex take (originals/<take>.png) with its paper divided out, cropped to its ink."""
+    flat = bd.divided(Image.open(HERE / "originals" / f"{take}.png").convert("RGB"))
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
 
 
@@ -121,8 +130,7 @@ def seeds():
     kit's band of light, scroll-linked, rested on the seeds while their words were read (a phone,
     the painting near the window's top) and washed them pale, as it did on About's oak, so the
     seeds are plain gold leaf at rest."""
-    flat = bd.divided(Image.open(HERE / "originals" / f"{SEEDS_TAKE}.png").convert("RGB"))
-    flat = flat.crop(bd.ink_box(np.asarray(flat), pad=0.05))
+    flat = codex_cropped(SEEDS_TAKE, pad=0.05)
     arr = np.asarray(flat)
     mask, count = seed_mask(arr)
     if count != SEED_COUNT:
@@ -278,7 +286,8 @@ def write_ts(art):
         "// (or its TAKES) and run it again. Advanced OPC Formula's ink paintings (October 16, 2026):",
         "// GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's own",
         "// paper. The Why painting (grapesUnlit, grapesLit) is a Codex take of November 17: grapes",
-        "// and a cut grape, its seeds plain, then gold leaf (no light mask: plain at rest). grapesSpread:",
+        "// and a cut grape, its seeds plain, then gold leaf (no light mask: plain at rest); plants, the",
+        "// nine plant sources, another (What's inside). grapesSpread:",
         "// where the gold starts, as fractions of the painting. sum.centres: its three numbers, as",
         "// fractions of its width. scene.bottle: where the real bottle stands, as fractions of the",
         "// painting (its width, and its picture's bottom above the painting's); scene.front: the",
@@ -299,7 +308,7 @@ if __name__ == "__main__":
             "grapesUnlit": unlit,
             "grapesLit": lit,
             "grapesSpread": spread,
-            "row": finish(cropped("row"), "row"),
+            "plants": finish(codex_cropped(PLANTS_TAKE), "plants"),
             "lens": finish(cropped("lens"), "lens"),
             "mortar": finish(cropped("mortar"), "mortar"),
             "plate": finish(cropped("plate"), "plate"),

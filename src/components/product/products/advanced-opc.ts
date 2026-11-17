@@ -287,9 +287,10 @@ const advancedOpc: ProductPage = {
       spread: opcArt.grapesSpread,
       alt: "A few ripe grapes on their stem and one grape cut in half, its seeds in gold leaf, painted in watercolor",
     },
+    // What's inside (Mo picked B, November 17, 2026): the formula's nine plant sources in color.
     inside: {
-      ...opcArt.row,
-      alt: "Grapes, pine bark, bilberries, tea leaves, an orange slice and a marigold, painted in ink",
+      ...opcArt.plants,
+      alt: "The nine plant sources: grapes, grape seeds, pine bark, bilberries, white, green and black tea leaves, an orange slice, a noni fruit, a marigold and sweet clover, painted in watercolor",
     },
     research: {
       ...opcArt.lens,

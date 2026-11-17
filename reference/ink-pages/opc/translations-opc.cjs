@@ -19,11 +19,12 @@ const entries = [
     "房についた熟したぶどう数粒と、半分に切ったぶどう一粒。その種を金箔で描いた水彩画。",
   ],
   [
-    "Grapes, pine bark, bilberries, tea leaves, an orange slice and a marigold, painted in ink",
-    "葡萄、松树皮、越橘、茶叶、一片橙子和一朵万寿菊，以水墨绘成。",
-    "포도, 소나무 껍질, 빌베리, 찻잎, 오렌지 한 조각과 메리골드 한 송이를 먹으로 그린 그림.",
-    "Nho, vỏ thông, việt quất đen, lá trà, một lát cam và một bông cúc vạn thọ, vẽ bằng mực.",
-    "ぶどう、松の樹皮、ビルベリー、茶葉、オレンジの輪切り、マリーゴールドを墨で描いた絵。",
+    // November 17, 2026: What's inside became the nine plant sources (Mo picked B).
+    "The nine plant sources: grapes, grape seeds, pine bark, bilberries, white, green and black tea leaves, an orange slice, a noni fruit, a marigold and sweet clover, painted in watercolor",
+    "九种植物来源：葡萄、葡萄籽、松树皮、越橘、白茶、绿茶和红茶的茶叶、一片橙子、一颗诺丽果、一朵万寿菊和草木樨，以水彩绘成。",
+    "아홉 가지 식물 원료: 포도, 포도씨, 소나무 껍질, 빌베리, 백차·녹차·홍차 잎, 오렌지 한 조각, 노니 열매 하나, 메리골드 한 송이와 스위트클로버를 그린 수채화.",
+    "Chín nguồn thực vật: nho, hạt nho, vỏ thông, việt quất đen, lá trà trắng, trà xanh và trà đen, một lát cam, một quả nhàu, một bông cúc vạn thọ và cỏ ba lá ngọt, vẽ bằng màu nước.",
+    "九つの植物原料。ぶどう、ぶどうの種、松の樹皮、ビルベリー、白茶・緑茶・紅茶の葉、オレンジの輪切り、ノニの実、マリーゴールド、スイートクローバーを描いた水彩画。",
   ],
   [
     "A magnifying glass over a few grape seeds and a sliver of pine bark, painted in ink",

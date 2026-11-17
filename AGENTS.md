@@ -218,7 +218,15 @@ These sit on top of `DESIGN.md`.
   seeds: the kit's scroll-linked band rested on them while their words were read and washed them
   pale (as on About's oak); plain gold leaf at rest. The words did not change. `build_opc.py`
   (`seeds()`, Codex take `why-seedsbig-ah`), `opc-art.ts`; mockups
-  `reference/ink-pages/mockups/opc-why/`.
+  `reference/ink-pages/mockups/opc-why/`. Live November 17, 2026 (`main` `7b7ca60`).
+- **Advanced OPC "Inside every capsule": all nine plants (Mo picked B, November 17, 2026).** The
+  plants painting was six plants in grey ink (an East Asian ink study). Of two California-color
+  paintings on the live page (A the same six in color, B all nine plant sources) he picked B,
+  Claude's pick: three rows of three, the formula's nine plant sources (grapes for red wine, grape
+  seeds, pine bark, bilberries, white, green and black tea, an orange slice, noni, a marigold,
+  sweet clover), as the page says "Nine plant extracts". The words and the list did not change.
+  `build_opc.py` (`plants`, Codex take `inside-nine-ah`); mockups
+  `reference/ink-pages/mockups/opc-inside/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a

@@ -2,7 +2,8 @@
 // (or its TAKES) and run it again. Advanced OPC Formula's ink paintings (October 16, 2026):
 // GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's own
 // paper. The Why painting (grapesUnlit, grapesLit) is a Codex take of November 17: grapes
-// and a cut grape, its seeds plain, then gold leaf (no light mask: plain at rest). grapesSpread:
+// and a cut grape, its seeds plain, then gold leaf (no light mask: plain at rest); plants, the
+// nine plant sources, another (What's inside). grapesSpread:
 // where the gold starts, as fractions of the painting. sum.centres: its three numbers, as
 // fractions of its width. scene.bottle: where the real bottle stands, as fractions of the
 // painting (its width, and its picture's bottom above the painting's); scene.front: the
@@ -22,10 +23,10 @@ export const opcArt = {
     x: 0.665,
     y: 0.7404,
   },
-  row: {
-    src: "/images/products/advanced-opc/ink/row-v1.webp",
-    width: 1100,
-    height: 1151,
+  plants: {
+    src: "/images/products/advanced-opc/ink/plants-v1.webp",
+    width: 1024,
+    height: 1009,
   },
   lens: {
     src: "/images/products/advanced-opc/ink/lens-v1.webp",

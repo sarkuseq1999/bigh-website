@@ -12,7 +12,7 @@ red wine are the formula's headline sources, and wine country is California's.
 | -------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | Opening        | The real bottle between "Advanced" small over "OPC" and "Formula" (name C; `nameHalves` + `nameLead`)           | (no painting)                         |
 | Why it matters | A bunch of grapes on the vine; as you arrive, gold light spreads through the berries from the middle (Why A; replaced November 17, below) | `why-grapes-gold`, `why-grapes-ink`   |
-| What's inside  | Six of the nine plants in two calm rows: grapes, pine bark, bilberries, tea leaves, an orange slice, a marigold | `inside-row`                          |
+| What's inside  | Six of the nine plants in two calm rows: grapes, pine bark, bilberries, tea leaves, an orange slice, a marigold (replaced November 17, below) | `inside-row`                          |
 | The research   | A hand lens over a few grape seeds and a sliver of pine bark; no gold, so the eye rests                        | `research-lens`                       |
 | The people     | Dr. Iris Wang, no face ever: a stone mortar and pestle with marigold petals stands for her formulation guidance | `people-mortar`                       |
 | How to take it | A plate after the meal, knife and fork laid together, a glass of water, two capsules; the sum 2 × 60 = 120     | `daily-plate`, `sum`                  |
@@ -70,6 +70,20 @@ scroll-linked and, on a phone with the painting near the window's top while its 
 rested on the right half's seeds and washed them pale (as on About's oak): plain gold leaf at rest. The picture's description is m700 (draft translations). Checks:
 `qa_opc_ink` section `spread` (plain seeds before, gold after). The other six takes (A's two, B's
 first two, two of the larger ones) are in `codes/bigh-archive/opc-why-unused-2026-11-17/`.
+
+## What's inside: all nine plants (Mo picked B, November 17, 2026)
+
+The plants painting was six plants in grey ink with a little colour (`inside-row`, an East Asian
+ink study). Two takes each of two ideas were painted by Codex in the grapes' hand
+(`paint_inside.sh`, `prompts/inside-color-1.txt`, `prompts/inside-nine-1.txt`) and mocked on the
+live page (`../mockups/opc-inside/`: `prep.py`, `mock.py`; review page
+https://claude.ai/artifact/NKKQJAoqfm5rx6TmoTXpuV): A the same six plants in colour; B all nine
+plant sources in three rows of three, as the page says "Nine plant extracts" (grapes for red wine,
+grape seeds, pine bark, bilberries, the three teas, an orange slice, noni, a marigold, sweet
+clover). Mo picked **B** (Claude's pick), take `inside-nine-ah` (kept in `originals/`), built by
+`build_opc.py` as `plants-v1.webp` (art key `plants`). The picture's description is m701 (draft
+translations). Checks: `qa_opc_ink` section `chapters`. The other three takes are in
+`codes/bigh-archive/opc-inside-unused-2026-11-17/`.
 
 ## Rules kept
 

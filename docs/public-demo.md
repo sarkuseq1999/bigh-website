@@ -4,7 +4,17 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-103gcl97k-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-4hs260zo4-sarkuseq1999s-projects.vercel.app`
+(`dpl_CjX6BUsuwvf7ntEaV8aDyskvncxu`), the **production** deployment of `main` at
+`7b7ca60d2909685145d50e7c223447a89dcef0ae` (November 17, 2026): Advanced OPC Formula's grapes
+chapter, a cut grape whose seeds turn to gold leaf (Mo picked B). Mo said "Yes, put it live".
+`origin/main` was `8f21216`, the tested tree's parent (a fast-forward). Quick look on the plain
+public URL at 1440 and 390 px: the seed paintings load, no gold light layer, no sideways scroll, no
+page errors. Public checks, sequential: `qa_home_ink` **290/290**, `qa_nav` **326/326**,
+`qa_opc_ink` 312/313: every released check passed; the one failure was the new check for the next
+(unreleased) change, the plants chapter's nine plants.
+
+Before that the alias pointed to `bigh-website-103gcl97k-sarkuseq1999s-projects.vercel.app`
 (`dpl_A2xcUN59edHPTs4Mg7hz5P4YnwsC`), the **production** deployment of `main` at
 `8f21216f3e86755f4d4e59e6ee38947a0c5acf4e` (November 17, 2026): no small labels over the chapter
 headings of Advanced OPC Formula, Turmerific and Nature Calm (Mo said yes; Green Bee Propolis keeps
