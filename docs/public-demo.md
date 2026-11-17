@@ -4,7 +4,18 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-g0hjazb7t-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-103gcl97k-sarkuseq1999s-projects.vercel.app`
+(`dpl_A2xcUN59edHPTs4Mg7hz5P4YnwsC`), the **production** deployment of `main` at
+`8f21216f3e86755f4d4e59e6ee38947a0c5acf4e` (November 17, 2026): no small labels over the chapter
+headings of Advanced OPC Formula, Turmerific and Nature Calm (Mo said yes; Green Bee Propolis keeps
+its numbered labels). Mo said "Yes, put it live". `origin/main` was `903ecad`, the tested tree's
+parent (a fast-forward). Quick look on the plain public URL at 1440 and 390 px: no labels on the
+three pages, Propolis's four kept, no sideways scroll, no page errors. Full public checks,
+sequential: `qa_opc_ink` **311/311**, `qa_turmerific_ink` **267/267**, `qa_nature_calm_ink`
+**271/271**, `qa_nuricell_ink` **663/663**, `qa_propolis_ink` **273/273**, `qa_home_ink`
+**290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-g0hjazb7t-sarkuseq1999s-projects.vercel.app`
 (`dpl_Emko1rfYCh9LhKd4KRZ8Szt38zxX`), the **production** deployment of `main` at
 `903ecaded167e647c341675ce676ec2be02fc140` (November 16, 2026): Nature Calm's first screen in a
 high meadow (Mo picked A), the last product on the shared opening to leave bare paper. Mo said

@@ -5,13 +5,15 @@ Originals: reference/ink-pages/opc/originals/gpt25-<take>.png (GPT Image 2.5 on 
 in prompts/; spend in reference/ink-pages/spend.md). Output: public/images/products/advanced-opc/
 ink/*.webp (lossless plates in plates/, not committed) and src/components/product/ink/opc-art.ts.
 The treatments are Green Bee Propolis's (build_propolis.py): the paper divided out and lifted to
-white so each painting multiplies onto the page's paper with no box, the outer edge feathered, gold
-leaf kept as a light mask for the kit's glint.
+white so each painting multiplies onto the page's paper with no box, the outer edge feathered.
 
-Why: a bunch of grapes lit from inside by gold (why-grapes-gold) and the same bunch in grey ink, a
-GPT edit of it (why-grapes-ink), registered to the gold take; `spread` is where the gold starts
-(the middle of the gilded berries). Buy: the vine scene with its bunch at the far left
-(buy-vines-left, cut from a fifth down so the real bottle has room over its cap); the real bottle
+Why (Mo picked B, November 17, 2026; it replaced October's grey grapes lit gold, whose gold sat in
+a yellow haze): a few ripe grapes in colour and one grape cut in half, its seeds in gold leaf (Codex
+take why-seedsbig-ah, originals/why-seedsbig-ah.png). The unlit layer is the same painting with the
+seeds turned plain grape-seed brown; `spread` is where the gold starts (the seeds' middle); no gold
+mask, so no band of light (it rested on the seeds and washed them pale): plain gold leaf at rest.
+
+Buy: the vine scene with its bunch at the far left (buy-vines-left, cut from a fifth down so the real bottle has room over its cap); the real bottle
 photo stands in the gap, `front` is the painting's lowest band cut to the bottle's shape. The
 opening's card capsules are the two capsules cut from the plate painting.
 
@@ -39,9 +41,9 @@ TS = REPO / "src/components/product/ink/opc-art.ts"
 BOTTLE = REPO / "public/images/products/advanced-opc.png"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
+# The Why painting is a Codex take (no gpt25- prefix): loaded by seeds() itself.
+SEEDS_TAKE = "why-seedsbig-ah"
 TAKES = {
-    "grapes-gold": "why-grapes-gold",
-    "grapes-ink": "why-grapes-ink",
     "row": "inside-row",
     "lens": "research-lens",
     "mortar": "people-mortar",
@@ -73,44 +75,69 @@ def cropped(key, pad=0.04):
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
 
 
-def gold_of(arr):
-    return cv2.morphologyEx(bd.gold_pixels(arr.astype(np.uint8)).astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+# The seeds: gold leaf only below this share of the picture's height (the cut grape lies in the
+# lower half), strongly saturated and bright. The gold is shrunk by SEED_SPLIT pixels so the right
+# half's two lower seeds, which touch, come apart; pieces under SEED_CORE pixels (flecks of yellow
+# flesh at the halves' seam) are dropped; each seed is then its outline's hull, grown back. Five
+# seeds in the take, two and three.
+SEEDS_FROM, SEED_SPLIT, SEED_CORE, SEED_COUNT = 0.5, 9, 1500, 5
 
 
-def richer_gold(img, strength=0.75):
-    """Dividing by the cream paper bleaches the leaf: the gold pushed back toward deep leaf."""
-    a = np.asarray(img).astype(np.float32)
-    gold = cv2.dilate(bd.gold_pixels(a.astype(np.uint8)).astype(np.float32), np.ones((3, 3), np.uint8))
-    m = (cv2.GaussianBlur(gold, (0, 0), 1.2) * strength)[..., None]
-    deep = a * np.array([0.98, 0.80, 0.42], np.float32)
-    return Image.fromarray(np.clip(a * (1 - m) + deep * m, 0, 255).astype(np.uint8))
+def seed_mask(arr):
+    """Where the cut grape's seeds are gold leaf, each seed filled whole. The olive leaf, the stem
+    and the pale flesh pass the kit's gold test, so only the lower part counts, and only strongly
+    saturated, bright gold; the leaf's pale highlights fail that test, so each seed is filled as
+    the hull of its outline (a grape seed is convex)."""
+    a = arr.astype(np.float32)
+    hi, lo = a.max(axis=2), a.min(axis=2)
+    sat = (hi - lo) / np.maximum(hi, 1)
+    gold = bd.gold_pixels(arr.astype(np.uint8)) & (sat > 0.42) & (hi > 150)
+    gold[: int(a.shape[0] * SEEDS_FROM)] = False
+    gold = cv2.morphologyEx(gold.astype(np.uint8), cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+    core = cv2.erode(gold, np.ones((SEED_SPLIT, SEED_SPLIT), np.uint8))
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(core)
+    filled = np.zeros(gold.shape, np.uint8)
+    pieces = 0
+    for i in range(1, n):
+        if stats[i, cv2.CC_STAT_AREA] < SEED_CORE:
+            continue
+        ys, xs = np.nonzero(labels == i)
+        hull = cv2.convexHull(np.stack([xs, ys], axis=1).astype(np.int32))
+        cv2.fillConvexPoly(filled, hull, 1)
+        pieces += 1
+    filled = cv2.dilate(filled, np.ones((SEED_SPLIT, SEED_SPLIT), np.uint8))
+    # Shrinking can also cut a seed's thin end off its core; the gold itself (the seam's flecks
+    # left out, each piece filled from its outline) covers what a hull missed.
+    n, labels, stats, _ = cv2.connectedComponentsWithStats(gold)
+    big = np.isin(labels, [i for i in range(1, n) if stats[i, cv2.CC_STAT_AREA] >= SEED_CORE]).astype(np.uint8)
+    contours, _ = cv2.findContours(big, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    cv2.drawContours(filled, contours, -1, 1, thickness=-1)
+    return filled, pieces
 
 
-def registered(fixed, moving):
-    if moving.size != fixed.size:
-        moving = moving.resize(fixed.size, Image.LANCZOS)
-    grey = lambda im: cv2.GaussianBlur(np.asarray(im.convert("L")).astype(np.float32) / 255, (0, 0), 3)
-    warp = np.eye(2, 3, dtype=np.float32)
-    criteria = (cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 200, 1e-6)
-    _, warp = cv2.findTransformECC(grey(fixed), grey(moving), warp, cv2.MOTION_EUCLIDEAN, criteria, None, 5)
-    print(f"grapes: ink take registered by ({warp[0, 2]:.1f}, {warp[1, 2]:.1f}) px")
-    w, h = fixed.size
-    moved = cv2.warpAffine(np.asarray(moving), warp, (w, h), flags=cv2.INTER_LINEAR + cv2.WARP_INVERSE_MAP, borderMode=cv2.BORDER_REPLICATE)
-    return Image.fromarray(moved)
-
-
-def grapes():
-    """(unlit, lit, spread): the two Why layers in register and where the gold starts."""
-    gold_take = bd.divided(bd.load(TAKES["grapes-gold"]))
-    ink_take = registered(gold_take, bd.divided(bd.load(TAKES["grapes-ink"])))
-    box = bd.ink_box(np.asarray(gold_take), pad=0.04)
-    lit_src = richer_gold(gold_take.crop(box))
-    lit = finish(lit_src, "grapes-lit", gold=True)
-    unlit = finish(ink_take.crop(box), "grapes-unlit")
-    ys, xs = np.nonzero(gold_of(np.asarray(lit_src).astype(np.float32)))
-    h, w = np.asarray(lit_src).shape[:2]
+def seeds():
+    """(unlit, lit, spread): the Why layers. Lit: the painting as Codex painted it. Unlit: the same
+    painting with the seeds plain grape-seed brown (their light and shade kept). No gold mask: the
+    kit's band of light, scroll-linked, rested on the seeds while their words were read (a phone,
+    the painting near the window's top) and washed them pale, as it did on About's oak, so the
+    seeds are plain gold leaf at rest."""
+    flat = bd.divided(Image.open(HERE / "originals" / f"{SEEDS_TAKE}.png").convert("RGB"))
+    flat = flat.crop(bd.ink_box(np.asarray(flat), pad=0.05))
+    arr = np.asarray(flat)
+    mask, count = seed_mask(arr)
+    if count != SEED_COUNT:
+        raise SystemExit(f"expected {SEED_COUNT} gold seeds, found {count}")
+    soft = cv2.GaussianBlur(cv2.dilate(mask, np.ones((3, 3), np.uint8)).astype(np.float32), (0, 0), 1.5)[..., None]
+    a = arr.astype(np.float32)
+    lum = a.mean(axis=2, keepdims=True)
+    brown = np.concatenate([lum * 0.62 + 40, lum * 0.48 + 28, lum * 0.34 + 18], axis=2)
+    plain = Image.fromarray(np.clip(a * (1 - soft) + brown * soft, 0, 255).astype(np.uint8))
+    lit = finish(flat, "seeds-lit")
+    unlit = finish(plain, "seeds-unlit")
+    ys, xs = np.nonzero(mask)
+    h, w = mask.shape
     spread = {"x": round(float(np.median(xs)) / w, 4), "y": round(float(np.median(ys)) / h, 4)}
-    print(f"grapes: gold {len(xs) / (w * h) * 100:.2f}% of the picture, spreads from {spread}")
+    print(f"seeds: {count} seeds, gold {len(xs) / (w * h) * 100:.2f}% of the picture, spreads from {spread}")
     return unlit, lit, spread
 
 
@@ -250,11 +277,12 @@ def write_ts(art):
         "// Generated by reference/ink-pages/opc/build_opc.py. Do not edit by hand: change the script",
         "// (or its TAKES) and run it again. Advanced OPC Formula's ink paintings (October 16, 2026):",
         "// GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's own",
-        "// paper; gold leaf as a light mask (`gold`). grapesSpread: where the gold starts, as fractions",
-        "// of the painting. sum.centres: its three numbers, as fractions of its width. scene.bottle:",
-        "// where the real bottle stands, as fractions of the painting (its width, and its picture's",
-        "// bottom above the painting's); scene.front: the painting's lowest share where the bottle",
-        "// stands, laid again in front of its foot.",
+        "// paper. The Why painting (grapesUnlit, grapesLit) is a Codex take of November 17: grapes",
+        "// and a cut grape, its seeds plain, then gold leaf (no light mask: plain at rest). grapesSpread:",
+        "// where the gold starts, as fractions of the painting. sum.centres: its three numbers, as",
+        "// fractions of its width. scene.bottle: where the real bottle stands, as fractions of the",
+        "// painting (its width, and its picture's bottom above the painting's); scene.front: the",
+        "// painting's lowest share where the bottle stands, laid again in front of its foot.",
         "",
     ]
     TS.parent.mkdir(parents=True, exist_ok=True)
@@ -265,7 +293,7 @@ def write_ts(art):
 
 
 if __name__ == "__main__":
-    unlit, lit, spread = grapes()
+    unlit, lit, spread = seeds()
     write_ts(
         {
             "grapesUnlit": unlit,

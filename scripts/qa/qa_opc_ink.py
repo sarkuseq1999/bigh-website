@@ -1,7 +1,7 @@
 """QA for Advanced OPC Formula's ink page (Mo, October 16, 2026; picks and paintings in
 reference/ink-pages/opc/README.md). The template is NuriCell's (qa_nuricell_ink.py); this checks
-what Advanced OPC brings: "Advanced" small over "OPC" round the bottle with "Formula", the gold
-spreading through the grapes, thirteen ingredients, a painting of Dr. Wang's work (no face), the
+what Advanced OPC brings: "Advanced" small over "OPC" round the bottle with "Formula", the cut
+grape's seeds turning to gold leaf, thirteen ingredients, a painting of Dr. Wang's work (no face), the
 painted sum 2 × 60 = 120, the real bottle inside the vine scene.
 
 Sections (all, or --only=a,b):
@@ -18,8 +18,10 @@ Sections (all, or --only=a,b):
   chapters    overview, why, inside, research, people, daily, buy; each its own painting; "thirteen
               ingredients"; 300 mg; Dr. Wang's words with a work painting captioned Illustration; the
               painted sum; every study; the questions
-  spread      the gold waits, then fills the grapes from their middle; reduced motion and no script:
-              filled from the first paint; its glint mask follows
+  spread      the Why painting (Mo picked B, November 17, 2026: grapes and a cut grape): the gold
+              waits, then spreads from the seeds; plain brown seeds before, gold leaf after, and no
+              gold anywhere but the seeds; reduced motion and no script: gold from the first paint;
+              no band of light on the seeds (plain gold leaf at rest)
   multiply    every painting multiplies onto the paper with no box
   buy         the real bottle (advanced-opc.png) stands inside the scene, centred; the front layer
               multiplies over its foot and changes nothing beside it; captioned; Add to cart
@@ -271,6 +273,27 @@ SPREAD = """() => { const f = document.querySelector('[data-chapter="why"] figur
                glint: gold ? Number(getComputedStyle(gold).opacity) : null } : null; }"""
 
 
+def gold_of(img):
+    """The share of a picture that is gold leaf: warm, strongly saturated and bright. The violet
+    grapes, the olive leaf, the pale flesh, the stem and the plain brown seeds are not (measured on
+    the shipped pictures over the paper: 0.06% before the moment, 1.1% after)."""
+    a = img.convert("RGB")
+    px = a.getdata()
+    gold = 0
+    for r, g, b in px:
+        hi, lo = max(r, g, b), min(r, g, b)
+        if hi <= 170 or not (r >= g > b) or (hi - lo) / hi <= 0.5:
+            continue
+        hue = 60 * (g - b) / (hi - lo)
+        if 22 < hue < 60:
+            gold += 1
+    return gold / len(px)
+
+
+def gold_share(page):
+    return gold_of(Image.open(io.BytesIO(page.locator('[data-chapter="why"] figure').screenshot())))
+
+
 def spread(browser):
     ctx, page, _, _ = opened(browser, 1440, 900)
     first = page.evaluate(SPREAD)
@@ -279,8 +302,11 @@ def spread(browser):
         ctx.close()
         return
     check("spread: off before the chapter is seen", first["light"] == "off" and first["spread"] == "-14%", str(first))
-    check("spread: radial from the grapes' middle", "radial-gradient" in (first["mask"] or ""), (first["mask"] or "")[:80])
+    check("spread: radial from the seeds", "radial-gradient" in (first["mask"] or ""), (first["mask"] or "")[:80])
     bring(page, '[data-chapter="why"] figure', 120)
+    # Before the light: the bloom has started, the seeds still plain (the light waits 1.8 s).
+    page.wait_for_timeout(900)
+    before = gold_share(page)
     seen = []
     for _ in range(14):
         page.wait_for_timeout(500)
@@ -290,9 +316,12 @@ def spread(browser):
     check("spread: comes on once seen", seen[-1]["light"] == "on", str(seen[-1]))
     check("spread: passes through partly filled", len(partial) >= 2, ", ".join(mids[:8]))
     check("spread: ends filled", seen[-1]["spread"] == "115%", seen[-1]["spread"])
+    after = gold_share(page)
+    check("spread: the seeds turn to gold leaf", before < 0.003 and after > 0.006, f"gold {before:.4f} before, {after:.4f} after")
     page.wait_for_timeout(3000)
     glint = page.evaluate(SPREAD)["glint"]
-    check("spread: the gold's glint after the fill", glint == 1, str(glint))
+    # No band of light on the seeds (November 17): it rested on them while their words were read.
+    check("spread: no band of light over the seeds (plain gold leaf at rest)", glint is None, str(glint))
     page.screenshot(path=str(OUT / "spread-1440.png"))
     ctx.close()
     for label, kwargs in [("reduced motion", {"reduced": True}), ("no script", {"js": False})]:
@@ -305,10 +334,8 @@ def spread(browser):
         else:
             shot = OUT / "spread-nojs.png"
             page.locator('[data-chapter="why"] figure').screenshot(path=str(shot))
-            img = Image.open(shot).convert("RGB").convert("HSV")
-            sat = img.tobytes()[1::3]
-            gold = sum(1 for s in sat if s > 90) / len(sat)
-            check(f"spread {label}: the gold shows", gold > 0.002, f"{gold:.4f} of pixels gold")
+            gold = gold_of(Image.open(shot))
+            check(f"spread {label}: the gold shows", gold > 0.006, f"{gold:.4f} of pixels gold")
         ctx.close()
 
 

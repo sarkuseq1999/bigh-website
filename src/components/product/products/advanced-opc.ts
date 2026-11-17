@@ -278,11 +278,14 @@ const advancedOpc: ProductPage = {
   // The ink page (Mo, October 16, 2026, "1C 2A 3A2"; paintings and picks in reference/ink-pages/opc/).
   // Alt texts are drafts for Mo.
   ink: {
+    // Why (Mo picked B, November 17, 2026; it replaced the grey grapes lit gold, whose gold sat in
+    // a yellow haze): a few grapes and one grape cut in half; as you arrive its plain brown seeds
+    // turn to gold leaf, spreading from the seeds (OPCs come from grape seeds).
     why: {
       unlit: opcArt.grapesUnlit,
       lit: opcArt.grapesLit,
       spread: opcArt.grapesSpread,
-      alt: "A bunch of grapes on the vine, lit from inside with gold leaf, painted in ink",
+      alt: "A few ripe grapes on their stem and one grape cut in half, its seeds in gold leaf, painted in watercolor",
     },
     inside: {
       ...opcArt.row,

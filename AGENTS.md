@@ -208,6 +208,17 @@ These sit on top of `DESIGN.md`.
   picture `reference/ink-pages/opc/build_opc_opening.py` (Codex painting
   `opening-harvest-ah`, `paint_opening.sh`); mockups `reference/ink-pages/mockups/opc-opening/`.
   Live November 16, 2026 (`main` `7c8dff5`).
+- **Advanced OPC "A balance worth keeping.": the gold is in the seeds (Mo picked B, November 17,
+  2026).** The chapter's grey ink grapes lit gold from inside were painted as an East Asian ink
+  painting, and their gold sat in a yellow haze (a glow). Of two California-color paintings mocked
+  on the live page (A a bunch that ripens from green to violet, no gold; B a few grapes and one
+  grape cut in half) he picked B, Claude's pick: as you arrive, the cut grape's plain brown seeds
+  turn to gold leaf, spreading from the seeds (OPCs come from grape seeds). The cut grape lies in
+  front, larger than the whole grapes, so the seeds read on a computer. No band of light on the
+  seeds: the kit's scroll-linked band rested on them while their words were read and washed them
+  pale (as on About's oak); plain gold leaf at rest. The words did not change. `build_opc.py`
+  (`seeds()`, Codex take `why-seedsbig-ah`), `opc-art.ts`; mockups
+  `reference/ink-pages/mockups/opc-why/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a
@@ -237,7 +248,7 @@ These sit on top of `DESIGN.md`.
   tagline, "From nature"). Green Bee Propolis keeps its numbered labels ("01 | Why green
   propolis"), part of its own chapter system with the index row under its opening. Don't put
   labels back over product chapter headings. `chapter-labels.ts`; mockups
-  `reference/ink-pages/mockups/product-labels/`.
+  `reference/ink-pages/mockups/product-labels/`. Live November 17, 2026 (`main` `8f21216`).
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

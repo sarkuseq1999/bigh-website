@@ -11,11 +11,12 @@ const FIRST = 700;
 const LAST = 739;
 const entries = [
   [
-    "A bunch of grapes on the vine, lit from inside with gold leaf, painted in ink",
-    "藤上的一串葡萄，自内而外被金箔点亮，以水墨绘成。",
-    "덩굴에 달린 포도 한 송이가 안에서부터 금박으로 빛나는 모습을 먹으로 그린 그림.",
-    "Một chùm nho trên giàn, được lá vàng thắp sáng từ bên trong, vẽ bằng mực.",
-    "蔓になった一房のぶどうが金箔で内側から灯るように輝く様子を、墨で描いた絵。",
+    // November 17, 2026: the Why painting became grapes and a cut grape with gold seeds (Mo picked B).
+    "A few ripe grapes on their stem and one grape cut in half, its seeds in gold leaf, painted in watercolor",
+    "几颗熟透的葡萄连着果梗，还有一颗切成两半的葡萄，籽上贴着金箔，以水彩绘成。",
+    "줄기에 달린 잘 익은 포도 몇 알과 반으로 자른 포도 한 알, 그 씨앗을 금박으로 그린 수채화.",
+    "Vài quả nho chín trên cuống và một quả nho bổ đôi, hạt của nó dát lá vàng, vẽ bằng màu nước.",
+    "房についた熟したぶどう数粒と、半分に切ったぶどう一粒。その種を金箔で描いた水彩画。",
   ],
   [
     "Grapes, pine bark, bilberries, tea leaves, an orange slice and a marigold, painted in ink",

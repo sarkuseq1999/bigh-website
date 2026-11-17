@@ -11,7 +11,7 @@ red wine are the formula's headline sources, and wine country is California's.
 | Chapter        | Painting                                                                                                      | Take(s)                               |
 | -------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
 | Opening        | The real bottle between "Advanced" small over "OPC" and "Formula" (name C; `nameHalves` + `nameLead`)           | (no painting)                         |
-| Why it matters | A bunch of grapes on the vine; as you arrive, gold light spreads through the berries from the middle (Why A)    | `why-grapes-gold`, `why-grapes-ink`   |
+| Why it matters | A bunch of grapes on the vine; as you arrive, gold light spreads through the berries from the middle (Why A; replaced November 17, below) | `why-grapes-gold`, `why-grapes-ink`   |
 | What's inside  | Six of the nine plants in two calm rows: grapes, pine bark, bilberries, tea leaves, an orange slice, a marigold | `inside-row`                          |
 | The research   | A hand lens over a few grape seeds and a sliver of pine bark; no gold, so the eye rests                        | `research-lens`                       |
 | The people     | Dr. Iris Wang, no face ever: a stone mortar and pestle with marigold petals stands for her formulation guidance | `people-mortar`                       |
@@ -48,12 +48,36 @@ closer (two bands of bare slope beside the bottle taken out) so a bunch of grape
 side. Checks: `qa_opc_ink` section `vineyard`. The other five takes (spring, autumn and the `b`
 takes) are in `codes/bigh-archive/opc-opening-unused-2026-11-16/`.
 
+## Why: the gold is in the seeds (Mo picked B, November 17, 2026)
+
+October's Why painting was grey ink grapes lit gold from inside, painted as an East Asian ink
+painting, its gold in a faint yellow haze: a glow, which Mo's rule of October 19 refuses (gold
+leaf never glows), and grey while the rest of the site turned California colour. Two ideas were
+painted by Codex in the homepage mailbox's hand (`paint_why.sh`, the mailbox as the painter's
+hand on the `h` takes; `prompts/why-ripe-1.txt`, `prompts/why-seeds-1.txt`) and mocked on the
+live page (`../mockups/opc-why/`: `prep.py`, `mock.py`; review page
+https://claude.ai/artifact/EvBkXxw7h84qguGVAxYPDM): A a bunch that ripens from green to violet as
+you arrive, no gold; B a few grapes and one grape cut in half whose plain brown seeds turn to gold
+leaf (OPCs come from grape seeds). Mo picked **B** (Claude's pick). The mocked take's seeds were
+about the size of a word on a computer, so the cut grape was painted larger
+(`prompts/why-seedsbig-1.txt`, take `why-seedsbig-ah`, kept in `originals/`; the halves lie in
+front of the cluster, larger than the whole grapes, as a near thing would).
+
+Built by `seeds()` in `build_opc.py` (`seeds-{lit,unlit}-v1.webp`; the art keys stay `grapesLit`, `grapesUnlit`, `grapesSpread`): the lit layer is the take as painted;
+the unlit layer the same painting with the five seeds turned plain grape-seed brown. The chapter's
+own spread moment runs from the seeds. No gold mask, so no band of light: the kit's band is
+scroll-linked and, on a phone with the painting near the window's top while its words are read, it
+rested on the right half's seeds and washed them pale (as on About's oak): plain gold leaf at rest. The picture's description is m700 (draft translations). Checks:
+`qa_opc_ink` section `spread` (plain seeds before, gold after). The other six takes (A's two, B's
+first two, two of the larger ones) are in `codes/bigh-archive/opc-why-unused-2026-11-17/`.
+
 ## Rules kept
 
 - The bottle is never redrawn (Mo, October 14): the real photo stands in the painting; its width
   and NuriCell's size come from the template (`nameFit`, `InkScene`).
 - Watercolour and ink, no photo scenes; nothing Asian-coded (no "kintsugi" wording, no teacup).
-- Gold leaf only where it means something: the light inside the grapes. The capsules stay plain
+- Gold leaf only where it means something: the seeds of the cut grape (November 17; before, the
+  light inside the grapes). The capsules stay plain
   grey (their real colour is not known).
 - Facts only from the data file and label; the alt texts and the sum captions are drafts for Mo.
 
