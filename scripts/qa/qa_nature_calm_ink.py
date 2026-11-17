@@ -9,6 +9,11 @@ Sections (all, or --only=a,b):
               errors (1440x900, 390x844)
   name        1920 to 360: both halves inside the wrap and clear of the bottle, on one row from 960px,
               "Nature" over "Calm" over the bottle below; vi too
+  meadow      the opening's painting, the high meadow (Mo picked A, November 16, 2026), 2560 to 360:
+              drawn and multiplied behind the name, the window's width and up to its top, the
+              bottle's foot on its ground with its own grass in front, the name over the land from
+              960px, the words under the painting, no sideways scroll; without scripts too; Green
+              Bee Propolis keeps its own opening
   chapters    overview, why, inside, research, people, daily, buy (no sum); each its own painting;
               "18 ingredients."; 100 mg; every study; Dr. Liu's portrait painting; the page's words;
               the three capsules on the "One bottle" card
@@ -159,7 +164,9 @@ NAME_BOXES = """() => {
   const inner = [wrap.left + parseFloat(style.paddingLeft), wrap.right - parseFloat(style.paddingRight)];
   const box = (el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
   const first = h.querySelector('[class*=first]'), second = h.querySelector('[class*=second]');
-  const bottle = h.querySelector('[class*=stand] img');
+  // The bottle photo itself: since November 16, 2026 the bottle's box also holds the meadow painting
+  // and its front grass (painted-opening.tsx).
+  const bottle = h.querySelector('[class*=stand] img[class*=bottle]');
   // The bottle's glass: the photo has a wide transparent margin (its visible part is 52% of its
   // width, centred).
   const b = box(bottle), mid = (b.l + b.r) / 2, half = (b.r - b.l) * 0.52 / 2;
@@ -317,17 +324,26 @@ def front_only_on_bottle(page, m, tag):
     the stage drawn with and without it, every changed pixel inside the bottle's box."""
     fl, fr, ft, fb = m["figure"]
     clip = {"x": fl, "y": ft, "width": fr - fl, "height": fb - ft}
-    with_front = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("RGB")
-    page.evaluate("() => { document.querySelector('[data-scene-front]').style.visibility = 'hidden'; }")
-    page.wait_for_timeout(200)
-    without = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("RGB")
-    page.evaluate("() => { document.querySelector('[data-scene-front]').style.visibility = ''; }")
+
+    def pair():
+        with_front = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("RGB")
+        page.evaluate("() => { document.querySelector('[data-scene-front]').style.visibility = 'hidden'; }")
+        page.wait_for_timeout(200)
+        without = Image.open(io.BytesIO(page.screenshot(clip=clip))).convert("RGB")
+        page.evaluate("() => { document.querySelector('[data-scene-front]').style.visibility = ''; }")
+        page.wait_for_timeout(200)
+        return with_front.load(), without.load(), with_front.size
+
+    # Two pairs of captures: a pixel counts only if the front layer changes it in both. Since the
+    # opening's painting made the page taller (November 16, 2026) the scene sits at a fractional
+    # pixel on a phone, and about one capture in five then draws a few edge pixels of the hidden
+    # layer's stage differently, beside the bottle; a real stray mark changes them every time.
+    (a, b, (w, h)), (a2, b2, _) = pair(), pair()
     bl, br, bt, bb = m["bottle"]
-    a, b = with_front.load(), without.load()
     outside = inside = 0
-    for y in range(with_front.height):
-        for x in range(with_front.width):
-            if max(abs(c1 - c2) for c1, c2 in zip(a[x, y], b[x, y])) > 10:
+    for y in range(h):
+        for x in range(w):
+            if max(abs(c1 - c2) for c1, c2 in zip(a[x, y], b[x, y])) > 10 and max(abs(c1 - c2) for c1, c2 in zip(a2[x, y], b2[x, y])) > 10:
                 px, py = fl + x, ft + y
                 if bl - 3 <= px <= br + 3 and bt - 3 <= py <= bb + 3:
                     inside += 1
@@ -433,9 +449,102 @@ def languages(browser):
         ctx.close()
 
 
+MEADOW = """() => {
+  const sec = document.querySelector('[data-chapter="overview"]');
+  const v = sec.querySelector('[data-opening-painting]');
+  if (!v) return null;
+  const css = getComputedStyle(sec);
+  const num = (n) => parseFloat(css.getPropertyValue(n));
+  const box = (el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
+  const img = v.querySelector('picture img');
+  const bottle = sec.querySelector('h1 img[class*=bottle]'), b = box(bottle), bh = b.b - b.t;
+  const front = sec.querySelector('img[class*=paintingFront]');
+  const second = sec.querySelector('h1 [class*=second]');
+  const probe = document.createElement('span');
+  Object.assign(probe.style, { display: 'inline-block', width: '0', height: '0', verticalAlign: 'baseline' });
+  second.append(probe); const baseline = probe.getBoundingClientRect().top; probe.remove();
+  const p = box(v), rows = num('--paint-rows');
+  const at = (row) => p.t + (row / rows) * (p.b - p.t);
+  return { src: decodeURIComponent(img.currentSrc || img.src), decoded: img.complete && img.naturalWidth > 1,
+           blend: getComputedStyle(v).mixBlendMode, z: getComputedStyle(v).zIndex,
+           painting: p, W: document.documentElement.clientWidth,
+           sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+           hills: at(num('--paint-hills')), ground: at(num('--paint-ground')), end: at(num('--paint-end')),
+           foot: b.t + (1242 / 1278) * bh, bottleH: bh, glassMid: (b.l + b.r) / 2,
+           front: front ? { ...box(front), z: getComputedStyle(front).zIndex, decoded: front.complete && front.naturalWidth > 1 } : null,
+           baseline, size: parseFloat(getComputedStyle(sec.querySelector('h1')).fontSize),
+           words: sec.querySelector('h1 + div').getBoundingClientRect().top };
+}"""
+
+MEADOW_SIZES = [(2560, 1300), (1920, 1080), (1536, 864), (1440, 900), (1440, 700), (1280, 800), (1024, 768), (960, 800), (768, 1024), (390, 844), (360, 780)]
+
+
+def meadow(browser):
+    """The opening's high meadow (Mo picked A, November 16, 2026; painted-opening.tsx, shared with
+    Advanced OPC Formula's vineyard and Turmerific's field): one painting behind the name and the
+    bottle, multiplied, the window's width and up to the window's top, the bottle's foot on its
+    ground with the painting's own grass in front, the name over the land from 960px, the words on
+    bare paper under the last of the painting."""
+    for w, h in MEADOW_SIZES:
+        ctx, page, _, errors = opened(browser, w, h, reduced=True)
+        page.wait_for_function("() => [...document.querySelectorAll('[data-chapter=\"overview\"] img')].every((i) => i.complete)")
+        page.wait_for_timeout(300)
+        m = page.evaluate(MEADOW)
+        tag = f"meadow {w}x{h}"
+        if m is None:
+            check(f"{tag}: the painting is there", False)
+            ctx.close()
+            continue
+        wide = w >= 960
+        want = "opening-meadow-v1" if wide else "opening-meadow-phone-v1"
+        check(f"{tag}: the painting ({'whole' if wide else 'its closer middle'}) is drawn", m["decoded"] and want in m["src"], m["src"][-70:])
+        check(f"{tag}: it multiplies behind the name and the bottle", m["blend"] == "multiply" and m["z"] == "-1", f"{m['blend']}, z {m['z']}")
+        left, right = m["painting"]["l"], m["painting"]["r"]
+        check(f"{tag}: it spans the window's width", left <= 0.5 and right >= m["W"] - 0.5, f"{left:.0f} to {right:.0f} of {m['W']}")
+        check(f"{tag}: its sky reaches the window's top", m["painting"]["t"] <= 0, f"top {m['painting']['t']:.0f}")
+        sink = (m["foot"] - m["ground"]) / m["bottleH"]
+        check(f"{tag}: the bottle's foot stands on its ground", 0 <= sink <= 0.03, f"foot {sink * 100:.1f}% of the bottle under the ground")
+        f = m["front"]
+        check(f"{tag}: its own grass lies over the bottle's foot", f is not None and f["decoded"] and f["z"] == "1"
+              and f["t"] < m["foot"] < f["b"] and f["l"] < m["glassMid"] < f["r"],
+              f"grass {f['t']:.0f}-{f['b']:.0f}, foot {m['foot']:.0f}" if f else "no grass")
+        if wide:
+            # Where the painting is drawn at the name's size (wider than the window) the name's foot
+            # rests over the hills with a strip of sky; where it is drawn as wide as the window (a
+            # window wider than about 1600px, or a short one) it stands on the bottle's foot and its
+            # land rises a little behind the name, but the name stays above the meadow (its baseline
+            # in the upper half between the hills' row and the ground).
+            at_name = m["painting"]["r"] - m["painting"]["l"] > m["W"] + 20
+            if at_name:
+                check(f"{tag}: the name's foot over the land (a strip of sky)", m["baseline"] <= m["hills"] - 0.05 * m["size"],
+                      f"baseline {m['baseline']:.0f}, hills {m['hills']:.0f}")
+            else:
+                check(f"{tag}: the name above the meadow (the painting as wide as the window)",
+                      m["baseline"] <= m["hills"] + 0.5 * (m["ground"] - m["hills"]),
+                      f"baseline {m['baseline']:.0f}, hills {m['hills']:.0f}, ground {m['ground']:.0f}")
+        check(f"{tag}: the words on bare paper under the painting", m["words"] >= m["end"] + 8, f"words {m['words']:.0f}, painting ends {m['end']:.0f}")
+        check(f"{tag}: no sideways scroll", m["sideways"] <= 0, f"{m['sideways']}px")
+        check(f"{tag}: no console errors", not errors, "; ".join(errors[:2]))
+        if w in (1440, 390, 2560):
+            page.screenshot(path=str(OUT / f"meadow-{w}x{h}.png"))
+        ctx.close()
+    # Without scripts the painting is there all the same (it is the page's markup, not a script's).
+    for w, h in [(1440, 900), (390, 844)]:
+        ctx, page, _, _ = opened(browser, w, h, js=False)
+        page.wait_for_timeout(800)
+        shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
+        check(f"meadow {w}x{h} no script: the painting is drawn", shown)
+        ctx.close()
+    # Green Bee Propolis keeps its own opening (Mo's approved lockup), with no painting.
+    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/green-bee-propolis")
+    check("meadow: Green Bee Propolis keeps its own opening", page.locator("[data-opening-painting]").count() == 0)
+    ctx.close()
+
+
 SECTIONS = {
     "shell": shell,
     "name": name,
+    "meadow": meadow,
     "chapters": chapters,
     "light": light,
     "multiply": multiply,

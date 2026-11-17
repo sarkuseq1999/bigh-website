@@ -13,8 +13,8 @@ Sections (all, or --only=a,b):
               360: drawn and multiplied behind the name, the window's width and up to its top, the
               bottle's foot on its ground with its own grass in front, the name over the hills from
               960px (above the vines where the painting is drawn as wide as the window), the words
-              under the last grass, no sideways scroll; without scripts too; Nature Calm keeps the
-              plain opening
+              under the last grass, no sideways scroll; without scripts too; Green Bee Propolis keeps
+              its own opening
   chapters    overview, why, inside, research, people, daily, buy; each its own painting; "thirteen
               ingredients"; 300 mg; Dr. Wang's words with a work painting captioned Illustration; the
               painted sum; every study; the questions
@@ -652,9 +652,9 @@ def vineyard(browser):
         shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
         check(f"vineyard {w}x{h} no script: the painting is drawn", shown)
         ctx.close()
-    # Nature Calm keeps its plain opening until its own part.
-    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/nature-calm")
-    check("vineyard: Nature Calm keeps its plain opening", page.locator("[data-opening-painting]").count() == 0)
+    # Green Bee Propolis keeps its own opening (Mo's approved lockup), with no painting.
+    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/green-bee-propolis")
+    check("vineyard: Green Bee Propolis keeps its own opening", page.locator("[data-opening-painting]").count() == 0)
     ctx.close()
 
 

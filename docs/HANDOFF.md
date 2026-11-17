@@ -5,8 +5,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Turmerific's first screen, the turmeric field, November 16, 2026 (Claude Code; built,
-  committed locally, not pushed).** Part 2 of Mo's "superb" goal. Of three California places for
+- **Nature Calm's first screen, the high meadow, November 16, 2026 (Claude Code; built, not
+  pushed).** Part 3 of Mo's "superb" goal: the last product on the shared opening to leave bare
+  paper. Of three calm California places mocked on the live page (A Tuolumne Meadows, B Tomales Bay
+  at dawn, C Eastern Sierra aspens) Mo picked **A** (Claude's pick). Built with the shared
+  `painted-opening.tsx` (`build_nature_calm_opening.py`, `nature-calm-opening-art.ts`, "Calm"'s
+  baseline at 62.2% of the bottle's box, lift 0.1); `qa_nature_calm_ink` has a `meadow` section;
+  the three checkers now check that Green Bee Propolis keeps its own opening. Review page
+  https://claude.ai/artifact/PoveGP1zttXYJyDZdyYZxb; unused takes in
+  `bigh-archive\nature-calm-opening-unused-2026-11-16\`. Built site (`npm run build` + `npm start`,
+  sequentially): `qa_nature_calm_ink` 269/269, `qa_turmerific_ink` 265/265, `qa_opc_ink` 309/309,
+  `qa_nuricell_ink` 663/663, `qa_propolis_ink` 273/273, `qa_home_ink` 290/290, `qa_nav` 326/326.
+  Nature Calm's buy check (the lavender's front layer touches only the bottle) failed about one
+  phone capture in five here and never on the live site: the taller opening puts the scene at a
+  fractional pixel and the hidden-layer capture draws a few edge pixels differently; the check now
+  counts a pixel only if it differs in two capture pairs (6/6 after). After this, every product page opens on
+  a painted California place (NuriCell the coast, Propolis its own lockup). Next, one part at a
+  time: the four pages' middle chapters (grey ink, every painting on the left, small grey labels
+  over headings, the thin "How to take it").
+- **Turmerific's first screen, the turmeric field, November 16, 2026 (Claude Code; live, `main`
+  `1ebc6d2`, production `dpl_EhcG3kou5jueRNLF9wsBFq7fCxjy`, demo alias on it).** Part 2 of Mo's
+  "superb" goal. Of three California places for
   turmeric mocked on the live page (A a Ventura County turmeric field with freshly dug roots and a
   eucalyptus windbreak, B a stucco garden wall with a lemon tree, C the Ojai bluffs at dusk) Mo
   picked **A** (Claude's pick). OPC's vineyard code became one shared piece,

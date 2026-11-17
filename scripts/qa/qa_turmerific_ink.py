@@ -12,8 +12,8 @@ Sections (all, or --only=a,b):
   field       the opening's painting, the turmeric field (Mo picked A, November 16, 2026), 2560 to
               360: drawn and multiplied behind the name, the window's width and up to its top, the
               bottle's foot on its ground with its own earth in front, the name over the land from
-              960px, the words under the painting, no sideways scroll; without scripts too; Nature
-              Calm keeps the plain opening
+              960px, the words under the painting, no sideways scroll; without scripts too; Green
+              Bee Propolis keeps its own opening
   chapters    overview, why, inside, research, daily, buy (no people); each its own painting;
               "Inside every capsule, one ingredient."; 1,000 mg; the painted sum; all six studies; the
               questions, with no liver answer yet (Mo's research)
@@ -525,9 +525,9 @@ def field(browser):
         shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
         check(f"field {w}x{h} no script: the painting is drawn", shown)
         ctx.close()
-    # Nature Calm keeps its plain opening until its own part.
-    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/nature-calm")
-    check("field: Nature Calm keeps its plain opening", page.locator("[data-opening-painting]").count() == 0)
+    # Green Bee Propolis keeps its own opening (Mo's approved lockup), with no painting.
+    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/green-bee-propolis")
+    check("field: Green Bee Propolis keeps its own opening", page.locator("[data-opening-painting]").count() == 0)
     ctx.close()
 
 

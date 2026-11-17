@@ -2,12 +2,14 @@
 
 import Image, { getImageProps } from "next/image";
 import type { CSSProperties } from "react";
+import { natureCalmOpening } from "./nature-calm-opening-art";
 import { opcOpening } from "./opc-opening-art";
 import styles from "./painted-opening.module.css";
 import { turmerificOpening } from "./turmerific-opening-art";
 
 // A product's opening painted as a California place (Advanced OPC Formula's vineyard at harvest,
-// Mo picked B, November 16, 2026; Turmerific's turmeric field, Mo picked A the same day; mockups
+// Mo picked B, November 16, 2026; Turmerific's turmeric field and Nature Calm's high meadow, Mo
+// picked A for each the same day; mockups
 // reference/ink-pages/mockups/<product>-opening/): one loose ink-and-wash painting behind the name
 // and the bottle. From 960px the name rests over the painting's far land and the bottle stands on
 // its ground; in one column the bottle stands on the ground under the name. The words and the buy
@@ -40,6 +42,7 @@ type OpeningPainting = {
 const PAINTINGS: Record<string, OpeningPainting> = {
   "advanced-opc": opcOpening,
   turmerific: turmerificOpening,
+  "nature-calm": natureCalmOpening,
 };
 
 /** The product's opening painting, or undefined (the plain opening). */

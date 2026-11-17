@@ -218,6 +218,16 @@ These sit on top of `DESIGN.md`.
   real bottle stands on the bare earth between the rows. Same painted opening as Advanced OPC's
   (`painted-opening.tsx`, shared); picture `reference/ink-pages/turmerific/build_turmerific_opening.py`
   (Codex painting `opening-field-ah`); mockups `reference/ink-pages/mockups/turmerific-opening/`.
+  Live November 16, 2026 (`main` `1ebc6d2`).
+- **Nature Calm opening: the high meadow (Mo picked A, November 16, 2026).** The last product on
+  the shared opening to leave bare paper. Of three calm California places mocked on the real page
+  (A Tuolumne Meadows in Yosemite's high country, B Tomales Bay still as a mirror at dawn, which
+  repeated the Lake Tahoe chapter's still water, C Eastern Sierra aspens in autumn) he picked A,
+  Claude's pick: a wide green meadow on a calm summer evening, a slow stream winding through it in
+  two curves, a line of lodgepole pines and pale granite domes behind; the real bottle stands in
+  the grass. The green sits with the green bottle. Same painted opening as OPC's and Turmerific's
+  (`painted-opening.tsx`); picture `reference/ink-pages/nature-calm/build_nature_calm_opening.py`
+  (Codex painting `opening-meadow-bh`); mockups `reference/ink-pages/mockups/nature-calm-opening/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

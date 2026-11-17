@@ -4,7 +4,19 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-of3pjnbhp-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-dfe6w576w-sarkuseq1999s-projects.vercel.app`
+(`dpl_EhcG3kou5jueRNLF9wsBFq7fCxjy`), the **production** deployment of `main` at
+`1ebc6d23a0e4d92b3de233eeb0956425c89fd6a6` (November 16, 2026): Turmerific's first screen in a
+turmeric field (Mo picked A), on the painted opening now shared with Advanced OPC Formula's
+vineyard. Mo said "Yes, put it live". `origin/main` was `7c8dff5`, an ancestor of the tested tree
+(a fast-forward). Quick look on the plain public URL: the field at 1440 and 390 px and OPC's
+vineyard unchanged, no sideways scroll, no page errors. Full public checks, sequential:
+`qa_turmerific_ink` **265/265**, `qa_opc_ink` **309/309**, `qa_nuricell_ink` **663/663**,
+`qa_propolis_ink` **273/273**, `qa_home_ink` **290/290**, `qa_nav` **326/326**,
+`qa_nature_calm_ink` 160/173: all of its released checks passed; the 13 failures were its new
+`meadow` section, written for Nature Calm's next (unreleased) opening.
+
+Before that the alias pointed to `bigh-website-of3pjnbhp-sarkuseq1999s-projects.vercel.app`
 (`dpl_EuVn9xcCePY3diXbwmoumwaaKmsB`), the **production** deployment of `main` at
 `7c8dff5d3bedf942d45d91d4944d5b338ea1ca45` (November 16, 2026): Advanced OPC Formula's first
 screen in a vineyard at harvest (Mo picked B) and Nature Calm's Big Dipper stars without their

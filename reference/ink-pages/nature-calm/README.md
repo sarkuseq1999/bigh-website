@@ -34,6 +34,23 @@ take **loose-e** is the still lake. Its ruffled twin is an edit of it (`paint_ta
 `prompts/why-tahoe-ripple.txt`, take **ripple-a**). Built as `tahoe-still-v1` / `tahoe-ruffled-v1`
 (colour washes, so no deepening). Unused takes: `codes/bigh-archive/nature-calm-tahoe-unused-2026-11-16/`.
 
+## The opening: the high meadow (Mo picked A, November 16, 2026)
+
+The last product on the shared opening to leave bare paper, after Advanced OPC Formula's vineyard
+and Turmerific's field. Three calm California places were painted by Codex (`paint_opening.sh`,
+`prompts/opening-{meadow,bay,aspens}-1.txt`; takes `a` and `b`, each with the homepage's Big Sur
+close as the painter's hand) and mocked on the live page by script
+(`../mockups/nature-calm-opening/`; review page https://claude.ai/artifact/PoveGP1zttXYJyDZdyYZxb):
+A Tuolumne Meadows in Yosemite's high country on a calm evening, B Tomales Bay still as a mirror at
+dawn (it repeated the Lake Tahoe chapter's still water), C Eastern Sierra aspens in autumn. Mo
+picked **A** (take `opening-meadow-bh`, the stream's two curves), Claude's pick.
+
+Built with the shared painted opening (`build_nature_calm_opening.py` → `opening-meadow-*-v1.webp`,
+`src/components/product/ink/nature-calm-opening-art.ts`; `painted-opening.tsx`): the pine tops
+under the name at row 640, the ground at row 795 (inside the grass), "Calm"'s baseline at 62.2% of
+the bottle's box, the name lifted 0.1 of its size. Checks: `qa_nature_calm_ink` section `meadow`.
+The other five takes are in `codes/bigh-archive/nature-calm-opening-unused-2026-11-16/`.
+
 ## The stars without their glow (November 16, 2026)
 
 Seen at full size, each gold star of the Big Dipper sat in a pale lemon-yellow halo, a fuzzy glow
