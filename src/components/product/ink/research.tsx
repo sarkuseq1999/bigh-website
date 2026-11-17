@@ -5,6 +5,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { byYear } from "../template-chapters-model";
+import { showsChapterLabels } from "./chapter-labels";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
 import { isNuricell, nuricellSizes } from "./nuricell-layout";
 import { NuricellResearch } from "./nuricell-research";
@@ -38,7 +39,9 @@ function TemplateResearch({ product }: { product: InkProduct }) {
         />
       }
     >
-      <p className={`${base.label} ${styles.label}`}>{copy("The research")}</p>
+      {showsChapterLabels(product) ? (
+        <p className={`${base.label} ${styles.label}`}>{copy("The research")}</p>
+      ) : null}
       <h2 id={titleId("research")} className={`${base.display} ${styles.heading}`}>
         {copy(product.researchTitle ?? "The research on the ingredients")}
       </h2>

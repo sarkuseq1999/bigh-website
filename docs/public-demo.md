@@ -4,7 +4,19 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-dfe6w576w-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-g0hjazb7t-sarkuseq1999s-projects.vercel.app`
+(`dpl_Emko1rfYCh9LhKd4KRZ8Szt38zxX`), the **production** deployment of `main` at
+`903ecaded167e647c341675ce676ec2be02fc140` (November 16, 2026): Nature Calm's first screen in a
+high meadow (Mo picked A), the last product on the shared opening to leave bare paper. Mo said
+"Yes, put it live". `origin/main` was `1ebc6d2`, an ancestor of the tested tree (a fast-forward).
+Quick look on the plain public URL: the meadow at 1440 and 390 px, no sideways scroll, no page
+errors. Full public checks, sequential: `qa_nuricell_ink` **663/663**, `qa_propolis_ink`
+**273/273**, `qa_home_ink` **290/290**, `qa_nav` **326/326**, `qa_nature_calm_ink` 269/271,
+`qa_opc_ink` 309/311, `qa_turmerific_ink` 265/267: every released check passed; the two failures
+on each of the three were the new label checks, written for the next (unreleased) change, the
+chapters without the small labels over their headings.
+
+Before that the alias pointed to `bigh-website-dfe6w576w-sarkuseq1999s-projects.vercel.app`
 (`dpl_EhcG3kou5jueRNLF9wsBFq7fCxjy`), the **production** deployment of `main` at
 `1ebc6d23a0e4d92b3de233eeb0956425c89fd6a6` (November 16, 2026): Turmerific's first screen in a
 turmeric field (Mo picked A), on the painted opening now shared with Advanced OPC Formula's

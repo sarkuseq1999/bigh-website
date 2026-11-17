@@ -5,6 +5,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct, ProductSynergy } from "../product-types";
 import { WORDS } from "../template-chapters-model";
+import { showsChapterLabels } from "./chapter-labels";
 import { InkChapter, InkFigure, titleId } from "./ink-chapter";
 import { nuricellGold } from "./nuricell-gold";
 import inside from "./nuricell-inside.module.css";
@@ -38,7 +39,9 @@ export function Inside({ product, motion }: { product: InkProduct; motion: boole
         </InkFigure>
       }
     >
-      {own ? null : <p className={`${base.label} ${styles.label}`}>{copy("What’s inside")}</p>}
+      {showsChapterLabels(product) ? (
+        <p className={`${base.label} ${styles.label}`}>{copy("What’s inside")}</p>
+      ) : null}
       <h2 id={titleId("inside")} className={`${base.display} ${styles.heading}`}>
         {count === 1
           ? copy("Inside every capsule, one ingredient.")

@@ -4,8 +4,9 @@ import Image from "next/image";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
+import { showsChapterLabels } from "./chapter-labels";
 import { CAPTIONS, InkChapter, InkFigure, titleId } from "./ink-chapter";
-import { isNuricell, NURICELL_PEOPLE_PHONE_SIZES, nuricellSizes } from "./nuricell-layout";
+import { NURICELL_PEOPLE_PHONE_SIZES, nuricellSizes } from "./nuricell-layout";
 import styles from "./product-ink.module.css";
 
 // Chapter 5: the person behind the formula. Dr. Liu as a painting in ink and colour (Mo's call,
@@ -44,9 +45,9 @@ export function People({ product }: { product: InkProduct }) {
   ) : null;
   return (
     <InkChapter id="people" picture={picture}>
-      {isNuricell(product) ? null : (
+      {showsChapterLabels(product) ? (
         <p className={`${base.label} ${styles.label}`}>{copy("The people behind the formula")}</p>
-      )}
+      ) : null}
       <h2 id={titleId("people")} className={`${base.display} ${styles.heading}`}>
         {copy(lead.name)}
       </h2>

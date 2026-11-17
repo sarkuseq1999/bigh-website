@@ -228,6 +228,16 @@ These sit on top of `DESIGN.md`.
   the grass. The green sits with the green bottle. Same painted opening as OPC's and Turmerific's
   (`painted-opening.tsx`); picture `reference/ink-pages/nature-calm/build_nature_calm_opening.py`
   (Codex painting `opening-meadow-bh`); mockups `reference/ink-pages/mockups/nature-calm-opening/`.
+  Live November 16, 2026 (`main` `903ecad`).
+- **Product chapters: no small labels over the headings (Mo, November 16, 2026).** Mo found the
+  small grey line over NuriCell's chapter headings strange three times ("Why cellular health
+  matters", "What's inside", "The research") and it came off there. Shown before and after on the
+  live pages, he said yes to taking it off Advanced OPC Formula, Turmerific and Nature Calm too:
+  each chapter now starts with its heading. The buy chapter keeps its line (the product's
+  tagline, "From nature"). Green Bee Propolis keeps its numbered labels ("01 | Why green
+  propolis"), part of its own chapter system with the index row under its opening. Don't put
+  labels back over product chapter headings. `chapter-labels.ts`; mockups
+  `reference/ink-pages/mockups/product-labels/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

@@ -5,8 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Nature Calm's first screen, the high meadow, November 16, 2026 (Claude Code; built, not
-  pushed).** Part 3 of Mo's "superb" goal: the last product on the shared opening to leave bare
+- **No small labels over product chapter headings, November 16, 2026 (Claude Code; built,
+  committed locally, not pushed).** Part 4 of Mo's "superb" goal. Shown before and after on the
+  live pages (https://claude.ai/artifact/YGNkesKRfZiNmepcJ87L3P), Mo said yes to taking the small
+  grey line off the chapter headings of Advanced OPC Formula, Turmerific and Nature Calm, as on
+  NuriCell. `chapter-labels.ts` (`showsChapterLabels`: only Green Bee Propolis, whose numbered
+  labels are its own chapter system); `why.tsx`, `inside.tsx`, `research.tsx`, `people.tsx`,
+  `daily.tsx`. The three checkers check no label stands over a chapter's heading. Built site
+  (`npm run build` + `npm start`, sequentially, November 17): `qa_opc_ink` 311/311,
+  `qa_turmerific_ink` 267/267, `qa_nature_calm_ink` 271/271, `qa_nuricell_ink` 663/663,
+  `qa_propolis_ink` 273/273, `qa_home_ink` 290/290, `qa_nav` 326/326; lint, type-check, prettier
+  clean; built pages looked at (1440 and 390 px). Noted, not yet shown to Mo: OPC's lit grapes (Why
+  chapter, approved October 16) sit in a pale yellow wash, a glow his later rule refuses (October
+  19: gold leaf never glows); being mocked as the next part (`reference/ink-pages/mockups/opc-why/`).
+- **Nature Calm's first screen, the high meadow, November 16, 2026 (Claude Code; live, `main`
+  `903ecad`, production `dpl_Emko1rfYCh9LhKd4KRZ8Szt38zxX`, demo alias on it).** Part 3 of Mo's "superb" goal: the last product on the shared opening to leave bare
   paper. Of three calm California places mocked on the live page (A Tuolumne Meadows, B Tomales Bay
   at dawn, C Eastern Sierra aspens) Mo picked **A** (Claude's pick). Built with the shared
   `painted-opening.tsx` (`build_nature_calm_opening.py`, `nature-calm-opening-art.ts`, "Calm"'s

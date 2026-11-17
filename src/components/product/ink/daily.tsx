@@ -6,6 +6,7 @@ import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
 import { monthPlan, titleFor } from "../template-chapters-model";
+import { showsChapterLabels } from "./chapter-labels";
 import { InkChapter, InkFigure, keepTogether, titleId } from "./ink-chapter";
 import styles from "./product-ink.module.css";
 
@@ -67,7 +68,9 @@ export function Daily({ product }: { product: InkProduct }) {
   const operators = plan.perDay * plan.days === plan.total;
   return (
     <InkChapter id="daily" picture={<InkFigure art={picture} alt={picture.alt} />}>
-      <p className={`${base.label} ${styles.label}`}>{copy("How to take it")}</p>
+      {showsChapterLabels(product) ? (
+        <p className={`${base.label} ${styles.label}`}>{copy("How to take it")}</p>
+      ) : null}
       <h2 id={titleId("daily")} className={`${base.display} ${styles.heading}`}>
         {copy(titleFor(plan.days), { days: plan.days })}
       </h2>

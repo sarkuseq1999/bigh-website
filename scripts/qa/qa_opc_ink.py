@@ -187,8 +187,9 @@ def name(browser):
             ctx.close()
 
 
+GONE = ['Why antioxidants matter', 'What’s inside', 'The people behind the formula']
+
 EXPECT = [
-    "Why antioxidants matter",
     "A balance worth keeping.",
     "Making energy also makes a few free radicals",
     "Inside every capsule, 13 ingredients.",
@@ -247,6 +248,12 @@ def chapters(browser):
     )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
+    # No small label over a chapter's heading (Mo, November 16, 2026; NuriCell's since October 26):
+    # each chapter starts with its heading; the buy chapter's line is the product's tagline.
+    labels = page.evaluate("""() => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"]):not([data-chapter="buy"]) [data-words] > p[class*="label"]')].map((p) => p.textContent.trim())""")
+    check("chapters: no small label over the chapters' headings", not labels, "; ".join(labels))
+    gone = [g for g in GONE if g in text]
+    check("chapters: the old labels are gone", not gone, "; ".join(gone))
     studies = page.locator("[data-study]").count()
     check("chapters: all five studies", studies == 5, f"{studies}")
     alts = page.evaluate("() => [...document.querySelectorAll('main figure img[alt]')].map(i => i.alt).filter(Boolean)")

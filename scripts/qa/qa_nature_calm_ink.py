@@ -55,6 +55,8 @@ PAINTED = ["why", "inside", "research", "people", "daily"]
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
 SIZES = [(1920, 1080), (1536, 864), (1440, 900), (1280, 800), (1024, 768), (960, 800), (900, 900), (768, 1024), (390, 844), (360, 780)]
 # Words from src/components/product/products/nature-calm.ts that every build must keep.
+GONE = ['Why stress matters to your cells', 'What’s inside', 'The people behind the formula']
+
 EXPECT = [
     "For life’s demanding days",
     "Everyday stress.",
@@ -64,7 +66,6 @@ EXPECT = [
     "Everyday stress",
     "90 vegetarian capsules",
     "30-day supply",
-    "Why stress matters to your cells",
     "Stress, seen from inside the cell.",
     "Under stress, your body releases hormones that get it ready to respond.",
     "In animal studies, Dr. Liu and Dr. Wang found that stress raised oxidative damage in the brain.",
@@ -237,6 +238,12 @@ def chapters(browser):
     )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
+    # No small label over a chapter's heading (Mo, November 16, 2026; NuriCell's since October 26):
+    # each chapter starts with its heading; the buy chapter's line is the product's tagline.
+    labels = page.evaluate("""() => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"]):not([data-chapter="buy"]) [data-words] > p[class*="label"]')].map((p) => p.textContent.trim())""")
+    check("chapters: no small label over the chapters' headings", not labels, "; ".join(labels))
+    gone = [g for g in GONE if g in text]
+    check("chapters: the old labels are gone", not gone, "; ".join(gone))
     studies = page.locator("[data-study]").count()
     check("chapters: all seven studies", studies == 7, f"{studies}")
     check("chapters: no rats", "rats" not in text.lower().split("animal study")[0] and " rats" not in text.lower())
