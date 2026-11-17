@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-4hs260zo4-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-atpwert6u-sarkuseq1999s-projects.vercel.app`
+(`dpl_B2d8YK6hdzrhcD4WDRC7yagccNuk`), the **production** deployment of `main` at
+`23cf79676ae4fda6cb6ec9b6a8585758bf1051b4` (November 17, 2026): Advanced OPC Formula's What's
+inside painting, all nine plant sources in color (Mo picked B). Mo said "Yes, put it live".
+`origin/main` was `7b7ca60`, the tested tree's parent (a fast-forward). Quick look on the plain
+public URL at 1440 and 390 px: the plants painting loads, no sideways scroll, no page errors.
+Public checks, sequential: `qa_opc_ink` **313/313**, `qa_home_ink` **290/290**, `qa_nav`
+**326/326**.
+
+Before that the alias pointed to `bigh-website-4hs260zo4-sarkuseq1999s-projects.vercel.app`
 (`dpl_CjX6BUsuwvf7ntEaV8aDyskvncxu`), the **production** deployment of `main` at
 `7b7ca60d2909685145d50e7c223447a89dcef0ae` (November 17, 2026): Advanced OPC Formula's grapes
 chapter, a cut grape whose seeds turn to gold leaf (Mo picked B). Mo said "Yes, put it live".

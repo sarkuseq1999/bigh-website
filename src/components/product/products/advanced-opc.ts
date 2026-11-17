@@ -217,7 +217,7 @@ const advancedOpc: ProductPage = {
       // her words on the ink page (Mo, October 16, 2026), captioned "Illustration".
       painting: {
         ...opcArt.mortar,
-        alt: "A stone mortar and pestle with a few marigold petals beside it, painted in ink",
+        alt: "A stone mortar and pestle with a few marigold petals beside it, painted in watercolor",
       },
       paintingOf: "work",
       lines: [
@@ -294,12 +294,12 @@ const advancedOpc: ProductPage = {
     },
     research: {
       ...opcArt.lens,
-      alt: "A magnifying glass over a few grape seeds and a sliver of pine bark, painted in ink",
+      alt: "A magnifying glass over a few grape seeds and a sliver of pine bark, painted in watercolor",
     },
     daily: {
       picture: {
         ...opcArt.plate,
-        alt: "An empty plate with the knife and fork laid together, a glass of water and two capsules, painted in ink",
+        alt: "An empty plate with the knife and fork laid together, a glass of water and two capsules, painted in watercolor",
       },
       sum: opcArt.sum,
     },

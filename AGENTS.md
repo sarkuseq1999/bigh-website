@@ -226,7 +226,16 @@ These sit on top of `DESIGN.md`.
   seeds, pine bark, bilberries, white, green and black tea, an orange slice, noni, a marigold,
   sweet clover), as the page says "Nine plant extracts". The words and the list did not change.
   `build_opc.py` (`plants`, Codex take `inside-nine-ah`); mockups
-  `reference/ink-pages/mockups/opc-inside/`.
+  `reference/ink-pages/mockups/opc-inside/`. Live November 17, 2026 (`main` `23cf796`).
+- **Advanced OPC's other paintings: the same pictures, in color (Mo picked A, November 17,
+  2026).** Of A (keep each approved design, repaint it in the page's new California color, show
+  the four together) and B (new ideas, one at a time), Mo picked A for the research lens, Dr.
+  Wang's mortar, the plate (its brushed 2 × 60 = 120 unchanged) and the vine scene the real bottle
+  stands in. Codex repainted each October painting with its composition kept: a brass lens with a
+  walnut handle, a pale granite mortar, a blue-rimmed plate, sage vines on straw grass. The
+  capsules stay plain grey-white (their real color is not known); the opening card's capsules
+  still come from the October plate. `build_opc.py` (`paint_colour.sh`, takes `<key>-colour-a`);
+  before and after `reference/ink-pages/mockups/opc-colour/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a

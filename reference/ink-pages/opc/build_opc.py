@@ -20,6 +20,11 @@ opening's card capsules are the two capsules cut from the plate painting.
 What's inside (Mo picked B, November 17, 2026; it replaced October's six plants in grey ink): the
 formula's nine plant sources in three rows of three, in colour (Codex take inside-nine-ah).
 
+The research lens, Dr. Wang's mortar, the plate and the Buy vine scene (Mo picked "same pictures, in
+color", November 17, 2026): the October paintings repainted by Codex in the page's California
+colour, their compositions kept (paint_colour.sh; takes <key>-colour-a). The October plate stays
+the source of the opening card's two capsules.
+
 usage: python -X utf8 reference/ink-pages/opc/build_opc.py
 """
 
@@ -47,12 +52,13 @@ V = "v1"
 # The Why and What's inside paintings are Codex takes (no gpt25- prefix): loaded by codex_cropped().
 SEEDS_TAKE = "why-seedsbig-ah"
 PLANTS_TAKE = "inside-nine-ah"
+# The lens, the mortar, the plate and the vine scene repainted in colour, the October compositions
+# kept (Mo picked "same pictures, in color", November 17, 2026; paint_colour.sh). Codex takes too.
+LENS_TAKE, MORTAR_TAKE, PLATE_TAKE, SCENE_TAKE = "lens-colour-a", "mortar-colour-a", "plate-colour-a", "scene-colour-a"
 TAKES = {
-    "lens": "research-lens",
-    "mortar": "people-mortar",
+    # The October plate stays only as the source of the opening card's two capsules (capsules()).
     "plate": "daily-plate",
     "sum": "sum",
-    "scene": "buy-vines-left",
 }
 EDGE = 0.03
 
@@ -183,26 +189,30 @@ def brushed_sum():
     return art
 
 
-# The Buy scene, in the take's own pixels (1744 x 2336): cut from a fifth down (the vines sit low;
+# The Buy scene: cut from SCENE_TOP of its height (the vines sit low;
 # the real bottle at 90% of the picture's width, as on NuriCell's stroke, needs about 1.04 widths of
 # height over its foot), the bottle's glass foot on the ground wash (measured: the lowest row where
-# the ink spans 5% of the width, less 2%). The front band is the painting's lowest 12%, fading over
-# 5% above, so a leaf and the ground wash cross the bottle's foot.
-SCENE_TOP = 0.2
+# the ink spans 5% of the width). The front band is the painting's lowest 20%, fading in over 3%
+# above, so the dry grass crosses the bottle's base. (The October grey take stood the foot 2% higher
+# with a 12% band: the colour take's pale straw grass there left the band empty, the base on top of
+# the grass, not in it.) The colour take is the October
+# painting (1744 x 2336, cut from a fifth down) padded with paper to 1024 x 1536 before Codex
+# repainted it: a fifth down the October take is 0.233 of the padded height.
+SCENE_TOP = 0.233
 BOTTLE_WIDTH = 0.9
-FRONT_BAND, FRONT_FADE = 0.12, 0.05
+FRONT_BAND, FRONT_FADE = 0.2, 0.03
 
 
 def scene():
-    img = bd.levelled(bd.divided(bd.load(TAKES["scene"])))
+    img = bd.levelled(bd.divided(Image.open(HERE / "originals" / f"{SCENE_TAKE}.png").convert("RGB")))
     w, h = img.size
     flat = img.crop((0, int(h * SCENE_TOP), w, h))
-    art = bd.art_of(bd.feathered(flat, EDGE), f"scene-{V}", 1100)
+    art = bd.art_of(bd.feathered(flat, EDGE), f"scene-colour-{V}", 1100)
     cw, ch = flat.size
     a = np.asarray(flat).min(axis=2)
     rows = (a < 235).sum(axis=1)
     ys = np.nonzero(rows > cw * 0.05)[0]
-    foot = float(ys.max()) / ch - 0.02
+    foot = float(ys.max()) / ch
     bottle = Image.open(BOTTLE)
     pic_h = BOTTLE_WIDTH * cw * bottle.height / bottle.width
     # The bottle photo's glass ends 5.2% above its picture's bottom (as Propolis's).
@@ -219,7 +229,7 @@ def scene_front(art):
     """What of the scene is laid again in front of the bottle: the painting's lowest band (fading
     out above it), but only where the bottle photo is, so a leaf crosses its foot and nothing else is
     painted twice (as Propolis's). White elsewhere, so it multiplies to nothing."""
-    scene_img = Image.open(OUT / f"scene-{V}.webp").convert("RGB")
+    scene_img = Image.open(OUT / f"scene-colour-{V}.webp").convert("RGB")
     w, h = scene_img.size
     bottle = Image.open(BOTTLE).convert("RGBA")
     bw = round(w * art["bottle"]["width"])
@@ -235,10 +245,10 @@ def scene_front(art):
     m = (alpha * rows)[..., None]
     paint = np.asarray(scene_img).astype(np.float32)
     front = Image.fromarray(np.clip(255 - (255 - paint) * m, 0, 255).astype(np.uint8))
-    path = OUT / f"scene-front-{V}.webp"
+    path = OUT / f"scene-colour-front-{V}.webp"
     front.save(path, "WEBP", quality=88, method=6)
     print(f"{path.relative_to(REPO)}  {w}x{h}  {path.stat().st_size // 1024} KB")
-    return f"{URL}/scene-front-{V}.webp"
+    return f"{URL}/scene-colour-front-{V}.webp"
 
 
 def capsules(box=(0.70, 0.76, 0.97, 0.95)):
@@ -309,9 +319,9 @@ if __name__ == "__main__":
             "grapesLit": lit,
             "grapesSpread": spread,
             "plants": finish(codex_cropped(PLANTS_TAKE), "plants"),
-            "lens": finish(cropped("lens"), "lens"),
-            "mortar": finish(cropped("mortar"), "mortar"),
-            "plate": finish(cropped("plate"), "plate"),
+            "lens": finish(codex_cropped(LENS_TAKE), "lens-colour"),
+            "mortar": finish(codex_cropped(MORTAR_TAKE), "mortar-colour"),
+            "plate": finish(codex_cropped(PLATE_TAKE), "plate-colour"),
             "sum": brushed_sum(),
             "scene": scene(),
             "capsules": capsules(),

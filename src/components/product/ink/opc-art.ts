@@ -29,19 +29,19 @@ export const opcArt = {
     height: 1009,
   },
   lens: {
-    src: "/images/products/advanced-opc/ink/lens-v1.webp",
-    width: 1100,
-    height: 1467,
+    src: "/images/products/advanced-opc/ink/lens-colour-v1.webp",
+    width: 942,
+    height: 1253,
   },
   mortar: {
-    src: "/images/products/advanced-opc/ink/mortar-v1.webp",
-    width: 1100,
-    height: 1215,
+    src: "/images/products/advanced-opc/ink/mortar-colour-v1.webp",
+    width: 861,
+    height: 950,
   },
   plate: {
-    src: "/images/products/advanced-opc/ink/plate-v1.webp",
-    width: 1100,
-    height: 1426,
+    src: "/images/products/advanced-opc/ink/plate-colour-v1.webp",
+    width: 974,
+    height: 1251,
   },
   sum: {
     src: "/images/products/advanced-opc/ink/sum-v1.webp",
@@ -51,14 +51,14 @@ export const opcArt = {
     centres: [0.1285, 0.4178, 0.805],
   },
   scene: {
-    src: "/images/products/advanced-opc/ink/scene-v1.webp",
-    width: 1100,
+    src: "/images/products/advanced-opc/ink/scene-colour-v1.webp",
+    width: 1024,
     height: 1179,
     bottle: {
       width: 0.9,
-      bottom: 0.0619,
+      bottom: 0.1003,
     },
-    front: "/images/products/advanced-opc/ink/scene-front-v1.webp",
+    front: "/images/products/advanced-opc/ink/scene-colour-front-v1.webp",
   },
   capsules: {
     src: "/images/products/advanced-opc/ink/capsules-v1.webp",

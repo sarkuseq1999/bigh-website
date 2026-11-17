@@ -85,6 +85,23 @@ clover). Mo picked **B** (Claude's pick), take `inside-nine-ah` (kept in `origin
 translations). Checks: `qa_opc_ink` section `chapters`. The other three takes are in
 `codes/bigh-archive/opc-inside-unused-2026-11-17/`.
 
+## The other four paintings in colour (Mo picked A, November 17, 2026)
+
+After the grapes and the plants, the research lens, Dr. Wang's mortar, the plate and the Buy vine
+scene were still grey ink. Mo chose "same pictures, in color" (A) over new ideas one at a time (B).
+`paint_colour.sh` pads each October take with its own paper to 1024 x 1536
+(`plates/colour/`, git-ignored) and has Codex repaint it with the page's new grapes and plants as
+the colour reference (`prompts/{lens,mortar,plate,scene}-colour.txt`); takes `<key>-colour-a` are
+kept in `originals/`, the `b` takes are in `codes/bigh-archive/opc-colour-unused-2026-11-17/`.
+`build_opc.py` ships them as `lens-colour-v1`, `mortar-colour-v1`, `plate-colour-v1` and
+`scene-colour-v1` (+ `scene-colour-front-v1`; the scene is cut from 0.233 of its height, where the
+October cut sat in the padded take; the bottle's foot is set at the foot of the colour grass and
+the painting's lowest 20% laid in front of it, so the dry grass crosses its base: with October's
+12% band the pale grass left the band empty and the base stood on top of the grass). The capsules
+on the plate stay plain grey-white; the opening card's capsules still come from the October plate.
+The three descriptions now say "painted in watercolor" (m702-m704, all five catalogs). Before and
+after: `../mockups/opc-colour/`.
+
 ## Rules kept
 
 - The bottle is never redrawn (Mo, October 14): the real photo stands in the painting; its width

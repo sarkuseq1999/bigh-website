@@ -5,8 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Advanced OPC's plants chapter: all nine plants, November 17, 2026 (Claude Code; built,
-  committed locally, not pushed).** Part 6 of Mo's "superb" goal. "Inside every capsule, 13
+- **Advanced OPC's other four paintings in color, November 17, 2026 (Claude Code; built,
+  committed locally, not pushed).** Part 7 of Mo's "superb" goal. Mo picked "same pictures, in
+  color" (A) for the research lens, Dr. Wang's mortar, the plate and the Buy vine scene: Codex
+  repainted the October paintings, compositions kept (`paint_colour.sh`); built as
+  `*-colour-v1.webp`; descriptions m702-m704 now say watercolor. The Buy bottle now stands at the
+  foot of the colour grass with the lowest 20% of the painting in front (with October's 12% band
+  the pale grass left the front layer empty). Built site, sequential: `qa_opc_ink` 313/313,
+  `qa_home_ink` 290/290, `qa_nav` 326/326 (a rebuilt picture under an unpushed name showed stale
+  until `.next/cache/images` was cleared). Before and after: https://claude.ai/artifact/FrBnkt5gyAf4xyBg2kB8r2
+  (`reference/ink-pages/mockups/opc-colour/`). After this, every chapter painting on Advanced
+  OPC is in color; its six question paintings are still grey ink (next), then Turmerific's, Nature
+  Calm's and Green Bee Propolis's middles.
+- **Advanced OPC's plants chapter: all nine plants, November 17, 2026 (Claude Code; live,
+  `main` `23cf796`, production `dpl_B2d8YK6hdzrhcD4WDRC7yagccNuk`, demo alias on it; public
+  checks green).** Part 6 of Mo's "superb" goal. "Inside every capsule, 13
   ingredients." showed six plants in grey ink. Of two California-color ideas mocked on the live
   page (A the same six in color, B all nine plant sources; review page
   https://claude.ai/artifact/NKKQJAoqfm5rx6TmoTXpuV) Mo picked **B** (Claude's pick): take
