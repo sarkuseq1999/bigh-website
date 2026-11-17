@@ -34,6 +34,16 @@ take **loose-e** is the still lake. Its ruffled twin is an edit of it (`paint_ta
 `prompts/why-tahoe-ripple.txt`, take **ripple-a**). Built as `tahoe-still-v1` / `tahoe-ruffled-v1`
 (colour washes, so no deepening). Unused takes: `codes/bigh-archive/nature-calm-tahoe-unused-2026-11-16/`.
 
+## The stars without their glow (November 16, 2026)
+
+Seen at full size, each gold star of the Big Dipper sat in a pale lemon-yellow halo, a fuzzy glow
+that the site's rules refuse (gold leaf behaves like real gold, no glow; no fuzzy glows, which read
+as germs). The halo is in the take itself (`research-stars-v2`). The build now takes it back to
+paper (`dehalo` in `build_nature_calm.py`: a pixel is lifted toward white as far as it is light
+and lemon yellow; the leaf is a deep orange-brown and keeps its colour) and ships `stars-v2`. The
+halo had also passed the gold detector, so the kit's band of light crossed it: the gold mask fell
+from 1.6% to 0.47% of the picture, the leaf alone. `stars-v1` stays in `public/`, unused.
+
 ## Rules learned on the way
 
 - A **pale wash dies on the page**: the still lake's water is only 7% darker than its paper, and

@@ -183,9 +183,30 @@ def cone():
     return gilded(finish(richer_gold(cropped("cone")), "cone"), f"cone-{V}")
 
 
+# v2 (November 16, 2026): each star's pale yellow halo taken out (dehalo), so the leaf no longer
+# glows (AGENTS.md: gold leaf behaves like real gold, no glow; DESIGN.md: no fuzzy glows). The halo
+# had also passed the gold detector, so the kit's band of light crossed it and brightened it.
+STARS_V = "v2"
+
+
+def dehalo(img):
+    """Pale yellow wash round the gold leaf taken back to paper. The leaf is a deep orange-brown
+    (green about two thirds of red); its halo is a light lemon yellow (green near red, blue well
+    under both). A pixel is lifted toward white as far as it is both that yellow and that light, so
+    the leaf and its edge keep their colour."""
+    a = np.asarray(img).astype(np.float32)
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    yellow = np.clip((g / np.maximum(r, 1) - 0.74) / 0.1, 0, 1) * np.clip((g - b - 6) / 20, 0, 1)
+    light = np.clip((np.minimum(r, g) - 190) / 30, 0, 1)
+    k = (yellow * light)[..., None]
+    return Image.fromarray(np.clip(np.rint(a + (255 - a) * k), 0, 255).astype(np.uint8))
+
+
 def stars():
-    """The stars' sheet is bare paper with a faint cool cast: lifted from 240 so it goes to white."""
-    return gilded(finish(richer_gold(cropped("stars")), "stars", lift=lambda img: gentle(img, 200, 240)), f"stars-{V}")
+    """The stars' sheet is bare paper with a faint cool cast: lifted from 240 so it goes to white;
+    then each star's halo is taken out."""
+    img = bd.feathered(dehalo(gentle(richer_gold(cropped("stars")), 200, 240)), EDGE)
+    return gilded(bd.art_of(img, f"stars-{STARS_V}", WIDTH), f"stars-{STARS_V}")
 
 
 def moon():

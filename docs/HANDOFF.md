@@ -5,6 +5,29 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Product pages to "superb", November 16, 2026 (Claude Code; nothing pushed).** Mo's goal: every
+  product page's words, design and paintings superb. Claude's honest scores after looking at all
+  five on the public demo (1440 and 390 px, scrolled like a visitor): NuriCell 8.5; Green Bee
+  Propolis 7, Nature Calm 7, Turmerific 6.5, Advanced OPC 6.5. What holds the four back: a plain
+  first screen (bottle on bare paper: the same template on OPC, Turmerific and Nature Calm), grey
+  ink middles while the rest of the site turned California colour, every painting on the left (Mo
+  called that boring on NuriCell, October 19), small grey labels over headings (Mo found them
+  strange three times on NuriCell), and the thin "How to take it" chapter with its painted sum
+  (Mo found NuriCell's strange, October 27). The words are sound. **Part 1, waiting for Mo's
+  pick:** Advanced OPC's first screen as a painted California vineyard (NuriCell's clear-day
+  approach): A spring with mustard, B harvest with ripe grapes (Claude's pick, 8.5), C autumn
+  colour. Codex paintings `reference/ink-pages/opc/originals/opening-{spring,harvest,autumn}-{a,b}h.png`
+  (prompts `prompts/opening-*-1.txt`, `paint_opening.sh`); mocked by script on the live page
+  (`reference/ink-pages/mockups/opc-opening/`: `mock.py`, `mock_sky.js`, `prep.py`); review page
+  https://claude.ai/artifact/Ta1qo8Jp8V8cMbkuoJe4e7. Not built. After Mo's pick: build it as
+  NuriCell's opening is built (a build script with a row cut and a front grass layer), then the
+  same kind of first screen for Turmerific and Nature Calm, then each page's middle chapters, one
+  part at a time. **Fixed meanwhile (local commit, not pushed):** Nature Calm's Big Dipper stars
+  sat in pale yellow halos (a fuzzy glow; the halo had also passed the gold detector): the build
+  takes the halo back to paper and ships `stars-v2` (`dehalo` in `build_nature_calm.py`; README
+  there). Built site: `qa_nature_calm_ink` 159/159. Noted for later: Nature Calm's thinnest moon
+  crescents read like brackets "( )".
+
 - **English launch pass, November 16, 2026 (Claude Code; live, `main` `5fff531`).** Mo's
   goal: the English site ready for launch, launch-quality words, nothing that reads as unfinished.
   Mo's answers the same day: no iMatrix (BiGH's own shop comes later, placeholders until then);
