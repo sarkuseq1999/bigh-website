@@ -5,7 +5,7 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **English launch pass, November 16, 2026 (Claude Code; local on `studio`, not pushed).** Mo's
+- **English launch pass, November 16, 2026 (Claude Code; live, `main` `5fff531`).** Mo's
   goal: the English site ready for launch, launch-quality words, nothing that reads as unfinished.
   Mo's answers the same day: no iMatrix (BiGH's own shop comes later, placeholders until then);
   show the bighnow.com prices; keep the fictional stories; Ask BiGH Science live through Support;
@@ -28,8 +28,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   science, about and the product pages ran before the footer's last change, a phone-only reorder
   re-checked by `qa_fda` and `qa_home_ink`); the launch checks 53/53 and the Support email path
   26/26 against a local stand-in for Resend (`reference/launch/test_support_mail.py`; the real
-  Resend is untested until its key is set). Lint, type-check and prettier clean. Not pushed; the
-  demo still shows `f5cc4c6`. A copy editor's pass (a subagent) found the slips fixed here and two
+  Resend is untested until its key is set). Lint, type-check and prettier clean. **Live** on Mo's
+  "Yes, push it": `main` `5fff531`, production `dpl_9k88cWZkpTZdPMoBKqskvSuFUCMx`, the demo alias on
+  it; all 11 public checks green with the same counts (`docs/public-demo.md`). Mo, after: email
+  "later"; keep Lake Tahoe; the disease-population studies stay, for his lawyer. A copy editor's pass (a subagent) found the slips fixed here and two
   things left for Mo (the checklist): disease-population studies on product pages, two OPC label
   quotes.
 

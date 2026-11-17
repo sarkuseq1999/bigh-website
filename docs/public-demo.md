@@ -4,7 +4,25 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-1lslc4i8z-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-icmqqavhx-sarkuseq1999s-projects.vercel.app`
+(`dpl_9k88cWZkpTZdPMoBKqskvSuFUCMx`), the **production** deployment of `main` at
+`5fff531ece7e6aa5eefbb4271938fd4b1d1ee9c2` (November 16, 2026): the English launch pass (Mo's
+goal of November 16; `docs/launch-checklist.md`). Prices on every product page; Ask BiGH Science
+live through the Support form; the form's email sending built (off until Resend's variables are
+set); `/privacy`, `/terms`, `/returns` linked in the footer; a branded 404; search basics with
+indexing still closed (`SITE_INDEXING` unset, robots disallow) and link previews pointing at this
+demo address; the site icon; American spelling and a copy editor's fixes; Nature Calm's lake
+repainted at Lake Tahoe. Mo explicitly said to push ("Yes, push it"). `origin/main` was
+`f5cc4c6`, an ancestor of the tested tree, so the fast-forward carried exactly what was checked on
+`npm run build` + `npm start`. Quick look on the plain public URL: the launch checks 53/53
+(prices, the cart note, Ask into the form, the API's 503 until email is set, legal pages, 404 in
+English and Korean, robots closed, sitemap, canonical and preview image on the demo address).
+Full public checks, sequential: `qa_home_ink` **290/290**, `qa_nav` **326/326**, `qa_fda`
+**248/248**, `qa_support` **341/341**, `qa_science_ink` **943/943**, `qa_about` **460/460**,
+`qa_nuricell_ink` **663/663**, `qa_propolis_ink` **273/273**, `qa_opc_ink` **199/199**,
+`qa_turmerific_ink` **155/155**, `qa_nature_calm_ink` **159/159**.
+
+Before that the alias pointed to `bigh-website-1lslc4i8z-sarkuseq1999s-projects.vercel.app`
 (`dpl_6VDnDcX8WQ7iQdLiQBZm1vLiaRuv`), the **production** deployment of `main` at
 `f5cc4c69a6ebdee2e666879051c05bf36734c530` (November 14, 2026). The homepage's "Make sense of
 the science." now uses the full California painting family: C's ranch workshop
