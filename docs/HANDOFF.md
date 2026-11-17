@@ -5,7 +5,20 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Product pages to "superb", November 16, 2026 (Claude Code; nothing pushed).** Mo's goal: every
+- **Turmerific's first screen, the turmeric field, November 16, 2026 (Claude Code; built,
+  committed locally, not pushed).** Part 2 of Mo's "superb" goal. Of three California places for
+  turmeric mocked on the live page (A a Ventura County turmeric field with freshly dug roots and a
+  eucalyptus windbreak, B a stucco garden wall with a lemon tree, C the Ojai bluffs at dusk) Mo
+  picked **A** (Claude's pick). OPC's vineyard code became one shared piece,
+  `painted-opening.tsx` + `painted-opening.module.css` (each product's art carries its rows, its
+  name's baseline in the bottle's box and its lift); OPC renders pixel for pixel as before.
+  Turmerific's art: `build_turmerific_opening.py`, `turmerific-opening-art.ts`, the name lifted
+  0.41 of its size as in the mockup. `qa_turmerific_ink` has a `field` section; `qa_opc_ink`
+  follows the shared names. Review page https://claude.ai/artifact/3oxar6sXLceaYD6Ka9ZxYC.
+  Unused takes in `bigh-archive\turmerific-opening-unused-2026-11-16\`. Next: Nature Calm's first
+  screen, then the middle chapters.
+- **Product pages to "superb", November 16, 2026 (Claude Code; OPC opening and the stars live,
+  `main` `7c8dff5`, production `dpl_EuVn9xcCePY3diXbwmoumwaaKmsB`, demo alias on it).** Mo's goal: every
   product page's words, design and paintings superb. Claude's honest scores after looking at all
   five on the public demo (1440 and 390 px, scrolled like a visitor): NuriCell 8.5; Green Bee
   Propolis 7, Nature Calm 7, Turmerific 6.5, Advanced OPC 6.5. What holds the four back: a plain

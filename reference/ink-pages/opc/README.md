@@ -34,7 +34,10 @@ young vines, B late summer before harvest (golden hills, oaks, ripe dark grapes)
 Mo picked **B** (take `opening-harvest-ah`), Claude's pick: the grapes say where OPCs come from.
 
 Built as NuriCell's clear day is built (`build_opc_opening.py` → `opening-vines-*-v1.webp`,
-`src/components/product/ink/opc-opening-art.ts`; `opc-opening.tsx`, `opc.module.css`): the
+`src/components/product/ink/opc-opening-art.ts`; first `opc-opening.tsx` and `opc.module.css`,
+the same day made `painted-opening.tsx` and `painted-opening.module.css`, shared with
+Turmerific's field; the art carries `base`, "Formula"'s baseline at 60% of the bottle's box, and
+`lift`, 0.1): the
 painting lies in the bottle's box, scaled so the hills under the name (row 650) meet the letters'
 baseline and the ground (row 795, in the dry grass) the glass's foot; the name lifted 0.1 of its
 size off the hills; the painting's own dry grass laid in front of the bottle's foot; in a window

@@ -10,9 +10,9 @@ import { Daily } from "./daily";
 import { Inside } from "./inside";
 import { isNuricell } from "./nuricell-layout";
 import nuricellStyles from "./nuricell.module.css";
-import { isOpc } from "./opc-opening";
-import opcStyles from "./opc.module.css";
 import { Opening } from "./opening";
+import { openingPainting } from "./painted-opening";
+import paintedStyles from "./painted-opening.module.css";
 import { People } from "./people";
 import styles from "./product-ink.module.css";
 import { PropolisOpening } from "./propolis-opening";
@@ -33,8 +33,8 @@ export function ProductInkPage({ product }: { product: InkProduct }) {
     ? ` ${propolisStyles.propolis}`
     : isNuricell(product)
       ? ` ${nuricellStyles.nuricell}`
-      : isOpc(product)
-        ? ` ${opcStyles.opc}`
+      : openingPainting(product.slug)
+        ? ` ${paintedStyles.painted}`
         : "";
   return (
     <InkPage current="products" className={`${styles.page}${own}`}>

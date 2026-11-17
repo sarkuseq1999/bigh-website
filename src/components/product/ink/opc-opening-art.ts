@@ -4,7 +4,8 @@
 // the page's paper. `sky` from 960px, `phone` (its middle, drawn closer) in one column;
 // `front`, its dry grass laid in front of the bottle's foot at `x`, `y` of `sky`. Rows of `sky`:
 // `hills` (the hills' tops under the name), `ground` (where the bottle stands) and `end` (the
-// last paint).
+// last paint); `base`, where the name's baseline sits in the bottle's box, and `lift`, how far
+// the name is lifted off the hills (painted-opening.tsx).
 export const opcOpening = {
   sky: {
     src: "/images/products/advanced-opc/ink/opening-vines-v1.webp",
@@ -26,4 +27,6 @@ export const opcOpening = {
   hills: 650,
   ground: 795,
   end: 858,
+  base: 0.6,
+  lift: 0.1,
 } as const;

@@ -13,7 +13,7 @@ Sections (all, or --only=a,b):
               360: drawn and multiplied behind the name, the window's width and up to its top, the
               bottle's foot on its ground with its own grass in front, the name over the hills from
               960px (above the vines where the painting is drawn as wide as the window), the words
-              under the last grass, no sideways scroll; without scripts too; Turmerific keeps the
+              under the last grass, no sideways scroll; without scripts too; Nature Calm keeps the
               plain opening
   chapters    overview, why, inside, research, people, daily, buy; each its own painting; "thirteen
               ingredients"; 300 mg; Dr. Wang's words with a work painting captioned Illustration; the
@@ -569,27 +569,25 @@ def sum_section(browser):
 
 VINEYARD = """() => {
   const sec = document.querySelector('[data-chapter="overview"]');
-  const v = sec.querySelector('[data-vineyard]');
+  const v = sec.querySelector('[data-opening-painting]');
   if (!v) return null;
   const css = getComputedStyle(sec);
   const num = (n) => parseFloat(css.getPropertyValue(n));
   const box = (el) => { const r = el.getBoundingClientRect(); return { l: r.left, r: r.right, t: r.top, b: r.bottom }; };
   const img = v.querySelector('picture img');
-  const sides = [...v.querySelectorAll('[class*=vineSide]')].filter((p) => getComputedStyle(p).display !== 'none')
-    .map((p) => ({ ...box(p), loaded: p.querySelector('img').naturalWidth > 1 }));
   const bottle = sec.querySelector('h1 img[class*=bottle]'), b = box(bottle), bh = b.b - b.t;
-  const front = sec.querySelector('img[class*=vineFront]');
+  const front = sec.querySelector('img[class*=paintingFront]');
   const second = sec.querySelector('h1 [class*=second]');
   const probe = document.createElement('span');
   Object.assign(probe.style, { display: 'inline-block', width: '0', height: '0', verticalAlign: 'baseline' });
   second.append(probe); const baseline = probe.getBoundingClientRect().top; probe.remove();
-  const p = box(v), rows = num('--vine-rows');
+  const p = box(v), rows = num('--paint-rows');
   const at = (row) => p.t + (row / rows) * (p.b - p.t);
   return { src: decodeURIComponent(img.currentSrc || img.src), decoded: img.complete && img.naturalWidth > 1,
            blend: getComputedStyle(v).mixBlendMode, z: getComputedStyle(v).zIndex,
-           painting: p, sides, W: document.documentElement.clientWidth,
+           painting: p, W: document.documentElement.clientWidth,
            sideways: document.documentElement.scrollWidth - document.documentElement.clientWidth,
-           hills: at(num('--vine-hills')), ground: at(num('--vine-ground')), end: at(num('--vine-end')),
+           hills: at(num('--paint-hills')), ground: at(num('--paint-ground')), end: at(num('--paint-end')),
            foot: b.t + (1242 / 1278) * bh, bottleH: bh, glassMid: (b.l + b.r) / 2,
            front: front ? { ...box(front), z: getComputedStyle(front).zIndex, decoded: front.complete && front.naturalWidth > 1 } : null,
            baseline, size: parseFloat(getComputedStyle(sec.querySelector('h1')).fontSize),
@@ -618,10 +616,8 @@ def vineyard(browser):
         want = "opening-vines-v1" if wide else "opening-vines-phone-v1"
         check(f"{tag}: the painting ({'whole' if wide else 'its closer middle'}) is drawn", m["decoded"] and want in m["src"], m["src"][-70:])
         check(f"{tag}: it multiplies behind the name and the bottle", m["blend"] == "multiply" and m["z"] == "-1", f"{m['blend']}, z {m['z']}")
-        left = min([m["painting"]["l"]] + [s["l"] for s in m["sides"] if s["loaded"]])
-        right = max([m["painting"]["r"]] + [s["r"] for s in m["sides"] if s["loaded"]])
-        check(f"{tag}: it spans the window's width", left <= 0.5 and right >= m["W"] - 0.5,
-              f"{left:.0f} to {right:.0f} of {m['W']}, {len(m['sides'])} side pieces")
+        left, right = m["painting"]["l"], m["painting"]["r"]
+        check(f"{tag}: it spans the window's width", left <= 0.5 and right >= m["W"] - 0.5, f"{left:.0f} to {right:.0f} of {m['W']}")
         check(f"{tag}: its sky reaches the window's top", m["painting"]["t"] <= 0, f"top {m['painting']['t']:.0f}")
         sink = (m["foot"] - m["ground"]) / m["bottleH"]
         check(f"{tag}: the bottle's foot stands on its ground", 0 <= sink <= 0.03, f"foot {sink * 100:.1f}% of the bottle under the ground")
@@ -653,12 +649,12 @@ def vineyard(browser):
     for w, h in [(1440, 900), (390, 844)]:
         ctx, page, _, _ = opened(browser, w, h, js=False)
         page.wait_for_timeout(800)
-        shown = page.evaluate("() => { const i = document.querySelector('[data-vineyard] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
+        shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
         check(f"vineyard {w}x{h} no script: the painting is drawn", shown)
         ctx.close()
-    # The other products keep their plain opening until their own part.
-    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/turmerific")
-    check("vineyard: Turmerific keeps its plain opening", page.locator("[data-vineyard]").count() == 0)
+    # Nature Calm keeps its plain opening until its own part.
+    ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/nature-calm")
+    check("vineyard: Nature Calm keeps its plain opening", page.locator("[data-opening-painting]").count() == 0)
     ctx.close()
 
 

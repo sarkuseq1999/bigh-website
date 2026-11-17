@@ -4,7 +4,20 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-icmqqavhx-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-of3pjnbhp-sarkuseq1999s-projects.vercel.app`
+(`dpl_EuVn9xcCePY3diXbwmoumwaaKmsB`), the **production** deployment of `main` at
+`7c8dff5d3bedf942d45d91d4944d5b338ea1ca45` (November 16, 2026): Advanced OPC Formula's first
+screen in a vineyard at harvest (Mo picked B) and Nature Calm's Big Dipper stars without their
+yellow halo (`stars-v2`). Mo said "Yes, put it live". `origin/main` was `5fff531`, an ancestor of
+the tested tree, so the fast-forward carried exactly what was checked on `npm run build` +
+`npm start`. Quick look on the plain public URL: the vineyard at 1440 and 390 px, no sideways
+scroll, no page errors, `stars-v2` served. Full public checks, sequential: `qa_opc_ink`
+**309/309**, `qa_nature_calm_ink` **159/159**, `qa_nuricell_ink` **663/663**, `qa_propolis_ink`
+**273/273**, `qa_home_ink` **290/290**, `qa_nav` **326/326**, `qa_turmerific_ink` 156/169: all 156
+of its released checks passed; the 13 failures were its new `field` section, written for
+Turmerific's next (unreleased) opening and run here against the old page.
+
+Before that the alias pointed to `bigh-website-icmqqavhx-sarkuseq1999s-projects.vercel.app`
 (`dpl_9k88cWZkpTZdPMoBKqskvSuFUCMx`), the **production** deployment of `main` at
 `5fff531ece7e6aa5eefbb4271938fd4b1d1ee9c2` (November 16, 2026): the English launch pass (Mo's
 goal of November 16; `docs/launch-checklist.md`). Prices on every product page; Ask BiGH Science

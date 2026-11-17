@@ -202,10 +202,22 @@ These sit on top of `DESIGN.md`.
   The real bottle stands on the dry grass between the rows, a little of the painting's own grass
   in front of its foot; from 960px the name is lifted off the hills (a strip of sky under it), as
   NuriCell's is off the sea. The words and the buy box stay on bare paper under the grass. Grapes
-  are painted as loose bunches, never a field of dots. OPC only for now: Turmerific and Nature
-  Calm keep the plain opening until their own part. `opc-opening.tsx`, `opc.module.css`,
-  `opc-opening-art.ts`; picture `reference/ink-pages/opc/build_opc_opening.py` (Codex painting
+  are painted as loose bunches, never a field of dots. Nature Calm keeps the plain opening until
+  its own part (Turmerific's field followed the same day). `painted-opening.tsx`,
+  `painted-opening.module.css` (shared with Turmerific since the same day), `opc-opening-art.ts`;
+  picture `reference/ink-pages/opc/build_opc_opening.py` (Codex painting
   `opening-harvest-ah`, `paint_opening.sh`); mockups `reference/ink-pages/mockups/opc-opening/`.
+  Live November 16, 2026 (`main` `7c8dff5`).
+- **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
+  to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
+  Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a
+  lemon tree, C the Ojai Valley's bluffs glowing at dusk, which read as Arizona) he picked A,
+  Claude's pick: rows of turmeric (broad lance leaves, a few pale pink flower spikes) on warm
+  earth in late-afternoon light, a few freshly dug roots with bright orange cut ends beside the
+  rows (where the golden compound comes from), a eucalyptus windbreak and soft hills behind. The
+  real bottle stands on the bare earth between the rows. Same painted opening as Advanced OPC's
+  (`painted-opening.tsx`, shared); picture `reference/ink-pages/turmerific/build_turmerific_opening.py`
+  (Codex painting `opening-field-ah`); mockups `reference/ink-pages/mockups/turmerific-opening/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

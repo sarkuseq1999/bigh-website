@@ -11,7 +11,7 @@ import { anchorId, splitName } from "../template-chapters-model";
 import { keepTogether } from "./ink-chapter";
 import { isNuricell } from "./nuricell-layout";
 import { ClearDay, clearDayVars } from "./nuricell-opening";
-import { isOpc, Vineyard, vineyardVars } from "./opc-opening";
+import { openingPainting, PaintedOpening, paintedVars } from "./painted-opening";
 import styles from "./product-ink.module.css";
 
 // The promise from the About page ("What you can count on"), shown as a badge: its catalogs end it
@@ -123,7 +123,8 @@ export function lockupFit(left: string, right: readonly string[]) {
 // the supply and the About page's promise, a wide Add to cart and the refund line.
 // NuriCell's bottle stands in a painting, "A clear day" (Mo picked A, November 10, 2026): the sky,
 // the sea and the bluff behind the name and the bottle (nuricell-opening.tsx). Advanced OPC
-// Formula's stands in a vineyard at harvest (Mo picked B, November 16, 2026; opc-opening.tsx).
+// Formula's stands in a vineyard at harvest and Turmerific's in a turmeric field (Mo's picks,
+// November 16, 2026; painted-opening.tsx).
 export function Opening({ product }: { product: ProductPage }) {
   const copy = useCopy();
   const price = priceOf(product.slug);
@@ -141,7 +142,7 @@ export function Opening({ product }: { product: ProductPage }) {
   const leadScale = lead ? Math.min(1, ems(first) / ems(lead)) : null;
   const fit = stacked ?? nameFit(first, second, spaced, lead ? PHONE_GAP : 0);
   const clearDay = isNuricell(product);
-  const vineyard = isOpc(product);
+  const painting = openingPainting(product.slug);
   return (
     <section
       id={anchorId("overview")}
@@ -153,10 +154,10 @@ export function Opening({ product }: { product: ProductPage }) {
       data-spaced={spaced || undefined}
       data-lead={lead ? "" : undefined}
       style={
-        fit || leadScale || clearDay || vineyard
+        fit || leadScale || clearDay || painting
           ? ({
               ...(clearDay ? clearDayVars : {}),
-              ...(vineyard ? vineyardVars : {}),
+              ...(painting ? paintedVars(painting) : {}),
               ...(fit
                 ? {
                     ["--name-scale" as string]: fit.scale.toFixed(4),
@@ -186,7 +187,7 @@ export function Opening({ product }: { product: ProductPage }) {
           </span>
           <span className={styles.stand} aria-hidden="true">
             {clearDay ? <ClearDay /> : null}
-            {vineyard ? <Vineyard /> : null}
+            {painting ? <PaintedOpening art={painting} /> : null}
             {/* The largest picture on a phone or tablet (on a wide screen it is the menu bar's
                 paper): loaded at once and first. Next 16's docs prefer loading="eager" with
                 fetchPriority to `preload`, which they advise against when the largest picture

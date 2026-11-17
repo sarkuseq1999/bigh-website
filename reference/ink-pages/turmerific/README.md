@@ -24,6 +24,29 @@ The card in the opening shows the two capsules from the daily painting. No big n
 data file has none, and none is invented. The liver question stays out of the questions until Mo has
 done her research.
 
+## The opening: the turmeric field (Mo picked A, November 16, 2026)
+
+The second product page to leave bare paper, after Advanced OPC Formula's vineyard (Mo's goal that
+day: every product page superb). Three California places for turmeric were painted by Codex
+(`paint_opening.sh`, `prompts/opening-{field,garden,ojai}-1.txt`; takes `a` and `b`, each with the
+homepage's Big Sur close as the painter's hand) and mocked on the live page by script
+(`../mockups/turmerific-opening/`; review page https://claude.ai/artifact/3oxar6sXLceaYD6Ka9ZxYC):
+A a small Ventura County farm's turmeric field, freshly dug roots with bright orange cut ends
+beside the rows, a eucalyptus windbreak and soft hills behind; B turmeric along a whitewashed
+stucco garden wall with a lemon tree; C the Ojai Valley's bluffs glowing at dusk (it read as
+Arizona). Mo picked **A** (take `opening-field-ah`), Claude's pick.
+
+Built with Advanced OPC Formula's opening, now shared (`build_turmerific_opening.py` →
+`opening-field-*-v1.webp`, `src/components/product/ink/turmerific-opening-art.ts`;
+`painted-opening.tsx`, `painted-opening.module.css`): the hills under the name at row 575, the
+ground at row 785 (inside the earth's wash). The field has much land between those rows, so at the
+name's size the painting would be narrower than the window: it is drawn as wide as the window,
+standing on the glass's foot, and the name is lifted 0.41 of its size (as far as in the mockup Mo
+picked; OPC's 0.1). On a phone the painting is drawn closer (two bands of bare earth beside the
+bottle taken out) so turmeric and a dug root stand on each side. Checks: `qa_turmerific_ink`
+section `field`. The other five takes are in
+`codes/bigh-archive/turmerific-opening-unused-2026-11-16/`.
+
 ## The signature: the gold soaks in
 
 Absorption is the chapter's point ("A golden compound. A hard one to absorb."), told in the site's
