@@ -22,6 +22,29 @@ The opening's "One bottle" card shows the two capsules cut from the plate painti
 Why B (a vineyard at sunrise, `why-vineyard-gold` / `-ink`), Buy A1 (`buy-vines`, the bunch half
 hidden behind the bottle), Buy B (`buy-stroke`, NuriCell's device). Their originals stay here.
 
+## The opening: a vineyard at harvest (Mo picked B, November 16, 2026)
+
+Mo's goal that day: every product page superb. OPC's first screen was the template's bottle on bare
+paper, the same as Turmerific's and Nature Calm's. Three seasons of one California vineyard were
+painted by Codex (`paint_opening.sh`, `prompts/opening-{spring,harvest,autumn}-1.txt`; takes `a`
+and `b`, each with the homepage's Big Sur close as the painter's hand, the `h` takes) and mocked on
+the live page by script (`../mockups/opc-opening/`: `mock.py`, `mock_sky.js`, `prep.py`; review
+page https://claude.ai/artifact/Ta1qo8Jp8V8cMbkuoJe4e7): A spring with yellow mustard between
+young vines, B late summer before harvest (golden hills, oaks, ripe dark grapes), C autumn colour.
+Mo picked **B** (take `opening-harvest-ah`), Claude's pick: the grapes say where OPCs come from.
+
+Built as NuriCell's clear day is built (`build_opc_opening.py` → `opening-vines-*-v1.webp`,
+`src/components/product/ink/opc-opening-art.ts`; `opc-opening.tsx`, `opc.module.css`): the
+painting lies in the bottle's box, scaled so the hills under the name (row 650) meet the letters'
+baseline and the ground (row 795, in the dry grass) the glass's foot; the name lifted 0.1 of its
+size off the hills; the painting's own dry grass laid in front of the bottle's foot; in a window
+wider than that (about 1600px and up, or a short one) the painting drawn as wide as the window,
+still on the glass's foot, so its hills rise a little behind the name (side pieces mirrored at its
+edges were tried first and made a "V" of vine posts at the joint); on a phone the painting drawn
+closer (two bands of bare slope beside the bottle taken out) so a bunch of grapes stands on each
+side. Checks: `qa_opc_ink` section `vineyard`. The other five takes (spring, autumn and the `b`
+takes) are in `codes/bigh-archive/opc-opening-unused-2026-11-16/`.
+
 ## Rules kept
 
 - The bottle is never redrawn (Mo, October 14): the real photo stands in the painting; its width

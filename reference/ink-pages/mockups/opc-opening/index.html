@@ -1,0 +1,167 @@
+<title>OPC First Screen</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* One column of rice paper, like the site itself: the pictures are the page. Single look on
+     purpose (the mockups are paintings on paper), so every color is set here. */
+  :root {
+    --paper: #f3efe6;
+    --ink: #1b1915;
+    --muted: #5c564c;
+    --line: #d8d1c3;
+    --pick: #1b1915;
+    --gold: #a77a1c;
+    --display: "Ysabeau", "Iowan Old Style", Georgia, serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px;
+  }
+  main { max-width: 1080px; margin: 0 auto; display: grid; gap: 56px; }
+  h1, h2 { font-family: var(--display); font-weight: 600; line-height: 1.08; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(34px, 6vw, 56px); }
+  h2 { font-size: clamp(26px, 3.6vw, 36px); }
+  p { margin: 0; max-width: 62ch; }
+  .lead { font-size: 19px; color: var(--ink); }
+  .muted { color: var(--muted); font-size: 15px; }
+  header { display: grid; gap: 14px; }
+  ul.plain { margin: 0; padding-left: 1.1em; display: grid; gap: 4px; }
+  .idea { display: grid; gap: 16px; padding-top: 28px; border-top: 1px solid var(--line); }
+  .idea-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px 16px; }
+  .tag {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 40px; height: 40px; border-radius: 999px; border: 1.5px solid var(--ink);
+    font-family: var(--display); font-weight: 600; font-size: 22px;
+  }
+  .idea.pick .tag { background: var(--pick); color: var(--paper); }
+  .score { font-variant-numeric: tabular-nums; color: var(--muted); font-size: 15px; }
+  .mine { font-size: 14px; font-weight: 600; letter-spacing: 0.02em; color: var(--gold); }
+  .shots { display: grid; grid-template-columns: minmax(0, 3.2fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+  figure img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  figcaption { font-size: 14px; color: var(--muted); }
+  .why { display: grid; gap: 6px; }
+  .board { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .board td { padding: 10px 8px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .board td:first-child { font-weight: 600; white-space: nowrap; }
+  .board td:nth-child(2) { white-space: nowrap; color: var(--muted); }
+  .wrap { overflow-x: auto; }
+  .reply { display: grid; gap: 8px; padding: 18px 20px; border: 1.5px solid var(--ink); border-radius: 12px; }
+  @media (max-width: 640px) {
+    .shots { grid-template-columns: minmax(0, 1fr) minmax(0, 0.62fr); gap: 10px; }
+  }
+</style>
+
+<main>
+  <header>
+    <p class="muted">BiGH website · product pages, part 1 · November 16, 2026</p>
+    <h1>Advanced OPC’s first screen</h1>
+    <p class="lead">Today it is a bottle on bare paper. NuriCell got a painted California coast, and it is the best product page now. These give OPC its own California place: a vineyard, where its grape seeds come from. Pick one season.</p>
+    <p class="muted">Mockups: new paintings laid on the live page in a browser. Nothing is built or live yet. The real bottle photo is unchanged.</p>
+  </header>
+
+  <section class="idea pick" aria-labelledby="built-title">
+    <div class="idea-head"><span class="tag">B</span><h2 id="built-title">Built: Harvest</h2><span class="score">8.5/10</span><span class="mine">Your pick</span></div>
+    <div class="shots">
+      <figure><img src="img/built-desk.jpg" alt="The built page: Advanced OPC Formula's name and bottle standing in a painted California vineyard at harvest" width="1440" height="900"><figcaption>Built page, computer</figcaption></figure>
+      <figure><img src="img/built-phone.jpg" alt="The built page on a phone, a bunch of grapes either side of the bottle" width="780" height="1688"><figcaption>Built page, phone</figcaption></figure>
+    </div>
+    <ul class="plain muted">
+      <li>The bottle stands in the painting’s own dry grass. On a phone the painting is drawn closer, so a bunch of grapes shows on each side.</li>
+      <li>Checked on the built site: every product page, the homepage and the menu pass. Not live yet.</li>
+      <li>What holds it back: on very wide screens (1920px and up) the hills rise behind the bottom of the name. Still easy to read.</li>
+    </ul>
+  </section>
+
+  <section class="idea" aria-labelledby="now-title">
+    <div class="idea-head"><h2 id="now-title">Now</h2><span class="score">5/10 at first glance</span></div>
+    <div class="shots">
+      <figure><img src="img/now-desk.jpg" alt="Advanced OPC Formula's first screen today: the name and the bottle on bare paper" width="1440" height="900"><figcaption>Computer, 1440 wide</figcaption></figure>
+      <figure><img src="img/now-phone.jpg" alt="The same first screen on a phone" width="780" height="1688"><figcaption>Phone</figcaption></figure>
+    </div>
+    <p class="muted">Looks like a template: same layout as Turmerific and Nature Calm, only the bottle changes.</p>
+  </section>
+
+  <section class="idea" aria-labelledby="a-title">
+    <div class="idea-head"><span class="tag">A</span><h2 id="a-title">Spring</h2><span class="score">8/10</span></div>
+    <div class="shots">
+      <figure><img src="img/spring-desk.jpg" alt="Idea A: a spring vineyard with yellow mustard between the vine rows, golden-green hills and oaks, the bottle standing between the rows" width="1440" height="900" loading="lazy"><figcaption>Computer</figcaption></figure>
+      <figure><img src="img/spring-phone.jpg" alt="Idea A on a phone" width="780" height="1688" loading="lazy"><figcaption>Phone</figcaption></figure>
+    </div>
+    <div class="why">
+      <p>Napa in March: young green vines, wild mustard blooming yellow between the rows.</p>
+      <ul class="plain muted">
+        <li>Calmest of the three. The red bottle pops against yellow and green.</li>
+        <li>Weak spot: no grapes yet, so it says less about what is inside.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="idea pick" aria-labelledby="b-title">
+    <div class="idea-head"><span class="tag">B</span><h2 id="b-title">Harvest</h2><span class="score">8.5/10</span><span class="mine">My pick</span></div>
+    <div class="shots">
+      <figure><img src="img/harvest-desk.jpg" alt="Idea B: a late-summer vineyard on golden hills, dark grapes hanging under green leaves, the bottle standing in the dry grass between the rows" width="1440" height="900" loading="lazy"><figcaption>Computer</figcaption></figure>
+      <figure><img src="img/harvest-phone.jpg" alt="Idea B on a phone" width="780" height="1688" loading="lazy"><figcaption>Phone</figcaption></figure>
+    </div>
+    <div class="why">
+      <p>Late summer, just before harvest: golden California hills, ripe dark grapes on the vines.</p>
+      <ul class="plain muted">
+        <li>The picture tells the story: OPCs come from grape seeds. You see the grapes.</li>
+        <li>Golden hills and oaks say California at once.</li>
+        <li>Weak spot: golden hills also appear on About. The vines keep it its own.</li>
+      </ul>
+    </div>
+    <figure><img src="img/harvest-desk1920.jpg" alt="Idea B on a wide 1920 screen" width="1920" height="1080" loading="lazy"><figcaption>B on a big screen, 1920 wide</figcaption></figure>
+  </section>
+
+  <section class="idea" aria-labelledby="c-title">
+    <div class="idea-head"><span class="tag">C</span><h2 id="c-title">Autumn</h2><span class="score">7/10</span></div>
+    <div class="shots">
+      <figure><img src="img/autumn-desk.jpg" alt="Idea C: an autumn vineyard, the vine rows turned red, orange and gold, blue hills behind" width="1440" height="900" loading="lazy"><figcaption>Computer</figcaption></figure>
+      <figure><img src="img/autumn-phone.jpg" alt="Idea C on a phone" width="780" height="1688" loading="lazy"><figcaption>Phone</figcaption></figure>
+    </div>
+    <div class="why">
+      <p>Late October after harvest: the vine leaves turn crimson, orange and gold.</p>
+      <ul class="plain muted">
+        <li>Boldest color, and it matches the red label.</li>
+        <li>Weak spots: the red rows read a bit like flowering bushes, and an oak sits behind the “C” of OPC.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="idea" aria-labelledby="board-title">
+    <h2 id="board-title">Where the five product pages stand</h2>
+    <p class="muted">My honest scores today, looked at like a first-time visitor on computer and phone. One part at a time, as you asked.</p>
+    <div class="wrap">
+      <table class="board">
+        <tr><td>NuriCell</td><td>8.5</td><td>Strong. Every chapter has its own painting and spot.</td></tr>
+        <tr><td>Green Bee Propolis</td><td>7</td><td>Good opening. Middle still grey ink, every painting on the left, small labels over headings.</td></tr>
+        <tr><td>Nature Calm</td><td>7</td><td>Lake Tahoe and lavender are lovely. Plain first screen. The gold “Big Dipper” stars have fuzzy glows.</td></tr>
+        <tr><td>Turmerific</td><td>6.5</td><td>Plain first screen. Grey ink middle. “How to take it” chapter is thin.</td></tr>
+        <tr><td>Advanced OPC</td><td>6.5</td><td>Plain first screen. Long ingredient list. Same thin “How to take it” and painted sum you found strange on NuriCell.</td></tr>
+      </table>
+    </div>
+    <p class="muted">After this: the same kind of first screen for Turmerific and Nature Calm, then each page’s middle chapters.</p>
+  </section>
+
+  <section class="idea" aria-labelledby="fix-title">
+    <h2 id="fix-title">Fixed meanwhile: Nature Calm’s stars</h2>
+    <p>Each gold star had a fuzzy yellow glow around it. Your rule: gold leaf never glows. I took the glow out; the stars themselves did not change. Checked on the built site (159 of 159 page checks pass). Not live yet.</p>
+    <figure><img src="img/stars-before-after.jpg" alt="Nature Calm's Big Dipper stars before (with yellow glows) and after (clean gold leaf)" width="996" height="480" loading="lazy"><figcaption>Before (left) and after (right)</figcaption></figure>
+  </section>
+
+  <section class="reply" aria-labelledby="reply-title">
+    <h2 id="reply-title">Next</h2>
+    <p>You picked <strong>B</strong>, and it is built. Say “put it live” to publish it (with the star fix), or tell me what to change.</p>
+  </section>
+</main>

@@ -192,6 +192,20 @@ These sit on top of `DESIGN.md`.
   a tablet's top). `nuricell-opening.tsx`, `nuricell.module.css`, `nuricell-sun-art.ts`,
   `opening.tsx` (`data-half`); pictures `reference/ink-pages/nuricell/build_nuricell_sun.py`
   (`paint_sun.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round7/`.
+- **Advanced OPC opening: a vineyard at harvest (Mo picked B, November 16, 2026).** Mo's goal
+  that day: every product page superb. The four product pages after NuriCell still opened on bare
+  paper (the same template, only the bottle changed). Of three seasons of one California vineyard
+  mocked on the real page (A spring with yellow mustard between young vines, B late summer before
+  harvest, C autumn colour) he picked B, Claude's pick: one loose ink-and-wash painting behind the
+  name and the bottle, golden California hills with valley oaks under a clear sky, and in front
+  the ends of vine rows heavy with dark grapes (OPCs come from grape seeds: the picture says so).
+  The real bottle stands on the dry grass between the rows, a little of the painting's own grass
+  in front of its foot; from 960px the name is lifted off the hills (a strip of sky under it), as
+  NuriCell's is off the sea. The words and the buy box stay on bare paper under the grass. Grapes
+  are painted as loose bunches, never a field of dots. OPC only for now: Turmerific and Nature
+  Calm keep the plain opening until their own part. `opc-opening.tsx`, `opc.module.css`,
+  `opc-opening-art.ts`; picture `reference/ink-pages/opc/build_opc_opening.py` (Codex painting
+  `opening-harvest-ah`, `paint_opening.sh`); mockups `reference/ink-pages/mockups/opc-opening/`.
 - **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
   the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
   swing above the ground, a gold light in the roots you can't see); it stands larger than the

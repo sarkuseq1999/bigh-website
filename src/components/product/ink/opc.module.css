@@ -1,0 +1,138 @@
+/* Advanced OPC Formula's own rules on the shared ink product page (product-ink.tsx adds .opc to
+   the page root). Scoped under .opc[data-look="ink"], so they outrank the template's rules in any
+   stylesheet order (the built site orders CSS differently from dev).
+
+   The opening, a vineyard at harvest (Mo picked B of three, November 16, 2026; mockups
+   reference/ink-pages/mockups/opc-opening/): one loose painting behind the name and the bottle,
+   golden hills under a clear sky, vine rows heavy with dark grapes in front. From 960px the name
+   rests over the hills and the bottle stands on the dry grass between the rows; in one column the
+   bottle stands on the grass under the name. The words and the buy box stay on bare paper under
+   the grass (opc-opening.tsx).
+
+   As NuriCell's clear day (nuricell.module.css): the painting is a child of the bottle's box, so it
+   is sized and placed in boxes (percentages of the box) and follows the bottle at every width and
+   in every language. It sits behind all the page's content (z-index -1: the page root is its own
+   stacking context) and multiplies onto the paper. --col is one row or column of the painting as a
+   share of the box's width; a row's height in shares of the box's height is that times 1230/1278
+   (the box's shape). --row-h and --row-v are one row of the painting as drawn, across (for left
+   and width) and down (for top). The painting's numbers (--vine-w, its width; --vine-hills,
+   --vine-ground and --vine-end, the rows of the hills under the name, of the ground the bottle
+   stands on and of its last paint) come from opc-opening-art.ts, set on the section. */
+
+/* One column: the whole painting would be 4.7 boxes wide (so its sky reaches the window's top over
+   the name); its middle, drawn closer, is shown (`phone`). The ground stands at 96% of the box's
+   height (--vine-y is the painting's top), the glass's foot (97.2%) a little into the grass. */
+.opc[data-look="ink"] [data-chapter="overview"] {
+  --col: calc(470% / var(--vine-w));
+  --row-h: var(--col);
+  --row-v: calc(var(--col) * 1230 / 1278);
+  --vine-y: calc(96% - var(--vine-ground) * var(--row-v));
+  /* The painting is wider than the window: its sides are cut, with no sideways scroll (no
+     stacking context, no scrolling box). */
+  overflow-x: clip;
+}
+
+.opc[data-look="ink"] .vines {
+  position: absolute;
+  z-index: -1;
+  top: var(--vine-y);
+  left: calc(50% - var(--vine-phone-w) * var(--row-h) / 2);
+  width: calc(var(--vine-phone-w) * var(--row-h));
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.opc[data-look="ink"] .vines :is(picture, img) {
+  display: block;
+  width: 100%;
+  max-width: none;
+  height: auto;
+}
+
+/* The bottle's shadow on the grass: soft, under its foot, over the painting. */
+.opc[data-look="ink"] .vineShadow {
+  position: absolute;
+  z-index: -1;
+  top: 94.4%;
+  left: 17%;
+  width: 66%;
+  height: 5.6%;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgba(38, 34, 28, 0.42),
+    rgba(38, 34, 28, 0.14) 62%,
+    transparent
+  );
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* The dry grass in front of the bottle's foot: the painting's own, laid where it lies on the
+   painting (--vine-front-x, --vine-front-y), over the bottle. */
+.opc[data-look="ink"] .vineFront {
+  position: absolute;
+  z-index: 1;
+  top: calc(var(--vine-y) + var(--vine-front-y) * var(--row-v));
+  left: calc(50% + (var(--vine-front-x) - var(--vine-w) / 2) * var(--row-h));
+  display: block;
+  width: calc(var(--vine-front-w) * var(--row-h));
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+/* One column: the words start 20px under the last of the grass. The ground is 4% of the box's
+   height (0.04156 of its width) over the box's foot, and the grass ends --vine-end less
+   --vine-ground rows under it, each 4.7 / --vine-w of the box's width (64vw, at most 320px). */
+.opc[data-look="ink"] [data-chapter="overview"] h1 + div {
+  margin-top: calc(
+    min(64vw, 320px) * ((var(--vine-end) - var(--vine-ground)) * 4.7 / var(--vine-w) - 0.04156) +
+      20px
+  );
+}
+
+@media (min-width: 960px) {
+  /* Two columns: the painting is as wide as it must be for the hills under the name to sit on the
+     letters' baseline (60% of the box's height, measured for "Formula" at the name's size and line
+     height) and the ground on the glass's foot, a little into the grass (96.2%): 36.2% of the box's
+     height between them, 37.61% of its width. About 3.98 boxes wide in all (108% of the window
+     while the name is set by the window's width). Where that is narrower than the window (the
+     name stops growing at 250px, or a short window shrinks it) the painting is drawn as wide as
+     the window instead, still standing on the glass's foot, so its hills rise a little behind the
+     name's foot: it never ends inside the window, and nothing is mirrored or patched beside it
+     (mirrored side pieces made a "V" of vine posts at the joint). */
+  .opc[data-look="ink"] [data-chapter="overview"] {
+    --col: calc(37.61% / (var(--vine-ground) - var(--vine-hills)));
+    --row-h: max(var(--col), calc((100vw + 8px) / var(--vine-w)));
+    --row-v: max(calc(var(--col) * 1230 / 1278), calc((100vw + 8px) / var(--vine-w)));
+    --vine-y: calc(96.2% - var(--vine-ground) * var(--row-v));
+    padding-top: calc(88px + clamp(6px, 1.7vw, 26px));
+  }
+
+  .opc[data-look="ink"] .vines {
+    left: calc(50% - var(--vine-w) * var(--row-h) / 2);
+    width: calc(var(--vine-w) * var(--row-h));
+  }
+
+  /* The name off the hills, as NuriCell's off the sea: both halves lifted 0.1 of their size, so a
+     strip of sky lies between their foot and the hills; the bottle stays on the grass. */
+  .opc[data-look="ink"] [data-chapter="overview"] h1 > [data-half] {
+    translate: 0 -0.1em;
+  }
+
+  /* The words start 0.13 of the name's size (and 3px) under the last of the grass: the grass ends
+     --vine-end less --vine-ground rows (each one row as drawn, in pixels here: a margin's
+     percentages are of the column, not the bottle's box) under the ground, which lies 3.8% of the
+     box's height (0.0395 of its width) over the box's foot, where the name's row ends. */
+  .opc[data-look="ink"] [data-chapter="overview"] h1 + div {
+    margin-top: calc(
+      (var(--vine-end) - var(--vine-ground)) *
+        max(
+          var(--stand) * 0.3761 / (var(--vine-ground) - var(--vine-hills)),
+          (100vw + 8px) / var(--vine-w)
+        ) -
+        var(--stand) * 0.0395 + 0.13 * var(--name) + 3px
+    );
+  }
+}

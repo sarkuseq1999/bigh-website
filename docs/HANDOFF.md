@@ -13,16 +13,27 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   ink middles while the rest of the site turned California colour, every painting on the left (Mo
   called that boring on NuriCell, October 19), small grey labels over headings (Mo found them
   strange three times on NuriCell), and the thin "How to take it" chapter with its painted sum
-  (Mo found NuriCell's strange, October 27). The words are sound. **Part 1, waiting for Mo's
-  pick:** Advanced OPC's first screen as a painted California vineyard (NuriCell's clear-day
-  approach): A spring with mustard, B harvest with ripe grapes (Claude's pick, 8.5), C autumn
-  colour. Codex paintings `reference/ink-pages/opc/originals/opening-{spring,harvest,autumn}-{a,b}h.png`
-  (prompts `prompts/opening-*-1.txt`, `paint_opening.sh`); mocked by script on the live page
-  (`reference/ink-pages/mockups/opc-opening/`: `mock.py`, `mock_sky.js`, `prep.py`); review page
-  https://claude.ai/artifact/Ta1qo8Jp8V8cMbkuoJe4e7. Not built. After Mo's pick: build it as
-  NuriCell's opening is built (a build script with a row cut and a front grass layer), then the
-  same kind of first screen for Turmerific and Nature Calm, then each page's middle chapters, one
-  part at a time. **Fixed meanwhile (local commit, not pushed):** Nature Calm's Big Dipper stars
+  (Mo found NuriCell's strange, October 27). The words are sound. **Part 1, built (local commit,
+  not pushed):** Advanced OPC's first screen as a painted California vineyard (NuriCell's
+  clear-day approach). Of A spring with mustard, B harvest with ripe grapes, C autumn colour, Mo
+  picked **B** (Claude's pick). Codex paintings
+  `reference/ink-pages/opc/originals/opening-{spring,harvest,autumn}-{a,b}h.png` (prompts
+  `prompts/opening-*-1.txt`, `paint_opening.sh`; only `opening-harvest-ah` is used and kept, the
+  other five are in `bigh-archive\opc-opening-unused-2026-11-16\`); mocked by
+  script on the live page (`reference/ink-pages/mockups/opc-opening/`); review page
+  https://claude.ai/artifact/Ta1qo8Jp8V8cMbkuoJe4e7. Built: `build_opc_opening.py`,
+  `opc-opening.tsx`, `opc.module.css`, `opc-opening-art.ts`, `opening.tsx` and `product-ink.tsx`
+  (OPC only); `qa_opc_ink` has a `vineyard` section and finds the bottle by its class (the
+  bottle's box now holds the painting too). AGENTS.md "Advanced OPC opening"; notes
+  `reference/ink-pages/opc/README.md`. Next, one part at a time: the same kind of first screen
+  for Turmerific and Nature Calm, then each page's middle chapters. Built site (`npm run build` +
+  `next start`, sequentially): `qa_opc_ink` 309/309 (new `vineyard` section, 2560 to 360),
+  `qa_nuricell_ink` 663/663, `qa_turmerific_ink` 155/155, `qa_nature_calm_ink` 159/159,
+  `qa_propolis_ink` 273/273, `qa_home_ink` 290/290, `qa_nav` 326/326 (the others before the last
+  OPC-only change, which dropped mirrored side pieces for a painting as wide as the window); lint,
+  type-check, prettier clean. Claude's score 8.5: from about 1920px wide the hills rise behind the
+  name's foot; the 1536px painting is soft on a 2560 screen. **Fixed meanwhile (local commit,
+  not pushed):** Nature Calm's Big Dipper stars
   sat in pale yellow halos (a fuzzy glow; the halo had also passed the gold detector): the build
   takes the halo back to paper and ships `stars-v2` (`dehalo` in `build_nature_calm.py`; README
   there). Built site: `qa_nature_calm_ink` 159/159. Noted for later: Nature Calm's thinnest moon
