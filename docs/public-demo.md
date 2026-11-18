@@ -4,7 +4,19 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-q1rjwz84u-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-abphd8cg8-sarkuseq1999s-projects.vercel.app`
+(`dpl_7xEjcvAxHEZgaCCBt2TpJpJT1F5a`), the **production** deployment of `main` at
+`a5ab8cc6e09d3df762a763b3664b0272d59be8b7` (November 18, 2026): Advanced OPC, Turmerific and
+Nature Calm alternate their paintings' sides from 960px, and Turmerific's daily glass in color.
+Pushed on Mo's go-ahead of November 18. `origin/main` was `b45f95a`, the tested tree's parent (a
+fast-forward). Quick look on the plain public URL at 1440 px: each chapter's painting on its own
+side (OPC and Nature Calm: why left, inside right, research left, people right, daily left, buy
+right; Turmerific: why left, inside right, research left, daily right, buy left), no sideways
+scroll, no page errors; a phone scroll-through of all five product pages showed nothing broken.
+Public checks, sequential: `qa_opc_ink` **314/314**, `qa_turmerific_ink` **269/269**,
+`qa_nature_calm_ink` **273/273**, `qa_home_ink` **290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-q1rjwz84u-sarkuseq1999s-projects.vercel.app`
 (`dpl_CnZxxEMhCCuWhs2DmEJST3GJVfpL`), the **production** deployment of `main` at
 `b45f95ad23914e47eaa0f02e080b84938ff9d2aa` (November 18, 2026): Green Bee Propolis's bee tree,
 specimen, mug and six questions, and NuriCell's six questions, in color. Pushed on Mo's go-ahead of

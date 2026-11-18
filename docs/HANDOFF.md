@@ -6,7 +6,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 ## Now
 
 - **The painted product pages alternate sides; Turmerific's glass in color, November 18, 2026
-  (Claude Code).** Part 12 of Mo's "superb" goal, on his go-ahead. Advanced OPC, Turmerific and
+  (Claude Code; live, `main` `a5ab8cc`, production `dpl_7xEjcvAxHEZgaCCBt2TpJpJT1F5a`, demo alias
+  on it).** Part 12 of Mo's "superb" goal, on his go-ahead. Advanced OPC, Turmerific and
   Nature Calm put every painting left of its words (Mo found that boring on NuriCell); from 960px
   every second chapter after "Why it matters" now has its painting on the right
   (`painted-opening.module.css`; `RIGHT_SIDE` in the three checkers, whose layout check now tests

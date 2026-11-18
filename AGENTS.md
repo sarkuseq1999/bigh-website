@@ -75,7 +75,8 @@ These sit on top of `DESIGN.md`.
   product pages) Advanced OPC, Turmerific and Nature Calm alternate: from 960px every second
   chapter after "Why it matters" has its painting right of its words (OPC and Nature Calm: inside,
   people, buy; Turmerific: inside, daily), as Green Bee Propolis already did for inside and daily
-  (`painted-opening.module.css`; the three checkers' `RIGHT_SIDE`).
+  (`painted-opening.module.css`; the three checkers' `RIGHT_SIDE`). Live November 18, 2026
+  (`main` `a5ab8cc`).
 - **NuriCell Dr. Liu: the view west (Mo picked A2, October 26, 2026).** Mo wanted the Dr. Liu
   chapter "more fun" and better designed. Of three ideas (A the Berkeley story, B a magazine cover,
   C a line in his own words) he picked A, then A2 of two mockups, then asked for it improved. His
