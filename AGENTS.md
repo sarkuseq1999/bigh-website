@@ -271,7 +271,7 @@ These sit on top of `DESIGN.md`.
   through violet to a warm glow over the ridge) that dissolves into the paper at its edges. The
   stars stay plain gold leaf with nothing round them; their gold mask stops above the glow
   (`STARS_GOLD_ROWS`). `build_nature_calm.py` (`stars()`, Codex edit `dusk-colour-a`); before and
-  after `reference/ink-pages/mockups/nature-calm-dusk/`.
+  after `reference/ink-pages/mockups/nature-calm-dusk/`. Live November 18, 2026 (`main` `190aa0a`).
   Green Bee Propolis last: the bee tree (both layers: a colour repaint with gold cracks and a
   Codex edit with the cracks open; in colour the bark and the bees pass the gold test, so the
   cracks are found where the two layers differ), the alecrim specimen, the mug (a sage glaze) and

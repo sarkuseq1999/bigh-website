@@ -5,7 +5,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Nature Calm's Big Dipper at dusk, November 18, 2026 (Claude Code).** Part 14 of Mo's
+- **Nature Calm's Big Dipper at dusk, November 18, 2026 (Claude Code; live, `main` `190aa0a`,
+  production `dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`, demo alias on it).** Part 14 of Mo's
   "superb" goal, on his go-ahead: the weakest picture of the desktop scroll-through (seven gold
   dabs on bare paper read as coins, not stars). A Codex edit of the colour take paints its sky at
   dusk; the stars and the ridge are kept (`dusk-colour-a`, `stars-dusk-v1`; `stars()` no longer

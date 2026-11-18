@@ -4,7 +4,18 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-8pb2xqdmh-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
+(`dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`), the **production** deployment of `main` at
+`190aa0ace8b6cf765f5129fa0cc18423ba3111c9` (November 18, 2026): Nature Calm's Big Dipper with its
+sky painted at dusk, and the three checkers' Propolis rule updated. Pushed on Mo's go-ahead of
+November 18. `origin/main` was `36fc975`, the tested tree's parent (a fast-forward). Quick look on
+the plain public URL at 1440 and 390 px: the dusk stars load, the Propolis opening painting still
+there, no sideways scroll, no page errors. Public checks, sequential, all five product pages:
+`qa_nature_calm_ink` **273/273**, `qa_opc_ink` **314/314**, `qa_turmerific_ink` **269/269**,
+`qa_propolis_ink` **345/345**, `qa_nuricell_ink` **664/664**, `qa_home_ink` **290/290**, `qa_nav`
+**326/326**.
+
+Before that the alias pointed to `bigh-website-8pb2xqdmh-sarkuseq1999s-projects.vercel.app`
 (`dpl_Aa4mi6syVxF8aCjn6ExM4YCK5V8P`), the **production** deployment of `main` at
 `36fc975937740f3d7a0e7d8d868d6a27c6f4afa1` (November 18, 2026): Green Bee Propolis's opening
 painted, the hills of Minas Gerais behind the approved name and bottle. Pushed on Mo's go-ahead of
