@@ -5,8 +5,22 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Nature Calm's paintings in color, November 17, 2026 (Claude Code; built, committed locally,
-  not pushed).** Part 10 of Mo's "superb" goal, the same way. Codex repainted the Big Dipper
+- **Green Bee Propolis's paintings and NuriCell's questions in color, November 18, 2026 (Claude
+  Code).** Part 11 of Mo's "superb" goal, the same way; with this every product painting except
+  NuriCell's chosen grey ink chapters is in color. Propolis: the bee tree (`hive-colour-a` and
+  `hiveopen-colour-a`, a Codex edit with the cracks open; `crack_mask()` in `build_propolis.py`
+  finds the cracks where the two differ, since the colour bark and bees pass the gold test), the
+  specimen (`specimen-colour-a`), the mug (`mug-colour-a`, shipped whole as `mug-colour2-v1`: the
+  ink box cut its pale steam off) and six questions (`q-*-v2`). NuriCell: six questions (`q-*-v2`;
+  capsule and study without powders). Descriptions m613, m615, m616 now say watercolor.
+  `qa_propolis_ink` and `qa_nuricell_ink` check the colour pictures. Built site, sequential:
+  `qa_propolis_ink` 275/275, `qa_nuricell_ink` 664/664, `qa_home_ink` 290/290, `qa_nav` 326/326.
+  Mo's go-ahead (November 18):
+  push live once the built-site checks pass and take the recommended option (AGENTS.md). Unused
+  takes in `bigh-archive\questions-colour-unused-2026-11-18\`.
+- **Nature Calm's paintings in color, November 17, 2026 (Claude Code; live November 18, `main`
+  `d06e4b9`, production `dpl_HA54t7xcauo1bzEAceUtsmC584ZR`, demo alias on it; public checks
+  green).** Part 10 of Mo's "superb" goal, the same way. Codex repainted the Big Dipper
   (`stars-colour-a`: a dusk-blue ridge, a faint lavender band, the stars plain gold leaf), the moon
   painting (`moon-colour-b`: its crescents now clear crescents, not brackets; the opening card's
   capsules still come from the October moon) and the five questions (`q-*-v2`; the capsule and

@@ -121,3 +121,20 @@ its scoped styles; the chapter design from the earlier local proposal remains.
   The intended lighter lettering was also visually confirmed in Firefox.
 - Visual assessment: 9/10. The introductory paragraph is still dense on a small phone. Desktop,
   phone and moving tree states were inspected on the production build.
+
+## The paintings in colour (Mo, November 18, 2026)
+
+The same way as the other product pages: the same pictures in color. Green Bee Propolis's grey ink
+paintings were the bee tree, the alecrim specimen and the mug (the resin dish and the buy scene
+were already colour). `paint_colour.sh` pads each October take with its own paper
+(`plates/colour/`, git-ignored) and has Codex repaint it with the page's resin dish and buy scene
+as the colour reference (`prompts/{hive,specimen,mug}-colour.txt`). The Why needs two layers in
+register: `hive-colour-a` repaints October's gold take (warm bark with moss, amber bees, the gold
+cracks kept), `hiveopen-colour-a` is a Codex edit of it with the cracks open
+(`prompts/hiveopen-colour.txt`), registered onto it. In colour the bark and the bees pass the
+kit's gold test, so `crack_mask()` finds the cracks where the two layers differ and the gold is
+bright; only they are laid in from the open take, deepened toward leaf, and given the light mask.
+The mug ships whole (`mug-colour2-v1`: cropping to the ink box cut its pale steam off) and
+without a light mask; the specimen as `specimen-colour-v1`. Descriptions m613, m615 and m616 now
+say watercolor. The `b` takes are in `codes/bigh-archive/questions-colour-unused-2026-11-18/`. The
+questions: `../questions/README.md`. Before and after: `../mockups/propolis-colour/`.

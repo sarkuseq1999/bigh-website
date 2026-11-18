@@ -7,19 +7,19 @@
 // painting's lowest share where the bottle stands, laid again in front of its foot.
 export const propolisArt = {
   hiveOpen: {
-    src: "/images/products/green-bee-propolis/ink/hive-open-v1.webp",
-    width: 1100,
-    height: 1473,
+    src: "/images/products/green-bee-propolis/ink/hive-open-colour-v1.webp",
+    width: 1024,
+    height: 1536,
   },
   hiveGold: {
-    src: "/images/products/green-bee-propolis/ink/hive-gold-v1.webp",
-    width: 1100,
-    height: 1473,
-    gold: "/images/products/green-bee-propolis/ink/hive-gold-v1-gold.webp",
+    src: "/images/products/green-bee-propolis/ink/hive-gold-colour-v1.webp",
+    width: 1024,
+    height: 1536,
+    gold: "/images/products/green-bee-propolis/ink/hive-gold-colour-v1-gold.webp",
   },
   hiveSpread: {
-    x: 0.5275,
-    y: 0.5372,
+    x: 0.5283,
+    y: 0.543,
   },
   resin: {
     src: "/images/products/green-bee-propolis/ink/resin-v1.webp",
@@ -33,15 +33,14 @@ export const propolisArt = {
     height: 113,
   },
   specimen: {
-    src: "/images/products/green-bee-propolis/ink/specimen-v1.webp",
-    width: 1100,
-    height: 1477,
+    src: "/images/products/green-bee-propolis/ink/specimen-colour-v1.webp",
+    width: 716,
+    height: 985,
   },
   mug: {
-    src: "/images/products/green-bee-propolis/ink/mug-v1.webp",
-    width: 1100,
-    height: 1294,
-    gold: "/images/products/green-bee-propolis/ink/mug-v1-gold.webp",
+    src: "/images/products/green-bee-propolis/ink/mug-colour2-v1.webp",
+    width: 1024,
+    height: 1024,
   },
   scene: {
     src: "/images/products/green-bee-propolis/ink/scene-v2.webp",

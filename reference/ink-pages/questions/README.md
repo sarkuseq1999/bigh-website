@@ -64,6 +64,15 @@ not given plants: the capsule answer is two closed capsules beside a few dry pla
 fibre cellulose comes from), the study answer an open book with a hand lens, a lavender sprig and
 one capsule (it was a tray of seven white powders). Shipped as `q-<key>-v2.webp` (`COLOUR`).
 
+## Green Bee Propolis and NuriCell in colour (November 18, 2026)
+
+`paint_colour.sh propolis` (its resin dish and buy scene as the colour reference) and
+`paint_colour.sh nuricell` (its coast opening and redwood round). Propolis's capsule answer is two
+closed yellow capsules on a green leaf. NuriCell's ingredients are made compounds, so its two
+powder pictures were not given plants: closed white capsules by dry plant stalks, and an open book
+with a hand lens, a redwood sprig and one capsule. Every product's questions now ship as
+`q-<key>-v2.webp`. The unused takes are in `codes/bigh-archive/questions-colour-unused-2026-11-18/`.
+
 ## Checks
 
 `scripts/qa/qa_questions.py <base-url>`: all five pages, wide and phone, no script, four languages.

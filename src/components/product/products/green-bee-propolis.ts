@@ -181,7 +181,7 @@ const greenBeePropolis: ProductPage = {
       unlit: propolisArt.hiveOpen,
       lit: propolisArt.hiveGold,
       spread: propolisArt.hiveSpread,
-      alt: "An old tree where wild bees live, its cracks filling with gold, painted in ink and gold leaf",
+      alt: "An old tree where wild bees live, its cracks filling with gold, painted in watercolor and gold leaf",
     },
     inside: {
       ...propolisArt.resin,
@@ -189,12 +189,12 @@ const greenBeePropolis: ProductPage = {
     },
     research: {
       ...propolisArt.specimen,
-      alt: "A sprig of alecrim pressed on a botanist’s specimen sheet, painted in ink",
+      alt: "A sprig of alecrim pressed on a botanist’s specimen sheet, painted in watercolor",
     },
     daily: {
       picture: {
         ...propolisArt.mug,
-        alt: "A mug of tea with one gold capsule beside it, painted in ink and watercolor",
+        alt: "A mug of tea with one gold capsule beside it, painted in watercolor",
       },
     },
     buy: {

@@ -9,7 +9,8 @@ Sections (all, or --only=a,b):
   name        1920 to 360: readable bold Switzer title, clear of the real bottle; Vietnamese too.
               Keyboard chapter navigation and the honest checkout preview.
   chapters    overview, why, inside, research, daily, buy (no people, no sum); each its own painting;
-              "Inside every capsule, one ingredient."; 200 mg; every study; the questions
+              "Inside every capsule, one ingredient."; 200 mg; every study; the questions; the
+              paintings in colour (November 18)
   spread      the gold waits, then fills the cracks from their middle; reduced motion and no script:
               filled from the first paint; its glint mask follows
   multiply    every painting multiplies onto the paper with no box
@@ -210,6 +211,14 @@ def chapters(browser):
     )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
+    # The paintings in colour (Mo, November 17-18, 2026: the same pictures in color, page by page):
+    # the hive's two layers, the specimen and the mug are the colour takes, the six questions v2.
+    srcs = page.evaluate("""() => [...document.querySelectorAll('main img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    colour = [n for n in ["hive-open-colour-v1.webp", "hive-gold-colour-v1.webp", "specimen-colour-v1.webp", "mug-colour2-v1.webp"] if n not in srcs]
+    check("chapters: the hive, the specimen and the mug in colour", not colour, "missing " + ", ".join(colour))
+    qs = page.evaluate("""() => [...document.querySelectorAll('#questions img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    old_q = [q for q in qs if not q.endswith("-v2.webp")]
+    check("chapters: the question paintings in colour", len(set(qs)) == 6 and not old_q, ", ".join(sorted(set(qs))))
     studies = page.locator("[data-study]").count()
     check("chapters: all seven studies", studies == 7, f"{studies}")
     alts = page.evaluate("() => [...document.querySelectorAll('main figure img[alt]')].map(i => i.alt).filter(Boolean)")

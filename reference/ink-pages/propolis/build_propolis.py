@@ -8,10 +8,15 @@ src/components/product/ink/propolis-art.ts. NuriCell's treatments (build_nuricel
 divided out and lifted to white so each painting multiplies onto the page's paper with no box, gold
 leaf kept as a light mask for the kit's glint.
 
-Why: the bee tree with its cracks sealed in gold, and the same tree with the cracks open. The open
-take is a GPT edit of the gold one; only its cracks are used (laid into the gold take along the
-cracks, toned to the bark around them), so nothing but the cracks changes as the gold spreads in.
-`spread` is where the gold starts (the middle of the cracks, near the hollow), as fractions.
+Why: the bee tree with its cracks sealed in gold, and the same tree with the cracks open. Since
+November 18, 2026 (Mo: the other product pages the same way as Advanced OPC, the same pictures in
+color) both are Codex colour takes: hive-colour-a repaints October's gold take (paint_colour.sh),
+hiveopen-colour-a is a Codex edit of it with the cracks open. In colour the warm bark and the amber
+bees pass the kit's gold test, so the cracks are found where the two takes differ (crack_mask());
+only they are laid in from the open take, deepened toward leaf, and given the light mask, so nothing
+but the cracks changes as the gold spreads in. `spread` is where the gold starts (the middle of
+the cracks, near the hollow), as fractions. The research specimen and the mug are Codex colour
+takes too; the mug ships without a light mask (its capsule is paint, plain at rest).
 
 Buy: the painted scene Mo picked (round 7 A) with its painted bottle taken out by a GPT edit
 (buy-painted-empty); the real bottle photo stands in its place (Mo, October 14: the bottle is never
@@ -44,6 +49,9 @@ V = "v1"
 SCENE_V = "v2"
 # The card's capsule went pale after going live (October 16).
 CAPSULE_V = "v2"
+# The colour takes (Codex, no gpt25- prefix; paint_colour.sh).
+HIVE_TAKE, HIVEOPEN_TAKE = "hive-colour-a", "hiveopen-colour-a"
+SPECIMEN_TAKE, MUG_TAKE = "specimen-colour-a", "mug-colour-a"
 TAKES = {
     "hive-gold": "why-hive-gold",
     "hive-open": "why-hive-open",
@@ -69,6 +77,16 @@ def finish(img, name, width):
 
 def cropped(key, pad=0.04):
     flat = bd.divided(bd.load(TAKES[key]))
+    return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
+
+
+def codex(take):
+    """A Codex take (originals/<take>.png) with its paper divided out."""
+    return bd.divided(Image.open(HERE / "originals" / f"{take}.png").convert("RGB"))
+
+
+def codex_cropped(take, pad=0.04):
+    flat = codex(take)
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
 
 
@@ -128,21 +146,47 @@ def cracks_open(gold_take, open_take):
     return Image.fromarray(np.clip(a * (1 - m) + e * m, 0, 255).astype(np.uint8))
 
 
+def crack_mask(gold_take, open_reg):
+    """The gilded cracks of the colour take: where the open take differs from it, and the gold take
+    is bright, saturated gold there (the edit changed nothing else, give or take a little drift)."""
+    a = np.asarray(gold_take).astype(np.float32)
+    e = np.asarray(open_reg).astype(np.float32)
+    differs = np.abs(a - e).max(axis=2) > 30
+    hi, lo = a.max(axis=2), a.min(axis=2)
+    sat = (hi - lo) / np.maximum(hi, 1)
+    gold = bd.gold_pixels(a.astype(np.uint8)) & (sat > 0.32) & (hi > 120)
+    m = (differs & gold).astype(np.uint8)
+    m = cv2.morphologyEx(m, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(m, 8)
+    keep = np.isin(lab, [i for i in range(1, n) if st[i, cv2.CC_STAT_AREA] >= 40]).astype(np.uint8)
+    return cv2.morphologyEx(keep, cv2.MORPH_CLOSE, np.ones((5, 5), np.uint8))
+
+
 def hive():
     """(open, gold, spread): the two Why layers in register and where the gold starts."""
-    gold_take = bd.divided(bd.load(TAKES["hive-gold"]))
-    open_take = bd.divided(bd.load(TAKES["hive-open"]))
-    before = cracks_open(gold_take, open_take)
-    after = richer_gold(gold_take)
-    lit = bd.art_of(trunk_fade(bd.levelled(after)), f"hive-gold-{V}", 1100)
-    ba.gold_mask(f"hive-gold-{V}")
-    lit["gold"] = f"{URL}/hive-gold-{V}-gold.webp"
-    unlit = bd.art_of(trunk_fade(bd.levelled(before)), f"hive-open-{V}", 1100)
+    gold_take = codex(HIVE_TAKE)
+    open_reg = registered(gold_take, codex(HIVEOPEN_TAKE))
+    cracks = crack_mask(gold_take, open_reg)
+    a = np.asarray(gold_take).astype(np.float32)
+    e = np.asarray(open_reg).astype(np.float32)
+    zone = cv2.GaussianBlur(cv2.dilate(cracks, np.ones((15, 15), np.uint8)).astype(np.float32), (0, 0), 2.5)[..., None]
+    before = Image.fromarray(np.clip(a * (1 - zone) + e * zone, 0, 255).astype(np.uint8))
+    leaf = cv2.GaussianBlur(cv2.dilate(cracks, np.ones((3, 3), np.uint8)).astype(np.float32), (0, 0), 1.2)[..., None] * 0.6
+    after = Image.fromarray(np.clip(a * (1 - leaf) + a * np.array([0.98, 0.80, 0.42], np.float32) * leaf, 0, 255).astype(np.uint8))
+    lit = bd.art_of(trunk_fade(bd.levelled(after)), f"hive-gold-colour-{V}", 1100)
+    unlit = bd.art_of(trunk_fade(bd.levelled(before)), f"hive-open-colour-{V}", 1100)
+    # The light mask: the cracks alone (white, the cracks as alpha), as ba.gold_mask writes it.
+    width = 1000
+    m = cv2.resize(cv2.GaussianBlur(cracks.astype(np.float32), (0, 0), 1.0), (width, round(cracks.shape[0] * width / cracks.shape[1])), interpolation=cv2.INTER_AREA)
+    rgba = np.dstack([np.full(m.shape + (3,), 255, np.uint8), (np.clip(m, 0, 1) * 255).astype(np.uint8)])
+    path = OUT / f"hive-gold-colour-{V}-gold.webp"
+    Image.fromarray(rgba, "RGBA").save(path, "WEBP", quality=90, method=6)
+    lit["gold"] = f"{URL}/hive-gold-colour-{V}-gold.webp"
     # Where the gold starts: the middle of the gilded cracks (the cracks fan out from the hollow).
-    ys, xs = np.nonzero(gold_of(np.asarray(after).astype(np.float32)))
-    h, w = np.asarray(after).shape[:2]
+    ys, xs = np.nonzero(cracks)
+    h, w = cracks.shape
     spread = {"x": round(float(np.median(xs)) / w, 4), "y": round(float(np.median(ys)) / h, 4)}
-    print(f"hive: gold spreads from {spread}")
+    print(f"hive: cracks {len(xs) / (w * h) * 100:.2f}% of the picture, gold spreads from {spread}")
     return unlit, lit, spread
 
 
@@ -209,10 +253,8 @@ def supply(resin_img, mask):
 def mug():
     """How to take it: a mug of tea and one gold capsule (Mo, October 14: an everyday mug, not a
     teacup)."""
-    art = finish(cropped("mug"), "mug", 1100)
-    ba.gold_mask(f"mug-{V}")
-    art["gold"] = f"{URL}/mug-{V}-gold.webp"
-    return art
+    # The whole take (its pale steam fails the ink box, which cut it off at the top).
+    return finish(codex(MUG_TAKE), "mug-colour2", 1100)
 
 
 # The Buy scene, in the take's own pixels (1744 x 2336). Mo, October 14: the bottle as big as
@@ -311,7 +353,7 @@ if __name__ == "__main__":
             "hiveSpread": spread,
             "resin": resin_art,
             "capsule": supply(resin_img, mask),
-            "specimen": finish(cropped("specimen"), "specimen", 1100),
+            "specimen": finish(codex_cropped(SPECIMEN_TAKE), "specimen-colour", 1100),
             "mug": mug(),
             "scene": scene(),
         }

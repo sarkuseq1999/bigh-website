@@ -1,0 +1,3 @@
+THE TASK: Edit the FIRST attached picture (a watercolour of an old tree trunk where wild bees live, the cracks in its bark sealed in gold leaf). Make exactly one change and nothing else: the cracks are no longer gold leaf. Paint each crack as an open, empty crack in the bark, a thin deep warm brown-black line with soft edges, exactly where the gold is now and the same shape.
+
+Everything else stays exactly as it is, pixel for pixel where possible: the framing, the trunk, the bark's colours, the hollow, every bee and the paper. Do not move, resize, redraw or add anything. No gold anywhere. No glow, no text, no frame.

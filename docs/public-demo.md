@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-7ntx4rsvx-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-n47adc36g-sarkuseq1999s-projects.vercel.app`
+(`dpl_HA54t7xcauo1bzEAceUtsmC584ZR`), the **production** deployment of `main` at
+`d06e4b9baa0c0f6cceb06c931035c65dd867d7dc` (November 18, 2026): Nature Calm's Big Dipper, moon and
+five questions in color (Mo: the same way, page by page). Mo said "Yes, put it live".
+`origin/main` was `4636cb0`, the tested tree's parent (a fast-forward). Quick look on the plain
+public URL at 1440 and 390 px: the colour Big Dipper and moon and the five v2 questions load, no
+sideways scroll, no page errors. Public checks, sequential: `qa_nature_calm_ink` **273/273**,
+`qa_home_ink` **290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-7ntx4rsvx-sarkuseq1999s-projects.vercel.app`
 (`dpl_2AEUiyN38sgtTpiGDKPJkTyoyh3N`), the **production** deployment of `main` at
 `4636cb020e7f4e94608fe2f04f5aa289d3df864e` (November 17, 2026): Turmerific's root, notebook and five
 questions in color (Mo: the same way as OPC, page by page). Mo said "Yes, put it live".

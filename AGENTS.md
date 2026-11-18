@@ -260,7 +260,19 @@ These sit on top of `DESIGN.md`.
   powder questions were not given plants (that could mislead): "What is the capsule made of?"
   is two closed capsules beside dry plant stalks, "Tested in a clinical trial?" an open book
   with a hand lens, a lavender sprig and one capsule. Before and after
-  `reference/ink-pages/mockups/nature-calm-colour/`.
+  `reference/ink-pages/mockups/nature-calm-colour/`. Live November 18, 2026 (`main` `d06e4b9`).
+  Green Bee Propolis last: the bee tree (both layers: a colour repaint with gold cracks and a
+  Codex edit with the cracks open; in colour the bark and the bees pass the gold test, so the
+  cracks are found where the two layers differ), the alecrim specimen, the mug (a sage glaze) and
+  its six questions (the capsule answer two closed yellow capsules on a leaf). NuriCell's six
+  questions the same way (its capsule and study answers lost their powders: closed white capsules
+  by dry stalks, an open book with a hand lens and a redwood sprig). NuriCell's chapters keep the
+  grey ink Mo chose for them (the lighthouse, the books, Dr. Liu at Berkeley). Before and after
+  `reference/ink-pages/mockups/propolis-colour/`.
+  **Mo's go-ahead for this work (November 18, 2026):** "You don't have to wait for me ... if you
+  need to deploy live, just deploy live. If there are choices, I will just go with your
+  recommended choices." For the product-pages colour work, push live once the built-site checks
+  pass and take Claude's recommended option; still show him the result (a review page) after.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a

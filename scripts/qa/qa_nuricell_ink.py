@@ -576,6 +576,11 @@ def reachable_text(page):
 
 def words(browser, chapters=tuple(CHAPTERS)):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
+    # The question paintings in colour (v2, November 18, 2026: the same pictures in color, the
+    # capsule and the study without their powders).
+    qs = page.evaluate("""() => [...document.querySelectorAll('#questions img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    old_q = [q for q in qs if not q.endswith("-v2.webp")]
+    check("words: the question paintings in colour", len(set(qs)) == 6 and not old_q, ", ".join(sorted(set(qs))))
     # The page at rest, as rendered: the per-chapter words below are visible without a click.
     text = re.sub(r"\s+", " ", page.locator("main").inner_text())
     for chapter in chapters:
