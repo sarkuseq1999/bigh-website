@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-r1aic7zh9-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-b306viihe-sarkuseq1999s-projects.vercel.app`
+(`dpl_5zZeCgkDEQ1AwnX9b3s8Gj7z9Zra`), the **production** deployment of `main` at
+`7655eaaa712d14ef1240b87bb7591e8151de509c` (November 17, 2026): Advanced OPC Formula's six question
+paintings in color, the capsule one without its powder (Mo picked A). Mo said "Yes, put it live".
+`origin/main` was `cf7a522`, the tested tree's parent (a fast-forward). Quick look on the plain
+public URL at 1440 and 390 px: the six v2 paintings load, no sideways scroll, no page errors.
+Public checks, sequential: `qa_opc_ink` **314/314**, `qa_home_ink` **290/290**, `qa_nav`
+**326/326**.
+
+Before that the alias pointed to `bigh-website-r1aic7zh9-sarkuseq1999s-projects.vercel.app`
 (`dpl_2Yub6F5eQ6eqGc6AoyKRuCjokadL`), the **production** deployment of `main` at
 `cf7a522a6cdae30697714b057658cd364658cf37` (November 17, 2026): Advanced OPC Formula's research
 lens, Dr. Wang's mortar, the plate and the Buy vine scene repainted in color (Mo picked A, same

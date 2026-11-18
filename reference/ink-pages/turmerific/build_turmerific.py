@@ -8,9 +8,12 @@ Propolis's (build_nuricell.py, build_propolis.py): the paper divided out and lif
 each painting multiplies onto the page's paper with no box, gold leaf kept as a light mask for the
 kit's glint.
 
-Why: a turmeric root and one slice cut from it, plain ink (unlit), then the same with the slice and
-the root's cut end in gold leaf and the gold soaked out into the paper (lit). The unlit take is a GPT
-edit of the lit one, registered onto it. The page reveals the lit painting through `soak`: a sprite
+Why: a turmeric root and one slice cut from it (unlit), then the same with the slice and the root's
+cut end in gold leaf and the gold soaked out into the paper (lit). Since November 17, 2026 (Mo:
+the other product pages the same way as Advanced OPC, the same pictures in color) both are Codex
+colour takes: lit-colour-a repaints October's lit take (paint_colour.sh), unlit-colour-a is a Codex
+edit of it (the cut faces fresh orange, the stain gone), registered onto it. The cut faces and where
+the soak starts are measured on the takes (faces()), not set by hand. The page reveals the lit painting through `soak`: a sprite
 of FRAMES masks, each a wider stretch of the gold, stacked as layers that fade in one after another,
 so the gold soaks outward from the slice in the bloom's own ragged shape (not a circle).
 
@@ -42,9 +45,9 @@ TS = REPO / "src/components/product/ink/turmerific-art.ts"
 BOTTLE = REPO / "public/images/products/turmerific.png"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
+# The colour takes (Codex, no gpt25- prefix; paint_colour.sh): the Why root and the notebook.
+LIT_TAKE, UNLIT_TAKE, NOTEBOOK_TAKE = "lit-colour-a", "unlit-colour-a", "notebook-colour-a"
 TAKES = {
-    "lit": "why-soak-lit",
-    "unlit": "why-soak-unlit",
     "inside": "inside-scoop",
     "research": "research-glasses",
     "daily": "daily-glass",
@@ -71,6 +74,11 @@ def cropped(key, pad=0.05):
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
 
 
+def codex(take):
+    """A Codex take (originals/<take>.png) with its paper divided out."""
+    return bd.divided(Image.open(HERE / "originals" / f"{take}.png").convert("RGB"))
+
+
 def with_gold(art, name):
     ba.gold_mask(f"{name}-{V}")
     art["gold"] = f"{URL}/{name}-{V}-gold.webp"
@@ -91,15 +99,14 @@ def registered(fixed, moving):
     return Image.fromarray(moved)
 
 
-# The soak: where it starts (the middle of the gold slice, as fractions of the cropped painting,
-# measured on it), how many masks the sprite holds, and how wide each mask's soft edge is.
-SLICE = (0.57, 0.43)
+# The soak: how many masks the sprite holds, and how wide each mask's soft edge is. Where it starts
+# (the middle of the cut slice) is measured by faces().
 FRAMES = 10
 FEATHER = 0.12
 SPRITE_WIDTH = 550
 
 
-def soak_time(lit, unlit, seed=7):
+def soak_time(lit, unlit, slice_at, seed=7):
     """When each pixel turns gold: 0 at the slice, 1 at the bloom's edge. Its distance from the slice
     divided by how far the gold reaches in its direction, so the bloom grows in its own shape and
     reaches every edge together; a fine noise roughens the wet edge without islands ahead of it."""
@@ -109,7 +116,7 @@ def soak_time(lit, unlit, seed=7):
     changed = np.abs(a - b).max(axis=2) > 18
     changed = cv2.morphologyEx(changed.astype(np.uint8), cv2.MORPH_OPEN, np.ones((5, 5), np.uint8)) > 0
     yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-    dx, dy = xx - SLICE[0] * w, yy - SLICE[1] * h
+    dx, dy = xx - slice_at[0] * w, yy - slice_at[1] * h
     d = np.hypot(dx, dy)
     bins = 180
     idx = ((np.arctan2(dy, dx) + np.pi) / (2 * np.pi) * bins).astype(int) % bins
@@ -125,13 +132,13 @@ def soak_time(lit, unlit, seed=7):
     return np.clip(d / reach[idx] + noise, 0, 1.3)
 
 
-def soak_sprite(lit, unlit):
+def soak_sprite(lit, unlit, slice_at):
     """FRAMES masks stacked top to bottom (white, the mask in alpha): mask k is the gold that has
     soaked in by step k, with a soft edge; the last is whole. The page fades one layer of the lit
     painting in through each, in order."""
     w = SPRITE_WIDTH
     h = round(lit.height * w / lit.width)
-    t = soak_time(lit.resize((w, h), Image.LANCZOS), unlit.resize((w, h), Image.LANCZOS))
+    t = soak_time(lit.resize((w, h), Image.LANCZOS), unlit.resize((w, h), Image.LANCZOS), slice_at)
     frames = []
     for k in range(FRAMES):
         if k == FRAMES - 1:
@@ -145,27 +152,50 @@ def soak_sprite(lit, unlit):
     white = np.full_like(alpha, 255)
     rgba = Image.merge("RGBA", (Image.fromarray(white), Image.fromarray(white), Image.fromarray(white),
                                 Image.fromarray(alpha)))
-    path = OUT / f"soak-{V}.webp"
+    path = OUT / f"soak-colour-{V}.webp"
     rgba.save(path, "WEBP", quality=82, method=6)
     print(f"{path.relative_to(REPO)}  {w}x{h * FRAMES} ({FRAMES} frames)  {path.stat().st_size // 1024} KB")
-    return {"sprite": f"{URL}/soak-{V}.webp", "frames": FRAMES}
+    return {"sprite": f"{URL}/soak-colour-{V}.webp", "frames": FRAMES}
 
 
-# The two cut faces in gold leaf, as ellipses (centre x, centre y, half width, half height, as
-# fractions of the cropped painting, measured on it). The glint is for leaf only: the soaked-in
-# wash around the slice is watercolour, and a band of light sweeping over it looked like a shine
-# on a stain (review of October 16).
-FACES = [(0.4636, 0.2993, 0.0564, 0.0818), (0.5927, 0.4572, 0.1018, 0.052)]
+# The glint is for leaf only: the soaked-in wash around the slice is watercolour, and a band of
+# light sweeping over it looked like a shine on a stain (review of October 16).
 
 
-def leaf_only(name):
+def faces(unlit):
+    """The two cut faces, as ellipses (centre x, centre y, half width, half height, as fractions of
+    the cropped painting): on the unlit layer they are fresh turmeric, a strong warm orange that
+    nothing else in the painting has. Returns (faces, slice_at): the slice is the lower face."""
+    a = np.asarray(unlit).astype(np.float32) / 255
+    r, g, b = a[..., 0], a[..., 1], a[..., 2]
+    hi, lo = a.max(axis=2), a.min(axis=2)
+    sat = (hi - lo) / np.maximum(hi, 1e-4)
+    hue = np.where((r >= g) & (g >= b), 60 * (g - b) / np.maximum(hi - lo, 1e-4), 0)
+    orange = (sat > 0.6) & (hi > 0.6) & (hue > 8) & (hue < 34)
+    orange = cv2.morphologyEx(orange.astype(np.uint8), cv2.MORPH_OPEN, np.ones((5, 5), np.uint8))
+    n, lab, st, _ = cv2.connectedComponentsWithStats(orange, 8)
+    h, w = orange.shape
+    big = sorted(range(1, n), key=lambda i: -st[i, cv2.CC_STAT_AREA])[:2]
+    if len(big) != 2 or st[big[1], cv2.CC_STAT_AREA] < 0.002 * h * w:
+        raise SystemExit(f"expected two orange cut faces, found {[int(st[i, cv2.CC_STAT_AREA]) for i in big]}")
+    out = []
+    for i in big:
+        x, y, cw, ch = st[i, cv2.CC_STAT_LEFT], st[i, cv2.CC_STAT_TOP], st[i, cv2.CC_STAT_WIDTH], st[i, cv2.CC_STAT_HEIGHT]
+        # A little wider than the orange: the gold leaf runs to the face's rim.
+        out.append((round((x + cw / 2) / w, 4), round((y + ch / 2) / h, 4), round(cw * 0.6 / w, 4), round(ch * 0.6 / h, 4)))
+    out.sort(key=lambda f: f[1])
+    print("why: cut faces", out)
+    return out, (out[1][0], out[1][1])
+
+
+def leaf_only(name, faces_at):
     """Keep the painting's gold mask (ba.gold_mask) only on the leaf faces."""
     path = OUT / f"{name}-gold.webp"
     mask = Image.open(path)
     alpha = np.asarray(mask.split()[3]).astype(np.float32)
     h, w = alpha.shape
     faces = np.zeros((h, w), np.uint8)
-    for cx, cy, rx, ry in FACES:
+    for cx, cy, rx, ry in faces_at:
         cv2.ellipse(faces, (round(cx * w), round(cy * h)), (round(rx * w), round(ry * h)), 0, 0, 360, 255, -1)
     keep = cv2.GaussianBlur(faces.astype(np.float32) / 255, (0, 0), 3)
     alpha = Image.fromarray(np.clip(alpha * keep, 0, 255).astype(np.uint8), "L")
@@ -176,16 +206,17 @@ def leaf_only(name):
 
 def why():
     """(unlit, lit, soak): the two Why layers in register, cropped by their shared box."""
-    lit_take = bd.divided(bd.load(TAKES["lit"]))
-    unlit_take = registered(lit_take, bd.divided(bd.load(TAKES["unlit"])))
+    lit_take = codex(LIT_TAKE)
+    unlit_take = registered(lit_take, codex(UNLIT_TAKE))
     a, b = bd.ink_box(np.asarray(lit_take), pad=0.05), bd.ink_box(np.asarray(unlit_take), pad=0.05)
     box = (min(a[0], b[0]), min(a[1], b[1]), max(a[2], b[2]), max(a[3], b[3]))
     lit_img = bd.feathered(bd.levelled(lit_take.crop(box)), EDGE)
     unlit_img = bd.feathered(bd.levelled(unlit_take.crop(box)), EDGE)
-    lit = with_gold(bd.art_of(lit_img, f"root-gold-{V}", 1100), "root-gold")
-    leaf_only(f"root-gold-{V}")
-    unlit = bd.art_of(unlit_img, f"root-plain-{V}", 1100)
-    return unlit, lit, soak_sprite(lit_img, unlit_img)
+    faces_at, slice_at = faces(unlit_img)
+    lit = with_gold(bd.art_of(lit_img, f"root-gold-colour-{V}", 1100), "root-gold-colour")
+    leaf_only(f"root-gold-colour-{V}", faces_at)
+    unlit = bd.art_of(unlit_img, f"root-plain-colour-{V}", 1100)
+    return unlit, lit, soak_sprite(lit_img, unlit_img, slice_at)
 
 
 def matte_capsules(img):
@@ -360,7 +391,8 @@ def write_ts(art):
         "// Generated by reference/ink-pages/turmerific/build_turmerific.py. Do not edit by hand: change",
         "// the script (or its TAKES) and run it again. Turmerific's ink paintings (October 16, 2026):",
         "// GPT Image 2.5 on rice paper, the paper divided out so each multiplies onto the page's own",
-        "// paper; gold leaf as a light mask (`gold`). soak: the sprite of masks the gold soaks in",
+        "// paper; gold leaf as a light mask (`gold`). The Why root and the notebook are Codex colour",
+        "// takes (November 17, 2026). soak: the sprite of masks the gold soaks in",
         "// through, and how many it holds. scene.bottle: where the real bottle stands, as fractions of",
         "// the painting (its width, and its picture's bottom above the painting's); scene.front: the",
         "// painting's lowest share where the bottle stands, laid again in front of its foot.",
@@ -383,7 +415,7 @@ if __name__ == "__main__":
             "soak": soak,
             "spoon": inside(),
             "capsules": supply(),
-            "notebook": finish(cropped("research"), "notebook"),
+            "notebook": finish(codex(NOTEBOOK_TAKE).crop(bd.ink_box(np.asarray(codex(NOTEBOOK_TAKE)), pad=0.05)), "notebook-colour"),
             "glass": with_gold(finish(cropped("daily"), "glass"), "glass"),
             "sum": brushed_sum(),
             "scene": scene(),

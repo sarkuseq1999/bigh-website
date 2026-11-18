@@ -10,11 +10,11 @@ const FIRST = 740;
 const LAST = 779;
 const entries = [
   [
-    "A turmeric root and a slice cut from it, the gold soaking out into the paper, painted in ink and gold leaf",
-    "一段姜黄根和从上面切下的一片，金色渐渐渗入纸中，以水墨与金箔绘成。",
-    "강황 뿌리와 거기서 잘라 낸 한 조각, 금빛이 종이로 스며 나가는 모습을 먹과 금박으로 그린 그림.",
-    "Một củ nghệ và một lát cắt từ củ, sắc vàng thấm dần ra giấy, vẽ bằng mực và lá vàng.",
-    "ターメリックの根と、そこから切った一切れ。金色が紙に染み出していく様子を墨と金箔で描いた絵。",
+    "A turmeric root and a slice cut from it, the gold soaking out into the paper, painted in watercolor and gold leaf",
+    "一段姜黄根和从上面切下的一片，金色渐渐渗入纸中，以水彩与金箔绘成。",
+    "강황 뿌리와 거기서 잘라 낸 한 조각, 금빛이 종이로 스며 나가는 모습을 수채와 금박으로 그린 그림.",
+    "Một củ nghệ và một lát cắt từ củ, sắc vàng thấm dần ra giấy, vẽ bằng màu nước và lá vàng.",
+    "ターメリックの根と、そこから切った一切れ。金色が紙に染み出していく様子を水彩と金箔で描いた絵。",
   ],
   [
     "A wooden spoon of golden curcumin powder and two capsules, painted in watercolour",
@@ -24,11 +24,11 @@ const entries = [
     "金色のクルクミンの粉をのせた木のスプーンと、カプセル二つを水彩で描いた絵。",
   ],
   [
-    "Reading glasses on an open notebook, a turmeric leaf as a bookmark, painted in ink",
-    "摊开的笔记本上放着一副老花镜，一片姜黄叶当作书签，以水墨绘成。",
-    "펼친 공책 위의 돋보기안경과 책갈피로 놓인 강황 잎 하나를 먹으로 그린 그림.",
-    "Cặp kính đọc sách trên cuốn sổ đang mở, một chiếc lá nghệ làm dấu trang, vẽ bằng mực.",
-    "開いたノートの上の老眼鏡と、しおり代わりのターメリックの葉一枚を墨で描いた絵。",
+    "Reading glasses on an open notebook, a turmeric leaf as a bookmark, painted in watercolor",
+    "摊开的笔记本上放着一副老花镜，一片姜黄叶当作书签，以水彩绘成。",
+    "펼친 공책 위의 돋보기안경과 책갈피로 놓인 강황 잎 하나를 수채화로 그린 그림.",
+    "Cặp kính đọc sách trên cuốn sổ đang mở, một chiếc lá nghệ làm dấu trang, vẽ bằng màu nước.",
+    "開いたノートの上の老眼鏡と、しおり代わりのターメリックの葉一枚を水彩で描いた絵。",
   ],
   [
     "A glass of water and two gold capsules, painted in ink and watercolour",

@@ -79,3 +79,20 @@ originals are kept out of the public repo, in
   m740-m779; m740-m744 used), not native-reviewed.
 - QA: `scripts/qa/qa_turmerific_ink.py`. The old template's `scripts/qa/qa_turmerific.py` no longer
   applies to this page.
+
+## The paintings in colour (Mo, November 17, 2026)
+
+With Advanced OPC all colour, Mo chose the same way for the other pages: the same pictures in
+color, page by page. Turmerific's grey ink paintings were the Why root, the research notebook and
+the five questions (the spoon, the glass and the plant were already colour). `paint_colour.sh`
+pads each October take with its own paper to 1024 x 1536 (`plates/colour/`, git-ignored) and has
+Codex repaint it with the page's own spoon and plant as the colour reference
+(`prompts/{lit,notebook}-colour.txt`). The Why needs two layers in register: `lit-colour-a` is the
+repaint of October's lit take (the root's skin warm tan, the gold leaf and the soaked stain kept),
+`unlit-colour-a` a Codex edit of it (`prompts/unlit-colour.txt`: the cut faces fresh orange, the
+stain gone), registered onto it by `why()`. `faces()` measures the two cut faces (the strong orange
+only they have on the unlit layer) and where the soak starts (the lower face), so the leaf-only
+gold mask and the sprite follow the new painting. Shipped as `root-{gold,plain}-colour-v1`,
+`soak-colour-v1`, `notebook-colour-v1`. Descriptions m740 and m742 now say watercolor (all five
+catalogs). The `b` takes are in `codes/bigh-archive/turmerific-colour-unused-2026-11-17/`. The
+questions: `../questions/README.md`. Before and after: `../mockups/turmerific-colour/`.

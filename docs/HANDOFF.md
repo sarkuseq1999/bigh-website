@@ -5,8 +5,20 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Advanced OPC's question paintings in color, November 17, 2026 (Claude Code; built,
-  committed locally, not pushed).** Part 8 of Mo's "superb" goal. Mo picked A: the same six
+- **Turmerific's paintings in color, November 17, 2026 (Claude Code; built, committed locally,
+  not pushed).** Part 9 of Mo's "superb" goal; Mo picked "the same way, page by page" for the other
+  pages. Codex repainted the Why root (`lit-colour-a`, and `unlit-colour-a`, a Codex edit of it so
+  the layers stay in register; `faces()` in `build_turmerific.py` now measures the cut faces and the
+  soak's start on the takes), the research notebook (`notebook-colour-a`) and the five questions
+  (`q-*-v2`; the curcumin answer's heap is golden spice, not white powder). Descriptions m740 and
+  m742 now say watercolor. `qa_turmerific_ink` checks the colour pictures. Built site, sequential:
+  `qa_turmerific_ink` 269/269, `qa_home_ink` 290/290, `qa_nav` 326/326. Review page
+  https://claude.ai/artifact/DWmtoyPZxJVQpmSfhezaPx. Unused takes in
+  `bigh-archive\turmerific-colour-unused-2026-11-17\`. Next: Nature Calm, then Green Bee Propolis,
+  then NuriCell's questions.
+- **Advanced OPC's question paintings in color, November 17, 2026 (Claude Code; live, `main`
+  `7655eaa`, production `dpl_5zZeCgkDEQ1AwnX9b3s8Gj7z9Zra`, demo alias on it; public checks
+  green).** Part 8 of Mo's "superb" goal. Mo picked A: the same six
   question pictures in color, the capsule one repainted as two closed capsules on a green leaf (its
   open capsule spilling white powder could read as drugs). `reference/ink-pages/questions/`
   `paint_colour.sh`, `build_questions.py` (`COLOUR`: OPC ships `q-*-v2`, the other products keep

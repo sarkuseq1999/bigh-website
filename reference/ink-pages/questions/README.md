@@ -41,12 +41,20 @@ keeps its own JPEGs in `../mockups/nuricell-questions/page/`) are in
 As OPC's chapter paintings turned California colour, Mo chose the same six question pictures in
 color, the capsule one repainted without its powder (an open capsule spilling white powder beside a
 scoop of rice flour can read as drugs): two closed capsules on a green leaf, the capsule being
-plant cellulose. `paint_colour.sh` pads each October painting with its own paper to 1536 x 1024
+plant cellulose. `paint_colour.sh opc <key>-<take>` pads each October painting with its own paper to 1536 x 1024
 (`plates/colour/`, git-ignored) and has Codex repaint it with the OPC page's new grapes and plants
 as the colour reference (`prompts/opc-<key>-colour.txt`); the capsule is a new painting. Takes
 `originals/opc-<key>-colour-a.png`; `build_questions.py` ships them as `q-<key>-v2.webp` (`COLOUR`;
 the other products keep their October v1 paintings). The two `b` takes are in
 `codes/bigh-archive/questions-opc-colour-unused-2026-11-17/`.
+
+## Turmerific in colour (November 17, 2026)
+
+The same way (Mo picked A for the other pages): `paint_colour.sh turmerific <key>-<take>`, with
+Turmerific's own spoon and plant as the colour reference; the part question's big heap is now a
+golden ochre spice (it was white powder) and its spoonful deep golden orange. Shipped as
+`q-<key>-v2.webp` (`COLOUR`). The unused `part` take is in
+`codes/bigh-archive/turmerific-colour-unused-2026-11-17/`.
 
 ## Checks
 

@@ -184,7 +184,7 @@ const turmerific: ProductPage = {
       unlit: turmerificArt.rootPlain,
       lit: turmerificArt.rootGold,
       soak: turmerificArt.soak,
-      alt: "A turmeric root and a slice cut from it, the gold soaking out into the paper, painted in ink and gold leaf",
+      alt: "A turmeric root and a slice cut from it, the gold soaking out into the paper, painted in watercolor and gold leaf",
     },
     inside: {
       ...turmerificArt.spoon,
@@ -192,7 +192,7 @@ const turmerific: ProductPage = {
     },
     research: {
       ...turmerificArt.notebook,
-      alt: "Reading glasses on an open notebook, a turmeric leaf as a bookmark, painted in ink",
+      alt: "Reading glasses on an open notebook, a turmeric leaf as a bookmark, painted in watercolor",
     },
     daily: {
       picture: {

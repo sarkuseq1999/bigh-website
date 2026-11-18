@@ -1,0 +1,5 @@
+THE TASK: Edit the FIRST attached picture (a watercolour of a turmeric root and one round slice cut from it, the slice's face and the root's cut end in gold leaf, a golden stain soaked into the paper around the slice). Make exactly two changes and nothing else:
+1. The slice's face and the root's cut end are no longer gold leaf: paint them as fresh-cut turmeric, a deep warm orange with paler rings toward the middle, in the same watercolour hand.
+2. Remove the golden stain from the paper completely: plain bare warm paper all round the slice and the root, as everywhere else.
+
+Everything else stays exactly as it is, pixel for pixel where possible: the framing, the root's shape, skin, colours and place, the slice's shape, size, place and angle, the paper. Do not move, resize, redraw or add anything. No gold anywhere. No glow, no halo, no text, no frame.

@@ -243,7 +243,17 @@ These sit on top of `DESIGN.md`.
   can read as drugs) became two closed capsules on a green leaf (the capsule is plant cellulose).
   Capsules stay plain grey-white. OPC only (`q-*-v2`); the other products keep their October
   question paintings for now. `reference/ink-pages/questions/` (`build_questions.py` `COLOUR`,
-  `paint_colour.sh`); before and after `reference/ink-pages/mockups/opc-questions/`.
+  `paint_colour.sh`); before and after `reference/ink-pages/mockups/opc-questions/`. Live November
+  17, 2026 (`main` `7655eaa`).
+- **The other product pages: the same way, page by page (Mo picked A, November 17, 2026).** With
+  Advanced OPC all colour, Mo chose the same approach for Turmerific, Nature Calm and Green Bee
+  Propolis (and NuriCell's questions): each page's grey ink paintings repainted in California
+  color, compositions kept, fixing anything that breaks a rule (white powder that reads as drugs),
+  one page's set shown together for one yes. Turmerific first: its Why root (both layers: the
+  plain root now fresh orange at its cut faces, the gold still soaking out), the research notebook
+  and its five questions (the curcumin question's big heap now a golden ochre spice, never white
+  powder). `reference/ink-pages/turmerific/` (`paint_colour.sh`, `build_turmerific.py`),
+  `reference/ink-pages/questions/`; before and after `reference/ink-pages/mockups/turmerific-colour/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a
