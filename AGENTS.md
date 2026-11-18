@@ -426,6 +426,19 @@ These sit on top of `DESIGN.md`.
   overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
   Preserve the approved desktop opening, mobile B and purchase card. (Its Weathered Taupe A
   footer sign of October 18 was replaced on October 19 by the site-wide redwood park sign.)
+  **Its painted world (November 18, 2026, on Mo's go-ahead for the product pages).** It was the
+  last product opening on bare paper. The composition above is unchanged; behind it lie the hills
+  of Minas Gerais on a clear dry-season morning (where the propolis comes from, so the place is
+  Brazil, not California): a big sky with the name in it, a thin band of far hills with a golden
+  ipê in bloom just right of the bottle and a few tiny hive boxes on the left, a red earth track,
+  low alecrim shrubs in front. The name's baselines sit only about a fifth of the bottle's height
+  above its foot, so the bottle stands back on the far hills (not on an empty spot in front, as
+  on the other painted openings) and no land rises over the name: a strip of sky stays under its
+  letters at every width (`qa_propolis_ink` `opening`). The words start under the last paint.
+  Keep the ipê out from behind the letters (a first take hid it behind "Propolis").
+  `propolis-opening.tsx`, `propolis.module.css`, `propolis-opening-art.ts`; picture
+  `reference/ink-pages/propolis/build_propolis_opening.py` (Codex painting `opening-ipemid-bh`,
+  `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`.
 - **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
   trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
   next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the

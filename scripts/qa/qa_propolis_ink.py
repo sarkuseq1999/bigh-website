@@ -13,6 +13,10 @@ Sections (all, or --only=a,b):
               paintings in colour (November 18)
   spread      the gold waits, then fills the cracks from their middle; reduced motion and no script:
               filled from the first paint; its glint mask follows
+  opening     the hills of Minas Gerais behind the name and bottle (November 18, 2026): the painting
+              loads, multiplies, reaches both window edges and above the window's top; the bottle's
+              foot stands on it; no land rises over the name's baselines (a strip of sky under the
+              letters); the front ground lies on the foot; the words start under the last paint
   multiply    every painting multiplies onto the paper with no box
   buy         the real bottle (green-bee-propolis.png) stands inside the scene, centred; the front layer
               multiplies over its foot and changes nothing beside it; captioned; Add to cart
@@ -276,6 +280,68 @@ def spread(browser):
         ctx.close()
 
 
+# Land in the opening painting: green or earth (green or red well above blue), never the pale warm sky
+# over the hills, and not near-white paper.
+OPENING_JS = """() => {
+  const q = s => document.querySelector(s);
+  const sec = q('[data-chapter=overview]');
+  const paint = q('[data-opening-painting]');
+  const front = q('[data-opening-front]');
+  const bottle = sec.querySelector('img[src*="green-bee-propolis.png"]');
+  const rect = e => { const r = e.getBoundingClientRect(); return {l: r.left, t: r.top, r: r.right, b: r.bottom, w: r.width, h: r.height}; };
+  // The baseline of a line of the name: a zero-size inline-block set on it.
+  const baseline = el => { const m = document.createElement('span'); m.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
+    el.appendChild(m); const y = m.getBoundingClientRect().top; m.remove(); return y; };
+  const wide = innerWidth >= 960;
+  const lines = wide ? [q('[data-name-left]'), q('[data-name-right]').lastElementChild] : [q('[data-mobile-name]').lastElementChild];
+  const words = lines.map(el => { const r = rect(el); return {l: r.l, r: r.r, base: baseline(el), size: parseFloat(getComputedStyle(el).fontSize)}; });
+  // Read the painting's own pixels (same origin) where each line's letters stand, from 0.35 of
+  // the letters' size over their baseline down to the baseline.
+  const c = document.createElement('canvas'); c.width = paint.naturalWidth; c.height = paint.naturalHeight;
+  const g = c.getContext('2d'); g.drawImage(paint, 0, 0);
+  const pr = rect(paint); const k = paint.naturalWidth / pr.w;
+  const land = words.map(wd => {
+    const x0 = Math.max(0, Math.round((wd.l - pr.l) * k)), x1 = Math.min(c.width, Math.round((wd.r - pr.l) * k));
+    const y0 = Math.max(0, Math.round((wd.base - 0.35 * wd.size - pr.t) * k)), y1 = Math.min(c.height, Math.round((wd.base - pr.t) * k));
+    if (x1 <= x0 || y1 <= y0) return 0;
+    const d = g.getImageData(x0, y0, x1 - x0, y1 - y0).data; let n = 0, all = 0;
+    for (let i = 0; i < d.length; i += 4) { all++; const [r, gr, b] = [d[i], d[i + 1], d[i + 2]]; if ((gr - b > 22 || r - b > 34) && Math.min(r, gr, b) < 215) n++; }
+    return n / all;
+  });
+  const br = rect(bottle);
+  const words2 = rect(sec.querySelector('h1 + div'));
+  const ground = Number(getComputedStyle(sec).getPropertyValue('--paint-ground'));
+  const end = Number(getComputedStyle(sec).getPropertyValue('--paint-end'));
+  const sc = pr.w / Number(getComputedStyle(sec).getPropertyValue('--paint-w'));
+  return {paint: pr, k, loaded: paint.complete && paint.naturalWidth > 0, blend: getComputedStyle(paint).mixBlendMode,
+    z: getComputedStyle(paint).zIndex, foot: br.t + br.h * 0.962, ground: pr.t + ground * sc, last: pr.t + end * sc,
+    land, front: front ? {...rect(front), loaded: front.complete && front.naturalWidth > 0} : null, words: words2.t,
+    scroll: document.documentElement.scrollWidth - innerWidth};
+}"""
+
+
+def opening(browser):
+    """The hills of Minas Gerais behind the approved name and bottle (November 18, 2026)."""
+    for w, h in SIZES:
+        ctx, page, _, _ = opened(browser, w, h, reduced=True)
+        page.evaluate("document.fonts.ready")
+        page.wait_for_timeout(400)
+        m = page.evaluate(OPENING_JS)
+        tag = f"opening {w}x{h}"
+        p = m["paint"]
+        check(f"{tag}: the painting loads and multiplies behind the page", m["loaded"] and m["blend"] == "multiply" and m["z"] == "-1", f"{m['blend']} z {m['z']}")
+        check(f"{tag}: it reaches both window edges and above the window's top", p["l"] <= 0 and p["r"] >= w and p["t"] < 0, f"{p['l']:.0f}..{p['r']:.0f}, top {p['t']:.0f}")
+        check(f"{tag}: the bottle's foot stands on its ground row", abs(m["foot"] - m["ground"]) <= 1.5, f"foot {m['foot']:.1f}, ground {m['ground']:.1f}")
+        check(f"{tag}: a strip of sky under the name (no land over its baselines)", all(f < 0.01 for f in m["land"]), ", ".join(f"{f:.3f}" for f in m["land"]))
+        f = m["front"]
+        check(f"{tag}: the front ground lies on the bottle's foot", f is not None and f["loaded"] and f["t"] <= m["foot"] <= f["b"], str(f)[:120])
+        check(f"{tag}: the words start under the last paint", m["words"] >= m["last"] + 8, f"words {m['words']:.0f}, last paint {m['last']:.0f}")
+        check(f"{tag}: no sideways scroll", m["scroll"] <= 0, f"{m['scroll']}px")
+        if w in (1440, 390):
+            page.screenshot(path=str(OUT / f"opening-{w}.png"))
+        ctx.close()
+
+
 def multiply(browser):
     ctx, page, _, _ = opened(browser, 1440, 900, reduced=True)
     for chapter in PAINTED + ["buy"]:
@@ -458,6 +524,7 @@ SECTIONS = {
     "name": name,
     "chapters": chapters,
     "spread": spread,
+    "opening": opening,
     "multiply": multiply,
     "buy": buy,
     "size": bottle_size,

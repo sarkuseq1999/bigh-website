@@ -67,12 +67,70 @@
   filter: drop-shadow(0 22px 18px rgb(41 30 12 / 0.09));
 }
 
+/* The hills of Minas Gerais behind the approved name and bottle (November 18, 2026, on Mo's
+   go-ahead for the product pages; build_propolis_opening.py, propolis-opening-art.ts). The
+   painting lies in the bottle's box, which is the bottle's picture at every width, so it follows
+   the bottle: the row it stands on (--paint-ground) falls on the glass's foot (96.2% of the box),
+   the name stays in the sky above the far hills, the shrubs run on below. It is --paint-span wide
+   (the window's width from 960px), --paint-at of it left of the bottle's middle, behind all the
+   page's content (z-index -1: the page root is its own stacking context) and multiplied onto the
+   paper. The section clips its sides, with no sideways scroll. */
+.propolis[data-look="ink"] .hero {
+  overflow-x: clip;
+}
+
+.propolis .bottleStand {
+  --paint-span: calc(100vw + 8px);
+  --paint-at: 0.5;
+  position: relative;
+}
+
+.propolis[data-look="ink"] img.painting {
+  position: absolute;
+  z-index: -1;
+  top: calc(96.2% - var(--paint-ground) * var(--paint-span) / var(--paint-w));
+  left: calc(50% - var(--paint-at) * var(--paint-span));
+  width: var(--paint-span);
+  max-width: none;
+  height: auto;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+/* The painting's own ground laid over the bottle's foot, so it stands in the land. */
+.propolis[data-look="ink"] img.paintingFront {
+  position: absolute;
+  z-index: 1;
+  top: calc(
+    96.2% + (var(--paint-front-y) - var(--paint-ground)) * var(--paint-span) / var(--paint-w)
+  );
+  left: calc(
+    50% - var(--paint-at) * var(--paint-span) + var(--paint-front-x) * var(--paint-span) /
+      var(--paint-w)
+  );
+  width: calc(var(--paint-front-w) * var(--paint-span) / var(--paint-w));
+  max-width: none;
+  height: auto;
+  pointer-events: none;
+}
+
+/* The words start 14px under the last of the painting: it ends (--paint-end less --paint-ground)
+   rows under the bottle's foot, which lies --foot-gap over the name's row's foot (the bottle,
+   28.67vw tall up to its max-height, is centred in the row's min-height; its foot is 96.2% down
+   it). */
 .propolis .heroDetails {
+  --foot-gap: calc(225px - 0.462 * min(510px, 28.67vw));
   display: grid;
   grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.85fr);
   gap: 11%;
   align-items: start;
-  margin-top: 26px;
+  margin-top: max(
+    26px,
+    calc(
+      (var(--paint-end) - var(--paint-ground)) * (100vw + 8px) / var(--paint-w) + 14px -
+        var(--foot-gap)
+    )
+  );
 }
 
 .propolis .lead > span {
@@ -173,6 +231,10 @@
   .propolis img.heroBottle {
     max-height: 600px;
   }
+
+  .propolis .heroDetails {
+    --foot-gap: calc(275px - 0.462 * min(600px, 28.67vw));
+  }
 }
 
 @media (min-width: 960px) and (max-width: 1100px) {
@@ -181,6 +243,7 @@
   }
 
   .propolis .heroDetails {
+    --foot-gap: calc(180px - 0.462 * min(510px, 28.67vw));
     gap: 6%;
     grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   }
@@ -398,14 +461,18 @@
     display: block;
   }
 
+  /* One column: the painting is drawn 858px wide (wider in a wide phone window, so it always
+     reaches both edges), centred on the bottle; the land from the far hills' crest to the
+     bottle's foot stays under the name's last line. The bottle's transparent canvas may run past
+     its box; the section clips it. */
   .propolis .bottleStand {
+    --paint-span: max(858px, 160vw);
     display: flex;
     justify-content: center;
     align-items: center;
     grid-column: 2;
     grid-row: 1;
     height: 244px;
-    overflow: hidden;
   }
 
   /* The real bottle remains whole; only its generous transparent canvas is clipped. */
@@ -417,9 +484,14 @@
     filter: drop-shadow(0 10px 12px rgb(41 30 12 / 0.06));
   }
 
+  /* The words 14px under the last of the painting (the bottle's foot lies 3.8% of its box over
+     the box's foot). */
   .propolis .heroDetails {
     display: block;
-    margin-top: 17px;
+    margin-top: calc(
+      (var(--paint-end) - var(--paint-ground)) * max(858px, 160vw) / var(--paint-w) + 14px - 0.038 *
+        244px
+    );
   }
 
   .propolis p.lead {
@@ -556,8 +628,18 @@
     font-size: clamp(60px, 8.3vw, 76px);
   }
 
+  /* A tablet's larger name: the painting 1150px wide, 0.6 of it left of the bottle's middle, so
+     it reaches both edges of the window while its land stays under the name. */
   .propolis .bottleStand {
+    --paint-span: 1150px;
+    --paint-at: 0.6;
     height: 340px;
+  }
+
+  .propolis .heroDetails {
+    margin-top: calc(
+      (var(--paint-end) - var(--paint-ground)) * 1150px / var(--paint-w) + 14px - 0.038 * 340px
+    );
   }
 
   .propolis p.lead {
@@ -578,6 +660,13 @@
 
   .propolis .bottleStand {
     height: 229px;
+  }
+
+  .propolis .heroDetails {
+    margin-top: calc(
+      (var(--paint-end) - var(--paint-ground)) * max(858px, 160vw) / var(--paint-w) + 14px - 0.038 *
+        229px
+    );
   }
 
   .propolis p.lead {

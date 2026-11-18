@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import type { MouseEvent } from "react";
+import type { CSSProperties, MouseEvent } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import { formatPrice, priceOf } from "@/components/shop/shop";
@@ -10,6 +10,7 @@ import type { InkProduct } from "../product-types";
 import { anchorId } from "../template-chapters-model";
 import { keepTogether } from "./ink-chapter";
 import card from "./product-ink.module.css";
+import { propolisOpening as art } from "./propolis-opening-art";
 import styles from "./propolis.module.css";
 
 const CHAPTERS = [
@@ -46,8 +47,22 @@ function followChapter(event: MouseEvent<HTMLAnchorElement>) {
   });
 }
 
+/** The painting's numbers for the stylesheet (propolis.module.css): its width, the row the
+ *  bottle's foot stands on, its last paint, and where its front ground lies on it. */
+const PAINT = {
+  "--paint-w": art.sky.width,
+  "--paint-ground": art.ground,
+  "--paint-end": art.end,
+  "--paint-front-x": art.front.x,
+  "--paint-front-y": art.front.y,
+  "--paint-front-w": art.front.width,
+} as CSSProperties;
+
 /** Mo's preferred composition: Green / the real bottle / Bee Propolis.
- * Mobile uses Mo's selected Editorial pair: the whole name left, the bottle right. */
+ * Mobile uses Mo's selected Editorial pair: the whole name left, the bottle right.
+ * Behind them since November 18, 2026: the hills of Minas Gerais (build_propolis_opening.py), the
+ * name in the sky, the bottle standing on the far hills, a little of their ground in front of its
+ * foot. */
 export function PropolisOpening({ product }: { product: InkProduct }) {
   const copy = useCopy();
   const price = priceOf(product.slug);
@@ -57,6 +72,7 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
       className={styles.hero}
       data-chapter="overview"
       aria-labelledby="product-name"
+      style={PAINT}
     >
       <div className={`${base.wrap} ${styles.heroWrap}`}>
         <h1 id="product-name" className={styles.name} lang="en" aria-label={product.name}>
@@ -78,6 +94,26 @@ export function PropolisOpening({ product }: { product: InkProduct }) {
               sizes="(max-width: 599px) 244px, (max-width: 959px) 360px, (max-width: 1920px) 28vw, 530px"
               loading="eager"
               fetchPriority="high"
+            />
+            <Image
+              className={styles.painting}
+              data-opening-painting=""
+              src={art.sky.src}
+              alt=""
+              width={art.sky.width}
+              height={art.sky.height}
+              sizes="(min-width: 960px) 101vw, (min-width: 600px) 1150px, 960px"
+              loading="eager"
+            />
+            <Image
+              className={styles.paintingFront}
+              data-opening-front=""
+              src={art.front.src}
+              alt=""
+              width={art.front.width}
+              height={art.front.height}
+              sizes="(min-width: 960px) 11vw, 120px"
+              loading="eager"
             />
           </span>
           <span className={styles.nameRight} data-name-right aria-hidden="true">

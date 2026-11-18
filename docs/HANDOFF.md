@@ -5,6 +5,19 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Green Bee Propolis's opening painted: the hills of Minas Gerais, November 18, 2026 (Claude
+  Code).** Part 13 of Mo's "superb" goal, on his go-ahead. A desktop and phone scroll-through of
+  all five product pages found Propolis the only product whose first screen was still bare paper.
+  The approved "Green [bottle] Bee Propolis" is unchanged; a Codex painting of Minas Gerais lies
+  behind it (big sky, far hills with a golden ipê beside the bottle and tiny hives, low alecrim
+  shrubs), the bottle standing on the far hills so no land rises over the name. Its own code, not
+  the shared painted opening: the name sits much lower against the bottle
+  (`propolis-opening.tsx`, `propolis.module.css`, `propolis-opening-art.ts`;
+  `reference/ink-pages/propolis/build_propolis_opening.py`). `qa_propolis_ink` gains `opening`
+  (the painting reaches both edges, the foot on its ground row, no land over the name's
+  baselines, the front ground on the foot, the words under the last paint). Before and after
+  `reference/ink-pages/mockups/propolis-opening/`; unused takes in
+  `bigh-archive\propolis-opening-unused-2026-11-18\`.
 - **The painted product pages alternate sides; Turmerific's glass in color, November 18, 2026
   (Claude Code; live, `main` `a5ab8cc`, production `dpl_7xEjcvAxHEZgaCCBt2TpJpJT1F5a`, demo alias
   on it).** Part 12 of Mo's "superb" goal, on his go-ahead. Advanced OPC, Turmerific and

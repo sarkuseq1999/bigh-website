@@ -8,7 +8,7 @@ Propolis's own paintings in every chapter and its own signature moment in "Why i
 
 | Chapter        | Painting                                                                                        | Take(s)                                         |
 | -------------- | ----------------------------------------------------------------------------------------------- | ----------------------------------------------- |
-| Opening        | The real bottle between "Green Bee" and "Propolis" (the name set to fit; phones stack it)       | (no painting)                                   |
+| Opening        | The real bottle between "Green Bee" and "Propolis" (the name set to fit; phones stack it)       | the hills of Minas Gerais (since November 18)   |
 | Why it matters | An old bee tree; as you arrive, gold runs into its cracks from where they meet (Mo: "1A")       | `why-hive-gold`, `why-hive-open` (its cracks)   |
 | What's inside  | Raw green propolis like amber in a porcelain dish, one capsule (tinted yellow, as the real one) | `inside-resin-dish`                             |
 | The research   | A pressed alecrim sprig on a specimen sheet; no gold, so the eye rests                          | `research-specimen`                             |
@@ -138,3 +138,18 @@ The mug ships whole (`mug-colour2-v1`: cropping to the ink box cut its pale stea
 without a light mask; the specimen as `specimen-colour-v1`. Descriptions m613, m615 and m616 now
 say watercolor. The `b` takes are in `codes/bigh-archive/questions-colour-unused-2026-11-18/`. The
 questions: `../questions/README.md`. Before and after: `../mockups/propolis-colour/`.
+
+## The opening's painting (November 18, 2026)
+
+On Mo's go-ahead for the product pages: the last product opening on bare paper. Five takes
+(`paint_opening.sh`, prompts `opening-ipe`, `opening-apiary`, their low-horizon versions and
+`opening-ipemid`): the ipê hills read as the place better than the beehive row, and the first
+takes' land rose into the name (its baselines sit only about a fifth of the bottle's height over
+its foot). The keeper, `opening-ipemid-bh`, has a very low horizon and the ipê at 61% across, in
+the gap between the bottle and "Bee Propolis" (a first take hid it behind "Propolis").
+`build_propolis_opening.py` divides out its paper, cuts it under the last shrubs and stands the
+bottle on the far hills (`GROUND`, about 70 rows under their crest), a little of their ground laid
+over its foot (`front`). The page draws it as wide as the window from 960px, 858px (wider in a
+wide phone) centred on the bottle in one column, 1150px on a tablet (0.6 of it left of the
+bottle). Unused takes: `bigh-archive\propolis-opening-unused-2026-11-18\`.
+

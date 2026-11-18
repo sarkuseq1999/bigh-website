@@ -1,0 +1,80 @@
+<title>Propolis Opening Hills</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ysabeau:wght@500;600&family=Inter:wght@400;500;600&display=swap">
+<style>
+  /* One column of rice paper, like the site: the opening before and after, then the other sizes.
+     A single light look on purpose (paintings on the site's own paper). */
+  :root {
+    --paper: #f3efe6;
+    --ink: #1b1915;
+    --muted: #5c564c;
+    --line: #d8d1c3;
+    --pick: #6b4a7a;
+    --display: "Ysabeau", "Iowan Old Style", Georgia, serif;
+    --body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color-scheme: light;
+  }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 28px 64px;
+  }
+  main { max-width: 1080px; margin: 0 auto; display: grid; gap: 44px; }
+  h1, h2 { font-family: var(--display); font-weight: 600; line-height: 1.08; text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(34px, 6vw, 56px); }
+  h2 { font-size: clamp(22px, 3vw, 30px); }
+  p { margin: 0; max-width: 62ch; }
+  .lead { font-size: 19px; }
+  .muted { color: var(--muted); font-size: 15px; }
+  .pick { color: var(--pick); font-weight: 600; font-size: 15px; letter-spacing: 0.02em; }
+  header { display: grid; gap: 14px; }
+  section { display: grid; gap: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+  .pair { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; }
+  .phones { display: grid; grid-template-columns: repeat(2, minmax(0, 260px)); gap: 12px; }
+  figure { margin: 0; display: grid; gap: 6px; min-width: 0; align-content: start; }
+  figure img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 6px; background: #fff; }
+  figcaption { font-size: 14px; color: var(--muted); }
+  @media (max-width: 640px) { .pair { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<main>
+  <header>
+    <p class="muted">BiGH website · Product pages, part 13 · November 18, 2026</p>
+    <p class="pick">Your go-ahead · live</p>
+    <h1>Green Bee Propolis gets its hills</h1>
+    <p class="lead">It was the last product page whose first screen was bare paper. Now the hills of Minas Gerais, Brazil, lie behind your approved "Green [bottle] Bee Propolis".</p>
+    <p class="muted">Nothing else moved: the same name, bottle, words and buy card. The name stays in clear sky. A golden ipê tree (Brazil's national tree) stands beside the bottle, a red earth path runs up to it, and low alecrim shrubs grow in front. Alecrim is the shrub the bees gather the resin from. A few beehive boxes sit far off on the left.</p>
+  </header>
+
+  <section aria-labelledby="computer">
+    <h2 id="computer">On a computer</h2>
+    <div class="pair">
+      <figure><img src="img/before-1440.jpg" alt="Green Bee Propolis opening before: the name and bottle on bare paper" width="1440" height="900"><figcaption>Before</figcaption></figure>
+      <figure><img src="img/after-1440.jpg" alt="Green Bee Propolis opening after: the name in the sky over the hills of Minas Gerais, the bottle standing on the hills" width="1440" height="900"><figcaption>After</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="phone">
+    <h2 id="phone">On a phone</h2>
+    <div class="phones">
+      <figure><img src="img/before-390.jpg" alt="Phone, before" width="390" height="844" loading="lazy"><figcaption>Before</figcaption></figure>
+      <figure><img src="img/after-390.jpg" alt="Phone, after" width="390" height="844" loading="lazy"><figcaption>After</figcaption></figure>
+    </div>
+  </section>
+
+  <section aria-labelledby="sizes">
+    <h2 id="sizes">Other sizes</h2>
+    <div class="pair">
+      <figure><img src="img/after-1920.jpg" alt="Large screen, after" width="1440" height="810" loading="lazy"><figcaption>Large screen</figcaption></figure>
+      <figure><img src="img/after-1024.jpg" alt="Small laptop, after" width="1024" height="768" loading="lazy"><figcaption>Small laptop</figcaption></figure>
+      <figure><img src="img/after-768.jpg" alt="Tablet, after" width="768" height="1024" loading="lazy"><figcaption>Tablet</figcaption></figure>
+    </div>
+  </section>
+</main>
