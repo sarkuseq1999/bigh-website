@@ -5,8 +5,20 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Advanced OPC's other four paintings in color, November 17, 2026 (Claude Code; built,
-  committed locally, not pushed).** Part 7 of Mo's "superb" goal. Mo picked "same pictures, in
+- **Advanced OPC's question paintings in color, November 17, 2026 (Claude Code; built,
+  committed locally, not pushed).** Part 8 of Mo's "superb" goal. Mo picked A: the same six
+  question pictures in color, the capsule one repainted as two closed capsules on a green leaf (its
+  open capsule spilling white powder could read as drugs). `reference/ink-pages/questions/`
+  `paint_colour.sh`, `build_questions.py` (`COLOUR`: OPC ships `q-*-v2`, the other products keep
+  v1); `qa_opc_ink` checks the six are v2. Built site, sequential: `qa_opc_ink` 314/314,
+  `qa_home_ink` 290/290, `qa_nav` 326/326. Review page https://claude.ai/artifact/MdKGnr5tMqepimomchpWcX.
+  Two unused takes in
+  `bigh-archive\questions-opc-colour-unused-2026-11-17\`. With this every painting on Advanced
+  OPC is in color. Next: Turmerific's, Nature Calm's and Green Bee Propolis's grey middles and
+  questions (NuriCell's questions are grey too).
+- **Advanced OPC's other four paintings in color, November 17, 2026 (Claude Code; live, `main`
+  `cf7a522`, production `dpl_2Yub6F5eQ6eqGc6AoyKRuCjokadL`, demo alias on it; public checks
+  green).** Part 7 of Mo's "superb" goal. Mo picked "same pictures, in
   color" (A) for the research lens, Dr. Wang's mortar, the plate and the Buy vine scene: Codex
   repainted the October paintings, compositions kept (`paint_colour.sh`); built as
   `*-colour-v1.webp`; descriptions m702-m704 now say watercolor. The Buy bottle now stands at the

@@ -36,6 +36,18 @@ The rejected takes, Codex's logs, and the mockups' raw screenshots and paintings
 keeps its own JPEGs in `../mockups/nuricell-questions/page/`) are in
 `codes/bigh-archive/questions-unused-2026-10-26/`, outside the public repository.
 
+## Advanced OPC in colour (Mo picked A, November 17, 2026)
+
+As OPC's chapter paintings turned California colour, Mo chose the same six question pictures in
+color, the capsule one repainted without its powder (an open capsule spilling white powder beside a
+scoop of rice flour can read as drugs): two closed capsules on a green leaf, the capsule being
+plant cellulose. `paint_colour.sh` pads each October painting with its own paper to 1536 x 1024
+(`plates/colour/`, git-ignored) and has Codex repaint it with the OPC page's new grapes and plants
+as the colour reference (`prompts/opc-<key>-colour.txt`); the capsule is a new painting. Takes
+`originals/opc-<key>-colour-a.png`; `build_questions.py` ships them as `q-<key>-v2.webp` (`COLOUR`;
+the other products keep their October v1 paintings). The two `b` takes are in
+`codes/bigh-archive/questions-opc-colour-unused-2026-11-17/`.
+
 ## Checks
 
 `scripts/qa/qa_questions.py <base-url>`: all five pages, wide and phone, no script, four languages.

@@ -17,7 +17,7 @@ Sections (all, or --only=a,b):
               its own opening
   chapters    overview, why, inside, research, people, daily, buy; each its own painting; "thirteen
               ingredients"; 300 mg; What's inside paints the nine plants; Dr. Wang's words with a work painting captioned Illustration; the
-              painted sum; every study; the questions
+              painted sum; every study; the questions, their six paintings in colour
   spread      the Why painting (Mo picked B, November 17, 2026: grapes and a cut grape): the gold
               waits, then spreads from the seeds; plain brown seeds before, gold leaf after, and no
               gold anywhere but the seeds; reduced motion and no script: gold from the first paint;
@@ -253,6 +253,11 @@ def chapters(browser):
     )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
+    # The six question paintings are in colour (v2, Mo picked A, November 17, 2026; the capsule one
+    # two closed capsules on a leaf, no powder).
+    qs = page.evaluate("""() => [...document.querySelectorAll('#questions img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    old_q = [q for q in qs if not q.endswith("-v2.webp")]
+    check("chapters: the question paintings in colour", len(set(qs)) == 6 and not old_q, ", ".join(sorted(set(qs))))
     # No small label over a chapter's heading (Mo, November 16, 2026; NuriCell's since October 26):
     # each chapter starts with its heading; the buy chapter's line is the product's tagline.
     labels = page.evaluate("""() => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"]):not([data-chapter="buy"]) [data-words] > p[class*="label"]')].map((p) => p.textContent.trim())""")

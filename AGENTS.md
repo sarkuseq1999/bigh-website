@@ -235,7 +235,15 @@ These sit on top of `DESIGN.md`.
   walnut handle, a pale granite mortar, a blue-rimmed plate, sage vines on straw grass. The
   capsules stay plain grey-white (their real color is not known); the opening card's capsules
   still come from the October plate. `build_opc.py` (`paint_colour.sh`, takes `<key>-colour-a`);
-  before and after `reference/ink-pages/mockups/opc-colour/`.
+  before and after `reference/ink-pages/mockups/opc-colour/`. Live November 17, 2026 (`main`
+  `cf7a522`).
+- **Advanced OPC's questions: the same pictures, in color, no powder (Mo picked A, November 17,
+  2026).** Its six question paintings repainted in the page's California color, compositions
+  kept; the capsule question's open capsule spilling white powder beside a scoop of rice flour (it
+  can read as drugs) became two closed capsules on a green leaf (the capsule is plant cellulose).
+  Capsules stay plain grey-white. OPC only (`q-*-v2`); the other products keep their October
+  question paintings for now. `reference/ink-pages/questions/` (`build_questions.py` `COLOUR`,
+  `paint_colour.sh`); before and after `reference/ink-pages/mockups/opc-questions/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a
