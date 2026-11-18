@@ -26,7 +26,7 @@ Sections (all, or --only=a,b):
   buy         the real bottle (advanced-opc.png) stands inside the scene, centred; the front layer
               multiplies over its foot and changes nothing beside it; captioned; Add to cart
   size        both bottles exactly NuriCell's size (1440, 1024, 390)
-  layout      sizes 1536 to 360: no sideways scroll, painting left of its words from 960px and above
+  layout      sizes 1536 to 360: no sideways scroll, painting on its own side of its words from 960px (alternating) and above
               them below, text 15px+
   deep_links  #chapter-<id> lands its heading under the menu bar
   languages   kr, jp, cns, vn: 200, no console errors, the new strings translated
@@ -446,6 +446,11 @@ def bottle_size(browser):
         check(f"size {w}x{h}: the Buy bottle as big as NuriCell's", abs(a[1] - b[1]) <= 2, f"{b[1]} vs {a[1]}")
 
 
+# From 960px the chapters alternate sides (November 18, 2026; AGENTS.md "Even rhythm"): these
+# have their painting right of their words, the others left.
+RIGHT_SIDE = ['inside', 'people', 'buy']
+
+
 def layout(browser):
     for w, h in SIZES[1:]:
         ctx, page, _, _ = opened(browser, w, h, reduced=True)
@@ -453,14 +458,15 @@ def layout(browser):
         wide = page.evaluate("() => document.documentElement.scrollWidth - window.innerWidth")
         check(f"{tag}: no sideways scroll", wide <= 0, f"{wide}px")
         bad = page.evaluate(
-            """(two) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
+            """([two, right]) => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"])')].map(c => {
                  const f = c.querySelector('figure[data-picture]').getBoundingClientRect();
                  const t = c.querySelector('[data-words]').getBoundingClientRect();
-                 const ok = two ? f.right <= t.left + 1 : f.bottom <= t.top + 1;
+                 const ok = !two ? f.bottom <= t.top + 1
+                   : right.includes(c.dataset.chapter) ? t.right <= f.left + 1 : f.right <= t.left + 1;
                  return ok ? null : c.dataset.chapter; }).filter(Boolean)""",
-            w >= 960,
+            [w >= 960, RIGHT_SIDE],
         )
-        check(f"{tag}: each painting {'left of' if w >= 960 else 'above'} its words", not bad, ", ".join(bad))
+        check(f"{tag}: each painting {'on its own side of' if w >= 960 else 'above'} its words", not bad, ", ".join(bad))
         small = page.evaluate(
             """() => [...document.querySelectorAll('main p, main li, main dd, main dt, main td, main th, main figcaption')]
                  .filter(e => e.offsetParent && e.textContent.trim() && parseFloat(getComputedStyle(e).fontSize) < 15)

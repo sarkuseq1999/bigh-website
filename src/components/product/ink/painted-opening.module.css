@@ -133,3 +133,48 @@
     );
   }
 }
+
+/* Each painting on its own side (November 18, 2026; AGENTS.md "Even rhythm": sides alternating).
+   The template put every painting left of its words, which Mo found boring on NuriCell. From
+   960px the chapters after "Why it matters" alternate: every second chapter has its painting on
+   the right, its words on the left (the words keep the wider column). Phones keep one column. */
+@media (min-width: 960px) {
+  .painted[data-look="ink"]
+    :is(
+      [data-product-ink="advanced-opc"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"]),
+      [data-product-ink="turmerific"] :is([data-chapter="inside"], [data-chapter="daily"]),
+      [data-product-ink="nature-calm"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"])
+    )
+    > div {
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+  }
+
+  .painted[data-look="ink"]
+    :is(
+      [data-product-ink="advanced-opc"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"]),
+      [data-product-ink="turmerific"] :is([data-chapter="inside"], [data-chapter="daily"]),
+      [data-product-ink="nature-calm"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"])
+    )
+    > div
+    > figure {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .painted[data-look="ink"]
+    :is(
+      [data-product-ink="advanced-opc"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"]),
+      [data-product-ink="turmerific"] :is([data-chapter="inside"], [data-chapter="daily"]),
+      [data-product-ink="nature-calm"]
+        :is([data-chapter="inside"], [data-chapter="people"], [data-chapter="buy"])
+    )
+    [data-words] {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}

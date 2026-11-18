@@ -96,3 +96,8 @@ gold mask and the sprite follow the new painting. Shipped as `root-{gold,plain}-
 `soak-colour-v1`, `notebook-colour-v1`. Descriptions m740 and m742 now say watercolor (all five
 catalogs). The `b` takes are in `codes/bigh-archive/turmerific-colour-unused-2026-11-17/`. The
 questions: `../questions/README.md`. Before and after: `../mockups/turmerific-colour/`.
+
+The daily glass followed on November 18: its heavy black outlines (the last on the painted pages)
+softened to a warm grey-brown, the water pale blue (`prompts/glass-colour.txt`, take
+`glass-colour-a`, shipped as `glass-colour-v1`); the opening card's capsules still come from the
+October glass (`supply()`). Description m743 now says watercolor.

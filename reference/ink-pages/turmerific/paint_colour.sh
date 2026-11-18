@@ -6,6 +6,7 @@
 #   bash reference/ink-pages/turmerific/paint_colour.sh <key>-<take> [...]
 #   key: lit (the Why root with its gold, from plates/colour/why-soak-lit.png)
 #        notebook (the research notebook, from plates/colour/research-glasses.png)
+#        glass (the daily glass of water, its heavy ink softened, from plates/colour/daily-glass.png)
 #        unlit (an EDIT of originals/$LIT.png: the gold taken off, so the two Why layers stay in
 #               register; set LIT, e.g. LIT=lit-colour-a)
 # The October takes are padded with their own paper to 1024 x 1536 (plates/colour/, git-ignored).
@@ -24,6 +25,7 @@ for name in "$@"; do
     lit) refs=(-i "$HERE/plates/colour/why-soak-lit.png" -i "$SPOON" -i "$PLANT") ;;
     notebook) refs=(-i "$HERE/plates/colour/research-glasses.png" -i "$SPOON" -i "$PLANT") ;;
     unlit) refs=(-i "$HERE/originals/${LIT:?set LIT to the lit take to edit}.png") ;;
+    glass) refs=(-i "$HERE/plates/colour/daily-glass.png" -i "$SPOON" -i "$PLANT") ;;
     *) echo "unknown key $key" >&2; continue ;;
   esac
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \

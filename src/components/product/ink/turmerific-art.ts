@@ -39,10 +39,10 @@ export const turmerificArt = {
     height: 794,
   },
   glass: {
-    src: "/images/products/turmerific/ink/glass-v1.webp",
-    width: 1100,
-    height: 1299,
-    gold: "/images/products/turmerific/ink/glass-v1-gold.webp",
+    src: "/images/products/turmerific/ink/glass-colour-v1.webp",
+    width: 730,
+    height: 850,
+    gold: "/images/products/turmerific/ink/glass-colour-v1-gold.webp",
   },
   sum: {
     src: "/images/products/turmerific/ink/sum-v1.webp",

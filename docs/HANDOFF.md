@@ -5,8 +5,18 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **The painted product pages alternate sides; Turmerific's glass in color, November 18, 2026
+  (Claude Code).** Part 12 of Mo's "superb" goal, on his go-ahead. Advanced OPC, Turmerific and
+  Nature Calm put every painting left of its words (Mo found that boring on NuriCell); from 960px
+  every second chapter after "Why it matters" now has its painting on the right
+  (`painted-opening.module.css`; `RIGHT_SIDE` in the three checkers, whose layout check now tests
+  each chapter's side). Turmerific's daily glass, the last heavy black ink on those pages, is a
+  Codex repaint with soft warm outlines (`glass-colour-a`, `glass-colour-v1`; the opening card's
+  capsules still from the October glass); description m743 now says watercolor. Built site,
+  sequential: `qa_opc_ink` 314/314, `qa_turmerific_ink` 269/269, `qa_nature_calm_ink` 273/273,
+  `qa_home_ink` 290/290, `qa_nav` 326/326. Before and after `reference/ink-pages/mockups/product-sides/`.
 - **Green Bee Propolis's paintings and NuriCell's questions in color, November 18, 2026 (Claude
-  Code).** Part 11 of Mo's "superb" goal, the same way; with this every product painting except
+  Code; live, `main` `b45f95a`, production `dpl_CnZxxEMhCCuWhs2DmEJST3GJVfpL`, demo alias on it).** Part 11 of Mo's "superb" goal, the same way; with this every product painting except
   NuriCell's chosen grey ink chapters is in color. Propolis: the bee tree (`hive-colour-a` and
   `hiveopen-colour-a`, a Codex edit with the cracks open; `crack_mask()` in `build_propolis.py`
   finds the cracks where the two differ, since the colour bark and bees pass the gold test), the

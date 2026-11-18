@@ -47,6 +47,9 @@ BOTTLE = REPO / "public/images/products/turmerific.png"
 V = "v1"
 # The colour takes (Codex, no gpt25- prefix; paint_colour.sh): the Why root and the notebook.
 LIT_TAKE, UNLIT_TAKE, NOTEBOOK_TAKE = "lit-colour-a", "unlit-colour-a", "notebook-colour-a"
+# The daily glass, its heavy black ink softened (November 18, 2026); the opening card's capsules
+# still come from the October glass (supply()).
+GLASS_TAKE = "glass-colour-a"
 TAKES = {
     "inside": "inside-scoop",
     "research": "research-glasses",
@@ -416,7 +419,7 @@ if __name__ == "__main__":
             "spoon": inside(),
             "capsules": supply(),
             "notebook": finish(codex(NOTEBOOK_TAKE).crop(bd.ink_box(np.asarray(codex(NOTEBOOK_TAKE)), pad=0.05)), "notebook-colour"),
-            "glass": with_gold(finish(cropped("daily"), "glass"), "glass"),
+            "glass": with_gold(finish(codex(GLASS_TAKE).crop(bd.ink_box(np.asarray(codex(GLASS_TAKE)), pad=0.05)), "glass-colour"), "glass-colour"),
             "sum": brushed_sum(),
             "scene": scene(),
         }

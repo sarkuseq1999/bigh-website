@@ -31,11 +31,11 @@ const entries = [
     "開いたノートの上の老眼鏡と、しおり代わりのターメリックの葉一枚を水彩で描いた絵。",
   ],
   [
-    "A glass of water and two gold capsules, painted in ink and watercolour",
-    "一杯清水和两粒金色胶囊，以水墨与水彩绘成。",
-    "물 한 잔과 금빛 캡슐 두 개를 먹과 수채로 그린 그림.",
-    "Một cốc nước và hai viên nang màu vàng, vẽ bằng mực và màu nước.",
-    "水の入ったグラスと金色のカプセル二つを墨と水彩で描いた絵。",
+    "A glass of water and two gold capsules, painted in watercolor",
+    "一杯清水和两粒金色胶囊，以水彩绘成。",
+    "물 한 잔과 금빛 캡슐 두 개를 수채로 그린 그림.",
+    "Một cốc nước và hai viên nang màu vàng, vẽ bằng màu nước.",
+    "水の入ったグラスと金色のカプセル二つを水彩で描いた絵。",
   ],
   [
     "A turmeric plant in flower painted in watercolour, gold slices of its root at its foot",

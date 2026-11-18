@@ -4,7 +4,17 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-n47adc36g-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-q1rjwz84u-sarkuseq1999s-projects.vercel.app`
+(`dpl_CnZxxEMhCCuWhs2DmEJST3GJVfpL`), the **production** deployment of `main` at
+`b45f95ad23914e47eaa0f02e080b84938ff9d2aa` (November 18, 2026): Green Bee Propolis's bee tree,
+specimen, mug and six questions, and NuriCell's six questions, in color. Pushed on Mo's go-ahead of
+November 18 ("if you need to deploy live, just deploy live"). `origin/main` was `d06e4b9`, the
+tested tree's parent (a fast-forward). Quick look on the plain public URL at 1440 and 390 px: the
+colour pictures and every v2 question load, no sideways scroll, no page errors. Public checks,
+sequential: `qa_propolis_ink` **275/275**, `qa_nuricell_ink` **664/664**, `qa_home_ink`
+**290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-n47adc36g-sarkuseq1999s-projects.vercel.app`
 (`dpl_HA54t7xcauo1bzEAceUtsmC584ZR`), the **production** deployment of `main` at
 `d06e4b9baa0c0f6cceb06c931035c65dd867d7dc` (November 18, 2026): Nature Calm's Big Dipper, moon and
 five questions in color (Mo: the same way, page by page). Mo said "Yes, put it live".

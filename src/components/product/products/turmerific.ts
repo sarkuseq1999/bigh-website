@@ -197,7 +197,7 @@ const turmerific: ProductPage = {
     daily: {
       picture: {
         ...turmerificArt.glass,
-        alt: "A glass of water and two gold capsules, painted in ink and watercolor",
+        alt: "A glass of water and two gold capsules, painted in watercolor",
       },
       sum: turmerificArt.sum,
     },
