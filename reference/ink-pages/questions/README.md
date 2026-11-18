@@ -56,6 +56,14 @@ golden ochre spice (it was white powder) and its spoonful deep golden orange. Sh
 `q-<key>-v2.webp` (`COLOUR`). The unused `part` take is in
 `codes/bigh-archive/turmerific-colour-unused-2026-11-17/`.
 
+## Nature Calm in colour (November 17, 2026)
+
+`paint_colour.sh nature-calm <key>-<take>`, with Nature Calm's lavender field and sugar pine cone as
+the colour reference. Its ingredients are mostly made compounds, so the two powder pictures were
+not given plants: the capsule answer is two closed capsules beside a few dry plant stalks (the plant
+fibre cellulose comes from), the study answer an open book with a hand lens, a lavender sprig and
+one capsule (it was a tray of seven white powders). Shipped as `q-<key>-v2.webp` (`COLOUR`).
+
 ## Checks
 
 `scripts/qa/qa_questions.py <base-url>`: all five pages, wide and phone, no script, four languages.

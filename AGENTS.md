@@ -254,6 +254,13 @@ These sit on top of `DESIGN.md`.
   and its five questions (the curcumin question's big heap now a golden ochre spice, never white
   powder). `reference/ink-pages/turmerific/` (`paint_colour.sh`, `build_turmerific.py`),
   `reference/ink-pages/questions/`; before and after `reference/ink-pages/mockups/turmerific-colour/`.
+  Live November 17, 2026 (`main` `4636cb0`). Nature Calm next: the Big Dipper over a dusk-blue
+  ridge (no halos), the moon painting (its thin crescents, which read as brackets, now clear
+  crescents) and its five questions. Its ingredients are mostly made compounds, so the two
+  powder questions were not given plants (that could mislead): "What is the capsule made of?"
+  is two closed capsules beside dry plant stalks, "Tested in a clinical trial?" an open book
+  with a hand lens, a lavender sprig and one capsule. Before and after
+  `reference/ink-pages/mockups/nature-calm-colour/`.
 - **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
   to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
   Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a

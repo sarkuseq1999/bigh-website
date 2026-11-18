@@ -5,8 +5,21 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
-- **Turmerific's paintings in color, November 17, 2026 (Claude Code; built, committed locally,
-  not pushed).** Part 9 of Mo's "superb" goal; Mo picked "the same way, page by page" for the other
+- **Nature Calm's paintings in color, November 17, 2026 (Claude Code; built, committed locally,
+  not pushed).** Part 10 of Mo's "superb" goal, the same way. Codex repainted the Big Dipper
+  (`stars-colour-a`: a dusk-blue ridge, a faint lavender band, the stars plain gold leaf), the moon
+  painting (`moon-colour-b`: its crescents now clear crescents, not brackets; the opening card's
+  capsules still come from the October moon) and the five questions (`q-*-v2`; the capsule and
+  study answers lost their powders: closed capsules by dry stalks, and an open book with a lens, a
+  lavender sprig and one capsule). `paint_colour.sh` in `nature-calm/` and `questions/`
+  (`nature-calm`). Descriptions m781-m783 now say watercolor (the cone was already colour).
+  `qa_nature_calm_ink` checks the colour pictures. Built site, sequential: `qa_nature_calm_ink`
+  273/273, `qa_home_ink` 290/290, `qa_nav` 326/326. Review page
+  https://claude.ai/artifact/FW6Q8DibWkX9McczCzVYqd. Unused takes in
+  `bigh-archive\nature-calm-colour-unused-2026-11-17\`. Next: Green Bee Propolis, then NuriCell's
+  questions.
+- **Turmerific's paintings in color, November 17, 2026 (Claude Code; live, `main` `4636cb0`,
+  production `dpl_2AEUiyN38sgtTpiGDKPJkTyoyh3N`, demo alias on it; public checks green).** Part 9 of Mo's "superb" goal; Mo picked "the same way, page by page" for the other
   pages. Codex repainted the Why root (`lit-colour-a`, and `unlit-colour-a`, a Codex edit of it so
   the layers stay in register; `faces()` in `build_turmerific.py` now measures the cut faces and the
   soak's start on the takes), the research notebook (`notebook-colour-a`) and the five questions

@@ -83,3 +83,18 @@ from 1.6% to 0.47% of the picture, the leaf alone. `stars-v1` stays in `public/`
   `src/components/product/ink/nature-calm-art.ts`.
 - `translations-nature-calm.cjs`: draft translations m780-m784 (not native-reviewed).
 - QA: `scripts/qa/qa_nature_calm_ink.py`.
+
+## The paintings in colour (Mo, November 17, 2026)
+
+The same way as Advanced OPC and Turmerific: the same pictures in color. Nature Calm's grey ink
+chapter paintings were the Big Dipper (research) and the moon (daily); the lake, the cone and the
+lavender were already colour. `paint_colour.sh` pads each October take with its own paper to
+1024 x 1536 (`plates/colour/`, git-ignored) and has Codex repaint it with the page's lavender field
+and sugar pine cone as the colour reference (`prompts/{stars,moon}-colour.txt`). The stars: the
+ridge a dusk blue-grey with a faint lavender band over it, the stars plain gold leaf (dehalo still
+runs). The moon: its thin crescents, which read as brackets, now clear filled crescents. Both are
+lifted to white gently (`gentle` 200/248, so their pale washes stay). Shipped as
+`stars-colour-v1`, `moon-colour-v1`; the opening card's capsules still come from the October moon.
+Descriptions m781-m783 now say watercolor. The `b` takes are in
+`codes/bigh-archive/nature-calm-colour-unused-2026-11-17/`. The questions:
+`../questions/README.md`. Before and after: `../mockups/nature-calm-colour/`.

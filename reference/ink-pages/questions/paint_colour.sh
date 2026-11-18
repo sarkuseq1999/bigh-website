@@ -3,7 +3,8 @@
 # color, the capsule one repainted as two closed capsules on a leaf, no powder; then the other
 # products the same way, page by page).
 #   bash reference/ink-pages/questions/paint_colour.sh <product> <key>-<take> [...]
-#   product: opc (refs: OPC's grapes and plants) or turmerific (refs: its spoon and plant)
+#   product: opc (refs: its grapes and plants), turmerific (its spoon and plant) or nature-calm
+#            (its lavender field and sugar pine cone)
 #   key: a question key; OPC's capsule is a new picture (prompts/opc-capsule-colour.txt)
 # The first attached picture is the October painting padded with its own paper to 1536 x 1024
 # (plates/colour/<product>-<key>.png, git-ignored; a new picture takes the lunch's framing).
@@ -16,6 +17,7 @@ shift
 case "$product" in
   opc) REF1="$HERE/../opc/originals/why-seedsbig-ah.png"; REF2="$HERE/../opc/originals/inside-nine-ah.png" ;;
   turmerific) REF1="$HERE/../turmerific/originals/gpt25-inside-scoop.png"; REF2="$HERE/../turmerific/originals/gpt25-buy-plant.png" ;;
+  nature-calm) REF1="$HERE/../nature-calm/originals/gpt25-buy-lavender.png"; REF2="$HERE/../nature-calm/originals/gpt25-inside-cone.png" ;;
   *) echo "unknown product $product" >&2; exit 1 ;;
 esac
 mkdir -p "$LOGS" "$HERE/originals"

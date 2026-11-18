@@ -45,6 +45,11 @@ TS = REPO / "src/components/product/ink/nature-calm-art.ts"
 BOTTLE = REPO / "public/images/products/nature-calm.png"
 # Bump when a shipped picture changes after it has been pushed (the image optimizer caches by URL).
 V = "v1"
+# The Big Dipper and the moon in colour (Mo, November 17, 2026: the other product pages the same
+# way as Advanced OPC, the same pictures in color): Codex repaints of the October takes
+# (paint_colour.sh; no gpt25- prefix). The moon's thin crescents are now clear crescents (they
+# read as brackets). The opening card's capsules still come from the October moon.
+STARS_TAKE, MOON_TAKE = "stars-colour-a", "moon-colour-b"
 TAKES = {
     "water-still": "why-water-still",
     "water-ripple": "why-water-ripple",
@@ -141,6 +146,12 @@ def cropped(key, pad=0.04):
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
 
 
+def codex_cropped(take, pad=0.04):
+    """A Codex take (originals/<take>.png) with its paper divided out, cropped to its ink."""
+    flat = bd.divided(Image.open(HERE / "originals" / f"{take}.png").convert("RGB"))
+    return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
+
+
 def registered(fixed, moving):
     if moving.size != fixed.size:
         moving = moving.resize(fixed.size, Image.LANCZOS)
@@ -203,16 +214,18 @@ def dehalo(img):
 
 
 def stars():
-    """The stars' sheet is bare paper with a faint cool cast: lifted from 240 so it goes to white;
-    then each star's halo is taken out."""
-    img = bd.feathered(dehalo(gentle(richer_gold(cropped("stars")), 200, 240)), EDGE)
-    return gilded(bd.art_of(img, f"stars-{STARS_V}", WIDTH), f"stars-{STARS_V}")
+    """The colour take (the ridge dusk blue, a faint lavender band over it): its paper lifted to
+    white gently, so the pale band stays; then any halo round a star is taken out (dehalo)."""
+    img = bd.feathered(dehalo(gentle(richer_gold(codex_cropped(STARS_TAKE)), 200, 248)), EDGE)
+    return gilded(bd.art_of(img, f"stars-colour-{V}", WIDTH), f"stars-colour-{V}")
 
 
 def moon():
-    img = richer_gold(cropped("moon"))
-    art = gilded(finish(img, "moon"), f"moon-{V}")
-    return art, img
+    """The colour take, its paper lifted gently (the pale silver-blue moons stay); and the October
+    take, whose three capsules make the opening card (supply())."""
+    img = richer_gold(codex_cropped(MOON_TAKE))
+    art = gilded(finish(img, "moon-colour", lift=lambda im: gentle(im, 200, 248)), f"moon-colour-{V}")
+    return art, richer_gold(cropped("moon"))
 
 
 def supply(moon_img):

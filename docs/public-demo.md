@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-b306viihe-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-7ntx4rsvx-sarkuseq1999s-projects.vercel.app`
+(`dpl_2AEUiyN38sgtTpiGDKPJkTyoyh3N`), the **production** deployment of `main` at
+`4636cb020e7f4e94608fe2f04f5aa289d3df864e` (November 17, 2026): Turmerific's root, notebook and five
+questions in color (Mo: the same way as OPC, page by page). Mo said "Yes, put it live".
+`origin/main` was `7655eaa`, the tested tree's parent (a fast-forward). Quick look on the plain
+public URL at 1440 and 390 px: the colour root layers, the notebook and the five v2 questions load,
+no sideways scroll, no page errors. Public checks, sequential: `qa_turmerific_ink` **269/269**,
+`qa_home_ink` **290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-b306viihe-sarkuseq1999s-projects.vercel.app`
 (`dpl_5zZeCgkDEQ1AwnX9b3s8Gj7z9Zra`), the **production** deployment of `main` at
 `7655eaaa712d14ef1240b87bb7591e8151de509c` (November 17, 2026): Advanced OPC Formula's six question
 paintings in color, the capsule one without its powder (Mo picked A). Mo said "Yes, put it live".

@@ -16,7 +16,7 @@ Sections (all, or --only=a,b):
               Bee Propolis keeps its own opening
   chapters    overview, why, inside, research, people, daily, buy (no sum); each its own painting;
               "18 ingredients."; 100 mg; every study; Dr. Liu's portrait painting; the page's words;
-              the three capsules on the "One bottle" card
+              the three capsules on the "One bottle" card; the paintings in colour (November 17)
   light       the lake is ruffled until seen, then the still water fades up over it; its glint
               follows; reduced motion and no script: still from the first paint
   multiply    every painting multiplies onto the paper with no box
@@ -238,6 +238,14 @@ def chapters(browser):
     )
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
+    # The paintings in colour (Mo, November 17, 2026: the same pictures in color, page by page): the
+    # Big Dipper and the moon are the colour takes, the five questions v2 (no powders).
+    srcs = page.evaluate("""() => [...document.querySelectorAll('main img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    colour = [n for n in ["stars-colour-v1.webp", "moon-colour-v1.webp"] if n not in srcs]
+    check("chapters: the Big Dipper and the moon in colour", not colour, "missing " + ", ".join(colour))
+    qs = page.evaluate("""() => [...document.querySelectorAll('#questions img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
+    old_q = [q for q in qs if not q.endswith("-v2.webp")]
+    check("chapters: the question paintings in colour", len(set(qs)) == 5 and not old_q, ", ".join(sorted(set(qs))))
     # No small label over a chapter's heading (Mo, November 16, 2026; NuriCell's since October 26):
     # each chapter starts with its heading; the buy chapter's line is the product's tagline.
     labels = page.evaluate("""() => [...document.querySelectorAll('[data-chapter]:not([data-chapter="overview"]):not([data-chapter="buy"]) [data-words] > p[class*="label"]')].map((p) => p.textContent.trim())""")

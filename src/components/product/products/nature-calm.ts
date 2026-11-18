@@ -339,16 +339,16 @@ const natureCalm: ProductPage = {
     },
     inside: {
       ...natureCalmArt.cone,
-      alt: "A long sugar pine cone with many scales and three small beads of gold resin, painted in ink",
+      alt: "A long sugar pine cone with many scales and three small beads of gold resin, painted in watercolor",
     },
     research: {
       ...natureCalmArt.stars,
-      alt: "The seven stars of the Big Dipper in gold leaf over one dark ridge, painted in ink",
+      alt: "The seven stars of the Big Dipper in gold leaf over one dark ridge, painted in watercolor",
     },
     daily: {
       picture: {
         ...natureCalmArt.moon,
-        alt: "A glass of water and three capsules, the moon’s phases above them with the full moon in gold leaf, painted in ink",
+        alt: "A glass of water and three capsules, the moon’s phases above them with the full moon in gold leaf, painted in watercolor",
       },
     },
     buy: {
