@@ -5,8 +5,16 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Nature Calm's Big Dipper at dusk, November 18, 2026 (Claude Code).** Part 14 of Mo's
+  "superb" goal, on his go-ahead: the weakest picture of the desktop scroll-through (seven gold
+  dabs on bare paper read as coins, not stars). A Codex edit of the colour take paints its sky at
+  dusk; the stars and the ridge are kept (`dusk-colour-a`, `stars-dusk-v1`; `stars()` no longer
+  dehalos, which would lift the glow, and masks gold only above it). The description m782 is
+  still true and did not change. `qa_nature_calm_ink` expects `stars-dusk-v1`. Before and after
+  `reference/ink-pages/mockups/nature-calm-dusk/`; the other take in
+  `bigh-archive\nature-calm-dusk-unused-2026-11-18\`.
 - **Green Bee Propolis's opening painted: the hills of Minas Gerais, November 18, 2026 (Claude
-  Code).** Part 13 of Mo's "superb" goal, on his go-ahead. A desktop and phone scroll-through of
+  Code; live, `main` `36fc975`, production `dpl_Aa4mi6syVxF8aCjn6ExM4YCK5V8P`, demo alias on it).** Part 13 of Mo's "superb" goal, on his go-ahead. A desktop and phone scroll-through of
   all five product pages found Propolis the only product whose first screen was still bare paper.
   The approved "Green [bottle] Bee Propolis" is unchanged; a Codex painting of Minas Gerais lies
   behind it (big sky, far hills with a golden ipê beside the bottle and tiny hives, low alecrim

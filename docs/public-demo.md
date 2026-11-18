@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-abphd8cg8-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-8pb2xqdmh-sarkuseq1999s-projects.vercel.app`
+(`dpl_Aa4mi6syVxF8aCjn6ExM4YCK5V8P`), the **production** deployment of `main` at
+`36fc975937740f3d7a0e7d8d868d6a27c6f4afa1` (November 18, 2026): Green Bee Propolis's opening
+painted, the hills of Minas Gerais behind the approved name and bottle. Pushed on Mo's go-ahead of
+November 18. `origin/main` was `a5ab8cc`, an ancestor of the tested tree (a fast-forward of the
+sides release's docs commit and this one). Quick look on the plain public URL at 1440 and 390 px:
+the painting behind the name, the name in clear sky, no sideways scroll, no page errors. Public
+checks, sequential: `qa_propolis_ink` **345/345**, `qa_home_ink` **290/290**, `qa_nav` **326/326**.
+
+Before that the alias pointed to `bigh-website-abphd8cg8-sarkuseq1999s-projects.vercel.app`
 (`dpl_7xEjcvAxHEZgaCCBt2TpJpJT1F5a`), the **production** deployment of `main` at
 `a5ab8cc6e09d3df762a763b3664b0272d59be8b7` (November 18, 2026): Advanced OPC, Turmerific and
 Nature Calm alternate their paintings' sides from 960px, and Turmerific's daily glass in color.

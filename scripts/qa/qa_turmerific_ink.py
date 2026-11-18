@@ -546,9 +546,10 @@ def field(browser):
         shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
         check(f"field {w}x{h} no script: the painting is drawn", shown)
         ctx.close()
-    # Green Bee Propolis keeps its own opening (Mo's approved lockup), with no painting.
+    # Green Bee Propolis keeps its own opening (Mo's approved lockup, its own painting since
+    # November 18, 2026: qa_propolis_ink `opening`), never the shared painted opening.
     ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/green-bee-propolis")
-    check("field: Green Bee Propolis keeps its own opening", page.locator("[data-opening-painting]").count() == 0)
+    check("field: Green Bee Propolis keeps its own opening", page.locator("[data-name-left]").count() == 1 and page.locator("h1 [data-half]").count() == 0 and page.locator("[data-opening-painting] picture").count() == 0)
     ctx.close()
 
 

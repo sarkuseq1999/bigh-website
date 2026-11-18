@@ -7,6 +7,8 @@
 #   key: stars (the Big Dipper over its ridge, from plates/colour/research-stars-v2.png)
 #        moon (the glass, three capsules and the moon's phases, from plates/colour/daily-moon.png;
 #              its thin crescents painted as clear crescents, not brackets)
+#        dusk (November 18: the colour stars take with its sky painted at dusk, the stars and the
+#              ridge kept, from originals/stars-colour-a.png)
 # The October takes are padded with their own paper to 1024 x 1536 (plates/colour/, git-ignored).
 # Out: originals/<key>-colour-<take>.png. stdin must be /dev/null, or codex exec waits on it.
 set -u
@@ -22,6 +24,7 @@ for name in "$@"; do
   case "$key" in
     stars) src="$HERE/plates/colour/research-stars-v2.png" ;;
     moon) src="$HERE/plates/colour/daily-moon.png" ;;
+    dusk) src="$HERE/originals/stars-colour-a.png" ;;
     *) echo "unknown key $key" >&2; continue ;;
   esac
   codex exec --skip-git-repo-check -C "$HERE" -s workspace-write -c model_reasoning_effort="low" \

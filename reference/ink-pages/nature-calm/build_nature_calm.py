@@ -50,6 +50,10 @@ V = "v1"
 # (paint_colour.sh; no gpt25- prefix). The moon's thin crescents are now clear crescents (they
 # read as brackets). The opening card's capsules still come from the October moon.
 STARS_TAKE, MOON_TAKE = "stars-colour-a", "moon-colour-b"
+# November 18, 2026 (Mo's go-ahead for the product pages): the Big Dipper's sky painted at dusk
+# (paint_colour.sh `dusk`, an edit of stars-colour-a: the stars and the ridge kept). On bare paper
+# the seven gold dabs read as scattered coins, not stars.
+STARS_TAKE = "dusk-colour-a"
 TAKES = {
     "water-still": "why-water-still",
     "water-ripple": "why-water-ripple",
@@ -95,12 +99,14 @@ def richer_gold(img, strength=0.75):
     return Image.fromarray(np.clip(a * (1 - m) + deep * m, 0, 255).astype(np.uint8))
 
 
-def gold_mask(name, width=1000):
+def gold_mask(name, width=1000, rows=1.0):
     """The shipped painting's gold leaf as an alpha mask (<name>-gold.webp, as ba.gold_mask), with
-    the strict detector, soft-edged. Returns the share of its pixels that are gold."""
+    the strict detector, soft-edged, none below `rows` of its height. Returns the share of its
+    pixels that are gold."""
     img = Image.open(ba.PLATES / f"{name}.png").convert("RGB")
     img = img.resize((width, round(img.height * width / img.width)), Image.LANCZOS)
     m = cv2.GaussianBlur(gold_soft(np.asarray(img)), (0, 0), 1.0)
+    m[int(m.shape[0] * rows):] = 0
     rgba = np.dstack([np.full(m.shape + (3,), 255, np.uint8), (m * 255).astype(np.uint8)])
     path = OUT / f"{name}-gold.webp"
     Image.fromarray(rgba, "RGBA").save(path, "WEBP", quality=90, method=6)
@@ -109,8 +115,8 @@ def gold_mask(name, width=1000):
     return share
 
 
-def gilded(art, name):
-    gold_mask(name)
+def gilded(art, name, rows=1.0):
+    gold_mask(name, rows=rows)
     art["gold"] = f"{URL}/{name}-gold.webp"
     return art
 
@@ -213,11 +219,22 @@ def dehalo(img):
     return Image.fromarray(np.clip(np.rint(a + (255 - a) * k), 0, 255).astype(np.uint8))
 
 
+# The stars' gold lies above this share of the dusk take's height; under it is the apricot glow over
+# the ridge, warm enough to pass the gold detector in places, so no gold is deepened or masked there.
+STARS_GOLD_ROWS = 0.72
+
+
 def stars():
-    """The colour take (the ridge dusk blue, a faint lavender band over it): its paper lifted to
-    white gently, so the pale band stays; then any halo round a star is taken out (dehalo)."""
-    img = bd.feathered(dehalo(gentle(richer_gold(codex_cropped(STARS_TAKE)), 200, 248)), EDGE)
-    return gilded(bd.art_of(img, f"stars-colour-{V}", WIDTH), f"stars-colour-{V}")
+    """The dusk take (November 18, 2026): the painted sky, the stars and the ridge. Its paper lifted
+    to white gently; the gold deepened and masked only in the sky above the glow. No dehalo: the
+    stars sit on the dark sky with nothing round them, and it would lift the apricot glow. (Until
+    then the colour take on bare paper, stars-colour-v1, with dehalo.)"""
+    img = codex_cropped(STARS_TAKE)
+    top = int(img.height * STARS_GOLD_ROWS)
+    img.paste(richer_gold(img.crop((0, 0, img.width, top))), (0, 0))
+    img = bd.feathered(gentle(img, 200, 248), EDGE)
+    name = f"stars-dusk-{V}"
+    return gilded(bd.art_of(img, name, WIDTH), name, rows=STARS_GOLD_ROWS)
 
 
 def moon():

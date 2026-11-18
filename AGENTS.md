@@ -265,6 +265,13 @@ These sit on top of `DESIGN.md`.
   is two closed capsules beside dry plant stalks, "Tested in a clinical trial?" an open book
   with a hand lens, a lavender sprig and one capsule. Before and after
   `reference/ink-pages/mockups/nature-calm-colour/`. Live November 18, 2026 (`main` `d06e4b9`).
+  Later that day (part 14 of the "superb" pass, on Mo's go-ahead) the Big Dipper's sky was
+  painted: on bare paper its seven gold dabs read as scattered coins, not stars. The same seven
+  stars in the same places and the same ridge, now in a dusk wash (deep twilight blue down
+  through violet to a warm glow over the ridge) that dissolves into the paper at its edges. The
+  stars stay plain gold leaf with nothing round them; their gold mask stops above the glow
+  (`STARS_GOLD_ROWS`). `build_nature_calm.py` (`stars()`, Codex edit `dusk-colour-a`); before and
+  after `reference/ink-pages/mockups/nature-calm-dusk/`.
   Green Bee Propolis last: the bee tree (both layers: a colour repaint with gold cracks and a
   Codex edit with the cracks open; in colour the bark and the bees pass the gold test, so the
   cracks are found where the two layers differ), the alecrim specimen, the mug (a sage glaze) and
@@ -438,7 +445,8 @@ These sit on top of `DESIGN.md`.
   Keep the ipê out from behind the letters (a first take hid it behind "Propolis").
   `propolis-opening.tsx`, `propolis.module.css`, `propolis-opening-art.ts`; picture
   `reference/ink-pages/propolis/build_propolis_opening.py` (Codex painting `opening-ipemid-bh`,
-  `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`.
+  `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`. Live November
+  18, 2026 (`main` `36fc975`).
 - **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
   trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
   next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the

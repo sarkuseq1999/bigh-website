@@ -98,3 +98,15 @@ lifted to white gently (`gentle` 200/248, so their pale washes stay). Shipped as
 Descriptions m781-m783 now say watercolor. The `b` takes are in
 `codes/bigh-archive/nature-calm-colour-unused-2026-11-17/`. The questions:
 `../questions/README.md`. Before and after: `../mockups/nature-calm-colour/`.
+
+## The Big Dipper at dusk (November 18, 2026)
+
+On bare paper the colour take's seven gold dabs read as scattered coins, not stars. Codex edited
+it (`paint_colour.sh dusk-a`, prompt `prompts/dusk-colour.txt`): the same stars and ridge, the sky
+painted at dusk, deep twilight blue at the top through violet to a warm apricot glow over the
+ridge, its edges dissolving into the paper. `build_nature_calm.py` ships it as `stars-dusk-v1`
+(`STARS_TAKE = "dusk-colour-a"`): no dehalo (the stars sit on the dark sky with nothing round
+them, and it would lift the glow), the gold deepened and masked only above `STARS_GOLD_ROWS`
+(the glow passes the gold test in a few pixels). The other take is in
+`bigh-archive\nature-calm-dusk-unused-2026-11-18\`.
+

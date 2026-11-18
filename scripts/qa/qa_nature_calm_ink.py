@@ -239,9 +239,10 @@ def chapters(browser):
     missing = [e for e in EXPECT if e not in text]
     check("chapters: the page's words", not missing, "; ".join(missing))
     # The paintings in colour (Mo, November 17, 2026: the same pictures in color, page by page): the
-    # Big Dipper and the moon are the colour takes, the five questions v2 (no powders).
+    # Big Dipper and the moon are the colour takes, the five questions v2 (no powders). Since
+    # November 18 the Big Dipper's sky is painted at dusk (stars-dusk).
     srcs = page.evaluate("""() => [...document.querySelectorAll('main img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
-    colour = [n for n in ["stars-colour-v1.webp", "moon-colour-v1.webp"] if n not in srcs]
+    colour = [n for n in ["stars-dusk-v1.webp", "moon-colour-v1.webp"] if n not in srcs]
     check("chapters: the Big Dipper and the moon in colour", not colour, "missing " + ", ".join(colour))
     qs = page.evaluate("""() => [...document.querySelectorAll('#questions img')].map((i) => decodeURIComponent(i.currentSrc || i.src).split('/').pop().split('&')[0])""")
     old_q = [q for q in qs if not q.endswith("-v2.webp")]
@@ -556,9 +557,10 @@ def meadow(browser):
         shown = page.evaluate("() => { const i = document.querySelector('[data-opening-painting] picture img'); return !!i && i.complete && i.naturalWidth > 1; }")
         check(f"meadow {w}x{h} no script: the painting is drawn", shown)
         ctx.close()
-    # Green Bee Propolis keeps its own opening (Mo's approved lockup), with no painting.
+    # Green Bee Propolis keeps its own opening (Mo's approved lockup, its own painting since
+    # November 18, 2026: qa_propolis_ink `opening`), never the shared painted opening.
     ctx, page, _, _ = opened(browser, 1440, 900, "/en/products/green-bee-propolis")
-    check("meadow: Green Bee Propolis keeps its own opening", page.locator("[data-opening-painting]").count() == 0)
+    check("meadow: Green Bee Propolis keeps its own opening", page.locator("[data-name-left]").count() == 1 and page.locator("h1 [data-half]").count() == 0 and page.locator("[data-opening-painting] picture").count() == 0)
     ctx.close()
 
 

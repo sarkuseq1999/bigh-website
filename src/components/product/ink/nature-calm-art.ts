@@ -25,10 +25,10 @@ export const natureCalmArt = {
     gold: "/images/products/nature-calm/ink/cone-v1-gold.webp",
   },
   stars: {
-    src: "/images/products/nature-calm/ink/stars-colour-v1.webp",
-    width: 941,
-    height: 1272,
-    gold: "/images/products/nature-calm/ink/stars-colour-v1-gold.webp",
+    src: "/images/products/nature-calm/ink/stars-dusk-v1.webp",
+    width: 1024,
+    height: 1417,
+    gold: "/images/products/nature-calm/ink/stars-dusk-v1-gold.webp",
   },
   moon: {
     src: "/images/products/nature-calm/ink/moon-colour-v1.webp",
