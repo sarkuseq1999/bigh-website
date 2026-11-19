@@ -15,7 +15,8 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
   `reference/ink-pages/mockups/nature-calm-dusk/`; the other take in
   `bigh-archive\nature-calm-dusk-unused-2026-11-18\`.
 - **Green Bee Propolis's opening painted: the hills of Minas Gerais, November 18, 2026 (Claude
-  Code; live, `main` `36fc975`, production `dpl_Aa4mi6syVxF8aCjn6ExM4YCK5V8P`, demo alias on it).** Part 13 of Mo's "superb" goal, on his go-ahead. A desktop and phone scroll-through of
+  Code; live, `main` `36fc975`, production `dpl_Aa4mi6syVxF8aCjn6ExM4YCK5V8P`, demo alias on it;
+  Mo saw it live and said "Keep it").** Part 13 of Mo's "superb" goal, on his go-ahead. A desktop and phone scroll-through of
   all five product pages found Propolis the only product whose first screen was still bare paper.
   The approved "Green [bottle] Bee Propolis" is unchanged; a Codex painting of Minas Gerais lies
   behind it (big sky, far hills with a golden ipê beside the bottle and tiny hives, low alecrim

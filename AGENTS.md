@@ -433,7 +433,8 @@ These sit on top of `DESIGN.md`.
   overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
   Preserve the approved desktop opening, mobile B and purchase card. (Its Weathered Taupe A
   footer sign of October 18 was replaced on October 19 by the site-wide redwood park sign.)
-  **Its painted world (November 18, 2026, on Mo's go-ahead for the product pages).** It was the
+  **Its painted world (November 18, 2026, on Mo's go-ahead for the product pages; he saw it live
+  and said "Keep it").** It was the
   last product opening on bare paper. The composition above is unchanged; behind it lie the hills
   of Minas Gerais on a clear dry-season morning (where the propolis comes from, so the place is
   Brazil, not California): a big sky with the name in it, a thin band of far hills with a golden
