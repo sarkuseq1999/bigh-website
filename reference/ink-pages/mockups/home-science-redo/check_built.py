@@ -9,7 +9,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 HERE = Path(__file__).resolve().parent
-OUT = HERE / "built"
+OUT = HERE / (sys.argv[2] if len(sys.argv) > 2 else "built")
 OUT.mkdir(exist_ok=True)
 BASE = sys.argv[1]
 TOPICS = ["Mitochondria", "Free radicals"]

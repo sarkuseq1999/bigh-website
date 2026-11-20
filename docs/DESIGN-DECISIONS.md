@@ -824,5 +824,16 @@ These sit on top of `DESIGN.md`.
   `lantern-fuel-v1.webp`, `lantern-soot-v1.webp` from
   `reference/ink-pages/home-science/build_lantern.py`; DESIGN.md "The Science Stage Rule";
   mockups `reference/ink-pages/mockups/home-science-redo/`.
+  **Free radicals, still open (Mo, November 20, after it went live):** "I think the free
+  radicals image is not inituitive enough for people to fully capture the idea". Soot on the
+  glass does not show free radicals as things, or anything stopping them. Round 1 of fixes
+  (sparks caught by a wire guard round the glass, three name labels on the painting; or a
+  cloth wiping the soot) he turned down: "The labels look too busy, and also the thing
+  wrapped around the glass—I don't know what it is—doesn't really make much sense." So: no
+  labels on a painting, and no added part a visitor has to puzzle out; only what everyone
+  knows a lantern has. Round 2 (waiting for his pick): the flame throws gold sparks, the
+  lantern's own glass holds most of them in, and the few that get out either scorch one of
+  the two poppies (A, Claude's pick) or burn the wooden plank it stands on (B). Review page
+  https://claude.ai/artifact/SN8MypC48mXEPXF6sg2u6T; `shoot_radicals.py` in the mockups folder.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.

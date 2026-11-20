@@ -4,7 +4,21 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
+The alias currently points to `bigh-website-lp0wqv52h-sarkuseq1999s-projects.vercel.app`
+(`dpl_C8Q9qdyqssAQeeQHrVuETiQqikvP`), the **production** deployment of `main` at
+`b4c103c1aa1965b9cf9e7e06f6f23a44b0b4a257` (November 20, 2026): the homepage's "Make sense of
+the science." shows one old barn lantern for Mitochondria and the same lantern with soot on
+its glass for Free radicals, in place of the California workshop. Pushed on Mo's go-ahead of
+November 20 ("Yes, go live"). `origin/main` was `6649524b`, the tested tree's parent (a
+fast-forward). Quick look on the plain public URL at 1440 and 390 px in a fresh browser: both
+lantern pictures decoded and shown, their new lines under them, no workshop picture left, no
+sideways scroll, no page errors (`reference/ink-pages/mockups/home-science-redo/check_built.py`).
+Public checks, sequential: `qa_home_ink` **290/290**, `qa_nav` **326/326**. When this alias was
+set it had been on `dpl_7i1aSArBKNpaE1DXCSfFpBgPiGax` (`main` `7e952f9e`, the Support and
+Advanced OPC ingredients redesign), a release this file has no entry for.
+
+Before that, by this file's last entry, the alias pointed to
+`bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
 (`dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`), the **production** deployment of `main` at
 `190aa0ace8b6cf765f5129fa0cc18423ba3111c9` (November 18, 2026): Nature Calm's Big Dipper with its
 sky painted at dusk, and the three checkers' Propolis rule updated. Pushed on Mo's go-ahead of
