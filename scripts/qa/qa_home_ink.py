@@ -1720,6 +1720,24 @@ def run(browser, look, mobile):
     context.close()
 
 
+def run_cellular_after_about(browser):
+    """Use the logo to return home with the About stylesheet still loaded."""
+    context, page, _, _ = open_page(browser, f"{BASE}/about", (1814, 930), False)
+    page.locator("[data-nav-logo]").click()
+    page.wait_for_url(f"{BASE}/")
+    figure = page.locator("[data-brush=cellular-mito]")
+    figure.scroll_into_view_if_needed()
+    g = page.evaluate(PAINTINGS)
+    left, _, right, _ = g["cell"]
+    words_end = g["cellWords"][2]
+    check(
+        "About to Home: the cell stays to the right of its words and inside the window",
+        words_end <= left < right <= g["win"],
+        f"words end {words_end:.0f}, cell {left:.0f} to {right:.0f}",
+    )
+    context.close()
+
+
 def run_short(browser, look):
     """1280 x 720: the opening holds at a short laptop window."""
     tag = f"{look} 1280x720"
@@ -2904,6 +2922,7 @@ with sync_playwright() as p:
         passed = sum(1 for r in results if r[1])
         print(f"\n{passed}/{len(results)} checks passed.")
         sys.exit(0 if passed == len(results) else 1)
+    run_cellular_after_about(browser)
     run(browser, "home", mobile=False)
     run(browser, "home", mobile=True)
     run_short(browser, "home")
