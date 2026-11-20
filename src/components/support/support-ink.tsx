@@ -1,57 +1,88 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Clock3, Mail, Phone, Sun } from "lucide-react";
 import { InkPage } from "@/components/ink/ink-page";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
-import { book, mailbox, parcel, porch } from "./support-art";
+import { book, mailbox, parcel, porch } from "./support-california-art";
 import { ALT, support } from "./support-content";
 import { Painting, Spread, useWordsLang } from "./spread";
 import { SupportForm } from "./support-form";
 import page from "./support-page.module.css";
+import studio from "./support-california.module.css";
 
-// Support, "Pull up a chair" (Mo, October 14, 2026; mockup reference/ink-pages/mockups/support/;
-// spec docs/superpowers/specs/2026-10-14-support-page-design.md). A California porch opens the
-// page; its cup's gold steam rises once the porch has bloomed (support-page.module.css), and again
-// when a message is sent. Then Write to us, Returns and Questions, one painting each, sides taking
-// turns. No brush line.
-
+// Approved California composition, retaining native navigation, copy and the Support form.
 function Opening() {
   const copy = useCopy();
   const o = support.opening;
+  const title = copy(o.lead);
+  const split = title.indexOf(". ");
   return (
-    <section className={page.opening} data-part="opening" aria-labelledby="support-title">
-      <div className={base.wrap}>
+    <section className={studio.opening} data-part="opening" aria-labelledby="support-title">
+      <div className={studio.scene}>
         <Painting
           art={porch}
           alt={copy(ALT.porch)}
-          sizes="(max-width: 599px) 92vw, 720px"
+          sizes="(max-width: 700px) 100vw, 75vw"
           preload
-          steam={porch.steam}
-          className={page.porch}
         />
-        <h1 id="support-title" className={page.title}>
-          {copy(o.title)}
-        </h1>
-        <p className={page.lead}>{copy(o.lead)}</p>
-        <dl className={page.contact}>
+      </div>
+      <div className={[base.wrap, studio.hero].join(" ")}>
+        <div className={studio.heroCopy}>
+          <p className={studio.eyebrow}>
+            <Sun aria-hidden="true" />
+            {copy(o.eyebrow)}
+          </p>
+          <h1 id="support-title" className={studio.title}>
+            {split < 0 ? (
+              title
+            ) : (
+              <>
+                {title.slice(0, split + 1)}
+                <br />
+                {title.slice(split + 2)}
+              </>
+            )}
+          </h1>
+          <p className={studio.lede}>{copy(o.description)}</p>
+          <div className={studio.actions}>
+            <a className={base.pill} href="#write">
+              <Mail size={19} aria-hidden="true" />
+              {copy(support.write.label)}
+            </a>
+            <a className={studio.textLink} href="#questions">
+              {copy(o.browse)}
+            </a>
+          </div>
+        </div>
+      </div>
+      <div className={studio.reach}>
+        <dl className={[base.wrap, studio.contact].join(" ")}>
           <div>
-            <dt>{copy(o.call.label)}</dt>
-            <dd>
-              <a className={page.number} href={o.call.href}>
-                {o.call.value}
-              </a>
-            </dd>
+            <Phone aria-hidden="true" />
+            <div>
+              <dt>{copy(o.call.label)}</dt>
+              <dd>
+                <a href={o.call.href}>{o.call.value}</a>
+              </dd>
+            </div>
           </div>
           <div>
-            <dt>{copy(o.email.label)}</dt>
-            <dd>
-              <a href={o.email.href}>{o.email.value}</a>
-            </dd>
+            <Mail aria-hidden="true" />
+            <div>
+              <dt>{copy(o.email.label)}</dt>
+              <dd>
+                <a href={o.email.href}>{o.email.value}</a>
+              </dd>
+            </div>
           </div>
           <div>
-            <dt>{copy(o.hours.label)}</dt>
-            <dd>{copy(o.hours.value)}</dd>
+            <Clock3 aria-hidden="true" />
+            <div>
+              <dt>{copy(o.hours.label)}</dt>
+              <dd>{copy(o.hours.value)}</dd>
+            </div>
           </div>
         </dl>
       </div>
@@ -142,9 +173,9 @@ function Questions() {
       labelledBy="questions-title"
       picture={<Painting art={book} alt={copy(ALT.book)} sizes={BOOK} className={page.book} />}
     >
-      <p className={page.label}>{copy(q.label)}</p>
+      <p className={page.label}>{copy(q.title)}</p>
       <h2 id="questions-title" className={page.heading}>
-        {copy(q.title)}
+        {copy(support.opening.title)}
       </h2>
       <div className={page.faq}>
         {q.items.map((item, i) => (
@@ -181,11 +212,11 @@ export function SupportInk({ titleFont, live }: { titleFont: string; live: boole
       {() => (
         <div data-support="porch" lang="en">
           <Opening />
+          <Questions />
+          <Returns />
           <Write live={live}>
             <SupportForm live={live} />
           </Write>
-          <Returns />
-          <Questions />
         </div>
       )}
     </InkPage>

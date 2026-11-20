@@ -1,0 +1,424 @@
+:global([data-product-ink="advanced-opc"])
+  .chapter[data-chapter="inside"][aria-labelledby]
+  > div
+  > div[data-words] {
+  grid-column: 1/-1;
+  grid-row: 1;
+  max-width: none;
+}
+.chapter {
+  --field-ochre: #966616;
+  --field-moss: #485637;
+  --field-rule: #c8c7b4;
+}
+.opener {
+  display: grid;
+  grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.76fr);
+  align-items: center;
+  gap: 4%;
+  padding-bottom: clamp(30px, 4.4vw, 70px);
+}
+.kicker,
+.indexTitle {
+  font:
+    600 11px/1.4 "Courier New",
+    monospace;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--field-moss);
+}
+.kicker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 clamp(15px, 2vw, 28px);
+}
+.kicker::before {
+  content: "";
+  flex: none;
+  width: 32px;
+  height: 3px;
+  background: var(--field-ochre);
+  border-radius: 80% 35% 58% 26%;
+  transform: rotate(-2deg);
+}
+.chapter h2.heading {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(52px, 7.3vw, 110px);
+  font-weight: 740;
+  line-height: 0.94;
+  letter-spacing: -0.061em;
+  overflow-wrap: normal;
+}
+.heading > span {
+  display: block;
+}
+.gold {
+  color: var(--field-ochre);
+  letter-spacing: -0.047em;
+  word-spacing: 0.073em;
+}
+.chapter p.intro {
+  color: var(--muted);
+  font-size: clamp(16px, 1.3vw, 19px);
+  line-height: 1.48;
+  margin: 25px 0 0;
+  max-width: 43ch;
+}
+.heroArt {
+  display: grid;
+  place-items: center;
+  align-self: center;
+  position: relative;
+  margin: 0;
+  padding-bottom: 28px;
+  min-width: 0;
+}
+.heroArt img {
+  display: block;
+  width: min(95%, 420px);
+  height: auto;
+  transform: rotate(-5deg);
+  mix-blend-mode: multiply;
+}
+.heroArt figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: var(--field-moss);
+  text-align: right;
+  line-height: 1.15;
+}
+.heroArt figcaption i {
+  display: block;
+  font:
+    italic clamp(15px, 1.6vw, 22px)/1.2 Georgia,
+    serif;
+  transform: rotate(-5deg);
+}
+.heroArt figcaption span {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.index {
+  display: flex;
+  align-items: center;
+  gap: clamp(12px, 3vw, 58px);
+  min-height: 54px;
+  border-block: 1px solid var(--field-rule);
+  padding-block: 6px;
+}
+.indexTitle {
+  color: var(--field-ochre);
+  margin-inline-end: auto;
+}
+.index a {
+  color: var(--ink);
+  display: inline-flex;
+  align-items: center;
+  min-height: 40px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 550;
+}
+.index a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.index a:focus-visible,
+.labelBlock summary:focus-visible {
+  outline: 2px solid var(--field-ochre);
+  outline-offset: 4px;
+}
+.group {
+  margin-top: clamp(31px, 4vw, 64px);
+  scroll-margin-top: 108px;
+}
+.chapter h3.groupHeading {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(9px, 1.65vw, 25px);
+  margin: 0 0 10px;
+  font-family: var(--display-font);
+  font-size: clamp(36px, 4.4vw, 66px);
+  letter-spacing: -0.059em;
+  font-weight: 680;
+  line-height: 1.08;
+}
+.groupHeading i {
+  font:
+    italic clamp(18px, 2.1vw, 33px)/1 Georgia,
+    serif;
+  color: var(--field-ochre);
+}
+.plates,
+.vitamins {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+.plates {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  column-gap: clamp(24px, 4.3vw, 74px);
+}
+.plate {
+  border-bottom: 1px solid var(--field-rule);
+  padding: clamp(18px, 2vw, 33px) 0 clamp(22px, 2.2vw, 36px);
+  min-width: 0;
+}
+.stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: clamp(144px, 14.5vw, 217px);
+  margin-bottom: 10px;
+}
+.stage img {
+  display: block;
+  max-width: 75%;
+  width: auto;
+  height: 88%;
+  object-fit: contain;
+  mix-blend-mode: multiply;
+}
+.plate:nth-child(1) .stage img {
+  height: 72%;
+}
+.plate:nth-child(5) .stage img,
+.plate:nth-child(6) .stage img {
+  height: 79%;
+}
+.itemName {
+  margin: 0;
+  font-family: var(--display-font);
+  font-size: clamp(23px, 2.1vw, 34px);
+  letter-spacing: -0.045em;
+  font-weight: 650;
+  line-height: 1.09;
+  overflow-wrap: anywhere;
+}
+.amount {
+  margin: 5px 0 0;
+  color: var(--field-ochre);
+  font:
+    italic clamp(19px, 1.55vw, 24px)/1.25 Georgia,
+    serif;
+  white-space: nowrap;
+}
+.itemNote {
+  margin: 7px 0 0;
+  max-width: 42ch;
+  font-size: clamp(15px, 1.15vw, 17px);
+  line-height: 1.48;
+  color: var(--muted);
+}
+.chapter .nutrients .groupHeading {
+  margin-bottom: clamp(19px, 2.6vw, 39px);
+}
+.vitamins {
+  border-top: 1px solid #a4a58d;
+}
+.vit {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(78px, 0.35fr) minmax(0, 1fr);
+  align-items: baseline;
+  gap: 12px 2.5%;
+  border-bottom: 1px solid var(--field-rule);
+  padding-block: clamp(15px, 1.4vw, 23px);
+}
+.vit .itemNote,
+.vit .amount {
+  margin: 0;
+}
+.label {
+  margin-top: clamp(35px, 3.5vw, 60px);
+  scroll-margin-top: 108px;
+}
+.labelBlock {
+  border-block: 1px solid #a5a68e;
+}
+.labelBlock summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  list-style: none;
+  padding: 14px 0;
+  cursor: pointer;
+  font-weight: 620;
+  font-size: clamp(18px, 1.65vw, 25px);
+}
+.labelBlock summary::-webkit-details-marker {
+  display: none;
+}
+.labelBlock summary span {
+  flex: none;
+  color: var(--field-ochre);
+  font-size: 27px;
+  font-weight: 400;
+  line-height: 1;
+}
+.labelBlock[open] summary span {
+  transform: rotate(45deg);
+}
+.labelTable {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  text-align: start;
+  font-size: 15px;
+  line-height: 1.42;
+  margin-bottom: 16px;
+}
+.labelTable caption {
+  margin: 0 0 9px;
+  color: var(--muted);
+  text-align: start;
+}
+.labelTable :is(th, td) {
+  text-align: start;
+  vertical-align: top;
+  padding: 8px 9px 8px 0;
+  border-bottom: 1px dotted var(--field-rule);
+  overflow-wrap: anywhere;
+}
+.labelTable th:first-child {
+  width: 27%;
+}
+.labelTable th:nth-child(2) {
+  width: clamp(66px, 12%, 147px);
+}
+.labelTable thead th {
+  color: var(--field-moss);
+}
+.labelTable tbody th {
+  font-weight: 560;
+}
+.qty {
+  white-space: nowrap;
+}
+.small {
+  color: var(--muted);
+  max-width: 74ch;
+  margin: 16px 0 0;
+  font-size: 15px;
+  line-height: 1.5;
+}
+@media (max-width: 900px) {
+  .opener {
+    grid-template-columns: minmax(0, 1.34fr) minmax(0, 0.66fr);
+    gap: 16px;
+  }
+  .chapter h2.heading {
+    font-size: clamp(49px, 7.9vw, 73px);
+  }
+  .stage {
+    height: 145px;
+  }
+}
+@media (max-width: 680px) {
+  .opener {
+    grid-template-columns: minmax(0, 1fr) minmax(80px, 27%);
+    column-gap: 10px;
+    row-gap: 15px;
+    padding-bottom: 23px;
+  }
+  .lead {
+    display: contents;
+  }
+  .kicker,
+  .heading {
+    grid-column: 1 / -1;
+  }
+  .kicker,
+  .chapter p.intro {
+    margin: 0;
+  }
+  .chapter h2.heading {
+    font-size: clamp(40px, 10.1vw, 67px);
+    letter-spacing: -0.048em;
+  }
+  .chapter p.intro {
+    grid-column: 1;
+    grid-row: 3;
+    line-height: 1.44;
+    font-size: 15px;
+  }
+  .heroArt {
+    grid-column: 2;
+    grid-row: 3;
+    padding-bottom: 23px;
+  }
+  .heroArt figcaption i {
+    font-size: 12px;
+  }
+  .heroArt figcaption span {
+    font-size: 9px;
+    margin-top: 3px;
+  }
+  .index {
+    justify-content: space-between;
+    gap: 7px;
+    min-height: 46px;
+    padding-block: 2px;
+  }
+  .indexTitle {
+    display: none;
+  }
+  .index a {
+    font-size: clamp(12px, 3.4vw, 15px);
+  }
+  .chapter h3.groupHeading {
+    font-size: clamp(33px, 7.35vw, 46px);
+    margin-bottom: 13px;
+  }
+  .plates {
+    display: block;
+  }
+  .plate {
+    display: grid;
+    grid-template-columns: minmax(68px, 24%) minmax(0, 1fr);
+    gap: clamp(13px, 4.3vw, 25px);
+    align-items: center;
+    padding-block: 16px;
+    min-height: 119px;
+  }
+  .plate:first-child {
+    border-top: 1px solid var(--field-rule);
+  }
+  .stage {
+    height: 92px;
+    margin: 0;
+  }
+  .stage img {
+    max-width: 98%;
+    height: 86%;
+  }
+  .itemName {
+    font-size: clamp(21px, 4.8vw, 28px);
+  }
+  .amount {
+    font-size: 18px;
+    margin-top: 3px;
+  }
+  .itemNote {
+    font-size: 15px;
+    line-height: 1.43;
+    margin-top: 4px;
+  }
+  .vit {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 4px 12px;
+    padding-block: 14px;
+  }
+  .vit .itemNote {
+    grid-column: 1 / -1;
+  }
+  .labelTable {
+    font-size: 13px;
+  }
+}

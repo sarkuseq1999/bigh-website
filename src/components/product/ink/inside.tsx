@@ -13,6 +13,7 @@ import { isNuricell } from "./nuricell-layout";
 import { NuricellLeaf } from "./nuricell-leaf";
 import { NuricellScenes } from "./nuricell-scenes";
 import styles from "./product-ink.module.css";
+import { OpcInside } from "./opc-inside";
 
 // Chapter 3: the capsule open, its four heaps sized by amount, beside the ingredients (amount,
 // name, what it does, the label's form when it differs) and how they work together. A
@@ -23,6 +24,7 @@ import styles from "./product-ink.module.css";
 // chapter's end now also says what notes.science said.
 export function Inside({ product, motion }: { product: InkProduct; motion: boolean }) {
   const copy = useCopy();
+  if (product.slug === "advanced-opc") return <OpcInside product={product} />;
   const count = product.ingredients.length;
   const names = Object.fromEntries(product.ingredients.map((item) => [item.key, item.name]));
   const own = isNuricell(product);

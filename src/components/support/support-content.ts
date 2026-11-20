@@ -15,6 +15,10 @@
 export const support = {
   opening: {
     title: "How can we help?",
+    eyebrow: "BiGH customer care",
+    description:
+      "Have a question about your order or one of our products? Our team in Glendora, California, is here to help.",
+    browse: "Browse common questions",
     lead: "Pull up a chair. We’re listening.",
     call: { label: "Call us", value: "800-919-2089", href: "tel:+18009192089" },
     email: { label: "Email us", value: "support@bighnow.com", href: "mailto:support@bighnow.com" },
@@ -114,8 +118,9 @@ export const support = {
 
 export const ALT = {
   porch:
-    "Two empty wooden chairs on a California porch, a cup of coffee on a small table between them, its steam in gold leaf, painted in ink",
-  mailbox: "A rural mailbox on a wooden post in tall dry grass, its flag raised, painted in ink",
-  parcel: "A parcel tied with twine on wooden porch steps, painted in ink",
-  book: "An open book on a porch rail, its pages lifting in a breeze, painted in ink",
+    "Two wooden chairs on a sunlit California porch with orange branches and foothills, painted in watercolor",
+  mailbox:
+    "A rural mailbox on a wooden post in tall dry grass, its flag raised, painted in watercolor",
+  parcel: "A parcel tied with twine on wooden porch steps, painted in watercolor",
+  book: "An open book on a porch rail, its pages lifting in a breeze, painted in watercolor",
 } as const;
