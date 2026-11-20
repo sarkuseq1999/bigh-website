@@ -5,6 +5,11 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Green Bee Propolis bee tree, November 20, 2026 (Codex, local preview).** Mo spotted straight
+  cuts across both ends of the trunk in “Why green propolis.” The bark and moving gold now fade
+  together into the paper (`propolis.module.css`). Desktop and phone screenshots are in
+  `reference/ink-pages/mockups/propolis-trunk/`. Built-site checks passed for Propolis
+  (345/345), the homepage (291/291) and navigation (326/326).
 - **Nature Calm's Big Dipper at dusk, November 18, 2026 (Claude Code; live, `main` `190aa0a`,
   production `dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`, demo alias on it).** Part 14 of Mo's
   "superb" goal, on his go-ahead: the weakest picture of the desktop scroll-through (seven gold
