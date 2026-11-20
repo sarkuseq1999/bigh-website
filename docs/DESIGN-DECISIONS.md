@@ -396,6 +396,9 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/propolis/build_propolis_opening.py` (Codex painting `opening-ipemid-bh`,
   `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`. Live November
   18, 2026 (`main` `36fc975`).
+- **Green Bee Propolis bee tree (Mo, November 20, 2026).** In “Why green propolis,” the trunk
+  should feel like it continues above and below the hollow. Let the bark and its gold cracks
+  trail into the paper at both ends, including while the gold is spreading.
 - **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
   trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
   next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the
@@ -579,6 +582,14 @@ These sit on top of `DESIGN.md`.
   opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
   line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
   Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
+- **Homepage brush line: the ink line stays (Mo, November 20, 2026).** Mo likes the stroke
+  running down the page but said it "feels very Asia" and asked for ideas that fit the
+  watercolor, California site. Of four (A a watercolor trail, B a Sierra creek, C trail-map
+  dashes, D a gold thread) he asked for mockups of A and B; both were laid on the real page with
+  real painted brush strokes (a warm earth wash, a blue-green wash). His verdict: "original is
+  still better". Don't repaint the line as a watercolor wash again unasked. Mockups and the
+  mockup code are on the local branch `line-watercolor` (`reference/ink-pages/mockups/home-line/`
+  there); review page https://claude.ai/artifact/JFEdFK2vCZJzXkGjnsUkJB.
 - **Homepage crane: between B and C, 57.5% (Mo picked it, October 23, 2026).** Mo liked the
   opening but found the flying crane a little big. Of three sizes (A 80%, B 65%, C 50%) he put B
   live, then C, then found C too small and picked a size between them. The crane is 57.5% of the
