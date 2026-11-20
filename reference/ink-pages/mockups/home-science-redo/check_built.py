@@ -13,8 +13,8 @@ OUT = HERE / (sys.argv[2] if len(sys.argv) > 2 else "built")
 OUT.mkdir(exist_ok=True)
 BASE = sys.argv[1]
 TOPICS = ["Mitochondria", "Free radicals"]
-ART = ["lantern-fuel-v1.webp", "lantern-soot-v1.webp"]
-LINES = ["fuel goes in, and the flame turns it into light", "Every flame leaves a little soot"]
+ART = ["lantern-fuel-v1.webp", "lantern-sparks-v1.webp"]
+LINES = ["fuel goes in, and the flame turns it into light", "Most sparks stay behind the glass"]
 
 with sync_playwright() as p:
     browser = p.chromium.launch(
@@ -32,7 +32,7 @@ with sync_playwright() as p:
         page.on("pageerror", lambda e: errors.append(str(e)))
         page.goto(BASE, wait_until="networkidle")
         page.evaluate("document.fonts.ready")
-        assert page.locator('#science img[src*="workshop"]').count() == 0, "an old workshop picture is still on the page"
+        assert page.locator('#science img[src*="workshop"], #science img[src*="lantern-soot"]').count() == 0, "an old picture is still on the page"
         page.locator("#science-title").evaluate(
             "(e) => scrollTo(0, scrollY + e.getBoundingClientRect().top - 110)"
         )

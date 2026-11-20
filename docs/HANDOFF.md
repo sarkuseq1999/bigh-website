@@ -7,8 +7,10 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 - **Homepage science: the lantern, November 20, 2026 (Claude Code; live, `main` `b4c103c`,
   production `dpl_C8Q9qdyqssAQeeQHrVuETiQqikvP`, demo alias on it; public `qa_home_ink`
-  290/290, `qa_nav` 326/326). Open: Mo finds the Free radicals picture (soot on the glass)
-  not intuitive enough; a new one is being picked, see DESIGN-DECISIONS. Built in a scratch
+  290/290, `qa_nav` 326/326). Since then, built and not yet live: Mo found the Free radicals
+  picture (soot on the glass) not intuitive enough and picked sparks and a scorched poppy
+  (`lantern-sparks-v1.webp`, the line "Most sparks stay behind the glass. The few that get
+  out do harm."); see DESIGN-DECISIONS. Built in a scratch
   worktree on branch `home-science-lantern` because the shared folder had another agent's
   uncommitted work; `studio` does not have these commits yet (fast-forward it to `origin/main`
   once its tracked tree is clean, after deleting the untracked copies of the same files under

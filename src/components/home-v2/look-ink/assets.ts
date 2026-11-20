@@ -72,17 +72,20 @@ export const mito: Picture = { src: `${I}/mito-soft-v1.webp`, width: 2000, heigh
 /** "Make sense of the science.": every picture shows what its words say. Mitochondria and
  *  Free radicals are one old barn lantern (Mo picked A, November 20, 2026: he found the
  *  November 14 ranch workshop not good; of three one-object ideas, a lantern, a wood stove and
- *  a water wheel, he picked the lantern). A few wet washes on white paper, the flame the only
- *  gold leaf; the stage multiplies, so the white vanishes (build_lantern.py). Aging cells shows
+ *  a water wheel, he picked the lantern). A few wet washes on white paper, the flame and its
+ *  sparks the only gold leaf; the stage multiplies, so the white vanishes (build_lantern.py). Aging cells shows
  *  one brain cell at three ages (build_california.py). */
 const S = `${I}/science`;
 export const sciencePaintings = {
   /** The lantern, lit, in dry grass with two poppies: fuel in its base, a flame, light out. */
   energy: { src: `${S}/lantern-fuel-v1.webp`, width: 1448, height: 1086 },
-  /** The same lantern up close: the flame has left soot on the upper glass, and the glass there
-   *  is dimmed (free radicals do harm, Mo, October 23, 2026; the body clears most, not all).
-   *  Black ink only. A comparison; the stage says "Illustrations". */
-  balance: { src: `${S}/lantern-soot-v1.webp`, width: 1448, height: 1086 },
+  /** The same lantern, its flame throwing gold sparks: the glass holds most of them in, and the
+   *  few that get out have scorched the poppy on its right, while the poppy on its left is still
+   *  fresh (Mo picked it, November 20, 2026: soot on the glass, the first lantern picture, was
+   *  not intuitive enough, and he wants no labels and no added part to puzzle out). Free radicals
+   *  do harm (Mo, October 23); the burn is black ink only. A comparison; the stage says
+   *  "Illustrations". */
+  balance: { src: `${S}/lantern-sparks-v1.webp`, width: 1448, height: 1086 },
   /** One brain cell up close at three ages, lined up on one framing: young (strong branches, six
    *  gold power plants), middle-aged (thinner branches, three still gold) and old (thin, pale
    *  branches, one still gold, still at work). The age slider shows one at a time. */

@@ -173,7 +173,7 @@ export const science = {
    *  for aging one per age of the brain cell (October 22). */
   peek: [
     "Like your cells: fuel goes in, and the flame turns it into light.",
-    "Every flame leaves a little soot. What isn’t cleared away dims the glass.",
+    "Most sparks stay behind the glass. The few that get out do harm.",
   ],
   peekAge: [
     "A young brain cell: strong branches, power plants burning bright.",

@@ -1,0 +1,33 @@
+{
+  "title": "Free radicals: a simpler picture",
+  "lead": "Round 2. No labels, and nothing wrapped around the glass. The lantern stays; only the Free radicals painting changes. Mockups on the live homepage, computer and phone; nothing is built yet.",
+  "why": [
+    "Only parts everyone knows: a flame, sparks, and the lantern's own glass.",
+    "The story in one look: the flame throws sparks, the glass holds most of them in, and the few that get out do harm."
+  ],
+  "ideas": [
+    {
+      "key": "g-a",
+      "letter": "A",
+      "name": "The scorched poppy",
+      "pick": true,
+      "say": "Most sparks stay inside the glass. Three get out and scorch the poppy on the right. The poppy on the left is still fresh.",
+      "line": "“Most sparks stay behind the glass. The few that get out do harm.”",
+      "notes": [
+        "My score: 9 out of 10. The harm lands on something living, which is the point: your cells.",
+        "It pairs with the first painting, where both poppies are fresh.",
+        "Small flaw: the burn holes in the petals are tiny. A second take could make them plainer."
+      ]
+    },
+    {
+      "key": "g-b",
+      "letter": "B",
+      "name": "Burns on the wood",
+      "say": "The same idea. The sparks that get out land on the wooden plank and leave two black burns.",
+      "line": "“Most sparks stay behind the glass. The few that get out leave burns.”",
+      "notes": [
+        "My score: 8.5 out of 10. Very clear, but a burnt plank matters less to you than a burnt flower."
+      ]
+    }
+  ]
+}

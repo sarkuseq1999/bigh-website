@@ -815,8 +815,9 @@ These sit on top of `DESIGN.md`.
   painted in a few wet washes. Of three one-object ideas mocked on the real page, computer and
   phone (A a barn lantern, B a cabin wood stove that kept his sparks-and-burns story, C a
   gold-country water wheel with rust), he picked A. Mitochondria: one old barn lantern in dry
-  grass with two poppies, its flame gold leaf (fuel in, light out). Free radicals: the same
-  lantern up close, soot from the flame dimming the upper glass (the harm, in black ink only).
+  grass with two poppies, its flame gold leaf (fuel in, light out). Free radicals was first the
+  same lantern up close, soot from the flame dimming the upper glass; see below for what
+  replaced it the same day.
   The line under each changed with it ("Like your cells: fuel goes in, and the flame turns it
   into light."; "Every flame leaves a little soot. What isn't cleared away dims the glass.").
   The brain cell, the other words, the layout and the motion did not change. Keep it one
@@ -824,16 +825,22 @@ These sit on top of `DESIGN.md`.
   `lantern-fuel-v1.webp`, `lantern-soot-v1.webp` from
   `reference/ink-pages/home-science/build_lantern.py`; DESIGN.md "The Science Stage Rule";
   mockups `reference/ink-pages/mockups/home-science-redo/`.
-  **Free radicals, still open (Mo, November 20, after it went live):** "I think the free
-  radicals image is not inituitive enough for people to fully capture the idea". Soot on the
-  glass does not show free radicals as things, or anything stopping them. Round 1 of fixes
-  (sparks caught by a wire guard round the glass, three name labels on the painting; or a
-  cloth wiping the soot) he turned down: "The labels look too busy, and also the thing
-  wrapped around the glass—I don't know what it is—doesn't really make much sense." So: no
-  labels on a painting, and no added part a visitor has to puzzle out; only what everyone
-  knows a lantern has. Round 2 (waiting for his pick): the flame throws gold sparks, the
-  lantern's own glass holds most of them in, and the few that get out either scorch one of
-  the two poppies (A, Claude's pick) or burn the wooden plank it stands on (B). Review page
-  https://claude.ai/artifact/SN8MypC48mXEPXF6sg2u6T; `shoot_radicals.py` in the mockups folder.
+  **Free radicals: sparks and the scorched poppy (Mo picked A, November 20, 2026, after the
+  soot picture went live):** "I think the free radicals image is not inituitive enough for
+  people to fully capture the idea". Soot on the glass did not show free radicals as things, or
+  anything stopping them. Round 1 of fixes (sparks caught by a wire guard round the glass, three
+  name labels on the painting; or a cloth wiping the soot) he turned down: "The labels look too
+  busy, and also the thing wrapped around the glass—I don't know what it is—doesn't really
+  make much sense." So: no labels on a painting, and no added part a visitor has to puzzle
+  out; only what everyone knows a lantern has. Round 2: the flame throws gold sparks, the
+  lantern's own glass holds most of them in, and the few that get out either scorch one of its
+  two poppies (A) or burn the wooden plank it stands on (B). He picked A: the harm lands on
+  something living, and it pairs with the first painting, where both poppies are fresh. The
+  line under it: "Most sparks stay behind the glass. The few that get out do harm." Built from
+  take 3 (a Codex edit of the take he saw that only repaints the burnt petals softer, without
+  their odd star-shaped holes), its lantern moved onto the first picture's lantern so the
+  lantern holds still when the topic changes. `lantern-sparks-v1.webp` (`build_lantern.py`:
+  `SPARKS`, `MEND`, `SHIFT`). Review page https://claude.ai/artifact/SN8MypC48mXEPXF6sg2u6T;
+  `shoot_radicals.py` in the mockups folder.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.
