@@ -1,0 +1,812 @@
+# Design decisions Mo has stated
+
+Moved out of `AGENTS.md` on November 20, 2026, word for word, so that `AGENTS.md` stays under
+Codex's 32 KiB read limit. These are still binding rules, page by page. Older notes that cite
+"AGENTS.md" for a page's design decision (for example `docs/HANDOFF.md`) mean this file.
+
+These sit on top of `DESIGN.md`.
+
+- **Shared theme, own design.** Every page shares only the theme: rice paper, sumi ink, one gold leaf
+  for energy, Switzer (Ysabeau for titles), the menu bar, the footer, honesty labels, the slow pace.
+  Each page needs its own layout, its own new paintings and its own signature moment. Never reuse the
+  homepage's paintings or its page-long brush line as a page's main structure. Test: "Would someone
+  think this is the homepage?" If yes, redesign. Offer 2-3 concepts as picture mockups before building.
+- **Even rhythm.** Every section uses the same pairing (one painting and its words, sides alternating).
+  One picture per screen, and each chapter brings its own picture. A signature object lives only in
+  the chapter where it means something. The brand name appears once per screen. No fake paper folds.
+- **Don't park every painting on one side.** Mo found NuriCell's chapters boring with every
+  painting on the left (October 19, 2026) and picked B, "each painting gets its own spot", over a
+  plain left-right zigzag. From 960px: lantern right, the capsule in the middle of its four
+  ingredients, the books running in from the page edge, Dr. Liu right, the redwood round right
+  (October 27, 2026; it replaced the brushed 3 × 30 = 90), the bottle left. Phones keep one
+  column. NuriCell only (`nuricell.module.css`). Since November 18, 2026 (Mo's go-ahead for the
+  product pages) Advanced OPC, Turmerific and Nature Calm alternate: from 960px every second
+  chapter after "Why it matters" has its painting right of its words (OPC and Nature Calm: inside,
+  people, buy; Turmerific: inside, daily), as Green Bee Propolis already did for inside and daily
+  (`painted-opening.module.css`; the three checkers' `RIGHT_SIDE`). Live November 18, 2026
+  (`main` `a5ab8cc`).
+- **NuriCell Dr. Liu: the view west (Mo picked A2, October 26, 2026).** Mo wanted the Dr. Liu
+  chapter "more fun" and better designed. Of three ideas (A the Berkeley story, B a magazine cover,
+  C a line in his own words) he picked A, then A2 of two mockups, then asked for it improved. His
+  real portrait (liu-v1, never redrawn) stands on the Berkeley hills over the bay, the Golden Gate
+  in the fog, painted in the site's grey ink (round 1's colour watercolour looked borrowed), dry
+  grass in front of his foot. From 960px one painting runs across the chapter and his name and
+  words sit in its sky; phones get their own framing (him larger, the bridge beside him). No label
+  over his name; the lead says he studied two of NuriCell's nutrients together at UC Berkeley; the
+  2002 study is told as published, with "An animal study, not a test of NuriCell." NuriCell only:
+  Nature Calm keeps the plain portrait. `people.tsx`, `nuricell.module.css`, `build_nuricell.py`
+  (`berkeley()`); mockups `reference/ink-pages/mockups/nuricell-liu/`.
+- **NuriCell research: tap a book, read its study (Mo picked A, October 26, 2026).** Mo asked for
+  the research list to be more fun to read and found the small "The research" label over its
+  heading strange. Each of the seven books in the painting is a button: tap one and its study
+  opens, its book stays dark and the other books fade under a little paper (pointing at a book
+  previews it). Each study is a plain question with a short, honest answer (animal studies say
+  rats or animals first); the two 2003 reviews share one question, "Scientists disagree", and
+  light two books. No label over the heading, no "Show all"; without scripts every answer shows.
+  `nuricell-research.tsx`; masks `books-mask-v1-*.png` from `reference/ink-pages/nuricell/find_books.py`.
+  Mockups: `reference/ink-pages/mockups/nuricell-research/`.
+- **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
+  October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
+  grey "What's inside" label odd and the three grey notes under the plate messy, and the
+  "Why these four work together" columns dull. The gold leaf now rises out of the powder and
+  settles where it is painted, then each flake keeps turning slowly, catching the light like
+  real gold leaf (picked over a never-ending updraft). The label is gone (the heading says it);
+  "per serving of 3 capsules" sits right under the heading (the heading says "every capsule",
+  the amounts are for 3); the other ingredients are one label card; the research note is said
+  once, at the chapter's end. The pairs became three little scenes (picked over a scroll story
+  and a pick-a-partner game); their powder heaps were replaced on October 27 (next rule).
+  NuriCell only (`nuricell-leaf.tsx`; pictures `build_nuricell_gold.py`). Mockups:
+  `reference/ink-pages/mockups/nuricell-inside/`.
+- **NuriCell pairs: on the ranch, no powder (Mo picked B, October 27, 2026).** Mo found the
+  pairs' white powder heaps with gold on top "a little strange, like drugs". Of three painted
+  ideas (A two hands passing gold leaf, B an old California ranch, C a gold trail map with four
+  camps) he picked B. Each pair is a Codex painting of two ranch things that need each other,
+  gold marking the energy: firewood and the stove with a gold fire (acetyl-L-carnitine +
+  alpha-lipoic acid, painted flipped so the wood comes first), the windmill pouring gold water
+  into its tank (alpha-lipoic acid + creatine), the Pony Express rider and his horse with a gold
+  letter (choline + acetyl-L-carnitine). The pair's names sit under each painting; the words
+  are unchanged. Each plays once as it comes into view (Play again replays it): the light runs
+  up the fire, the wheel turns once while the water pours and light spreads across the tank,
+  the light crosses the letter. Gold behaves like gold leaf (no glow, no sparkle). No powder,
+  pills, capsules, tins or lab glass in these paintings: anything that could read as drugs.
+  The wheel turns over Codex's painting of the same scene without it. NuriCell only
+  (`nuricell-scenes.tsx`, `nuricell-pairs.ts`; pictures
+  `reference/ink-pages/nuricell-pairs/build_nuricell_pairs.py`). Mockups:
+  `reference/ink-pages/mockups/nuricell-pairs/`.
+- **NuriCell chapter 6: "The same formula for about 20 years" (Mo picked 2, October 27, 2026).**
+  Mo found "How to take it" (the egg cup and the brushed 3 × 30 = 90) strange, then found "3
+  capsules a day" too thin for a chapter: the buy box right under it and the first question say
+  it too. Of round 3's two ideas (1 a painted California day with a line per moment, 2 the
+  formula's years) he picked 2: the cut end of a young California redwood (a Codex painting), the
+  ring about 20 rings in from the bark laid in gold leaf (with the kit's light mask). The heading
+  "The same formula for about 20 years.", a lead in ink ("Dr. Liu chose its four nutrients. We
+  haven't changed them since.") and a note naming the four. No label, no sum; from 960px the
+  words left and the round right, phones the round over its words. "About 20 years" is Mo's
+  "almost 20-something years"; no start year is on file, and Mo put it live with "about 20 years"
+  (October 28). If a real start year turns up, change the words (m962-m964) to match. NuriCell only
+  (`daily.tsx` `story`, `nuricell.ts`); OPC and Turmerific keep the sum. Picture `rings()` in
+  `build_nuricell.py`; mockups `reference/ink-pages/mockups/nuricell-daily/` (round3).
+- **NuriCell "Tiny power plants": a California lighthouse and fewer words (Mo picked B, October
+  26, 2026).** Mo asked for another kind of lamp and found the words too much and not well ordered,
+  the grey "Why cellular health matters" line on top strange. Of three California lights (A a Gold
+  Rush miner's lantern, B a coast lighthouse, C a San Francisco gas street lamp) he first picked A
+  (the paper lantern read as Asian), then saw A built beside the B sample and switched to B the
+  same day. Its light still comes on as you scroll (the lamp room dark, then lit, with its beam).
+  On phones and tablets it stands taller than the template's paintings (55% of the window, not
+  46%) so its lamp is more than a dot. The label over the heading is gone, the three paragraphs are
+  one lead-in line on the heading's left edge (no indent), and the brain's 2% is set small and grey
+  beside a big 20% (stacked, small first, on phones). NuriCell only (`why.tsx`,
+  `nuricell.module.css`; pictures `build_nuricell.py`, Codex paintings). Mockups:
+  `reference/ink-pages/mockups/nuricell-why/`.
+- **Product openings, the words under the name: "Title face" (Mo picked C, October 26, 2026).**
+  Mo found the bottom-left of NuriCell's first screen weak and unfinished (grey words, a thin side
+  line, ending above the buy box). He turned down Dr. Liu's photo there: the opening is shared, and
+  pages without him (Turmerific and Propolis have no scientist chapter) would look lesser. So a fix
+  for the shared opening uses only what every product has. The headline is in Ysabeau; the purpose
+  is a large lead in ink that runs under the bottle, with no side line; from 960px the two sit
+  together at the foot of their side and end where Add to cart ends. All four products on the
+  shared opening (`opening.tsx`, `product-ink.module.css`); Green Bee Propolis keeps its own
+  approved opening. Mockups: `reference/ink-pages/mockups/nuricell-hero-left/`.
+- **NuriCell opening: "A clear day" (Mo picked A, November 10, 2026; live the same day, `main`
+  `4d846c7`).** Mo asked again for a better first screen for NuriCell (the 18
+  ideas of October 23-24 were all turned down). Three ideas were mocked on the real page, each
+  keeping the big "Nuri [bottle] Cell" he had asked to keep and giving the bottle a world to stand
+  in: A a clear day (a painting), B blue and gold (one blue brush stroke behind the name, a strip of
+  gold leaf under the bottle), C morning shade (an oak branch's shadow, no paint). He picked A: one
+  loose ink-and-wash painting behind the name and the bottle, a clear California morning sky over
+  the Pacific and a low grassy bluff with a few poppies and two stones. From 960px the name sits on
+  the horizon (since November 11 a strip of sky above it: next rule) and the real bottle stands on
+  the bluff; in one column the bottle stands on the bluff
+  under the name. As the page opens the morning fog lifts, once (reduced motion: no fog). The words
+  and the buy box stay on bare paper under the grass. The painting fills the window's width at
+  every size (two side pieces join it in a window wider than 1600px). Paint the coast loosely: ink
+  brush first, light washes, small poppies as single dabs (the first take, flat washes and big
+  poppies, read as a greeting card). No words about fog or a clear head near it: the lifting fog
+  must never become a promise ("clears brain fog"). NuriCell only: Advanced OPC, Turmerific and
+  Nature Calm keep the plain opening, Green Bee Propolis its own. `nuricell-opening.tsx`,
+  `nuricell.module.css`, `opening.tsx`; picture `reference/ink-pages/nuricell/build_nuricell_opening.py`
+  (a Codex painting, `paint_opening.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round6/`.
+- **NuriCell opening: room and sunshine (Mo picked A, November 11, 2026; live the same day,
+  `main` `dca5fc8`).** Mo found the big name sitting right on the sea line and asked
+  for space between them, for more room between the painting and the words under it ("Stay sharp.
+  Live fully." and the two highlights), and for "some kind of reflection of the sun" in the upper
+  right corner: "California sunshine". From 960px "Nuri" and "Cell" are lifted 0.1 of their size,
+  so a strip of sky lies between their foot and the horizon; the bottle stays on the bluff, so its
+  middle now sits 0.1 name-sizes under the letters' middle (the October 10 rule, adjusted). The
+  words start 0.13 name-sizes under the last of the grass (20px on a phone). Of two sunshine ideas
+  on the real page (A light from the corner, B a small painted sun with its sparkle) he picked A:
+  the sun is just out of the picture, its warm light pours in from beyond the window's top right
+  corner and its sparkle lies on the sea under that corner. Both are Codex paint laid in the
+  painting's blend group (only the light is taken from Codex's sky, so the opening's own blue
+  stays) and placed against the window's right edge, so the light is in the corner at every
+  width. No sun disc here (it crowded "Cell" on a laptop, and the homepage has its sun), no lens
+  flare or glow, and the light never ends inside the window (a first take left a hard line along
+  a tablet's top). `nuricell-opening.tsx`, `nuricell.module.css`, `nuricell-sun-art.ts`,
+  `opening.tsx` (`data-half`); pictures `reference/ink-pages/nuricell/build_nuricell_sun.py`
+  (`paint_sun.sh`); mockups `reference/ink-pages/mockups/nuricell-opening/round7/`.
+- **Advanced OPC opening: a vineyard at harvest (Mo picked B, November 16, 2026).** Mo's goal
+  that day: every product page superb. The four product pages after NuriCell still opened on bare
+  paper (the same template, only the bottle changed). Of three seasons of one California vineyard
+  mocked on the real page (A spring with yellow mustard between young vines, B late summer before
+  harvest, C autumn colour) he picked B, Claude's pick: one loose ink-and-wash painting behind the
+  name and the bottle, golden California hills with valley oaks under a clear sky, and in front
+  the ends of vine rows heavy with dark grapes (OPCs come from grape seeds: the picture says so).
+  The real bottle stands on the dry grass between the rows, a little of the painting's own grass
+  in front of its foot; from 960px the name is lifted off the hills (a strip of sky under it), as
+  NuriCell's is off the sea. The words and the buy box stay on bare paper under the grass. Grapes
+  are painted as loose bunches, never a field of dots. Nature Calm keeps the plain opening until
+  its own part (Turmerific's field followed the same day). `painted-opening.tsx`,
+  `painted-opening.module.css` (shared with Turmerific since the same day), `opc-opening-art.ts`;
+  picture `reference/ink-pages/opc/build_opc_opening.py` (Codex painting
+  `opening-harvest-ah`, `paint_opening.sh`); mockups `reference/ink-pages/mockups/opc-opening/`.
+  Live November 16, 2026 (`main` `7c8dff5`).
+- **Advanced OPC "A balance worth keeping.": the gold is in the seeds (Mo picked B, November 17,
+  2026).** The chapter's grey ink grapes lit gold from inside were painted as an East Asian ink
+  painting, and their gold sat in a yellow haze (a glow). Of two California-color paintings mocked
+  on the live page (A a bunch that ripens from green to violet, no gold; B a few grapes and one
+  grape cut in half) he picked B, Claude's pick: as you arrive, the cut grape's plain brown seeds
+  turn to gold leaf, spreading from the seeds (OPCs come from grape seeds). The cut grape lies in
+  front, larger than the whole grapes, so the seeds read on a computer. No band of light on the
+  seeds: the kit's scroll-linked band rested on them while their words were read and washed them
+  pale (as on About's oak); plain gold leaf at rest. The words did not change. `build_opc.py`
+  (`seeds()`, Codex take `why-seedsbig-ah`), `opc-art.ts`; mockups
+  `reference/ink-pages/mockups/opc-why/`. Live November 17, 2026 (`main` `7b7ca60`).
+- **Advanced OPC "Inside every capsule": all nine plants (Mo picked B, November 17, 2026).** The
+  plants painting was six plants in grey ink (an East Asian ink study). Of two California-color
+  paintings on the live page (A the same six in color, B all nine plant sources) he picked B,
+  Claude's pick: three rows of three, the formula's nine plant sources (grapes for red wine, grape
+  seeds, pine bark, bilberries, white, green and black tea, an orange slice, noni, a marigold,
+  sweet clover), as the page says "Nine plant extracts". The words and the list did not change.
+  `build_opc.py` (`plants`, Codex take `inside-nine-ah`); mockups
+  `reference/ink-pages/mockups/opc-inside/`. Live November 17, 2026 (`main` `23cf796`).
+- **Advanced OPC's other paintings: the same pictures, in color (Mo picked A, November 17,
+  2026).** Of A (keep each approved design, repaint it in the page's new California color, show
+  the four together) and B (new ideas, one at a time), Mo picked A for the research lens, Dr.
+  Wang's mortar, the plate (its brushed 2 × 60 = 120 unchanged) and the vine scene the real bottle
+  stands in. Codex repainted each October painting with its composition kept: a brass lens with a
+  walnut handle, a pale granite mortar, a blue-rimmed plate, sage vines on straw grass. The
+  capsules stay plain grey-white (their real color is not known); the opening card's capsules
+  still come from the October plate. `build_opc.py` (`paint_colour.sh`, takes `<key>-colour-a`);
+  before and after `reference/ink-pages/mockups/opc-colour/`. Live November 17, 2026 (`main`
+  `cf7a522`).
+- **Advanced OPC's questions: the same pictures, in color, no powder (Mo picked A, November 17,
+  2026).** Its six question paintings repainted in the page's California color, compositions
+  kept; the capsule question's open capsule spilling white powder beside a scoop of rice flour (it
+  can read as drugs) became two closed capsules on a green leaf (the capsule is plant cellulose).
+  Capsules stay plain grey-white. OPC only (`q-*-v2`); the other products keep their October
+  question paintings for now. `reference/ink-pages/questions/` (`build_questions.py` `COLOUR`,
+  `paint_colour.sh`); before and after `reference/ink-pages/mockups/opc-questions/`. Live November
+  17, 2026 (`main` `7655eaa`).
+- **The other product pages: the same way, page by page (Mo picked A, November 17, 2026).** With
+  Advanced OPC all colour, Mo chose the same approach for Turmerific, Nature Calm and Green Bee
+  Propolis (and NuriCell's questions): each page's grey ink paintings repainted in California
+  color, compositions kept, fixing anything that breaks a rule (white powder that reads as drugs),
+  one page's set shown together for one yes. Turmerific first: its Why root (both layers: the
+  plain root now fresh orange at its cut faces, the gold still soaking out), the research notebook
+  and its five questions (the curcumin question's big heap now a golden ochre spice, never white
+  powder). `reference/ink-pages/turmerific/` (`paint_colour.sh`, `build_turmerific.py`),
+  `reference/ink-pages/questions/`; before and after `reference/ink-pages/mockups/turmerific-colour/`.
+  Live November 17, 2026 (`main` `4636cb0`). Nature Calm next: the Big Dipper over a dusk-blue
+  ridge (no halos), the moon painting (its thin crescents, which read as brackets, now clear
+  crescents) and its five questions. Its ingredients are mostly made compounds, so the two
+  powder questions were not given plants (that could mislead): "What is the capsule made of?"
+  is two closed capsules beside dry plant stalks, "Tested in a clinical trial?" an open book
+  with a hand lens, a lavender sprig and one capsule. Before and after
+  `reference/ink-pages/mockups/nature-calm-colour/`. Live November 18, 2026 (`main` `d06e4b9`).
+  Later that day (part 14 of the "superb" pass, on Mo's go-ahead) the Big Dipper's sky was
+  painted: on bare paper its seven gold dabs read as scattered coins, not stars. The same seven
+  stars in the same places and the same ridge, now in a dusk wash (deep twilight blue down
+  through violet to a warm glow over the ridge) that dissolves into the paper at its edges. The
+  stars stay plain gold leaf with nothing round them; their gold mask stops above the glow
+  (`STARS_GOLD_ROWS`). `build_nature_calm.py` (`stars()`, Codex edit `dusk-colour-a`); before and
+  after `reference/ink-pages/mockups/nature-calm-dusk/`. Live November 18, 2026 (`main` `190aa0a`).
+  Green Bee Propolis last: the bee tree (both layers: a colour repaint with gold cracks and a
+  Codex edit with the cracks open; in colour the bark and the bees pass the gold test, so the
+  cracks are found where the two layers differ), the alecrim specimen, the mug (a sage glaze) and
+  its six questions (the capsule answer two closed yellow capsules on a leaf). NuriCell's six
+  questions the same way (its capsule and study answers lost their powders: closed white capsules
+  by dry stalks, an open book with a hand lens and a redwood sprig). NuriCell's chapters keep the
+  grey ink Mo chose for them (the lighthouse, the books, Dr. Liu at Berkeley). Before and after
+  `reference/ink-pages/mockups/propolis-colour/`.
+  **Mo's go-ahead for this work (November 18, 2026):** "You don't have to wait for me ... if you
+  need to deploy live, just deploy live. If there are choices, I will just go with your
+  recommended choices." For the product-pages colour work, push live once the built-site checks
+  pass and take Claude's recommended option; still show him the result (a review page) after.
+- **Turmerific opening: the turmeric field (Mo picked A, November 16, 2026).** The second product
+  to leave bare paper. Of three California places for turmeric mocked on the real page (A a small
+  Ventura County farm's turmeric field, B turmeric along a whitewashed stucco garden wall with a
+  lemon tree, C the Ojai Valley's bluffs glowing at dusk, which read as Arizona) he picked A,
+  Claude's pick: rows of turmeric (broad lance leaves, a few pale pink flower spikes) on warm
+  earth in late-afternoon light, a few freshly dug roots with bright orange cut ends beside the
+  rows (where the golden compound comes from), a eucalyptus windbreak and soft hills behind. The
+  real bottle stands on the bare earth between the rows. Same painted opening as Advanced OPC's
+  (`painted-opening.tsx`, shared); picture `reference/ink-pages/turmerific/build_turmerific_opening.py`
+  (Codex painting `opening-field-ah`); mockups `reference/ink-pages/mockups/turmerific-opening/`.
+  Live November 16, 2026 (`main` `1ebc6d2`).
+- **Nature Calm opening: the high meadow (Mo picked A, November 16, 2026).** The last product on
+  the shared opening to leave bare paper. Of three calm California places mocked on the real page
+  (A Tuolumne Meadows in Yosemite's high country, B Tomales Bay still as a mirror at dawn, which
+  repeated the Lake Tahoe chapter's still water, C Eastern Sierra aspens in autumn) he picked A,
+  Claude's pick: a wide green meadow on a calm summer evening, a slow stream winding through it in
+  two curves, a line of lodgepole pines and pale granite domes behind; the real bottle stands in
+  the grass. The green sits with the green bottle. Same painted opening as OPC's and Turmerific's
+  (`painted-opening.tsx`); picture `reference/ink-pages/nature-calm/build_nature_calm_opening.py`
+  (Codex painting `opening-meadow-bh`); mockups `reference/ink-pages/mockups/nature-calm-opening/`.
+  Live November 16, 2026 (`main` `903ecad`).
+- **Product chapters: no small labels over the headings (Mo, November 16, 2026).** Mo found the
+  small grey line over NuriCell's chapter headings strange three times ("Why cellular health
+  matters", "What's inside", "The research") and it came off there. Shown before and after on the
+  live pages, he said yes to taking it off Advanced OPC Formula, Turmerific and Nature Calm too:
+  each chapter now starts with its heading. The buy chapter keeps its line (the product's
+  tagline, "From nature"). Green Bee Propolis keeps its numbered labels ("01 | Why green
+  propolis"), part of its own chapter system with the index row under its opening. Don't put
+  labels back over product chapter headings. `chapter-labels.ts`; mockups
+  `reference/ink-pages/mockups/product-labels/`. Live November 17, 2026 (`main` `8f21216`).
+- **About, "Our purpose" and the circle (October 19, 2026).** Mo found the seedling too slight for
+  the purpose and its mission line too small to read. He picked a big painted valley oak (a rope
+  swing above the ground, a gold light in the roots you can't see); it stands larger than the
+  page's other paintings on purpose (repainted in soft colour, with people, on November 10:
+  "About 'Our purpose'" below). The mission line sits a step under the heading, in ink, not
+  the grey body size. Later the same day Mo found the opening circle "too round, not artistic
+  enough" and the spark of gold light that ran round it "fake". He picked circle A, "heavy to
+  dry" (a wet, heavy start that thins into dry streaks and lifts before it closes), and the gold
+  leaf floating down onto it like a real flake, settling, then catching the light. Gold leaf
+  behaves like real gold: no glow, no spark, no twinkling stars, never red. On October 26 Mo
+  found that leaf's fall and shine cartoonish and picked A of three ideas: no gold on the circle
+  at all (the opening's gold is the sunlit hilltop below it), over the hilltop warming to gold
+  and a still leaf. He also found the circle too small on a big screen ("not immersive enough").
+  Of two bigger layouts built on the real page he picked A: the circle fills the first screen
+  and the title is written inside it (on a phone the lead sits under it), over B, a bigger
+  circle with the words under it, which hardly grew on a short laptop. Mockups:
+  `reference/ink-pages/mockups/about-circle-size/`. (The circle left the page on October 28:
+  next rule.)
+- **About opening: the poppy meadow, thinning into the paper (Mo picked A, then A, October
+  27-28, 2026).** The big circle reminded Mo of the film The Ring ("a little scary"). Of three
+  painted ideas (A a poppy superbloom, B a morning walk, C the name painted) he compared A and B
+  on the live site and picked A: golden California hills in spring poppies fill the first screen,
+  the words in the painting's empty sky, the poppies' gold arriving from the foot of the screen
+  as the page opens (gold leaf: no glow, no shine). He then found the first screen and Our purpose
+  "don't transition well" (the painting stopped in a straight line on its biggest poppies) and
+  picked A of two painted ends over B, morning fog: below the first screen the meadow thins out,
+  fewer and smaller poppies, a few last ones and dry grass, then bare paper, then the oak. Never
+  end the meadow in a straight line or a gradient fade. The painting's paper is cut to
+  transparency (no multiply). `meadow.module.css`, `meadow-art.ts`; pictures
+  `reference/ink-pages/about-opening/build_about_opening.py` (Codex painting plus Codex's
+  continuation of its foot, `join_foot.py`). Mockups: `reference/ink-pages/mockups/about-opening/`
+  and `about-opening-join/`.
+- **About "Our purpose": the oak on a sunny afternoon (Mo picked A, November 10, 2026; live the
+  same day).** Mo found the purpose's oak "a little dark or
+  scary": black ink right after the sunny meadow, bare roots hanging in empty paper, and an empty
+  swing (the words say "a full life", and nobody was in the picture). Of three painted ideas on the
+  real page (A the same oak on a sunny afternoon, B Monterey Bay above and below the water, a
+  gold-leaf kelp forest under a sea otter, C a San Francisco cable car over its hidden gold cable)
+  he picked A: the valley oak in the soft colour of the valley at dawn, a child on the swing, a
+  grandmother pushing, a dog and a picnic, the roots inside a slice of warm earth, a patch of gold
+  leaf among them. A picture of a full life has people in it. Never an empty swing, bare roots
+  hanging in empty paper, or black ink here. It still stands larger than the page's other
+  paintings. Its gold leaf is plain gold at rest: the kit's band of light crosses it only as the
+  painting comes up (on the kit's own range the band stood on the patch when the painting was
+  centred and washed it pale, like a hole in the paint). `purpose-art.ts`, `about-ink.tsx`,
+  `circle.module.css`; picture `reference/ink-pages/about-purpose/build_about_purpose.py` (Codex
+  painting `oak-1-b`, `paint.sh`); mockups `reference/ink-pages/mockups/about-purpose/`.
+- **About "Our ingredients": the globe (Mo picked A, the map, November 6, then B, the globe,
+  November 9, 2026; on the draft branch `about-chapters`, not live).** Mo liked the idea of "Each
+  plant, from where it grows best." but not its first design (four specimens beside a two-by-two
+  key). He picked a painted world map with each plant at its place and gold trails home to
+  California, then said not to name places at all (he is still finding out where the pine bark
+  and grape seed come from): the part should only give the feeling that each plant comes from the
+  region of the world best for its natural growth. Of two no-place designs (A the same map, the
+  plants in the seas; B a globe) he picked B: a painted globe over the real land, California
+  facing you, the four plants standing just past its rim all round it, and a trail of gold-leaf
+  dabs from each over the globe to California, laid one plant after another, once, as it comes
+  into view. Each plant carries the kind of place it thrives in ("Sunny slopes"), never a
+  country. On phones the trails start at the globe's rim and the plants are listed under it.
+  `plants-map.tsx`; pictures `reference/ink-pages/about-plants/` (`render_globe.py`, `globe-1-a`);
+  mockups `reference/ink-pages/mockups/about-plants/` (`no-places/`).
+- **About "Proudly made in California.": the valley at dawn (Mo picked F, November 9, 2026; on
+  the draft branch `about-chapters`, not live).** Mo did not want the five bottles in the draft's
+  painting ("I'd rather not have the product bottle there"). Of five no-bottle ideas on the real
+  page (A a fruit-crate label, B a record book written in as you scroll, C California painted
+  over its outline, D a clipboard ticked in gold on a sunlit wall, F the Central Valley at dawn;
+  a Gold Rush pan was tried and dropped) he picked F: one painting across the chapter, the
+  Central Valley in first light with some fields in gold leaf, the heading in its empty sky and
+  the three GMP rules in a row under it. "Made in California" goes back into the promise list.
+  `made-mockups.tsx` (`ValleyIdea`); pictures `reference/ink-pages/about-made/` (`valley-1-b`);
+  mockups `reference/ink-pages/mockups/about-made/`.
+- **About "Our experience": the sequoia, a little coloured (Mo picked 3, November 11, 2026;
+  live November 12, `main` `f46a497`).** Mo asked for About's last three parts (Our experience, Our
+  promise, "Curious about the science?") to take the site's California colour, one part at a
+  time. For Our experience he set aside three new paintings (A Riverside's parent navel orange
+  tree, B a San Francisco sourdough starter, C a seaside carousel): "I think the sequoia tree is a
+  good idea. Maybe just make it a little bit colored." Of three colourings on the real page (1
+  the ink painting tinted stroke for stroke, 2 Codex's repaint in thin watercolour, 3 that repaint
+  made softer) he picked 3: the same giant sequoia beside a young one, cinnamon bark, a sage
+  crown, pale blue-green firs in the mist, its colour mixed a third of the way back to grey so it
+  reads as a little coloured; the gold leaf on the trunk at full colour. Its gold takes the
+  purpose oak's light timing (plain gold at rest). The words and numbers did not change.
+  `experience-art.ts`, `circle.module.css`; picture
+  `reference/ink-pages/about-experience/build_about_experience.py` (Codex painting
+  `sequoia-colour-b`, `paint_colour.sh`); mockups `reference/ink-pages/mockups/about-experience/`.
+- **About "Our promise": the dots in colour (Mo picked A, November 12, 2026; live the same day,
+  `main` `57a87b5`).**
+  The second of About's last three parts. The four grey ink dots (black to pale) over "What you
+  can count on." Of three ideas on the real page (A the same dots in colour, B four California
+  wildflowers, C one poppy counting from bud to bloom, Claude's pick) Mo compared B and C side by
+  side, then said "Let's try A": four loose watercolour blooms, poppy orange, golden-hill straw,
+  Pacific blue and sage green, the colours of the page's own paintings. Their paint stands as wide
+  as the grey dots' did (92px squares at 1440px, 64px from 1000px down, a 72px row picture on a
+  phone); they bloom in one after another as before. The words did not change. `promise-art.ts`,
+  `circle.module.css`; pictures `reference/ink-pages/about-promise/build_about_promise.py` (Codex
+  painting `dots-colour-2`); mockups `reference/ink-pages/mockups/about-promise/`.
+- **About "Curious about the science?": the tide pool with a guide (Mo picked B, November 13,
+  2026; live the same day, `main` `05356fc`).** The last of About's three parts: the grey ink reading glasses on a
+  notebook. Of three ideas on the real page (A the same glasses in colour, B a tide pool with a
+  guide, C a field notebook by a creek) he picked B: low tide on the Monterey coast, a curious
+  older woman in a straw hat looks into a tide pool with a hand lens while a park naturalist
+  kneels beside her and points to a sea star; cypress on the headland behind. It shows the words:
+  you're curious, and someone who knows helps you look. A 3:2 painting a plain height tall (495 by
+  330px at 1440px; the glasses were 470 by 238px), so the two people are not specks. Its people
+  are loose (faces two or three strokes). The words did not change; new description m1252 (draft
+  translations). `closing-art.ts`, `about-ink.tsx` (`TIDEPOOL`), `circle.module.css`; picture
+  `reference/ink-pages/about-closing/build_about_closing.py` (Codex painting `tidepool-1`);
+  mockups `reference/ink-pages/mockups/about-closing/`.
+- **Green Bee Propolis opening:** keep the real bottle between the product-name text on desktop
+  (Mo, October 16, 2026). Refine that composition; do not replace it with all the words beside the
+  bottle. On October 18, Mo selected mobile option B, Editorial pair: Green / Bee / Propolis
+  stacked on the left beside the real bottle, then the short description and original purchase
+  card. Put the longer explanation and provenance below the purchase controls on mobile only.
+  Preserve the approved desktop appearance.
+  Mo approved Bold Signature A on October 18: heavy Switzer (750), Green left, the real bottle
+  centred, Bee / Propolis right. Keep the original outlined One bottle card with the capsule,
+  overlapping 45-day badge, daily count, and a centred Add to cart without an arrow.
+  Preserve the approved desktop opening, mobile B and purchase card. (Its Weathered Taupe A
+  footer sign of October 18 was replaced on October 19 by the site-wide redwood park sign.)
+  **Its painted world (November 18, 2026, on Mo's go-ahead for the product pages; he saw it live
+  and said "Keep it").** It was the
+  last product opening on bare paper. The composition above is unchanged; behind it lie the hills
+  of Minas Gerais on a clear dry-season morning (where the propolis comes from, so the place is
+  Brazil, not California): a big sky with the name in it, a thin band of far hills with a golden
+  ipê in bloom just right of the bottle and a few tiny hive boxes on the left, a red earth track,
+  low alecrim shrubs in front. The name's baselines sit only about a fifth of the bottle's height
+  above its foot, so the bottle stands back on the far hills (not on an empty spot in front, as
+  on the other painted openings) and no land rises over the name: a strip of sky stays under its
+  letters at every width (`qa_propolis_ink` `opening`). The words start under the last paint.
+  Keep the ipê out from behind the letters (a first take hid it behind "Propolis").
+  `propolis-opening.tsx`, `propolis.module.css`, `propolis-opening-art.ts`; picture
+  `reference/ink-pages/propolis/build_propolis_opening.py` (Codex painting `opening-ipemid-bh`,
+  `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`. Live November
+  18, 2026 (`main` `36fc975`).
+- **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
+  trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
+  next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the
+  one-brushstroke sign with a California poppy and asked for the feel of California's park signs,
+  then picked the redwood park sign: a muted redwood plank with rounded corners, a cream carved
+  border and cream letters, sage grass and the poppy, painted loosely with no pen outlines. Keep
+  its brown muted (ink, not orange) and its letters at 4.5:1 or more. Mockups:
+  `reference/ink-pages/mockups/fda-sign/`.
+- **Footer: the copyright line comes last (Mo, October 26, 2026).** "© 2026 BiGH. Be in Good
+  Health." and "Back to top" are the page's very last line, under the park sign (© left, Back to
+  top right; on phones Back to top above, © last). The grey preview note that sat under the sign
+  ("Educational content is for general information…") is gone; the product window still says
+  ordering is not open.
+- **Footer: two California quail by the park sign (Mo picked A1, November 3, 2026).** On
+  October 26 Mo asked for better ideas for "Stay sharp. Live fully." and its crane and picked B,
+  "end of the trail" (pose C): the painting leaves the promise and stands in the grass at the FDA
+  park sign's right, looking at the sign's California poppy; the promise stands alone, a size
+  smaller. On November 3 the red-crowned crane there read as Chinese, like the opening's crane
+  and the old close's cranes. Of three California animals (A California quail, the state bird; B
+  a desert tortoise; C a black bear cub) he picked A, then asked for the quail "a little more
+  painting like" and picked A1 of two looser takes (A2 ink and wash): two quail painted in a few
+  wet washes in the opening hummingbird's hand, no outlines, one keeping watch, the other bending
+  toward the poppy. A painting with its own thin colour, the same on every page (no tinted twin).
+  On phones the sign narrows for it (seven lines at 390 px, about seven under 390) and the quail
+  stay inside the column. The homepage's brush line still ends as a stroke under the words.
+  `closing-quail.tsx`, `ink.module.css` (`.look .rest`), `fda-statement.tsx`; picture
+  `reference/ink-pages/footer-crane/build_footer_quail.py` (Codex paintings, `paint.sh`).
+  Mockups: `reference/ink-pages/mockups/footer-crane/` (`animals/` for the quail).
+- **Phone menu's foot: the hummingbird at a California fuchsia (Mo picked E, November 3,
+  2026).** The crane at rest at the foot of the phone and tablet menu (the footer's old finale in
+  miniature) was the last crane on the site. Of five ideas put into the real menu (A one quail, B
+  the footer's two quail, C poppies; then, on "Can we try with the hummingbird?", D Allen's
+  perched on a twig and E the homepage's own bird at a California fuchsia) he picked E, then
+  found its beating wings "annoying, like flys" at the menu's size: here the wings never beat.
+  They rest on their first frame, raised as painted (the homepage's rest with reduced motion),
+  baked with the body into one picture. The bird is the homepage's own, never redrawn; only the
+  fuchsia is a new painting (Codex), its coral calmed so the bird leads. No brush stroke under it
+  (one cut through the grass like a bar). Its room keeps the crane's: on phones a set size from
+  the window's height (130-230px), on tablets the room left under the words. The homepage's
+  opening bird beats its wings only as it arrives (November 4). `nav-inscription.tsx` (`.sheetBird`, `useBirdRoom`),
+  picture `menu-hummingbird-v1.webp` from `reference/ink-pages/menu-finale/build_menu_finale.py`;
+  mockups `reference/ink-pages/mockups/menu-finale/`.
+- **Homepage opening: giant sequoias and a hummingbird (Mo picked, October 28, 2026).** Mo's
+  colleagues loved the opening's watercolour and gold sun but said the whole read as
+  Chinese, "made in China": the misty peaks with pines and the red-crowned crane. Of California
+  scenes painted on the real page (A Big Sur sunset, B golden hills, C Yosemite) Mo asked how a
+  scene relates to "Good health starts with your cells." and picked D: a grove of giant sequoias
+  (they live more than 3,000 years) in the morning sun, the sun in a clearing beside one giant
+  trunk, the gold sun the same gold as "cells.". The crane goes: of three birds he picked Anna's
+  hummingbird (California's year-round hummingbird; for its size it burns energy faster than
+  almost any animal, its flight muscles packed with mitochondria) over a golden eagle and a grey
+  sandhill crane. Keep the stroke that leaves the bird and runs down the page (Mo likes it).
+  **First screen only** (Mo, October 28): the crane stayed below it at first; the closing
+  painting's cranes left on November 2 ("Homepage close", below), the footer's crane and the
+  phone menu's on November 3 ("Footer: two California quail" and "Phone menu's foot", above).
+  No crane is left on the site. Built: the painting covers the whole opening
+  (`opening-sequoias-v1.webp`), the sun in the clearing (at most 1000 px into the column), the
+  hummingbird in the crane's frame (Anna's as a still until October 29, below), the line pinned
+  to the painting's forest floor (`opening-land`, `ground()` in `brush-route.ts`). Then Mo found
+  the desktop sun "a little too big or too close to the tree" and picked A of three placements
+  (A smaller, same spot; B smaller in the clearing's middle; C low behind the firs): the desktop
+  sun is three quarters of its size (218 comp px), shrunk about its own centre; phones keep
+  theirs. Mockups `reference/ink-pages/mockups/home-sun/`.
+  **The bird: Allen's, painted loose, wings beating as it arrives (Mo, October 29 and November
+  4).** Mo asked for other
+  hummingbirds and wings "always moving", like a dragonfly's. Of today's Anna's, a green female
+  Anna's and Allen's (copper, like the redwood bark; it nests almost only on the California
+  coast) he picked Allen's, then asked for it "more painting-like" and picked C, painted in a
+  few wet washes in the old crane's hand (fresh Codex paintings: edits of a detailed bird keep
+  its speckle), then found the beak "too realistic": the beak is one dry grey brush stroke, no
+  shine. Its orange is calmed toward the redwood's copper so the gold sun leads. The wings are
+  its own painted wings, lifted out and beaten about the shoulder, six blurred frames a beat at
+  ten beats a second (`hummingbird-v2-near/-far.webp`, `build_wings.py`), the far wing behind
+  the body; paused once the opening leaves the window, resting raised with reduced motion. On
+  November 4 Mo found the non-stop beat "a little annoying", like a fly (as in the phone menu the
+  day before), and picked A of three (A beat as it arrives, then rest; B short bursts; C always
+  still): the wings beat at full speed for 3 s while the bird blooms in, slow over three beats,
+  then rest on their first frame, raised as painted. Never a beat that runs on. On November 11
+  Mo found the wings swinging down by the belly wrong ("normally I just see the upper wings
+  move"): a hovering hummingbird beats in a flat figure 8 at shoulder height. The wings now fan
+  above the body, from raised as painted out to about level with the shoulder (the near wing
+  back over the back, the far wing forward over the head), never through the shoulder or below
+  the body (`RIG` in `build_wings.py`). On November 12 Mo found the beat too slow ("so fast you
+  can barely see his wings ... right now ... it's like a butterfly"): ten clear flaps a second,
+  slowing to four. A hummingbird beats forty to fifty times a second, faster than a screen can
+  show, so the eye sees a pale fan. The wings now beat as a haze: each frame the wing blurred
+  over most of a beat, at a different point of the stroke, stepped once a screen frame so the
+  fan shimmers; about 3 s as the bird arrives, then a quick fold onto the raised wings, then
+  rest. No slow flaps at the end, and never distinct flaps a visitor can count
+  (`hummingbird-v4-near/-far.webp`: rest, 8 haze and 2 fold frames). The
+  bird is lined up on the first hummingbird's bill and tail, so the line still leaves from under
+  its tail. Mockups `reference/ink-pages/mockups/home-bird/`.
+  `opening-crane.tsx`, `opening.module.css`; pictures `build_home_opening.py` in
+  `reference/ink-pages/home-california/` (README); mockups
+  `reference/ink-pages/mockups/home-california/`.
+- **California, not Asian.** BiGH is a California/USA brand. Keep the ink style, but no Chinese
+  characters, seals, stamps, scrolls-as-culture or herbal cabinets, and no Asian-tradition names like
+  "kintsugi". Anchor ideas in California and American imagery: poppies, oaks, golden hills, state-park
+  signs, botanist specimens.
+- **Paintings, not photos.** Loose sumi-e brushwork, like the homepage crane: "the more it looks like a
+  painting, the better." Watercolour backgrounds only. No photo-real scenes and no detailed drawings.
+- **Never redraw the product.** Paint the background with an empty spot, then stand the real approved
+  bottle PNG from `public/images/products/` in it, unchanged. A soft ground wash and a front layer (a
+  sprig in front of the base) seat it in the painting. Never ship a generated bottle or label.
+- **Real people.** Dr. Liu's face is never generated: use his real photo, in colour (a living person in
+  black and white reads as deceased). When editing a painting with his photo in it, give the edit model
+  the empty frame and paste the real photo back afterwards. Dr. Iris Wang appears in words only.
+  **Mockups may redraw him (Mo, November 11, 2026):** while the site is being built, design ideas may
+  change Dr. Liu's picture (a new pose, new clothes, a new scene, painted by a picture model from his
+  photo): "you can make different kinds of designs and changes to it ... I will have him check and
+  approve later." So a redrawn or generated Dr. Liu may be mocked up and shown to Mo, labelled as
+  such. It is not put on the public site (the demo and `main` are public) until Mo says Dr. Liu has
+  seen and approved that picture. What is live keeps his real face.
+- **Never use:** lab glassware (reads as "chemicals you eat"), red or rust clustered dots or fuzzy glows
+  (read as germs), a gold halo behind a product, a decorative picture that only repeats its sentence.
+  Every picture must add information.
+- **Never boring at rest.** Judge a design at first glance, before any hover. If it looks like a
+  template or the old design at rest, it fails.
+- **Menus show everything at once** on desktop (a row of all five bottles, not a list that swaps one
+  picture on hover).
+- **Menu bar: "Signed with one stroke" (Mo picked A, October 21, 2026).** Mo found the bar plain
+  ("simple, it does its job") and picked A of three painted ideas over B (a two-line title page)
+  and C (the words on one pale brushstroke): the bar's words in Ysabeau, the title face (Chinese,
+  Japanese and Korean keep their own letters); the painted rule under the bar from the first frame,
+  laid once as the page opens; Sign up and the phone's Menu written in paper on a real black
+  brushstroke; a pale ink wash behind a pointed-at word. Drop-downs, the settle and the menu sheet
+  stay as they were. Mockups: `reference/ink-pages/mockups/nav/2026-10-21/`; strokes cut by
+  `reference/nav/make_signed_strokes.py` from two Codex paintings. On November 12 Mo asked whether
+  the bar should turn California too; of seven ideas over three rounds (A warm ink, B a golden
+  ridge, C a poppy Sign up, E open air, F a masthead, G a floating paper sheet; D dropped) he kept
+  this bar "for now". Don't redo it unasked. Mockups:
+  `reference/ink-pages/mockups/nav/2026-11-12-california/`.
+- **Menu bar: Science is a plain link for now (Mo, October 26, 2026).** The Science page is one
+  page, and the drop-down's four doors into it made the site look short of content. Science goes
+  straight to `/science` on the bar and in the phone's menu, like About and Support. Keep the
+  drop-down's design: it is switched off, not deleted (`navScienceMenu` in
+  `src/components/ink/nav/nav-data.ts`, `SCIENCE_MENU` in `scripts/qa/qa_nav.py`). Turn it back
+  on only when Mo says the Science page has grown enough.
+- **Science: his path one place per screen (Mo picked B, October 26, 2026).** Mo liked the
+  Science page's paintings but found the sideways handscroll "feels like a draft", and asked for
+  an order that is logical and easy. The page opens on the title and Dr. Liu (photo, name, intro;
+  no numbers row, his path tells them), then his path going down, one place per screen: Okayama
+  (painting left), Berkeley 1994 (right; the 2002 study is told there), Salzburg 2025 (left),
+  Today (wide, its words in the sky by the gold sun). Then the research, health explained, the
+  formulas, Ask. The paintings are cut from the old handscroll's band (`build_science.py`,
+  `PLACES`); phones get tighter cuts in one column. Berkeley says 1994, not 1994-2002: the
+  faculty profile dates his time in Bruce Ames's laboratory 1994-1997. Mockups:
+  `reference/ink-pages/mockups/science-path/2026-10-26/`. (Round 3 below changed the order and
+  the paintings; the path's one place per screen stays.)
+- **Science round 3: start with the science, then the scientist (Mo, November 4, 2026; built
+  for his critique, which kept the page as built; live November 6, `main` `8b422fa`).** Mo: the design was good but "the way I put it together
+  could be better"; start broader, with what kind of science BiGH focuses on (cell science) and
+  the reason behind it; keep the water paint but shift from Asian to California. He then gave
+  Claude the whole job ("do the best you can ... I will come and critique"), so no options were
+  mocked; the built page is the proposal. Order: the opening "Our science starts in the cell."
+  (the two questions, how cells make energy and what changes with age, naming Dr. Liu on the
+  first screen; a desk at an open window over golden hills, a brass microscope on it); "Why start
+  with the cell?" (about 37 trillion cells, each making its own energy: San Francisco's houses at
+  dusk whose windows light a few at a time in gold leaf, once, as it arrives; three numbered lines
+  opening the existing explainer sheets; it keeps the `#health` address the footer links to);
+  Dr. Liu; his path (Berkeley with the Okayama doctorate in its words, Salzburg, Today: Okayama's
+  castle read as Asian); "Every formula has a scientist behind it."; "Read the research
+  yourself." (bound journals on a library table, three open); Ask BiGH Science (camp mugs on a
+  redwood picnic table). No labels over headings. Gone: the scrolls, the balanced stones and oil
+  lamp, the tea-set mugs, "Make sense of the science." (the homepage's own heading). Every
+  painting is Codex ink and wash, painted loose (the tidy first takes read as illustrations).
+  Spec `docs/superpowers/specs/2026-11-04-science-california-design.md`; pictures
+  `reference/ink-pages/science/` (README, `build_science.py`, `paint.sh`).
+  November 6: Mo kept the opening line ("Our science starts in the cell.") and asked for other
+  pictures for "Why start with the cell?" to compare. Shown on the real page, each lighting in
+  gold leaf a piece at a time: A the town (as built), B monarchs wintering at Pacific Grove (each
+  warms its own flight muscles before it can fly; Claude's pick), C a Sacramento Valley sunflower
+  field at sunrise. A microscope view of cheek cells was tried and left out (the gold cells looked
+  like chips). Mo picked A, the town stays. He also left the formulas' row of five bottles as it
+  is ("Every formula has a scientist behind it."). Mockups `reference/ink-pages/mockups/science-why/`;
+  the unused takes are in `bigh-archive\science-why-unused-2026-11-06\`.
+- **Homepage brush line: twice as heavy (Mo picked B, October 21, 2026).** Mo asked for the
+  page-long line a little thicker and picked B (2×) over A (1.5×) and C (2.5×). The running line
+  takes the whole weight; the two heavy accents (the ground under the big bottle, the closing
+  stroke under "Stay sharp.") only a little more, so they never turn into slabs; the crane's
+  opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
+  line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
+  Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
+- **Homepage crane: between B and C, 57.5% (Mo picked it, October 23, 2026).** Mo liked the
+  opening but found the flying crane a little big. Of three sizes (A 80%, B 65%, C 50%) he put B
+  live, then C, then found C too small and picked a size between them. The crane is 57.5% of the
+  comp's size, shrunk toward the point its brush line leaves from, then lifted 60 comp px and
+  moved 50 left, its flight stroke with it, so it reads as farther off in the sky and the
+  headline leads. Phones: 66% of the old crane (63.4vw, the bird about 41% of the window), clear
+  of the window's left edge, its line unchanged. `opening.module.css`. Mockups:
+  `reference/ink-pages/mockups/home-crane-size/`.
+- **Homepage "Tiny power plants.": the mitochondrion in softer ink (Mo picked B, November 4,
+  2026).** Mo loves the cell's design, but its heavy black and blue-grey ink no longer fitted the
+  page once the opening turned California and colourful. Of two recolourings of the same painting,
+  every stroke kept (A California colour: a redwood copper skin, pale sage inside; B softer ink),
+  compared live as test pages `/home-a` and `/home-b`, he picked B: the ink a third lighter and
+  warmed to sepia, the blackest strokes a deep warm brown-grey. The gold folds are unchanged (the
+  gold layer). Its own colour, so no green-spring tint. Keep the design; change only the paint.
+  `mito-soft-v1.webp` from `reference/ink-pages/home-mito/build_mito_colour.py` (`softer`);
+  `assets.ts` `mito`, `cellular.tsx`. Mockups: `reference/ink-pages/mockups/home-mito/`.
+- **Homepage "Aging cells": a brain cell up close (Mo picked B, October 22, 2026).** Mo found the
+  steam engine growing old did not relate to the age slider and asked for a cell that ages. One
+  brain cell, up close: its branches thin and its six gold power plants go out (6, 3, 1) as the
+  age goes up, still at work when old. Picked over A (the whole cell, whose gold was too small on
+  a phone). DESIGN.md "The Science Stage Rule";
+  mockup: `reference/ink-pages/mockups/home-science-cell/`.
+- **Homepage "Mitochondria" and "Free radicals": inside the powerhouse (Mo picked D, October 22,
+  2026).** Mo asked for a power plant instead of the steam train and picked D of six painted ideas:
+  an old powerhouse with its front left open like a storybook (a worker feeds the gold fire, its
+  steam turns the wheel, power runs out along the wire), and for Free radicals its chimney opened
+  up, the screen on top catching the sparks. Grey ink, few parts, the crane's hand. On October 23
+  Mo asked Free radicals to show harm ("free radicals harm us") and picked A of three: the few
+  sparks that slip past the screen burn black holes in the roof (black ink only, never red).
+  DESIGN.md "The Science Stage Rule"; mockups: `reference/ink-pages/mockups/home-science-plants/`
+  and `home-science-harm/`.
+- **Homepage science on phones: tabs over the picture, swipe, a peek (Mo, October 23-26, 2026).** In
+  one column the three tabs sat about 500px above the picture, out of sight. Mo picked A (the tabs
+  right above the picture, the words after it), then asked to swipe with a finger from one topic to
+  the next: the three topics (picture, line, words) sit side by side in a strip as wide as the
+  window that snaps to one topic; the tabs glide it and follow the swipe. On October 26 Mo asked
+  how people would know they can swipe and picked A of three hints (over a one-time nudge and three
+  dots): the next topic's painting peeks in, paler, at the window's right edge. DESIGN.md "The
+  Scroll Story Rule"; `science.tsx` (`.slides`).
+- **Homepage "Good questions": a country mailbox (Mo picked A, October 30, 2026).** The inkstone
+  and brush read as Chinese. Of three California pictures on the real page (A a country mailbox, B
+  a Gold Rush pan and pick, C a naturalist's notebook) Mo picked A: the rounded rural mailbox on its
+  post, its raised flag in gold leaf, poppies and dry grass at its foot, in a few wet washes. You
+  send a question, an answer comes back. Same small size and centred pause as before; the words
+  and button did not change. The switched-off Science drop-down carries it too. `mailbox-v1.webp`,
+  `build_home_ask.py` in `reference/ink-pages/home-ask/`; mockups
+  `reference/ink-pages/mockups/home-ask/`.
+- **Homepage "In their own words.": breakfast on the back porch (Mo picked A, November 6,
+  2026).** The three sample stories' still lifes were painted as East Asian ink still
+  lifes (plum blossom in a narrow vase, tea bowls, a low table, a sliced pear) and read as Asian.
+  Of two California mornings on the real page (A the back porch, B the kitchen table with a lemon
+  tree in the window) Mo picked A: coffee in an enamel mug, orange juice, a bowl of oranges,
+  poppies in a jam jar, a brown paper lunch bag and the car keys on a weathered porch table, golden
+  hills and a valley oak beyond. Ink and thin watercolour in the mailbox's and the Big Sur close's
+  hand, its own colour (no green-spring twin). Michael's and Susan's stories follow on the same
+  porch (dusk with a book and reading glasses; a piece of honeycomb and a sprig of the Brazilian
+  shrub). The real bottle stays out of the paintings (it read as an ad in a customer's story). The
+  paintings are framed whole, and from 900px the window's edge falls at 6% of the painting (it was
+  14%), so nothing in it is cut in half. `story-porch-{morning,dusk,afternoon}-v1.webp` from
+  `build_home_stories.py` in `reference/ink-pages/home-stories/` (`paint.sh`, `shoot_stories.py`);
+  `assets.ts` `storyPaintings`, `stories.module.css`. Mockups
+  `reference/ink-pages/mockups/home-stories/`.
+- **Homepage close: the long view down the Big Sur coast, in ink and wash (Mo picked 1B,
+  November 2, 2026).** "Our purpose is simple." sat over an old pine on its rock, misty peaks and
+  two red-crowned cranes: Chinese. Of three California endings on the real page (A Big Sur at
+  evening, B an evening walk on a golden ridge, C a surfer at low tide) Mo tried A and B live as
+  test pages, then found the walk with people "doesn't give the vibe of California" (bare golden
+  hills could be anywhere). Of three Californian walks (1 on the Big Sur coast, 2 among a valley
+  oak and poppies, which echoed About, 3 under palms) he picked 1 and put it live, then found it
+  "a little bit simple" next to the old pine painting ("that one looks really good, like a
+  picture"). Of three richer Big Sur paintings he tried 1 (the long view with Bixby Bridge) and 3
+  (McWay Falls) live and found them "more picture like": photos with a watercolour filter. Of the
+  same two places painted loosely (A a loose watercolour, B ink and wash) he picked 1B: an older
+  couple and their dog on the cliff-top trail, headland after headland fading down the coast,
+  Bixby Bridge small in the haze, drawn with an ink brush and light colour laid over it, the old
+  pine painting's way of painting. Richness comes from brushwork and ink, never from photographic
+  detail. Morning sequoias to evening coast, one full day. The sun is the opening's own gold leaf
+  set on the horizon at the head of the glitter; five brown pelicans fly in where the cranes flew.
+  The painting is 2:1 (at the old 7:3 the land rose into the words); on phones the frame is 150%
+  of the window from 22.5% across, so the walkers and the whole sun both show. `purpose.tsx`,
+  `purpose.module.css`; pictures `build_home_purpose.py` (`ink-long`) in
+  `reference/ink-pages/home-purpose/`; mockups `reference/ink-pages/mockups/home-purpose/` (round 4).
+- **Homepage "Small beginnings. Bigger possibilities.": the title face, all ink (Mo picked B,
+  November 9, 2026).** The line under the Big Sur close is a `<p>`, so the homepage's title face
+  (Ysabeau, given to h1-h3) never reached it: it read as heavy Switzer with a grey second line,
+  the page's only one, like a leftover. Of two looks on the real page (A the title face with the
+  grey second line, B both lines in ink) Mo picked B. The words did not change. Any display line
+  that is not a heading takes `font-family: var(--display-font)` itself. `purpose.module.css`
+  (`.graphic`); mockups `reference/ink-pages/mockups/home-graphic/`.
+- **Product questions: a painting for each answer (Mo picked A, October 26, 2026).** Mo found the
+  questions part plain ("more fun, better to look at"; the words stay) and picked A, "a picture for
+  each question", over B (one breakfast-table painting with numbered marks). All five product
+  pages: from 960px the questions on the left and the picked one's painting and answer on the
+  right, the first picked as the page opens, the menu bar's pale wash behind it and a round "+" on
+  the others; on a phone each question opens in place with its painting. Every painting shows its
+  own answer and is true to the label (the right number of capsules, their colour, 30 squares a
+  month); all are 3:2, so the answers line up. `questions.tsx`; paintings and their build script
+  `reference/ink-pages/questions/`; mockups `reference/ink-pages/mockups/nuricell-questions/`.
+- **Science opening: one slow zoom, from a walker to one cell (Mo picked it, November 9, 2026;
+  live the same day, `main` `552f28c`).** Mo found round 3's first screen plain and boring (a small painting boxed
+  on one side, small black words, nothing moving, the word "cell" beside a desk), and doubted that
+  the town at dusk "correlates to the topic" (it only made sense after its caption). Of three
+  ideas for the opening (A the same window filling the screen, B a zoom, C one big cell) with
+  three for "Why start with the cell?" (1 lead with the number, 2 the cell as a map of the three
+  lines, 3 the zoom lands on the cell) he took B with 3, saw a sample, and said "Yes, build it".
+  A walker on golden California hills fills the first screen, the h1 in the painting's sky,
+  "cell." in the homepage's gold leaf. As the page scrolls the view moves in on the walker's hand
+  in the dry grass, then on one cell of it, where "Why start with the cell?" and its lead stand;
+  the three numbered lines follow below. The cell is a loose wet wash with a dark blue nucleus,
+  its mitochondria about twenty-five slender slivers of gold, and a line under it says so ("In
+  gold: its mitochondria, where the cell makes most of its energy."). The first cell came out as a
+  schoolbook diagram with fat gold beans that read as peanuts, and the first hand as a realistic
+  illustration (knuckles, nails): never those; paint both loose. The gold is flat like leaf: no
+  glow. The stage is pinned while its track (4.4 windows) scrolls; reduced motion and no script
+  get no pinning, the hills then the cell beside its words. The desk at the window and the town
+  with its lamps are gone (their originals stay). `#health` now stands at the zoom's last view.
+  Keep in mind Mo's October 21 note on the homepage (a hiker with a round window into a cell was
+  "hard to relate to", the cell "a ball with worms in it"): here the hand is the step between,
+  and the heading beside the cell names it. `zoom.tsx`, `zoom.module.css`, `why.tsx` (the lines);
+  pictures `zoom()` in `build_science.py` (Codex paintings, `prompts/zoom-*.txt`); mockup
+  `reference/ink-pages/mockups/science-zoom/`. (Since November 10 the zoom starts inside the
+  cell and pulls back: next rule.)
+- **Science opening: it starts inside the cell (Mo picked A, November 10, 2026; live the same
+  day, `main` `e0f04ab`).** A day after the zoom went live Mo asked for more or better ideas for the first screen, then to see them. What was weak: the picture said "hiking"
+  while the words said "cell" (they met only after scrolling), nothing moved until you scrolled,
+  the walker was small and in a corner, and golden hills with poppies looked like About's
+  opening. Mo's saved hero designs all fill the screen, show one clear main thing and move
+  gently at rest. Of four ideas mocked on the real page (A start inside the cell and pull back;
+  B the walker painted in dabs, "made of cells"; C the words very large, the full stop in gold
+  leaf, one cell below; D the same hills with the walker three times bigger) he picked A. The
+  first screen is the inside of one cell, its mitochondria as slivers of gold leaf that drift
+  and turn slowly, each on its own; the h1 in the painting's pale corner; a line at the foot
+  says what the gold is. Scrolling pulls back: that cell seen whole (the page's cell painting),
+  a hand, then a last view on golden hills, where "Why start with the cell?" and its lead stand
+  in the sky; the three numbered lines follow. Gold leaf: no glow, no shine, and the drift is
+  slow (a few pixels over six seconds), never a flutter. Reduced motion and no script: nothing
+  pinned and nothing adrift, the inside view, then the hills. `#health` stands at the last view.
+  Gold laid on a person did not paint well: slivers on a clothed walker read as scratches, a
+  see-through body as a ghost, and the dabs as pebbles. `zoom.tsx`, `zoom.module.css`; pictures
+  `zoom()` and `lifted()` in `build_science.py` (`zoom-inside-1`); mockups
+  `reference/ink-pages/mockups/science-hero/`.
+- **Science opening, the last view: hand in hand (Mo picked 1, November 10, 2026; live the
+  same day, `main` `e0f04ab`).** Mo saw A built and found the picture the zoom pulls back
+  to (one small walker on empty hills) "a little bit plain or a little bit like boring". Of four
+  last pictures set in the real page's last view (1 a grandfather and a grandchild walking hand
+  in hand; 2 a woman picking oranges in a grove; 3 a silver-haired surfer walking down to the
+  Pacific; 4 the same walker three times bigger; a painter at her easel was tried and left out)
+  he picked 1. The hand you were inside turns out to be holding a small one: after the whole
+  cell comes a grandfather's hand holding a child's, then the two of them from behind on the
+  trail, the child pointing ahead. The pull-back starts where the big hand stood and about as
+  large, so the two paintings read as one move. Upright windows (phones, tablets held upright)
+  get the hands and the pair painted again as tall pictures; a wide painting cut for a phone
+  showed only knuckles. Hands are painted loose: no nails, creases or veins. The words did not
+  change ("from a clear thought to a long walk" fits). `zoom.tsx` (`FOCUS`, `NEAR`, the two
+  `<picture>`s); paintings `zoom-pair-1`, `zoom-pair-phone-2`, `zoom-hands-3`,
+  `zoom-hands-phone-1` (`paint.sh` paints the three views from the pair, so the people match);
+  mockups `reference/ink-pages/mockups/science-hero/` (`shoot_last.py`, `review/last-*.jpg`).
+  (Since November 12 the zoom ends on a climber: next rule.)
+- **Science opening, the last view: the climber (Mo picked A, November 12, 2026; live the same
+  day, `main` `d4a87f4`).** Mo still liked the scroll from the cell out, but found the picture it lands on (the
+  pair walking away) "a little boring", then asked for ideas beyond it ("it doesn't have to be
+  ... the hill ... the older man, the kid or kite. You can think freely"). Of round 1 (the pair
+  flying a gold-leaf kite; the grandfather swinging the child round) and round 2 (A a climber in
+  Yosemite, B a rower at sunrise among gold-leaf ripples, C an older couple swing dancing in
+  Golden Gate Park; a grandmother's cannonball into Lake Tahoe and wind turbines were tried and
+  left out) he picked round 2's A: a woman in her sixties, silver hair under her helmet, climbs a
+  sunlit granite wall high above Yosemite Valley, Half Dome small and pale across it, the words
+  in the open sky at the upper left. The hand before it is her hand gripping the warm granite
+  (her coral sleeve, the same wall's cracks), and the pull-back starts from the back of that
+  same hand in the climbing painting, about as large (`NEAR`, wide and tall). A picture of a full
+  life shows someone doing something, not walking away. Her face is two or three strokes, never
+  a storybook face; the hand is loose (no nails, creases, veins or tendons). The words did not
+  change. `zoom.tsx` (`FOCUS`, `NEAR`), `zoom.module.css`; paintings `end-climb-3`,
+  `tall-end-climb-3-1`, `climb-hand-1`, `tall-climb-hand-1-1` (`paint.sh` `end-*`,
+  `climb-hand-*`, `tall-*`); mockups `reference/ink-pages/mockups/science-last/`.
+- **Science, Dr. Liu: "the gold he studies" (Mo picked C, November 11, 2026; live the same
+  day, `main` `dd73322`).** Mo found the Dr. Liu part "pretty plain or just a little boring": a
+  small dark studio photograph on bare paper, between a page of paintings. Of five ideas mocked
+  on the real page (A his own words beside a bigger portrait, which needs a real sentence from him; B office
+  hours, a desk and a blackboard; C the gold he studies; then, because C's cell repeats the
+  opening's, D at his microscope and E paper planes for his 280+ papers, both with him painted
+  new by a picture model) he picked C. His painted portrait (`liu-v1`, his real face, the one
+  NuriCell shows) sits in front of one huge cell, its mitochondria slivers of gold that drift
+  slowly, as on the first screen; from 960px the painting runs off the window's right edge and
+  his words stand on the bare paper at its left; a phone gets a tall painting over the words. One
+  new line says what the gold is ("In gold: mitochondria. He has studied them since 1994.").
+  The tags are "Portrait painting · Illustration". Gold leaf: no glow; the drift is a few pixels
+  over six seconds, only while the painting is in the window, never with reduced motion. Nothing
+  dark or busy behind his head, and no round shape centred on it (a halo). Never put the studio
+  photograph's black box back on this page. `people.tsx`, `people.module.css`, `liu-art.ts`;
+  pictures `reference/ink-pages/science/build_liu.py` (Codex painting `liu-cell-1`); mockups
+  `reference/ink-pages/mockups/science-liu/`.
+- **Homepage "Make sense of the science.": the California workshop (Mo picked B, November 13, 2026).**
+  Mo sent the current grey powerhouse section and asked for a redesign to match the site's shift
+  from Asian imagery to California. Codex prepared two painting directions on the existing page:
+  A a sunny Sierra timber powerhouse; B an open-air workshop against golden foothills. A camp-stove
+  concept was dropped before the final comparison. Start with this section only; keep the pictures explanatory, not scenery
+  unrelated to their topics. Mo found both first takes too picture-like and asked for more painting:
+  broad wet washes, broken brush edges and fewer small details. Round 2 repaints both in the loose
+  hand of the footer quail (style reference only), with the energy sequence still readable.
+  He picked B: the open-air workshop, a worker feeding a log to the gold fire, a blue-grey wheel,
+  a generator and a small gold lamp, California foothills and a valley oak behind them.
+  Mo then clarified that the redesign covers **all three topics**, not only Mitochondria, and
+  asked for fresh Mitochondria redesign ideas too. B is the current local painting, not a reason
+  to stop after one topic. Keep the three illustrations coordinated and explanatory; include
+  all three age-slider states when repainting Aging cells.
+  He chose to improve the workshop painting and layout, rather than switch to a different scene.
+  Layout studies A Picture first and B Guided painting are in the review's `layouts/` folder;
+  neither layout is selected yet.
+  Mo then explicitly asked to see redesign ideas for **all three topics together as a set**.
+  Show the whole painting family for this review, including young, middle and older cell states;
+  another Mitochondria-only comparison does not answer it. The coordinated concept board is in
+  `reference/ink-pages/mockups/home-science-california/full-set/`. This comparison is not a
+  request to put three paintings side by side in the production section.
+  After seeing more Mitochondria compositions, Mo preferred **C, the California ranch workshop**:
+  "C matches with the next image of this section." Its open cedar shed, copper chimney and blue
+  wheel connect to the close view of escaping sparks and the burned roof. Use
+  `california-workshop-shed-v1.png` in the coordinated preview (`full-set/selected-c-1440.jpg`).
+  On November 14 Mo asked to put all three on the actual webpage for computer and phone review.
+  The local page now uses C (`workshop-fuel-v2.webp`), the matching sparks
+  (`workshop-sparks-v1.webp`) and all three blue/sage cell ages (`cell-*-v3.webp`). Keep the
+  existing desktop scroll story and phone swipe/tabs: neither alternative layout was selected.
+  `build_california.py` encodes all five original RGBA paintings without changing their colour
+  or framing. The Illustrations label has bare paper above the stage; the transparent cell ages
+  each have a white CSS backing inside the multiplied group so only one cell shows at rest.
+  Actual-page review: `reference/ink-pages/mockups/home-science-california/actual-page/`.
+  Mo authorized publishing the full set to the live demo on November 14. The earlier c3 B painting
+  (`workshop-fuel-v1.webp`) is retained with the earlier review in `round2/`.
+- **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
+  not its small labels. Keep labels and targets large for older readers.
