@@ -5,16 +5,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Green Bee Propolis bee tree, November 20, 2026 (Codex, local preview).** Mo spotted straight
+  cuts across both ends of the trunk in “Why green propolis.” The bark and moving gold now fade
+  together into the paper (`propolis.module.css`). Desktop and phone screenshots are in
+  `reference/ink-pages/mockups/propolis-trunk/`. Built-site checks passed for Propolis
+  (345/345), the homepage (291/291) and navigation (326/326).
 - **Homepage science: the lantern, November 20, 2026 (Claude Code; live, `main` `b4c103c`,
-  production `dpl_C8Q9qdyqssAQeeQHrVuETiQqikvP`, demo alias on it; public `qa_home_ink`
-  290/290, `qa_nav` 326/326). Since then, built and not yet live: Mo found the Free radicals
-  picture (soot on the glass) not intuitive enough and picked sparks and a scorched poppy
-  (`lantern-sparks-v1.webp`, the line "Most sparks stay behind the glass. The few that get
-  out do harm."); see DESIGN-DECISIONS. Built in a scratch
-  worktree on branch `home-science-lantern` because the shared folder had another agent's
-  uncommitted work; `studio` does not have these commits yet (fast-forward it to `origin/main`
-  once its tracked tree is clean, after deleting the untracked copies of the same files under
-  `reference/ink-pages/home-science/` and `mockups/home-science-redo/`).** Mo found the California workshop paintings
+  production `dpl_C8Q9qdyqssAQeeQHrVuETiQqikvP`; public `qa_home_ink` 290/290, `qa_nav`
+  326/326). Since then, built on branch `home-science-lantern` (a scratch worktree) and not yet
+  live: Mo found the Free radicals picture (soot on the glass) not intuitive enough and picked
+  sparks and a scorched poppy (`lantern-sparks-v1.webp`, the line "Most sparks stay behind the
+  glass. The few that get out do harm."); see DESIGN-DECISIONS.** Mo found the California workshop paintings
   (Mitochondria, Free radicals) not good and picked A of three one-object ideas mocked on the
   real page: one old barn lantern (fuel in, light out), then the same lantern up close with
   soot dimming its glass. `lantern-fuel-v1.webp`, `lantern-soot-v1.webp`

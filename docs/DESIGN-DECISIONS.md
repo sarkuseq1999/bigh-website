@@ -396,6 +396,9 @@ These sit on top of `DESIGN.md`.
   `reference/ink-pages/propolis/build_propolis_opening.py` (Codex painting `opening-ipemid-bh`,
   `paint_opening.sh`); mockups `reference/ink-pages/mockups/propolis-opening/`. Live November
   18, 2026 (`main` `36fc975`).
+- **Green Bee Propolis bee tree (Mo, November 20, 2026).** In “Why green propolis,” the trunk
+  should feel like it continues above and below the hollow. Let the bark and its gold cracks
+  trail into the paper at both ends, including while the gold is spreading.
 - **FDA footer sign: the redwood park sign, on every page (Mo, October 19, 2026).** The brown
   trail sign (October 13) and the taupe sign (October 18) looked drawn (pen outlines, wood grain)
   next to the homepage's soft ink wash. After trying painted signs on real pages, Mo liked the

@@ -910,7 +910,7 @@ GOLD_LOG = """(() => {
   const tick = () => {
     const ink = document.querySelector('[data-meadow] img:first-child'), gold = document.querySelector('[data-meadow] img + img');
     if (ink && gold)
-      log.push([Math.round(performance.now()), parseFloat(getComputedStyle(gold).getPropertyValue('--reach')),
+      log.push([Math.round(performance.now()), parseFloat(getComputedStyle(gold).getPropertyValue('--about-meadow-reach')),
                 gold.complete && gold.naturalWidth > 0, ink.complete && ink.naturalWidth > 0]);
     if (performance.now() < 14000) requestAnimationFrame(tick);
   };
