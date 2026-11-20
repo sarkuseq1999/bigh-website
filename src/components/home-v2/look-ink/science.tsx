@@ -11,11 +11,10 @@ import base from "@/components/ink/ink.module.css";
 import styles from "./science.module.css";
 
 // "Make sense of the science." Three topics, each picture showing what its words say, with a line
-// under it that ties it to them. Mitochondria (Mo, November 14, 2026: C, the ranch workshop):
-// an open California shed, a worker feeding the gold fire, steam turning a blue-grey
-// wheel, its belt driving a generator and lamp. Free radicals (Mo, October 23: show the harm)
-// shows its chimney opened up, the screen holding most of the sparks, the few that
-// slip past burning black holes in the roof. Aging cells (Mo, October 22: the
+// under it that ties it to them. Mitochondria (Mo, November 20, 2026: A, the lantern): one old
+// barn lantern in dry grass, fuel in its base, its flame gold leaf, light out. Free radicals
+// (Mo, October 23: show the harm) shows the same lantern up close, soot from the flame
+// gathered on the upper glass and dimming it. Aging cells (Mo, October 22: the
 // engine did not relate to the slider): one brain cell up close, young, middle-aged and old,
 // its branches thinning and its gold power plants going out, chosen by an age slider, with the
 // honesty line "Illustration, not a measurement". The slider shows one cell at a time, never two

@@ -1,0 +1,55 @@
+{
+  "title": "Make sense of the science: three new painting ideas",
+  "lead": "Mockups on the real homepage, computer and phone. Only the Mitochondria and Free radicals paintings change. The brain cell and all the words stay as they are; the one line under each painting is a suggestion.",
+  "why": [
+    "Why today's paintings feel off: they are storybook drawings, not watercolors. Hard edges, heavy brown, and about ten parts in one picture (worker, boiler, wheel, belt, generator, lamp, shed, oak, hills, sky).",
+    "What the three ideas share: one object, a few wet washes, lots of bare paper, and gold leaf only where the energy is. The same hand as the mailbox and the hummingbird."
+  ],
+  "ideas": [
+    {
+      "key": "a",
+      "letter": "A",
+      "name": "The lantern",
+      "pick": true,
+      "say": "One old barn lantern. Fuel in the base, a flame, light. Then the same lantern up close: the flame has left soot on the glass.",
+      "lines": [
+        "“Like your cells: fuel goes in, and the flame turns it into light.”",
+        "“Every flame leaves a little soot. What isn’t cleared away dims the glass.”"
+      ],
+      "notes": [
+        "My score: 9 out of 10. The simplest and the calmest, and it reads at once on a phone.",
+        "The harm is gentle (a dimmed glass), not a burnt roof. No wildfire feeling.",
+        "The words under the paintings would change from “sparks” and “burns” to “soot”."
+      ]
+    },
+    {
+      "key": "b",
+      "letter": "B",
+      "name": "The wood stove",
+      "say": "Your story, kept: fuel, fire, a screen that catches most sparks, burns from the few that slip out. Moved indoors to a cabin stove and painted as a real watercolor.",
+      "lines": [
+        "“Like your cells: food is the fuel, and the fire turns it into energy.”",
+        "“Most sparks are caught. The few that slip out leave burns.” (unchanged)"
+      ],
+      "notes": [
+        "My score: 8.5 out of 10. The closest to what you already approved, so the fewest word changes.",
+        "The sparks and the three burns are small on a phone. A second take could make them bigger."
+      ]
+    },
+    {
+      "key": "c",
+      "letter": "C",
+      "name": "The water wheel",
+      "say": "A gold-country water wheel. The stream turns the wheel, the wheel lights a lamp. Up close, the drops that stray leave rust on the iron hub.",
+      "lines": [
+        "“Like your cells: food is the stream, and the wheel turns it into power.”",
+        "“Most of the water does its work. The drops that stray leave rust.”"
+      ],
+      "notes": [
+        "My score: 8 out of 10. The most Californian, and rust is what free radicals really do (oxidation).",
+        "The rust picture is the weakest of the six: it looks a little like a diagram. It would need another take.",
+        "No fire at all, so both lines under the paintings change."
+      ]
+    }
+  ]
+}

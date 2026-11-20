@@ -168,12 +168,12 @@ export const science = {
   explainer: "Read a quick explainer",
   ageLabel: "Illustration, not a measurement",
   topics: ["Mitochondria", "Free radicals", "Aging cells"],
-  /** The line under each picture that ties it to the words (draft, October 21, 2026; English
-   *  only for now): one per topic for the steam engine, and for aging one per age of the brain
-   *  cell (October 22). */
+  /** The line under each picture that ties it to the words (English only for now): one per
+   *  topic for the lantern (November 20, 2026, the lines Mo saw with the lantern mockup), and
+   *  for aging one per age of the brain cell (October 22). */
   peek: [
-    "Like your cells: food is the fuel, and the fire turns it into power.",
-    "Most sparks are caught. The few that slip out leave burns.",
+    "Like your cells: fuel goes in, and the flame turns it into light.",
+    "Every flame leaves a little soot. What isn’t cleared away dims the glass.",
   ],
   peekAge: [
     "A young brain cell: strong branches, power plants burning bright.",
