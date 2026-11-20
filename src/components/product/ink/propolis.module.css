@@ -331,6 +331,19 @@
   padding-left: 0;
 }
 
+/* The bark ends on straight lines about 5% inside the painted sheet. Let the wash
+   thin toward those ends across the whole stack, including the moving gold. */
+.propolis[data-look="ink"] [data-spread] > span {
+  mask-image: radial-gradient(
+    ellipse 85% 44% at 50% 50%,
+    black 64%,
+    rgb(0 0 0 / 94%) 73%,
+    rgb(0 0 0 / 48%) 86%,
+    rgb(0 0 0 / 10%) 95%,
+    transparent
+  );
+}
+
 .propolis[data-look="ink"] [data-chapter="why"] dl {
   grid-template-columns: minmax(0, 1fr);
   margin-top: 30px;
