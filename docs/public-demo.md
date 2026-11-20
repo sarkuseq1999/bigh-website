@@ -4,7 +4,16 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
+On November 20, 2026, Mo approved the softer ends of the Green Bee Propolis bee tree.
+The public demo moved to production deployment
+`bigh-website-chck02w03-sarkuseq1999s-projects.vercel.app`
+(`dpl_N6YcAND1ULYwa2RcGmTiRwmqNBgX`), built from `main` at
+`c65ce4e26f88574c9f2e9a9c9db771060006beeb`. The release includes the homepage cell fix
+from `e50d7350`. On the plain demo address, fresh signed-out desktop and phone browsers
+showed the bark and gold cracks fading together at both ends. Public checks passed for
+Propolis (345/345), the homepage (291/291) and navigation (326/326).
+
+An earlier release used `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
 (`dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`), the **production** deployment of `main` at
 `190aa0ace8b6cf765f5129fa0cc18423ba3111c9` (November 18, 2026): Nature Calm's Big Dipper with its
 sky painted at dusk, and the three checkers' Propolis rule updated. Pushed on Mo's go-ahead of
