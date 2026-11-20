@@ -808,5 +808,21 @@ These sit on top of `DESIGN.md`.
   Actual-page review: `reference/ink-pages/mockups/home-science-california/actual-page/`.
   Mo authorized publishing the full set to the live demo on November 14. The earlier c3 B painting
   (`workshop-fuel-v1.webp`) is retained with the earlier review in `round2/`.
+- **Homepage "Mitochondria" and "Free radicals": the lantern (Mo picked A, November 20,
+  2026).** Mo sent the live workshop paintings: "The artwork on this section doesn't really
+  looked that good", and asked for a redesign with mockup ideas. Claude's reading: they were
+  storybook drawings (hard edges, heavy brown, about ten parts in one picture) beside pages
+  painted in a few wet washes. Of three one-object ideas mocked on the real page, computer and
+  phone (A a barn lantern, B a cabin wood stove that kept his sparks-and-burns story, C a
+  gold-country water wheel with rust), he picked A. Mitochondria: one old barn lantern in dry
+  grass with two poppies, its flame gold leaf (fuel in, light out). Free radicals: the same
+  lantern up close, soot from the flame dimming the upper glass (the harm, in black ink only).
+  The line under each changed with it ("Like your cells: fuel goes in, and the flame turns it
+  into light."; "Every flame leaves a little soot. What isn't cleared away dims the glass.").
+  The brain cell, the other words, the layout and the motion did not change. Keep it one
+  object in the mailbox's hand; don't add a scene, a worker or machinery back.
+  `lantern-fuel-v1.webp`, `lantern-soot-v1.webp` from
+  `reference/ink-pages/home-science/build_lantern.py`; DESIGN.md "The Science Stage Rule";
+  mockups `reference/ink-pages/mockups/home-science-redo/`.
 - **References:** Timeline (timeline.com) is Mo's favourite site: borrow its calm, one idea per screen,
   not its small labels. Keep labels and targets large for older readers.

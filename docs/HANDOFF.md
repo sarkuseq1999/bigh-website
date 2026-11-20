@@ -5,6 +5,17 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Homepage science: the lantern, November 20, 2026 (Claude Code; built on branch
+  `home-science-lantern`, not pushed, not live).** Mo found the California workshop paintings
+  (Mitochondria, Free radicals) not good and picked A of three one-object ideas mocked on the
+  real page: one old barn lantern (fuel in, light out), then the same lantern up close with
+  soot dimming its glass. `lantern-fuel-v1.webp`, `lantern-soot-v1.webp`
+  (`reference/ink-pages/home-science/build_lantern.py`; Codex originals `redo-lantern-*`,
+  `paint_redo.sh`); the line under each changed (`content.ts` `science.peek`, English only).
+  The brain cell, layout and motion are untouched. Built site, sequential: `qa_home_ink` 290/290,
+  `qa_nav` 326/326; `check_built.py` in the mockups folder films both topics. Review page
+  https://claude.ai/artifact/FA5ZvK6u13BzusHLvwq3XB; mockups and the two ideas not picked
+  (wood stove, water wheel) in `reference/ink-pages/mockups/home-science-redo/`.
 - **Nature Calm's Big Dipper at dusk, November 18, 2026 (Claude Code; live, `main` `190aa0a`,
   production `dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`, demo alias on it).** Part 14 of Mo's
   "superb" goal, on his go-ahead: the weakest picture of the desktop scroll-through (seven gold
