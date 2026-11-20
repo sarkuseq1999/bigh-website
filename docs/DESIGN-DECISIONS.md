@@ -45,6 +45,10 @@ These sit on top of `DESIGN.md`.
   light two books. No label over the heading, no "Show all"; without scripts every answer shows.
   `nuricell-research.tsx`; masks `books-mask-v1-*.png` from `reference/ink-pages/nuricell/find_books.py`.
   Mockups: `reference/ink-pages/mockups/nuricell-research/`.
+  On November 20, 2026, Mo approved the Berkeley bookshelf for the page. Seven plain clothbound
+  books sit on a sunlit sill with a live oak and the Berkeley hills beyond. Publication years
+  belong in the study list. The books run from oldest on the left to newest on the right. On
+  phones the heading and tap instruction introduce the shelf, then the studies follow.
 - **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
   October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
   grey "What's inside" label odd and the three grey notes under the plate messy, and the

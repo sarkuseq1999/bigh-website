@@ -112,7 +112,7 @@ RESEARCH_WORDS = [
     "Both looked at patients, not healthy adults.", "Dr. Liu’s own overview:",
     "A review of lab, animal and human studies.", "Six small trials, 281 people.",
 ]
-# Which books each question lights (1-7, nearest first): the two 2003 reviews share one question.
+# Which books each question lights (1-7, left to right): the two 2003 reviews share one question.
 BOOKS_OF = [[1], [2], [3, 4], [5], [6], [7]]
 # Next's prefetched-CSS warning is not an error of this page (qa_about.py's PREFETCH_CSS).
 PREFETCH_CSS = re.compile(r"was preloaded using link preload but not used")
@@ -518,7 +518,7 @@ def nuricell_strings():
 EXPECT = {
     "why": "lighthouse-unlit",
     "inside": "capsule",
-    "research": "books",
+    "research": "berkeley-bookshelf-v1",
     "people": "liu-berkeley",
     "daily": "rings-",
     "buy": "stroke",
@@ -795,14 +795,11 @@ def sticky(browser):
         ctx.close()
 
 
-# The middle of a book's tap area in window px: its clip-path's points, averaged.
+# Independent points inside the painted spines, measured on the 1402 px source.
 BOOK_AT = """(n) => {
-  const b = document.querySelector('[data-chapter="research"] [data-book="' + n + '"]');
-  const r = b.getBoundingClientRect();
-  const pts = [...b.style.clipPath.matchAll(/([\\d.]+)% ([\\d.]+)%/g)].map((m) => [+m[1], +m[2]]);
-  const cx = pts.reduce((s, p) => s + p[0], 0) / pts.length;
-  const cy = pts.reduce((s, p) => s + p[1], 0) / pts.length;
-  return [r.left + (r.width * cx) / 100, r.top + (r.height * cy) / 100];
+  const r = document.querySelector('[data-chapter="research"] figure img').getBoundingClientRect();
+  const centers = [198, 368, 535, 705, 868, 1029, 1225];
+  return [r.left + r.width * centers[n - 1] / 1402, r.top + r.height * 0.66];
 }"""
 # Which questions are open (0-5) and which books are dark (1-7, not faded under paper).
 RESEARCH_STATE = """() => { const c = document.querySelector('[data-chapter="research"]');
@@ -817,6 +814,10 @@ def research(browser):
     page.mouse.move(1430, 890)
     page.wait_for_timeout(900)
     state = lambda: page.evaluate(RESEARCH_STATE)
+    painting = page.locator('[data-chapter="research"] figure')
+    check("research: the bookshelf has plain spines", painting.inner_text().strip() == "Illustration")
+    painting.locator('img[data-bloom="done"]').wait_for()
+    page.screenshot(path=OUT / "bookshelf-desktop.jpg", quality=90)
     rest = state()
     check("research: at rest the first question is open, its book dark, the other six faded", rest == {"open": [0], "dark": [1]}, str(rest))
     rows = page.locator('[data-chapter="research"] li[data-study]')
@@ -835,6 +836,8 @@ def research(browser):
     x, y = page.evaluate(BOOK_AT, 3)
     page.mouse.click(x, y)
     page.mouse.move(1430, 890)
+    page.wait_for_timeout(200)
+    page.screenshot(path=OUT / "bookshelf-switching.jpg", quality=90)
     page.wait_for_timeout(1200)
     pair = state()
     links = page.locator('[data-chapter="research"] li[data-study][data-open] a').evaluate_all(
@@ -843,7 +846,7 @@ def research(browser):
     faded = page.evaluate("() => Number(getComputedStyle(document.querySelector('[data-fade=\"1\"]')).opacity)")
     check("research: a 2003 book opens the shared question and lights both books, two studies to read",
           pair == {"open": [2], "dark": [3, 4]} and links == 2, f"{pair}, {links} links")
-    check("research: a faded book sits under a little paper (0.6)", abs(faded - 0.6) < 0.02, f"{faded:.2f}")
+    check("research: the other books stay visible under a light wash", 0.25 <= faded <= 0.45, f"{faded:.2f}")
     x, y = page.evaluate(BOOK_AT, 6)
     page.mouse.move(x, y, steps=6)
     page.wait_for_timeout(300)
@@ -884,8 +887,9 @@ def research(browser):
     page = ctx.new_page()
     page.goto(BASE + PATH, wait_until="networkidle")
     page.evaluate("document.documentElement.style.scrollBehavior = 'auto'")
-    bring(page, '[data-chapter="research"] figure', 90)
-    page.wait_for_timeout(600)
+    bring(page, '[data-chapter="research"] h2', 100)
+    page.locator('[data-chapter="research"] img[data-bloom="done"]').wait_for()
+    page.screenshot(path=OUT / "bookshelf-phone.jpg", quality=90)
     own = [
         n for n in range(1, 8)
         if page.evaluate(f"([x, y]) => document.elementFromPoint(x, y)?.dataset.book", page.evaluate(BOOK_AT, n)) != str(n)
@@ -899,6 +903,7 @@ def research(browser):
                   document.querySelector('header').getBoundingClientRect().bottom]"""
     )
     tapped = page.evaluate(RESEARCH_STATE)
+    page.screenshot(path=OUT / "bookshelf-phone-study.jpg", quality=90)
     check("research 390: a tapped book opens its question and brings it up under the menu bar",
           tapped["open"] == [4] and bar <= top <= bar + 40, f"{tapped}; row top {top:.0f}, bar {bar:.0f}")
     ctx.close()
@@ -934,7 +939,10 @@ def layout(browser):
                  const t = box(c.querySelector('[data-words]'));
                  const id = c.dataset.chapter;
                  let ok;
-                 if (!two) ok = f.bottom <= t.top + 1;
+                 if (!two && id === 'research') {
+                   ok = box(c.querySelector('[data-words] > p:last-of-type')).bottom <= f.top + 1
+                     && f.bottom <= box(c.querySelector('[data-studies]')).top + 1;
+                 } else if (!two) ok = f.bottom <= t.top + 1;
                  else if (id === 'why' || id === 'daily') ok = t.right <= f.left + 1;
                  else if (id === 'people') {
                    const img = box(c.querySelector('figure[data-picture] img'));
@@ -950,7 +958,7 @@ def layout(browser):
                  return ok ? null : id; }).filter(Boolean)""",
             w >= 960,
         )
-        check(f"{tag}: each painting in its place {'(B, October 19)' if w >= 960 else '(above its words)'}", not bad, ", ".join(bad))
+        check(f"{tag}: each painting in its approved position", not bad, ", ".join(bad))
         small = page.evaluate(
             """() => [...document.querySelectorAll('main p, main li, main dd, main dt, main td, main th, main figcaption')]
                  .filter(e => e.offsetParent && e.textContent.trim() && parseFloat(getComputedStyle(e).fontSize) < 15)
@@ -1254,7 +1262,7 @@ NEW_TABLE_HEADERS = ["Per serving", "Ingredient", "About it"]
 ALTS = {
     "why": "A lighthouse on the California coast whose light comes on, painted in ink",
     "inside": "An opened capsule with its four powders in a row and gold sparks rising, painted in ink",
-    "research": "Seven books as stepping stones across a calm stream, painted in ink",
+    "research": "Seven clothbound books on a sunlit sill, with a live oak and the Berkeley hills beyond.",
     "people": "A portrait painting of Dr. Jiankang Liu on a hill above San Francisco Bay, the Golden Gate in the fog, painted in ink and color",
     "daily": "The cut end of a young redwood log, one ring about 20 years in from the bark laid in gold leaf, painted in ink",
 }

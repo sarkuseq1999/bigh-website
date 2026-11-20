@@ -92,19 +92,25 @@ sat = (hi - lo) / np.maximum(hi, 1)
 skin = (sat > 0.12) & (hi > 120)
 check("liu: in colour, never black-and-white", skin.mean() > 0.03, f"coloured pixels {skin.mean():.1%}")
 books = pixels(art["books"]["src"])
-check("books: no gold", warm(books) < 0.001, f"{warm(books):.3%}")
+indigo = books[round(0.65 * books.shape[0]), round(0.14 * books.shape[1])]
+rust = books[round(0.65 * books.shape[0]), round(0.38 * books.shape[1])]
+check("books: indigo and rusty red cloth spines", indigo[2] > indigo[0] + 12 and rust[0] > rust[2] + 25)
 stroke = pixels(art["stroke"]["src"])
 check("stroke: no gold", warm(stroke) < 0.001, f"{warm(stroke):.3%}")
 
-# Only shipped pictures under public/ (the build writes nothing else; spares live in
-# reference/ink-pages/nuricell/spares/).
+# Current chapter art and previously published, versioned assets can share this directory.
 listed = {Path(v).name for entry in art.values() for k, v in entry.items() if k in ("src", "gold")}
-# What's inside's moving gold and heaps (build_nuricell_gold.py, October 26, 2026) ship here too.
-gold_ts = (REPO / "src/components/product/ink/nuricell-gold.ts").read_text(encoding="utf-8")
-listed |= set(re.findall(r"/images/products/nuricell/ink/([\w.-]+\.webp)", gold_ts))
+for manifest in ("nuricell-gold", "nuricell-opening-art", "nuricell-sun-art", "nuricell-pairs", "questions-art"):
+    source = TS.with_name(f"{manifest}.ts").read_text(encoding="utf-8")
+    listed.update(re.findall(r"/images/products/nuricell/ink/([\w.-]+\.webp)", source))
+previous = {"books-v1.webp", *(f"books-mask-v1-{n}.png" for n in range(1, 8))}
+previous.update(f"q-{key}-v1.webp" for key in ("take", "month", "capsule", "studied", "pregnancy", "doctor"))
 folder = REPO / "public" / art["books"]["src"].lstrip("/").rsplit("/", 1)[0]
-extra = sorted(f.name for f in folder.iterdir() if f.is_file() and f.name not in listed)
-check("public: only the shipped pictures", not extra, ", ".join(extra) or f"{len(listed)} files")
+files = {f.name for f in folder.iterdir() if f.is_file()}
+missing = sorted(listed - files)
+extra = sorted(files - listed - previous)
+check("public: current pictures present", not missing, ", ".join(missing))
+check("public: every picture accounted for", not extra, ", ".join(extra) or f"{len(files)} files")
 
 c = art["sum"]["centres"]
 check("sum: numbers 3, 30, 90", art["sum"]["numbers"] == [3, 30, 90])

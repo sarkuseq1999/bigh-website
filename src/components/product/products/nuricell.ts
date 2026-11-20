@@ -215,7 +215,7 @@ const nuricell: ProductPage = {
     },
     research: {
       ...nuricellArt.books,
-      alt: "Seven books as stepping stones across a calm stream, painted in ink",
+      alt: "Seven clothbound books on a sunlit sill, with a live oak and the Berkeley hills beyond.",
     },
     // Chapter 6 (Mo picked 2 of round 3, October 27, 2026; mockups
     // reference/ink-pages/mockups/nuricell-daily/): "3 capsules a day" was too thin for a chapter

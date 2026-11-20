@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, type CSSProperties } from "react";
+import { useRef, useState } from "react";
 import base from "@/components/ink/ink.module.css";
 import { useCopy } from "@/i18n/use-copy";
 import type { InkProduct } from "../product-types";
@@ -11,31 +11,21 @@ import s from "./nuricell-research.module.css";
 
 // NuriCell's research as plain questions, each tied to its book in the painting (Mo picked A, "tap a
 // book, read its study", October 26, 2026; mockups: reference/ink-pages/mockups/nuricell-research/).
-// Seven books, seven studies, nearest (oldest) first; the two 2003 reviews share one question and
+// Seven books, seven studies, oldest first; the two 2003 reviews share one question and
 // light their two books together. Answers follow each paper's abstract (PubMed).
 
 const P = "https://pubmed.ncbi.nlm.nih.gov/";
 
-/** Each book's outline in % of the painting (find_books.py), nearest first. */
+/** Spines from left to right. The tap target and its watercolor fade follow the same outline. */
 const BOOKS = [
-  "46.3% 81.5%, 32.6% 85.7%, 21.0% 87.8%, 4.4% 74.0%, 3.2% 71.9%, 6.3% 67.1%, 19.9% 63.4%, 25.0% 63.0%, 45.7% 73.3%",
-  "59.6% 61.5%, 58.6% 63.0%, 44.7% 67.7%, 41.7% 67.7%, 35.9% 66.7%, 29.3% 64.2%, 26.0% 61.4%, 25.7% 58.2%, 26.3% 55.7%, 27.3% 54.7%, 41.1% 50.8%, 58.8% 55.4%",
-  "69.2% 40.3%, 69.1% 45.0%, 61.0% 48.4%, 53.3% 48.4%, 49.7% 46.9%, 47.2% 45.2%, 46.3% 43.7%, 46.5% 41.1%, 47.1% 39.8%, 56.4% 37.3%, 58.5% 37.2%, 62.5% 38.1%, 68.7% 39.6%",
-  "78.6% 28.5%, 78.4% 32.6%, 75.1% 33.7%, 66.3% 35.1%, 60.7% 34.8%, 59.0% 31.1%, 59.5% 28.9%, 59.9% 28.4%, 69.3% 26.1%",
-  "69.9% 20.0%, 70.1% 18.3%, 70.7% 17.5%, 78.0% 16.3%, 83.9% 18.0%, 84.1% 21.0%, 83.1% 22.0%, 79.5% 23.0%, 71.6% 23.1%",
-  "90.4% 12.9%, 89.7% 13.5%, 82.5% 13.6%, 79.2% 12.5%, 78.8% 11.0%, 79.5% 9.8%, 84.4% 9.0%, 89.8% 10.2%, 90.4% 10.9%",
-  "88.3% 5.9%, 88.6% 4.9%, 90.5% 4.0%, 91.7% 3.9%, 96.0% 4.6%, 96.5% 5.3%, 96.5% 6.5%, 95.2% 6.9%, 88.7% 6.6%",
+  "polygon(7.56% 44.65%, 11.84% 42.16%, 22.61% 41.62%, 20.26% 45.01%, 20.19% 85.65%, 19.04% 86.72%, 8.35% 86.81%)",
+  "polygon(19.97% 45.28%, 23.04% 42.96%, 32.74% 43.05%, 32.03% 45.81%, 32.31% 85.83%, 30.74% 86.72%, 20.68% 86.63%)",
+  "polygon(32.10% 45.37%, 33.88% 42.25%, 43.58% 42.51%, 44.22% 44.56%, 44.29% 85.20%, 43.22% 86.54%, 33.10% 86.54%)",
+  "polygon(44.01% 42.16%, 44.65% 39.13%, 55.21% 39.39%, 56.35% 41.98%, 56.35% 85.03%, 55.42% 86.36%, 45.01% 86.45%)",
+  "polygon(56.28% 41.80%, 56.06% 39.75%, 65.55% 39.57%, 67.62% 41.98%, 67.62% 84.76%, 66.83% 86.01%, 56.99% 85.92%)",
+  "polygon(67.55% 43.32%, 66.90% 41.09%, 75.68% 40.55%, 78.60% 42.96%, 79.17% 84.49%, 78.25% 86.01%, 68.19% 85.56%)",
+  "polygon(78.67% 44.47%, 84.02% 40.73%, 88.80% 41.98%, 95.29% 83.33%, 93.08% 85.12%, 85.95% 86.10%, 79.53% 81.73%)",
 ];
-
-/** A book's tap area: its outline grown from its centre, so the far, small books stay tappable. */
-function tapArea(outline: string, grow: number) {
-  const points = outline.split(", ").map((pair) => pair.split(" ").map(parseFloat));
-  const cx = points.reduce((sum, [x]) => sum + x, 0) / points.length;
-  const cy = points.reduce((sum, [, y]) => sum + y, 0) / points.length;
-  return `polygon(${points
-    .map(([x, y]) => `${(cx + (x - cx) * grow).toFixed(1)}% ${(cy + (y - cy) * grow).toFixed(1)}%`)
-    .join(", ")})`;
-}
 
 type Finding = { label?: string; verdict: string; line: string; url: string };
 type Row = {
@@ -200,28 +190,24 @@ export function NuricellResearch({ product }: { product: InkProduct }) {
           alt={product.ink.research.alt}
           sizes={nuricellSizes(product, "research", product.ink.research)}
         >
-          {BOOKS.map((_, i) => (
+          {BOOKS.map((clipPath, i) => (
             <span
               key={`fade-${i}`}
               className={s.fade}
               data-fade={i + 1}
               data-dim={lit && !lit.includes(i) ? "" : undefined}
-              style={
-                {
-                  ["--mask" as string]: `url(/images/products/nuricell/ink/books-mask-v1-${i + 1}.png)`,
-                } as CSSProperties
-              }
+              style={{ clipPath }}
               aria-hidden="true"
             />
           ))}
-          {BOOKS.map((outline, i) => {
+          {BOOKS.map((clipPath, i) => {
             const row = rowOfBook(i);
             return (
               <button
                 key={`book-${i}`}
                 type="button"
                 className={s.book}
-                style={{ clipPath: tapArea(outline, i < 2 ? 1.05 : 1.6) }}
+                style={{ clipPath }}
                 aria-label={`${ROWS[row].year}: ${copy(ROWS[row].question)}`}
                 aria-controls={`research-answer-${row}`}
                 aria-expanded={open === row}

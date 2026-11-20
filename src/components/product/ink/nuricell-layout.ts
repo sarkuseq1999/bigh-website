@@ -35,6 +35,6 @@ export function nuricellSizes(
   // Dr. Liu's view west from 960px: as wide as the window (at most the window's height less the
   // bar, times 1.8, on a short wide screen).
   if (chapter === "people") return "100vw";
-  // The books: their column plus the gutter, at most 6/11 of (1300px less the 112px gap) + 132px.
-  return "(max-width: 959px) 88vw, 780px";
+  // The bookshelf uses one gutter on phones and 65% of the left gutter beside its words.
+  return "(max-width: 574px) 93vw, (max-width: 959px) 530px, (max-width: 1500px) 50vw, 740px";
 }

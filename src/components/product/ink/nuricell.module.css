@@ -68,6 +68,37 @@
    so on a phone it spans the column and its lamp is more than a dot; the heading still shows under
    it once it sits under the menu bar (the label over the heading is gone). */
 @media (max-width: 959px) {
+  /* Introduce the studies before the reader reaches the tappable bookshelf. */
+  .nuricell [data-chapter="research"] > div {
+    row-gap: 0;
+  }
+
+  .nuricell [data-chapter="research"] [data-words] {
+    display: contents;
+  }
+
+  .nuricell [data-chapter="research"] h2 + p {
+    margin-top: 12px;
+  }
+
+  .nuricell [data-chapter="research"] h2 + p + p {
+    margin-top: 10px;
+  }
+
+  .nuricell[data-look="ink"] [data-chapter="research"] figure {
+    order: 1;
+    width: min(calc(100% + var(--gutter)), 530px);
+    margin-top: 20px;
+  }
+
+  .nuricell [data-chapter="research"] figcaption {
+    margin-right: calc(var(--gutter) / 2);
+  }
+
+  .nuricell [data-chapter="research"] [data-studies] {
+    order: 2;
+  }
+
   .nuricell[data-look="ink"] [data-chapter="why"] {
     --picture-height: 55svh;
   }
@@ -247,8 +278,7 @@
     grid-column: 1 / -1;
   }
 
-  /* 4. The research: the books, larger, run out over the page's left margin (the gutter), never
-     taller than the window leaves them under the menu bar. */
+  /* Let the Berkeley bookshelf use part of the left gutter, with paper around the oak. */
   .nuricell[data-look="ink"] [data-chapter="research"] > div {
     grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
   }
@@ -256,10 +286,10 @@
   .nuricell[data-look="ink"] [data-chapter="research"] > div > figure {
     justify-self: start;
     width: min(
-      calc(100% + var(--gutter)),
+      calc(100% + 0.65 * var(--gutter)),
       max(calc(var(--picture-height) * var(--aspect, 1)), 220px)
     );
-    margin-left: calc(-1 * var(--gutter));
+    margin-left: calc(-0.65 * var(--gutter));
   }
 }
 

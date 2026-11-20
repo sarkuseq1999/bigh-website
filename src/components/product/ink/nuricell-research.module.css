@@ -2,20 +2,18 @@
    October 26, 2026). Every selector starts at the chapter's own class, so it outranks the template's
    .page rules (0,2,1) whatever order the stylesheets load in. */
 
-/* The books that are not the open study's fade back under a little paper, each through its own
-   feathered mask, inside the painting's blend group (white multiplies to nothing). */
+/* Fade each unselected book inside its painted outline. */
 .research span.fade {
   position: absolute;
   inset: 0;
   background: #fff;
-  mask: var(--mask) center / 100% 100% no-repeat;
   opacity: 0;
   transition: opacity 0.7s var(--ease);
   pointer-events: none;
 }
 
 .research span.fade[data-dim] {
-  opacity: 0.6;
+  opacity: 0.36;
 }
 
 .research button.book {
@@ -30,6 +28,7 @@
 
 .research button.book:focus-visible {
   outline: none;
+  background: rgb(255 252 235 / 16%);
 }
 
 .research p.hint {
