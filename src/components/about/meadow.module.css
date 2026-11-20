@@ -77,7 +77,8 @@
   }
 }
 
-@property --reach {
+/* Registered properties apply across routes, even after leaving About. */
+@property --about-meadow-reach {
   syntax: "<percentage>";
   inherits: false;
   initial-value: 150%;
@@ -91,13 +92,13 @@
   .root .picture img.gold {
     -webkit-mask-image: radial-gradient(
       ellipse 70% calc(var(--foot) * 60%) at 50% calc(var(--foot) * 100%),
-      #000 calc(var(--reach) - 30%),
-      transparent var(--reach)
+      #000 calc(var(--about-meadow-reach) - 30%),
+      transparent var(--about-meadow-reach)
     );
     mask-image: radial-gradient(
       ellipse 70% calc(var(--foot) * 60%) at 50% calc(var(--foot) * 100%),
-      #000 calc(var(--reach) - 30%),
-      transparent var(--reach)
+      #000 calc(var(--about-meadow-reach) - 30%),
+      transparent var(--about-meadow-reach)
     );
     animation: arrive 3.4s cubic-bezier(0.3, 0, 0.3, 1) 0.4s backwards;
   }
@@ -114,10 +115,10 @@
 
 @keyframes arrive {
   from {
-    --reach: 0%;
+    --about-meadow-reach: 0%;
   }
 
   to {
-    --reach: 150%;
+    --about-meadow-reach: 150%;
   }
 }
