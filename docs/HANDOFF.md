@@ -5,6 +5,12 @@ stop. The rules are in [`AGENTS.md`](../AGENTS.md).
 
 ## Now
 
+- **Homepage cell overlap, November 20, 2026 (live, `main` `e50d7350`, local `studio` `be7dfe72`).**
+  Returning from About used to move the painting over “Tiny power plants.” About's meadow
+  animation now registers its own CSS property. The homepage test follows the About logo
+  back home and measures the gap. The public demo passed both entry paths on desktop and
+  phone. Deployment details are in [the public demo log](public-demo.md).
+
 - **Green Bee Propolis bee tree, November 20, 2026 (live, `main` `c65ce4e2`).** Mo spotted straight
   cuts across both ends of the trunk in “Why green propolis.” The bark and moving gold now fade
   together into the paper (`propolis.module.css`). Desktop and phone screenshots are in

@@ -13,6 +13,18 @@ from `e50d7350`. On the plain demo address, fresh signed-out desktop and phone b
 showed the bark and gold cracks fading together at both ends. Public checks passed for
 Propolis (345/345), the homepage (291/291) and navigation (326/326).
 
+On November 20, 2026, the alias moved to production deployment
+`bigh-website-7cw7gqvjt-sarkuseq1999s-projects.vercel.app`
+(`dpl_27sDBaFkwuSmbkMTpyFXQ9XiCLhh`), built from `main` at
+`e50d7350a9429806a9f0220f01b64e299f2c6bc8`. This release adds the homepage cell positioning
+fix and its browser checks to the live lantern release (`b4c103c1`). Mo approved the push.
+A fresh signed-out browser opened Home directly and through the About page's logo on the public
+demo. The cell cleared the words by 32 px on desktop (1814 px wide) and sat 32 px below them
+on a phone (390 px wide) on both visits. Public checks ran sequentially against the demo:
+`qa_home_ink` **291/291**, `qa_about` **460/460** and `qa_nav` **326/326**. The separate
+Propolis release reached the demo during this run. Both entry paths passed again at both
+widths on that deployment (`dpl_N6YcAND1ULYwa2RcGmTiRwmqNBgX`).
+
 An earlier release used `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
 (`dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`), the **production** deployment of `main` at
 `190aa0ace8b6cf765f5129fa0cc18423ba3111c9` (November 18, 2026): Nature Calm's Big Dipper with its
