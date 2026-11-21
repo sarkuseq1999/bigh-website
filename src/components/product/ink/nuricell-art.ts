@@ -26,9 +26,9 @@ export const nuricellArt = {
     height: 134,
   },
   books: {
-    src: "/images/products/nuricell/ink/books-v1.webp",
-    width: 1100,
-    height: 982,
+    src: "/images/products/nuricell/ink/berkeley-bookshelf-v1.webp",
+    width: 1402,
+    height: 1122,
   },
   liu: {
     src: "/images/products/nuricell/ink/liu-v1.webp",

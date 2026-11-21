@@ -38,7 +38,6 @@ V = "v1"
 # GOLDRUSH.
 TAKES = {
     "capsule": "P7-capsule",
-    "books": "P7-stepping-books",
     "liu": "P11-liu-face-bold",
     "breakfast": "P7-egg-capsules",
     "sum": "P7-sum",
@@ -62,6 +61,15 @@ def finish(img, name, width):
 def cropped(key, pad=0.04):
     flat = bd.divided(bd.load(TAKES[key]))
     return flat.crop(bd.ink_box(np.asarray(flat), pad=pad))
+
+
+def bookshelf():
+    """Keep the approved full canvas so the seven click targets line up at every width."""
+    name = "berkeley-bookshelf-v1.webp"
+    with Image.open(HERE / "originals/research-berkeley-shelf-v1.png") as painting:
+        width, height = painting.size
+        bd.feathered(painting.convert("RGB"), 0.008).save(OUT / name, quality=88, method=6)
+    return {"src": f"{URL}/{name}", "width": width, "height": height}
 
 
 def gilded(key, width, sat_from=0.3, pad=0.04):
@@ -414,7 +422,7 @@ if __name__ == "__main__":
             "lanternLit": lit,
             "capsule": gilded("capsule", 1200),
             "capsulePair": capsule_pair(),
-            "books": finish(cropped("books"), "books", 1100),
+            "books": bookshelf(),
             "liu": liu,
             "liuBerkeley": liu_berkeley,
             "liuBerkeleyPhone": liu_berkeley_phone,

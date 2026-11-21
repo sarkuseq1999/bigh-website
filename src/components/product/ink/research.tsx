@@ -14,9 +14,7 @@ import styles from "./product-ink.module.css";
 /** Studies shown before "Show all": the list stays about as tall as its painting. */
 const FIRST = 5;
 
-// Chapter 4: seven books as stepping stones (seven studies) beside the studies on hairlines, oldest
-// first like the Chapters template's timeline; each opens with its round toggle to what it found
-// and a link to it.
+// Each study opens to its findings and a link to the paper.
 export function Research({ product }: { product: InkProduct }) {
   // NuriCell's books are buttons and its studies plain questions (Mo picked A, October 26, 2026).
   if (isNuricell(product)) return <NuricellResearch product={product} />;

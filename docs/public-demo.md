@@ -4,7 +4,28 @@ Mo explicitly requested a public demo after colleagues could not open the tokeni
 
 **Share this stable address: https://bigh-website-demo.vercel.app/**
 
-The alias currently points to `bigh-website-lp0wqv52h-sarkuseq1999s-projects.vercel.app`
+On November 20, 2026, Mo approved the softer ends of the Green Bee Propolis bee tree.
+The public demo moved to production deployment
+`bigh-website-chck02w03-sarkuseq1999s-projects.vercel.app`
+(`dpl_N6YcAND1ULYwa2RcGmTiRwmqNBgX`), built from `main` at
+`c65ce4e26f88574c9f2e9a9c9db771060006beeb`. The release includes the homepage cell fix
+from `e50d7350`. On the plain demo address, fresh signed-out desktop and phone browsers
+showed the bark and gold cracks fading together at both ends. Public checks passed for
+Propolis (345/345), the homepage (291/291) and navigation (326/326).
+
+On November 20, 2026, the alias moved to production deployment
+`bigh-website-7cw7gqvjt-sarkuseq1999s-projects.vercel.app`
+(`dpl_27sDBaFkwuSmbkMTpyFXQ9XiCLhh`), built from `main` at
+`e50d7350a9429806a9f0220f01b64e299f2c6bc8`. This release adds the homepage cell positioning
+fix and its browser checks to the live lantern release (`b4c103c1`). Mo approved the push.
+A fresh signed-out browser opened Home directly and through the About page's logo on the public
+demo. The cell cleared the words by 32 px on desktop (1814 px wide) and sat 32 px below them
+on a phone (390 px wide) on both visits. Public checks ran sequentially against the demo:
+`qa_home_ink` **291/291**, `qa_about` **460/460** and `qa_nav` **326/326**. The separate
+Propolis release reached the demo during this run. Both entry paths passed again at both
+widths on that deployment (`dpl_N6YcAND1ULYwa2RcGmTiRwmqNBgX`).
+
+Before those two, on November 20, 2026, the alias pointed to `bigh-website-lp0wqv52h-sarkuseq1999s-projects.vercel.app`
 (`dpl_C8Q9qdyqssAQeeQHrVuETiQqikvP`), the **production** deployment of `main` at
 `b4c103c1aa1965b9cf9e7e06f6f23a44b0b4a257` (November 20, 2026): the homepage's "Make sense of
 the science." shows one old barn lantern for Mitochondria and the same lantern with soot on
@@ -17,8 +38,7 @@ Public checks, sequential: `qa_home_ink` **290/290**, `qa_nav` **326/326**. When
 set it had been on `dpl_7i1aSArBKNpaE1DXCSfFpBgPiGax` (`main` `7e952f9e`, the Support and
 Advanced OPC ingredients redesign), a release this file has no entry for.
 
-Before that, by this file's last entry, the alias pointed to
-`bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
+An earlier release used `bigh-website-6t2m09wbl-sarkuseq1999s-projects.vercel.app`
 (`dpl_B4Qi95k7TN9kFnmmyLAb7XomsH9C`), the **production** deployment of `main` at
 `190aa0ace8b6cf765f5129fa0cc18423ba3111c9` (November 18, 2026): Nature Calm's Big Dipper with its
 sky painted at dusk, and the three checkers' Propolis rule updated. Pushed on Mo's go-ahead of

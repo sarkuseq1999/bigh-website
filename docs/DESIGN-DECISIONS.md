@@ -45,6 +45,10 @@ These sit on top of `DESIGN.md`.
   light two books. No label over the heading, no "Show all"; without scripts every answer shows.
   `nuricell-research.tsx`; masks `books-mask-v1-*.png` from `reference/ink-pages/nuricell/find_books.py`.
   Mockups: `reference/ink-pages/mockups/nuricell-research/`.
+  On November 20, 2026, Mo approved the Berkeley bookshelf for the page. Seven plain clothbound
+  books sit on a sunlit sill with a live oak and the Berkeley hills beyond. Publication years
+  belong in the study list. The books run from oldest on the left to newest on the right. On
+  phones the heading and tap instruction introduce the shelf, then the studies follow.
 - **NuriCell "What's inside": moving gold, a tidier top, the pairs as scenes (Mo picked 1A,
   October 26, 2026).** Mo liked the plate's layout but wanted the gold to move, found the small
   grey "What's inside" label odd and the three grey notes under the plate messy, and the
@@ -582,6 +586,18 @@ These sit on top of `DESIGN.md`.
   opening stroke none, on phones too. The dry-brush streaks keep their old size, so the heavier
   line never reads as two lines or a hollow tube. `WEIGHT` in `src/components/ink/brush.tsx`.
   Mockups: `reference/ink-pages/mockups/home-brush-weight/`.
+- **Homepage brush line: the ink line stays (Mo, November 20, 2026).** Mo likes the stroke
+  running down the page but said it "feels very Asia" and asked for ideas that fit the
+  watercolor, California site. Of four (A a watercolor trail, B a Sierra creek, C trail-map
+  dashes, D a gold thread) he asked for mockups of A and B; both were laid on the real page with
+  real painted brush strokes (a warm earth wash, a blue-green wash). His verdict: "original is
+  still better". He then asked for different ideas; three that keep the ink line's crispness and
+  drop only the brush were mocked the same way (C the hummingbird's flight path in hand-inked
+  dashes, E a broad-nib pen line, F a poppy stem with painted leaves and blooms). His verdict:
+  "Keep today's". The ink line stays as it is, and so does the menu bar that matches it. Don't
+  restyle either again unasked. Mockups and the mockup code are on the local branch
+  `line-watercolor` (`reference/ink-pages/mockups/home-line/` there); review page
+  https://claude.ai/artifact/JFEdFK2vCZJzXkGjnsUkJB.
 - **Homepage crane: between B and C, 57.5% (Mo picked it, October 23, 2026).** Mo liked the
   opening but found the flying crane a little big. Of three sizes (A 80%, B 65%, C 50%) he put B
   live, then C, then found C too small and picked a size between them. The crane is 57.5% of the

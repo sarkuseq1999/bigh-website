@@ -49,11 +49,11 @@ const entries = [
     "開いたカプセルと一列に並ぶ4種類の粉末、立ちのぼる金色の火花を墨で描いた絵。",
   ],
   [
-    "Seven books as stepping stones across a calm stream, painted in ink",
-    "七本书如踏脚石横跨平静的溪流，以水墨绘成。",
-    "잔잔한 시냇물을 건너는 징검돌이 된 일곱 권의 책을 먹으로 그린 그림.",
-    "Bảy cuốn sách như những phiến đá lót lối băng qua dòng suối êm, vẽ bằng mực.",
-    "静かな小川に渡した飛び石のような7冊の本を墨で描いた絵。",
+    "Seven clothbound books on a sunlit sill, with a live oak and the Berkeley hills beyond.",
+    "七本布面精装书并排立在阳光照耀的窗台上，窗外是一棵常绿橡树和远处的伯克利群山。",
+    "햇살이 비치는 창턱에 천으로 표지를 씌운 책 일곱 권이 나란히 서 있고, 창밖으로 상록 참나무와 버클리의 언덕이 보입니다.",
+    "Bảy cuốn sách bìa vải xếp trên bậu cửa sổ đầy nắng. Bên ngoài là một cây sồi thường xanh và những ngọn đồi Berkeley ở phía xa.",
+    "陽の当たる窓辺に並ぶ布装の本が7冊。窓の向こうには常緑のオークとバークレーの丘が見えます。",
   ],
   [
     "A portrait painting of Dr. Jiankang Liu in ink and colour",
